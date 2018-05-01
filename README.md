@@ -1,6 +1,6 @@
 # PKDB - Pharmacokinetics database
 
-<b><a href="https://orcid.org/0000-0003-1725-179X" title="https://orcid.org/0000-0003-1725-179X"><img src="./docs/images/orcid.png" height="15"/></a> Matthias König</b>
+<b><a href="https://orcid.org/0000-0003-1725-179X" title="https://orcid.org/0000-0003-1725-179X"><img src="./docs/images/orcid.png" height="15" width="15"/></a> Matthias König</b>
 
 Database for storing pharmacokinetics information.
 This includes
@@ -11,6 +11,9 @@ This includes
 - dosing schemas
 - pharmacokinetics parameters (
 - timecourse data
+
+
+<img src="./docs/images/data_extraction.png" />
 
 ## pharmacokinetics
 Pharmacokinetics data is hereby a subclass of experimental data. 
