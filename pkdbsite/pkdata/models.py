@@ -14,7 +14,11 @@ class Publication(models.Model):
 class Study(models.Model):
     study_id = models.CharField(max_length=200)
     reference = models.ForeignKey(Publication)
-    design = models.TextField()
+    text = models.TextField()
+
+
+
+
 
 class Intervention(models.Model):
     intervention_id = models.CharField(max_length=200)
