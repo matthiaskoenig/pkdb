@@ -1,0 +1,14 @@
+study	subject	sex	age	weight	caf_dose	substance	f_free	f_salvia_tot	f_salvia_free
+Zylber-Katz1984	1	M	44	88	350	caffeine	0.61	0.76	1.22
+Zylber-Katz1984	2	F	45	60	350	caffeine	0.58	0.78	1.72
+Zylber-Katz1984	3	M	43	85	350	caffeine	0.65	0.77	1.29
+Zylber-Katz1984	4	M	47	85	350	caffeine	0.56	0.87	1.63
+Zylber-Katz1984	5	F	29	63	350	caffeine	0.61	0.75	1.23
+Zylber-Katz1984	6	F	28	58	310	caffeine	0.66	0.74	1.43
+Zylber-Katz1984	7	M	24	62	310	caffeine	0.58	0.73	1.57
+Zylber-Katz1984	8	M	30	91	310	caffeine	0.60	0.73	1.67
+Zylber-Katz1984	9	F	30	69	260	caffeine	0.56	0.82	1.56
+Zylber-Katz1984	10	M	26	61	260	caffeine	0.51	0.81	1.46
+Zylber-Katz1984	11	M	22	75	260	caffeine	0.53	0.90	1.58
+Zylber-Katz1984	12	F	31	46	260	caffeine	0.57	0.79	1.30
+

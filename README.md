@@ -1,5 +1,7 @@
 # PKDB - Pharmacokinetics database
 
+<b><a href="https://orcid.org/0000-0002-4588-4925" title="0000-0002-4588-4925"><img src="./docs/images/logos/orcid.png" height="15"/></a> Jan Grzegorzewski</b>
+and
 <b><a href="https://orcid.org/0000-0003-1725-179X" title="https://orcid.org/0000-0003-1725-179X"><img src="./docs/images/orcid.png" height="15" width="15"/></a> Matthias König</b>
 
 Database for storing pharmacokinetics information.
@@ -29,4 +31,4 @@ mkvirtualenv pkdb --python=python3
 ```
 
 ----
-&copy; 2018 Matthias König.
+&copy; 2018 Jan Grzegorzewski & Matthias König.

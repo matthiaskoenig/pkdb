@@ -1,0 +1,36 @@
+study	sid	renal_cl	sex	age	height	weight	clcr	smoking	events	Comedication	t1	t2	caf1	caf2	cls_caf
+Terziivanov2003	1	normal	M	58	170	83	82	0	None	Vitamins	4	8	2.23	3.32	0.00758
+Terziivanov2003	2	normal	M	41	179	96.5	126	5.5	None	No	4	8	4.1	2.45	0.04829
+Terziivanov2003	3	normal	F	40	167	67	103	0	None	No	4	8	2.69	1.14	0.12706
+Terziivanov2003	4	normal	F	41	160	50	132	0	None	No	1	7	3.01	1.28	0.14278
+Terziivanov2003	5	normal	F	18	172	72	103	0	None	No	1	7	4.89	2.21	0.07675
+Terziivanov2003	6	normal	F	47	148	55.9	119	1.5	None	No	4	8	4.39	3.19	0.0476
+Terziivanov2003	7	normal	M	18	187	78.5	92	2.5	None	Propanolol	1	7	5.85	2.78	0.04752
+Terziivanov2003	8	normal	M	22	180	74	106	0.5	None	No	4	8	2.76	1.55	0.08869
+Terziivanov2003	9	normal	M	39	176	95.2	79	0	None	No	1	7	3.9	1.89	0.08749
+Terziivanov2003	10	normal	F	25	164	55	143	0	None	No	4	NA	3.95	NA	0.04825
+Terziivanov2003	11	normal	M	40	176	83	111	0	None	No	4	8	5.26	2.78	0.05192
+Terziivanov2003	12	normal	F	44	156	49.5	102	0	None	No	1	7	7.89	2.66	0.05704
+Terziivanov2003	13	normal	F	41	160	62	133	0	None	No	0.5	3	1.38	6.48	0.0425
+Terziivanov2003	14	normal	M	45	176	90	101	0	None	No	0.5	3	0.27	3.38	0.0782
+Terziivanov2003	15	normal	M	19	189	80	99	0	None	Atenolol	0.5	3	0.1	2.78	0.0125
+Terziivanov2003	16	normal	F	27	167	57.5	138	0	None	No	0.5	3	3.88	1.48	0.27206
+Terziivanov2003	17	normal	F	60	160	114	125	0	None	No	2	6	9.36	4.63	0.0425
+Terziivanov2003	18	normal	F	24	165	66	131	0	None	No	0.5	3	0.28	5.44	0.00909
+Terziivanov2003	19	normal	M	18	163	77	176	0	None	No	10	24	1.51	0.19	0.07779
+Terziivanov2003	20	normal	F	23	175	98	197	17	None	No	10	24	0.86	0.04	0.12755
+Terziivanov2003	21	normal	F	26	158	45	128	15	None	No	10	24	1.8	0.07	0.0425
+Terziivanov2003	22	normal	F	28	161	78	93	0	None	Enalapril	10	24	2.05	0.7	0.0475
+Terziivanov2003	23	normal	F	24	167	65	152	10	None	No	0.5	3	0.09	3.6	0.01253
+Terziivanov2003	24	normal	F	23	168	50	107	0	None	No	0.5	3	1.53	2.66	0.12755
+Terziivanov2003	25	normal	M	51	172	70	108	20	None	No	2	6	2.26	0.78	0.21259
+Terziivanov2003	26	normal	M	43	181	107	122	0	None	Atenolol, diclofenac	2	6	4.81	4.27	0.0475
+Terziivanov2003	27	normal	M	24	180	69	117	20	None	No	2	6	2.06	0.4	0.2725
+Terziivanov2003	28	reduced	M	25	176	91.4	44	20	None	No	1	7	6.57	1.27	0.1025
+Terziivanov2003	29	reduced	F	37	174	75	52	0	None	Enalapril, prednisone	4	8	2.07	0.8	0.1444
+Terziivanov2003	30	reduced	M	62	167	63	59	20	None	Enalapril	10	24	0.42	0.06	0.24775
+Terziivanov2003	31	reduced	M	32	164	56.5	29	0	None	Famotidine	0.5	3	0.05	2.36	0.0175
+Terziivanov2003	32	reduced	M	28	186	72	22	5	None	No	10	24	0.68	0.08	0.14228
+Terziivanov2003	33	reduced	F	38	160	64	41	12.5	None	Enalapril	2	6	3.32	2.17	0.08857
+Terziivanov2003	34	reduced	F	56	165	47	11	10	None	Ciprofloxacin, diclofenac	2	6	16.09	14.09	0.00253
+

@@ -1,0 +1,5 @@
+study	health_status	age_class	fitness_status	clg	clg_se	clg_lw	clg_lw_se	clg_mg	clg_mg_se	cls	cls_se	cls_lw	cls_lw_se	cls_mg	cls_mg_se	clr	clr_se	clr_mg	clr_mg_se
+Wynne1990	healthy	young	fit	2.5	0.1	134	10	140	17	1.8	0.1	92	6	95	13	0.1	0.0	9	3
+Wynne1990	healthy	elderly	fit	2.1	0.1	128	11	163	17	1.2	0.1	77	8	102	13	0.1	0.0	15	1
+Wynne1990	healthy	elderly	frail	1.0	0.1	67	10	95	16	1.1	0.1	67	9	99	14	0.1	0.0	11	3
+

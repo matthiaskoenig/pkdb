@@ -1,0 +1,26 @@
+study	smoking	time	caf	caf_se	caf_and_se
+Brown1988a	abstinence	0	1.07	0.26	1.33
+Brown1988a	abstinence	1	2.08	0.22	2.30
+Brown1988a	abstinence	2	1.59	0.26	1.86
+Brown1988a	abstinence	3	3.04	0.23	3.27
+Brown1988a	abstinence	4	2.71	0.30	3.02
+Brown1988a	abstinence	6	3.18	0.33	3.51
+Brown1988a	abstinence	8	3.48	0.39	3.87
+Brown1988a	abstinence	10	3.68	0.38	4.06
+Brown1988a	abstinence	12	3.80	0.36	4.16
+Brown1988a	abstinence	14	2.31	0.31	2.62
+Brown1988a	abstinence	16	1.67	0.44	2.11
+Brown1988a	abstinence	20	0.89	0.25	1.14
+Brown1988a	smoking	0	0.66	0.38	0.28
+Brown1988a	smoking	1	1.66	0.18	1.48
+Brown1988a	smoking	2	1.16	0.14	1.02
+Brown1988a	smoking	3	2.13	0.20	1.92
+Brown1988a	smoking	4	2.02	0.19	1.82
+Brown1988a	smoking	6	2.30	0.22	2.08
+Brown1988a	smoking	8	2.62	0.20	2.41
+Brown1988a	smoking	10	2.86	0.21	2.64
+Brown1988a	smoking	12	2.89	0.33	2.56
+Brown1988a	smoking	14	1.64	0.28	1.36
+Brown1988a	smoking	16	0.86	0.20	0.66
+Brown1988a	smoking	20	0.34	0.13	0.21
+
