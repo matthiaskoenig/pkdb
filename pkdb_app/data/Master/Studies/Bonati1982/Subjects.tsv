@@ -1,0 +1,4 @@
+	study	subjects	keywords	species	strain	ethnicity	count	gender	healthy	condition	alcohol	caffeine 	smoking	smoking_amount	oc	age	age_sd	age_sem	age_min	age_max	age_unit	bw	bw_sd	bw_sem	bw_min	bw_max	bw_unit	height	height_sd	height_se	height_min	height_max	height_unit	subjects_details
+10	Bonati1982	S1		homo sapiens			4	male	yes	healthy									26.0	36.0	yr	70.0					kg							"4 healthy men who were 26 to 36 yr old with a mean weight of 70kg;
+They abstained from coffee, tea, chocolate, and cola beverages from 10 days before until the end of study;
+Overnight fasting;"

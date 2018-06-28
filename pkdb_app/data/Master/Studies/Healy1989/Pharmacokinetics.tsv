@@ -1,0 +1,21 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+526	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	cmax		2.1	0.5					µg/ml	
+527	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	tmax		1.2	0.4					h	
+528	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	kel		0.14	0.03					1/h	
+529	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	thalf		5.2	1.2					h	
+530	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	vd	yes	0.67	0.19					l/kg	
+531	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	auc		16.3	6.6					µg/ml*h	
+532	Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	clearance_tbc		106.0	41.6					ml/min/1.73m^2	total body clearance
+533	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	cmax		2.3	0.4					µg/ml	
+534	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	tmax		1.4	0.6					h	
+535	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	kel		0.1	0.04					1/h	
+536	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	thalf		8.2	2.5					h	
+537	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	vd	yes	0.62	0.16					l/kg	
+538	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	auc		25.9	7.8					µg/ml*h	
+539	Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	clearance_tbc		58.2	28.8					ml/min/1.73m^2	total body clearance
+540	Healy1989	control	S1	D_CAF	paraxanthine	Tab2	E3	plasma	cmax		0.6	0.2					µg/ml	
+541	Healy1989	control	S1	D_CAF	paraxanthine	Tab2	E3	plasma	tmax		6.2	1.7					h	
+542	Healy1989	control	S1	D_CAF	paraxanthine	Tab2	E3	plasma	auc		4.6	1.3					µg/ml*h	AUC 0-10
+543	Healy1989	control	S1	D_CAF; D_CIP	paraxanthine	Tab2	E4	plasma	cmax		0.6	0.2					µg/ml	
+544	Healy1989	control	S1	D_CAF; D_CIP	paraxanthine	Tab2	E4	plasma	tmax		10.4	2.7					h	
+545	Healy1989	control	S1	D_CAF; D_CIP	paraxanthine	Tab2	E4	plasma	auc		2.5	0.8					µg/ml*h	AUC 0-10

@@ -1,0 +1,327 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st June 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180601.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">2853056</PMID>
+        <DateCompleted>
+            <Year>1989</Year>
+            <Month>05</Month>
+            <Day>10</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2017</Year>
+            <Month>07</Month>
+            <Day>14</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0031-6970</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>35</Volume>
+                    <Issue>6</Issue>
+                    <PubDate>
+                        <Year>1988</Year>
+                    </PubDate>
+                </JournalIssue>
+                <Title>European journal of clinical pharmacology</Title>
+                <ISOAbbreviation>Eur. J. Clin. Pharmacol.</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>4-quinolones inhibit biotransformation of caffeine.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>651-6</MedlinePgn>
+            </Pagination>
+            <Abstract>
+                <AbstractText>The pharmacokinetics of caffeine, including formation of its major metabolite paraxanthine in plasma, has been investigated in 12 healthy males (age 20-40 years) alone and during co-administration of the 4-quinolones ofloxacin, norfloxacin, pipemidic acid, ciprofloxacin, and enoxacin; ciprofloxacin and enoxacin were given in 3 different dose levels. The naphthyridine derivative enoxacin and the pyrido-pyrimidine derivative pipemidic acid had caused marked inhibition of caffeine and paraxanthine metabolism, whereas the genuine quinolone derivatives norfloxacin and ciprofloxacin had little effect, and the pyrido-benzoxacine derivative ofloxacin had no detectable effect. The different molecular and spatial structures of the compounds appear to be responsible for the differences in inhibitory potency.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Harder</LastName>
+                    <ForeName>S</ForeName>
+                    <Initials>S</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Clinical Pharmacology, University Hospital, Frankfurt/Main, Federal Republic of Germany.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Staib</LastName>
+                    <ForeName>A H</ForeName>
+                    <Initials>AH</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Beer</LastName>
+                    <ForeName>C</ForeName>
+                    <Initials>C</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Papenburg</LastName>
+                    <ForeName>A</ForeName>
+                    <Initials>A</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Stille</LastName>
+                    <ForeName>W</ForeName>
+                    <Initials>W</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Shah</LastName>
+                    <ForeName>P M</ForeName>
+                    <Initials>PM</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016430">Clinical Trial</PublicationType>
+                <PublicationType UI="D018848">Controlled Clinical Trial</PublicationType>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>Germany</Country>
+            <MedlineTA>Eur J Clin Pharmacol</MedlineTA>
+            <NlmUniqueID>1256165</NlmUniqueID>
+            <ISSNLinking>0031-6970</ISSNLinking>
+        </MedlineJournalInfo>
+        <ChemicalList>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D015363">Quinolones</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>325OGW249P</RegistryNumber>
+                <NameOfSubstance UI="D015365">Enoxacin</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>3G6A5W338E</RegistryNumber>
+                <NameOfSubstance UI="D002110">Caffeine</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>5E8K9I0O4U</RegistryNumber>
+                <NameOfSubstance UI="D002939">Ciprofloxacin</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>A4P49JAZ9H</RegistryNumber>
+                <NameOfSubstance UI="D015242">Ofloxacin</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>C137DTR5RG</RegistryNumber>
+                <NameOfSubstance UI="D013806">Theophylline</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>LT12J5HVR8</RegistryNumber>
+                <NameOfSubstance UI="D010876">Pipemidic Acid</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>N0F8P22L1P</RegistryNumber>
+                <NameOfSubstance UI="D009643">Norfloxacin</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>Q3565Y41V7</RegistryNumber>
+                <NameOfSubstance UI="C021183">1,7-dimethylxanthine</NameOfSubstance>
+            </Chemical>
+        </ChemicalList>
+        <CitationSubset>IM</CitationSubset>
+        <CommentsCorrectionsList>
+            <CommentsCorrections RefType="ErratumIn">
+                <RefSource>Eur J Clin Pharmacol 1989;36(1):100</RefSource>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 1984 Jul 14;2(8394):108-9</RefSource>
+                <PMID Version="1">6145999</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Chest. 1987 Oct;92(4):663-9</RefSource>
+                <PMID Version="1">3477409</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>N Engl J Med. 1987 Jul 9;317(2):117</RefSource>
+                <PMID Version="1">3587324</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1981 Aug;12(2):155-9</RefSource>
+                <PMID Version="1">7306430</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Dtsch Med Wochenschr. 1986 Sep 26;111(39):1500</RefSource>
+                <PMID Version="1">3463500</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 1984 Sep 1;2(8401):530</RefSource>
+                <PMID Version="1">6147598</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Clin Pharmacol. 1988 Feb;28(2):169-78</RefSource>
+                <PMID Version="1">3283180</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Drug Metab Dispos. 1987 Mar-Apr;15(2):237-49</RefSource>
+                <PMID Version="1">2882985</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Clin Pharmacol. 1987;33(3):227-30</RefSource>
+                <PMID Version="1">3480222</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br Med J (Clin Res Ed). 1988 Apr 16;296(6629):1131</RefSource>
+                <PMID Version="1">3132238</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Infection. 1986;14 Suppl 1:S67-9</RefSource>
+                <PMID Version="1">3456985</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1987 Mar;31(3):375-8</RefSource>
+                <PMID Version="1">3472488</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1986 Dec;22(6):677-83</RefSource>
+                <PMID Version="1">3567014</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 1969 Dec 27;2(7635):1397-9</RefSource>
+                <PMID Version="1">4188280</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Xenobiotica. 1980 Jan;10 (1):37-46</RefSource>
+                <PMID Version="1">7385914</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1988 Feb;32(2):190-4</RefSource>
+                <PMID Version="1">2834994</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Antimicrob Chemother. 1987 Feb;19(2):263-9</RefSource>
+                <PMID Version="1">3571046</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Drug Metab Dispos. 1987 Mar-Apr;15(2):204-6</RefSource>
+                <PMID Version="1">2882979</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Clin Pharmacokinet. 1988 Feb;14(2):96-121</RefSource>
+                <PMID Version="1">3282749</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1988 Jan;32(1):75-7</RefSource>
+                <PMID Version="1">3348614</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1986 Aug;22(2):177-82</RefSource>
+                <PMID Version="1">3756065</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Clin Pharmacol Ther. 1978 Nov;24(5):571-5</RefSource>
+                <PMID Version="1">699481</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Pharm Weekbl Sci. 1986 Feb 21;8(1):1-21</RefSource>
+                <PMID Version="1">3515312</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Dtsch Med Wochenschr. 1987 Jan 30;112(5):201</RefSource>
+                <PMID Version="1">3467948</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1986 Aug;22(2):183-6</RefSource>
+                <PMID Version="1">3756066</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Antimicrob Chemother. 1987 Nov;20(5):729-34</RefSource>
+                <PMID Version="1">3480885</PMID>
+            </CommentsCorrections>
+        </CommentsCorrectionsList>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D000328" MajorTopicYN="N">Adult</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D001711" MajorTopicYN="N">Biotransformation</DescriptorName>
+                <QualifierName UI="Q000187" MajorTopicYN="N">drug effects</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002110" MajorTopicYN="N">Caffeine</DescriptorName>
+                <QualifierName UI="Q000097" MajorTopicYN="N">blood</QualifierName>
+                <QualifierName UI="Q000378" MajorTopicYN="N">metabolism</QualifierName>
+                <QualifierName UI="Q000493" MajorTopicYN="Y">pharmacokinetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002939" MajorTopicYN="N">Ciprofloxacin</DescriptorName>
+                <QualifierName UI="Q000008" MajorTopicYN="N">administration &amp; dosage</QualifierName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004305" MajorTopicYN="N">Dose-Response Relationship, Drug</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004347" MajorTopicYN="N">Drug Interactions</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015365" MajorTopicYN="N">Enoxacin</DescriptorName>
+                <QualifierName UI="Q000008" MajorTopicYN="N">administration &amp; dosage</QualifierName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008297" MajorTopicYN="N">Male</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015394" MajorTopicYN="N">Molecular Structure</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D009643" MajorTopicYN="N">Norfloxacin</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015242" MajorTopicYN="N">Ofloxacin</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D010876" MajorTopicYN="N">Pipemidic Acid</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015363" MajorTopicYN="N">Quinolones</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="Y">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D011897" MajorTopicYN="N">Random Allocation</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D013806" MajorTopicYN="N">Theophylline</DescriptorName>
+                <QualifierName UI="Q000097" MajorTopicYN="N">blood</QualifierName>
+                <QualifierName UI="Q000493" MajorTopicYN="Y">pharmacokinetics</QualifierName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>1988</Year>
+                <Month>1</Month>
+                <Day>1</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>1988</Year>
+                <Month>1</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>1988</Year>
+                <Month>1</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">2853056</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

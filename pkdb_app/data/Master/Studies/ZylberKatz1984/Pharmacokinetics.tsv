@@ -1,0 +1,25 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+310	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E1	plasma	thalf		7.18	3.09			3.1	12.1	h	
+311	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E1	plasma	auc		99.44	41.54			40.7	169.7	µg/ml*h	
+312	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E1	plasma	clearance	yes	0.96	0.4			0.4	1.6	ml/min/kg	
+313	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E1	plasma	vd	yes	0.48	0.06			0.42	0.59	l/kg	
+314	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E2	salvia	thalf		7.74	3.36			3.2	12.6	h	
+315	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E2	salvia	auc		82.98	34.15			31.8	136.1	µg/ml*h	
+316	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E2	salvia	clearance	yes	1.18	0.56			0.5	2.1	ml/min/kg	
+317	ZylberKatz1984	control	S1	D1	caffeine	Tab1	E2	salvia	vd	yes	0.63	0.11			0.55	0.84	l/kg	
+318	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E3	plasma	thalf		4.73	0.05			4.7	4.8	h	
+319	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E3	plasma	auc		57.57	13.17			39.0	68.2	µg/ml*h	
+320	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E3	plasma	clearance	yes	1.33	0.47			1.0	2.0	ml/min/kg	
+321	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E3	plasma	vd	yes	0.55	0.04			0.52	0.61	l/kg	
+322	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E4	salvia	thalf		4.23	0.24			3.9	4.4	h	
+323	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E4	salvia	auc		40.23	8.59			28.1	46.7	µg/ml*h	
+324	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E4	salvia	clearance	yes	1.9	0.08			1.8	2.0	ml/min/kg	
+325	ZylberKatz1984	control	S2	D2	caffeine	Tab1	E4	salvia	vd	yes	0.7	0.05			0.64	0.77	l/kg	
+326	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E5	plasma	thalf		4.7	1.67			3.3	7.5	h	
+327	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E5	plasma	auc		63.93	43.03			30.9	136.5	µg/ml*h	
+328	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E5	plasma	clearance	yes	1.5	0.5			1.0	2.0	ml/min/kg	
+329	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E5	plasma	vd	yes	0.53	0.12			0.4	0.71	l/kg	
+330	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E6	salvia	thalf		4.72	1.72			3.1	7.6	h	
+331	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E6	salvia	auc		53.53	32.62			27.1	108.9	µg/ml*h	
+332	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E6	salvia	clearance	yes	1.65	0.5			0.9	2.3	ml/min/kg	
+333	ZylberKatz1984	control	S3	D3	caffeine	Tab1	E6	salvia	vd	yes	0.59	0.05			0.53	0.65	l/kg	

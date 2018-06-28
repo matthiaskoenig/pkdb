@@ -1,0 +1,3 @@
+	study	subjects	keywords	species	strain	ethnicity	count	gender	healthy	condition	alcohol	caffeine 	smoking	smoking_amount	oc	age	age_sd	age_sem	age_min	age_max	age_unit	bw	bw_sd	bw_sem	bw_min	bw_max	bw_unit	height	height_sd	height_se	height_min	height_max	height_unit	subjects_details
+7	Balogh1995	S1		homo sapiens			10	female	yes	healthy			no						20.0	34.0	yr				51.0	75.0	kg							"Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;
+Excluded were smokers;"

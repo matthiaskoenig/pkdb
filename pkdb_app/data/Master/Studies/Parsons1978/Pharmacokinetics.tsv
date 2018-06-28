@@ -1,0 +1,9 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+286	Parsons1978	control	S1	D1	caffeine	Tab2	E1	salvia	thalf		6.0	1.9					h	
+287	Parsons1978	control	S1	D1	caffeine	Tab2	E1	salvia	kel		0.13		0.013000000000000001				1/h	
+288	Parsons1978	control	S1	D1	caffeine	Tab2	E1	salvia	vd	yes	0.61		0.08				l/kg	
+289	Parsons1978	control	S1	D1	caffeine	Tab2	E1	salvia	clearance		1.57		0.3				ml/min/kg	
+290	Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	salvia	thalf		3.5	1.37					h	
+291	Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	salvia	kel		0.23		0.028999999999999998				1/h	
+292	Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	salvia	vd	yes	0.72		0.067				l/kg	
+293	Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	salvia	clearance		2.58		0.27				ml/min/kg	

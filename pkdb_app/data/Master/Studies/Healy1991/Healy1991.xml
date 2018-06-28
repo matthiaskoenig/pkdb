@@ -1,0 +1,291 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st June 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180601.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">2069371</PMID>
+        <DateCompleted>
+            <Year>1991</Year>
+            <Month>08</Month>
+            <Day>15</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2013</Year>
+            <Month>11</Month>
+            <Day>21</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0066-4804</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>35</Volume>
+                    <Issue>4</Issue>
+                    <PubDate>
+                        <Year>1991</Year>
+                        <Month>Apr</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Antimicrobial agents and chemotherapy</Title>
+                <ISOAbbreviation>Antimicrob. Agents Chemother.</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Lack of interaction between lomefloxacin and caffeine in normal volunteers.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>660-4</MedlinePgn>
+            </Pagination>
+            <Abstract>
+                <AbstractText>Sixteen healthy, nonsmoking adult males participated in a randomized, double-blind, placebo-controlled, two-way crossover study to evaluate the influence of chronic lomefloxacin administration on the disposition of caffeine and its major metabolite, paraxanthine, at steady-state conditions. Lomefloxacin (400 mg) or placebo was administered orally once daily for 5 days to xanthine-free volunteers after an overnight fast. Caffeine (200 mg orally) was administered simultaneously with lomefloxacin on days 3 through 5. After a 2-day washout period, subjects were crossed over to the alternate 5-day regimen with caffeine, which was again given on the final 3 days. Blood samples for caffeine, paraxanthine, and lomefloxacin concentration determinations were serially collected for 48 h following the last dose of each regimen. All compounds were analyzed by high-performance liquid chromatography. For the placebo versus lomefloxacin-containing treatments, maximum caffeine concentrations in plasma (4.35 +/- 0.63 versus 4.07 +/- 0.56 micrograms/ml), areas under the concentration-time curve from time zero to 24 h at steady state (30.3 +/- 6.9 versus 29.7 +/- 6.6 micrograms.h/ml), and elimination half-lives of caffeine (4.8 +/- 1.1 versus 4.8 +/- 1.2 h) were not significantly different. In addition, there were no significant changes in the disposition parameters of paraxanthine as a result of lomefloxacin administration. The frequencies of central nervous system-related effects for the two treatments were not statistically different. We conclude that lomefloxacin has no significant effect on the disposition of caffeine in young healthy volunteers.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Healy</LastName>
+                    <ForeName>D P</ForeName>
+                    <Initials>DP</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Pharmacy and Pharmaceutics, School of Pharmacy, Medical College of Virginia/Virginia Commonwealth University, Richmond 23298-0581.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Schoenle</LastName>
+                    <ForeName>J R</ForeName>
+                    <Initials>JR</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Stotka</LastName>
+                    <ForeName>J</ForeName>
+                    <Initials>J</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Polk</LastName>
+                    <ForeName>R E</ForeName>
+                    <Initials>RE</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016430">Clinical Trial</PublicationType>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+                <PublicationType UI="D016449">Randomized Controlled Trial</PublicationType>
+                <PublicationType UI="D013485">Research Support, Non-U.S. Gov't</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>United States</Country>
+            <MedlineTA>Antimicrob Agents Chemother</MedlineTA>
+            <NlmUniqueID>0315061</NlmUniqueID>
+            <ISSNLinking>0066-4804</ISSNLinking>
+        </MedlineJournalInfo>
+        <ChemicalList>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D042462">4-Quinolones</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D000890">Anti-Infective Agents</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D024841">Fluoroquinolones</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D015363">Quinolones</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>3G6A5W338E</RegistryNumber>
+                <NameOfSubstance UI="D002110">Caffeine</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>C137DTR5RG</RegistryNumber>
+                <NameOfSubstance UI="D013806">Theophylline</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>L6BR2WJD8V</RegistryNumber>
+                <NameOfSubstance UI="C053091">lomefloxacin</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>Q3565Y41V7</RegistryNumber>
+                <NameOfSubstance UI="C021183">1,7-dimethylxanthine</NameOfSubstance>
+            </Chemical>
+        </ChemicalList>
+        <CitationSubset>IM</CitationSubset>
+        <CommentsCorrectionsList>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 1984 Sep 1;2(8401):530</RefSource>
+                <PMID Version="1">6147598</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1990 Jun;34(6):1254-6</RefSource>
+                <PMID Version="1">2393286</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Infection. 1986;14 Suppl 1:S67-9</RefSource>
+                <PMID Version="1">3456985</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1986 Dec;22(6):677-83</RefSource>
+                <PMID Version="1">3567014</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Clin Pharmacol. 1987;32(4):431-2</RefSource>
+                <PMID Version="1">3475207</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Drug Intell Clin Pharm. 1987 Nov;21(11):879-81</RefSource>
+                <PMID Version="1">3678060</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Clin Pharmacol. 1987;33(3):227-30</RefSource>
+                <PMID Version="1">3480222</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Antimicrob Chemother. 1987 Nov;20(5):729-34</RefSource>
+                <PMID Version="1">3480885</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Drugs. 1978 Oct;16(4):358-82</RefSource>
+                <PMID Version="1">359314</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Clin Pharmacol. 1983;24(1):93-8</RefSource>
+                <PMID Version="1">6832208</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Lancet. 1984 Jul 14;2(8394):108-9</RefSource>
+                <PMID Version="1">6145999</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1988 Jan;32(1):75-7</RefSource>
+                <PMID Version="1">3348614</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Clin Pharmacol. 1987;33(4):435-6</RefSource>
+                <PMID Version="1">3443151</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>J Clin Pharm Ther. 1987 Feb;12(1):53-7</RefSource>
+                <PMID Version="1">3449564</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1988 Apr;32(4):510-2</RefSource>
+                <PMID Version="1">3377462</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Biochem Pharmacol. 1988 Jul 1;37(13):2565-8</RefSource>
+                <PMID Version="1">3164618</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Clin Pharmacol Ther. 1988 Jul;44(1):35-8</RefSource>
+                <PMID Version="1">3391003</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Clin Pharmacol Ther. 1988 Nov;44(5):579-87</RefSource>
+                <PMID Version="1">3180639</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Eur J Clin Pharmacol. 1988;35(6):651-6</RefSource>
+                <PMID Version="1">2853056</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1989 Apr;33(4):474-8</RefSource>
+                <PMID Version="1">2729942</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Int J Clin Pharmacol Ther Toxicol. 1989 Jun;27(6):289-3</RefSource>
+                <PMID Version="1">2737798</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1989 Jul;33(7):1006-8</RefSource>
+                <PMID Version="1">2675751</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1990 Jan;34(1):150-2</RefSource>
+                <PMID Version="1">2327750</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1990 Apr;29(4):491-3</RefSource>
+                <PMID Version="1">2328197</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Antimicrob Agents Chemother. 1990 Apr;34(4):594-9</RefSource>
+                <PMID Version="1">2344166</PMID>
+            </CommentsCorrections>
+            <CommentsCorrections RefType="Cites">
+                <RefSource>Br J Clin Pharmacol. 1985 Dec;20(6):583-8</RefSource>
+                <PMID Version="1">3867394</PMID>
+            </CommentsCorrections>
+        </CommentsCorrectionsList>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D042462" MajorTopicYN="N">4-Quinolones</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000328" MajorTopicYN="N">Adult</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000890" MajorTopicYN="N">Anti-Infective Agents</DescriptorName>
+                <QualifierName UI="Q000493" MajorTopicYN="N">pharmacokinetics</QualifierName>
+                <QualifierName UI="Q000494" MajorTopicYN="Y">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002110" MajorTopicYN="N">Caffeine</DescriptorName>
+                <QualifierName UI="Q000493" MajorTopicYN="Y">pharmacokinetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004311" MajorTopicYN="N">Double-Blind Method</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004347" MajorTopicYN="N">Drug Interactions</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D024841" MajorTopicYN="Y">Fluoroquinolones</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006207" MajorTopicYN="N">Half-Life</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008297" MajorTopicYN="N">Male</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D015363" MajorTopicYN="Y">Quinolones</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D013806" MajorTopicYN="N">Theophylline</DescriptorName>
+                <QualifierName UI="Q000493" MajorTopicYN="N">pharmacokinetics</QualifierName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>1991</Year>
+                <Month>4</Month>
+                <Day>1</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>1991</Year>
+                <Month>4</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>1</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>1991</Year>
+                <Month>4</Month>
+                <Day>1</Day>
+                <Hour>0</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">2069371</ArticleId>
+            <ArticleId IdType="pmc">PMC245075</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

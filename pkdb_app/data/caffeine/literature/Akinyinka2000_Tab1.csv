@@ -1,0 +1,22 @@
+study	subject	status	age	gender	weight	t_half	AUC	px_caf	Cl	T	parasite_counts
+Akinyinka2000	1C	control	40	M	60	5.7	47.8	0.60	1.74	NA	NA
+Akinyinka2000	2C	control	28	M	38	7.0	76.2	0.54	1.29	NA	NA
+Akinyinka2000	3C	control	39	M	68	8.5	69.1	0.25	1.06	NA	NA
+Akinyinka2000	4C	control	42	M	82	4.1	19.5	0.53	3.12	NA	NA
+Akinyinka2000	5C	control	37	F	56	14.8	96.3	0.30	0.95	NA	NA
+Akinyinka2000	6C	control	23	M	52	10.0	86.7	0.33	1.11	NA	NA
+Akinyinka2000	7C	control	33	M	54	7.4	28.2	0.43	3.27	NA	NA
+Akinyinka2000	8C	control	18	M	56	4.2	47.3	0.63	1.89	NA	NA
+Akinyinka2000	9C	control	29	M	58	6.6	43.2	0.62	2.00	NA	NA
+Akinyinka2000	10C	control	32	M	74	4.0	42.0	0.53	2.05	NA	NA
+Akinyinka2000	1M	malaria	15	M	58	7.1	51.6	0.42	1.67	37.6	8.8
+Akinyinka2000	2M	malaria	16	M	44	6.0	66.4	0.41	1.71	39.1	109.1
+Akinyinka2000	3M	malaria	17	F	75	24.4	150.6	0.13	0.44	39.7	65.6
+Akinyinka2000	4M	malaria	18	M	46	7.3	45.7	0.52	2.38	37.2	29.3
+Akinyinka2000	5M	malaria	12	F	25	8.5	25.1	0.18	7.97	38.5	180.0
+Akinyinka2000	6M	malaria	18	M	58	5.5	25.8	0.35	3.34	36.6	1382.7
+Akinyinka2000	7M	malaria	15	F	35	8.2	64.9	0.55	2.20	38.4	95.6
+Akinyinka2000	8M	malaria	20	F	45	8.0	88.4	0.49	1.26	37.8	33.4
+Akinyinka2000	9M	malaria	15	F	35	9.7	102.1	0.10	1.40	38.4	65.1
+Akinyinka2000	10M	malaria	12	M	32	10.2	126.3	0.22	1.24	38.0	56.5
+

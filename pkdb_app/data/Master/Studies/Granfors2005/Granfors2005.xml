@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st June 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180601.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">16198659</PMID>
+        <DateCompleted>
+            <Year>2005</Year>
+            <Month>11</Month>
+            <Day>02</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2015</Year>
+            <Month>11</Month>
+            <Day>19</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Print">0009-9236</ISSN>
+                <JournalIssue CitedMedium="Print">
+                    <Volume>78</Volume>
+                    <Issue>4</Issue>
+                    <PubDate>
+                        <Year>2005</Year>
+                        <Month>Oct</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Clinical pharmacology and therapeutics</Title>
+                <ISOAbbreviation>Clin. Pharmacol. Ther.</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>400-11</MedlinePgn>
+            </Pagination>
+            <Abstract>
+                <AbstractText Label="BACKGROUND AND OBJECTIVE" NlmCategory="OBJECTIVE">Oral contraceptives (OCs) can inhibit drug metabolism, but their effect on various cytochrome P450 (CYP) enzymes and drugs can be different. Our objective was to study the effect of combined OCs, containing ethinyl estradiol (INN, ethinylestradiol) and gestodene, on CYP1A2 activity, as well as their interaction potential with tizanidine.</AbstractText>
+                <AbstractText Label="METHODS" NlmCategory="METHODS">In a parallel-group study, 15 healthy women using OCs and 15 healthy women without OCs (control subjects) ingested a single dose of 4 mg tizanidine. Plasma and urine concentrations of tizanidine, as well as several of its metabolites (M-3, M-4, M-5, M-9, and M-10), and pharmacodynamic variables were measured until 24 hours after dosing. As a marker of CYP1A2 activity, an oral caffeine test was performed in both groups.</AbstractText>
+                <AbstractText Label="RESULTS" NlmCategory="RESULTS">The mean area under the plasma concentration-time curve from time 0 to infinity [AUC0-infinity] of tizanidine was 3.9 times greater (P&lt;.001) and the mean peak plasma tizanidine concentration (Cmax) was 3.0 times higher (P&lt;.001) in the OC users than in the control subjects. In 1 OC user the AUC0-infinity of tizanidine exceeded the mean AUC0-infinity of the control subjects by nearly 20 times. There were no significant differences in the elimination half-life or time to peak concentration in plasma of tizanidine between the groups. Tizanidine/metabolite ratios in plasma (M-3 and M-4) and urine (M-3, M-4, M-5, M-9, and M-10) were 2 to 10 times higher in the users of OCs than in the control subjects. In the OC group the excretion of unchanged tizanidine into urine was, on average, 3.8 times greater (P=.008) than in the control subjects. The plasma caffeine/paraxanthine ratio was 2.8 times higher (P&lt;.001) in the OC users than in the control subjects. The caffeine/paraxanthine ratio correlated significantly with the AUC0-infinity and peak concentration of tizanidine in plasma, with its excretion into urine, and with, for example, the tizanidine/M-3 and tizanidine/M-4 area under the plasma concentration-time curve ratios. Both the systolic and diastolic blood pressures were lowered by tizanidine more in the OC users (-29+/- 10 mm Hg and -21+/- 8 mm Hg, respectively) than in the control subjects (-17+/- 9 mm Hg and -13+/- 5 mm Hg, respectively) (P &lt; .01).</AbstractText>
+                <AbstractText Label="CONCLUSIONS" NlmCategory="CONCLUSIONS">OCs containing ethinyl estradiol and gestodene increase, to a clinically significant extent, the plasma concentrations and effects of tizanidine, probably mainly by inhibiting its CYP1A2-mediated presystemic metabolism. Care should be exercised when tizanidine is prescribed to OC users.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Granfors</LastName>
+                    <ForeName>Marika T</ForeName>
+                    <Initials>MT</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Department of Clinical Pharmacology, University of Helsinki, and Helsinki University Central Hospital, Helsinki, Finland.</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Backman</LastName>
+                    <ForeName>Janne T</ForeName>
+                    <Initials>JT</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Laitila</LastName>
+                    <ForeName>Jouko</ForeName>
+                    <Initials>J</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Neuvonen</LastName>
+                    <ForeName>Pertti J</ForeName>
+                    <Initials>PJ</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016430">Clinical Trial</PublicationType>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+                <PublicationType UI="D013485">Research Support, Non-U.S. Gov't</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>United States</Country>
+            <MedlineTA>Clin Pharmacol Ther</MedlineTA>
+            <NlmUniqueID>0372741</NlmUniqueID>
+            <ISSNLinking>0009-9236</ISSNLinking>
+        </MedlineJournalInfo>
+        <ChemicalList>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D000316">Adrenergic alpha-Agonists</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D003277">Contraceptives, Oral, Combined</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D065609">Cytochrome P-450 CYP1A2 Inhibitors</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D009652">Norpregnenes</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>1664P6E6MI</RegistryNumber>
+                <NameOfSubstance UI="C033273">Gestodene</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>3G6A5W338E</RegistryNumber>
+                <NameOfSubstance UI="D002110">Caffeine</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>423D2T571U</RegistryNumber>
+                <NameOfSubstance UI="D004997">Ethinyl Estradiol</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>6AI06C00GW</RegistryNumber>
+                <NameOfSubstance UI="C023754">tizanidine</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>C137DTR5RG</RegistryNumber>
+                <NameOfSubstance UI="D013806">Theophylline</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>MN3L5RMN02</RegistryNumber>
+                <NameOfSubstance UI="D003000">Clonidine</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>Q3565Y41V7</RegistryNumber>
+                <NameOfSubstance UI="C021183">1,7-dimethylxanthine</NameOfSubstance>
+            </Chemical>
+        </ChemicalList>
+        <CitationSubset>AIM</CitationSubset>
+        <CitationSubset>IM</CitationSubset>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D000293" MajorTopicYN="N">Adolescent</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000316" MajorTopicYN="N">Adrenergic alpha-Agonists</DescriptorName>
+                <QualifierName UI="Q000097" MajorTopicYN="N">blood</QualifierName>
+                <QualifierName UI="Q000493" MajorTopicYN="Y">pharmacokinetics</QualifierName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000328" MajorTopicYN="N">Adult</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D019540" MajorTopicYN="N">Area Under Curve</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002110" MajorTopicYN="N">Caffeine</DescriptorName>
+                <QualifierName UI="Q000097" MajorTopicYN="N">blood</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D003000" MajorTopicYN="N">Clonidine</DescriptorName>
+                <QualifierName UI="Q000031" MajorTopicYN="Y">analogs &amp; derivatives</QualifierName>
+                <QualifierName UI="Q000097" MajorTopicYN="N">blood</QualifierName>
+                <QualifierName UI="Q000493" MajorTopicYN="N">pharmacokinetics</QualifierName>
+                <QualifierName UI="Q000494" MajorTopicYN="N">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D003277" MajorTopicYN="N">Contraceptives, Oral, Combined</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="Y">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D065609" MajorTopicYN="Y">Cytochrome P-450 CYP1A2 Inhibitors</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004357" MajorTopicYN="N">Drug Synergism</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004997" MajorTopicYN="N">Ethinyl Estradiol</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="Y">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D005260" MajorTopicYN="N">Female</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006207" MajorTopicYN="N">Half-Life</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D009652" MajorTopicYN="N">Norpregnenes</DescriptorName>
+                <QualifierName UI="Q000494" MajorTopicYN="Y">pharmacology</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D013806" MajorTopicYN="N">Theophylline</DescriptorName>
+                <QualifierName UI="Q000097" MajorTopicYN="N">blood</QualifierName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="received">
+                <Year>2005</Year>
+                <Month>04</Month>
+                <Day>29</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="accepted">
+                <Year>2005</Year>
+                <Month>06</Month>
+                <Day>25</Day>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>2005</Year>
+                <Month>10</Month>
+                <Day>4</Day>
+                <Hour>9</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>2005</Year>
+                <Month>11</Month>
+                <Day>3</Day>
+                <Hour>9</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>2005</Year>
+                <Month>10</Month>
+                <Day>4</Day>
+                <Hour>9</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">16198659</ArticleId>
+            <ArticleId IdType="pii">S0009-9236(05)00279-1</ArticleId>
+            <ArticleId IdType="doi">10.1016/j.clpt.2005.06.009</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

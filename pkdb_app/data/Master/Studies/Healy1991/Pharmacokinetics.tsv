@@ -1,0 +1,23 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+342	Healy1991	control	S1	D1	caffeine	Tab1	E1	plasma	cmax		4.35	0.63					µg/ml	
+343	Healy1991	control	S1	D1	caffeine	Tab1	E1	plasma	tmax		0.78	0.18					h	
+344	Healy1991	control	S1	D1	caffeine	Tab1	E1	plasma	thalf		4.8	1.1					h	
+345	Healy1991	control	S1	D1	caffeine	Tab1	E1	plasma	auc		30.3	6.9					µg/ml*h	AUC 0-24
+346	Healy1991	control	S1	D1	caffeine	Tab1	E1	plasma	clearance_tbc		104.0	21.8					ml/min/1.73m^2	total body clearance
+347	Healy1991	control	S1	D1	paraxanthine	Tab1	E2	plasma	cmax		1.32	0.23					µg/ml	
+348	Healy1991	control	S1	D1	paraxanthine	Tab1	E2	plasma	tmax		5.88	1.54					h	
+349	Healy1991	control	S1	D1	paraxanthine	Tab1	E2	plasma	thalf		9.2	2.9					h	
+350	Healy1991	control	S1	D1	paraxanthine	Tab1	E2	plasma	auc		21.3	4.9					µg/ml*h	AUC 0-24
+351	Healy1991	lomefloxacin	S1	D1	caffeine	Tab1	E3	plasma	cmax		4.07	0.56					µg/ml	
+352	Healy1991	lomefloxacin	S1	D1	caffeine	Tab1	E3	plasma	tmax		0.98	0.31					h	
+353	Healy1991	lomefloxacin	S1	D1	caffeine	Tab1	E3	plasma	thalf		4.8	1.2					h	
+354	Healy1991	lomefloxacin	S1	D1	caffeine	Tab1	E3	plasma	auc		29.7	6.6					µg/ml*h	AUC 0-24
+355	Healy1991	lomefloxacin	S1	D1	caffeine	Tab1	E1	plasma	clearance_tbc		107.0	20.4					ml/min/1.73m^2	total body clearance
+356	Healy1991	lomefloxacin	S1	D1	paraxanthine	Tab1	E4	plasma	cmax		1.34	0.27					µg/ml	
+357	Healy1991	lomefloxacin	S1	D1	paraxanthine	Tab1	E4	plasma	tmax		5.5	1.15					h	
+358	Healy1991	lomefloxacin	S1	D1	paraxanthine	Tab1	E4	plasma	thalf		9.2	4.0					h	
+359	Healy1991	lomefloxacin	S1	D1	paraxanthine	Tab1	E4	plasma	auc		20.8	4.6					µg/ml*h	AUC 0-24
+360	Healy1991	lomefloxacin	S1	D1	lomefloxacin	Tab1	E5	plasma	cmax		3.1	0.53					µg/ml	
+361	Healy1991	lomefloxacin	S1	D1	lomefloxacin	Tab1	E5	plasma	tmax		1.45	0.65					h	
+362	Healy1991	lomefloxacin	S1	D1	lomefloxacin	Tab1	E5	plasma	thalf		6.3	1.8					h	
+363	Healy1991	lomefloxacin	S1	D1	lomefloxacin	Tab1	E5	plasma	auc		25.2	3.4					µg/ml*h	AUC 0-24

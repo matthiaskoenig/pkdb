@@ -1,0 +1,56 @@
+study	gender	oc	m	m_long	m_unit	value
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	5.415
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	6.199
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	7.068
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	7.614
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	8.040
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	8.142
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	9.011
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	9.369
+Abernethy1985	F	yes	halflife	caffeine elimination half-life [h]	h	9.983
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	3.659
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	4.136
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	4.188
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	4.324
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	5.023
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	5.227
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	5.330
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	5.943
+Abernethy1985	F	no	halflife	caffeine elimination half-life [h]	h	9.932
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.815
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.852
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.852
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.855
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.934
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.978
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.036
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.214
+Abernethy1985	F	yes	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.770
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	0.811
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.013
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.347
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.439
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	1.849
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	2.166
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	2.194
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	2.190
+Abernethy1985	F	no	clearance	caffeine clearance [ml/min/kg]	ml/min/kg	2.617
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.576
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.612
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.656
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.666
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.663
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.707
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.722
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.722
+Abernethy1985	F	yes	Vd	caffeine volume of distribution [L/kg]	L/kg	0.840
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.533
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.605
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.668
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.692
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.709
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.716
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.796
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	0.835
+Abernethy1985	F	no	Vd	caffeine volume of distribution [L/kg]	L/kg	1.205
+

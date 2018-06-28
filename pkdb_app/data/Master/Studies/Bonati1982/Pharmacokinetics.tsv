@@ -1,0 +1,31 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+162	Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	clearance		104.0		26.0				ml/min	
+163	Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	vd		33.7		3.8				l	
+164	Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	thalf		3.4						h	
+165	Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	auc		170.0		29.0				mg/l*min	
+166	Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	kel		0.205		0.073				1/h	
+167	Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	kabs		3.15		0.45				1/h	
+168	Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	clearance		133.0		14.0				ml/min	
+169	Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	vd		48.7		2.8				l	
+170	Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	thalf		4.2						h	
+171	Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	auc		544.0		64.0				mg/l*min	
+172	Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	kel		0.165		0.017				1/h	
+173	Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	kabs		5.51		1.84				1/h	
+174	Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	clearance		119.0		14.0				ml/min	
+175	Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	vd		53.5		5.7				l	
+176	Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	thalf		5.0						h	
+177	Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	auc		977.0		148.0				mg/l*min	
+178	Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	kel		0.139		0.025				1/h	
+179	Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	kabs		5.6		1.75				1/h	
+180	Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	clearance		71.9		9.0				ml/min	
+181	Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	vd		39.4		1.6				l	
+182	Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	thalf		6.3						h	
+183	Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	auc		5164.0		691.0				mg/l*min	
+184	Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	kel		0.11		0.016				1/h	
+185	Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	kabs		6.31		1.91				1/h	
+186	Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	clearance		103.0						ml/min	
+187	Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	vd		46.5						l	
+188	Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	thalf		5.2						h	
+189	Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	auc		6815.0						mg/l*min	
+190	Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	kel		0.133						1/h	
+191	Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	kabs		40.76						1/h	

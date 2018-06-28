@@ -1,0 +1,11 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+0	Abernethy1985	oral contraceptive (OC)	S1	D1	caffeine	Tab1	E1	plasma	clearance	yes	1.05		0.1				ml/min/kg	
+1	Abernethy1985	oral contraceptive (OC)	S1	D1	caffeine	Tab1	E1	plasma	vd	yes	0.69		0.03				l/kg	
+2	Abernethy1985	oral contraceptive (OC)	S1	D1	caffeine	Tab1	E1	plasma	thalf		7.88		0.49				h	
+3	Abernethy1985	oral contraceptive (OC)	S1	D1	caffeine	Tab1	E1	plasma	tmax		1.52		0.26				h	
+4	Abernethy1985	oral contraceptive (OC)	S1	D1	caffeine	Tab1	E1	plasma	cmax		3.99		0.27				µg/ml	
+5	Abernethy1985	control	S2	D1	caffeine	Tab1	E2	plasma	clearance	yes	1.75		0.2				ml/min/kg	
+6	Abernethy1985	control	S2	D1	caffeine	Tab1	E2	plasma	vd	yes	0.75		0.07				l/kg	
+7	Abernethy1985	control	S2	D1	caffeine	Tab1	E2	plasma	thalf		5.37		0.62				h	
+8	Abernethy1985	control	S2	D1	caffeine	Tab1	E2	plasma	tmax		0.79		0.11				h	
+9	Abernethy1985	control	S2	D1	caffeine	Tab1	E2	plasma	cmax		4.09		0.24				µg/ml	

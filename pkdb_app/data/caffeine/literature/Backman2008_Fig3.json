@@ -1,0 +1,68 @@
+# TODO: write a simple programe for this
+# database of existing fields in the background
+# Database in the backend, only requires to annotate things once.
+# unified data
+
+# http://specs.frictionlessdata.io/json-table-schema/
+{
+
+  # PMID/bibtex source
+  # who digitized this data set & when, when created
+  # 
+  # dataset: 
+
+
+  # required study data  
+
+
+  "fields": [
+	# missingValue
+	# constraints
+
+    {
+      "name": "study",
+      "title": "Study identifier",
+      "type": "string",
+      "description": "Study identifier",
+      "missingValue: "NA",
+      "constraints": {},
+	  "units": "-",
+	  "annotations": {},		
+    },
+
+	{
+      "name": "gender",
+      "title": "Gender",
+      "type": "string",
+      "description": "Gender",
+      "missingValue: "NA",
+	  "constraints": {
+		  "enum": ["male", "female"]
+	  },
+	  "units": "-",
+	  "annotations": {"PATO_0000047"},		
+    },
+
+	{
+      "name": "smoking",
+      "title": "Smoking status",
+      "type": "string",
+      "description": "Smoking status (smoker or non-smoker)",
+      "missingValue: "NA",
+	  "constraints": {
+		  "enum": ["yes", "no"]
+	  },	  
+	  "units": "-",
+	  "annotations": {},
+    },
+
+
+
+ 
+  ],
+  # (optional) specification of the primary key
+  # "primaryKey": ...
+  # (optional) specification of the foreign keys
+  # "foreignKeys": ...
+
+}

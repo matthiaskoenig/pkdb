@@ -1,0 +1,5 @@
+	study	subjects	keywords	species	strain	ethnicity	count	gender	healthy	condition	alcohol	caffeine 	smoking	smoking_amount	oc	age	age_sd	age_sem	age_min	age_max	age_unit	bw	bw_sd	bw_sem	bw_min	bw_max	bw_unit	height	height_sd	height_se	height_min	height_max	height_unit	subjects_details
+9	Blanchard1983a	S1		homo sapiens		Caucasian	10	male	yes	healthy			no			21.8		1.1	18.8	30.0	yr	79.5		3.9	64.0	106.0	kg							"10 healthy adult male volunteers, aged 18.8 to 30.0 years;
+Healthy adult male Caucasian volunteers. None of the subjects were taking any prescription or non-presecription medication at time of the study.
+Each subject was fasted from the previous evening until at least 2h after the administration of the oral dose.
+Subjects were instructed to abstain from caffeine-containing food and beverages, tobacco (9 of the 10 subjects were non-smokers) and alcohol from 72h before, until 24h after caffeine administration."

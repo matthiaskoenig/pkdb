@@ -1,0 +1,189 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PubmedArticleSet PUBLIC "-//NLM//DTD PubMedArticle, 1st June 2018//EN" "https://dtd.nlm.nih.gov/ncbi/pubmed/out/pubmed_180601.dtd">
+<PubmedArticleSet>
+<PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+        <PMID Version="1">19125908</PMID>
+        <DateCompleted>
+            <Year>2009</Year>
+            <Month>02</Month>
+            <Day>26</Day>
+        </DateCompleted>
+        <DateRevised>
+            <Year>2013</Year>
+            <Month>11</Month>
+            <Day>21</Day>
+        </DateRevised>
+        <Article PubModel="Print">
+            <Journal>
+                <ISSN IssnType="Electronic">1365-2710</ISSN>
+                <JournalIssue CitedMedium="Internet">
+                    <Volume>34</Volume>
+                    <Issue>1</Issue>
+                    <PubDate>
+                        <Year>2009</Year>
+                        <Month>Feb</Month>
+                    </PubDate>
+                </JournalIssue>
+                <Title>Journal of clinical pharmacy and therapeutics</Title>
+                <ISOAbbreviation>J Clin Pharm Ther</ISOAbbreviation>
+            </Journal>
+            <ArticleTitle>Population pharmacokinetics of caffeine in healthy male adults using mixed-effects models.</ArticleTitle>
+            <Pagination>
+                <MedlinePgn>103-14</MedlinePgn>
+            </Pagination>
+            <ELocationID EIdType="doi" ValidYN="Y">10.1111/j.1365-2710.2008.00976.x</ELocationID>
+            <Abstract>
+                <AbstractText Label="OBJECTIVE" NlmCategory="OBJECTIVE">Caffeine has been shown to maintain or improve the performance of individuals, but its pharmacokinetic profile for Asians has not been well characterized. In this study, a population pharmacokinetic model for describing the pharmacokinetics of caffeine in Singapore males was developed. The data were also analysed using non-compartmental models.</AbstractText>
+                <AbstractText Label="METHODS" NlmCategory="METHODS">Data gathered from 59 male volunteers, who each ingested a single caffeine capsule in two clinical trials (3 or 5 mg/kg), were analysed via non-linear mixed-effects modelling. The participants' covariates, including age, body weight, and regularity of caffeinated-beverage consumption or smoking, were analysed in a stepwise fashion to identify their potential influence on caffeine pharmacokinetics. The final pharmacostatistical model was then subjected to stochastic simulation to predict the plasma concentrations of caffeine after oral (204, 340 and 476 mg) dosing regimens (repeated dosing every 6, 8 or 12 h) over a hypothetical 3-day period.</AbstractText>
+                <AbstractText Label="RESULTS" NlmCategory="RESULTS">The data were best described by a one-compartmental model with first-order absorption and first-order elimination. Smoking status was an influential covariate for clearance: clearance (mL/min) = 110*SMOKE + 114, where SMOKE was 0 and 1 for the non-smoker and the smoker respectively. Interoccasion variability was smaller compared to interindividual variability in clearance, volume and absorption rate (27% vs. 33%, 10% vs. 15% and 23% vs. 51% respectively). The extrapolated elimination half-lives of caffeine in the non-smokers and the smokers were 4.3 +/- 1.5 and 3.0 +/- 0.7 h respectively. Dosing simulations indicated that dosing regimens of 340 mg (repeated every 8 h) and 476 mg (repeated every 6 h) should achieve population-averaged caffeine concentrations within the reported beneficial range (4.5-9 microg/mL) in the non-smokers and the smokers respectively over 72 h.</AbstractText>
+                <AbstractText Label="CONCLUSION" NlmCategory="CONCLUSIONS">The population pharmacokinetic model satisfactorily described the disposition and variability of caffeine in the data. Mixed-effects modelling showed that the dose of caffeine depended on cigarette smoking status.</AbstractText>
+            </Abstract>
+            <AuthorList CompleteYN="Y">
+                <Author ValidYN="Y">
+                    <LastName>Seng</LastName>
+                    <ForeName>K-Y</ForeName>
+                    <Initials>KY</Initials>
+                    <AffiliationInfo>
+                        <Affiliation>Bioengineering Laboratory, Defence Medical and Environmental Research Institute, DSO National Laboratories, Singapore, Singapore. skokyong@dso.org.sg</Affiliation>
+                    </AffiliationInfo>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Fun</LastName>
+                    <ForeName>C-Y</ForeName>
+                    <Initials>CY</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Law</LastName>
+                    <ForeName>Y-L</ForeName>
+                    <Initials>YL</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Lim</LastName>
+                    <ForeName>W-M</ForeName>
+                    <Initials>WM</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Fan</LastName>
+                    <ForeName>W</ForeName>
+                    <Initials>W</Initials>
+                </Author>
+                <Author ValidYN="Y">
+                    <LastName>Lim</LastName>
+                    <ForeName>C-L</ForeName>
+                    <Initials>CL</Initials>
+                </Author>
+            </AuthorList>
+            <Language>eng</Language>
+            <PublicationTypeList>
+                <PublicationType UI="D016430">Clinical Trial</PublicationType>
+                <PublicationType UI="D016428">Journal Article</PublicationType>
+                <PublicationType UI="D013485">Research Support, Non-U.S. Gov't</PublicationType>
+            </PublicationTypeList>
+        </Article>
+        <MedlineJournalInfo>
+            <Country>England</Country>
+            <MedlineTA>J Clin Pharm Ther</MedlineTA>
+            <NlmUniqueID>8704308</NlmUniqueID>
+            <ISSNLinking>0269-4727</ISSNLinking>
+        </MedlineJournalInfo>
+        <ChemicalList>
+            <Chemical>
+                <RegistryNumber>0</RegistryNumber>
+                <NameOfSubstance UI="D000697">Central Nervous System Stimulants</NameOfSubstance>
+            </Chemical>
+            <Chemical>
+                <RegistryNumber>3G6A5W338E</RegistryNumber>
+                <NameOfSubstance UI="D002110">Caffeine</NameOfSubstance>
+            </Chemical>
+        </ChemicalList>
+        <CitationSubset>IM</CitationSubset>
+        <MeshHeadingList>
+            <MeshHeading>
+                <DescriptorName UI="D044466" MajorTopicYN="N">Asian Continental Ancestry Group</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002110" MajorTopicYN="N">Caffeine</DescriptorName>
+                <QualifierName UI="Q000008" MajorTopicYN="N">administration &amp; dosage</QualifierName>
+                <QualifierName UI="Q000378" MajorTopicYN="Y">metabolism</QualifierName>
+                <QualifierName UI="Q000493" MajorTopicYN="Y">pharmacokinetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D000697" MajorTopicYN="N">Central Nervous System Stimulants</DescriptorName>
+                <QualifierName UI="Q000008" MajorTopicYN="N">administration &amp; dosage</QualifierName>
+                <QualifierName UI="Q000378" MajorTopicYN="Y">metabolism</QualifierName>
+                <QualifierName UI="Q000493" MajorTopicYN="Y">pharmacokinetics</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D002851" MajorTopicYN="N">Chromatography, High Pressure Liquid</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D003198" MajorTopicYN="N">Computer Simulation</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D004305" MajorTopicYN="N">Dose-Response Relationship, Drug</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D006801" MajorTopicYN="N">Humans</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008297" MajorTopicYN="N">Male</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D008954" MajorTopicYN="Y">Models, Biological</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D017711" MajorTopicYN="N">Nonlinear Dynamics</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D011446" MajorTopicYN="N">Prospective Studies</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D012846" MajorTopicYN="N" Type="Geographic">Singapore</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D012907" MajorTopicYN="N">Smoking</DescriptorName>
+                <QualifierName UI="Q000378" MajorTopicYN="Y">metabolism</QualifierName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D013269" MajorTopicYN="N">Stochastic Processes</DescriptorName>
+            </MeshHeading>
+            <MeshHeading>
+                <DescriptorName UI="D055815" MajorTopicYN="N">Young Adult</DescriptorName>
+            </MeshHeading>
+        </MeshHeadingList>
+    </MedlineCitation>
+    <PubmedData>
+        <History>
+            <PubMedPubDate PubStatus="entrez">
+                <Year>2009</Year>
+                <Month>1</Month>
+                <Day>8</Day>
+                <Hour>9</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="pubmed">
+                <Year>2009</Year>
+                <Month>1</Month>
+                <Day>8</Day>
+                <Hour>9</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+            <PubMedPubDate PubStatus="medline">
+                <Year>2009</Year>
+                <Month>2</Month>
+                <Day>27</Day>
+                <Hour>9</Hour>
+                <Minute>0</Minute>
+            </PubMedPubDate>
+        </History>
+        <PublicationStatus>ppublish</PublicationStatus>
+        <ArticleIdList>
+            <ArticleId IdType="pubmed">19125908</ArticleId>
+            <ArticleId IdType="pii">JCP976</ArticleId>
+            <ArticleId IdType="doi">10.1111/j.1365-2710.2008.00976.x</ArticleId>
+        </ArticleIdList>
+    </PubmedData>
+</PubmedArticle>
+
+</PubmedArticleSet>

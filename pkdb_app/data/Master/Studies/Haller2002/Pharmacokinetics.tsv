@@ -1,0 +1,7 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+336	Haller2002	control	S1	D1	caffeine	Tab3	E1	plasma	tmax		94.0	29.7					min	
+337	Haller2002	control	S1	D1	caffeine	Tab3	E1	plasma	cmax		5.0	1.26					µg/ml	
+338	Haller2002	control	S1	D1	caffeine	Tab3	E1	plasma	thalf		8.1	4.76					h	
+339	Haller2002	control	S1	D1	caffeine	Tab3	E1	plasma	auc		73.7	43.0					µg/ml*h	
+340	Haller2002	control	S1	D1	caffeine	Tab3	E1	plasma	clearance	yes	0.81	0.44					ml/min/kg	
+341	Haller2002	control	S1	D1	caffeine	Tab3	E1	plasma	vd	yes	0.46	0.07					l/kg	

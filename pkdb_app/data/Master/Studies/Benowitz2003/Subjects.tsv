@@ -1,0 +1,2 @@
+	study	subjects	keywords	species	strain	ethnicity	count	gender	healthy	condition	alcohol	caffeine 	smoking	smoking_amount	oc	age	age_sd	age_sem	age_min	age_max	age_unit	bw	bw_sd	bw_sem	bw_min	bw_max	bw_unit	height	height_sd	height_se	height_min	height_max	height_unit	subjects_details
+8	Benowitz2003	S1		homo sapiens			12	male	yes	healthy			yes						27.0	47.0	yr													The subjects were 12 healthy men who were regular cigarette smokers. They ranged in age from 27 to 47 years, smoked an average of 28 cigarettes per day, and had smoked for an average of 22 years.

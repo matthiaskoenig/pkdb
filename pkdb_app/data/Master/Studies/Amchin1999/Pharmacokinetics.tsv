@@ -1,0 +1,25 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+66	Amchin1999	control	S1	D1	caffeine	Tab1	E1	plasma	clearance		84.8	35.5					ml/min	
+67	Amchin1999	control	S1	D1	caffeine	Tab1	E1	plasma	vd		36.7	8.1					l	
+68	Amchin1999	control	S1	D1	caffeine	Tab1	E1	plasma	thalf		6.1	3.55					h	
+69	Amchin1999	control	S1	D1	caffeine	Tab1	E1	plasma	tmax		1.2	0.68					h	
+70	Amchin1999	control	S1	D1	caffeine	Tab1	E1	plasma	cmax		4.96	0.83					µg/ml	
+71	Amchin1999	control	S1	D1	caffeine	Tab1	E1	plasma	auc		48.7	26.9					µg/ml*h	
+72	Amchin1999	control	S1	D1	17X	Tab2	E1	urine (24h)	amount		8.75	3.07					mg	
+73	Amchin1999	control	S1	D1	37X	Tab2	E1	urine (24h)	amount		1.91	0.94					mg	
+74	Amchin1999	control	S1	D1	17U	Tab2	E1	urine (24h)	amount		13.4	3.6					mg	
+75	Amchin1999	control	S1	D1	1X	Tab2	E1	urine (24h)	amount		15.2	5.9					mg	
+76	Amchin1999	control	S1	D1	1U	Tab2	E1	urine (24h)	amount		24.5	9.0					mg	
+77	Amchin1999	control	S1	D1	AAMU	Tab2	E1	urine (24h)	amount		36.1	18.6					mg	
+78	Amchin1999	venlafaxine	S1	D1	caffeine	Tab1	E2	plasma	clearance		90.3	40.1					ml/min	
+79	Amchin1999	venlafaxine	S1	D1	caffeine	Tab1	E2	plasma	vd		35.0	8.1					l	
+80	Amchin1999	venlafaxine	S1	D1	caffeine	Tab1	E2	plasma	thalf		5.46	3.19					h	
+81	Amchin1999	venlafaxine	S1	D1	caffeine	Tab1	E2	plasma	tmax		1.0	0.42					h	
+82	Amchin1999	venlafaxine	S1	D1	caffeine	Tab1	E2	plasma	cmax		5.48	1.63					µg/ml	
+83	Amchin1999	venlafaxine	S1	D1	caffeine	Tab1	E2	plasma	auc		46.4	26.5					µg/ml*h	
+84	Amchin1999	venlafaxine	S1	D1	17X	Tab2	E2	urine (24h)	amount		7.96	2.75					mg	
+85	Amchin1999	venlafaxine	S1	D1	37X	Tab2	E2	urine (24h)	amount		1.66	0.48					mg	
+86	Amchin1999	venlafaxine	S1	D1	17U	Tab2	E2	urine (24h)	amount		13.7	4.4					mg	
+87	Amchin1999	venlafaxine	S1	D1	1X	Tab2	E2	urine (24h)	amount		16.7	6.3					mg	
+88	Amchin1999	venlafaxine	S1	D1	1U	Tab2	E2	urine (24h)	amount		25.7	8.7					mg	
+89	Amchin1999	venlafaxine	S1	D1	AAMU	Tab2	E2	urine (24h)	amount		39.6	21.2					mg	

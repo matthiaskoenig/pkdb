@@ -1,0 +1,4 @@
+,study,dosing,substance,route,application,form,dose,dose_unit,dose_bodyweight,times,times_unit,dosing_details
+6,Blanchard1983a,D1,caffeine,oral,single dose,,5.0,mg/kg,yes,0,h,"administred 5mg/kg dose of caffeine either as an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion."
+7,Blanchard1983a,D2,caffeine,iv,single dose,,5.0,mg/kg,yes,0,h,"administred 5mg/kg dose of caffeine either as an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion.
+"

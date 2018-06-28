@@ -1,0 +1,17 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+294	Fuhr1993a	control	S1	D1	caffeine	Tab2	E1	plasma	auc		147.0	77.0					µmol/l*h	
+295	Fuhr1993a	control	S1	D1	caffeine	Tab2	E1	plasma	clearance		115.0	54.0					ml/min	
+296	Fuhr1993a	control	S1	D1	caffeine	Tab2	E1	plasma	thalf		4.5	1.8					h	
+297	Fuhr1993a	control	S1	D1	caffeine	Tab2	E1	plasma	vd	yes	0.57	0.6					l/kg	
+298	Fuhr1993a	grapefruit	S1	D1	caffeine	Tab2	E2	plasma	auc		195.0	132.0					µmol/l*h	
+299	Fuhr1993a	grapefruit	S1	D1	caffeine	Tab2	E2	plasma	clearance		94.0	44.0					ml/min	
+300	Fuhr1993a	grapefruit	S1	D1	caffeine	Tab2	E2	plasma	thalf		6.0	3.0					h	
+301	Fuhr1993a	grapefruit	S1	D1	caffeine	Tab2	E2	plasma	vd	yes	0.6	0.09					l/kg	
+302	Fuhr1993a	control	S2	D1	caffeine	Tab2	E3	plasma	auc		95.83	20.42			51.0	109.0	µmol/l*h	
+303	Fuhr1993a	control	S2	D1	caffeine	Tab2	E3	plasma	clearance		152.17	45.0			107.0	248.0	ml/min	
+304	Fuhr1993a	control	S2	D1	caffeine	Tab2	E3	plasma	thalf		3.1	0.94			1.8	4.7	h	
+305	Fuhr1993a	control	S2	D1	caffeine	Tab2	E3	plasma	vd	yes	0.58	0.14			0.43	0.78	l/kg	
+306	Fuhr1993a	control	S3	D1	caffeine	Tab2	E4	plasma	auc		197.83	72.08			122.0	332.0	µmol/l*h	
+307	Fuhr1993a	control	S3	D1	caffeine	Tab2	E4	plasma	clearance		79.17	25.41			42.0	117.0	ml/min	
+308	Fuhr1993a	control	S3	D1	caffeine	Tab2	E4	plasma	thalf		5.83	1.14			4.4	7.9	h	
+309	Fuhr1993a	control	S3	D1	caffeine	Tab2	E4	plasma	vd	yes	0.55	0.03			0.51	0.61	l/kg	

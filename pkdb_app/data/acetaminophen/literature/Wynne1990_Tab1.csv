@@ -1,0 +1,5 @@
+study	health_status	age_class	fitness_status	age	age_se	weight	weight_se	liv_vol	liv_vol_se	liv_vol_bw	liv_vol_bw_se	vc	vc_se	vss	vss_se	t_half	t_half_se	cl	cl_se	Cl_liver	Cl_liver_SE
+Wynne1990	healthy	young	fit	25	1	59	2	1124	40	19.2	0.7	232	43	770	41	123	6	4.7	0.2	251	13
+Wynne1990	healthy	elderly	fit	73	1	66	2	1091	43	16.8	0.9	334	34	739	27	144	4	3.7	0.2	234	18
+Wynne1990	healthy	elderly	frail	82	2	53	4	843	50	15.9	0.5	199	29	614	25	226	42	2.5	0.1	157	17
+

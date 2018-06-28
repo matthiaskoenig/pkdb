@@ -1,0 +1,3 @@
+	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
+508	Harder1989	control_OFL	S1	D_CAF	caffeine	Tab4	E1	plasma	clearance	yes	164.0	70.0					ml/h/kg	caffeine clearance is the dose divided by AUC
+509	Harder1989	OFL	S1	D_CAF; D_OFL	caffeine	Tab4	E2	plasma	clearance	yes	160.0	67.0					ml/h/kg	caffeine clearance is the dose divided by AUC

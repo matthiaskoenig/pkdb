@@ -1,0 +1,4 @@
+,study,dosing,substance,route,application,form,dose,dose_unit,dose_bodyweight,times,times_unit,dosing_details
+14,Cheng1990,D1,caffeine,oral,single dose,,70.0,mg,yes,0,h,oral studies
+15,Cheng1990,D2,caffeine,oral,single dose,,200.0,mg,yes,0,h,oral studies
+16,Cheng1990,D3,caffeine,oral,single dose,,300.0,mg,yes,0,h,oral studies
