@@ -11,7 +11,7 @@ This includes
 - subjects information
 - interventions
 - dosing schemas
-- pharmacokinetics parameters (
+- pharmacokinetics parameters 
 - timecourse data
 
 
@@ -24,11 +24,65 @@ The form can vary (mean, median) and also the error terms associated with the va
 In addition the number of subjects is important as well (n), to be able to convert between different error
 measurments.
 
+# Prerequisites
+
+- [Docker](https://docs.docker.com/docker-for-mac/install/)  
+
 # Setup & Installation
+## Python3.6
+### Ubuntu 14.04 and 16.04
 ```
-mkvirtualenv pkdb --python=python3
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt-get install python3.6
+sudo apt-get install python3.6-dev
+
+```
+### Ubuntu 16.10 and 17.04
+```
+sudo apt-get update
+sudo apt-get install python3.6
+sudo apt-get install python3.6-dev
+
+```
+## Virtual Env
+```
+mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
 ```
 
+# Initialize the project
+
+Start the dev server for local development:
+
+```bash
+docker-compose up
+```
+
+Create a superuser to login to the admin:
+
+```bash
+docker-compose run --rm web ./manage.py createsuperuser
+```
+
+# Local Development
+Start the dev server for local development:
+
+```bash
+docker-compose up
+```
+Run a command inside the docker container:
+
+```bash
+docker-compose run --rm web [command]
+```
+Example:
+
+```
+ docker-compose run --rm web python manage.py makemigrations
+```
+
+
 ----
+
 &copy; 2018 Jan Grzegorzewski & Matthias König.
