@@ -1,5 +1,5 @@
 from django.db import models
-from .utils import CHAR_MAX_LENGTH
+from pkdb_app.studies.utils import CHAR_MAX_LENGTH
 
 
 class Sidable(models.Model):

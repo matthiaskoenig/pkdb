@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from .models import Intervention, Author, Study
+
+
 BASE_FIELDS = ('sid', 'comment', 'description',)
 
 class InterventionSerializer(serializers.ModelSerializer):
+
 
     class Meta:
         model = Intervention

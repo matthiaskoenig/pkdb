@@ -1,7 +1,7 @@
 from django.db import models
 from .utils import CHAR_MAX_LENGTH
-from .behaviours import Sidable, Describable, Commentable
-from .choices import INTERVENTION_CHOICES
+from pkdb_app.behaviours import Sidable, Describable, Commentable
+from pkdb_app.choices import INTERVENTION_CHOICES
 
 
 class Author(models.Model):
