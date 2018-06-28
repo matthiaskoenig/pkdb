@@ -1,9 +1,9 @@
 from django.db import models
 
 #studies import
-from pkdb_app.studies.models import Intervention
-from pkdb_app.studies.behaviours import Sidable, Describable
-from pkdb_app.studies.choices import SPECIE_CHOICES ,CHARATERISTIC_CHOICES
+from ..studies.models import Intervention
+from ..behaviours import Sidable, Describable
+from ..choices import SPECIE_CHOICES ,CHARATERISTIC_CHOICES
 
 
 class SubjectTag(Sidable,Describable,models.Model):

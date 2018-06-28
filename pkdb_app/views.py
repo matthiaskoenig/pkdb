@@ -6,7 +6,7 @@ from rest_framework.schemas import SchemaGenerator
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-# views in subjectssic authentication example
+
 
 @api_view()
 @renderer_classes([SwaggerUIRenderer, OpenAPIRenderer,CoreJSONRenderer])

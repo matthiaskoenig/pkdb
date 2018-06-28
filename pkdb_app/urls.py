@@ -1,16 +1,10 @@
 from django.conf import settings
-from django.urls import path, re_path, include, reverse_lazy
+from django.urls import path, include
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter
-from rest_framework.authtoken import views
-from .subjects.views import schema_view
 from rest_framework_swagger.views import get_swagger_view
-
-
-from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import AuthorsViewSet,InterventionsViewSet,StudiesViewSet

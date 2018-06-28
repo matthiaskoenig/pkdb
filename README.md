@@ -50,7 +50,10 @@ sudo apt-get install python3.6-dev
 mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
 ```
-
+add your virtual environment to jupyter kernels:
+```
+(pkdb) ipython kernel install --user --name=pkdb
+``` 
 # Initialize the project
 
 Start the dev server for local development:
