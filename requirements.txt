@@ -17,6 +17,8 @@ django_unique_upload==0.2.1
 djangorestframework==3.8.2
 Markdown==2.6.11
 django-filter==1.1.0
+coreapi
+django-rest-swagger
 
 # Developer Tools
 ipdb==0.11
@@ -42,5 +44,4 @@ bonobo-docker
 biopython
 ipykernel
 pandas
-coreapi
-django-rest-swagger
+
