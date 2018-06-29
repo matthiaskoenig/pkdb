@@ -11,13 +11,12 @@ class Author(models.Model):
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
-
-class Study(Sidable, Commentable, Describable, models.Model):
-    title = models.CharField(max_length=CHAR_MAX_LENGTH)
+class Study(Commentable, Describable, models.Model):
+    title = models.TextField()
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH)
-    authors = models.ManyToManyField(Author, blank=True)
+    abstract = models.TextField(blank=True, null=True)
     file = models.FileField(upload_to="study", null=True, blank=True)
-
+    authors = models.ManyToManyField(Author, blank=True, related_name='authors')
 
 class Intervention(Sidable, Commentable, Describable, models.Model):
     type = models.IntegerField(choices=INTERVENTION_CHOICES)

@@ -20,7 +20,7 @@ class StudiesViewSet(viewsets.ModelViewSet):
     queryset = Study.objects.all()
     serializer_class = StudySerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ('sid', 'comment','description','title','pmid')
+    filter_fields = ( 'comment','description','title','pmid')
     search_fields = filter_fields
 
 
@@ -29,6 +29,6 @@ class InterventionsViewSet(viewsets.ModelViewSet):
     queryset = Intervention.objects.all()
     serializer_class = InterventionSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ('sid', 'comment','description','type')
+    filter_fields = ('comment','description','type')
     search_fields = filter_fields
 
