@@ -39,7 +39,6 @@ def create_data(data_pd, file_name):
         ensure_dir(data_path)
         d.to_csv(data_path, sep="\t")
 
-
 def split_into_study_folder(path,file_name):
     data_pd = pd.read_csv(path,delimiter='\t')
     create_data(data_pd, file_name)
@@ -57,21 +56,10 @@ def add_study_sid(d):
     sid = str(d["study"])
     yield {**d ,'sid':sid}
 
-def create_study_db(d):
-
+def create_study_folder(d):
     study_path = os.path.join(path_master_studies,d['sid'])
     ensure_dir(study_path)
     yield {**d, "study_path":study_path}
-
-'''
-def load_from_biopython(d):
-    Entrez.email = 'janekg89@hotmail.de'
-    handle = Entrez.efetch(db='pubmed', id=d['pmid'], retmode='xml')
-    all_info = handle.read()
-    handle.close()
-    yield {**d, 'data': ET.fromstring(all_info)}
-
-'''
 
 
 def load_from_biopython(d):
@@ -100,7 +88,6 @@ def create_authors_file(d):
 
 
 def get_authors_from_study(d):
-
     for author in d["data"].iter("Author"):
         d1 = {}
         d1["first_name"] = author.find("ForeName").text
@@ -121,7 +108,7 @@ def get_graph(**options):
         extract_studies(path_studies),
         pmid_to_int,
         add_study_sid,
-        create_study_db,
+        create_study_folder,
         load_from_biopython,
         write_biopython_xml_to_file,
         create_authors_file,

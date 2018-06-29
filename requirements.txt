@@ -44,4 +44,3 @@ ipykernel
 pandas
 coreapi
 django-rest-swagger
-django-filter
