@@ -26,7 +26,7 @@ def upload_study(json_study):
 
 def get_graph(**options):
     graph = bonobo.Graph()
-    #add studies
+    # add studies
     graph.add_chain(
         get_study_json_path,
         open_json,
