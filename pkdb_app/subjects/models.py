@@ -75,7 +75,6 @@ class CharacteristicRange(Characteristic):
 
 
 
-
 class Individual(Sidable, models.Model):
     specie = models.IntegerField(choices=SPECIES_CHOICES)
     tags = models.ManyToManyField(SubjectTag)
@@ -96,7 +95,7 @@ class SubjectGroup(Group):
     Intervention = models.ForeignKey(Intervention,on_delete=True)
     subjects = models.ManyToManyField(Subject, through="RelativeAmount")
 
-
+# dont do this
 class RelativeAmount(models.Model):
     subjects = models.ForeignKey(Subject, on_delete=models.CASCADE)
     subjects_group = models.ForeignKey(SubjectGroup,on_delete=models.CASCADE)
