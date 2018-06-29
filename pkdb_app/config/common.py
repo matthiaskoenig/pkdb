@@ -1,3 +1,6 @@
+"""
+Shared django settings.
+"""
 import os
 from os.path import join
 from distutils.util import strtobool
