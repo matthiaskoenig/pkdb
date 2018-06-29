@@ -13,10 +13,10 @@ Database and web interface for storing pharmacokinetics information including
 - pharmacokinetics parameters 
 - timecourse data
 
-<img src="./docs/images/data_extraction.png" width="300"/>
+<img src="./docs/images/data_extraction.png" width="600"/>
 Figure 1: Overview over data extraction.
 
-## data model
+## Data model
 Pharmacokinetics data is a special type of experimental data.
 Pharmacokinetics data like clearance, halflife, ... (with units and error measurements) are either directly reported in publications
 or can be calculated from time course data.
@@ -24,28 +24,13 @@ or can be calculated from time course data.
 * Important information is the number of subjects (n) underlying the measurement, which is required to convert between different error
 measurements.
 
-# Prerequisites
-
-- [Docker](https://docs.docker.com/docker-for-mac/install/)  
-
 # Setup & Installation
-## Python3.6
-### Ubuntu 14.04 and 16.04
-```
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt-get update
-sudo apt-get install python3.6
-sudo apt-get install python3.6-dev
+## Requirements
+- [Docker](https://docs.docker.com/docker-for-mac/install/)
+- Python3.6
 
-```
-### Ubuntu 16.10 and 17.04
-```
-sudo apt-get update
-sudo apt-get install python3.6
-sudo apt-get install python3.6-dev
-
-```
-## Virtual Env
+## Virtual Environment
+Setting up a virtual environment
 ```
 mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
@@ -57,13 +42,11 @@ add your virtual environment to jupyter kernels:
 # Initialize the project
 
 Start the dev server for local development:
-
 ```bash
 docker-compose up
 ```
 
 Create a superuser to login to the admin:
-
 ```bash
 docker-compose run --rm web ./manage.py createsuperuser
 ```
@@ -84,7 +67,6 @@ Example:
 ```
  docker-compose run --rm web python manage.py makemigrations
 ```
-
 
 ----
 
