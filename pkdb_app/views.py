@@ -1,3 +1,6 @@
+"""
+Views
+"""
 from django.shortcuts import render
 from rest_framework_swagger.renderers import SwaggerUIRenderer,OpenAPIRenderer
 from rest_framework.decorators import api_view,renderer_classes,authentication_classes,permission_classes
@@ -9,10 +12,10 @@ from rest_framework.response import Response
 
 
 @api_view()
-@renderer_classes([SwaggerUIRenderer, OpenAPIRenderer,CoreJSONRenderer])
-@authentication_classes((SessionAuthentication,BasicAuthentication))
+@renderer_classes([SwaggerUIRenderer, OpenAPIRenderer, CoreJSONRenderer])
+@authentication_classes((SessionAuthentication, BasicAuthentication))
 @permission_classes((AllowAny,))
 def schema_view(request):
     generator = SchemaGenerator(
-        title='Pkdb Web API')
+        title='PKDB Web API')
     return Response(generator.get_schema(request=request))

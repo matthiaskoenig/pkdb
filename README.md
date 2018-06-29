@@ -1,11 +1,10 @@
 # PKDB - Pharmacokinetics database
 
-<b><a href="https://orcid.org/0000-0002-4588-4925" title="0000-0002-4588-4925"><img src="./docs/images/logos/orcid.png" height="15"/></a> Jan Grzegorzewski</b>
+<b><a href="https://orcid.org/0000-0002-4588-4925" title="0000-0002-4588-4925"><img src="./docs/images/orcid.png" height="15"/></a> Jan Grzegorzewski</b>
 and
 <b><a href="https://orcid.org/0000-0003-1725-179X" title="https://orcid.org/0000-0003-1725-179X"><img src="./docs/images/orcid.png" height="15" width="15"/></a> Matthias König</b>
 
-Database for storing pharmacokinetics information.
-This includes
+Database and web interface for storing pharmacokinetics information including
 - study data (publication data)
 - trial design
 - subjects information
@@ -14,38 +13,24 @@ This includes
 - pharmacokinetics parameters 
 - timecourse data
 
+<img src="./docs/images/data_extraction.png" width="600"/>
+Figure 1: Overview over data extraction.
 
-<img src="./docs/images/data_extraction.png" />
-
-## pharmacokinetics
-Pharmacokinetics data is hereby a subclass of experimental data. 
-These are the numerical values which are normally reported in publications.
-The form can vary (mean, median) and also the error terms associated with the values (SD, SE, CV, Range). 
-In addition the number of subjects is important as well (n), to be able to convert between different error
-measurments.
-
-# Prerequisites
-
-- [Docker](https://docs.docker.com/docker-for-mac/install/)  
+## Data model
+Pharmacokinetics data is a special type of experimental data.
+Pharmacokinetics data like clearance, halflife, ... (with units and error measurements) are either directly reported in publications
+or can be calculated from time course data.
+* the reported value (mean, median) as well as the error terms associated with the values (SD, SE, CV, Range) can vary
+* Important information is the number of subjects (n) underlying the measurement, which is required to convert between different error
+measurements.
 
 # Setup & Installation
-## Python3.6
-### Ubuntu 14.04 and 16.04
-```
-sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt-get update
-sudo apt-get install python3.6
-sudo apt-get install python3.6-dev
+## Requirements
+- [Docker](https://docs.docker.com/docker-for-mac/install/)
+- Python3.6
 
-```
-### Ubuntu 16.10 and 17.04
-```
-sudo apt-get update
-sudo apt-get install python3.6
-sudo apt-get install python3.6-dev
-
-```
-## Virtual Env
+## Virtual Environment
+Setting up a virtual environment
 ```
 mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
@@ -57,13 +42,11 @@ add your virtual environment to jupyter kernels:
 # Initialize the project
 
 Start the dev server for local development:
-
 ```bash
 docker-compose up
 ```
 
 Create a superuser to login to the admin:
-
 ```bash
 docker-compose run --rm web ./manage.py createsuperuser
 ```
@@ -84,7 +67,6 @@ Example:
 ```
  docker-compose run --rm web python manage.py makemigrations
 ```
-
 
 ----
 
