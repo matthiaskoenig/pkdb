@@ -1,3 +1,6 @@
+"""
+Production django settings.
+"""
 import os
 from .common import Common
 
