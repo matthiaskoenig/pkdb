@@ -1,3 +1,6 @@
+"""
+Creates json files in master folder
+"""
 import os
 import csv
 import sys
@@ -7,7 +10,7 @@ from Bio import Entrez
 import json
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../'))
-Master = os.path.join(BASEPATH,"Master")
+Master = os.path.join(BASEPATH, "Master")
 if BASEPATH not in sys.path:
     sys.path.append(BASEPATH)
 
@@ -17,12 +20,12 @@ SUBJECTSPATH = os.path.join(DATABASEPATH, "caffeine", "Subjects.tsv")
 PHARMACOKINETICSPATH = os.path.join(DATABASEPATH, "caffeine", "Pharmacokinetics.tsv")
 INTERVENTIONSPATH = os.path.join(DATABASEPATH, "caffeine", "Interventions.tsv")
 DOSINGPATH = os.path.join(DATABASEPATH, "caffeine", "Dosing.tsv")
-MASTERPATH =     os.path.join(DATABASEPATH, "Master")
+MASTERPATH = os.path.join(DATABASEPATH, "Master")
 STUDIESMASTERPATH = os.path.join(MASTERPATH, "Studies")
 
 
 def extract_studies(path):
-    reader = csv.DictReader(open(path),delimiter='\t')
+    reader = csv.DictReader(open(path), delimiter='\t')
     for line in reader:
         yield dict(line)
 
@@ -34,7 +37,7 @@ def pmid_to_int(d):
 
 def add_study_sid(d):
     sid = str(d["study"])
-    yield {**d ,'sid':sid}
+    yield {**d , 'sid': sid}
 
 
 def add_study_path(d):
@@ -73,7 +76,6 @@ def create_json(d):
     return {'json': json_dict, 'study_path' : d["study_path"]}
 
 
-#save
 def save_json(d):
     json_file = os.path.join(d["study_path"],"data.json")
     with open(json_file, 'w') as fp:
@@ -81,6 +83,11 @@ def save_json(d):
 
 
 def get_graph(**options):
+    """ Bonobo execution graph.
+
+    :param options:
+    :return:
+    """
     graph = bonobo.Graph()
     graph.add_chain(
         extract_studies(STUDIESPATH),
