@@ -15,18 +15,41 @@ class Author(models.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
 
+# All models should be commentable
+
+
 class Study(Commentable, Describable, models.Model):
     """ Single clinical study.
 
     Mainly reported as a single publication.
+
+    """
+    # sid should be the AuthorYear if possible
+    # comments
+    description (if no description is provided, this is filled with the abstract)
+    files (PNG, CSV) (all files with exception of pdf)
+    reference
+
+    interventions
+    subjects
+    ....
+
+
+class Reference():
+    """
+    This is the main class describing the publication or reference which describes the study.
+    In most cases this is a published paper, but could be a thesis or unpublished.
     """
 
-
+    pmid = models.CharField(max_length=CHAR_MAX_LENGTH) (optional)
+    doi (optional)
     title = models.TextField()
-    pmid = models.CharField(max_length=CHAR_MAX_LENGTH)
     abstract = models.TextField(blank=True, null=True)
-    file = models.FileField(upload_to="study", null=True, blank=True)
+    journal
+    year
+    pdf = models.FileField(upload_to="study", null=True, blank=True)
     authors = models.ManyToManyField(Author, blank=True, related_name='authors')
+    keywords
 
 
 class Intervention(Sidable, Commentable, Describable, models.Model):
