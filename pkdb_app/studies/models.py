@@ -61,10 +61,14 @@ class Study(Sidable, Commentable, Describable, models.Model):
 
 
 
+# -------------------------------------------------
+# Intervention
+# -------------------------------------------------
+# Here only the different (two or more) groups which were compared in the study have to be defined.
+# In a single study/paper multiple groups are compared (these can be defined as groups).
 
 
-
-class Intervention(Sidable, Commentable, Describable, models.Model):
-    type = models.IntegerField(choices=INTERVENTION_CHOICES)
-    study = models.ForeignKey(Study, null=True, blank=True, on_delete=True)
+# class Intervention(Sidable, Commentable, Describable, models.Model):
+#    type = models.IntegerField(choices=INTERVENTION_CHOICES)
+#    study = models.ForeignKey(Study, null=True, blank=True, on_delete=True)
 

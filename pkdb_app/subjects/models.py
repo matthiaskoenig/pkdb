@@ -1,178 +1,98 @@
 """
-Describes subjects which participated in a study.
-This can be individuals or groups.
+Describe group of subjects or individual (i.e. define the characteristics of the
+group or individual).
+
+How is different from things which will be measured?
+From the data structure this has to be handled very similar.
+
+
 """
 from django.db import models
 
-from ..studies.models import Intervention,Study
+from ..studies.models import Study
 from ..behaviours import Sidable, Describable
-from ..categoricals import ChoiceEnum, All_Characteristics, characteristics_types
+from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, UNITS_CHOICES
 from ..utils import CHAR_MAX_LENGTH
-#############################################################
-
-#New Approach
-#General Categorical
-# class CharacteristicType(models.Model):
-#     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-#     pass
-#
-# class Characteristic(models.Model):
-#     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-#     type = models.ForeignKey(CharacteristicType, on_delete=False)
-#     #unit = models.CharField(max_length=CHAR_MAX_LENGTH)
-#
-#
-#
-# class Category(models.Model):
-#     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-#     characteristic = models.ForeignKey(Characteristic, on_delete=False)
-#
-##############################################################
 
 
-class Group(Sidable,models.Model):
-    study = models.ForeignKey(Study, on_delete=True)
+class Timecourse(models.Model):
+    """ Storing of time course data.
 
-
-class GroupCharacteristic(Sidable,models.Model):
-    name = models.CharField(choices=All_Characteristics.choices(), max_length=CHAR_MAX_LENGTH)
-    #######################
-    #statistical properties
-    value = models.FloatField(null=True,blank=True)
-    mean = models.FloatField(null=True,blank=True)
-    min = models.FloatField(null=True,blank=True)
-    max = models.FloatField(null=True,blank=True)
-    std = models.FloatField(null=True,blank=True)
-    count = models.IntegerField()
-    ########################
-    unit = models.CharField(choices=All_Units.choices(),max_length=CHAR_MAX_LENGTH)
-    group = models.ForeignKey(Group,on_delete=True)
-
-
-    def type(self):
-        return characteristics_types[self.name]
-
-
-##########################################################################################
-
-class CharacteristicValue(models.Model):
-    count = models.IntegerField(null=True)
-    mean = models.FloatField(null=True)
-
-class SubjectTag(Sidable, Describable, models.Model):
-    pass
+    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
+    """
+    data = models.BinaryField()
 
 
 class Characteristic(Sidable, models.Model):
-    """ Property which the individual or group has, examples are age, weight.
-    These can be either
-    - categorial
-    - continuous
-
+    """ Characteristic.
+    Characteristics are used to store the information about subjects.
     """
-    class Type(ChoiceEnum):
-        OTHER = 'other'
-        ANTROPOMETRIE = 'antropometrie'
-        LIFE_STYLE = 'life style'
-        GENETICS = 'genetics'
+    name = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
 
-    count = models.IntegerField()     #count (optional: either subset, or all) # can be done via through
-    type = models.CharField(choices=Type.choices())
+    @property
+    def characteristic_data(self):
+        """ Returns the full information about the characteristic.
+
+        :return:
+        """
+        return CHARACTERISTIC_DICT[self.name]
+
+    @property
+    def choices(self):
+        return self.characteristic_data.choices
 
     class Meta:
         abstract = True
 
 
-class CharacteristicCategorial(Characteristic):
+class CharacteristicValue(Characteristic):
     """
-    - sex (M/F)
-    - healthy (healthy/non-healthy)
-    - ethnicity (Asian, Afroamerican, African, Caucasian)
+    This is the concrete selection/information of the characteristics.
+    This stores the raw information. Derived values can be calculated.
     """
-    class Category(ChoiceEnum):
+    choice = models.CharField()  # check in validation that allowed choice
 
-            Health = "health"
-            Sex = "sex"
-            Smoking = "smoking"
-            Ethnicity = "ethnicity"
+    count = models.IntegerField()  # how many participants in characteristics
+    value = models.FloatField(null=True, blank=True)
 
-    #category = models.CharField(choices=Category.choices())
-    name = models.CharField(choices=Category.choices())
-    value = models.CharField(choices=All_Characteristics.choices())
-###############################################################
+    mean = models.FloatField(null=True, blank=True)
+    median = models.FloatField(null=True, blank=True)
+    min = models.FloatField(null=True, blank=True)
+    max = models.FloatField(null=True, blank=True)
+    sd = models.FloatField(null=True, blank=True)
+    se = models.FloatField(null=True, blank=True)
+    cv = models.FloatField(null=True, blank=True)
 
-class CharacteristicContinuous(Characteristic):
+    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
+
+    timecourse = models.ForeignKey(Timecourse)
+
+    def validate(self):
+        """ Check that choices are valid. I.e. that choice is allowed choice from choices for
+        characteristics.
+
+        Add checks for individuals and groups. For instance if count==1 than value must be filled,
+        but not entries in mean, median, ...
+
+        :return:
+        """
+        raise NotImplemented
+
+
+class ProcessedCharacteristicValue(CharacteristicValue):
+    """ Processed and normalized data (calculated on change from
+    corresponding raw CharacteristicValue.
     """
-    -
-    """
-
-    class Category(ChoiceEnum):
-        Age = "age"
-        BodyWeight = "bodyweight"
-        Height = "height"
-
-
-
-    name = models.CharField(choices=Category.choices())
-    #value = models.FloatField()
-
-
-class Value(models.Model):
-
-    #category/keyword/type (age, bodyweight, height, ...)
-    models.ForeignKey(CharacteristicContinuous, on_delete=True)
-    n (=1) # ?
-    mean
-    unit
-
-
-class GroupValue():
-    """
-    can be single or group value
-    """
-    n
-    mean
-    median
-    sd (standard deviation)
-    se (standard error)
-    min
-    max
-    cv
-    unit
-
-
-
-
-
-
-class CharacteristicRange(Characteristic):
-    start = models.FloatField()
-    end = models.FloatField()
-
-
-
-class Individual(Sidable, models.Model):
-    specie = models.IntegerField(choices=SPECIES_CHOICES)
-    tags = models.ManyToManyField(SubjectTag)
-    characteristics_binary = models.ManyToManyField(CharacteristicBinary)
-    characteristics_continous = models.ManyToManyField(CharacteristicContinouos)
-    # characteristics_range = models.ManyToManyField(CharacteristicRange)
+    raw = models.OneToOneField(CharacteristicValue)
 
 
 class Group(Sidable, models.Model):
-    number = models.IntegerField()
+    """ Individual or group of people.
 
-    class Meta:
-        abstract = True
+    Groups are defined via their characteristics.
+    """
+    study = models.ForeignKey(Study, on_delete=True)
+    count = models.IntegerField()
+    characteristics = models.ManyToManyField(Characteristic, on_delete=True)
 
-
-
-class SubjectGroup(Group):
-    Intervention = models.ForeignKey(Intervention,on_delete=True)
-    subjects = models.ManyToManyField(Subject, through="RelativeAmount")
-
-# dont do this
-class RelativeAmount(models.Model):
-    subjects = models.ForeignKey(Subject, on_delete=models.CASCADE)
-    subjects_group = models.ForeignKey(SubjectGroup,on_delete=models.CASCADE)
-    relative_amount = models.FloatField()
+# TODO: How to handle Pharmacokinetics data?
