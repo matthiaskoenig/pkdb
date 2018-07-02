@@ -3,7 +3,7 @@ Reusable behavior for models.
 """
 
 from django.db import models
-from pkdb_app.studies.utils import CHAR_MAX_LENGTH
+from pkdb_app.utils import CHAR_MAX_LENGTH
 
 
 class Sidable(models.Model):
@@ -15,6 +15,7 @@ class Sidable(models.Model):
 
 
 # FIXME: This has to be more complicated.
+'''
 - multiple users can comment and every comment should be tracked to user with provenance information like
   timestamp (last modified)
 
@@ -24,6 +25,8 @@ class Sidable(models.Model):
        timestamp
 
 - Annotation (annotatable), at some point, but not now
+'''
+
 
 
 class Commentable(models.Model):
