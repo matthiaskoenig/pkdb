@@ -35,28 +35,44 @@ UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 #   categorial: NA, None
 
 CHARACTERISTIC_DATA = [
+    # Antropmetrical information
+    CharacteristicType('species', 'Species', 'categorial', ["Homo sapiens"]),
     CharacteristicType('height', 'BodyParameter', 'numeric', None),
     CharacteristicType('body weight', 'BodyParameter', 'numeric', None),
     CharacteristicType('age', 'BodyParameter', 'numeric', None),
     CharacteristicType('sex', 'BodyParameter', 'categorial', ["M", "F"]),
     CharacteristicType('bmi', 'BodyParameter', 'numeric', None),
     CharacteristicType('waist circumference', 'BodyParameter', 'numeric', None),
-
     CharacteristicType('ethnicity', 'Ethnicity', 'categorial', ["african", "afroamerican", "asian", "caucasian"]),
 
-    # exists as yes/no or as amount
+    # Disease (status)
     CharacteristicType('healthy', "Health status", "boolean", None),
     CharacteristicType('disease', "Disease", "categorial", ["cirrhosis"]),
 
+
+    # Lifestyle
     CharacteristicType('smoking', 'Lifestyle', 'boolean', ["Y", "N"]),
     CharacteristicType('smoking_amount', 'Lifestyle', 'numeric', None),
     CharacteristicType('alcohol', 'Lifestyle', 'boolean', ["Y", "N"]),
     CharacteristicType('alcohol_amount', 'Lifestyle', 'numeric', None),
+    CharacteristicType('caffeine', 'Lifestyle', 'boolean', ["Y", "N"]),
+    CharacteristicType('caffeine_amount', 'Lifestyle', 'numeric', None),
 
+    # Study protocol
+    CharacteristicType('overnight fast', 'Study protocol', 'boolean', ["Y", "N"]),
+    CharacteristicType('alcohol abstinence', 'Study protocol', 'boolean', ["Y", "N"]),
+
+    # Medication
     CharacteristicType('oral contraceptives', 'Contraceptives', 'boolean', ["Y", "N"]),
-
     CharacteristicType('medication', 'Medication', 'categorial', ["ibuprofen", "paracetamol", "aspirin"]),  # ? dosing
-    CharacteristicType('species', 'Species', 'categorial', ["Homo sapiens"]),
+
+    # Genetics ???
+    # Requires storage of the variants and effects of clearance
+
+]
+
+PK_DATA = [
+
 ]
 
 CHARACTERISTIC_DICT = {item.value: item for item in CHARACTERISTIC_DATA}
@@ -72,3 +88,22 @@ DATA_CHOICES = (
      (5, "Static Multiple"),
      )
 '''
+
+class Dosing:
+    substance
+    route
+    form
+    dose
+    dose_unit
+    dose_bodyweight
+    times
+
+class Pharmacokinetics (CharacteristicValue):
+    group (intervention)
+    dosing
+    substance
+    source
+    entry
+
+
+

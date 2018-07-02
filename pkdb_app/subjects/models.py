@@ -92,6 +92,7 @@ class Group(Sidable, models.Model):
     Groups are defined via their characteristics.
     """
     study = models.ForeignKey(Study, on_delete=True)
+    name = models.TextField()
     count = models.IntegerField()
     characteristics = models.ManyToManyField(Characteristic, on_delete=True)
 
