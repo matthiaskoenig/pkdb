@@ -4,9 +4,8 @@ group or individual).
 
 How is different from things which will be measured?
 From the data structure this has to be handled very similar.
-
-
 """
+
 from django.db import models
 
 from ..studies.models import Study

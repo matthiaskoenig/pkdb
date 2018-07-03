@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import Intervention, Author, Study
+from .models import Reference, Author, Study
 
 
 BASE_FIELDS = ('comment', 'description',)
 
-class InterventionSerializer(serializers.ModelSerializer):
+#class InterventionSerializer(serializers.ModelSerializer):
 
 
-    class Meta:
-        model = Intervention
-        fields = BASE_FIELDS + ('type', 'study',)
+#    class Meta:
+#        model = Intervention
+#        fields = BASE_FIELDS + ('type', 'study',)
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -25,20 +25,23 @@ class AuthorSerializer(serializers.ModelSerializer):
         return author
 
 
-class StudySerializer(serializers.ModelSerializer):
+class ReferenceSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True,read_only=False)#, queryset=Study.objects.all(), source='studies')
 
-
     class Meta:
-        model = Study
-        fields = BASE_FIELDS + ('title', 'pmid', 'authors', 'abstract','file')
+        model = Reference
+        fields = BASE_FIELDS + ('pmid', 'doi', 'title', 'abstract', 'journal','year', 'authors','pdf')
 
     def create(self, validated_data):
         authors_data = validated_data.pop('authors')
-        study, _ = Study.objects.update_or_create(pmid=validated_data["pmid"],defaults = validated_data)
+        reference, _ = Reference.objects.update_or_create(pmid=validated_data["pmid"],defaults = validated_data)
         for author_data in authors_data:
             author, created = Author.objects.update_or_create(**author_data)
-            study.authors.add(author)
-            study.save()
+            reference.authors.add(author)
+            reference.save()
 
-        return study
+        studies_data = validated_data.pop('study')
+        for study in studies_data:
+            reference.study_set.update_or_create(sid=study["sid"], defaults=study)
+
+        return reference

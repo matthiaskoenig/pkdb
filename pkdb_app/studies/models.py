@@ -4,7 +4,6 @@ Django model for Study.
 from django.db import models
 from pkdb_app.utils import CHAR_MAX_LENGTH
 from pkdb_app.behaviours import Sidable, Describable, Commentable
-from pkdb_app.categoricals import INTERVENTION_CHOICES
 
 
 class Author(models.Model):

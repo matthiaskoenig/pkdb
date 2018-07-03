@@ -26,7 +26,6 @@ UNIT_DATA = [
 UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 
 
-
 # class, value, dtype (numeric, boolean, categorial), choices
 # dates?
 # How to store NA? Is this necessary?
@@ -34,7 +33,17 @@ UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 #   boolean: NA, None
 #   categorial: NA, None
 
-CHARACTERISTIC_DATA = [
+COMMON_DATA = [
+    # Medication
+    CharacteristicType('oral contraceptives', 'Contraceptives', 'boolean', ["Y", "N"]),
+    CharacteristicType('medication', 'Medication', 'categorial', ["ibuprofen", "paracetamol", "aspirin"]),  # ? dosing
+
+    # Lifestyle
+    CharacteristicType('caffeine', 'Lifestyle', 'boolean', ["Y", "N"]),
+    CharacteristicType('caffeine_amount', 'Lifestyle', 'numeric', None),
+]
+
+CHARACTERISTIC_DATA = COMMON_DATA+ [
     # Antropmetrical information
     CharacteristicType('species', 'Species', 'categorial', ["Homo sapiens"]),
     CharacteristicType('height', 'BodyParameter', 'numeric', None),
@@ -55,28 +64,33 @@ CHARACTERISTIC_DATA = [
     CharacteristicType('smoking_amount', 'Lifestyle', 'numeric', None),
     CharacteristicType('alcohol', 'Lifestyle', 'boolean', ["Y", "N"]),
     CharacteristicType('alcohol_amount', 'Lifestyle', 'numeric', None),
-    CharacteristicType('caffeine', 'Lifestyle', 'boolean', ["Y", "N"]),
-    CharacteristicType('caffeine_amount', 'Lifestyle', 'numeric', None),
+
 
     # Study protocol
     CharacteristicType('overnight fast', 'Study protocol', 'boolean', ["Y", "N"]),
     CharacteristicType('alcohol abstinence', 'Study protocol', 'boolean', ["Y", "N"]),
 
     # Medication
-    CharacteristicType('oral contraceptives', 'Contraceptives', 'boolean', ["Y", "N"]),
-    CharacteristicType('medication', 'Medication', 'categorial', ["ibuprofen", "paracetamol", "aspirin"]),  # ? dosing
 
     # Genetics ???
     # Requires storage of the variants and effects of clearance
-
 ]
 
 PK_DATA = [
-
 ]
 
-CHARACTERISTIC_DICT = {item.value: item for item in CHARACTERISTIC_DATA}
-CHARACTERISTIC_CHOICES = [(ctype.value, ctype.value) for ctype in CHARACTERISTIC_DATA]
+# class, value, dtype (numeric, boolean, categorial), choices
+INTERVENTION_DATA = COMMON_DATA + [
+]
+
+def dict_and_choices(data):
+    data_dict = {item.value: item for item in data}
+    data_choices = [(ctype.value, ctype.value) for ctype in data]
+    return data_dict, data_choices
+
+
+CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
+INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
 
 '''
@@ -89,6 +103,7 @@ DATA_CHOICES = (
      )
 '''
 
+'''
 class Dosing:
     substance
     route
@@ -104,6 +119,8 @@ class Pharmacokinetics (CharacteristicValue):
     substance
     source
     entry
+'''
+
 
 
 
