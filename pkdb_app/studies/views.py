@@ -1,11 +1,10 @@
-from .models import Author,Study,Intervention
-from .serializers import AuthorSerializer,InterventionSerializer,StudySerializer
+from .models import Author,Study, Reference
+from .serializers import AuthorSerializer, ReferenceSerializer
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 
 
-# Create your views here.
 class AuthorsViewSet(viewsets.ModelViewSet):
 
     queryset = Author.objects.all()
@@ -15,20 +14,20 @@ class AuthorsViewSet(viewsets.ModelViewSet):
     search_fields = filter_fields
 
 
-class StudiesViewSet(viewsets.ModelViewSet):
+class ReferencesViewSet(viewsets.ModelViewSet):
 
-    queryset = Study.objects.all()
-    serializer_class = StudySerializer
+    queryset = Reference.objects.all()
+    serializer_class = ReferenceSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ( 'comment','description','title','pmid')
+    filter_fields = ( 'comment','description','pmid', 'doi', 'title', 'abstract', 'journal','year', 'authors')
     search_fields = filter_fields
 
 
-class InterventionsViewSet(viewsets.ModelViewSet):
+#class InterventionsViewSet(viewsets.ModelViewSet):
 
-    queryset = Intervention.objects.all()
-    serializer_class = InterventionSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ('comment','description','type')
-    search_fields = filter_fields
+#    queryset = Intervention.objects.all()
+#    serializer_class = InterventionSerializer
+#    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
+#    filter_fields = ('comment','description','type')
+ #   search_fields = filter_fields
 
