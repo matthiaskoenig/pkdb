@@ -12,7 +12,7 @@ from Bio import Entrez
 import xml.etree.ElementTree as ET
 import pandas as pd
 
-BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../'))
+BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..//'))
 Master = os.path.join(BASEPATH,"Master")
 if BASEPATH not in sys.path:
     sys.path.append(BASEPATH)
@@ -20,11 +20,11 @@ if BASEPATH not in sys.path:
 DATABASEPATH = os.path.join(BASEPATH, "data")
 path_studies = os.path.join(DATABASEPATH, "caffeine", "Studies.tsv")
 path_subjects = os.path.join(DATABASEPATH, "caffeine", "Subjects.tsv")
-path_pharmacokinetics = os.path.join(DATABASEPATH,"caffeine", "Pharmacokinetics.tsv")
-path_interventions = os.path.join(DATABASEPATH,"caffeine", "Interventions.tsv")
-path_dosing = os.path.join(DATABASEPATH,"caffeine", "Dosing.tsv")
-path_master =     os.path.join(DATABASEPATH,"Master")
-path_master_studies = os.path.join(path_master,"Studies")
+path_pharmacokinetics = os.path.join(DATABASEPATH, "caffeine", "Pharmacokinetics.tsv")
+path_interventions = os.path.join(DATABASEPATH, "caffeine", "Interventions.tsv")
+path_dosing = os.path.join(DATABASEPATH, "caffeine", "Dosing.tsv")
+path_master = os.path.join(DATABASEPATH, "Master")
+path_master_studies = os.path.join(path_master, "Studies")
 
 
 def ensure_dir(file_path):
@@ -45,6 +45,7 @@ def create_data(data_pd, file_name):
         ensure_dir(data_path)
         d.to_csv(data_path, sep="\t")
 
+
 def split_into_study_folder(path,file_name):
     data_pd = pd.read_csv(path,delimiter='\t')
     create_data(data_pd, file_name)
@@ -52,15 +53,15 @@ def split_into_study_folder(path,file_name):
         yield row
 
 
-
-
 def pmid_to_int(d):
     d['pmid'] = int(d['pmid'])
     yield d
 
+
 def add_study_sid(d):
     sid = str(d["study"])
     yield {**d ,'sid':sid}
+
 
 def create_study_folder(d):
     study_path = os.path.join(path_master_studies,d['sid'])

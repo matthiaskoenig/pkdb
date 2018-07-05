@@ -29,6 +29,7 @@ class Common(Configuration):
         'pkdb_app.users',
         'pkdb_app.studies',
         'pkdb_app.subjects',
+
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -57,7 +58,7 @@ class Common(Configuration):
     # Postgres
     DATABASES = {
         'default': dj_database_url.config(
-            default='postgres://postgres:@postgres:5432/postgres',
+            default='postgres://postgres:pass@postgres:5432/postgres',
             conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
         )
     }

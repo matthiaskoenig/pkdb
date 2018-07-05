@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import Reference, Author, Study
+from .models import Reference, Author
+from ..subjects.serializers import GroupSerializer
 
-
-BASE_FIELDS = ('comment', 'description',)
+BASE_FIELDS = ()
 
 #class InterventionSerializer(serializers.ModelSerializer):
 
@@ -27,21 +27,24 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class ReferenceSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True,read_only=False)#, queryset=Study.objects.all(), source='studies')
+    groups = GroupSerializer(many=True,read_only=False)#, queryset=Study.objects.all(), source='studies')
 
     class Meta:
         model = Reference
-        fields = BASE_FIELDS + ('pmid', 'doi', 'title', 'abstract', 'journal','year', 'authors','pdf')
+        fields = BASE_FIELDS + ('sid','groups', 'pmid', 'doi', 'title', 'abstract', 'journal','date', 'authors','pdf')
 
     def create(self, validated_data):
         authors_data = validated_data.pop('authors')
+        groups_data = validated_data.pop('groups')
+
         reference, _ = Reference.objects.update_or_create(pmid=validated_data["pmid"],defaults = validated_data)
         for author_data in authors_data:
             author, created = Author.objects.update_or_create(**author_data)
             reference.authors.add(author)
             reference.save()
 
-        studies_data = validated_data.pop('study')
-        for study in studies_data:
-            reference.study_set.update_or_create(sid=study["sid"], defaults=study)
+        for group in groups_data:
+            reference.group_set.update_or_create(sid=group["sid"], defaults=group)
 
         return reference
+
