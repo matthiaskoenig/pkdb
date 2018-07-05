@@ -2,14 +2,14 @@ import os
 import bonobo
 import coreapi
 import json
-from create_master import STUDIESMASTERPATH
+from create_master import REFERENCESMASTERPATH
 
 client = coreapi.Client()
 document = client.get("http://0.0.0.0:8000/")
 
 
-def get_study_json_path():
-    for root, dirs, files in os.walk(STUDIESMASTERPATH, topdown=False):
+def get_reference_json_path():
+    for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "data.json" in files:
             yield os.path.join(root, 'data.json')
 
@@ -17,20 +17,20 @@ def get_study_json_path():
 def open_json(d):
     with open(d) as f:
         json_dict = json.loads(f.read())
-    return json_dict
+    return {"json":json_dict, "reference_path":d}
 
 
-def upload_study(json_study):
-    client.action(document, ["studies", "create"], params=json_study)
+def upload_reference(json_reference):
+    client.action(document, ["references", "create"], params=json_reference["json"])
 
 
 def get_graph(**options):
     graph = bonobo.Graph()
     # add studies
     graph.add_chain(
-        get_study_json_path,
+        get_reference_json_path,
         open_json,
-        upload_study,
+        upload_reference,
     )
     return graph
 

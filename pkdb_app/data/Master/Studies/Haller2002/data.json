@@ -1,7 +1,10 @@
 {
+    "pmid": 12087345,
+    "sid": "Haller2002",
+    "date": "2002-07-16",
+    "journal": "Clinical pharmacology and therapeutics",
     "title": "Pharmacology of ephedra alkaloids and caffeine after single-dose dietary supplement use.",
     "abstract": "Botanical stimulants have disposition characteristics similar to their pharmaceutical counterparts, and they can produce significant cardiovascular responses after a single dose.",
-    "pmid": 12087345,
     "authors": [
         {
             "first_name": "Christine A",
@@ -14,6 +17,96 @@
         {
             "first_name": "Neal L",
             "last_name": "Benowitz"
+        }
+    ],
+    "doi": "",
+    "groups": [
+        {
+            "count": 8,
+            "sid": "Haller2002-S1",
+            "description": "Eight healthy volunteers (5 women and 3 men) from 25 to 38 years old participated in the study. Eligibility for the study was determined on the basis of medical history, brief physical examination, and screening laboratory tests that included complete blood count, serum chemistry values to assess liver and renal function, urine toxicology testing for drugs of abuse, and a urine pregnancy test for women. Exclusion criteria included any person with obesity (body mass index 30), or a history of heart, thyroid, liver, kidney, or psychiatric disease, diabetes, central nervous system disorders, prostate hypertrophy, narrow angle glaucoma, or pregnancy or lactation. Any person with recent use (previous 1 month) of any product that contained ephedrine alkaloids or with a history of illicit substance use within the previous year was excluded. Smokers and heavy users of caffeine (4 cups of coffee per day) were excluded. Participants were not taking any medications that would cause changes in heart rate or blood pressure.",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": NaN
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": NaN
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "2 yes / 5 no"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": NaN
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": "no"
+                },
+                {
+                    "value": "age",
+                    "choice": NaN
+                },
+                {
+                    "value": "sex",
+                    "choice": "3 male / 5 female"
+                }
+            ]
         }
     ]
 }

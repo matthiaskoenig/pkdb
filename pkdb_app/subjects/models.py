@@ -8,7 +8,7 @@ From the data structure this has to be handled very similar.
 
 from django.db import models
 
-from ..studies.models import Study
+from ..studies.models import Reference
 from ..behaviours import Sidable, Describable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, UNITS_CHOICES
 from ..utils import CHAR_MAX_LENGTH
@@ -26,7 +26,7 @@ class Characteristic(Sidable, models.Model):
     """ Characteristic.
     Characteristics are used to store the information about subjects.
     """
-    name = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
+    value = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
 
     @property
     def characteristic_data(self):
@@ -34,7 +34,7 @@ class Characteristic(Sidable, models.Model):
 
         :return:
         """
-        return CHARACTERISTIC_DICT[self.name]
+        return CHARACTERISTIC_DICT[self.value]
 
     @property
     def choices(self):
@@ -49,7 +49,7 @@ class CharacteristicValue(Characteristic):
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    choice = models.CharField()  # check in validation that allowed choice
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH)  # check in validation that allowed choice
 
     count = models.IntegerField()  # how many participants in characteristics
     value = models.FloatField(null=True, blank=True)
@@ -64,7 +64,7 @@ class CharacteristicValue(Characteristic):
 
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
 
-    timecourse = models.ForeignKey(Timecourse)
+    #timecourse = models.ForeignKey(Timecourse)
 
     def validate(self):
         """ Check that choices are valid. I.e. that choice is allowed choice from choices for
@@ -82,17 +82,17 @@ class ProcessedCharacteristicValue(CharacteristicValue):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
     """
-    raw = models.OneToOneField(CharacteristicValue)
+    raw = models.OneToOneField(CharacteristicValue,parent_link=True, on_delete=True)
 
 
-class Group(Sidable, models.Model):
+class Group(Sidable,Describable, models.Model):
     """ Individual or group of people.
 
     Groups are defined via their characteristics.
     """
-    study = models.ForeignKey(Study, on_delete=True)
-    name = models.TextField()
+    reference = models.ForeignKey(Reference, on_delete=True)
+    # = models.TextField(null=True)
     count = models.IntegerField()
-    characteristics = models.ManyToManyField(Characteristic, on_delete=True)
+    characteristic_value = models.ManyToManyField(CharacteristicValue)
 
 # TODO: How to handle Pharmacokinetics data?

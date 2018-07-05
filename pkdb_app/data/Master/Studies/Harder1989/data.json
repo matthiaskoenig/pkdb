@@ -1,7 +1,10 @@
 {
+    "pmid": 2589393,
+    "sid": "Harder1989",
+    "date": "1990-01-02",
+    "journal": "The American journal of medicine",
     "title": "Ciprofloxacin-caffeine: a drug interaction established using in vivo and in vitro investigations.",
     "abstract": "The inhibitory effects of ciprofloxacin and other quinolone derivatives on the hepatic cytochrome P450-dependent metabolism of caffeine have been investigated in humans. In vivo studies involved an intraindividual comparison of the single-dose kinetics of caffeine before and during quinolone administration in 12 healthy men. Changes of enzymatic caffeine degradation by the quinolones were studied in vitro using human liver microsomes from three donors. Enoxacin and pipemidic acid markedly prolonged caffeine elimination in vivo. A positive correlation exists between the doses of enoxacin or ciprofloxacin and the prolongation (increases) in the caffeine elimination half-life. Decreases in caffeine elimination, using doses of ciprofloxacin in the upper part of the recommended dose range, were approximately 1.5-fold in comparison with untreated control subjects, whereas in the case of enoxacin there was a sixfold change. In vitro results with enoxacin, ofloxacin, ciprofloxacin, and pipemidic acid show a competitive inhibition (Dixon plots) of caffeine 3-demethylation. Ciprofloxacin and enoxacin showed the strongest inhibitory effects in vitro, whereas ofloxacin had the lowest inhibitory effect. These results are qualitatively reflected in the in vivo results; however, the clinical effects may be dependent on pharmacokinetic disposition of the quinolone and this could explain the weak inhibitory action of ciprofloxacin in vivo.",
-    "pmid": 2589393,
     "authors": [
         {
             "first_name": "S",
@@ -18,6 +21,96 @@
         {
             "first_name": "T",
             "last_name": "Wolff"
+        }
+    ],
+    "doi": "",
+    "groups": [
+        {
+            "count": 12,
+            "sid": "Harder1989-S1",
+            "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": NaN
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": NaN
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "-"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": NaN
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": NaN
+                },
+                {
+                    "value": "age",
+                    "choice": NaN
+                },
+                {
+                    "value": "sex",
+                    "choice": "male"
+                }
+            ]
         }
     ]
 }

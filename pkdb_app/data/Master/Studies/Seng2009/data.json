@@ -1,7 +1,10 @@
 {
+    "pmid": 19125908,
+    "sid": "Seng2009",
+    "date": "2009-02-26",
+    "journal": "Journal of clinical pharmacy and therapeutics",
     "title": "Population pharmacokinetics of caffeine in healthy male adults using mixed-effects models.",
     "abstract": "The population pharmacokinetic model satisfactorily described the disposition and variability of caffeine in the data. Mixed-effects modelling showed that the dose of caffeine depended on cigarette smoking status.",
-    "pmid": 19125908,
     "authors": [
         {
             "first_name": "K-Y",
@@ -26,6 +29,270 @@
         {
             "first_name": "C-L",
             "last_name": "Lim"
+        }
+    ],
+    "doi": "",
+    "groups": [
+        {
+            "count": 14,
+            "sid": "Seng2009-S_NCNS",
+            "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean \u00b1 SD) 21 \u00b1 2 years, body weight 62 \u00b1 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 \u00b1 4 years, body weight 69 \u00b1 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 \u00b1 4 cigarettes daily, age 23 \u00b1 5 years, body weight 71 \u00b1 19 kg).",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": "Asian"
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": "-"
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "-"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": "no (during trial)"
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": "no"
+                },
+                {
+                    "value": "age",
+                    "choice": 21.0
+                },
+                {
+                    "value": "sex",
+                    "choice": "male"
+                }
+            ]
+        },
+        {
+            "count": 15,
+            "sid": "Seng2009-S_CNS",
+            "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean \u00b1 SD) 21 \u00b1 2 years, body weight 62 \u00b1 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 \u00b1 4 years, body weight 69 \u00b1 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 \u00b1 4 cigarettes daily, age 23 \u00b1 5 years, body weight 71 \u00b1 19 kg).",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": "Asian"
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": "-"
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "-"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": "no (during trial)"
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": "no"
+                },
+                {
+                    "value": "age",
+                    "choice": 24.0
+                },
+                {
+                    "value": "sex",
+                    "choice": "male"
+                }
+            ]
+        },
+        {
+            "count": 30,
+            "sid": "Seng2009-S_CS",
+            "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean \u00b1 SD) 21 \u00b1 2 years, body weight 62 \u00b1 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 \u00b1 4 years, body weight 69 \u00b1 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 \u00b1 4 cigarettes daily, age 23 \u00b1 5 years, body weight 71 \u00b1 19 kg).",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": "Asian"
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": "10 +- 4 cigarettes/day"
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "-"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": "no (during trial)"
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": "yes"
+                },
+                {
+                    "value": "age",
+                    "choice": 23.0
+                },
+                {
+                    "value": "sex",
+                    "choice": "male"
+                }
+            ]
         }
     ]
 }

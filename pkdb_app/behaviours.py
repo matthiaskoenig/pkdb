@@ -8,7 +8,7 @@ from pkdb_app.utils import CHAR_MAX_LENGTH
 
 class Sidable(models.Model):
     """ Model has an sid. """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     class Meta:
         abstract = True

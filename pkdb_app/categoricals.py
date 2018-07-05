@@ -12,7 +12,7 @@ an ontology which represents the relationship between the differnent values.
 # TODO: How to handle the genetic information? Genetic variants?
 
 from collections import namedtuple
-CharacteristicType = namedtuple("CharacteristicType", ["value", "class", "dtype", "choices"])
+CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices"])
 UnitType = namedtuple("UnitType", ["name"])
 
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
@@ -68,7 +68,7 @@ CHARACTERISTIC_DATA = COMMON_DATA+ [
 
     # Study protocol
     CharacteristicType('overnight fast', 'Study protocol', 'boolean', ["Y", "N"]),
-    CharacteristicType('alcohol abstinence', 'Study protocol', 'boolean', ["Y", "N"]),
+    CharacteristicType('alcohol_abstinence', 'Study protocol', 'boolean', ["Y", "N"]),
 
     # Medication
 
@@ -88,7 +88,7 @@ def dict_and_choices(data):
     data_choices = [(ctype.value, ctype.value) for ctype in data]
     return data_dict, data_choices
 
-
+CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 

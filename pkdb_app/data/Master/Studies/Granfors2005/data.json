@@ -1,7 +1,10 @@
 {
+    "pmid": 16198659,
+    "sid": "Granfors2005",
+    "date": "2005-11-02",
+    "journal": "Clinical pharmacology and therapeutics",
     "title": "Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.",
     "abstract": "OCs containing ethinyl estradiol and gestodene increase, to a clinically significant extent, the plasma concentrations and effects of tizanidine, probably mainly by inhibiting its CYP1A2-mediated presystemic metabolism. Care should be exercised when tizanidine is prescribed to OC users.",
-    "pmid": 16198659,
     "authors": [
         {
             "first_name": "Marika T",
@@ -18,6 +21,183 @@
         {
             "first_name": "Pertti J",
             "last_name": "Neuvonen"
+        }
+    ],
+    "doi": "",
+    "groups": [
+        {
+            "count": 15,
+            "sid": "Granfors2005-S1",
+            "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": NaN
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": NaN
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "no"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": NaN
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": "no"
+                },
+                {
+                    "value": "age",
+                    "choice": 22.0
+                },
+                {
+                    "value": "sex",
+                    "choice": "female"
+                }
+            ]
+        },
+        {
+            "count": 15,
+            "sid": "Granfors2005-S2",
+            "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
+            "characteristics_values": [
+                {
+                    "value": "disease",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine_amount",
+                    "choice": null
+                },
+                {
+                    "value": "bmi",
+                    "choice": null
+                },
+                {
+                    "value": "body weight",
+                    "choice": null
+                },
+                {
+                    "value": "ethnicity",
+                    "choice": NaN
+                },
+                {
+                    "value": "height",
+                    "choice": NaN
+                },
+                {
+                    "value": "caffeine",
+                    "choice": null
+                },
+                {
+                    "value": "waist circumference",
+                    "choice": null
+                },
+                {
+                    "value": "medication",
+                    "choice": null
+                },
+                {
+                    "value": "smoking_amount",
+                    "choice": NaN
+                },
+                {
+                    "value": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "value": "healthy",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol",
+                    "choice": NaN
+                },
+                {
+                    "value": "oral contraceptives",
+                    "choice": "yes"
+                },
+                {
+                    "value": "alcohol_amount",
+                    "choice": null
+                },
+                {
+                    "value": "alcohol_abstinence",
+                    "choice": NaN
+                },
+                {
+                    "value": "overnight fast",
+                    "choice": null
+                },
+                {
+                    "value": "smoking",
+                    "choice": "no"
+                },
+                {
+                    "value": "age",
+                    "choice": 22.0
+                },
+                {
+                    "value": "sex",
+                    "choice": "female"
+                }
+            ]
         }
     ]
 }

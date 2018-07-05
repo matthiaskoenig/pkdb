@@ -3,12 +3,20 @@ version: '2'
 services:
   postgres:
     image: postgres:9.6
-    #ports:
-    #  - "5432:5432"
+    ports:
+      - "5432:5432"
+    environment:
+
+     POSTGRES_USER : postgres
+     POSTGRES_PASSWORD: pass
+     POSTGRES_DB: postgres
+
+
   web:
     restart: always
     environment:
       - DJANGO_SECRET_KEY=local
+
     image: web
     build: ./
     command: >
