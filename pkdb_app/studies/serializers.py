@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Reference, Author
+from ..subjects.models import Group
 from ..subjects.serializers import GroupSerializer
 
 BASE_FIELDS = ()
@@ -33,18 +34,22 @@ class ReferenceSerializer(serializers.ModelSerializer):
         model = Reference
         fields = BASE_FIELDS + ('sid','groups', 'pmid', 'doi', 'title', 'abstract', 'journal','date', 'authors','pdf')
 
+    def validate(self, data):
+        return data
+
     def create(self, validated_data):
-        authors_data = validated_data.pop('authors')
-        groups_data = validated_data.pop('groups')
+        authors_data = validated_data.pop('authors',[])
+        groups_data = validated_data.pop('groups',[])
 
         reference, _ = Reference.objects.update_or_create(pmid=validated_data["pmid"],defaults = validated_data)
+
         for author_data in authors_data:
             author, created = Author.objects.update_or_create(**author_data)
             reference.authors.add(author)
             reference.save()
 
         for group in groups_data:
-            reference.group_set.update_or_create(sid=group["sid"], defaults=group)
+            Group.objects.update_or_create(sid=group["sid"], reference=reference, defaults=group)
 
         return reference
 

@@ -60,6 +60,7 @@ def xml_to_data(d):
 
 def create_json(d):
     json_dict = {}
+    json_dict["groups"] = []
     json_dict["pmid"] = d["pmid"]
     json_dict["sid"] = d["sid"]
     for date in d["data"].iter("DateCompleted"):

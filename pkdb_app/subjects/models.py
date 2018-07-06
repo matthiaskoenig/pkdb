@@ -12,6 +12,7 @@ from ..studies.models import Reference
 from ..behaviours import Sidable, Describable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, UNITS_CHOICES
 from ..utils import CHAR_MAX_LENGTH
+from .managers import GroupManager
 
 
 class Timecourse(models.Model):
@@ -22,11 +23,11 @@ class Timecourse(models.Model):
     data = models.BinaryField()
 
 
-class Characteristic(Sidable, models.Model):
+class Characteristic(models.Model):
     """ Characteristic.
     Characteristics are used to store the information about subjects.
     """
-    value = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
+    category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
 
     @property
     def characteristic_data(self):
@@ -34,7 +35,7 @@ class Characteristic(Sidable, models.Model):
 
         :return:
         """
-        return CHARACTERISTIC_DICT[self.value]
+        return CHARACTERISTIC_DICT[self.category]
 
     @property
     def choices(self):
@@ -44,12 +45,23 @@ class Characteristic(Sidable, models.Model):
         abstract = True
 
 
+class Group(Sidable,Describable, models.Model):
+    """ Individual or group of people.
+
+    Groups are defined via their characteristics.
+    """
+    reference = models.ForeignKey(Reference, on_delete=True, related_name='groups', null=True, blank=True)
+    # = models.TextField(null=True)
+    count = models.IntegerField()
+
+    objects = GroupManager()
+
 class CharacteristicValue(Characteristic):
     """
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH)  # check in validation that allowed choice
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # check in validation that allowed choice
 
     count = models.IntegerField()  # how many participants in characteristics
     value = models.FloatField(null=True, blank=True)
@@ -62,20 +74,20 @@ class CharacteristicValue(Characteristic):
     se = models.FloatField(null=True, blank=True)
     cv = models.FloatField(null=True, blank=True)
 
-    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
+    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    group = models.ForeignKey(Group, related_name="characteristic_values", null=True, on_delete=True)
 
-    #timecourse = models.ForeignKey(Timecourse)
 
-    def validate(self):
-        """ Check that choices are valid. I.e. that choice is allowed choice from choices for
-        characteristics.
+    #def validate(self):
+    #    """ Check that choices are valid. I.e. that choice is allowed choice from choices for
+    #    characteristics.
 
-        Add checks for individuals and groups. For instance if count==1 than value must be filled,
-        but not entries in mean, median, ...
+    #    Add checks for individuals and groups. For instance if count==1 than value must be filled,
+    #    but not entries in mean, median, ...
 
-        :return:
-        """
-        raise NotImplemented
+    #    :return:
+    #    """
+    #    raise NotImplemented
 
 
 class ProcessedCharacteristicValue(CharacteristicValue):
@@ -85,14 +97,6 @@ class ProcessedCharacteristicValue(CharacteristicValue):
     raw = models.OneToOneField(CharacteristicValue,parent_link=True, on_delete=True)
 
 
-class Group(Sidable,Describable, models.Model):
-    """ Individual or group of people.
 
-    Groups are defined via their characteristics.
-    """
-    reference = models.ForeignKey(Reference, on_delete=True)
-    # = models.TextField(null=True)
-    count = models.IntegerField()
-    characteristic_value = models.ManyToManyField(CharacteristicValue)
 
 # TODO: How to handle Pharmacokinetics data?
