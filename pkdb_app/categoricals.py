@@ -20,8 +20,9 @@ UNIT_DATA = [
     UnitType('-'),
     UnitType('cm'), UnitType('m'),
     UnitType('kg'),
-    UnitType('y'),
+    UnitType('yr'),
     UnitType('kg/m^2'),
+    UnitType('1/day'),
 ]
 UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 
@@ -35,7 +36,7 @@ UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 
 COMMON_DATA = [
     # Medication
-    CharacteristicType('oral contraceptives', 'Contraceptives', 'boolean', ["Y", "N"]),
+    CharacteristicType('oral_contraceptives', 'Contraceptives', 'boolean', ["Y", "N"]),
     CharacteristicType('medication', 'Medication', 'categorial', ["ibuprofen", "paracetamol", "aspirin"]),  # ? dosing
 
     # Lifestyle
@@ -47,11 +48,11 @@ CHARACTERISTIC_DATA = COMMON_DATA+ [
     # Antropmetrical information
     CharacteristicType('species', 'Species', 'categorial', ["Homo sapiens"]),
     CharacteristicType('height', 'BodyParameter', 'numeric', None),
-    CharacteristicType('body weight', 'BodyParameter', 'numeric', None),
+    CharacteristicType('body_weight', 'BodyParameter', 'numeric', None),
     CharacteristicType('age', 'BodyParameter', 'numeric', None),
     CharacteristicType('sex', 'BodyParameter', 'categorial', ["M", "F"]),
     CharacteristicType('bmi', 'BodyParameter', 'numeric', None),
-    CharacteristicType('waist circumference', 'BodyParameter', 'numeric', None),
+    CharacteristicType('waist_circumference', 'BodyParameter', 'numeric', None),
     CharacteristicType('ethnicity', 'Ethnicity', 'categorial', ["african", "afroamerican", "asian", "caucasian"]),
 
     # Disease (status)
@@ -67,7 +68,7 @@ CHARACTERISTIC_DATA = COMMON_DATA+ [
 
 
     # Study protocol
-    CharacteristicType('overnight fast', 'Study protocol', 'boolean', ["Y", "N"]),
+    CharacteristicType('overnight_fast', 'Study protocol', 'boolean', ["Y", "N"]),
     CharacteristicType('alcohol_abstinence', 'Study protocol', 'boolean', ["Y", "N"]),
 
     # Medication
@@ -88,6 +89,7 @@ def dict_and_choices(data):
     data_choices = [(ctype.value, ctype.value) for ctype in data]
     return data_dict, data_choices
 
+CHARACTERISTIC_DTYPE = {item.value : item.dtype for item in CHARACTERISTIC_DATA}
 CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)

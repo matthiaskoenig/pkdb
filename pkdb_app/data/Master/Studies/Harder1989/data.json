@@ -1,4 +1,169 @@
 {
+    "groups": [
+        {
+            "count": 12,
+            "sid": "Harder1989-S1",
+            "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 12,
+                    "category": "oral_contraceptives",
+                    "choice": "-"
+                },
+                {
+                    "count": 12,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 12,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 12,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 12,
+                    "category": "smoking",
+                    "choice": null
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 12,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 12,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 12,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 12,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 12,
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "category": "age",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": "20",
+                    "max": "40",
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 12,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 12,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 12,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        }
+    ],
     "pmid": 2589393,
     "sid": "Harder1989",
     "date": "1990-01-02",
@@ -23,94 +188,5 @@
             "last_name": "Wolff"
         }
     ],
-    "doi": "",
-    "groups": [
-        {
-            "count": 12,
-            "sid": "Harder1989-S1",
-            "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
-            "characteristics_values": [
-                {
-                    "value": "disease",
-                    "choice": NaN
-                },
-                {
-                    "value": "caffeine_amount",
-                    "choice": null
-                },
-                {
-                    "value": "bmi",
-                    "choice": null
-                },
-                {
-                    "value": "body weight",
-                    "choice": null
-                },
-                {
-                    "value": "ethnicity",
-                    "choice": NaN
-                },
-                {
-                    "value": "height",
-                    "choice": NaN
-                },
-                {
-                    "value": "caffeine",
-                    "choice": null
-                },
-                {
-                    "value": "waist circumference",
-                    "choice": null
-                },
-                {
-                    "value": "medication",
-                    "choice": null
-                },
-                {
-                    "value": "smoking_amount",
-                    "choice": NaN
-                },
-                {
-                    "value": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "value": "healthy",
-                    "choice": "yes"
-                },
-                {
-                    "value": "alcohol",
-                    "choice": NaN
-                },
-                {
-                    "value": "oral contraceptives",
-                    "choice": "-"
-                },
-                {
-                    "value": "alcohol_amount",
-                    "choice": null
-                },
-                {
-                    "value": "alcohol_abstinence",
-                    "choice": NaN
-                },
-                {
-                    "value": "overnight fast",
-                    "choice": null
-                },
-                {
-                    "value": "smoking",
-                    "choice": NaN
-                },
-                {
-                    "value": "age",
-                    "choice": NaN
-                },
-                {
-                    "value": "sex",
-                    "choice": "male"
-                }
-            ]
-        }
-    ]
+    "doi": ""
 }

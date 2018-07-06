@@ -1,14 +1,14 @@
 {
     "groups": [
         {
-            "count": 10,
-            "sid": "Healy1989-S1",
-            "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean \u00b1 standard deviation age, weight, and serum creatinine of the subjects were 26.7 \u00b1 1.6 years, 76.3 \u00b1 8.6 kg, and 1.0 \u00b1 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
+            "count": 7,
+            "sid": "Culm-Merdek2005-S1",
+            "description": "7 subjects (6 men, 1 woman, average age 50 years, average weight 82 kg) completed the study after giving informed consent. All subjects were nonsmokers based upon self-reports.Four of the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. All subjects were asked to abstain from all caffeine-containing foods and beverages for 24 h prior to each study trial. The study had a randomized, four-way crossover design, with at least 7 days elapsing between treatments.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 10,
-                    "mean": "76.3",
+                    "count": 7,
+                    "mean": "82",
                     "median": null,
                     "min": null,
                     "max": null,
@@ -18,33 +18,33 @@
                     "unit": "kg"
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "oral_contraceptives",
-                    "choice": "-"
+                    "choice": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "disease",
                     "choice": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "smoking",
                     "choice": "N"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 10,
+                    "count": 7,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -56,7 +56,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 10,
+                    "count": 7,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -67,23 +67,23 @@
                     "unit": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 10,
+                    "count": 7,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -95,7 +95,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 10,
+                    "count": 7,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -106,30 +106,35 @@
                     "unit": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "healthy",
                     "choice": "Y"
                 },
                 {
-                    "count": 10,
+                    "count": "6",
                     "category": "sex",
                     "choice": "M"
                 },
                 {
+                    "count": "1",
+                    "category": "sex",
+                    "choice": "F"
+                },
+                {
                     "category": "age",
-                    "count": 10,
-                    "mean": "26.7",
+                    "count": 7,
+                    "mean": "50",
                     "median": null,
                     "min": null,
                     "max": null,
-                    "sd": "1.6",
+                    "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 10,
+                    "count": 7,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -140,18 +145,18 @@
                     "unit": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "ethnicity",
                     "choice": null
                 },
                 {
-                    "count": 10,
+                    "count": 7,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 10,
+                    "count": 7,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -164,33 +169,29 @@
             ]
         }
     ],
-    "pmid": 2729942,
-    "sid": "Healy1989",
-    "date": "1989-07-07",
-    "journal": "Antimicrobial agents and chemotherapy",
-    "title": "Interaction between oral ciprofloxacin and caffeine in normal volunteers.",
-    "abstract": "The influence of multiple doses of ciprofloxacin on the disposition of caffeine and its major metabolite, paraxanthine, was investigated in healthy volunteers. Ten xanthine-free, fasting males were given 100 mg of caffeine orally 24 h before being given ciprofloxacin and again with the third dose of ciprofloxacin (750 mg administered every 12 h). Blood samples were serially collected after both doses of caffeine and after the first and last doses of ciprofloxacin. Ciprofloxacin significantly increased the half-life of caffeine (from 5.2 +/- 1.2 to 8.2 +/- 2.5 h) and the area under the caffeine concentration-time curve (from 16.3 +/- 6.6 to 25.9 +/- 7.8 micrograms.h/ml) while decreasing the total body clearance (from 106 +/- 41.6 to 58.2 +/- 28.8 ml/min per 1.73 m2). In addition, the rate of conversion of caffeine to paraxanthine was significantly delayed. There was no significant linear correlation between the urinary recovery of oxociprofloxacin at 0 to 12 h and the change in the area under the caffeine concentration-time curve. There was also a small but statistically significant increase in the area under the ciprofloxacin concentration-time curve during simultaneous administration of caffeine. We concluded that ciprofloxacin causes a significant increase in the half-life of caffeine and in the area under the caffeine concentration-time curve by reducing total body clearance. This interaction is due at least in part to a delay in the conversion of caffeine to paraxanthine. The clinical significance of these observations remains to be determined. Lastly, caffeine may alter the kinetics of ciprofloxacin, a possibility which should be more fully explored.",
+    "pmid": 16236038,
+    "sid": "Culm-Merdek2005",
+    "date": "2006-05-03",
+    "journal": "British journal of clinical pharmacology",
+    "title": "Fluvoxamine impairs single-dose caffeine clearance without altering caffeine pharmacodynamics.",
+    "abstract": "Fluvoxamine greatly impaired caffeine clearance, but without detectable changes in caffeine pharmacodynamics. However, this study does not rule out possible adverse effects due to extensive accumulation of caffeine with daily ingestion in fluvoxamine-treated individuals.",
     "authors": [
         {
-            "first_name": "D P",
-            "last_name": "Healy"
+            "first_name": "Kerry E",
+            "last_name": "Culm-Merdek"
         },
         {
-            "first_name": "R E",
-            "last_name": "Polk"
+            "first_name": "Lisa L",
+            "last_name": "von Moltke"
         },
         {
-            "first_name": "L",
-            "last_name": "Kanawati"
+            "first_name": "Jerold S",
+            "last_name": "Harmatz"
         },
         {
-            "first_name": "D T",
-            "last_name": "Rock"
-        },
-        {
-            "first_name": "M L",
-            "last_name": "Mooney"
+            "first_name": "David J",
+            "last_name": "Greenblatt"
         }
     ],
-    "doi": ""
+    "doi": "10.1111/j.1365-2125.2005.02467.x"
 }

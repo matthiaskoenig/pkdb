@@ -1,0 +1,1025 @@
+{
+    "groups": [
+        {
+            "count": 7,
+            "sid": "Joeres1988-S1",
+            "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 7,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 7,
+                    "category": "sex",
+                    "choice": null
+                },
+                {
+                    "category": "age",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": "25",
+                    "max": "45",
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        },
+        {
+            "count": 7,
+            "sid": "Joeres1988-S2",
+            "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 7,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 7,
+                    "category": "sex",
+                    "choice": null
+                },
+                {
+                    "category": "age",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 7,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 7,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 7,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        },
+        {
+            "count": 8,
+            "sid": "Joeres1988-S3",
+            "description": "8 smoking healthy volunteers and patients without liver disease",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 8,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 8,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 8,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 8,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 8,
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 8,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 8,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 8,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 8,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 8,
+                    "category": "sex",
+                    "choice": null
+                },
+                {
+                    "category": "age",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 8,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 8,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        },
+        {
+            "count": 15,
+            "sid": "Joeres1988-S4",
+            "description": "15 non-smoking healthy volunteers and patients without liver disease",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 15,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 15,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 15,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 15,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 15,
+                    "category": "sex",
+                    "choice": null
+                },
+                {
+                    "category": "age",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 15,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        },
+        {
+            "count": 18,
+            "sid": "Joeres1988-S5",
+            "description": "18 smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 18,
+                    "mean": "71",
+                    "median": null,
+                    "min": null,
+                    "max": "94",
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
+                },
+                {
+                    "count": 18,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 18,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 18,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 18,
+                    "category": "disease",
+                    "choice": "alcoholic liver cirrhosis"
+                },
+                {
+                    "count": 18,
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 18,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 18,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 18,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 18,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 18,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 18,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 18,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 18,
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "count": "13",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "5",
+                    "category": "sex",
+                    "choice": "F"
+                },
+                {
+                    "category": "age",
+                    "count": 18,
+                    "mean": "46",
+                    "median": null,
+                    "min": "30",
+                    "max": "65",
+                    "sd": "9",
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 18,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 18,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 18,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 18,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        },
+        {
+            "count": 30,
+            "sid": "Joeres1988-S6",
+            "description": "30 non-smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 30,
+                    "mean": "75",
+                    "median": null,
+                    "min": null,
+                    "max": "100",
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
+                },
+                {
+                    "count": 30,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 30,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 30,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 30,
+                    "category": "disease",
+                    "choice": "alcoholic liver cirrhosis"
+                },
+                {
+                    "count": 30,
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 30,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 30,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 30,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 30,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 30,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 30,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 30,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 30,
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "count": "21",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "9",
+                    "category": "sex",
+                    "choice": "F"
+                },
+                {
+                    "category": "age",
+                    "count": 30,
+                    "mean": "51",
+                    "median": null,
+                    "min": "40",
+                    "max": "66",
+                    "sd": "6",
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 30,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 30,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 30,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 30,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        }
+    ],
+    "pmid": 3371873,
+    "sid": "Joeres1988",
+    "date": "1988-06-30",
+    "journal": "Hepatology (Baltimore, Md.)",
+    "title": "Influence of smoking on caffeine elimination in healthy volunteers and in patients with alcoholic liver cirrhosis.",
+    "abstract": "The effect of smoking on caffeine elimination was measured in 7 healthy volunteers and in 18 smoking and in 30 nonsmoking patients with alcoholic liver cirrhosis following oral application of 366 mg caffeine. In an intraindividual experiment in smoking health probands, caffeine clearance decreased from 118 +/- 33 to 77 +/- 22 ml per min (p less than 0.05) after abstaining cigarette smoking for 3 weeks. In a control group without liver disease (8 smokers, 15 nonsmokers), we found a caffeine clearance of 114 +/- 40 ml per min in smokers and 64 +/- 20 in nonsmokers (p less than 0.05). Smoking and nonsmoking patients with alcoholic liver cirrhosis did not differ with respect to clinical and laboratory data and hexobarbitone elimination. However, caffeine clearance was 63 +/- 63 ml per min in smoking patients compared to 34 +/- 49 ml per min in nonsmokers (p less than 0.05). Fasting plasma concentrations of caffeine were higher in nonsmokers (5.1 +/- 6.2 micrograms per ml) than in smokers (2.1 +/- 4.5 micrograms per ml, p less than 0.05). We conclude that smoking habits have to be taken into account if caffeine is used as a model compound for measuring quantitative liver function.",
+    "authors": [
+        {
+            "first_name": "R",
+            "last_name": "Joeres"
+        },
+        {
+            "first_name": "H",
+            "last_name": "Klinker"
+        },
+        {
+            "first_name": "H",
+            "last_name": "Heusler"
+        },
+        {
+            "first_name": "J",
+            "last_name": "Epping"
+        },
+        {
+            "first_name": "W",
+            "last_name": "Zilly"
+        },
+        {
+            "first_name": "E",
+            "last_name": "Richter"
+        }
+    ],
+    "doi": ""
+}

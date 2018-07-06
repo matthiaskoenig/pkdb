@@ -2,16 +2,16 @@
     "groups": [
         {
             "count": 10,
-            "sid": "Healy1989-S1",
-            "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean \u00b1 standard deviation age, weight, and serum creatinine of the subjects were 26.7 \u00b1 1.6 years, 76.3 \u00b1 8.6 kg, and 1.0 \u00b1 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
+            "sid": "Balogh1995-S1",
+            "description": "Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;\nExcluded were smokers;",
             "characteristic_values": [
                 {
                     "category": "body_weight",
                     "count": 10,
-                    "mean": "76.3",
+                    "mean": null,
                     "median": null,
                     "min": null,
-                    "max": null,
+                    "max": "75",
                     "sd": null,
                     "se": null,
                     "cv": null,
@@ -20,7 +20,7 @@
                 {
                     "count": 10,
                     "category": "oral_contraceptives",
-                    "choice": "-"
+                    "choice": null
                 },
                 {
                     "count": 10,
@@ -113,16 +113,16 @@
                 {
                     "count": 10,
                     "category": "sex",
-                    "choice": "M"
+                    "choice": "F"
                 },
                 {
                     "category": "age",
                     "count": 10,
-                    "mean": "26.7",
+                    "mean": null,
                     "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "1.6",
+                    "min": "20",
+                    "max": "34",
+                    "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "yr"
@@ -164,32 +164,36 @@
             ]
         }
     ],
-    "pmid": 2729942,
-    "sid": "Healy1989",
-    "date": "1989-07-07",
-    "journal": "Antimicrobial agents and chemotherapy",
-    "title": "Interaction between oral ciprofloxacin and caffeine in normal volunteers.",
-    "abstract": "The influence of multiple doses of ciprofloxacin on the disposition of caffeine and its major metabolite, paraxanthine, was investigated in healthy volunteers. Ten xanthine-free, fasting males were given 100 mg of caffeine orally 24 h before being given ciprofloxacin and again with the third dose of ciprofloxacin (750 mg administered every 12 h). Blood samples were serially collected after both doses of caffeine and after the first and last doses of ciprofloxacin. Ciprofloxacin significantly increased the half-life of caffeine (from 5.2 +/- 1.2 to 8.2 +/- 2.5 h) and the area under the caffeine concentration-time curve (from 16.3 +/- 6.6 to 25.9 +/- 7.8 micrograms.h/ml) while decreasing the total body clearance (from 106 +/- 41.6 to 58.2 +/- 28.8 ml/min per 1.73 m2). In addition, the rate of conversion of caffeine to paraxanthine was significantly delayed. There was no significant linear correlation between the urinary recovery of oxociprofloxacin at 0 to 12 h and the change in the area under the caffeine concentration-time curve. There was also a small but statistically significant increase in the area under the ciprofloxacin concentration-time curve during simultaneous administration of caffeine. We concluded that ciprofloxacin causes a significant increase in the half-life of caffeine and in the area under the caffeine concentration-time curve by reducing total body clearance. This interaction is due at least in part to a delay in the conversion of caffeine to paraxanthine. The clinical significance of these observations remains to be determined. Lastly, caffeine may alter the kinetics of ciprofloxacin, a possibility which should be more fully explored.",
+    "pmid": 7589032,
+    "sid": "Balogh1995",
+    "date": "1995-11-28",
+    "journal": "European journal of clinical pharmacology",
+    "title": "Influence of ethinylestradiol-containing combination oral contraceptives with gestodene or levonorgestrel on caffeine elimination.",
+    "abstract": "In a controlled clinical trial, the elimination of caffeine was examined in 20 healthy women prior to and during one cycle of treatment with either of two oral contraceptive formulations, one containing 0.075 mg gestodene and 0.03 mg ethinylestradiol and one containing 0.125 mg levonorgestrel and 0.03 mg ethinylestradiol. In addition, caffeine clearance was determined 1 month after the last intake of the oral contraceptives. Compared with pretreatment values, the clearance of caffeine was reduced by about 54% and 55% after one treatment cycle with gestodene- and the levonorgestrel-containing oral contraceptive, respectively. Other pharmacokinetic parameters of caffeine, such as tmax and Cmax, were not affected. Clearance values returned to pretreatment values 1 month after the last administration of the oral contraceptives. There was no difference in the reduction of caffeine clearance between contraceptive formulations. A small, but significant difference in the AUC(0-24 h) values of ethinylestradiol was noted between both preparations. There was no correlation between the AUC(model) values of caffeine and the AUC(0-24 h) values of ethinylestradiol. In the present study, a somewhat more pronounced effect on the elimination of caffeine was observed than in previous investigations, where several contraceptive steroids were administered only for a period of 2 weeks.",
     "authors": [
         {
-            "first_name": "D P",
-            "last_name": "Healy"
+            "first_name": "A",
+            "last_name": "Balogh"
         },
         {
-            "first_name": "R E",
-            "last_name": "Polk"
+            "first_name": "G",
+            "last_name": "Klinger"
         },
         {
             "first_name": "L",
-            "last_name": "Kanawati"
+            "last_name": "Henschel"
         },
         {
-            "first_name": "D T",
-            "last_name": "Rock"
+            "first_name": "A",
+            "last_name": "B\u00f6rner"
         },
         {
-            "first_name": "M L",
-            "last_name": "Mooney"
+            "first_name": "R",
+            "last_name": "Vollanth"
+        },
+        {
+            "first_name": "W",
+            "last_name": "Kuhnz"
         }
     ],
     "doi": ""

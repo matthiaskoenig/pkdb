@@ -1,4 +1,174 @@
 {
+    "groups": [
+        {
+            "count": 11,
+            "sid": "Ghassabian2009-S1",
+            "description": "The assay was applied to samples collected in a pilot study of people with schizophrenia who were receiving Clozapine. Participants were selected on the basis of having no history of chronic diseases such as diabetes, asthma, and cancer, and women could not be pregnant at the time of study. 11 people with schizophrenia who were receiving\nclozapine provided informed consent, participated, and\nsuccessfully completed the pilot clinical study (Table 5).\nNone of the subjects experienced serious side effects after\nadministration of the drug cocktail.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 11,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "count": 11,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 11,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 11,
+                    "category": "disease",
+                    "choice": "schizophrenia"
+                },
+                {
+                    "count": 11,
+                    "category": "smoking",
+                    "choice": null
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 11,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 11,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 11,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 11,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": "9",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "F"
+                },
+                {
+                    "category": "age",
+                    "count": 11,
+                    "mean": "41.09",
+                    "median": null,
+                    "min": "22",
+                    "max": "66",
+                    "sd": "14.56",
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 11,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 11,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        }
+    ],
     "pmid": 19307938,
     "sid": "Ghassabian2009",
     "date": "2009-04-29",
@@ -47,94 +217,5 @@
             "last_name": "McLachlan"
         }
     ],
-    "doi": "",
-    "groups": [
-        {
-            "count": 11,
-            "sid": "Ghassabian2009-S1",
-            "description": "The assay was applied to samples collected in a pilot study of people with schizophrenia who were receiving Clozapine. Participants were selected on the basis of having no history of chronic diseases such as diabetes, asthma, and cancer, and women could not be pregnant at the time of study. 11 people with schizophrenia who were receiving\nclozapine provided informed consent, participated, and\nsuccessfully completed the pilot clinical study (Table 5).\nNone of the subjects experienced serious side effects after\nadministration of the drug cocktail.",
-            "characteristics_values": [
-                {
-                    "value": "disease",
-                    "choice": "schizophrenia"
-                },
-                {
-                    "value": "caffeine_amount",
-                    "choice": null
-                },
-                {
-                    "value": "bmi",
-                    "choice": null
-                },
-                {
-                    "value": "body weight",
-                    "choice": null
-                },
-                {
-                    "value": "ethnicity",
-                    "choice": NaN
-                },
-                {
-                    "value": "height",
-                    "choice": NaN
-                },
-                {
-                    "value": "caffeine",
-                    "choice": null
-                },
-                {
-                    "value": "waist circumference",
-                    "choice": null
-                },
-                {
-                    "value": "medication",
-                    "choice": null
-                },
-                {
-                    "value": "smoking_amount",
-                    "choice": NaN
-                },
-                {
-                    "value": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "value": "healthy",
-                    "choice": "yes"
-                },
-                {
-                    "value": "alcohol",
-                    "choice": NaN
-                },
-                {
-                    "value": "oral contraceptives",
-                    "choice": NaN
-                },
-                {
-                    "value": "alcohol_amount",
-                    "choice": null
-                },
-                {
-                    "value": "alcohol_abstinence",
-                    "choice": NaN
-                },
-                {
-                    "value": "overnight fast",
-                    "choice": null
-                },
-                {
-                    "value": "smoking",
-                    "choice": NaN
-                },
-                {
-                    "value": "age",
-                    "choice": 41.09
-                },
-                {
-                    "value": "sex",
-                    "choice": "9 male / 2 female"
-                }
-            ]
-        }
-    ]
+    "doi": ""
 }

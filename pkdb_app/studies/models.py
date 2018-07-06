@@ -32,7 +32,7 @@ class Reference(Sidable,models.Model):
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True) #optional
-    doi = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True) #optional
+    doi = models.CharField(max_length=150, null=True, blank=True) #optional
     title = models.TextField()
     abstract = models.TextField(blank=True, null=True)
     journal = models.TextField(blank=True, null=True)

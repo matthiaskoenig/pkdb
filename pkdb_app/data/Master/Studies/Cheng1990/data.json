@@ -1,50 +1,50 @@
 {
     "groups": [
         {
-            "count": 15,
-            "sid": "Granfors2005-S1",
-            "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
+            "count": 13,
+            "sid": "Cheng1990-S1",
+            "description": "13 healthy volunteers (nine men and four women on the hospital staff) were recruited. The volunteers were between 20 and 50 years of age and weighed between 47 and 85 kg. None were taking any medications, and all had normal plasma biochemical profiles. Their normal caffeine intake ranged between 0 and 250 mg / day. Except for one volunteer who smoked 10 cigarettes a day, all others were nonsmokers. Eight of the volunteers were nondrinkers, and the other five consumed less than 50 gm alcohol a day. They were not restricted in their normal activities until the day before the study, when they were instructed to abstain from caffeine. Six of the same group of healthy subjects also received at least two doses (70 mg and 200 mg) of intravenous caffeine on another two separate occasions for estimation of the bioavailability of orally administered caffeine in these subjects. Three of these same healthy subjects also received 300 mg caffeine by intravenous infusion over 20 minutes.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 15,
-                    "mean": "62",
+                    "count": 13,
+                    "mean": null,
                     "median": null,
                     "min": null,
-                    "max": "74",
+                    "max": "85",
                     "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "kg"
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "oral_contraceptives",
-                    "choice": "N"
+                    "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "disease",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "smoking",
                     "choice": "N"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -56,7 +56,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -67,23 +67,23 @@
                     "unit": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -95,7 +95,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -106,30 +106,35 @@
                     "unit": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "healthy",
                     "choice": "Y"
                 },
                 {
-                    "count": 15,
+                    "count": "9",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "4",
                     "category": "sex",
                     "choice": "F"
                 },
                 {
                     "category": "age",
-                    "count": 15,
-                    "mean": "22",
+                    "count": 13,
+                    "mean": null,
                     "median": null,
-                    "min": "19",
-                    "max": "26",
-                    "sd": "2",
+                    "min": "20",
+                    "max": "50",
+                    "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -140,18 +145,18 @@
                     "unit": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "ethnicity",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -164,50 +169,50 @@
             ]
         },
         {
-            "count": 15,
-            "sid": "Granfors2005-S2",
-            "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
+            "count": 13,
+            "sid": "Cheng1990-S2",
+            "description": "13 cirrhotic patients were also studied. 9 of these patients were nonsmokers, and the remaining four patients smoked fewer than 20 cigarettes a day. Data on these patients are presented in Table I. Nine patients were nondrinkers, and the remaining four consumed less than 50 gm alcohol a day. Patients were between the ages of 53 and 75 years and weighed between 50 and 107 kg. Their normal caffeine intake ranged from 50 to 500 mg a day. Two patients had decompensated cirrhosis, as assessed by the presence of ascites and hepatic encephalopathy, and these patients received 70 mg and 200 mg doses of caffeine only.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 15,
-                    "mean": "57",
+                    "count": 13,
+                    "mean": "74.77",
                     "median": null,
                     "min": null,
-                    "max": "63",
+                    "max": "107",
                     "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "kg"
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "oral_contraceptives",
-                    "choice": "Y"
+                    "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "disease",
-                    "choice": null
+                    "choice": "cirrhosis"
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "smoking",
-                    "choice": "N"
+                    "choice": "Mixed"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -219,7 +224,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -230,23 +235,23 @@
                     "unit": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -258,7 +263,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -269,30 +274,35 @@
                     "unit": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "healthy",
-                    "choice": "Y"
+                    "choice": "N"
                 },
                 {
-                    "count": 15,
+                    "count": "10",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "3",
                     "category": "sex",
                     "choice": "F"
                 },
                 {
                     "category": "age",
-                    "count": 15,
-                    "mean": "22",
+                    "count": 13,
+                    "mean": "62.2",
                     "median": null,
-                    "min": "18",
-                    "max": "25",
-                    "sd": "2",
+                    "min": "53",
+                    "max": "75",
+                    "sd": "6.37",
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -303,18 +313,18 @@
                     "unit": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "ethnicity",
                     "choice": null
                 },
                 {
-                    "count": 15,
+                    "count": 13,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 15,
+                    "count": 13,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -327,28 +337,36 @@
             ]
         }
     ],
-    "pmid": 16198659,
-    "sid": "Granfors2005",
-    "date": "2005-11-02",
+    "pmid": 2328560,
+    "sid": "Cheng1990",
+    "date": "1990-05-25",
     "journal": "Clinical pharmacology and therapeutics",
-    "title": "Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.",
-    "abstract": "OCs containing ethinyl estradiol and gestodene increase, to a clinically significant extent, the plasma concentrations and effects of tizanidine, probably mainly by inhibiting its CYP1A2-mediated presystemic metabolism. Care should be exercised when tizanidine is prescribed to OC users.",
+    "title": "Dose-dependent pharmacokinetics of caffeine in humans: relevance as a test of quantitative liver function.",
+    "abstract": "Caffeine clearance was determined in 13 healthy control subjects and in 13 patients with histologically proven cirrhosis. On separate occasions, 70 mg, 200 mg, and 300 mg single doses of anhydrous caffeine were administered orally with decaffeinated coffee to each subject. Subjects were analyzed individually, acting as their own controls, thus reducing interindividual variability. The present study showed that caffeine exhibited dose-dependent pharmacokinetics, particularly in subjects who showed high initial clearance with the low dose (70 mg) of caffeine. There was a significant decrease in caffeine clearance with increasing dose from 70 mg to 300 mg (n = 26, p less than 0.01, Dunnett's test), indicating saturable caffeine metabolism in the dose range tested. These findings imply that if caffeine is to be used as a guide to deteriorating liver function, serial caffeine clearance estimations should be performed in each individual subject, with use of the same dose of caffeine each time.",
     "authors": [
         {
-            "first_name": "Marika T",
-            "last_name": "Granfors"
+            "first_name": "W S",
+            "last_name": "Cheng"
         },
         {
-            "first_name": "Janne T",
-            "last_name": "Backman"
+            "first_name": "T L",
+            "last_name": "Murphy"
         },
         {
-            "first_name": "Jouko",
-            "last_name": "Laitila"
+            "first_name": "M T",
+            "last_name": "Smith"
         },
         {
-            "first_name": "Pertti J",
-            "last_name": "Neuvonen"
+            "first_name": "W G",
+            "last_name": "Cooksley"
+        },
+        {
+            "first_name": "J W",
+            "last_name": "Halliday"
+        },
+        {
+            "first_name": "L W",
+            "last_name": "Powell"
         }
     ],
     "doi": ""

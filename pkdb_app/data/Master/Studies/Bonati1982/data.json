@@ -1,50 +1,50 @@
 {
     "groups": [
         {
-            "count": 12,
-            "sid": "Harder1988-S1",
-            "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
+            "count": 4,
+            "sid": "Bonati1982-S1",
+            "description": "4 healthy men who were 26 to 36 yr old with a mean weight of 70kg;\nThey abstained from coffee, tea, chocolate, and cola beverages from 10 days before until the end of study;\nOvernight fasting;",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 12,
-                    "mean": null,
+                    "count": 4,
+                    "mean": "70",
                     "median": null,
                     "min": null,
                     "max": null,
                     "sd": null,
                     "se": null,
                     "cv": null,
-                    "unit": null
+                    "unit": "kg"
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "oral_contraceptives",
-                    "choice": "-"
+                    "choice": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "disease",
                     "choice": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "smoking",
                     "choice": null
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -56,7 +56,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -67,23 +67,23 @@
                     "unit": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -95,7 +95,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -106,22 +106,22 @@
                     "unit": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "healthy",
                     "choice": "Y"
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "sex",
                     "choice": "M"
                 },
                 {
                     "category": "age",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
-                    "min": "20",
-                    "max": "40",
+                    "min": "26",
+                    "max": "36",
                     "sd": null,
                     "se": null,
                     "cv": null,
@@ -129,7 +129,7 @@
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -140,18 +140,18 @@
                     "unit": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "ethnicity",
                     "choice": null
                 },
                 {
-                    "count": 12,
+                    "count": 4,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 12,
+                    "count": 4,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -164,36 +164,36 @@
             ]
         }
     ],
-    "pmid": 2853056,
-    "sid": "Harder1988",
-    "date": "1989-05-10",
-    "journal": "European journal of clinical pharmacology",
-    "title": "4-quinolones inhibit biotransformation of caffeine.",
-    "abstract": "The pharmacokinetics of caffeine, including formation of its major metabolite paraxanthine in plasma, has been investigated in 12 healthy males (age 20-40 years) alone and during co-administration of the 4-quinolones ofloxacin, norfloxacin, pipemidic acid, ciprofloxacin, and enoxacin; ciprofloxacin and enoxacin were given in 3 different dose levels. The naphthyridine derivative enoxacin and the pyrido-pyrimidine derivative pipemidic acid had caused marked inhibition of caffeine and paraxanthine metabolism, whereas the genuine quinolone derivatives norfloxacin and ciprofloxacin had little effect, and the pyrido-benzoxacine derivative ofloxacin had no detectable effect. The different molecular and spatial structures of the compounds appear to be responsible for the differences in inhibitory potency.",
+    "pmid": 7083737,
+    "sid": "Bonati1982",
+    "date": "1982-08-26",
+    "journal": "Clinical pharmacology and therapeutics",
+    "title": "Caffeine disposition after oral doses.",
+    "abstract": "Caffeine (TMX) disposition was studied in mean after 1, 5, and 10 mg/kg in water, as mocha coffee (1.54 mg/kg) and as a soft drink (0.22 mg/kg). TMX and its metabolites were analyzed in plasma and urine by high-pressure liquid chromatography. The design permitted confirmation of most of the partial results in various experimental settings and contributed new data on the metabolic disposition of TMX, with specific reference to main dimethylxanthine metabolite found in plasma, paraxanthine (1,7-dimethylxanthine). Different analysis methods were compared for the calculated parameters (absorption and elimination rate constants and renal clearance)to assess the consistency of results. The kinetics of TMX and of its dimethylated metabolites in plasma were described with a model that used an analogdigital hybrid computing system. In addition to providing a comprehensive profile of TMS disposition in the healthy adult, the results indicate tha TMX exhibits dose-independent kinetics at the levels at which man normally takes TMX.",
     "authors": [
         {
+            "first_name": "M",
+            "last_name": "Bonati"
+        },
+        {
+            "first_name": "R",
+            "last_name": "Latini"
+        },
+        {
+            "first_name": "F",
+            "last_name": "Galletti"
+        },
+        {
+            "first_name": "J F",
+            "last_name": "Young"
+        },
+        {
+            "first_name": "G",
+            "last_name": "Tognoni"
+        },
+        {
             "first_name": "S",
-            "last_name": "Harder"
-        },
-        {
-            "first_name": "A H",
-            "last_name": "Staib"
-        },
-        {
-            "first_name": "C",
-            "last_name": "Beer"
-        },
-        {
-            "first_name": "A",
-            "last_name": "Papenburg"
-        },
-        {
-            "first_name": "W",
-            "last_name": "Stille"
-        },
-        {
-            "first_name": "P M",
-            "last_name": "Shah"
+            "last_name": "Garattini"
         }
     ],
     "doi": ""

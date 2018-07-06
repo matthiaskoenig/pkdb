@@ -1,50 +1,50 @@
 {
     "groups": [
         {
-            "count": 5,
-            "sid": "ZylberKatz1984-S1",
-            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "count": 10,
+            "sid": "Akinyinka2000-S1",
+            "description": "Control group: Ten healthy adults, with a mean age of 32.1 \u00b1 7.6 years (age range 18\u00b140 years) and weighing 59.8 +- 12.3 kg (range 38\u00b182 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 5,
-                    "mean": "76.2",
+                    "count": 10,
+                    "mean": "59.8",
                     "median": null,
                     "min": null,
-                    "max": "88",
+                    "max": "82",
                     "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "kg"
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "oral_contraceptives",
-                    "choice": "N"
+                    "choice": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "disease",
                     "choice": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "smoking",
                     "choice": "N"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 5,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -56,7 +56,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 5,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -67,23 +67,23 @@
                     "unit": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 5,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -95,7 +95,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 5,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -106,35 +106,30 @@
                     "unit": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "healthy",
                     "choice": "Y"
                 },
                 {
-                    "count": "3",
+                    "count": 10,
                     "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "2",
-                    "category": "sex",
-                    "choice": "F"
+                    "choice": null
                 },
                 {
                     "category": "age",
-                    "count": 5,
-                    "mean": "41.6",
+                    "count": 10,
+                    "mean": "32.1",
                     "median": null,
-                    "min": "29",
-                    "max": "47",
-                    "sd": "6.44",
+                    "min": "18",
+                    "max": "40",
+                    "sd": "7.6",
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 5,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -145,18 +140,18 @@
                     "unit": null
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "ethnicity",
-                    "choice": null
+                    "choice": "Black"
                 },
                 {
-                    "count": 5,
+                    "count": 10,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 5,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -169,50 +164,50 @@
             ]
         },
         {
-            "count": 3,
-            "sid": "ZylberKatz1984-S2",
-            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "count": 10,
+            "sid": "Akinyinka2000-S2",
+            "description": "Patient group: Ten patients aged 15.7 \u00b1 2.5 years (range 12\u00b120 years) and weighing 45.3 \u00b1 14.9 kg (range 25\u00b158 kg) were enrolled into the study (Table 1). Patients were enrolled if the following criteria were met: fever in the preceding 24\u00b148 h or pyrexia at presentation, pure Plasmodium falciparum parasitaemia with a peripheral parasite density of more than 5000 asexual forms per microlitre in blood, no history of anti-malarial drug administration in the 2 weeks preceding presentation, negative urine test for 4-aminoquinoline (Dill-Glazko) and sulphonamides (Lignin) and/or absence of other concomitant illness.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 3,
-                    "mean": "70.33",
+                    "count": 10,
+                    "mean": "45.3",
                     "median": null,
                     "min": null,
-                    "max": "91",
+                    "max": "58",
                     "sd": null,
                     "se": null,
                     "cv": null,
                     "unit": "kg"
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "oral_contraceptives",
-                    "choice": "N"
+                    "choice": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "disease",
-                    "choice": null
+                    "choice": "Plasmodium falciparum"
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "smoking",
                     "choice": "N"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 3,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -224,7 +219,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 3,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -235,23 +230,23 @@
                     "unit": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 3,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -263,7 +258,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 3,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -274,35 +269,30 @@
                     "unit": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "healthy",
-                    "choice": "Y"
+                    "choice": "N"
                 },
                 {
-                    "count": "2",
+                    "count": 10,
                     "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "1",
-                    "category": "sex",
-                    "choice": "F"
+                    "choice": null
                 },
                 {
                     "category": "age",
-                    "count": 3,
-                    "mean": "27.33",
+                    "count": 10,
+                    "mean": "15.7",
                     "median": null,
-                    "min": "24",
-                    "max": "30",
-                    "sd": "2.49",
+                    "min": "12",
+                    "max": "20",
+                    "sd": "2.5",
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 3,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -313,18 +303,18 @@
                     "unit": null
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "ethnicity",
-                    "choice": null
+                    "choice": "Black"
                 },
                 {
-                    "count": 3,
+                    "count": 10,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 3,
+                    "count": 10,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -337,50 +327,50 @@
             ]
         },
         {
-            "count": 4,
-            "sid": "ZylberKatz1984-S3",
-            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "count": 8,
+            "sid": "Akinyinka2000-S3",
+            "description": "Plasma and salvia caffeine concentration measured in 8 of 10 healthy volunteers. Control group: Ten healthy adults, with a mean age of 32.1 \u00b1 7.6 years (age range 18\u00b140 years) and weighing 59.8 +- 12.3 kg (range 38\u00b182 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 4,
-                    "mean": "62.75",
+                    "count": 8,
+                    "mean": null,
                     "median": null,
                     "min": null,
-                    "max": "75",
+                    "max": null,
                     "sd": null,
                     "se": null,
                     "cv": null,
-                    "unit": "kg"
+                    "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "oral_contraceptives",
-                    "choice": "N"
+                    "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "disease",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "smoking",
                     "choice": "N"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 4,
+                    "count": 8,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -392,7 +382,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 4,
+                    "count": 8,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -403,23 +393,23 @@
                     "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 4,
+                    "count": 8,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -431,7 +421,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 4,
+                    "count": 8,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -442,35 +432,18 @@
                     "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
                     "category": "healthy",
                     "choice": "Y"
                 },
                 {
-                    "count": "2",
+                    "count": 8,
                     "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "2",
-                    "category": "sex",
-                    "choice": "F"
+                    "choice": null
                 },
                 {
                     "category": "age",
-                    "count": 4,
-                    "mean": "27.25",
-                    "median": null,
-                    "min": "22",
-                    "max": "31",
-                    "sd": "3.56",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 4,
+                    "count": 8,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -481,18 +454,30 @@
                     "unit": null
                 },
                 {
-                    "count": 4,
-                    "category": "ethnicity",
-                    "choice": null
+                    "category": "caffeine_amount",
+                    "count": 8,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 8,
+                    "category": "ethnicity",
+                    "choice": "Black"
+                },
+                {
+                    "count": 8,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 4,
+                    "count": 8,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -505,24 +490,28 @@
             ]
         }
     ],
-    "pmid": 6734043,
-    "sid": "ZylberKatz1984",
-    "date": "1984-08-13",
-    "journal": "Clinical pharmacology and therapeutics",
-    "title": "Relationship between caffeine concentrations in plasma and saliva.",
-    "abstract": "Caffeine concentrations in plasma and saliva were measured by HPLC in 12 healthy subjects after a single oral dose of 250 to 350 mg. There was a linear relationship between caffeine concentrations in the two fluids. Mean (+/- SE) saliva: total plasma concentration ratio was 0.79 +/- 0.02, while the ratio of the free (non-protein bound):total concentration of drug in plasma was 0.59 +/- 0.01. We postulate that the higher saliva:total plasma ratio as compared to the plasma free: total ratio is a result of pH partitioning. The mean elimination t 1/2 estimated from plasma and saliva concentration-time curves were much the same (5.7 +/- 0.7 and 5.9 +/- 0.8 hr). Values for total body clearance and apparent volume of distribution obtained from saliva data were higher than values derived from plasma concentrations. These differences could be corrected by multiplying the saliva-derived parameters by the saliva: total plasma concentration ratio. We conclude that saliva sampling could serve as a useful technique for therapeutic drug monitoring as well as for research of caffeine kinetics when many samples are required.",
+    "pmid": 10877011,
+    "sid": "Akinyinka2000",
+    "date": "2000-10-06",
+    "journal": "European journal of clinical pharmacology",
+    "title": "The effects of acute falciparum malaria on the disposition of caffeine and the comparison of saliva and plasma-derived pharmacokinetic parameters in adult Nigerians.",
+    "abstract": "Acute Plasmodium falciparum malaria produced significant changes in the disposition of caffeine metabolites. Analysis of concentrations in saliva is a useful non-invasive method for monitoring the kinetics of caffeine and paraxanthine in Nigerians.",
     "authors": [
         {
-            "first_name": "E",
-            "last_name": "Zylber-Katz"
+            "first_name": "O O",
+            "last_name": "Akinyinka"
         },
         {
-            "first_name": "L",
-            "last_name": "Granit"
+            "first_name": "A",
+            "last_name": "Sowunmi"
         },
         {
-            "first_name": "M",
-            "last_name": "Levy"
+            "first_name": "R",
+            "last_name": "Honeywell"
+        },
+        {
+            "first_name": "A G",
+            "last_name": "Renwick"
         }
     ],
     "doi": ""

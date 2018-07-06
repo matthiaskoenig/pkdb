@@ -2,16 +2,16 @@
     "groups": [
         {
             "count": 5,
-            "sid": "ZylberKatz1984-S1",
-            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "sid": "Campbell1987a-S1",
+            "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
                     "count": 5,
-                    "mean": "76.2",
+                    "mean": "57.8",
                     "median": null,
                     "min": null,
-                    "max": "88",
+                    "max": "64",
                     "sd": null,
                     "se": null,
                     "cv": null,
@@ -111,198 +111,25 @@
                     "choice": "Y"
                 },
                 {
-                    "count": "3",
-                    "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "2",
+                    "count": 5,
                     "category": "sex",
                     "choice": "F"
                 },
                 {
                     "category": "age",
                     "count": 5,
-                    "mean": "41.6",
+                    "mean": "24.6",
                     "median": null,
-                    "min": "29",
-                    "max": "47",
-                    "sd": "6.44",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 5,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 5,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 5,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 5,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                }
-            ]
-        },
-        {
-            "count": 3,
-            "sid": "ZylberKatz1984-S2",
-            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
-            "characteristic_values": [
-                {
-                    "category": "body_weight",
-                    "count": 3,
-                    "mean": "70.33",
-                    "median": null,
-                    "min": null,
-                    "max": "91",
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "count": 3,
-                    "category": "oral_contraceptives",
-                    "choice": "N"
-                },
-                {
-                    "count": 3,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "count": 3,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 3,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "count": 3,
-                    "category": "smoking",
-                    "choice": "N"
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 3,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "bmi",
-                    "count": 3,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 3,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "count": 3,
-                    "category": "overnight_fast",
-                    "choice": null
-                },
-                {
-                    "count": 3,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 3,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 3,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 3,
-                    "category": "healthy",
-                    "choice": "Y"
-                },
-                {
-                    "count": "2",
-                    "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "1",
-                    "category": "sex",
-                    "choice": "F"
-                },
-                {
-                    "category": "age",
-                    "count": 3,
-                    "mean": "27.33",
-                    "median": null,
-                    "min": "24",
+                    "min": "21",
                     "max": "30",
-                    "sd": "2.49",
+                    "sd": "3",
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 3,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -313,18 +140,18 @@
                     "unit": null
                 },
                 {
-                    "count": 3,
+                    "count": 5,
                     "category": "ethnicity",
-                    "choice": null
+                    "choice": "Caucasian"
                 },
                 {
-                    "count": 3,
+                    "count": 5,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 3,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -337,14 +164,14 @@
             ]
         },
         {
-            "count": 4,
-            "sid": "ZylberKatz1984-S3",
-            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "count": 5,
+            "sid": "Campbell1987a-S2",
+            "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
-                    "count": 4,
-                    "mean": "62.75",
+                    "count": 5,
+                    "mean": "64",
                     "median": null,
                     "min": null,
                     "max": "75",
@@ -354,33 +181,33 @@
                     "unit": "kg"
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "oral_contraceptives",
-                    "choice": "N"
+                    "choice": "Y"
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "caffeine",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "species",
                     "choice": "homo sapiens"
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "disease",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "smoking",
                     "choice": "N"
                 },
                 {
                     "category": "alcohol_amount",
-                    "count": 4,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -392,7 +219,7 @@
                 },
                 {
                     "category": "bmi",
-                    "count": 4,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -403,23 +230,23 @@
                     "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "overnight_fast",
                     "choice": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
                     "category": "height",
-                    "count": 4,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -431,7 +258,7 @@
                 },
                 {
                     "category": "smoking_amount",
-                    "count": 4,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -442,35 +269,30 @@
                     "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "healthy",
                     "choice": "Y"
                 },
                 {
-                    "count": "2",
-                    "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "2",
+                    "count": 5,
                     "category": "sex",
                     "choice": "F"
                 },
                 {
                     "category": "age",
-                    "count": 4,
-                    "mean": "27.25",
+                    "count": 5,
+                    "mean": "25",
                     "median": null,
-                    "min": "22",
-                    "max": "31",
-                    "sd": "3.56",
+                    "min": "24",
+                    "max": "26",
+                    "sd": "0.89",
                     "se": null,
                     "cv": null,
                     "unit": "yr"
                 },
                 {
                     "category": "caffeine_amount",
-                    "count": 4,
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -481,18 +303,181 @@
                     "unit": null
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "ethnicity",
-                    "choice": null
+                    "choice": "Caucasian"
                 },
                 {
-                    "count": 4,
+                    "count": 5,
                     "category": "medication",
                     "choice": null
                 },
                 {
                     "category": "waist_circumference",
-                    "count": 4,
+                    "count": 5,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        },
+        {
+            "count": 5,
+            "sid": "Campbell1987a-S3",
+            "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 5,
+                    "mean": "57.6",
+                    "median": null,
+                    "min": null,
+                    "max": "59",
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
+                },
+                {
+                    "count": 5,
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "count": 5,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 5,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 5,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 5,
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 5,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 5,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 5,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 5,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 5,
+                    "category": "alcohol",
+                    "choice": null
+                },
+                {
+                    "category": "height",
+                    "count": 5,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 5,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 5,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 5,
+                    "category": "sex",
+                    "choice": "F"
+                },
+                {
+                    "category": "age",
+                    "count": 5,
+                    "mean": "30.4",
+                    "median": null,
+                    "min": "21",
+                    "max": "42",
+                    "sd": "7.96",
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 5,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 5,
+                    "category": "ethnicity",
+                    "choice": "Caucasian"
+                },
+                {
+                    "count": 5,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 5,
                     "mean": null,
                     "median": null,
                     "min": null,
@@ -505,24 +490,24 @@
             ]
         }
     ],
-    "pmid": 6734043,
-    "sid": "ZylberKatz1984",
-    "date": "1984-08-13",
+    "pmid": 3608349,
+    "sid": "Campbell1987a",
+    "date": "1987-09-21",
     "journal": "Clinical pharmacology and therapeutics",
-    "title": "Relationship between caffeine concentrations in plasma and saliva.",
-    "abstract": "Caffeine concentrations in plasma and saliva were measured by HPLC in 12 healthy subjects after a single oral dose of 250 to 350 mg. There was a linear relationship between caffeine concentrations in the two fluids. Mean (+/- SE) saliva: total plasma concentration ratio was 0.79 +/- 0.02, while the ratio of the free (non-protein bound):total concentration of drug in plasma was 0.59 +/- 0.01. We postulate that the higher saliva:total plasma ratio as compared to the plasma free: total ratio is a result of pH partitioning. The mean elimination t 1/2 estimated from plasma and saliva concentration-time curves were much the same (5.7 +/- 0.7 and 5.9 +/- 0.8 hr). Values for total body clearance and apparent volume of distribution obtained from saliva data were higher than values derived from plasma concentrations. These differences could be corrected by multiplying the saliva-derived parameters by the saliva: total plasma concentration ratio. We conclude that saliva sampling could serve as a useful technique for therapeutic drug monitoring as well as for research of caffeine kinetics when many samples are required.",
+    "title": "A urinary metabolite ratio that reflects systemic caffeine clearance.",
+    "abstract": "Systemic caffeine clearance and urinary metabolite profiles were determined in 15 subjects with diverse exposure histories to cytochrome P-450 inducers (cigarette smoke) and inhibitors (oral contraceptive steroids). A correlation was observed between caffeine clearance and a urinary ratio based on the molar recovery of paraxanthine 7-demethylation products relative to a paraxanthine 8-hydroxylation product (r = 0.91; P less than 0.001). Analysis of urinary metabolites was undertaken in a larger population to assess the effects of gender, age, oral contraceptives, and smoking on the ratio. No gender differences were observed in either adults or children; children (n = 21) showed a higher (P less than 0.001) mean metabolite ratio than adults (n = 61), oral contraceptive users (n = 9) had lower (P less than 0.05) ratios than women not taking oral contraceptives (n = 30), and smokers (n = 26) had higher (P less than 0.001) ratios than nonsmokers (n = 61). The data indicate that a urinary metabolite ratio based on paraxanthine 7-demethylation/8-hydroxylation products reflects systemic caffeine clearance and likely monitors cytochrome P-450 activity inducible by polycyclic aromatic hydrocarbons.",
     "authors": [
         {
-            "first_name": "E",
-            "last_name": "Zylber-Katz"
+            "first_name": "M E",
+            "last_name": "Campbell"
         },
         {
-            "first_name": "L",
-            "last_name": "Granit"
+            "first_name": "S P",
+            "last_name": "Spielberg"
         },
         {
-            "first_name": "M",
-            "last_name": "Levy"
+            "first_name": "W",
+            "last_name": "Kalow"
         }
     ],
     "doi": ""

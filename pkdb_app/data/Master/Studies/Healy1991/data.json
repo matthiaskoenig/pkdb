@@ -1,4 +1,169 @@
 {
+    "groups": [
+        {
+            "count": 16,
+            "sid": "Healy1991-S1",
+            "description": "Sixteen healthy adult males participated in this study after internal review board approval and written informed consent were obtained. The mean (\u00b1 standard deviation) age was 27.1 \u00b1 3.1 years, and the weight was 76.7 \u00b1 6.8 kg. Volunteers were excluded on the basis of the following criteria: prior hypersensitivity to quinolones, smoking, the use of medication for chronic illness, body weight deviating by more than 15% from ideal weight, and abnormalities on physical examination, electrocardiogram, or prestudy laboratory tests. Each volunteer was given a list of xanthine-containing products and instructed to abstain from such items, alcohol, and all other drugs beginning 2 days prior to study participation. A xanthine-free diet was maintained throughout the study.",
+            "characteristic_values": [
+                {
+                    "category": "body_weight",
+                    "count": 16,
+                    "mean": "76.7",
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
+                },
+                {
+                    "count": 16,
+                    "category": "oral_contraceptives",
+                    "choice": "-"
+                },
+                {
+                    "count": 16,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "count": 16,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 16,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "count": 16,
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "alcohol_amount",
+                    "count": 16,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 16,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 16,
+                    "category": "alcohol_abstinence",
+                    "choice": null
+                },
+                {
+                    "count": 16,
+                    "category": "overnight_fast",
+                    "choice": null
+                },
+                {
+                    "count": 16,
+                    "category": "alcohol",
+                    "choice": "N"
+                },
+                {
+                    "category": "height",
+                    "count": 16,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 16,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 16,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 16,
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "category": "age",
+                    "count": 16,
+                    "mean": "27.1",
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": "3.1",
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "category": "caffeine_amount",
+                    "count": 16,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 16,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 16,
+                    "category": "medication",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 16,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                }
+            ]
+        }
+    ],
     "pmid": 2069371,
     "sid": "Healy1991",
     "date": "1991-08-15",
@@ -23,94 +188,5 @@
             "last_name": "Polk"
         }
     ],
-    "doi": "",
-    "groups": [
-        {
-            "count": 16,
-            "sid": "Healy1991-S1",
-            "description": "Sixteen healthy adult males participated in this study after internal review board approval and written informed consent were obtained. The mean (\u00b1 standard deviation) age was 27.1 \u00b1 3.1 years, and the weight was 76.7 \u00b1 6.8 kg. Volunteers were excluded on the basis of the following criteria: prior hypersensitivity to quinolones, smoking, the use of medication for chronic illness, body weight deviating by more than 15% from ideal weight, and abnormalities on physical examination, electrocardiogram, or prestudy laboratory tests. Each volunteer was given a list of xanthine-containing products and instructed to abstain from such items, alcohol, and all other drugs beginning 2 days prior to study participation. A xanthine-free diet was maintained throughout the study.",
-            "characteristics_values": [
-                {
-                    "value": "disease",
-                    "choice": NaN
-                },
-                {
-                    "value": "caffeine_amount",
-                    "choice": null
-                },
-                {
-                    "value": "bmi",
-                    "choice": null
-                },
-                {
-                    "value": "body weight",
-                    "choice": null
-                },
-                {
-                    "value": "ethnicity",
-                    "choice": NaN
-                },
-                {
-                    "value": "height",
-                    "choice": NaN
-                },
-                {
-                    "value": "caffeine",
-                    "choice": null
-                },
-                {
-                    "value": "waist circumference",
-                    "choice": null
-                },
-                {
-                    "value": "medication",
-                    "choice": null
-                },
-                {
-                    "value": "smoking_amount",
-                    "choice": NaN
-                },
-                {
-                    "value": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "value": "healthy",
-                    "choice": "yes"
-                },
-                {
-                    "value": "alcohol",
-                    "choice": "no"
-                },
-                {
-                    "value": "oral contraceptives",
-                    "choice": "-"
-                },
-                {
-                    "value": "alcohol_amount",
-                    "choice": null
-                },
-                {
-                    "value": "alcohol_abstinence",
-                    "choice": NaN
-                },
-                {
-                    "value": "overnight fast",
-                    "choice": null
-                },
-                {
-                    "value": "smoking",
-                    "choice": "no"
-                },
-                {
-                    "value": "age",
-                    "choice": 27.1
-                },
-                {
-                    "value": "sex",
-                    "choice": "male"
-                }
-            ]
-        }
-    ]
+    "doi": ""
 }

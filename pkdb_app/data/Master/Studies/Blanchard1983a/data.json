@@ -2,25 +2,25 @@
     "groups": [
         {
             "count": 10,
-            "sid": "Healy1989-S1",
-            "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean \u00b1 standard deviation age, weight, and serum creatinine of the subjects were 26.7 \u00b1 1.6 years, 76.3 \u00b1 8.6 kg, and 1.0 \u00b1 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
+            "sid": "Blanchard1983a-S1",
+            "description": "10 healthy adult male volunteers, aged 18.8 to 30.0 years;\nHealthy adult male Caucasian volunteers. None of the subjects were taking any prescription or non-presecription medication at time of the study.\nEach subject was fasted from the previous evening until at least 2h after the administration of the oral dose.\nSubjects were instructed to abstain from caffeine-containing food and beverages, tobacco (9 of the 10 subjects were non-smokers) and alcohol from 72h before, until 24h after caffeine administration.",
             "characteristic_values": [
                 {
                     "category": "body_weight",
                     "count": 10,
-                    "mean": "76.3",
+                    "mean": "79.5",
                     "median": null,
                     "min": null,
-                    "max": null,
+                    "max": "106",
                     "sd": null,
-                    "se": null,
+                    "se": "3.9",
                     "cv": null,
                     "unit": "kg"
                 },
                 {
                     "count": 10,
                     "category": "oral_contraceptives",
-                    "choice": "-"
+                    "choice": null
                 },
                 {
                     "count": 10,
@@ -118,12 +118,12 @@
                 {
                     "category": "age",
                     "count": 10,
-                    "mean": "26.7",
+                    "mean": "21.8",
                     "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "1.6",
-                    "se": null,
+                    "min": "18.8",
+                    "max": "30",
+                    "sd": null,
+                    "se": "1.1",
                     "cv": null,
                     "unit": "yr"
                 },
@@ -142,7 +142,7 @@
                 {
                     "count": 10,
                     "category": "ethnicity",
-                    "choice": null
+                    "choice": "Caucasian"
                 },
                 {
                     "count": 10,
@@ -164,32 +164,20 @@
             ]
         }
     ],
-    "pmid": 2729942,
-    "sid": "Healy1989",
-    "date": "1989-07-07",
-    "journal": "Antimicrobial agents and chemotherapy",
-    "title": "Interaction between oral ciprofloxacin and caffeine in normal volunteers.",
-    "abstract": "The influence of multiple doses of ciprofloxacin on the disposition of caffeine and its major metabolite, paraxanthine, was investigated in healthy volunteers. Ten xanthine-free, fasting males were given 100 mg of caffeine orally 24 h before being given ciprofloxacin and again with the third dose of ciprofloxacin (750 mg administered every 12 h). Blood samples were serially collected after both doses of caffeine and after the first and last doses of ciprofloxacin. Ciprofloxacin significantly increased the half-life of caffeine (from 5.2 +/- 1.2 to 8.2 +/- 2.5 h) and the area under the caffeine concentration-time curve (from 16.3 +/- 6.6 to 25.9 +/- 7.8 micrograms.h/ml) while decreasing the total body clearance (from 106 +/- 41.6 to 58.2 +/- 28.8 ml/min per 1.73 m2). In addition, the rate of conversion of caffeine to paraxanthine was significantly delayed. There was no significant linear correlation between the urinary recovery of oxociprofloxacin at 0 to 12 h and the change in the area under the caffeine concentration-time curve. There was also a small but statistically significant increase in the area under the ciprofloxacin concentration-time curve during simultaneous administration of caffeine. We concluded that ciprofloxacin causes a significant increase in the half-life of caffeine and in the area under the caffeine concentration-time curve by reducing total body clearance. This interaction is due at least in part to a delay in the conversion of caffeine to paraxanthine. The clinical significance of these observations remains to be determined. Lastly, caffeine may alter the kinetics of ciprofloxacin, a possibility which should be more fully explored.",
+    "pmid": 6832208,
+    "sid": "Blanchard1983a",
+    "date": "1983-05-27",
+    "journal": "European journal of clinical pharmacology",
+    "title": "The absolute bioavailability of caffeine in man.",
+    "abstract": "The absolute bioavailability of orally administered caffeine was investigated in 10 healthy adult male volunteers, aged 18.8 to 30.0 years. The subjects were administered a 5 mg/kg dose of caffeine as either an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion. Plasma samples were collected over the 24-h period following each dose and assayed for their caffeine content using a high-performance liquid chromatographic technique. The oral absorption was very rapid, reaching a peak (Tp) plasma concentration after 29.8 +/- 8.1 min (mean +/- SEM). In addition, the variation in the maximum plasma concentration (Cmax) was low, 10.0 +/- 1.0 micrograms/ml. The absolute bioavailability was assessed by comparing the areas under the plasma concentration vs. time curves for the intravenous and oral doses of caffeine. The rapid absorption resulted in essentially complete bioavailability of the oral caffeine, F(%) = 108.3 +/- 3.6%. The caffeine plasma half-lives varied from 2.7 to 9.9 h, indicating substantial inter-subject variability in its elimination.",
     "authors": [
         {
-            "first_name": "D P",
-            "last_name": "Healy"
+            "first_name": "J",
+            "last_name": "Blanchard"
         },
         {
-            "first_name": "R E",
-            "last_name": "Polk"
-        },
-        {
-            "first_name": "L",
-            "last_name": "Kanawati"
-        },
-        {
-            "first_name": "D T",
-            "last_name": "Rock"
-        },
-        {
-            "first_name": "M L",
-            "last_name": "Mooney"
+            "first_name": "S J",
+            "last_name": "Sawers"
         }
     ],
     "doi": ""
