@@ -6,36 +6,9 @@
             "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 15,
-                    "mean": "22",
-                    "median": null,
-                    "min": "19",
-                    "max": "26",
-                    "sd": "2",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 15,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "smoking",
-                    "choice": "N"
-                },
-                {
-                    "count": 15,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "sex",
+                    "choice": "F"
                 },
                 {
                     "count": 15,
@@ -43,14 +16,33 @@
                     "choice": "homo sapiens"
                 },
                 {
+                    "category": "body_weight",
                     "count": 15,
-                    "category": "alcohol",
-                    "choice": null
+                    "mean": 62.0,
+                    "median": null,
+                    "min": 52.0,
+                    "max": 74.0,
+                    "sd": 10.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
                 },
                 {
                     "count": 15,
-                    "category": "sex",
-                    "choice": "F"
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "age",
+                    "count": 15,
+                    "mean": 22.0,
+                    "median": null,
+                    "min": 19.0,
+                    "max": 26.0,
+                    "sd": 2.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 15,
@@ -59,107 +51,8 @@
                 },
                 {
                     "count": 15,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 15,
-                    "mean": "62",
-                    "median": null,
-                    "min": "52",
-                    "max": "74",
-                    "sd": "10",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "oral_contraceptives",
+                    "category": "smoking",
                     "choice": "N"
-                },
-                {
-                    "category": "bmi",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         },
@@ -169,36 +62,9 @@
             "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 15,
-                    "mean": "22",
-                    "median": null,
-                    "min": "18",
-                    "max": "25",
-                    "sd": "2",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 15,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "smoking",
-                    "choice": "N"
-                },
-                {
-                    "count": 15,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "sex",
+                    "choice": "F"
                 },
                 {
                     "count": 15,
@@ -206,14 +72,33 @@
                     "choice": "homo sapiens"
                 },
                 {
+                    "category": "body_weight",
                     "count": 15,
-                    "category": "alcohol",
-                    "choice": null
+                    "mean": 57.0,
+                    "median": null,
+                    "min": 48.0,
+                    "max": 63.0,
+                    "sd": 6.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
                 },
                 {
                     "count": 15,
-                    "category": "sex",
-                    "choice": "F"
+                    "category": "oral_contraceptives",
+                    "choice": "Y"
+                },
+                {
+                    "category": "age",
+                    "count": 15,
+                    "mean": 22.0,
+                    "median": null,
+                    "min": 18.0,
+                    "max": 25.0,
+                    "sd": 2.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 15,
@@ -222,107 +107,8 @@
                 },
                 {
                     "count": 15,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 15,
-                    "mean": "57",
-                    "median": null,
-                    "min": "48",
-                    "max": "63",
-                    "sd": "6",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "oral_contraceptives",
-                    "choice": "Y"
-                },
-                {
-                    "category": "bmi",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
+                    "category": "smoking",
+                    "choice": "N"
                 }
             ]
         }

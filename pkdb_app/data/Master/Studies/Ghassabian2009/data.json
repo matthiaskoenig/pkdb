@@ -6,48 +6,6 @@
             "description": "The assay was applied to samples collected in a pilot study of people with schizophrenia who were receiving Clozapine. Participants were selected on the basis of having no history of chronic diseases such as diabetes, asthma, and cancer, and women could not be pregnant at the time of study. 11 people with schizophrenia who were receiving\nclozapine provided informed consent, participated, and\nsuccessfully completed the pilot clinical study (Table 5).\nNone of the subjects experienced serious side effects after\nadministration of the drug cocktail.",
             "characteristic_values": [
                 {
-                    "category": "age",
-                    "count": 11,
-                    "mean": "41.09",
-                    "median": null,
-                    "min": "22",
-                    "max": "66",
-                    "sd": "14.56",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 11,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 11,
-                    "category": "smoking",
-                    "choice": null
-                },
-                {
-                    "count": 11,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 11,
-                    "category": "overnight_fast",
-                    "choice": null
-                },
-                {
-                    "count": 11,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 11,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
                     "count": "9",
                     "category": "sex",
                     "choice": "M"
@@ -59,6 +17,23 @@
                 },
                 {
                     "count": 11,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "age",
+                    "count": 11,
+                    "mean": 41.09,
+                    "median": null,
+                    "min": 22.0,
+                    "max": 66.0,
+                    "sd": 14.56,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
+                },
+                {
+                    "count": 11,
                     "category": "healthy",
                     "choice": "Y"
                 },
@@ -66,105 +41,6 @@
                     "count": 11,
                     "category": "disease",
                     "choice": "schizophrenia"
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 11,
-                    "category": "oral_contraceptives",
-                    "choice": null
-                },
-                {
-                    "category": "bmi",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 11,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 11,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         }

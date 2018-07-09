@@ -37,6 +37,7 @@ UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 COMMON_DATA = [
     # Medication
     CharacteristicType('oral_contraceptives', 'Contraceptives', 'boolean', ["Y", "N"]),
+    CharacteristicType('oral_contraceptives_amount', 'Contraceptives', 'numeric', None),
     CharacteristicType('medication', 'Medication', 'categorial', ["ibuprofen", "paracetamol", "aspirin"]),  # ? dosing
 
     # Lifestyle

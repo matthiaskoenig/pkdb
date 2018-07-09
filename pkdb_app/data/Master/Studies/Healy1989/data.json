@@ -6,36 +6,9 @@
             "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean \u00b1 standard deviation age, weight, and serum creatinine of the subjects were 26.7 \u00b1 1.6 years, 76.3 \u00b1 8.6 kg, and 1.0 \u00b1 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 10,
-                    "mean": "26.7",
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "1.6",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 10,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 10,
-                    "category": "smoking",
-                    "choice": "N"
-                },
-                {
-                    "count": 10,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 10,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "sex",
+                    "choice": "M"
                 },
                 {
                     "count": 10,
@@ -43,14 +16,28 @@
                     "choice": "homo sapiens"
                 },
                 {
+                    "category": "body_weight",
                     "count": 10,
-                    "category": "alcohol",
-                    "choice": null
+                    "mean": 76.3,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": 8.6,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
                 },
                 {
+                    "category": "age",
                     "count": 10,
-                    "category": "sex",
-                    "choice": "M"
+                    "mean": 26.7,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": 1.6,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 10,
@@ -59,107 +46,8 @@
                 },
                 {
                     "count": 10,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 10,
-                    "mean": "76.3",
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "8.6",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 10,
-                    "category": "oral_contraceptives",
-                    "choice": "-"
-                },
-                {
-                    "category": "bmi",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 10,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 10,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
+                    "category": "smoking",
+                    "choice": "N"
                 }
             ]
         }

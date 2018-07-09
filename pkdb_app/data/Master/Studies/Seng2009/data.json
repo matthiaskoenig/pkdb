@@ -6,26 +6,26 @@
             "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean \u00b1 SD) 21 \u00b1 2 years, body weight 62 \u00b1 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 \u00b1 4 years, body weight 69 \u00b1 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 \u00b1 4 cigarettes daily, age 23 \u00b1 5 years, body weight 71 \u00b1 19 kg).",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 14,
-                    "mean": "21",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": 14,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "body_weight",
+                    "count": 14,
+                    "mean": 62.0,
                     "median": null,
                     "min": null,
                     "max": null,
-                    "sd": "2",
+                    "sd": 9.0,
                     "se": null,
                     "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 14,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 14,
-                    "category": "smoking",
-                    "choice": "N"
+                    "unit": "kg"
                 },
                 {
                     "count": 14,
@@ -34,23 +34,20 @@
                 },
                 {
                     "count": 14,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "alcohol_abstinence",
+                    "choice": "N"
                 },
                 {
+                    "category": "age",
                     "count": 14,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 14,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
-                    "count": 14,
-                    "category": "sex",
-                    "choice": "M"
+                    "mean": 21.0,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": 2.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 14,
@@ -59,107 +56,13 @@
                 },
                 {
                     "count": 14,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 14,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 14,
-                    "mean": "62",
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "9",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 14,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 14,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 14,
-                    "category": "oral_contraceptives",
-                    "choice": "-"
-                },
-                {
-                    "category": "bmi",
-                    "count": 14,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
+                    "category": "smoking",
+                    "choice": "N"
                 },
                 {
                     "count": 14,
                     "category": "caffeine",
                     "choice": "<=200mg per day"
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 14,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 14,
-                    "category": "alcohol_abstinence",
-                    "choice": "N"
-                },
-                {
-                    "category": "height",
-                    "count": 14,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         },
@@ -169,26 +72,26 @@
             "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean \u00b1 SD) 21 \u00b1 2 years, body weight 62 \u00b1 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 \u00b1 4 years, body weight 69 \u00b1 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 \u00b1 4 cigarettes daily, age 23 \u00b1 5 years, body weight 71 \u00b1 19 kg).",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 15,
-                    "mean": "24",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": 15,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "body_weight",
+                    "count": 15,
+                    "mean": 69.0,
                     "median": null,
                     "min": null,
                     "max": null,
-                    "sd": "4",
+                    "sd": 12.0,
                     "se": null,
                     "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 15,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "smoking",
-                    "choice": "N"
+                    "unit": "kg"
                 },
                 {
                     "count": 15,
@@ -197,23 +100,20 @@
                 },
                 {
                     "count": 15,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "alcohol_abstinence",
+                    "choice": "N"
                 },
                 {
+                    "category": "age",
                     "count": 15,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "sex",
-                    "choice": "M"
+                    "mean": 24.0,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": 4.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 15,
@@ -222,107 +122,13 @@
                 },
                 {
                     "count": 15,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 15,
-                    "mean": "69",
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "12",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "oral_contraceptives",
-                    "choice": "-"
-                },
-                {
-                    "category": "bmi",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
+                    "category": "smoking",
+                    "choice": "N"
                 },
                 {
                     "count": 15,
                     "category": "caffeine",
                     "choice": ">200mg per day"
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol_abstinence",
-                    "choice": "N"
-                },
-                {
-                    "category": "height",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         },
@@ -332,26 +138,26 @@
             "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean \u00b1 SD) 21 \u00b1 2 years, body weight 62 \u00b1 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 \u00b1 4 years, body weight 69 \u00b1 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 \u00b1 4 cigarettes daily, age 23 \u00b1 5 years, body weight 71 \u00b1 19 kg).",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 30,
-                    "mean": "23",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": 30,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "body_weight",
+                    "count": 30,
+                    "mean": 71.0,
                     "median": null,
                     "min": null,
                     "max": null,
-                    "sd": "5",
+                    "sd": 19.0,
                     "se": null,
                     "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 30,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 30,
-                    "category": "smoking",
-                    "choice": "Y"
+                    "unit": "kg"
                 },
                 {
                     "count": 30,
@@ -360,57 +166,25 @@
                 },
                 {
                     "count": 30,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "alcohol_abstinence",
+                    "choice": "N"
                 },
                 {
+                    "category": "age",
                     "count": 30,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 30,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
-                    "count": 30,
-                    "category": "sex",
-                    "choice": "M"
+                    "mean": 23.0,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": 5.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 30,
                     "category": "healthy",
                     "choice": "Y"
-                },
-                {
-                    "count": 30,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 30,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 30,
-                    "mean": "71",
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": "19",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
                 },
                 {
                     "category": "smoking_amount",
@@ -425,67 +199,14 @@
                     "unit": "1/day"
                 },
                 {
-                    "category": "alcohol_amount",
                     "count": 30,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 30,
-                    "category": "oral_contraceptives",
-                    "choice": "-"
-                },
-                {
-                    "category": "bmi",
-                    "count": 30,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
+                    "category": "smoking",
+                    "choice": "Y"
                 },
                 {
                     "count": 30,
                     "category": "caffeine",
                     "choice": ">200mg per day"
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 30,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 30,
-                    "category": "alcohol_abstinence",
-                    "choice": "N"
-                },
-                {
-                    "category": "height",
-                    "count": 30,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         }

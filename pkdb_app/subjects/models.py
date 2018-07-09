@@ -9,8 +9,8 @@ From the data structure this has to be handled very similar.
 from django.db import models
 
 from ..studies.models import Reference
-from ..behaviours import Sidable, Describable
-from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, UNITS_CHOICES
+from ..behaviours import Sidable, Describable, Values
+from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES
 from ..utils import CHAR_MAX_LENGTH
 from .managers import GroupManager
 
@@ -53,28 +53,14 @@ class Group(Sidable,Describable, models.Model):
     reference = models.ForeignKey(Reference, on_delete=True, related_name='groups', null=True, blank=True)
     # = models.TextField(null=True)
     count = models.IntegerField()
-
     objects = GroupManager()
 
-class CharacteristicValue(Characteristic):
+
+class CharacteristicValue(Values,Characteristic):
     """
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # check in validation that allowed choice
-
-    count = models.IntegerField()  # how many participants in characteristics
-    value = models.FloatField(null=True, blank=True)
-
-    mean = models.FloatField(null=True, blank=True)
-    median = models.FloatField(null=True, blank=True)
-    min = models.FloatField(null=True, blank=True)
-    max = models.FloatField(null=True, blank=True)
-    sd = models.FloatField(null=True, blank=True)
-    se = models.FloatField(null=True, blank=True)
-    cv = models.FloatField(null=True, blank=True)
-
-    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     group = models.ForeignKey(Group, related_name="characteristic_values", null=True, on_delete=True)
 
 
@@ -90,11 +76,11 @@ class CharacteristicValue(Characteristic):
     #    raise NotImplemented
 
 
-class ProcessedCharacteristicValue(CharacteristicValue):
+class ProcessedCharacteristicValue(Values,Characteristic,models.Model):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
     """
-    raw = models.OneToOneField(CharacteristicValue,parent_link=True, on_delete=True)
+    raw = models.ForeignKey(CharacteristicValue, null=True, on_delete=True)
 
 
 

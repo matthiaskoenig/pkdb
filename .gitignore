@@ -116,3 +116,4 @@ venv.bak/
 pkdb_app/studies/migrations
 pkdb_app/users/migrations
 pkdb_app/subjects/migrations
+pkdb_app/interventions/migrations

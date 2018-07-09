@@ -1,135 +1,134 @@
-study	intervention	category	intervention_details
-Abernethy1985	oral contraceptive (OC)	oc	"The effect of chronic (> 3 months) administration of low-dose oestrogen-containing (< 50 µg oestrogen) oral contraceptives (OCS) on the pharmacokinetics of caffeine has been examined in a treated females matched with 9 non-smoking, drugfree, healthy control females of similar age, weight and ethnic origin. Each subject received 162mg caffeine base orally after an overnight fast.
+study	intervention	groups	oral_contraceptives_amount	category	description
+Abernethy1985	oral contraceptive (OC)	S1 | S2		oral_contraceptives	"The effect of chronic (> 3 months) administration of low-dose oestrogen-containing (< 50 µg oestrogen) oral contraceptives (OCS) on the pharmacokinetics of caffeine has been examined in a treated females matched with 9 non-smoking, drugfree, healthy control females of similar age, weight and ethnic origin. Each subject received 162mg caffeine base orally after an overnight fast.
 All subjects were asked to abstain from caffeine consumption 48h prior to the study."
-Abernethy1985	control	control	"The effect of chronic (> 3 months) administration of low-dose oestrogen-containing (< 50 µg oestrogen) oral contraceptives (OCS) on the pharmacokinetics of caffeine has been examined in a treated females matched with 9 non-smoking, drugfree, healthy control females of similar age, weight and ethnic origin. Each subject received 162mg caffeine base orally after an overnight fast.
+Abernethy1985	control			control	"The effect of chronic (> 3 months) administration of low-dose oestrogen-containing (< 50 µg oestrogen) oral contraceptives (OCS) on the pharmacokinetics of caffeine has been examined in a treated females matched with 9 non-smoking, drugfree, healthy control females of similar age, weight and ethnic origin. Each subject received 162mg caffeine base orally after an overnight fast.
 All subjects were asked to abstain from caffeine consumption 48h prior to the study."
-Akinyinka2000	control	control	Healthy subjects vs. malaria infection
-Akinyinka2000	Plasmodium falciparum	malaria	Healthy subjects vs. malaria infection
-Amchin1999	control	control	"Control vs. 8 days venlafaxine;
+Akinyinka2000	control			control	Healthy subjects vs. malaria infection
+Akinyinka2000	Plasmodium falciparum			malaria	Healthy subjects vs. malaria infection
+Amchin1999	control			control	"Control vs. 8 days venlafaxine;
 Caffeine and xanthene-containing beverages and foods were prohibited;
 Subjects who routinely consumed more than five 8-ounce cups pf coffee per day were excluded."
-Amchin1999	venlafaxine	venlafaxine	"Control vs. 8 days venlafaxine;
+Amchin1999	venlafaxine			venlafaxine	"Control vs. 8 days venlafaxine;
 Caffeine and xanthene-containing beverages and foods were prohibited;
 Subjects who routinely consumed more than five 8-ounce cups pf coffee per day were excluded."
-Balogh1992	control	control	Testing intra- and interindividual variation in caffeine clearance.
-Balogh1995	control	control	"Oral contraceptives on caffeine clearance;
+Balogh1992	control			control	Testing intra- and interindividual variation in caffeine clearance.
+Balogh1995	control			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (gestodene, Cycle 1)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (gestodene, Cycle 1)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (gestodene, Cycle 2)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (gestodene, Cycle 2)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (gestodene, Cycle 3)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (gestodene, Cycle 3)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	OC (gestodene, Cycle 4)	oc	"Oral contraceptives on caffeine clearance;
+Balogh1995	OC (gestodene, Cycle 4)			oc	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (gestodene, Cycle 5)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (gestodene, Cycle 5)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (levonorgestrel, Cycle 1)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (levonorgestrel, Cycle 1)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (levonorgestrel, Cycle 2)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (levonorgestrel, Cycle 2)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (levonorgestrel, Cycle 3)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (levonorgestrel, Cycle 3)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	OC (levonorgestrel, Cycle 4)	oc	"Oral contraceptives on caffeine clearance;
+Balogh1995	OC (levonorgestrel, Cycle 4)			oc	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Balogh1995	control (levonorgestrel, Cycle 5)	control	"Oral contraceptives on caffeine clearance;
+Balogh1995	control (levonorgestrel, Cycle 5)			control	"Oral contraceptives on caffeine clearance;
 Comparison gestodene formulation (group A) vs. levonorgestrel formulation (group B);
 three control cycles (cycles I-III), one
 treatment cycle (cycle IV) and one post-treatment cycle (cycle V);"
-Benowitz2003	smoking	smoking	Twelve cigarette smokers were studied in 3 treatment conditions, each lasting 7 days, during which they smoked cigarettes, breathed carbon monoxide to achieve carboxyhemoglobin levels similar to those associated with cigarette smoking, chlorzoxazone (250 mg) and caffeine (250 mg) with measurement of disposition kinetics and urine metabolite profiles.
-Benowitz2003	carbon monoxide	carbon monoxide	Twelve cigarette smokers were studied in 3 treatment conditions, each lasting 7 days, during which they smoked cigarettes, breathed carbon monoxide to achieve carboxyhemoglobin levels similar to those associated with cigarette smoking, chlorzoxazone (250 mg) and caffeine (250 mg) with measurement of disposition kinetics and urine metabolite profiles.
-Benowitz2003	air	control	Twelve cigarette smokers were studied in 3 treatment conditions, each lasting 7 days, during which they smoked cigarettes, breathed carbon monoxide to achieve carboxyhemoglobin levels similar to those associated with cigarette smoking, chlorzoxazone (250 mg) and caffeine (250 mg) with measurement of disposition kinetics and urine metabolite profiles.
-Blanchard1983a	control	control	iv vs. oral comparison
-Bonati1982	control	control	different caffeine doses
-Campbell1987a	oral contraceptive (OC)	oc	effect of smoking and OC usage
-Campbell1987a	nonsmokers	control	effect of smoking and OC usage
-Campbell1987a	smokers	smoking	effect of smoking and OC usage
-Cheng1990	control	control	effect of caffeine dose in control and subjects with cirrhosis
-Cheng1990	cirrhosis	cirrhosis	effect of caffeine dose in control and subjects with cirrhosis
-Joeres1988	smokers	smoking	"effect of smoking in normal subjects and cirrhosis;
+Benowitz2003	smoking			smoking	Twelve cigarette smokers were studied in 3 treatment conditions, each lasting 7 days, during which they smoked cigarettes, breathed carbon monoxide to achieve carboxyhemoglobin levels similar to those associated with cigarette smoking, chlorzoxazone (250 mg) and caffeine (250 mg) with measurement of disposition kinetics and urine metabolite profiles.
+Benowitz2003	carbon monoxide			carbon monoxide	Twelve cigarette smokers were studied in 3 treatment conditions, each lasting 7 days, during which they smoked cigarettes, breathed carbon monoxide to achieve carboxyhemoglobin levels similar to those associated with cigarette smoking, chlorzoxazone (250 mg) and caffeine (250 mg) with measurement of disposition kinetics and urine metabolite profiles.
+Benowitz2003	air			control	Twelve cigarette smokers were studied in 3 treatment conditions, each lasting 7 days, during which they smoked cigarettes, breathed carbon monoxide to achieve carboxyhemoglobin levels similar to those associated with cigarette smoking, chlorzoxazone (250 mg) and caffeine (250 mg) with measurement of disposition kinetics and urine metabolite profiles.
+Blanchard1983a	control			control	iv vs. oral comparison
+Bonati1982	control			control	different caffeine doses
+Campbell1987a	oral contraceptive (OC)			oc	effect of smoking and OC usage
+Campbell1987a	nonsmokers			control	effect of smoking and OC usage
+Campbell1987a	smokers			smoking	effect of smoking and OC usage
+Cheng1990	control			control	effect of caffeine dose in control and subjects with cirrhosis
+Cheng1990	cirrhosis			cirrhosis	effect of caffeine dose in control and subjects with cirrhosis
+Joeres1988	smokers			smoking	"effect of smoking in normal subjects and cirrhosis;
 The effect of smoking on caffeine elimination was measured in 7 healthy volunteers and in 18 smoking and in 30 nonsmoking patients with alcoholic liver cirrhosis."
-Joeres1988	nonsmokers	control	"effect of smoking in normal subjects and cirrhosis;
+Joeres1988	nonsmokers			control	"effect of smoking in normal subjects and cirrhosis;
 The effect of smoking on caffeine elimination was measured in 7 healthy volunteers and in 18 smoking and in 30 nonsmoking patients with alcoholic liver cirrhosis."
-Joeres1988	abstinent	control	"effect of smoking in normal subjects and cirrhosis;
+Joeres1988	abstinent			control	"effect of smoking in normal subjects and cirrhosis;
 The effect of smoking on caffeine elimination was measured in 7 healthy volunteers and in 18 smoking and in 30 nonsmoking patients with alcoholic liver cirrhosis."
-Renner1984	control	control	effect of liver disease on caffeine clearance
-Renner1984	cirrhosis	cirrhosis	effect of liver disease on caffeine clearance
-Renner1984	pbc	pbc	effect of liver disease on caffeine clearance
-Renner1984	misc liver disease	misc liver disease	effect of liver disease on caffeine clearance
-Culm-Merdek2005	placebo + caffeine	control	effect of fluvoxamine on the pharmaconkinetics for caffeine and its metabolites; Seven healthy subjects received single 250 mg doses of caffeine (or matching placebo) together with fluvoxamine (four doses of 100 mg over 2 days) or with matching placebo in a double-blind, four-way crossover study. For 24 h after caffeine or placebo administration, plasma caffeine and fluvoxamine concentrations were determined. Psychomotor performance, sedation, and electroencephalographic (EEG) ‘beta’ frequency activity were also assessed.
-Culm-Merdek2005	fluvoxamine + caffeine	fluvoxamine	effect of fluvoxamine on the pharmaconkinetics for caffeine and its metabolites; Seven healthy subjects received single 250 mg doses of caffeine (or matching placebo) together with fluvoxamine (four doses of 100 mg over 2 days) or with matching placebo in a double-blind, four-way crossover study. For 24 h after caffeine or placebo administration, plasma caffeine and fluvoxamine concentrations were determined. Psychomotor performance, sedation, and electroencephalographic (EEG) ‘beta’ frequency activity were also assessed.
-Desmond1980	control	control	impaired elimination of caffeine in cirrhosis
-Desmond1980	cirrhosis	cirrhosis	impaired elimination of caffeine in cirrhosis
-Parsons1978	control	control	effect of smoking on caffeine clearance
-Parsons1978	smoking	smoking	effect of smoking on caffeine clearance
-Fuhr1993a	control	control	inhibitory effect of grapefruit juice and its bitter principal naringenin on CYP1A2 in man
-Fuhr1993a	grapefruit juice	grapefruit	inhibitory effect of grapefruit juice and its bitter principal naringenin on CYP1A2 in man
-ZylberKatz1984	control	control	relationship between caffeine concentrations in plasma and salvia under different caffeine doses
-Ghassabian2009	control	control	simultaneaus in vivo phenotyping of 5 major cytochrome P450 enzymes
-Granfors2005	control	control	Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.
-Granfors2005	oral contraceptive (OC)	oc	Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.
-Haller2002	control	control	pharmacology of ephedra alkaloids and caffeine after single-dose dietary supplement use. A single-arm, open-label pilot study was designed to determine the pharmacokinetics and pharmacodynamics of ephedrine alkaloids and caffeine contained in a commercial dietary supplement administered as a single oral dose to healthy volunteers.
-Healy1991	control	control	Sixteen healthy, nonsmoking adult males participated in a randomized, double-blind, placebo-controlled, two-way crossover study to evaluate the influence of chronic lomefloxacin administration on the disposition of caffeine and its major metabolite, paraxanthine, at steady-state conditions.
-Healy1991	lomefloxacin	lomefloxacin	Sixteen healthy, nonsmoking adult males participated in a randomized, double-blind, placebo-controlled, two-way crossover study to evaluate the influence of chronic lomefloxacin administration on the disposition of caffeine and its major metabolite, paraxanthine, at steady-state conditions.
-Harder1988	control_OFL	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	OFL	OFL	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_NOR	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	NOR	NOR	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_PPA	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	PPA	PPA	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_CIP1	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	CIP1	CIP1	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_CIP2	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	CIP2	CIP2	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_CIP3	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	CIP3	CIP3	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_ENX1	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	ENX1	ENX1	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_ENX2	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	ENX2	ENX2	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	control_ENX3	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1988	ENX3	ENX3	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_OFL	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	OFL	OFL	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_NOR	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	NOR	NOR	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_PPA	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	PPA	PPA	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_CIP1	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	CIP1	CIP1	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_CIP2	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	CIP2	CIP2	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_CIP3	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	CIP3	CIP3	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_ENX1	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	ENX1	ENX1	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_ENX2	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	ENX2	ENX2	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	control_ENX3	control	Effect of 4-Quinolones on caffeine biotransformation
-Harder1989	ENX3	ENX3	Effect of 4-Quinolones on caffeine biotransformation
-Healy1989	control	control	Interaction between oral ciprofloxacin and caffeine in normal volunteers
-Healy1989	ciprofloxacin	control	Interaction between oral ciprofloxacin and caffeine in normal volunteers
-Seng2009	control	control	caffeine in healthy male under different dosages
-Seng2009	CNS	control	caffeine in healthy male under different dosages
-Seng2009	CS	smoking	caffeine in healthy male under different dosages
-
+Renner1984	control			control	effect of liver disease on caffeine clearance
+Renner1984	cirrhosis			cirrhosis	effect of liver disease on caffeine clearance
+Renner1984	pbc			pbc	effect of liver disease on caffeine clearance
+Renner1984	misc liver disease			misc liver disease	effect of liver disease on caffeine clearance
+Culm-Merdek2005	placebo + caffeine			control	effect of fluvoxamine on the pharmaconkinetics for caffeine and its metabolites; Seven healthy subjects received single 250 mg doses of caffeine (or matching placebo) together with fluvoxamine (four doses of 100 mg over 2 days) or with matching placebo in a double-blind, four-way crossover study. For 24 h after caffeine or placebo administration, plasma caffeine and fluvoxamine concentrations were determined. Psychomotor performance, sedation, and electroencephalographic (EEG) ‘beta’ frequency activity were also assessed.
+Culm-Merdek2005	fluvoxamine + caffeine			fluvoxamine	effect of fluvoxamine on the pharmaconkinetics for caffeine and its metabolites; Seven healthy subjects received single 250 mg doses of caffeine (or matching placebo) together with fluvoxamine (four doses of 100 mg over 2 days) or with matching placebo in a double-blind, four-way crossover study. For 24 h after caffeine or placebo administration, plasma caffeine and fluvoxamine concentrations were determined. Psychomotor performance, sedation, and electroencephalographic (EEG) ‘beta’ frequency activity were also assessed.
+Desmond1980	control			control	impaired elimination of caffeine in cirrhosis
+Desmond1980	cirrhosis			cirrhosis	impaired elimination of caffeine in cirrhosis
+Parsons1978	control			control	effect of smoking on caffeine clearance
+Parsons1978	smoking			smoking	effect of smoking on caffeine clearance
+Fuhr1993a	control			control	inhibitory effect of grapefruit juice and its bitter principal naringenin on CYP1A2 in man
+Fuhr1993a	grapefruit juice			grapefruit	inhibitory effect of grapefruit juice and its bitter principal naringenin on CYP1A2 in man
+ZylberKatz1984	control			control	relationship between caffeine concentrations in plasma and salvia under different caffeine doses
+Ghassabian2009	control			control	simultaneaus in vivo phenotyping of 5 major cytochrome P450 enzymes
+Granfors2005	control			control	Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.
+Granfors2005	oral contraceptive (OC)			oc	Oral contraceptives containing ethinyl estradiol and gestodene markedly increase plasma concentrations and effects of tizanidine by inhibiting cytochrome P450 1A2.
+Haller2002	control			control	pharmacology of ephedra alkaloids and caffeine after single-dose dietary supplement use. A single-arm, open-label pilot study was designed to determine the pharmacokinetics and pharmacodynamics of ephedrine alkaloids and caffeine contained in a commercial dietary supplement administered as a single oral dose to healthy volunteers.
+Healy1991	control			control	Sixteen healthy, nonsmoking adult males participated in a randomized, double-blind, placebo-controlled, two-way crossover study to evaluate the influence of chronic lomefloxacin administration on the disposition of caffeine and its major metabolite, paraxanthine, at steady-state conditions.
+Healy1991	lomefloxacin			lomefloxacin	Sixteen healthy, nonsmoking adult males participated in a randomized, double-blind, placebo-controlled, two-way crossover study to evaluate the influence of chronic lomefloxacin administration on the disposition of caffeine and its major metabolite, paraxanthine, at steady-state conditions.
+Harder1988	control_OFL			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	OFL			OFL	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_NOR			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	NOR			NOR	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_PPA			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	PPA			PPA	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_CIP1			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	CIP1			CIP1	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_CIP2			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	CIP2			CIP2	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_CIP3			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	CIP3			CIP3	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_ENX1			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	ENX1			ENX1	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_ENX2			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	ENX2			ENX2	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	control_ENX3			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1988	ENX3			ENX3	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_OFL			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	OFL			OFL	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_NOR			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	NOR			NOR	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_PPA			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	PPA			PPA	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_CIP1			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	CIP1			CIP1	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_CIP2			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	CIP2			CIP2	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_CIP3			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	CIP3			CIP3	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_ENX1			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	ENX1			ENX1	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_ENX2			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	ENX2			ENX2	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	control_ENX3			control	Effect of 4-Quinolones on caffeine biotransformation
+Harder1989	ENX3			ENX3	Effect of 4-Quinolones on caffeine biotransformation
+Healy1989	control			control	Interaction between oral ciprofloxacin and caffeine in normal volunteers
+Healy1989	ciprofloxacin			control	Interaction between oral ciprofloxacin and caffeine in normal volunteers
+Seng2009	control			control	caffeine in healthy male under different dosages
+Seng2009	CNS			control	caffeine in healthy male under different dosages
+Seng2009	CS			smoking	caffeine in healthy male under different dosages

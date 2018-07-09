@@ -37,7 +37,12 @@ def add_characteristic_values(group):
     characteristics_values = []
     for category in CHARACTERISTIC_CATEGORIES:
         for characteristics_value in process_characteristic_values(group,category):
-            characteristics_values.append(characteristics_value)
+            temp_characteristics_value = {**characteristics_value}
+            for key in ["category","count"]:
+                temp_characteristics_value.pop(key)
+            if not all(value is None  for value in temp_characteristics_value.values()):
+                characteristics_values.append(characteristics_value)
+
     return characteristics_values
 
 def remove_nans(group):
@@ -48,9 +53,11 @@ def remove_nans(group):
             group[key] = None
         if str(value) == "":
             group[key] = None
-        if str(value) == "NANS":
+        if str(value) == "NA":
             group[key] = None
         if str(value) == "None":
+            group[key] = None
+        if str(value) == "-":
             group[key] = None
 
 

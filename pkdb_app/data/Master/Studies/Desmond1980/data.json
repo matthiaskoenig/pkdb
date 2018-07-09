@@ -6,12 +6,27 @@
             "description": "15 healthy male subjects, age range 18-71 years (13 nonsmokers), with normal clinical history, physical examination, and SMA12 profile were studied",
             "characteristic_values": [
                 {
+                    "count": 15,
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": 15,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 15,
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
                     "category": "age",
                     "count": 15,
                     "mean": null,
                     "median": null,
-                    "min": "18",
-                    "max": "71",
+                    "min": 18.0,
+                    "max": 71.0,
                     "sd": null,
                     "se": null,
                     "cv": null,
@@ -19,8 +34,8 @@
                 },
                 {
                     "count": 15,
-                    "category": "medication",
-                    "choice": null
+                    "category": "healthy",
+                    "choice": "Y"
                 },
                 {
                     "count": "13",
@@ -31,140 +46,6 @@
                     "count": "2",
                     "category": "smoking",
                     "choice": "Y"
-                },
-                {
-                    "count": 15,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "overnight_fast",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": 15,
-                    "category": "healthy",
-                    "choice": "Y"
-                },
-                {
-                    "count": 15,
-                    "category": "disease",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "oral_contraceptives",
-                    "choice": "N"
-                },
-                {
-                    "category": "bmi",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         },
@@ -174,12 +55,27 @@
             "description": "10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
             "characteristic_values": [
                 {
+                    "count": 10,
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": 10,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 10,
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
                     "category": "age",
                     "count": 10,
                     "mean": null,
                     "median": null,
-                    "min": "42",
-                    "max": "65",
+                    "min": 42.0,
+                    "max": 65.0,
                     "sd": null,
                     "se": null,
                     "cv": null,
@@ -187,8 +83,13 @@
                 },
                 {
                     "count": 10,
-                    "category": "medication",
-                    "choice": null
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "count": 10,
+                    "category": "disease",
+                    "choice": "cirrhosis"
                 },
                 {
                     "count": "6",
@@ -199,140 +100,6 @@
                     "count": "4",
                     "category": "smoking",
                     "choice": "Y"
-                },
-                {
-                    "count": 10,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 10,
-                    "category": "overnight_fast",
-                    "choice": null
-                },
-                {
-                    "count": 10,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 10,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
-                    "count": 10,
-                    "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": 10,
-                    "category": "healthy",
-                    "choice": "N"
-                },
-                {
-                    "count": 10,
-                    "category": "disease",
-                    "choice": "cirrhosis"
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 10,
-                    "category": "oral_contraceptives",
-                    "choice": "N"
-                },
-                {
-                    "category": "bmi",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 10,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 10,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 10,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         },
@@ -342,36 +109,9 @@
             "description": "Subset of 8 from 10 cirrhosis patients. 10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
             "characteristic_values": [
                 {
-                    "category": "age",
                     "count": 8,
-                    "mean": "49.6",
-                    "median": null,
-                    "min": "42",
-                    "max": "60",
-                    "sd": "6",
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "count": 8,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "count": 8,
-                    "category": "smoking",
-                    "choice": "Mixed"
-                },
-                {
-                    "count": 8,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 8,
-                    "category": "overnight_fast",
-                    "choice": null
+                    "category": "sex",
+                    "choice": "M"
                 },
                 {
                     "count": 8,
@@ -379,14 +119,33 @@
                     "choice": "homo sapiens"
                 },
                 {
+                    "category": "body_weight",
                     "count": 8,
-                    "category": "alcohol",
-                    "choice": null
+                    "mean": 71.5,
+                    "median": null,
+                    "min": 48.0,
+                    "max": 84.0,
+                    "sd": 11.1,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
                 },
                 {
                     "count": 8,
-                    "category": "sex",
-                    "choice": "M"
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "age",
+                    "count": 8,
+                    "mean": 49.6,
+                    "median": null,
+                    "min": 42.0,
+                    "max": 60.0,
+                    "sd": 6.0,
+                    "se": null,
+                    "cv": null,
+                    "unit": "yr"
                 },
                 {
                     "count": 8,
@@ -399,103 +158,9 @@
                     "choice": "cirrhosis"
                 },
                 {
-                    "category": "waist_circumference",
                     "count": 8,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "body_weight",
-                    "count": 8,
-                    "mean": "71.5",
-                    "median": null,
-                    "min": "48",
-                    "max": "84",
-                    "sd": "11.1",
-                    "se": null,
-                    "cv": null,
-                    "unit": "kg"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 8,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "alcohol_amount",
-                    "count": 8,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 8,
-                    "category": "oral_contraceptives",
-                    "choice": "N"
-                },
-                {
-                    "category": "bmi",
-                    "count": 8,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 8,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 8,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 8,
-                    "category": "alcohol_abstinence",
-                    "choice": null
-                },
-                {
-                    "category": "height",
-                    "count": 8,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
+                    "category": "smoking",
+                    "choice": "Mixed"
                 }
             ]
         }

@@ -29,6 +29,7 @@ class Common(Configuration):
         'pkdb_app.users',
         'pkdb_app.studies',
         'pkdb_app.subjects',
+        'pkdb_app.interventions',
 
     )
 
