@@ -110,10 +110,11 @@ venv.bak/
 
 # django staticfiles
 /static
+
 */migrations/
 # mypy
 .mypy_cache/
-pkdb_app/studies/migrations
-pkdb_app/users/migrations
-pkdb_app/subjects/migrations
-pkdb_app/interventions/migrations
+pkdb_app/studies/migrations/00*.py
+pkdb_app/users/migrations/00*.py
+pkdb_app/subjects/migrations/00*.py
+pkdb_app/interventions/migrations/00*.py
