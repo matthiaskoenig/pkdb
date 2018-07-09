@@ -7,6 +7,7 @@ from distutils.util import strtobool
 import dj_database_url
 from configurations import Configuration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+POSTGRES_PORT = 5432
 
 
 class Common(Configuration):
@@ -59,7 +60,7 @@ class Common(Configuration):
     # Postgres
     DATABASES = {
         'default': dj_database_url.config(
-            default='postgres://postgres:pass@postgres:5432/postgres',
+            default=f'postgres://postgres:pass@postgres:{POSTGRES_PORT}/postgres',
             conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
         )
     }
