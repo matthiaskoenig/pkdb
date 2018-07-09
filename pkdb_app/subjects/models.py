@@ -8,19 +8,40 @@ From the data structure this has to be handled very similar.
 
 from django.db import models
 
-from ..studies.models import Reference
-from ..behaviours import Sidable, Describable, Values
+from ..studies.models import Study, Reference
+from ..behaviours import Sidable, Describable, Valueable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES
 from ..utils import CHAR_MAX_LENGTH
 from .managers import GroupManager
 
 
-class Timecourse(models.Model):
-    """ Storing of time course data.
+# TODO: Add ExclusionCriteria as extra class on group | or via field ?
+# Not clear what is best: The important thing is that stated exclusion criteria
+# must be encodable and be found as such (often via cutoffs)
+# - how to represent cutoff & negation
 
-    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
+# - Exclusion/Inclusion
+# - Group
+# - Intervention
+
+# - DataSets/Output
+
+
+
+# Idea: GroupSet
+
+class Group(Sidable, Describable, models.Model):
+    """ Individual or group of people.
+
+    Groups are defined via their characteristics.
     """
-    data = models.BinaryField()
+    study = models.ForeignKey(Study, on_delete=True, related_name='groups', null=True, blank=True)
+    count = models.IntegerField()  # number of people/animals/objects in group
+    objects = GroupManager()
+
+    @property
+    def reference(self):
+        return self.study.reference
 
 
 class Characteristic(models.Model):
@@ -45,18 +66,7 @@ class Characteristic(models.Model):
         abstract = True
 
 
-class Group(Sidable,Describable, models.Model):
-    """ Individual or group of people.
-
-    Groups are defined via their characteristics.
-    """
-    reference = models.ForeignKey(Reference, on_delete=True, related_name='groups', null=True, blank=True)
-    # = models.TextField(null=True)
-    count = models.IntegerField()
-    objects = GroupManager()
-
-
-class CharacteristicValue(Values,Characteristic):
+class CharacteristicValue(Valueable, Characteristic):
     """
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
@@ -76,13 +86,24 @@ class CharacteristicValue(Values,Characteristic):
     #    raise NotImplemented
 
 
-class ProcessedCharacteristicValue(Values,Characteristic,models.Model):
+class ProcessedCharacteristicValue(Valueable, Characteristic, models.Model):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
     """
     raw = models.ForeignKey(CharacteristicValue, null=True, on_delete=True)
+    # method field? for different processing?
+
+    # TODO: add methods for doing the processing & automatic update if corresponding
+    # Value is changed.
+    # -> move to a ProcessedValuable
 
 
+class Timecourse(models.Model):
+    """ Storing of time course data.
+
+    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
+    """
+    data = models.BinaryField()
 
 
 # TODO: How to handle Pharmacokinetics data?
