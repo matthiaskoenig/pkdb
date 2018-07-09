@@ -13,9 +13,11 @@ class Author(models.Model):
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
+
 class Files(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     file = models.FileField(null=True, blank=True)
+
 
 class KeyWord(models.Model):
     """
@@ -59,14 +61,4 @@ class Reference(Sidable,models.Model):
 
 
 
-# -------------------------------------------------
-# Intervention
-# -------------------------------------------------
-# Here only the different (two or more) groups which were compared in the study have to be defined.
-# In a single study/paper multiple groups are compared (these can be defined as groups).
-
-
-# class Intervention(Sidable, Commentable, Describable, models.Model):
-#    type = models.IntegerField(choices=INTERVENTION_CHOICES)
-#    study = models.ForeignKey(Study, null=True, blank=True, on_delete=True)
 
