@@ -96,14 +96,3 @@ class ProcessedCharacteristicValue(Valueable, Characteristic, models.Model):
     # TODO: add methods for doing the processing & automatic update if corresponding
     # Value is changed.
     # -> move to a ProcessedValuable
-
-
-class Timecourse(models.Model):
-    """ Storing of time course data.
-
-    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
-    """
-    data = models.BinaryField()
-
-
-# TODO: How to handle Pharmacokinetics data?

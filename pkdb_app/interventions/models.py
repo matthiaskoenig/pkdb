@@ -24,25 +24,35 @@ from ..utils import CHAR_MAX_LENGTH
 # Simple pharmacokinetics
 
 
-# Create your models here.
-class Output(Sidable, Describable, models.Model):
-    """ Storage of data sets. """
-    file = models.FileField(upload_to="output", null=True, blank=True)
-    groups = models.ManyToManyField(Group, through="InterventionValue")
-
 
 # How to represent the dosing?
 # Add separate class? extension of model?
 
-class Protocol(Sidable, Describable, models.Model):
-    """ What is done to the group. """
 
+class Protocol:
+    """ Selection of things which were done to the group.
+
+    """
+    group = models.ForeignKey(Group, related_name='intervention', on_delete=True)
+    # set of protocols
+    # name (control, fluvoxamine, control-fluvo, fluvo-control)
+
+
+class ProtocolStep(Sidable, Describable, models.Model):
+    """ What is done to the group, single step.
+
+     - dosing of certain substance, e.g. caffeine oral
+
+     - smoking cessation
+     - sports, ...
+     -
+     """
+    # TODO: MedicationStep & LifestyleStep
 
     # FIXME: Important to find the subset of dosing protocols
 
     category = models.IntegerField(choices=PROTOCOL_CHOICES)
-    group = models.ForeignKey(Group, related_name='intervention', on_delete=True)
-    output = models.ForeignKey(Output, related_name='intervention', on_delete=True)
+
 
     @property
     def Intervention_data(self):
@@ -60,6 +70,24 @@ class Protocol(Sidable, Describable, models.Model):
         abstract = True
 
 
+
+class MedicationStep(Valuable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
+
+    substance: # what was given ['
+    route: # where ['oral', 'iv']
+    application: # how timing ['single dose', 'multiple doses', 'continuous injection']
+    application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
+    form: # how medication [capusle, tablete]
+    form_details: # h details
+
+
+class Substance(Ontologable):
+    """
+    """
+    name # example caffeine
+    # ontologies: has set of defined values: is, CHEBI:27732
+
+
 class ProtocolValue(Valueable, Protocol):
     pass
 
@@ -73,3 +101,45 @@ class ProtocolValue(Valueable, Protocol):
         #    :return:
         #    """
         #    raise NotImplemented
+
+class DatasetFile():
+    """ Table or figure from where the data comes from.
+
+    """
+    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
+
+
+# Create your models here.
+class Output(Sidable, Describable, models.Model):
+    """ Storage of data sets. """
+    protocol = models.ForeignKey(Protocol)
+    file = models.ForeignKey(DatasetFile)
+
+
+class Timecourse(Output):
+    """ Storing of time course data.
+
+    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
+    """
+    data = models.BinaryField()
+
+
+
+class Pharmacokinetics(Output, Valueable):
+    """ Measured value (calculated value via ProcessedPharmacokinetics)
+
+    category: [clearance, vd, thalf, cmax, ...]
+    """
+    substance = models.ForeignKey(Substance)
+    tissue # where was it measured
+
+
+class ProcessedPharmacokinetics():
+    """ Calculated from pharmacokinetics or timecourse data.
+
+    """
+    rawid = models.ForeignKey(Pharmacokinetics)
+    type # ['normalized', 'timecourse-derived']
+
+
+
