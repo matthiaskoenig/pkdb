@@ -51,6 +51,17 @@ Create a superuser to login to the admin:
 docker-compose run --rm web ./manage.py createsuperuser
 ```
 
+# Update after code change
+```
+docker-compose down
+docker-compose up --build
+```
+reset migrations
+```
+sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete && sudo find . -path "*/migrations/*.pyc"  -delete
+```
+
+
 # Local Development
 Start the dev server for local development:
 
