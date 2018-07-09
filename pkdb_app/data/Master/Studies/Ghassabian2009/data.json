@@ -6,36 +6,21 @@
             "description": "The assay was applied to samples collected in a pilot study of people with schizophrenia who were receiving Clozapine. Participants were selected on the basis of having no history of chronic diseases such as diabetes, asthma, and cancer, and women could not be pregnant at the time of study. 11 people with schizophrenia who were receiving\nclozapine provided informed consent, participated, and\nsuccessfully completed the pilot clinical study (Table 5).\nNone of the subjects experienced serious side effects after\nadministration of the drug cocktail.",
             "characteristic_values": [
                 {
-                    "category": "body_weight",
+                    "category": "age",
                     "count": 11,
-                    "mean": null,
+                    "mean": "41.09",
                     "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
+                    "min": "22",
+                    "max": "66",
+                    "sd": "14.56",
                     "se": null,
                     "cv": null,
-                    "unit": null
+                    "unit": "yr"
                 },
                 {
                     "count": 11,
-                    "category": "oral_contraceptives",
+                    "category": "medication",
                     "choice": null
-                },
-                {
-                    "count": 11,
-                    "category": "caffeine",
-                    "choice": null
-                },
-                {
-                    "count": 11,
-                    "category": "species",
-                    "choice": "homo sapiens"
-                },
-                {
-                    "count": 11,
-                    "category": "disease",
-                    "choice": "schizophrenia"
                 },
                 {
                     "count": 11,
@@ -43,32 +28,8 @@
                     "choice": null
                 },
                 {
-                    "category": "alcohol_amount",
                     "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "category": "bmi",
-                    "count": 11,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 11,
-                    "category": "alcohol_abstinence",
+                    "category": "ethnicity",
                     "choice": null
                 },
                 {
@@ -78,11 +39,48 @@
                 },
                 {
                     "count": 11,
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": 11,
                     "category": "alcohol",
                     "choice": null
                 },
                 {
-                    "category": "height",
+                    "count": "9",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "F"
+                },
+                {
+                    "count": 11,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 11,
+                    "category": "disease",
+                    "choice": "schizophrenia"
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "body_weight",
                     "count": 11,
                     "mean": null,
                     "median": null,
@@ -106,31 +104,38 @@
                     "unit": null
                 },
                 {
+                    "category": "alcohol_amount",
                     "count": 11,
-                    "category": "healthy",
-                    "choice": "Y"
-                },
-                {
-                    "count": "9",
-                    "category": "sex",
-                    "choice": "M"
-                },
-                {
-                    "count": "2",
-                    "category": "sex",
-                    "choice": "F"
-                },
-                {
-                    "category": "age",
-                    "count": 11,
-                    "mean": "41.09",
+                    "mean": null,
                     "median": null,
-                    "min": "22",
-                    "max": "66",
-                    "sd": "14.56",
+                    "min": null,
+                    "max": null,
+                    "sd": null,
                     "se": null,
                     "cv": null,
-                    "unit": "yr"
+                    "unit": null
+                },
+                {
+                    "count": 11,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
+                    "category": "bmi",
+                    "count": 11,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 11,
+                    "category": "caffeine",
+                    "choice": null
                 },
                 {
                     "category": "caffeine_amount",
@@ -146,16 +151,11 @@
                 },
                 {
                     "count": 11,
-                    "category": "ethnicity",
+                    "category": "alcohol_abstinence",
                     "choice": null
                 },
                 {
-                    "count": 11,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
+                    "category": "height",
                     "count": 11,
                     "mean": null,
                     "median": null,

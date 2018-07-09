@@ -6,25 +6,35 @@
             "description": "16 healthy volunteers (nine males and seven females) were enrolled in this study. Mean (range) age, weight, and height for the subjects were 31.1 years (21 to 41 years), 70.5 kg (47 to 93 kg), and 172 cm (157 to 183cm), respectively. Screening of sub jects, within 2 weeks of study initiation, consisted of a medical history; physical examination, including a 12- lead electrocardiogram (ECG); clinical laboratory tests; urinary drug screen; vital signs; ethanol breath test; and serum pregnancy test (females only). Exclusion criteria included women of child bearing potential or use of tobacco products within 6 months, prescription drugs within 14 days, non prescrip tion drugs within 7 days, or investigational drugs or drugs known to induce or inhibit hepatic enzymes within 30 days of study drug administration. Subjects who routinely consumed more than five 8-ounce cups of coffee (or caffeine equivalent) per day were excluded from the study. Caffeine and xanthene- containing beverages and foods, as well as charcoal- grilled foods, were strictly prohibited from the even ing of Day \u20132 through the morn ing of Day 9. Alcohol was prohibited from 7 days prior to the study and through out the study.",
             "characteristic_values": [
                 {
-                    "category": "body_weight",
+                    "category": "age",
                     "count": 15,
-                    "mean": "70.5",
+                    "mean": "31.1",
                     "median": null,
-                    "min": null,
-                    "max": "93",
+                    "min": "21",
+                    "max": "41",
                     "sd": null,
                     "se": null,
                     "cv": null,
-                    "unit": "kg"
+                    "unit": "yr"
                 },
                 {
                     "count": 15,
-                    "category": "oral_contraceptives",
+                    "category": "medication",
                     "choice": null
                 },
                 {
                     "count": 15,
-                    "category": "caffeine",
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "count": 15,
+                    "category": "ethnicity",
+                    "choice": null
+                },
+                {
+                    "count": 15,
+                    "category": "overnight_fast",
                     "choice": null
                 },
                 {
@@ -34,13 +44,59 @@
                 },
                 {
                     "count": 15,
-                    "category": "disease",
+                    "category": "alcohol",
                     "choice": null
                 },
                 {
                     "count": 15,
-                    "category": "smoking",
-                    "choice": "N"
+                    "category": "sex",
+                    "choice": "8 M / 7 F"
+                },
+                {
+                    "count": 15,
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "count": 15,
+                    "category": "disease",
+                    "choice": null
+                },
+                {
+                    "category": "waist_circumference",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "category": "body_weight",
+                    "count": 15,
+                    "mean": "70.5",
+                    "median": null,
+                    "min": "47",
+                    "max": "93",
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": "kg"
+                },
+                {
+                    "category": "smoking_amount",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
                 },
                 {
                     "category": "alcohol_amount",
@@ -55,7 +111,29 @@
                     "unit": null
                 },
                 {
+                    "count": 15,
+                    "category": "oral_contraceptives",
+                    "choice": null
+                },
+                {
                     "category": "bmi",
+                    "count": 15,
+                    "mean": null,
+                    "median": null,
+                    "min": null,
+                    "max": null,
+                    "sd": null,
+                    "se": null,
+                    "cv": null,
+                    "unit": null
+                },
+                {
+                    "count": 15,
+                    "category": "caffeine",
+                    "choice": null
+                },
+                {
+                    "category": "caffeine_amount",
                     "count": 15,
                     "mean": null,
                     "median": null,
@@ -72,16 +150,6 @@
                     "choice": null
                 },
                 {
-                    "count": 15,
-                    "category": "overnight_fast",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "alcohol",
-                    "choice": null
-                },
-                {
                     "category": "height",
                     "count": 15,
                     "mean": 172.0,
@@ -92,74 +160,6 @@
                     "se": null,
                     "cv": null,
                     "unit": "cm"
-                },
-                {
-                    "category": "smoking_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "healthy",
-                    "choice": "Y"
-                },
-                {
-                    "count": 15,
-                    "category": "sex",
-                    "choice": "8 M / 7 F"
-                },
-                {
-                    "category": "age",
-                    "count": 15,
-                    "mean": "31.1",
-                    "median": null,
-                    "min": "21",
-                    "max": "41",
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": "yr"
-                },
-                {
-                    "category": "caffeine_amount",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
-                },
-                {
-                    "count": 15,
-                    "category": "ethnicity",
-                    "choice": null
-                },
-                {
-                    "count": 15,
-                    "category": "medication",
-                    "choice": null
-                },
-                {
-                    "category": "waist_circumference",
-                    "count": 15,
-                    "mean": null,
-                    "median": null,
-                    "min": null,
-                    "max": null,
-                    "sd": null,
-                    "se": null,
-                    "cv": null,
-                    "unit": null
                 }
             ]
         }
