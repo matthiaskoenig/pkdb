@@ -29,7 +29,6 @@ class Sidable(models.Model):
 '''
 
 
-
 class Commentable(models.Model):
     """ Model has a comment field. """
     comment = models.TextField(blank=True, null=True)
@@ -39,22 +38,26 @@ class Commentable(models.Model):
 
 
 class Describable(models.Model):
-    """
-
-    """
+    """ Add description field. """
     description = models.TextField(blank=True, null=True)
 
     class Meta:
         abstract = True
 
+
 class Hashable(models.Model):
+    """ Add hash key field. """
     hash = models.CharField(max_length=CHAR_MAX_LENGTH,blank=True, null=True)
 
     class Meta:
         abstract = True
 
 
-class Values(models.Model):
+class Valueable(models.Model):
+    """ Add fields to store values.
+
+    In addition all the statistical values are stored.
+    """
 
     choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
                               blank=True)  # check in validation that allowed choice
@@ -74,3 +77,6 @@ class Values(models.Model):
 
     class Meta:
         abstract = True
+
+    # FIXME: all validation rules & methods should be on Valuable
+    # for instance, if choice set, other fields must be empty, ...

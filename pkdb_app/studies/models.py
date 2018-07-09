@@ -26,9 +26,8 @@ class KeyWord(models.Model):
     #name = models.IntegerField(choices=KEY_WORD_CHOICES)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
-# All models should be commentable
 
-class Reference(Sidable,models.Model):
+class Reference(Sidable, models.Model):
     """
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
@@ -42,7 +41,13 @@ class Reference(Sidable,models.Model):
     pdf = models.FileField(upload_to="study", null=True, blank=True)
     authors = models.ManyToManyField(Author, blank=True, related_name='authors')
 
-#class Study(Sidable, Commentable, Describable, models.Model):
+
+class Study(Sidable, Commentable, Describable, models.Model):
+    reference = models.ForeignKey(Reference, on_delete=True, related_name='studies', null=True, blank=True)
+
+
+
+
   #  """ Single clinical study.
 
   #  Mainly reported as a single publication.

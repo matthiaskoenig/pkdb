@@ -61,6 +61,20 @@ reset migrations
 sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete && sudo find . -path "*/migrations/*.pyc"  -delete
 ```
 
+# Fill database
+```
+workon pkdb
+(pkdb) pip install -r requirements.txt --upgrade
+(pkdb) python ./pkdb_app/data_management/fill_database.py
+
+docker-compose run --rm web ./data_management/fill_database.py
+```
+
+# Connect database pycharm
+```
+DataSource -> postgres
+```
+Use port defined in `docker-compose.yml` (5433), database name and password in `docker-compose.yml`
 
 # Local Development
 Start the dev server for local development:
