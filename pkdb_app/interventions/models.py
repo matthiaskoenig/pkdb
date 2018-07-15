@@ -9,6 +9,7 @@ from ..behaviours import Sidable, Describable, Valueable
 from ..categoricals import PROTOCOL_CHOICES, UNITS_CHOICES
 from ..subjects.models import Group
 from ..utils import CHAR_MAX_LENGTH
+
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
@@ -69,9 +70,9 @@ class ProtocolStep(Sidable, Describable, models.Model):
     class Meta:
         abstract = True
 
+'''
 
-
-class MedicationStep(Valuable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
+class MedicationStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
 
     substance: # what was given ['
     route: # where ['oral', 'iv']
@@ -140,6 +141,9 @@ class ProcessedPharmacokinetics():
     """
     rawid = models.ForeignKey(Pharmacokinetics)
     type # ['normalized', 'timecourse-derived']
+
+'''
+
 
 
 

@@ -9,7 +9,7 @@ from .categoricals import UNITS_CHOICES
 
 class Sidable(models.Model):
     """ Model has an sid. """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH)
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key = True)
 
     class Meta:
         abstract = True
