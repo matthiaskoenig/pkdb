@@ -1,5 +1,5 @@
-from .models import Author, Reference
-from .serializers import AuthorSerializer, ReferenceSerializer
+from .models import Author, Reference, Study
+from .serializers import AuthorSerializer, ReferenceSerializer, StudySerializer
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
@@ -22,6 +22,13 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
 
+
+class StudyViewSet(viewsets.ModelViewSet):
+    queryset = Study.objects.all()
+    serializer_class = StudySerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('sid',)
+    search_fields = filter_fields
 
 
 #class InterventionsViewSet(viewsets.ModelViewSet):

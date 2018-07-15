@@ -7,7 +7,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
 from .users.views import UserViewSet, UserCreateViewSet
-from .studies.views import AuthorsViewSet,ReferencesViewSet
+from .studies.views import AuthorsViewSet,ReferencesViewSet, StudyViewSet
 from .subjects.views import GroupsViewSet,CharacteristicValuesViewSet
 
 # views in User
@@ -18,6 +18,8 @@ router.register(r'users', UserCreateViewSet)
 # views in studies
 router.register('authors',AuthorsViewSet,base_name="authors")
 router.register('references', ReferencesViewSet, base_name="references")
+router.register('studies',StudyViewSet, base_name="studies")
+
 router.register('groups', GroupsViewSet, base_name="groups")
 router.register('characteristic_values', CharacteristicValuesViewSet, base_name="characteristic_values")
 
