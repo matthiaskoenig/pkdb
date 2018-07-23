@@ -27,14 +27,15 @@ class KeyWord(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
 
-class Reference( models.Model):
+class Reference(models.Model):
     """
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
 
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True) #optional
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key = True, default=pmid)
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True, default=pmid)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True, blank=True) #optional
     title = models.TextField()
     abstract = models.TextField(blank=True, null=True)
@@ -46,13 +47,17 @@ class Reference( models.Model):
 
 
 
+
+
 class Study(Sidable, Commentable, Describable, models.Model):
     """ Single clinical study.
 
     Mainly reported as a single publication.
 
     """
-    reference = models.ForeignKey(Reference, on_delete=True, related_name='studies', null=True, blank=True)
+    reference = models.ForeignKey(Reference, on_delete=True, to_field="sid",db_column="reference_sid", related_name='studies', null=True, blank=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    #todo:study design, observational sudy ...
 
 
 

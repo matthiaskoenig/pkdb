@@ -19,7 +19,9 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
+    filter_fields = ('sid',)
+
+    #filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
 
 
@@ -29,6 +31,8 @@ class StudyViewSet(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter,)
     filter_fields = ('sid',)
     search_fields = filter_fields
+
+
 
 
 #class InterventionsViewSet(viewsets.ModelViewSet):

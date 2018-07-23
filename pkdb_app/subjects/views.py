@@ -10,7 +10,7 @@ class GroupsViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ('description', 'sid')
+    filter_fields = ('description',)
     search_fields = filter_fields
 
 
