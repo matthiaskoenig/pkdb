@@ -14,3 +14,4 @@ class GroupManager(models.Manager):
 
         group.save()
 
+        return group, created

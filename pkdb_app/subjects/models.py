@@ -30,12 +30,13 @@ from .managers import GroupManager
 
 # Idea: GroupSet
 
-class Group(Sidable, Describable, models.Model):
+class Group(Describable, models.Model):
     """ Individual or group of people.
 
     Groups are defined via their characteristics.
     """
-    study = models.ForeignKey(Study, on_delete=True, related_name='groups', null=True, blank=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    study = models.ForeignKey(Study, on_delete=True, related_name='groups',to_field="sid", db_column="study_sid",null=True, blank=True)
     count = models.IntegerField()  # number of people/animals/objects in group
     objects = GroupManager()
 
