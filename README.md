@@ -53,22 +53,23 @@ docker-compose run --rm web ./manage.py createsuperuser
 
 # Update after code change
 ```
+# reset migrations
+sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete && sudo find . -path "*/migrations/*.pyc"  -delete
+
+# rebuild container
 docker-compose down
 docker-compose up --build
 ```
-reset migrations
-```
-sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete && sudo find . -path "*/migrations/*.pyc"  -delete
-```
+
 
 # Fill database
+From console use the following
 ```
 workon pkdb
 (pkdb) pip install -r requirements.txt --upgrade
 (pkdb) python ./pkdb_app/data_management/fill_database.py
-
-docker-compose run --rm web ./data_management/fill_database.py
 ```
+
 
 # Connect database pycharm
 ```

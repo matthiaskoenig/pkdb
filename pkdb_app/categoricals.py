@@ -7,22 +7,30 @@ Model choices and more specifically possible categories of subject characteristi
 
 In the future the relationship between the characteristics could be implemented via
 an ontology which represents the relationship between the differnent values.
+
+
+units on CharacteristicType is an ordered iteratable, with the first unit being the default unit.
+
 """
 
 # TODO: How to handle the genetic information? Genetic variants?
 
 from collections import namedtuple
-CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices"])
+CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices", "units"])
 UnitType = namedtuple("UnitType", ["name"])
 
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
 UNIT_DATA = [
     UnitType('-'),
-    UnitType('cm'), UnitType('m'),
+    UnitType('cm'),
+    UnitType('m'),
     UnitType('kg'),
     UnitType('yr'),
     UnitType('kg/m^2'),
     UnitType('1/day'),
+    UnitType('IU/I'),
+    UnitType('mg/dl'),
+    UnitType('g/dl')
 ]
 UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 
@@ -41,44 +49,76 @@ YES = "Y"
 NO = 'N'
 BOOLEAN_CHOICES = [YES, NO]
 
+# categories
+DEMOGRAPHICS = "Demographics"  # age, sex, ethnicity
+ANTHROPOMETRY = "Anthropometry"  # height, weight, waist bmi
+SPECIES = "Species"
+BIOCHEMICAL_DATA = "Biochemical data"
+HEMATOLOGY_DATA = "Hematology data"
+
+
+INCLUSION_CRITERIA = "InclusionCriteria"
+EXCLUSION_CRITERIA = "ExclusionCriteria"
+GROUP_CRITERIA = "GroupCriteria"
+CHARACTERISTIC_VALUE_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
+CHARACTERISTIC_VALUE_CHOICES = [(t.name, t.name) for t in CHARACTERISTIC_VALUE_TYPES]
+
+
+STUDY_DESIGN_DATA = [
+    "single group (interventional study)",
+    "parallel group (interventional study)",
+    "crossover (interventional study)",
+    "cohort (oberservational study)",
+    "case control (oberservational study)",
+]
+STUDY_DESIGN_CHOICES = [(t.name, t.name) for t in STUDY_DESIGN_DATA]
+
 
 COMMON_DATA = [
     # Medication
-    CharacteristicType('oral_contraceptives', 'Contraceptives', BOOLEAN_TYPE, BOOLEAN_CHOICES),
-    CharacteristicType('oral_contraceptives_amount', 'Contraceptives', NUMERIC_TYPE, None),
-    CharacteristicType('medication', 'Medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"]),  # ? dosing
+    CharacteristicType('oral_contraceptives', 'Contraceptives', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('oral_contraceptives_amount', 'Contraceptives', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('medication', 'Medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),  # ? dosing
 
     # Lifestyle
-    CharacteristicType('caffeine', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES),
-    CharacteristicType('caffeine_amount', 'Lifestyle', NUMERIC_TYPE, None),
+    CharacteristicType('caffeine', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('caffeine_amount', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
 ]
 
-CHARACTERISTIC_DATA = COMMON_DATA+ [
+CHARACTERISTIC_DATA = COMMON_DATA + [
     # Antropmetrical information
-    CharacteristicType('species', 'Species', CATEGORIAL_TYPE, ["Homo sapiens"]),
-    CharacteristicType('height', 'BodyParameter', NUMERIC_TYPE, None),
-    CharacteristicType('body_weight', 'BodyParameter', NUMERIC_TYPE, None),
-    CharacteristicType('age', 'BodyParameter', NUMERIC_TYPE, None),
-    CharacteristicType('sex', 'BodyParameter', CATEGORIAL_TYPE, ["M", "F"]),
-    CharacteristicType('bmi', 'BodyParameter', NUMERIC_TYPE, None),
-    CharacteristicType('waist_circumference', 'BodyParameter', NUMERIC_TYPE, None),
-    CharacteristicType('ethnicity', 'Ethnicity', CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian"]),
+    CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["Homo sapiens"], ["-"]),
+    CharacteristicType('height', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm", 'm']),
+    CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
+    CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg/m^2"]),
+    CharacteristicType('waist_circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
+    CharacteristicType('liver_weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
+    CharacteristicType('kidney_weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
+
+    CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
+    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F"], ["-"]),
+    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["African", "Afroamerican", "Asian", "Caucasian"], ["-"]),
+
 
     # Disease (status)
-    CharacteristicType('healthy', "Health status", BOOLEAN_TYPE, BOOLEAN_CHOICES),
-    CharacteristicType('disease', "Disease", CATEGORIAL_TYPE, ["cirrhosis"]),
+    CharacteristicType('healthy', "Health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('disease', "Disease", CATEGORIAL_TYPE, ["cirrhosis"], ["-"]),
 
 
     # Lifestyle
-    CharacteristicType('smoking', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES),
-    CharacteristicType('smoking_amount', 'Lifestyle', NUMERIC_TYPE, None),
-    CharacteristicType('alcohol', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES),
-    CharacteristicType('alcohol_amount', 'Lifestyle', NUMERIC_TYPE, None),
+    CharacteristicType('smoking', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('smoking_amount', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('alcohol', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('alcohol_amount', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
 
+    # Biochemical data
+    CharacteristicType('ALT', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
+    CharacteristicType('AST', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
+    CharacteristicType('Albumin', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["g/dl"]),
 
     # Study protocol
-    CharacteristicType('overnight_fast', 'Study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES),
-    CharacteristicType('alcohol_abstinence', 'Study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES),
+    CharacteristicType('overnight_fast', 'Study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('alcohol_abstinence', 'Study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
 
     # Medication
 
@@ -91,11 +131,7 @@ PK_DATA = [
 
 # class, value, dtype (numeric, boolean, categorial), choices
 PROTOCOL_DATA = [
-
-    CharacteristicType('dosing', 'Dosing', NUMERIC_TYPE, None),
-
-
-
+    CharacteristicType('dosing', 'Dosing', NUMERIC_TYPE, None, ["-"]),
 ]
 
 def dict_and_choices(data):

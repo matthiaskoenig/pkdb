@@ -10,7 +10,8 @@ from django.db import models
 
 from ..studies.models import Study, Reference
 from ..behaviours import Sidable, Describable, Valueable
-from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES
+from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTIC_VALUE_CHOICES, GROUP_CRITERIA, \
+    INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
 from .managers import GroupManager
 
@@ -47,7 +48,17 @@ class Group(Describable, models.Model):
 
 class Characteristic(models.Model):
     """ Characteristic.
-    Characteristics are used to store the information about subjects.
+
+    Characteristics are used to store information about a group of subjects.
+    Such a group is defined by
+    - Inclusion criteria, which define general characteristics (often via cutoffs, i.e. min or max) of which
+      subjects are in a group.
+    - Exclusion criteria, analogue to inclusion criteria but defines which subjects are excluded.
+    - Group criteria, concrete properties/characteristics of the group of subjects.
+
+    The type of characteristic is defined via the cvtype.
+    When group characterists are curated it is important to specify the inclusion/exclusion criteria in
+    addition to the group criteria.
     """
     category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
 
@@ -73,7 +84,15 @@ class CharacteristicValue(Valueable, Characteristic):
     This stores the raw information. Derived values can be calculated.
     """
     group = models.ForeignKey(Group, related_name="characteristic_values", null=True, on_delete=True)
+    cvtype = models.CharField(choices=CHARACTERISTIC_VALUE_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA)
 
+    @property
+    def is_inclusion(self):
+        return self.cvtype == INCLUSION_CRITERIA
+
+    @property
+    def is_exclusion(self):
+        return self.cvtype == EXCLUSION_CRITERIA
 
     #def validate(self):
     #    """ Check that choices are valid. I.e. that choice is allowed choice from choices for
@@ -90,6 +109,8 @@ class CharacteristicValue(Valueable, Characteristic):
 class ProcessedCharacteristicValue(Valueable, Characteristic, models.Model):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
+
+    - convert exclusion to inclusion criteria
     """
     raw = models.ForeignKey(CharacteristicValue, null=True, on_delete=True)
     # method field? for different processing?
