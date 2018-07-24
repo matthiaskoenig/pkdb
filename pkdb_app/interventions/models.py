@@ -8,6 +8,7 @@ from django.db import models
 from ..behaviours import Sidable, Describable, Valueable
 from ..categoricals import PROTOCOL_CHOICES, UNITS_CHOICES
 from ..subjects.models import Group
+from ..studies.models import DataFile
 from ..utils import CHAR_MAX_LENGTH
 
 # -------------------------------------------------
@@ -29,13 +30,6 @@ from ..utils import CHAR_MAX_LENGTH
 # Add separate class? extension of model?
 
 
-class Protocol(models.Model):
-    """ List of things/steps which were done to the group.
-
-    """
-    group = models.ForeignKey(Group, related_name='intervention', on_delete=True)
-    # set of protocols
-    # name (control, fluvoxamine, control-fluvo, fluvo-control)
 
 
 class ProtocolStep(Sidable, Describable, models.Model):
@@ -80,14 +74,28 @@ class MedicationStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyw
 
     The actual dosing is stored in the Valueable.
     """
+    substance = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) #substance: # what was given ['
+    route = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # route: # where ['oral', 'iv']
+    application = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
+    application_time = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
+    form = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # form: # how medication [capusle, tablete]
+    form_details = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) #form_details: # h details
 
-    substance: # what was given ['
-    route: # where ['oral', 'iv']
-    application: # how timing ['single dose', 'multiple doses', 'continuous injection']
-    application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
-    form: # how medication [capusle, tablete]
-    form_details: # h details
+class ProcessedMedicationStep(Valueable, ProtocolStep):
+    """ Calculated from medicationstep
+    """
+    raw = models.ForeignKey(MedicationStep, null=True, on_delete=True)
 
+
+class Protocol(models.Model):
+    """ List of things/steps which were done to the group.
+
+    """
+    group = models.ForeignKey(Group, related_name='intervention', on_delete=True)
+    protokol_steps = models.ManyToManyField(MedicationStep)
+    name = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)
+    # set of protocols
+    # name (control, fluvoxamine, control-fluvo, fluvo-control)
 
 class Substance(models.Model):
     """ Substances have to be in a different table, so that
@@ -96,7 +104,8 @@ class Substance(models.Model):
     Has to be extended via ontology (Ontologable)
 
     """
-    name # example caffeine
+    name = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)
+    #name # example caffeine
     # ontologies: has set of defined values: is, CHEBI:27732
 
 
@@ -107,17 +116,17 @@ class Substance(models.Model):
 # Create your models here.
 class Output(Sidable, Describable, models.Model):
     """ Storage of data sets. """
-    protocol = models.ForeignKey(Protocol)
+    protocol = models.ForeignKey(Protocol,on_delete=True)
     # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
-    files = models.ForeignKey(DataFile)
+    files = models.ForeignKey(DataFile, on_delete=True)
 
 class Pharmacokinetics(Output, Valueable):
     """ Measured value (calculated value via ProcessedPharmacokinetics)
 
     category: [clearance, vd, thalf, cmax, ...]
     """
-    substance = models.ForeignKey(Substance)
-    tissue # where was it measured
+    substance = models.ForeignKey(Substance, on_delete=True)
+    #tissue # where was it measured
 
 
 class Timecourse(Output):
@@ -125,19 +134,17 @@ class Timecourse(Output):
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
-    substance
-    tissue
-    data = models.ForeignKey(DataFile) # link to the CSV
+    #substance
+    #tissue
+    data = models.ForeignKey(DataFile, on_delete=True) # link to the CSV
 
 
-'''
-class ProcessedPharmacokinetics():
+class ProcessedPharmacokinetics(Valueable):
     """ Calculated from pharmacokinetics or timecourse data.
-
     """
-    rawid = models.ForeignKey(Pharmacokinetics)
-    type # ['normalized', 'timecourse-derived']
-'''
+    raw = models.ForeignKey(Pharmacokinetics, null=True, on_delete=True)
+    type = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # ['normalized', 'timecourse-derived']
+
 
 
 

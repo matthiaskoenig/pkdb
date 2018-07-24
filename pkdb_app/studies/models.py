@@ -15,11 +15,6 @@ class Author(models.Model):
         return '%s %s' % (self.id, self.first_name, self.last_name)
 
 
-class Files(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    file = models.FileField(null=True, blank=True)
-
-
 class KeyWord(models.Model):
     """
     This class describes the keyowrds / tags of a  publication or any other reference.
@@ -45,6 +40,15 @@ class Reference(models.Model):
     authors = models.ManyToManyField(Author, blank=True, related_name='references')
 
 
+class DataFile(models.Model):
+    """ Table or figure from where the data comes from (png).
+
+    This should be in a separate class, so that they can be easily displayed/filtered/...
+    """
+
+    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
+    filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
+
 class Study(Sidable, Commentable, Describable, models.Model):
     """ Single clinical study.
 
@@ -53,6 +57,7 @@ class Study(Sidable, Commentable, Describable, models.Model):
     reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
+    raw_data = models.ManyToManyField(DataFile)
 
     # TODO: substances, e.g. caffeine, acetaminophen
     # TODO: datafiles (DataFile)
@@ -61,10 +66,3 @@ class Study(Sidable, Commentable, Describable, models.Model):
 # TODO: substances here
 
 
-class DataFile(models.Model):
-    """ Table or figure from where the data comes from (png).
-
-    This should be in a separate class, so that they can be easily displayed/filtered/...
-    """
-    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
-    filetype # XLSX, PNG, CSV

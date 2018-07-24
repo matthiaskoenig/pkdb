@@ -61,7 +61,7 @@ INCLUSION_CRITERIA = "InclusionCriteria"
 EXCLUSION_CRITERIA = "ExclusionCriteria"
 GROUP_CRITERIA = "GroupCriteria"
 CHARACTERISTIC_VALUE_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
-CHARACTERISTIC_VALUE_CHOICES = [(t.name, t.name) for t in CHARACTERISTIC_VALUE_TYPES]
+CHARACTERISTIC_VALUE_CHOICES = [(t, t) for t in CHARACTERISTIC_VALUE_TYPES]
 
 
 STUDY_DESIGN_DATA = [
@@ -71,7 +71,7 @@ STUDY_DESIGN_DATA = [
     "cohort (oberservational study)",
     "case control (oberservational study)",
 ]
-STUDY_DESIGN_CHOICES = [(t.name, t.name) for t in STUDY_DESIGN_DATA]
+STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
 
 COMMON_DATA = [
