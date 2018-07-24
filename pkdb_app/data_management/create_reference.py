@@ -2,6 +2,7 @@
 Creates json files in master folder
 """
 import os
+import shutil
 import csv
 import sys
 import bonobo
@@ -18,12 +19,19 @@ if BASEPATH not in sys.path:
 DATABASEPATH = os.path.join(BASEPATH, "data")
 REFERENCESPATH = os.path.join(DATABASEPATH, "caffeine", "Studies.tsv")
 SUBJECTSPATH = os.path.join(DATABASEPATH, "caffeine", "Subjects.tsv")
+LITERATUREPATH = os.path.join(DATABASEPATH, "caffeine", "literature")
+
 PHARMACOKINETICSPATH = os.path.join(DATABASEPATH, "caffeine", "Pharmacokinetics.tsv")
 INTERVENTIONSPATH = os.path.join(DATABASEPATH, "caffeine", "Interventions.tsv")
 DOSINGPATH = os.path.join(DATABASEPATH, "caffeine", "Dosing.tsv")
 MASTERPATH = os.path.join(DATABASEPATH, "Master")
 REFERENCESMASTERPATH = os.path.join(MASTERPATH, "Studies")
 
+
+def ensure_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 def extract_references(path):
     reader = csv.DictReader(open(path), delimiter='\t')
@@ -33,16 +41,18 @@ def extract_references(path):
 
 def pmid_to_int(d):
     d['pmid'] = int(d['pmid'])
+    d['sid'] = int(d['pmid'])
+
     yield d
 
 
 def add_reference_sid(d):
     sid = str(d["study"])
-    yield {**d , 'sid': sid}
+    yield {**d , 'name': sid}
 
 
 def add_reference_path(d):
-    reference_path = os.path.join(REFERENCESMASTERPATH, d['sid'])
+    reference_path = os.path.join(REFERENCESMASTERPATH, d['name'])
     return {**d, "reference_path":reference_path}
 
 
@@ -58,10 +68,12 @@ def xml_to_data(d):
     yield {**d, 'data': ET.fromstring(d['xml'])}
 
 
+
 def create_json(d):
     json_dict = {}
-    json_dict["groups"] = []
+    #json_dict["groups"] = []
     json_dict["pmid"] = d["pmid"]
+    json_dict["name"] = d["name"]
     json_dict["sid"] = d["sid"]
     for date in d["data"].iter("DateCompleted"):
         year = date.find('Year').text
@@ -100,10 +112,30 @@ def add_doi(d):
     return {"json":json_dict, "reference_path": d["reference_path"]}
 
 def save_json(d):
-    json_file = os.path.join(d["reference_path"],"data.json")
+    json_file = os.path.join(d["reference_path"],"reference.json")
+    ensure_dir(json_file)
     with open(json_file, 'w') as fp:
         json.dump(d['json'],fp, indent=4)
 
+def add_resources(d):
+    """
+    inputs the result of "add_reference_path()" from add reference path
+    :param d:
+    :return:
+    """
+    for file in os.listdir(LITERATUREPATH):
+        if file.startswith(d['name']):
+            src = os.path.join(LITERATUREPATH,file)
+            dst = os.path.join(d["reference_path"],file)
+            ensure_dir(dst)
+            shutil.copy(src,dst)
+
+
+
+collect_reference = [extract_references(REFERENCESPATH),
+        pmid_to_int,
+        add_reference_sid,
+        add_reference_path,]
 
 def get_graph(**options):
     """ Bonobo execution graph.
@@ -112,17 +144,21 @@ def get_graph(**options):
     :return:
     """
     graph = bonobo.Graph()
+
+    #adds reference to
+    graph.add_chain(*collect_reference)
+
     graph.add_chain(
-        extract_references(REFERENCESPATH),
-        pmid_to_int,
-        add_reference_sid,
-        add_reference_path,
         load_from_biopython,
         xml_to_data,
         create_json,
         add_doi,
         save_json,
-    )
+        _input= add_reference_path)
+
+
+    graph.add_chain(add_resources, _input= add_reference_path)
+
     return graph
 
 

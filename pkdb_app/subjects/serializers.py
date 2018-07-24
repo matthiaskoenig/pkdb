@@ -8,6 +8,8 @@ from collections import OrderedDict
 
 class CharacteristicValueSerializer(serializers.ModelSerializer):
 
+    count = serializers.IntegerField(required=False)
+
     class Meta:
         model = CharacteristicValue
         fields = "__all__"
@@ -29,6 +31,12 @@ class GroupSerializer(serializers.ModelSerializer):
         return group
 
     def to_representation(self, instance):
+        """
+        this method reduces the serialized output to not non-values.
+        :param instance:
+        :return:
+        """
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+
 
