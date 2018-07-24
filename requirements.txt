@@ -44,4 +44,4 @@ bonobo-docker
 biopython
 ipykernel
 pandas
-
+jsonschema

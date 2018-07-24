@@ -3,6 +3,8 @@ import bonobo
 import coreapi
 import json
 from create_reference import REFERENCESMASTERPATH
+from jsonschema import validate
+from schemas import reference_schema
 
 client = coreapi.Client()
 document = client.get("http://0.0.0.0:8000/")
@@ -25,10 +27,12 @@ def open_reference(d):
 
 def open_study(d):
     with open(d) as f:
+
         json_dict = json.loads(f.read())
     return {"json":json_dict, "study_path":d}
 
 def upload_reference(json_reference):
+    validate(json_reference["json"],reference_schema)
     client.action(document, ["references", "create"], params=json_reference["json"])
 
 def upload_study(json_study):
