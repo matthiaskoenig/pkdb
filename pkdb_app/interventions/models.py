@@ -25,13 +25,12 @@ from ..utils import CHAR_MAX_LENGTH
 # Simple pharmacokinetics
 
 
-
 # How to represent the dosing?
 # Add separate class? extension of model?
 
 
-class Protocol:
-    """ Selection of things which were done to the group.
+class Protocol(models.Model):
+    """ List of things/steps which were done to the group.
 
     """
     group = models.ForeignKey(Group, related_name='intervention', on_delete=True)
@@ -43,17 +42,22 @@ class ProtocolStep(Sidable, Describable, models.Model):
     """ What is done to the group, single step.
 
      - dosing of certain substance, e.g. caffeine oral
-
      - smoking cessation
-     - sports, ...
-     -
+     - sports / lifestyle change
+     - medication
+     - ...
+
+     Examples:
+         Two groups (parallel group design), one group control, other group gets medication, e.g., oral contraceptives, than pharmacokinetics of caffeine measured.
+         -> 2 protocol
+            - protocol 1 (linked to control group): MedicationStep (caffeine)
+            - protocol 2 (linked to intervention group): MedicationStep (oral contraceptives), MedicationStep (caffeine)
+
      """
     # TODO: MedicationStep & LifestyleStep
 
     # FIXME: Important to find the subset of dosing protocols
-
     category = models.IntegerField(choices=PROTOCOL_CHOICES)
-
 
     @property
     def Intervention_data(self):
@@ -70,9 +74,12 @@ class ProtocolStep(Sidable, Describable, models.Model):
     class Meta:
         abstract = True
 
-'''
 
 class MedicationStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
+    """ Dosing.
+
+    The actual dosing is stored in the Valueable.
+    """
 
     substance: # what was given ['
     route: # where ['oral', 'iv']
@@ -82,49 +89,27 @@ class MedicationStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyw
     form_details: # h details
 
 
-class Substance(Ontologable):
-    """
+class Substance(models.Model):
+    """ Substances have to be in a different table, so that
+    than be uniquely defined.
+
+    Has to be extended via ontology (Ontologable)
+
     """
     name # example caffeine
     # ontologies: has set of defined values: is, CHEBI:27732
 
 
-class ProtocolValue(Valueable, Protocol):
-    pass
-
-    #def validate(self):
-        #    """ Check that choices are valid. I.e. that choice is allowed choice from choices for
-        #    Interventions.
-
-        #    Add checks for individuals and groups. For instance if count==1 than value must be filled,
-        #    but not entries in mean, median, ...
-
-        #    :return:
-        #    """
-        #    raise NotImplemented
-
-class DatasetFile():
-    """ Table or figure from where the data comes from.
-
-    """
-    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
-
+# -----------------
+# RESULTS
+# -----------------
 
 # Create your models here.
 class Output(Sidable, Describable, models.Model):
     """ Storage of data sets. """
     protocol = models.ForeignKey(Protocol)
-    file = models.ForeignKey(DatasetFile)
-
-
-class Timecourse(Output):
-    """ Storing of time course data.
-
-    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
-    """
-    data = models.BinaryField()
-
-
+    # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
+    files = models.ForeignKey(DataFile)
 
 class Pharmacokinetics(Output, Valueable):
     """ Measured value (calculated value via ProcessedPharmacokinetics)
@@ -135,13 +120,23 @@ class Pharmacokinetics(Output, Valueable):
     tissue # where was it measured
 
 
+class Timecourse(Output):
+    """ Storing of time course data.
+
+    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
+    """
+    substance
+    tissue
+    data = models.ForeignKey(DataFile) # link to the CSV
+
+
+'''
 class ProcessedPharmacokinetics():
     """ Calculated from pharmacokinetics or timecourse data.
 
     """
     rawid = models.ForeignKey(Pharmacokinetics)
     type # ['normalized', 'timecourse-derived']
-
 '''
 
 

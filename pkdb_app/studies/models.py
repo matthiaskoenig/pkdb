@@ -54,7 +54,17 @@ class Study(Sidable, Commentable, Describable, models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
 
+    # TODO: substances, e.g. caffeine, acetaminophen
+    # TODO: datafiles (DataFile)
 
 
+# TODO: substances here
 
 
+class DataFile(models.Model):
+    """ Table or figure from where the data comes from (png).
+
+    This should be in a separate class, so that they can be easily displayed/filtered/...
+    """
+    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
+    filetype # XLSX, PNG, CSV
