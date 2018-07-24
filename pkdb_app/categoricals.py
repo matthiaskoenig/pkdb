@@ -132,6 +132,7 @@ PK_DATA = [
 # class, value, dtype (numeric, boolean, categorial), choices
 PROTOCOL_DATA = [
     CharacteristicType('dosing', 'Dosing', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('smoking_cessation', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
 ]
 
 def dict_and_choices(data):
