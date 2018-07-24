@@ -1,0 +1,154 @@
+{
+    "sid": 6734043,
+    "name": "ZylberKatz1984",
+    "reference": 6734043,
+    "groups": [
+        {
+            "count": 5,
+            "name": "ZylberKatz1984-S1",
+            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 76.2,
+                    "min": 60.0,
+                    "max": 88.0,
+                    "sd": 12.1,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 41.6,
+                    "min": 29.0,
+                    "max": 47.0,
+                    "sd": 6.44,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": "3",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        },
+        {
+            "count": 3,
+            "name": "ZylberKatz1984-S2",
+            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 70.33,
+                    "min": 58.0,
+                    "max": 91.0,
+                    "sd": 14.7,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 27.33,
+                    "min": 24.0,
+                    "max": 30.0,
+                    "sd": 2.49,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "1",
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        },
+        {
+            "count": 4,
+            "name": "ZylberKatz1984-S3",
+            "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 62.75,
+                    "min": 46.0,
+                    "max": 75.0,
+                    "sd": 10.9,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 27.25,
+                    "min": 22.0,
+                    "max": 31.0,
+                    "sd": 3.56,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        }
+    ]
+}

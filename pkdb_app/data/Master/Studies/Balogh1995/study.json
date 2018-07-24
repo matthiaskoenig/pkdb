@@ -1,0 +1,42 @@
+{
+    "sid": 7589032,
+    "name": "Balogh1995",
+    "reference": 7589032,
+    "groups": [
+        {
+            "count": 10,
+            "name": "Balogh1995-S1",
+            "description": "Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;\nExcluded were smokers;",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "min": 51.0,
+                    "max": 75.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "min": 20.0,
+                    "max": 34.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        }
+    ]
+}

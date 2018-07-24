@@ -10,6 +10,7 @@ class GroupManager(models.Manager):
         group, created = super(GroupManager, self).update_or_create(*args, **kwargs)
         group.characteristic_values.all().delete()
         for characteristic_value in characteristic_values:
+            characteristic_value["count"] =  characteristic_value.get("count",group.count)
             group.characteristic_values.create(**characteristic_value)
 
         group.save()

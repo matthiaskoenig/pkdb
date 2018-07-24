@@ -1,0 +1,101 @@
+{
+    "sid": 4029248,
+    "name": "Abernethy1985",
+    "reference": 4029248,
+    "groups": [
+        {
+            "count": 9,
+            "name": "Abernethy1985-S1",
+            "description": "The subjects were 18 healthy women, 23 to 30 years supplementation. The subjects were divided into two groups each of 9 for the study. One group consisted of women taking a low-dose oestrogen (50 \u00b5g or less of the oestrogen component) oral contraceptive steroid for at least 3 months and no other medication (OCS group). The other group comprised 9 women of similar age not taking any medication. In each group 8 women were Caucasian, and t was Black. History, physical and laboratory examination indicated that all subjects were in good health. All subjects were asked to abstain from caffeine consumption 48 hours prior to the study.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 59.0,
+                    "se": 2.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 26.0,
+                    "min": 23.0,
+                    "max": 30.0,
+                    "se": 1.0,
+                    "unit": "yr"
+                },
+                {
+                    "count": "8",
+                    "category": "ethnicity",
+                    "choice": "Caucasian"
+                },
+                {
+                    "count": "1",
+                    "category": "ethnicity",
+                    "choice": "Black"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        },
+        {
+            "count": 9,
+            "name": "Abernethy1985-S2",
+            "description": "The subjects were 18 healthy women, 23 to 30 years supplementation. The subjects were divided into two groups each of 9 for the study. One group consisted of women taking a low-dose oestrogen (50 \u00b5g or less of the oestrogen component) oral contraceptive steroid for at least 3 months and no other medication (OCS group). The other group comprised 9 women of similar age not taking any medication. In each group 8 women were Caucasian, and t was Black. History, physical and laboratory examination indicated that all subjects were in good health. All subjects were asked to abstain from caffeine consumption 48 hours prior to the study.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 58.0,
+                    "se": 3.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 26.0,
+                    "min": 23.0,
+                    "max": 30.0,
+                    "se": 1.0,
+                    "unit": "yr"
+                },
+                {
+                    "count": "8",
+                    "category": "ethnicity",
+                    "choice": "Caucasian"
+                },
+                {
+                    "count": "1",
+                    "category": "ethnicity",
+                    "choice": "Black"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        }
+    ]
+}

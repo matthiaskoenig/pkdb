@@ -1,0 +1,26 @@
+study	subjects	intervention	time	caf	caf_se	caf_sd
+Benowitz2003	12	CO	0.0	0.07	0.00	0.00
+Benowitz2003	12	CO	0.5	2.17	0.42	1.47
+Benowitz2003	12	CO	1.0	3.91	0.39	1.34
+Benowitz2003	12	CO	2.0	3.87	0.31	1.09
+Benowitz2003	12	CO	3.0	2.81	0.37	1.28
+Benowitz2003	12	CO	6.0	2.17	0.17	0.57
+Benowitz2003	12	CO	8.0	1.53	0.18	0.64
+Benowitz2003	12	CO	12.0	0.87	0.18	0.64
+Benowitz2003	12	Smoking	0.0	0.11	0.00	0.00
+Benowitz2003	12	Smoking	0.5	1.64	0.57	1.98
+Benowitz2003	12	Smoking	1.0	3.11	0.35	1.21
+Benowitz2003	12	Smoking	2.0	3.61	0.24	0.83
+Benowitz2003	12	Smoking	3.0	2.35	0.24	0.83
+Benowitz2003	12	Smoking	6.0	1.61	0.20	0.70
+Benowitz2003	12	Smoking	8.0	1.01	0.17	0.58
+Benowitz2003	12	Smoking	12.0	0.50	0.15	0.51
+Benowitz2003	12	Air	0.0	0.07	0.00	0.00
+Benowitz2003	12	Air	0.5	1.47	0.20	0.70
+Benowitz2003	12	Air	1.0	3.15	0.31	1.09
+Benowitz2003	12	Air	2.0	3.88	0.24	0.83
+Benowitz2003	12	Air	3.0	2.85	0.22	0.77
+Benowitz2003	12	Air	6.0	2.17	0.18	0.64
+Benowitz2003	12	Air	8.0	1.49	0.22	0.77
+Benowitz2003	12	Air	12.0	0.89	0.15	0.51
+

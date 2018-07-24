@@ -1,0 +1,136 @@
+{
+    "sid": 7371463,
+    "name": "Desmond1980",
+    "reference": 7371463,
+    "groups": [
+        {
+            "count": 15,
+            "name": "Desmond1980-S1",
+            "description": "15 healthy male subjects, age range 18-71 years (13 nonsmokers), with normal clinical history, physical examination, and SMA12 profile were studied",
+            "characteristic_values": [
+                {
+                    "count": "13",
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "count": "2",
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "age",
+                    "min": 18.0,
+                    "max": 71.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "M"
+                }
+            ]
+        },
+        {
+            "count": 10,
+            "name": "Desmond1980-S2",
+            "description": "10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
+            "characteristic_values": [
+                {
+                    "count": "6",
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "count": "4",
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "age",
+                    "min": 42.0,
+                    "max": 65.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "disease",
+                    "choice": "cirrhosis"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "M"
+                }
+            ]
+        },
+        {
+            "count": 8,
+            "name": "Desmond1980-S3",
+            "description": "Subset of 8 from 10 cirrhosis patients. 10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "Mixed"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 71.5,
+                    "min": 48.0,
+                    "max": 84.0,
+                    "sd": 11.1,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 49.6,
+                    "min": 42.0,
+                    "max": 60.0,
+                    "sd": 6.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "disease",
+                    "choice": "cirrhosis"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "M"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "pmid": 9378841,
+    "name": "Kaplan1997",
+    "sid": 9378841,
+    "date": "1997-11-10",
+    "journal": "Journal of clinical pharmacology",
+    "title": "Dose-dependent pharmacokinetics and psychomotor effects of caffeine in humans.",
+    "abstract": "Twelve healthy volunteers received oral placebo, 250 mg of caffeine, and 500 mg of caffeine in a randomized, double-blind, single-dose crossover study. Caffeine kinetics were nonlinear, with clearance significantly reduced and elimination half-life prolonged at the 500-mg compared to the 250-mg dose. The lower dose of caffeine produced more favorable subjective effects than the higher dose (elation, peacefulness, pleasantness), whereas unpleasant effects (tension, nervousness, anxiety, excitement, irritability, nausea, palpitations, restlessness) following the 500-mg dose exceeded those of the 250-mg dose. The lower dose of caffeine enhanced performance on the digit symbol substitution test and a tapping speed test compared to placebo; high-dose caffeine produced less performance enhancement than the lower dose. The plasma concentration versus response relationship revealed concentration-dependent increases in anxiety and improvements in cognitive and motor performance at low to intermediate concentrations. Both caffeine doses reduced electroencephalographic amplitude over the 4 Hz to 30 Hz spectrum, as well as in the alpha (8-11 Hz) and beta (12-30 Hz) ranges; however, effects were not dose-dependent. While favorable subjective and performance-enhancing stimulant effects occur at low to intermediate caffeine doses, the unfavorable subjective and somatic effects, as well as performance disruption, from high doses of caffeine may intrinsically limit the doses of caffeine used in the general population.",
+    "authors": [
+        {
+            "first_name": "G B",
+            "last_name": "Kaplan"
+        },
+        {
+            "first_name": "D J",
+            "last_name": "Greenblatt"
+        },
+        {
+            "first_name": "B L",
+            "last_name": "Ehrenberg"
+        },
+        {
+            "first_name": "J E",
+            "last_name": "Goddard"
+        },
+        {
+            "first_name": "M M",
+            "last_name": "Cotreau"
+        },
+        {
+            "first_name": "J S",
+            "last_name": "Harmatz"
+        },
+        {
+            "first_name": "R I",
+            "last_name": "Shader"
+        }
+    ],
+    "doi": ""
+}

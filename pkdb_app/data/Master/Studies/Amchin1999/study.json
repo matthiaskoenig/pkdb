@@ -1,0 +1,57 @@
+{
+    "sid": 10073324,
+    "name": "Amchin1999",
+    "reference": 10073324,
+    "groups": [
+        {
+            "count": 15,
+            "name": "Amchin1999-S1",
+            "description": "16 healthy volunteers (nine males and seven females) were enrolled in this study. Mean (range) age, weight, and height for the subjects were 31.1 years (21 to 41 years), 70.5 kg (47 to 93 kg), and 172 cm (157 to 183cm), respectively. Screening of sub jects, within 2 weeks of study initiation, consisted of a medical history; physical examination, including a 12- lead electrocardiogram (ECG); clinical laboratory tests; urinary drug screen; vital signs; ethanol breath test; and serum pregnancy test (females only). Exclusion criteria included women of child bearing potential or use of tobacco products within 6 months, prescription drugs within 14 days, non prescrip tion drugs within 7 days, or investigational drugs or drugs known to induce or inhibit hepatic enzymes within 30 days of study drug administration. Subjects who routinely consumed more than five 8-ounce cups of coffee (or caffeine equivalent) per day were excluded from the study. Caffeine and xanthene- containing beverages and foods, as well as charcoal- grilled foods, were strictly prohibited from the even ing of Day \u20132 through the morn ing of Day 9. Alcohol was prohibited from 7 days prior to the study and through out the study.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 70.5,
+                    "min": 47.0,
+                    "max": 93.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 31.1,
+                    "min": 21.0,
+                    "max": 41.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "height",
+                    "mean": 172.0,
+                    "min": 157.0,
+                    "max": 183.0,
+                    "unit": "cm"
+                },
+                {
+                    "count": "8",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "7",
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        }
+    ]
+}

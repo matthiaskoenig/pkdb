@@ -1,0 +1,112 @@
+{
+    "sid": 10877011,
+    "name": "Akinyinka2000",
+    "reference": 10877011,
+    "groups": [
+        {
+            "count": 10,
+            "name": "Akinyinka2000-S1",
+            "description": "Control group: Ten healthy adults, with a mean age of 32.1 \u00b1 7.6 years (age range 18\u00b140 years) and weighing 59.8 +- 12.3 kg (range 38\u00b182 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 59.8,
+                    "min": 38.0,
+                    "max": 82.0,
+                    "sd": 12.3,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 32.1,
+                    "min": 18.0,
+                    "max": 40.0,
+                    "sd": 7.6,
+                    "unit": "yr"
+                },
+                {
+                    "category": "ethnicity",
+                    "choice": "Black"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                }
+            ]
+        },
+        {
+            "count": 10,
+            "name": "Akinyinka2000-S2",
+            "description": "Patient group: Ten patients aged 15.7 \u00b1 2.5 years (range 12\u00b120 years) and weighing 45.3 \u00b1 14.9 kg (range 25\u00b158 kg) were enrolled into the study (Table 1). Patients were enrolled if the following criteria were met: fever in the preceding 24\u00b148 h or pyrexia at presentation, pure Plasmodium falciparum parasitaemia with a peripheral parasite density of more than 5000 asexual forms per microlitre in blood, no history of anti-malarial drug administration in the 2 weeks preceding presentation, negative urine test for 4-aminoquinoline (Dill-Glazko) and sulphonamides (Lignin) and/or absence of other concomitant illness.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 45.3,
+                    "min": 25.0,
+                    "max": 58.0,
+                    "sd": 14.9,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 15.7,
+                    "min": 12.0,
+                    "max": 20.0,
+                    "sd": 2.5,
+                    "unit": "yr"
+                },
+                {
+                    "category": "disease",
+                    "choice": "Plasmodium falciparum"
+                },
+                {
+                    "category": "ethnicity",
+                    "choice": "Black"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                }
+            ]
+        },
+        {
+            "count": 8,
+            "name": "Akinyinka2000-S3",
+            "description": "Plasma and salvia caffeine concentration measured in 8 of 10 healthy volunteers. Control group: Ten healthy adults, with a mean age of 32.1 \u00b1 7.6 years (age range 18\u00b140 years) and weighing 59.8 +- 12.3 kg (range 38\u00b182 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "ethnicity",
+                    "choice": "Black"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                }
+            ]
+        }
+    ]
+}

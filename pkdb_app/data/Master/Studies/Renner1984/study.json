@@ -1,0 +1,209 @@
+{
+    "sid": 6420303,
+    "name": "Renner1984",
+    "reference": 6420303,
+    "groups": [
+        {
+            "count": 10,
+            "name": "Renner1984-S1",
+            "description": "10 healthy volunteers (information in table 2)",
+            "characteristic_values": [
+                {
+                    "count": "4",
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "count": "6",
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 74.0,
+                    "min": 58.0,
+                    "max": 86.0,
+                    "sd": 10.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 38.0,
+                    "min": 27.0,
+                    "max": 56.0,
+                    "sd": 11.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "oral_contraceptives",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "M"
+                }
+            ]
+        },
+        {
+            "count": 8,
+            "name": "Renner1984-S2",
+            "description": "8 patients with cirrhotic liver disease (information in table 1)",
+            "characteristic_values": [
+                {
+                    "count": "5",
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "count": "3",
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 66.0,
+                    "min": 41.0,
+                    "max": 100.0,
+                    "sd": 18.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 55.0,
+                    "min": 34.0,
+                    "max": 66.0,
+                    "sd": 10.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "disease",
+                    "choice": "cirrhotic liver disease"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": "6",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        },
+        {
+            "count": 7,
+            "name": "Renner1984-S3",
+            "description": "7 patients with PBC (information in table 1)",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 57.0,
+                    "min": 49.0,
+                    "max": 68.0,
+                    "sd": 8.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 56.0,
+                    "min": 42.0,
+                    "max": 73.0,
+                    "sd": 13.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "disease",
+                    "choice": "PBC"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        },
+        {
+            "count": 11,
+            "name": "Renner1984-S4",
+            "description": "11 patients with miscellaneous liver disease (information in table 1)",
+            "characteristic_values": [
+                {
+                    "count": "9",
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "count": "2",
+                    "category": "smoking",
+                    "choice": "Y"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 81.0,
+                    "min": 55.0,
+                    "max": 118.0,
+                    "sd": 19.0,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 52.0,
+                    "min": 24.0,
+                    "max": 71.0,
+                    "sd": 12.0,
+                    "unit": "yr"
+                },
+                {
+                    "category": "disease",
+                    "choice": "Miscellaneous Liver Disease"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "N"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "count": "9",
+                    "category": "sex",
+                    "choice": "M"
+                },
+                {
+                    "count": "2",
+                    "category": "sex",
+                    "choice": "F"
+                }
+            ]
+        }
+    ]
+}

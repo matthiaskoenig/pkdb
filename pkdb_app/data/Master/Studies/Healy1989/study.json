@@ -1,0 +1,42 @@
+{
+    "sid": 2729942,
+    "name": "Healy1989",
+    "reference": 2729942,
+    "groups": [
+        {
+            "count": 10,
+            "name": "Healy1989-S1",
+            "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean \u00b1 standard deviation age, weight, and serum creatinine of the subjects were 26.7 \u00b1 1.6 years, 76.3 \u00b1 8.6 kg, and 1.0 \u00b1 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
+            "characteristic_values": [
+                {
+                    "category": "smoking",
+                    "choice": "N"
+                },
+                {
+                    "category": "body_weight",
+                    "mean": 76.3,
+                    "sd": 8.6,
+                    "unit": "kg"
+                },
+                {
+                    "category": "age",
+                    "mean": 26.7,
+                    "sd": 1.6,
+                    "unit": "yr"
+                },
+                {
+                    "category": "healthy",
+                    "choice": "Y"
+                },
+                {
+                    "category": "species",
+                    "choice": "homo sapiens"
+                },
+                {
+                    "category": "sex",
+                    "choice": "M"
+                }
+            ]
+        }
+    ]
+}

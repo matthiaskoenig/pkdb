@@ -1,0 +1,32 @@
+{
+    "pmid": 10073324,
+    "name": "Amchin1999",
+    "sid": 10073324,
+    "date": "1999-04-30",
+    "journal": "Journal of clinical pharmacology",
+    "title": "Effect of venlafaxine on CYP1A2-dependent pharmacokinetics and metabolism of caffeine.",
+    "abstract": "Venlafaxine is a clinically effective antidepressant. Caffeine is a metabolic probe for the quantitative measurement of CYP1A2 activity in vivo. This open-label study evaluated the effect of steady-state venlafaxine on CYP1A2-dependent metabolism, as measured by the pharmacokinetic disposition of caffeine, and urinary caffeine metabolite ratios (CMRs). Sixteen healthy subjects received 200 mg of caffeine orally before (Day 1) and after (Day 8) venlafaxine was titrated to steady-state (37.5 mg every 12 hours on Days 2-4, then 75 mg every 12 hours on Days 5-8). Samples were collected before and for 24 hours after caffeine dosing for the determination of caffeine in plasma and 1,7-dimethylxanthine, 3,7-dimethylxanthine, 1,7-dimethyluric acid (17U), 1-methylxanthine (1X) and 1-methyluric acid (1U), and 5-acetylamino-6-amino-3-methyluracil (AAMU) in urine. Blood samples were obtained before venlafaxine doses on Days 7 and 8 (morning dose only) for the determination of trough venlafaxine and O-desmethylvenlafaxine levels. Venlafaxine did not significantly alter the pharmacokinetics of caffeine and its metabolites. Plasma caffeine AUC was unchanged and remained within the bioequivalence criteria (90% confidence interval: 87.9%-102%) in the presence of venlafaxine. Urine metabolite data showed variable increases and decreases in the CMR [(AAMU + 1U + 1X)/17U] for individual subjects. However, the mean CMR was altered by < 10% in the presence of venlafaxine. This in vivo study demonstrated that venlafaxine did not alter the pharmacokinetic profile of caffeine and confirms in vitro data that venlafaxine does not inhibit CYP1A2 metabolism. Therefore, venlafaxine appears to have a relatively low potential for drug interactions based on CYP1A2 inhibition.",
+    "authors": [
+        {
+            "first_name": "J",
+            "last_name": "Amchin"
+        },
+        {
+            "first_name": "W",
+            "last_name": "Zarycranski"
+        },
+        {
+            "first_name": "K P",
+            "last_name": "Taylor"
+        },
+        {
+            "first_name": "D",
+            "last_name": "Albano"
+        },
+        {
+            "first_name": "P M",
+            "last_name": "Klockowski"
+        }
+    ],
+    "doi": ""
+}

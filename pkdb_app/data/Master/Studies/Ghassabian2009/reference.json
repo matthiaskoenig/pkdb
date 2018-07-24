@@ -1,0 +1,52 @@
+{
+    "pmid": 19307938,
+    "name": "Ghassabian2009",
+    "sid": 19307938,
+    "date": "2009-04-29",
+    "journal": "Therapeutic drug monitoring",
+    "title": "A high-throughput assay using liquid chromatography-tandem mass spectrometry for simultaneous in vivo phenotyping of 5 major cytochrome p450 enzymes in patients.",
+    "abstract": "The phenotyping cocktail is a practical approach for phenotyping of cytochrome P450 (CYP) enzymes in vivo. In this study, a liquid chromatography-tandem mass spectrometry method using a dual-extraction approach was developed and validated to quantify 5 selective substrates and their metabolites for the simultaneous phenotyping CYPs 1A2, 2C19, 2C9, 2D6, and 3A4 in patient blood samples. The assay was applied in a pilot study of 11 patients with schizophrenia. Five blood samples were collected before and at 1, 2, 4, and 6 hours after administration of a phenotyping cocktail consisting of 100 mg caffeine, 20 mg omeprazole, 25 mg losartan, 30 mg dextromethorphan, and 2 mg midazolam. The method successfully quantitated the CYP enzyme activities without serious side effects in patients. The ratios of metabolite to parent area under the concentration-time curve values were calculated over the 6-hour postdosage to reflect CYP2D6, CYP3A4, and CYP2C9 activities. The ratios of metabolite to parent plasma concentrations were calculated at 4-hour postdosage for CYP1A2 and at 4- or 6-hour postdose for CYP2C19, respectively. The plasma concentration of midazolam at 4 hours was also estimated as another phenotyping index for CYP3A4 activity. The simultaneous assay of all these analytes in a single matrix (plasma) will increase the feasibility of CYP phenotyping in patients.",
+    "authors": [
+        {
+            "first_name": "Sussan",
+            "last_name": "Ghassabian"
+        },
+        {
+            "first_name": "Manoranjenni",
+            "last_name": "Chetty"
+        },
+        {
+            "first_name": "Bruce N",
+            "last_name": "Tattam"
+        },
+        {
+            "first_name": "Mraci C",
+            "last_name": "Chem"
+        },
+        {
+            "first_name": "John",
+            "last_name": "Glen"
+        },
+        {
+            "first_name": "Jeannie",
+            "last_name": "Rahme"
+        },
+        {
+            "first_name": "Zvijezdana",
+            "last_name": "Stankovic"
+        },
+        {
+            "first_name": "Iqbal",
+            "last_name": "Ramzan"
+        },
+        {
+            "first_name": "Michael",
+            "last_name": "Murray"
+        },
+        {
+            "first_name": "Andrew J",
+            "last_name": "McLachlan"
+        }
+    ],
+    "doi": ""
+}

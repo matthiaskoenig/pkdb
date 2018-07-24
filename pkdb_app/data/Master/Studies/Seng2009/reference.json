@@ -1,0 +1,36 @@
+{
+    "pmid": 19125908,
+    "name": "Seng2009",
+    "sid": 19125908,
+    "date": "2009-02-26",
+    "journal": "Journal of clinical pharmacy and therapeutics",
+    "title": "Population pharmacokinetics of caffeine in healthy male adults using mixed-effects models.",
+    "abstract": "The population pharmacokinetic model satisfactorily described the disposition and variability of caffeine in the data. Mixed-effects modelling showed that the dose of caffeine depended on cigarette smoking status.",
+    "authors": [
+        {
+            "first_name": "K-Y",
+            "last_name": "Seng"
+        },
+        {
+            "first_name": "C-Y",
+            "last_name": "Fun"
+        },
+        {
+            "first_name": "Y-L",
+            "last_name": "Law"
+        },
+        {
+            "first_name": "W-M",
+            "last_name": "Lim"
+        },
+        {
+            "first_name": "W",
+            "last_name": "Fan"
+        },
+        {
+            "first_name": "C-L",
+            "last_name": "Lim"
+        }
+    ],
+    "doi": ""
+}
