@@ -4,6 +4,7 @@ Django model for Study.
 from django.db import models
 from pkdb_app.utils import CHAR_MAX_LENGTH
 from pkdb_app.behaviours import Sidable, Describable, Commentable
+from pkdb_app.categoricals import STUDY_DESIGN_CHOICES
 
 
 class Author(models.Model):
@@ -32,7 +33,6 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True) #optional
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True, default=pmid)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -45,19 +45,14 @@ class Reference(models.Model):
     authors = models.ManyToManyField(Author, blank=True, related_name='references')
 
 
-
-
-
-
 class Study(Sidable, Commentable, Describable, models.Model):
     """ Single clinical study.
 
     Mainly reported as a single publication.
-
     """
-    reference = models.ForeignKey(Reference, on_delete=True, to_field="sid",db_column="reference_sid", related_name='studies', null=True, blank=True)
+    reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    #todo:study design, observational sudy ...
+    design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
 
 
 
