@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Group, CharacteristicValue
+from ..interventions.serializers import ProtocolSerializer
 from ..studies.models import Reference
 from ..serializers import BaseSerializer
 BASE_FIELDS = ()
@@ -21,10 +22,12 @@ class CharacteristicValueSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     characteristic_values = CharacteristicValueSerializer(many=True, read_only=False)
+    interventions = ProtocolSerializer(many=True, read_only=False)
 
     class Meta:
             model = Group
-            fields = BASE_FIELDS + ( 'characteristic_values', 'name', 'description', 'count',)
+            fields = BASE_FIELDS + ( 'name', 'count','description','characteristic_values', 'intervention')
+
 
     def create(self, validated_data):
         group , _ = Group.objects.update_or_create(name=validated_data["name"], defaults=validated_data)
