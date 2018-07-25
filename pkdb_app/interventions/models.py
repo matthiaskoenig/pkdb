@@ -91,7 +91,7 @@ class Protocol(models.Model):
     """ List of things/steps which were done to the group.
 
     """
-    group = models.ForeignKey(Group, related_name='intervention', on_delete=True)
+    group = models.ForeignKey(Group, related_name='interventions', on_delete=True)
     protokol_steps = models.ManyToManyField(MedicationStep)
     name = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)
     # set of protocols
