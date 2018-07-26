@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # open/libre office
-.ods#
+*.ods#
 
 
 # Distribution / packaging
