@@ -1,0 +1,118 @@
+{
+    "sid": 2069371,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Healy1991",
+    "reference": 2069371,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "Sixteen healthy adult males participated in this study after internal review board approval and written informed consent were obtained. The mean (± standard deviation) age was 27.1 ± 3.1 years, and the weight was 76.7 ± 6.8 kg. Volunteers were excluded on the basis of the following criteria: prior hypersensitivity to quinolones, smoking, the use of medication for chronic illness, body weight deviating by more than 15% from ideal weight, and abnormalities on physical examination, electrocardiogram, or prestudy laboratory tests. Each volunteer was given a list of xanthine-containing products and instructed to abstain from such items, alcohol, and all other drugs beginning 2 days prior to study participation. A xanthine-free diet was maintained throughout the study.",
+        "groups": [
+            {
+                "count": 16,
+                "name": "S1",
+                "description": "Sixteen healthy adult males participated in this study after internal review board approval and written informed consent were obtained. The mean (± standard deviation) age was 27.1 ± 3.1 years, and the weight was 76.7 ± 6.8 kg. Volunteers were excluded on the basis of the following criteria: prior hypersensitivity to quinolones, smoking, the use of medication for chronic illness, body weight deviating by more than 15% from ideal weight, and abnormalities on physical examination, electrocardiogram, or prestudy laboratory tests. Each volunteer was given a list of xanthine-containing products and instructed to abstain from such items, alcohol, and all other drugs beginning 2 days prior to study participation. A xanthine-free diet was maintained throughout the study.",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "76.7",
+                        "min": null,
+                        "max": null,
+                        "sd": "6.8",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "alcohol",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.1",
+                        "min": null,
+                        "max": null,
+                        "sd": "3.1",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "After an overnight fast, subjects randomly received a single daily dose of either lomefloxacin (400 mg; two 200-mg capsules; lot 8568RCT, G. D. Searle & Co., Skokie, Ill.) or identicalappearing placebo capsules for 5 consecutive days. Caffeine (200 mg; two 100-mg NO-DOZ tablets; lot ND9Y1B; Bristol- Myers Co., New York, N.Y.) was simultaneously administered with the last three doses of each lomefloxacin or placebo treatment. After a 2-day washout period, subjects were begun on the alternate 5-day regimen with caffeine, which was again administered on the final 3 days. Subjects ingested lomefloxacin, placebo, and caffeine doses with 180 ml of distilled water. Following administration of the final dose of each regimen, subjects were required to continue fasting for 4 h.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 200.0,
+                "unit": "mg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "clearance_tbc",
+                "value": 107.0,
+                "tissue": "plasma",
+                "sd": 20.4,
+                "unit": "ml/min/1.73m^2"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "lomefloxacin",
+                "pktype": "auc",
+                "value": 25.2,
+                "tissue": "plasma",
+                "sd": 3.4,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "paraxanthine",
+                "pktype": "auc",
+                "value": 20.8,
+                "tissue": "plasma",
+                "sd": 4.6,
+                "unit": "µg/ml*h"
+            }
+        ]
+    }
+}

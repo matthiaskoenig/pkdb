@@ -1,0 +1,169 @@
+{
+    "sid": 16236038,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Culm-Merdek2005",
+    "reference": 16236038,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "7 subjects (6 men, 1 woman, average age 50 years, average weight 82 kg) completed the study after giving informed consent. All subjects were nonsmokers based upon self-reports.Four of the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. All subjects were asked to abstain from all caffeine-containing foods and beverages for 24 h prior to each study trial. The study had a randomized, four-way crossover design, with at least 7 days elapsing between treatments.",
+        "groups": [
+            {
+                "count": 7,
+                "name": "S1",
+                "description": "7 subjects (6 men, 1 woman, average age 50 years, average weight 82 kg) completed the study after giving informed consent. All subjects were nonsmokers based upon self-reports.Four of the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. All subjects were asked to abstain from all caffeine-containing foods and beverages for 24 h prior to each study trial. The study had a randomized, four-way crossover design, with at least 7 days elapsing between treatments.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "82",
+                        "min": null,
+                        "max": null,
+                        "sd": null,
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "6 M | 1 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "50",
+                        "min": null,
+                        "max": null,
+                        "sd": null,
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "7 healthy subjects received single 250mg doses of caffeine (or matching placebo) together with fluvoxamine (4 doses of 100 mg over 2 days)|7 healthy subjects received single 250mg doses of caffeine (or matching placebo) together with fluvoxamine (4 doses of 100 mg over 2 days); Cotreatment with fluvoxamine, 100 mg (or placebo), was as follows: the first dose was at 08.00 h on the morning prior to the trial, the second dose at 16.00 h on the afternoon prior to the trial, the third dose at 07.30 h on the day of caffeine or placebo administration, and the fourth dose at 17.00 h on the same day. The first, third, and fourth doses of fluvoxamine (or placebo) were administered under the supervision of the study personnel. The second dose was provided to subjects to be taken on an outpatient basis. Caffeine or placebo was administered at 09.00 h, 90 min after the third dose of fluvoxamine (or placebo).",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 250.0,
+                "unit": "mg"
+            },
+            {
+                "name": "D2",
+                "substance": "fluvoxamine",
+                "time": "-26|-18|-2.5| 8",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 100.0,
+                "unit": "mg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 46.3,
+                "tissue": "plasma",
+                "se": 7.0,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "paraxanthine",
+                "pktype": "auc24h",
+                "value": 27.3,
+                "tissue": "plasma",
+                "se": 3.09,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "theobromine",
+                "pktype": "auc24h",
+                "value": 14.8,
+                "tissue": "plasma",
+                "se": 3.37,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "theophylline",
+                "pktype": "auc24h",
+                "value": 1.96,
+                "tissue": "plasma",
+                "se": 0.94,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1+D2",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 635.0,
+                "tissue": "plasma",
+                "se": 146.0,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1+D2",
+                "substance": "paraxanthine",
+                "pktype": "auc24h",
+                "value": 9.03,
+                "tissue": "plasma",
+                "se": 1.82,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1+D2",
+                "substance": "theobromine",
+                "pktype": "auc24h",
+                "value": 18.15,
+                "tissue": "plasma",
+                "se": 4.92,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1+D2",
+                "substance": "theophylline",
+                "pktype": "auc24h",
+                "value": 5.07,
+                "tissue": "plasma",
+                "se": 1.14,
+                "unit": "µg/ml*h"
+            }
+        ]
+    }
+}

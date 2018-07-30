@@ -45,6 +45,7 @@ UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 BOOLEAN_TYPE = 'boolean'
 NUMERIC_TYPE = 'numeric'
 CATEGORIAL_TYPE = 'categorial'
+STRING_TYPE = "string"  # can be a free string, no limitations compared to categorial
 YES = "Y"
 NO = 'N'
 BOOLEAN_CHOICES = [YES, NO]
@@ -133,6 +134,7 @@ PK_DATA = [
 PROTOCOL_DATA = [
     CharacteristicType('dosing', 'Dosing', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('smoking_cessation', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('female cycle', 'Cycle', STRING_TYPE, None, ["-"]),
 ]
 
 def dict_and_choices(data):

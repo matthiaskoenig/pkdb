@@ -1,0 +1,231 @@
+{
+    "sid": 8485024,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Fuhr1993a",
+    "reference": 8485024,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
+        "groups": [
+            {
+                "count": 12,
+                "name": "S1",
+                "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "68",
+                        "min": "39",
+                        "max": "98",
+                        "sd": "15.2",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "3 Y  |  5 N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "4 M | 8 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "6 N | 6 Y"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "170.83",
+                        "min": "158",
+                        "max": "190",
+                        "sd": "9.23",
+                        "se": null,
+                        "unit": "cm"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "33.7",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "12.7",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 6,
+                "name": "S2",
+                "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "67.5",
+                        "min": "39",
+                        "max": "80",
+                        "sd": "14.6",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "2 Y | 2 N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "2 M | 4 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "168.33",
+                        "min": "158",
+                        "max": "175",
+                        "sd": "6.75",
+                        "se": null,
+                        "unit": "cm"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "34.5",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "14.06",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 6,
+                "name": "S3",
+                "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "68.5",
+                        "min": "55",
+                        "max": "98",
+                        "sd": "15.7",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "1 Y | 3 N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "2 M | 4  F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "173.33",
+                        "min": "162",
+                        "max": "190",
+                        "sd": "10.59",
+                        "se": null,
+                        "unit": "cm"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "32.83",
+                        "min": "22",
+                        "max": "56",
+                        "sd": "11.13",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "Following an overnight period of methylxanthine abstinence the subjects received 167 mg of caffeine in the morning administered as 5.0 g of instant coffee (Nescafe Classic) in both study periods. In addition, the subjects drank 300 ml of either grapefruit juice or water 0.5 h before and every 6 h following caffeine intake until the end of the sampling period. In order to exclude any contamination that might be present in commercially processed grapefruit juice, only the freshly pressed juice from 'Outspan' fruit of South African origin was administered. The naringin content determined by h.p.l.c. (Greiner & Wallrauch, 1984) in two fruits of the batch used was 530 and 421 mg 1-1.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 167.0,
+                "unit": "mg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.6,
+                "tissue": "plasma",
+                "sd": 0.09,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S2",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.58,
+                "tissue": "plasma",
+                "sd": 0.14,
+                "min": 0.43,
+                "max": 0.78,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S3",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.55,
+                "tissue": "plasma",
+                "sd": 0.03,
+                "min": 0.51,
+                "max": 0.61,
+                "unit": "l/kg"
+            }
+        ]
+    }
+}

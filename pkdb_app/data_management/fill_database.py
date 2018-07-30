@@ -1,13 +1,17 @@
-import os
+import os, sys
 import bonobo
 import coreapi
 import json
-from create_reference import REFERENCESMASTERPATH
-from jsonschema import validate
-from schemas import reference_schema
 
-client = coreapi.Client()
-document = client.get("http://0.0.0.0:8000/")
+BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
+sys.path.append(BASEPATH)
+
+from pkdb_app.data_management.create_reference import REFERENCESMASTERPATH
+from jsonschema import validate
+from pkdb_app.data_management.schemas import reference_schema
+
+
+
 
 
 def get_reference_json_path():
@@ -64,6 +68,9 @@ def get_services(**options):
 
 
 if __name__ == '__main__':
+    client = coreapi.Client()
+    document = client.get("http://0.0.0.0:8000/")
+
     parser = bonobo.get_argument_parser()
     with bonobo.parse_args(parser) as options:
         bonobo.run(get_graph_references(**options), services=get_services(**options))

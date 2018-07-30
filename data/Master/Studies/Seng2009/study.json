@@ -1,0 +1,282 @@
+{
+    "sid": 19125908,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Seng2009",
+    "reference": 19125908,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
+        "groups": [
+            {
+                "count": 14,
+                "name": "S_NCNS",
+                "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": "Asian"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "62",
+                        "min": null,
+                        "max": null,
+                        "sd": "9",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "alcohol_abstinence",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": "<=200mg per day"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "21",
+                        "min": null,
+                        "max": null,
+                        "sd": "2",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 15,
+                "name": "S_CNS",
+                "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": "Asian"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "69",
+                        "min": null,
+                        "max": null,
+                        "sd": "12",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "alcohol_abstinence",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": ">200mg per day"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "24",
+                        "min": null,
+                        "max": null,
+                        "sd": "4",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 30,
+                "name": "S_CS",
+                "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": "Asian"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71",
+                        "min": null,
+                        "max": null,
+                        "sd": "19",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "alcohol_abstinence",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": ">200mg per day"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "smoking_amount",
+                        "mean": "10",
+                        "min": "6",
+                        "max": "14",
+                        "unit": "1/day"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "23",
+                        "min": null,
+                        "max": null,
+                        "sd": "5",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "Caffeine was given orally in the form of anhydrous caffeine capsules (Union Chemical and Pharmaceutical Pte Ltd, Singapore); the capsules were available in 5, 10, 20, 50, 200, 250, 300 and 400 mg. The actual dosages that were administered to the participants for 3 and 5 mg ⁄ kg regimens were 205 ± 47 and 342 ± 79 mg respectively. Dosage administration was observed and recorded for each Participant. All participants were orally dosed with, first, 3 mg ⁄ kg body weight of caffeine and then 5 mg⁄ kg body weight of caffeine. The two separate clinical trials – which constituted two different occasions – for each participant was separated by a washout period of no less than 7 days. Consumption of alcohol and caffeine-containing products was prohibited 96 h before and during each clinical Trial.",
+        "interventions": [
+            {
+                "name": "D_CAF3",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 3.0,
+                "unit": "mg/kg"
+            },
+            {
+                "name": "D_CAF5",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 5.0,
+                "unit": "mg/kg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S_CNS",
+                "intervention": "D_CAF3",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 50.9,
+                "tissue": "plasma",
+                "sd": 34.05,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S_CNS",
+                "intervention": "D_CAF5",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 72.59,
+                "tissue": "plasma",
+                "sd": 44.08,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S_CS",
+                "intervention": "D_CAF3",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 23.1,
+                "tissue": "plasma",
+                "sd": 16.72,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S_CS",
+                "intervention": "D_CAF5",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 46.06,
+                "tissue": "plasma",
+                "sd": 18.92,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S_NCNS",
+                "intervention": "D_CAF3",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 46.58,
+                "tissue": "plasma",
+                "sd": 13.65,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S_NCNS",
+                "intervention": "D_CAF5",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 65.85,
+                "tissue": "plasma",
+                "sd": 44.0,
+                "unit": "µg/ml*h"
+            }
+        ]
+    }
+}

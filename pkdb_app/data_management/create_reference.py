@@ -11,7 +11,11 @@ from Bio import Entrez
 import json
 import requests
 
-BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..//'))
+BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
+sys.path.append(BASEPATH)
+from pkdb_app.utils import ensure_dir
+
+
 Master = os.path.join(BASEPATH, "Master")
 if BASEPATH not in sys.path:
     sys.path.append(BASEPATH)
@@ -28,10 +32,6 @@ MASTERPATH = os.path.join(DATABASEPATH, "Master")
 REFERENCESMASTERPATH = os.path.join(MASTERPATH, "Studies")
 
 
-def ensure_dir(file_path):
-    directory = os.path.dirname(file_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
 def extract_references(path):
     reader = csv.DictReader(open(path), delimiter='\t')
@@ -40,8 +40,8 @@ def extract_references(path):
 
 
 def pmid_to_int(d):
-    d['pmid'] = int(d['pmid'])
     d['sid'] = int(d['pmid'])
+    d['pmid'] = int(d['pmid'])
 
     yield d
 

@@ -1,0 +1,154 @@
+{
+    "sid": 7083737,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Bonati1982",
+    "reference": 7083737,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "4 healthy men who were 26 to 36 yr old with a mean weight of 70kg;\nThey abstained from coffee, tea, chocolate, and cola beverages from 10 days before until the end of study;\nOvernight fasting;",
+        "groups": [
+            {
+                "count": 4,
+                "name": "S1",
+                "description": "4 healthy men who were 26 to 36 yr old with a mean weight of 70kg;\nThey abstained from coffee, tea, chocolate, and cola beverages from 10 days before until the end of study;\nOvernight fasting;",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "70",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "min": "26",
+                        "max": "36",
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "After overnight fasting each was given the following preparations, containing TMX, in a random sequence, 2 wk apart: 0.22 mg/kg as soft drink (190 ml), 1.54 mg/kg as mocha coffee (50 ml), 1.00 mg/kg as aqueous solution (70 ml at 0.1%), 5.00 mg/kg as aqueous solution (70 ml at 0.5%), and 10.00 mg/kg as aqueous solution (70 ml at 1.0%).",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 0.22,
+                "unit": "mg/kg"
+            },
+            {
+                "name": "D2",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 1.0,
+                "unit": "mg/kg"
+            },
+            {
+                "name": "D3",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 1.54,
+                "unit": "mg/kg"
+            },
+            {
+                "name": "D4",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 5.0,
+                "unit": "mg/kg"
+            },
+            {
+                "name": "D5",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 10.0,
+                "unit": "mg/kg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "kabs",
+                "value": 3.15,
+                "tissue": "plasma",
+                "se": 0.45,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D2",
+                "substance": "caffeine",
+                "pktype": "kabs",
+                "value": 5.51,
+                "tissue": "plasma",
+                "se": 1.84,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D3",
+                "substance": "caffeine",
+                "pktype": "kabs",
+                "value": 5.6,
+                "tissue": "plasma",
+                "se": 1.75,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D4",
+                "substance": "caffeine",
+                "pktype": "kabs",
+                "value": 6.31,
+                "tissue": "plasma",
+                "se": 1.91,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "intervention": "D5",
+                "substance": "caffeine",
+                "pktype": "kabs",
+                "value": 40.76,
+                "tissue": "plasma",
+                "unit": "1/h"
+            }
+        ]
+    }
+}

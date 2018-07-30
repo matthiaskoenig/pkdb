@@ -1,0 +1,212 @@
+{
+    "sid": 3608349,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Campbell1987a",
+    "reference": 3608349,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
+        "groups": [
+            {
+                "count": 5,
+                "name": "S1",
+                "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": "Caucasian"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "57.8",
+                        "min": "57",
+                        "max": "64",
+                        "sd": "4.53",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "24.6",
+                        "min": "21",
+                        "max": "30",
+                        "sd": "3",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 5,
+                "name": "S2",
+                "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": "Caucasian"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "64",
+                        "min": "54",
+                        "max": "75",
+                        "sd": "6.66",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "25",
+                        "min": "24",
+                        "max": "26",
+                        "sd": "0.89",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 5,
+                "name": "S3",
+                "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": "Caucasian"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "57.6",
+                        "min": "56",
+                        "max": "59",
+                        "sd": "1.2",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "30.4",
+                        "min": "21",
+                        "max": "42",
+                        "sd": "7.96",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "After an overnight fast, each subject received an oral caffeine dose (4 mg/kg). Total urine volume was collected for 40 hours at the following intervals: 0, 0 to 8, 8 to 16, 16 to 24, 24 to 32, and 32 to 40 hours.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 4.0,
+                "unit": "mg/kg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.077,
+                "tissue": "plasma",
+                "max": 0.005,
+                "unit": "1/h"
+            },
+            {
+                "group": "S2",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.106,
+                "tissue": "plasma",
+                "se": 0.01,
+                "unit": "1/h"
+            },
+            {
+                "group": "S3",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.18899999999999997,
+                "tissue": "plasma",
+                "se": 0.033,
+                "unit": "1/h"
+            }
+        ]
+    }
+}

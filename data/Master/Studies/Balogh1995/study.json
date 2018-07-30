@@ -1,0 +1,90 @@
+{
+    "sid": 7589032,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Balogh1995",
+    "reference": 7589032,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;\nExcluded were smokers;",
+        "groups": [
+            {
+                "count": 10,
+                "name": "S1",
+                "description": "Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;\nExcluded were smokers;",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "weight",
+                        "mean": null,
+                        "min": "51",
+                        "max": "75",
+                        "sd": null,
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": null,
+                        "min": "20",
+                        "max": "34",
+                        "sd": null,
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "The drug (200 mg caffeine as uncoated tablet, Berlin Chemie, Germany) was administered in the morning after an overnight fast, together with 200 ml herbal tea. On day 21 of the treatment cycle, caffeine was administered 30min after the intake of the oral contraceptive. All volunteers had been instructed to refrain for at least 36 h prior to and during the caffeine test from all methylxanthine-containing beverages and food.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 200.0,
+                "unit": "mg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 4.79,
+                "tissue": "plasma",
+                "sd": 0.87,
+                "unit": "µg/ml"
+            }
+        ]
+    }
+}

@@ -69,10 +69,11 @@ class ProtocolStep(Sidable, Describable, models.Model):
         abstract = True
 
 
-class MedicationStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
-    """ Dosing.
+class ValueProtocolStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
+    """ A concrete step/thing which is done to the group.
 
-    The actual dosing is stored in the Valueable.
+    In case of dosing/medication the actual dosing is stored in the Valueable.
+    In case of a step without dosing, e.g., lifestyle intervention only the category is used.
     """
     substance = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) #substance: # what was given ['
     route = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # route: # where ['oral', 'iv']
@@ -81,18 +82,22 @@ class MedicationStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyw
     form = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # form: # how medication [capusle, tablete]
     form_details = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) #form_details: # h details
 
-class ProcessedMedicationStep(Valueable, ProtocolStep):
+class ProcessedValueProtocolStep(Valueable, ProtocolStep):
     """ Calculated from medicationstep
     """
-    raw = models.ForeignKey(MedicationStep, null=True, on_delete=True)
+    raw = models.ForeignKey(ValueProtocolStep, null=True, on_delete=True)
 
 
 class Protocol(models.Model):
-    """ List of things/steps which were done to the group.
+    """ List of things/steps which were done to the group or changed within the group or
+    distinguishing the group (for instance different time in montly cycle).
+    - distinguishing operation on the group (! but does not change group characteristics !)
+    - giving medication
+    - FIXME: better naming of class
 
     """
     group = models.ForeignKey(Group, related_name='interventions', on_delete=True)
-    protokol_steps = models.ManyToManyField(MedicationStep)
+    protocol_steps = models.ManyToManyField(ValueProtocolStep)
     name = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)
     # set of protocols
     # name (control, fluvoxamine, control-fluvo, fluvo-control)

@@ -1,0 +1,159 @@
+{
+    "sid": 10073324,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "Amchin1999",
+    "reference": 10073324,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "16 healthy volunteers (nine males and seven females) were enrolled in this study. Mean (range) age, weight, and height for the subjects were 31.1 years (21 to 41 years), 70.5 kg (47 to 93 kg), and 172 cm (157 to 183cm), respectively. Screening of sub jects, within 2 weeks of study initiation, consisted of a medical history; physical examination, including a 12- lead electrocardiogram (ECG); clinical laboratory tests; urinary drug screen; vital signs; ethanol breath test; and serum pregnancy test (females only). Exclusion criteria included women of child bearing potential or use of tobacco products within 6 months, prescription drugs within 14 days, non prescrip tion drugs within 7 days, or investigational drugs or drugs known to induce or inhibit hepatic enzymes within 30 days of study drug administration. Subjects who routinely consumed more than five 8-ounce cups of coffee (or caffeine equivalent) per day were excluded from the study. Caffeine and xanthene- containing beverages and foods, as well as charcoal- grilled foods, were strictly prohibited from the even ing of Day –2 through the morn ing of Day 9. Alcohol was prohibited from 7 days prior to the study and through out the study.",
+        "groups": [
+            {
+                "count": 15,
+                "name": "S1",
+                "description": "16 healthy volunteers (nine males and seven females) were enrolled in this study. Mean (range) age, weight, and height for the subjects were 31.1 years (21 to 41 years), 70.5 kg (47 to 93 kg), and 172 cm (157 to 183cm), respectively. Screening of sub jects, within 2 weeks of study initiation, consisted of a medical history; physical examination, including a 12- lead electrocardiogram (ECG); clinical laboratory tests; urinary drug screen; vital signs; ethanol breath test; and serum pregnancy test (females only). Exclusion criteria included women of child bearing potential or use of tobacco products within 6 months, prescription drugs within 14 days, non prescrip tion drugs within 7 days, or investigational drugs or drugs known to induce or inhibit hepatic enzymes within 30 days of study drug administration. Subjects who routinely consumed more than five 8-ounce cups of coffee (or caffeine equivalent) per day were excluded from the study. Caffeine and xanthene- containing beverages and foods, as well as charcoal- grilled foods, were strictly prohibited from the even ing of Day –2 through the morn ing of Day 9. Alcohol was prohibited from 7 days prior to the study and through out the study.",
+                "characteristica": [
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "70.5",
+                        "min": "47",
+                        "max": "93",
+                        "sd": null,
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "8 M | 7 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "172",
+                        "min": "157",
+                        "max": "183",
+                        "sd": null,
+                        "se": null,
+                        "unit": "cm"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "31.1",
+                        "min": "21",
+                        "max": "41",
+                        "sd": null,
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "Caffeine (200 mg NoDoz® caplets, Bristol- Myers Products, New York, NY) was administered in single doses of 200 mg on Days 1 and 8. Caffeine doses were administered with 180 mL of room-temperature water at approximately 8 a.m., following an over night fast.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 200.0,
+                "unit": "mg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "17U",
+                "pktype": "amount",
+                "value": 13.7,
+                "tissue": "urine (24h)",
+                "sd": 4.4,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "17X",
+                "pktype": "amount",
+                "value": 7.96,
+                "tissue": "urine (24h)",
+                "sd": 2.75,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "1U",
+                "pktype": "amount",
+                "value": 25.7,
+                "tissue": "urine (24h)",
+                "sd": 8.7,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "1X",
+                "pktype": "amount",
+                "value": 16.7,
+                "tissue": "urine (24h)",
+                "sd": 6.3,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "37X",
+                "pktype": "amount",
+                "value": 1.66,
+                "tissue": "urine (24h)",
+                "sd": 0.48,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "AAMU",
+                "pktype": "amount",
+                "value": 39.6,
+                "tissue": "urine (24h)",
+                "sd": 21.2,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 46.4,
+                "tissue": "plasma",
+                "sd": 26.5,
+                "unit": "µg/ml*h"
+            }
+        ]
+    }
+}

@@ -1,0 +1,224 @@
+{
+    "sid": 6734043,
+    "pkdb_version": 1.0,
+    "creator": "Matthias König",
+    "name": "ZylberKatz1984",
+    "reference": 6734043,
+    "curators": [
+        "Matthias König",
+        "Jan Grzeogrzewski"
+    ],
+    "groupset": {
+        "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+        "groups": [
+            {
+                "count": 5,
+                "name": "S1",
+                "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "76.2",
+                        "min": "60",
+                        "max": "88",
+                        "sd": "12.1",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "3 M | 2 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "41.6",
+                        "min": "29",
+                        "max": "47",
+                        "sd": "6.44",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 3,
+                "name": "S2",
+                "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "70.33",
+                        "min": "58",
+                        "max": "91",
+                        "sd": "14.7",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "2 M | 1 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.33",
+                        "min": "24",
+                        "max": "30",
+                        "sd": "2.49",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            },
+            {
+                "count": 4,
+                "name": "S3",
+                "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
+                "characteristica": [
+                    {
+                        "category": "weight",
+                        "mean": "62.75",
+                        "min": "46",
+                        "max": "75",
+                        "sd": "10.9",
+                        "se": null,
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "2 M | 2 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.25",
+                        "min": "22",
+                        "max": "31",
+                        "sd": "3.56",
+                        "se": null,
+                        "unit": "yr"
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "After abstaining from caffeine-containing beverages and chocolate for 16 h and from food for at least 4 h, subjects were requested to drink 2 cups of black coffee at 4pm. Volume drank was measured and caffeine content determined.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 350.0,
+                "unit": "mg"
+            },
+            {
+                "name": "D2",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 310.0,
+                "unit": "mg"
+            },
+            {
+                "name": "D3",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 260.0,
+                "unit": "mg"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "intervention": "D1",
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.63,
+                "tissue": "salvia",
+                "sd": 0.11,
+                "min": 0.55,
+                "max": 0.84,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S2",
+                "intervention": "D2",
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.7,
+                "tissue": "salvia",
+                "sd": 0.05,
+                "min": 0.64,
+                "max": 0.77,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S3",
+                "intervention": "D3",
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.59,
+                "tissue": "salvia",
+                "sd": 0.05,
+                "min": 0.53,
+                "max": 0.65,
+                "unit": "l/kg"
+            }
+        ]
+    }
+}
