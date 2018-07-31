@@ -9,7 +9,7 @@ sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
 from pkdb_app.data_management.create_reference import DOSINGPATH, ensure_dir
-from pkdb_app.data_management.initialize_study import save_study
+from pkdb_app.data_management.initialize_study import save_study, SEPERATOR
 from pkdb_app.utils import create_if_exists, clean_import
 
 def add_intervention_to_study(study):
@@ -21,7 +21,7 @@ def add_intervention_to_study(study):
 
     try:
         test=this_interventions["dosing_details"].unique()[0]
-        study_json["interventionset"]["description"] = '|'.join(this_interventions["dosing_details"].unique())
+        study_json["interventionset"]["description"] = SEPERATOR.join(this_interventions["dosing_details"].unique())
     except IndexError:
         print( f'{study_json["name"]}:has no Interventions')
 

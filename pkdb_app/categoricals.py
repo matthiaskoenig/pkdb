@@ -51,75 +51,75 @@ NO = 'N'
 BOOLEAN_CHOICES = [YES, NO]
 
 # categories
-DEMOGRAPHICS = "Demographics"  # age, sex, ethnicity
-ANTHROPOMETRY = "Anthropometry"  # height, weight, waist bmi
-SPECIES = "Species"
-BIOCHEMICAL_DATA = "Biochemical data"
-HEMATOLOGY_DATA = "Hematology data"
+DEMOGRAPHICS = "demographics"  # age, sex, ethnicity
+ANTHROPOMETRY = "anthropometry"  # height, weight, waist bmi
+SPECIES = "species"
+BIOCHEMICAL_DATA = "biochemical data"
+HEMATOLOGY_DATA = "hematology data"
 
 
-INCLUSION_CRITERIA = "InclusionCriteria"
-EXCLUSION_CRITERIA = "ExclusionCriteria"
-GROUP_CRITERIA = "GroupCriteria"
-CHARACTERISTIC_VALUE_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
-CHARACTERISTIC_VALUE_CHOICES = [(t, t) for t in CHARACTERISTIC_VALUE_TYPES]
+INCLUSION_CRITERIA = "inclusion"
+EXCLUSION_CRITERIA = "exclusion"
+GROUP_CRITERIA = "group"
+CHARACTERISTICA_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
+CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
 
 
 STUDY_DESIGN_DATA = [
-    "single group (interventional study)",
-    "parallel group (interventional study)",
-    "crossover (interventional study)",
-    "cohort (oberservational study)",
-    "case control (oberservational study)",
+    "single group",  # (interventional study)
+    "parallel group",  #  (interventional study)
+    "crossover",  # (interventional study)
+    "cohort",  # (oberservational study)
+    "case control",  # (oberservational study)
 ]
 STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
 
 COMMON_DATA = [
     # Medication
-    CharacteristicType('oral_contraceptives', 'Contraceptives', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('oral_contraceptives_amount', 'Contraceptives', NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('medication', 'Medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),  # ? dosing
+    CharacteristicType('oral contraceptives', 'contraceptives', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('oral contraceptives amount', 'contraceptives', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('medication', 'medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),  # ? dosing
 
     # Lifestyle
-    CharacteristicType('caffeine', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('caffeine_amount', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('caffeine_amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
 ]
 
 CHARACTERISTIC_DATA = COMMON_DATA + [
     # Antropmetrical information
-    CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["Homo sapiens"], ["-"]),
+    CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["homo sapiens"], ["-"]),
     CharacteristicType('height', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm", 'm']),
     CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
     CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg/m^2"]),
-    CharacteristicType('waist_circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
-    CharacteristicType('liver_weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
-    CharacteristicType('kidney_weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
+    CharacteristicType('waist circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
+    CharacteristicType('liver weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
+    CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
 
     CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
     CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F"], ["-"]),
-    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["African", "Afroamerican", "Asian", "Caucasian"], ["-"]),
+    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian"], ["-"]),
 
 
     # Disease (status)
-    CharacteristicType('healthy', "Health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('disease', "Disease", CATEGORIAL_TYPE, ["cirrhosis"], ["-"]),
+    CharacteristicType('healthy', "health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, ["cirrhosis"], ["-"]),
 
 
     # Lifestyle
-    CharacteristicType('smoking', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking_amount', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('alcohol', 'Lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('alcohol_amount', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('smoking amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('alcohol', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('alcohol amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
 
     # Biochemical data
     CharacteristicType('ALT', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
     CharacteristicType('AST', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
-    CharacteristicType('Albumin', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["g/dl"]),
+    CharacteristicType('albumin', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["g/dl"]),
 
     # Study protocol
-    CharacteristicType('overnight_fast', 'Study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('alcohol_abstinence', 'Study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('overnight fast', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
 
     # Medication
 
@@ -132,9 +132,9 @@ PK_DATA = [
 
 # class, value, dtype (numeric, boolean, categorial), choices
 PROTOCOL_DATA = [
-    CharacteristicType('dosing', 'Dosing', NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('smoking_cessation', 'Lifestyle', NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('female cycle', 'Cycle', STRING_TYPE, None, ["-"]),
+    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
 ]
 
 def dict_and_choices(data):
@@ -153,29 +153,10 @@ DATA_CHOICES = (
      (1, "Other"),
      (2, "Dynamic Individual"),
      (3, "Dynamic Group"),
-     (4, "Static Single"),
-     (5, "Static Multiple"),
+     (4, "Static Individual"),
+     (5, "Static Group"),
      )
 '''
-
-'''
-class Dosing:
-    substance
-    route
-    form
-    dose
-    dose_unit
-    dose_bodyweight
-    times
-
-class Pharmacokinetics (CharacteristicValue):
-    group (intervention)
-    dosing
-    substance
-    source
-    entry
-'''
-
 
 
 
