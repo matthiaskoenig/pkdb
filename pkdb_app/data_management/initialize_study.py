@@ -17,7 +17,10 @@ sys.path.append(BASEPATH)
 from pkdb_app.data_management.create_reference import collect_reference, add_reference_path, ensure_dir
 
 MK = "Matthias König"
+MK_u = "mkoenig"
+JG_u = "janekg"
 JG = "Jan Grzeogrzewski"
+SUBSTANCES = ["caffeine",]
 pkdb_version = 1.0
 study_filename = "study.json"
 SEPERATOR = "||"
@@ -26,10 +29,11 @@ def study_create(reference):
     #create json for study
     json = {"sid": reference["sid"]}
     json["pkdb_version"] = pkdb_version
-    json["creator"] = MK
+    json["creator"] = MK_u
     json["name"] = reference["name"]
+    json["substances"] = SUBSTANCES
     json["reference"] = reference["sid"]
-    json["curators"] = [MK, JG]
+    json["curators"] = [MK_u, JG_u]
     study_path = os.path.join(reference["reference_path"],study_filename)
     return {"json":json, "study_path":study_path}
 
@@ -38,7 +42,7 @@ def save_study(d):
     json_file = os.path.join(d["study_path"])
     ensure_dir(json_file)
     with open(json_file, 'w') as fp:
-        json.dump(d['json'],fp, indent=4,ensure_ascii=False)
+        json.dump(d['json'],fp, indent=4, ensure_ascii=False,)
 
 
 def get_graph(**options):

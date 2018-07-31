@@ -31,6 +31,9 @@ DOSINGPATH = os.path.join(DATABASEPATH, "caffeine", "Dosing.tsv")
 MASTERPATH = os.path.join(DATABASEPATH, "Master")
 REFERENCESMASTERPATH = os.path.join(MASTERPATH, "Studies")
 
+INDIVIDUALPATH = os.path.join(DATABASEPATH, "caffeine", "Individuals.tsv")
+DYNAMICALRESULTSPATH = os.path.join(DATABASEPATH, "caffeine", "DynamicalResults.tsv")
+
 
 
 def extract_references(path):

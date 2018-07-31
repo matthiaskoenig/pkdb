@@ -1,6 +1,6 @@
 import os
 import sys
-
+from pprint import pprint
 import pandas as pd
 import bonobo
 
@@ -10,7 +10,7 @@ sys.path.append(BASEPATH)
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
 from pkdb_app.data_management.initialize_study import save_study, study_filename, SEPERATOR
 from pkdb_app.categoricals import CHARACTERISTIC_CATEGORIES,CHARACTERISTIC_DTYPE
-from pkdb_app.data_management.create_reference import SUBJECTSPATH
+from pkdb_app.data_management.create_reference import SUBJECTSPATH, INDIVIDUALPATH
 
 from pkdb_app.utils import create_if_exists, clean_import
 
@@ -28,6 +28,8 @@ def add_groupset_to_study(study):
     except IndexError:
         print( f'{study_json["name"]}: has no group')
 
+    if len(this_subject) > 1:
+        study_json["groupset"]["characteristica"] = []
     study_json["groupset"]["groups"] = []
 
     for group in this_subject.itertuples():
@@ -40,11 +42,58 @@ def add_group_to_groupset(data):
     group = {}
     group["count"] = data["group"]["count"]
     group["name"] = data["group"]["groups"]
-    group["description"] = data["group"]["description"]
+    #group["description"] = data["group"]["description"]
     group["characteristica"] = add_characteristic_values(data["group"])
     json = {**data["json"]}
     json["groupset"]["groups"].append(group)
     return {"json":json, "study_path":data["study_path"]}
+
+def add_characteristica_groupset(data):
+    this_data = {**data}
+    groups = this_data["json"]["groupset"]["groups"]
+    number_of_groups = len(groups)
+
+    if number_of_groups > 1:
+        new_groups =[]
+        for group in groups:
+            new_chara = []
+            for characteristica in group['characteristica']:
+                characteristica.pop("count",None)
+                new_chara.append(tuple(characteristica.items()))
+            new_groups.append(set(new_chara))
+
+        groupset_chara_tuples = set.intersection(*new_groups)
+        groupset_dict = [dict(x) for x in groupset_chara_tuples]
+        this_data["json"]["groupset"]["characteristica"] = groupset_dict
+
+        new_groups = [group - groupset_chara_tuples for group in new_groups]
+        groups_dict = [list(map(dict,x)) for x in new_groups]
+
+        for i, group in enumerate(groups_dict):
+            this_data["json"]["groupset"]["groups"][i]['characteristica'] = group
+
+def add_individual_set(data):
+    this_data = {**data}
+    individials_pd = pd.read_csv(INDIVIDUALPATH, delimiter='\t', keep_default_na=False)
+    this_individuals = individials_pd[individials_pd["study"] == this_data["json"]["name"]]
+    this_individuals.replace({'NA': None}, inplace=True)
+
+    if len(this_individuals) > 0:
+        this_data["json"]["individualset"] = {}
+
+        this_data["json"]["individualset"]["description"] = ""
+        this_data["json"]["individualset"]["individuals"] = []
+
+        for individuals in this_individuals.itertuples():
+            print(individuals.data)
+            individuals_dict = {"data" :individuals.data, "figure" :individuals.figure}
+            this_data["json"]["individualset"]["individuals"].append(individuals_dict)
+
+
+    return this_data
+
+
+
 
 def add_characteristic_values(group):
     characteristics_values = []
@@ -106,6 +155,26 @@ def get_graph_study(**options):
     )
     return graph
 
+
+def get_graph_groupset_chara(**options):
+    graph = bonobo.Graph()
+    graph.add_chain(
+            get_study_json_path,
+            open_study,
+            add_characteristica_groupset,
+            save_study,
+    )
+    return graph
+
+def get_graph_groupset_individual(**options):
+    graph = bonobo.Graph()
+    graph.add_chain(
+            get_study_json_path,
+            open_study,
+            add_individual_set,
+            save_study,
+    )
+    return graph
 def get_services(**options):
     return {}
 
@@ -114,3 +183,5 @@ if __name__ == '__main__':
     parser = bonobo.get_argument_parser()
     with bonobo.parse_args(parser) as options:
         bonobo.run(get_graph_study(**options), services=get_services(**options))
+        bonobo.run(get_graph_groupset_chara(**options), services=get_services(**options))
+        bonobo.run(get_graph_groupset_individual(**options), services=get_services(**options))
