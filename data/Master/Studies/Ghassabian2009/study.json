@@ -17,28 +17,8 @@
                 "description": "The assay was applied to samples collected in a pilot study of people with schizophrenia who were receiving Clozapine. Participants were selected on the basis of having no history of chronic diseases such as diabetes, asthma, and cancer, and women could not be pregnant at the time of study. 11 people with schizophrenia who were receiving\nclozapine provided informed consent, participated, and\nsuccessfully completed the pilot clinical study (Table 5).\nNone of the subjects experienced serious side effects after\nadministration of the drug cocktail.",
                 "characteristica": [
                     {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "schizophrenia"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "9 M | 2 F"
-                    },
-                    {
                         "category": "smoking",
                         "choice": null
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     },
                     {
                         "category": "age",
@@ -48,6 +28,26 @@
                         "sd": "14.56",
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "schizophrenia"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "9 M || 2 F"
                     }
                 ]
             }

@@ -21,6 +21,10 @@
                         "choice": "Caucasian"
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "79.5",
                         "min": "64",
@@ -30,22 +34,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": "21.8",
                         "min": "18.8",
@@ -53,13 +41,25 @@
                         "sd": null,
                         "se": "1.1",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             }
         ]
     },
     "interventionset": {
-        "description": "administred 5mg/kg dose of caffeine either as an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion.|administred 5mg/kg dose of caffeine either as an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion.\n",
+        "description": "administred 5mg/kg dose of caffeine either as an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion.||administred 5mg/kg dose of caffeine either as an aqueous oral solution or an intravenous infusion, on separate occasions about 1 week apart, in a randomized crossover fashion.\n",
         "interventions": [
             {
                 "name": "D1",

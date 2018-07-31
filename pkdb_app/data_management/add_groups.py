@@ -8,7 +8,7 @@ BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file_
 sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
-from pkdb_app.data_management.initialize_study import save_study, study_filename
+from pkdb_app.data_management.initialize_study import save_study, study_filename, SEPERATOR
 from pkdb_app.categoricals import CHARACTERISTIC_CATEGORIES,CHARACTERISTIC_DTYPE
 from pkdb_app.data_management.create_reference import SUBJECTSPATH
 
@@ -24,7 +24,7 @@ def add_groupset_to_study(study):
     study_json["groupset"] = {}
     try:
         test = this_subject["description"].unique()[0]
-        study_json["groupset"]["description"] = '|'.join(this_subject["description"].unique())
+        study_json["groupset"]["description"] = SEPERATOR.join(this_subject["description"].unique())
     except IndexError:
         print( f'{study_json["name"]}: has no group')
 

@@ -17,6 +17,10 @@
                 "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
                 "characteristica": [
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "76.2",
                         "min": "60",
@@ -24,6 +28,15 @@
                         "sd": "12.1",
                         "se": null,
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "41.6",
+                        "min": "29",
+                        "max": "47",
+                        "sd": "6.44",
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
@@ -34,25 +47,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "3 M | 2 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "41.6",
-                        "min": "29",
-                        "max": "47",
-                        "sd": "6.44",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "3 M || 2 F"
                     }
                 ]
             },
@@ -61,6 +61,10 @@
                 "name": "S2",
                 "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "weight",
                         "mean": "70.33",
@@ -71,6 +75,15 @@
                         "unit": "kg"
                     },
                     {
+                        "category": "age",
+                        "mean": "27.33",
+                        "min": "24",
+                        "max": "30",
+                        "sd": "2.49",
+                        "se": null,
+                        "unit": "yr"
+                    },
+                    {
                         "category": "oral_contraceptives",
                         "choice": "N"
                     },
@@ -79,25 +92,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "2 M | 1 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "27.33",
-                        "min": "24",
-                        "max": "30",
-                        "sd": "2.49",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "2 M || 1 F"
                     }
                 ]
             },
@@ -106,6 +106,10 @@
                 "name": "S3",
                 "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "weight",
                         "mean": "62.75",
@@ -116,6 +120,15 @@
                         "unit": "kg"
                     },
                     {
+                        "category": "age",
+                        "mean": "27.25",
+                        "min": "22",
+                        "max": "31",
+                        "sd": "3.56",
+                        "se": null,
+                        "unit": "yr"
+                    },
+                    {
                         "category": "oral_contraceptives",
                         "choice": "N"
                     },
@@ -124,25 +137,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "2 M | 2 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "27.25",
-                        "min": "22",
-                        "max": "31",
-                        "sd": "3.56",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "2 M || 2 F"
                     }
                 ]
             }

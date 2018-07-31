@@ -21,6 +21,10 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "76.3",
                         "min": null,
@@ -28,6 +32,15 @@
                         "sd": "8.6",
                         "se": null,
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "26.7",
+                        "min": null,
+                        "max": null,
+                        "sd": "1.6",
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
@@ -38,25 +51,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "26.7",
-                        "min": null,
-                        "max": null,
-                        "sd": "1.6",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             }
@@ -77,7 +77,7 @@
             {
                 "name": "D_CIP",
                 "substance": "ciprofloxacin",
-                "time": "24|36|48",
+                "time": "24||36||48",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 750.0,

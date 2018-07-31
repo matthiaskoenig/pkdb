@@ -21,6 +21,12 @@
                         "choice": null
                     },
                     {
+                        "category": "age",
+                        "min": "20",
+                        "max": "40",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "oral_contraceptives",
                         "choice": null
                     },
@@ -29,25 +35,19 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "min": "20",
-                        "max": "40",
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             }
         ]
     },
     "interventionset": {
-        "description": "Caffeine and paraxanthine concentrations in plasma were simultaneously determined after a single oral dose of 230 mg caffeine in a liquid preparation. Blood samples were collected 0.5, 1, 2, 4, 6, 10, 14, 20 and 24 h after the administration of caffeine.|Quinolones were given after completion of the caffeine-alone phase. All subjects received quinolones b.d. for 3 days. On the fourth day a last single dose of the quinolone was. given together with a second dose of caffeine, followed by a further 24-h blood sampling period.",
+        "description": "Caffeine and paraxanthine concentrations in plasma were simultaneously determined after a single oral dose of 230 mg caffeine in a liquid preparation. Blood samples were collected 0.5, 1, 2, 4, 6, 10, 14, 20 and 24 h after the administration of caffeine.||Quinolones were given after completion of the caffeine-alone phase. All subjects received quinolones b.d. for 3 days. On the fourth day a last single dose of the quinolone was. given together with a second dose of caffeine, followed by a further 24-h blood sampling period.",
         "interventions": [
             {
                 "name": "D_CAF",
@@ -61,7 +61,7 @@
             {
                 "name": "D_OFL",
                 "substance": "ofloxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
@@ -70,7 +70,7 @@
             {
                 "name": "D_NOR",
                 "substance": "norfloxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 400.0,
@@ -79,7 +79,7 @@
             {
                 "name": "D_PPA",
                 "substance": "pipemidic acid",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 400.0,
@@ -88,7 +88,7 @@
             {
                 "name": "D_CIP1",
                 "substance": "ciprofloxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
@@ -97,7 +97,7 @@
             {
                 "name": "D_CIP2",
                 "substance": "ciprofloxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 250.0,
@@ -106,7 +106,7 @@
             {
                 "name": "D_CIP3",
                 "substance": "ciprofloxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 500.0,
@@ -115,7 +115,7 @@
             {
                 "name": "D_ENX1",
                 "substance": "enoxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
@@ -124,7 +124,7 @@
             {
                 "name": "D_ENX2",
                 "substance": "enoxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
@@ -133,7 +133,7 @@
             {
                 "name": "D_ENX3",
                 "substance": "enoxacin",
-                "time": "0|24|48|72",
+                "time": "0||24||48||72",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 400.0,

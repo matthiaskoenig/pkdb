@@ -21,7 +21,6 @@ def add_outputs_to_study(study):
     study_output = dosing_pd[dosing_pd["study"] == study_json["name"]]
     for name, data in study_output.groupby(["subjects", "dosing","substance"]):
         output = {}
-        #output["name"] = '|'.join(name[:-1])
         output["group"] = name[0]
         output["intervention"] = name[1]
 

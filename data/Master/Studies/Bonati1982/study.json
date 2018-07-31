@@ -26,22 +26,22 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "age",
+                        "min": "26",
+                        "max": "36",
+                        "unit": "yr"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "min": "26",
-                        "max": "36",
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             }

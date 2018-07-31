@@ -21,27 +21,6 @@
                         "choice": null
                     },
                     {
-                        "category": "weight",
-                        "mean": "70.5",
-                        "min": "47",
-                        "max": "93",
-                        "sd": null,
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "8 M | 7 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "height",
                         "mean": "172",
                         "min": "157",
@@ -51,8 +30,17 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "70.5",
+                        "min": "47",
+                        "max": "93",
+                        "sd": null,
+                        "se": null,
+                        "unit": "kg"
                     },
                     {
                         "category": "age",
@@ -62,6 +50,18 @@
                         "sd": null,
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "8 M || 7 F"
                     }
                 ]
             }

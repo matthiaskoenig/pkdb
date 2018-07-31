@@ -10,7 +10,7 @@ from django.db import models
 
 from ..studies.models import Study, Reference
 from ..behaviours import Sidable, Describable, Valueable
-from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTIC_VALUE_CHOICES, GROUP_CRITERIA, \
+from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
 from .managers import GroupManager
@@ -84,15 +84,15 @@ class CharacteristicValue(Valueable, Characteristic):
     This stores the raw information. Derived values can be calculated.
     """
     group = models.ForeignKey(Group, related_name="characteristic_values", null=True, on_delete=True)
-    cvtype = models.CharField(choices=CHARACTERISTIC_VALUE_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA)
+    ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA)
 
     @property
     def is_inclusion(self):
-        return self.cvtype == INCLUSION_CRITERIA
+        return self.ctype == INCLUSION_CRITERIA
 
     @property
     def is_exclusion(self):
-        return self.cvtype == EXCLUSION_CRITERIA
+        return self.ctype == EXCLUSION_CRITERIA
 
     #def validate(self):
     #    """ Check that choices are valid. I.e. that choice is allowed choice from choices for

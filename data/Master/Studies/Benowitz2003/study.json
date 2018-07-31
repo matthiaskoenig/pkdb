@@ -21,19 +21,7 @@
                         "choice": null
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
                         "category": "smoking",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "healthy",
                         "choice": "Y"
                     },
                     {
@@ -44,6 +32,18 @@
                         "sd": null,
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             }

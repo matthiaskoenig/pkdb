@@ -21,6 +21,10 @@
                         "choice": "Caucasian"
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "57.8",
                         "min": "57",
@@ -28,6 +32,15 @@
                         "sd": "4.53",
                         "se": null,
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "24.6",
+                        "min": "21",
+                        "max": "30",
+                        "sd": "3",
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
@@ -38,25 +51,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "24.6",
-                        "min": "21",
-                        "max": "30",
-                        "sd": "3",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "F"
                     }
                 ]
             },
@@ -70,6 +70,10 @@
                         "choice": "Caucasian"
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "64",
                         "min": "54",
@@ -77,6 +81,15 @@
                         "sd": "6.66",
                         "se": null,
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "25",
+                        "min": "24",
+                        "max": "26",
+                        "sd": "0.89",
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
@@ -87,25 +100,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "25",
-                        "min": "24",
-                        "max": "26",
-                        "sd": "0.89",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "F"
                     }
                 ]
             },
@@ -119,6 +119,10 @@
                         "choice": "Caucasian"
                     },
                     {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
                         "category": "weight",
                         "mean": "57.6",
                         "min": "56",
@@ -126,6 +130,15 @@
                         "sd": "1.2",
                         "se": null,
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "30.4",
+                        "min": "21",
+                        "max": "42",
+                        "sd": "7.96",
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
@@ -136,25 +149,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "30.4",
-                        "min": "21",
-                        "max": "42",
-                        "sd": "7.96",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "F"
                     }
                 ]
             }

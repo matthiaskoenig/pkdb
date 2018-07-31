@@ -20,6 +20,7 @@ MK = "Matthias König"
 JG = "Jan Grzeogrzewski"
 pkdb_version = 1.0
 study_filename = "study.json"
+SEPERATOR = "||"
 
 def study_create(reference):
     #create json for study

@@ -21,6 +21,10 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "68.49",
                         "min": "52",
@@ -30,26 +34,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral_contraceptives",
-                        "choice": "2 Y | 5 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "3 M | 5 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": null,
                         "min": "25",
@@ -57,6 +41,22 @@
                         "sd": null,
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": "2 Y || 5 N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "3 M || 5 F"
                     }
                 ]
             }

@@ -9,13 +9,17 @@
         "Jan Grzeogrzewski"
     ],
     "groupset": {
-        "description": "10 healthy volunteers (information in table 2)|8 patients with cirrhotic liver disease (information in table 1)|7 patients with PBC (information in table 1)|11 patients with miscellaneous liver disease (information in table 1)",
+        "description": "10 healthy volunteers (information in table 2)||8 patients with cirrhotic liver disease (information in table 1)||7 patients with PBC (information in table 1)||11 patients with miscellaneous liver disease (information in table 1)",
         "groups": [
             {
                 "count": 10,
                 "name": "S1",
                 "description": "10 healthy volunteers (information in table 2)",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "4 N || 6 Y"
+                    },
                     {
                         "category": "weight",
                         "mean": "74",
@@ -26,6 +30,15 @@
                         "unit": "kg"
                     },
                     {
+                        "category": "age",
+                        "mean": "38",
+                        "min": "27",
+                        "max": "56",
+                        "sd": "11",
+                        "se": null,
+                        "unit": "yr"
+                    },
+                    {
                         "category": "oral_contraceptives",
                         "choice": "N"
                     },
@@ -34,25 +47,12 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "4 N | 6 Y"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "38",
-                        "min": "27",
-                        "max": "56",
-                        "sd": "11",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             },
@@ -61,6 +61,10 @@
                 "name": "S2",
                 "description": "8 patients with cirrhotic liver disease (information in table 1)",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "5 N || 3 Y"
+                    },
                     {
                         "category": "weight",
                         "mean": "66",
@@ -71,30 +75,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhotic liver disease"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "6 M | 2 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "5 N | 3 Y"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
                         "category": "age",
                         "mean": "55",
                         "min": "34",
@@ -102,6 +82,26 @@
                         "sd": "10",
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhotic liver disease"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "6 M || 2 F"
                     }
                 ]
             },
@@ -110,6 +110,10 @@
                 "name": "S3",
                 "description": "7 patients with PBC (information in table 1)",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "weight",
                         "mean": "57",
@@ -120,30 +124,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "PBC"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
                         "category": "age",
                         "mean": "56",
                         "min": "42",
@@ -151,6 +131,26 @@
                         "sd": "13",
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "PBC"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "F"
                     }
                 ]
             },
@@ -159,6 +159,10 @@
                 "name": "S4",
                 "description": "11 patients with miscellaneous liver disease (information in table 1)",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "9 N || 2 Y"
+                    },
                     {
                         "category": "weight",
                         "mean": "81",
@@ -169,30 +173,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "Miscellaneous Liver Disease"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "9 M | 2 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "9 N | 2 Y"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
                         "category": "age",
                         "mean": "52",
                         "min": "24",
@@ -200,6 +180,26 @@
                         "sd": "12",
                         "se": null,
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral_contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "Miscellaneous Liver Disease"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "9 M || 2 F"
                     }
                 ]
             }

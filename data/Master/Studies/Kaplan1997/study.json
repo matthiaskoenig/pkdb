@@ -17,8 +17,16 @@
                 "description": "12 healthy male and female volunteers, 20 to 46 years old, participated after giving written informed consent (Table I). All were active ambulatory adults with no evidence of medical disease and taking no other medications. Two of the subjects were cigarette smokers. Ten oft the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. They were asked to abstain from all caffeine for 24 hours prior to each study trial.",
                 "characteristica": [
                     {
+                        "category": "caffeine",
+                        "choice": "10  || regular useres of caffeine"
+                    },
+                    {
                         "category": "ethnicity",
                         "choice": null
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "2 Y || 10 N "
                     },
                     {
                         "category": "weight",
@@ -30,20 +38,17 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "caffeine",
-                        "choice": "10  | regular useres of caffeine"
+                        "category": "age",
+                        "mean": "28.8",
+                        "min": "22",
+                        "max": "41",
+                        "sd": "6.6",
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
                         "choice": null
-                    },
-                    {
-                        "category": "alcohol",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "smoking_amount",
@@ -52,25 +57,20 @@
                         "unit": "1/day"
                     },
                     {
-                        "category": "sex",
-                        "choice": "5 M | 7 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "2 Y | 10 N "
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "28.8",
-                        "min": "22",
-                        "max": "41",
-                        "sd": "6.6",
-                        "se": null,
-                        "unit": "yr"
+                        "category": "alcohol",
+                        "choice": null
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "5 M || 7 F"
                     }
                 ]
             }

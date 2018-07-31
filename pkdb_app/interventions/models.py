@@ -30,8 +30,6 @@ from ..utils import CHAR_MAX_LENGTH
 # Add separate class? extension of model?
 
 
-
-
 class ProtocolStep(Sidable, Describable, models.Model):
     """ What is done to the group, single step.
 
@@ -79,8 +77,7 @@ class ValueProtocolStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bo
     route = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # route: # where ['oral', 'iv']
     application = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
     application_time = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
-    form = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # form: # how medication [capusle, tablete]
-    form_details = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) #form_details: # h details
+    form = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # form: # how medication [capsule, tablete]
 
 class ProcessedValueProtocolStep(Valueable, ProtocolStep):
     """ Calculated from medicationstep

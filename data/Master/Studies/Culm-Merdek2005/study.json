@@ -17,6 +17,10 @@
                 "description": "7 subjects (6 men, 1 woman, average age 50 years, average weight 82 kg) completed the study after giving informed consent. All subjects were nonsmokers based upon self-reports.Four of the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. All subjects were asked to abstain from all caffeine-containing foods and beverages for 24 h prior to each study trial. The study had a randomized, four-way crossover design, with at least 7 days elapsing between treatments.",
                 "characteristica": [
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "weight",
                         "mean": "82",
                         "min": null,
@@ -24,6 +28,15 @@
                         "sd": null,
                         "se": null,
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "50",
+                        "min": null,
+                        "max": null,
+                        "sd": null,
+                        "se": null,
+                        "unit": "yr"
                     },
                     {
                         "category": "oral_contraceptives",
@@ -34,32 +47,19 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "sex",
-                        "choice": "6 M | 1 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "50",
-                        "min": null,
-                        "max": null,
-                        "sd": null,
-                        "se": null,
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "6 M || 1 F"
                     }
                 ]
             }
         ]
     },
     "interventionset": {
-        "description": "7 healthy subjects received single 250mg doses of caffeine (or matching placebo) together with fluvoxamine (4 doses of 100 mg over 2 days)|7 healthy subjects received single 250mg doses of caffeine (or matching placebo) together with fluvoxamine (4 doses of 100 mg over 2 days); Cotreatment with fluvoxamine, 100 mg (or placebo), was as follows: the first dose was at 08.00 h on the morning prior to the trial, the second dose at 16.00 h on the afternoon prior to the trial, the third dose at 07.30 h on the day of caffeine or placebo administration, and the fourth dose at 17.00 h on the same day. The first, third, and fourth doses of fluvoxamine (or placebo) were administered under the supervision of the study personnel. The second dose was provided to subjects to be taken on an outpatient basis. Caffeine or placebo was administered at 09.00 h, 90 min after the third dose of fluvoxamine (or placebo).",
+        "description": "7 healthy subjects received single 250mg doses of caffeine (or matching placebo) together with fluvoxamine (4 doses of 100 mg over 2 days)||7 healthy subjects received single 250mg doses of caffeine (or matching placebo) together with fluvoxamine (4 doses of 100 mg over 2 days); Cotreatment with fluvoxamine, 100 mg (or placebo), was as follows: the first dose was at 08.00 h on the morning prior to the trial, the second dose at 16.00 h on the afternoon prior to the trial, the third dose at 07.30 h on the day of caffeine or placebo administration, and the fourth dose at 17.00 h on the same day. The first, third, and fourth doses of fluvoxamine (or placebo) were administered under the supervision of the study personnel. The second dose was provided to subjects to be taken on an outpatient basis. Caffeine or placebo was administered at 09.00 h, 90 min after the third dose of fluvoxamine (or placebo).",
         "interventions": [
             {
                 "name": "D1",
@@ -73,7 +73,7 @@
             {
                 "name": "D2",
                 "substance": "fluvoxamine",
-                "time": "-26|-18|-2.5| 8",
+                "time": "-26||-18||-2.5|| 8",
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
