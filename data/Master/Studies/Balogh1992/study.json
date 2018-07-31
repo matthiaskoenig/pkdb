@@ -1,12 +1,15 @@
 {
     "sid": 1304170,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Balogh1992",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 1304170,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "12 healthy male volunteers (ages 24 to 39 years) and whose weight ranged from 65 kg to 100 kg. None had a history of serious illness, regular consumption of any medication, smoking, or of a chronic exposure to chemicals known to induce or inhibit hepatic drug metabolizing enzymes.",
@@ -14,15 +17,29 @@
             {
                 "count": 12,
                 "name": "S1",
-                "description": "12 healthy male volunteers (ages 24 to 39 years) and whose weight ranged from 65 kg to 100 kg. None had a history of serious illness, regular consumption of any medication, smoking, or of a chronic exposure to chemicals known to induce or inhibit hepatic drug metabolizing enzymes.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "ethnicity",
                         "choice": null
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "age",
+                        "mean": null,
+                        "min": "24",
+                        "max": "39",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
                         "category": "weight",
@@ -30,29 +47,7 @@
                         "min": "65",
                         "max": "100",
                         "sd": "8.83",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": null,
-                        "min": "24",
-                        "max": "39",
-                        "sd": null,
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     },
                     {
                         "category": "sex",

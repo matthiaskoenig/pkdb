@@ -1,12 +1,15 @@
 {
     "sid": 7589032,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Balogh1995",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 7589032,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;\nExcluded were smokers;",
@@ -14,41 +17,35 @@
             {
                 "count": 10,
                 "name": "S1",
-                "description": "Twenty healthy, young women, (ages 20-34 years), whose weight ranged from 51 to 75 kg, participated in the study. The women had not taken oral contraceptives at least 2 months prior to their participation in the study;\nExcluded were smokers;",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": null,
-                        "min": "51",
-                        "max": "75",
-                        "sd": null,
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": null,
-                        "min": "20",
-                        "max": "34",
-                        "sd": null,
-                        "se": null,
-                        "unit": "yr"
+                        "category": "ethnicity",
+                        "choice": null
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": null,
+                        "min": "20",
+                        "max": "34",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "min": "51",
+                        "max": "75",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",

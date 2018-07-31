@@ -1,12 +1,15 @@
 {
     "sid": 9378841,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Kaplan1997",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 9378841,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "12 healthy male and female volunteers, 20 to 46 years old, participated after giving written informed consent (Table I). All were active ambulatory adults with no evidence of medical disease and taking no other medications. Two of the subjects were cigarette smokers. Ten oft the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. They were asked to abstain from all caffeine for 24 hours prior to each study trial.",
@@ -14,28 +17,22 @@
             {
                 "count": 12,
                 "name": "S1",
-                "description": "12 healthy male and female volunteers, 20 to 46 years old, participated after giving written informed consent (Table I). All were active ambulatory adults with no evidence of medical disease and taking no other medications. Two of the subjects were cigarette smokers. Ten oft the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. They were asked to abstain from all caffeine for 24 hours prior to each study trial.",
                 "characteristica": [
                     {
                         "category": "caffeine",
                         "choice": "10  || regular useres of caffeine"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
                         "category": "smoking",
                         "choice": "2 Y || 10 N "
                     },
                     {
-                        "category": "weight",
-                        "mean": "66.8",
-                        "min": "54.4",
-                        "max": "86.4",
-                        "sd": "10.7",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -43,36 +40,38 @@
                         "min": "22",
                         "max": "41",
                         "sd": "6.6",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "smoking_amount",
-                        "min": "10",
-                        "max": "20",
-                        "unit": "1/day"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     },
                     {
                         "category": "alcohol",
                         "choice": null
                     },
                     {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "66.8",
+                        "min": "54.4",
+                        "max": "86.4",
+                        "sd": "10.7",
+                        "unit": "kg"
+                    },
+                    {
                         "category": "sex",
                         "choice": "5 M || 7 F"
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Kaplan1997_Tab1.csv",
+                "figure": "Kaplan1997_Tab1.png"
             }
         ]
     },
@@ -177,6 +176,12 @@
                 "tissue": "plasma",
                 "se": 0.18,
                 "unit": "µg/ml*h"
+            }
+        ],
+        "dynamics": [
+            {
+                "data": "Kaplan1997_Fig1.csv",
+                "figure": "Kaplan1997_Fig1.png"
             }
         ]
     }

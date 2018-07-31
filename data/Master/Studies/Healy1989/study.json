@@ -1,12 +1,15 @@
 {
     "sid": 2729942,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Healy1989",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 2729942,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean ± standard deviation age, weight, and serum creatinine of the subjects were 26.7 ± 1.6 years, 76.3 ± 8.6 kg, and 1.0 ± 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
@@ -14,36 +17,13 @@
             {
                 "count": 10,
                 "name": "S1",
-                "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean ± standard deviation age, weight, and serum creatinine of the subjects were 26.7 ± 1.6 years, 76.3 ± 8.6 kg, and 1.0 ± 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "76.3",
-                        "min": null,
-                        "max": null,
-                        "sd": "8.6",
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "26.7",
-                        "min": null,
-                        "max": null,
-                        "sd": "1.6",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
+                        "category": "ethnicity",
                         "choice": null
                     },
                     {
@@ -51,8 +31,20 @@
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "26.7",
+                        "sd": "1.6",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "76.3",
+                        "sd": "8.6",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",

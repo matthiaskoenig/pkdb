@@ -1,42 +1,39 @@
 {
     "sid": 8485024,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Fuhr1993a",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 8485024,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 12,
                 "name": "S1",
-                "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "6 N || 6 Y"
+                    },
                     {
                         "category": "height",
                         "mean": "170.83",
                         "min": "158",
                         "max": "190",
                         "sd": "9.23",
-                        "se": null,
                         "unit": "cm"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "6 N || 6 Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "68",
-                        "min": "39",
-                        "max": "98",
-                        "sd": "15.2",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -44,20 +41,19 @@
                         "min": "21",
                         "max": "56",
                         "sd": "12.7",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "3 Y  ||  5 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "68",
+                        "min": "39",
+                        "max": "98",
+                        "sd": "15.2",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -68,19 +64,33 @@
             {
                 "count": 6,
                 "name": "S2",
-                "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
                     {
                         "category": "height",
                         "mean": "168.33",
                         "min": "158",
                         "max": "175",
                         "sd": "6.75",
-                        "se": null,
                         "unit": "cm"
                     },
                     {
-                        "category": "smoking",
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "34.5",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "14.06",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
                         "choice": "Y"
                     },
                     {
@@ -89,29 +99,7 @@
                         "min": "39",
                         "max": "80",
                         "sd": "14.6",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "34.5",
-                        "min": "21",
-                        "max": "56",
-                        "sd": "14.06",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "2 Y || 2 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     },
                     {
                         "category": "sex",
@@ -122,29 +110,22 @@
             {
                 "count": 6,
                 "name": "S3",
-                "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "height",
                         "mean": "173.33",
                         "min": "162",
                         "max": "190",
                         "sd": "10.59",
-                        "se": null,
                         "unit": "cm"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "68.5",
-                        "min": "55",
-                        "max": "98",
-                        "sd": "15.7",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -152,26 +133,34 @@
                         "min": "22",
                         "max": "56",
                         "sd": "11.13",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "1 Y || 3 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
+                        "category": "weight",
+                        "mean": "68.5",
+                        "min": "55",
+                        "max": "98",
+                        "sd": "15.7",
+                        "unit": "kg"
+                    },
+                    {
                         "category": "sex",
                         "choice": "2 M || 4  F"
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Fuhr1993a_Tab1.csv",
+                "figure": "Fuhr1993a_Tab1.png"
             }
         ]
     },

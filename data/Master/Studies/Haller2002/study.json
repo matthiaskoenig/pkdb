@@ -1,12 +1,15 @@
 {
     "sid": 12087345,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Haller2002",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 12087345,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "Eight healthy volunteers (5 women and 3 men) from 25 to 38 years old participated in the study. Eligibility for the study was determined on the basis of medical history, brief physical examination, and screening laboratory tests that included complete blood count, serum chemistry values to assess liver and renal function, urine toxicology testing for drugs of abuse, and a urine pregnancy test for women. Exclusion criteria included any person with obesity (body mass index 30), or a history of heart, thyroid, liver, kidney, or psychiatric disease, diabetes, central nervous system disorders, prostate hypertrophy, narrow angle glaucoma, or pregnancy or lactation. Any person with recent use (previous 1 month) of any product that contained ephedrine alkaloids or with a history of illicit substance use within the previous year was excluded. Smokers and heavy users of caffeine (4 cups of coffee per day) were excluded. Participants were not taking any medications that would cause changes in heart rate or blood pressure.",
@@ -14,15 +17,29 @@
             {
                 "count": 8,
                 "name": "S1",
-                "description": "Eight healthy volunteers (5 women and 3 men) from 25 to 38 years old participated in the study. Eligibility for the study was determined on the basis of medical history, brief physical examination, and screening laboratory tests that included complete blood count, serum chemistry values to assess liver and renal function, urine toxicology testing for drugs of abuse, and a urine pregnancy test for women. Exclusion criteria included any person with obesity (body mass index 30), or a history of heart, thyroid, liver, kidney, or psychiatric disease, diabetes, central nervous system disorders, prostate hypertrophy, narrow angle glaucoma, or pregnancy or lactation. Any person with recent use (previous 1 month) of any product that contained ephedrine alkaloids or with a history of illicit substance use within the previous year was excluded. Smokers and heavy users of caffeine (4 cups of coffee per day) were excluded. Participants were not taking any medications that would cause changes in heart rate or blood pressure.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "ethnicity",
                         "choice": null
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "age",
+                        "mean": null,
+                        "min": "25",
+                        "max": "38",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
                         "category": "weight",
@@ -30,35 +47,22 @@
                         "min": "52",
                         "max": "88.9",
                         "sd": "12.24",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": null,
-                        "min": "25",
-                        "max": "38",
-                        "sd": null,
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "2 Y || 5 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     },
                     {
                         "category": "sex",
                         "choice": "3 M || 5 F"
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Haller2002_Tab3.csv",
+                "figure": "Haller2002_Tab3.png"
             }
         ]
     },
@@ -88,6 +92,12 @@
                 "tissue": "plasma",
                 "sd": 0.07,
                 "unit": "l/kg"
+            }
+        ],
+        "dynamics": [
+            {
+                "data": "Haller2002_Fig1C.csv",
+                "figure": "Haller2002_Fig1C.png"
             }
         ]
     }

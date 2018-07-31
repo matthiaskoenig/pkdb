@@ -1,38 +1,37 @@
 {
     "sid": 7371463,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Desmond1980",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 7371463,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "15 healthy male subjects, age range 18-71 years (13 nonsmokers), with normal clinical history, physical examination, and SMA12 profile were studied||10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.||Subset of 8 from 10 cirrhosis patients. 10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 15,
                 "name": "S1",
-                "description": "15 healthy male subjects, age range 18-71 years (13 nonsmokers), with normal clinical history, physical examination, and SMA12 profile were studied",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "13 N || 2 Y"
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "age",
                         "min": "18",
                         "max": "71",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
@@ -47,29 +46,24 @@
             {
                 "count": 10,
                 "name": "S2",
-                "description": "10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "6 N || 4 Y"
                     },
                     {
-                        "category": "age",
-                        "min": "42",
-                        "max": "65",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "disease",
                         "choice": "cirrhosis"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "age",
+                        "min": "42",
+                        "max": "65",
+                        "unit": "yr"
                     },
                     {
                         "category": "healthy",
@@ -84,20 +78,18 @@
             {
                 "count": 8,
                 "name": "S3",
-                "description": "Subset of 8 from 10 cirrhosis patients. 10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "Mixed"
                     },
                     {
-                        "category": "weight",
-                        "mean": "71.5",
-                        "min": "48",
-                        "max": "84",
-                        "sd": "11.1",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     },
                     {
                         "category": "age",
@@ -105,24 +97,19 @@
                         "min": "42",
                         "max": "60",
                         "sd": "6",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhosis"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71.5",
+                        "min": "48",
+                        "max": "84",
+                        "sd": "11.1",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",

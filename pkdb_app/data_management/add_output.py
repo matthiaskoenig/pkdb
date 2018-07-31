@@ -6,7 +6,7 @@ sys.path.append(BASEPATH)
 
 
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
-from pkdb_app.data_management.create_reference import PHARMACOKINETICSPATH
+from pkdb_app.data_management.create_reference import PHARMACOKINETICSPATH, DYNAMICALRESULTSPATH
 from pkdb_app.data_management.initialize_study import save_study
 from pkdb_app.utils import create_if_exists, clean_import
 
@@ -42,6 +42,22 @@ def add_outputs_to_study(study):
 
     yield {"json":study_json,"study_path": study["study_path"]}
 
+def add_dynamics_to_ouput(data):
+    this_data = {**data}
+    dynamics_pd = pd.read_csv(DYNAMICALRESULTSPATH, delimiter='\t', keep_default_na=False,encoding="utf-8")
+    this_dynamics = dynamics_pd[dynamics_pd["study"] == this_data["json"]["name"]]
+    this_dynamics.replace({'NA': None}, inplace=True)
+
+    if len(this_dynamics) > 0:
+        this_data["json"]["outputset"]["dynamics"] = []
+        for dynamics in this_dynamics.itertuples():
+            print(dynamics.data)
+            dynamics_dict = {"data" :dynamics.data, "figure" :dynamics.figure}
+            this_data["json"]["outputset"]["dynamics"].append(dynamics_dict)
+
+
+    return this_data
+
 def get_graph_study(**options):
     graph = bonobo.Graph()
     # add studies
@@ -49,6 +65,17 @@ def get_graph_study(**options):
         get_study_json_path,
         open_study,
         add_outputs_to_study,
+        save_study,
+    )
+    return graph
+
+def get_graph_dynamics(**options):
+    graph = bonobo.Graph()
+    # add studies
+    graph.add_chain(
+        get_study_json_path,
+        open_study,
+        add_dynamics_to_ouput,
         save_study,
     )
     return graph
@@ -61,5 +88,6 @@ if __name__ == '__main__':
     parser = bonobo.get_argument_parser()
     with bonobo.parse_args(parser) as options:
         bonobo.run(get_graph_study(**options), services=get_services(**options))
+        bonobo.run(get_graph_dynamics(**options), services=get_services(**options))
 
 

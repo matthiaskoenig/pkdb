@@ -1,54 +1,53 @@
 {
     "sid": 4029248,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Abernethy1985",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 4029248,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "The subjects were 18 healthy women, 23 to 30 years supplementation. The subjects were divided into two groups each of 9 for the study. One group consisted of women taking a low-dose oestrogen (50 µg or less of the oestrogen component) oral contraceptive steroid for at least 3 months and no other medication (OCS group). The other group comprised 9 women of similar age not taking any medication. In each group 8 women were Caucasian, and t was Black. History, physical and laboratory examination indicated that all subjects were in good health. All subjects were asked to abstain from caffeine consumption 48 hours prior to the study.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 9,
                 "name": "S1",
-                "description": "The subjects were 18 healthy women, 23 to 30 years supplementation. The subjects were divided into two groups each of 9 for the study. One group consisted of women taking a low-dose oestrogen (50 µg or less of the oestrogen component) oral contraceptive steroid for at least 3 months and no other medication (OCS group). The other group comprised 9 women of similar age not taking any medication. In each group 8 women were Caucasian, and t was Black. History, physical and laboratory examination indicated that all subjects were in good health. All subjects were asked to abstain from caffeine consumption 48 hours prior to the study.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": "8 Caucasian || 1 Black"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "59",
-                        "min": null,
-                        "max": null,
-                        "sd": null,
-                        "se": "2",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "26",
-                        "min": "23",
-                        "max": "30",
-                        "sd": null,
-                        "se": "1",
-                        "unit": "yr"
+                        "category": "ethnicity",
+                        "choice": "8 Caucasian || 1 Black"
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "26",
+                        "min": "23",
+                        "max": "30",
+                        "se": "1",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "59",
+                        "se": "2",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -59,47 +58,51 @@
             {
                 "count": 9,
                 "name": "S2",
-                "description": "The subjects were 18 healthy women, 23 to 30 years supplementation. The subjects were divided into two groups each of 9 for the study. One group consisted of women taking a low-dose oestrogen (50 µg or less of the oestrogen component) oral contraceptive steroid for at least 3 months and no other medication (OCS group). The other group comprised 9 women of similar age not taking any medication. In each group 8 women were Caucasian, and t was Black. History, physical and laboratory examination indicated that all subjects were in good health. All subjects were asked to abstain from caffeine consumption 48 hours prior to the study.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": "8 Caucasian || 1 Black"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "58",
-                        "min": null,
-                        "max": null,
-                        "sd": null,
-                        "se": "3",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "26",
-                        "min": "23",
-                        "max": "30",
-                        "sd": null,
-                        "se": "1",
-                        "unit": "yr"
+                        "category": "ethnicity",
+                        "choice": "8 Caucasian || 1 Black"
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "26",
+                        "min": "23",
+                        "max": "30",
+                        "se": "1",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "58",
+                        "se": "3",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
                         "choice": "F"
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Abernethy1985_Fig2.csv",
+                "figure": "Abernethy1985_Fig2.png"
             }
         ]
     },

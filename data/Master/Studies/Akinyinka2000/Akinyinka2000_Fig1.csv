@@ -1,28 +1,27 @@
-study	time	status	caf	caf_sd	px	px_sd	px_caf	px_caf_sd
-Akinyinka2000	0.0	control	0.000	NA	0.006	NA	NA	NA
-Akinyinka2000	0.2	control	5.315	NA	0.183	0.090	0.034	NA
-Akinyinka2000	0.4	control	4.640	NA	0.200	0.081	0.043	NA
-Akinyinka2000	0.7	control	5.378	NA	0.284	0.093	0.053	NA
-Akinyinka2000	1.0	control	4.724	0.791	0.479	0.183	0.101	0.042
-Akinyinka2000	2.0	control	4.377	0.675	0.667	0.218	0.153	0.055
-Akinyinka2000	3.0	control	3.280	0.443	0.687	0.227	0.210	0.075
-Akinyinka2000	4.0	control	3.734	0.517	0.998	0.322	0.267	0.094
-Akinyinka2000	6.0	control	3.070	0.580	1.076	0.221	0.350	0.098
-Akinyinka2000	8.0	control	2.459	0.517	1.032	0.256	0.420	0.136
-Akinyinka2000	12.0	control	1.743	0.453	1.004	0.189	0.576	0.185
-Akinyinka2000	24.0	control	0.692	0.274	0.466	0.180	0.674	0.373
-Akinyinka2000	36.0	control	0.347	0.169	0.236	0.113	0.682	0.465
-Akinyinka2000	0.0	malaria	0.011	NA	0.000	NA	NA	NA
-Akinyinka2000	0.2	malaria	2.953	NA	0.096	0.046	0.032	NA
-Akinyinka2000	0.4	malaria	4.144	NA	0.177	0.044	0.043	NA
-Akinyinka2000	0.7	malaria	4.376	0.938	0.215	0.078	0.049	0.021
-Akinyinka2000	1.0	malaria	4.197	0.907	0.264	0.087	0.063	0.025
-Akinyinka2000	2.0	malaria	4.029	0.875	0.299	0.090	0.074	0.028
-Akinyinka2000	3.0	malaria	4.155	0.844	0.510	0.105	0.123	0.035
-Akinyinka2000	4.0	malaria	3.818	0.780	0.632	0.171	0.166	0.056
-Akinyinka2000	6.0	malaria	3.408	0.780	0.719	0.136	0.211	0.063
-Akinyinka2000	8.0	malaria	2.860	0.443	0.733	0.148	0.256	0.065
-Akinyinka2000	12.0	malaria	2.323	0.633	0.836	0.180	0.360	0.125
-Akinyinka2000	24.0	malaria	1.019	0.337	0.554	0.139	0.543	0.226
-Akinyinka2000	36.0	malaria	0.400	0.221	0.213	0.084	0.533	0.363
-
+study	subjects	time	status	caf	caf_sd	px	px_sd	px_caf	px_caf_sd
+Akinyinka2000	S1	0.0	control	0		6			
+Akinyinka2000	S1	0.2	control	5315		183	90	34	
+Akinyinka2000	S1	0.4	control	4640		200	81	43	
+Akinyinka2000	S1	0.7	control	5378		284	93	53	
+Akinyinka2000	S1	1.0	control	4724	791	479	183	101	42
+Akinyinka2000	S1	2.0	control	4377	675	667	218	153	55
+Akinyinka2000	S1	3.0	control	3280	443	687	227	210	75
+Akinyinka2000	S1	4.0	control	3734	517	998	322	267	94
+Akinyinka2000	S1	6.0	control	3070	580	1076	221	350	98
+Akinyinka2000	S1	8.0	control	2459	517	1032	256	420	136
+Akinyinka2000	S1	12.0	control	1743	453	1004	189	576	185
+Akinyinka2000	S1	24.0	control	692	274	466	180	674	373
+Akinyinka2000	S1	36.0	control	347	169	236	113	682	465
+Akinyinka2000	S2	0.0	malaria	11		0			
+Akinyinka2000	S2	0.2	malaria	2953		96	46	32	
+Akinyinka2000	S2	0.4	malaria	4144		177	44	43	
+Akinyinka2000	S2	0.7	malaria	4376	938	215	78	49	21
+Akinyinka2000	S2	1.0	malaria	4197	907	264	87	63	25
+Akinyinka2000	S2	2.0	malaria	4029	875	299	90	74	28
+Akinyinka2000	S2	3.0	malaria	4155	844	510	105	123	35
+Akinyinka2000	S2	4.0	malaria	3818	780	632	171	166	56
+Akinyinka2000	S2	6.0	malaria	3408	780	719	136	211	63
+Akinyinka2000	S2	8.0	malaria	2860	443	733	148	256	65
+Akinyinka2000	S2	12.0	malaria	2323	633	836	180	360	125
+Akinyinka2000	S2	24.0	malaria	1019	337	554	139	543	226
+Akinyinka2000	S2	36.0	malaria	400	221	213	84	533	363

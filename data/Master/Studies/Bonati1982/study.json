@@ -1,12 +1,15 @@
 {
     "sid": 7083737,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Bonati1982",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 7083737,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "4 healthy men who were 26 to 36 yr old with a mean weight of 70kg;\nThey abstained from coffee, tea, chocolate, and cola beverages from 10 days before until the end of study;\nOvernight fasting;",
@@ -14,16 +17,14 @@
             {
                 "count": 4,
                 "name": "S1",
-                "description": "4 healthy men who were 26 to 36 yr old with a mean weight of 70kg;\nThey abstained from coffee, tea, chocolate, and cola beverages from 10 days before until the end of study;\nOvernight fasting;",
                 "characteristica": [
                     {
                         "category": "ethnicity",
                         "choice": null
                     },
                     {
-                        "category": "weight",
-                        "mean": "70",
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -32,12 +33,13 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "70",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -148,6 +150,12 @@
                 "value": 40.76,
                 "tissue": "plasma",
                 "unit": "1/h"
+            }
+        ],
+        "dynamics": [
+            {
+                "data": "Bonati1982_Fig1.csv",
+                "figure": "Bonati1982_Fig1.png"
             }
         ]
     }

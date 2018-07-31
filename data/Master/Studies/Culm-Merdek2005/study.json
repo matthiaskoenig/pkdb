@@ -1,12 +1,15 @@
 {
     "sid": 16236038,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Culm-Merdek2005",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 16236038,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "7 subjects (6 men, 1 woman, average age 50 years, average weight 82 kg) completed the study after giving informed consent. All subjects were nonsmokers based upon self-reports.Four of the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. All subjects were asked to abstain from all caffeine-containing foods and beverages for 24 h prior to each study trial. The study had a randomized, four-way crossover design, with at least 7 days elapsing between treatments.",
@@ -14,41 +17,28 @@
             {
                 "count": 7,
                 "name": "S1",
-                "description": "7 subjects (6 men, 1 woman, average age 50 years, average weight 82 kg) completed the study after giving informed consent. All subjects were nonsmokers based upon self-reports.Four of the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. All subjects were asked to abstain from all caffeine-containing foods and beverages for 24 h prior to each study trial. The study had a randomized, four-way crossover design, with at least 7 days elapsing between treatments.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "82",
-                        "min": null,
-                        "max": null,
-                        "sd": null,
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "50",
-                        "min": null,
-                        "max": null,
-                        "sd": null,
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "50",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "82",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",

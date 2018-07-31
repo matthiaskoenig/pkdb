@@ -1,66 +1,55 @@
 {
     "sid": 19125908,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Seng2009",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 19125908,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
+        "characteristica": [],
         "groups": [
             {
                 "count": 14,
                 "name": "S_NCNS",
-                "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
                 "characteristica": [
                     {
                         "category": "caffeine",
                         "choice": "<=200mg per day"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": "Asian"
-                    },
-                    {
-                        "category": "alcohol_abstinence",
-                        "choice": "N"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "62",
-                        "min": null,
-                        "max": null,
-                        "sd": "9",
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "21",
-                        "min": null,
-                        "max": null,
-                        "sd": "2",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
+                        "category": "ethnicity",
+                        "choice": "Asian"
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "21",
+                        "sd": "2",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "62",
+                        "sd": "9",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -71,53 +60,38 @@
             {
                 "count": 15,
                 "name": "S_CNS",
-                "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
                 "characteristica": [
                     {
                         "category": "caffeine",
                         "choice": ">200mg per day"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": "Asian"
-                    },
-                    {
-                        "category": "alcohol_abstinence",
-                        "choice": "N"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "69",
-                        "min": null,
-                        "max": null,
-                        "sd": "12",
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "24",
-                        "min": null,
-                        "max": null,
-                        "sd": "4",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
+                        "category": "ethnicity",
+                        "choice": "Asian"
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "24",
+                        "sd": "4",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "69",
+                        "sd": "12",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -128,60 +102,38 @@
             {
                 "count": 30,
                 "name": "S_CS",
-                "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
                 "characteristica": [
                     {
                         "category": "caffeine",
                         "choice": ">200mg per day"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": "Asian"
-                    },
-                    {
-                        "category": "alcohol_abstinence",
-                        "choice": "N"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "71",
-                        "min": null,
-                        "max": null,
-                        "sd": "19",
-                        "se": null,
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "23",
-                        "min": null,
-                        "max": null,
-                        "sd": "5",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "smoking_amount",
-                        "mean": "10",
-                        "min": "6",
-                        "max": "14",
-                        "unit": "1/day"
+                        "category": "ethnicity",
+                        "choice": "Asian"
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "age",
+                        "mean": "23",
+                        "sd": "5",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71",
+                        "sd": "19",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",

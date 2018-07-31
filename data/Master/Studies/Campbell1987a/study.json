@@ -1,37 +1,35 @@
 {
     "sid": 3608349,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Campbell1987a",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 3608349,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 5,
                 "name": "S1",
-                "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "57.8",
-                        "min": "57",
-                        "max": "64",
-                        "sd": "4.53",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "ethnicity",
+                        "choice": "Caucasian"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -39,20 +37,19 @@
                         "min": "21",
                         "max": "30",
                         "sd": "3",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "57.8",
+                        "min": "57",
+                        "max": "64",
+                        "sd": "4.53",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -63,24 +60,18 @@
             {
                 "count": 5,
                 "name": "S2",
-                "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "64",
-                        "min": "54",
-                        "max": "75",
-                        "sd": "6.66",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "ethnicity",
+                        "choice": "Caucasian"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -88,20 +79,19 @@
                         "min": "24",
                         "max": "26",
                         "sd": "0.89",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "64",
+                        "min": "54",
+                        "max": "75",
+                        "sd": "6.66",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -112,14 +102,29 @@
             {
                 "count": 5,
                 "name": "S3",
-                "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
                     {
                         "category": "ethnicity",
                         "choice": "Caucasian"
                     },
                     {
-                        "category": "smoking",
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "30.4",
+                        "min": "21",
+                        "max": "42",
+                        "sd": "7.96",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
                         "choice": "Y"
                     },
                     {
@@ -128,29 +133,7 @@
                         "min": "56",
                         "max": "59",
                         "sd": "1.2",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "30.4",
-                        "min": "21",
-                        "max": "42",
-                        "sd": "7.96",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     },
                     {
                         "category": "sex",

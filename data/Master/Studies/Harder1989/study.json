@@ -1,12 +1,15 @@
 {
     "sid": 2589393,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Harder1989",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 2589393,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
@@ -14,25 +17,20 @@
             {
                 "count": 12,
                 "name": "S1",
-                "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
                 "characteristica": [
                     {
                         "category": "ethnicity",
                         "choice": null
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "age",
                         "min": "20",
                         "max": "40",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",

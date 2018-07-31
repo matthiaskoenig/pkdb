@@ -1,37 +1,35 @@
 {
     "sid": 10877011,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Akinyinka2000",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 10877011,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "Control group: Ten healthy adults, with a mean age of 32.1 ± 7.6 years (age range 18±40 years) and weighing 59.8 +- 12.3 kg (range 38±82 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.||Patient group: Ten patients aged 15.7 ± 2.5 years (range 12±20 years) and weighing 45.3 ± 14.9 kg (range 25±58 kg) were enrolled into the study (Table 1). Patients were enrolled if the following criteria were met: fever in the preceding 24±48 h or pyrexia at presentation, pure Plasmodium falciparum parasitaemia with a peripheral parasite density of more than 5000 asexual forms per microlitre in blood, no history of anti-malarial drug administration in the 2 weeks preceding presentation, negative urine test for 4-aminoquinoline (Dill-Glazko) and sulphonamides (Lignin) and/or absence of other concomitant illness.||Plasma and salvia caffeine concentration measured in 8 of 10 healthy volunteers. Control group: Ten healthy adults, with a mean age of 32.1 ± 7.6 years (age range 18±40 years) and weighing 59.8 +- 12.3 kg (range 38±82 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 10,
                 "name": "S1",
-                "description": "Control group: Ten healthy adults, with a mean age of 32.1 ± 7.6 years (age range 18±40 years) and weighing 59.8 +- 12.3 kg (range 38±82 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": "Black"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "59.8",
-                        "min": "38",
-                        "max": "82",
-                        "sd": "12.3",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "ethnicity",
+                        "choice": "Black"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -39,16 +37,19 @@
                         "min": "18",
                         "max": "40",
                         "sd": "7.6",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "59.8",
+                        "min": "38",
+                        "max": "82",
+                        "sd": "12.3",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -59,14 +60,33 @@
             {
                 "count": 10,
                 "name": "S2",
-                "description": "Patient group: Ten patients aged 15.7 ± 2.5 years (range 12±20 years) and weighing 45.3 ± 14.9 kg (range 25±58 kg) were enrolled into the study (Table 1). Patients were enrolled if the following criteria were met: fever in the preceding 24±48 h or pyrexia at presentation, pure Plasmodium falciparum parasitaemia with a peripheral parasite density of more than 5000 asexual forms per microlitre in blood, no history of anti-malarial drug administration in the 2 weeks preceding presentation, negative urine test for 4-aminoquinoline (Dill-Glazko) and sulphonamides (Lignin) and/or absence of other concomitant illness.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
                     {
                         "category": "ethnicity",
                         "choice": "Black"
                     },
                     {
-                        "category": "smoking",
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "Plasmodium falciparum"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "15.7",
+                        "min": "12",
+                        "max": "20",
+                        "sd": "2.5",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
                         "choice": "N"
                     },
                     {
@@ -75,29 +95,7 @@
                         "min": "25",
                         "max": "58",
                         "sd": "14.9",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "15.7",
-                        "min": "12",
-                        "max": "20",
-                        "sd": "2.5",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "Plasmodium falciparum"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
                     },
                     {
                         "category": "sex",
@@ -108,15 +106,14 @@
             {
                 "count": 8,
                 "name": "S3",
-                "description": "Plasma and salvia caffeine concentration measured in 8 of 10 healthy volunteers. Control group: Ten healthy adults, with a mean age of 32.1 ± 7.6 years (age range 18±40 years) and weighing 59.8 +- 12.3 kg (range 38±82 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
                 "characteristica": [
-                    {
-                        "category": "ethnicity",
-                        "choice": "Black"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": "Black"
                     },
                     {
                         "category": "species",
@@ -131,6 +128,15 @@
                         "choice": null
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Akinyinka2000_Tab1.csv",
+                "figure": "Akinyinka2000_Tab1.png"
             }
         ]
     },
@@ -250,6 +256,12 @@
                 "tissue": "salvia",
                 "sd": 8.7,
                 "unit": "h"
+            }
+        ],
+        "dynamics": [
+            {
+                "data": "Akinyinka2000_Fig1.csv",
+                "figure": "Akinyinka2000_Fig1.png"
             }
         ]
     }

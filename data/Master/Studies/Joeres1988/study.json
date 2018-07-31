@@ -1,38 +1,37 @@
 {
     "sid": 3371873,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Joeres1988",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 3371873,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.||8 smoking healthy volunteers and patients without liver disease||15 non-smoking healthy volunteers and patients without liver disease||18 smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.||30 non-smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 7,
                 "name": "S1",
-                "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "Y"
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "age",
                         "min": "25",
                         "max": "45",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
@@ -47,15 +46,10 @@
             {
                 "count": 7,
                 "name": "S2",
-                "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
                     },
                     {
                         "category": "species",
@@ -74,15 +68,10 @@
             {
                 "count": 8,
                 "name": "S3",
-                "description": "8 smoking healthy volunteers and patients without liver disease",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
                     },
                     {
                         "category": "species",
@@ -101,15 +90,10 @@
             {
                 "count": 15,
                 "name": "S4",
-                "description": "15 non-smoking healthy volunteers and patients without liver disease",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
                     },
                     {
                         "category": "species",
@@ -128,20 +112,18 @@
             {
                 "count": 18,
                 "name": "S5",
-                "description": "18 smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "71",
-                        "min": "51",
-                        "max": "94",
-                        "sd": "14",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
                     },
                     {
                         "category": "age",
@@ -149,24 +131,19 @@
                         "min": "30",
                         "max": "65",
                         "sd": "9",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71",
+                        "min": "51",
+                        "max": "94",
+                        "sd": "14",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -177,10 +154,29 @@
             {
                 "count": 30,
                 "name": "S6",
-                "description": "30 non-smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
                 "characteristica": [
                     {
                         "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "51",
+                        "min": "40",
+                        "max": "66",
+                        "sd": "6",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
                         "choice": "N"
                     },
                     {
@@ -189,39 +185,22 @@
                         "min": "48",
                         "max": "100",
                         "sd": "14",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "51",
-                        "min": "40",
-                        "max": "66",
-                        "sd": "6",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
                     },
                     {
                         "category": "sex",
                         "choice": "21 M || 9 F"
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Joeres1988_Fig1.csv",
+                "figure": "Joeres1988_Fig1.png"
             }
         ]
     },

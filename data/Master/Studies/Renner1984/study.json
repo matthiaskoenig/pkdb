@@ -1,33 +1,31 @@
 {
     "sid": 6420303,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Renner1984",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 6420303,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "10 healthy volunteers (information in table 2)||8 patients with cirrhotic liver disease (information in table 1)||7 patients with PBC (information in table 1)||11 patients with miscellaneous liver disease (information in table 1)",
+        "characteristica": [],
         "groups": [
             {
                 "count": 10,
                 "name": "S1",
-                "description": "10 healthy volunteers (information in table 2)",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "4 N || 6 Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "74",
-                        "min": "58",
-                        "max": "86",
-                        "sd": "10",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -35,20 +33,19 @@
                         "min": "27",
                         "max": "56",
                         "sd": "11",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "74",
+                        "min": "58",
+                        "max": "86",
+                        "sd": "10",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -59,20 +56,18 @@
             {
                 "count": 8,
                 "name": "S2",
-                "description": "8 patients with cirrhotic liver disease (information in table 1)",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "5 N || 3 Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "66",
-                        "min": "41",
-                        "max": "100",
-                        "sd": "18",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhotic liver disease"
                     },
                     {
                         "category": "age",
@@ -80,24 +75,19 @@
                         "min": "34",
                         "max": "66",
                         "sd": "10",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhotic liver disease"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "66",
+                        "min": "41",
+                        "max": "100",
+                        "sd": "18",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
@@ -108,10 +98,29 @@
             {
                 "count": 7,
                 "name": "S3",
-                "description": "7 patients with PBC (information in table 1)",
                 "characteristica": [
                     {
                         "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "PBC"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "56",
+                        "min": "42",
+                        "max": "73",
+                        "sd": "13",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
                         "choice": "N"
                     },
                     {
@@ -120,33 +129,7 @@
                         "min": "49",
                         "max": "68",
                         "sd": "8",
-                        "se": null,
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "56",
-                        "min": "42",
-                        "max": "73",
-                        "sd": "13",
-                        "se": null,
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "PBC"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
                     },
                     {
                         "category": "sex",
@@ -157,20 +140,18 @@
             {
                 "count": 11,
                 "name": "S4",
-                "description": "11 patients with miscellaneous liver disease (information in table 1)",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "9 N || 2 Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "81",
-                        "min": "55",
-                        "max": "118",
-                        "sd": "19",
-                        "se": null,
-                        "unit": "kg"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "Miscellaneous Liver Disease"
                     },
                     {
                         "category": "age",
@@ -178,24 +159,19 @@
                         "min": "24",
                         "max": "71",
                         "sd": "12",
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "Miscellaneous Liver Disease"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "81",
+                        "min": "55",
+                        "max": "118",
+                        "sd": "19",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",

@@ -1,41 +1,38 @@
 {
     "sid": 657717,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Parsons1978",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 657717,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "Our subjects were 13 smokers and 13 control nonsmokers chosen from laboratory and hospital personnel. Each group consisted of 9 females and 4 males with and average age of 26 (range 20 to 45). No subjects in the nonsmoking group had ever used tobacco regularly. Smoking subjects consumed at least 20 cigarettes a day for a minimum of two years. With the exception of 3 women in each group who were taking oral contraceptives, none of the subjects took any medication regularly. The usual daily intake of caffeine, mostly as coffee, was found by questionnaire to approximate 320mg in the smokers and 150mg in the nonsmokers.",
+        "characteristica": [],
         "groups": [
             {
                 "count": 13,
                 "name": "S1",
-                "description": "Our subjects were 13 smokers and 13 control nonsmokers chosen from laboratory and hospital personnel. Each group consisted of 9 females and 4 males with and average age of 26 (range 20 to 45). No subjects in the nonsmoking group had ever used tobacco regularly. Smoking subjects consumed at least 20 cigarettes a day for a minimum of two years. With the exception of 3 women in each group who were taking oral contraceptives, none of the subjects took any medication regularly. The usual daily intake of caffeine, mostly as coffee, was found by questionnaire to approximate 320mg in the smokers and 150mg in the nonsmokers.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "age",
                         "mean": "26",
                         "min": "20",
                         "max": "45",
-                        "sd": null,
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "3 Y || 1 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
@@ -50,28 +47,21 @@
             {
                 "count": 13,
                 "name": "S2",
-                "description": "Our subjects were 13 smokers and 13 control nonsmokers chosen from laboratory and hospital personnel. Each group consisted of 9 females and 4 males with and average age of 26 (range 20 to 45). No subjects in the nonsmoking group had ever used tobacco regularly. Smoking subjects consumed at least 20 cigarettes a day for a minimum of two years. With the exception of 3 women in each group who were taking oral contraceptives, none of the subjects took any medication regularly. The usual daily intake of caffeine, mostly as coffee, was found by questionnaire to approximate 320mg in the smokers and 150mg in the nonsmokers.",
                 "characteristica": [
                     {
                         "category": "smoking",
                         "choice": "Y"
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "age",
                         "mean": "26",
                         "min": "20",
                         "max": "45",
-                        "sd": null,
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral_contraceptives",
-                        "choice": "3 Y || 1 N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
@@ -82,6 +72,15 @@
                         "choice": "4 M || 9 F"
                     }
                 ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "data": "Parsons1978_Tab2.csv",
+                "figure": "Parsons1978_Tab2.png"
             }
         ]
     },

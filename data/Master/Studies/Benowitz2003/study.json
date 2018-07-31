@@ -1,12 +1,15 @@
 {
     "sid": 14586387,
     "pkdb_version": 1.0,
-    "creator": "Matthias König",
+    "creator": "mkoenig",
     "name": "Benowitz2003",
+    "substances": [
+        "caffeine"
+    ],
     "reference": 14586387,
     "curators": [
-        "Matthias König",
-        "Jan Grzeogrzewski"
+        "mkoenig",
+        "janekg"
     ],
     "groupset": {
         "description": "The subjects were 12 healthy men who were regular cigarette smokers. They ranged in age from 27 to 47 years, smoked an average of 28 cigarettes per day, and had smoked for an average of 22 years.",
@@ -14,28 +17,25 @@
             {
                 "count": 12,
                 "name": "S1",
-                "description": "The subjects were 12 healthy men who were regular cigarette smokers. They ranged in age from 27 to 47 years, smoked an average of 28 cigarettes per day, and had smoked for an average of 22 years.",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
                     {
                         "category": "ethnicity",
                         "choice": null
                     },
                     {
-                        "category": "smoking",
-                        "choice": "Y"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
                         "mean": null,
                         "min": "27",
                         "max": "47",
-                        "sd": null,
-                        "se": null,
                         "unit": "yr"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
@@ -85,6 +85,12 @@
                 "tissue": "plasma",
                 "sd": 1.2,
                 "unit": "µg/ml"
+            }
+        ],
+        "dynamics": [
+            {
+                "data": "Benowitz2003_Fig3.csv",
+                "figure": "Benowitz2003_Fig3.png"
             }
         ]
     }
