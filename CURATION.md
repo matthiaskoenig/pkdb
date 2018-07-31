@@ -192,6 +192,7 @@ All available fields for intervention and interventionset are:
 }
 ```
 * TODO: document after next iteration
+* Question: maybe remove individuals and dynamics and add something like `extern/table/mapping`. There you add mappings.
 
 ## 5. Curation of output/outputset
 
