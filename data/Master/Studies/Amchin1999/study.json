@@ -19,46 +19,36 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
-                        "category": "height",
-                        "mean": "172",
-                        "min": "157",
-                        "max": "183",
-                        "sd": null,
-                        "unit": "cm"
-                    },
-                    {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "sex",
+                        "choice": "8 M || 7 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "age",
-                        "mean": "31.1",
-                        "min": "21",
-                        "max": "41",
-                        "unit": "yr"
+                        "mean": "31.1"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "70.5",
-                        "min": "47",
-                        "max": "93",
-                        "unit": "kg"
+                        "category": "height",
+                        "mean": "172"
                     },
                     {
-                        "category": "sex",
-                        "choice": "8 M || 7 F"
+                        "category": "weight",
+                        "mean": "70.5"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     }
                 ]
             }

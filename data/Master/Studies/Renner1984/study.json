@@ -20,20 +20,16 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "4 N || 6 Y"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "sex",
+                        "choice": "M"
                     },
                     {
                         "category": "age",
-                        "mean": "38",
-                        "min": "27",
-                        "max": "56",
-                        "sd": "11",
-                        "unit": "yr"
+                        "mean": "38"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "4 N || 6 Y"
                     },
                     {
                         "category": "healthy",
@@ -41,15 +37,7 @@
                     },
                     {
                         "category": "weight",
-                        "mean": "74",
-                        "min": "58",
-                        "max": "86",
-                        "sd": "10",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
+                        "mean": "74"
                     }
                 ]
             },
@@ -58,40 +46,28 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "5 N || 3 Y"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "sex",
+                        "choice": "6 M || 2 F"
                     },
                     {
                         "category": "disease",
                         "choice": "cirrhotic liver disease"
                     },
                     {
-                        "category": "age",
-                        "mean": "55",
-                        "min": "34",
-                        "max": "66",
-                        "sd": "10",
-                        "unit": "yr"
+                        "category": "smoking",
+                        "choice": "5 N || 3 Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "66"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "66",
-                        "min": "41",
-                        "max": "100",
-                        "sd": "18",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "6 M || 2 F"
+                        "category": "age",
+                        "mean": "55"
                     }
                 ]
             },
@@ -100,36 +76,24 @@
                 "name": "S3",
                 "characteristica": [
                     {
+                        "category": "weight",
+                        "mean": "57"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "PBC"
-                    },
-                    {
                         "category": "age",
-                        "mean": "56",
-                        "min": "42",
-                        "max": "73",
-                        "sd": "13",
-                        "unit": "yr"
+                        "mean": "56"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "57",
-                        "min": "49",
-                        "max": "68",
-                        "sd": "8",
-                        "unit": "kg"
+                        "category": "disease",
+                        "choice": "PBC"
                     },
                     {
                         "category": "sex",
@@ -142,40 +106,28 @@
                 "name": "S4",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "9 N || 2 Y"
+                        "category": "weight",
+                        "mean": "81"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "age",
+                        "mean": "52"
                     },
                     {
                         "category": "disease",
                         "choice": "Miscellaneous Liver Disease"
                     },
                     {
-                        "category": "age",
-                        "mean": "52",
-                        "min": "24",
-                        "max": "71",
-                        "sd": "12",
-                        "unit": "yr"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "81",
-                        "min": "55",
-                        "max": "118",
-                        "sd": "19",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "sex",
                         "choice": "9 M || 2 F"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "9 N || 2 Y"
                     }
                 ]
             }

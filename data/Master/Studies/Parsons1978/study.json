@@ -22,25 +22,6 @@
                     {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "26",
-                        "min": "20",
-                        "max": "45",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "4 M || 9 F"
                     }
                 ]
             },
@@ -51,25 +32,6 @@
                     {
                         "category": "smoking",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "26",
-                        "min": "20",
-                        "max": "45",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "4 M || 9 F"
                     }
                 ]
             }

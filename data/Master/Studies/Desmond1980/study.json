@@ -20,26 +20,12 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "13 N || 2 Y"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "min": "18",
-                        "max": "71",
-                        "unit": "yr"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "smoking",
+                        "choice": "13 N || 2 Y"
                     }
                 ]
             },
@@ -48,30 +34,16 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "6 N || 4 Y"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "N"
                     },
                     {
                         "category": "disease",
                         "choice": "cirrhosis"
                     },
                     {
-                        "category": "age",
-                        "min": "42",
-                        "max": "65",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "smoking",
+                        "choice": "6 N || 4 Y"
                     }
                 ]
             },
@@ -84,36 +56,20 @@
                         "choice": "Mixed"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhosis"
-                    },
-                    {
                         "category": "age",
-                        "mean": "49.6",
-                        "min": "42",
-                        "max": "60",
-                        "sd": "6",
-                        "unit": "yr"
+                        "mean": "49.6"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71.5"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "71.5",
-                        "min": "48",
-                        "max": "84",
-                        "sd": "11.1",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     }
                 ]
             }

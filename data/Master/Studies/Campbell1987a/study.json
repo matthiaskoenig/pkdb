@@ -20,40 +20,16 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "weight",
+                        "mean": "57.8"
                     },
                     {
                         "category": "age",
-                        "mean": "24.6",
-                        "min": "21",
-                        "max": "30",
-                        "sd": "3",
-                        "unit": "yr"
+                        "mean": "24.6"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "57.8",
-                        "min": "57",
-                        "max": "64",
-                        "sd": "4.53",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "F"
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             },
@@ -62,40 +38,16 @@
                 "name": "S2",
                 "characteristica": [
                     {
+                        "category": "age",
+                        "mean": "25"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "25",
-                        "min": "24",
-                        "max": "26",
-                        "sd": "0.89",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "weight",
-                        "mean": "64",
-                        "min": "54",
-                        "max": "75",
-                        "sd": "6.66",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "F"
+                        "mean": "64"
                     }
                 ]
             },
@@ -104,40 +56,16 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
-                        "mean": "30.4",
-                        "min": "21",
-                        "max": "42",
-                        "sd": "7.96",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "mean": "30.4"
                     },
                     {
                         "category": "weight",
-                        "mean": "57.6",
-                        "min": "56",
-                        "max": "59",
-                        "sd": "1.2",
-                        "unit": "kg"
+                        "mean": "57.6"
                     },
                     {
-                        "category": "sex",
-                        "choice": "F"
+                        "category": "smoking",
+                        "choice": "Y"
                     }
                 ]
             }

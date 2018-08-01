@@ -19,18 +19,12 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "age",
-                        "min": "26",
-                        "max": "36",
-                        "unit": "yr"
+                        "category": "sex",
+                        "choice": "M"
                     },
                     {
                         "category": "healthy",
@@ -38,12 +32,11 @@
                     },
                     {
                         "category": "weight",
-                        "mean": "70",
-                        "unit": "kg"
+                        "mean": "70"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "ethnicity",
+                        "choice": null
                     }
                 ]
             }

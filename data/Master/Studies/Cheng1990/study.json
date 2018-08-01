@@ -20,29 +20,16 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
-                        "mean": null,
-                        "min": "20",
-                        "max": "50",
-                        "unit": "yr"
+                        "mean": null
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "weight",
-                        "min": "47",
-                        "max": "85",
-                        "unit": "kg"
+                        "category": "smoking",
+                        "choice": "N"
                     },
                     {
                         "category": "sex",
@@ -55,40 +42,28 @@
                 "name": "S2",
                 "characteristica": [
                     {
+                        "category": "sex",
+                        "choice": "10 M || 3 F"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "Mixed"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhosis"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "62.2",
-                        "min": "53",
-                        "max": "75",
-                        "sd": "6.37",
-                        "unit": "yr"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "74.77",
-                        "min": "50",
-                        "max": "107",
-                        "sd": "12.55",
-                        "unit": "kg"
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     },
                     {
-                        "category": "sex",
-                        "choice": "10 M || 3 F"
+                        "category": "weight",
+                        "mean": "74.77"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "62.2"
                     }
                 ]
             }

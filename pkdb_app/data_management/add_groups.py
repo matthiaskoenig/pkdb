@@ -20,7 +20,7 @@ def add_groupset_to_study(study):
     subject_pd = pd.read_csv(SUBJECTSPATH,delimiter='\t',keep_default_na=False)
     this_subject = subject_pd[subject_pd["reference"] == study_json["name"]]
     this_subject.replace({'NA':None}, inplace=True)
-
+    this_subject.columns = [c.replace('_', ' ') for c in this_subject.columns]
     study_json["groupset"] = {}
     try:
         test = this_subject["description"].unique()[0]
@@ -32,8 +32,11 @@ def add_groupset_to_study(study):
         study_json["groupset"]["characteristica"] = []
     study_json["groupset"]["groups"] = []
 
-    for group in this_subject.itertuples():
-        yield {"json": study_json,"group": group._asdict(), "study_path": study["study_path"]}
+    for group in this_subject.iterrows():
+        #todo: hier weitermachen
+        print(group)
+        print(group.to_dict("records"))
+        yield {"json": study_json,"group": group.to_dict(), "study_path": study["study_path"]}
 
 
 def add_group_to_groupset(data):
@@ -72,6 +75,9 @@ def add_characteristica_groupset(data):
         for i, group in enumerate(groups_dict):
             this_data["json"]["groupset"]["groups"][i]['characteristica'] = group
 
+    return this_data
+
+
 def add_individual_set(data):
     this_data = {**data}
     individials_pd = pd.read_csv(INDIVIDUALPATH, delimiter='\t', keep_default_na=False)
@@ -96,6 +102,7 @@ def add_individual_set(data):
 
 
 def add_characteristic_values(group):
+    group
     characteristics_values = []
     for category in CHARACTERISTIC_CATEGORIES:
         for characteristics_value in process_characteristic_values(group,category):

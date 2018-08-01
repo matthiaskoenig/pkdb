@@ -19,23 +19,20 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
                         "category": "species",
                         "choice": "homo sapiens"
                     },
                     {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "age",
-                        "mean": null,
-                        "min": "24",
-                        "max": "39",
-                        "unit": "yr"
+                        "mean": null
                     },
                     {
                         "category": "healthy",
@@ -43,15 +40,11 @@
                     },
                     {
                         "category": "weight",
-                        "mean": "75",
-                        "min": "65",
-                        "max": "100",
-                        "sd": "8.83",
-                        "unit": "kg"
+                        "mean": "75"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "ethnicity",
+                        "choice": null
                     }
                 ]
             }

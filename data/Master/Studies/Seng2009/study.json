@@ -20,40 +20,20 @@
                 "name": "S_NCNS",
                 "characteristica": [
                     {
+                        "category": "weight",
+                        "mean": "62"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "21"
+                    },
+                    {
                         "category": "caffeine",
                         "choice": "<=200mg per day"
                     },
                     {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Asian"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "21",
-                        "sd": "2",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "62",
-                        "sd": "9",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
                     }
                 ]
             },
@@ -62,40 +42,20 @@
                 "name": "S_CNS",
                 "characteristica": [
                     {
+                        "category": "age",
+                        "mean": "24"
+                    },
+                    {
                         "category": "caffeine",
                         "choice": ">200mg per day"
                     },
                     {
+                        "category": "weight",
+                        "mean": "69"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Asian"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "24",
-                        "sd": "4",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "69",
-                        "sd": "12",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
                     }
                 ]
             },
@@ -104,40 +64,20 @@
                 "name": "S_CS",
                 "characteristica": [
                     {
+                        "category": "age",
+                        "mean": "23"
+                    },
+                    {
                         "category": "caffeine",
                         "choice": ">200mg per day"
                     },
                     {
+                        "category": "weight",
+                        "mean": "71"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Asian"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "23",
-                        "sd": "5",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "71",
-                        "sd": "19",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
                     }
                 ]
             }

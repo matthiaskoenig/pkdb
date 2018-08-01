@@ -20,40 +20,8 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "22",
-                        "min": "19",
-                        "max": "26",
-                        "sd": "2",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "weight",
-                        "mean": "62",
-                        "min": "52",
-                        "max": "74",
-                        "sd": "10",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "F"
+                        "mean": "62"
                     }
                 ]
             },
@@ -62,40 +30,8 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "22",
-                        "min": "18",
-                        "max": "25",
-                        "sd": "2",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "weight",
-                        "mean": "57",
-                        "min": "48",
-                        "max": "63",
-                        "sd": "6",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "F"
+                        "mean": "57"
                     }
                 ]
             }

@@ -19,48 +19,40 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "caffeine",
-                        "choice": "10  || regular useres of caffeine"
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "5 M || 7 F"
                     },
                     {
                         "category": "smoking",
                         "choice": "2 Y || 10 N "
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
-                        "mean": "28.8",
-                        "min": "22",
-                        "max": "41",
-                        "sd": "6.6",
-                        "unit": "yr"
+                        "mean": "28.8"
                     },
                     {
-                        "category": "alcohol",
-                        "choice": null
+                        "category": "caffeine",
+                        "choice": "10  || regular useres of caffeine"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "66.8",
-                        "min": "54.4",
-                        "max": "86.4",
-                        "sd": "10.7",
-                        "unit": "kg"
+                        "category": "alcohol",
+                        "choice": null
                     },
                     {
-                        "category": "sex",
-                        "choice": "5 M || 7 F"
+                        "category": "weight",
+                        "mean": "66.8"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     }
                 ]
             }
