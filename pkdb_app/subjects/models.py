@@ -30,20 +30,27 @@ from .managers import GroupManager
 
 
 # Idea: GroupSet
+class GroupSet(Describable,models.Model):
+    study = models.ForeignKey(Study, on_delete=True, related_name='groups',to_field="sid", db_column="study_sid",null=True, blank=True)
 
-class Group(Describable, models.Model):
+
+    @property
+    def reference(self):
+        return self.study.reference
+
+class Group(models.Model):
     """ Individual or group of people.
 
     Groups are defined via their characteristics.
     """
+    groupset = models.ForeignKey(GroupSet,on_delete=True, related_name="groups")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    study = models.ForeignKey(Study, on_delete=True, related_name='groups',to_field="sid", db_column="study_sid",null=True, blank=True)
     count = models.IntegerField()  # number of people/animals/objects in group
     objects = GroupManager()
 
     @property
     def reference(self):
-        return self.study.reference
+        return self.groupset.reference
 
 
 class Characteristic(models.Model):
@@ -61,7 +68,8 @@ class Characteristic(models.Model):
     addition to the group criteria.
     """
     category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
-
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
+                              blank=True)  # check in validation that allowed choice
     @property
     def characteristic_data(self):
         """ Returns the full information about the characteristic.
@@ -78,12 +86,13 @@ class Characteristic(models.Model):
         abstract = True
 
 
-class CharacteristicValue(Valueable, Characteristic):
+class Characteristica(Valueable, Characteristic):
     """
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    group = models.ForeignKey(Group, related_name="characteristic_values", null=True, on_delete=True)
+    groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, on_delete=True)
+    group = models.ForeignKey(Group, related_name="characteristica", null=True, on_delete=True)
     ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA)
 
     @property
@@ -106,13 +115,17 @@ class CharacteristicValue(Valueable, Characteristic):
     #    raise NotImplemented
 
 
-class ProcessedCharacteristicValue(Valueable, Characteristic, models.Model):
+class CleanCharacteristica(Valueable, Characteristic, models.Model):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
 
     - convert exclusion to inclusion criteria
     """
-    raw = models.ForeignKey(CharacteristicValue, null=True, on_delete=True)
+    raw = models.ForeignKey(Characteristica, related_name="clean", null=True, on_delete=True)
+
+
+
+
     # method field? for different processing?
 
     # TODO: add methods for doing the processing & automatic update if corresponding

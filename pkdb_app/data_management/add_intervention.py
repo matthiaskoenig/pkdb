@@ -20,7 +20,7 @@ def add_intervention_to_study(study):
     this_interventions.replace({'NA':None}, inplace=True)
 
     try:
-        test=this_interventions["dosing_details"].unique()[0]
+        test = this_interventions["dosing_details"].unique()[0]
         study_json["interventionset"]["description"] = SEPERATOR.join(this_interventions["dosing_details"].unique())
     except IndexError:
         print( f'{study_json["name"]}:has no Interventions')

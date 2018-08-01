@@ -2,10 +2,12 @@
 Django model for Study.
 """
 from django.db import models
+
+from pkdb_app.interventions.models import Substance
 from pkdb_app.utils import CHAR_MAX_LENGTH
 from pkdb_app.behaviours import Sidable, Describable, Commentable
-from pkdb_app.categoricals import STUDY_DESIGN_CHOICES
-
+from pkdb_app.categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION
+from pkdb_app.users.models import User
 
 class Author(models.Model):
     first_name = models.CharField(max_length=30, blank=True)
@@ -13,14 +15,6 @@ class Author(models.Model):
 
     def __str__(self):
         return '%s %s' % (self.id, self.first_name, self.last_name)
-
-
-class KeyWord(models.Model):
-    """
-    This class describes the keyowrds / tags of a  publication or any other reference.
-    """
-    #name = models.IntegerField(choices=KEY_WORD_CHOICES)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
 
 class Reference(models.Model):
@@ -49,20 +43,28 @@ class DataFile(models.Model):
     file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
     filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
 
+
 class Study(Sidable, Commentable, Describable, models.Model):
     """ Single clinical study.
 
     Mainly reported as a single publication.
     """
-    reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
+    # FIXME: Do we need descciption here?
+    pkdb_version = models.IntegerField(default=CURRENT_VERSION)
+    creator =  models.ForeignKey(User,on_delete=False)  # any creator needs an account.
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
-    raw_data = models.ManyToManyField(DataFile)
+    reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
+    curators =  models.ManyToManyField(User)  # any curator needs an account.
+    substances = models.ManyToManyField(Substance)
+    raw_data = models.ManyToManyField(DataFile) # FIXME: is this the right name?
 
-    # TODO: substances, e.g. caffeine, acetaminophen
-    # TODO: datafiles (DataFile)
 
-
-# TODO: substances here
-
+#TODO: Not shure if later is even needed (not included yet)
+class KeyWord(models.Model):
+    """
+    This class describes the keyowrds / tags of a  publication or any other reference.
+    """
+    #name = models.IntegerField(choices=KEY_WORD_CHOICES)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
 

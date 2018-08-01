@@ -59,8 +59,7 @@ class Valueable(models.Model):
     In addition all the statistical values are stored.
     """
 
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                              blank=True)  # check in validation that allowed choice
+
 
     count = models.IntegerField()  # how many participants in characteristics
     value = models.FloatField(null=True, blank=True)

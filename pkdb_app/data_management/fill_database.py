@@ -17,7 +17,10 @@ from pkdb_app.data_management.schemas import reference_schema
 def get_reference_json_path():
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "reference.json" in files:
-            yield os.path.join(root, 'reference.json')
+            json_file = os.path.join(root, 'reference.json')
+            pdf_file = f"{os.path.dirname(json_file)}.pdf"
+
+            yield {"json":json_file , "pdf": pdf_file}
 
 def get_study_json_path():
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
@@ -25,18 +28,23 @@ def get_study_json_path():
             yield os.path.join(root, 'study.json')
 
 def open_reference(d):
-    with open(d) as f:
+
+    with open(d["json"]) as f:
         json_dict = json.loads(f.read())
-    return {"json":json_dict, "reference_path":d}
+    with open(d["pdf"],'rb') as f:
+        pdf = f
+
+    json_dict["pdf"] = pdf
+    return {"json":json_dict, "reference_path":d["json"]}
 
 def open_study(d):
     with open(d) as f:
-
         json_dict = json.loads(f.read())
     return {"json":json_dict, "study_path":d}
 
 def upload_reference(json_reference):
     validate(json_reference["json"],reference_schema)
+
     client.action(document, ["references", "create"], params=json_reference["json"])
 
 def upload_study(json_study):

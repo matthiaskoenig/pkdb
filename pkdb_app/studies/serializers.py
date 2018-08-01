@@ -29,7 +29,7 @@ class ReferenceSerializer(BaseSerializer):
 
     class Meta:
         model = Reference
-        fields = BASE_FIELDS + ('pmid', 'sid', 'name', 'doi', 'title','abstract','journal', 'date', 'authors', 'pdf')
+        fields = BASE_FIELDS + ('pmid', 'sid', 'name', 'doi', 'title','abstract', 'journal', 'date', 'authors', 'pdf')
 
     def create(self, validated_data):
 
@@ -60,11 +60,11 @@ class ReferenceSerializer(BaseSerializer):
 class StudySerializer(BaseSerializer):
     #reference = ReferenceSerializer(read_only=False)
     reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all())
-    groups = GroupSerializer(many=True, read_only=False)
+    groupset = GroupSerializer(many=True, read_only=False)
 
     class Meta:
         model = Study
-        fields = BASE_FIELDS + ('sid','comment','name','description', 'groups', 'reference')
+        fields = BASE_FIELDS + ('sid','comment','name','description', 'groupset', 'reference')
 
     def create(self, validated_data):
 
