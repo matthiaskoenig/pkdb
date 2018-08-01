@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Benowitz2003",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 14586387,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "The subjects were 12 healthy men who were regular cigarette smokers. They ranged in age from 27 to 47 years, smoked an average of 28 cigarettes per day, and had smoked for an average of 22 years.",
@@ -19,8 +20,19 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "age",
+                        "mean": null,
+                        "min": "27",
+                        "max": "47",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,16 +43,8 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": null
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -84,10 +88,20 @@
                 "unit": "µg/ml"
             }
         ],
-        "dynamics": [
+        "timecourse": [
             {
-                "data": "Benowitz2003_Fig3.csv",
-                "figure": "Benowitz2003_Fig3.png"
+                "group": "",
+                "intervention": "",
+                "source": "Benowitz2003_Fig3.csv",
+                "format": "",
+                "figure": "Benowitz2003_Fig3.png",
+                "substance": "",
+                "tissue": "",
+                "pktype": "",
+                "times": "",
+                "values": "",
+                "sd": "",
+                "unit": ""
             }
         ]
     }

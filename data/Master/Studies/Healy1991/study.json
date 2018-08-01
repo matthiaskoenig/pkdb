@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Healy1991",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 2069371,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "Sixteen healthy adult males participated in this study after internal review board approval and written informed consent were obtained. The mean (± standard deviation) age was 27.1 ± 3.1 years, and the weight was 76.7 ± 6.8 kg. Volunteers were excluded on the basis of the following criteria: prior hypersensitivity to quinolones, smoking, the use of medication for chronic illness, body weight deviating by more than 15% from ideal weight, and abnormalities on physical examination, electrocardiogram, or prestudy laboratory tests. Each volunteer was given a list of xanthine-containing products and instructed to abstain from such items, alcohol, and all other drugs beginning 2 days prior to study participation. A xanthine-free diet was maintained throughout the study.",
@@ -19,8 +20,32 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "76.7",
+                        "sd": "6.8",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "alcohol",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.1",
+                        "sd": "3.1",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,24 +56,8 @@
                         "choice": "N"
                     },
                     {
-                        "category": "age",
-                        "mean": "27.1"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "alcohol",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "76.7"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -102,10 +111,20 @@
                 "unit": "µg/ml*h"
             }
         ],
-        "dynamics": [
+        "timecourse": [
             {
-                "data": "Healy1991_Fig.csv",
-                "figure": "Healy1991_Fig.png"
+                "group": "",
+                "intervention": "",
+                "source": "Healy1991_Fig.csv",
+                "format": "",
+                "figure": "Healy1991_Fig.png",
+                "substance": "",
+                "tissue": "",
+                "pktype": "",
+                "times": "",
+                "values": "",
+                "sd": "",
+                "unit": ""
             }
         ]
     }

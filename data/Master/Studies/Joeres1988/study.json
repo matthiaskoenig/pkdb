@@ -3,25 +3,37 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Joeres1988",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 3371873,
     "curators": [
         "mkoenig",
         "janekg"
     ],
+    "substances": [
+        "caffeine"
+    ],
     "groupset": {
         "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.||8 smoking healthy volunteers and patients without liver disease||15 non-smoking healthy volunteers and patients without liver disease||18 smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.||30 non-smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
-        "characteristica": [],
+        "characteristica": [
+            {
+                "category": "oral contraceptives",
+                "choice": null
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            }
+        ],
         "groups": [
             {
                 "count": 7,
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
+                        "category": "age",
+                        "min": "25",
+                        "max": "45",
+                        "unit": "yr"
                     },
                     {
                         "category": "healthy",
@@ -30,6 +42,10 @@
                     {
                         "category": "smoking",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
                     }
                 ]
             },
@@ -38,16 +54,16 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
+                        "category": "smoking",
+                        "choice": "N"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "sex",
+                        "choice": null
                     }
                 ]
             },
@@ -56,16 +72,16 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
                         "category": "smoking",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
                     }
                 ]
             },
@@ -74,16 +90,16 @@
                 "name": "S4",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
+                        "category": "smoking",
+                        "choice": "N"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "sex",
+                        "choice": null
                     }
                 ]
             },
@@ -91,10 +107,6 @@
                 "count": 18,
                 "name": "S5",
                 "characteristica": [
-                    {
-                        "category": "age",
-                        "mean": "46"
-                    },
                     {
                         "category": "smoking",
                         "choice": "Y"
@@ -104,16 +116,28 @@
                         "choice": "13 M || 5 F"
                     },
                     {
-                        "category": "weight",
-                        "mean": "71"
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "46",
+                        "min": "30",
+                        "max": "65",
+                        "sd": "9",
+                        "unit": "yr"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
+                        "category": "weight",
+                        "mean": "71",
+                        "min": "51",
+                        "max": "94",
+                        "sd": "14",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -121,14 +145,6 @@
                 "count": 30,
                 "name": "S6",
                 "characteristica": [
-                    {
-                        "category": "age",
-                        "mean": "51"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "75"
-                    },
                     {
                         "category": "smoking",
                         "choice": "N"
@@ -138,12 +154,28 @@
                         "choice": "21 M || 9 F"
                     },
                     {
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "75",
+                        "min": "48",
+                        "max": "100",
+                        "sd": "14",
+                        "unit": "kg"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
+                        "category": "age",
+                        "mean": "51",
+                        "min": "40",
+                        "max": "66",
+                        "sd": "6",
+                        "unit": "yr"
                     }
                 ]
             }
@@ -153,8 +185,12 @@
         "description": "",
         "individuals": [
             {
-                "data": "Joeres1988_Fig1.csv",
-                "figure": "Joeres1988_Fig1.png"
+                "name": "",
+                "group": "",
+                "source": "Joeres1988_Fig1.csv",
+                "format": "",
+                "figure": "Joeres1988_Fig1.png",
+                "characteristica": []
             }
         ]
     },
@@ -175,6 +211,18 @@
     "outputset": {
         "description": "",
         "outputs": [
+            {
+                "source": "Joeres1988_Fig1.csv",
+                "format": "",
+                "figure": "Joeres1988_Fig1.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
             {
                 "group": "S1",
                 "intervention": "D1",

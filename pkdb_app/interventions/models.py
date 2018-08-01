@@ -6,9 +6,9 @@ group or individual).
 
 from django.db import models
 from ..behaviours import Sidable, Describable, Valueable
-from ..categoricals import PROTOCOL_CHOICES, UNITS_CHOICES
+from ..categoricals import PROTOCOL_CHOICES, UNITS_CHOICES, SUBSTANCES_DATA_CHOICES
 from ..subjects.models import Group
-from ..studies.models import DataFile
+from ..studies.models import DataFile, Substance
 from ..utils import CHAR_MAX_LENGTH
 
 # -------------------------------------------------
@@ -46,10 +46,11 @@ class ProtocolStep(Sidable, Describable, models.Model):
             - protocol 2 (linked to intervention group): MedicationStep (oral contraceptives), MedicationStep (caffeine)
 
      """
-    # TODO: MedicationStep & LifestyleStep
 
     # FIXME: Important to find the subset of dosing protocols
     category = models.IntegerField(choices=PROTOCOL_CHOICES)
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
+                              blank=True)  # check in validation that allowed choice
 
     @property
     def Intervention_data(self):
@@ -99,16 +100,7 @@ class Protocol(models.Model):
     # set of protocols
     # name (control, fluvoxamine, control-fluvo, fluvo-control)
 
-class Substance(models.Model):
-    """ Substances have to be in a different table, so that
-    than be uniquely defined.
 
-    Has to be extended via ontology (Ontologable)
-
-    """
-    name = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)
-    #name # example caffeine
-    # ontologies: has set of defined values: is, CHEBI:27732
 
 
 # -----------------
@@ -127,6 +119,8 @@ class Pharmacokinetics(Output, Valueable):
 
     category: [clearance, vd, thalf, cmax, ...]
     """
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
+                              blank=True)  # check in validation that allowed choice
     substance = models.ForeignKey(Substance, on_delete=True)
     #tissue # where was it measured
 
@@ -148,6 +142,24 @@ class ProcessedPharmacokinetics(Valueable):
     type = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # ['normalized', 'timecourse-derived']
 
 
+#####################################
+#new
+class Substance(models.Model):
+    """ Substances have to be in a different table, so that
+    than be uniquely defined.
 
+    Has to be extended via ontology (Ontologable)
+
+    """
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=SUBSTANCES_DATA_CHOICES)
+
+    #name # example caffeine
+    # ontologies: has set of defined values: is, CHEBI:27732
+
+class Intervension(models.Model):
+    models.ForeignKey(Substance, on_delete=False)
+
+class InterventionSet(Describable, models.model):
+    interventions = models.ForeignKey(Intervension, on_delete=True)
 
 

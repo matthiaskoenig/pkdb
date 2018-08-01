@@ -31,6 +31,7 @@ Fill in basic information for study, use the `PMID` for `sid` and `reference` fi
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Akinyinka2000",
+    "design":"parallel group",
     "reference": 10877011,
     "curators": [
         "mkoenig",
@@ -192,7 +193,7 @@ All available fields for intervention and interventionset are:
 }
 ```
 * TODO: document after next iteration
-* Question: maybe remove individuals and dynamics and add something like `extern/table/mapping`. There you add mappings.
+* Question: maybe remove individuals and dynamics and add something like `extern/table/mapping`. There you could add mappings.
 
 ## 5. Curation of output/outputset
 

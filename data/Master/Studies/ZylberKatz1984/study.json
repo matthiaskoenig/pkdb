@@ -3,33 +3,59 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "ZylberKatz1984",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 6734043,
     "curators": [
         "mkoenig",
         "janekg"
     ],
+    "substances": [
+        "caffeine"
+    ],
     "groupset": {
         "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
-        "characteristica": [],
+        "characteristica": [
+            {
+                "category": "oral contraceptives",
+                "choice": "N"
+            },
+            {
+                "category": "smoking",
+                "choice": "N"
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            }
+        ],
         "groups": [
             {
                 "count": 5,
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "age",
-                        "mean": "41.6"
-                    },
-                    {
                         "category": "sex",
                         "choice": "3 M || 2 F"
                     },
                     {
                         "category": "weight",
-                        "mean": "76.2"
+                        "mean": "76.2",
+                        "min": "60",
+                        "max": "88",
+                        "sd": "12.1",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "41.6",
+                        "min": "29",
+                        "max": "47",
+                        "sd": "6.44",
+                        "unit": "yr"
                     }
                 ]
             },
@@ -38,16 +64,24 @@
                 "name": "S2",
                 "characteristica": [
                     {
+                        "category": "weight",
+                        "mean": "70.33",
+                        "min": "58",
+                        "max": "91",
+                        "sd": "14.7",
+                        "unit": "kg"
+                    },
+                    {
                         "category": "age",
-                        "mean": "27.33"
+                        "mean": "27.33",
+                        "min": "24",
+                        "max": "30",
+                        "sd": "2.49",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
                         "choice": "2 M || 1 F"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "70.33"
                     }
                 ]
             },
@@ -56,16 +90,24 @@
                 "name": "S3",
                 "characteristica": [
                     {
+                        "category": "sex",
+                        "choice": "2 M || 2 F"
+                    },
+                    {
                         "category": "age",
-                        "mean": "27.25"
+                        "mean": "27.25",
+                        "min": "22",
+                        "max": "31",
+                        "sd": "3.56",
+                        "unit": "yr"
                     },
                     {
                         "category": "weight",
-                        "mean": "62.75"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "2 M || 2 F"
+                        "mean": "62.75",
+                        "min": "46",
+                        "max": "75",
+                        "sd": "10.9",
+                        "unit": "kg"
                     }
                 ]
             }
@@ -75,12 +117,20 @@
         "description": "",
         "individuals": [
             {
-                "data": "ZylberKatz1984_Tab1.csv",
-                "figure": "ZylberKatz1984_Tab1.png"
+                "name": "",
+                "group": "",
+                "source": "ZylberKatz1984_Tab1.csv",
+                "format": "",
+                "figure": "ZylberKatz1984_Tab1.png",
+                "characteristica": []
             },
             {
-                "data": "ZylberKatz1984_Tab2.csv",
-                "figure": "ZylberKatz1984_Tab2.png"
+                "name": "",
+                "group": "",
+                "source": "ZylberKatz1984_Tab2.csv",
+                "format": "",
+                "figure": "ZylberKatz1984_Tab2.png",
+                "characteristica": []
             }
         ]
     },
@@ -119,6 +169,30 @@
     "outputset": {
         "description": "",
         "outputs": [
+            {
+                "source": "ZylberKatz1984_Tab1.csv",
+                "format": "",
+                "figure": "ZylberKatz1984_Tab1.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
+            {
+                "source": "ZylberKatz1984_Tab2.csv",
+                "format": "",
+                "figure": "ZylberKatz1984_Tab2.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
             {
                 "group": "S1",
                 "intervention": "D1",

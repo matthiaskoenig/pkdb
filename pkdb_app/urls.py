@@ -25,7 +25,7 @@ router.register('characteristic_values', CharacteristicValuesViewSet, base_name=
 
 #router.register('intervention',InterventionsViewSet,base_name="intervention")
 
-schema_view = get_swagger_view(title='PkBD API')
+schema_view = get_swagger_view(title='PKDB API')
 
 
 

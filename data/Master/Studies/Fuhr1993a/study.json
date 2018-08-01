@@ -3,41 +3,67 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Fuhr1993a",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 8485024,
     "curators": [
         "mkoenig",
         "janekg"
     ],
+    "substances": [
+        "caffeine"
+    ],
     "groupset": {
         "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
-        "characteristica": [],
+        "characteristica": [
+            {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            }
+        ],
         "groups": [
             {
                 "count": 12,
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "height",
+                        "mean": "170.83",
+                        "min": "158",
+                        "max": "190",
+                        "sd": "9.23",
+                        "unit": "cm"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "33.7",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "12.7",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "weight",
-                        "mean": "68"
+                        "mean": "68",
+                        "min": "39",
+                        "max": "98",
+                        "sd": "15.2",
+                        "unit": "kg"
                     },
                     {
                         "category": "smoking",
                         "choice": "6 N || 6 Y"
                     },
                     {
+                        "category": "oral contraceptives",
+                        "choice": "3 Y  ||  5 N"
+                    },
+                    {
                         "category": "sex",
                         "choice": "4 M || 8 F"
-                    },
-                    {
-                        "category": "height",
-                        "mean": "170.83"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "33.7"
                     }
                 ]
             },
@@ -46,24 +72,40 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "age",
-                        "mean": "34.5"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "Y"
                     },
                     {
-                        "category": "weight",
-                        "mean": "67.5"
+                        "category": "age",
+                        "mean": "34.5",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "14.06",
+                        "unit": "yr"
                     },
                     {
-                        "category": "height",
-                        "mean": "168.33"
+                        "category": "weight",
+                        "mean": "67.5",
+                        "min": "39",
+                        "max": "80",
+                        "sd": "14.6",
+                        "unit": "kg"
                     },
                     {
                         "category": "sex",
                         "choice": "2 M || 4 F"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "168.33",
+                        "min": "158",
+                        "max": "175",
+                        "sd": "6.75",
+                        "unit": "cm"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "2 Y || 2 N"
                     }
                 ]
             },
@@ -72,24 +114,40 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "height",
-                        "mean": "173.33"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "32.83"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "68.5"
-                    },
-                    {
                         "category": "sex",
                         "choice": "2 M || 4  F"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "68.5",
+                        "min": "55",
+                        "max": "98",
+                        "sd": "15.7",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "1 Y || 3 N"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "32.83",
+                        "min": "22",
+                        "max": "56",
+                        "sd": "11.13",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "173.33",
+                        "min": "162",
+                        "max": "190",
+                        "sd": "10.59",
+                        "unit": "cm"
                     }
                 ]
             }
@@ -99,8 +157,12 @@
         "description": "",
         "individuals": [
             {
-                "data": "Fuhr1993a_Tab1.csv",
-                "figure": "Fuhr1993a_Tab1.png"
+                "name": "",
+                "group": "",
+                "source": "Fuhr1993a_Tab1.csv",
+                "format": "",
+                "figure": "Fuhr1993a_Tab1.png",
+                "characteristica": []
             }
         ]
     },
@@ -121,6 +183,18 @@
     "outputset": {
         "description": "",
         "outputs": [
+            {
+                "source": "Fuhr1993a_Tab1.csv",
+                "format": "",
+                "figure": "Fuhr1993a_Tab1.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
             {
                 "group": "S1",
                 "intervention": "D1",

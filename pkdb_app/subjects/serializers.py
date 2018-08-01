@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Group, CharacteristicValue
+from .models import Group, Characteristica
 from ..interventions.serializers import ProtocolSerializer
 from ..studies.models import Reference
 from ..serializers import BaseSerializer
@@ -12,7 +12,7 @@ class CharacteristicValueSerializer(serializers.ModelSerializer):
     count = serializers.IntegerField(required=False)
 
     class Meta:
-        model = CharacteristicValue
+        model = Characteristica
         fields = "__all__"
 
     def to_representation(self, instance):

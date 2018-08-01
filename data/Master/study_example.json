@@ -38,6 +38,14 @@
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "weight",
+                        "mean": "59.8",
+                        "min": "38",
+                        "max": "82",
+                        "sd": "12.3",
+                        "unit": "kg"
+                    },
+                    {
                         "category": "age",
                         "mean": "32.1",
                         "min": "18",
@@ -48,14 +56,6 @@
                     {
                         "category": "healthy",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "59.8",
-                        "min": "38",
-                        "max": "82",
-                        "sd": "12.3",
-                        "unit": "kg"
                     }
                 ]
             },
@@ -63,10 +63,6 @@
                 "count": 10,
                 "name": "S2",
                 "characteristica": [
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
                     {
                         "category": "disease",
                         "choice": "Plasmodium falciparum"
@@ -78,6 +74,10 @@
                         "max": "20",
                         "sd": "2.5",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
                     },
                     {
                         "category": "weight",
@@ -104,28 +104,30 @@
     "individualset": {
         "description": "",
         "individuals": [
-            {
-                "name": "col==subject",
-                "group": "col==group",
+		
+            {	
+		"name":"col==subject",
+		"group": "col==group",
                 "source": "Akinyinka2000_Tab1.csv",
                 "format": "TSV",
                 "figure": "Akinyinka2000_Tab1.png",
-                "characteristica": [
-                    {
-                        "category": "weight",
-                        "value": "col==weight",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "value": "col==age",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "col==sex"
-                    }
-                ]
+
+		"characteristica" : [
+			{
+			"category" : "weight",
+			"value":"col==weight",
+			"unit": "kg",
+			},
+			{
+			"category" : "age",
+			"value":"col==age",
+			"unit": "yr",
+			},
+			{
+			"category" : "sex",
+			"choice":"col==sex",
+			},
+		]
             }
         ]
     },
@@ -146,23 +148,21 @@
     "outputset": {
         "description": "",
         "outputs": [
-            {
-                "source": "Akinyinka2000_Tab1.csv",
+	    {
+		"source": "Akinyinka2000_Tab1.csv",
                 "format": "TSV",
-                "figure": "Akinyinka2000_Tab1.png",
-                "individuum": "col==subject",
+		"individuum": "col==subject",
                 "intervention": "D1",
                 "substance": "caffeine",
                 "pktype": "thalf || auc || clearance",
                 "value": "col==t_half || col==AUC || col==Cl",
                 "tissue": "plasma",
-                "unit": "h || µg/ml*h || ml/min/kg"
+                "unit": " h || µg/ml*h || ml/min/kg"
             },
-            {
-                "source": "Akinyinka2000_Tab1.csv",
+	    {
+		"source": "Akinyinka2000_Tab1.csv",
                 "format": "TSV",
-                "figure": "Akinyinka2000_Tab1.png",
-                "individuum": "col==subject",
+		"individuum": "col==subject",
                 "intervention": "D1",
                 "substance": "paraxanthine/caffeine",
                 "pktype": "ratio",

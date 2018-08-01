@@ -3,25 +3,63 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Granfors2005",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 16198659,
     "curators": [
         "mkoenig",
         "janekg"
     ],
+    "substances": [
+        "caffeine"
+    ],
     "groupset": {
         "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
-        "characteristica": [],
+        "characteristica": [
+            {
+                "category": "smoking",
+                "choice": "N"
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            },
+            {
+                "category": "sex",
+                "choice": "F"
+            },
+            {
+                "category": "ethnicity",
+                "choice": null
+            }
+        ],
         "groups": [
             {
                 "count": 15,
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "oral contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "22",
+                        "min": "19",
+                        "max": "26",
+                        "sd": "2",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "weight",
-                        "mean": "62"
+                        "mean": "62",
+                        "min": "52",
+                        "max": "74",
+                        "sd": "10",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -30,8 +68,24 @@
                 "name": "S2",
                 "characteristica": [
                     {
+                        "category": "age",
+                        "mean": "22",
+                        "min": "18",
+                        "max": "25",
+                        "sd": "2",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "weight",
-                        "mean": "57"
+                        "mean": "57",
+                        "min": "48",
+                        "max": "63",
+                        "sd": "6",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "Y"
                     }
                 ]
             }
@@ -41,8 +95,12 @@
         "description": "",
         "individuals": [
             {
-                "data": "Granfors2005_Fig7B.csv",
-                "figure": "Granfors2005_Fig7B.png"
+                "name": "",
+                "group": "",
+                "source": "Granfors2005_Fig7B.csv",
+                "format": "",
+                "figure": "Granfors2005_Fig7B.png",
+                "characteristica": []
             }
         ]
     },
@@ -63,6 +121,18 @@
     "outputset": {
         "description": "",
         "outputs": [
+            {
+                "source": "Granfors2005_Fig7B.csv",
+                "format": "",
+                "figure": "Granfors2005_Fig7B.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
             {
                 "group": "S1",
                 "intervention": "D1",

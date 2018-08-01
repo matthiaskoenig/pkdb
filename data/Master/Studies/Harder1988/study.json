@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Harder1988",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 2853056,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "In two consecutive studies, each in 12 healthy male volunteers (age 20-40 years), the pharmacokinetics of caffeine and its major metabolite paraxanthine alone and at the end of 4 days of treatment with several quinolones (Table 1) were investigated. Thine- free diet (no tea, coffee or chocolate) from 36 h before the first dose of caffeine until the end of the second sampling period.",
@@ -19,20 +20,30 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
                         "category": "ethnicity",
                         "choice": null
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "age",
+                        "min": "20",
+                        "max": "40",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }

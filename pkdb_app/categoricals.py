@@ -12,6 +12,13 @@ an ontology which represents the relationship between the differnent values.
 units on CharacteristicType is an ordered iteratable, with the first unit being the default unit.
 
 """
+CURRENT_VERSION = [1.0]
+VERSIONS = [1.0,]
+#considering: to maintain serializers of serval versions of the json file. The version would be read from the json file and the respective
+#serializer would be selected.
+
+
+
 
 # TODO: How to handle the genetic information? Genetic variants?
 
@@ -73,6 +80,15 @@ STUDY_DESIGN_DATA = [
     "case control",  # (oberservational study)
 ]
 STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
+
+SUBSTANCES_DATA = [
+    "ibuprofen",
+    "paracetamol",
+    "aspirin",
+    "caffeine",
+    "acetaminophen",
+]
+SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
 
 COMMON_DATA = [

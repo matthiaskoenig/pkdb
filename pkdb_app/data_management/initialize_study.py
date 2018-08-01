@@ -31,9 +31,10 @@ def study_create(reference):
     json["pkdb_version"] = pkdb_version
     json["creator"] = MK_u
     json["name"] = reference["name"]
-    json["substances"] = SUBSTANCES
+    json["design"] = ""
     json["reference"] = reference["sid"]
     json["curators"] = [MK_u, JG_u]
+    json["substances"] = SUBSTANCES
     study_path = os.path.join(reference["reference_path"],study_filename)
     return {"json":json, "study_path":study_path}
 

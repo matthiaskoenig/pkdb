@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Haller2002",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 12087345,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "Eight healthy volunteers (5 women and 3 men) from 25 to 38 years old participated in the study. Eligibility for the study was determined on the basis of medical history, brief physical examination, and screening laboratory tests that included complete blood count, serum chemistry values to assess liver and renal function, urine toxicology testing for drugs of abuse, and a urine pregnancy test for women. Exclusion criteria included any person with obesity (body mass index 30), or a history of heart, thyroid, liver, kidney, or psychiatric disease, diabetes, central nervous system disorders, prostate hypertrophy, narrow angle glaucoma, or pregnancy or lactation. Any person with recent use (previous 1 month) of any product that contained ephedrine alkaloids or with a history of illicit substance use within the previous year was excluded. Smokers and heavy users of caffeine (4 cups of coffee per day) were excluded. Participants were not taking any medications that would cause changes in heart rate or blood pressure.",
@@ -19,8 +20,31 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "68.49",
+                        "min": "52",
+                        "max": "88.9",
+                        "sd": "12.24",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "2 Y || 5 N"
+                    },
+                    {
+                        "category": "age",
+                        "mean": null,
+                        "min": "25",
+                        "max": "38",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,20 +55,8 @@
                         "choice": "N"
                     },
                     {
-                        "category": "age",
-                        "mean": null
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "68.49"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -54,8 +66,12 @@
         "description": "",
         "individuals": [
             {
-                "data": "Haller2002_Tab3.csv",
-                "figure": "Haller2002_Tab3.png"
+                "name": "",
+                "group": "",
+                "source": "Haller2002_Tab3.csv",
+                "format": "",
+                "figure": "Haller2002_Tab3.png",
+                "characteristica": []
             }
         ]
     },
@@ -77,6 +93,18 @@
         "description": "",
         "outputs": [
             {
+                "source": "Haller2002_Tab3.csv",
+                "format": "",
+                "figure": "Haller2002_Tab3.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
+            {
                 "group": "S1",
                 "intervention": "D1",
                 "substance": "caffeine",
@@ -87,10 +115,20 @@
                 "unit": "l/kg"
             }
         ],
-        "dynamics": [
+        "timecourse": [
             {
-                "data": "Haller2002_Fig1C.csv",
-                "figure": "Haller2002_Fig1C.png"
+                "group": "",
+                "intervention": "",
+                "source": "Haller2002_Fig1C.csv",
+                "format": "",
+                "figure": "Haller2002_Fig1C.png",
+                "substance": "",
+                "tissue": "",
+                "pktype": "",
+                "times": "",
+                "values": "",
+                "sd": "",
+                "unit": ""
             }
         ]
     }

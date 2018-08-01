@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Kaplan1997",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 9378841,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "12 healthy male and female volunteers, 20 to 46 years old, participated after giving written informed consent (Table I). All were active ambulatory adults with no evidence of medical disease and taking no other medications. Two of the subjects were cigarette smokers. Ten oft the participants were regular users of caffeine in the form of coffee or other caffeine-containing beverages. They were asked to abstain from all caffeine for 24 hours prior to each study trial.",
@@ -19,8 +20,46 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "66.8",
+                        "min": "54.4",
+                        "max": "86.4",
+                        "sd": "10.7",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "alcohol",
+                        "choice": null
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": "10  || regular useres of caffeine"
+                    },
+                    {
+                        "category": "smoking amount",
+                        "min": "10",
+                        "max": "20",
+                        "unit": "1/day"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "28.8",
+                        "min": "22",
+                        "max": "41",
+                        "sd": "6.6",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,28 +70,8 @@
                         "choice": "2 Y || 10 N "
                     },
                     {
-                        "category": "age",
-                        "mean": "28.8"
-                    },
-                    {
-                        "category": "caffeine",
-                        "choice": "10  || regular useres of caffeine"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "alcohol",
-                        "choice": null
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "66.8"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -62,8 +81,12 @@
         "description": "",
         "individuals": [
             {
-                "data": "Kaplan1997_Tab1.csv",
-                "figure": "Kaplan1997_Tab1.png"
+                "name": "",
+                "group": "",
+                "source": "Kaplan1997_Tab1.csv",
+                "format": "",
+                "figure": "Kaplan1997_Tab1.png",
+                "characteristica": []
             }
         ]
     },
@@ -89,6 +112,18 @@
     "outputset": {
         "description": "",
         "outputs": [
+            {
+                "source": "Kaplan1997_Tab1.csv",
+                "format": "",
+                "figure": "Kaplan1997_Tab1.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            },
             {
                 "group": "S1",
                 "intervention": "D_CAF250",
@@ -170,10 +205,20 @@
                 "unit": "µg/ml*h"
             }
         ],
-        "dynamics": [
+        "timecourse": [
             {
-                "data": "Kaplan1997_Fig1.csv",
-                "figure": "Kaplan1997_Fig1.png"
+                "group": "",
+                "intervention": "",
+                "source": "Kaplan1997_Fig1.csv",
+                "format": "",
+                "figure": "Kaplan1997_Fig1.png",
+                "substance": "",
+                "tissue": "",
+                "pktype": "",
+                "times": "",
+                "values": "",
+                "sd": "",
+                "unit": ""
             }
         ]
     }

@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Blanchard1983a",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 6832208,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "10 healthy adult male volunteers, aged 18.8 to 30.0 years;\nHealthy adult male Caucasian volunteers. None of the subjects were taking any prescription or non-presecription medication at time of the study.\nEach subject was fasted from the previous evening until at least 2h after the administration of the oral dose.\nSubjects were instructed to abstain from caffeine-containing food and beverages, tobacco (9 of the 10 subjects were non-smokers) and alcohol from 72h before, until 24h after caffeine administration.",
@@ -19,8 +20,28 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "79.5",
+                        "min": "64",
+                        "max": "106",
+                        "se": "3.9",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": "Caucasian"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "21.8",
+                        "min": "18.8",
+                        "max": "30",
+                        "se": "1.1",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,20 +52,8 @@
                         "choice": "N"
                     },
                     {
-                        "category": "age",
-                        "mean": "21.8"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "79.5"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -76,10 +85,20 @@
     "outputset": {
         "description": "",
         "outputs": [],
-        "dynamics": [
+        "timecourse": [
             {
-                "data": "Blanchard1983a_Fig2.csv",
-                "figure": "Blanchard1983a_Fig2.png"
+                "group": "",
+                "intervention": "",
+                "source": "Blanchard1983a_Fig2.csv",
+                "format": "",
+                "figure": "Blanchard1983a_Fig2.png",
+                "substance": "",
+                "tissue": "",
+                "pktype": "",
+                "times": "",
+                "values": "",
+                "sd": "",
+                "unit": ""
             }
         ]
     }

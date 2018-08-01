@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Ghassabian2009",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 19307938,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "The assay was applied to samples collected in a pilot study of people with schizophrenia who were receiving Clozapine. Participants were selected on the basis of having no history of chronic diseases such as diabetes, asthma, and cancer, and women could not be pregnant at the time of study. 11 people with schizophrenia who were receiving\nclozapine provided informed consent, participated, and\nsuccessfully completed the pilot clinical study (Table 5).\nNone of the subjects experienced serious side effects after\nadministration of the drug cocktail.",
@@ -19,8 +20,24 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "schizophrenia"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "age",
+                        "mean": "41.09",
+                        "min": "22",
+                        "max": "66",
+                        "sd": "14.56",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,16 +48,8 @@
                         "choice": null
                     },
                     {
-                        "category": "disease",
-                        "choice": "schizophrenia"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "41.09"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -50,8 +59,12 @@
         "description": "",
         "individuals": [
             {
-                "data": "Ghassabian2009_Tab5.csv",
-                "figure": "Ghassabian2009_Tab5.png"
+                "name": "",
+                "group": "",
+                "source": "Ghassabian2009_Tab5.csv",
+                "format": "",
+                "figure": "Ghassabian2009_Tab5.png",
+                "characteristica": []
             }
         ]
     },
@@ -71,6 +84,19 @@
     },
     "outputset": {
         "description": "",
-        "outputs": []
+        "outputs": [
+            {
+                "source": "Ghassabian2009_Tab5.csv",
+                "format": "",
+                "figure": "Ghassabian2009_Tab5.png",
+                "individuum": "",
+                "intervention": "",
+                "substance": "",
+                "pktype": "",
+                "value": "",
+                "tissue": "",
+                "unit": ""
+            }
+        ]
     }
 }

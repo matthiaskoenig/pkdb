@@ -3,13 +3,14 @@
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Balogh1992",
-    "substances": [
-        "caffeine"
-    ],
+    "design": "",
     "reference": 1304170,
     "curators": [
         "mkoenig",
         "janekg"
+    ],
+    "substances": [
+        "caffeine"
     ],
     "groupset": {
         "description": "12 healthy male volunteers (ages 24 to 39 years) and whose weight ranged from 65 kg to 100 kg. None had a history of serious illness, regular consumption of any medication, smoking, or of a chronic exposure to chemicals known to induce or inhibit hepatic drug metabolizing enzymes.",
@@ -19,8 +20,31 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "75",
+                        "min": "65",
+                        "max": "100",
+                        "sd": "8.83",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "age",
+                        "mean": null,
+                        "min": "24",
+                        "max": "39",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -31,20 +55,8 @@
                         "choice": "N"
                     },
                     {
-                        "category": "age",
-                        "mean": null
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "75"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }

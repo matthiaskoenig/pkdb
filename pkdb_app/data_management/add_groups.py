@@ -11,7 +11,6 @@ from pkdb_app.data_management.fill_database import get_study_json_path, open_stu
 from pkdb_app.data_management.initialize_study import save_study, study_filename, SEPERATOR
 from pkdb_app.categoricals import CHARACTERISTIC_CATEGORIES,CHARACTERISTIC_DTYPE
 from pkdb_app.data_management.create_reference import SUBJECTSPATH, INDIVIDUALPATH
-
 from pkdb_app.utils import create_if_exists, clean_import
 
 
@@ -19,8 +18,8 @@ def add_groupset_to_study(study):
     study_json = {**study["json"]}
     subject_pd = pd.read_csv(SUBJECTSPATH,delimiter='\t',keep_default_na=False)
     this_subject = subject_pd[subject_pd["reference"] == study_json["name"]]
-    this_subject.replace({'NA':None}, inplace=True)
-    this_subject.columns = [c.replace('_', ' ') for c in this_subject.columns]
+    this_subject = this_subject.replace({'NA':None})
+    #this_subject.columns = [c.replace('_', ' ') for c in this_subject.columns]
     study_json["groupset"] = {}
     try:
         test = this_subject["description"].unique()[0]
@@ -32,21 +31,25 @@ def add_groupset_to_study(study):
         study_json["groupset"]["characteristica"] = []
     study_json["groupset"]["groups"] = []
 
-    for group in this_subject.iterrows():
-        #todo: hier weitermachen
-        print(group)
-        print(group.to_dict("records"))
-        yield {"json": study_json,"group": group.to_dict(), "study_path": study["study_path"]}
+    for group in this_subject.itertuples():
+        #print(group.reset_index().to_dict())
+        #print(group)
+        #print(group.to_dict("records"))
+        yield {"json": study_json,"group": group._asdict(), "study_path": study["study_path"]}
 
 
 def add_group_to_groupset(data):
+
+    data_group = { k.replace('_', ' '):v for k,v in data["group"].items()}
+    print(data_group)
     #add groupsets
     #######################################################
     group = {}
+
     group["count"] = data["group"]["count"]
     group["name"] = data["group"]["groups"]
     #group["description"] = data["group"]["description"]
-    group["characteristica"] = add_characteristic_values(data["group"])
+    group["characteristica"] = add_characteristic_values(data_group)
     json = {**data["json"]}
     json["groupset"]["groups"].append(group)
     return {"json":json, "study_path":data["study_path"]}
@@ -91,8 +94,16 @@ def add_individual_set(data):
         this_data["json"]["individualset"]["individuals"] = []
 
         for individuals in this_individuals.itertuples():
-            print(individuals.data)
-            individuals_dict = {"data" :individuals.data, "figure" :individuals.figure}
+            individuals_dict_raw = individuals._asdict()
+            individuals_dict_raw = {k.replace('_', ' '): v for k, v in individuals_dict_raw.items()}
+
+            individuals_dict = {}
+            individuals_dict["name"] =  individuals_dict_raw["name"]
+            individuals_dict["group"] =  individuals_dict_raw["group"]
+            individuals_dict["source"] =  individuals_dict_raw["source"]
+            individuals_dict["format"] =  individuals_dict_raw["format"]
+            individuals_dict["figure"] =  individuals_dict_raw["figure"]
+            individuals_dict['characteristica'] = add_characteristic_values(individuals_dict_raw)
             this_data["json"]["individualset"]["individuals"].append(individuals_dict)
 
 
@@ -102,7 +113,6 @@ def add_individual_set(data):
 
 
 def add_characteristic_values(group):
-    group
     characteristics_values = []
     for category in CHARACTERISTIC_CATEGORIES:
         for characteristics_value in process_characteristic_values(group,category):
@@ -113,28 +123,30 @@ def add_characteristic_values(group):
                 characteristics_values.append(characteristics_value)
     return characteristics_values
 
+
 def process_characteristic_values(group,category):
     this_value = str(group.get("category",""))
     if this_value.strip().replace('.','',1).isdigit() or CHARACTERISTIC_DTYPE[category] == "numeric":
 
         numeric_data = {}
         numeric_data["category"] = category
+        group["count"] = group.get("count",1)
         if "new_count" in group:
             numeric_data["count"] = group["new_count"]
 
         if group["count"] > 1:
             numeric_data = create_if_exists(group,category,numeric_data,"mean")
-            numeric_data = create_if_exists(group,f"{category}_median",numeric_data,"median")
-            numeric_data = create_if_exists(group,f"{category}_min",numeric_data,"min")
-            numeric_data = create_if_exists(group,f"{category}_max",numeric_data,"max")
-            numeric_data = create_if_exists(group,f"{category}_sd",numeric_data,"sd")
-            numeric_data = create_if_exists(group,f"{category}_se",numeric_data,"se")
-            numeric_data = create_if_exists(group,f"{category}_cv",numeric_data,"cv")
-            numeric_data = create_if_exists(group,f"{category}_unit",numeric_data,"unit")
+            numeric_data = create_if_exists(group,f"{category} median",numeric_data,"median")
+            numeric_data = create_if_exists(group,f"{category} min",numeric_data,"min")
+            numeric_data = create_if_exists(group,f"{category} max",numeric_data,"max")
+            numeric_data = create_if_exists(group,f"{category} sd",numeric_data,"sd")
+            numeric_data = create_if_exists(group,f"{category} se",numeric_data,"se")
+            numeric_data = create_if_exists(group,f"{category} cv",numeric_data,"cv")
 
         else:
-            numeric_data = create_if_exists(group,category,numeric_data,"float")
+            numeric_data = create_if_exists(group,category,numeric_data,"value")
 
+        numeric_data = create_if_exists(group, f"{category} unit", numeric_data, "unit")
 
         return [clean_import(numeric_data)]
 
