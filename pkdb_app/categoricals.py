@@ -83,7 +83,7 @@ COMMON_DATA = [
 
     # Lifestyle
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('caffeine_amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
 ]
 
 CHARACTERISTIC_DATA = COMMON_DATA + [
@@ -144,6 +144,7 @@ def dict_and_choices(data):
 
 CHARACTERISTIC_DTYPE = {item.value : item.dtype for item in CHARACTERISTIC_DATA}
 CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
+CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 PROTOCOL_DICT, PROTOCOL_CHOICES = dict_and_choices(PROTOCOL_DATA)
 
