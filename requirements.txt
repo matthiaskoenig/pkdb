@@ -45,3 +45,5 @@ biopython
 ipykernel
 pandas
 jsonschema
+django-extra-fields
+PyPDF2

@@ -7,13 +7,11 @@ From the data structure this has to be handled very similar.
 """
 
 from django.db import models
-
-from ..studies.models import Study, Reference
-from ..behaviours import Sidable, Describable, Valueable
+from ..behaviours import Valueable, Describable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
-from .managers import GroupManager
+from .managers import GroupManager, GroupSetManager
 
 
 # TODO: Add ExclusionCriteria as extra class on group | or via field ?
@@ -29,21 +27,30 @@ from .managers import GroupManager
 
 
 
-# Idea: GroupSet
-class GroupSet(Describable,models.Model):
-    study = models.ForeignKey(Study, on_delete=True, related_name='groups',to_field="sid", db_column="study_sid",null=True, blank=True)
 
+
+class Set(Describable, models.Model):
+    """
+    abstarct class for all set classes
+    """
 
     @property
     def reference(self):
-        return self.study.reference
+        return self.reference
+
+    class Meta:
+        abstract = True
+
+class GroupSet(Set):
+    objects = GroupSetManager()
+
 
 class Group(models.Model):
     """ Individual or group of people.
 
     Groups are defined via their characteristics.
     """
-    groupset = models.ForeignKey(GroupSet,on_delete=True, related_name="groups")
+    groupset = models.ForeignKey(GroupSet,on_delete=models.SET_NULL,null=True,related_name="groups")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()  # number of people/animals/objects in group
     objects = GroupManager()
@@ -53,23 +60,61 @@ class Group(models.Model):
         return self.groupset.reference
 
 
-class Characteristic(models.Model):
+class IndividualSet(Set):
+    pass
+
+
+class Individual(models.Model):
+    """ Individual or group of people.
+
+    Individuals are defined via their characteristics.
+    """
+    individualset = models.ForeignKey(IndividualSet,on_delete=models.CASCADE, related_name="individuals")
+    group =  models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals")
+
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+
+    #objects = GroupManager()
+
+    @property
+    def reference(self):
+        return self.individualset.reference
+
+
+class Characteristica(Valueable, models.Model):
     """ Characteristic.
 
-    Characteristics are used to store information about a group of subjects.
-    Such a group is defined by
-    - Inclusion criteria, which define general characteristics (often via cutoffs, i.e. min or max) of which
-      subjects are in a group.
-    - Exclusion criteria, analogue to inclusion criteria but defines which subjects are excluded.
-    - Group criteria, concrete properties/characteristics of the group of subjects.
+        Characteristics are used to store information about a group of subjects.
+        Such a group is defined by
+        - Inclusion criteria, which define general characteristics (often via cutoffs, i.e. min or max) of which
+          subjects are in a group.
+        - Exclusion criteria, analogue to inclusion criteria but defines which subjects are excluded.
+        - Group criteria, concrete properties/characteristics of the group of subjects.
 
-    The type of characteristic is defined via the cvtype.
-    When group characterists are curated it is important to specify the inclusion/exclusion criteria in
-    addition to the group criteria.
+        The type of characteristic is defined via the cvtype.
+        When group characterists are curated it is important to specify the inclusion/exclusion criteria in
+        addition to the group criteria.
+
+    This is the concrete selection/information of the characteristics.
+    This stores the raw information. Derived values can be calculated.
     """
     category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                              blank=True)  # check in validation that allowed choice
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)  # check in validation that allowed choice
+    groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
+    individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
+    ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA) #this is for exclusion and inclustion
+
+
+    @property
+    def is_inclusion(self):
+        return self.ctype == INCLUSION_CRITERIA
+
+    @property
+    def is_exclusion(self):
+        return self.ctype == EXCLUSION_CRITERIA
+
     @property
     def characteristic_data(self):
         """ Returns the full information about the characteristic.
@@ -82,26 +127,6 @@ class Characteristic(models.Model):
     def choices(self):
         return self.characteristic_data.choices
 
-    class Meta:
-        abstract = True
-
-
-class Characteristica(Valueable, Characteristic):
-    """
-    This is the concrete selection/information of the characteristics.
-    This stores the raw information. Derived values can be calculated.
-    """
-    groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, on_delete=True)
-    group = models.ForeignKey(Group, related_name="characteristica", null=True, on_delete=True)
-    ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA)
-
-    @property
-    def is_inclusion(self):
-        return self.ctype == INCLUSION_CRITERIA
-
-    @property
-    def is_exclusion(self):
-        return self.ctype == EXCLUSION_CRITERIA
 
     #def validate(self):
     #    """ Check that choices are valid. I.e. that choice is allowed choice from choices for
@@ -115,7 +140,7 @@ class Characteristica(Valueable, Characteristic):
     #    raise NotImplemented
 
 
-class CleanCharacteristica(Valueable, Characteristic, models.Model):
+class CleanCharacteristica(Characteristica):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
 
@@ -123,11 +148,10 @@ class CleanCharacteristica(Valueable, Characteristic, models.Model):
     """
     raw = models.ForeignKey(Characteristica, related_name="clean", null=True, on_delete=True)
 
-
-
-
     # method field? for different processing?
 
     # TODO: add methods for doing the processing & automatic update if corresponding
     # Value is changed.
     # -> move to a ProcessedValuable
+
+

@@ -17,17 +17,27 @@ VERSIONS = [1.0,]
 #considering: to maintain serializers of serval versions of the json file. The version would be read from the json file and the respective
 #serializer would be selected.
 
-
-
-
 # TODO: How to handle the genetic information? Genetic variants?
 
 from collections import namedtuple
+def create_choices(list):
+    return [(utype, utype) for utype in list]
+
+
 CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices", "units"])
 UnitType = namedtuple("UnitType", ["name"])
 
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
-UNIT_DATA = [
+UNIT_TIME = [
+    UnitType('sec'),
+    UnitType('min'),
+    UnitType('h'),
+    UnitType('days'),
+]
+TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
+
+
+UNIT_DATA = UNIT_TIME + [
     UnitType('-'),
     UnitType('cm'),
     UnitType('m'),
@@ -39,6 +49,8 @@ UNIT_DATA = [
     UnitType('mg/dl'),
     UnitType('g/dl')
 ]
+
+
 UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
 
 
@@ -56,6 +68,24 @@ STRING_TYPE = "string"  # can be a free string, no limitations compared to categ
 YES = "Y"
 NO = 'N'
 BOOLEAN_CHOICES = [YES, NO]
+
+INTERVENTION_ROUTE = [
+"oral",
+"iv",
+]
+INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
+INTERVENTION_APPLICATION = [
+    "single dose",
+    "multiple dose",
+    "continous injection",
+]
+INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
+
+INTERVENTION_FORM = [
+    "tablete",
+    "capsule",
+]
+INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
 # categories
 DEMOGRAPHICS = "demographics"  # age, sex, ethnicity
@@ -87,8 +117,14 @@ SUBSTANCES_DATA = [
     "aspirin",
     "caffeine",
     "acetaminophen",
+    "paraxanthine",
+    "paraxanthine/caffeine",
+    "theobromine",
+    "theophylline",
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
+
+
 
 
 COMMON_DATA = [
@@ -144,7 +180,28 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
 ]
 
 PK_DATA = [
+    "auc",
+    "concentration",
+    "clearance",
+    "vd",
+    "thalf",
+    "tmax",
+    "cmax",
+    "amount",
+    "kel",
+    "kabs",
+    "plasma_binding",
+    "clearance_unbound",
+    "ratio",
+    "clearance_tbc",
 ]
+OUTPUT_TISSUE_DATA = [
+    "saliva",
+    "plasma",
+    "urine",
+]
+
+PK_DATA_CHOICES = create_choices(PK_DATA)
 
 # class, value, dtype (numeric, boolean, categorial), choices
 PROTOCOL_DATA = [

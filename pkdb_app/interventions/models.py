@@ -5,10 +5,11 @@ group or individual).
 """
 
 from django.db import models
-from ..behaviours import Sidable, Describable, Valueable
-from ..categoricals import PROTOCOL_CHOICES, UNITS_CHOICES, SUBSTANCES_DATA_CHOICES
-from ..subjects.models import Group
-from ..studies.models import DataFile, Substance
+from ..behaviours import Valueable, Describable
+from ..categoricals import PROTOCOL_CHOICES, TIME_UNITS_CHOICES, \
+    INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
+    SUBSTANCES_DATA_CHOICES
+from ..subjects.models import Group, Individual, Set
 from ..utils import CHAR_MAX_LENGTH
 
 # -------------------------------------------------
@@ -29,31 +30,59 @@ from ..utils import CHAR_MAX_LENGTH
 # How to represent the dosing?
 # Add separate class? extension of model?
 
+#####################################
+#new
+class DataFile(models.Model):
+    """ Table or figure from where the data comes from (png).
 
-class ProtocolStep(Sidable, Describable, models.Model):
-    """ What is done to the group, single step.
+    This should be in a separate class, so that they can be easily displayed/filtered/...
+    """
 
-     - dosing of certain substance, e.g. caffeine oral
-     - smoking cessation
-     - sports / lifestyle change
-     - medication
-     - ...
+    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
+    filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
 
-     Examples:
-         Two groups (parallel group design), one group control, other group gets medication, e.g., oral contraceptives, than pharmacokinetics of caffeine measured.
-         -> 2 protocol
-            - protocol 1 (linked to control group): MedicationStep (caffeine)
-            - protocol 2 (linked to intervention group): MedicationStep (oral contraceptives), MedicationStep (caffeine)
 
-     """
+class Substance(models.Model):
+    """ Substances have to be in a different table, so that
+    than be uniquely defined.
 
-    # FIXME: Important to find the subset of dosing protocols
+    Has to be extended via ontology (Ontologable)
+
+    """
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=SUBSTANCES_DATA_CHOICES)
+
+    #name # example caffeine
+    # ontologies: has set of defined values: is, CHEBI:27732
+
+class InterventionSet(Set):
+    pass
+
+
+class Intervention(Valueable,models.Model):
+
+    """ A concrete step/thing which is done to the group.
+
+       In case of dosing/medication the actual dosing is stored in the Valueable.
+       In case of a step without dosing, e.g., lifestyle intervention only the category is used.
+    """
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+
+    interventionset = models.ForeignKey(InterventionSet, related_name="interventions", on_delete=models.CASCADE)
+    substance = models.ForeignKey(Substance, null=True,blank=False, on_delete=False)#substance: # what was given ['
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_ROUTE_CHOICES)# route: # where ['oral', 'iv']
+    form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_FORM_CHOICES)
+
+    application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_APPLICATION_CHOICES) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
+    application_time = models.FloatField(null=True,blank=False)  #application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
+
+    ######
+    #probably should be deleted
     category = models.IntegerField(choices=PROTOCOL_CHOICES)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                              blank=True)  # check in validation that allowed choice
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)
 
     @property
-    def Intervention_data(self):
+    def intervention_data(self):
         """ Returns the full information about the characteristic.
 
         :return:
@@ -62,28 +91,87 @@ class ProtocolStep(Sidable, Describable, models.Model):
 
     @property
     def choices(self):
-        return self.Intervention_data.choices
+        return self.intervention_data.choices
+
+
+class CleanIntervention(Intervention):
+    """ Calculated from medicationstep
+    """
+    raw = models.ForeignKey(Intervention, related_name="clean", on_delete=True)
+# -----------------
+# RESULTS
+# -----------------
+
+#
+class OutputSet(Set):
+    pass
+
+class BaseOutput(models.Model):
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=False)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=False)
+    intervention = models.ForeignKey(Intervention, on_delete=False)
+    substance = models.ForeignKey(Substance, on_delete=False)
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES ,null=True, blank=True)
 
     class Meta:
         abstract = True
 
 
-class ValueProtocolStep(Valueable, ProtocolStep):  # choices, dose, unit (per_bodyweitght is not important)
-    """ A concrete step/thing which is done to the group.
+class Output(Valueable,BaseOutput,models.Model):
 
-    In case of dosing/medication the actual dosing is stored in the Valueable.
-    In case of a step without dosing, e.g., lifestyle intervention only the category is used.
-    """
-    substance = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) #substance: # what was given ['
-    route = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # route: # where ['oral', 'iv']
-    application = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
-    application_time = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
-    form = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH) # form: # how medication [capsule, tablete]
+    outputset = models.ForeignKey(OutputSet, related_name="outputs", on_delete=models.CASCADE)
 
-class ProcessedValueProtocolStep(Valueable, ProtocolStep):
-    """ Calculated from medicationstep
+    """ Storage of data sets. """
+
+
+    pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES)
+    time = models.FloatField(null=True,blank=True)
+    # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
+    files = models.ForeignKey(DataFile, on_delete=True)
+
+
+class Timecourse(BaseOutput):
+    """ Storing of time course data.
+
+    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
-    raw = models.ForeignKey(ValueProtocolStep, null=True, on_delete=True)
+    #substance
+    #tissue
+    data = models.ForeignKey(DataFile, on_delete=True) # link to the CSV
+
+
+class CleanOutput(Output):
+    raw = models.ForeignKey(Output, related_name="clean", null=True, on_delete=True)
+
+
+class CleanTimecourse(Timecourse):
+    raw = models.ForeignKey(Timecourse, related_name="clean", null=True, on_delete=True)
+
+
+'''
+
+
+class Pharmacokinetics(Output, Valueable):
+    """ Measured value (calculated value via ProcessedPharmacokinetics)
+
+    category: [clearance, vd, thalf, cmax, ...]
+    """
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)  # check in validation that allowed choice
+    substance = models.ForeignKey(Substance, on_delete=True)
+    #tissue # where was it measured
+
+
+
+
+
+class CleanPharmacokinetics(Valueable):
+    """ Calculated from pharmacokinetics or timecourse data.
+    """
+    raw = models.ForeignKey(Pharmacokinetics, null=True, on_delete=True)
+    type = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # ['normalized', 'timecourse-derived']
+
+
+
 
 
 class Protocol(models.Model):
@@ -99,67 +187,6 @@ class Protocol(models.Model):
     name = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)
     # set of protocols
     # name (control, fluvoxamine, control-fluvo, fluvo-control)
-
-
-
-
-# -----------------
-# RESULTS
-# -----------------
-
-# Create your models here.
-class Output(Sidable, Describable, models.Model):
-    """ Storage of data sets. """
-    protocol = models.ForeignKey(Protocol,on_delete=True)
-    # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
-    files = models.ForeignKey(DataFile, on_delete=True)
-
-class Pharmacokinetics(Output, Valueable):
-    """ Measured value (calculated value via ProcessedPharmacokinetics)
-
-    category: [clearance, vd, thalf, cmax, ...]
-    """
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                              blank=True)  # check in validation that allowed choice
-    substance = models.ForeignKey(Substance, on_delete=True)
-    #tissue # where was it measured
-
-
-class Timecourse(Output):
-    """ Storing of time course data.
-
-    Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
-    """
-    #substance
-    #tissue
-    data = models.ForeignKey(DataFile, on_delete=True) # link to the CSV
-
-
-class ProcessedPharmacokinetics(Valueable):
-    """ Calculated from pharmacokinetics or timecourse data.
-    """
-    raw = models.ForeignKey(Pharmacokinetics, null=True, on_delete=True)
-    type = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # ['normalized', 'timecourse-derived']
-
-
-#####################################
-#new
-class Substance(models.Model):
-    """ Substances have to be in a different table, so that
-    than be uniquely defined.
-
-    Has to be extended via ontology (Ontologable)
-
-    """
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=SUBSTANCES_DATA_CHOICES)
-
-    #name # example caffeine
-    # ontologies: has set of defined values: is, CHEBI:27732
-
-class Intervension(models.Model):
-    models.ForeignKey(Substance, on_delete=False)
-
-class InterventionSet(Describable, models.model):
-    interventions = models.ForeignKey(Intervension, on_delete=True)
+'''
 
 

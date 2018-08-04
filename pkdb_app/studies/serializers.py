@@ -2,10 +2,16 @@ from rest_framework import serializers
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
+from pkdb_app.categoricals import SUBSTANCES_DATA
+from pkdb_app.interventions.models import Substance
+from pkdb_app.interventions.serializers import SubstanceSerializer
+from pkdb_app.subjects.serializers import GroupSetSerializer
+from pkdb_app.users.models import User
+from pkdb_app.users.serializers import UserSerializer
 from .models import Reference, Author, Study
-
-from ..subjects.serializers import GroupSerializer
-from ..subjects.models import Group
+from django.core.exceptions import ObjectDoesNotExist
+#from ..subjects.serializers import GroupSerializer
+from ..subjects.models import Group, GroupSet
 from ..serializers import BaseSerializer
 from django.shortcuts import get_object_or_404
 
@@ -32,9 +38,9 @@ class ReferenceSerializer(BaseSerializer):
         fields = BASE_FIELDS + ('pmid', 'sid', 'name', 'doi', 'title','abstract', 'journal', 'date', 'authors', 'pdf')
 
     def create(self, validated_data):
-
         authors_data = validated_data.pop('authors',[])
         reference = Reference.objects.create(**validated_data)
+
 
         for author_data in authors_data:
             author, _ = Author.objects.update_or_create(**author_data)
@@ -52,40 +58,105 @@ class ReferenceSerializer(BaseSerializer):
         for author_data in authors_data:
             author, _ = Author.objects.update_or_create(**author_data)
             instance.authors.add(author)
-            instance.save()
+
+        instance.save()
 
         return instance
 
 
+
+
 class StudySerializer(BaseSerializer):
     #reference = ReferenceSerializer(read_only=False)
-    reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all())
-    groupset = GroupSerializer(many=True, read_only=False)
+    reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False)
+    groupset = GroupSetSerializer(read_only=False, required=False)
+    curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False)
+    creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False)
+    #substances = SubstanceSerializer(slug_field='name', required=False,many=True)
+    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True)
 
     class Meta:
         model = Study
-        fields = BASE_FIELDS + ('sid','comment','name','description', 'groupset', 'reference')
+        fields = BASE_FIELDS + ('sid','name',"creator","pkdb_version","design",'reference',"curators", "groupset", "substances")
 
     def create(self, validated_data):
 
-        groups_data = validated_data.pop('groups', [])
+        substances_data = validated_data.pop('substances', [])
+        curators_data = validated_data.pop('curators', [])
+        groupset_data = validated_data.pop('groupset', None)
+        creator_data = validated_data.pop('creator', None)
         reference = validated_data.pop('reference')
 
-        study, _ = Study.objects.update_or_create(sid=validated_data["sid"], reference=reference, defaults=validated_data,)
+        #for substance in SUBSTANCES_DATA:
+        #   Substance.objects.create(substance)
 
-        for group in groups_data:
-            Group.objects.update_or_create(name=group["name"], study=study, defaults=group)
+
+
+        try:
+            creator = User.objects.get(username=creator_data)
+        except ObjectDoesNotExist:
+            creator = None
+
+        study, _ = Study.objects.update_or_create(sid=validated_data["sid"], reference=reference, creator=creator, defaults=validated_data,)
+
+        if groupset_data is not None:
+            groupset, _ = GroupSet.objects.create(**groupset_data)
+
+            groupset.save()
+            study.groupset = groupset
+
+        for curator_data in curators_data:
+            try:
+                curator = User.objects.get(username=curator_data)
+            except ObjectDoesNotExist:
+                curator = None
+            study.curators.add(curator)
+
+        for substance_data in substances_data:
+            try:
+                substance = User.objects.get(username=substance_data)
+            except ObjectDoesNotExist:
+                substance = None
+            study.substances.add(substance)
 
         study.save()
         return study
 
     def update(self, instance, validated_data):
-        groups_data = validated_data.pop('groups', [])
+        groupset_data = validated_data.pop('groupset',None)
+        curators_data = validated_data.pop('curators', [])
+        creator_data = validated_data.pop('creator', None)
+
+        try:
+            creator = User.objects.get(username=creator_data)
+        except ObjectDoesNotExist:
+            creator = None
+
+        instance.creator = creator
+
         for name, value in validated_data.items():
             setattr(instance, name, value)
 
-        for group in groups_data:
-            Group.objects.update_or_create(name=group["name"], study=instance, defaults=group)
+        instance.save()
+
+
+        if groupset_data is not None:
+            groupset , _= GroupSet.objects.create(**groupset_data)
+
+            groupset.save()
+            instance.groupset = groupset
+
+        instance.save()
+
+        for curator_data in curators_data:
+            try:
+                curator = User.objects.get(username=curator_data)
+            except ObjectDoesNotExist:
+                curator = None
+            instance.curators.add(curator)
+        instance.save()
+
 
 
         return instance
+

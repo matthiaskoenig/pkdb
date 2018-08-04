@@ -1,10 +1,10 @@
-from .models import Group, CharacteristicValue
-from .serializers import GroupSerializer, CharacteristicValueSerializer
+#from .models import Group, CharacteristicValue
+#from .serializers import GroupSerializer, CharacteristicValueSerializer
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 
-
+"""
 class GroupsViewSet(viewsets.ModelViewSet):
 
     queryset = Group.objects.all()
@@ -21,6 +21,8 @@ class CharacteristicValuesViewSet(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
     filter_fields = ( 'choice', 'count','category')
     search_fields = filter_fields
+
+"""
 
 
 
