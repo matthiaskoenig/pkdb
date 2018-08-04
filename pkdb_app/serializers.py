@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
+# Get an instance of a logger
+
 
 
 class BaseSerializer(serializers.ModelSerializer):

@@ -1,8 +1,9 @@
 from rest_framework import serializers
-from .models import Protocol,  MedicationStep
+
+from pkdb_app.interventions.models import Substance
 from ..serializers import BaseSerializer
 
-
+'''
 class MedicationStepSerializer(BaseSerializer):
     class Meta:
         model = MedicationStep
@@ -15,4 +16,18 @@ class ProtocolSerializer(BaseSerializer):
     class Meta:
         model = Protocol
         fields = "__all__"
+
+
+'''
+
+
+class SubstanceSerializer(serializers.Serializer):
+
+    class Meta:
+        model = Substance
+        fields = ["name"]
+
+
+
+
 

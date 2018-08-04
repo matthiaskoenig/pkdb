@@ -5,14 +5,34 @@ from django.db import models
 
 
 class GroupManager(models.Manager):
-    def update_or_create(self, *args, **kwargs):
-        characteristic_values = kwargs["defaults"].pop("characteristic_values", [])
+    def create(self, *args, **kwargs):
+        characteristica = kwargs.pop("characteristica", [])
         group, created = super(GroupManager, self).update_or_create(*args, **kwargs)
-        group.characteristic_values.all().delete()
-        for characteristic_value in characteristic_values:
-            characteristic_value["count"] = characteristic_value.get("count",group.count)
-            group.characteristic_values.create(**characteristic_value)
+        group.characteristica.all().delete()
+        for characteristica_single in characteristica:
+            characteristica_single["count"] = characteristica_single.get("count",group.count)
+            group.characteristica.create(**characteristica_single)
 
         group.save()
 
         return group, created
+
+class GroupSetManager(models.Manager):
+    def create(self, *args, **kwargs):
+        characteristica = kwargs.pop("characteristica", [])
+        groups = kwargs.pop("groups", [])
+
+        groupset, created = super(GroupSetManager, self).update_or_create(*args, **kwargs)
+        groupset.characteristica.all().delete()
+        groupset.groups.all().delete()
+
+
+        for characteristica_single in characteristica:
+            groupset.characteristica.create(**characteristica_single)
+
+        for group in groups:
+            groupset.groups.create(**group)
+
+        groupset.save()
+
+        return groupset, created
