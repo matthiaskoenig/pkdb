@@ -6,7 +6,6 @@ CHAR_MAX_LENGTH = 30
 def create_if_exists(src,src_key,dest,dest_key):
     if src_key in src.keys():
             dest[dest_key] = src[src_key]
-
     return dest
 
 

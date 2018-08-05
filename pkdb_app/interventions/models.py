@@ -5,6 +5,8 @@ group or individual).
 """
 
 from django.db import models
+
+from pkdb_app.interventions.managers import InterventionSetManager
 from ..behaviours import Valueable, Describable
 from ..categoricals import PROTOCOL_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
@@ -54,8 +56,11 @@ class Substance(models.Model):
     #name # example caffeine
     # ontologies: has set of defined values: is, CHEBI:27732
 
+    def __str__(self):
+        return self.name
+
 class InterventionSet(Set):
-    pass
+    objects = InterventionSetManager()
 
 
 class Intervention(Valueable,models.Model):
@@ -78,7 +83,7 @@ class Intervention(Valueable,models.Model):
 
     ######
     #probably should be deleted
-    category = models.IntegerField(choices=PROTOCOL_CHOICES)
+    category = models.IntegerField(choices=PROTOCOL_CHOICES,null=True,blank=True)
     choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)
 
     @property

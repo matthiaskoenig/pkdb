@@ -6,6 +6,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
+from .interventions.views import SubstancesViewSet
 from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import AuthorsViewSet, ReferencesViewSet, StudyViewSet
 #from .subjects.views import GroupsViewSet,CharacteristicValuesViewSet
@@ -14,6 +15,8 @@ from .studies.views import AuthorsViewSet, ReferencesViewSet, StudyViewSet
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'users', UserCreateViewSet)
+
+router.register('substances', SubstancesViewSet, base_name="substances")
 
 # views in studies
 router.register('authors',AuthorsViewSet,base_name="authors")

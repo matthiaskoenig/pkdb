@@ -3,7 +3,7 @@ Django model for Study.
 """
 from django.db import models
 
-from pkdb_app.interventions.models import OutputSet, Substance, DataFile
+from pkdb_app.interventions.models import OutputSet, Substance, DataFile, InterventionSet
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
@@ -35,7 +35,8 @@ class Reference(models.Model):
     pdf = models.FileField(upload_to="study", null=True, blank=True)
     authors = models.ManyToManyField(Author, blank=True, related_name='references')
 
-
+    def __str__(self):
+        return self.title
 
 
 class Study(Sidable, models.Model):
@@ -52,6 +53,7 @@ class Study(Sidable, models.Model):
     substances = models.ManyToManyField(Substance)
     raw_data = models.ManyToManyField(DataFile) # FIXME: is this the right name?
     groupset = models.OneToOneField(GroupSet, on_delete=models.CASCADE,null=True, blank=True)
+    interventionset = models.OneToOneField(InterventionSet, on_delete=models.CASCADE,null=True, blank=True)
     individualset = models.OneToOneField(IndividualSet, on_delete=models.CASCADE,null=True, blank=True)
     outputset = models.OneToOneField(OutputSet, on_delete=models.CASCADE,null=True, blank=True)
 

@@ -55,6 +55,7 @@ def add_group_to_groupset(data):
     return {"json":json, "study_path":data["study_path"]}
 
 def add_characteristica_groupset(data):
+
     this_data = {**data}
     groups = this_data["json"]["groupset"]["groups"]
     number_of_groups = len(groups)
