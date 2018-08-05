@@ -7,7 +7,7 @@ from django.db import models
 class GroupManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
-        group, created = super(GroupManager, self).update_or_create(*args, **kwargs)
+        group = super(GroupManager, self).create(*args, **kwargs)
         group.characteristica.all().delete()
         for characteristica_single in characteristica:
             characteristica_single["count"] = characteristica_single.get("count",group.count)
@@ -15,14 +15,14 @@ class GroupManager(models.Manager):
 
         group.save()
 
-        return group, created
+        return group
 
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
         groups = kwargs.pop("groups", [])
 
-        groupset, created = super(GroupSetManager, self).update_or_create(*args, **kwargs)
+        groupset = super(GroupSetManager, self).create(*args, **kwargs)
         groupset.characteristica.all().delete()
         groupset.groups.all().delete()
 
@@ -35,4 +35,4 @@ class GroupSetManager(models.Manager):
 
         groupset.save()
 
-        return groupset, created
+        return groupset

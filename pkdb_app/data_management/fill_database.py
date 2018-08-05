@@ -10,7 +10,14 @@ sys.path.append(BASEPATH)
 from pkdb_app.data_management.create_reference import REFERENCESMASTERPATH
 from jsonschema import validate
 from pkdb_app.data_management.schemas import reference_schema
-
+import logging
+import mondrian
+from pkdb_app.categoricals import SUBSTANCES_DATA
+# One line setup (excepthook=True tells mondrian to handle uncaught exceptions)
+mondrian.setup(excepthook=True)
+# Use logging, as usual.
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 PASSWORD = "test"
 Jan_G_U = {"username":"janekg","first_name":"Jan","last_name":"Grzegorzewski","email":"Janekg89@hotmail.de","password":PASSWORD}
@@ -18,11 +25,10 @@ Matthias_K = {"username":"mkoenig","first_name":"Matthias","last_name":"König",
 
 USERS = [Jan_G_U, Matthias_K]
 
-def upload_user(USERS):
-    for user in USERS:
-        requests.post()
+
 
 def get_reference_json_path():
+    #fill_user_and_substances()
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "reference.json" in files:
             json_file = os.path.join(root, 'reference.json')
@@ -54,23 +60,31 @@ def upload_reference(json_reference):
 
 
 
+def fill_user_and_substances():
+
+    for substance in SUBSTANCES_DATA:
+        client.action(document, ["substances", "create"], params={"name":substance})
+    for user in USERS:
+        client.action(document, ["users", "create"], params=user)
+
+
 def upload_study(json_study):
     study_partial = {}
     study_partial["sid"] = json_study["json"]["sid"]
     study_partial["name"] = json_study["json"]["name"]
     study_partial["pkdb_version"] = json_study["json"]["pkdb_version"]
     study_partial["design"] = json_study["json"]["design"]
-    #study_partial["substances"] = json_study["json"]["substances"]
+    study_partial["substances"] = json_study["json"]["substances"]
     study_partial["reference"] = json_study["json"]["reference"]
-    #study_partial["curators"] = json_study["json"]["curators"]
-    #study_partial["creator"] = json_study["json"]["creator"]
+    study_partial["curators"] = json_study["json"]["curators"]
+    study_partial["creator"] = json_study["json"]["creator"]
     study_partial["groupset"] = json_study["json"]["groupset"]
+    study_partial["interventionset"] = json_study["json"]["interventionset"]
 
 
 
 
-    client.action(document, ["studies", "create"], params=study_partial)
-
+    data = client.action(document, ["studies", "create"], params=study_partial)
 def get_graph_references(**options):
     graph = bonobo.Graph()
     # add studies

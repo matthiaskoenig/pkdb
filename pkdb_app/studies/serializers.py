@@ -3,8 +3,8 @@ from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from pkdb_app.categoricals import SUBSTANCES_DATA
-from pkdb_app.interventions.models import Substance
-from pkdb_app.interventions.serializers import SubstanceSerializer
+from pkdb_app.interventions.models import Substance, InterventionSet
+from pkdb_app.interventions.serializers import SubstanceSerializer, InterventionSetSerializer
 from pkdb_app.subjects.serializers import GroupSetSerializer
 from pkdb_app.users.models import User
 from pkdb_app.users.serializers import UserSerializer
@@ -67,29 +67,26 @@ class ReferenceSerializer(BaseSerializer):
 
 
 class StudySerializer(BaseSerializer):
-    #reference = ReferenceSerializer(read_only=False)
     reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False)
     groupset = GroupSetSerializer(read_only=False, required=False)
     curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False)
     creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False)
-    #substances = SubstanceSerializer(slug_field='name', required=False,many=True)
     substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True)
+    interventionset = InterventionSetSerializer(read_only=False, required=False)
 
     class Meta:
         model = Study
-        fields = BASE_FIELDS + ('sid','name',"creator","pkdb_version","design",'reference',"curators", "groupset", "substances")
+        fields = BASE_FIELDS + ('sid','name',"creator","pkdb_version","design",'reference',"curators",
+                                "groupset", "interventionset","substances")
 
     def create(self, validated_data):
+        interventionset_data = validated_data.pop('interventionset',None)
 
         substances_data = validated_data.pop('substances', [])
         curators_data = validated_data.pop('curators', [])
         groupset_data = validated_data.pop('groupset', None)
         creator_data = validated_data.pop('creator', None)
         reference = validated_data.pop('reference')
-
-        #for substance in SUBSTANCES_DATA:
-        #   Substance.objects.create(substance)
-
 
 
         try:
@@ -100,10 +97,16 @@ class StudySerializer(BaseSerializer):
         study, _ = Study.objects.update_or_create(sid=validated_data["sid"], reference=reference, creator=creator, defaults=validated_data,)
 
         if groupset_data is not None:
-            groupset, _ = GroupSet.objects.create(**groupset_data)
+            groupset = GroupSet.objects.create(**groupset_data)
 
             groupset.save()
             study.groupset = groupset
+
+        if interventionset_data is not None:
+            interventionset = InterventionSet.objects.create(**interventionset_data)
+            interventionset.save()
+            study.interventionset = interventionset
+        study.save()
 
         for curator_data in curators_data:
             try:
@@ -114,7 +117,7 @@ class StudySerializer(BaseSerializer):
 
         for substance_data in substances_data:
             try:
-                substance = User.objects.get(username=substance_data)
+                substance = Substance.objects.get(name=substance_data)
             except ObjectDoesNotExist:
                 substance = None
             study.substances.add(substance)
@@ -124,6 +127,8 @@ class StudySerializer(BaseSerializer):
 
     def update(self, instance, validated_data):
         groupset_data = validated_data.pop('groupset',None)
+        interventionset_data = validated_data.pop('interventionset',None)
+        substances_data = validated_data.pop('substances', [])
         curators_data = validated_data.pop('curators', [])
         creator_data = validated_data.pop('creator', None)
 
@@ -140,8 +145,14 @@ class StudySerializer(BaseSerializer):
         instance.save()
 
 
+        if interventionset_data is not None:
+            interventionset = InterventionSet.objects.create(**interventionset_data)
+            interventionset.save()
+            instance.interventionset = interventionset
+        instance.save()
+
         if groupset_data is not None:
-            groupset , _= GroupSet.objects.create(**groupset_data)
+            groupset = GroupSet.objects.create(**groupset_data)
 
             groupset.save()
             instance.groupset = groupset
@@ -156,7 +167,12 @@ class StudySerializer(BaseSerializer):
             instance.curators.add(curator)
         instance.save()
 
-
+        for substance_data in substances_data:
+            try:
+                substance = Substance.objects.get(name=substance_data)
+            except ObjectDoesNotExist:
+                substance = None
+            instance.substances.add(substance)
 
         return instance
 

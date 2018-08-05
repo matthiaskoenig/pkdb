@@ -99,7 +99,7 @@ class Characteristica(Valueable, models.Model):
     This stores the raw information. Derived values can be calculated.
     """
     category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)  # check in validation that allowed choice
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH*3, null=True,blank=True)  # check in validation that allowed choice
     groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
