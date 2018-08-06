@@ -74,15 +74,23 @@ class Hashable(models.Model):
     class Meta:
         abstract = True
 
+class Sourceable(models.Model):
+    source = models.CharField(max_length=CHAR_MAX_LENGTH)  # todo: to file_filed
+    figure = models.CharField(max_length=CHAR_MAX_LENGTH)  # todo: to file_filed
+    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    @staticmethod
+    def fields():
+        return ["source","figure","format"]
 
 class Valueable(models.Model):
     """ Add fields to store values.
 
     In addition all the statistical values are stored.
     """
-
-
-
     count = models.IntegerField(null=True, blank=True)  # how many participants in characteristics
     value = models.FloatField(null=True, blank=True)
 
@@ -99,5 +107,29 @@ class Valueable(models.Model):
     class Meta:
         abstract = True
 
-    # FIXME: all validation rules & methods should be on Valuable
-    # for instance, if choice set, other fields must be empty, ...
+    @staticmethod
+    def fields():
+        return ["value",  "mean",  "median",  "min", "max", "sd",  "se",  "cv",  "unit", ]
+
+
+class ValueableMap(models.Model):
+    count_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # how many participants in characteristics
+    value_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    mean_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    median_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    min_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    max_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    sd_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    se_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    cv_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    unit_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+    @staticmethod
+    def fields():
+        return ["value_map", "mean_map", "median_map",  "min_map", "max_map","sd_map", "se_map", "cv_map", "unit_map" ]
+

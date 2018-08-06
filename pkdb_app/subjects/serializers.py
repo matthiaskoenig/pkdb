@@ -1,4 +1,8 @@
+import pandas as pd
 from rest_framework import serializers
+
+from pkdb_app.behaviours import Sourceable
+from pkdb_app.categoricals import FORMAT_MAPPING
 from .models import Group, GroupSet,Individual,IndividualSet,Characteristica
 
 from ..studies.models import Reference
@@ -9,17 +13,28 @@ from collections import OrderedDict
 
 
 
-class CharacteristicaSerializer(serializers.ModelSerializer):
+class CharacteristicaSerializer(ParserSerializer):
 
     count = serializers.IntegerField(required=False)
 
     class Meta:
         model = Characteristica
-        fields = "__all__"
+        fields = ["category","choice","ctype","count","value","mean","median","min","max","sd","se","cv","unit",
+                  "count_map","value_map","mean_map","median_map","min_map","max_map","sd_map","se_map","cv_map","unit_map"]
+
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+
+    def to_internal_value(self, data):
+        """
+
+        :param data:
+        :return:
+        """
+        data = self.split_to_map(data)
+        return super(CharacteristicaSerializer, self).to_internal_value(data)
 
 
 class GroupSerializer(ParserSerializer):
@@ -28,7 +43,6 @@ class GroupSerializer(ParserSerializer):
     class Meta:
         model = Group
         fields = ["name","count","characteristica"]
-
 
 
     def to_internal_value(self, data):
@@ -61,41 +75,70 @@ class GroupSetSerializer(ParserSerializer):
 
 
 
-'''
-class CharacteristicValueSerializer(serializers.ModelSerializer):
+class IndividualSerializer(ParserSerializer):
+    characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False,allow_null=True)
+    group =  serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name',read_only=False,required=False, allow_null=True) #todo: filter for only this study
 
-    count = serializers.IntegerField(required=False)
+    #todo:add figure
+
 
     class Meta:
-        model = Characteristica
-        fields = "__all__"
+            model = Individual
+            fields = Sourceable.fields() + ["name","name_map",  "group_map", "characteristica","group"]
 
-    def to_representation(self, instance):
-        result = super().to_representation(instance)
-        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
-
-
-class GroupSerializer(serializers.ModelSerializer):
-    characteristic_values = CharacteristicValueSerializer(many=True, read_only=False)
-    interventions = ProtocolSerializer(many=True, read_only=False)
-
-    class Meta:
-            model = Group
-            fields = BASE_FIELDS + ( 'name', 'count','description','characteristic_values', 'intervention')
-
-
-    def create(self, validated_data):
-        group , _ = Group.objects.update_or_create(name=validated_data["name"], defaults=validated_data)
-        return group
-
-    def to_representation(self, instance):
+    def to_internal_value(self, data):
         """
-        this method reduces the serialized output to not non-values.
-        :param instance:
+
+        :param data:
         :return:
         """
-        result = super().to_representation(instance)
-        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+        data = self.generic_parser(data, "characteristica")
+        data = self.split_to_map(data)
+        #data = self.parse_individuals(data) #todo: this has to be done on CleanIndividual
+
+        return super(IndividualSerializer, self).to_internal_value(data)
+
+    def parse_individuals(self,data):
+        try:
+            individuals = data
+            unpacked_individuals = []
+            for individual in individuals:
+                src =  individual.pop("source")  # todo: upload data first and then have the data saved here not the path.
+                characteristica_mapping =  individual.pop("characteristica")
+
+                delimiter = FORMAT_MAPPING[ individual.pop("format")].delimiter
+                individual_mapping =  individual
+                table = pd.read_csv(src, delimiter=delimiter, keep_default_na=False)
+                characteristica_table = self.mapping_parser(characteristica_mapping,table)
+                individuals_table = self.mapping_parser(individual_mapping,table)
+                individuals_table["characteristica"] = characteristica_table.to_dict('records')
+                unpacked_individuals += individuals_table.to_dict('recods')
+
+            data = unpacked_individuals
 
 
-'''
+        except KeyError:
+            pass
+        return data
+
+
+class IndividualSetSerializer(ParserSerializer):
+    characteristica = CharacteristicaSerializer(many=True,read_only=False, required=False)
+    individuals = IndividualSerializer(many=True,read_only=False, required=False)
+
+
+    class Meta:
+        model = IndividualSet
+        fields = ["description", "individuals", "characteristica"]
+
+    def to_internal_value(self, data):
+        """
+
+        :param data:
+        :return:
+        """
+        data = self.generic_parser(data,"characteristica")
+
+        return super(IndividualSetSerializer, self).to_internal_value(data)
+
+

@@ -102,6 +102,11 @@ CHARACTERISTICA_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
 CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
 
 
+FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
+
+FORMAT_MAPPING = {"TSV":FileFormat("TSV",'\t'),
+                  "CSV":FileFormat("CSV",",")}
+
 STUDY_DESIGN_DATA = [
     "single group",  # (interventional study)
     "parallel group",  #  (interventional study)
