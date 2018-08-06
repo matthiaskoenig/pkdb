@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
-from pkdb_app.interventions.models import Substance, InterventionSet, Intervention
+from pkdb_app.behaviours import Sourceable, Valueable, ValueableMap
+from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet
 from pkdb_app.serializers import ParserSerializer
+from pkdb_app.subjects.models import IndividualSet, Individual, Group
 
 
 class SubstanceSerializer(serializers.ModelSerializer):
@@ -40,3 +42,25 @@ class InterventionSetSerializer(ParserSerializer):
         return super(InterventionSetSerializer, self).to_internal_value(data)
 
 
+class OutputSerializer(serializers.ModelSerializer):
+    group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', read_only=False,
+                                         required=False, allow_null=True)
+    individual = serializers.SlugRelatedField(queryset=Individual.objects.all(), slug_field='name', read_only=False,
+                                         required=False, allow_null=True)
+    intervention =  serializers.SlugRelatedField(queryset=Intervention.objects.all(), slug_field='name',read_only=False,required=False, allow_null=True)
+    substance = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',read_only=False,required=False, allow_null=True)
+
+    class Meta:
+        model = Output
+        fields =  Sourceable.fields() + Valueable.fields() + ValueableMap.fields() + ["pktype", "pktype_map", "time",
+                  "time_map","group", "group_map", "individual", "individual_map", "intervention", "intervention_map",
+                   "substance","substance_map","tissue", "tissue_map"]
+
+
+class OutputSetSerializer(ParserSerializer):
+    outputs = OutputSerializer(many=True, read_only=False)
+
+
+    class Meta:
+        model = OutputSet
+        fields = ["outputs","description"]

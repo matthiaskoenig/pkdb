@@ -7,7 +7,7 @@ group or individual).
 from django.db import models
 
 from pkdb_app.interventions.managers import InterventionSetManager
-from ..behaviours import Valueable, Describable
+from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import PROTOCOL_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES
@@ -99,6 +99,10 @@ class Intervention(Valueable,models.Model):
         return self.intervention_data.choices
 
 
+    class Meta:
+        unique_together = ('interventionset', 'name')
+
+
 class CleanIntervention(Intervention):
     """ Calculated from medicationstep
     """
@@ -106,8 +110,8 @@ class CleanIntervention(Intervention):
 # -----------------
 # RESULTS
 # -----------------
-
 #
+
 class OutputSet(Set):
     pass
 
@@ -121,8 +125,24 @@ class BaseOutput(models.Model):
     class Meta:
         abstract = True
 
+class BaseOutputMap(models.Model):
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    intervention_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
 
-class Output(Valueable,BaseOutput,models.Model):
+    class Meta:
+        abstract = True
+
+class OutputMap(models.Model):
+    pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    time_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+class Output(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutput,models.Model):
 
     outputset = models.ForeignKey(OutputSet, related_name="outputs", on_delete=models.CASCADE)
 
@@ -132,7 +152,7 @@ class Output(Valueable,BaseOutput,models.Model):
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES)
     time = models.FloatField(null=True,blank=True)
     # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
-    files = models.ForeignKey(DataFile, on_delete=True)
+    #files = models.ForeignKey(DataFile, on_delete=True)
 
 
 class Timecourse(BaseOutput):
@@ -154,8 +174,6 @@ class CleanTimecourse(Timecourse):
 
 
 '''
-
-
 class Pharmacokinetics(Output, Valueable):
     """ Measured value (calculated value via ProcessedPharmacokinetics)
 

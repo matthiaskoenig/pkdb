@@ -49,7 +49,7 @@ class Study(Sidable, models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
     reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
-    curators =  models.ManyToManyField(User)  # any curator needs an account.
+    curators = models.ManyToManyField(User)  # any curator needs an account.
     substances = models.ManyToManyField(Substance)
     raw_data = models.ManyToManyField(DataFile) # FIXME: is this the right name?
     groupset = models.OneToOneField(GroupSet, on_delete=models.CASCADE,null=True, blank=True)

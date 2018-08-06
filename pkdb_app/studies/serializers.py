@@ -3,15 +3,15 @@ from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from pkdb_app.categoricals import SUBSTANCES_DATA
-from pkdb_app.interventions.models import Substance, InterventionSet
-from pkdb_app.interventions.serializers import SubstanceSerializer, InterventionSetSerializer
-from pkdb_app.subjects.serializers import GroupSetSerializer
+from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet
+from pkdb_app.interventions.serializers import SubstanceSerializer, InterventionSetSerializer, OutputSetSerializer
+from pkdb_app.subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from pkdb_app.users.models import User
 from pkdb_app.users.serializers import UserSerializer
 from .models import Reference, Author, Study
 from django.core.exceptions import ObjectDoesNotExist
 #from ..subjects.serializers import GroupSerializer
-from ..subjects.models import Group, GroupSet
+from ..subjects.models import Group, GroupSet, IndividualSet
 from ..serializers import BaseSerializer
 from django.shortcuts import get_object_or_404
 
@@ -67,55 +67,74 @@ class ReferenceSerializer(BaseSerializer):
 
 
 class StudySerializer(BaseSerializer):
-    reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False)
-    groupset = GroupSetSerializer(read_only=False, required=False)
-    curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False)
-    creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False)
-    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True)
-    interventionset = InterventionSetSerializer(read_only=False, required=False)
+    reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False,allow_null=True)
+    groupset = GroupSetSerializer(read_only=False, required=False,allow_null=True)
+    curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False,allow_null=True)
+    creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False,allow_null=True)
+    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True,allow_null=True)
+    interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
+    individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
+    outputset =OutputSetSerializer(read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = Study
         fields = BASE_FIELDS + ('sid','name',"creator","pkdb_version","design",'reference',"curators",
-                                "groupset", "interventionset","substances")
+                                "groupset", "interventionset","individualset","outputset","substances")
 
-    def create(self, validated_data):
-        interventionset_data = validated_data.pop('interventionset',None)
+    @staticmethod
+    def pop_relations(validated_data):
+        related = {}
+        related["interventionset_data"] = validated_data.pop('interventionset', None)
+        related["substances_data"] = validated_data.pop('substances', [])
+        related["curators_data"] = validated_data.pop('curators', [])
+        related["groupset_data"] = validated_data.pop('groupset', None)
+        related["individualset_data"] = validated_data.pop('individualset', None)
+        related["outputset_data"] = validated_data.pop('outputset', None)
+        related["creator_data"] = validated_data.pop('creator', None)
 
-        substances_data = validated_data.pop('substances', [])
-        curators_data = validated_data.pop('curators', [])
-        groupset_data = validated_data.pop('groupset', None)
-        creator_data = validated_data.pop('creator', None)
-        reference = validated_data.pop('reference')
-
+        related["reference"] = validated_data.pop('reference')
 
         try:
-            creator = User.objects.get(username=creator_data)
+            related["creator"] = User.objects.get(username=related["creator_data"])
         except ObjectDoesNotExist:
-            creator = None
+            related["creator"] = None
 
-        study, _ = Study.objects.update_or_create(sid=validated_data["sid"], reference=reference, creator=creator, defaults=validated_data,)
+        return related
 
-        if groupset_data is not None:
-            groupset = GroupSet.objects.create(**groupset_data)
+    @staticmethod
+    def create_relations(study, related):
+        if related["groupset_data"] is not None:
+            groupset = GroupSet.objects.create(**related["groupset_data"])
 
             groupset.save()
             study.groupset = groupset
 
-        if interventionset_data is not None:
-            interventionset = InterventionSet.objects.create(**interventionset_data)
+        if related["individualset_data"] is not None:
+            individualset = IndividualSet.objects.create(**related["individualset_data"])
+
+            individualset.save()
+            study.individualset = individualset
+
+        if related["interventionset_data"] is not None:
+            interventionset = InterventionSet.objects.create(**related["interventionset_data"])
             interventionset.save()
             study.interventionset = interventionset
         study.save()
 
-        for curator_data in curators_data:
+        if related["outputset_data"] is not None:
+            outputset = OutputSet.objects.create(**related["outputset_data"])
+            outputset.save()
+            study.outputset = outputset
+        study.save()
+
+        for curator_data in related["curators_data"]:
             try:
                 curator = User.objects.get(username=curator_data)
             except ObjectDoesNotExist:
                 curator = None
             study.curators.add(curator)
 
-        for substance_data in substances_data:
+        for substance_data in related["substances_data"]:
             try:
                 substance = Substance.objects.get(name=substance_data)
             except ObjectDoesNotExist:
@@ -123,56 +142,36 @@ class StudySerializer(BaseSerializer):
             study.substances.add(substance)
 
         study.save()
+
+        return study
+
+
+    def create(self, validated_data):
+        related = self.pop_relations(validated_data)
+
+        study, _ = Study.objects.update_or_create(sid=validated_data["sid"],
+                                                  reference=related["reference"],
+                                                  creator=related["creator"],
+                                                  defaults=validated_data,)
+
+        study = self.create_relations(study,related)
+
+
         return study
 
     def update(self, instance, validated_data):
-        groupset_data = validated_data.pop('groupset',None)
-        interventionset_data = validated_data.pop('interventionset',None)
-        substances_data = validated_data.pop('substances', [])
-        curators_data = validated_data.pop('curators', [])
-        creator_data = validated_data.pop('creator', None)
 
-        try:
-            creator = User.objects.get(username=creator_data)
-        except ObjectDoesNotExist:
-            creator = None
+        related = self.pop_relations(validated_data)
 
-        instance.creator = creator
+
+
+        instance.creator =  related["creator"]
 
         for name, value in validated_data.items():
             setattr(instance, name, value)
 
         instance.save()
-
-
-        if interventionset_data is not None:
-            interventionset = InterventionSet.objects.create(**interventionset_data)
-            interventionset.save()
-            instance.interventionset = interventionset
-        instance.save()
-
-        if groupset_data is not None:
-            groupset = GroupSet.objects.create(**groupset_data)
-
-            groupset.save()
-            instance.groupset = groupset
-
-        instance.save()
-
-        for curator_data in curators_data:
-            try:
-                curator = User.objects.get(username=curator_data)
-            except ObjectDoesNotExist:
-                curator = None
-            instance.curators.add(curator)
-        instance.save()
-
-        for substance_data in substances_data:
-            try:
-                substance = Substance.objects.get(name=substance_data)
-            except ObjectDoesNotExist:
-                substance = None
-            instance.substances.add(substance)
+        instance = self.create_relations(instance,related)
 
         return instance
 

@@ -7,11 +7,11 @@ From the data structure this has to be handled very similar.
 """
 
 from django.db import models
-from ..behaviours import Valueable, Describable
+from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
-from .managers import GroupManager, GroupSetManager
+from .managers import GroupManager, GroupSetManager, IndividualManager, IndividualSetManager
 
 
 # TODO: Add ExclusionCriteria as extra class on group | or via field ?
@@ -59,29 +59,60 @@ class Group(models.Model):
     def reference(self):
         return self.groupset.reference
 
+    @property
+    def study(self):
+        return self.groupset.study
+
+    class Meta:
+        unique_together = ('groupset', 'name')
+
 
 class IndividualSet(Set):
-    pass
+    objects = IndividualSetManager()
 
 
-class Individual(models.Model):
+class IndividualMap(models.Model):
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class Individual(IndividualMap,Sourceable,models.Model):
     """ Individual or group of people.
 
     Individuals are defined via their characteristics.
     """
     individualset = models.ForeignKey(IndividualSet,on_delete=models.CASCADE, related_name="individuals")
-    group =  models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals")
+    group =  models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals",null=True, blank=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    ###############
 
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    objects = IndividualManager()
 
-    #objects = GroupManager()
+
 
     @property
     def reference(self):
         return self.individualset.reference
 
+    @property
+    def study(self):
+        return self.individualset.study
 
-class Characteristica(Valueable, models.Model):
+    def groups_in_study(self):
+        return self.study.groupset.groups
+
+    class Meta:
+        unique_together = ('individualset','name','name_map','source')
+
+    def __str__(self):
+        return self.name
+
+
+
+class Characteristica(ValueableMap,Valueable, models.Model):
     """ Characteristic.
 
         Characteristics are used to store information about a group of subjects.
@@ -102,8 +133,8 @@ class Characteristica(Valueable, models.Model):
     choice = models.CharField(max_length=CHAR_MAX_LENGTH*3, null=True,blank=True)  # check in validation that allowed choice
     groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
-    individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
+    individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
     ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA) #this is for exclusion and inclustion
 
 

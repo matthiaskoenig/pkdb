@@ -28,7 +28,7 @@ USERS = [Jan_G_U, Matthias_K]
 
 
 def get_reference_json_path():
-    #fill_user_and_substances()
+    fill_user_and_substances()
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "reference.json" in files:
             json_file = os.path.join(root, 'reference.json')
@@ -81,10 +81,12 @@ def upload_study(json_study):
     study_partial["groupset"] = json_study["json"]["groupset"]
     study_partial["interventionset"] = json_study["json"]["interventionset"]
 
+    study_partial["individualset"] = json_study["json"].get("individualset",None)
+    study_partial["outputset"] = json_study["json"].get("outputset",None)
 
 
+    client.action(document, ["studies", "create"], params=study_partial)
 
-    data = client.action(document, ["studies", "create"], params=study_partial)
 def get_graph_references(**options):
     graph = bonobo.Graph()
     # add studies

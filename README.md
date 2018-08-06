@@ -55,6 +55,7 @@ docker-compose run --rm web ./manage.py createsuperuser
 ```
 # reset migrations
 sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete && sudo find . -path "*/migrations/*.pyc"  -delete
+sudo rm -r media/study/
 
 # rebuild container
 docker-compose down
