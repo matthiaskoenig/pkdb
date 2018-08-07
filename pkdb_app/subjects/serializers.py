@@ -73,11 +73,16 @@ class GroupSetSerializer(ParserSerializer):
         return super(GroupSetSerializer, self).to_internal_value(data)
 
 
-
+class GroupSRField(serializers.SlugRelatedField):
+    def get_queryset(self):
+        study = self.context["study"]
+        queryset = Group.objects.filter(groupset__study__sid = study)
+        return queryset
 
 class IndividualSerializer(ParserSerializer):
+
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False,allow_null=True)
-    group =  serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name',read_only=False,required=False, allow_null=True) #todo: filter for only this study
+    group = GroupSRField( slug_field='name',read_only=False,required=False, allow_null=True) #todo: filter for only this study
 
     #todo:add figure
 

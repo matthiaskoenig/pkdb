@@ -45,9 +45,20 @@ UNIT_DATA = UNIT_TIME + [
     UnitType('yr'),
     UnitType('kg/m^2'),
     UnitType('1/day'),
+    UnitType('1/h'),
     UnitType('IU/I'),
     UnitType('mg/dl'),
-    UnitType('g/dl')
+    UnitType('g/dl'),
+    UnitType('l/kg'),
+    UnitType("ml/min/kg"),
+    UnitType("µg/ml*h"),
+    UnitType("Âµg/ml"),
+    UnitType("µg/ml"),
+    UnitType("mg"),
+    UnitType("ml/min/1.73m^2"),
+
+
+
 ]
 
 
@@ -126,6 +137,14 @@ SUBSTANCES_DATA = [
     "paraxanthine/caffeine",
     "theobromine",
     "theophylline",
+    "chlorozoxazone",
+    "lomefloxacin",
+    "AAMU",
+    "1U",
+    "17X",
+    "17U",
+    "37X",
+    "1X",
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -199,13 +218,15 @@ PK_DATA = [
     "clearance_unbound",
     "ratio",
     "clearance_tbc",
+    "caf_px_6h",
 ]
 OUTPUT_TISSUE_DATA = [
     "saliva",
     "plasma",
     "urine",
+    "urine (24h)",
 ]
-
+OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 PK_DATA_CHOICES = create_choices(PK_DATA)
 
 # class, value, dtype (numeric, boolean, categorial), choices
