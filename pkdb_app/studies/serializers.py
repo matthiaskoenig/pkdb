@@ -67,7 +67,7 @@ class ReferenceSerializer(BaseSerializer):
 
 
 class StudySerializer(BaseSerializer):
-    reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False,allow_null=True)
+    reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False, allow_null=True)
     groupset = GroupSetSerializer(read_only=False, required=False,allow_null=True)
     curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False,allow_null=True)
     creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False,allow_null=True)
@@ -81,6 +81,12 @@ class StudySerializer(BaseSerializer):
         fields = BASE_FIELDS + ('sid','name',"creator","pkdb_version","design",'reference',"curators",
                                 "groupset", "interventionset","individualset","outputset","substances")
 
+    def to_internal_value(self, data):
+        sid = data.get("sid")
+        self.context["study"] = sid
+
+        return super().to_internal_value(data)
+
     @staticmethod
     def pop_relations(validated_data):
         related = {}
@@ -92,13 +98,12 @@ class StudySerializer(BaseSerializer):
         related["outputset_data"] = validated_data.pop('outputset', None)
         related["creator_data"] = validated_data.pop('creator', None)
 
-        related["reference"] = validated_data.pop('reference')
+        related["reference"] = validated_data.pop('reference',None)
 
         try:
             related["creator"] = User.objects.get(username=related["creator_data"])
         except ObjectDoesNotExist:
             related["creator"] = None
-
         return related
 
     @staticmethod
@@ -163,9 +168,8 @@ class StudySerializer(BaseSerializer):
 
         related = self.pop_relations(validated_data)
 
-
-
-        instance.creator =  related["creator"]
+        if related["creator"] is not None:
+            instance.creator =  related["creator"]
 
         for name, value in validated_data.items():
             setattr(instance, name, value)
@@ -174,4 +178,5 @@ class StudySerializer(BaseSerializer):
         instance = self.create_relations(instance,related)
 
         return instance
+
 

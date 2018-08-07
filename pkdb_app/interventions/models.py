@@ -6,11 +6,11 @@ group or individual).
 
 from django.db import models
 
-from pkdb_app.interventions.managers import InterventionSetManager
+from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager
 from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import PROTOCOL_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
-    SUBSTANCES_DATA_CHOICES
+    SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
 from ..subjects.models import Group, Individual, Set
 from ..utils import CHAR_MAX_LENGTH
 
@@ -78,7 +78,7 @@ class Intervention(Valueable,models.Model):
     form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_FORM_CHOICES)
 
     application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_APPLICATION_CHOICES) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
-    application_time = models.FloatField(null=True,blank=False)  #application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
+    application_time = models.DecimalField(max_digits = 40,decimal_places=20,null=True,blank=False)  #application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
 
     ######
@@ -113,14 +113,14 @@ class CleanIntervention(Intervention):
 #
 
 class OutputSet(Set):
-    pass
+    objects = OutputSetManager()
 
 class BaseOutput(models.Model):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=False)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=False)
-    intervention = models.ForeignKey(Intervention, on_delete=False)
-    substance = models.ForeignKey(Substance, on_delete=False)
-    tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES ,null=True, blank=True)
+    intervention = models.ForeignKey(Intervention,null=True, blank=True, on_delete=False)
+    substance = models.ForeignKey(Substance, null=True, blank=True,on_delete=False)
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=OUTPUT_TISSUE_DATA_CHOICES ,null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -149,8 +149,8 @@ class Output(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutpu
     """ Storage of data sets. """
 
 
-    pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES)
-    time = models.FloatField(null=True,blank=True)
+    pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES, null=True, blank=True)
+    time = models.DecimalField(max_digits = 40,decimal_places=20,null=True,blank=True)
     # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
     #files = models.ForeignKey(DataFile, on_delete=True)
 

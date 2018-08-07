@@ -15,6 +15,7 @@ class BaseSerializer(serializers.ModelSerializer):
     def is_valid(self, raise_exception=False):
         if "sid" in self.initial_data.keys():
             sid = self.initial_data.get("sid")
+            self.context["study"] = sid
             try:
                 # Try to get the object in question
                 obj = self.Meta.model.objects.get(sid = sid)
@@ -112,12 +113,36 @@ class ParserSerializer(serializers.ModelSerializer):
     def split_to_map(data):
         splitted_data = {}
         for key,value in data.items():
-            if "==" in value:
-                splitted_data[f"{key}_map"] = data.get(key)
-            else:
-                splitted_data[key] = data.get(key)
+            try:
+                if "==" in value:
+                    splitted_data[f"{key}_map"] = data.get(key)
+                else:
+                    splitted_data[key] = data.get(key)
+            except :
+                    splitted_data[key] = data.get(key)
+
         return splitted_data
 
+    @staticmethod
+    def drop_blank(data):
+        return {k: v for k, v in data.items() if v is not None}
+
+    @staticmethod
+    def drop_empty(data):
+        return {k:v for k, v in data.items() if (not v and isinstance(v, str) )}
+
+
+    @staticmethod
+    def strip(data):
+        data_stripped = {}
+
+        for k, v in data.items():
+            if isinstance(v, str):# and not k=="name"):
+                v = v.strip()
+            data_stripped[k] = v
+
+
+        return data_stripped
 
 
     def to_representation(self, instance):

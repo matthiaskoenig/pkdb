@@ -20,8 +20,8 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "ethnicity",
+                        "choice": null
                     },
                     {
                         "category": "weight",
@@ -32,26 +32,30 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "alcohol",
-                        "choice": null
+                        "category": "smoking amount",
+                        "min": "10",
+                        "max": "20",
+                        "unit": "1/day"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "smoking",
+                        "choice": "2 Y || 10 N "
                     },
                     {
                         "category": "caffeine",
                         "choice": "10  || regular useres of caffeine"
                     },
                     {
-                        "category": "smoking amount",
-                        "min": "10",
-                        "max": "20",
-                        "unit": "1/day"
+                        "category": "sex",
+                        "choice": "5 M || 7 F"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -62,16 +66,12 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "sex",
-                        "choice": "5 M || 7 F"
+                        "category": "oral contraceptives",
+                        "choice": null
                     },
                     {
-                        "category": "smoking",
-                        "choice": "2 Y || 10 N "
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "alcohol",
+                        "choice": null
                     }
                 ]
             }

@@ -16,16 +16,16 @@
         "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
         "characteristica": [
             {
-                "category": "oral contraceptives",
-                "choice": "N"
-            },
-            {
                 "category": "smoking",
                 "choice": "N"
             },
             {
                 "category": "healthy",
                 "choice": "Y"
+            },
+            {
+                "category": "oral contraceptives",
+                "choice": "N"
             },
             {
                 "category": "species",
@@ -38,6 +38,14 @@
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "age",
+                        "mean": "41.6",
+                        "min": "29",
+                        "max": "47",
+                        "sd": "6.44",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "sex",
                         "choice": "3 M || 2 F"
                     },
@@ -48,14 +56,6 @@
                         "max": "88",
                         "sd": "12.1",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "41.6",
-                        "min": "29",
-                        "max": "47",
-                        "sd": "6.44",
-                        "unit": "yr"
                     }
                 ]
             },
@@ -64,12 +64,8 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "weight",
-                        "mean": "70.33",
-                        "min": "58",
-                        "max": "91",
-                        "sd": "14.7",
-                        "unit": "kg"
+                        "category": "sex",
+                        "choice": "2 M || 1 F"
                     },
                     {
                         "category": "age",
@@ -80,8 +76,12 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "sex",
-                        "choice": "2 M || 1 F"
+                        "category": "weight",
+                        "mean": "70.33",
+                        "min": "58",
+                        "max": "91",
+                        "sd": "14.7",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -89,10 +89,6 @@
                 "count": 4,
                 "name": "S3",
                 "characteristica": [
-                    {
-                        "category": "sex",
-                        "choice": "2 M || 2 F"
-                    },
                     {
                         "category": "age",
                         "mean": "27.25",
@@ -108,6 +104,10 @@
                         "max": "75",
                         "sd": "10.9",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "2 M || 2 F"
                     }
                 ]
             }
@@ -199,7 +199,7 @@
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.63,
-                "tissue": "salvia",
+                "tissue": "saliva",
                 "sd": 0.11,
                 "min": 0.55,
                 "max": 0.84,
@@ -211,7 +211,7 @@
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.7,
-                "tissue": "salvia",
+                "tissue": "saliva",
                 "sd": 0.05,
                 "min": 0.64,
                 "max": 0.77,
@@ -223,7 +223,7 @@
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.59,
-                "tissue": "salvia",
+                "tissue": "saliva",
                 "sd": 0.05,
                 "min": 0.53,
                 "max": 0.65,

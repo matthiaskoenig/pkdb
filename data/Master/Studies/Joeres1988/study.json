@@ -30,18 +30,18 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "age",
-                        "min": "25",
-                        "max": "45",
-                        "unit": "yr"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
                         "category": "smoking",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "min": "25",
+                        "max": "45",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
@@ -54,16 +54,16 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
                         "category": "sex",
                         "choice": null
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             },
@@ -72,11 +72,11 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "healthy",
+                        "category": "smoking",
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
+                        "category": "healthy",
                         "choice": "Y"
                     },
                     {
@@ -90,16 +90,16 @@
                 "name": "S4",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
                         "category": "sex",
                         "choice": null
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             },
@@ -112,12 +112,20 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "sex",
-                        "choice": "13 M || 5 F"
+                        "category": "weight",
+                        "mean": "71",
+                        "min": "51",
+                        "max": "94",
+                        "sd": "14",
+                        "unit": "kg"
                     },
                     {
                         "category": "disease",
                         "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "13 M || 5 F"
                     },
                     {
                         "category": "age",
@@ -130,14 +138,6 @@
                     {
                         "category": "healthy",
                         "choice": "N"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "71",
-                        "min": "51",
-                        "max": "94",
-                        "sd": "14",
-                        "unit": "kg"
                     }
                 ]
             },
@@ -146,16 +146,20 @@
                 "name": "S6",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "51",
+                        "min": "40",
+                        "max": "66",
+                        "sd": "6",
+                        "unit": "yr"
                     },
                     {
                         "category": "sex",
                         "choice": "21 M || 9 F"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
                     },
                     {
                         "category": "weight",
@@ -170,12 +174,8 @@
                         "choice": "N"
                     },
                     {
-                        "category": "age",
-                        "mean": "51",
-                        "min": "40",
-                        "max": "66",
-                        "sd": "6",
-                        "unit": "yr"
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             }

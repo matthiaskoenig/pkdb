@@ -16,12 +16,12 @@
         "description": "15 healthy, nonmedicated (except for use of oral contraceptives in five subjects) white subjects participated in this study and were selected to include five nonsmoking oral contraceptive users, five nonsmokers, and five smokers (approximately 20 cigarettes per day). Subjects abstained from methylxanthine-containing foods and beverages for 48 hours before and for the duration of the study.",
         "characteristica": [
             {
-                "category": "ethnicity",
-                "choice": "Caucasian"
-            },
-            {
                 "category": "healthy",
                 "choice": "Y"
+            },
+            {
+                "category": "ethnicity",
+                "choice": "Caucasian"
             },
             {
                 "category": "sex",
@@ -46,16 +46,16 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "N"
-                    },
-                    {
                         "category": "age",
                         "mean": "24.6",
                         "min": "21",
                         "max": "30",
                         "sd": "3",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "N"
                     },
                     {
                         "category": "smoking",
@@ -67,14 +67,6 @@
                 "count": 5,
                 "name": "S2",
                 "characteristica": [
-                    {
-                        "category": "age",
-                        "mean": "25",
-                        "min": "24",
-                        "max": "26",
-                        "sd": "0.89",
-                        "unit": "yr"
-                    },
                     {
                         "category": "weight",
                         "mean": "64",
@@ -88,6 +80,14 @@
                         "choice": "Y"
                     },
                     {
+                        "category": "age",
+                        "mean": "25",
+                        "min": "24",
+                        "max": "26",
+                        "sd": "0.89",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N"
                     }
@@ -98,20 +98,8 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "oral contraceptives",
-                        "choice": "N"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "57.6",
-                        "min": "56",
-                        "max": "59",
-                        "sd": "1.2",
-                        "unit": "kg"
                     },
                     {
                         "category": "age",
@@ -120,6 +108,18 @@
                         "max": "42",
                         "sd": "7.96",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "57.6",
+                        "min": "56",
+                        "max": "59",
+                        "sd": "1.2",
+                        "unit": "kg"
                     }
                 ]
             }

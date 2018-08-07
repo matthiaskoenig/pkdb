@@ -30,6 +30,10 @@
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "sex",
+                        "choice": "4 M || 8 F"
+                    },
+                    {
                         "category": "height",
                         "mean": "170.83",
                         "min": "158",
@@ -60,10 +64,6 @@
                     {
                         "category": "oral contraceptives",
                         "choice": "3 Y  ||  5 N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "4 M || 8 F"
                     }
                 ]
             },
@@ -76,24 +76,20 @@
                         "choice": "Y"
                     },
                     {
+                        "category": "oral contraceptives",
+                        "choice": "2 Y || 2 N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "2 M || 4 F"
+                    },
+                    {
                         "category": "age",
                         "mean": "34.5",
                         "min": "21",
                         "max": "56",
                         "sd": "14.06",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "67.5",
-                        "min": "39",
-                        "max": "80",
-                        "sd": "14.6",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "2 M || 4 F"
                     },
                     {
                         "category": "height",
@@ -104,8 +100,12 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "2 Y || 2 N"
+                        "category": "weight",
+                        "mean": "67.5",
+                        "min": "39",
+                        "max": "80",
+                        "sd": "14.6",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -114,12 +114,12 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "sex",
                         "choice": "2 M || 4  F"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "1 Y || 3 N"
                     },
                     {
                         "category": "weight",
@@ -128,10 +128,6 @@
                         "max": "98",
                         "sd": "15.7",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": "1 Y || 3 N"
                     },
                     {
                         "category": "age",
@@ -148,6 +144,10 @@
                         "max": "190",
                         "sd": "10.59",
                         "unit": "cm"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             }

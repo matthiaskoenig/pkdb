@@ -80,12 +80,16 @@ def upload_study(json_study):
     study_partial["creator"] = json_study["json"]["creator"]
     study_partial["groupset"] = json_study["json"]["groupset"]
     study_partial["interventionset"] = json_study["json"]["interventionset"]
-
     study_partial["individualset"] = json_study["json"].get("individualset",None)
-    study_partial["outputset"] = json_study["json"].get("outputset",None)
 
 
     client.action(document, ["studies", "create"], params=study_partial)
+    if "outputset" in json_study["json"].keys():
+        response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = {"outputset": json_study["json"].get("outputset")})
+        if response.status_code == 400:
+            print(json_study["json"]["name"],response.text)
+    #study_partial["outputset"] = json_study["json"].get("outputset",None)
+
 
 def get_graph_references(**options):
     graph = bonobo.Graph()

@@ -24,12 +24,20 @@
                         "choice": "Y"
                     },
                     {
+                        "category": "smoking",
+                        "choice": null
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "9 M || 2 F"
+                    },
+                    {
                         "category": "disease",
                         "choice": "schizophrenia"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -40,16 +48,8 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "sex",
-                        "choice": "9 M || 2 F"
-                    },
-                    {
-                        "category": "smoking",
+                        "category": "oral contraceptives",
                         "choice": null
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     }
                 ]
             }

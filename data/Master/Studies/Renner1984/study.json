@@ -26,6 +26,26 @@
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "4 N || 6 Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "38",
+                        "min": "27",
+                        "max": "56",
+                        "sd": "11",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
                         "category": "oral contraceptives",
                         "choice": "N"
                     },
@@ -36,26 +56,6 @@
                         "max": "86",
                         "sd": "10",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "4 N || 6 Y"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "38",
-                        "min": "27",
-                        "max": "56",
-                        "sd": "11",
-                        "unit": "yr"
                     }
                 ]
             },
@@ -92,12 +92,12 @@
                         "choice": "6 M || 2 F"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "5 N || 3 Y"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
                     }
                 ]
             },
@@ -106,16 +106,12 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "disease",
-                        "choice": "PBC"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "weight",
+                        "mean": "57",
+                        "min": "49",
+                        "max": "68",
+                        "sd": "8",
+                        "unit": "kg"
                     },
                     {
                         "category": "age",
@@ -126,6 +122,14 @@
                         "unit": "yr"
                     },
                     {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "PBC"
+                    },
+                    {
                         "category": "sex",
                         "choice": "F"
                     },
@@ -134,12 +138,8 @@
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "57",
-                        "min": "49",
-                        "max": "68",
-                        "sd": "8",
-                        "unit": "kg"
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             },
@@ -148,12 +148,20 @@
                 "name": "S4",
                 "characteristica": [
                     {
+                        "category": "age",
+                        "mean": "52",
+                        "min": "24",
+                        "max": "71",
+                        "sd": "12",
+                        "unit": "yr"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "9 N || 2 Y"
                     },
                     {
-                        "category": "disease",
-                        "choice": "Miscellaneous Liver Disease"
+                        "category": "oral contraceptives",
+                        "choice": null
                     },
                     {
                         "category": "weight",
@@ -164,24 +172,16 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "sex",
-                        "choice": "9 M || 2 F"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "age",
-                        "mean": "52",
-                        "min": "24",
-                        "max": "71",
-                        "sd": "12",
-                        "unit": "yr"
+                        "category": "disease",
+                        "choice": "Miscellaneous Liver Disease"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "9 M || 2 F"
                     }
                 ]
             }

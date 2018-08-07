@@ -75,8 +75,8 @@ class Hashable(models.Model):
         abstract = True
 
 class Sourceable(models.Model):
-    source = models.CharField(max_length=CHAR_MAX_LENGTH)  # todo: to file_filed
-    figure = models.CharField(max_length=CHAR_MAX_LENGTH)  # todo: to file_filed
+    source = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # todo: to file_filed
+    figure = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # todo: to file_filed
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
@@ -92,24 +92,24 @@ class Valueable(models.Model):
     In addition all the statistical values are stored.
     """
     count = models.IntegerField(null=True, blank=True)  # how many participants in characteristics
-    value = models.FloatField(null=True, blank=True)
+    value = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
 
-    mean = models.FloatField(null=True, blank=True)
-    median = models.FloatField(null=True, blank=True)
-    min = models.FloatField(null=True, blank=True)
-    max = models.FloatField(null=True, blank=True)
-    sd = models.FloatField(null=True, blank=True)
-    se = models.FloatField(null=True, blank=True)
-    cv = models.FloatField(null=True, blank=True)
+    mean = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    median = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    min = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    max = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    sd = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    se = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    cv = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
 
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
         abstract = True
 
-    @staticmethod
-    def fields():
-        return ["value",  "mean",  "median",  "min", "max", "sd",  "se",  "cv",  "unit", ]
+    #@staticmethod
+    #def fields():
+    #    return ["value",  "mean",  "median",  "min", "max", "sd",  "se",  "cv",  "unit", ]
 
 
 class ValueableMap(models.Model):
@@ -129,7 +129,7 @@ class ValueableMap(models.Model):
     class Meta:
         abstract = True
 
-    @staticmethod
-    def fields():
-        return ["value_map", "mean_map", "median_map",  "min_map", "max_map","sd_map", "se_map", "cv_map", "unit_map" ]
+    #@staticmethod
+    #def fields():
+    #    return ["value_map", "mean_map", "median_map",  "min_map", "max_map","sd_map", "se_map", "cv_map", "unit_map" ]
 

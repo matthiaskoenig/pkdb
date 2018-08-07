@@ -20,8 +20,15 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "70.5",
+                        "min": "47",
+                        "max": "93",
+                        "unit": "kg"
                     },
                     {
                         "category": "height",
@@ -32,15 +39,20 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "weight",
-                        "mean": "70.5",
-                        "min": "47",
-                        "max": "93",
-                        "unit": "kg"
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "8 M || 7 F"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "age",
@@ -48,18 +60,6 @@
                         "min": "21",
                         "max": "41",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "8 M || 7 F"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     }
                 ]
             }
