@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
 from collections import OrderedDict
 import pandas as pd
 import string
@@ -69,15 +69,20 @@ class ParserSerializer(serializers.ModelSerializer):
                     values = list(map(str.strip, values))
                 except AttributeError:
                     values = [value]
+
+                if (key == "name" and len(values) != n):
+                    msg = f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain is violated."
+                    raise ValidationError(msg)
+
                 if len(values) == 1:
                     values = values * n
 
 
-                    if key == "name" and n > 1:
-                        ialpha = iter(string.ascii_uppercase)
-                        values = [f"{value}_{next(ialpha)}" for value in values]
+                    #if key == "name" and n > 1:
+                    #    ialpha = iter(string.ascii_uppercase)
+                    #    values = [f"{value}_{next(ialpha)}" for value in values]
 
-                    data_n[key] = values
+                data_n[key] = values
 
             return data_n
 
@@ -129,8 +134,15 @@ class ParserSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def drop_empty(data):
-        return {k:v for k, v in data.items() if (not v and isinstance(v, str) )}
-
+        dropped_empty = {}
+        for k,v in data.items():
+            if isinstance(v,str):
+                if not v:
+                    print(V)
+                    continue
+            dropped_empty[k] = v
+        #return {k:v for k, v in data.items() if (not v and isinstance(v, str))}
+        return dropped_empty
 
     @staticmethod
     def strip(data):

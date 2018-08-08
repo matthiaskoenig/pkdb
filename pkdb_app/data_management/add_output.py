@@ -25,7 +25,9 @@ def add_outputs_to_study(study):
     for name, data in study_output.groupby(["subjects", "dosing","substance"]):
         output = {}
         output["group"] = name[0]
-        output["intervention"] = name[1]
+        interventions = name[1].split(",")
+        output["interventions"] = list(map(str.strip,interventions))
+
 
         output["substance"] = name[2]
 
@@ -40,8 +42,7 @@ def add_outputs_to_study(study):
             output['min'] = row["min"]
             output['max'] = row["max"]
             output['unit'] = row["unit"]
-
-        study_json["outputset"]["outputs"].append(clean_import(output))
+            study_json["outputset"]["outputs"].append(clean_import(output))
 
     yield {"json":study_json,"study_path": study["study_path"]}
 
@@ -56,7 +57,11 @@ def add_timecourse_to_ouput(data):
         for timecourse in this_timecourse.itertuples(index=False):
             timecourse_dict = timecourse._asdict()
             timecourse_dict.pop("study")
-            this_data["json"]["outputset"]["timecourse"].append(timecourse_dict)
+            if ("interventions" in timecourse_dict and timecourse_dict["interventions"]):
+                timecourse_dict["interventions"] = list(
+                    map(str.strip, timecourse_dict["interventions"].split(",")))
+
+            this_data["json"]["outputset"]["timecourse"].append(clean_import(timecourse_dict))
 
 
     return this_data
@@ -71,7 +76,10 @@ def add_individualmapping_to_ouput(data):
         for individuals_output in this_individuals_output.itertuples(index=False):
             individuals_output_dict = individuals_output._asdict()
             individuals_output_dict.pop("study")
-            this_data["json"]["outputset"]["outputs"].append(individuals_output_dict)
+            if ("interventions" in individuals_output_dict and individuals_output_dict["interventions"]):
+                individuals_output_dict["interventions"] = list(map(str.strip,individuals_output_dict["interventions"].split(",")))
+
+            this_data["json"]["outputset"]["outputs"].append(clean_import(individuals_output_dict))
     return this_data
 
 

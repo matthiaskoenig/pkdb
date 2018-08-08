@@ -105,7 +105,7 @@ def add_individual_set(data):
             individuals_dict["format"] =  individuals_dict_raw["format"]
             individuals_dict["figure"] =  individuals_dict_raw["figure"]
             individuals_dict['characteristica'] = add_characteristic_values(individuals_dict_raw)
-            this_data["json"]["individualset"]["individuals"].append(individuals_dict)
+            this_data["json"]["individualset"]["individuals"].append(clean_import(individuals_dict))
 
 
     return this_data

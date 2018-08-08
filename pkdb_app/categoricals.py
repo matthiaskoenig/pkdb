@@ -56,8 +56,14 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("µg/ml"),
     UnitType("mg"),
     UnitType("ml/min/1.73m^2"),
-
-
+    UnitType("µg/ml*h/kg"),
+    UnitType("l"),
+    UnitType("µmol/l*h"),
+    UnitType("ml/min"),
+    UnitType("mg/l*min"),
+    UnitType("ml/h/kg"),
+    UnitType("mg/l"),
+    UnitType("mg/l*h"),
 
 ]
 
@@ -219,6 +225,7 @@ PK_DATA = [
     "ratio",
     "clearance_tbc",
     "caf_px_6h",
+    "auc24h",
 ]
 OUTPUT_TISSUE_DATA = [
     "saliva",
