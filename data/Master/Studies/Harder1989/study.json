@@ -24,16 +24,16 @@
                         "choice": null
                     },
                     {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "oral contraceptives",
+                        "choice": null
                     },
                     {
                         "category": "sex",
                         "choice": "M"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
                         "category": "age",
@@ -42,8 +42,8 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -62,7 +62,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_OFL",
+                "name": "D_OFL_A  || D_OFL_B ||  D_OFL_C || D_OFL_D",
                 "substance": "ofloxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -71,7 +71,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_NOR",
+                "name": "D_NOR_A  || D_NOR_B ||  D_NOR_C || D_NOR_D",
                 "substance": "norfloxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -80,7 +80,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_PPA",
+                "name": "D_PPA_A  || D_PPA_B ||  D_PPA_C || D_PPA_D",
                 "substance": "pipemidic acid",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -89,7 +89,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_CIP1",
+                "name": "D_CIP1_A || D_CIP1_B || D_CIP1_C || D_CIP1_D",
                 "substance": "ciprofloxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -98,7 +98,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_CIP2",
+                "name": "D_CIP2_A || D_CIP2_B || D_CIP2_C || D_CIP2_D",
                 "substance": "ciprofloxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -107,7 +107,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_CIP3",
+                "name": "D_CIP3_A || D_CIP3_B || D_CIP3_C || D_CIP3_D",
                 "substance": "ciprofloxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -116,7 +116,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_ENX1",
+                "name": "D_ENX1_A || D_ENX1_B || D_ENX1_C || D_ENX1_D",
                 "substance": "enoxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -125,7 +125,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_ENX2",
+                "name": "D_ENX2_A || D_ENX2_B || D_ENX2_C || D_ENX2_D",
                 "substance": "enoxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -134,7 +134,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_ENX3",
+                "name": "D_ENX3_A || D_ENX3_B || D_ENX3_C || D_ENX3_D",
                 "substance": "enoxacin",
                 "time": "0||24||48||72",
                 "time_unit": "h",
@@ -149,7 +149,9 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D_CAF",
+                "interventions": [
+                    "D_CAF"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance",
                 "value": 164.0,
@@ -159,7 +161,13 @@
             },
             {
                 "group": "S1",
-                "intervention": "D_CAF; D_OFL",
+                "interventions": [
+                    "D_CAF",
+                    "D_OFL_A",
+                    "D_OFL_B",
+                    "D_OFL_C",
+                    "D_OFL_D"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance",
                 "value": 160.0,

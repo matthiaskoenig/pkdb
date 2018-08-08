@@ -24,6 +24,18 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
                         "category": "weight",
                         "mean": "76.7",
                         "sd": "6.8",
@@ -34,30 +46,18 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "mean": "27.1",
                         "sd": "3.1",
                         "unit": "yr"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
                         "category": "alcohol",
                         "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -82,7 +82,117 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 4.35,
+                "tissue": "plasma",
+                "sd": 0.63,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 0.78,
+                "tissue": "plasma",
+                "sd": 0.18,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 4.8,
+                "tissue": "plasma",
+                "sd": 1.1,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 30.3,
+                "tissue": "plasma",
+                "sd": 6.9,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance_tbc",
+                "value": 104.0,
+                "tissue": "plasma",
+                "sd": 21.8,
+                "unit": "ml/min/1.73m^2"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 4.07,
+                "tissue": "plasma",
+                "sd": 0.56,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 0.98,
+                "tissue": "plasma",
+                "sd": 0.31,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 4.8,
+                "tissue": "plasma",
+                "sd": 1.2,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 29.7,
+                "tissue": "plasma",
+                "sd": 6.6,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance_tbc",
                 "value": 107.0,
@@ -92,7 +202,45 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "lomefloxacin",
+                "pktype": "cmax",
+                "value": 3.1,
+                "tissue": "plasma",
+                "sd": 0.53,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "lomefloxacin",
+                "pktype": "tmax",
+                "value": 1.45,
+                "tissue": "plasma",
+                "sd": 0.65,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "lomefloxacin",
+                "pktype": "thalf",
+                "value": 6.3,
+                "tissue": "plasma",
+                "sd": 1.8,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "lomefloxacin",
                 "pktype": "auc",
                 "value": 25.2,
@@ -102,7 +250,93 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 1.32,
+                "tissue": "plasma",
+                "sd": 0.23,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 5.88,
+                "tissue": "plasma",
+                "sd": 1.54,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "thalf",
+                "value": 9.2,
+                "tissue": "plasma",
+                "sd": 2.9,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "auc",
+                "value": 21.3,
+                "tissue": "plasma",
+                "sd": 4.9,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 1.34,
+                "tissue": "plasma",
+                "sd": 0.27,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 5.5,
+                "tissue": "plasma",
+                "sd": 1.15,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "thalf",
+                "value": 9.2,
+                "tissue": "plasma",
+                "sd": 4.0,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "paraxanthine",
                 "pktype": "auc",
                 "value": 20.8,
@@ -113,18 +347,8 @@
         ],
         "timecourse": [
             {
-                "group": "",
-                "intervention": "",
                 "source": "Healy1991_Fig.csv",
-                "format": "",
-                "figure": "Healy1991_Fig.png",
-                "substance": "",
-                "tissue": "",
-                "pktype": "",
-                "times": "",
-                "values": "",
-                "sd": "",
-                "unit": ""
+                "figure": "Healy1991_Fig.png"
             }
         ]
     }

@@ -14,13 +14,13 @@ Akinyinka2000	control	S1	D1	caffeine	Tab2	E1	plasma	thalf		7.2	3					h
 Akinyinka2000	control	S1	D1	caffeine	Tab2	E1	plasma	tmax		1.1	1					h	
 Akinyinka2000	control	S1	D1	caffeine	Tab2	E1	plasma	cmax		5.9	2.8					µg/ml	
 Akinyinka2000	control	S1	D1	caffeine	Tab2	E1	plasma	auc		55.6	24					µg/ml*h	
-Akinyinka2000	control	S1	D1	caffeine	Tab2	E1	plasma	auc	yes	0.649	0.251					µg/ml*h/kg	
+Akinyinka2000	control	S1	D1	caffeine	Tab2	E1	plasma	auc	yes	649	251					µg/ml*h/kg	
 Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	clearance	yes	2.4	2					ml/min/kg	
 Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	thalf		9.5	5.2					h	
 Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	tmax		1.3	1.2					h	
 Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	cmax		4.9	1.8					µg/ml	
 Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	auc		74.7	39.7					µg/ml*h	
-Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	auc	yes	0.72	0.569					µg/ml*h/kg	
+Akinyinka2000	Plasmodium falciparum	S2	D1	caffeine	Tab2	E2	plasma	auc	yes	0.72	569					µg/ml*h/kg	
 Akinyinka2000	control	S1	D1	paraxanthine	Tab2	E3	plasma	thalf		9.1	9					h	
 Akinyinka2000	control	S1	D1	paraxanthine	Tab2	E3	plasma	tmax		7.9	3.7					h	
 Akinyinka2000	control	S1	D1	paraxanthine	Tab2	E3	plasma	cmax		1.4	0.5					µg/ml	
@@ -48,7 +48,7 @@ Akinyinka2000	Plasmodium falciparum	S2	D1	theobromine	Tab2	E8	plasma	auc		7.1	3.
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	cmax		5.8	3.2					µg/ml	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	tmax		1.5	1.8					h	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	auc		51.9	26.9					µg/ml*h	
-Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	auc	yes	0.609	0.297					µg/ml*h/kg	
+Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	auc	yes	609	297					µg/ml*h/kg	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	thalf		6	1.7					h	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E1	plasma	clearance	yes	1.8	0.7					ml/min/kg	
 Akinyinka2000	control	S3	D1	paraxanthine	Tab3	E2	plasma	cmax		1.5	0.6					µg/ml	
@@ -58,7 +58,7 @@ Akinyinka2000	control	S3	D1	paraxanthine	Tab3	E2	plasma	thalf		10.5	4.4					h
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	cmax		4.8	8					µg/ml	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	tmax		1.3	1					h	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	auc		35.5	18.9					µg/ml*h	
-Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	auc	yes	0.427	0.239					µg/ml*h/kg	
+Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	auc	yes	427	239					µg/ml*h/kg	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	thalf		7.1	3.8					h	
 Akinyinka2000	control	S3	D1	caffeine	Tab3	E3	saliva	clearance	yes	2.8	1.2					ml/min/kg	
 Akinyinka2000	control	S3	D1	paraxanthine	Tab3	E4	saliva	cmax		1	0.4					µg/ml	
@@ -165,41 +165,41 @@ Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	clearance		104		26				ml/min
 Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	vd		33.7		3.8				l	
 Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	thalf		3.4						h	
 Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	auc		170		29				mg/l*min	
-Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	kel		0.205		0.073				1/h	
+Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	kel		205		73				1/h	
 Bonati1982	control	S1	D1	caffeine	Tab1	E1	plasma	kabs		3.15		0.45				1/h	
 Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	clearance		133		14				ml/min	
 Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	vd		48.7		2.8				l	
 Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	thalf		4.2						h	
 Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	auc		544		64				mg/l*min	
-Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	kel		0.165		0.017				1/h	
+Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	kel		165		17				1/h	
 Bonati1982	control	S1	D2	caffeine	Tab1	E2	plasma	kabs		5.51		1.84				1/h	
 Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	clearance		119		14				ml/min	
 Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	vd		53.5		5.7				l	
 Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	thalf		5						h	
 Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	auc		977		148				mg/l*min	
-Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	kel		0.139		0.025				1/h	
+Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	kel		139		25				1/h	
 Bonati1982	control	S1	D3	caffeine	Tab1	E3	plasma	kabs		5.6		1.75				1/h	
 Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	clearance		71.9		9				ml/min	
 Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	vd		39.4		1.6				l	
 Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	thalf		6.3						h	
 Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	auc		5164		691				mg/l*min	
-Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	kel		0.11		0.016				1/h	
+Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	kel		0.11		16				1/h	
 Bonati1982	control	S1	D4	caffeine	Tab1	E4	plasma	kabs		6.31		1.91				1/h	
 Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	clearance		103						ml/min	
 Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	vd		46.5						l	
 Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	thalf		5.2						h	
 Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	auc		6815						mg/l*min	
-Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	kel		0.133						1/h	
+Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	kel		133						1/h	
 Bonati1982	control	S1	D5	caffeine	Tab1	E5	plasma	kabs		40.76						1/h	
 Campbell1987a	oral contraceptive (OC)	S1	D1	caffeine	Tab2	E1	plasma	clearance	yes	0.87		0.06				ml/min/kg	
 Campbell1987a	oral contraceptive (OC)	S1	D1	caffeine	Tab2	E1	plasma	thalf		9.2		0.7				h	
-Campbell1987a	oral contraceptive (OC)	S1	D1	caffeine	Tab2	E1	plasma	kel		0.077					0.005	1/h	
+Campbell1987a	oral contraceptive (OC)	S1	D1	caffeine	Tab2	E1	plasma	kel		77					5	1/h	
 Campbell1987a	nonsmokers	S2	D1	caffeine	Tab2	E2	plasma	clearance	yes	0.94		0.08				ml/min/kg	
 Campbell1987a	nonsmokers	S2	D1	caffeine	Tab2	E2	plasma	thalf		6.8		0.8				h	
-Campbell1987a	nonsmokers	S2	D1	caffeine	Tab2	E2	plasma	kel		0.106		0.01				1/h	
+Campbell1987a	nonsmokers	S2	D1	caffeine	Tab2	E2	plasma	kel		106		0.01				1/h	
 Campbell1987a	smokers	S3	D1	caffeine	Tab2	E3	plasma	clearance		1.94		0.21				ml/min/kg	
 Campbell1987a	smokers	S3	D1	caffeine	Tab2	E3	plasma	thalf		4		0.6				h	
-Campbell1987a	smokers	S3	D1	caffeine	Tab2	E3	plasma	kel		0.189		0.033				1/h	
+Campbell1987a	smokers	S3	D1	caffeine	Tab2	E3	plasma	kel		189		33				1/h	
 Cheng1990	control	S1	D1	caffeine	Tab2	E1	plasma	clearance	yes	1.52	0.61					ml/min/kg	
 Cheng1990	control	S1	D1	caffeine	Tab2	E1	plasma	vd		0.51	0.17					l/kg	
 Cheng1990	control	S1	D1	caffeine	Tab2	E1	plasma	thalf		4.5	2.4					h	
@@ -264,21 +264,21 @@ Culm-Merdek2005	control	S1	D1	caffeine	Tab1	E1	plasma	auc		46.3		7				µg/ml*h
 Culm-Merdek2005	control	S1	D1	paraxanthine	Tab1	E1	plasma	auc24h		27.3		3.09				µg/ml*h	
 Culm-Merdek2005	control	S1	D1	theobromine	Tab1	E1	plasma	auc24h		14.8		3.37				µg/ml*h	
 Culm-Merdek2005	control	S1	D1	theophylline	Tab1	E1	plasma	auc24h		1.96		0.94				µg/ml*h	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	clearance		9.12		2.02				ml/min	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	clearance	yes	0.14		0.03				ml/min/kg	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	vd		44.7		8.5				l	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	vd		0.54		0.1				l/kg	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	thalf		55.9		10.7				h	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	tmax		4.57		3.25				h	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	cmax		8.14		0.75				µg/ml	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	caffeine	Tab1	E2	plasma	auc		635		146				µg/ml*h	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	paraxanthine	Tab1	E2	plasma	auc24h		9.03		1.82				µg/ml*h	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	theobromine	Tab1	E2	plasma	auc24h		18.15		4.92				µg/ml*h	
-Culm-Merdek2005	fluvoxamine	S1	D1+D2	theophylline	Tab1	E2	plasma	auc24h		5.07		1.14				µg/ml*h	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	clearance		9.12		2.02				ml/min	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	clearance	yes	0.14		0.03				ml/min/kg	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	vd		44.7		8.5				l	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	vd		0.54		0.1				l/kg	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	thalf		55.9		10.7				h	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	tmax		4.57		3.25				h	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	cmax		8.14		0.75				µg/ml	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	caffeine	Tab1	E2	plasma	auc		635		146				µg/ml*h	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	paraxanthine	Tab1	E2	plasma	auc24h		9.03		1.82				µg/ml*h	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	theobromine	Tab1	E2	plasma	auc24h		18.15		4.92				µg/ml*h	
+Culm-Merdek2005	fluvoxamine	S1	D1,D2_A,D2_B,D2_C,D2_D	theophylline	Tab1	E2	plasma	auc24h		5.07		1.14				µg/ml*h	
 Desmond1980	control	S1	D1	caffeine	Tab2	E1	plasma	thalf		5.2	2.4					h	
 Desmond1980	control	S1	D1	caffeine	Tab2	E1	plasma	vd	yes	0.54	0.17					l/kg	
 Desmond1980	control	S1	D1	caffeine	Tab2	E1	plasma	clearance	yes	1.4	0.5					ml/min/kg	
-Desmond1980	control	S1	D1	caffeine	Tab2	E1	plasma	plasma_binding		0.313	1.8					-	
+Desmond1980	control	S1	D1	caffeine	Tab2	E1	plasma	plasma_binding		313	1.8					-	
 Desmond1980	control	S1	D1	caffeine	Tab2	E1	plasma	clearance_unbound	yes	2	0.7					ml/min/kg	
 Desmond1980	cirrhosis	S3	D1	caffeine	Tab2	E2	plasma	thalf		6.1	1.9					h	
 Desmond1980	cirrhosis	S3	D1	caffeine	Tab2	E2	plasma	vd	yes	0.47	0.16					l/kg	
@@ -286,12 +286,12 @@ Desmond1980	cirrhosis	S3	D1	caffeine	Tab2	E2	plasma	clearance	yes	0.9	0.3					ml
 Desmond1980	cirrhosis	S3	D1	caffeine	Tab2	E2	plasma	plasma_binding		25.5	4					-	
 Desmond1980	cirrhosis	S3	D1	caffeine	Tab2	E2	plasma	clearance_unbound	yes	1.2	0.4					ml/min/kg	
 Parsons1978	control	S1	D1	caffeine	Tab2	E1	saliva	thalf		6	1.9					h	
-Parsons1978	control	S1	D1	caffeine	Tab2	E1	saliva	kel		0.13		0.013				1/h	
+Parsons1978	control	S1	D1	caffeine	Tab2	E1	saliva	kel		0.13		13				1/h	
 Parsons1978	control	S1	D1	caffeine	Tab2	E1	saliva	vd	yes	0.61		0.08				l/kg	
 Parsons1978	control	S1	D1	caffeine	Tab2	E1	saliva	clearance		1.57		0.3				ml/min/kg	
 Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	saliva	thalf		3.5	1.37					h	
-Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	saliva	kel		0.23		0.029				1/h	
-Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	saliva	vd	yes	0.72		0.067				l/kg	
+Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	saliva	kel		0.23		29				1/h	
+Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	saliva	vd	yes	0.72		67				l/kg	
 Parsons1978	smoking	S2	D1	caffeine	Tab2	E1	saliva	clearance		2.58		0.27				ml/min/kg	
 Fuhr1993a	control	S1	D1	caffeine	Tab2	E1	plasma	auc		147	77					µmol/l*h	
 Fuhr1993a	control	S1	D1	caffeine	Tab2	E1	plasma	clearance		115	54					ml/min	
@@ -367,164 +367,164 @@ Harder1988	control_OFL	S1	D_CAF	caffeine	Tab3	E1	plasma	thalf		2.9	0.7					h
 Harder1988	control_OFL	S1	D_CAF	caffeine	Tab3	E1	plasma	auc		20.6	8.4					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_OFL	S1	D_CAF	caffeine	Tab3	E1	plasma	tmax		0.83	0.44					h	
 Harder1988	control_OFL	S1	D_CAF	caffeine	Tab3	E1	plasma	cmax		4.09	0.86					mg/l	
-Harder1988	OFL	S1	D_CAF; D_OFL	caffeine	Tab3	E2	plasma	thalf		2.8	1					h	
-Harder1988	OFL	S1	D_CAF; D_OFL	caffeine	Tab3	E2	plasma	auc		20.3	8.4					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	OFL	S1	D_CAF; D_OFL	caffeine	Tab3	E2	plasma	tmax		0.68	0.26					h	
-Harder1988	OFL	S1	D_CAF; D_OFL	caffeine	Tab3	E2	plasma	cmax		4.34	1.08					mg/l	
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	caffeine	Tab3	E2	plasma	thalf		2.8	1					h	
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	caffeine	Tab3	E2	plasma	auc		20.3	8.4					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	caffeine	Tab3	E2	plasma	tmax		0.68	0.26					h	
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	caffeine	Tab3	E2	plasma	cmax		4.34	1.08					mg/l	
 Harder1988	control_NOR	S1	D_CAF	caffeine	Tab3	E3	plasma	thalf		3.2	1.1					h	
 Harder1988	control_NOR	S1	D_CAF	caffeine	Tab3	E3	plasma	auc		21.4	9.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_NOR	S1	D_CAF	caffeine	Tab3	E3	plasma	tmax		0.6	0.2					h	
 Harder1988	control_NOR	S1	D_CAF	caffeine	Tab3	E3	plasma	cmax		4.33	0.79					mg/l	
-Harder1988	NOR	S1	D_CAF; D_NOR	caffeine	Tab3	E4	plasma	thalf		3.7	1.1					h	
-Harder1988	NOR	S1	D_CAF; D_NOR	caffeine	Tab3	E4	plasma	auc		24.9	10					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	NOR	S1	D_CAF; D_NOR	caffeine	Tab3	E4	plasma	tmax		0.8	0.3					h	
-Harder1988	NOR	S1	D_CAF; D_NOR	caffeine	Tab3	E4	plasma	cmax		4.37	0.85					mg/l	
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	caffeine	Tab3	E4	plasma	thalf		3.7	1.1					h	
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	caffeine	Tab3	E4	plasma	auc		24.9	10					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	caffeine	Tab3	E4	plasma	tmax		0.8	0.3					h	
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	caffeine	Tab3	E4	plasma	cmax		4.37	0.85					mg/l	
 Harder1988	control_PPA	S1	D_CAF	caffeine	Tab3	E5	plasma	thalf		3.3	1.1					h	
 Harder1988	control_PPA	S1	D_CAF	caffeine	Tab3	E5	plasma	auc		21.8	8.7					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_PPA	S1	D_CAF	caffeine	Tab3	E5	plasma	tmax		1.1	0.6					h	
 Harder1988	control_PPA	S1	D_CAF	caffeine	Tab3	E5	plasma	cmax		3.86	0.55					mg/l	
-Harder1988	PPA	S1	D_CAF; D_PPA	caffeine	Tab3	E6	plasma	thalf		7.3	3.2					h	
-Harder1988	PPA	S1	D_CAF; D_PPA	caffeine	Tab3	E6	plasma	auc		60.8	27.3					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	PPA	S1	D_CAF; D_PPA	caffeine	Tab3	E6	plasma	tmax		2	1.7					h	
-Harder1988	PPA	S1	D_CAF; D_PPA	caffeine	Tab3	E6	plasma	cmax		5.17	0.83					mg/l	
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	caffeine	Tab3	E6	plasma	thalf		7.3	3.2					h	
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	caffeine	Tab3	E6	plasma	auc		60.8	27.3					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	caffeine	Tab3	E6	plasma	tmax		2	1.7					h	
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	caffeine	Tab3	E6	plasma	cmax		5.17	0.83					mg/l	
 Harder1988	control_CIP1	S1	D_CAF	caffeine	Tab3	E7	plasma	thalf		3.4	1.2					h	
 Harder1988	control_CIP1	S1	D_CAF	caffeine	Tab3	E7	plasma	auc		21.4	9.2					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_CIP1	S1	D_CAF	caffeine	Tab3	E7	plasma	tmax		1	0.5					h	
 Harder1988	control_CIP1	S1	D_CAF	caffeine	Tab3	E7	plasma	cmax		3.94	0.6					mg/l	
-Harder1988	CIP1	S1	D_CAF; D_CIP1	caffeine	Tab3	E8	plasma	thalf		3.6	1.5					h	
-Harder1988	CIP1	S1	D_CAF; D_CIP1	caffeine	Tab3	E8	plasma	auc		25	9.8					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	CIP1	S1	D_CAF; D_CIP1	caffeine	Tab3	E8	plasma	tmax		1	0.5					h	
-Harder1988	CIP1	S1	D_CAF; D_CIP1	caffeine	Tab3	E8	plasma	cmax		4.21	0.59					mg/l	
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	caffeine	Tab3	E8	plasma	thalf		3.6	1.5					h	
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	caffeine	Tab3	E8	plasma	auc		25	9.8					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	caffeine	Tab3	E8	plasma	tmax		1	0.5					h	
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	caffeine	Tab3	E8	plasma	cmax		4.21	0.59					mg/l	
 Harder1988	control_CIP2	S1	D_CAF	caffeine	Tab3	E9	plasma	thalf		3.4	0.9					h	
 Harder1988	control_CIP2	S1	D_CAF	caffeine	Tab3	E9	plasma	auc		22.4	7.5					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_CIP2	S1	D_CAF	caffeine	Tab3	E9	plasma	tmax		0.71	0.26					h	
 Harder1988	control_CIP2	S1	D_CAF	caffeine	Tab3	E9	plasma	cmax		4.49	1.29					mg/l	
-Harder1988	CIP2	S1	D_CAF; D_CIP2	caffeine	Tab3	E10	plasma	thalf		3.9	1					h	
-Harder1988	CIP2	S1	D_CAF; D_CIP2	caffeine	Tab3	E10	plasma	auc		35.2	18.7					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	CIP2	S1	D_CAF; D_CIP2	caffeine	Tab3	E10	plasma	tmax		1.04	0.75					h	
-Harder1988	CIP2	S1	D_CAF; D_CIP2	caffeine	Tab3	E10	plasma	cmax		4.88	0.81					mg/l	
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	caffeine	Tab3	E10	plasma	thalf		3.9	1					h	
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	caffeine	Tab3	E10	plasma	auc		35.2	18.7					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	caffeine	Tab3	E10	plasma	tmax		1.04	0.75					h	
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	caffeine	Tab3	E10	plasma	cmax		4.88	0.81					mg/l	
 Harder1988	control_CIP3	S1	D_CAF	caffeine	Tab3	E11	plasma	thalf		3.4	1					h	
 Harder1988	control_CIP3	S1	D_CAF	caffeine	Tab3	E11	plasma	auc		20.4	6.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_CIP3	S1	D_CAF	caffeine	Tab3	E11	plasma	tmax		0.9	0.4					h	
 Harder1988	control_CIP3	S1	D_CAF	caffeine	Tab3	E11	plasma	cmax		3.91	1.06					mg/l	
-Harder1988	CIP3	S1	D_CAF; D_CIP3	caffeine	Tab3	E12	plasma	thalf		4.3	1.2					h	
-Harder1988	CIP3	S1	D_CAF; D_CIP3	caffeine	Tab3	E12	plasma	auc		32.2	13.6					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	CIP3	S1	D_CAF; D_CIP3	caffeine	Tab3	E12	plasma	tmax		0.9	0.4					h	
-Harder1988	CIP3	S1	D_CAF; D_CIP3	caffeine	Tab3	E12	plasma	cmax		4.57	0.74					mg/l	
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	caffeine	Tab3	E12	plasma	thalf		4.3	1.2					h	
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	caffeine	Tab3	E12	plasma	auc		32.2	13.6					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	caffeine	Tab3	E12	plasma	tmax		0.9	0.4					h	
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	caffeine	Tab3	E12	plasma	cmax		4.57	0.74					mg/l	
 Harder1988	control_ENX1	S1	D_CAF	caffeine	Tab3	E13	plasma	thalf		3	1.1					h	
 Harder1988	control_ENX1	S1	D_CAF	caffeine	Tab3	E13	plasma	auc		20	7.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_ENX1	S1	D_CAF	caffeine	Tab3	E13	plasma	tmax		0.8	0.3					h	
 Harder1988	control_ENX1	S1	D_CAF	caffeine	Tab3	E13	plasma	cmax		3.99	0.8					mg/l	
-Harder1988	ENX1	S1	D_CAF; D_ENX1	caffeine	Tab3	E14	plasma	thalf		6.1	1.7					h	
-Harder1988	ENX1	S1	D_CAF; D_ENX1	caffeine	Tab3	E14	plasma	auc		47.6	17.2					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	ENX1	S1	D_CAF; D_ENX1	caffeine	Tab3	E14	plasma	tmax		1	0.6					h	
-Harder1988	ENX1	S1	D_CAF; D_ENX1	caffeine	Tab3	E14	plasma	cmax		5	1.14					mg/l	
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	caffeine	Tab3	E14	plasma	thalf		6.1	1.7					h	
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	caffeine	Tab3	E14	plasma	auc		47.6	17.2					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	caffeine	Tab3	E14	plasma	tmax		1	0.6					h	
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	caffeine	Tab3	E14	plasma	cmax		5	1.14					mg/l	
 Harder1988	control_ENX2	S1	D_CAF	caffeine	Tab3	E15	plasma	thalf		3.4	1.2					h	
 Harder1988	control_ENX2	S1	D_CAF	caffeine	Tab3	E15	plasma	auc		21.8	8.7					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_ENX2	S1	D_CAF	caffeine	Tab3	E15	plasma	tmax		1	0.5					h	
 Harder1988	control_ENX2	S1	D_CAF	caffeine	Tab3	E15	plasma	cmax		4.27	0.62					mg/l	
-Harder1988	ENX2	S1	D_CAF; D_ENX2	caffeine	Tab3	E16	plasma	thalf		7.7	2.5					h	
-Harder1988	ENX2	S1	D_CAF; D_ENX2	caffeine	Tab3	E16	plasma	auc		60.2	15.4					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	ENX2	S1	D_CAF; D_ENX2	caffeine	Tab3	E16	plasma	tmax		1	0.5					h	
-Harder1988	ENX2	S1	D_CAF; D_ENX2	caffeine	Tab3	E16	plasma	cmax		5.15	1					mg/l	
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	caffeine	Tab3	E16	plasma	thalf		7.7	2.5					h	
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	caffeine	Tab3	E16	plasma	auc		60.2	15.4					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	caffeine	Tab3	E16	plasma	tmax		1	0.5					h	
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	caffeine	Tab3	E16	plasma	cmax		5.15	1					mg/l	
 Harder1988	control_ENX3	S1	D_CAF	caffeine	Tab3	E17	plasma	thalf		3.3	1.3					h	
 Harder1988	control_ENX3	S1	D_CAF	caffeine	Tab3	E17	plasma	auc		22.6	9.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_ENX3	S1	D_CAF	caffeine	Tab3	E17	plasma	tmax		0.7	0.3					h	
 Harder1988	control_ENX3	S1	D_CAF	caffeine	Tab3	E17	plasma	cmax		3.9	0.7					mg/l	
-Harder1988	ENX3	S1	D_CAF; D_ENX3	caffeine	Tab3	E18	plasma	thalf		11.8	5					h	
-Harder1988	ENX3	S1	D_CAF; D_ENX3	caffeine	Tab3	E18	plasma	auc		100.8	31.5					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	ENX3	S1	D_CAF; D_ENX3	caffeine	Tab3	E18	plasma	tmax		1.1	0.7					h	
-Harder1988	ENX3	S1	D_CAF; D_ENX3	caffeine	Tab3	E18	plasma	cmax		5.51	1.04					mg/l	
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	caffeine	Tab3	E18	plasma	thalf		11.8	5					h	
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	caffeine	Tab3	E18	plasma	auc		100.8	31.5					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	caffeine	Tab3	E18	plasma	tmax		1.1	0.7					h	
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	caffeine	Tab3	E18	plasma	cmax		5.51	1.04					mg/l	
 Harder1988	control_OFL	S1	D_CAF	paraxanthine	Tab4	E1	plasma	thalf		3	1.2					h	
 Harder1988	control_OFL	S1	D_CAF	paraxanthine	Tab4	E1	plasma	auc		16	5.2					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_OFL	S1	D_CAF	paraxanthine	Tab4	E1	plasma	tmax		5.7	1.89					h	
 Harder1988	control_OFL	S1	D_CAF	paraxanthine	Tab4	E1	plasma	cmax		1.17	0.22					mg/l	
-Harder1988	OFL	S1	D_CAF; D_OFL	paraxanthine	Tab4	E2	plasma	thalf		2.8	1.2					h	
-Harder1988	OFL	S1	D_CAF; D_OFL	paraxanthine	Tab4	E2	plasma	auc		15.2	6					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	OFL	S1	D_CAF; D_OFL	paraxanthine	Tab4	E2	plasma	tmax		4.32	0.94					h	
-Harder1988	OFL	S1	D_CAF; D_OFL	paraxanthine	Tab4	E2	plasma	cmax		1.11	0.16					mg/l	
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	paraxanthine	Tab4	E2	plasma	thalf		2.8	1.2					h	
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	paraxanthine	Tab4	E2	plasma	auc		15.2	6					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	paraxanthine	Tab4	E2	plasma	tmax		4.32	0.94					h	
+Harder1988	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	paraxanthine	Tab4	E2	plasma	cmax		1.11	0.16					mg/l	
 Harder1988	control_NOR	S1	D_CAF	paraxanthine	Tab4	E3	plasma	thalf		2.8	1.3					h	
 Harder1988	control_NOR	S1	D_CAF	paraxanthine	Tab4	E3	plasma	auc		23.8	9					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_NOR	S1	D_CAF	paraxanthine	Tab4	E3	plasma	tmax		4.7	2.1					h	
 Harder1988	control_NOR	S1	D_CAF	paraxanthine	Tab4	E3	plasma	cmax		1.56	0.45					mg/l	
-Harder1988	NOR	S1	D_CAF; D_NOR	paraxanthine	Tab4	E4	plasma	thalf		3.4	1.3					h	
-Harder1988	NOR	S1	D_CAF; D_NOR	paraxanthine	Tab4	E4	plasma	auc		26.4	13.6					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	NOR	S1	D_CAF; D_NOR	paraxanthine	Tab4	E4	plasma	tmax		6	3.2					h	
-Harder1988	NOR	S1	D_CAF; D_NOR	paraxanthine	Tab4	E4	plasma	cmax		1.5	0.39					mg/l	
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	paraxanthine	Tab4	E4	plasma	thalf		3.4	1.3					h	
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	paraxanthine	Tab4	E4	plasma	auc		26.4	13.6					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	paraxanthine	Tab4	E4	plasma	tmax		6	3.2					h	
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	paraxanthine	Tab4	E4	plasma	cmax		1.5	0.39					mg/l	
 Harder1988	control_PPA	S1	D_CAF	paraxanthine	Tab4	E5	plasma	thalf		2.7	1.2					h	
 Harder1988	control_PPA	S1	D_CAF	paraxanthine	Tab4	E5	plasma	auc		22	6.7					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_PPA	S1	D_CAF	paraxanthine	Tab4	E5	plasma	tmax		4.8	2.2					h	
 Harder1988	control_PPA	S1	D_CAF	paraxanthine	Tab4	E5	plasma	cmax		1.6	0.32					mg/l	
-Harder1988	PPA	S1	D_CAF; D_PPA	paraxanthine	Tab4	E6	plasma	thalf		9.6	5.3					h	
-Harder1988	PPA	S1	D_CAF; D_PPA	paraxanthine	Tab4	E6	plasma	auc		43	15.9					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	PPA	S1	D_CAF; D_PPA	paraxanthine	Tab4	E6	plasma	tmax		14.4	5.6					h	
-Harder1988	PPA	S1	D_CAF; D_PPA	paraxanthine	Tab4	E6	plasma	cmax		1.28	0.26					mg/l	
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	paraxanthine	Tab4	E6	plasma	thalf		9.6	5.3					h	
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	paraxanthine	Tab4	E6	plasma	auc		43	15.9					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	paraxanthine	Tab4	E6	plasma	tmax		14.4	5.6					h	
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	paraxanthine	Tab4	E6	plasma	cmax		1.28	0.26					mg/l	
 Harder1988	control_CIP1	S1	D_CAF	paraxanthine	Tab4	E7	plasma	thalf		2.6	1.4					h	
 Harder1988	control_CIP1	S1	D_CAF	paraxanthine	Tab4	E7	plasma	auc		26.6	7.5					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_CIP1	S1	D_CAF	paraxanthine	Tab4	E7	plasma	tmax		5.7	2.9					h	
 Harder1988	control_CIP1	S1	D_CAF	paraxanthine	Tab4	E7	plasma	cmax		1.57	0.33					mg/l	
-Harder1988	CIP1	S1	D_CAF; D_CIP1	paraxanthine	Tab4	E8	plasma	thalf		3.3	1.7					h	
-Harder1988	CIP1	S1	D_CAF; D_CIP1	paraxanthine	Tab4	E8	plasma	auc		23	8.9					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	CIP1	S1	D_CAF; D_CIP1	paraxanthine	Tab4	E8	plasma	tmax		6.5	3.3					h	
-Harder1988	CIP1	S1	D_CAF; D_CIP1	paraxanthine	Tab4	E8	plasma	cmax		1.48	0.31					mg/l	
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	paraxanthine	Tab4	E8	plasma	thalf		3.3	1.7					h	
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	paraxanthine	Tab4	E8	plasma	auc		23	8.9					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	paraxanthine	Tab4	E8	plasma	tmax		6.5	3.3					h	
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	paraxanthine	Tab4	E8	plasma	cmax		1.48	0.31					mg/l	
 Harder1988	control_CIP2	S1	D_CAF	paraxanthine	Tab4	E9	plasma	thalf		3	1					h	
 Harder1988	control_CIP2	S1	D_CAF	paraxanthine	Tab4	E9	plasma	auc		18.5	7.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_CIP2	S1	D_CAF	paraxanthine	Tab4	E9	plasma	tmax		5.3	2.9					h	
 Harder1988	control_CIP2	S1	D_CAF	paraxanthine	Tab4	E9	plasma	cmax		1.15	0.19					mg/l	
-Harder1988	CIP2	S1	D_CAF; D_CIP2	paraxanthine	Tab4	E10	plasma	thalf		4.1	1.8					h	
-Harder1988	CIP2	S1	D_CAF; D_CIP2	paraxanthine	Tab4	E10	plasma	auc		20.2	8.3					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	CIP2	S1	D_CAF; D_CIP2	paraxanthine	Tab4	E10	plasma	tmax		7.09	2.34					h	
-Harder1988	CIP2	S1	D_CAF; D_CIP2	paraxanthine	Tab4	E10	plasma	cmax		1.19	0.23					mg/l	
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	paraxanthine	Tab4	E10	plasma	thalf		4.1	1.8					h	
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	paraxanthine	Tab4	E10	plasma	auc		20.2	8.3					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	paraxanthine	Tab4	E10	plasma	tmax		7.09	2.34					h	
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	paraxanthine	Tab4	E10	plasma	cmax		1.19	0.23					mg/l	
 Harder1988	control_CIP3	S1	D_CAF	paraxanthine	Tab4	E11	plasma	thalf		2.6	0.9					h	
 Harder1988	control_CIP3	S1	D_CAF	paraxanthine	Tab4	E11	plasma	auc		20.2	8.3					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_CIP3	S1	D_CAF	paraxanthine	Tab4	E11	plasma	tmax		4.3	1.4					h	
 Harder1988	control_CIP3	S1	D_CAF	paraxanthine	Tab4	E11	plasma	cmax		1.38	0.35					mg/l	
-Harder1988	CIP3	S1	D_CAF; D_CIP3	paraxanthine	Tab4	E12	plasma	thalf		4.4	1.3					h	
-Harder1988	CIP3	S1	D_CAF; D_CIP3	paraxanthine	Tab4	E12	plasma	auc		26.6	11.3					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	CIP3	S1	D_CAF; D_CIP3	paraxanthine	Tab4	E12	plasma	tmax		7.7	3.1					h	
-Harder1988	CIP3	S1	D_CAF; D_CIP3	paraxanthine	Tab4	E12	plasma	cmax		1.33	0.22					mg/l	
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	paraxanthine	Tab4	E12	plasma	thalf		4.4	1.3					h	
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	paraxanthine	Tab4	E12	plasma	auc		26.6	11.3					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	paraxanthine	Tab4	E12	plasma	tmax		7.7	3.1					h	
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	paraxanthine	Tab4	E12	plasma	cmax		1.33	0.22					mg/l	
 Harder1988	control_ENX1	S1	D_CAF	paraxanthine	Tab4	E13	plasma	thalf		2.6	1.2					h	
 Harder1988	control_ENX1	S1	D_CAF	paraxanthine	Tab4	E13	plasma	auc		22.7	8.5					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_ENX1	S1	D_CAF	paraxanthine	Tab4	E13	plasma	tmax		5.5	2.6					h	
 Harder1988	control_ENX1	S1	D_CAF	paraxanthine	Tab4	E13	plasma	cmax		1.57	0.27					mg/l	
-Harder1988	ENX1	S1	D_CAF; D_ENX1	paraxanthine	Tab4	E14	plasma	thalf		4.7	1.8					h	
-Harder1988	ENX1	S1	D_CAF; D_ENX1	paraxanthine	Tab4	E14	plasma	auc		32.4	9.9					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	ENX1	S1	D_CAF; D_ENX1	paraxanthine	Tab4	E14	plasma	tmax		9.9	3.6					h	
-Harder1988	ENX1	S1	D_CAF; D_ENX1	paraxanthine	Tab4	E14	plasma	cmax		1.33	0.22					mg/l	
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	paraxanthine	Tab4	E14	plasma	thalf		4.7	1.8					h	
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	paraxanthine	Tab4	E14	plasma	auc		32.4	9.9					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	paraxanthine	Tab4	E14	plasma	tmax		9.9	3.6					h	
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	paraxanthine	Tab4	E14	plasma	cmax		1.33	0.22					mg/l	
 Harder1988	control_ENX2	S1	D_CAF	paraxanthine	Tab4	E15	plasma	thalf		3.1	1.4					h	
 Harder1988	control_ENX2	S1	D_CAF	paraxanthine	Tab4	E15	plasma	auc		21.9	5.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_ENX2	S1	D_CAF	paraxanthine	Tab4	E15	plasma	tmax		5.3	2.6					h	
 Harder1988	control_ENX2	S1	D_CAF	paraxanthine	Tab4	E15	plasma	cmax		1.57	0.3					mg/l	
-Harder1988	ENX2	S1	D_CAF; D_ENX2	paraxanthine	Tab4	E16	plasma	thalf		7.9	3.9					h	
-Harder1988	ENX2	S1	D_CAF; D_ENX2	paraxanthine	Tab4	E16	plasma	auc		39.2	9.1					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	ENX2	S1	D_CAF; D_ENX2	paraxanthine	Tab4	E16	plasma	tmax		12.6	4.7					h	
-Harder1988	ENX2	S1	D_CAF; D_ENX2	paraxanthine	Tab4	E16	plasma	cmax		1.24	0.27					mg/l	
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	paraxanthine	Tab4	E16	plasma	thalf		7.9	3.9					h	
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	paraxanthine	Tab4	E16	plasma	auc		39.2	9.1					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	paraxanthine	Tab4	E16	plasma	tmax		12.6	4.7					h	
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	paraxanthine	Tab4	E16	plasma	cmax		1.24	0.27					mg/l	
 Harder1988	control_ENX3	S1	D_CAF	paraxanthine	Tab4	E17	plasma	thalf		2.7	1.1					h	
 Harder1988	control_ENX3	S1	D_CAF	paraxanthine	Tab4	E17	plasma	auc		22.6	9.8					mg/l*h	dose-normalized to 3.0 mg/kg
 Harder1988	control_ENX3	S1	D_CAF	paraxanthine	Tab4	E17	plasma	tmax		5.15	1.55					h	
 Harder1988	control_ENX3	S1	D_CAF	paraxanthine	Tab4	E17	plasma	cmax		1.23	0.22					mg/l	
-Harder1988	ENX3	S1	D_CAF; D_ENX3	paraxanthine	Tab4	E18	plasma	thalf		14.3	20.8					h	
-Harder1988	ENX3	S1	D_CAF; D_ENX3	paraxanthine	Tab4	E18	plasma	auc		100.8	31.5					mg/l*h	dose-normalized to 3.0 mg/kg
-Harder1988	ENX3	S1	D_CAF; D_ENX3	paraxanthine	Tab4	E18	plasma	tmax		20.73	6.03					h	
-Harder1988	ENX3	S1	D_CAF; D_ENX3	paraxanthine	Tab4	E18	plasma	cmax		1.35	0.53					mg/l	
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	paraxanthine	Tab4	E18	plasma	thalf		14.3	20.8					h	
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	paraxanthine	Tab4	E18	plasma	auc		100.8	31.5					mg/l*h	dose-normalized to 3.0 mg/kg
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	paraxanthine	Tab4	E18	plasma	tmax		20.73	6.03					h	
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	paraxanthine	Tab4	E18	plasma	cmax		1.35	0.53					mg/l	
 Harder1989	control_OFL	S1	D_CAF	caffeine	Tab4	E1	plasma	clearance	yes	164	70					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1989	OFL	S1	D_CAF; D_OFL	caffeine	Tab4	E2	plasma	clearance	yes	160	67					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1989	OFL	S1	D_CAF,D_OFL_A  , D_OFL_B ,  D_OFL_C , D_OFL_D	caffeine	Tab4	E2	plasma	clearance	yes	160	67					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_NOR	S1	D_CAF	caffeine	Tab4	E3	plasma	clearance	yes	166	68					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	NOR	S1	D_CAF; D_NOR	caffeine	Tab4	E4	plasma	clearance	yes	142	63					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	NOR	S1	D_CAF,D_NOR_A  , D_NOR_B ,  D_NOR_C , D_NOR_D	caffeine	Tab4	E4	plasma	clearance	yes	142	63					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_PPA	S1	D_CAF	caffeine	Tab4	E5	plasma	clearance	yes	159	61					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	PPA	S1	D_CAF; D_PPA	caffeine	Tab4	E6	plasma	clearance	yes	56	18					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	PPA	S1	D_CAF,D_PPA_A  , D_PPA_B ,  D_PPA_C , D_PPA_D	caffeine	Tab4	E6	plasma	clearance	yes	56	18					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_CIP1	S1	D_CAF	caffeine	Tab4	E7	plasma	clearance	yes	168	91					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	CIP1	S1	D_CAF; D_CIP1	caffeine	Tab4	E8	plasma	clearance	yes	138	54					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	CIP1	S1	D_CAF, D_CIP1_A , D_CIP1_B , D_CIP1_C , D_CIP1_D	caffeine	Tab4	E8	plasma	clearance	yes	138	54					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_CIP2	S1	D_CAF	caffeine	Tab4	E9	plasma	clearance	yes	143	54					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	CIP2	S1	D_CAF; D_CIP2	caffeine	Tab4	E10	plasma	clearance	yes	99	32					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	CIP2	S1	D_CAF, D_CIP2_A , D_CIP2_B , D_CIP2_C , D_CIP2_D	caffeine	Tab4	E10	plasma	clearance	yes	99	32					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_CIP3	S1	D_CAF	caffeine	Tab4	E11	plasma	clearance	yes	170	83					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	CIP3	S1	D_CAF; D_CIP3	caffeine	Tab4	E12	plasma	clearance	yes	111	53					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	CIP3	S1	D_CAF, D_CIP3_A , D_CIP3_B , D_CIP3_C , D_CIP3_D	caffeine	Tab4	E12	plasma	clearance	yes	111	53					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_ENX1	S1	D_CAF	caffeine	Tab4	E13	plasma	clearance	yes	174	73					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	ENX1	S1	D_CAF; D_ENX1	caffeine	Tab4	E14	plasma	clearance	yes	71	24					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	ENX1	S1	D_CAF, D_ENX1_A , D_ENX1_B , D_ENX1_C , D_ENX1_D	caffeine	Tab4	E14	plasma	clearance	yes	71	24					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_ENX2	S1	D_CAF	caffeine	Tab4	E15	plasma	clearance	yes	157	60					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	ENX2	S1	D_CAF; D_ENX2	caffeine	Tab4	E16	plasma	clearance	yes	54	17					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	ENX2	S1	D_CAF, D_ENX2_A , D_ENX2_B , D_ENX2_C , D_ENX2_D	caffeine	Tab4	E16	plasma	clearance	yes	54	17					ml/h/kg	caffeine clearance is the dose divided by AUC
 Harder1988	control_ENX3	S1	D_CAF	caffeine	Tab4	E17	plasma	clearance	yes	149	68					ml/h/kg	caffeine clearance is the dose divided by AUC
-Harder1988	ENX3	S1	D_CAF; D_ENX3	caffeine	Tab4	E18	plasma	clearance	yes	32	9					ml/h/kg	caffeine clearance is the dose divided by AUC
+Harder1988	ENX3	S1	D_CAF, D_ENX3_A , D_ENX3_B , D_ENX3_C , D_ENX3_D	caffeine	Tab4	E18	plasma	clearance	yes	32	9					ml/h/kg	caffeine clearance is the dose divided by AUC
 Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	cmax		2.1	0.5					µg/ml	
 Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	tmax		1.2	0.4					h	
 Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	kel		0.14	0.03					1/h	
@@ -532,19 +532,19 @@ Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	thalf		5.2	1.2					h
 Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	vd	yes	0.67	0.19					l/kg	
 Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	auc		16.3	6.6					µg/ml*h	
 Healy1989	control	S1	D_CAF	caffeine	Tab1	E1	plasma	clearance_tbc		106	41.6					ml/min/1.73m^2	total body clearance
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	cmax		2.3	0.4					µg/ml	
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	tmax		1.4	0.6					h	
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	kel		0.1	0.04					1/h	
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	thalf		8.2	2.5					h	
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	vd	yes	0.62	0.16					l/kg	
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	auc		25.9	7.8					µg/ml*h	
-Healy1989	control	S1	D_CAF; D_CIP	caffeine	Tab1	E2	plasma	clearance_tbc		58.2	28.8					ml/min/1.73m^2	total body clearance
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	cmax		2.3	0.4					µg/ml	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	tmax		1.4	0.6					h	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	kel		0.1	0.04					1/h	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	thalf		8.2	2.5					h	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	vd	yes	0.62	0.16					l/kg	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	auc		25.9	7.8					µg/ml*h	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	caffeine	Tab1	E2	plasma	clearance_tbc		58.2	28.8					ml/min/1.73m^2	total body clearance
 Healy1989	control	S1	D_CAF	paraxanthine	Tab2	E3	plasma	cmax		0.6	0.2					µg/ml	
 Healy1989	control	S1	D_CAF	paraxanthine	Tab2	E3	plasma	tmax		6.2	1.7					h	
 Healy1989	control	S1	D_CAF	paraxanthine	Tab2	E3	plasma	auc		4.6	1.3					µg/ml*h	AUC 0-10
-Healy1989	control	S1	D_CAF; D_CIP	paraxanthine	Tab2	E4	plasma	cmax		0.6	0.2					µg/ml	
-Healy1989	control	S1	D_CAF; D_CIP	paraxanthine	Tab2	E4	plasma	tmax		10.4	2.7					h	
-Healy1989	control	S1	D_CAF; D_CIP	paraxanthine	Tab2	E4	plasma	auc		2.5	0.8					µg/ml*h	AUC 0-10
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	paraxanthine	Tab2	E4	plasma	cmax		0.6	0.2					µg/ml	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	paraxanthine	Tab2	E4	plasma	tmax		10.4	2.7					h	
+Healy1989	control	S1	D_CAF, D_CIP_A , D_CIP_B , D_CIP_C 	paraxanthine	Tab2	E4	plasma	auc		2.5	0.8					µg/ml*h	AUC 0-10
 Seng2009	control	S_NCNS	D_CAF3	caffeine	Tab1	E1	plasma	clearance		80.74	43.06					ml/min	
 Seng2009	control	S_NCNS	D_CAF3	caffeine	Tab1	E1	plasma	clearance	yes	1.81	0.67					ml/min/kg	
 Seng2009	control	S_NCNS	D_CAF3	caffeine	Tab1	E1	plasma	thalf		4.79	2.25					h	

@@ -76,7 +76,7 @@ class Hashable(models.Model):
 
 class Sourceable(models.Model):
     source = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # todo: to file_filed
-    figure = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # todo: to file_filed
+    figure = models.CharField(max_length=CHAR_MAX_LENGTH*5,null=True, blank=True)  # todo: to file_filed
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:

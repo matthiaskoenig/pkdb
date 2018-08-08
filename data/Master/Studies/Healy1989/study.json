@@ -24,6 +24,18 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
                         "category": "weight",
                         "mean": "76.3",
                         "sd": "8.6",
@@ -34,26 +46,14 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "mean": "26.7",
                         "sd": "1.6",
                         "unit": "yr"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -72,7 +72,7 @@
                 "unit": "mg"
             },
             {
-                "name": "D_CIP",
+                "name": "D_CIP_A || D_CIP_B || D_CIP_C ",
                 "substance": "ciprofloxacin",
                 "time": "24||36||48",
                 "time_unit": "h",
@@ -87,7 +87,81 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D_CAF",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 2.1,
+                "tissue": "plasma",
+                "sd": 0.5,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.2,
+                "tissue": "plasma",
+                "sd": 0.4,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.14,
+                "tissue": "plasma",
+                "sd": 0.03,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.2,
+                "tissue": "plasma",
+                "sd": 1.2,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.67,
+                "tissue": "plasma",
+                "sd": 0.19,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 16.3,
+                "tissue": "plasma",
+                "sd": 6.6,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance_tbc",
                 "value": 106.0,
@@ -97,7 +171,33 @@
             },
             {
                 "group": "S1",
-                "intervention": "D_CAF",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 0.6,
+                "tissue": "plasma",
+                "sd": 0.2,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 6.2,
+                "tissue": "plasma",
+                "sd": 1.7,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
                 "substance": "paraxanthine",
                 "pktype": "auc",
                 "value": 4.6,
@@ -107,7 +207,102 @@
             },
             {
                 "group": "S1",
-                "intervention": "D_CAF; D_CIP",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 2.3,
+                "tissue": "plasma",
+                "sd": 0.4,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.4,
+                "tissue": "plasma",
+                "sd": 0.6,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.1,
+                "tissue": "plasma",
+                "sd": 0.04,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 8.2,
+                "tissue": "plasma",
+                "sd": 2.5,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.62,
+                "tissue": "plasma",
+                "sd": 0.16,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 25.9,
+                "tissue": "plasma",
+                "sd": 7.8,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance_tbc",
                 "value": 58.2,
@@ -117,7 +312,42 @@
             },
             {
                 "group": "S1",
-                "intervention": "D_CAF; D_CIP",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 0.6,
+                "tissue": "plasma",
+                "sd": 0.2,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 10.4,
+                "tissue": "plasma",
+                "sd": 2.7,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
                 "substance": "paraxanthine",
                 "pktype": "auc",
                 "value": 2.5,

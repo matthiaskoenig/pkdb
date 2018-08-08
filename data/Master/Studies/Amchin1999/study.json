@@ -24,11 +24,23 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{8}} ||  F{{7}}"
+                    },
+                    {
                         "category": "weight",
                         "mean": "70.5",
                         "min": "47",
                         "max": "93",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
                         "category": "height",
@@ -39,27 +51,15 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "8 M || 7 F"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "mean": "31.1",
                         "min": "21",
                         "max": "41",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -84,7 +84,21 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "17U",
+                "pktype": "amount",
+                "value": 13.4,
+                "tissue": "urine (24h)",
+                "sd": 3.6,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "17U",
                 "pktype": "amount",
                 "value": 13.7,
@@ -94,7 +108,21 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "17X",
+                "pktype": "amount",
+                "value": 8.75,
+                "tissue": "urine (24h)",
+                "sd": 3.07,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "17X",
                 "pktype": "amount",
                 "value": 7.96,
@@ -104,7 +132,21 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "1U",
+                "pktype": "amount",
+                "value": 24.5,
+                "tissue": "urine (24h)",
+                "sd": 9.0,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "1U",
                 "pktype": "amount",
                 "value": 25.7,
@@ -114,7 +156,21 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "1X",
+                "pktype": "amount",
+                "value": 15.2,
+                "tissue": "urine (24h)",
+                "sd": 5.9,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "1X",
                 "pktype": "amount",
                 "value": 16.7,
@@ -124,7 +180,21 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "37X",
+                "pktype": "amount",
+                "value": 1.91,
+                "tissue": "urine (24h)",
+                "sd": 0.94,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "37X",
                 "pktype": "amount",
                 "value": 1.66,
@@ -134,7 +204,21 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "AAMU",
+                "pktype": "amount",
+                "value": 36.1,
+                "tissue": "urine (24h)",
+                "sd": 18.6,
+                "unit": "mg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "AAMU",
                 "pktype": "amount",
                 "value": 39.6,
@@ -144,7 +228,141 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 84.8,
+                "tissue": "plasma",
+                "sd": 35.5,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 36.7,
+                "tissue": "plasma",
+                "sd": 8.1,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 6.1,
+                "tissue": "plasma",
+                "sd": 3.55,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.2,
+                "tissue": "plasma",
+                "sd": 0.68,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 4.96,
+                "tissue": "plasma",
+                "sd": 0.83,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 48.7,
+                "tissue": "plasma",
+                "sd": 26.9,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 90.3,
+                "tissue": "plasma",
+                "sd": 40.1,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 35.0,
+                "tissue": "plasma",
+                "sd": 8.1,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.46,
+                "tissue": "plasma",
+                "sd": 3.19,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.0,
+                "tissue": "plasma",
+                "sd": 0.42,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 5.48,
+                "tissue": "plasma",
+                "sd": 1.63,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "auc",
                 "value": 46.4,

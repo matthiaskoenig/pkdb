@@ -24,6 +24,18 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
                         "category": "weight",
                         "mean": "75",
                         "min": "65",
@@ -36,18 +48,6 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "mean": null,
                         "min": "24",
@@ -55,8 +55,8 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "N"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -81,7 +81,21 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 2.52,
+                "tissue": "plasma",
+                "sd": 0.97,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "thalf",
                 "value": 3.3,

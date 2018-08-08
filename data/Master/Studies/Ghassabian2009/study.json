@@ -20,24 +20,20 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "smoking",
                         "choice": null
                     },
                     {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
                         "category": "sex",
-                        "choice": "9 M || 2 F"
+                        "choice": "M {{9}} || F {{2}}"
                     },
                     {
-                        "category": "disease",
-                        "choice": "schizophrenia"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
                     },
                     {
                         "category": "age",
@@ -48,8 +44,12 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "schizophrenia"
                     }
                 ]
             }
@@ -59,10 +59,7 @@
         "description": "",
         "individuals": [
             {
-                "name": "",
-                "group": "",
                 "source": "Ghassabian2009_Tab5.csv",
-                "format": "",
                 "figure": "Ghassabian2009_Tab5.png",
                 "characteristica": []
             }
@@ -87,15 +84,7 @@
         "outputs": [
             {
                 "source": "Ghassabian2009_Tab5.csv",
-                "format": "",
-                "figure": "Ghassabian2009_Tab5.png",
-                "individuum": "",
-                "intervention": "",
-                "substance": "",
-                "pktype": "",
-                "value": "",
-                "tissue": "",
-                "unit": ""
+                "figure": "Ghassabian2009_Tab5.png"
             }
         ]
     }

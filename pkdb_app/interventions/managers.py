@@ -2,6 +2,7 @@
 the managers can be used to overwrite class methods of the models module.
 """
 from django.db import models
+from django.apps import apps
 
 
 class InterventionSetManager(models.Manager):
@@ -23,11 +24,23 @@ class OutputSetManager(models.Manager):
 
     def create(self, *args, **kwargs):
         outputs = kwargs.pop("outputs", [])
+        timecourses = kwargs.pop("timecourse", [])
+
         outputset = super().create(*args, **kwargs)
         outputset.outputs.all().delete()
 
         for output in outputs:
-            outputset.outputs.create(**output)
+            intervention_ids = output.pop("interventions", [])
+            output_instance = outputset.outputs.create(**output)
+            output_instance.interventions.add(*intervention_ids)
+            output_instance.save()
+            outputset.save()
+
+        for timecourse in timecourses:
+            intervention_ids = timecourse.pop("interventions", [])
+            timecourse_instance = outputset.timecourse.create(**timecourse)
+            timecourse_instance.interventions.add(*intervention_ids)
+            timecourse_instance.save()
             outputset.save()
 
         return outputset

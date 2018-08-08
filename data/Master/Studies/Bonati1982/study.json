@@ -24,6 +24,10 @@
                         "choice": null
                     },
                     {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
                         "category": "weight",
                         "mean": "70",
                         "unit": "kg"
@@ -33,18 +37,14 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "min": "26",
                         "max": "36",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -105,7 +105,68 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 104.0,
+                "tissue": "plasma",
+                "se": 26.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 33.7,
+                "tissue": "plasma",
+                "se": 3.8,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 3.4,
+                "tissue": "plasma",
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 170.0,
+                "tissue": "plasma",
+                "se": 29.0,
+                "unit": "mg/l*min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 205.0,
+                "tissue": "plasma",
+                "se": 73.0,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "kabs",
                 "value": 3.15,
@@ -115,7 +176,68 @@
             },
             {
                 "group": "S1",
-                "intervention": "D2",
+                "interventions": [
+                    "D2"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 133.0,
+                "tissue": "plasma",
+                "se": 14.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D2"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 48.7,
+                "tissue": "plasma",
+                "se": 2.8,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D2"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 4.2,
+                "tissue": "plasma",
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D2"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 544.0,
+                "tissue": "plasma",
+                "se": 64.0,
+                "unit": "mg/l*min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D2"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 165.0,
+                "tissue": "plasma",
+                "se": 17.0,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D2"
+                ],
                 "substance": "caffeine",
                 "pktype": "kabs",
                 "value": 5.51,
@@ -125,7 +247,68 @@
             },
             {
                 "group": "S1",
-                "intervention": "D3",
+                "interventions": [
+                    "D3"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 119.0,
+                "tissue": "plasma",
+                "se": 14.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D3"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 53.5,
+                "tissue": "plasma",
+                "se": 5.7,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D3"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.0,
+                "tissue": "plasma",
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D3"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 977.0,
+                "tissue": "plasma",
+                "se": 148.0,
+                "unit": "mg/l*min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D3"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 139.0,
+                "tissue": "plasma",
+                "se": 25.0,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D3"
+                ],
                 "substance": "caffeine",
                 "pktype": "kabs",
                 "value": 5.6,
@@ -135,7 +318,68 @@
             },
             {
                 "group": "S1",
-                "intervention": "D4",
+                "interventions": [
+                    "D4"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 71.9,
+                "tissue": "plasma",
+                "se": 9.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D4"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 39.4,
+                "tissue": "plasma",
+                "se": 1.6,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D4"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 6.3,
+                "tissue": "plasma",
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D4"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 5164.0,
+                "tissue": "plasma",
+                "se": 691.0,
+                "unit": "mg/l*min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D4"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.11,
+                "tissue": "plasma",
+                "se": 16.0,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D4"
+                ],
                 "substance": "caffeine",
                 "pktype": "kabs",
                 "value": 6.31,
@@ -145,7 +389,64 @@
             },
             {
                 "group": "S1",
-                "intervention": "D5",
+                "interventions": [
+                    "D5"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 103.0,
+                "tissue": "plasma",
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D5"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 46.5,
+                "tissue": "plasma",
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D5"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.2,
+                "tissue": "plasma",
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D5"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 6815.0,
+                "tissue": "plasma",
+                "unit": "mg/l*min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D5"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 133.0,
+                "tissue": "plasma",
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D5"
+                ],
                 "substance": "caffeine",
                 "pktype": "kabs",
                 "value": 40.76,
@@ -155,18 +456,8 @@
         ],
         "timecourse": [
             {
-                "group": "",
-                "intervention": "",
                 "source": "Bonati1982_Fig1.csv",
-                "format": "",
-                "figure": "Bonati1982_Fig1.png",
-                "substance": "",
-                "tissue": "",
-                "pktype": "",
-                "times": "",
-                "values": "",
-                "sd": "",
-                "unit": ""
+                "figure": "Bonati1982_Fig1.png"
             }
         ]
     }

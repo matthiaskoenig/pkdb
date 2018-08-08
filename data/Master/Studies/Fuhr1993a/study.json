@@ -30,24 +30,16 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": "4 M || 8 F"
-                    },
-                    {
-                        "category": "height",
-                        "mean": "170.83",
-                        "min": "158",
-                        "max": "190",
-                        "sd": "9.23",
-                        "unit": "cm"
-                    },
-                    {
                         "category": "age",
                         "mean": "33.7",
                         "min": "21",
                         "max": "56",
                         "sd": "12.7",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{4}} || F {{8}}"
                     },
                     {
                         "category": "weight",
@@ -58,12 +50,20 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "6 N || 6 Y"
+                        "category": "oral contraceptives",
+                        "choice": "Y {{3}}  ||  N {{5}}"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "3 Y  ||  5 N"
+                        "category": "smoking",
+                        "choice": "N {{6}} || Y {{6}}"
+                    },
+                    {
+                        "category": "height",
+                        "mean": "170.83",
+                        "min": "158",
+                        "max": "190",
+                        "sd": "9.23",
+                        "unit": "cm"
                     }
                 ]
             },
@@ -72,24 +72,8 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "oral contraceptives",
-                        "choice": "2 Y || 2 N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "2 M || 4 F"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "34.5",
-                        "min": "21",
-                        "max": "56",
-                        "sd": "14.06",
-                        "unit": "yr"
+                        "choice": "Y {{2}}  ||  N {{2}}"
                     },
                     {
                         "category": "height",
@@ -100,12 +84,28 @@
                         "unit": "cm"
                     },
                     {
+                        "category": "sex",
+                        "choice": "M {{2}} || F {{4}}"
+                    },
+                    {
                         "category": "weight",
                         "mean": "67.5",
                         "min": "39",
                         "max": "80",
                         "sd": "14.6",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "34.5",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "14.06",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
                     }
                 ]
             },
@@ -114,12 +114,20 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": "2 M || 4  F"
+                        "category": "age",
+                        "mean": "32.83",
+                        "min": "22",
+                        "max": "56",
+                        "sd": "11.13",
+                        "unit": "yr"
                     },
                     {
                         "category": "oral contraceptives",
-                        "choice": "1 Y || 3 N"
+                        "choice": "Y {{1}}  ||  N {{3}}"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{2}}|| F {{4}}"
                     },
                     {
                         "category": "weight",
@@ -128,14 +136,6 @@
                         "max": "98",
                         "sd": "15.7",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "32.83",
-                        "min": "22",
-                        "max": "56",
-                        "sd": "11.13",
-                        "unit": "yr"
                     },
                     {
                         "category": "height",
@@ -157,10 +157,7 @@
         "description": "",
         "individuals": [
             {
-                "name": "",
-                "group": "",
                 "source": "Fuhr1993a_Tab1.csv",
-                "format": "",
                 "figure": "Fuhr1993a_Tab1.png",
                 "characteristica": []
             }
@@ -185,19 +182,97 @@
         "outputs": [
             {
                 "source": "Fuhr1993a_Tab1.csv",
-                "format": "",
-                "figure": "Fuhr1993a_Tab1.png",
-                "individuum": "",
-                "intervention": "",
-                "substance": "",
-                "pktype": "",
-                "value": "",
-                "tissue": "",
-                "unit": ""
+                "figure": "Fuhr1993a_Tab1.png"
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 147.0,
+                "tissue": "plasma",
+                "sd": 77.0,
+                "unit": "µmol/l*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 115.0,
+                "tissue": "plasma",
+                "sd": 54.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 4.5,
+                "tissue": "plasma",
+                "sd": 1.8,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.57,
+                "tissue": "plasma",
+                "sd": 0.6,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 195.0,
+                "tissue": "plasma",
+                "sd": 132.0,
+                "unit": "µmol/l*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 94.0,
+                "tissue": "plasma",
+                "sd": 44.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 6.0,
+                "tissue": "plasma",
+                "sd": 3.0,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.6,
@@ -207,7 +282,51 @@
             },
             {
                 "group": "S2",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 95.83,
+                "tissue": "plasma",
+                "sd": 20.42,
+                "min": 51.0,
+                "max": 109.0,
+                "unit": "µmol/l*h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 152.17,
+                "tissue": "plasma",
+                "sd": 45.0,
+                "min": 107.0,
+                "max": 248.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 3.1,
+                "tissue": "plasma",
+                "sd": 0.94,
+                "min": 1.8,
+                "max": 4.7,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.58,
@@ -219,7 +338,51 @@
             },
             {
                 "group": "S3",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 197.83,
+                "tissue": "plasma",
+                "sd": 72.08,
+                "min": 122.0,
+                "max": 332.0,
+                "unit": "µmol/l*h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 79.17,
+                "tissue": "plasma",
+                "sd": 25.41,
+                "min": 42.0,
+                "max": 117.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.83,
+                "tissue": "plasma",
+                "sd": 1.14,
+                "min": 4.4,
+                "max": 7.9,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.55,

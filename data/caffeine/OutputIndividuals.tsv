@@ -1,4 +1,4 @@
-study	source	format	figure	individuum	intervention	substance	pktype	value	tissue	unit
+study	source	format	figure	individuum	interventions	substance	pktype	value	tissue	unit
 Abernethy1985	Abernethy1985_Fig2.csv		Abernethy1985_Fig2.png							
 Akinyinka2000	Akinyinka2000_Tab1.csv	TSV	Akinyinka2000_Tab1.png	col==subject	D1	caffeine	thalf || auc || clearance	col==t_half || col==AUC || col==Cl	plasma	h || µg/ml*h || ml/min/kg
 Akinyinka2000	Akinyinka2000_Tab1.csv	TSV	Akinyinka2000_Tab1.png	col==subject	D1	paraxanthine/caffeine	ratio	col==px_caf	plasma	-

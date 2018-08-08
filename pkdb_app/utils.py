@@ -13,7 +13,7 @@ def clean_import(data):
     clean_dict = {}
     for key, value in data.items():
 
-        if not str(value) in ["", "nan"]:
+        if not str(value).strip() in ["", "nan"]:
             clean_dict[key] = value
 
         elif str(value) == "NA":

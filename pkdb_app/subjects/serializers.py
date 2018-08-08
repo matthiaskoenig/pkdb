@@ -103,6 +103,13 @@ class IndividualSerializer(ParserSerializer):
 
         return super(IndividualSerializer, self).to_internal_value(data)
 
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+        if "group" in rep:
+            rep["group"] = instance.group.name
+
+        return rep
+
     def parse_individuals(self,data):
         try:
             individuals = data

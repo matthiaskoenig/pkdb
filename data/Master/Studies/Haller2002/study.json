@@ -24,6 +24,18 @@
                         "choice": null
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "Y {{2}}  ||  N {{5}}"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{3}} ||  F {{5}}"
+                    },
+                    {
                         "category": "weight",
                         "mean": "68.49",
                         "min": "52",
@@ -36,18 +48,6 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "3 M || 5 F"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "mean": null,
                         "min": "25",
@@ -55,8 +55,8 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "2 Y || 5 N"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -66,10 +66,7 @@
         "description": "",
         "individuals": [
             {
-                "name": "",
-                "group": "",
                 "source": "Haller2002_Tab3.csv",
-                "format": "",
                 "figure": "Haller2002_Tab3.png",
                 "characteristica": []
             }
@@ -94,19 +91,73 @@
         "outputs": [
             {
                 "source": "Haller2002_Tab3.csv",
-                "format": "",
-                "figure": "Haller2002_Tab3.png",
-                "individuum": "",
-                "intervention": "",
-                "substance": "",
-                "pktype": "",
-                "value": "",
-                "tissue": "",
-                "unit": ""
+                "figure": "Haller2002_Tab3.png"
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 94.0,
+                "tissue": "plasma",
+                "sd": 29.7,
+                "unit": "min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 5.0,
+                "tissue": "plasma",
+                "sd": 1.26,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 8.1,
+                "tissue": "plasma",
+                "sd": 4.76,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 73.7,
+                "tissue": "plasma",
+                "sd": 43.0,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 0.81,
+                "tissue": "plasma",
+                "sd": 0.44,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "vd",
                 "value": 0.46,
@@ -117,18 +168,8 @@
         ],
         "timecourse": [
             {
-                "group": "",
-                "intervention": "",
                 "source": "Haller2002_Fig1C.csv",
-                "format": "",
-                "figure": "Haller2002_Fig1C.png",
-                "substance": "",
-                "tissue": "",
-                "pktype": "",
-                "times": "",
-                "values": "",
-                "sd": "",
-                "unit": ""
+                "figure": "Haller2002_Fig1C.png"
             }
         ]
     }

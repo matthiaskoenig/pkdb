@@ -34,18 +34,18 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "13 N || 2 Y"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "min": "18",
                         "max": "71",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N {{13}} ||  Y {{2}}"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
                     }
                 ]
             },
@@ -54,12 +54,12 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "healthy",
-                        "choice": "N"
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     },
                     {
                         "category": "smoking",
-                        "choice": "6 N || 4 Y"
+                        "choice": "N {{6}}  ||  Y {{4}}"
                     },
                     {
                         "category": "age",
@@ -68,8 +68,8 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "disease",
-                        "choice": "cirrhosis"
+                        "category": "healthy",
+                        "choice": "N"
                     }
                 ]
             },
@@ -80,6 +80,10 @@
                     {
                         "category": "smoking",
                         "choice": "Mixed"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     },
                     {
                         "category": "weight",
@@ -100,10 +104,6 @@
                     {
                         "category": "healthy",
                         "choice": "N"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhosis"
                     }
                 ]
             }
@@ -128,7 +128,57 @@
         "outputs": [
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.2,
+                "tissue": "plasma",
+                "sd": 2.4,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.54,
+                "tissue": "plasma",
+                "sd": 0.17,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 1.4,
+                "tissue": "plasma",
+                "sd": 0.5,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "plasma_binding",
+                "value": 313.0,
+                "tissue": "plasma",
+                "sd": 1.8,
+                "unit": "-"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance_unbound",
                 "value": 2.0,
@@ -138,7 +188,57 @@
             },
             {
                 "group": "S3",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 6.1,
+                "tissue": "plasma",
+                "sd": 1.9,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.47,
+                "tissue": "plasma",
+                "sd": 0.16,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 0.9,
+                "tissue": "plasma",
+                "sd": 0.3,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "plasma_binding",
+                "value": 25.5,
+                "tissue": "plasma",
+                "sd": 4.0,
+                "unit": "-"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance_unbound",
                 "value": 1.2,

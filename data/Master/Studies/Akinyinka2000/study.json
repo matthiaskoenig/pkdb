@@ -16,16 +16,16 @@
         "description": "Control group: Ten healthy adults, with a mean age of 32.1 ± 7.6 years (age range 18±40 years) and weighing 59.8 +- 12.3 kg (range 38±82 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.||Patient group: Ten patients aged 15.7 ± 2.5 years (range 12±20 years) and weighing 45.3 ± 14.9 kg (range 25±58 kg) were enrolled into the study (Table 1). Patients were enrolled if the following criteria were met: fever in the preceding 24±48 h or pyrexia at presentation, pure Plasmodium falciparum parasitaemia with a peripheral parasite density of more than 5000 asexual forms per microlitre in blood, no history of anti-malarial drug administration in the 2 weeks preceding presentation, negative urine test for 4-aminoquinoline (Dill-Glazko) and sulphonamides (Lignin) and/or absence of other concomitant illness.||Plasma and salvia caffeine concentration measured in 8 of 10 healthy volunteers. Control group: Ten healthy adults, with a mean age of 32.1 ± 7.6 years (age range 18±40 years) and weighing 59.8 +- 12.3 kg (range 38±82 kg) (Table 1) participated in the study. The subjects were all non-smokers, were not receiving any medication and all abstained from alcohol and kola nuts in the preceding 2 weeks and throughout the Study.",
         "characteristica": [
             {
+                "category": "sex",
+                "choice": null
+            },
+            {
                 "category": "species",
                 "choice": "homo sapiens"
             },
             {
                 "category": "ethnicity",
                 "choice": "Black"
-            },
-            {
-                "category": "sex",
-                "choice": null
             },
             {
                 "category": "smoking",
@@ -64,14 +64,6 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "Plasmodium falciparum"
-                    },
-                    {
                         "category": "age",
                         "mean": "15.7",
                         "min": "12",
@@ -80,12 +72,20 @@
                         "unit": "yr"
                     },
                     {
+                        "category": "disease",
+                        "choice": "Plasmodium falciparum"
+                    },
+                    {
                         "category": "weight",
                         "mean": "45.3",
                         "min": "25",
                         "max": "58",
                         "sd": "14.9",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
                     }
                 ]
             },
@@ -112,13 +112,13 @@
                 "figure": "Akinyinka2000_Tab1.png",
                 "characteristica": [
                     {
+                        "category": "sex",
+                        "choice": "col==sex"
+                    },
+                    {
                         "category": "weight",
                         "value": "col==weight",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "col==sex"
                     },
                     {
                         "category": "age",
@@ -151,7 +151,9 @@
                 "format": "TSV",
                 "figure": "Akinyinka2000_Tab1.png",
                 "individuum": "col==subject",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "thalf || auc || clearance",
                 "value": "col==t_half || col==AUC || col==Cl",
@@ -163,7 +165,9 @@
                 "format": "TSV",
                 "figure": "Akinyinka2000_Tab1.png",
                 "individuum": "col==subject",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "paraxanthine/caffeine",
                 "pktype": "ratio",
                 "value": "col==px_caf",
@@ -172,17 +176,117 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 1.9,
+                "tissue": "plasma",
+                "sd": 0.8,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 7.2,
+                "tissue": "plasma",
+                "sd": 3.0,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.1,
+                "tissue": "plasma",
+                "sd": 1.0,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 5.9,
+                "tissue": "plasma",
+                "sd": 2.8,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "auc",
-                "value": 0.649,
+                "value": 55.6,
                 "tissue": "plasma",
-                "sd": 0.251,
+                "sd": 24.0,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 649.0,
+                "tissue": "plasma",
+                "sd": 251.0,
                 "unit": "µg/ml*h/kg"
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "thalf",
+                "value": 9.1,
+                "tissue": "plasma",
+                "sd": 9.0,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 7.9,
+                "tissue": "plasma",
+                "sd": 3.7,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 1.4,
+                "tissue": "plasma",
+                "sd": 0.5,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "paraxanthine",
                 "pktype": "auc",
                 "value": 24.7,
@@ -192,7 +296,45 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theobromine",
+                "pktype": "thalf",
+                "value": 14.5,
+                "tissue": "plasma",
+                "sd": 8.4,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theobromine",
+                "pktype": "tmax",
+                "value": 10.2,
+                "tissue": "plasma",
+                "sd": 6.0,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theobromine",
+                "pktype": "cmax",
+                "value": 0.2,
+                "tissue": "plasma",
+                "sd": 0.04,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "theobromine",
                 "pktype": "auc",
                 "value": 4.1,
@@ -202,7 +344,45 @@
             },
             {
                 "group": "S1",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theophylline",
+                "pktype": "thalf",
+                "value": 14.4,
+                "tissue": "plasma",
+                "sd": 7.4,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theophylline",
+                "pktype": "tmax",
+                "value": 10.3,
+                "tissue": "plasma",
+                "sd": 7.6,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theophylline",
+                "pktype": "cmax",
+                "value": 0.21,
+                "tissue": "plasma",
+                "sd": 0.1,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "theophylline",
                 "pktype": "auc",
                 "value": 7.2,
@@ -212,17 +392,117 @@
             },
             {
                 "group": "S2",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 2.4,
+                "tissue": "plasma",
+                "sd": 2.0,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 9.5,
+                "tissue": "plasma",
+                "sd": 5.2,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.3,
+                "tissue": "plasma",
+                "sd": 1.2,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 4.9,
+                "tissue": "plasma",
+                "sd": 1.8,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 74.7,
+                "tissue": "plasma",
+                "sd": 39.7,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "auc",
                 "value": 0.72,
                 "tissue": "plasma",
-                "sd": 0.569,
+                "sd": 569.0,
                 "unit": "µg/ml*h/kg"
             },
             {
                 "group": "S2",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "thalf",
+                "value": 11.6,
+                "tissue": "plasma",
+                "sd": 5.3,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 11.4,
+                "tissue": "plasma",
+                "sd": 7.1,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 0.9,
+                "tissue": "plasma",
+                "sd": 0.4,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "paraxanthine",
                 "pktype": "auc",
                 "value": 23.8,
@@ -232,7 +512,45 @@
             },
             {
                 "group": "S2",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theobromine",
+                "pktype": "thalf",
+                "value": 17.4,
+                "tissue": "plasma",
+                "sd": 4.8,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theobromine",
+                "pktype": "tmax",
+                "value": 12.4,
+                "tissue": "plasma",
+                "sd": 6.9,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theobromine",
+                "pktype": "cmax",
+                "value": 0.24,
+                "tissue": "plasma",
+                "sd": 0.09,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "theobromine",
                 "pktype": "auc",
                 "value": 7.1,
@@ -242,7 +560,45 @@
             },
             {
                 "group": "S2",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theophylline",
+                "pktype": "thalf",
+                "value": 17.7,
+                "tissue": "plasma",
+                "sd": 4.8,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theophylline",
+                "pktype": "tmax",
+                "value": 13.8,
+                "tissue": "plasma",
+                "sd": 7.3,
+                "unit": "h"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "theophylline",
+                "pktype": "cmax",
+                "value": 0.14,
+                "tissue": "plasma",
+                "sd": 0.09,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "theophylline",
                 "pktype": "auc",
                 "value": 6.1,
@@ -252,7 +608,141 @@
             },
             {
                 "group": "S3",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 5.8,
+                "tissue": "plasma",
+                "sd": 3.2,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.5,
+                "tissue": "plasma",
+                "sd": 1.8,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 51.9,
+                "tissue": "plasma",
+                "sd": 26.9,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 609.0,
+                "tissue": "plasma",
+                "sd": 297.0,
+                "unit": "µg/ml*h/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 6.0,
+                "tissue": "plasma",
+                "sd": 1.7,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 1.8,
+                "tissue": "plasma",
+                "sd": 0.7,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 4.8,
+                "tissue": "saliva",
+                "sd": 8.0,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.3,
+                "tissue": "saliva",
+                "sd": 1.0,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 35.5,
+                "tissue": "saliva",
+                "sd": 18.9,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 427.0,
+                "tissue": "saliva",
+                "sd": 239.0,
+                "unit": "µg/ml*h/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 7.1,
+                "tissue": "saliva",
+                "sd": 3.8,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "caffeine",
                 "pktype": "clearance",
                 "value": 2.8,
@@ -262,7 +752,93 @@
             },
             {
                 "group": "S3",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 1.5,
+                "tissue": "plasma",
+                "sd": 0.6,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 7.0,
+                "tissue": "plasma",
+                "sd": 3.4,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "auc",
+                "value": 29.1,
+                "tissue": "plasma",
+                "sd": 9.4,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "thalf",
+                "value": 10.5,
+                "tissue": "plasma",
+                "sd": 4.4,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 1.0,
+                "tissue": "saliva",
+                "sd": 0.4,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 8.0,
+                "tissue": "saliva",
+                "sd": 2.8,
+                "unit": "h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "auc",
+                "value": 16.8,
+                "tissue": "saliva",
+                "sd": 9.9,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
                 "substance": "paraxanthine",
                 "pktype": "thalf",
                 "value": 6.9,
@@ -274,43 +850,49 @@
         "timecourse": [
             {
                 "group": "col==subjects",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
                 "source": "Akinyinka2000_Fig1.csv",
                 "format": "TSV",
                 "figure": "Akinyinka2000_Fig1.png",
                 "substance": "paraxanthine",
                 "tissue": "plasma",
                 "pktype": "concentration",
-                "times": "col==time",
-                "values": "col==caf",
+                "time": "col==time",
+                "value": "col==caf",
                 "sd": "col==caf_sd",
                 "unit": "µg/ml"
             },
             {
                 "group": "col==subjects",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
                 "source": "Akinyinka2000_Fig1.csv",
                 "format": "TSV",
                 "figure": "Akinyinka2000_Fig2.png",
                 "substance": "caffeine",
                 "tissue": "plasma",
                 "pktype": "concentration",
-                "times": "col==time",
-                "values": "col==px",
+                "time": "col==time",
+                "value": "col==px",
                 "sd": "col==px_sd",
                 "unit": "µg/ml"
             },
             {
                 "group": "col==subjects",
-                "intervention": "D1",
+                "interventions": [
+                    "D1"
+                ],
                 "source": "Akinyinka2000_Fig1.csv",
                 "format": "TSV",
                 "figure": "Akinyinka2000_Fig1.png && Akinyinka2000_Fig2.png",
                 "substance": "paraxanthine/caffeine",
                 "tissue": "plasma",
                 "pktype": "ratio",
-                "times": "col==time",
-                "values": "col==px_caf",
+                "time": "col==time",
+                "value": "col==px_caf",
                 "sd": "col==px_caf_sd",
                 "unit": "-"
             }

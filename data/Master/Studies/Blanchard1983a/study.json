@@ -24,6 +24,14 @@
                         "choice": "Caucasian"
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
                         "category": "weight",
                         "mean": "79.5",
                         "min": "64",
@@ -36,24 +44,16 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "age",
                         "mean": "21.8",
                         "min": "18.8",
                         "max": "30",
                         "se": "1.1",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }
@@ -87,18 +87,8 @@
         "outputs": [],
         "timecourse": [
             {
-                "group": "",
-                "intervention": "",
                 "source": "Blanchard1983a_Fig2.csv",
-                "format": "",
-                "figure": "Blanchard1983a_Fig2.png",
-                "substance": "",
-                "tissue": "",
-                "pktype": "",
-                "times": "",
-                "values": "",
-                "sd": "",
-                "unit": ""
+                "figure": "Blanchard1983a_Fig2.png"
             }
         ]
     }
