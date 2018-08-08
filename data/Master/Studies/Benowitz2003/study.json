@@ -20,10 +20,6 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
                         "category": "smoking",
                         "choice": "Y"
                     },
@@ -32,8 +28,16 @@
                         "choice": "M"
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     },
                     {
                         "category": "age",
@@ -41,10 +45,6 @@
                         "min": "27",
                         "max": "47",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     }
                 ]
             }

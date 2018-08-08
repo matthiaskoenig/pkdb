@@ -16,12 +16,12 @@
         "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.||8 smoking healthy volunteers and patients without liver disease||15 non-smoking healthy volunteers and patients without liver disease||18 smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.||30 non-smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
         "characteristica": [
             {
-                "category": "oral contraceptives",
-                "choice": null
-            },
-            {
                 "category": "species",
                 "choice": "homo sapiens"
+            },
+            {
+                "category": "oral contraceptives",
+                "choice": null
             }
         ],
         "groups": [
@@ -30,12 +30,12 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
                     },
                     {
                         "category": "smoking",
@@ -54,12 +54,12 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
                     },
                     {
                         "category": "smoking",
@@ -72,12 +72,12 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
                     },
                     {
                         "category": "smoking",
@@ -90,12 +90,12 @@
                 "name": "S4",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": null
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
                     },
                     {
                         "category": "smoking",
@@ -108,6 +108,10 @@
                 "name": "S5",
                 "characteristica": [
                     {
+                        "category": "sex",
+                        "choice": "M {{13}} ||  F {{5}}"
+                    },
+                    {
                         "category": "weight",
                         "mean": "71",
                         "min": "51",
@@ -116,28 +120,24 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "age",
-                        "mean": "46",
-                        "min": "30",
-                        "max": "65",
-                        "sd": "9",
-                        "unit": "yr"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
+                        "category": "smoking",
+                        "choice": "Y"
                     },
                     {
                         "category": "healthy",
                         "choice": "N"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M {{13}} ||  F {{5}}"
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "Y"
+                        "category": "age",
+                        "mean": "46",
+                        "min": "30",
+                        "max": "65",
+                        "sd": "9",
+                        "unit": "yr"
                     }
                 ]
             },
@@ -154,16 +154,8 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "disease",
-                        "choice": "alcoholic liver cirrhosis"
-                    },
-                    {
                         "category": "sex",
                         "choice": "M {{21}} || F {{9}}"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
                     },
                     {
                         "category": "age",
@@ -174,8 +166,16 @@
                         "unit": "yr"
                     },
                     {
+                        "category": "healthy",
+                        "choice": "N"
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
                     }
                 ]
             }

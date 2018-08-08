@@ -20,11 +20,11 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
+                        "category": "oral contraceptives",
                         "choice": null
                     },
                     {
-                        "category": "oral contraceptives",
+                        "category": "smoking",
                         "choice": null
                     },
                     {
@@ -32,8 +32,16 @@
                         "choice": "M {{9}} || F {{2}}"
                     },
                     {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "schizophrenia"
                     },
                     {
                         "category": "age",
@@ -42,14 +50,6 @@
                         "max": "66",
                         "sd": "14.56",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "schizophrenia"
                     }
                 ]
             }

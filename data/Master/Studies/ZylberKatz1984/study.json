@@ -38,14 +38,6 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "weight",
-                        "mean": "76.2",
-                        "min": "60",
-                        "max": "88",
-                        "sd": "12.1",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "age",
                         "mean": "41.6",
                         "min": "29",
@@ -56,6 +48,14 @@
                     {
                         "category": "sex",
                         "choice": "M {{3}} || F {{2}}"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "76.2",
+                        "min": "60",
+                        "max": "88",
+                        "sd": "12.1",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -63,6 +63,14 @@
                 "count": 3,
                 "name": "S2",
                 "characteristica": [
+                    {
+                        "category": "age",
+                        "mean": "27.33",
+                        "min": "24",
+                        "max": "30",
+                        "sd": "2.49",
+                        "unit": "yr"
+                    },
                     {
                         "category": "weight",
                         "mean": "70.33",
@@ -74,14 +82,6 @@
                     {
                         "category": "sex",
                         "choice": "M {{2}} ||  F {{1}}"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "27.33",
-                        "min": "24",
-                        "max": "30",
-                        "sd": "2.49",
-                        "unit": "yr"
                     }
                 ]
             },

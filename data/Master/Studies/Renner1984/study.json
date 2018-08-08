@@ -26,16 +26,8 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "74",
-                        "min": "58",
-                        "max": "86",
-                        "sd": "10",
-                        "unit": "kg"
+                        "category": "oral contraceptives",
+                        "choice": "N"
                     },
                     {
                         "category": "smoking",
@@ -50,12 +42,20 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
+                        "category": "weight",
+                        "mean": "74",
+                        "min": "58",
+                        "max": "86",
+                        "sd": "10",
+                        "unit": "kg"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "N"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
                     }
                 ]
             },
@@ -64,20 +64,12 @@
                 "name": "S2",
                 "characteristica": [
                     {
+                        "category": "disease",
+                        "choice": "cirrhotic liver disease"
+                    },
+                    {
                         "category": "sex",
                         "choice": "M {{6}} || {{2}} F"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "66",
-                        "min": "41",
-                        "max": "100",
-                        "sd": "18",
-                        "unit": "kg"
                     },
                     {
                         "category": "age",
@@ -88,6 +80,10 @@
                         "unit": "yr"
                     },
                     {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N {{4}} ||  Y {{3}}"
                     },
@@ -96,8 +92,12 @@
                         "choice": "N"
                     },
                     {
-                        "category": "disease",
-                        "choice": "cirrhotic liver disease"
+                        "category": "weight",
+                        "mean": "66",
+                        "min": "41",
+                        "max": "100",
+                        "sd": "18",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -122,16 +122,16 @@
                         "unit": "kg"
                     },
                     {
+                        "category": "disease",
+                        "choice": "PBC"
+                    },
+                    {
                         "category": "oral contraceptives",
                         "choice": null
                     },
                     {
                         "category": "sex",
                         "choice": "F"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "PBC"
                     },
                     {
                         "category": "healthy",
@@ -148,8 +148,16 @@
                 "name": "S4",
                 "characteristica": [
                     {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
                         "category": "smoking",
                         "choice": "N {{4}}  || Y {{2}}"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
                     },
                     {
                         "category": "weight",
@@ -160,28 +168,20 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M {{9}}  ||  F {{2}}"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "Miscellaneous Liver Disease"
-                    },
-                    {
                         "category": "age",
                         "mean": "52",
                         "min": "24",
                         "max": "71",
                         "sd": "12",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{9}}  ||  F {{2}}"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "Miscellaneous Liver Disease"
                     }
                 ]
             }

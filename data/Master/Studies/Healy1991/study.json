@@ -20,20 +20,12 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "ethnicity",
+                        "category": "oral contraceptives",
                         "choice": null
                     },
                     {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
                     },
                     {
                         "category": "weight",
@@ -42,22 +34,30 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "sex",
+                        "choice": "M"
                     },
                     {
-                        "category": "age",
-                        "mean": "27.1",
-                        "sd": "3.1",
-                        "unit": "yr"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "alcohol",
                         "choice": "N"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.1",
+                        "sd": "3.1",
+                        "unit": "yr"
                     }
                 ]
             }

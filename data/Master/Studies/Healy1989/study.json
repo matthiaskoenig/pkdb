@@ -20,20 +20,12 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "ethnicity",
+                        "category": "oral contraceptives",
                         "choice": null
                     },
                     {
                         "category": "smoking",
                         "choice": "N"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
                     },
                     {
                         "category": "weight",
@@ -42,18 +34,26 @@
                         "unit": "kg"
                     },
                     {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
                         "category": "healthy",
                         "choice": "Y"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     },
                     {
                         "category": "age",
                         "mean": "26.7",
                         "sd": "1.6",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     }
                 ]
             }

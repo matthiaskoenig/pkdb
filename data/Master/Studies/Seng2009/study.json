@@ -16,28 +16,28 @@
         "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
         "characteristica": [
             {
-                "category": "healthy",
-                "choice": "Y"
-            },
-            {
-                "category": "ethnicity",
-                "choice": "Asian"
-            },
-            {
-                "category": "sex",
-                "choice": "M"
-            },
-            {
-                "category": "oral contraceptives",
-                "choice": null
+                "category": "species",
+                "choice": "homo sapiens"
             },
             {
                 "category": "alcohol abstinence",
                 "choice": "N"
             },
             {
-                "category": "species",
-                "choice": "homo sapiens"
+                "category": "ethnicity",
+                "choice": "Asian"
+            },
+            {
+                "category": "oral contraceptives",
+                "choice": null
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "sex",
+                "choice": "M"
             }
         ],
         "groups": [
@@ -45,6 +45,14 @@
                 "count": 14,
                 "name": "S_NCNS",
                 "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": "<=200mg per day"
+                    },
                     {
                         "category": "age",
                         "mean": "21",
@@ -56,14 +64,6 @@
                         "mean": "62",
                         "sd": "9",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "caffeine",
-                        "choice": "<=200mg per day"
                     }
                 ]
             },
@@ -76,14 +76,14 @@
                         "choice": "N"
                     },
                     {
-                        "category": "caffeine",
-                        "choice": ">200mg per day"
-                    },
-                    {
                         "category": "age",
                         "mean": "24",
                         "sd": "4",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": ">200mg per day"
                     },
                     {
                         "category": "weight",
@@ -98,20 +98,8 @@
                 "name": "S_CS",
                 "characteristica": [
                     {
-                        "category": "weight",
-                        "mean": "71",
-                        "sd": "19",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "caffeine",
                         "choice": ">200mg per day"
-                    },
-                    {
-                        "category": "age",
-                        "mean": "23",
-                        "sd": "5",
-                        "unit": "yr"
                     },
                     {
                         "category": "smoking",
@@ -123,6 +111,18 @@
                         "min": "6",
                         "max": "14",
                         "unit": "1/day"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71",
+                        "sd": "19",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "23",
+                        "sd": "5",
+                        "unit": "yr"
                     }
                 ]
             }
