@@ -25,6 +25,7 @@ ipdb==0.11
 ipython==6.4.0
 mkdocs==0.17.4
 flake8==3.5.0
+django-debug-toolbar
 
 # Testing
 mock==2.0.0
@@ -47,3 +48,4 @@ pandas
 jsonschema
 django-extra-fields
 PyPDF2
+lark-parser

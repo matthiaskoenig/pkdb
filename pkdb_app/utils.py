@@ -1,5 +1,6 @@
 
 import os
+from django.core.exceptions import ValidationError
 
 CHAR_MAX_LENGTH = 30
 
@@ -25,3 +26,16 @@ def ensure_dir(file_path):
     directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
+
+
+def update_or_create_multiple(parent,children,related_name):
+    for child in children:
+            instance_cild =  getattr(parent,related_name)
+            instance_cild.update_or_create(**child)
+
+def get_or_val_error(model, *args, **kwargs):
+    try:
+        return model.objects.get(*args, **kwargs)
+    except model.DoesNotExist:
+        msg = f"{model} instance with args:{args}, kwargs:{kwargs} does not exist"
+        return ValidationError(msg)

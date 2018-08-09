@@ -83,7 +83,12 @@ def upload_study(json_study):
     study_partial["individualset"] = json_study["json"].get("individualset",None)
 
 
-    client.action(document, ["studies", "create"], params=study_partial)
+    #client.action(document, ["studies", "create"], params=study_partial)
+    response = requests.post(f'http://0.0.0.0:8000/api/v1/studies/',
+                              json=study_partial)
+    if response.status_code == 400:
+        print(json_study["json"]["name"],response.text)
+
     if "outputset" in json_study["json"].keys():
         response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = {"outputset": json_study["json"].get("outputset")})
         if response.status_code == 400:
@@ -122,6 +127,6 @@ if __name__ == '__main__':
 
     parser = bonobo.get_argument_parser()
     with bonobo.parse_args(parser) as options:
-        bonobo.run(get_graph_references(**options), services=get_services(**options))
+        #bonobo.run(get_graph_references(**options), services=get_services(**options))
         bonobo.run(get_graph_study(**options), services=get_services(**options))
 

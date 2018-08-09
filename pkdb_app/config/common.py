@@ -26,6 +26,8 @@ class Common(Configuration):
         'rest_framework.authtoken',  # token authentication
         'django_filters',            # for filtering rest endpoints
         'rest_framework_swagger',
+        'debug_toolbar',
+
         # Your apps
         'pkdb_app.users',
         'pkdb_app.studies',
@@ -44,7 +46,12 @@ class Common(Configuration):
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
+
+    DEBUG_TOOLBAR_PATCH_SETTINGS = False
+
+    INTERNAL_IPS = ('172.19.0.1',)
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'pkdb_app.urls'
@@ -204,7 +211,6 @@ class Common(Configuration):
         ],
         'DEFAULT_AUTHENTICATION_CLASSES': (
             'rest_framework.authentication.SessionAuthentication',
-            #'rest_framework.authentication.T'
             'rest_framework.authentication.TokenAuthentication',
 
         ),
