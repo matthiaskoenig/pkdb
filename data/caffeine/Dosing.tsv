@@ -1,4 +1,4 @@
-study	dosing	substance	route	application	form	dose	dose_unit	dose_bodyweight	times	times_unit	dosing_details
+study	dosing	substance	route	application	form	dose	dose_unit	dose_bodyweight	time	time_unit	dosing_details
 Abernethy1985	D1	caffeine	oral	single dose		162	mg	no	0	h	"Each subject received 162mg caffeine base orally after an overnight fast.
 Each subject ingested 325mg caffeine citrate (Lilly) with 100 mt water (equivalent to 162 mg caffeine base)."
 Akinyinka2000	D1	caffeine	oral	single dose		300	mg	no	0	h	All patients and volunteers fasted overnight and, at 0800 hours, were given orally 300 mg caffeine dissolved in 150 ml water; food intake was allowed 3 h after administration of caffeine.

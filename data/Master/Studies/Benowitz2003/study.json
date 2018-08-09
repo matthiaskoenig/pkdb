@@ -28,16 +28,8 @@
                         "choice": "M"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
                     },
                     {
                         "category": "age",
@@ -45,6 +37,14 @@
                         "min": "27",
                         "max": "47",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     }
                 ]
             }

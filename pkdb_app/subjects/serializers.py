@@ -1,11 +1,10 @@
 import pandas as pd
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from pkdb_app.behaviours import Sourceable
-from pkdb_app.categoricals import FORMAT_MAPPING
+from pkdb_app.categoricals import FORMAT_MAPPING, CHARACTERISTIC_DICT, CATEGORIAL_TYPE, NUMERIC_TYPE, BOOLEAN_TYPE
 from .models import Group, GroupSet,Individual,IndividualSet,Characteristica
-
-from ..studies.models import Reference
 from ..serializers import ParserSerializer
 
 BASE_FIELDS = ()
@@ -34,6 +33,27 @@ class CharacteristicaSerializer(ParserSerializer):
         :return:
         """
         data = self.split_to_map(data)
+        characteristic = CHARACTERISTIC_DICT[data.get("category")]
+        choice = data.get("choice",None)
+        unit = data.get("unit",None)
+
+        fields_require_unit = ["value","mean","median","min","max","sd","se","cv","value_map","mean_map","median_map","min_map","max_map","sd_map","se_map","cv_map"]
+
+        if choice:
+            if (characteristic.dtype == CATEGORIAL_TYPE or characteristic.dtype == BOOLEAN_TYPE):
+                if not choice in characteristic.choices:
+                    msg = f"{choice} is not part of {characteristic.choices} for {characteristic.value}"
+                    raise ValidationError(msg)
+
+        #if any(k in fields_require_unit for k in data.keys()):
+        elif characteristic.dtype == NUMERIC_TYPE:
+            if not unit in characteristic.units:
+                msg = f"{unit} is not allowed but required. For {characteristic.value} allowed units are {characteristic.units}"
+                raise ValidationError(msg)
+
+
+
+
         return super(CharacteristicaSerializer, self).to_internal_value(data)
 
 

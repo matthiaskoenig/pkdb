@@ -5,6 +5,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
+from django.conf import settings
+from django.conf.urls import include, url
 
 from .interventions.views import SubstancesViewSet
 from .users.views import UserViewSet, UserCreateViewSet
@@ -46,3 +48,9 @@ urlpatterns = [
     #re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

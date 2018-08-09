@@ -24,26 +24,12 @@
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "min": "51",
-                        "max": "75",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "sex",
                         "choice": "F"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
                     },
                     {
                         "category": "age",
@@ -51,6 +37,20 @@
                         "min": "20",
                         "max": "34",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "weight",
+                        "min": "51",
+                        "max": "75",
+                        "unit": "kg"
                     }
                 ]
             }

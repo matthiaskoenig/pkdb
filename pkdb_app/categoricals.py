@@ -64,6 +64,8 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("ml/h/kg"),
     UnitType("mg/l"),
     UnitType("mg/l*h"),
+    UnitType("mg/kg"),
+    UnitType("mg/day")
 
 ]
 
@@ -84,7 +86,8 @@ CATEGORIAL_TYPE = 'categorial'
 STRING_TYPE = "string"  # can be a free string, no limitations compared to categorial
 YES = "Y"
 NO = 'N'
-BOOLEAN_CHOICES = [YES, NO]
+M = "Mixed"
+BOOLEAN_CHOICES = [YES, NO, M]
 
 INTERVENTION_ROUTE = [
 "oral",
@@ -101,6 +104,10 @@ INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
 INTERVENTION_FORM = [
     "tablete",
     "capsule",
+    "2 100mg NO-DOZ tablets",
+    "capsules",
+    "2 capsules",
+
 ]
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
@@ -151,6 +158,12 @@ SUBSTANCES_DATA = [
     "17U",
     "37X",
     "1X",
+    "enoxacin",
+    "ciprofloxacin",
+    "pipemidic acid",
+    "norfloxacin",
+    "ofloxacin",
+    "fluvoxamine",
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -165,7 +178,7 @@ COMMON_DATA = [
 
     # Lifestyle
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["mg/day"]),
 ]
 
 CHARACTERISTIC_DATA = COMMON_DATA + [
@@ -179,20 +192,21 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
 
     CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F"], ["-"]),
+    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", "Mixed"], ["-"]),
     CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian"], ["-"]),
 
 
     # Disease (status)
     CharacteristicType('healthy', "health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, ["cirrhosis"], ["-"]),
+    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, ["cirrhosis","plasmodium falciparum","alcoholic liver cirrhosis","cirrhotic liver disease","PBC","miscellaneous liver disease","schizophrenia"], ["-"]),
 
 
     # Lifestyle
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('smoking amount', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
     CharacteristicType('alcohol', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('alcohol amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+
 
     # Biochemical data
     CharacteristicType('ALT', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
@@ -208,7 +222,6 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     # Genetics ???
     # Requires storage of the variants and effects of clearance
 ]
-
 PK_DATA = [
     "auc",
     "concentration",

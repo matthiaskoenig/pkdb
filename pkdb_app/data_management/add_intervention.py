@@ -31,9 +31,10 @@ def add_intervention_to_study(study):
         intervention_json = {}
         intervention_json["name"] = row["dosing"]
         intervention_json["substance"] = row["substance"]
-        intervention_json["time"] = row["times"]
-        intervention_json["time_unit"] = row["times_unit"]
+        intervention_json["time"] = row["time"]
+        intervention_json["time_unit"] = row["time_unit"]
         intervention_json["route"] = row["route"]
+        intervention_json["form"] = row["form"]
         intervention_json["value"] = row["dose"]
         intervention_json["unit"] = row["dose_unit"]
         study_json["interventionset"]["interventions"].append(clean_import(intervention_json))

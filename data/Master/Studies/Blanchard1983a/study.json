@@ -24,28 +24,12 @@
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "79.5",
-                        "min": "64",
-                        "max": "106",
-                        "se": "3.9",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "sex",
                         "choice": "M"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian"
                     },
                     {
                         "category": "age",
@@ -54,6 +38,22 @@
                         "max": "30",
                         "se": "1.1",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": "caucasian"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "79.5",
+                        "min": "64",
+                        "max": "106",
+                        "se": "3.9",
+                        "unit": "kg"
                     }
                 ]
             }

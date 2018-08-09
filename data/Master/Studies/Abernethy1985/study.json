@@ -16,10 +16,6 @@
         "description": "The subjects were 18 healthy women, 23 to 30 years supplementation. The subjects were divided into two groups each of 9 for the study. One group consisted of women taking a low-dose oestrogen (50 µg or less of the oestrogen component) oral contraceptive steroid for at least 3 months and no other medication (OCS group). The other group comprised 9 women of similar age not taking any medication. In each group 8 women were Caucasian, and t was Black. History, physical and laboratory examination indicated that all subjects were in good health. All subjects were asked to abstain from caffeine consumption 48 hours prior to the study.",
         "characteristica": [
             {
-                "category": "species",
-                "choice": "homo sapiens"
-            },
-            {
                 "category": "age",
                 "mean": "26",
                 "min": "23",
@@ -28,16 +24,20 @@
                 "unit": "yr"
             },
             {
-                "category": "smoking",
-                "choice": "N"
+                "category": "healthy",
+                "choice": "Y"
             },
             {
                 "category": "sex",
                 "choice": "F"
             },
             {
-                "category": "healthy",
-                "choice": "Y"
+                "category": "species",
+                "choice": "homo sapiens"
+            },
+            {
+                "category": "smoking",
+                "choice": "N"
             }
         ],
         "groups": [
@@ -46,14 +46,14 @@
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "ethnicity",
+                        "choice": "caucasian {{8}} ||  african {{1}}"
+                    },
+                    {
                         "category": "weight",
                         "mean": "59",
                         "se": "2",
                         "unit": "kg"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": "Caucasian {{8}} ||  Black {{1}}"
                     }
                 ]
             },
@@ -62,14 +62,14 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "ethnicity",
-                        "choice": "Caucasian {{8}}  || Black {{1}}"
-                    },
-                    {
                         "category": "weight",
                         "mean": "58",
                         "se": "3",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": "caucasian {{8}}  || african {{1}}"
                     }
                 ]
             }

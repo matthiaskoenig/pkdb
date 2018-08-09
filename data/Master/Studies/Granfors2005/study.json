@@ -16,6 +16,14 @@
         "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
         "characteristica": [
             {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "sex",
+                "choice": "F"
+            },
+            {
                 "category": "species",
                 "choice": "homo sapiens"
             },
@@ -26,14 +34,6 @@
             {
                 "category": "smoking",
                 "choice": "N"
-            },
-            {
-                "category": "sex",
-                "choice": "F"
-            },
-            {
-                "category": "healthy",
-                "choice": "Y"
             }
         ],
         "groups": [
@@ -42,24 +42,24 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "weight",
-                        "mean": "62",
-                        "min": "52",
-                        "max": "74",
-                        "sd": "10",
-                        "unit": "kg"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": "N"
-                    },
-                    {
                         "category": "age",
                         "mean": "22",
                         "min": "19",
                         "max": "26",
                         "sd": "2",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "62",
+                        "min": "52",
+                        "max": "74",
+                        "sd": "10",
+                        "unit": "kg"
                     }
                 ]
             },
@@ -67,6 +67,10 @@
                 "count": 15,
                 "name": "S2",
                 "characteristica": [
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "Y"
+                    },
                     {
                         "category": "weight",
                         "mean": "57",
@@ -82,10 +86,6 @@
                         "max": "25",
                         "sd": "2",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "oral contraceptives",
-                        "choice": "Y"
                     }
                 ]
             }

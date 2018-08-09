@@ -16,12 +16,12 @@
         "description": "The effects of grapefruit juice on caffeine pharmacokinetics were measured using a randomised, crossover study design. The subjects were 12 healthy volunteers who gave their written informed consent. Both male (n = 4) and female (n = 8) subjects, aged between 21 and 56 years and including smokers (n = 6) and nonsmokers (n = 6), participated in the study. Women on oral contraceptives were included if the drug used and the dosage were the same for both study periods. The weights of the subjects ranged between 39 and 98 kg. Individual characteristics of the volunteers are listed in Table 1. All had normal pre-study blood chemistry and haematology values.",
         "characteristica": [
             {
-                "category": "healthy",
-                "choice": "Y"
-            },
-            {
                 "category": "species",
                 "choice": "homo sapiens"
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
             }
         ],
         "groups": [
@@ -30,16 +30,24 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": "M {{4}} || F {{8}}"
-                    },
-                    {
                         "category": "height",
                         "mean": "170.83",
                         "min": "158",
                         "max": "190",
                         "sd": "9.23",
                         "unit": "cm"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "68",
+                        "min": "39",
+                        "max": "98",
+                        "sd": "15.2",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{4}} || F {{8}}"
                     },
                     {
                         "category": "smoking",
@@ -52,14 +60,6 @@
                         "max": "56",
                         "sd": "12.7",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "68",
-                        "min": "39",
-                        "max": "98",
-                        "sd": "15.2",
-                        "unit": "kg"
                     },
                     {
                         "category": "oral contraceptives",
@@ -76,12 +76,12 @@
                         "choice": "Y {{2}}  ||  N {{2}}"
                     },
                     {
-                        "category": "age",
-                        "mean": "34.5",
-                        "min": "21",
-                        "max": "56",
-                        "sd": "14.06",
-                        "unit": "yr"
+                        "category": "height",
+                        "mean": "168.33",
+                        "min": "158",
+                        "max": "175",
+                        "sd": "6.75",
+                        "unit": "cm"
                     },
                     {
                         "category": "weight",
@@ -96,16 +96,16 @@
                         "choice": "Y"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M {{2}} || F {{4}}"
+                        "category": "age",
+                        "mean": "34.5",
+                        "min": "21",
+                        "max": "56",
+                        "sd": "14.06",
+                        "unit": "yr"
                     },
                     {
-                        "category": "height",
-                        "mean": "168.33",
-                        "min": "158",
-                        "max": "175",
-                        "sd": "6.75",
-                        "unit": "cm"
+                        "category": "sex",
+                        "choice": "M {{2}} || F {{4}}"
                     }
                 ]
             },
@@ -114,16 +114,28 @@
                 "name": "S3",
                 "characteristica": [
                     {
+                        "category": "oral contraceptives",
+                        "choice": "Y {{1}}  ||  N {{3}}"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "68.5",
+                        "min": "55",
+                        "max": "98",
+                        "sd": "15.7",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{2}}|| F {{4}}"
+                    },
+                    {
                         "category": "age",
                         "mean": "32.83",
                         "min": "22",
                         "max": "56",
                         "sd": "11.13",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
                     },
                     {
                         "category": "height",
@@ -134,20 +146,8 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": "Y {{1}}  ||  N {{3}}"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M {{2}}|| F {{4}}"
-                    },
-                    {
-                        "category": "weight",
-                        "mean": "68.5",
-                        "min": "55",
-                        "max": "98",
-                        "sd": "15.7",
-                        "unit": "kg"
+                        "category": "smoking",
+                        "choice": "N"
                     }
                 ]
             }

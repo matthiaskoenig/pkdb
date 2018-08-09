@@ -92,15 +92,15 @@ class Valueable(models.Model):
     In addition all the statistical values are stored.
     """
     count = models.IntegerField(null=True, blank=True)  # how many participants in characteristics
-    value = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
+    value = models.FloatField( null=True, blank=True)
+    mean = models.FloatField( null=True, blank=True)
+    median = models.FloatField( null=True, blank=True)
+    min = models.FloatField( null=True, blank=True)
+    max = models.FloatField( null=True, blank=True)
+    sd = models.FloatField( null=True, blank=True)
+    se = models.FloatField( null=True, blank=True)
+    cv = models.FloatField( null=True, blank=True)
 
-    mean = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
-    median = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
-    min = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
-    max = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
-    sd = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
-    se = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
-    cv = models.DecimalField(max_digits = 40,decimal_places=20, null=True, blank=True)
 
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 

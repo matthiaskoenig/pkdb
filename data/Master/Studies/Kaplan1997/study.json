@@ -20,22 +20,46 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "oral contraceptives",
+                        "category": "smoking",
+                        "choice": "Y {{2}}  ||  N {{10}} "
+                    },
+                    {
+                        "category": "alcohol",
                         "choice": null
                     },
                     {
-                        "category": "caffeine",
-                        "choice": "regular useres of caffeine {{10}}  "
+                        "category": "sex",
+                        "choice": " M {{5}} || F {{7}}"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "Y {{2}}  ||  N {{10}} "
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "28.8",
+                        "min": "22",
+                        "max": "41",
+                        "sd": "6.6",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "caffeine",
+                        "choice": "Y {{10}} || N {{2}}"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     },
                     {
                         "category": "smoking amount",
                         "min": "10",
                         "max": "20",
                         "unit": "1/day"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "weight",
@@ -46,32 +70,8 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "sex",
-                        "choice": " M {{5}} || F {{7}}"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "alcohol",
+                        "category": "oral contraceptives",
                         "choice": null
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
-                        "category": "age",
-                        "mean": "28.8",
-                        "min": "22",
-                        "max": "41",
-                        "sd": "6.6",
-                        "unit": "yr"
                     }
                 ]
             }
@@ -95,6 +95,7 @@
                 "substance": "caffeine",
                 "time_unit": "h",
                 "route": "oral",
+                "form": "capsules",
                 "unit": "mg"
             },
             {
@@ -102,6 +103,7 @@
                 "substance": "caffeine",
                 "time_unit": "h",
                 "route": "oral",
+                "form": "capsules",
                 "unit": "mg"
             }
         ]

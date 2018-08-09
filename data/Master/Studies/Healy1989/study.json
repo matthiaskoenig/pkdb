@@ -20,12 +20,30 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "oral contraceptives",
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "26.7",
+                        "sd": "1.6",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
                         "choice": null
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "weight",
@@ -34,26 +52,8 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
+                        "category": "oral contraceptives",
                         "choice": null
-                    },
-                    {
-                        "category": "age",
-                        "mean": "26.7",
-                        "sd": "1.6",
-                        "unit": "yr"
                     }
                 ]
             }
@@ -77,6 +77,7 @@
                 "time": "24||36||48",
                 "time_unit": "h",
                 "route": "oral",
+                "form": "capsules",
                 "value": 750.0,
                 "unit": "mg"
             }

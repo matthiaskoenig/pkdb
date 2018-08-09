@@ -20,12 +20,34 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "oral contraceptives",
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "alcohol",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.1",
+                        "sd": "3.1",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
                         "choice": null
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "weight",
@@ -34,30 +56,8 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
-                        "category": "alcohol",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "ethnicity",
+                        "category": "oral contraceptives",
                         "choice": null
-                    },
-                    {
-                        "category": "age",
-                        "mean": "27.1",
-                        "sd": "3.1",
-                        "unit": "yr"
                     }
                 ]
             }
@@ -72,6 +72,7 @@
                 "time": "0",
                 "time_unit": "h",
                 "route": "oral",
+                "form": "2 100mg NO-DOZ tablets",
                 "value": 200.0,
                 "unit": "mg"
             }

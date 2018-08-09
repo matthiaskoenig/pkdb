@@ -20,30 +20,30 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
-                    },
-                    {
                         "category": "sex",
                         "choice": "M"
-                    },
-                    {
-                        "category": "species",
-                        "choice": "homo sapiens"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
                         "category": "age",
                         "min": "20",
                         "max": "40",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
                     }
                 ]
             }

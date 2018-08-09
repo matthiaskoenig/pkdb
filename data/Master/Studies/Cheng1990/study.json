@@ -30,10 +30,18 @@
                 "name": "S1",
                 "characteristica": [
                     {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
                         "category": "weight",
                         "min": "47",
                         "max": "85",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
                     },
                     {
                         "category": "age",
@@ -43,16 +51,8 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
                         "category": "sex",
                         "choice": "M {{9}} ||  F {{4}}"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
                     }
                 ]
             },
@@ -61,24 +61,24 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "weight",
-                        "mean": "74.77",
-                        "min": "50",
-                        "max": "107",
-                        "sd": "12.55",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "disease",
                         "choice": "cirrhosis"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
                     },
                     {
                         "category": "sex",
                         "choice": "M {{10}}  ||  F {{3}}"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "N"
+                        "category": "weight",
+                        "mean": "74.77",
+                        "min": "50",
+                        "max": "107",
+                        "sd": "12.55",
+                        "unit": "kg"
                     },
                     {
                         "category": "smoking",

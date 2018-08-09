@@ -24,19 +24,23 @@
                         "choice": "N"
                     },
                     {
-                        "category": "weight",
-                        "mean": "70.5",
-                        "min": "47",
-                        "max": "93",
-                        "unit": "kg"
-                    },
-                    {
                         "category": "sex",
                         "choice": "M {{8}} ||  F{{7}}"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "31.1",
+                        "min": "21",
+                        "max": "41",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     },
                     {
                         "category": "height",
@@ -47,19 +51,15 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "healthy",
-                        "choice": "Y"
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
-                    },
-                    {
-                        "category": "age",
-                        "mean": "31.1",
-                        "min": "21",
-                        "max": "41",
-                        "unit": "yr"
+                        "category": "weight",
+                        "mean": "70.5",
+                        "min": "47",
+                        "max": "93",
+                        "unit": "kg"
                     }
                 ]
             }

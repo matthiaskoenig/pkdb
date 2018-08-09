@@ -21,10 +21,12 @@ class SubstanceSerializer(serializers.ModelSerializer):
 
 
 class InterventionSerializer(ParserSerializer):
+    substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False,required=False, allow_null=True)
+
 
     class Meta:
         model = Intervention
-        fields = ["name","route","form","application","time","time_unit","value"]
+        fields = ["name","route","form","application","time","time_unit","value","unit","substance"]
 
     def to_internal_value(self, data):
         """

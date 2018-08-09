@@ -16,16 +16,16 @@
         "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
         "characteristica": [
             {
+                "category": "species",
+                "choice": "homo sapiens"
+            },
+            {
                 "category": "healthy",
                 "choice": "Y"
             },
             {
                 "category": "oral contraceptives",
                 "choice": "N"
-            },
-            {
-                "category": "species",
-                "choice": "homo sapiens"
             },
             {
                 "category": "smoking",
@@ -64,14 +64,6 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "age",
-                        "mean": "27.33",
-                        "min": "24",
-                        "max": "30",
-                        "sd": "2.49",
-                        "unit": "yr"
-                    },
-                    {
                         "category": "weight",
                         "mean": "70.33",
                         "min": "58",
@@ -82,6 +74,14 @@
                     {
                         "category": "sex",
                         "choice": "M {{2}} ||  F {{1}}"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.33",
+                        "min": "24",
+                        "max": "30",
+                        "sd": "2.49",
+                        "unit": "yr"
                     }
                 ]
             },
@@ -94,20 +94,20 @@
                         "choice": "M {{2}}  || F {{2}}"
                     },
                     {
-                        "category": "age",
-                        "mean": "27.25",
-                        "min": "22",
-                        "max": "31",
-                        "sd": "3.56",
-                        "unit": "yr"
-                    },
-                    {
                         "category": "weight",
                         "mean": "62.75",
                         "min": "46",
                         "max": "75",
                         "sd": "10.9",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "27.25",
+                        "min": "22",
+                        "max": "31",
+                        "sd": "3.56",
+                        "unit": "yr"
                     }
                 ]
             }

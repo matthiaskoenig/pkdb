@@ -16,16 +16,16 @@
         "description": "15 healthy male subjects, age range 18-71 years (13 nonsmokers), with normal clinical history, physical examination, and SMA12 profile were studied||10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.||Subset of 8 from 10 cirrhosis patients. 10 male patients with cirrhosis, age range 42-60 years (6 non-smokers), were also studied. 6 subjects had alcoholic cirrhosis and 4 had postnecrotic cirrhosis; the diagnosis was established by clinical and biochemical criteria and confirmed by percutaneous liver biopsy in 9. All subjects abstained from caffeine-containing beverages and medication for at least 3 days prior to the study.",
         "characteristica": [
             {
-                "category": "oral contraceptives",
-                "choice": "N"
-            },
-            {
                 "category": "species",
                 "choice": "homo sapiens"
             },
             {
                 "category": "sex",
                 "choice": "M"
+            },
+            {
+                "category": "oral contraceptives",
+                "choice": "N"
             }
         ],
         "groups": [
@@ -34,18 +34,18 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "age",
-                        "min": "18",
-                        "max": "71",
-                        "unit": "yr"
+                        "category": "smoking",
+                        "choice": "N {{13}} ||  Y {{2}}"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "N {{13}} ||  Y {{2}}"
+                        "category": "age",
+                        "min": "18",
+                        "max": "71",
+                        "unit": "yr"
                     }
                 ]
             },
@@ -54,22 +54,22 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N {{6}}  ||  Y {{4}}"
-                    },
-                    {
                         "category": "healthy",
                         "choice": "N"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhosis"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N {{6}}  ||  Y {{4}}"
                     },
                     {
                         "category": "age",
                         "min": "42",
                         "max": "65",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "disease",
-                        "choice": "cirrhosis"
                     }
                 ]
             },
@@ -86,10 +86,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "disease",
-                        "choice": "cirrhosis"
-                    },
-                    {
                         "category": "age",
                         "mean": "49.6",
                         "min": "42",
@@ -104,6 +100,10 @@
                     {
                         "category": "smoking",
                         "choice": "Mixed"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     }
                 ]
             }

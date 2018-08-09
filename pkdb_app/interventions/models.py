@@ -78,7 +78,7 @@ class Intervention(Valueable,models.Model):
     form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_FORM_CHOICES)
 
     application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_APPLICATION_CHOICES) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
-    time = models.DecimalField(max_digits = 40,decimal_places=20,null=True,blank=False)  #application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
+    time = models.FloatField(null=True,blank=False)  #application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
 
     ######
@@ -154,7 +154,7 @@ class Output(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutpu
 
 
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES, null=True, blank=True)
-    time = models.DecimalField(max_digits = 40,decimal_places=20,null=True,blank=True)
+    time = models.FloatField(null=True,blank=True)
 
     # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
     #files = models.ForeignKey(DataFile, on_delete=True)
