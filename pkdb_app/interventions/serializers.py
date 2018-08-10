@@ -1,12 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Q
 from rest_framework import serializers
-
-from pkdb_app.behaviours import Sourceable, Valueable, ValueableMap
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
 from pkdb_app.serializers import ParserSerializer
-from pkdb_app.subjects.models import IndividualSet, Individual, Group
-from pkdb_app.subjects.serializers import GroupSRField
+from pkdb_app.subjects.models import  Individual, Group
+from pkdb_app.utils import un_map
 
 
 class SubstanceSerializer(serializers.ModelSerializer):
@@ -39,11 +37,15 @@ class InterventionSerializer(ParserSerializer):
         data = self.strip(data)
         return super().to_internal_value(data)
 
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+        return un_map(rep)
+
+
 
 class InterventionSetSerializer(ParserSerializer):
 
     interventions = InterventionSerializer(many=True , read_only=False,required=False, allow_null=True)
-
     class Meta:
         model = InterventionSet
         fields = ["description","interventions"]
@@ -55,18 +57,13 @@ class InterventionSetSerializer(ParserSerializer):
         :return:
         """
         data = self.generic_parser(data,"interventions")
-        #data = self.split_to_map(data)
-        #data = self.drop_blank(data)
-        #data = self.strip(data)
         return super(InterventionSetSerializer, self).to_internal_value(data)
 
 
 class OutputSerializer(ParserSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), read_only=False,required=False, allow_null=True)
     individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(), read_only=False, required=False, allow_null=True)
-    #intervention = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(),read_only=False,required=False, allow_null=True)
     interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(),many=True, read_only=False,required=False, allow_null=True)
-
     substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False,required=False, allow_null=True)
 
     class Meta:
@@ -78,17 +75,8 @@ class OutputSerializer(ParserSerializer):
                   "time_map","group","group_map", "individual", "individual_map", "interventions", "interventions_map",
                    "substance","substance_map","tissue", "tissue_map"]
 
-
     def to_internal_value(self, data):
-        """
 
-        :param data:
-        :return:
-        """
-
-
-        #data = self.strip(data)
-        #data = self.generic_parser(data, "outputs")
         study_sid = self.context['request'].path.split("/")[-2]
         data = self.split_to_map(data)
 
@@ -130,7 +118,7 @@ class OutputSerializer(ParserSerializer):
             rep["group"] = instance.group.name
         if "interventions" in rep:
             rep["interventions"] = [intervention.name for intervention in instance.interventions.all()]
-        return rep
+        return un_map(rep)
 
 
 class TimecourseSerializer(OutputSerializer):
@@ -146,11 +134,14 @@ class TimecourseSerializer(OutputSerializer):
                     "interventions_map",
                     "substance", "substance_map", "tissue", "tissue_map"]
 
+        def to_representation(self, instance):
+            rep = super().to_representation(instance)
+            return un_map(rep)
+
 
 class OutputSetSerializer(ParserSerializer):
     outputs = OutputSerializer(many=True, read_only=False, required=False, allow_null=True)
     timecourse = TimecourseSerializer(many=True, read_only=False, required=False, allow_null=True)
-
 
     class Meta:
         model = OutputSet
@@ -158,7 +149,6 @@ class OutputSetSerializer(ParserSerializer):
 
     def to_internal_value(self, data):
         """
-
         :param data:
         :return:
         """

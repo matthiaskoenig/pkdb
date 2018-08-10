@@ -86,8 +86,9 @@ CATEGORIAL_TYPE = 'categorial'
 STRING_TYPE = "string"  # can be a free string, no limitations compared to categorial
 YES = "Y"
 NO = 'N'
-M = "Mixed"
-BOOLEAN_CHOICES = [YES, NO, M]
+MIX = "Mixed"
+NAN = "NAN"
+BOOLEAN_CHOICES = [YES, NO, MIX,NAN]
 
 INTERVENTION_ROUTE = [
 "oral",
@@ -107,6 +108,7 @@ INTERVENTION_FORM = [
     "2 100mg NO-DOZ tablets",
     "capsules",
     "2 capsules",
+    NAN,
 
 ]
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
@@ -192,13 +194,13 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
 
     CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", "Mixed"], ["-"]),
-    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian"], ["-"]),
+    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX,NAN], ["-"]),
+    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian",NAN], ["-"]),
 
 
     # Disease (status)
     CharacteristicType('healthy', "health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, ["cirrhosis","plasmodium falciparum","alcoholic liver cirrhosis","cirrhotic liver disease","PBC","miscellaneous liver disease","schizophrenia"], ["-"]),
+    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, [NAN,"cirrhosis","plasmodium falciparum","alcoholic liver cirrhosis","cirrhotic liver disease","PBC","miscellaneous liver disease","schizophrenia"], ["-"]),
 
 
     # Lifestyle
