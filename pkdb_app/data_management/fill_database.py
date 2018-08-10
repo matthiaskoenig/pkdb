@@ -7,7 +7,7 @@ import requests
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.create_reference import REFERENCESMASTERPATH
+from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
 from jsonschema import validate
 from pkdb_app.data_management.schemas import reference_schema
 import logging

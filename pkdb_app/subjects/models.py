@@ -5,7 +5,6 @@ group or individual).
 How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
-
 from django.db import models
 from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
@@ -13,21 +12,14 @@ from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTE
 from ..utils import CHAR_MAX_LENGTH
 from .managers import GroupManager, GroupSetManager, IndividualManager, IndividualSetManager
 
-
 # TODO: Add ExclusionCriteria as extra class on group | or via field ?
 # Not clear what is best: The important thing is that stated exclusion criteria
 # must be encodable and be found as such (often via cutoffs)
 # - how to represent cutoff & negation
-
 # - Exclusion/Inclusion
 # - Group
 # - Intervention
-
 # - DataSets/Output
-
-
-
-
 
 class Set(Describable, models.Model):
     """
@@ -111,7 +103,6 @@ class Individual(IndividualMap,Sourceable,models.Model):
         return self.name
 
 
-
 class Characteristica(ValueableMap,Valueable, models.Model):
     """ Characteristic.
 
@@ -159,18 +150,6 @@ class Characteristica(ValueableMap,Valueable, models.Model):
         return self.characteristic_data.choices
 
 
-    #def validate(self):
-    #    """ Check that choices are valid. I.e. that choice is allowed choice from choices for
-    #    characteristics.
-
-    #    Add checks for individuals and groups. For instance if count==1 than value must be filled,
-    #    but not entries in mean, median, ...
-
-    #    :return:
-    #    """
-    #    raise NotImplemented
-
-
 class CleanCharacteristica(Characteristica):
     """ Processed and normalized data (calculated on change from
     corresponding raw CharacteristicValue.
@@ -178,11 +157,4 @@ class CleanCharacteristica(Characteristica):
     - convert exclusion to inclusion criteria
     """
     raw = models.ForeignKey(Characteristica, related_name="clean", null=True, on_delete=True)
-
-    # method field? for different processing?
-
     # TODO: add methods for doing the processing & automatic update if corresponding
-    # Value is changed.
-    # -> move to a ProcessedValuable
-
-

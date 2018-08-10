@@ -8,7 +8,7 @@ BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file_
 sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
-from pkdb_app.data_management.create_reference import DOSINGPATH, ensure_dir
+from pkdb_app.data_management.create_reference_caffeine import DOSINGPATH, ensure_dir
 from pkdb_app.data_management.initialize_study import save_study, SEPERATOR
 from pkdb_app.utils import create_if_exists, clean_import
 
@@ -37,6 +37,8 @@ def add_intervention_to_study(study):
         intervention_json["form"] = row["form"]
         intervention_json["value"] = row["dose"]
         intervention_json["unit"] = row["dose_unit"]
+        intervention_json["category"] = row["category"]
+
         study_json["interventionset"]["interventions"].append(clean_import(intervention_json))
 
     yield {"json":study_json,"study_path": study["study_path"]}

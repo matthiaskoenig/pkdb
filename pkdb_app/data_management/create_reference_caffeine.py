@@ -15,25 +15,24 @@ BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file_
 sys.path.append(BASEPATH)
 from pkdb_app.utils import ensure_dir
 
+CAFFEINE = "caffeine"
 
 Master = os.path.join(BASEPATH, "Master")
 if BASEPATH not in sys.path:
     sys.path.append(BASEPATH)
 
 DATABASEPATH = os.path.join(BASEPATH, "data")
-REFERENCESPATH = os.path.join(DATABASEPATH, "caffeine", "Studies.tsv")
-SUBJECTSPATH = os.path.join(DATABASEPATH, "caffeine", "Subjects.tsv")
-LITERATUREPATH = os.path.join(DATABASEPATH, "caffeine", "literature")
-
-PHARMACOKINETICSPATH = os.path.join(DATABASEPATH, "caffeine", "Pharmacokinetics.tsv")
-INTERVENTIONSPATH = os.path.join(DATABASEPATH, "caffeine", "Interventions.tsv")
-DOSINGPATH = os.path.join(DATABASEPATH, "caffeine", "Dosing.tsv")
+REFERENCESPATH = os.path.join(DATABASEPATH, CAFFEINE, "Studies.tsv")
+SUBJECTSPATH = os.path.join(DATABASEPATH, CAFFEINE, "Subjects.tsv")
+LITERATUREPATH = os.path.join(DATABASEPATH, CAFFEINE, "literature")
+PHARMACOKINETICSPATH = os.path.join(DATABASEPATH, CAFFEINE, "Pharmacokinetics.tsv")
+INTERVENTIONSPATH = os.path.join(DATABASEPATH, CAFFEINE, "Interventions.tsv")
+DOSINGPATH = os.path.join(DATABASEPATH, CAFFEINE, "Dosing.tsv")
 MASTERPATH = os.path.join(DATABASEPATH, "Master")
 REFERENCESMASTERPATH = os.path.join(MASTERPATH, "Studies")
-
-INDIVIDUALPATH = os.path.join(DATABASEPATH, "caffeine", "Individuals.tsv")
-TIMECOURSEPATH = os.path.join(DATABASEPATH, "caffeine", "Timecourse.tsv")
-OUTPUTINDIVIDUALPATH = os.path.join(DATABASEPATH, "caffeine", "OutputIndividuals.tsv")
+INDIVIDUALPATH = os.path.join(DATABASEPATH, CAFFEINE, "Individuals.tsv")
+TIMECOURSEPATH = os.path.join(DATABASEPATH, CAFFEINE, "Timecourse.tsv")
+OUTPUTINDIVIDUALPATH = os.path.join(DATABASEPATH, CAFFEINE, "OutputIndividuals.tsv")
 
 
 

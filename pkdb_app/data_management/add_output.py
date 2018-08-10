@@ -6,7 +6,7 @@ sys.path.append(BASEPATH)
 
 
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
-from pkdb_app.data_management.create_reference import PHARMACOKINETICSPATH, TIMECOURSEPATH, OUTPUTINDIVIDUALPATH
+from pkdb_app.data_management.create_reference_caffeine import PHARMACOKINETICSPATH, TIMECOURSEPATH, OUTPUTINDIVIDUALPATH
 from pkdb_app.data_management.initialize_study import save_study
 from pkdb_app.utils import create_if_exists, clean_import
 
