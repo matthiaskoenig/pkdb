@@ -57,8 +57,8 @@ class StudySerializer(BaseSerializer):
 
     class Meta:
         model = Study
-        fields = ('sid','name',"creator","pkdb_version","design",'reference',"curators",
-                 "groupset", "interventionset","individualset","outputset","substances")
+        fields = ('sid',"pkdb_version","creator",'name',"design",'reference',"curators","substances",
+                 "groupset","individualset","interventionset","outputset")
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)

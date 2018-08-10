@@ -127,6 +127,6 @@ if __name__ == '__main__':
 
     parser = bonobo.get_argument_parser()
     with bonobo.parse_args(parser) as options:
-        #bonobo.run(get_graph_references(**options), services=get_services(**options))
+        bonobo.run(get_graph_references(**options), services=get_services(**options))
         bonobo.run(get_graph_study(**options), services=get_services(**options))
 

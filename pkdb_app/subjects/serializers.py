@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from pkdb_app.behaviours import Sourceable
 from pkdb_app.categoricals import FORMAT_MAPPING, CHARACTERISTIC_DICT, CATEGORIAL_TYPE, NUMERIC_TYPE, BOOLEAN_TYPE
+from pkdb_app.utils import un_map
 from .models import Group, GroupSet,Individual,IndividualSet,Characteristica
 from ..serializers import ParserSerializer
 
@@ -24,7 +25,15 @@ class CharacteristicaSerializer(ParserSerializer):
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
-        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+        if result["ctype"] == "group":
+            result.pop("ctype")
+
+        return un_map(result)
+
+
+
+
+
 
     def to_internal_value(self, data):
         """
@@ -36,8 +45,7 @@ class CharacteristicaSerializer(ParserSerializer):
         characteristic = CHARACTERISTIC_DICT[data.get("category")]
         choice = data.get("choice",None)
         unit = data.get("unit",None)
-
-        fields_require_unit = ["value","mean","median","min","max","sd","se","cv","value_map","mean_map","median_map","min_map","max_map","sd_map","se_map","cv_map"]
+        #fields_require_unit = ["value","mean","median","min","max","sd","se","cv","value_map","mean_map","median_map","min_map","max_map","sd_map","se_map","cv_map"]
 
         if choice:
             if (characteristic.dtype == CATEGORIAL_TYPE or characteristic.dtype == BOOLEAN_TYPE):
@@ -50,7 +58,6 @@ class CharacteristicaSerializer(ParserSerializer):
             if not unit in characteristic.units:
                 msg = f"{unit} is not allowed but required. For {characteristic.value} allowed units are {characteristic.units}"
                 raise ValidationError(msg)
-
 
 
 
@@ -128,7 +135,8 @@ class IndividualSerializer(ParserSerializer):
         if "group" in rep:
             rep["group"] = instance.group.name
 
-        return rep
+
+        return un_map(rep)
 
     def parse_individuals(self,data):
         try:
@@ -147,7 +155,6 @@ class IndividualSerializer(ParserSerializer):
                 unpacked_individuals += individuals_table.to_dict('recods')
 
             data = unpacked_individuals
-
 
         except KeyError:
             pass
@@ -173,4 +180,6 @@ class IndividualSetSerializer(ParserSerializer):
 
         return super(IndividualSetSerializer, self).to_internal_value(data)
 
-
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+        return un_map(rep)

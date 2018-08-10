@@ -43,10 +43,13 @@ class BaseSerializer(serializers.ModelSerializer):
             return super().is_valid(raise_exception)
 
 
-
-    def to_representation(self, instance):
+    """
+        def to_representation(self, instance):
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+
+    
+    """
 
     @staticmethod
     def create_relations(study, related):

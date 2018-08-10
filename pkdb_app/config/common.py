@@ -51,7 +51,7 @@ class Common(Configuration):
 
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
-    INTERNAL_IPS = ('172.19.0.1',)
+    INTERNAL_IPS = ('172.18.0.1',)
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'pkdb_app.urls'

@@ -39,3 +39,13 @@ def get_or_val_error(model, *args, **kwargs):
     except model.DoesNotExist:
         msg = f"{model} instance with args:{args}, kwargs:{kwargs} does not exist"
         return ValidationError(msg)
+
+def un_map(data):
+    cleaned_result = {}
+    for k, v in data.items():
+        if "_map" in k:
+            k = k[:-4]
+        if v is None:
+            continue
+        cleaned_result[k] = v
+    return cleaned_result
