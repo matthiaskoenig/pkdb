@@ -1,0 +1,36 @@
+{
+    "pmid": 21143403,
+    "name": "Chiew2010",
+    "sid": 21143403,
+    "date": "2013-02-07",
+    "journal": "Emergency medicine Australasia : EMA",
+    "title": "The comparative pharmacokinetics of modified-release and immediate-release paracetamol in a simulated overdose model.",
+    "abstract": "There were minor differences between the PK parameters of the two major paracetamol metabolites of these two preparations in simulated overdose. The variability in paracetamol AUC seen between the two preparations in moderate overdose might be explained by concurrent metabolism of paracetamol during slower absorption with PEx.",
+    "authors": [
+        {
+            "first_name": "Angela",
+            "last_name": "Chiew"
+        },
+        {
+            "first_name": "Peter",
+            "last_name": "Day"
+        },
+        {
+            "first_name": "Chris",
+            "last_name": "Salonikas"
+        },
+        {
+            "first_name": "Daya",
+            "last_name": "Naidoo"
+        },
+        {
+            "first_name": "Andis",
+            "last_name": "Graudins"
+        },
+        {
+            "first_name": "Rebecca",
+            "last_name": "Thomas"
+        }
+    ],
+    "doi": ""
+}

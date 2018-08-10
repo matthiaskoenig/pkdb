@@ -10,12 +10,11 @@ class GroupManager(models.Manager):
         group = super(GroupManager, self).create(*args, **kwargs)
         group.characteristica.all().delete()
         for characteristica_single in characteristica:
-            characteristica_single["count"] = characteristica_single.get("count",group.count)
+            characteristica_single["count"] = characteristica_single.get("count", group.count)
             group.characteristica.create(**characteristica_single)
-
         group.save()
-
         return group
+
 
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
@@ -26,7 +25,6 @@ class GroupSetManager(models.Manager):
         groupset.characteristica.all().delete()
         groupset.groups.all().delete()
 
-
         for characteristica_single in characteristica:
             groupset.characteristica.create(**characteristica_single)
 
@@ -36,6 +34,7 @@ class GroupSetManager(models.Manager):
         groupset.save()
 
         return groupset
+
 
 class IndividualManager(models.Manager):
     def create(self, *args, **kwargs):
@@ -56,7 +55,6 @@ class IndividualSetManager(models.Manager):
         individualset = super(IndividualSetManager, self).create(*args, **kwargs)
         individualset.characteristica.all().delete()
         individualset.individuals.all().delete()
-
 
         for characteristica_single in characteristica:
             individualset.characteristica.create(**characteristica_single)

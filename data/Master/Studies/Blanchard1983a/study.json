@@ -20,18 +20,6 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": "21.8",
                         "min": "18.8",
@@ -40,8 +28,12 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": "caucasian"
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
                     },
                     {
                         "category": "species",
@@ -54,6 +46,14 @@
                         "max": "106",
                         "se": "3.9",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": "caucasian"
                     }
                 ]
             }
@@ -69,7 +69,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 5.0,
-                "unit": "mg/kg"
+                "unit": "mg/kg",
+                "category": "dosing"
             },
             {
                 "name": "D2",
@@ -78,7 +79,8 @@
                 "time_unit": "h",
                 "route": "iv",
                 "value": 5.0,
-                "unit": "mg/kg"
+                "unit": "mg/kg",
+                "category": "dosing"
             }
         ]
     },

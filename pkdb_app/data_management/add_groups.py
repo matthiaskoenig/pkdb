@@ -10,7 +10,7 @@ sys.path.append(BASEPATH)
 from pkdb_app.data_management.fill_database import get_study_json_path, open_study
 from pkdb_app.data_management.initialize_study import save_study, study_filename, SEPERATOR
 from pkdb_app.categoricals import CHARACTERISTIC_CATEGORIES,CHARACTERISTIC_DTYPE
-from pkdb_app.data_management.create_reference import SUBJECTSPATH, INDIVIDUALPATH
+from pkdb_app.data_management.create_reference_caffeine import SUBJECTSPATH, INDIVIDUALPATH
 from pkdb_app.utils import create_if_exists, clean_import
 
 

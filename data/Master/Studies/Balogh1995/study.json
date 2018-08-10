@@ -20,18 +20,6 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "F"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": null,
                         "min": "20",
@@ -39,8 +27,12 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
                     },
                     {
                         "category": "species",
@@ -51,6 +43,14 @@
                         "min": "51",
                         "max": "75",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "F"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     }
                 ]
             }
@@ -66,7 +66,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

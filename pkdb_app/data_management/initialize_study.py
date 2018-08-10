@@ -14,7 +14,7 @@ import sys
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.create_reference import collect_reference, add_reference_path, ensure_dir
+from pkdb_app.data_management.create_reference_caffeine import collect_reference, add_reference_path, ensure_dir
 
 MK = "Matthias König"
 MK_u = "mkoenig"

@@ -20,21 +20,17 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "min": "20",
                         "max": "40",
                         "unit": "yr"
                     },
                     {
-                        "category": "ethnicity",
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "oral contraceptives",
                         "choice": null
                     },
                     {
@@ -42,7 +38,11 @@
                         "choice": "homo sapiens"
                     },
                     {
-                        "category": "oral contraceptives",
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "ethnicity",
                         "choice": null
                     }
                 ]
@@ -59,7 +59,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 230.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_OFL_A  || D_OFL_B ||  D_OFL_C || D_OFL_D",
@@ -68,7 +69,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_NOR_A  || D_NOR_B ||  D_NOR_C || D_NOR_D",
@@ -77,7 +79,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 400.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_PPA_A  || D_PPA_B ||  D_PPA_C || D_PPA_D",
@@ -86,7 +89,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 400.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_CIP1_A || D_CIP1_B || D_CIP1_C || D_CIP1_D",
@@ -95,7 +99,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_CIP2_A || D_CIP2_B || D_CIP2_C || D_CIP2_D",
@@ -104,7 +109,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 250.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_CIP3_A || D_CIP3_B || D_CIP3_C || D_CIP3_D",
@@ -113,7 +119,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 500.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_ENX1_A || D_ENX1_B || D_ENX1_C || D_ENX1_D",
@@ -122,7 +129,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_ENX2_A || D_ENX2_B || D_ENX2_C || D_ENX2_D",
@@ -131,7 +139,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_ENX3_A || D_ENX3_B || D_ENX3_C || D_ENX3_D",
@@ -140,7 +149,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 400.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

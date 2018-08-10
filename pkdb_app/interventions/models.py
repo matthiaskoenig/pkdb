@@ -8,7 +8,7 @@ from django.db import models
 
 from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager
 from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
-from ..categoricals import PROTOCOL_CHOICES, TIME_UNITS_CHOICES, \
+from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
 from ..subjects.models import Group, Individual, Set
@@ -83,8 +83,8 @@ class Intervention(Valueable,models.Model):
 
     ######
     #probably should be deleted
-    category = models.IntegerField(choices=PROTOCOL_CHOICES,null=True,blank=True)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)
+    category = models.CharField(max_length=CHAR_MAX_LENGTH,choices=INTERVENTION_CHOICES,null=True,blank=True)
+    #choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)
 
     @property
     def intervention_data(self):
@@ -92,7 +92,7 @@ class Intervention(Valueable,models.Model):
 
         :return:
         """
-        return PROTOCOL_CHOICES[self.category]
+        return INTERVENTION_CHOICES[self.category]
 
     @property
     def choices(self):

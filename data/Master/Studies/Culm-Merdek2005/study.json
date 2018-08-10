@@ -20,21 +20,21 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M {{6}} ||  F {{1}}"
+                        "category": "age",
+                        "mean": "50",
+                        "unit": "yr"
                     },
                     {
                         "category": "healthy",
                         "choice": "Y"
                     },
                     {
-                        "category": "age",
-                        "mean": "50",
-                        "unit": "yr"
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
                     },
                     {
                         "category": "species",
@@ -46,8 +46,8 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral contraceptives",
-                        "choice": null
+                        "category": "sex",
+                        "choice": "M {{6}} ||  F {{1}}"
                     }
                 ]
             }
@@ -63,7 +63,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 250.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D2_A || D2_B  || D2_C || D2_D ",
@@ -72,7 +73,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

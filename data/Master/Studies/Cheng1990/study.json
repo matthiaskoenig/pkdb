@@ -16,12 +16,12 @@
         "description": "13 healthy volunteers (nine men and four women on the hospital staff) were recruited. The volunteers were between 20 and 50 years of age and weighed between 47 and 85 kg. None were taking any medications, and all had normal plasma biochemical profiles. Their normal caffeine intake ranged between 0 and 250 mg / day. Except for one volunteer who smoked 10 cigarettes a day, all others were nonsmokers. Eight of the volunteers were nondrinkers, and the other five consumed less than 50 gm alcohol a day. They were not restricted in their normal activities until the day before the study, when they were instructed to abstain from caffeine. Six of the same group of healthy subjects also received at least two doses (70 mg and 200 mg) of intravenous caffeine on another two separate occasions for estimation of the bioavailability of orally administered caffeine in these subjects. Three of these same healthy subjects also received 300 mg caffeine by intravenous infusion over 20 minutes.||13 cirrhotic patients were also studied. 9 of these patients were nonsmokers, and the remaining four patients smoked fewer than 20 cigarettes a day. Data on these patients are presented in Table I. Nine patients were nondrinkers, and the remaining four consumed less than 50 gm alcohol a day. Patients were between the ages of 53 and 75 years and weighed between 50 and 107 kg. Their normal caffeine intake ranged from 50 to 500 mg a day. Two patients had decompensated cirrhosis, as assessed by the presence of ascites and hepatic encephalopathy, and these patients received 70 mg and 200 mg doses of caffeine only.",
         "characteristica": [
             {
-                "category": "species",
-                "choice": "homo sapiens"
-            },
-            {
                 "category": "oral contraceptives",
                 "choice": null
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
             }
         ],
         "groups": [
@@ -29,10 +29,6 @@
                 "count": 13,
                 "name": "S1",
                 "characteristica": [
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
                     {
                         "category": "weight",
                         "min": "47",
@@ -44,15 +40,19 @@
                         "choice": "N"
                     },
                     {
+                        "category": "sex",
+                        "choice": "M {{9}} ||  F {{4}}"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
                         "category": "age",
                         "mean": null,
                         "min": "20",
                         "max": "50",
                         "unit": "yr"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M {{9}} ||  F {{4}}"
                     }
                 ]
             },
@@ -61,16 +61,12 @@
                 "name": "S2",
                 "characteristica": [
                     {
-                        "category": "disease",
-                        "choice": "cirrhosis"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "N"
-                    },
-                    {
                         "category": "sex",
                         "choice": "M {{10}}  ||  F {{3}}"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Mixed"
                     },
                     {
                         "category": "weight",
@@ -81,8 +77,12 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "Mixed"
+                        "category": "healthy",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "cirrhosis"
                     },
                     {
                         "category": "age",
@@ -106,7 +106,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 70.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D2",
@@ -115,7 +116,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D3",
@@ -124,7 +126,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 300.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

@@ -16,24 +16,24 @@
         "description": "59 healthy adult Asian volunteers were included. In what follows, a non-caffeine consumer (NCCS) refers to an individual who consumed beverages\n(coffee or tea) containing <=200 mg of caffeine per day, and a regular caffeine consumer to one who consumed more >200 mg. A cup (150 mL) of coffee or tea is equivalent to approximately a caffeine dose of 70 and 25 mg respectively (9). Additionally, a non-smoker refers to an individual who did not smoke for at least 6 months prior to dosing. The study population consisted of 14 non-caffeine consumers, non-smokers (NCNS) [age (mean ± SD) 21 ± 2 years, body weight 62 ± 9 kg), 15 caffeine consumers, non smokers (CNS) (age 24 ± 4 years, body weight 69 ± 12 kg), and 30 caffeine consumer, smokers (CS) (actual consumption 10 ± 4 cigarettes daily, age 23 ± 5 years, body weight 71 ± 19 kg).",
         "characteristica": [
             {
-                "category": "oral contraceptives",
-                "choice": null
-            },
-            {
-                "category": "healthy",
-                "choice": "Y"
+                "category": "ethnicity",
+                "choice": "asian"
             },
             {
                 "category": "alcohol abstinence",
                 "choice": "N"
             },
             {
-                "category": "ethnicity",
-                "choice": "asian"
-            },
-            {
                 "category": "species",
                 "choice": "homo sapiens"
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "oral contraceptives",
+                "choice": null
             },
             {
                 "category": "sex",
@@ -52,13 +52,13 @@
                         "unit": "kg"
                     },
                     {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
                         "category": "caffeine amount",
                         "min": "200",
                         "unit": "mg/day"
-                    },
-                    {
-                        "category": "smoking",
-                        "choice": "N"
                     },
                     {
                         "category": "age",
@@ -79,11 +79,6 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "caffeine amount",
-                        "max": "200",
-                        "unit": "mg/day"
-                    },
-                    {
                         "category": "smoking",
                         "choice": "N"
                     },
@@ -92,6 +87,11 @@
                         "mean": "69",
                         "sd": "12",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "caffeine amount",
+                        "max": "200",
+                        "unit": "mg/day"
                     }
                 ]
             },
@@ -106,17 +106,6 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "smoking",
-                        "choice": "Y"
-                    },
-                    {
-                        "category": "smoking amount",
-                        "mean": "10",
-                        "min": "6",
-                        "max": "14",
-                        "unit": "1/day"
-                    },
-                    {
                         "category": "caffeine amount",
                         "max": "200",
                         "unit": "mg/day"
@@ -126,6 +115,17 @@
                         "mean": "23",
                         "sd": "5",
                         "unit": "yr"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "smoking amount",
+                        "mean": "10",
+                        "min": "6",
+                        "max": "14",
+                        "unit": "1/day"
                     }
                 ]
             }
@@ -142,7 +142,8 @@
                 "route": "oral",
                 "form": "capsules",
                 "value": 3.0,
-                "unit": "mg/kg"
+                "unit": "mg/kg",
+                "category": "dosing"
             },
             {
                 "name": "D_CAF5",
@@ -152,7 +153,8 @@
                 "route": "oral",
                 "form": "capsules",
                 "value": 5.0,
-                "unit": "mg/kg"
+                "unit": "mg/kg",
+                "category": "dosing"
             }
         ]
     },

@@ -16,20 +16,20 @@
         "description": "Subjects were 7 healthy men and 5 women ranging in age from 22 to 47 years. All were nonsmokers and reported only casual alcohol consumption, and none were taking any medication. Habitual daily coffee intake varied from 1 to 6 cups. Results of blood biochemistry (SMAC12) were normal in all.",
         "characteristica": [
             {
-                "category": "species",
-                "choice": "homo sapiens"
-            },
-            {
-                "category": "healthy",
-                "choice": "Y"
-            },
-            {
                 "category": "oral contraceptives",
                 "choice": "N"
             },
             {
                 "category": "smoking",
                 "choice": "N"
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
             }
         ],
         "groups": [
@@ -46,16 +46,16 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "sex",
-                        "choice": "M {{3}} || F {{2}}"
-                    },
-                    {
                         "category": "weight",
                         "mean": "76.2",
                         "min": "60",
                         "max": "88",
                         "sd": "12.1",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{3}} || F {{2}}"
                     }
                 ]
             },
@@ -90,16 +90,16 @@
                 "name": "S3",
                 "characteristica": [
                     {
-                        "category": "sex",
-                        "choice": "M {{2}}  || F {{2}}"
-                    },
-                    {
                         "category": "weight",
                         "mean": "62.75",
                         "min": "46",
                         "max": "75",
                         "sd": "10.9",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{2}}  || F {{2}}"
                     },
                     {
                         "category": "age",
@@ -138,7 +138,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 350.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D2",
@@ -147,7 +148,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 310.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D3",
@@ -156,7 +158,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 260.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

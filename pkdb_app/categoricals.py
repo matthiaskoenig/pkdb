@@ -166,6 +166,8 @@ SUBSTANCES_DATA = [
     "norfloxacin",
     "ofloxacin",
     "fluvoxamine",
+    "alcohol",
+
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -218,6 +220,7 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     # Study protocol
     CharacteristicType('overnight fast', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, SUBSTANCES_DATA+["alcohol","food"]),
 
     # Medication
 
@@ -252,8 +255,8 @@ OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 PK_DATA_CHOICES = create_choices(PK_DATA)
 
 # class, value, dtype (numeric, boolean, categorial), choices
-PROTOCOL_DATA = [
-    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["-"]),
+INTERVENTION_DATA = [
+    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg","mg/kg"]),
     CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
 ]
@@ -267,7 +270,7 @@ CHARACTERISTIC_DTYPE = {item.value : item.dtype for item in CHARACTERISTIC_DATA}
 CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
-PROTOCOL_DICT, PROTOCOL_CHOICES = dict_and_choices(PROTOCOL_DATA)
+INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
 
 '''

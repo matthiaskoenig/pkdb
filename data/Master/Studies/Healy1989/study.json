@@ -20,25 +20,21 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": "26.7",
                         "sd": "1.6",
                         "unit": "yr"
                     },
                     {
-                        "category": "ethnicity",
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
                         "choice": null
                     },
                     {
@@ -52,7 +48,11 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral contraceptives",
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "ethnicity",
                         "choice": null
                     }
                 ]
@@ -69,7 +69,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 100.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_CIP_A || D_CIP_B || D_CIP_C ",
@@ -79,7 +80,8 @@
                 "route": "oral",
                 "form": "capsules",
                 "value": 750.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

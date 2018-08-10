@@ -4,7 +4,7 @@ from rest_framework import serializers
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
 from pkdb_app.serializers import ParserSerializer
 from pkdb_app.subjects.models import  Individual, Group
-from pkdb_app.utils import un_map
+from pkdb_app.utils import un_map, validate_input
 
 
 class SubstanceSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class InterventionSerializer(ParserSerializer):
 
     class Meta:
         model = Intervention
-        fields = ["name","route","form","application","time","time_unit","value","unit","substance"]
+        fields = ["category","name","route","form","application","time","time_unit","value","unit","substance"]
 
     def to_internal_value(self, data):
         """
@@ -36,6 +36,11 @@ class InterventionSerializer(ParserSerializer):
         data = self.drop_blank(data)
         data = self.strip(data)
         return super().to_internal_value(data)
+
+    def validate(self,data):
+        validated_data = super().validate(data)
+        return validate_input(validated_data,"intervention")
+
 
     def to_representation(self, instance):
         rep =  super().to_representation(instance)

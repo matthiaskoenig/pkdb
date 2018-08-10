@@ -20,22 +20,6 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "Y {{2}}  ||  N {{10}} "
-                    },
-                    {
-                        "category": "alcohol",
-                        "choice": null
-                    },
-                    {
-                        "category": "sex",
-                        "choice": " M {{5}} || F {{7}}"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": "28.8",
                         "min": "22",
@@ -44,22 +28,28 @@
                         "unit": "yr"
                     },
                     {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
                         "category": "caffeine",
                         "choice": "Y {{10}} || N {{2}}"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "smoking",
+                        "choice": "Y {{2}}  ||  N {{10}} "
                     },
                     {
-                        "category": "smoking amount",
-                        "min": "10",
-                        "max": "20",
-                        "unit": "1/day"
+                        "category": "oral contraceptives",
+                        "choice": null
                     },
                     {
                         "category": "species",
                         "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "alcohol",
+                        "choice": null
                     },
                     {
                         "category": "weight",
@@ -70,7 +60,17 @@
                         "unit": "kg"
                     },
                     {
-                        "category": "oral contraceptives",
+                        "category": "smoking amount",
+                        "min": "10",
+                        "max": "20",
+                        "unit": "1/day"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": " M {{5}} || F {{7}}"
+                    },
+                    {
+                        "category": "ethnicity",
                         "choice": null
                     }
                 ]
@@ -96,7 +96,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "form": "capsules",
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             },
             {
                 "name": "D_CAF500",
@@ -104,7 +105,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "form": "capsules",
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },

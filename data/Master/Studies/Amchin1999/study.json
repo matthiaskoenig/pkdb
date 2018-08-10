@@ -20,18 +20,6 @@
                 "name": "S1",
                 "characteristica": [
                     {
-                        "category": "smoking",
-                        "choice": "N"
-                    },
-                    {
-                        "category": "sex",
-                        "choice": "M {{8}} ||  F{{7}}"
-                    },
-                    {
-                        "category": "healthy",
-                        "choice": "Y"
-                    },
-                    {
                         "category": "age",
                         "mean": "31.1",
                         "min": "21",
@@ -39,8 +27,16 @@
                         "unit": "yr"
                     },
                     {
-                        "category": "ethnicity",
-                        "choice": null
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
                     },
                     {
                         "category": "height",
@@ -51,15 +47,19 @@
                         "unit": "cm"
                     },
                     {
-                        "category": "species",
-                        "choice": "homo sapiens"
-                    },
-                    {
                         "category": "weight",
                         "mean": "70.5",
                         "min": "47",
                         "max": "93",
                         "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{8}} ||  F{{7}}"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
                     }
                 ]
             }
@@ -75,7 +75,8 @@
                 "time_unit": "h",
                 "route": "oral",
                 "value": 200.0,
-                "unit": "mg"
+                "unit": "mg",
+                "category": "dosing"
             }
         ]
     },
