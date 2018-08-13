@@ -27,6 +27,7 @@ class Common(Configuration):
         'django_filters',            # for filtering rest endpoints
         'rest_framework_swagger',
         'debug_toolbar',
+        'corsheaders',
 
         # Your apps
         'pkdb_app.users',
@@ -41,6 +42,7 @@ class Common(Configuration):
     MIDDLEWARE = (
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -50,6 +52,7 @@ class Common(Configuration):
     )
 
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
+    CORS_ORIGIN_WHITELIST = ('0.0.0.0:8080','localhost:8080')
 
     INTERNAL_IPS = ('172.18.0.1',)
 

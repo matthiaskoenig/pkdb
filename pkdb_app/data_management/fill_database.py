@@ -28,7 +28,7 @@ USERS = [Jan_G_U, Matthias_K]
 
 
 def get_reference_json_path():
-    fill_user_and_substances()
+    #fill_user_and_substances()
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "reference.json" in files:
             json_file = os.path.join(root, 'reference.json')
@@ -55,6 +55,8 @@ def open_study(d):
 def upload_reference(json_reference):
     validate(json_reference["json"],reference_schema)
     client.action(document, ["references", "create"], params=json_reference["json"])
+
+
     with open(json_reference["pdf"],'rb') as f:
         requests.patch(f'http://0.0.0.0:8000/api/v1/references/{json_reference["json"]["sid"]}/', files={"pdf":f})
 
@@ -78,9 +80,7 @@ def upload_study(json_study):
     study_partial["reference"] = json_study["json"]["reference"]
     study_partial["curators"] = json_study["json"]["curators"]
     study_partial["creator"] = json_study["json"]["creator"]
-    study_partial["groupset"] = json_study["json"]["groupset"]
-    study_partial["interventionset"] = json_study["json"]["interventionset"]
-    study_partial["individualset"] = json_study["json"].get("individualset",None)
+
 
 
     #client.action(document, ["studies", "create"], params=study_partial)
@@ -88,6 +88,19 @@ def upload_study(json_study):
                               json=study_partial)
     if response.status_code == 400:
         print(json_study["json"]["name"],response.text)
+
+    #for file in json_study["json"].get("files",[]):
+    #    with open(file, 'rb') as f:
+    #        requests.patch(f'http://0.0.0.0:8000/api/v1/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
+
+    study_partial2 = {}
+    study_partial2["groupset"] = json_study["json"]["groupset"]
+    study_partial2["interventionset"] = json_study["json"]["interventionset"]
+    study_partial2["individualset"] = json_study["json"].get("individualset", None)
+
+    response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = study_partial2)
+    if response.status_code == 400:
+        print(json_study["json"]["name"], response.text)
 
     if "outputset" in json_study["json"].keys():
         response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = {"outputset": json_study["json"].get("outputset")})

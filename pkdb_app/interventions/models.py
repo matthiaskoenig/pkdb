@@ -40,7 +40,7 @@ class DataFile(models.Model):
     This should be in a separate class, so that they can be easily displayed/filtered/...
     """
 
-    file = models.FileField(upload_to="output", null=True, blank=True)  # table or figure
+    file = models.FileField(upload_to="data", null=True, blank=True)  # table or figure
     filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
 
 

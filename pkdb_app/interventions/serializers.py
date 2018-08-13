@@ -1,11 +1,17 @@
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
+from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
+    DataFile
 from pkdb_app.serializers import ParserSerializer
 from pkdb_app.subjects.models import  Individual, Group
 from pkdb_app.utils import un_map, validate_input
 
+
+class DataFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataFile
+        fields = ["file","filetype"]
 
 class SubstanceSerializer(serializers.ModelSerializer):
 
@@ -27,11 +33,6 @@ class InterventionSerializer(ParserSerializer):
         fields = ["category","name","route","form","application","time","time_unit","value","unit","substance"]
 
     def to_internal_value(self, data):
-        """
-
-        :param data:
-        :return:
-        """
         data = self.split_to_map(data)
         data = self.drop_blank(data)
         data = self.strip(data)
@@ -41,11 +42,9 @@ class InterventionSerializer(ParserSerializer):
         validated_data = super().validate(data)
         return validate_input(validated_data,"intervention")
 
-
     def to_representation(self, instance):
         rep =  super().to_representation(instance)
         return un_map(rep)
-
 
 
 class InterventionSetSerializer(ParserSerializer):

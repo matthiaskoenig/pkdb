@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from pkdb_app.utils import update_or_create_multiple, get_or_val_error
 from ..interventions.models import Substance
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
+from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, DataFileSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
 from .models import Reference, Author, Study
@@ -54,6 +54,7 @@ class StudySerializer(BaseSerializer):
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
     outputset =OutputSetSerializer(read_only=False, required=False, allow_null=True)
+    files = DataFileSerializer(read_only=False, required=False, allow_null=True, many=True)
 
     class Meta:
         model = Study
