@@ -51,12 +51,12 @@ class Study(Sidable, models.Model):
     reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
     curators = models.ManyToManyField(User)  # any curator needs an account.
     substances = models.ManyToManyField(Substance)
-    raw_data = models.ManyToManyField(DataFile) # FIXME: is this the right name?
+    #raw_data = models.ManyToManyField(DataFile) # FIXME: is this the right name?
     groupset = models.OneToOneField(GroupSet, on_delete=models.CASCADE,null=True, blank=True)
     interventionset = models.OneToOneField(InterventionSet, on_delete=models.CASCADE,null=True, blank=True)
     individualset = models.OneToOneField(IndividualSet, on_delete=models.CASCADE,null=True, blank=True)
     outputset = models.OneToOneField(OutputSet, on_delete=models.CASCADE,null=True, blank=True)
-
+    files = models.ManyToManyField(DataFile)
 
 
 

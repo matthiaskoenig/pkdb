@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+      <Reference></Reference>
   </div>
 </template>
 
 <script>
+import Reference from './components/Reference'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Reference
+  }
 }
 </script>
 

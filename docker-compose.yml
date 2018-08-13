@@ -6,7 +6,6 @@ services:
     ports:
       - "5433:5432"
     environment:
-
      POSTGRES_USER : postgres
      POSTGRES_PASSWORD: pass
      POSTGRES_DB: postgres
@@ -38,3 +37,14 @@ services:
       - ./:/code
     ports:
       - "8001:8001"
+
+  #client:
+    #build: ./client
+    #ports:
+    #  - 8080:8080
+    #volumes:
+    #  - ./client:/data
+    #depends_on:
+    #  - web
+    #environment:
+    #  - API_URL=http://localhost:8081/
