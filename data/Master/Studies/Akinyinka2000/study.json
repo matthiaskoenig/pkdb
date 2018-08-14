@@ -29,7 +29,8 @@
             },
             {
                 "category": "sex",
-                "choice": null
+                "choice": null,
+		"hallo": "ich"
             }
         ],
         "groups": [
@@ -888,7 +889,6 @@
                 ],
                 "source": "Akinyinka2000_Fig1.csv",
                 "format": "TSV",
-                "figure": "Akinyinka2000_Fig1.png && Akinyinka2000_Fig2.png",
                 "substance": "paraxanthine/caffeine",
                 "tissue": "plasma",
                 "pktype": "ratio",
