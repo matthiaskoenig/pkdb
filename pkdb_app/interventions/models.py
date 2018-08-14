@@ -11,7 +11,7 @@ from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
-from ..subjects.models import Group, Individual, Set
+from ..subjects.models import Group, Individual, Set, DataFile
 from ..utils import CHAR_MAX_LENGTH
 
 # -------------------------------------------------
@@ -34,14 +34,8 @@ from ..utils import CHAR_MAX_LENGTH
 
 #####################################
 #new
-class DataFile(models.Model):
-    """ Table or figure from where the data comes from (png).
 
-    This should be in a separate class, so that they can be easily displayed/filtered/...
-    """
 
-    file = models.FileField(upload_to="data", null=True, blank=True)  # table or figure
-    filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
 
 
 class Substance(models.Model):
@@ -152,6 +146,8 @@ class Output(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutpu
 
     """ Storage of data sets. """
 
+    source = models.ForeignKey(DataFile, related_name="output_sources",on_delete=False)
+    figure = models.ForeignKey(DataFile, related_name="output_figures",on_delete=False)
 
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES, null=True, blank=True)
     time = models.FloatField(null=True,blank=True)
@@ -167,8 +163,10 @@ class Timecourse(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseO
     """
     #substance
     #tissue
-    outputset = models.ForeignKey(OutputSet, related_name="timecourse", on_delete=models.CASCADE,null=True, blank=True)
+    source = models.ForeignKey(DataFile, related_name="timecourse_sources",on_delete=False)
+    figure = models.ForeignKey(DataFile, related_name="timecourse_figures",on_delete=False)
 
+    outputset = models.ForeignKey(OutputSet, related_name="timecourse", on_delete=models.CASCADE,null=True, blank=True)
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True, blank=True)
     time = models.DecimalField(max_digits=40, decimal_places=20, null=True, blank=True)
     #data = models.ForeignKey(DataFile, on_delete=True) # link to the CSV

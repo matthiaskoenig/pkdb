@@ -26,9 +26,8 @@ Matthias_K = {"username":"mkoenig","first_name":"Matthias","last_name":"König",
 USERS = [Jan_G_U, Matthias_K]
 
 
-
 def get_reference_json_path():
-    #fill_user_and_substances()
+    fill_user_and_substances()
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "reference.json" in files:
             json_file = os.path.join(root, 'reference.json')
@@ -36,21 +35,24 @@ def get_reference_json_path():
 
             yield {"json":json_file , "pdf": pdf_file}
 
+
 def get_study_json_path():
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "study.json" in files:
             yield os.path.join(root, 'study.json')
 
-def open_reference(d):
 
+def open_reference(d):
     with open(d["json"]) as f:
         json_dict = json.loads(f.read())
     return {"json":json_dict,"pdf":d["pdf"], "reference_path":d["json"]}
+
 
 def open_study(d):
     with open(d) as f:
         json_dict = json.loads(f.read())
     return {"json":json_dict, "study_path":d}
+
 
 def upload_reference(json_reference):
     validate(json_reference["json"],reference_schema)
@@ -61,7 +63,6 @@ def upload_reference(json_reference):
         requests.patch(f'http://0.0.0.0:8000/api/v1/references/{json_reference["json"]["sid"]}/', files={"pdf":f})
 
 
-
 def fill_user_and_substances():
 
     for substance in SUBSTANCES_DATA:
@@ -70,8 +71,44 @@ def fill_user_and_substances():
         client.action(document, ["users", "create"], params=user)
 
 
+def fill_files(file_path):
+    data_dict = {}
+    head, sid = os.path.split(file_path)
+    study_dir = os.path.join(head,sid)
+    for root, dirs, files in os.walk(study_dir, topdown=False):
+        files = set(files) - set(['reference.json', 'study.json', f'{sid}.pdf'])
+        for file in files:
+            file_path = os.path.join(root, file)
+            with open(file_path,'rb') as f:
+                response = requests.post(f'http://0.0.0.0:8000/api/v1/datafiles/', files={"file": f})
+            data_dict[file] = response.json()["id"]
+    return data_dict
+
+def recursive_iter(obj, keys=()):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            yield from recursive_iter(v, keys + (k,))
+    elif any(isinstance(obj, t) for t in (list, tuple)):
+        for idx, item in enumerate(obj):
+            yield from recursive_iter(item, keys + (idx,))
+    else:
+        yield keys, obj
+
+def set_keys(d, value, *keys):
+    for key in keys[:-1]:
+        d = d[key]
+    d[keys[-1]] = value
+
 def upload_study(json_study):
+    study_dir = os.path.dirname(json_study["study_path"])
+    file_dict = fill_files(study_dir)
+
+    for keys, item in recursive_iter(json_study):
+        if item in file_dict.keys():
+            set_keys(json_study, file_dict[item], *keys)
+
     study_partial = {}
+
     study_partial["sid"] = json_study["json"]["sid"]
     study_partial["name"] = json_study["json"]["name"]
     study_partial["pkdb_version"] = json_study["json"]["pkdb_version"]
@@ -80,6 +117,8 @@ def upload_study(json_study):
     study_partial["reference"] = json_study["json"]["reference"]
     study_partial["curators"] = json_study["json"]["curators"]
     study_partial["creator"] = json_study["json"]["creator"]
+    study_partial["files"] = list(file_dict.values())
+
 
 
 
@@ -89,14 +128,14 @@ def upload_study(json_study):
     if response.status_code == 400:
         print(json_study["json"]["name"],response.text)
 
-    #for file in json_study["json"].get("files",[]):
-    #    with open(file, 'rb') as f:
-    #        requests.patch(f'http://0.0.0.0:8000/api/v1/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
+
+
 
     study_partial2 = {}
     study_partial2["groupset"] = json_study["json"]["groupset"]
     study_partial2["interventionset"] = json_study["json"]["interventionset"]
     study_partial2["individualset"] = json_study["json"].get("individualset", None)
+
 
     response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = study_partial2)
     if response.status_code == 400:

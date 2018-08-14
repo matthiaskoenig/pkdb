@@ -3,7 +3,7 @@ Django model for Study.
 """
 from django.db import models
 
-from pkdb_app.interventions.models import OutputSet, Substance, DataFile, InterventionSet
+from pkdb_app.interventions.models import OutputSet, Substance, InterventionSet, DataFile
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable

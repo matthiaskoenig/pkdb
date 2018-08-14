@@ -1,17 +1,14 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
-    DataFile
+from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
 from pkdb_app.serializers import ParserSerializer
-from pkdb_app.subjects.models import  Individual, Group
+from pkdb_app.subjects.models import Individual, Group, DataFile
 from pkdb_app.utils import un_map, validate_input
 
 
-class DataFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DataFile
-        fields = ["file","filetype"]
+
 
 class SubstanceSerializer(serializers.ModelSerializer):
 
@@ -25,8 +22,7 @@ class SubstanceSerializer(serializers.ModelSerializer):
 
 
 class InterventionSerializer(ParserSerializer):
-    substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False,required=False, allow_null=True)
-
+    substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = Intervention
@@ -69,6 +65,8 @@ class OutputSerializer(ParserSerializer):
     individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(), read_only=False, required=False, allow_null=True)
     interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(),many=True, read_only=False,required=False, allow_null=True)
     substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False,required=False, allow_null=True)
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Output
@@ -110,6 +108,7 @@ class OutputSerializer(ParserSerializer):
                         raise ValidationError(msg)
                     data["interventions"] = interventions
 
+
         data = self.strip(data)
         data = self.drop_blank(data)
         data = self.drop_empty(data)
@@ -122,6 +121,11 @@ class OutputSerializer(ParserSerializer):
             rep["group"] = instance.group.name
         if "interventions" in rep:
             rep["interventions"] = [intervention.name for intervention in instance.interventions.all()]
+        for file in ["source", "figure"]:
+            if file in rep:
+                current_site = f'http://{get_current_site(self.context["request"]).domain}'
+                rep[file] = current_site+ getattr(instance,file).file.url
+
         return un_map(rep)
 
 
@@ -138,9 +142,9 @@ class TimecourseSerializer(OutputSerializer):
                     "interventions_map",
                     "substance", "substance_map", "tissue", "tissue_map"]
 
-        def to_representation(self, instance):
-            rep = super().to_representation(instance)
-            return un_map(rep)
+        #def to_representation(self, instance):
+        #    rep = super().to_representation(instance)
+        #    return un_map(rep)
 
 
 class OutputSetSerializer(ParserSerializer):
