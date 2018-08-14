@@ -1,8 +1,9 @@
+from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from pkdb_app.utils import update_or_create_multiple, get_or_val_error
-from ..interventions.models import Substance
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, DataFileSerializer
+from ..interventions.models import Substance, DataFile
+from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
 from .models import Reference, Author, Study
@@ -54,12 +55,12 @@ class StudySerializer(BaseSerializer):
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
     outputset =OutputSetSerializer(read_only=False, required=False, allow_null=True)
-    files = DataFileSerializer(read_only=False, required=False, allow_null=True, many=True)
+    files = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True, many=True)
 
     class Meta:
         model = Study
         fields = ('sid',"pkdb_version","creator",'name',"design",'reference',"curators","substances",
-                 "groupset","individualset","interventionset","outputset")
+                 "groupset","individualset","interventionset","outputset","files")
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
@@ -91,5 +92,14 @@ class StudySerializer(BaseSerializer):
         instance = self.create_relations(instance,related)
 
         return instance
+
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        current_site = f'http://{get_current_site(self.context["request"]).domain}'
+
+        if "files" in rep:
+            rep["files"] = [current_site + file.file.url for file in instance.files.all()]
+        return rep
 
 

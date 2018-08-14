@@ -8,7 +8,8 @@ from rest_framework_swagger.views import get_swagger_view
 from django.conf import settings
 from django.conf.urls import include, url
 
-from .interventions.views import SubstancesViewSet, DataFileViewSet
+from pkdb_app.subjects.views import DataFileViewSet
+from .interventions.views import SubstancesViewSet
 from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import AuthorsViewSet, ReferencesViewSet, StudyViewSet
 #from .subjects.views import GroupsViewSet,CharacteristicValuesViewSet

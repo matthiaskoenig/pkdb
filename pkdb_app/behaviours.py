@@ -4,6 +4,7 @@ Reusable behavior for models.
 
 from django.db import models
 from django.core.exceptions import ValidationError
+
 from pkdb_app.utils import CHAR_MAX_LENGTH
 from .categoricals import UNITS_CHOICES
 
@@ -74,9 +75,10 @@ class Hashable(models.Model):
     class Meta:
         abstract = True
 
+
 class Sourceable(models.Model):
-    source = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # todo: to file_filed
-    figure = models.CharField(max_length=CHAR_MAX_LENGTH*5,null=True, blank=True)  # todo: to file_filed
+    #source = models.ForeignKey(DataFile, on_delete=False)  # todo: to file_filed
+    #figure = models.CharField(max_length=CHAR_MAX_LENGTH*5,null=True, blank=True)  # todo: to file_filed
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:

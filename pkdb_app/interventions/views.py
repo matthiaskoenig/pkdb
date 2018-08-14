@@ -4,9 +4,8 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets
 
-from pkdb_app.interventions.models import Substance, DataFile
-from pkdb_app.interventions.serializers import SubstanceSerializer, DataFileSerializer
-
+from pkdb_app.interventions.models import Substance
+from pkdb_app.interventions.serializers import SubstanceSerializer
 
 class SubstancesViewSet(viewsets.ModelViewSet):
 
@@ -14,7 +13,3 @@ class SubstancesViewSet(viewsets.ModelViewSet):
     serializer_class = SubstanceSerializer
 
 
-class DataFileViewSet(viewsets.ModelViewSet):
-
-    queryset = DataFile.objects.all()
-    serializer_class = DataFileSerializer

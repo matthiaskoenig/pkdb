@@ -3,10 +3,10 @@ from lark import UnexpectedCharacters, Lark
 
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 import pandas as pd
 
-from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet
+from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile
 from pkdb_app.studies.models import Reference
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.models import User
@@ -43,14 +43,6 @@ class BaseSerializer(serializers.ModelSerializer):
             return super().is_valid(raise_exception)
 
 
-    """
-        def to_representation(self, instance):
-        result = super().to_representation(instance)
-        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
-
-    
-    """
-
     @staticmethod
     def create_relations(study, related):
         for name,model in RELATED_SETS.items():
@@ -68,6 +60,10 @@ class BaseSerializer(serializers.ModelSerializer):
             substance = get_or_val_error(Substance, name=substance_data)
             study.substances.add(substance)
 
+        #study.files.all().delete()
+        for file_pk in related["files"]:
+            study.files.add(file_pk)
+
         study.save()
 
         return study
@@ -77,7 +73,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
         related_foreinkeys = RELATED_SETS.copy()
         related_foreinkeys["reference"] = Reference
-        related_many2many = {"substances": Substance,"curators": User}
+        related_many2many = {"substances": Substance,"curators": User,"files": DataFile}
         related_foreinkeys_dict = {name:validated_data.pop(name, None) for name,_ in related_foreinkeys.items()}
         related_many2many_dict = {name:validated_data.pop(name, []) for name,_  in related_many2many.items()}
         related = {**related_foreinkeys_dict,**related_many2many_dict}

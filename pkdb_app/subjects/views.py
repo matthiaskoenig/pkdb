@@ -4,6 +4,9 @@ from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 
+from pkdb_app.subjects.models import DataFile
+from pkdb_app.subjects.serializers import DataFileSerializer
+
 """
 class GroupsViewSet(viewsets.ModelViewSet):
 
@@ -34,3 +37,7 @@ class CharacteristicValuesViewSet(viewsets.ModelViewSet):
 #    filter_fields = ('comment','description','type')
  #   search_fields = filter_fields
 
+class DataFileViewSet(viewsets.ModelViewSet):
+
+    queryset = DataFile.objects.all()
+    serializer_class = DataFileSerializer

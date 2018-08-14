@@ -6,6 +6,7 @@ How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
 from django.db import models
+
 from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
@@ -20,6 +21,18 @@ from .managers import GroupManager, GroupSetManager, IndividualManager, Individu
 # - Group
 # - Intervention
 # - DataSets/Output
+
+class DataFile(models.Model):
+    """ Table or figure from where the data comes from (png).
+
+    This should be in a separate class, so that they can be easily displayed/filtered/...
+    """
+
+    file = models.FileField(upload_to="data", null=True, blank=True)  # table or figure
+    filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
+
+    def __str__(self):
+        return self.file.name
 
 class Set(Describable, models.Model):
     """
@@ -76,6 +89,9 @@ class Individual(IndividualMap,Sourceable,models.Model):
 
     Individuals are defined via their characteristics.
     """
+    source = models.ForeignKey(DataFile,related_name="individual_sources", on_delete=False)
+    figure = models.ForeignKey(DataFile, related_name="individual_figures", on_delete=False)
+
     individualset = models.ForeignKey(IndividualSet,on_delete=models.CASCADE, related_name="individuals")
     group =  models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals",null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)

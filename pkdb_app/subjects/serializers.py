@@ -1,9 +1,14 @@
+from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 from pkdb_app.behaviours import Sourceable
 from pkdb_app.utils import un_map, validate_input
-from .models import Group, GroupSet, Individual, IndividualSet, Characteristica
+from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile
 from ..serializers import ParserSerializer
 
+class DataFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataFile
+        fields = ["id","file","filetype"]
 
 class CharacteristicaSerializer(ParserSerializer):
     count = serializers.IntegerField(required=False)
@@ -64,10 +69,12 @@ class GroupSRField(serializers.SlugRelatedField):
 class IndividualSerializer(ParserSerializer):
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False, allow_null=True)
     group = GroupSRField(slug_field='name', read_only=False, required=False, allow_null=True)
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
     class Meta:
             model = Individual
-            fields = Sourceable.fields() + ["name", "name_map",  "group_map", "characteristica", "group"]
+            fields = Sourceable.fields() + ["name", "name_map",  "group_map", "characteristica", "group","source"]
 
     def to_internal_value(self, data):
         data = self.generic_parser(data, "characteristica")
@@ -78,6 +85,11 @@ class IndividualSerializer(ParserSerializer):
         rep = super().to_representation(instance)
         if "group" in rep:
             rep["group"] = instance.group.name
+
+        for file in ["source", "figure"]:
+            if file in rep:
+                current_site = f'http://{get_current_site(self.context["request"]).domain}'
+                rep[file] = current_site+ getattr(instance,file).file.url
         return un_map(rep)
 
     '''
