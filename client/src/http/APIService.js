@@ -14,9 +14,9 @@ export class APIService{
           return axios.get(url).then(response => response.data);
       }
 
-    updateReference(product){
-        const url = `${API_URL}/api/products/${product.pk}`;
-        return axios.put(url,product);
+    updateReference(pk){
+        const url = `${API_URL}/api/preferences/${pk}`;
+        return axios.put(url,pk);
     }
 }
 

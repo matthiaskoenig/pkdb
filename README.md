@@ -96,5 +96,14 @@ Example:
 ```
 
 ----
+# Client
+check out ./client/README.md.
+## Requirements
+- node.js
+- npm
+- vue.js
+
+
+
 
 &copy; 2018 Jan Grzegorzewski & Matthias König.
