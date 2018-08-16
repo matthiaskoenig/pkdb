@@ -7,7 +7,7 @@ import bonobo
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.fill_database import get_study_json_path, open_study
+from pkdb_app.data_management.fill_database import get_study_paths, read_study_json
 from pkdb_app.data_management.initialize_study import save_study, study_filename, SEPERATOR
 from pkdb_app.categoricals import CHARACTERISTIC_CATEGORIES,CHARACTERISTIC_DTYPE
 from pkdb_app.data_management.create_reference_caffeine import SUBJECTSPATH, INDIVIDUALPATH
@@ -167,8 +167,8 @@ def get_graph_study(**options):
     graph = bonobo.Graph()
     # add studies
     graph.add_chain(
-        get_study_json_path,
-        open_study,
+        get_study_paths,
+        read_study_json,
         add_groupset_to_study,
         add_group_to_groupset,
         save_study,
@@ -179,8 +179,8 @@ def get_graph_study(**options):
 def get_graph_groupset_chara(**options):
     graph = bonobo.Graph()
     graph.add_chain(
-            get_study_json_path,
-            open_study,
+            get_study_paths,
+            read_study_json,
             add_characteristica_groupset,
             save_study,
     )
@@ -189,8 +189,8 @@ def get_graph_groupset_chara(**options):
 def get_graph_groupset_individual(**options):
     graph = bonobo.Graph()
     graph.add_chain(
-            get_study_json_path,
-            open_study,
+            get_study_paths,
+            read_study_json,
             add_individual_set,
             save_study,
     )

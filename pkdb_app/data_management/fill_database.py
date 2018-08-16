@@ -1,76 +1,128 @@
-import os, sys
+"""
+Script to load data into database.
+
+Needs location of directory with data.
+Uses bonobo framework, a lightweight extract-transform-load (ETL) framework,
+for data transformation and preparation.
+
+The upload expects a certain folder structure:
+- folder name is STUDYNAME, e.g., Albert1974
+- folder contains pdf as STUDYNAME.pdf, e.g., Albert1974.pdf
+- folder contains reference information as `reference.json`
+- folder contains study information as `study.json`
+- folder contains additional files associated with study, i.e.,
+    - tables, named STUDYNAME_Tab[0-9]*.png, e.g., Albert1974_Tab1.png
+    - figures, named STUDYNAME_Fig[0-9]*.png, e.g., Albert1974_Fig2.png
+    - excel file, named STUDYNAME.xlsx, e.g., Albert1974.xlsx
+    - data files, named STUDYNAME_Tab[0-9]*.csv or STUDYNAME_Fig[0-9]*.csv
+
+Details about the JSON schema are given elsewhere (JSON schema and REST API).
+"""
+import os
+import sys
 import bonobo
 import coreapi
 import json
 import requests
+from jsonschema import validate
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
-from jsonschema import validate
 from pkdb_app.data_management.schemas import reference_schema
-import logging
-import mondrian
-# One line setup (excepthook=True tells mondrian to handle uncaught exceptions)
-#mondrian.setup(excepthook=True)
-# Use logging, as usual.
-#logger = logging.getLogger()
-#logger.setLevel(logging.DEBUG)
+from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
 
-if hasattr (sys, 'tracebacklimit'):
-    del sys.tracebacklimit
 
-class Stop (Exception):
-    def __init__ (self):
-        sys.tracebacklimit = 0
+# FIXME: implement proper logging
 
+# -----------------------------
+# user information
+# -----------------------------
 PASSWORD = "test"
-Jan_G_U = {"username":"janekg","first_name":"Jan","last_name":"Grzegorzewski","email":"Janekg89@hotmail.de","password":PASSWORD}
-Matthias_K = {"username":"mkoenig","first_name":"Matthias","last_name":"König","email":"konigmatt@googlemail.com","password":PASSWORD}
+USERS = [
+    {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
+          "password": PASSWORD},
+    {"username": "mkoenig", "first_name": "Matthias", "last_name": "König", "email": "konigmatt@googlemail.com",
+           "password": PASSWORD}
+]
 
-USERS = [Jan_G_U, Matthias_K]
-
-
-def get_reference_json_path():
-
-    fill_user_and_substances()
-    from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
-
-    for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
-        if "reference.json" in files:
-            json_file = os.path.join(root, 'reference.json')
-            pdf_file = os.path.join(root,f"{os.path.basename(root)}.pdf")
-
-            yield {"json":json_file , "pdf": pdf_file}
+# -----------------------------
+# master path
+# -----------------------------
+MASTER_PATH = REFERENCESMASTERPATH
 
 
-def get_study_json_path():
-    from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
-    for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
-        if "study.json" in files:
-            yield os.path.join(root, 'study.json')
+def setup_database():
+    """ Creates core information in database.
+
+    This information is independent of study information. E.g., users, substances,
+    categorials.
+
+    :return:
+    """
+    # FIXME: use requests instead of core api
+    from pkdb_app.categoricals import SUBSTANCES_DATA
+    for substance in SUBSTANCES_DATA:
+        client.action(document, ["substances", "create"], params={"name": substance})
+    for user in USERS:
+        client.action(document, ["users", "create"], params=user)
 
 
-def open_reference(d):
-    with open(d["json"]) as f:
+# -------------------------------
+# Paths of JSON files
+# -------------------------------
+def _get_paths(filename):
+    """ Finds paths of filename recursively in MASTER_PATH. """
+    for root, dirs, files in os.walk(MASTER_PATH, topdown=False):
+        if filename in files:
+            yield os.path.join(root, filename)
+
+
+def get_reference_paths():
+    """ Finds paths of reference JSON files and corresponding PDFs.
+
+    :return: dict
+    """
+    for path in _get_paths("reference.json"):
+        pdf_path = os.path.join(os.path.dirname(path), f"{os.path.basename(path)}.pdf")
+        yield {"reference_path": path, "pdf": pdf_path}
+
+
+def get_study_paths():
+    """ Finds paths of study JSON files. """
+    _get_paths("study.json")
+
+
+# -------------------------------
+# Read JSON files
+# -------------------------------
+def _read_json(path):
+    """ Reads json.
+
+    :param path: returns json, or None if parsing failed.
+    :return:
+    """
+    with open(path) as f:
         try:
-            json_dict = json.loads(f.read())
+            json_data = json.loads(f.read())
         except json.decoder.JSONDecodeError as err:
             print(err)
             return
-    return {"json":json_dict,"pdf":d["pdf"], "reference_path":d["json"]}
+    return json_data
 
 
-def open_study(d):
-    with open(d) as f:
-        try:
-            json_dict = json.loads(f.read())
-        except json.decoder.JSONDecodeError as err:
-            print(err)
-            return
+def read_reference_json(d):
+    """ Reads JSON for reference. """
+    path = d["reference_path"]
+    d2 = d.copy()
+    d2["json"] = _read_json(path)
+    return d2
 
 
+def read_study_json(path):
+    return {"json": _read_json(path),
+            "study_path": path}
 
-    return {"json":json_dict, "study_path":d}
+
 
 
 def upload_reference(json_reference):
@@ -92,14 +144,6 @@ def upload_reference(json_reference):
 
     return ok
 
-
-
-def fill_user_and_substances():
-    from pkdb_app.categoricals import SUBSTANCES_DATA
-    for substance in SUBSTANCES_DATA:
-        client.action(document, ["substances", "create"], params={"name":substance})
-    for user in USERS:
-        client.action(document, ["users", "create"], params=user)
 
 
 def fill_files(file_path):
@@ -211,8 +255,8 @@ def get_graph_references(**options):
     graph = bonobo.Graph()
     # add studies
     graph.add_chain(
-        get_reference_json_path,
-        open_reference,
+        get_reference_paths,
+        read_reference_json,
         upload_reference,
     )
     return graph
@@ -221,8 +265,8 @@ def get_graph_study(**options):
     graph = bonobo.Graph()
     # add studies
     graph.add_chain(
-        get_study_json_path,
-        open_study,
+        get_study_paths,
+        read_study_json,
         upload_study,
     )
     return graph
@@ -236,6 +280,10 @@ if __name__ == '__main__':
     client = coreapi.Client()
     document = client.get("http://0.0.0.0:8000/")
 
+    # core database setup
+    setup_database()
+
+    # run the bonobo chain
     parser = bonobo.get_argument_parser()
     with bonobo.parse_args(parser) as options:
         bonobo.run(get_graph_references(**options), services=get_services(**options))
