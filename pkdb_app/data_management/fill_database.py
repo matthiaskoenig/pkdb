@@ -283,6 +283,9 @@ def upload_study_json(json_study_dict):
             logging.warning(f'{study_core["name"]} {response.text}')
             success = False
 
+    if success:
+        logging.info(f'{API_URL}/studies/{json_study["sid"]}/')
+
     return success
 
 
@@ -317,7 +320,7 @@ def upload_study_from_dir(study_dir):
     reference_pdf = os.path.join(study_dir, f"{study_name}.pdf")
     if study_json and not os.path.exists(reference_path):
         if study_json:
-            pmid = json.get("reference", None)
+            pmid = study_json.get("reference", None)
             if pmid is not None:
                 Reference = namedtuple("Reference", ["reference", "name", "pmid"])
                 ref = Reference(reference=study_dir, name=study_name, pmid=pmid)
@@ -328,7 +331,7 @@ def upload_study_from_dir(study_dir):
     # upload reference.json
     success_ref = True
     if os.path.exists(reference_path):
-        reference_dict = {"json": reference_path, "pdf": reference_pdf}
+        reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
             success_ref = upload_reference_json(read_reference_json(reference_dict))
 
@@ -336,7 +339,9 @@ def upload_study_from_dir(study_dir):
     success_study = upload_study_json(study_dict)
 
     if success_ref and success_study:
-        print("--- upload successful ---")
+        logging.info("--- upload successful ---")
+
+    return {}
 
 
 # -------------------------------

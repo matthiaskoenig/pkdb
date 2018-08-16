@@ -16,6 +16,13 @@ Database and web interface for storing pharmacokinetics information including
 <img src="./docs/images/data_extraction.png" width="600"/>
 Figure 1: Overview over data extraction.
 
+## Access
+http://localhost:8000/api/v1/
+http://localhost:8000/api/v1/studies/17955229/
+
+
+
+
 ## Data model
 Pharmacokinetics data is a special type of experimental data.
 Pharmacokinetics data like clearance, halflife, ... (with units and error measurements) are either directly reported in publications

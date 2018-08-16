@@ -24,7 +24,6 @@ For upload a certain folder structure is expected
     - data files, named STUDYNAME_Tab[0-9]*.csv or STUDYNAME_Fig[0-9]*.csv
 * Start watchdog `watch_study.py` via pycharm with `-s PATH_TO_DIRECTORY` argument
 
-* Get `PMID` (Pubmed id) for publication from https://www.ncbi.nlm.nih.gov/pubmed/
 
 ## 2. Initial study information (`study.json`)
 Fill in basic information for study, use the `PMID` for `sid` and `reference` field, use StudyName for `name` field.
@@ -35,7 +34,7 @@ Fill in basic information for study, use the `PMID` for `sid` and `reference` fi
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Akinyinka2000",
-    "design":"parallel group",
+    "design": "parallel group",
     "reference": 10877011,
     "curators": [
         "mkoenig",

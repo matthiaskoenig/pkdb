@@ -23,6 +23,8 @@ sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.fill_database import upload_study_from_dir
 
+# FIXME: make sure that removed files are removed from the study (on delete?)
+
 
 class StudyHandler(FileSystemEventHandler):
     def __init__(self,  study):
@@ -35,6 +37,7 @@ class StudyHandler(FileSystemEventHandler):
         upload_study_from_dir(self.study)
 
     def on_created(self, event):
+        print('\n')
         upload_study_from_dir(self.study)
 
 
