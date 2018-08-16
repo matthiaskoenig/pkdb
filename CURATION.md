@@ -1,10 +1,9 @@
 # Curation information
-Collection of resources and infromation on how experimental data
+Collection of resources and information on how experimental data
 should be curated from manuscripts for upload/inclusion in PKDB.
 
-Most important point is to create valid JSON which can be accepted 
-by the model serializers, i.e. serializers which are defined
-in 
+In the curation JSON files for the study and reference are created which are parsed
+ by the model serializers
 ```
 serializers.py
 studies/serializers.py
@@ -12,15 +11,20 @@ interventions/serializers.py
 subjects/serializers.py
 ```
 
-Additionally, the JSON files have to be conform to the JSON schema,
-defined in 
-
 ## 1. PDF, Reference, Figures & Tables
-* Create folder for study, name folder AuthorYear{a,b,c, ...} from hereon referred to as StudyName
+For upload a certain folder structure is expected
+- folder name is STUDYNAME, e.g., Albert1974
+- folder contains pdf as STUDYNAME.pdf, e.g., Albert1974.pdf
+- folder contains reference information as `reference.json`
+- folder contains study information as `study.json`
+- folder contains additional files associated with study, i.e.,
+    - tables, named STUDYNAME_Tab[0-9]*.png, e.g., Albert1974_Tab1.png
+    - figures, named STUDYNAME_Fig[0-9]*.png, e.g., Albert1974_Fig2.png
+    - excel file, named STUDYNAME.xlsx, e.g., Albert1974.xlsx
+    - data files, named STUDYNAME_Tab[0-9]*.csv or STUDYNAME_Fig[0-9]*.csv
+* Start watchdog `watch_study.py` via pycharm with `-s PATH_TO_DIRECTORY` argument
+
 * Get `PMID` (Pubmed id) for publication from https://www.ncbi.nlm.nih.gov/pubmed/
-* Download PDF in folder as StudyName.pdf 
-* Extract Figures with graphics program and save as StudyName_Fig[0-9]* or StudyName_Tab[0-9]*
-* Digitized data should be stored in StudyName.xlsx
 
 ## 2. Initial study information (`study.json`)
 Fill in basic information for study, use the `PMID` for `sid` and `reference` field, use StudyName for `name` field.
