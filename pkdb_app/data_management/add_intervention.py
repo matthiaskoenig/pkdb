@@ -7,7 +7,7 @@ import json
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.fill_database import get_study_json_path, open_study
+from pkdb_app.data_management.fill_database import get_study_paths, read_study_json
 from pkdb_app.data_management.create_reference_caffeine import DOSINGPATH, ensure_dir
 from pkdb_app.data_management.initialize_study import save_study, SEPERATOR
 from pkdb_app.utils import create_if_exists, clean_import
@@ -55,8 +55,8 @@ def get_graph_study(**options):
     graph = bonobo.Graph()
     # add studies
     graph.add_chain(
-        get_study_json_path,
-        open_study,
+        get_study_paths,
+        read_study_json,
         add_intervention_to_study,
         save_study,
     )

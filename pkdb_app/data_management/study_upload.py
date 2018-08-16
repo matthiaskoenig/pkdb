@@ -4,7 +4,7 @@ import argparse
 from collections import namedtuple
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
-from pkdb_app.data_management.fill_database import open_reference, open_study, upload_reference,upload_study
+from pkdb_app.data_management.fill_database import read_reference_json, read_study_json, upload_reference,upload_study
 from pkdb_app.data_management.reference_create import run as create_reference
 
 
@@ -16,8 +16,8 @@ def run(args):
     reference_path = os.path.join(args.study, "reference.json")
     reference_pdf = os.path.join(args.study, f"{study_name}.pdf")
 
-    if open_study(study_path) and hasattr(args, 'r'):
-        study = open_study(study_path)
+    if read_study_json(study_path) and hasattr(args, 'r'):
+        study = read_study_json(study_path)
         Reference = namedtuple("Reference",["reference", "name", "pmid"])
         ref = Reference(reference=args.study,name=study_name, pmid=study["json"]["reference"])
         create_reference(ref)
@@ -25,16 +25,16 @@ def run(args):
 
     if os.path.isfile(reference_path):
         reference_dict = {"json": reference_path, "pdf": reference_pdf}
-        if open_reference(reference_dict):
-            ok_ref = upload_reference(open_reference(reference_dict))
+        if read_reference_json(reference_dict):
+            ok_ref = upload_reference(read_reference_json(reference_dict))
             if not ok_ref:
                 ok = ok_ref
         else:
             ok = False
 
     if os.path.isfile(study_path):
-        if open_study(study_path):
-            ok_study = upload_study(open_study(study_path))
+        if read_study_json(study_path):
+            ok_study = upload_study(read_study_json(study_path))
             if not ok_study:
                 ok = ok_study
         else:
