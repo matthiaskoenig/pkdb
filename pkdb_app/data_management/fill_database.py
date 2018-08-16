@@ -129,15 +129,34 @@ def set_keys(d, value, *keys):
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
+def pop_comment(d, *keys):
+
+    for key in keys[:-1]:
+
+        if  key == "comments":
+            d.pop("comments")
+            return
+
+        d = d[key]
+
+
+
 
 def upload_study(json_study):
     ok = True
     study_dir = os.path.dirname(json_study["study_path"])
     file_dict = fill_files(study_dir)
-
+    comments = []
     for keys, item in recursive_iter(json_study):
         if item in file_dict.keys():
             set_keys(json_study, file_dict[item], *keys)
+        if "comments" in keys:
+            comments.append(keys)
+
+    for comment in comments:
+        pop_comment(json_study,*comment)
+
+
 
     study_partial = {}
 
