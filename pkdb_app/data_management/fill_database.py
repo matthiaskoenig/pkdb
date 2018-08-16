@@ -21,22 +21,26 @@ Details about the JSON schema are given elsewhere (JSON schema and REST API).
 import os
 import sys
 import bonobo
-import coreapi
 import json
 import requests
 from jsonschema import validate
+import logging
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 from pkdb_app.data_management.schemas import reference_schema
-from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
-
 
 # FIXME: implement proper logging
 
 # -----------------------------
-# user information
+# master path
 # -----------------------------
+DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
+
+# -----------------------------
+# setup database
+# -----------------------------
+API_URL = "http://0.0.0.0:8000/api/v1"
 PASSWORD = "test"
 USERS = [
     {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
@@ -44,11 +48,6 @@ USERS = [
     {"username": "mkoenig", "first_name": "Matthias", "last_name": "König", "email": "konigmatt@googlemail.com",
      "password": PASSWORD}
 ]
-
-# -----------------------------
-# master path
-# -----------------------------
-MASTER_PATH = REFERENCESMASTERPATH
 
 
 def setup_database():
@@ -59,12 +58,12 @@ def setup_database():
 
     :return:
     """
-    # FIXME: use requests instead of core api
     from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
-        client.action(document, ["substances", "create"], params={"name": substance})
+        requests.post(f'{API_URL}/substances/', json={"name": substance})
+
     for user in USERS:
-        client.action(document, ["users", "create"], params=user)
+        requests.post(f'{API_URL}/users/', json=user)
 
 
 # -------------------------------
@@ -72,7 +71,7 @@ def setup_database():
 # -------------------------------
 def _get_paths(filename):
     """ Finds paths of filename recursively in MASTER_PATH. """
-    for root, dirs, files in os.walk(MASTER_PATH, topdown=False):
+    for root, dirs, files in os.walk(DATA_PATH, topdown=False):
         if filename in files:
             yield os.path.join(root, filename)
 
@@ -83,13 +82,14 @@ def get_reference_paths():
     :return: dict
     """
     for path in _get_paths("reference.json"):
-        pdf_path = os.path.join(os.path.dirname(path), f"{os.path.basename(path)}.pdf")
+        study_name = os.path.basename(os.path.dirname(path))
+        pdf_path = os.path.join(os.path.dirname(path), f"{study_name}.pdf")
         yield {"reference_path": path, "pdf": pdf_path}
 
 
 def get_study_paths():
     """ Finds paths of study JSON files. """
-    _get_paths("study.json")
+    return _get_paths("study.json")
 
 
 # -------------------------------
@@ -160,9 +160,6 @@ def pop_comment(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-API_URL = "http://0.0.0.0:8000/api/v1"
-
-
 def upload_files(file_path):
     """ Uploads all files in directory of given file.
 
@@ -289,11 +286,9 @@ def get_services(**options):
 
 # -------------------------------------------------------------------------------
 if __name__ == '__main__':
-    client = coreapi.Client()
-    document = client.get("http://0.0.0.0:8000/")
 
     # core database setup
-    setup_database()
+    # setup_database()
 
     # run the bonobo chain
     parser = bonobo.get_argument_parser()
