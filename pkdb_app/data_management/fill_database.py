@@ -42,10 +42,10 @@ from collections import namedtuple
 # -----------------------------
 # DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
 DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
-print("-" * 80)
-print("DATA_PATH:", DATA_PATH)
-print("-" * 80)
 if not os.path.exists(DATA_PATH):
+    print("-" * 80)
+    print("DATA_PATH:", DATA_PATH)
+    print("-" * 80)
     raise FileNotFoundError
 
 # -----------------------------
@@ -116,7 +116,7 @@ def _read_json(path):
         try:
             json_data = json.loads(f.read())
         except json.decoder.JSONDecodeError as err:
-            print(err)
+            logging.warning(f'{err}\nin {path}')
             return
     return json_data
 
@@ -186,7 +186,12 @@ def upload_files(file_path):
             file_path = os.path.join(root, file)
             with open(file_path, 'rb') as f:
                 response = requests.post(f'{API_URL}/datafiles/', files={"file": f})
-            data_dict[file] = response.json()["id"]
+            if response.status_code == 201:
+                data_dict[file] = response.json()["id"]
+            else:
+                logging.warning(f"File upload failed: {file}")
+                print(response.json())
+
     return data_dict
 
 
@@ -198,7 +203,7 @@ def upload_reference_json(json_reference):
     # post
     response = requests.post(f'{API_URL}/references/', json=json_reference["json"])
     if not response.status_code == 201:
-        print(json_reference["json"]["name"], response.text)
+        logging.info(json_reference["json"]["name"], response.text)
         success = False
 
     # patch
@@ -206,61 +211,76 @@ def upload_reference_json(json_reference):
         response = requests.patch(f'{API_URL}/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
 
     if not response.status_code == 200:
-        print(json_reference["json"]["name"], response.text)
+        logging.info(json_reference["json"]["name"], response.text)
         success = False
 
     return success
 
 
-def upload_study_json(json_study):
-    """ Uploads study JSON. """
+def upload_study_json(json_study_dict):
+    """ Uploads study JSON.
+
+    :returns success code
+    """
     success = True
-    study_dir = os.path.dirname(json_study["study_path"])
+    json_study = json_study_dict["json"]
+    if not json_study:
+        logging.warning("No study information in `study.json`")
+        return False
+
+    # upload files (and get dict for file ids)
+    study_dir = os.path.dirname(json_study_dict["study_path"])
     file_dict = upload_files(study_dir)
+
+
     comments = []
-    for keys, item in recursive_iter(json_study):
+    for keys, item in recursive_iter(json_study_dict):
         if item in file_dict.keys():
-            set_keys(json_study, file_dict[item], *keys)
+            set_keys(json_study_dict, file_dict[item], *keys)
         if "comments" in keys:
             comments.append(keys)
 
     for comment in comments:
-        pop_comment(json_study, *comment)
+        pop_comment(json_study_dict, *comment)
 
-    study_partial = {}
-    study_partial["sid"] = json_study["json"]["sid"]
-    study_partial["name"] = json_study["json"]["name"]
-    study_partial["pkdb_version"] = json_study["json"]["pkdb_version"]
-    study_partial["design"] = json_study["json"]["design"]
-    study_partial["substances"] = json_study["json"]["substances"]
-    study_partial["reference"] = json_study["json"]["reference"]
-    study_partial["curators"] = json_study["json"]["curators"]
-    study_partial["creator"] = json_study["json"]["creator"]
-    study_partial["files"] = list(file_dict.values())
+    # ---------------------------
+    # post study core
+    # ---------------------------
+    study_core = {}
+    study_core["sid"] = json_study.get("sid")
+    study_core["name"] = json_study.get("name")
+    study_core["pkdb_version"] = json_study.get("pkdb_version")
+    study_core["design"] = json_study.get("design")
+    study_core["substances"] = json_study.get("substances")
+    study_core["reference"] = json_study.get("reference")
+    study_core["curators"] = json_study.get("curators")
+    study_core["creator"] = json_study.get("creator")
+    study_core["files"] = list(file_dict.values())
 
-    # post
-    response = requests.post(f'{API_URL}/studies/', json=study_partial)
+    response = requests.post(f'{API_URL}/studies/', json=study_core)
     if not response.status_code == 201:
-        print(json_study["json"]["name"], response.text)
+        logging.warning(f'{study_core["name"]} {response.text}')
         success = False
 
-    study_partial2 = {}
-    study_partial2["groupset"] = json_study["json"]["groupset"]
-    study_partial2["interventionset"] = json_study["json"]["interventionset"]
-    study_partial2["individualset"] = json_study["json"].get("individualset", None)
+    # ---------------------------
+    # post study sets
+    # ---------------------------
+    study_sets = {}
+    study_sets["groupset"] = json_study.get("groupset")
+    study_sets["interventionset"] = json_study.get("interventionset")
+    study_sets["individualset"] = json_study.get("individualset")
 
-    # patch
-    response = requests.patch(f'{API_URL}/studies/{json_study["json"]["sid"]}/', json=study_partial2)
+    response = requests.patch(f'{API_URL}/studies/{json_study["sid"]}/', json=study_sets)
     if not response.status_code == 200:
-        print(json_study["json"]["name"], response.text)
+        logging.warning(f'{study_core["name"]} {response.text}')
         success = False
 
     # patch
-    if "outputset" in json_study["json"].keys():
-        response = requests.patch(f'{API_URL}/studies/{json_study["json"]["sid"]}/',
-                                  json={"outputset": json_study["json"].get("outputset")})
+    if "outputset" in json_study.keys():
+        response = requests.patch(f'{API_URL}/studies/{json_study["sid"]}/',
+                                  json={"outputset": json_study.get("outputset")})
         if not response.status_code == 200:
-            print(json_study["json"]["name"], response.text)
+            logging.warning(f'{study_core["name"]} {response.text}')
             success = False
 
     return success
@@ -278,37 +298,44 @@ def upload_study_from_dir(study_dir):
     :return:
     """
 
-    success = True
+    # handle study.json
     study_path = os.path.join(study_dir, "study.json")
     _, study_name = os.path.split(study_dir)
+    if not os.path.exists(study_path):
+        logging.warning("`study.json` missing.")
+        return False
 
+    study_dict = read_study_json(study_path)
+    if not study_dict:
+        logging.warning("`study.json` is empty.")
+        return False
+
+    study_json = study_dict.get("json", None)
+
+    # try to create missing reference.json
     reference_path = os.path.join(study_dir, "reference.json")
     reference_pdf = os.path.join(study_dir, f"{study_name}.pdf")
+    if study_json and not os.path.exists(reference_path):
+        if study_json:
+            pmid = json.get("reference", None)
+            if pmid is not None:
+                Reference = namedtuple("Reference", ["reference", "name", "pmid"])
+                ref = Reference(reference=study_dir, name=study_name, pmid=pmid)
+                create_reference(ref)
+            else:
+                logging.warning("`reference.json` missing, and no pmid in `study.json`")
 
-    if not os.path.exists(reference_path):
-        study = read_study_json(study_path)
-        Reference = namedtuple("Reference", ["reference", "name", "pmid"])
-        ref = Reference(reference=study_dir, name=study_name, pmid=study["json"]["reference"])
-        create_reference(ref)
-
-    if os.path.isfile(reference_path):
+    # upload reference.json
+    success_ref = True
+    if os.path.exists(reference_path):
         reference_dict = {"json": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
-            ok_ref = upload_reference_json(read_reference_json(reference_dict))
-            if not ok_ref:
-                success = ok_ref
-        else:
-            success = False
+            success_ref = upload_reference_json(read_reference_json(reference_dict))
 
-    if os.path.isfile(study_path):
-        if read_study_json(study_path):
-            ok_study = upload_study_json(read_study_json(study_path))
-            if not ok_study:
-                success = ok_study
-        else:
-            success = False
+    # upload study.json
+    success_study = upload_study_json(study_dict)
 
-    if success:
+    if success_ref and success_study:
         print("--- upload successful ---")
 
 
