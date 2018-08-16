@@ -1,11 +1,11 @@
 #! /usr/bin/env python
 import os, sys
 import argparse
-
+from collections import namedtuple
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 from pkdb_app.data_management.fill_database import open_reference, open_study, upload_reference,upload_study
-
+from pkdb_app.data_management.reference_create import run as create_reference
 
 
 def run(args):
@@ -15,6 +15,13 @@ def run(args):
 
     reference_path = os.path.join(args.study, "reference.json")
     reference_pdf = os.path.join(args.study, f"{study_name}.pdf")
+
+    if open_study(study_path) and hasattr(args, 'r'):
+        study = open_study(study_path)
+        Reference = namedtuple("Reference",["reference", "name", "pmid"])
+        ref = Reference(reference=args.study,name=study_name, pmid=study["json"]["reference"])
+        create_reference(ref)
+
 
     if os.path.isfile(reference_path):
         reference_dict = {"json": reference_path, "pdf": reference_pdf}
@@ -40,6 +47,8 @@ def run(args):
 def main():
     parser = argparse.ArgumentParser(description="Upload a file to PKDB")
     parser.add_argument("-s", help="directory of a study", dest="study", type=str, required=True)
+    parser.add_argument("--r", help="directory of a study", action="store_true")
+
     parser.set_defaults(func=run)
     args = parser.parse_args()
     args.func(args)

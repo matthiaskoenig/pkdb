@@ -89,8 +89,8 @@ class Individual(IndividualMap,Sourceable,models.Model):
 
     Individuals are defined via their characteristics.
     """
-    source = models.ForeignKey(DataFile,related_name="individual_sources", on_delete=False)
-    figure = models.ForeignKey(DataFile, related_name="individual_figures", on_delete=False)
+    source = models.ForeignKey(DataFile,related_name="individual_sources", null=True,blank=True, on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="individual_figures", null=True,blank=True, on_delete=models.SET_NULL)
 
     individualset = models.ForeignKey(IndividualSet,on_delete=models.CASCADE, related_name="individuals")
     group =  models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals",null=True, blank=True)
@@ -119,7 +119,23 @@ class Individual(IndividualMap,Sourceable,models.Model):
         return self.name
 
 
-class Characteristica(ValueableMap,Valueable, models.Model):
+class CharacteristicaBase(models.Model):
+
+    category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True,
+                              blank=True)  # check in validation that allowed choice
+    ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH,
+                             default=GROUP_CRITERIA)  # this is for exclusion and inclustion
+
+    category_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    ctype_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class Characteristica(CharacteristicaBase,ValueableMap,Valueable, models.Model):
     """ Characteristic.
 
         Characteristics are used to store information about a group of subjects.
@@ -136,13 +152,11 @@ class Characteristica(ValueableMap,Valueable, models.Model):
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH*3, null=True,blank=True)  # check in validation that allowed choice
+
     groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
     individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
-    ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH, default=GROUP_CRITERIA) #this is for exclusion and inclustion
 
 
     @property

@@ -78,7 +78,6 @@ class OutputSerializer(ParserSerializer):
                    "substance","substance_map","tissue", "tissue_map"]
 
     def to_internal_value(self, data):
-
         study_sid = self.context['request'].path.split("/")[-2]
         data = self.split_to_map(data)
 
@@ -142,9 +141,7 @@ class TimecourseSerializer(OutputSerializer):
                     "interventions_map",
                     "substance", "substance_map", "tissue", "tissue_map"]
 
-        #def to_representation(self, instance):
-        #    rep = super().to_representation(instance)
-        #    return un_map(rep)
+
 
 
 class OutputSetSerializer(ParserSerializer):

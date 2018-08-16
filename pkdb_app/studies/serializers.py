@@ -1,4 +1,5 @@
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
 from rest_framework import serializers
 
 from pkdb_app.utils import update_or_create_multiple, get_or_val_error
@@ -7,10 +8,10 @@ from ..interventions.serializers import InterventionSetSerializer, OutputSetSeri
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
 from .models import Reference, Author, Study
-from ..serializers import BaseSerializer
+from ..serializers import BaseSerializer, WrongKeySerializer
 
 
-class AuthorSerializer(serializers.ModelSerializer):
+class AuthorSerializer(WrongKeySerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -75,6 +76,7 @@ class StudySerializer(BaseSerializer):
 
         study = self.create_relations(study,related)
         return study
+
 
     def update(self, instance, validated_data):
 

@@ -15,6 +15,8 @@ BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file_
 sys.path.append(BASEPATH)
 from pkdb_app.utils import ensure_dir
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pkdb_app.config.local")
+
 CAFFEINE = "caffeine"
 
 Master = os.path.join(BASEPATH, "Master")
@@ -60,24 +62,24 @@ def add_reference_path(d):
 
 
 def load_from_biopython(d):
+
     Entrez.email = 'janekg89@hotmail.de'
     handle = Entrez.efetch(db='pubmed', id=d['pmid'], retmode='xml')
     all_info = handle.read()
     handle.close()
-    yield {**d, 'xml': all_info}
+    return {**d, 'xml': all_info}
 
 
 def xml_to_data(d):
-    yield {**d, 'data': ET.fromstring(d['xml'])}
+    return {**d, 'data': ET.fromstring(d['xml'])}
 
 
 
 def create_json(d):
     json_dict = {}
-    #json_dict["groups"] = []
     json_dict["pmid"] = d["pmid"]
     json_dict["name"] = d["name"]
-    json_dict["sid"] = d["sid"]
+    json_dict["sid"] = d["pmid"]
     for date in d["data"].iter("DateCompleted"):
         year = date.find('Year').text
         month = date.find('Month').text

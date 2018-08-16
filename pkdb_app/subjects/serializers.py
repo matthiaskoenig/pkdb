@@ -1,21 +1,25 @@
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from pkdb_app.behaviours import Sourceable
 from pkdb_app.utils import un_map, validate_input
 from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile
-from ..serializers import ParserSerializer
+from ..serializers import ParserSerializer, WrongKeySerializer
 
-class DataFileSerializer(serializers.ModelSerializer):
+
+class DataFileSerializer(WrongKeySerializer):
     class Meta:
         model = DataFile
-        fields = ["id","file","filetype"]
+        fields = ["file","filetype","id"]
+        extra_kwargs = {'id': {'allow_null': False}}
+
 
 class CharacteristicaSerializer(ParserSerializer):
     count = serializers.IntegerField(required=False)
 
     class Meta:
         model = Characteristica
-        fields = ["category", "choice", "ctype", "count", "value", "mean", "median", "min", "max", "sd", "se", "cv",
+        fields = ["category", "category_map","choice_map","choice", "ctype","ctype_map", "count", "value", "mean", "median", "min", "max", "sd", "se", "cv",
                   "unit", "count_map", "value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map",
                   "cv_map", "unit_map"]
 
@@ -27,11 +31,11 @@ class CharacteristicaSerializer(ParserSerializer):
 
     def to_internal_value(self, data):
         data = self.split_to_map(data)
-        return super(CharacteristicaSerializer, self).to_internal_value(data)
+        return super().to_internal_value(data)
 
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        return validate_input(data, "characteristica")
+    def validate(self,data):
+        validated_data = super().validate(data)
+        return validate_input(validated_data,"characteristica")
 
 
 class GroupSerializer(ParserSerializer):
@@ -42,6 +46,7 @@ class GroupSerializer(ParserSerializer):
         fields = ["name", "count", "characteristica"]
 
     def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         return super(GroupSerializer, self).to_internal_value(data)
 
@@ -55,20 +60,15 @@ class GroupSetSerializer(ParserSerializer):
         fields = ["description", "characteristica", "groups"]
 
     def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         return super(GroupSetSerializer, self).to_internal_value(data)
 
 
-class GroupSRField(serializers.SlugRelatedField):
-    def get_queryset(self):
-        study = self.context["study"]
-        queryset = Group.objects.filter(groupset__study__sid=study)
-        return queryset
-
 
 class IndividualSerializer(ParserSerializer):
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False, allow_null=True)
-    group = GroupSRField(slug_field='name', read_only=False, required=False, allow_null=True)
+    group =serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
@@ -77,6 +77,7 @@ class IndividualSerializer(ParserSerializer):
             fields = Sourceable.fields() + ["name", "name_map",  "group_map", "characteristica", "group","source"]
 
     def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         data = self.split_to_map(data)
         return super(IndividualSerializer, self).to_internal_value(data)
@@ -121,6 +122,7 @@ class IndividualSerializer(ParserSerializer):
 
 
 class IndividualSetSerializer(ParserSerializer):
+
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
     individuals = IndividualSerializer(many=True, read_only=False, required=False)
 
@@ -129,6 +131,7 @@ class IndividualSetSerializer(ParserSerializer):
         fields = ["description", "individuals", "characteristica"]
 
     def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         return super(IndividualSetSerializer, self).to_internal_value(data)
 

@@ -43,6 +43,8 @@ UNIT_DATA = UNIT_TIME + [
     UnitType('m'),
     UnitType('kg'),
     UnitType('yr'),
+    UnitType('week'),
+    UnitType('day'),
     UnitType('kg/m^2'),
     UnitType('1/day'),
     UnitType('1/h'),
@@ -167,7 +169,7 @@ SUBSTANCES_DATA = [
     "ofloxacin",
     "fluvoxamine",
     "alcohol",
-
+    "codeine"
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -220,11 +222,13 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     # Study protocol
     CharacteristicType('overnight fast', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, SUBSTANCES_DATA+["alcohol","food"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol","medication","grapefruit juice"],["-"]),
 
     # Medication
 
     # Genetics ???
+    CharacteristicType('genetics', 'genetics',CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type","CYP2D6 poor metabolizer"], ["-"]),
+
     # Requires storage of the variants and effects of clearance
 ]
 PK_DATA = [

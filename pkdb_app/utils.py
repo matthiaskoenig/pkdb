@@ -1,6 +1,7 @@
 
 import os
 from django.core.exceptions import ValidationError
+#from rest_framework.exceptions import ValidationError
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_TYPE, INTERVENTION_DICT
 
@@ -40,11 +41,12 @@ def get_or_val_error(model, *args, **kwargs):
         return model.objects.get(*args, **kwargs)
     except model.DoesNotExist:
         msg = f"{model} instance with args:{args}, kwargs:{kwargs} does not exist"
-        return ValidationError(msg)
+        raise ValidationError({model:msg})
 
 def validate_input(data,model_name):
     model_categoricals = {"characteristica":CHARACTERISTIC_DICT,"intervention":INTERVENTION_DICT}
     category = data.get("category", None)
+
     if category:
         model_categorical = model_categoricals[model_name][data.get("category")]
         choice = data.get("choice",None)
@@ -54,13 +56,12 @@ def validate_input(data,model_name):
             if (model_categorical.dtype == CATEGORIAL_TYPE or model_categorical.dtype == BOOLEAN_TYPE):
                 if not choice in model_categorical.choices:
                     msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.value}"
-                    raise ValidationError(msg)
+                    raise ValidationError({"choice":msg})
 
         elif model_categorical.dtype == NUMERIC_TYPE:
             if not unit in model_categorical.units:
-                msg = f"{unit} is not allowed but required. For {model_categorical.value} allowed units are {model_categorical.units}"
-                raise ValidationError(msg)
-
+                msg = f"{unit} is not allowed but unit is required. For {model_categorical.value} allowed units are {model_categorical.units}"
+                raise ValidationError({"unit":msg})
     return data
 
 def un_map(data):
