@@ -20,22 +20,33 @@ Details about the JSON schema are given elsewhere (JSON schema and REST API).
 """
 import os
 import sys
-import bonobo
 import json
 import requests
+import bonobo
 from jsonschema import validate
 import logging
+
+# FIXME: remove bonobo
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 from pkdb_app.data_management.schemas import reference_schema
+from pkdb_app.data_management.create_reference import run as create_reference
+from collections import namedtuple
+
 
 # FIXME: implement proper logging
 
 # -----------------------------
 # master path
 # -----------------------------
-DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
+# DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
+DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
+print("-" * 80)
+print("DATA_PATH:", DATA_PATH)
+print("-" * 80)
+if not os.path.exists(DATA_PATH):
+    raise FileNotFoundError
 
 # -----------------------------
 # setup database
@@ -179,7 +190,7 @@ def upload_files(file_path):
     return data_dict
 
 
-def upload_reference(json_reference):
+def upload_reference_json(json_reference):
     """ Uploads reference JSON. """
     success = True
     validate(json_reference["json"], reference_schema)
@@ -201,7 +212,7 @@ def upload_reference(json_reference):
     return success
 
 
-def upload_study(json_study):
+def upload_study_json(json_study):
     """ Uploads study JSON. """
     success = True
     study_dir = os.path.dirname(json_study["study_path"])
@@ -255,6 +266,52 @@ def upload_study(json_study):
     return success
 
 
+def upload_study_from_dir(study_dir):
+    """ Upload a complete study directory.
+
+    Includes
+    - study.json
+    - reference.json
+    - files
+
+    :param study_dir:
+    :return:
+    """
+
+    success = True
+    study_path = os.path.join(study_dir, "study.json")
+    _, study_name = os.path.split(study_dir)
+
+    reference_path = os.path.join(study_dir, "reference.json")
+    reference_pdf = os.path.join(study_dir, f"{study_name}.pdf")
+
+    if not os.path.exists(reference_path):
+        study = read_study_json(study_path)
+        Reference = namedtuple("Reference", ["reference", "name", "pmid"])
+        ref = Reference(reference=study_dir, name=study_name, pmid=study["json"]["reference"])
+        create_reference(ref)
+
+    if os.path.isfile(reference_path):
+        reference_dict = {"json": reference_path, "pdf": reference_pdf}
+        if read_reference_json(reference_dict):
+            ok_ref = upload_reference_json(read_reference_json(reference_dict))
+            if not ok_ref:
+                success = ok_ref
+        else:
+            success = False
+
+    if os.path.isfile(study_path):
+        if read_study_json(study_path):
+            ok_study = upload_study_json(read_study_json(study_path))
+            if not ok_study:
+                success = ok_study
+        else:
+            success = False
+
+    if success:
+        print("--- upload successful ---")
+
+
 # -------------------------------
 # Bonobo
 # -------------------------------
@@ -264,7 +321,7 @@ def get_graph_references(**options):
     graph.add_chain(
         get_reference_paths,
         read_reference_json,
-        upload_reference,
+        upload_reference_json,
     )
     return graph
 
@@ -275,7 +332,7 @@ def get_graph_study(**options):
     graph.add_chain(
         get_study_paths,
         read_study_json,
-        upload_study,
+        upload_study_json,
     )
     return graph
 
@@ -288,7 +345,8 @@ def get_services(**options):
 if __name__ == '__main__':
 
     # core database setup
-    # setup_database()
+    setup_database()
+
 
     # run the bonobo chain
     parser = bonobo.get_argument_parser()
@@ -296,3 +354,4 @@ if __name__ == '__main__':
         bonobo.run(get_graph_references(**options), services=get_services(**options))
         bonobo.run(get_graph_study(**options), services=get_services(**options))
 
+    print("--- done ---")
