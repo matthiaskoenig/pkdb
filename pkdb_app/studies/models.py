@@ -4,6 +4,7 @@ Django model for Study.
 from django.db import models
 
 from pkdb_app.interventions.models import OutputSet, Substance, InterventionSet, DataFile
+from pkdb_app.storage import OverwriteStorage
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
@@ -32,7 +33,7 @@ class Reference(models.Model):
     abstract = models.TextField(blank=True, null=True)
     journal = models.TextField(blank=True, null=True)
     date = models.DateField()
-    pdf = models.FileField(upload_to="study", null=True, blank=True)
+    pdf = models.FileField(upload_to="study",storage=OverwriteStorage(), null=True, blank=True)
     authors = models.ManyToManyField(Author, blank=True, related_name='references')
 
     def __str__(self):
