@@ -15,7 +15,7 @@ from watchdog.events import FileSystemEventHandler
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.study_upload import run as upload_study
+from pkdb_app.data_management.fill_database import upload_study_from_dir
 
 
 class StudyHandler(FileSystemEventHandler):
@@ -26,7 +26,7 @@ class StudyHandler(FileSystemEventHandler):
         _, study_name = os.path.split(self.study)
 
         print(f'---------- Study: {study_name} ----------')
-        upload_study(self)
+        upload_study_from_dir(self.study)
 
 
 def run(args):
