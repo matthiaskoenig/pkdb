@@ -2,9 +2,11 @@ import re
 from lark import UnexpectedCharacters, Lark
 
 from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
+from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 import pandas as pd
+from rest_framework.settings import api_settings
 
 from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile
 from pkdb_app.studies.models import Reference
@@ -15,13 +17,28 @@ from pkdb_app.utils import get_or_val_error
 
 RELATED_SETS = {"groupset":GroupSet ,"individualset": IndividualSet,"interventionset":InterventionSet,"outputset":OutputSet}
 
-class BaseSerializer(serializers.ModelSerializer):
+class WrongKeySerializer(serializers.ModelSerializer):
+
+    def validate_wrong_keys(self,data):
+        serializer_fields = self.Meta.fields
+        payload_keys = data.keys()
+        for payload_key in payload_keys:
+            if payload_key not in serializer_fields:
+                msg = {payload_key:f"<{payload_key}> is a wrong key"}
+                raise ValidationError(msg)
+
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        return super().to_internal_value(data)
+
+class BaseSerializer(WrongKeySerializer):
     """
     This Serializer is overwriting a the is_valid method. If sid allready exisits. It adds a instance to the class.
     This triggers the update method instead of the create method of the serializer.
     """
 
     def is_valid(self, raise_exception=False):
+
         if "sid" in self.initial_data.keys():
             sid = self.initial_data.get("sid")
             self.context["study"] = sid
@@ -43,6 +60,10 @@ class BaseSerializer(serializers.ModelSerializer):
             return super().is_valid(raise_exception)
 
 
+
+
+
+
     @staticmethod
     def create_relations(study, related):
         for name,model in RELATED_SETS.items():
@@ -60,7 +81,6 @@ class BaseSerializer(serializers.ModelSerializer):
             substance = get_or_val_error(Substance, name=substance_data)
             study.substances.add(substance)
 
-        #study.files.all().delete()
         for file_pk in related["files"]:
             study.files.add(file_pk)
 
@@ -80,7 +100,9 @@ class BaseSerializer(serializers.ModelSerializer):
         return related
 
 
-class ParserSerializer(serializers.ModelSerializer):
+class ParserSerializer(WrongKeySerializer):
+
+
     @staticmethod
     def generic_parser(data,key):
 
@@ -97,7 +119,7 @@ class ParserSerializer(serializers.ModelSerializer):
                     return len(values)
             return 1
 
-        def split_string_count(string):
+        def split_string_count(string,key):
 
             l = Lark('''start: WORD "{{" NUMBER "}}"
                     %import common.NUMBER
@@ -111,8 +133,8 @@ class ParserSerializer(serializers.ModelSerializer):
             # except UnexpectedCharacters as e:
             # msg = f"{string} is not maching pattern:\{{(.?[0-9]+)\}}"
             #    raise ValidationError(str(e))
-            except UnexpectedCharacters as e:
-                raise ValidationError(f"UnexpectedCharacters in {string}")
+            except UnexpectedCharacters:
+                raise ValidationError({key:f"UnexpectedCharacters in {string}"})
             return data
 
         def list_chara(data):
@@ -128,8 +150,8 @@ class ParserSerializer(serializers.ModelSerializer):
                     values = [value]
 
                 if (key == "name" and len(values) != n):
-                    msg = f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain is violated."
-                    raise ValidationError(msg)
+                    msg = {f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain is violated."}
+                    raise ValidationError({"name": msg})
 
                 if len(values) == 1:
                     values = values * n
@@ -139,12 +161,12 @@ class ParserSerializer(serializers.ModelSerializer):
                     count_n = []
                     for value in values:
                         if "{{" in value:
-                            splitted_data = split_string_count(value)
+                            splitted_data = split_string_count(value,key)
                             values_n.append(splitted_data.children[0].value)
                             count_n.append(splitted_data.children[1].value)
                         else:
                             values_n.append(value)
-                            count_n.append(data.get("count", ""))
+                            count_n.append(data.get("count", None))
                     values = values_n
                     data_n["count"] = count_n
 
@@ -224,11 +246,10 @@ class ParserSerializer(serializers.ModelSerializer):
                 v = v.strip()
             data_stripped[k] = v
 
-
         return data_stripped
-
 
     def to_representation(self, instance):
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+
 

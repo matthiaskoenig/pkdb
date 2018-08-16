@@ -29,8 +29,7 @@
             },
             {
                 "category": "sex",
-                "choice": null,
-		"hallo": "ich"
+                "choice": null
             }
         ],
         "groups": [
@@ -152,7 +151,7 @@
                 "source": "Akinyinka2000_Tab1.csv",
                 "format": "TSV",
                 "figure": "Akinyinka2000_Tab1.png",
-                "individuum": "col==subject",
+                "individual": "col==subject",
                 "interventions": [
                     "D1"
                 ],
@@ -166,7 +165,7 @@
                 "source": "Akinyinka2000_Tab1.csv",
                 "format": "TSV",
                 "figure": "Akinyinka2000_Tab1.png",
-                "individuum": "col==subject",
+                "individual": "col==subject",
                 "interventions": [
                     "D1"
                 ],

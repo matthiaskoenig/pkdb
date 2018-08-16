@@ -3,22 +3,19 @@ import bonobo
 import coreapi
 import json
 import requests
-from django.core.exceptions import ValidationError
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
-
-from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
 from jsonschema import validate
 from pkdb_app.data_management.schemas import reference_schema
 import logging
 import mondrian
-from pkdb_app.categoricals import SUBSTANCES_DATA
 # One line setup (excepthook=True tells mondrian to handle uncaught exceptions)
 #mondrian.setup(excepthook=True)
 # Use logging, as usual.
 #logger = logging.getLogger()
 #logger.setLevel(logging.DEBUG)
+
 if hasattr (sys, 'tracebacklimit'):
     del sys.tracebacklimit
 
@@ -34,7 +31,10 @@ USERS = [Jan_G_U, Matthias_K]
 
 
 def get_reference_json_path():
+
     fill_user_and_substances()
+    from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
+
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "reference.json" in files:
             json_file = os.path.join(root, 'reference.json')
@@ -44,6 +44,7 @@ def get_reference_json_path():
 
 
 def get_study_json_path():
+    from pkdb_app.data_management.create_reference_caffeine import REFERENCESMASTERPATH
     for root, dirs, files in os.walk(REFERENCESMASTERPATH, topdown=False):
         if "study.json" in files:
             yield os.path.join(root, 'study.json')
@@ -77,7 +78,7 @@ def upload_reference(json_reference):
     validate(json_reference["json"],reference_schema)
     #client.action(document, ["references", "create"], params=json_reference["json"])
     response = requests.post(f'http://0.0.0.0:8000/api/v1/references/', json=json_reference["json"])
-    if response.status_code == 400:
+    if not response.status_code == 201:
         print(json_reference["json"]["name"], response.text)
         ok = False
 
@@ -85,7 +86,7 @@ def upload_reference(json_reference):
     with open(json_reference["pdf"],'rb') as f:
         response = requests.patch(f'http://0.0.0.0:8000/api/v1/references/{json_reference["json"]["sid"]}/', files={"pdf":f})
 
-    if response.status_code == 400:
+    if not response.status_code == 200:
         print(json_reference["json"]["name"], response.text)
         ok = False
 
@@ -94,7 +95,7 @@ def upload_reference(json_reference):
 
 
 def fill_user_and_substances():
-
+    from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
         client.action(document, ["substances", "create"], params={"name":substance})
     for user in USERS:
@@ -149,6 +150,8 @@ def upload_study(json_study):
     study_partial["curators"] = json_study["json"]["curators"]
     study_partial["creator"] = json_study["json"]["creator"]
     study_partial["files"] = list(file_dict.values())
+    #study_partial["bla"] = "bla"
+
 
 
 
@@ -156,7 +159,7 @@ def upload_study(json_study):
     #client.action(document, ["studies", "create"], params=study_partial)
     response = requests.post(f'http://0.0.0.0:8000/api/v1/studies/',
                               json=study_partial)
-    if response.status_code == 400:
+    if not response.status_code == 201:
         print(json_study["json"]["name"],response.text)
         ok = False
 
@@ -170,13 +173,13 @@ def upload_study(json_study):
 
 
     response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = study_partial2)
-    if response.status_code == 400:
+    if not response.status_code == 200:
         print(json_study["json"]["name"], response.text)
         ok = False
 
     if "outputset" in json_study["json"].keys():
         response = requests.patch(f'http://0.0.0.0:8000/api/v1/studies/{json_study["json"]["sid"]}/', json = {"outputset": json_study["json"].get("outputset")})
-        if response.status_code == 400:
+        if not response.status_code == 200:
             print(json_study["json"]["name"],response.text)
             ok = False
 

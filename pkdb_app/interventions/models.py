@@ -146,8 +146,8 @@ class Output(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutpu
 
     """ Storage of data sets. """
 
-    source = models.ForeignKey(DataFile, related_name="output_sources",on_delete=False)
-    figure = models.ForeignKey(DataFile, related_name="output_figures",on_delete=False)
+    source = models.ForeignKey(DataFile, related_name="output_sources",null=True,blank=True, on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="output_figures",null=True,blank=True, on_delete=models.SET_NULL)
 
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES, null=True, blank=True)
     time = models.FloatField(null=True,blank=True)
@@ -163,8 +163,8 @@ class Timecourse(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseO
     """
     #substance
     #tissue
-    source = models.ForeignKey(DataFile, related_name="timecourse_sources",on_delete=False)
-    figure = models.ForeignKey(DataFile, related_name="timecourse_figures",on_delete=False)
+    source = models.ForeignKey(DataFile, related_name="timecourse_sources",null=True,blank=True,on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="timecourse_figures",null=True,blank=True, on_delete=models.SET_NULL)
 
     outputset = models.ForeignKey(OutputSet, related_name="timecourse", on_delete=models.CASCADE,null=True, blank=True)
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True, blank=True)

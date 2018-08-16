@@ -96,7 +96,7 @@
         "individuals": [
             {
                 "source": "Granfors2005_Fig7B.csv",
-                "figure": "Granfors2005_Fig7B.png",
+                "figure": "Granfors2005_Fig7.png",
                 "characteristica": []
             }
         ]
@@ -121,7 +121,7 @@
         "outputs": [
             {
                 "source": "Granfors2005_Fig7B.csv",
-                "figure": "Granfors2005_Fig7B.png"
+                "figure": "Granfors2005_Fig7.png"
             },
             {
                 "group": "S1",

@@ -53,7 +53,6 @@ class Common(Configuration):
 
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
     CORS_ORIGIN_WHITELIST = ('0.0.0.0:8080','localhost:8080')
-
     INTERNAL_IPS = ('172.18.0.1',)
 
     ALLOWED_HOSTS = ["*"]
