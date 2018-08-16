@@ -7,6 +7,7 @@ From the data structure this has to be handled very similar.
 """
 from django.db import models
 
+from pkdb_app.storage import OverwriteStorage
 from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
@@ -28,12 +29,11 @@ class DataFile(models.Model):
     This should be in a separate class, so that they can be easily displayed/filtered/...
     """
 
-    file = models.FileField(upload_to="data", null=True, blank=True)  # table or figure
+    file = models.FileField(upload_to="data", storage=OverwriteStorage() ,null=True, blank=True)  # table or figure
     filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
 
     def __str__(self):
-        return self.file.name
-
+        return self.file.nam
 class Set(Describable, models.Model):
     """
     abstarct class for all set classes
