@@ -33,10 +33,12 @@ class DataFile(models.Model):
     filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
 
     def __str__(self):
-        return self.file.nam
+        return self.file.name
+
+
 class Set(Describable, models.Model):
     """
-    abstarct class for all set classes
+    abstract class for all set classes
     """
 
     @property
@@ -45,6 +47,7 @@ class Set(Describable, models.Model):
 
     class Meta:
         abstract = True
+
 
 class GroupSet(Set):
     objects = GroupSetManager()
