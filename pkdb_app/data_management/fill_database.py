@@ -181,7 +181,13 @@ def upload_files(file_path):
     head, sid = os.path.split(file_path)
     study_dir = os.path.join(head, sid)
     for root, dirs, files in os.walk(study_dir, topdown=False):
+        #exclude files
         files = set(files) - set(['reference.json', 'study.json', f'{sid}.pdf'])
+        #exclude files
+        forbidden_suffix = (".log",".xlsx#",".idea")
+        files = [file for file in files if not file.endswith(forbidden_suffix)]
+
+
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'rb') as f:
