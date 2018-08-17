@@ -157,8 +157,6 @@ SUBSTANCES_DATA = [
     # caffeine
     "caffeine",
     "paraxanthine",
-    "paraxanthine/caffeine",
-    "caffeine/paraxanthine",
     "theobromine",
     "theophylline",
     "AAMU",
@@ -168,6 +166,14 @@ SUBSTANCES_DATA = [
     "37X",
     "1X",
     "methylxanthine",
+    "paraxanthine/caffeine",
+    "caffeine/paraxanthine",
+    "theobromine/caffeine",
+    "theophylline/caffeine",
+    "1X/caffeine",
+    "1X/paraxanthine",
+    "1X/theophylline",
+
     # quinolones
     "quinolone",
     "pipemidic acid",
