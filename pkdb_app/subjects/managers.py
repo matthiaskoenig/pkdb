@@ -18,7 +18,7 @@ class GroupManager(models.Manager):
 
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
-        characteristica = kwargs.pop("characteristica", [])
+        #characteristica = kwargs.pop("characteristica", [])
         descriptions = kwargs.pop("descriptions", [])
 
 
@@ -28,8 +28,8 @@ class GroupSetManager(models.Manager):
         groupset.characteristica.all().delete()
         groupset.groups.all().delete()
 
-        for characteristica_single in characteristica:
-            groupset.characteristica.create(**characteristica_single)
+        #for characteristica_single in characteristica:
+        #    groupset.characteristica.create(**characteristica_single)
 
         for description in descriptions:
             groupset.descriptions.create(**description)
