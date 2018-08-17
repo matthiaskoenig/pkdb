@@ -6,6 +6,10 @@ Is used in watchdog.
 import os
 import sys
 import argparse
+import coloredlogs, logging
+
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='INFO')
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)

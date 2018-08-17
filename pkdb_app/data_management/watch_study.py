@@ -11,9 +11,11 @@ import os
 import sys
 import time
 import argparse
-import logging
+import coloredlogs, logging
 
-logging.getLogger().setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='INFO')
+
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler

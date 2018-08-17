@@ -60,17 +60,16 @@ class GroupSerializer(ParserSerializer):
 
 
 class GroupSetSerializer(ParserSerializer):
-    characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
+    #characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
     groups = GroupSerializer(many=True, read_only=False)
     descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
 
     class Meta:
         model = GroupSet
-        fields = ["descriptions", "characteristica", "groups"]
+        fields = ["descriptions","groups"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
-        data = self.generic_parser(data, "characteristica")
         return super(GroupSetSerializer, self).to_internal_value(data)
 
 

@@ -53,3 +53,4 @@ PyPDF2
 lark-parser
 watchdog
 requests
+coloredlogs
