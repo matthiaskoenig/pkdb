@@ -38,7 +38,7 @@ class StudyHandler(FileSystemEventHandler):
         logging.info('-' * 80)
         upload_study_from_dir(self.study)
 
-    def on_created(self, event):
+    def on_modified(self, event):
         print('\n')
         upload_study_from_dir(self.study)
 
