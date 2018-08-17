@@ -29,25 +29,30 @@ UnitType = namedtuple("UnitType", ["name"])
 
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
 UNIT_TIME = [
-    UnitType('sec'),
-    UnitType('min'),
+    UnitType('yr'),
+    UnitType('week'),
+    UnitType('day'),
     UnitType('h'),
-    UnitType('days'),
+    UnitType('min'),
+    UnitType('s'),
 ]
 TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
-
 
 UNIT_DATA = UNIT_TIME + [
     UnitType('-'),
     UnitType('cm'),
     UnitType('m'),
     UnitType('kg'),
-    UnitType('yr'),
-    UnitType('week'),
-    UnitType('day'),
-    UnitType('kg/m^2'),
+
+    UnitType('1/week'),
     UnitType('1/day'),
     UnitType('1/h'),
+    UnitType('1/min'),
+    UnitType('1/s'),
+
+    UnitType('kg/m^2'),
+
+
     UnitType('IU/I'),
     UnitType('mg/dl'),
     UnitType('g/dl'),
@@ -89,7 +94,7 @@ STRING_TYPE = "string"  # can be a free string, no limitations compared to categ
 YES = "Y"
 NO = 'N'
 MIX = "Mixed"
-NAN = "NAN"
+NAN = "NaN"
 BOOLEAN_CHOICES = [YES, NO, MIX,NAN]
 
 INTERVENTION_ROUTE = [
@@ -100,27 +105,28 @@ INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
 INTERVENTION_APPLICATION = [
     "single dose",
     "multiple dose",
-    "continous injection",
+    "continuous injection",
 ]
 INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
 
 INTERVENTION_FORM = [
     "tablete",
     "capsule",
-    "2 100mg NO-DOZ tablets",
-    "capsules",
-    "2 capsules",
     NAN,
-
 ]
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
 # categories
-DEMOGRAPHICS = "demographics"  # age, sex, ethnicity
-ANTHROPOMETRY = "anthropometry"  # height, weight, waist bmi
 SPECIES = "species"
+DEMOGRAPHICS = "demographics"
+ANTHROPOMETRY = "anthropometry"
+PHYSIOLOGY = "physiology"
+PATIENT_STATUS = "patient status"
+MEDICATION = "medication"
+LIFESTYLE = "lifestyle"
 BIOCHEMICAL_DATA = "biochemical data"
 HEMATOLOGY_DATA = "hematology data"
+GENETIC_VARIANTS = "genetic variants"
 
 
 INCLUSION_CRITERIA = "inclusion"
@@ -145,103 +151,110 @@ STUDY_DESIGN_DATA = [
 STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
 SUBSTANCES_DATA = [
-    "ibuprofen",
-    "paracetamol",
-    "aspirin",
-    "caffeine",
+    # acetaminophen
     "acetaminophen",
+
+    # caffeine
+    "caffeine",
     "paraxanthine",
     "paraxanthine/caffeine",
+    "caffeine/paraxanthine",
     "theobromine",
     "theophylline",
-    "chlorozoxazone",
-    "lomefloxacin",
     "AAMU",
     "1U",
     "17X",
     "17U",
     "37X",
     "1X",
+
+    # codeine
+    "codeine",
+
+    # misc
+    "tizanidine",
+    "ibuprofen",
+    "aspirin",
     "enoxacin",
     "ciprofloxacin",
     "pipemidic acid",
     "norfloxacin",
     "ofloxacin",
     "fluvoxamine",
-    "alcohol",
-    "codeine"
+    "ethanol",
+    "chlorozoxazone",
+    "lomefloxacin",
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
 
-
-
-COMMON_DATA = [
-    # Medication
-    CharacteristicType('oral contraceptives', 'contraceptives', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('oral contraceptives amount', 'contraceptives', NUMERIC_TYPE, None, ["-"]),
-
-    CharacteristicType('medication', 'medication', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('medication type', 'medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),
-    CharacteristicType('medication amount', 'medication', NUMERIC_TYPE, None, ["-"]),
-
-    # Lifestyle
-    CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["mg/day"]),
-]
-
-CHARACTERISTIC_DATA = COMMON_DATA + [
-    # Antropmetrical information
+CHARACTERISTIC_DATA = [
+    # -------------- Species --------------
     CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["homo sapiens"], ["-"]),
+
+    # -------------- Anthropometry --------------
     CharacteristicType('height', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm", 'm']),
     CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
     CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg/m^2"]),
     CharacteristicType('waist circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
+
+    # -------------- Demography --------------
+    CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
+    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], ["-"]),
+    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian", NAN], ["-"]),
+
+    # -------------- Physiology --------------
+    CharacteristicType('blood pressure', PHYSIOLOGY, NUMERIC_TYPE, None, ["mmHg"]),
+    CharacteristicType('heart rate', PHYSIOLOGY, NUMERIC_TYPE, None, ["1/s"]),
+
+    # -------------- Organ weights --------------
     CharacteristicType('liver weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
     CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
 
-    CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], ["-"]),
-    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian",NAN], ["-"]),
+    # -------------- Patient status --------------
+    CharacteristicType('overnight fast', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('healthy', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('disease', PATIENT_STATUS, CATEGORIAL_TYPE, [NAN, "cirrhosis", "plasmodium falciparum",
+                                                               "alcoholic liver cirrhosis", "cirrhotic liver disease", "PBC",
+                                                               "miscellaneous liver disease", "schizophrenia"], ["-"]),
 
+    # -------------- Medication --------------
+    CharacteristicType('medication', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),
+    CharacteristicType('medication amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
-    # Disease (status)
-    CharacteristicType('healthy', "health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, [NAN, "cirrhosis", "plasmodium falciparum","alcoholic liver cirrhosis","cirrhotic liver disease","PBC","miscellaneous liver disease","schizophrenia"], ["-"]),
+    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    # CharacteristicType('oral contraceptives amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, ["alcohol", "caffeine", "grapefruit juice"],
+                       ["year", "week", "day"]),
 
-    CharacteristicType('blood pressure', "health status", NUMERIC_TYPE, None, ["mmHg"]),
+    # -------------- Caffeine --------------
+    CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["mg/day"]),
 
-    # ------------
-    # smoking
-    # ------------
+    # -------------- Smoking --------------
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('smoking amount (cigarettes)', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
     CharacteristicType('smoking amount (packyears)', 'lifestyle', NUMERIC_TYPE, None, ["yr"]),
     CharacteristicType('smoking duration (years)', 'lifestyle', NUMERIC_TYPE, None, ["yr"]),
 
-
+    # -------------- Alcohol --------------
     CharacteristicType('alcohol', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('alcohol amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
 
-
-    # Biochemical data
+    # -------------- Biochemical data --------------
     CharacteristicType('ALT', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
     CharacteristicType('AST', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
     CharacteristicType('albumin', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["g/dl"]),
 
-    # Study protocol
-    CharacteristicType('overnight fast', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "medication", "grapefruit juice"],["-"]),
 
-    # Medication
+    # --------------Genetic variants --------------
+    CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type", "CYP2D6 poor metabolizer"], ["-"]),
 
-    # Genetics ???
-    CharacteristicType('genetics', 'genetics', CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type", "CYP2D6 poor metabolizer"], ["-"]),
-
-    # Requires storage of the variants and effects of clearance
 ]
+
 PK_DATA = [
     "auc",
     "concentration",
@@ -260,12 +273,14 @@ PK_DATA = [
     "caf_px_6h",
     "auc24h",
 ]
+
 OUTPUT_TISSUE_DATA = [
     "saliva",
     "plasma",
     "urine",
     "urine (24h)",
 ]
+
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 PK_DATA_CHOICES = create_choices(PK_DATA)
 
@@ -286,17 +301,4 @@ CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
-
-
-'''
-DATA_CHOICES = (
-     (1, "Other"),
-     (2, "Dynamic Individual"),
-     (3, "Dynamic Group"),
-     (4, "Static Individual"),
-     (5, "Static Group"),
-     )
-'''
-
-
 
