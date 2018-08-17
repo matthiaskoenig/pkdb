@@ -19,6 +19,8 @@ class GroupManager(models.Manager):
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
+
+
         groups = kwargs.pop("groups", [])
 
         groupset = super(GroupSetManager, self).create(*args, **kwargs)
@@ -27,9 +29,16 @@ class GroupSetManager(models.Manager):
 
         for characteristica_single in characteristica:
             groupset.characteristica.create(**characteristica_single)
-
+        study_groups = []
         for group in groups:
-            groupset.groups.create(**group)
+            if "parent" in group:
+                for n_group in study_groups:
+                        if n_group.name == group["parent"]:
+                            group["parent"] = n_group
+
+
+            n_group = groupset.groups.create(**group)
+            study_groups.append(n_group)
 
         groupset.save()
 
