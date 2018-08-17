@@ -158,6 +158,7 @@ SUBSTANCES_DATA = [
     "caffeine",
     "paraxanthine",
     "paraxanthine/caffeine",
+    "caffeine/paraxanthine",
     "theobromine",
     "theophylline",
     "AAMU",
