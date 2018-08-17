@@ -9,9 +9,14 @@ class InterventionSetManager(models.Manager):
     def create(self, *args, **kwargs):
 
         interventions = kwargs.pop("interventions", [])
+        descriptions = kwargs.pop("descriptions", [])
+
 
         interventionset = super().create(*args, **kwargs)
         interventionset.interventions.all().delete()
+
+        for description in descriptions:
+            interventionset.descriptions.create(**description)
 
         for intervention in interventions:
             interventionset.interventions.create(**intervention)
@@ -25,9 +30,12 @@ class OutputSetManager(models.Manager):
     def create(self, *args, **kwargs):
         outputs = kwargs.pop("outputs", [])
         timecourses = kwargs.pop("timecourse", [])
-
+        descriptions = kwargs.pop("descriptions", [])
         outputset = super().create(*args, **kwargs)
         outputset.outputs.all().delete()
+
+        for description in descriptions:
+            outputset.descriptions.create(**description)
 
         for output in outputs:
             intervention_ids = output.pop("interventions", [])

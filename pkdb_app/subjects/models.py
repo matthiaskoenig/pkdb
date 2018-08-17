@@ -36,7 +36,7 @@ class DataFile(models.Model):
         return self.file.name
 
 
-class Set(Describable, models.Model):
+class Set(models.Model):
     """
     abstract class for all set classes
     """
