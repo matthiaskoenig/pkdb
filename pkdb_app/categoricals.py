@@ -272,29 +272,29 @@ CHARACTERISTIC_DATA = [
 ]
 
 PK_DATA = [
-    "auc",
-    "concentration",
-    "clearance",
-    "vd",
-    "thalf",
-    "tmax",
-    "cmax",
+    "auc_inf",  # Area under the curve, extrapolated until infinity
+    "auc_end",  # Area under the curve, until end time point (time has to be given as time attribute)
+
     "amount",
-    "kel",
-    "kabs",
-    "plasma_binding",
-    "clearance_unbound",
+    "concentration",
     "ratio",
-    "clearance_tbc",
-    "caf_px_6h",
-    "auc24h",
+
+    "clearance",
+    "clearance_renal",
+    "vd",  # Volume of distribution
+    "thalf",  # halflife
+    "tmax",  # time of maximum
+    "cmax",  # maximum concentration
+
+    "kel",  # elimination rate
+    "kabs",  # absorption rate
+    "plasma_binding",
 ]
 
 OUTPUT_TISSUE_DATA = [
     "saliva",
     "plasma",
     "urine",
-    "urine (24h)",
 ]
 
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
