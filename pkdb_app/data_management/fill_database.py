@@ -156,8 +156,13 @@ def set_keys(d, value, *keys):
         d = d[key]
     d[keys[-1]] = value
 
+def remove_keys(d, value, *keys):
+    """ Changes keys in nested dictionary. """
+    for key in keys[:-1]:
+        d = d[key]
+    d[keys[-1]] = value
 
-def pop_comment(d, *keys):
+def pop_comments(d, *keys):
     """ Pops comment in nested dictionary. """
     for key in keys[:-1]:
 
@@ -244,10 +249,15 @@ def upload_study_json(json_study_dict):
         if item in file_dict.keys():
             set_keys(json_study_dict, file_dict[item], *keys)
         if "comments" in keys:
-            comments.append(keys)
+            n_keys = []
+            for key in keys:
+                n_keys.append(key)
+                if key == "comments":
+                    break
+            comments.append(tuple(n_keys))
 
-    for comment in comments:
-        pop_comment(json_study_dict, *comment)
+    for comment in set(comments):
+        pop_comments(json_study_dict, *comment)
 
     # ---------------------------
     # post study core

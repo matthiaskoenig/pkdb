@@ -61,7 +61,9 @@ class Group(models.Model):
     groupset = models.ForeignKey(GroupSet,on_delete=models.SET_NULL,null=True,related_name="groups")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()  # number of people/animals/objects in group
+    parent = models.ForeignKey("Group",null=True,blank=True,on_delete=models.CASCADE)
     objects = GroupManager()
+
 
     @property
     def reference(self):
