@@ -167,7 +167,7 @@ SUBSTANCES_DATA = [
     "17U",
     "37X",
     "1X",
-
+    "methylxanthine",
     # quinolones
     "quinolone",
     "pipemidic acid",
@@ -178,8 +178,6 @@ SUBSTANCES_DATA = [
 
     # codeine
     "codeine",
-
-
 
     # misc
     "tizanidine",
@@ -224,6 +222,7 @@ CHARACTERISTIC_DATA = [
 
     # -------------- Patient status --------------
     CharacteristicType('overnight fast', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('fasted', PATIENT_STATUS, NUMERIC_TYPE, None, ["h"]),
     CharacteristicType('healthy', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('disease', PATIENT_STATUS, CATEGORIAL_TYPE, [NAN, "cirrhosis", "plasmodium falciparum",
                                                                "alcoholic liver cirrhosis", "cirrhotic liver disease", "PBC",
