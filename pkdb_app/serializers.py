@@ -81,8 +81,11 @@ class BaseSerializer(WrongKeySerializer):
             substance = get_or_val_error(Substance, name=substance_data)
             study.substances.add(substance)
 
-        for file_pk in related["files"]:
-            study.files.add(file_pk)
+        if related["files"] :
+            print(related["files"])
+            study.files.all().delete()
+            for file_pk in related["files"]:
+                study.files.add(file_pk)
 
         study.save()
 
@@ -101,7 +104,6 @@ class BaseSerializer(WrongKeySerializer):
 
 
 class ParserSerializer(WrongKeySerializer):
-
 
     @staticmethod
     def generic_parser(data,key):
