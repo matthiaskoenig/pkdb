@@ -2,6 +2,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Q
 from rest_framework import serializers
+
+from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
 from pkdb_app.serializers import ParserSerializer
 from pkdb_app.subjects.models import Individual, Group, DataFile
@@ -46,9 +48,10 @@ class InterventionSerializer(ParserSerializer):
 class InterventionSetSerializer(ParserSerializer):
 
     interventions = InterventionSerializer(many=True , read_only=False,required=False, allow_null=True)
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
     class Meta:
         model = InterventionSet
-        fields = ["description","interventions"]
+        fields = ["descriptions","interventions"]
 
     def to_internal_value(self, data):
         """
@@ -147,10 +150,11 @@ class TimecourseSerializer(OutputSerializer):
 class OutputSetSerializer(ParserSerializer):
     outputs = OutputSerializer(many=True, read_only=False, required=False, allow_null=True)
     timecourse = TimecourseSerializer(many=True, read_only=False, required=False, allow_null=True)
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
 
     class Meta:
         model = OutputSet
-        fields = ["description","outputs","timecourse"]
+        fields = ["descriptions","outputs","timecourse"]
 
     def to_internal_value(self, data):
         """

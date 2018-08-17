@@ -19,6 +19,7 @@ class GroupManager(models.Manager):
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
+        descriptions = kwargs.pop("descriptions", [])
 
 
         groups = kwargs.pop("groups", [])
@@ -29,6 +30,10 @@ class GroupSetManager(models.Manager):
 
         for characteristica_single in characteristica:
             groupset.characteristica.create(**characteristica_single)
+
+        for description in descriptions:
+            groupset.descriptions.create(**description)
+
         study_groups = []
         for group in groups:
             if "parent" in group:
@@ -60,10 +65,15 @@ class IndividualSetManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
         individuals = kwargs.pop("individuals", [])
+        descriptions = kwargs.pop("descriptions", [])
+
 
         individualset = super(IndividualSetManager, self).create(*args, **kwargs)
         individualset.characteristica.all().delete()
         individualset.individuals.all().delete()
+
+        for description in descriptions:
+            individualset.descriptions.create(**description)
 
         for characteristica_single in characteristica:
             individualset.characteristica.create(**characteristica_single)
