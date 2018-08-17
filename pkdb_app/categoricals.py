@@ -114,6 +114,7 @@ INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
 INTERVENTION_FORM = [
     "tablete",
     "capsule",
+    "solution",
     NAN,
 ]
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
