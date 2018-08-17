@@ -168,11 +168,22 @@ SUBSTANCES_DATA = [
     "37X",
     "1X",
 
+    # quinolones
+    "quinolone",
+    "pipemidic acid",
+    "norfloxacin",
+    "enoxacin",
+    "ciprofloxacin",
+    "ofloxacin",
+
     # codeine
     "codeine",
 
+
+
     # misc
     "tizanidine",
+
     "ibuprofen",
     "aspirin",
     "enoxacin",
