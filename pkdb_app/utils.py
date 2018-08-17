@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_TYPE, INTERVENTION_DICT
 
-CHAR_MAX_LENGTH = 30
+CHAR_MAX_LENGTH = 100
 
 def create_if_exists(src,src_key,dest,dest_key):
     if src_key in src.keys():

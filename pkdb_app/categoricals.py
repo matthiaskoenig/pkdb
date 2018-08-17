@@ -65,6 +65,8 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("mmHg"),
     UnitType("ml/min/1.73m^2"),
     UnitType("µg/ml*h/kg"),
+    UnitType("mg*h/l"),
+    UnitType("l/h"),
     UnitType("l"),
     UnitType("µmol/l*h"),
     UnitType("ml/min"),

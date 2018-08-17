@@ -136,6 +136,8 @@ class BaseOutputMap(models.Model):
 class OutputMap(models.Model):
     pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
 
     class Meta:
         abstract = True
@@ -151,6 +153,8 @@ class Output(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutpu
 
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH,choices=PK_DATA_CHOICES, null=True, blank=True)
     time = models.FloatField(null=True,blank=True)
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
+
 
     # files from which the data was extracted, these have to be linked to the study already should be PNG or NONE
     #files = models.ForeignKey(DataFile, on_delete=True)
@@ -169,6 +173,8 @@ class Timecourse(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseO
     outputset = models.ForeignKey(OutputSet, related_name="timecourse", on_delete=models.CASCADE,null=True, blank=True)
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True, blank=True)
     time = models.DecimalField(max_digits=40, decimal_places=20, null=True, blank=True)
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
+
     #data = models.ForeignKey(DataFile, on_delete=True) # link to the CSV
 
 
