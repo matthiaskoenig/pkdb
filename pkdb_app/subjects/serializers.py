@@ -40,10 +40,11 @@ class CharacteristicaSerializer(ParserSerializer):
 
 class GroupSerializer(ParserSerializer):
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
+    parent = serializers.CharField()
 
     class Meta:
         model = Group
-        fields = ["name", "count", "characteristica"]
+        fields = ["name", "count", "characteristica","parent"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
