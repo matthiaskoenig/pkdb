@@ -41,7 +41,6 @@ class BaseSerializer(WrongKeySerializer):
 
         if "sid" in self.initial_data.keys():
             sid = self.initial_data.get("sid")
-            self.context["study"] = sid
             try:
                 # Try to get the object in question
                 obj = self.Meta.model.objects.get(sid = sid)
