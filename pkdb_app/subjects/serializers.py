@@ -44,12 +44,18 @@ class GroupSerializer(ParserSerializer):
 
     class Meta:
         model = Group
-        fields = ["name", "count", "characteristica","parent"]
+        fields = ["name","parent", "count", "characteristica",]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         return super(GroupSerializer, self).to_internal_value(data)
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        if "parent" in rep:
+            rep["parent"] = instance.parent.name
+        return rep
 
 
 class GroupSetSerializer(ParserSerializer):
