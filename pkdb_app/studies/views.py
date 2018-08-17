@@ -63,14 +63,18 @@ class StudyViewSet(viewsets.ModelViewSet):
     @staticmethod
     def group_validation(request):
         if "groupset" in request.data:
-            groupset = request.data["groupset"]
-            groups = groupset.get("groups", [])
-            parents = set([group.get("parent") for group in groups])
-            groups = set([group.get("name") for group in groups])
-            missing_groups = parents - groups
-            if missing_groups:
-                msg = {"groups": f"<{missing_groups}> have been used but not defined"}
-                raise ValidationError(msg)
+            if request.data["groupset"]:
+                groupset = request.data["groupset"]
+                if "groups" in groupset:
+                    groups = groupset.get("groups", [])
+                    parents = set([group.get("parent") for group in groups if group.get("parent")] )
+                    groups = set([group.get("name") for group in groups if group.get("name")])
+                    missing_groups = parents - groups
+                    if missing_groups:
+                        print(missing_groups)
+                        if missing_groups is not None:
+                            msg = {"groups": f"<{missing_groups}> have been used but not defined"}
+                            raise ValidationError(msg)
 
     def partial_update(self, request, *args, **kwargs):
         self.group_validation(request)
