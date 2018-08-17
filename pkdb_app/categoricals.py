@@ -57,6 +57,7 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("Âµg/ml"),
     UnitType("µg/ml"),
     UnitType("mg"),
+    UnitType("mmHg"),
     UnitType("ml/min/1.73m^2"),
     UnitType("µg/ml*h/kg"),
     UnitType("l"),
@@ -68,7 +69,6 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("mg/l*h"),
     UnitType("mg/kg"),
     UnitType("mg/day")
-
 ]
 
 
@@ -93,8 +93,8 @@ NAN = "NAN"
 BOOLEAN_CHOICES = [YES, NO, MIX,NAN]
 
 INTERVENTION_ROUTE = [
-"oral",
-"iv",
+    "oral",
+    "iv",
 ]
 INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
 INTERVENTION_APPLICATION = [
@@ -132,8 +132,8 @@ CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
 
 FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
 
-FORMAT_MAPPING = {"TSV":FileFormat("TSV",'\t'),
-                  "CSV":FileFormat("CSV",",")}
+FORMAT_MAPPING = {"TSV": FileFormat("TSV",'\t'),
+                  "CSV": FileFormat("CSV",",")}
 
 STUDY_DESIGN_DATA = [
     "single group",  # (interventional study)
@@ -180,7 +180,10 @@ COMMON_DATA = [
     # Medication
     CharacteristicType('oral contraceptives', 'contraceptives', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('oral contraceptives amount', 'contraceptives', NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('medication', 'medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),  # ? dosing
+
+    CharacteristicType('medication', 'medication', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('medication type', 'medication', CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),
+    CharacteristicType('medication amount', 'medication', NUMERIC_TYPE, None, ["-"]),
 
     # Lifestyle
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -198,18 +201,26 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
 
     CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX,NAN], ["-"]),
+    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], ["-"]),
     CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian",NAN], ["-"]),
 
 
     # Disease (status)
     CharacteristicType('healthy', "health status", BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, [NAN,"cirrhosis","plasmodium falciparum","alcoholic liver cirrhosis","cirrhotic liver disease","PBC","miscellaneous liver disease","schizophrenia"], ["-"]),
+    CharacteristicType('disease', "disease", CATEGORIAL_TYPE, [NAN, "cirrhosis", "plasmodium falciparum","alcoholic liver cirrhosis","cirrhotic liver disease","PBC","miscellaneous liver disease","schizophrenia"], ["-"]),
 
 
-    # Lifestyle
+    CharacteristicType('blood pressure', "health status", NUMERIC_TYPE, None, ["mmHg"]),
+
+    # ------------
+    # smoking
+    # ------------
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking amount', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
+    CharacteristicType('smoking amount (cigarettes)', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
+    CharacteristicType('smoking amount (packyears)', 'lifestyle', NUMERIC_TYPE, None, ["yr"]),
+    CharacteristicType('smoking duration (years)', 'lifestyle', NUMERIC_TYPE, None, ["yr"]),
+
+
     CharacteristicType('alcohol', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('alcohol amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
 
@@ -222,12 +233,12 @@ CHARACTERISTIC_DATA = COMMON_DATA + [
     # Study protocol
     CharacteristicType('overnight fast', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol","medication","grapefruit juice"],["-"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "medication", "grapefruit juice"],["-"]),
 
     # Medication
 
     # Genetics ???
-    CharacteristicType('genetics', 'genetics',CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type","CYP2D6 poor metabolizer"], ["-"]),
+    CharacteristicType('genetics', 'genetics', CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type", "CYP2D6 poor metabolizer"], ["-"]),
 
     # Requires storage of the variants and effects of clearance
 ]
