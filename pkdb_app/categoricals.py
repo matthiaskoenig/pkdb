@@ -172,6 +172,7 @@ SUBSTANCES_DATA = [
     "codeine",
 
     # misc
+    "tizanidine",
     "ibuprofen",
     "aspirin",
     "enoxacin",
