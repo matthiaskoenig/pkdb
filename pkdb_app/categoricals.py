@@ -29,25 +29,20 @@ UnitType = namedtuple("UnitType", ["name"])
 
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
 UNIT_TIME = [
-    UnitType('sec'),
-    UnitType('min'),
-    UnitType('h'),
-    UnitType('days'),
-]
-TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
-
-
-UNIT_DATA = UNIT_TIME + [
-    UnitType('-'),
-    UnitType('cm'),
-    UnitType('m'),
-    UnitType('kg'),
     UnitType('yr'),
     UnitType('week'),
     UnitType('day'),
     UnitType('h'),
     UnitType('min'),
     UnitType('s'),
+]
+TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
+
+UNIT_DATA = UNIT_TIME + [
+    UnitType('-'),
+    UnitType('cm'),
+    UnitType('m'),
+    UnitType('kg'),
 
     UnitType('1/week'),
     UnitType('1/day'),
@@ -229,8 +224,8 @@ CHARACTERISTIC_DATA = [
     CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     # CharacteristicType('oral contraceptives amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["grapefruit juice"],
-                       ["year", "weak", "day"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, ["alcohol", "caffeine", "grapefruit juice"],
+                       ["year", "week", "day"]),
 
     # -------------- Caffeine --------------
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
