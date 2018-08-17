@@ -76,7 +76,8 @@ class OutputSerializer(ParserSerializer):
         fields = ["source","figure","format"] + \
                  ["value",  "mean",  "median",  "min", "max", "sd",  "se",  "cv",  "unit", ] \
                  +["value_map", "mean_map", "median_map",  "min_map", "max_map","sd_map", "se_map", "cv_map", "unit_map" ]\
-                 + ["pktype", "pktype_map", "time",
+                 + ["pktype", "pktype_map", "time", "time_unit",
+                    "time_unit_map",
                   "time_map","group","group_map", "individual", "individual_map", "interventions", "interventions_map",
                    "substance","substance_map","tissue", "tissue_map"]
 
@@ -140,7 +141,8 @@ class TimecourseSerializer(OutputSerializer):
                  + ["value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map", "cv_map",
                     "unit_map"] \
                  + ["pktype", "pktype_map", "time",
-                    "time_map", "group", "group_map", "individual", "individual_map", "interventions",
+                    "time_map", "time_unit",
+                    "time_unit_map", "group", "group_map", "individual", "individual_map", "interventions",
                     "interventions_map",
                     "substance", "substance_map", "tissue", "tissue_map"]
 
