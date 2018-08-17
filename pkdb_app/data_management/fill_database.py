@@ -164,12 +164,11 @@ def remove_keys(d, value, *keys):
 
 def pop_comments(d, *keys):
     """ Pops comment in nested dictionary. """
-    for key in keys[:-1]:
+    for key in keys:
 
         if key == "comments":
             d.pop("comments")
             return
-
         d = d[key]
 
 
@@ -255,9 +254,12 @@ def upload_study_json(json_study_dict):
                 if key == "comments":
                     break
             comments.append(tuple(n_keys))
-
+    #print(comments)
     for comment in set(comments):
         pop_comments(json_study_dict, *comment)
+    #from pprint import pprint
+    #pprint(json_study_dict)
+
 
     # ---------------------------
     # post study core
