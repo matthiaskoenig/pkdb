@@ -11,14 +11,13 @@ import os
 import sys
 import time
 import argparse
-import coloredlogs, logging
+import coloredlogs
+import logging
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='INFO')
-
-
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
@@ -29,25 +28,41 @@ from pkdb_app.data_management.fill_database import upload_study_from_dir
 
 
 class StudyHandler(FileSystemEventHandler):
-    def __init__(self,  study):
-        self.study = study
-        _, study_name = os.path.split(self.study)
+    """ Handler for study folder. """
+    def __init__(self, path):
+
+        self.path = path
+        _, study_name = os.path.split(self.path)
         logging.info('-' * 80)
         logging.info(f'Watching [{study_name}]')
-        logging.info(f'\t{self.study}')
+        logging.info(f'\t{self.path}')
         logging.info('-' * 80)
-        upload_study_from_dir(self.study)
+        upload_study_from_dir(self.path)
 
     def on_modified(self, event):
+        """ Executed on modified event.
+        :param event:
+        :return:
+        """
         print('\n')
-        upload_study_from_dir(self.study)
+        upload_study_from_dir(self.path)
 
 
-def run(args):
+def start_observer(args):
     """ Run observer. """
-    event_handler = StudyHandler(study=args.study)
+
+    # normalize path
+    path = os.path.abspath(args.path)
+    if path.endswith("/"):
+         path = path[:-1]
+    if not os.path.exists(path) or not os.path.isdir(path):
+        print(path)
+        raise FileNotFoundError
+
+    # start event handling
+    event_handler = StudyHandler(path=path)
     observer = Observer()
-    observer.schedule(event_handler, path=args.study, recursive=False)
+    observer.schedule(event_handler, path=path, recursive=False)
     observer.start()
     try:
         while True:
@@ -58,8 +73,8 @@ def run(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Watch a study folder for changes")
-    parser.add_argument("-s", help="directory of study", dest="study", type=str, required=True)
-    parser.set_defaults(func=run)
+    parser = argparse.ArgumentParser(description="Watch a study directory for changes")
+    parser.add_argument("-s", help="path to study directory", dest="path", type=str, required=True)
+    parser.set_defaults(func=start_observer)
     args = parser.parse_args()
     args.func(args)
