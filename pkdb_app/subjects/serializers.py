@@ -2,6 +2,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from pkdb_app.behaviours import Sourceable
+from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.utils import un_map, validate_input
 from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile
 from ..serializers import ParserSerializer, WrongKeySerializer
@@ -44,21 +45,28 @@ class GroupSerializer(ParserSerializer):
 
     class Meta:
         model = Group
-        fields = ["name", "count", "characteristica","parent"]
+        fields = ["name","parent", "count", "characteristica",]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         return super(GroupSerializer, self).to_internal_value(data)
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        if "parent" in rep:
+            rep["parent"] = instance.parent.name
+        return rep
+
 
 class GroupSetSerializer(ParserSerializer):
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
     groups = GroupSerializer(many=True, read_only=False)
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
 
     class Meta:
         model = GroupSet
-        fields = ["description", "characteristica", "groups"]
+        fields = ["descriptions", "characteristica", "groups"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
@@ -126,10 +134,11 @@ class IndividualSetSerializer(ParserSerializer):
 
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
     individuals = IndividualSerializer(many=True, read_only=False, required=False)
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
 
     class Meta:
         model = IndividualSet
-        fields = ["description", "individuals", "characteristica"]
+        fields = ["descriptions", "individuals", "characteristica"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)

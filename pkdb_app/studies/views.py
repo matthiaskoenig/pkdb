@@ -68,7 +68,7 @@ class StudyViewSet(viewsets.ModelViewSet):
             parents = set([group.get("parent") for group in groups])
             groups = set([group.get("name") for group in groups])
             missing_groups = parents - groups
-            if not missing_groups:
+            if missing_groups:
                 msg = {"groups": f"<{missing_groups}> have been used but not defined"}
                 raise ValidationError(msg)
 
