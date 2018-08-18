@@ -79,7 +79,7 @@ class OutputSerializer(ParserSerializer):
                  + ["pktype", "pktype_map", "time", "time_unit",
                     "time_unit_map",
                   "time_map","group","group_map", "individual", "individual_map", "interventions", "interventions_map",
-                   "substance","substance_map","tissue", "tissue_map"]
+                   "substance","substance_map","tissue", "tissue_map","subset_map"]
 
     def to_internal_value(self, data):
         study_sid = self.context['request'].path.split("/")[-2]
@@ -141,7 +141,7 @@ class TimecourseSerializer(OutputSerializer):
                  + ["value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map", "cv_map",
                     "unit_map"] \
                  + ["pktype", "pktype_map", "time",
-                    "time_map", "time_unit",
+                    "time_map", "time_unit","subset_map",
                     "time_unit_map", "group", "group_map", "individual", "individual_map", "interventions",
                     "interventions_map",
                     "substance", "substance_map", "tissue", "tissue_map"]
