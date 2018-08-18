@@ -252,7 +252,6 @@ def upload_study_json(json_study_dict):
         if item in file_dict.keys():
             set_keys(json_study_dict, file_dict[item], *keys)
         if "comments" in keys:
-            print(keys)
             n_keys = []
             for key in keys:
                 n_keys.append(key)
