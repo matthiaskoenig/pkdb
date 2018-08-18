@@ -36,8 +36,6 @@ from ..utils import CHAR_MAX_LENGTH
 #new
 
 
-
-
 class Substance(models.Model):
     """ Substances have to be in a different table, so that
     than be uniquely defined.
@@ -53,12 +51,12 @@ class Substance(models.Model):
     def __str__(self):
         return self.name
 
+
 class InterventionSet(Set):
     objects = InterventionSetManager()
 
 
-class Intervention(Valueable,models.Model):
-
+class Intervention(Valueable, models.Model):
     """ A concrete step/thing which is done to the group.
 
        In case of dosing/medication the actual dosing is stored in the Valueable.
@@ -70,7 +68,6 @@ class Intervention(Valueable,models.Model):
     substance = models.ForeignKey(Substance, null=True,blank=False, on_delete=False)#substance: # what was given ['
     route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_ROUTE_CHOICES)# route: # where ['oral', 'iv']
     form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_FORM_CHOICES)
-
     application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_APPLICATION_CHOICES) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
     time = models.FloatField(null=True,blank=False)  #application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
