@@ -259,11 +259,10 @@ def upload_study_json(json_study_dict):
                 if key == "comments":
                     break
             comments.append(tuple(n_keys))
-    print(comments)
     for comment in set(comments):
         pop_comments(json_study_dict, *comment)
-    from pprint import pprint
-    pprint(list(recursive_iter(json_study_dict)))
+    #from pprint import pprint
+    #pprint(list(recursive_iter(json_study_dict)))
 
 
     # ---------------------------
