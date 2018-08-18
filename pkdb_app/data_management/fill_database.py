@@ -146,6 +146,10 @@ def recursive_iter(obj, keys=()):
     elif any(isinstance(obj, t) for t in (list, tuple)):
         for idx, item in enumerate(obj):
             yield from recursive_iter(item, keys + (idx,))
+
+        if len(obj) == 0:
+            yield keys, None
+
     else:
         yield keys, obj
 
@@ -248,17 +252,18 @@ def upload_study_json(json_study_dict):
         if item in file_dict.keys():
             set_keys(json_study_dict, file_dict[item], *keys)
         if "comments" in keys:
+            print(keys)
             n_keys = []
             for key in keys:
                 n_keys.append(key)
                 if key == "comments":
                     break
             comments.append(tuple(n_keys))
-    #print(comments)
+    print(comments)
     for comment in set(comments):
         pop_comments(json_study_dict, *comment)
-    #from pprint import pprint
-    #pprint(json_study_dict)
+    from pprint import pprint
+    pprint(list(recursive_iter(json_study_dict)))
 
 
     # ---------------------------
