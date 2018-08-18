@@ -126,6 +126,7 @@ class BaseOutputMap(models.Model):
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    subset_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
 
     class Meta:
         abstract = True
