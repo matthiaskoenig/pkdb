@@ -162,6 +162,7 @@ SUBSTANCES_DATA = [
     "paraxanthine",
     "theobromine",
     "theophylline",
+    "AFMU",
     "AAMU",
     "1U",
     "17X",
@@ -176,6 +177,10 @@ SUBSTANCES_DATA = [
     "1X/caffeine",
     "1X/paraxanthine",
     "1X/theophylline",
+    "(AFMU+1U+1X)/17U",
+    "17U/17X",
+    "1U/(1U+1X)",
+    "AFMU/(AFMU+1U+1X)",
 
     # quinolones
     "quinolone",
