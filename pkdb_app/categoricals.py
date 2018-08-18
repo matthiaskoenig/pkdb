@@ -185,6 +185,11 @@ SUBSTANCES_DATA = [
     "ciprofloxacin",
     "ofloxacin",
 
+    # oral contraceptives
+    "levonorgestrel",
+    "gestodene",
+    "EE2",
+
     # codeine
     "codeine",
 

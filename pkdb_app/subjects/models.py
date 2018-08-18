@@ -140,7 +140,7 @@ class CharacteristicaBase(models.Model):
         abstract = True
 
 
-class Characteristica(CharacteristicaBase,ValueableMap,Valueable, models.Model):
+class Characteristica(CharacteristicaBase, ValueableMap, Valueable, models.Model):
     """ Characteristic.
 
         Characteristics are used to store information about a group of subjects.
