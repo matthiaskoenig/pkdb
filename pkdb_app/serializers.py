@@ -14,26 +14,33 @@ from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.models import User
 from pkdb_app.utils import get_or_val_error
 
+ITEM_SEPARATOR = '||'
+RELATED_SETS = {
+    "groupset": GroupSet,
+    "individualset": IndividualSet,
+    "interventionset": InterventionSet,
+    "outputset": OutputSet
+}
 
-RELATED_SETS = {"groupset":GroupSet ,"individualset": IndividualSet,"interventionset":InterventionSet,"outputset":OutputSet}
 
 class WrongKeySerializer(serializers.ModelSerializer):
 
-    def validate_wrong_keys(self,data):
+    def validate_wrong_keys(self, data):
         serializer_fields = self.Meta.fields
         payload_keys = data.keys()
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
-                msg = {payload_key:f"<{payload_key}> is a wrong key"}
+                msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise ValidationError(msg)
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
+
 class BaseSerializer(WrongKeySerializer):
     """
-    This Serializer is overwriting a the is_valid method. If sid allready exisits. It adds a instance to the class.
+    This Serializer is overwriting a the is_valid method. If sid already exists. It adds a instance to the class.
     This triggers the update method instead of the create method of the serializer.
     """
 
@@ -59,17 +66,13 @@ class BaseSerializer(WrongKeySerializer):
             return super().is_valid(raise_exception)
 
 
-
-
-
-
     @staticmethod
     def create_relations(study, related):
-        for name,model in RELATED_SETS.items():
+        for name, model in RELATED_SETS.items():
             if related[name] is not None:
                  instance = model.objects.create(**related[name])
                  instance.save()
-                 setattr(study,name,instance)
+                 setattr(study, name, instance)
 
         for curator_data in related["curators"]:
             curator = get_or_val_error(User, username=curator_data)
@@ -80,7 +83,7 @@ class BaseSerializer(WrongKeySerializer):
             substance = get_or_val_error(Substance, name=substance_data)
             study.substances.add(substance)
 
-        if related["files"] :
+        if related["files"]:
             print(related["files"])
             study.files.all().delete()
             for file_pk in related["files"]:
@@ -104,15 +107,19 @@ class BaseSerializer(WrongKeySerializer):
 
 class ParserSerializer(WrongKeySerializer):
 
-    @staticmethod
-    def generic_parser(data,key):
 
-        raw = data.get(key,[])
+    @staticmethod
+    def generic_parser(data, key):
+
+        # FIXME: This is overkill and looks very complicated!
+        # TODO: code review
 
         def number_raw(data):
+            """ Splits the data to get number of entries. """
+
             for key, value in data.items():
                 try:
-                    values = value.split('||')
+                    values = value.split(ITEM_SEPARATOR)
                 except AttributeError:
                     values = [value]
 
@@ -120,7 +127,8 @@ class ParserSerializer(WrongKeySerializer):
                     return len(values)
             return 1
 
-        def split_string_count(string,key):
+
+        def split_string_count(string, key):
 
             l = Lark('''start: WORD "{{" NUMBER "}}"
                     %import common.NUMBER
@@ -135,16 +143,21 @@ class ParserSerializer(WrongKeySerializer):
             # msg = f"{string} is not maching pattern:\{{(.?[0-9]+)\}}"
             #    raise ValidationError(str(e))
             except UnexpectedCharacters:
-                raise ValidationError({key:f"UnexpectedCharacters in {string}"})
+                raise ValidationError({key: f"UnexpectedCharacters in {string}"})
             return data
 
         def list_chara(data):
+            """ Splits data items based on item separator.
+
+            :param data:
+            :return:
+            """
             n = number_raw(data)
             data_n = {}
 
             for key, value in data.items():
                 try:
-                    values = value.split('||')
+                    values = value.split(ITEM_SEPARATOR)
                     values = list(map(str.strip, values))
 
                 except AttributeError:
@@ -179,6 +192,7 @@ class ParserSerializer(WrongKeySerializer):
 
             return data_n
 
+        raw = data.get(key, [])
         cleaned = []
         for raw_single in raw:
             raw_single = {k: v for k, v in raw_single.items() if v is not None}
@@ -188,9 +202,8 @@ class ParserSerializer(WrongKeySerializer):
 
         return data
 
-
     @staticmethod
-    def mapping_parser(mapping,table):
+    def mapping_parser(mapping, table):
 
         resulting_keys = []
         for key, value in mapping.items():
@@ -199,7 +212,6 @@ class ParserSerializer(WrongKeySerializer):
                 if not values[0].strip() == "col":
                     raise Exception(f"Value provided does not match pattern 'col==<file_mapping>', with key:{key} and  value:{values}")
                 resulting_keys.append(values[1].strip())
-
 
             else:
                 table[key] = value
@@ -212,14 +224,14 @@ class ParserSerializer(WrongKeySerializer):
     @staticmethod
     def split_to_map(data):
         splitted_data = {}
-        for key,value in data.items():
+        for key, value in data.items():
             try:
                 if "==" in value:
                     splitted_data[f"{key}_map"] = data.get(key)
                 else:
                     splitted_data[key] = data.get(key)
-            except :
-                    splitted_data[key] = data.get(key)
+            except:
+                splitted_data[key] = data.get(key)
 
         return splitted_data
 
@@ -252,5 +264,3 @@ class ParserSerializer(WrongKeySerializer):
     def to_representation(self, instance):
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
-
-
