@@ -297,17 +297,17 @@ def upload_study_json(json_study_dict):
     study_core["files"] = list(file_dict.values())
 
     response = requests.post(f'{API_URL}/studies/', json=study_core)
-    if not response.status_code == 201:
-        logging.warning(f'{study_core["name"]} {response.text}')
-        success = False
+    success = check_json_response(response)
 
     # ---------------------------
     # post study sets
     # ---------------------------
     study_sets = {}
     study_sets["groupset"] = json_study.get("groupset")
-    study_sets["interventionset"] = json_study.get("interventionset")
     study_sets["individualset"] = json_study.get("individualset")
+    study_sets["interventionset"] = json_study.get("interventionset")
+
+    # FIXME: Where are groupset, individualset and interventionset uploaded?
 
     # post
     sid = json_study["sid"]
