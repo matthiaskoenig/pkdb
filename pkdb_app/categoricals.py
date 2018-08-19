@@ -112,7 +112,7 @@ INTERVENTION_APPLICATION = [
 INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
 
 INTERVENTION_FORM = [
-    "tablete",
+    "tablet",
     "capsule",
     "solution",
     NAN,
@@ -141,8 +141,8 @@ CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
 
 FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
 
-FORMAT_MAPPING = {"TSV": FileFormat("TSV",'\t'),
-                  "CSV": FileFormat("CSV",",")}
+FORMAT_MAPPING = {"TSV": FileFormat("TSV", '\t'),
+                  "CSV": FileFormat("CSV", ",")}
 
 STUDY_DESIGN_DATA = [
     "single group",  # (interventional study)
@@ -178,6 +178,7 @@ SUBSTANCES_DATA = [
     "1X/paraxanthine",
     "1X/theophylline",
     "(AFMU+1U+1X)/17U",
+    "(AAMU+1X+1U)/17U",
     "17U/17X",
     "1U/(1U+1X)",
     "AFMU/(AFMU+1U+1X)",
@@ -200,6 +201,7 @@ SUBSTANCES_DATA = [
 
     # misc
     "tizanidine",
+    "venlafaxine",
 
     "ibuprofen",
     "aspirin",
@@ -211,7 +213,8 @@ SUBSTANCES_DATA = [
     "fluvoxamine",
     "ethanol",
     "chlorozoxazone",
-    "lomefloxacin",]
+    "lomefloxacin",
+]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
 
@@ -294,12 +297,13 @@ PK_DATA = [
     "clearance",
     "clearance_renal",
     "vd",  # Volume of distribution
-    "thalf",  # halflife
+    "thalf",  # half-life
     "tmax",  # time of maximum
     "cmax",  # maximum concentration
 
-    "kel",  # elimination rate
+    "kel",  # elimination rate (often beta)
     "kabs",  # absorption rate
+    "fraction_absorbed",  # "often also absolute bioavailability
     "plasma_binding",
 ]
 

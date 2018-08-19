@@ -227,6 +227,26 @@ def upload_reference_json(json_reference):
     return success
 
 
+def check_json_response(response):
+    """ Check response and create warning if not valid
+
+    :param response:
+    :return:
+    """
+    if response.status_code not in [200, 201]:
+        try:
+            json_data = json.loads(response.text)
+
+            msg = json.dumps(json_data, sort_keys=True, indent=2)
+            logging.warning(f'\n{msg}')
+
+        except json.decoder.JSONDecodeError as err:
+            logging.warning(err)
+
+        return False
+    return True
+
+
 def upload_study_json(json_study_dict):
     """ Uploads study JSON.
 
@@ -241,7 +261,6 @@ def upload_study_json(json_study_dict):
     # upload files (and get dict for file ids)
     study_dir = os.path.dirname(json_study_dict["study_path"])
     file_dict = upload_files(study_dir)
-
 
     comments = []
     for keys, item in recursive_iter(json_study_dict):
@@ -259,7 +278,6 @@ def upload_study_json(json_study_dict):
         pop_comments(json_study_dict, *comment)
     #from pprint import pprint
     #pprint(json_study_dict)
-
 
     # ---------------------------
     # post study core
@@ -288,21 +306,19 @@ def upload_study_json(json_study_dict):
     study_sets["interventionset"] = json_study.get("interventionset")
     study_sets["individualset"] = json_study.get("individualset")
 
-    response = requests.patch(f'{API_URL}/studies/{json_study["sid"]}/', json=study_sets)
-    if not response.status_code == 200:
-        logging.warning(f'{study_core["name"]} {response.text}')
-        success = False
+    # post
+    sid = json_study["sid"]
+    response = requests.patch(f'{API_URL}/studies/{sid}/', json=study_sets)
+    success = success and check_json_response(response)
 
-    # patch
     if "outputset" in json_study.keys():
-        response = requests.patch(f'{API_URL}/studies/{json_study["sid"]}/',
+        response = requests.patch(f'{API_URL}/studies/{sid}/',
                                   json={"outputset": json_study.get("outputset")})
-        if not response.status_code == 200:
-            logging.warning(f'{study_core["name"]} {response.text}')
-            success = False
+        success = success and check_json_response(response)
 
     if success:
-        logging.info(f'{API_URL}/studies/{json_study["sid"]}/')
+        # print access URL
+        logging.info(f'{API_URL}/studies/{sid}/')
 
     return success
 
