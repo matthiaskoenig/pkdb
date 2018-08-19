@@ -202,6 +202,7 @@ SUBSTANCES_DATA = [
     # misc
     "tizanidine",
     "venlafaxine",
+    "lomefloxacin",
 
     "ibuprofen",
     "aspirin",
