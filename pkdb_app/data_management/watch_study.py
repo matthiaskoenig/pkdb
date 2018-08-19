@@ -16,8 +16,15 @@ import logging
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+coloredlogs.install(
+    level='INFO',
+    fmt="%(module)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
+    # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
+)
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='INFO')
+
+
+
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
