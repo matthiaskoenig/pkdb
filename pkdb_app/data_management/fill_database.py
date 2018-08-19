@@ -245,7 +245,9 @@ def check_json_response(response):
             logging.warning(f'\n{msg}')
 
         except json.decoder.JSONDecodeError as err:
-            logging.warning(err)
+            # something went wrong on the django serializer side
+            logging.error(err)
+            logging.warning(response.text)
 
         return False
     return True
