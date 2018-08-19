@@ -2,7 +2,6 @@ import re
 from lark import UnexpectedCharacters, Lark
 
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 import pandas as pd
@@ -13,6 +12,9 @@ from pkdb_app.studies.models import Reference
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.models import User
 from pkdb_app.utils import get_or_val_error
+
+import traceback
+import logging
 
 ITEM_SEPARATOR = '||'
 RELATED_SETS = {
@@ -31,7 +33,7 @@ class WrongKeySerializer(serializers.ModelSerializer):
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
-                raise ValidationError(msg)
+                raise serializers.ValidationError(msg)
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
@@ -50,7 +52,7 @@ class BaseSerializer(WrongKeySerializer):
             sid = self.initial_data.get("sid")
             try:
                 # Try to get the object in question
-                obj = self.Meta.model.objects.get(sid = sid)
+                obj = self.Meta.model.objects.get(sid=sid)
             except (ObjectDoesNotExist, MultipleObjectsReturned):
                 # Except not finding the object or the data being ambiguous
                 # for defining it. Then validate the data as usual
@@ -64,7 +66,6 @@ class BaseSerializer(WrongKeySerializer):
             # If the Serializer was instantiated with just an object, and no
             # data={something} proceed as usual
             return super().is_valid(raise_exception)
-
 
     @staticmethod
     def create_relations(study, related):
@@ -107,7 +108,6 @@ class BaseSerializer(WrongKeySerializer):
 
 class ParserSerializer(WrongKeySerializer):
 
-
     @staticmethod
     def generic_parser(data, key):
 
@@ -127,9 +127,7 @@ class ParserSerializer(WrongKeySerializer):
                     return len(values)
             return 1
 
-
         def split_string_count(string, key):
-
             l = Lark('''start: WORD "{{" NUMBER "}}"
                     %import common.NUMBER
                     %import common.WORD
@@ -143,7 +141,7 @@ class ParserSerializer(WrongKeySerializer):
             # msg = f"{string} is not maching pattern:\{{(.?[0-9]+)\}}"
             #    raise ValidationError(str(e))
             except UnexpectedCharacters:
-                raise ValidationError({key: f"UnexpectedCharacters in {string}"})
+                raise serializers.ValidationError({key: f"UnexpectedCharacters in {string}"})
             return data
 
         def list_chara(data):
@@ -196,7 +194,15 @@ class ParserSerializer(WrongKeySerializer):
         cleaned = []
         for raw_single in raw:
             raw_single = {k: v for k, v in raw_single.items() if v is not None}
-            cleaned += pd.DataFrame(list_chara(raw_single)).to_dict('records')
+
+            try:
+                cleaned += pd.DataFrame(list_chara(raw_single)).to_dict('records')
+            except ValueError as err:
+                print(err)
+                raise serializers.ValidationError([
+                    f"ValueError in splitting entries",
+                    raw_single,
+                    traceback.format_exc()]) from err
 
         data[key] = cleaned
 
@@ -210,7 +216,7 @@ class ParserSerializer(WrongKeySerializer):
             if "==" in value:
                 values = value.split("==")
                 if not values[0].strip() == "col":
-                    raise Exception(f"Value provided does not match pattern 'col==<file_mapping>', with key:{key} and  value:{values}")
+                    raise serializers.ValidationError(f"Value provided does not match pattern 'col==<file_mapping>', with key:{key} and  value:{values}")
                 resulting_keys.append(values[1].strip())
 
             else:
@@ -242,8 +248,8 @@ class ParserSerializer(WrongKeySerializer):
     @staticmethod
     def drop_empty(data):
         dropped_empty = {}
-        for k,v in data.items():
-            if isinstance(v,str):
+        for k, v in data.items():
+            if isinstance(v, str):
                 if not v:
                     continue
             dropped_empty[k] = v
