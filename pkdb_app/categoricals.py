@@ -58,22 +58,29 @@ UNIT_DATA = UNIT_TIME + [
     UnitType('g/dl'),
     UnitType('l/kg'),
     UnitType("ml/min/kg"),
-    UnitType("µg/ml*h"),
+
     UnitType("Âµg/ml"),
     UnitType("µg/ml"),
     UnitType("mg"),
     UnitType("mmHg"),
     UnitType("ml/min/1.73m^2"),
+
     UnitType("µg/ml*h/kg"),
+
+    # AUC
     UnitType("mg*h/l"),
+    UnitType("µg*h/ml"),   # -> mg*h/l
+    UnitType("mg*min/l"),  # -> mg*h/l
+    UnitType("µmol*h/l"),
+
     UnitType("l/h"),
     UnitType("l"),
-    UnitType("µmol/l*h"),
+
     UnitType("ml/min"),
-    UnitType("mg/l*min"),
+
     UnitType("ml/h/kg"),
     UnitType("mg/l"),
-    UnitType("mg/l*h"),
+
     UnitType("mg/kg"),
     UnitType("mg/day")
 ]
