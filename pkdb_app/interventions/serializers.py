@@ -144,14 +144,14 @@ class OutputSerializer(ParserSerializer):
         validated_data = super().validate(data)
 
         # either group or individual set
-        if validated_data.get("individual") and (validated_data.get("group") or validated_data.get("group_map")):
+        if (validated_data.get("individual") and validated_data.get("individual_map")) and (validated_data.get("group") or validated_data.get("group_map")):
             raise serializers.ValidationError(
                 ["individual and group cannot be set together on output.",
                 validated_data
             ])
-        if not validated_data.get("individual") and not (validated_data.get("group") or validated_data.get("group_map")):
+        if not (validated_data.get("individual") or validated_data.get("individual_map")) and not (validated_data.get("group") or validated_data.get("group_map")):
             raise serializers.ValidationError(
-                ["either individual or group must be set together on output.",
+                ["either individual or group must be set on output.",
                 validated_data
             ])
 
