@@ -121,11 +121,12 @@ class IndividualSerializer(ParserSerializer):
         validated_data = super().validate(data)
 
         # individuals require group
-        if not validated_data.get("group"):
+        if not validated_data.get("group") and not validated_data.get("group_map"):
             raise serializers.ValidationError(
                 ["individuals require group.",
                 validated_data
             ])
+        return validated_data
 
     '''
     def parse_individuals(self,data):
