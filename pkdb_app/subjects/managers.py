@@ -53,10 +53,14 @@ class GroupSetManager(models.Manager):
 class IndividualManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
+        clean = kwargs.pop("clean", [])
+
         individual = super(IndividualManager, self).create(*args, **kwargs)
         individual.characteristica.all().delete()
         for characteristica_single in characteristica:
             individual.characteristica.create(**characteristica_single)
+        for clean_single in clean:
+            individual.clean.create(individualset = individual.individualset, **clean_single)
         individual.save()
         return individual
 
@@ -68,6 +72,7 @@ class IndividualSetManager(models.Manager):
         characteristica = kwargs.pop("characteristica", [])
         individuals = kwargs.pop("individuals", [])
         descriptions = kwargs.pop("descriptions", [])
+
 
 
         individualset = super(IndividualSetManager, self).create(*args, **kwargs)
@@ -82,6 +87,7 @@ class IndividualSetManager(models.Manager):
 
         for individual in individuals:
             individualset.individuals.create(**individual)
+
 
 
         individualset.save()

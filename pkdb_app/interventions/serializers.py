@@ -10,7 +10,7 @@ from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
 from pkdb_app.serializers import ParserSerializer
 from pkdb_app.subjects.models import Individual, Group, DataFile
-from pkdb_app.utils import un_map, validate_categorials
+from pkdb_app.utils import unmap_keys, validate_categorials
 
 
 class SubstanceSerializer(serializers.ModelSerializer):
@@ -44,7 +44,7 @@ class InterventionSerializer(ParserSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        return un_map(rep)
+        return unmap_keys(rep)
 
 
 class InterventionSetSerializer(ParserSerializer):
@@ -138,7 +138,7 @@ class OutputSerializer(ParserSerializer):
                 current_site = f'http://{get_current_site(self.context["request"]).domain}'
                 rep[file] = current_site + getattr(instance, file).file.url
 
-        return un_map(rep)
+        return unmap_keys(rep)
 
     def validate(self, data):
         validated_data = super().validate(data)

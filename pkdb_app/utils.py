@@ -77,7 +77,7 @@ def validate_categorials(data, model_name):
                 raise ValidationError({"unit":msg})
     return data
 
-def un_map(data):
+def unmap_keys(data):
     cleaned_result = {}
     for k, v in data.items():
         if "_map" in k:
@@ -87,3 +87,24 @@ def un_map(data):
         cleaned_result[k] = v
     return cleaned_result
 
+def recursive_iter(obj, keys=()):
+    """ Creates dictionary with key:object from nested JSON data structure. """
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            yield from recursive_iter(v, keys + (k,))
+    elif any(isinstance(obj, t) for t in (list, tuple)):
+        for idx, item in enumerate(obj):
+            yield from recursive_iter(item, keys + (idx,))
+
+        if len(obj) == 0:
+            yield keys, None
+
+    else:
+        yield keys, obj
+
+
+def set_keys(d, value, *keys):
+    """ Changes keys in nested dictionary. """
+    for key in keys[:-1]:
+        d = d[key]
+    d[keys[-1]] = value

@@ -41,6 +41,7 @@ from collections import namedtuple
 # master path
 # -----------------------------
 # DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
+
 DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
 if not os.path.exists(DATA_PATH):
     print("-" * 80)

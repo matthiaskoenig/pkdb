@@ -90,20 +90,30 @@ class IndividualMap(models.Model):
     class Meta:
         abstract = True
 
+class AbstractIndividual(IndividualMap, Sourceable, models.Model):
+    objects = IndividualManager()
 
-class Individual(IndividualMap, Sourceable, models.Model):
+    class Meta:
+        abstract = True
+
+
+class Individual(AbstractIndividual):
     """ Individual.
 
     Individuals are defined via their characteristics, analogue to groups.
     """
-    source = models.ForeignKey(DataFile,related_name="individual_sources", null=True,blank=True, on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="individual_figures", null=True,blank=True, on_delete=models.SET_NULL)
+    source = models.ForeignKey(DataFile, related_name="individual_sources", null=True, blank=True,
+                               on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="individual_figures", null=True, blank=True,
+                               on_delete=models.SET_NULL)
 
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individuals")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals", null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
-    objects = IndividualManager()
+
+    class Meta:
+        unique_together = ('individualset', 'name', 'name_map', 'source')
 
     @property
     def reference(self):
@@ -116,8 +126,43 @@ class Individual(IndividualMap, Sourceable, models.Model):
     def groups_in_study(self):
         return self.study.groupset.groups
 
+    def __str__(self):
+        return self.name
+
+
+
+
+
+
+class CleanIndividual(AbstractIndividual):
+    """ Processed and normalized data (calculated on change from
+    corresponding raw CharacteristicValue.
+
+    - convert exclusion to inclusion criteria
+    """
+    source = models.ForeignKey(DataFile, related_name="c_individual_sources", null=True, blank=True,
+                               on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="c_individual_figures", null=True, blank=True,
+                               on_delete=models.SET_NULL)
+
+    individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="c_individuals")
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="c_individuals", null=True, blank=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    raw = models.ForeignKey(Individual, related_name="clean", null=True, on_delete=True)
+
     class Meta:
-        unique_together = ('individualset', 'name', 'name_map', 'source')
+        unique_together = ('individualset', 'name')
+
+    @property
+    def reference(self):
+        return self.individualset.reference
+
+    @property
+    def study(self):
+        return self.individualset.study
+
+    def groups_in_study(self):
+        return self.study.groupset.groups
 
     def __str__(self):
         return self.name
@@ -160,6 +205,8 @@ class Characteristica(CharacteristicaBase, ValueableMap, Valueable, models.Model
     groupset = models.ForeignKey(GroupSet, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
+    c_individual = models.ForeignKey(CleanIndividual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
+
     individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
 
 

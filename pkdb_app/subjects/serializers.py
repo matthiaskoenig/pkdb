@@ -1,13 +1,16 @@
+import pandas as pd
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.behaviours import Sourceable
+from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.comments.serializers import DescriptionsSerializer
-from pkdb_app.utils import un_map, validate_categorials
-from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile
+from pkdb_app.utils import recursive_iter, set_keys
+from pkdb_app.utils import unmap_keys, validate_categorials
+from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile, CleanIndividual
 from ..serializers import ParserSerializer, WrongKeySerializer
-
+from copy import deepcopy
 
 class DataFileSerializer(WrongKeySerializer):
     class Meta:
@@ -29,7 +32,7 @@ class CharacteristicaSerializer(ParserSerializer):
         result = super().to_representation(instance)
         if result["ctype"] == "group":
             result.pop("ctype")
-        return un_map(result)
+        return unmap_keys(result)
 
     def to_internal_value(self, data):
         data = self.split_to_map(data)
@@ -80,29 +83,113 @@ class GroupSetSerializer(ParserSerializer):
         return super(GroupSetSerializer, self).to_internal_value(data)
 
 
-class IndividualSerializer(ParserSerializer):
+class CleanIndividualSerializer(ParserSerializer):
     """ Individual """
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False, allow_null=True)
-    group =serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
+
     class Meta:
-            model = Individual
-            fields = Sourceable.fields() + ["name", "name_map",  "group_map", "characteristica", "group","source"]
+        model = CleanIndividual
+        fields = Sourceable.fields() + ["name", "group", "characteristica", "source"]
+
+    @staticmethod
+    def group_to_internal_value(group,study_sid):
+
+        if group:
+            try:
+                group = Group.objects.get(Q(groupset__study__sid=study_sid) & Q(name=group)).pk
+            except ObjectDoesNotExist:
+                msg = f'group: {group} in study: {study_sid} does not exist'
+                raise ValidationError(msg)
+        return group
+
+    def to_internal_value(self, data):
+        study_sid = self.context['request'].path.split("/")[-2]
+        if "group" in data :
+            data["group"] = self.group_to_internal_value(data["group"],study_sid)
+        return super().to_internal_value(data)
+
+
+
+class IndividualSerializer(CleanIndividualSerializer):
+    clean = CleanIndividualSerializer(many=True, write_only=True, required=False, allow_null=True)
+
+
+    class Meta:
+
+        model = Individual
+        fields = Sourceable.fields() + ["name", "name_map", "group_map", "group", "characteristica",  "source","clean"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         data = self.split_entries_for_key(data, "characteristica")
+        initial_data = deepcopy(data)
         data = self.split_to_map(data)
         study_sid = self.context['request'].path.split("/")[-2]
         if "group" in data :
-            if data["group"]:
-                try:
-                    data["group"] = Group.objects.get(Q(groupset__study__sid=study_sid) & Q(name=data.get("group"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
-                    raise ValidationError(msg)
+            data["group"] = self.group_to_internal_value(data["group"], study_sid)
+
+        #---------------------------------------
+        # add cleaned individuals
+        # ---------------------------------------
+        clean_individuals = []
+        recursive_individual_dict = list(recursive_iter(initial_data))
+
+
+        #check if any mapping
+        is_mapping = any("map" in field for field in data.keys())
+        characteristica_data = initial_data.get("characteristica")
+        if characteristica_data:
+            is_mapping = is_mapping or any("map" in field for field in characteristica_data.keys())
+
+
+        if is_mapping:
+
+            source = initial_data.get("source")
+            delimiter = FORMAT_MAPPING[initial_data.pop("format")].delimiter
+            src = DataFile.objects.get(pk = source)
+            #initial_data.pop("figure")
+            try:
+                individuals_data = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False)
+            except:
+                raise serializers.ValidationError(["cannot read csv"],data)
+
+
+            for individual in individuals_data.itertuples():
+
+                individual_dict = initial_data.copy()
+
+                for keys,value in recursive_individual_dict:
+
+                    if isinstance(value, str):
+                        if "==" in value:
+                            values = value.split("==")
+                            values = [v.strip() for v in values]
+
+                            if len(values) != 2 or values[0]!="col":
+                                raise serializers.ValidationError(["field has wrong pattern col=='col_value'",data])
+                            try:
+                                 individual_value = getattr(individual, values[1])
+                                 if "group" in keys:
+                                     print(individual_value)
+                            except AttributeError:
+                                raise serializers.ValidationError([f"key <{values[1]}> is missing in file <{source}> ", data])
+
+                            set_keys(individual_dict,individual_value,*keys)
+
+
+
+                clean_individuals.append(deepcopy(individual_dict))
+
+        else:
+            clean_individuals.append(initial_data)
+
+        data["clean"] = clean_individuals
+        # finish clean individuals
+        #-------------------------------------------
 
         return super(IndividualSerializer, self).to_internal_value(data)
 
@@ -115,7 +202,7 @@ class IndividualSerializer(ParserSerializer):
             if file in rep:
                 current_site = f'http://{get_current_site(self.context["request"]).domain}'
                 rep[file] = current_site+ getattr(instance,file).file.url
-        return un_map(rep)
+        return unmap_keys(rep)
 
     def validate(self, data):
         validated_data = super().validate(data)
@@ -127,6 +214,7 @@ class IndividualSerializer(ParserSerializer):
                 validated_data
             ])
         return validated_data
+
 
     '''
     def parse_individuals(self,data):
@@ -159,7 +247,7 @@ class IndividualSerializer(ParserSerializer):
 class IndividualSetSerializer(ParserSerializer):
 
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
-    individuals = IndividualSerializer(many=True, read_only=False, required=False)
+    individuals = IndividualSerializer(many=True, read_only=False, required=False )
     descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
 
     class Meta:
@@ -172,4 +260,6 @@ class IndividualSetSerializer(ParserSerializer):
         return super(IndividualSetSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):
-        return un_map(super().to_representation(instance))
+
+        return unmap_keys(super().to_representation(instance))
+
