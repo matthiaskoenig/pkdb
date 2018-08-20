@@ -46,7 +46,7 @@ class OutputSetManager(models.Manager):
 
         for timecourse in timecourses:
             intervention_ids = timecourse.pop("interventions", [])
-            timecourse_instance = outputset.timecourse.create(**timecourse)
+            timecourse_instance = outputset.timecourses.create(**timecourse)
             timecourse_instance.interventions.add(*intervention_ids)
             timecourse_instance.save()
             outputset.save()
