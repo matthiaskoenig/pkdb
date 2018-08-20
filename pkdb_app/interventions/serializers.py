@@ -124,7 +124,6 @@ class OutputSerializer(ParserSerializer):
         data = self.strip(data)
         data = self.drop_blank(data)
         data = self.drop_empty(data)
-        print(data.get("figure"))
 
         return super().to_internal_value(data)
 
