@@ -2,8 +2,8 @@ pip==18.0
 
 # Core
 pytz==2018.4
-Django==2.0.6
-django-configurations==2.0
+Django==2.1
+django-configurations==2.1
 gunicorn==19.8.1
 newrelic==3.2.2.94
 
@@ -18,7 +18,7 @@ django_unique_upload==0.2.1
 # Rest apis
 djangorestframework==3.8.2
 Markdown==2.6.11
-django-filter==1.1.0
+django-filter==2.0
 coreapi
 django-rest-swagger
 django-cors-headers==2.4.0
@@ -50,7 +50,6 @@ pandas
 jsonschema
 django-extra-fields
 PyPDF2
-lark-parser
 watchdog
 requests
 coloredlogs
