@@ -4,7 +4,7 @@ from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.behaviours import Sourceable
 from pkdb_app.comments.serializers import DescriptionsSerializer
-from pkdb_app.utils import un_map, validate_input
+from pkdb_app.utils import un_map, validate_categorials
 from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile
 from ..serializers import ParserSerializer, WrongKeySerializer
 
@@ -35,12 +35,15 @@ class CharacteristicaSerializer(ParserSerializer):
         data = self.split_to_map(data)
         return super().to_internal_value(data)
 
-    def validate(self,data):
+    def validate(self, data):
         validated_data = super().validate(data)
-        return validate_input(validated_data,"characteristica")
+        validated_data = validate_categorials(validated_data, "characteristica")
+
+        return validated_data
 
 
 class GroupSerializer(ParserSerializer):
+    """ Group."""
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
     parent = serializers.CharField()
 
@@ -49,8 +52,7 @@ class GroupSerializer(ParserSerializer):
         fields = ["name","parent", "count", "characteristica",]
 
     def to_internal_value(self, data):
-        self.validate_wrong_keys(data)
-        data = self.generic_parser(data, "characteristica")
+        data = self.split_entries_for_key(data, "characteristica")
         return super(GroupSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):
@@ -58,6 +60,10 @@ class GroupSerializer(ParserSerializer):
         if "parent" in rep:
             rep["parent"] = instance.parent.name
         return rep
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+        return validated_data
 
 
 class GroupSetSerializer(ParserSerializer):
@@ -74,8 +80,8 @@ class GroupSetSerializer(ParserSerializer):
         return super(GroupSetSerializer, self).to_internal_value(data)
 
 
-
 class IndividualSerializer(ParserSerializer):
+    """ Individual """
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False, allow_null=True)
     group =serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
@@ -87,7 +93,7 @@ class IndividualSerializer(ParserSerializer):
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
-        data = self.generic_parser(data, "characteristica")
+        data = self.split_entries_for_key(data, "characteristica")
         data = self.split_to_map(data)
         study_sid = self.context['request'].path.split("/")[-2]
         if "group" in data :
@@ -110,6 +116,16 @@ class IndividualSerializer(ParserSerializer):
                 current_site = f'http://{get_current_site(self.context["request"]).domain}'
                 rep[file] = current_site+ getattr(instance,file).file.url
         return un_map(rep)
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+
+        # individuals require group
+        if not validated_data.get("group"):
+            raise serializers.ValidationError(
+                ["individuals require group.",
+                validated_data
+            ])
 
     '''
     def parse_individuals(self,data):
@@ -151,7 +167,7 @@ class IndividualSetSerializer(ParserSerializer):
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
-        data = self.generic_parser(data, "characteristica")
+        data = self.split_entries_for_key(data, "characteristica")
         return super(IndividualSetSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):
