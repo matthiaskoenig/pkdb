@@ -168,7 +168,7 @@ class Timecourse(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseO
     source = models.ForeignKey(DataFile, related_name="timecourse_sources",null=True,blank=True,on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="timecourse_figures",null=True,blank=True, on_delete=models.SET_NULL)
 
-    outputset = models.ForeignKey(OutputSet, related_name="timecourse", on_delete=models.CASCADE,null=True, blank=True)
+    outputset = models.ForeignKey(OutputSet, related_name="timecourses", on_delete=models.CASCADE,null=True, blank=True)
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True, blank=True)
     time = models.DecimalField(max_digits=40, decimal_places=20, null=True, blank=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH,null=True,blank=True, choices=TIME_UNITS_CHOICES)
