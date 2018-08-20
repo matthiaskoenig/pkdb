@@ -9,7 +9,6 @@ from pkdb_app.utils import CHAR_MAX_LENGTH
 from .categoricals import UNITS_CHOICES
 
 
-
 class Sidable(models.Model):
     """ Model has an sid. """
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True)
@@ -30,9 +29,6 @@ class Sidable(models.Model):
 
 - Annotation (annotatable), at some point, but not now
 '''
-
-
-
 
 
 class Blankable(models.Model):
@@ -70,7 +66,7 @@ class Describable(models.Model):
 
 class Hashable(models.Model):
     """ Add hash key field. """
-    hash = models.CharField(max_length=CHAR_MAX_LENGTH,blank=True, null=True)
+    hash = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -86,24 +82,23 @@ class Sourceable(models.Model):
 
     @staticmethod
     def fields():
-        return ["source","figure","format"]
+        return ["source", "figure", "format"]
+
 
 class Valueable(models.Model):
-    """ Add fields to store values.
+    """ Valuable.
 
-    In addition all the statistical values are stored.
+    Adds fields to store values with their statistics.
     """
     count = models.IntegerField(null=True, blank=True)  # how many participants in characteristics
-    value = models.FloatField( null=True, blank=True)
-    mean = models.FloatField( null=True, blank=True)
-    median = models.FloatField( null=True, blank=True)
-    min = models.FloatField( null=True, blank=True)
-    max = models.FloatField( null=True, blank=True)
-    sd = models.FloatField( null=True, blank=True)
-    se = models.FloatField( null=True, blank=True)
-    cv = models.FloatField( null=True, blank=True)
-
-
+    value = models.FloatField(null=True, blank=True)
+    mean = models.FloatField(null=True, blank=True)
+    median = models.FloatField(null=True, blank=True)
+    min = models.FloatField(null=True, blank=True)
+    max = models.FloatField(null=True, blank=True)
+    sd = models.FloatField(null=True, blank=True)
+    se = models.FloatField(null=True, blank=True)
+    cv = models.FloatField(null=True, blank=True)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
@@ -115,18 +110,19 @@ class Valueable(models.Model):
 
 
 class ValueableMap(models.Model):
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)  # how many participants in characteristics
-    value_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    """ ValuableMap. """
+    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)  # how many participants in characteristics
+    value_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
-    mean_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    median_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    min_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    max_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    sd_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    se_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    cv_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    mean_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    median_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    min_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    max_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    sd_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    se_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    cv_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
-    unit_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
         abstract = True
