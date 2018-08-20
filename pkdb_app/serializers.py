@@ -22,7 +22,6 @@ RELATED_SETS = {
 }
 
 
-
 class WrongKeySerializer(serializers.ModelSerializer):
 
 
@@ -47,7 +46,6 @@ class WrongKeySerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         self.validate_wrong_keys(attrs)
         return super().validate(attrs)
-
 
 
 class BaseSerializer(WrongKeySerializer):
