@@ -306,7 +306,6 @@ def upload_study_json(json_study_dict):
     # ---------------------------
     study_sets = {}
     study_sets["groupset"] = json_study.get("groupset")
-    study_sets["individualset"] = json_study.get("individualset")
     study_sets["interventionset"] = json_study.get("interventionset")
 
     # FIXME: Where are groupset, individualset and interventionset uploaded?
@@ -315,6 +314,14 @@ def upload_study_json(json_study_dict):
     sid = json_study["sid"]
     response = requests.patch(f'{API_URL}/studies/{sid}/', json=study_sets)
     success = success and check_json_response(response)
+
+    # is using group, has to be uploaded separately from the groupset
+    if "individualset" in json_study.keys():
+        response = requests.patch(f'{API_URL}/studies/{sid}/',
+                                json = {"individualset": json_study.get("individualset")})
+
+        success = success and check_json_response(response)
+
 
     if "outputset" in json_study.keys():
         response = requests.patch(f'{API_URL}/studies/{sid}/',

@@ -190,6 +190,10 @@ class ParserSerializer(WrongKeySerializer):
 
             return data_n
 
+
+
+
+
         raw = data.get(key, [])
         cleaned = []
         for raw_single in raw:
@@ -198,7 +202,6 @@ class ParserSerializer(WrongKeySerializer):
             try:
                 cleaned += pd.DataFrame(list_chara(raw_single)).to_dict('records')
             except ValueError as err:
-                print(err)
                 raise serializers.ValidationError([
                     f"ValueError in splitting entries",
                     raw_single,
@@ -223,8 +226,6 @@ class ParserSerializer(WrongKeySerializer):
                 table[key] = value
                 resulting_keys.append(key)
 
-        #resulting_data = table[resulting_keys].to_dict("records")
-        #return resulting_data
         return table[resulting_keys]
 
     @staticmethod

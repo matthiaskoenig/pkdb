@@ -1,5 +1,6 @@
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.behaviours import Sourceable
 from pkdb_app.comments.serializers import DescriptionsSerializer
@@ -88,6 +89,15 @@ class IndividualSerializer(ParserSerializer):
         self.validate_wrong_keys(data)
         data = self.generic_parser(data, "characteristica")
         data = self.split_to_map(data)
+        study_sid = self.context['request'].path.split("/")[-2]
+        if "group" in data :
+            if data["group"]:
+                try:
+                    data["group"] = Group.objects.get(Q(groupset__study__sid=study_sid) & Q(name=data.get("group"))).pk
+                except ObjectDoesNotExist:
+                    msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
+                    raise ValidationError(msg)
+
         return super(IndividualSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):

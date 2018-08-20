@@ -29,7 +29,7 @@ class OutputSetManager(models.Manager):
 
     def create(self, *args, **kwargs):
         outputs = kwargs.pop("outputs", [])
-        timecourses = kwargs.pop("timecourse", [])
+        timecourses = kwargs.pop("timecourses", [])
         descriptions = kwargs.pop("descriptions", [])
         outputset = super().create(*args, **kwargs)
         outputset.outputs.all().delete()

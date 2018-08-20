@@ -124,6 +124,7 @@ class OutputSerializer(ParserSerializer):
         data = self.strip(data)
         data = self.drop_blank(data)
         data = self.drop_empty(data)
+        #data = self.split_to_map(data)
 
         return super().to_internal_value(data)
 
@@ -161,19 +162,21 @@ class OutputSetSerializer(ParserSerializer):
     Outputset
     """
     outputs = OutputSerializer(many=True, read_only=False, required=False, allow_null=True)
-    timecourse = TimecourseSerializer(many=True, read_only=False, required=False, allow_null=True)
+    timecourses = TimecourseSerializer(many=True, read_only=False, required=False, allow_null=True)
     descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
 
     class Meta:
         model = OutputSet
-        fields = ["descriptions","outputs","timecourse"]
+        fields = ["descriptions","outputs","timecourses"]
 
     def to_internal_value(self, data):
         """
         :param data:
         :return:
         """
-        data = self.generic_parser(data, "outputs")
-        data = self.split_to_map(data)
+        #data = self.generic_parser(data, "outputs")
+        #data = self.generic_parser(data, "timecourses")
+
+        #data = self.split_to_map(data)
 
         return super().to_internal_value(data)
