@@ -40,6 +40,7 @@ TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
 
 UNIT_DATA = UNIT_TIME + [
     UnitType('-'),
+    UnitType('%'),  # dimensionless * 100
     UnitType('cm'),
     UnitType('m'),
     UnitType('kg'),
@@ -223,6 +224,15 @@ SUBSTANCES_DATA = [
     "ethanol",
     "chlorozoxazone",
     "lomefloxacin",
+
+    "aminopyrine",
+    "antipyrine",
+    "bromsulpthalein",
+    "midazolam",
+    "phenylalanine",
+    "omeprazole",
+    "indocyanine green",
+    "morphine",
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -236,6 +246,8 @@ CHARACTERISTIC_DATA = [
     CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
     CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg/m^2"]),
     CharacteristicType('waist circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
+    CharacteristicType('lean body mass', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
+    CharacteristicType('percent fat', ANTHROPOMETRY, NUMERIC_TYPE, None, ["%"]),
 
     # -------------- Demography --------------
     CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
