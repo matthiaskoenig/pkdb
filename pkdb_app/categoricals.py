@@ -40,6 +40,7 @@ TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
 
 UNIT_DATA = UNIT_TIME + [
     UnitType('-'),
+    UnitType('%'),  # dimensionless * 100
     UnitType('cm'),
     UnitType('m'),
     UnitType('kg'),
@@ -51,7 +52,6 @@ UNIT_DATA = UNIT_TIME + [
     UnitType('1/s'),
 
     UnitType('kg/m^2'),
-
 
     UnitType('IU/I'),
     UnitType('mg/dl'),
@@ -75,12 +75,14 @@ UNIT_DATA = UNIT_TIME + [
 
     UnitType("l/h"),
     UnitType("l"),
+    UnitType('l/kg'),
+    UnitType('ml/kg'),
 
+    # clearance
     UnitType("ml/min"),
-
     UnitType("ml/h/kg"),
-    UnitType("mg/l"),
 
+    UnitType("mg/l"),
     UnitType("mg/kg"),
     UnitType("mg/day")
 ]
@@ -222,6 +224,15 @@ SUBSTANCES_DATA = [
     "ethanol",
     "chlorozoxazone",
     "lomefloxacin",
+
+    "aminopyrine",
+    "antipyrine",
+    "bromsulpthalein",
+    "midazolam",
+    "phenylalanine",
+    "omeprazole",
+    "indocyanine green",
+    "morphine",
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -235,6 +246,8 @@ CHARACTERISTIC_DATA = [
     CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
     CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg/m^2"]),
     CharacteristicType('waist circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
+    CharacteristicType('lean body mass', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
+    CharacteristicType('percent fat', ANTHROPOMETRY, NUMERIC_TYPE, None, ["%"]),
 
     # -------------- Demography --------------
     CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
@@ -266,7 +279,7 @@ CHARACTERISTIC_DATA = [
     # CharacteristicType('oral contraceptives amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
     CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "smoking", "grapefruit juice"],
-                       ["year", "week", "day"]),
+                       ["year", "week", "day", "h"]),
 
     # -------------- Caffeine --------------
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -326,7 +339,7 @@ PK_DATA_CHOICES = create_choices(PK_DATA)
 
 # class, value, dtype (numeric, boolean, categorial), choices
 INTERVENTION_DATA = [
-    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg","mg/kg"]),
+    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
     CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
 ]
