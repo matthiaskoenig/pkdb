@@ -233,6 +233,11 @@ SUBSTANCES_DATA = [
     "omeprazole",
     "indocyanine green",
     "morphine",
+
+    "glycerol",
+    "FFA",
+
+    "carbamazepine"
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
