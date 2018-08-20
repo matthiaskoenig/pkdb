@@ -270,8 +270,20 @@ def upload_study_json(json_study_dict):
 
     comments = []
     for keys, item in recursive_iter(json_study_dict):
-        if item in file_dict.keys():
-            set_keys(json_study_dict, file_dict[item], *keys)
+
+
+
+        #set_keys(json_study_dict,item.replace(item,file_dict[item]),*keys)
+        if isinstance(item,str):
+            for file, file_pk in file_dict.items():
+                item = item.replace(file,str(file_pk))
+
+
+            set_keys(json_study_dict, item, *keys)
+
+
+
+
         if "comments" in keys:
             n_keys = []
             for key in keys:
