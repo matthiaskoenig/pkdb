@@ -52,7 +52,6 @@ UNIT_DATA = UNIT_TIME + [
 
     UnitType('kg/m^2'),
 
-
     UnitType('IU/I'),
     UnitType('mg/dl'),
     UnitType('g/dl'),
@@ -75,12 +74,14 @@ UNIT_DATA = UNIT_TIME + [
 
     UnitType("l/h"),
     UnitType("l"),
+    UnitType('l/kg'),
+    UnitType('ml/kg'),
 
+    # clearance
     UnitType("ml/min"),
-
     UnitType("ml/h/kg"),
-    UnitType("mg/l"),
 
+    UnitType("mg/l"),
     UnitType("mg/kg"),
     UnitType("mg/day")
 ]
@@ -266,7 +267,7 @@ CHARACTERISTIC_DATA = [
     # CharacteristicType('oral contraceptives amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
     CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "smoking", "grapefruit juice"],
-                       ["year", "week", "day"]),
+                       ["year", "week", "day", "h"]),
 
     # -------------- Caffeine --------------
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -326,7 +327,7 @@ PK_DATA_CHOICES = create_choices(PK_DATA)
 
 # class, value, dtype (numeric, boolean, categorial), choices
 INTERVENTION_DATA = [
-    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg","mg/kg"]),
+    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
     CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
 ]
