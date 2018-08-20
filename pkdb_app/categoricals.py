@@ -237,7 +237,9 @@ SUBSTANCES_DATA = [
     "glycerol",
     "FFA",
 
-    "carbamazepine"
+    "carbamazepine",
+    "midazolam",
+    "digoxin"
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
