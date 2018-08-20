@@ -61,6 +61,8 @@ class IndividualManager(models.Manager):
         return individual
 
 
+
+
 class IndividualSetManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
@@ -81,6 +83,8 @@ class IndividualSetManager(models.Manager):
         for individual in individuals:
             individualset.individuals.create(**individual)
 
+
         individualset.save()
 
         return individualset
+

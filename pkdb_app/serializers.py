@@ -1,4 +1,4 @@
-
+import numpy as np
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
@@ -22,7 +22,15 @@ RELATED_SETS = {
 }
 
 
+
 class WrongKeySerializer(serializers.ModelSerializer):
+
+
+    def replace_NA(self,dict):
+        for key, value in dict.items():
+            if isinstance(value,str):
+                dict[key].replace("NA","nan")
+
 
     def validate_wrong_keys(self, data):
         serializer_fields = self.Meta.fields
@@ -32,9 +40,14 @@ class WrongKeySerializer(serializers.ModelSerializer):
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise serializers.ValidationError(msg)
 
-    def to_internal_value(self, data):
-        self.validate_wrong_keys(data)
-        return super().to_internal_value(data)
+    # def to_internal_value(self, data):
+    #    self.validate_wrong_keys(data)
+    #    return super().to_internal_value(data)
+
+    def validate(self, attrs):
+        self.validate_wrong_keys(attrs)
+        return super().validate(attrs)
+
 
 
 class BaseSerializer(WrongKeySerializer):
@@ -82,7 +95,6 @@ class BaseSerializer(WrongKeySerializer):
             study.substances.add(substance)
 
         if related["files"]:
-            print(related["files"])
             study.files.all().delete()
             for file_pk in related["files"]:
                 study.files.add(file_pk)
@@ -157,7 +169,6 @@ class ParserSerializer(WrongKeySerializer):
 
             for field in entry.keys():
                 value = entry[field]
-                print(field, value)
                 try:
                     values = value.split(ITEM_SEPARATOR)
                 except AttributeError:
@@ -166,7 +177,6 @@ class ParserSerializer(WrongKeySerializer):
                     if isinstance(value, str):
                         values[k] = value.strip()
 
-                print(field, values)
 
                 # --- validation ---
                 # names must be split in a split entry
