@@ -59,8 +59,10 @@ UNIT_DATA = UNIT_TIME + [
     UnitType('l/kg'),
     UnitType("ml/min/kg"),
 
-    UnitType("Âµg/ml"),
     UnitType("µg/ml"),
+    UnitType("µmol/l"),
+
+    UnitType("ng/ml"),
     UnitType("mg"),
     UnitType("mmHg"),
     UnitType("ml/min/1.73m^2"),
@@ -192,6 +194,9 @@ SUBSTANCES_DATA = [
     "1U/(1U+1X)",
     "AFMU/(AFMU+1U+1X)",
 
+    # caffeine interaction
+    "fluvoxamine",
+
     # quinolones
     "quinolone",
     "pipemidic acid",
@@ -239,7 +244,17 @@ SUBSTANCES_DATA = [
 
     "carbamazepine",
     "midazolam",
-    "digoxin"
+    "1-hydroxymidazolam",
+    "digoxin",
+    "losartan",
+    "exp3174",
+    # omeprazole
+    "omeprazole",
+    "5-hydroxyomeprazole",
+
+    "dextromethorphan",
+    "dextrorphan",
+
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -291,6 +306,7 @@ CHARACTERISTIC_DATA = [
     # -------------- Caffeine --------------
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["mg/day"]),
+    CharacteristicType('caffeine amount (beverages)', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
 
     # -------------- Smoking --------------
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -311,7 +327,6 @@ CHARACTERISTIC_DATA = [
 
     # --------------Genetic variants --------------
     CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type", "CYP2D6 poor metabolizer"], ["-"]),
-
 ]
 
 PK_DATA = [
