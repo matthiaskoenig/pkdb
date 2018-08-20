@@ -2,7 +2,7 @@
 Serializers for interventions.
 """
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 
@@ -10,7 +10,7 @@ from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
 from pkdb_app.serializers import ParserSerializer
 from pkdb_app.subjects.models import Individual, Group, DataFile
-from pkdb_app.utils import un_map, validate_input
+from pkdb_app.utils import un_map, validate_categorials
 
 
 class SubstanceSerializer(serializers.ModelSerializer):
@@ -40,7 +40,7 @@ class InterventionSerializer(ParserSerializer):
 
     def validate(self, data):
         validated_data = super().validate(data)
-        return validate_input(validated_data, "intervention")
+        return validate_categorials(validated_data, "intervention")
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -62,7 +62,7 @@ class InterventionSetSerializer(ParserSerializer):
         :param data:
         :return:
         """
-        data = self.generic_parser(data, "interventions")
+        data = self.split_entries_for_key(data, "interventions")
         return super(InterventionSetSerializer, self).to_internal_value(data)
 
 
@@ -100,7 +100,7 @@ class OutputSerializer(ParserSerializer):
                     data["group"] = Group.objects.get(Q(groupset__study__sid=study_sid) & Q(name=data.get("group"))).pk
                 except ObjectDoesNotExist:
                     msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
-                    raise ValidationError(msg)
+                    raise serializers.ValidationError(msg)
 
         if "individual" in data:
             if data["individual"]:
@@ -108,7 +108,7 @@ class OutputSerializer(ParserSerializer):
                     data["individual"] = Individual.objects.get(Q(individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
                 except ObjectDoesNotExist:
                     msg = f'individual: {data.get("individual")} in study: {study_sid} does not exist'
-                    raise ValidationError(msg)
+                    raise serializers.ValidationError(msg)
 
         if "interventions" in data:
             if data["interventions"]:
@@ -118,13 +118,12 @@ class OutputSerializer(ParserSerializer):
                         interventions.append(Intervention.objects.get(Q(interventionset__study__sid=study_sid) & Q(name=internvention)).pk)
                     except ObjectDoesNotExist:
                         msg = f'intervention: {internvention} in study: {study_sid} does not exist'
-                        raise ValidationError(msg)
+                        raise serializers.ValidationError(msg)
                     data["interventions"] = interventions
 
         data = self.strip(data)
         data = self.drop_blank(data)
         data = self.drop_empty(data)
-        #data = self.split_to_map(data)
 
         return super().to_internal_value(data)
 
@@ -140,6 +139,23 @@ class OutputSerializer(ParserSerializer):
                 rep[file] = current_site + getattr(instance, file).file.url
 
         return un_map(rep)
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+
+        # either group or individual set
+        if validated_data.get("individual") and validated_data.get("group"):
+            raise serializers.ValidationError(
+                ["individual and group cannot be set together on output.",
+                validated_data
+            ])
+        if not validated_data.get("individual") and not validated_data.get("group"):
+            raise serializers.ValidationError(
+                ["either individual or group must be set together on output.",
+                validated_data
+            ])
+
+        return validated_data
 
 
 class TimecourseSerializer(OutputSerializer):
@@ -159,7 +175,7 @@ class TimecourseSerializer(OutputSerializer):
 
 class OutputSetSerializer(ParserSerializer):
     """
-    Outputset
+    OutputSet
     """
     outputs = OutputSerializer(many=True, read_only=False, required=False, allow_null=True)
     timecourses = TimecourseSerializer(many=True, read_only=False, required=False, allow_null=True)
@@ -174,9 +190,7 @@ class OutputSetSerializer(ParserSerializer):
         :param data:
         :return:
         """
-        #data = self.generic_parser(data, "outputs")
-        #data = self.generic_parser(data, "timecourses")
-
-        #data = self.split_to_map(data)
+        data = self.split_entries_for_key(data, "outputs")
+        data = self.split_entries_for_key(data, "timecourses")
 
         return super().to_internal_value(data)

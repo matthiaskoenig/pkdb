@@ -45,8 +45,19 @@ def get_or_val_error(model, *args, **kwargs):
         msg = f"{model} instance with args:{args}, kwargs:{kwargs} does not exist"
         raise ValidationError({model:msg})
 
-def validate_input(data,model_name):
-    model_categoricals = {"characteristica":CHARACTERISTIC_DICT,"intervention":INTERVENTION_DICT}
+
+def validate_categorials(data, model_name):
+    """
+
+    :param data:
+    :param model_name:
+    :return:
+    """
+
+    model_categoricals = {
+        "characteristica": CHARACTERISTIC_DICT,
+        "intervention": INTERVENTION_DICT
+    }
     category = data.get("category", None)
 
     if category:

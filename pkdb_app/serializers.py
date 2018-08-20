@@ -1,10 +1,7 @@
-import re
-from lark import UnexpectedCharacters, Lark
 
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
-import pandas as pd
 from rest_framework.settings import api_settings
 
 from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile
@@ -109,104 +106,114 @@ class BaseSerializer(WrongKeySerializer):
 class ParserSerializer(WrongKeySerializer):
 
     @staticmethod
-    def generic_parser(data, key):
+    def split_entries_for_key(data, key):
+        """ Splits entries in multiple if separators found.
 
-        # FIXME: This is overkill and looks very complicated!
-        # TODO: code review
+        Gets the subset of data for the key, splits the entries in multiple
+        and overwrites the data in the original data dict!
 
-        def number_raw(data):
+        :param data:
+        :param key:
+        :return:
+        """
+
+        def number_of_entries(entry):
             """ Splits the data to get number of entries. """
 
-            for key, value in data.items():
+            n_values = []
+            for field, value in entry.items():
+                n = 1
                 try:
                     values = value.split(ITEM_SEPARATOR)
+                    n = len(values)
                 except AttributeError:
-                    values = [value]
+                    pass
 
-                if len(values) > 1:
-                    return len(values)
-            return 1
+                n_values.append(n)
 
-        def split_string_count(string, key):
-            l = Lark('''start: WORD "{{" NUMBER "}}"
-                    %import common.NUMBER
-                    %import common.WORD
+            # validation (either 1 or max length)
+            n_set = set(n_values)
+            if len(n_set) not in [1, 2]:
+                serializers.ValidationError(
+                    f"Fields have different length, check || separators",
+                    entry,
+                )
 
-                   %ignore " "           // Disregard spaces in text
-                ''')
+            return max(n_values)
 
-            try:
-                data = l.parse(string)
-            # except UnexpectedCharacters as e:
-            # msg = f"{string} is not maching pattern:\{{(.?[0-9]+)\}}"
-            #    raise ValidationError(str(e))
-            except UnexpectedCharacters:
-                raise serializers.ValidationError({key: f"UnexpectedCharacters in {string}"})
-            return data
+        def split_entry(entry):
+            """ Splits entry fields based on separator.
 
-        def list_chara(data):
-            """ Splits data items based on item separator.
-
-            :param data:
-            :return:
+            :param entry:
+            :return: list of entries
             """
-            n = number_raw(data)
-            data_n = {}
 
-            for key, value in data.items():
+            n = number_of_entries(entry)
+            if n == 1:
+                return [entry]
+
+            # create entries by splitting separators
+            entries = [dict() for k in range(n)]
+
+            for field in entry.keys():
+                value = entry[field]
+                print(field, value)
                 try:
                     values = value.split(ITEM_SEPARATOR)
-                    values = list(map(str.strip, values))
-
                 except AttributeError:
                     values = [value]
+                for k, value in enumerate(values):
+                    if isinstance(value, str):
+                        values[k] = value.strip()
 
-                if (key == "name" and len(values) != n):
-                    msg = {f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain is violated."}
-                    raise ValidationError({"name": msg})
+                print(field, values)
 
+                # --- validation ---
+                # names must be split in a split entry
+                if field == "name" and len(values) != n:
+                    raise serializers.ValidationError(f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain is violated.")
+                # check for old syntax
+                for value in values:
+                    if isinstance(value, str):
+                        if "{{" in value or "}}" in value:
+                            raise serializers.ValidationError(
+                                f"Splitting via '{{ }}' syntax not allowed, use '||' in count.")
+                # ------------------
+
+                # extend entries
                 if len(values) == 1:
                     values = values * n
 
-                else:
-                    values_n = []
-                    count_n = []
-                    for value in values:
-                        if "{{" in value:
-                            splitted_data = split_string_count(value,key)
-                            values_n.append(splitted_data.children[0].value)
-                            count_n.append(splitted_data.children[1].value)
-                        else:
-                            values_n.append(value)
-                            count_n.append(data.get("count", None))
-                    values = values_n
-                    data_n["count"] = count_n
+                if len(values) is not n:
+                    raise serializers.ValidationError(
+                        ["Values do not have correct length",
+                        field, values, entry]
+                    )
 
-                    # if key == "name" and n > 1:
-                    #    ialpha = iter(string.ascii_uppercase)
-                    #    values = [f"{value}_{next(ialpha)}" for value in values]
+                for k in range(n):
+                    entries[k][field] = values[k]
 
-                data_n[key] = values
+            return entries
 
-            return data_n
+        # get data for key
+        raw = data.get(key, [])  # outputs
 
-
-
-
-
-        raw = data.get(key, [])
         cleaned = []
-        for raw_single in raw:
-            raw_single = {k: v for k, v in raw_single.items() if v is not None}
-
+        for entry in raw:  # output
+            entries = split_entry(entry)
+            cleaned.extend(entries)
+            '''
             try:
-                cleaned += pd.DataFrame(list_chara(raw_single)).to_dict('records')
-            except ValueError as err:
+                entries = split_entry(entry)
+                cleaned.extend(entries)
+            except Exception as err:
                 raise serializers.ValidationError([
                     f"ValueError in splitting entries",
-                    raw_single,
+                    entry,
                     traceback.format_exc()]) from err
+            '''
 
+        # overwrite data
         data[key] = cleaned
 
         return data
