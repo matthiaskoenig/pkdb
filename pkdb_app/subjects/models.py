@@ -54,16 +54,18 @@ class GroupSet(Set):
 
 
 class Group(models.Model):
-    """ Individual or group of people.
+    """ Group of people.
 
-    Groups are defined via their characteristics.
+    Groups are defined via their characteristica.
+    A group can be a subgroup of another group via the parent field.
+    All characteristica of the parent group are also in the child group.
     """
-    groupset = models.ForeignKey(GroupSet,on_delete=models.SET_NULL,null=True,related_name="groups")
+    groupset = models.ForeignKey(GroupSet, on_delete=models.SET_NULL, null=True, related_name="groups")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()  # number of people/animals/objects in group
-    parent = models.ForeignKey("Group",null=True,blank=True,on_delete=models.CASCADE)
-    objects = GroupManager()
+    parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
 
+    objects = GroupManager()
 
     @property
     def reference(self):
@@ -82,29 +84,26 @@ class IndividualSet(Set):
 
 
 class IndividualMap(models.Model):
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
         abstract = True
 
 
-class Individual(IndividualMap,Sourceable,models.Model):
-    """ Individual or group of people.
+class Individual(IndividualMap, Sourceable, models.Model):
+    """ Individual.
 
-    Individuals are defined via their characteristics.
+    Individuals are defined via their characteristics, analogue to groups.
     """
     source = models.ForeignKey(DataFile,related_name="individual_sources", null=True,blank=True, on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="individual_figures", null=True,blank=True, on_delete=models.SET_NULL)
 
-    individualset = models.ForeignKey(IndividualSet,on_delete=models.CASCADE, related_name="individuals")
-    group =  models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals",null=True, blank=True)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    ###############
+    individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individuals")
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals", null=True, blank=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     objects = IndividualManager()
-
-
 
     @property
     def reference(self):
@@ -118,7 +117,7 @@ class Individual(IndividualMap,Sourceable,models.Model):
         return self.study.groupset.groups
 
     class Meta:
-        unique_together = ('individualset','name','name_map','source')
+        unique_together = ('individualset', 'name', 'name_map', 'source')
 
     def __str__(self):
         return self.name
@@ -130,11 +129,11 @@ class CharacteristicaBase(models.Model):
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True,
                               blank=True)  # check in validation that allowed choice
     ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH,
-                             default=GROUP_CRITERIA)  # this is for exclusion and inclustion
+                             default=GROUP_CRITERIA)  # this is for exclusion and inclusion
 
-    category_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    ctype_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    category_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    ctype_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
         abstract = True
