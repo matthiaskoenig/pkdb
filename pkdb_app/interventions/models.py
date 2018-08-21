@@ -65,7 +65,7 @@ class Intervention(Valueable, models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     interventionset = models.ForeignKey(InterventionSet, related_name="interventions", on_delete=models.CASCADE)
-    substance = models.ForeignKey(Substance, null=True,blank=False, on_delete=False)#substance: # what was given ['
+    substance = models.ForeignKey(Substance, null=True,blank=False, on_delete=models.SET_NULL)#substance: # what was given ['
     route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_ROUTE_CHOICES)# route: # where ['oral', 'iv']
     form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_FORM_CHOICES)
     application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True,null=True, choices=INTERVENTION_APPLICATION_CHOICES) # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
@@ -100,7 +100,7 @@ class Intervention(Valueable, models.Model):
 class CleanIntervention(Intervention):
     """ Calculated from medicationstep
     """
-    raw = models.ForeignKey(Intervention, related_name="clean", on_delete=True)
+    raw = models.ForeignKey(Intervention, related_name="clean", on_delete=models.CASCADE)
 # -----------------
 # RESULTS
 # -----------------
@@ -110,11 +110,11 @@ class OutputSet(Set):
     objects = OutputSetManager()
 
 class BaseOutput(models.Model):
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=False)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=False)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     #intervention = models.ForeignKey(Intervention,null=True, blank=True, on_delete=False)
     interventions = models.ManyToManyField(Intervention)
-    substance = models.ForeignKey(Substance, null=True, blank=True,on_delete=False)
+    substance = models.ForeignKey(Substance, null=True, blank=True,on_delete=models.SET_NULL)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=OUTPUT_TISSUE_DATA_CHOICES ,null=True, blank=True)
 
     class Meta:
@@ -177,11 +177,11 @@ class Timecourse(OutputMap,Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseO
 
 
 class CleanOutput(Output):
-    raw = models.ForeignKey(Output, related_name="clean", null=True, on_delete=True)
+    raw = models.ForeignKey(Output, related_name="clean", null=True, on_delete=models.CASCADE)
 
 
 class CleanTimecourse(Timecourse):
-    raw = models.ForeignKey(Timecourse, related_name="clean", null=True, on_delete=True)
+    raw = models.ForeignKey(Timecourse, related_name="clean", null=True, on_delete=models.CASCADE)
 
 
 '''

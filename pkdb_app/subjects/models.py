@@ -60,7 +60,7 @@ class Group(models.Model):
     A group can be a subgroup of another group via the parent field.
     All characteristica of the parent group are also in the child group.
     """
-    groupset = models.ForeignKey(GroupSet, on_delete=models.SET_NULL, null=True, related_name="groups")
+    groupset = models.ForeignKey(GroupSet, on_delete=models.CASCADE, null=True, related_name="groups")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()  # number of people/animals/objects in group
     parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
@@ -148,7 +148,7 @@ class CleanIndividual(AbstractIndividual):
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="c_individuals")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="c_individuals", null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    raw = models.ForeignKey(Individual, related_name="clean", null=True, on_delete=True)
+    raw = models.ForeignKey(Individual, related_name="cleaned", null=True, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('individualset', 'name')
@@ -237,5 +237,5 @@ class CleanCharacteristica(Characteristica):
 
     - convert exclusion to inclusion criteria
     """
-    raw = models.ForeignKey(Characteristica, related_name="clean", null=True, on_delete=True)
+    raw = models.ForeignKey(Characteristica, related_name="clean", null=True, on_delete=models.CASCADE)
     # TODO: add methods for doing the processing & automatic update if corresponding
