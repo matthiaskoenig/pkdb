@@ -74,6 +74,7 @@ UNIT_DATA = UNIT_TIME + [
     # AUC
     UnitType("mg*h/l"),
     UnitType("µg*h/ml"),   # -> mg*h/l
+    UnitType("µg/ml*h"),   # -> mg*h/l
     UnitType("mg*min/l"),  # -> mg*h/l
     UnitType("µmol*h/l"),  # -> mg*h/l (with molar weight)
     UnitType("µmol/l*h"),  # -> mg*h/l (with molar weight)
@@ -219,6 +220,8 @@ SUBSTANCES_DATA = [
     "tizanidine",
     "venlafaxine",
     "lomefloxacin",
+    "ephedrine",
+    "pseudoephedrine",
 
     "ibuprofen",
     "aspirin",
