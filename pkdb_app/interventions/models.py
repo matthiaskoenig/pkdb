@@ -75,14 +75,28 @@ class AbstractIntervention(models.Model):
         return self.name
 
 
-class InterventionEx(Valueable,ValueableMap,AbstractIntervention):
+class AbstractInterventionMap(models.Model):
+
+    form_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    application_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    route_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class InterventionEx(Valueable,ValueableMap,AbstractIntervention,AbstractInterventionMap):
     """ Intervention (external curated layer).
 
        """
-    source = models.ForeignKey(DataFile, related_name="intervention_exs", null=True, blank=True,
+    source = models.ForeignKey(DataFile, related_name="s_intervention_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    figure = models.ForeignKey(DataFile, related_name="intervention_exs", null=True, blank=True,
+    figure = models.ForeignKey(DataFile, related_name="f_intervention_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
 
     interventionset = models.ForeignKey(InterventionSet, related_name="interventions_exs", on_delete=models.CASCADE)
@@ -102,8 +116,7 @@ class Intervention(Valueable, AbstractIntervention):
     ex = models.ForeignKey(IndividualEx, related_name="interventions", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
-    class Meta:
-        unique_together = ('ex__interventionset', 'name')
+    # TODO: unique together  unique_together = ('ex__interventionset', 'name')
 
 
 # -------------------------------------------------
@@ -147,8 +160,8 @@ class AbstractOutputMap(models.Model):
 
 
 class OutputEx(AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
-    source = models.ForeignKey(DataFile, related_name="output_exs", null=True, blank=True,on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="output_exs", null=True, blank=True,on_delete=models.SET_NULL)
+    source = models.ForeignKey(DataFile, related_name="s_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="f_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True, blank=True)
 
 
@@ -162,8 +175,8 @@ class Output(Valueable, AbstractOutput):
 
 class TimecourseEx(AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
 
-    source = models.ForeignKey(DataFile, related_name="timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
+    source = models.ForeignKey(DataFile, related_name="s_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True, blank=True)
 
 

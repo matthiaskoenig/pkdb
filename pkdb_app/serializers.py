@@ -1,8 +1,7 @@
-import numpy as np
+from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
-from rest_framework.settings import api_settings
 
 from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile
 from pkdb_app.studies.models import Reference
@@ -10,28 +9,17 @@ from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.models import User
 from pkdb_app.utils import get_or_val_error
 
-import traceback
-import logging
-
 ITEM_SEPARATOR = '||'
-RELATED_SETS = {
-    "groupset": GroupSet,
-    "individualset": IndividualSet,
-    "interventionset": InterventionSet,
-    "outputset": OutputSet
-}
 
+class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
-class WrongKeySerializer(serializers.ModelSerializer):
-
-
-    def replace_NA(self,dict):
-        for key, value in dict.items():
-            if isinstance(value,str):
-                dict[key].replace("NA","nan")
-
-
+    # ----------------------------------
+    # helper
+    # ----------------------------------
     def validate_wrong_keys(self, data):
+        """
+        validate that all keys correspond to a model field.
+        """
         serializer_fields = self.Meta.fields
         payload_keys = data.keys()
         for payload_key in payload_keys:
@@ -39,20 +27,124 @@ class WrongKeySerializer(serializers.ModelSerializer):
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise serializers.ValidationError(msg)
 
-    # def to_internal_value(self, data):
-    #    self.validate_wrong_keys(data)
-    #    return super().to_internal_value(data)
+    # ----------------------------------
+    #
+    # ----------------------------------
 
     def validate(self, attrs):
         self.validate_wrong_keys(attrs)
         return super().validate(attrs)
 
 
-class BaseSerializer(WrongKeySerializer):
+    def to_representation(self, instance):
+        """
+        display only keys, which are not None
+        """
+        result = super().to_representation(instance)
+        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+
+class MappingSerializer(WrongKeyValidationSerializer):
+    # ----------------------------------
+    # helper
+    # ----------------------------------
+    @staticmethod
+    def transform_map_fields(data):
+        """
+        replaces key with f"{key}_map" if value contains special syntax.( ==, || )
+        """
+        splitted_data = {}
+        for key, value in data.items():
+            if isinstance(value, str):
+                if "==" in value or "||" in value:
+                    splitted_data[f"{key}_map"] = data.get(key)
+                else:
+                    splitted_data[key] = data.get(key)
+            else:
+                splitted_data[key] = data.get(key)
+
+        return splitted_data
+
+    @staticmethod
+    def retransform_map_fields(data):
+        cleaned_result = {}
+        for k, v in data.items():
+            if "_map" in k:
+                k = k[:-4]
+            if v is None:
+                continue
+            cleaned_result[k] = v
+        return cleaned_result
+
+    # ----------------------------------
+    #
+    # ----------------------------------
+
+    def to_internal_value(self, data):
+        data = self.transform_map_fields(data)
+        return super().to_internal_value(data)
+
+    def to_representation(self, instance):
+
+        rep = self.retransform_map_fields(super().to_representation(instance))
+
+        #url representation of file
+        for file in ["source", "figure"]:
+            if file in rep:
+                current_site = f'http://{get_current_site(self.context["request"]).domain}'
+                rep[file] = current_site + getattr(instance, file).file.url
+
+
+        return self.retransform_map_fields(super().to_representation(instance))
+
+
+class ExSerializer(MappingSerializer):
+
+    def ex_mapping(self):
+        return {"individual_exs":"individuals",
+                "individual_ex": "individuals",
+                "intervention_exs": "interventions",
+                "group_exs": "groups",
+                "characteristica_ex":"characteristica"
+                }
+
+    def rev_ex_mapping(self):
+        return {(v, k) for k, v in self.ex_mapping().items()}
+
+    def transform_ex_fields(self,data):
+        transform_data = {}
+        for key, value in data.items():
+            ex_key = self.rev_ex_mapping().get(key)
+            if ex_key:
+                transform_data[ex_key] = value
+            else:
+                transform_data[key] = value
+        return transform_data
+
+
+    def retransform_ex_fields(self,data):
+        transform_data = {}
+        for key, value in data.items():
+            ex_key = self.ex_mapping().get(key)
+            if ex_key:
+                transform_data[ex_key] = value
+            else:
+                transform_data[key] = value
+        return transform_data
+
+
+    def to_internal_value(self, data):
+        data = self.transform_ex_fields(data)
+        return super().to_internal_value(data)
+
+    def to_representation(self, instance):
+        return self.retransform_ex_fields(super().to_representation(instance))
+
+
+class SidSerializer(WrongKeyValidationSerializer):
     """
-    This Serializer is overwriting a the is_valid method. If sid already exists. It adds a instance to the class.
-    This triggers the update method instead of the create method of the serializer.
-    """
+       This Serializer is overwriting a the is_valid method. If sid already exists. It adds a instance to the class.
+       This triggers the update method instead of the create method of the serializer.
+       """
 
     def is_valid(self, raise_exception=False):
 
@@ -75,47 +167,10 @@ class BaseSerializer(WrongKeySerializer):
             # data={something} proceed as usual
             return super().is_valid(raise_exception)
 
-    @staticmethod
-    def create_relations(study, related):
-        for name, model in RELATED_SETS.items():
-            if related[name] is not None:
-                 if getattr(study,name):
-                    getattr(study,name).delete()
-                 instance = model.objects.create(**related[name])
-                 instance.save()
-                 setattr(study, name, instance)
-
-        for curator_data in related["curators"]:
-            curator = get_or_val_error(User, username=curator_data)
-            study.curators.add(curator)
-
-        for substance_data in related["substances"]:
-
-            substance = get_or_val_error(Substance, name=substance_data)
-            study.substances.add(substance)
-
-        if related["files"]:
-            study.files.all().delete()
-            for file_pk in related["files"]:
-                study.files.add(file_pk)
-
-        study.save()
-
-        return study
-
-    @staticmethod
-    def pop_relations(validated_data):
-
-        related_foreinkeys = RELATED_SETS.copy()
-        related_foreinkeys["reference"] = Reference
-        related_many2many = {"substances": Substance,"curators": User,"files": DataFile}
-        related_foreinkeys_dict = {name:validated_data.pop(name, None) for name,_ in related_foreinkeys.items()}
-        related_many2many_dict = {name:validated_data.pop(name, []) for name,_  in related_many2many.items()}
-        related = {**related_foreinkeys_dict,**related_many2many_dict}
-        return related
+'''
 
 
-class ParserSerializer(WrongKeySerializer):
+class ParserValidationSerializer(WrongKeyValidationSerializer):
 
     @staticmethod
     def split_entries_for_key(data, key):
@@ -212,18 +267,6 @@ class ParserSerializer(WrongKeySerializer):
         for entry in raw:  # output
             entries = split_entry(entry)
             cleaned.extend(entries)
-            '''
-            try:
-                entries = split_entry(entry)
-                cleaned.extend(entries)
-            except Exception as err:
-                raise serializers.ValidationError([
-                    f"ValueError in splitting entries",
-                    entry,
-                    traceback.format_exc()]) from err
-            '''
-
-        # overwrite data
         data[key] = cleaned
 
         return data
@@ -288,3 +331,4 @@ class ParserSerializer(WrongKeySerializer):
     def to_representation(self, instance):
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+'''
