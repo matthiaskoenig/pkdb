@@ -47,6 +47,7 @@ UNIT_DATA = UNIT_TIME + [
     UnitType('kg'),
     UnitType("mg"),
     UnitType("mmHg"),
+    UnitType("µmol"),
 
     # reverse time units
     UnitType('1/week'),
@@ -87,9 +88,10 @@ UNIT_DATA = UNIT_TIME + [
 
     # clearance
     UnitType("ml/min"),
-    UnitType("ml/h"),  # -> ml/min
-    UnitType("ml/h/kg"),
-    UnitType("ml/min/kg"),  # -> ml/h/kg
+    UnitType("ml/h"),       # -> ml/min
+    UnitType("l/h/kg"),
+    UnitType("ml/h/kg"),    # -> l/h/kg
+    UnitType("ml/min/kg"),  # -> l/h/kg
     UnitType("ml/min/1.73m^2"),
 ]
 
@@ -346,6 +348,7 @@ PK_DATA = [
     "auc_end",  # Area under the curve, until end time point (time has to be given as time attribute)
 
     "amount",
+    "cum_amount",  # cumulative amount
     "concentration",
     "ratio",
 
@@ -377,7 +380,6 @@ INTERVENTION_DATA = [
     CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
 ]
-
 def dict_and_choices(data):
     data_dict = {item.value: item for item in data}
     data_choices = [(ctype.value, ctype.value) for ctype in data]
