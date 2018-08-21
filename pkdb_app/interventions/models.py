@@ -7,79 +7,57 @@ group or individual).
 from django.db import models
 
 from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputManager
-from ..behaviours import Valueable, ValueableMap, Sourceable
+from ..behaviours import Valueable, ValueableMap
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
-from ..subjects.models import Group, IndividualEx, Set, DataFile
+from ..subjects.models import Group, IndividualEx, DataFile
 from ..utils import CHAR_MAX_LENGTH
 
+
 # -------------------------------------------------
-# Intervention
+# Substance
 # -------------------------------------------------
-
-# Important to store raw DataSets & Corresponding Figures/Tables
-#
-
-# How can data sets look
-# - CharacteristicValues (value +- SE in n subjects) -> e.g. pharmacokinetics data
-# - mean timecourse +- SE/SD
-# - individual time courses
-
-# Simple pharmacokinetics
-
-
-# How to represent the dosing?
-# Add separate class? extension of model?
-
-#####################################
-#new
-
-
 class Substance(models.Model):
     """ Substances have to be in a different table, so that
     than be uniquely defined.
 
     Has to be extended via ontology (Ontologable)
-
     """
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=SUBSTANCES_DATA_CHOICES)
 
-    #name # example caffeine
     # ontologies: has set of defined values: is, CHEBI:27732
 
     def __str__(self):
         return self.name
 
 
-class InterventionSet(Set):
+# -------------------------------------------------
+# Intervention
+# -------------------------------------------------
+class InterventionSet(models.Model):
     objects = InterventionSetManager()
 
-class Intervention(Valueable, models.Model):
-    """ A concrete step/thing which is done to the group.
 
-         In case of dosing/medication the actual dosing is stored in the Valueable.
-         In case of a step without dosing, e.g., lifestyle intervention only the category is used.
-      """
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-
-    interventionset = models.ForeignKey(InterventionSet, related_name="interventions", on_delete=models.CASCADE)
-    substance = models.ForeignKey(Substance, null=True, blank=False,
-                                  on_delete=models.SET_NULL)  # substance: # what was given ['
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True,
-                             choices=INTERVENTION_ROUTE_CHOICES)  # route: # where ['oral', 'iv']
+class AbstractIntervention(models.Model):
     form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True, choices=INTERVENTION_FORM_CHOICES)
     application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True,
                                    choices=INTERVENTION_APPLICATION_CHOICES)  # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
+
     time = models.FloatField(null=True,
                              blank=False)  # application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=TIME_UNITS_CHOICES)
 
-    ######
-    # probably should be deleted
-    category = models.CharField(max_length=CHAR_MAX_LENGTH, choices=INTERVENTION_CHOICES, null=True, blank=True)
+    substance = models.ForeignKey(Substance, null=True, blank=False,
+                                  on_delete=models.SET_NULL)  # substance: # what was given ['
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True,
+                             choices=INTERVENTION_ROUTE_CHOICES)  # route: # where ['oral', 'iv']
 
-    # choice = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,blank=True)
+    category = models.CharField(choices=INTERVENTION_CHOICES, max_length=CHAR_MAX_LENGTH)
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True,blank=True)
+
+    class Meta:
+        abstract = True
 
     @property
     def intervention_data(self):
@@ -93,26 +71,54 @@ class Intervention(Valueable, models.Model):
     def choices(self):
         return self.intervention_data.choices
 
-    class Meta:
-        unique_together = ('interventionset', 'name')
-
     def __str__(self):
         return self.name
 
 
+class InterventionEx(Valueable,ValueableMap,AbstractIntervention):
+    """ Intervention (external curated layer).
 
-# -----------------
+       """
+    source = models.ForeignKey(DataFile, related_name="intervention_exs", null=True, blank=True,
+                               on_delete=models.SET_NULL)
+    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    figure = models.ForeignKey(DataFile, related_name="intervention_exs", null=True, blank=True,
+                               on_delete=models.SET_NULL)
+
+    interventionset = models.ForeignKey(InterventionSet, related_name="interventions_exs", on_delete=models.CASCADE)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('interventionset', 'name', 'name_map', 'source')
+
+
+class Intervention(Valueable, AbstractIntervention):
+    """ A concrete step/thing which is done to the group.
+
+         In case of dosing/medication the actual dosing is stored in the Valueable.
+         In case of a step without dosing, e.g., lifestyle intervention only the category is used.
+      """
+    ex = models.ForeignKey(IndividualEx, related_name="interventions", null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+
+    class Meta:
+        unique_together = ('ex__interventionset', 'name')
+
+
+# -------------------------------------------------
 # RESULTS
-# -----------------
-#
+# -------------------------------------------------
 
-class OutputSet(Set):
+
+class OutputSet(models.Model):
     objects = OutputSetManager()
 
-class BaseOutput(models.Model):
+
+class AbstractOutput(models.Model):
+
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
-    #intervention = models.ForeignKey(Intervention,null=True, blank=True, on_delete=False)
     interventions = models.ManyToManyField(Intervention)
     substance = models.ForeignKey(Substance, null=True, blank=True,on_delete=models.SET_NULL)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=OUTPUT_TISSUE_DATA_CHOICES ,null=True, blank=True)
@@ -123,7 +129,9 @@ class BaseOutput(models.Model):
     class Meta:
         abstract = True
 
-class BaseOutputMap(models.Model):
+
+class AbstractOutputMap(models.Model):
+
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
@@ -138,53 +146,31 @@ class BaseOutputMap(models.Model):
         abstract = True
 
 
-class CleanOutput(Sourceable,Valueable,BaseOutput,models.Model):
+class OutputEx(AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
+    source = models.ForeignKey(DataFile, related_name="output_exs", null=True, blank=True,on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="output_exs", null=True, blank=True,on_delete=models.SET_NULL)
+    outputset = models.ForeignKey(OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True, blank=True)
+
+
+class Output(Valueable, AbstractOutput):
 
     """ Storage of data sets. """
 
-    source = models.ForeignKey(DataFile, related_name="c_output_sources", null=True, blank=True,on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="c_output_figures", null=True, blank=True,on_delete=models.SET_NULL)
-    outputset = models.ForeignKey(OutputSet, related_name="c_outputs", on_delete=models.CASCADE, null=True, blank=True)
-
-    raw = models.ForeignKey("Output", related_name="cleaned", on_delete=models.CASCADE)
-
-
-class Output(Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutput,models.Model):
-
-    """ Storage of data sets. """
-
-    source = models.ForeignKey(DataFile, related_name="output_sources",null=True,blank=True, on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="output_figures",null=True,blank=True, on_delete=models.SET_NULL)
-    outputset = models.ForeignKey(OutputSet, related_name="outputs", on_delete=models.CASCADE,null=True, blank=True)
+    ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
     objects = OutputManager()
 
-class CleanTimecourse(Sourceable,Valueable,BaseOutput,models.Model):
 
-    source = models.ForeignKey(DataFile, related_name="c_timecourse_sources", null=True, blank=True,
-                               on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="c_timecourse_figures", null=True, blank=True,
-                               on_delete=models.SET_NULL)
-    outputset = models.ForeignKey(OutputSet, related_name="c_timecourses", on_delete=models.CASCADE, null=True,
-                                  blank=True)
+class TimecourseEx(AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
 
-    raw = models.ForeignKey("Timecourse", related_name="cleaned", null=True, on_delete=models.CASCADE)
+    source = models.ForeignKey(DataFile, related_name="timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
+    outputset = models.ForeignKey(OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True, blank=True)
 
 
 
-class Timecourse(Sourceable,ValueableMap,Valueable,BaseOutputMap,BaseOutput,models.Model):
+class Timecourse(Valueable, AbstractOutput):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
-    source = models.ForeignKey(DataFile, related_name="timecourse_sources",null=True,blank=True,on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="timecourse_figures",null=True,blank=True, on_delete=models.SET_NULL)
-    outputset = models.ForeignKey(OutputSet, related_name="timecourses", on_delete=models.CASCADE,null=True, blank=True)
-    objects = OutputManager()
-
-
-
-
-
-
-
-
+    ex = models.ForeignKey(TimecourseEx, related_name="outputs", on_delete=models.CASCADE)

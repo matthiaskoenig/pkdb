@@ -166,7 +166,7 @@ class Individual(AbstractIndividual):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     class Meta:
-        unique_together = ('individualset', 'name')
+        unique_together = ('ex__individualset', 'name')
 
     @property
     def source(self):
@@ -211,7 +211,7 @@ class AbstractCharacteristica(models.Model):
         return self.characteristic_data.choices
 
 
-class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable, models.Model):
+class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable):
     """ Characteristica  (external curated layer).
 
         Characteristics are used to store information about a group of subjects.
