@@ -1,5 +1,4 @@
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
 from rest_framework import serializers
 
 from pkdb_app.utils import update_or_create_multiple, get_or_val_error

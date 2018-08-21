@@ -14,7 +14,7 @@ from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
     CleanOutput, CleanTimecourse
 from pkdb_app.serializers import ParserSerializer
-from pkdb_app.subjects.models import Individual, Group, DataFile, CleanIndividual
+from pkdb_app.subjects.models import IndividualEx, Group, DataFile, Individual
 from pkdb_app.utils import unmap_keys, validate_categorials, recursive_iter, set_keys
 
 from pprint import pprint
@@ -75,7 +75,7 @@ class InterventionSetSerializer(ParserSerializer):
 class CleanOutputSerializer(ParserSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
                                                read_only=False, required=False, allow_null=True)
-    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
+    individual = serializers.PrimaryKeyRelatedField(queryset=IndividualEx.objects.all(),
                                                     read_only=False, required=False, allow_null=True)
     interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
                                                        read_only=False, required=False, allow_null=True)
@@ -110,7 +110,7 @@ class CleanOutputSerializer(ParserSerializer):
         if "individual" in data:
             if data["individual"]:
                 try:
-                    data["individual"] = CleanIndividual.objects.get(
+                    data["individual"] = Individual.objects.get(
                         Q(individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
                 except ObjectDoesNotExist:
                     msg = f'individual: clean individual {data.get("individual")} in study: {study_sid} does not exist'
@@ -164,7 +164,7 @@ class OutputSerializer(CleanOutputSerializer):
         if "individual" in data:
             if data["individual"]:
                 try:
-                    data["individual"] = Individual.objects.get(
+                    data["individual"] = IndividualEx.objects.get(
                         Q(individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
                 except ObjectDoesNotExist:
                     msg = f'individual: {data.get("individual")} in study: {study_sid} does not exist'

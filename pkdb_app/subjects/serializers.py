@@ -8,7 +8,7 @@ from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.utils import recursive_iter, set_keys
 from pkdb_app.utils import unmap_keys, validate_categorials
-from .models import Group, GroupSet, Individual, IndividualSet, Characteristica, DataFile, CleanIndividual
+from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristica, DataFile, Individual
 from ..serializers import ParserSerializer, WrongKeySerializer
 from copy import deepcopy
 
@@ -92,7 +92,7 @@ class CleanIndividualSerializer(ParserSerializer):
 
 
     class Meta:
-        model = CleanIndividual
+        model = Individual
         fields = Sourceable.fields() + ["name", "group", "characteristica", "source"]
 
     @staticmethod
@@ -120,7 +120,7 @@ class IndividualSerializer(CleanIndividualSerializer):
 
     class Meta:
 
-        model = Individual
+        model = IndividualEx
         fields = Sourceable.fields() + ["name", "name_map", "group_map", "group", "characteristica",  "source","cleaned"]
 
     def to_internal_value(self, data):
