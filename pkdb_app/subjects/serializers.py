@@ -3,20 +3,83 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.behaviours import Sourceable
 from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.utils import recursive_iter, set_keys
-from pkdb_app.utils import unmap_keys, validate_categorials
-from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristica, DataFile, Individual
-from ..serializers import ParserSerializer, WrongKeySerializer
+from pkdb_app.utils import validate_categorials
+from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristica, DataFile, Individual, \
+    CharacteristicaEx, GroupEx
+from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
 from copy import deepcopy
 
-class DataFileSerializer(WrongKeySerializer):
+SOURCE_FIELDS = ["source","format","figure"]
+
+# ----------------------------------
+# DataFile
+# ----------------------------------
+class DataFileSerializer(WrongKeyValidationSerializer):
     class Meta:
         model = DataFile
         fields = ["file","filetype","id"]
         extra_kwargs = {'id': {'allow_null': False}}
+
+
+# ----------------------------------
+# Characteristica
+# ----------------------------------
+class CharacteristicaExSerializer(MappingSerializer):
+    count = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = CharacteristicaEx
+        fields = ["count","count_map","choice","choice_map","category","choice","ctype"]
+
+# ----------------------------------
+# Group
+# ----------------------------------
+class GroupExSerializer(ExSerializer):
+    characteristica_ex = CharacteristicaExSerializer(many=True, read_only=False, required=False)
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    parent = serializers.CharField()
+    class Meta:
+        model = GroupEx
+        fields = SOURCE_FIELDS + ["name","name_map","count","count_map", "parent", "characteristica_ex"]
+
+
+class GroupSetSerializer(ExSerializer):
+    group_exs = GroupExSerializer(many=True, read_only=False)
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
+
+    class Meta:
+        model = GroupSet
+        fields = ["descriptions","group_exs"]
+
+# ----------------------------------
+# Individual
+# ----------------------------------
+class IndividualExSerializer(ExSerializer):
+    characteristica_ex = CharacteristicaExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    group_ex = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+
+    class Meta:
+        model = IndividualEx
+        fields = SOURCE_FIELDS + ["name","name_map","group_ex","group_ex_map","characteristica_ex"]
+
+
+class IndividualSetSerializer(ExSerializer):
+
+    individual_exs = IndividualExSerializer(many=True, read_only=False, required=False )
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
+
+    class Meta:
+        model = IndividualSet
+        fields = ["descriptions", "individual_exs"]
+
+
+'''
 
 
 class CharacteristicaSerializer(ParserSerializer):
@@ -93,7 +156,7 @@ class CleanIndividualSerializer(ParserSerializer):
 
     class Meta:
         model = Individual
-        fields = Sourceable.fields() + ["name", "group", "characteristica", "source"]
+        fields = ["name", "group", "characteristica", "source","figure","format"]
 
     @staticmethod
     def group_to_internal_value(group,study_sid):
@@ -121,7 +184,7 @@ class IndividualSerializer(CleanIndividualSerializer):
     class Meta:
 
         model = IndividualEx
-        fields = Sourceable.fields() + ["name", "name_map", "group_map", "group", "characteristica",  "source","cleaned"]
+        fields =  ["name", "name_map", "group_map", "group", "characteristica",  "source","cleaned"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
@@ -215,34 +278,6 @@ class IndividualSerializer(CleanIndividualSerializer):
         return validated_data
 
 
-    '''
-    def parse_individuals(self,data):
-    """
-    later for parsing individuals from a dataset
-    """
-    try:
-        individuals = data
-        unpacked_individuals = []
-        for individual in individuals:
-            src =  individual.pop("source")  # todo: upload data first and then have the data saved here not the path.
-            characteristica_mapping =  individual.pop("characteristica")
-
-            delimiter = FORMAT_MAPPING[ individual.pop("format")].delimiter
-            individual_mapping =  individual
-            table = pd.read_csv(src, delimiter=delimiter, keep_default_na=False)
-            characteristica_table = self.mapping_parser(characteristica_mapping,table)
-            individuals_table = self.mapping_parser(individual_mapping,table)
-            individuals_table["characteristica"] = characteristica_table.to_dict('records')
-            unpacked_individuals += individuals_table.to_dict('recods')
-
-        data = unpacked_individuals
-
-    except KeyError:
-        pass
-    return data
-    '''
-
-
 class IndividualSetSerializer(ParserSerializer):
 
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False)
@@ -262,3 +297,4 @@ class IndividualSetSerializer(ParserSerializer):
 
         return unmap_keys(super().to_representation(instance))
 
+'''

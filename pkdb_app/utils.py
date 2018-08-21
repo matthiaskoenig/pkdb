@@ -1,7 +1,6 @@
 
 import os
 from django.core.exceptions import ValidationError
-#from rest_framework.exceptions import ValidationError
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_TYPE, INTERVENTION_DICT
 
@@ -77,15 +76,7 @@ def validate_categorials(data, model_name):
                 raise ValidationError({"unit":msg})
     return data
 
-def unmap_keys(data):
-    cleaned_result = {}
-    for k, v in data.items():
-        if "_map" in k:
-            k = k[:-4]
-        if v is None:
-            continue
-        cleaned_result[k] = v
-    return cleaned_result
+
 
 def recursive_iter(obj, keys=()):
     """ Creates dictionary with key:object from nested JSON data structure. """

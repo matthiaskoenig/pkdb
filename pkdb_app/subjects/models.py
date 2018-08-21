@@ -54,17 +54,17 @@ class GroupEx(AbstractGroup):
     Groups are defined via their characteristica.
     A group can be a subgroup of another group via the parent field.
     """
-    source = models.ForeignKey(DataFile, related_name="group_exs", null=True, blank=True,
-                               on_delete=models.SET_NULL)
+    source = models.ForeignKey(DataFile, related_name="s_group_exs", null=True, blank=True,
+                                on_delete=models.SET_NULL)
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    figure = models.ForeignKey(DataFile, related_name="group_exs", null=True, blank=True,
+    figure = models.ForeignKey(DataFile, related_name="f_group_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
     groupset = models.ForeignKey(GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs")
 
     parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    count = models.IntegerField()  # number of people/animals/objects in group
+    count = models.IntegerField()
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     objects = GroupManager()
@@ -91,8 +91,8 @@ class Group(models.Model):
 
     objects = GroupManager()
 
-    class Meta:
-        unique_together = ('ex__groupset', 'name')
+    #class Meta:
+    #todo: in validator unique_together = ('ex__groupset', 'name')
 
     @property
     def source(self):
@@ -126,15 +126,15 @@ class IndividualEx(AbstractIndividual):
     This contains maps and splittings.
     Individuals are defined via their characteristics, analogue to groups.
     """
-    source = models.ForeignKey(DataFile, related_name="individual_exs", null=True, blank=True,
+    source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    figure = models.ForeignKey(DataFile, related_name="individual_exs", null=True, blank=True,
+    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
 
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True, blank=True)
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    group_ex = models.ForeignKey(GroupEx, on_delete=models.CASCADE, related_name="individual_exs", null=True, blank=True)
+    group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
@@ -165,8 +165,7 @@ class Individual(AbstractIndividual):
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
-    class Meta:
-        unique_together = ('ex__individualset', 'name')
+    # TODO: unique together  unique_together = ('ex__individualset', 'name')
 
     @property
     def source(self):
@@ -175,6 +174,7 @@ class Individual(AbstractIndividual):
     @property
     def figure(self):
         return self.ex.figure
+
 
 
 # ----------------------------------
