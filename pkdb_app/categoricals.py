@@ -39,54 +39,57 @@ UNIT_TIME = [
 TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
 
 UNIT_DATA = UNIT_TIME + [
+    # base units
     UnitType('-'),
     UnitType('%'),  # dimensionless * 100
     UnitType('cm'),
     UnitType('m'),
     UnitType('kg'),
+    UnitType("mg"),
+    UnitType("mmHg"),
 
+    # reverse time units
     UnitType('1/week'),
     UnitType('1/day'),
     UnitType('1/h'),
     UnitType('1/min'),
     UnitType('1/s'),
 
+    # misc units
+    UnitType("mg/kg"),
+    UnitType("mg/day"),
     UnitType('kg/m^2'),
-
     UnitType('IU/I'),
-    UnitType('mg/dl'),
-    UnitType('g/dl'),
-    UnitType('l/kg'),
-    UnitType("ml/min/kg"),
+    UnitType("l/h"),
 
+    # concentration
     UnitType("µg/ml"),
-    UnitType("µmol/l"),
-
-    UnitType("ng/ml"),
-    UnitType("mg"),
-    UnitType("mmHg"),
-    UnitType("ml/min/1.73m^2"),
-
-    UnitType("µg/ml*h/kg"),
+    UnitType('mg/dl'),  # -> µg/ml
+    UnitType("mg/l"),    # -> µg/ml
+    UnitType("µmol/l"),  # -> µg/ml (with molar weight)
+    UnitType("nmol/l"),  # -> µg/ml (with molar weight)
+    UnitType('g/dl'),    # -> µg/dl
+    UnitType("ng/ml"),   # -> µg/ml
 
     # AUC
     UnitType("mg*h/l"),
     UnitType("µg*h/ml"),   # -> mg*h/l
     UnitType("mg*min/l"),  # -> mg*h/l
-    UnitType("µmol*h/l"),
+    UnitType("µmol*h/l"),  # -> mg*h/l (with molar weight)
+    UnitType("µmol/l*h"),  # -> mg*h/l (with molar weight)
+    UnitType("µg/ml*h/kg"),  # -> mg*h/l/kg
 
-    UnitType("l/h"),
+    # Volume of distribution (vd)
     UnitType("l"),
     UnitType('l/kg'),
-    UnitType('ml/kg'),
+    UnitType('ml/kg'),  # -> l/kg
 
     # clearance
     UnitType("ml/min"),
+    UnitType("ml/h"),  # -> ml/min
     UnitType("ml/h/kg"),
-
-    UnitType("mg/l"),
-    UnitType("mg/kg"),
-    UnitType("mg/day")
+    UnitType("ml/min/kg"),  # -> ml/h/kg
+    UnitType("ml/min/1.73m^2"),
 ]
 
 
@@ -168,7 +171,7 @@ SUBSTANCES_DATA = [
     # acetaminophen
     "acetaminophen",
 
-    # caffeine
+    # caffeine (CYP2A1)
     "caffeine",
     "paraxanthine",
     "theobromine",
@@ -193,11 +196,10 @@ SUBSTANCES_DATA = [
     "17U/17X",
     "1U/(1U+1X)",
     "AFMU/(AFMU+1U+1X)",
-
     # caffeine interaction
     "fluvoxamine",
-
-    # quinolones
+    "naringenin",
+    "grapefruit juice",
     "quinolone",
     "pipemidic acid",
     "norfloxacin",
@@ -233,9 +235,7 @@ SUBSTANCES_DATA = [
     "aminopyrine",
     "antipyrine",
     "bromsulpthalein",
-    "midazolam",
     "phenylalanine",
-    "omeprazole",
     "indocyanine green",
     "morphine",
 
@@ -243,17 +243,26 @@ SUBSTANCES_DATA = [
     "FFA",
 
     "carbamazepine",
+
+    # midazolam
     "midazolam",
     "1-hydroxymidazolam",
-    "digoxin",
+
+    # losartan
     "losartan",
     "exp3174",
-    # omeprazole
+
+    # omeprazole (CYP2C19)
     "omeprazole",
     "5-hydroxyomeprazole",
+    "5-hydroxyomeprazole/omeprazole",
 
+    # dextromethorphan
     "dextromethorphan",
     "dextrorphan",
+
+    "digoxin",
+    "clozapine",
 
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
@@ -294,7 +303,7 @@ CHARACTERISTIC_DATA = [
 
     # -------------- Medication --------------
     CharacteristicType('medication', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine"], ["-"]),
     CharacteristicType('medication amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
     CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
