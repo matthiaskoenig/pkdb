@@ -115,13 +115,13 @@ class CleanIndividualSerializer(ParserSerializer):
 
 
 class IndividualSerializer(CleanIndividualSerializer):
-    clean = CleanIndividualSerializer(many=True, write_only=True, required=False, allow_null=True)
+    cleaned = CleanIndividualSerializer(many=True, write_only=True, required=False, allow_null=True)
 
 
     class Meta:
 
         model = Individual
-        fields = Sourceable.fields() + ["name", "name_map", "group_map", "group", "characteristica",  "source","clean"]
+        fields = Sourceable.fields() + ["name", "name_map", "group_map", "group", "characteristica",  "source","cleaned"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
@@ -135,7 +135,7 @@ class IndividualSerializer(CleanIndividualSerializer):
         #---------------------------------------
         # add cleaned individuals
         # ---------------------------------------
-        clean_individuals = []
+        cleaned_individuals = []
         recursive_individual_dict = list(recursive_iter(initial_data))
 
 
@@ -182,12 +182,12 @@ class IndividualSerializer(CleanIndividualSerializer):
 
 
 
-                clean_individuals.append(deepcopy(individual_dict))
+                cleaned_individuals.append(deepcopy(individual_dict))
 
         else:
-            clean_individuals.append(initial_data)
+            cleaned_individuals.append(initial_data)
 
-        data["clean"] = clean_individuals
+        data["cleaned"] = cleaned_individuals
         # finish clean individuals
         #-------------------------------------------
 

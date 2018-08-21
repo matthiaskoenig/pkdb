@@ -79,6 +79,8 @@ class BaseSerializer(WrongKeySerializer):
     def create_relations(study, related):
         for name, model in RELATED_SETS.items():
             if related[name] is not None:
+                 if getattr(study,name):
+                    getattr(study,name).delete()
                  instance = model.objects.create(**related[name])
                  instance.save()
                  setattr(study, name, instance)
