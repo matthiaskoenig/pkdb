@@ -173,8 +173,7 @@ class IndividualSerializer(CleanIndividualSerializer):
                                 raise serializers.ValidationError(["field has wrong pattern col=='col_value'",data])
                             try:
                                  individual_value = getattr(individual, values[1])
-                                 if "group" in keys:
-                                     print(individual_value)
+
                             except AttributeError:
                                 raise serializers.ValidationError([f"key <{values[1]}> is missing in file <{source}> ", data])
 

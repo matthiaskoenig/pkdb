@@ -16,21 +16,6 @@ class Sidable(models.Model):
     class Meta:
         abstract = True
 
-
-# FIXME: This has to be more complicated.
-'''
-- multiple users can comment and every comment should be tracked to user with provenance information like
-  timestamp (last modified)
-
-    Comment(model):
-       text
-       user
-       timestamp
-
-- Annotation (annotatable), at some point, but not now
-'''
-
-
 class Blankable(models.Model):
     # when creating the BlankAble class object it will add a __blank_together__
     # attribute corresponding to the same in {YourModel}.MyMeta.blank_together
@@ -56,25 +41,8 @@ class Blankable(models.Model):
         abstract = True
 
 
-class Describable(models.Model):
-    """ Add description field. """
-    description = models.TextField(blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-
-class Hashable(models.Model):
-    """ Add hash key field. """
-    hash = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-
 class Sourceable(models.Model):
-    #source = models.ForeignKey(DataFile, on_delete=False)  # todo: to file_filed
-    #figure = models.CharField(max_length=CHAR_MAX_LENGTH*5,null=True, blank=True)  # todo: to file_filed
+
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:

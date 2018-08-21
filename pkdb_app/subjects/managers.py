@@ -7,7 +7,7 @@ from django.db import models
 class GroupManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
-        group = super(GroupManager, self).create(*args, **kwargs)
+        group = super().create(*args, **kwargs)
         group.characteristica.all().delete()
         for characteristica_single in characteristica:
             characteristica_single["count"] = characteristica_single.get("count", group.count)
@@ -18,18 +18,9 @@ class GroupManager(models.Manager):
 
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
-        #characteristica = kwargs.pop("characteristica", [])
         descriptions = kwargs.pop("descriptions", [])
-
-
         groups = kwargs.pop("groups", [])
-
-        groupset = super(GroupSetManager, self).create(*args, **kwargs)
-        groupset.characteristica.all().delete()
-        groupset.groups.all().delete()
-
-        #for characteristica_single in characteristica:
-        #    groupset.characteristica.create(**characteristica_single)
+        groupset = super().create(*args, **kwargs)
 
         for description in descriptions:
             groupset.descriptions.create(**description)
@@ -55,8 +46,7 @@ class IndividualManager(models.Manager):
         characteristica = kwargs.pop("characteristica", [])
         cleaned = kwargs.pop("cleaned", [])
 
-        individual = super(IndividualManager, self).create(*args, **kwargs)
-        individual.characteristica.all().delete()
+        individual = super().create(*args, **kwargs)
         for characteristica_single in characteristica:
             individual.characteristica.create(**characteristica_single)
         for clean_single in cleaned:
@@ -75,9 +65,7 @@ class IndividualSetManager(models.Manager):
 
 
 
-        individualset = super(IndividualSetManager, self).create(*args, **kwargs)
-        individualset.characteristica.all().delete()
-        individualset.individuals.all().delete()
+        individualset = super().create(*args, **kwargs)
 
         for description in descriptions:
             individualset.descriptions.create(**description)
