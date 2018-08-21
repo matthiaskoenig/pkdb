@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 from pkdb_app.interventions.models import Intervention, InterventionSet, Timecourse, OutputSet, Output
 from pkdb_app.studies.models import Reference, Study
-from pkdb_app.subjects.models import Individual, IndividualSet, Characteristica, GroupSet, Group
+from pkdb_app.subjects.models import IndividualEx, IndividualSet, Characteristica, GroupSet, Group
 from pkdb_app.users.models import User
 
 
@@ -14,7 +14,7 @@ class Comment(models.Model):
     time = models.DateTimeField(auto_created=True)
     ####
 
-    individual = models.ForeignKey(Individual,related_name="comments",blank=True, null=True, on_delete=models.SET_NULL)
+    individual = models.ForeignKey(IndividualEx, related_name="comments", blank=True, null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet,related_name="comments",blank=True, null=True, on_delete=models.SET_NULL)
     group = models.ForeignKey(Group,related_name="comments", blank=True, null=True,on_delete=models.SET_NULL)
     groupset = models.ForeignKey(GroupSet,related_name="comments",blank=True, null=True, on_delete=models.SET_NULL)

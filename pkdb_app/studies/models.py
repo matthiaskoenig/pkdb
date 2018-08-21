@@ -59,8 +59,7 @@ class Study(Sidable, models.Model):
     files = models.ManyToManyField(DataFile)
 
 
-
-#not jet used
+# not yet used
 class KeyWord(models.Model):
     """
     This class describes the keyowrds / tags of a  publication or any other reference.

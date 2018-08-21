@@ -11,7 +11,7 @@ from ..behaviours import Valueable, ValueableMap, Sourceable
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
-from ..subjects.models import Group, Individual, Set, DataFile
+from ..subjects.models import Group, IndividualEx, Set, DataFile
 from ..utils import CHAR_MAX_LENGTH
 
 # -------------------------------------------------
@@ -111,7 +111,7 @@ class OutputSet(Set):
 
 class BaseOutput(models.Model):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
     #intervention = models.ForeignKey(Intervention,null=True, blank=True, on_delete=False)
     interventions = models.ManyToManyField(Intervention)
     substance = models.ForeignKey(Substance, null=True, blank=True,on_delete=models.SET_NULL)

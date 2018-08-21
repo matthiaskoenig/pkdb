@@ -41,24 +41,12 @@ class Blankable(models.Model):
         abstract = True
 
 
-class Sourceable(models.Model):
-
-    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-    @staticmethod
-    def fields():
-        return ["source", "figure", "format"]
-
-
 class Valueable(models.Model):
     """ Valuable.
 
     Adds fields to store values with their statistics.
     """
-    count = models.IntegerField(null=True, blank=True)  # how many participants in characteristics
+    # count = models.IntegerField(null=True, blank=True)  # how many participants in characteristics
     value = models.FloatField(null=True, blank=True)
     mean = models.FloatField(null=True, blank=True)
     median = models.FloatField(null=True, blank=True)
@@ -79,7 +67,7 @@ class Valueable(models.Model):
 
 class ValueableMap(models.Model):
     """ ValuableMap. """
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)  # how many participants in characteristics
+    # count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)  # how many participants in characteristics
     value_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     mean_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
