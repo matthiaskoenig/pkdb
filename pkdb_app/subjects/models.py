@@ -8,7 +8,7 @@ From the data structure this has to be handled very similar.
 from django.db import models
 
 from pkdb_app.storage import OverwriteStorage
-from ..behaviours import Valueable, Describable, ValueableMap, Sourceable
+from ..behaviours import Valueable, ValueableMap, Sourceable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
@@ -206,7 +206,6 @@ class Characteristica(CharacteristicaBase, ValueableMap, Valueable, models.Model
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
     c_individual = models.ForeignKey(CleanIndividual, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
-
     individualset = models.ForeignKey(IndividualSet, related_name="characteristica", null=True,blank=True, on_delete=models.CASCADE)
 
 
@@ -230,12 +229,3 @@ class Characteristica(CharacteristicaBase, ValueableMap, Valueable, models.Model
     def choices(self):
         return self.characteristic_data.choices
 
-
-class CleanCharacteristica(Characteristica):
-    """ Processed and normalized data (calculated on change from
-    corresponding raw CharacteristicValue.
-
-    - convert exclusion to inclusion criteria
-    """
-    raw = models.ForeignKey(Characteristica, related_name="clean", null=True, on_delete=models.CASCADE)
-    # TODO: add methods for doing the processing & automatic update if corresponding

@@ -52,3 +52,12 @@ class OutputSetManager(models.Manager):
             outputset.save()
 
         return outputset
+
+class OutputManager(models.Manager):
+    def create(self, *args, **kwargs):
+        cleaned = kwargs.pop("cleaned", [])
+        output = super().create(*args, **kwargs)
+        for clean_single in cleaned:
+            output.cleaned.create(outputset=output.outputset, **clean_single)
+        output.save()
+        return output
