@@ -4,18 +4,6 @@ the managers can be used to overwrite class methods of the models module.
 from django.db import models
 
 
-class GroupExManager(models.Manager):
-    def create(self, *args, **kwargs):
-        characteristica_ex = kwargs.pop("characteristica_ex", [])
-        group_ex = super().create(*args, **kwargs)
-        group_ex.characteristica_ex.all().delete()
-        for characteristica_ex_single in characteristica_ex:
-            characteristica_ex_single["count"] = characteristica_ex_single.get("count", group_ex.count)
-            group_ex.characteristica_ex.create(**characteristica_ex_single)
-        group_ex.save()
-        return group_ex
-
-
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         descriptions = kwargs.pop("descriptions", [])
@@ -32,10 +20,41 @@ class GroupSetManager(models.Manager):
                         if study_group_ex.name == group_ex["parent_ex"]:
                             group_ex["parent_ex"] = study_group_ex
 
+            # create single group_ex
             study_group_ex = groupset.group_exs.create(**group_ex)
             study_group_exs.append(study_group_ex)
         groupset.save()
         return groupset
+
+
+class GroupExManager(models.Manager):
+    def create(self, *args, **kwargs):
+        characteristica_ex = kwargs.pop("characteristica_ex", [])
+        group_ex = super().create(*args, **kwargs)
+        group_ex.characteristica_ex.all().delete()
+        for characteristica_ex_single in characteristica_ex:
+            characteristica_ex_single["count"] = characteristica_ex_single.get("count", group_ex.count)
+            group_ex.characteristica_ex.create(**characteristica_ex_single)
+        group_ex.save()
+        return group_ex
+
+
+class IndividualSetManager(models.Manager):
+    def create(self, *args, **kwargs):
+        individual_exs = kwargs.pop("individual_exs", [])
+        descriptions = kwargs.pop("descriptions", [])
+
+        individualset = super().create(*args, **kwargs)
+
+        for description in descriptions:
+            individualset.descriptions.create(**description)
+
+        # create single individual_ex
+        for individual_ex in individual_exs:
+            individualset.individual_exs.create(**individual_ex)
+
+        individualset.save()
+        return individualset
 
 
 class IndividualExManager(models.Manager):
@@ -50,23 +69,3 @@ class IndividualExManager(models.Manager):
             individual_ex.individuals.create(individualset = individual_ex.individualset, **individual)
         individual_ex.save()
         return individual_ex
-
-
-
-
-class IndividualSetManager(models.Manager):
-    def create(self, *args, **kwargs):
-        individual_exs = kwargs.pop("individual_exs", [])
-        descriptions = kwargs.pop("descriptions", [])
-
-        individualset = super().create(*args, **kwargs)
-
-        for description in descriptions:
-            individualset.descriptions.create(**description)
-
-        for individual_ex in individual_exs:
-            individualset.individual_exs.create(**individual_ex)
-
-        individualset.save()
-        return individualset
-

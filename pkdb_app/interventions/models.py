@@ -41,21 +41,14 @@ class InterventionSet(models.Model):
 
 
 class AbstractIntervention(models.Model):
-    form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True, choices=INTERVENTION_FORM_CHOICES)
-    application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True,
-                                   choices=INTERVENTION_APPLICATION_CHOICES)  # application: # how timing ['single dose', 'multiple doses', 'continuous injection']
-
-    time = models.FloatField(null=True,
-                             blank=False)  # application_time: # when exactly [h] (for multiple times create multiple MedicationSteps)
-    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=TIME_UNITS_CHOICES)
-
-    substance = models.ForeignKey(Substance, null=True, blank=False,
-                                  on_delete=models.SET_NULL)  # substance: # what was given ['
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True,
-                             choices=INTERVENTION_ROUTE_CHOICES)  # route: # where ['oral', 'iv']
-
     category = models.CharField(choices=INTERVENTION_CHOICES, max_length=CHAR_MAX_LENGTH)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True,blank=True)
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True, blank=True)
+    form = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True, choices=INTERVENTION_FORM_CHOICES)
+    application = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
+    time = models.FloatField(null=True, blank=False)
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=TIME_UNITS_CHOICES)
+    substance = models.ForeignKey(Substance, null=True, blank=False, on_delete=models.SET_NULL)
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True, null=True, choices=INTERVENTION_ROUTE_CHOICES)
 
     class Meta:
         abstract = True
@@ -77,24 +70,20 @@ class AbstractIntervention(models.Model):
 
 
 class AbstractInterventionMap(models.Model):
-
-
+    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     form_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     application_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     route_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
         abstract = True
 
 
 class InterventionEx(Externable, Valueable, ValueableMap, AbstractIntervention, AbstractInterventionMap):
-    """ Intervention (external curated layer).
-
-       """
+    """ Intervention (external curated layer)."""
     source = models.ForeignKey(DataFile, related_name="s_intervention_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_intervention_exs", null=True, blank=True,
@@ -123,8 +112,6 @@ class Intervention(Valueable, AbstractIntervention):
 # -------------------------------------------------
 # RESULTS
 # -------------------------------------------------
-
-
 class OutputSet(models.Model):
     objects = OutputSetManager()
 
@@ -153,7 +140,7 @@ class AbstractOutputMap(models.Model):
         abstract = True
 
 
-class OutputEx(Externable ,AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
+class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
 
     source = models.ForeignKey(DataFile, related_name="s_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
@@ -182,7 +169,7 @@ class Output(Valueable, AbstractOutput):
     #objects = OutputManager()
 
 
-class TimecourseEx(Externable, AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
+class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
 
     source = models.ForeignKey(DataFile, related_name="s_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
