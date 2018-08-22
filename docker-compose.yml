@@ -14,7 +14,8 @@ services:
   web:
     restart: always
     environment:
-      - DJANGO_SECRET_KEY=local
+      - PKPD_SECRET_KEY="cgasj6yjpkag"
+      - PKPD_DEFAULT_PASSWORD="pkdb"
 
     image: web
     build: ./

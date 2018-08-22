@@ -39,52 +39,60 @@ UNIT_TIME = [
 TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
 
 UNIT_DATA = UNIT_TIME + [
+    # base units
     UnitType('-'),
     UnitType('%'),  # dimensionless * 100
     UnitType('cm'),
     UnitType('m'),
     UnitType('kg'),
+    UnitType("mg"),
+    UnitType("mmHg"),
+    UnitType("µmol"),
 
+    # reverse time units
     UnitType('1/week'),
     UnitType('1/day'),
     UnitType('1/h'),
     UnitType('1/min'),
     UnitType('1/s'),
 
+    # misc units
+    UnitType("mg/kg"),
+    UnitType("mg/day"),
     UnitType('kg/m^2'),
-
     UnitType('IU/I'),
-    UnitType('mg/dl'),
-    UnitType('g/dl'),
-    UnitType('l/kg'),
-    UnitType("ml/min/kg"),
+    UnitType("l/h"),
 
-    UnitType("Âµg/ml"),
+    # concentration
     UnitType("µg/ml"),
-    UnitType("mg"),
-    UnitType("mmHg"),
-    UnitType("ml/min/1.73m^2"),
-
-    UnitType("µg/ml*h/kg"),
+    UnitType('mg/dl'),  # -> µg/ml
+    UnitType("mg/l"),    # -> µg/ml
+    UnitType("µmol/l"),  # -> µg/ml (with molar weight)
+    UnitType("nmol/l"),  # -> µg/ml (with molar weight)
+    UnitType('g/dl'),    # -> µg/dl
+    UnitType("ng/ml"),   # -> µg/ml
 
     # AUC
     UnitType("mg*h/l"),
     UnitType("µg*h/ml"),   # -> mg*h/l
+    UnitType("µg/ml*h"),   # -> mg*h/l
     UnitType("mg*min/l"),  # -> mg*h/l
-    UnitType("µmol*h/l"),
+    UnitType("µmol*h/l"),  # -> mg*h/l (with molar weight)
+    UnitType("µmol/l*h"),  # -> mg*h/l (with molar weight)
+    UnitType("µg/ml*h/kg"),  # -> mg*h/l/kg
 
-    UnitType("l/h"),
+    # Volume of distribution (vd)
     UnitType("l"),
     UnitType('l/kg'),
-    UnitType('ml/kg'),
+    UnitType('ml/kg'),  # -> l/kg
 
     # clearance
     UnitType("ml/min"),
-    UnitType("ml/h/kg"),
-
-    UnitType("mg/l"),
-    UnitType("mg/kg"),
-    UnitType("mg/day")
+    UnitType("ml/h"),       # -> ml/min
+    UnitType("l/h/kg"),
+    UnitType("ml/h/kg"),    # -> l/h/kg
+    UnitType("ml/min/kg"),  # -> l/h/kg
+    UnitType("ml/min/1.73m^2"),
 ]
 
 
@@ -166,7 +174,7 @@ SUBSTANCES_DATA = [
     # acetaminophen
     "acetaminophen",
 
-    # caffeine
+    # caffeine (CYP2A1)
     "caffeine",
     "paraxanthine",
     "theobromine",
@@ -191,8 +199,10 @@ SUBSTANCES_DATA = [
     "17U/17X",
     "1U/(1U+1X)",
     "AFMU/(AFMU+1U+1X)",
-
-    # quinolones
+    # caffeine interaction
+    "fluvoxamine",
+    "naringenin",
+    "grapefruit juice",
     "quinolone",
     "pipemidic acid",
     "norfloxacin",
@@ -212,6 +222,8 @@ SUBSTANCES_DATA = [
     "tizanidine",
     "venlafaxine",
     "lomefloxacin",
+    "ephedrine",
+    "pseudoephedrine",
 
     "ibuprofen",
     "aspirin",
@@ -228,16 +240,35 @@ SUBSTANCES_DATA = [
     "aminopyrine",
     "antipyrine",
     "bromsulpthalein",
-    "midazolam",
     "phenylalanine",
-    "omeprazole",
     "indocyanine green",
     "morphine",
 
     "glycerol",
     "FFA",
 
-    "carbamazepine"
+    "carbamazepine",
+
+    # midazolam
+    "midazolam",
+    "1-hydroxymidazolam",
+
+    # losartan
+    "losartan",
+    "exp3174",
+
+    # omeprazole (CYP2C19)
+    "omeprazole",
+    "5-hydroxyomeprazole",
+    "5-hydroxyomeprazole/omeprazole",
+
+    # dextromethorphan
+    "dextromethorphan",
+    "dextrorphan",
+
+    "digoxin",
+    "clozapine",
+
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -277,7 +308,7 @@ CHARACTERISTIC_DATA = [
 
     # -------------- Medication --------------
     CharacteristicType('medication', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin"], ["-"]),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine"], ["-"]),
     CharacteristicType('medication amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
     CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -289,6 +320,7 @@ CHARACTERISTIC_DATA = [
     # -------------- Caffeine --------------
     CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["mg/day"]),
+    CharacteristicType('caffeine amount (beverages)', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
 
     # -------------- Smoking --------------
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -309,7 +341,6 @@ CHARACTERISTIC_DATA = [
 
     # --------------Genetic variants --------------
     CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type", "CYP2D6 poor metabolizer"], ["-"]),
-
 ]
 
 PK_DATA = [
@@ -317,6 +348,7 @@ PK_DATA = [
     "auc_end",  # Area under the curve, until end time point (time has to be given as time attribute)
 
     "amount",
+    "cum_amount",  # cumulative amount
     "concentration",
     "ratio",
 
@@ -348,7 +380,6 @@ INTERVENTION_DATA = [
     CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
 ]
-
 def dict_and_choices(data):
     data_dict = {item.value: item for item in data}
     data_choices = [(ctype.value, ctype.value) for ctype in data]

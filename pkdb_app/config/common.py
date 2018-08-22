@@ -4,11 +4,8 @@ Shared django settings.
 import os
 from os.path import join
 from distutils.util import strtobool
-import dj_database_url
 from configurations import Configuration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-POSTGRES_PORT = 5432
-
 
 class Common(Configuration):
 
@@ -35,7 +32,6 @@ class Common(Configuration):
         'pkdb_app.subjects',
         'pkdb_app.interventions',
         'pkdb_app.comments',
-
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -52,12 +48,12 @@ class Common(Configuration):
     )
 
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
-    CORS_ORIGIN_WHITELIST = ('0.0.0.0:8080','localhost:8080')
+    CORS_ORIGIN_WHITELIST = ('0.0.0.0:8080', 'localhost:8080')
     INTERNAL_IPS = ('172.18.0.1',)
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'pkdb_app.urls'
-    SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+    SECRET_KEY = os.getenv('PKPD_SECRET_KEY')
     WSGI_APPLICATION = 'pkdb_app.wsgi.application'
 
     # Email
@@ -67,13 +63,7 @@ class Common(Configuration):
         ('Author', 'janekg89@hotmail.de'),
     )
 
-    # Postgres
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=f'postgres://postgres:pass@postgres:{POSTGRES_PORT}/postgres',
-            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-        )
-    }
+
 
     # General
     APPEND_SLASH = False
