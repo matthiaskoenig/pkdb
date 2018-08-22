@@ -6,12 +6,13 @@ group or individual).
 
 from django.db import models
 
-from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputManager
-from ..behaviours import Valueable, ValueableMap
+from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputExManager, \
+    TimecourseExManager
+from ..behaviours import Valueable, ValueableMap, Externable
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
-from ..subjects.models import Group, IndividualEx, DataFile
+from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
 from ..utils import CHAR_MAX_LENGTH
 
 
@@ -77,6 +78,7 @@ class AbstractIntervention(models.Model):
 
 class AbstractInterventionMap(models.Model):
 
+
     form_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     application_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
@@ -89,17 +91,16 @@ class AbstractInterventionMap(models.Model):
         abstract = True
 
 
-class InterventionEx(Valueable,ValueableMap,AbstractIntervention,AbstractInterventionMap):
+class InterventionEx(Externable, Valueable, ValueableMap, AbstractIntervention, AbstractInterventionMap):
     """ Intervention (external curated layer).
 
        """
     source = models.ForeignKey(DataFile, related_name="s_intervention_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
-    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     figure = models.ForeignKey(DataFile, related_name="f_intervention_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
 
-    interventionset = models.ForeignKey(InterventionSet, related_name="interventions_exs", on_delete=models.CASCADE)
+    interventionset = models.ForeignKey(InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
@@ -130,9 +131,6 @@ class OutputSet(models.Model):
 
 class AbstractOutput(models.Model):
 
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention)
     substance = models.ForeignKey(Substance, null=True, blank=True,on_delete=models.SET_NULL)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=OUTPUT_TISSUE_DATA_CHOICES ,null=True, blank=True)
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True, blank=True)
@@ -145,12 +143,8 @@ class AbstractOutput(models.Model):
 
 class AbstractOutputMap(models.Model):
 
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
-    subset_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
@@ -159,26 +153,50 @@ class AbstractOutputMap(models.Model):
         abstract = True
 
 
-class OutputEx(AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
+class OutputEx(Externable ,AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
+
     source = models.ForeignKey(DataFile, related_name="s_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True, blank=True)
+
+    group_ex = models.ForeignKey(GroupEx, null=True, blank=True, on_delete=models.CASCADE)
+    individual_ex = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
+    intervention_exs = models.ManyToManyField(InterventionEx)
+
+    group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    individual_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    intervention_exs_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    objects = OutputExManager()
 
 
 class Output(Valueable, AbstractOutput):
 
     """ Storage of data sets. """
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    interventions = models.ManyToManyField(Intervention)
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
-    objects = OutputManager()
+
+    #objects = OutputManager()
 
 
-class TimecourseEx(AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
+class TimecourseEx(Externable, AbstractOutput,AbstractOutputMap,ValueableMap,Valueable):
 
     source = models.ForeignKey(DataFile, related_name="s_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True, blank=True)
 
+    group_ex = models.ForeignKey(GroupEx, null=True, blank=True, on_delete=models.CASCADE)
+    individual_ex = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
+    intervention_exs = models.ManyToManyField(InterventionEx)
+
+    group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    individual_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    intervention_exs_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    objects = TimecourseExManager()
 
 
 class Timecourse(Valueable, AbstractOutput):
@@ -186,4 +204,8 @@ class Timecourse(Valueable, AbstractOutput):
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    interventions = models.ManyToManyField(Intervention)
+
     ex = models.ForeignKey(TimecourseEx, related_name="outputs", on_delete=models.CASCADE)

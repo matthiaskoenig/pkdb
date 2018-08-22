@@ -73,22 +73,22 @@ class StudySerializer(SidSerializer):
                                                   reference=related["reference"],
                                                   defaults=validated_data,)
         instance = self.create_relations(instance,related)
+        instance.save()
         return instance
 
     def update(self, instance, validated_data):
 
         related = self.pop_relations(validated_data)
         creator = validated_data.get("creator")
+
         if creator:
             validated_data["creator"] = get_or_val_error(User, username=creator)
 
-
         for name, value in validated_data.items():
-            setattr(instance, name, value)
-        instance.save()
+                setattr(instance, name, value)
+                instance.save()
 
         instance = self.create_relations(instance,related)
-
         return instance
 
     def to_representation(self, instance):
@@ -103,8 +103,8 @@ class StudySerializer(SidSerializer):
     # Helper
     #############################################################################################
 
-    @property
-    def related_sets(self):
+    @staticmethod
+    def related_sets():
         return {
         "groupset": GroupSet,
         "individualset": IndividualSet,
@@ -112,36 +112,44 @@ class StudySerializer(SidSerializer):
         "outputset": OutputSet
         }
 
-    def create_relations(self,study, related):
-        for name, model in self.related_sets.items():
+    def create_relations(self,study,related):
+        for name, model in self.related_sets().items():
+
             if related[name] is not None:
-                if getattr(study, name):
-                    getattr(study, name).delete()
+                #if getattr(study, name):
+                    #if name == "outputset":
+                    #    getattr(study, name).delete()
                 instance = model.objects.create(**related[name])
-                instance.save()
                 setattr(study, name, instance)
+                study.save()
 
         for curator_data in related["curators"]:
             curator = get_or_val_error(User, username=curator_data)
             study.curators.add(curator)
+            study.save()
 
         for substance_data in related["substances"]:
             substance = get_or_val_error(Substance, name=substance_data)
             study.substances.add(substance)
+            study.save()
+
 
         if related["files"]:
             study.files.all().delete()
+
             for file_pk in related["files"]:
                 study.files.add(file_pk)
-        study.save()
+                study.save()
+
         return study
 
+
     def pop_relations(self ,validated_data):
-        related_foreinkeys = self.related_sets.copy()
+        related_foreinkeys = self.related_sets().copy()
         related_foreinkeys["reference"] = Reference
         related_many2many = {"substances": Substance, "curators": User, "files": DataFile}
-        related_foreinkeys_dict = {name: validated_data.pop(name, None) for name, _ in related_foreinkeys.items()}
-        related_many2many_dict = {name: validated_data.pop(name, []) for name, _ in related_many2many.items()}
+        related_foreinkeys_dict = {name: validated_data.pop(name,None) for name in related_foreinkeys.keys()}
+        related_many2many_dict = {name: validated_data.pop(name, []) for name in related_many2many.keys()}
         related = {**related_foreinkeys_dict, **related_many2many_dict}
         return related
 

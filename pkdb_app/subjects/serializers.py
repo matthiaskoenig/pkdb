@@ -12,7 +12,13 @@ from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristic
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
 from copy import deepcopy
 
-SOURCE_FIELDS = ["source","format","figure"]
+EXTERN_FILE_FIELDS = ["source", "format", "figure", "subset_map"]
+VALUE_FIELDS =  ["value", "mean", "median", "min","max", "sd", "se", "cv", "unit"]
+VALUE_MAP_FIELDS = ["value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map","cv_map", "unit_map"]
+CHARACTERISTISTA_FIELDS = ["count","choice","category","ctype"]
+CHARACTERISTISTA_MAP_FIELDS = ["count_map","choice_map"]
+GROUP_FIELDS = ["name", "count"]
+GROUP_MAP_FIELDS = ["name_map","count_map"]
 
 # ----------------------------------
 # DataFile
@@ -32,7 +38,7 @@ class CharacteristicaExSerializer(MappingSerializer):
 
     class Meta:
         model = CharacteristicaEx
-        fields = ["count","count_map","choice","choice_map","category","choice","ctype"]
+        fields = CHARACTERISTISTA_FIELDS + CHARACTERISTISTA_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS
 
 # ----------------------------------
 # Group
@@ -41,15 +47,15 @@ class GroupExSerializer(ExSerializer):
     characteristica_ex = CharacteristicaExSerializer(many=True, read_only=False, required=False)
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
-    parent = serializers.CharField()
+    parent_ex = serializers.CharField()
     class Meta:
         model = GroupEx
-        fields = SOURCE_FIELDS + ["name","name_map","count","count_map", "parent", "characteristica_ex"]
+        fields = EXTERN_FILE_FIELDS + GROUP_FIELDS+ GROUP_MAP_FIELDS + ["parent_ex", "characteristica_ex"]
 
 
 class GroupSetSerializer(ExSerializer):
-    group_exs = GroupExSerializer(many=True, read_only=False)
     descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
+    group_exs = GroupExSerializer(many=True, read_only=False)
 
     class Meta:
         model = GroupSet
@@ -60,13 +66,14 @@ class GroupSetSerializer(ExSerializer):
 # ----------------------------------
 class IndividualExSerializer(ExSerializer):
     characteristica_ex = CharacteristicaExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    group_ex = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
+    group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(), required=False, allow_null=True)
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = IndividualEx
-        fields = SOURCE_FIELDS + ["name","name_map","group_ex","group_ex_map","characteristica_ex"]
+        fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group_ex", "group_ex_map", "characteristica_ex"]
+
 
 
 class IndividualSetSerializer(ExSerializer):

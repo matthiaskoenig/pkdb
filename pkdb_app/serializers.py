@@ -1,15 +1,17 @@
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Q
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 
-from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile
+from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile, InterventionEx
 from pkdb_app.studies.models import Reference
-from pkdb_app.subjects.models import GroupSet, IndividualSet
+from pkdb_app.subjects.models import GroupSet, IndividualSet, GroupEx, IndividualEx
 from pkdb_app.users.models import User
 from pkdb_app.utils import get_or_val_error
 
 ITEM_SEPARATOR = '||'
+ITEM_MAPPER = '=='
 
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
@@ -31,9 +33,9 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
     #
     # ----------------------------------
 
-    def validate(self, attrs):
-        self.validate_wrong_keys(attrs)
-        return super().validate(attrs)
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        return super().to_internal_value(data)
 
 
     def to_representation(self, instance):
@@ -52,39 +54,40 @@ class MappingSerializer(WrongKeyValidationSerializer):
         """
         replaces key with f"{key}_map" if value contains special syntax.( ==, || )
         """
-        splitted_data = {}
+        transformed_data = {}
         for key, value in data.items():
             if isinstance(value, str):
-                if "==" in value or "||" in value:
-                    splitted_data[f"{key}_map"] = data.get(key)
+                if ITEM_MAPPER in value or ITEM_SEPARATOR in value:
+                    transformed_data[f"{key}_map"] = data.get(key)
                 else:
-                    splitted_data[key] = data.get(key)
+                    transformed_data[key] = data.get(key)
             else:
-                splitted_data[key] = data.get(key)
+                transformed_data[key] = data.get(key)
 
-        return splitted_data
+        return transformed_data
 
     @staticmethod
     def retransform_map_fields(data):
-        cleaned_result = {}
+        transformed_data = {}
         for k, v in data.items():
             if "_map" in k:
                 k = k[:-4]
             if v is None:
                 continue
-            cleaned_result[k] = v
-        return cleaned_result
+            transformed_data[k] = v
+        return transformed_data
 
     # ----------------------------------
     #
     # ----------------------------------
 
     def to_internal_value(self, data):
+
+
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-
         rep = self.retransform_map_fields(super().to_representation(instance))
 
         #url representation of file
@@ -93,38 +96,43 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 current_site = f'http://{get_current_site(self.context["request"]).domain}'
                 rep[file] = current_site + getattr(instance, file).file.url
 
-
-        return self.retransform_map_fields(super().to_representation(instance))
+        return rep
 
 
 class ExSerializer(MappingSerializer):
 
-    def ex_mapping(self):
+    @staticmethod
+    def ex_mapping():
         return {"individual_exs":"individuals",
-                "individual_ex": "individuals",
+                "individual_ex": "individual",
                 "intervention_exs": "interventions",
                 "group_exs": "groups",
-                "characteristica_ex":"characteristica"
-                }
+                "group_ex": "group",
+                "characteristica_ex": "characteristica",
+                "parent_ex": "parent",
+                "output_exs":"outputs",
+                "timecourse_exs": "timecourses",}
 
-    def rev_ex_mapping(self):
-        return {(v, k) for k, v in self.ex_mapping().items()}
+    @classmethod
+    def rev_ex_mapping(cls):
+        return dict((v, k) for k, v in cls.ex_mapping().items())
 
-    def transform_ex_fields(self,data):
+    @classmethod
+    def transform_ex_fields(cls,data):
         transform_data = {}
         for key, value in data.items():
-            ex_key = self.rev_ex_mapping().get(key)
+            ex_key = cls.rev_ex_mapping().get(key)
             if ex_key:
                 transform_data[ex_key] = value
             else:
                 transform_data[key] = value
         return transform_data
 
-
-    def retransform_ex_fields(self,data):
+    @classmethod
+    def retransform_ex_fields(cls,data):
         transform_data = {}
         for key, value in data.items():
-            ex_key = self.ex_mapping().get(key)
+            ex_key = cls.ex_mapping().get(key)
             if ex_key:
                 transform_data[ex_key] = value
             else:
@@ -133,11 +141,75 @@ class ExSerializer(MappingSerializer):
 
 
     def to_internal_value(self, data):
+
+
         data = self.transform_ex_fields(data)
+
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
         return self.retransform_ex_fields(super().to_representation(instance))
+
+class BaseOutputExSerializer(ExSerializer):
+
+    def to_internal_value(self, data):
+
+        data = self.transform_ex_fields(data)
+        data = self.transform_map_fields(data)
+
+        study_sid = self.context['request'].path.split("/")[-2]
+
+        if "group_ex" in data:
+
+            if data["group_ex"]:
+                try:
+                    data["group_ex"] = GroupEx.objects.get(
+                        Q(groupset__study__sid=study_sid) & Q(name=data.get("group_ex"))).pk
+                except ObjectDoesNotExist:
+                    msg = f'group: {data.get("group_ex")} in study: {study_sid} does not exist'
+                    raise serializers.ValidationError(msg)
+
+        if "individual_ex" in data:
+
+            if data["individual_ex"]:
+                try:
+                    data["individual_ex"] = IndividualEx.objects.get(
+                        Q(individualset__study__sid=study_sid) & Q(name=data.get("individual_ex"))).pk
+                except ObjectDoesNotExist:
+                    msg = f'individual_ex: individual <{data.get("individual_ex")}>  in study: <{study_sid}> does not exist'
+                    raise serializers.ValidationError(msg)
+
+        if "intervention_exs" in data:
+
+            if data["intervention_exs"]:
+                intervention_exs = []
+                for intervention_ex in data["intervention_exs"]:
+                    try:
+                        intervention_exs.append(InterventionEx.objects.get(
+                            Q(interventionset__study__sid=study_sid) & Q(name=intervention_ex)).pk)
+                    except ObjectDoesNotExist:
+                        msg = f'intervention_ex: {intervention_ex} in study: {study_sid} does not exist'
+                        raise serializers.ValidationError(msg)
+                data["intervention_exs"] = intervention_exs
+
+        return super(WrongKeyValidationSerializer,self).to_internal_value(data)
+
+    def to_representation(self, instance):
+
+        rep = super().to_representation(instance)
+
+        if "group" in rep:
+            if rep["group"]:
+                if instance.group_ex:
+                    rep["group"] = instance.group_ex.name
+                if instance.group_ex_map:
+                     rep["group"] = instance.group_ex_map
+
+        if "interventions" in rep:
+            rep["interventions"] = [intervention_ex.name for intervention_ex in instance.intervention_exs.all()]
+
+        return rep
+
 
 
 class SidSerializer(WrongKeyValidationSerializer):
