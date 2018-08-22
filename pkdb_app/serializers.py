@@ -214,10 +214,9 @@ class BaseOutputExSerializer(ExSerializer):
 
 class SidSerializer(WrongKeyValidationSerializer):
     """
-       This Serializer is overwriting a the is_valid method. If sid already exists. It adds a instance to the class.
-       This triggers the update method instead of the create method of the serializer.
-       """
-
+    This Serializer is overwriting a the is_valid method. If sid already exists. It adds a instance to the class.
+    This triggers the update method instead of the create method of the serializer.
+    """
     def is_valid(self, raise_exception=False):
 
         if "sid" in self.initial_data.keys():

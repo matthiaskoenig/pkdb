@@ -45,6 +45,7 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         substance, created = Substance.objects.update_or_create(**validated_data)
         return substance
 
+
 # ----------------------------------
 # Interventions
 # ----------------------------------
@@ -58,8 +59,6 @@ class InterventionExSerializer(MappingSerializer):
     class Meta:
         model = InterventionEx
         fields = EXTERN_FILE_FIELDS + VALUE_MAP_FIELDS + VALUE_FIELDS + INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS
-
-
 
 
 class InterventionSetSerializer(ExSerializer):

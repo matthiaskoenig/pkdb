@@ -38,6 +38,7 @@ def update_or_create_multiple(parent,children,related_name):
             instance_cild.update_or_create(**child)
 
 def get_or_val_error(model, *args, **kwargs):
+    """ Checks if object exists or raised ValidationError."""
     try:
         return model.objects.get(*args, **kwargs)
     except model.DoesNotExist:
