@@ -6,8 +6,24 @@ from .common import Common
 
 
 class Production(Common):
+    DEBUG = False
+
     INSTALLED_APPS = Common.INSTALLED_APPS
-    SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+    SECRET_KEY = os.getenv('PKDB_SECRET_KEY')
+    POSTGRES_PASSWORD = os.getenv('PKDB_POSTGRES_PASSWORD')
+
+    # Postgres
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'pkpd',
+            'USER': 'pkpd_user',
+            'HOST': 'localhost',
+            'PASSWORD': POSTGRES_PASSWORD,
+            'PORT': 5432,
+        }
+    }
+
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
     ALLOWED_HOSTS = ["*"]
