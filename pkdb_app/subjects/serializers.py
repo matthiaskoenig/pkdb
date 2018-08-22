@@ -12,13 +12,13 @@ from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristic
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
 from copy import deepcopy
 
-EXTERN_FILE_FIELDS = ["source", "format", "figure", "subset_map"]
-VALUE_FIELDS =  ["value", "mean", "median", "min","max", "sd", "se", "cv", "unit"]
+EXTERN_FILE_FIELDS = ["source", "format", "subset_map", "figure"]
+VALUE_FIELDS =  ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"]
 VALUE_MAP_FIELDS = ["value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map","cv_map", "unit_map"]
-CHARACTERISTISTA_FIELDS = ["count","choice","category","ctype"]
-CHARACTERISTISTA_MAP_FIELDS = ["count_map","choice_map"]
+CHARACTERISTISTA_FIELDS = ["count", "category", "choice", "ctype"]
+CHARACTERISTISTA_MAP_FIELDS = ["count_map", "choice_map"]
 GROUP_FIELDS = ["name", "count"]
-GROUP_MAP_FIELDS = ["name_map","count_map"]
+GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
 # ----------------------------------
 # DataFile
@@ -50,7 +50,7 @@ class GroupExSerializer(ExSerializer):
     parent_ex = serializers.CharField()
     class Meta:
         model = GroupEx
-        fields = EXTERN_FILE_FIELDS + GROUP_FIELDS+ GROUP_MAP_FIELDS + ["parent_ex", "characteristica_ex"]
+        fields = EXTERN_FILE_FIELDS + GROUP_FIELDS + GROUP_MAP_FIELDS + ["parent_ex", "characteristica_ex"]
 
 
 class GroupSetSerializer(ExSerializer):
@@ -73,7 +73,6 @@ class IndividualExSerializer(ExSerializer):
     class Meta:
         model = IndividualEx
         fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group_ex", "group_ex_map", "characteristica_ex"]
-
 
 
 class IndividualSetSerializer(ExSerializer):

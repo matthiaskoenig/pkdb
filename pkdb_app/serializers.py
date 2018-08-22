@@ -45,6 +45,7 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         result = super().to_representation(instance)
         return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
 
+
 class MappingSerializer(WrongKeyValidationSerializer):
     # ----------------------------------
     # helper
@@ -141,14 +142,15 @@ class ExSerializer(MappingSerializer):
 
 
     def to_internal_value(self, data):
-
-
+        # change keys
         data = self.transform_ex_fields(data)
-
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-        return self.retransform_ex_fields(super().to_representation(instance))
+        representation = super().to_representation(instance)
+        # change keys
+        return self.retransform_ex_fields(representation)
+
 
 class BaseOutputExSerializer(ExSerializer):
 
