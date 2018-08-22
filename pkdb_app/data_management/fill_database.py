@@ -413,6 +413,9 @@ def upload_study_from_dir(study_dir):
 
     return {}
 
+def print_study(d):
+    logging.info(d["json"]["name"])
+    return d
 
 # -------------------------------
 # Bonobo
@@ -434,6 +437,7 @@ def get_graph_study(**options):
     graph.add_chain(
         get_study_paths,
         read_study_json,
+        print_study,
         upload_study_json,
     )
     return graph
@@ -448,7 +452,6 @@ if __name__ == '__main__':
 
     # core database setup
     setup_database()
-    exit()
 
     # run the bonobo chain
     parser = bonobo.get_argument_parser()

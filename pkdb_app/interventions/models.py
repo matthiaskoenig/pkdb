@@ -8,7 +8,7 @@ from django.db import models
 
 from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputExManager, \
     TimecourseExManager
-from ..behaviours import Valueable, ValueableMap, Externable
+from ..behaviours import Valueable, ValueableMap, Externable, CHAR_MAX_LENGTH_LONG
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
     SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
@@ -130,7 +130,7 @@ class AbstractOutput(models.Model):
 
 class AbstractOutputMap(models.Model):
 
-    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG,null=True, blank=True)
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
     pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
