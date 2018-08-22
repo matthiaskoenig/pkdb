@@ -4,11 +4,9 @@ Local django settings.
 import os
 from .common import Common
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+import dj_database_url
 
 class Local(Common):
-
-
     DEBUG = True
 
     # Testing
@@ -23,6 +21,15 @@ class Local(Common):
         '--with-progressive',
         '--cover-package=pkdb'
     ]
+
+    # Postgres
+    DATABASES = {
+        'default': dj_database_url.config(
+            # postgres://USER:PASSWORD@HOST:PORT/NAME
+            default=f'postgres://postgres:pass@postgres:5432/postgres',
+            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
+        )
+    }
 
     # Mail
     EMAIL_HOST = 'localhost'
