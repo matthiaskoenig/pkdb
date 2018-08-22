@@ -194,7 +194,10 @@ def upload_files(file_path):
         files = set(files) - set(['reference.json', 'study.json', f'{sid}.pdf'])
         #exclude files
         forbidden_suffix = (".log",".xlsx#",".idea")
+        forbidden_prefix = (".lock")
+
         files = [file for file in files if not file.endswith(forbidden_suffix)]
+        files = [file for file in files if not file.startswith(forbidden_prefix)]
 
 
         for file in files:

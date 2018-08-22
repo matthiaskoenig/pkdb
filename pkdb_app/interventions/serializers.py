@@ -13,17 +13,28 @@ from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.comments.serializers import DescriptionsSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
     InterventionEx, OutputEx, TimecourseEx
-from pkdb_app.serializers import ExSerializer, MappingSerializer, WrongKeyValidationSerializer
+from pkdb_app.serializers import ExSerializer, MappingSerializer, WrongKeyValidationSerializer, BaseOutputExSerializer
 
 from pkdb_app.subjects.models import IndividualEx, Group, DataFile, Individual, GroupEx
-from pkdb_app.subjects.serializers import SOURCE_FIELDS
 from pkdb_app.utils import validate_categorials, recursive_iter, set_keys
+
+from pkdb_app.subjects.serializers import VALUE_MAP_FIELDS,VALUE_FIELDS,EXTERN_FILE_FIELDS
+
+# ----------------------------------
+# Serializer FIELDS
+# ----------------------------------
+INTERVENTION_FIELDS = ["name","category", "route", "form", "application", "time", "time_unit","substance","route","choice"]
+
+INTERVENTION_MAP_FIELDS = ["name_map", "route_map", "form_map", "application_map","time_map", "time_unit_map",
+                            "unit_map","substance_map","route_map","choice_map"]
+
+OUTPUT_FIELDS = ["pktype", "tissue", "substance", "time", "time_unit"]
+
+OUTPUT_MAP_FIELDS = ["pktype_map", "tissue_map", "substance_map", "time_map", "time_unit_map"]
 
 # ----------------------------------
 # substance
 # ----------------------------------
-
-
 class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
     class Meta:
@@ -39,16 +50,14 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 # ----------------------------------
 class InterventionExSerializer(MappingSerializer):
     substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False, required=False, allow_null=True)
+
+    ######
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+
     class Meta:
         model = InterventionEx
-        fields = SOURCE_FIELDS + ["name","name_map","category", "route", "route_map" "form", "form_map", "application",
-                                  "application_map", "time","time_map", "time_unit","time_unit_map" "value","value_map",
-                                  "unit_map","substance","substance_map","route","route_map","choice","choice_map"] + \
-                                 ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"] + ["value_map",
-                                 "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map", "cv_map",
-                                  "unit_map","subset_map"]
+        fields = EXTERN_FILE_FIELDS + VALUE_MAP_FIELDS + VALUE_FIELDS + INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS
 
 
 
@@ -66,8 +75,8 @@ class InterventionSetSerializer(ExSerializer):
 # ----------------------------------
 # results
 # ----------------------------------
-class OutputExSerializer(ExSerializer):
-    group = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
+class OutputExExSerializer(BaseOutputExSerializer):
+    group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
                                                read_only=False, required=False, allow_null=True)
     individual_ex = serializers.PrimaryKeyRelatedField(queryset=IndividualEx.objects.all(),
                                                     read_only=False, required=False, allow_null=True)
@@ -75,15 +84,23 @@ class OutputExSerializer(ExSerializer):
                                                        read_only=False, required=False, allow_null=True)
     substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
                                              read_only=False, required=False, allow_null=True)
+
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
+
+
     class Meta:
         model = OutputEx
+        fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
+                 ["group_ex","individual_ex","intervention_exs"] + \
+                 ["group_ex_map","individual_ex_map","intervention_exs_map"]
 
 
-class TimecourseExSerializer(ExSerializer):
-    group = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
+
+
+class TimecourseExExSerializer(BaseOutputExSerializer):
+    group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
                                                read_only=False, required=False, allow_null=True)
     individual_ex = serializers.PrimaryKeyRelatedField(queryset=IndividualEx.objects.all(),
                                                        read_only=False, required=False, allow_null=True)
@@ -91,29 +108,33 @@ class TimecourseExSerializer(ExSerializer):
                                                           read_only=False, required=False, allow_null=True)
     substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
                                              read_only=False, required=False, allow_null=True)
+
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
 
+
     class Meta:
         model = TimecourseEx
-        fields = SOURCE_FIELDS + ["name", "name_map", "time", "time_map", "time_unit", "time_unit_map", "unit_map",
-                                  "substance", "substance_map"] + ["value", "mean", "median", "min", "max", "sd", "se",
-                                  "cv", "unit"] + ["value_map","mean_map", "median_map","min_map", "max_map", "sd_map",
-                                  "se_map", "cv_map", "unit_map"]+["pktype", "pktype_map","subset_map"]
+        fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
+                 ["group_ex", "individual_ex", "intervention_exs"] + \
+                 ["group_ex_map", "individual_ex_map", "intervention_exs_map"]
+
 
 
 class OutputSetSerializer(ExSerializer):
     """
     OutputSet
     """
-    output_exs = OutputExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    timecourse_exs = TimecourseExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
+    output_exs = OutputExExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    timecourse_exs = TimecourseExExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
 
     class Meta:
         model = OutputSet
         fields = ["descriptions","timecourse_exs","output_exs"]
+
+
 
 
 

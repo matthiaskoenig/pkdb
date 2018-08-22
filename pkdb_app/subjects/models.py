@@ -8,11 +8,11 @@ From the data structure this has to be handled very similar.
 from django.db import models
 
 from pkdb_app.storage import OverwriteStorage
-from ..behaviours import Valueable, ValueableMap
+from ..behaviours import Valueable, ValueableMap, Externable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
-from .managers import GroupManager, GroupSetManager, IndividualManager, IndividualSetManager
+from .managers import GroupExManager, GroupSetManager, IndividualExManager, IndividualSetManager
 
 
 # ----------------------------------
@@ -39,7 +39,7 @@ class GroupSet(models.Model):
 
 
 class AbstractGroup(models.Model):
-    objects = GroupManager()
+    objects = GroupExManager()
 
     class Meta:
         abstract = True
@@ -48,7 +48,7 @@ class AbstractGroup(models.Model):
         return self.name
 
 
-class GroupEx(AbstractGroup):
+class GroupEx(Externable, AbstractGroup):
     """ Group (external curated layer).
 
     Groups are defined via their characteristica.
@@ -56,18 +56,17 @@ class GroupEx(AbstractGroup):
     """
     source = models.ForeignKey(DataFile, related_name="s_group_exs", null=True, blank=True,
                                 on_delete=models.SET_NULL)
-    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     figure = models.ForeignKey(DataFile, related_name="f_group_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
     groupset = models.ForeignKey(GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs")
 
-    parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
+    parent_ex = models.ForeignKey("GroupEX", null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     count = models.IntegerField()
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
-    objects = GroupManager()
+    objects = GroupExManager()
 
     @property
     def study(self):
@@ -89,7 +88,7 @@ class Group(models.Model):
     count = models.IntegerField()
     parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
 
-    objects = GroupManager()
+    #objects = GroupManager()
 
     #class Meta:
     #todo: in validator unique_together = ('ex__groupset', 'name')
@@ -111,7 +110,6 @@ class IndividualSet(models.Model):
 
 
 class AbstractIndividual(models.Model):
-    objects = IndividualManager()
 
     class Meta:
         abstract = True
@@ -120,12 +118,12 @@ class AbstractIndividual(models.Model):
         return self.name
 
 
-class IndividualEx(AbstractIndividual):
+class IndividualEx(Externable, AbstractIndividual):
     """ Individual (external curated layer).
-
     This contains maps and splittings.
     Individuals are defined via their characteristics, analogue to groups.
     """
+
     source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, blank=True,
                                on_delete=models.SET_NULL)
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
@@ -137,6 +135,8 @@ class IndividualEx(AbstractIndividual):
     group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    objects = IndividualExManager()
 
     class Meta:
         unique_together = ('individualset', 'name', 'name_map', 'source')
@@ -150,7 +150,7 @@ class IndividualEx(AbstractIndividual):
         return self.study.reference
 
     def groups_in_study(self):
-        return self.study.groupset.groups
+        return self.study.groupset.group_exs
 
     # TODO: validation in one place
     # TODO: validation: either name or name_map must be set

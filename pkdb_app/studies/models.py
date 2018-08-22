@@ -46,7 +46,7 @@ class Study(Sidable, models.Model):
     Mainly reported as a single publication.
     """
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
-    creator =  models.ForeignKey(User,related_name="studies",on_delete=False,null=True, blank=True)  # any creator needs an account.
+    creator =  models.ForeignKey(User,related_name="studies",on_delete=models.CASCADE,null=True, blank=True)  # any creator needs an account.
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
     reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)

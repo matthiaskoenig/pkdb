@@ -4,81 +4,69 @@ the managers can be used to overwrite class methods of the models module.
 from django.db import models
 
 
-class GroupManager(models.Manager):
+class GroupExManager(models.Manager):
     def create(self, *args, **kwargs):
-        characteristica = kwargs.pop("characteristica", [])
-        group = super().create(*args, **kwargs)
-        group.characteristica.all().delete()
-        for characteristica_single in characteristica:
-            characteristica_single["count"] = characteristica_single.get("count", group.count)
-            group.characteristica.create(**characteristica_single)
-        group.save()
-        return group
+        characteristica_ex = kwargs.pop("characteristica_ex", [])
+        group_ex = super().create(*args, **kwargs)
+        group_ex.characteristica_ex.all().delete()
+        for characteristica_ex_single in characteristica_ex:
+            characteristica_ex_single["count"] = characteristica_ex_single.get("count", group_ex.count)
+            group_ex.characteristica_ex.create(**characteristica_ex_single)
+        group_ex.save()
+        return group_ex
 
 
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         descriptions = kwargs.pop("descriptions", [])
-        groups = kwargs.pop("groups", [])
+        group_exs = kwargs.pop("group_exs", [])
         groupset = super().create(*args, **kwargs)
 
         for description in descriptions:
             groupset.descriptions.create(**description)
 
-        study_groups = []
-        for group in groups:
-            if "parent" in group:
-                for n_group in study_groups:
-                        if n_group.name == group["parent"]:
-                            group["parent"] = n_group
+        study_group_exs = []
+        for group_ex in group_exs:
+            if "parent_ex" in group_ex:
+                for study_group_ex in study_group_exs:
+                        if study_group_ex.name == group_ex["parent_ex"]:
+                            group_ex["parent_ex"] = study_group_ex
 
-
-            n_group = groupset.groups.create(**group)
-            study_groups.append(n_group)
-
+            study_group_ex = groupset.group_exs.create(**group_ex)
+            study_group_exs.append(study_group_ex)
         groupset.save()
-
         return groupset
 
 
-class IndividualManager(models.Manager):
+class IndividualExManager(models.Manager):
     def create(self, *args, **kwargs):
-        characteristica = kwargs.pop("characteristica", [])
-        cleaned = kwargs.pop("cleaned", [])
+        characteristica_ex = kwargs.pop("characteristica_ex", [])
+        individuals = kwargs.pop("individuals", [])
+        individual_ex = super().create(*args, **kwargs)
 
-        individual = super().create(*args, **kwargs)
-        for characteristica_single in characteristica:
-            individual.characteristica.create(**characteristica_single)
-        for clean_single in cleaned:
-            individual.cleaned.create(individualset = individual.individualset, **clean_single)
-        individual.save()
-        return individual
+        for characteristica_ex_single in characteristica_ex:
+            individual_ex.characteristica_ex.create(**characteristica_ex_single)
+        for individual in individuals:
+            individual_ex.individuals.create(individualset = individual_ex.individualset, **individual)
+        individual_ex.save()
+        return individual_ex
 
 
 
 
 class IndividualSetManager(models.Manager):
     def create(self, *args, **kwargs):
-        characteristica = kwargs.pop("characteristica", [])
-        individuals = kwargs.pop("individuals", [])
+        individual_exs = kwargs.pop("individual_exs", [])
         descriptions = kwargs.pop("descriptions", [])
-
-
 
         individualset = super().create(*args, **kwargs)
 
         for description in descriptions:
             individualset.descriptions.create(**description)
 
-        for characteristica_single in characteristica:
-            individualset.characteristica.create(**characteristica_single)
-
-        for individual in individuals:
-            individualset.individuals.create(**individual)
-
-
+        for individual_ex in individual_exs:
+            individualset.individual_exs.create(**individual_ex)
 
         individualset.save()
-
         return individualset
 

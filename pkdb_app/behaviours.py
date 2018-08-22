@@ -16,6 +16,13 @@ class Sidable(models.Model):
     class Meta:
         abstract = True
 
+class Externable(models.Model):
+    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    subset_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
 class Blankable(models.Model):
     # when creating the BlankAble class object it will add a __blank_together__
     # attribute corresponding to the same in {YourModel}.MyMeta.blank_together
