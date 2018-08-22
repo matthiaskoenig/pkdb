@@ -77,6 +77,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     transformed_data[f"{key}_map"] = data.get(key)
                 else:
                     transformed_data[key] = data.get(key)
+
             else:
                 transformed_data[key] = data.get(key)
 

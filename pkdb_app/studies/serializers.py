@@ -166,9 +166,8 @@ class StudySerializer(SidSerializer):
         for name, model in self.related_sets().items():
 
             if related[name] is not None:
-                #if getattr(study, name):
-                    #if name == "outputset":
-                    #    getattr(study, name).delete()
+                if getattr(study, name):
+                        getattr(study, name).delete()
                 instance = model.objects.create(**related[name])
                 setattr(study, name, instance)
                 study.save()

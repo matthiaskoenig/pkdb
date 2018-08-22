@@ -77,6 +77,7 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("µg*h/ml"),   # -> mg*h/l
     UnitType("µg/ml*h"),   # -> mg*h/l
     UnitType("mg*min/l"),  # -> mg*h/l
+    UnitType("µg*min/ml"),
     UnitType("µmol*h/l"),  # -> mg*h/l (with molar weight)
     UnitType("µmol/l*h"),  # -> mg*h/l (with molar weight)
     UnitType("µg/ml*h/kg"),  # -> mg*h/l/kg

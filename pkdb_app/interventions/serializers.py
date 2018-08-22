@@ -74,7 +74,7 @@ class InterventionSetSerializer(ExSerializer):
 # ----------------------------------
 # results
 # ----------------------------------
-class OutputExExSerializer(BaseOutputExSerializer):
+class OutputExSerializer(BaseOutputExSerializer):
     group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
                                                read_only=False, required=False, allow_null=True)
     individual_ex = serializers.PrimaryKeyRelatedField(queryset=IndividualEx.objects.all(),
@@ -125,7 +125,7 @@ class OutputSetSerializer(ExSerializer):
     """
     OutputSet
     """
-    output_exs = OutputExExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    output_exs = OutputExSerializer(many=True, read_only=False, required=False, allow_null=True)
     timecourse_exs = TimecourseExExSerializer(many=True, read_only=False, required=False, allow_null=True)
     descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
 
