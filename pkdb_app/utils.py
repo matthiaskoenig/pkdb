@@ -1,6 +1,5 @@
 
 import os
-from django.core.exceptions import ValidationError
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_TYPE, INTERVENTION_DICT
 
@@ -37,13 +36,6 @@ def update_or_create_multiple(parent,children,related_name):
             instance_cild =  getattr(parent,related_name)
             instance_cild.update_or_create(**child)
 
-def get_or_val_error(model, *args, **kwargs):
-    """ Checks if object exists or raised ValidationError."""
-    try:
-        return model.objects.get(*args, **kwargs)
-    except model.DoesNotExist:
-        msg = f"{model} instance with args:{args}, kwargs:{kwargs} does not exist"
-        raise ValidationError({model:msg})
 
 
 def validate_categorials(data, model_name):
@@ -69,12 +61,12 @@ def validate_categorials(data, model_name):
             if (model_categorical.dtype == CATEGORIAL_TYPE or model_categorical.dtype == BOOLEAN_TYPE):
                 if not choice in model_categorical.choices:
                     msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.value}"
-                    raise ValidationError({"choice":msg})
+                    #raise serializers.ValidationError({"choice": msg})
 
         elif model_categorical.dtype == NUMERIC_TYPE:
             if not unit in model_categorical.units:
                 msg = f"{unit} is not allowed but unit is required. For {model_categorical.value} allowed units are {model_categorical.units}"
-                raise ValidationError({"unit":msg})
+                #raise serializers.ValidationError({"unit": msg})
     return data
 
 

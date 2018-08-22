@@ -2,7 +2,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from pkdb_app.subjects.models import GroupSet, IndividualSet
-from pkdb_app.utils import update_or_create_multiple, get_or_val_error
+from pkdb_app.utils import update_or_create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
@@ -107,7 +107,7 @@ class StudySerializer(SidSerializer):
 
         creator = data.get("creator")
         if creator:
-            data["creator"] = get_or_val_error(User, username=creator)
+            data["creator"] = self.get_or_val_error(User, username=creator)
 
         return super().to_internal_value(data)
 
@@ -162,6 +162,7 @@ class StudySerializer(SidSerializer):
         :return:
         """
 
+
         for name, model in self.related_sets().items():
 
             if related[name] is not None:
@@ -173,12 +174,12 @@ class StudySerializer(SidSerializer):
                 study.save()
 
         for curator_data in related["curators"]:
-            curator = get_or_val_error(User, username=curator_data)
+            curator = self.get_or_val_error(User, username=curator_data)
             study.curators.add(curator)
         study.save()
 
         for substance_data in related["substances"]:
-            substance = get_or_val_error(Substance, name=substance_data)
+            substance = self.get_or_val_error(Substance, name=substance_data)
             study.substances.add(substance)
         study.save()
 

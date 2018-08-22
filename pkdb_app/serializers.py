@@ -3,12 +3,12 @@ from django.db.models import Q
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
+from rest_framework.settings import api_settings
 
 from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile, InterventionEx
 from pkdb_app.studies.models import Reference
 from pkdb_app.subjects.models import GroupSet, IndividualSet, GroupEx, IndividualEx
 from pkdb_app.users.models import User
-from pkdb_app.utils import get_or_val_error
 
 ITEM_SEPARATOR = '||'
 ITEM_MAPPER = '=='
@@ -28,6 +28,21 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
             if payload_key not in serializer_fields:
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise serializers.ValidationError(msg)
+
+
+    def get_or_val_error(self, model, *args, **kwargs):
+        """ Checks if object exists or raised ValidationError."""
+        try:
+            instance =  model.objects.get(*args, **kwargs)
+        except model.DoesNotExist:
+            instance = None
+        if not instance:
+            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY:"instance does not exist","detail":{**kwargs}})
+
+        return instance
+
+
+
 
     # ----------------------------------
     #

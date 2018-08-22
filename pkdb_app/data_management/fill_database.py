@@ -54,7 +54,8 @@ if not os.path.exists(DATA_PATH):
 # -----------------------------
 API_URL = "http://0.0.0.0:8000/api/v1"
 
-PASSWORD = os.getenv("PKPD_DEFAULT_PASSWORD")
+#PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
+PASSWORD = "test"
 USERS = [
     {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
      "password": PASSWORD},
@@ -73,10 +74,16 @@ def setup_database():
     """
     from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
-        requests.post(f'{API_URL}/substances/', json={"name": substance})
+        response = requests.post(f'{API_URL}/substances/', json={"name": substance})
+        if not  response.status_code == 201:
+            logging.warning(f"substance upload failed ")
+            print(response.json())
 
     for user in USERS:
-        requests.post(f'{API_URL}/users/', json=user)
+        response = requests.post(f'{API_URL}/users/', json=user)
+        if not  response.status_code == 201:
+            logging.warning(f"user upload failed ")
+            print(response.json())
 
 
 # -------------------------------
@@ -441,7 +448,7 @@ if __name__ == '__main__':
 
     # core database setup
     setup_database()
-
+    exit()
 
     # run the bonobo chain
     parser = bonobo.get_argument_parser()
