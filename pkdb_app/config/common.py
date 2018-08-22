@@ -53,7 +53,7 @@ class Common(Configuration):
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'pkdb_app.urls'
-    SECRET_KEY = os.getenv('PKPD_SECRET_KEY')
+    SECRET_KEY = os.getenv('PKDB_SECRET_KEY')
     WSGI_APPLICATION = 'pkdb_app.wsgi.application'
 
     # Email
@@ -62,7 +62,6 @@ class Common(Configuration):
     ADMINS = (
         ('Author', 'janekg89@hotmail.de'),
     )
-
 
 
     # General
