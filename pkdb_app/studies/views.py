@@ -56,6 +56,8 @@ class StudyViewSet(viewsets.ModelViewSet):
                     groups = groupset.get("groups", [])
                     parents = set([group.get("parent") for group in groups if group.get("parent")] )
                     groups = set([group.get("name") for group in groups if group.get("name")])
+
+                    # validate if groups are missing
                     missing_groups = parents - groups
                     if missing_groups:
                         if missing_groups is not None:
