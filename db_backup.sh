@@ -22,9 +22,10 @@ echo "Backup to" $DIR
 
 # backup media
 sudo cp -R /var/git/pkdb/media $DIR
+sudo cp -R /var/git/pkdb/static $DIR
 
 # backup database
 echo "---------------"
 echo "Dump database"
 echo "---------------"
-sudo -u postgres pg_dump pkdb > $DIR/pddb_dump.psql
+sudo -u postgres pg_dump pkdb > $DIR/pkdb_dump.psql
