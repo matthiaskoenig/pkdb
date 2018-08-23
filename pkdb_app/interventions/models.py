@@ -5,13 +5,13 @@ group or individual).
 """
 
 from django.db import models
-
+from django.contrib.postgres.fields import ArrayField
 from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputExManager, \
-    TimecourseExManager
+    TimecourseExManager, InterventionExManager
 from ..behaviours import Valueable, ValueableMap, Externable, CHAR_MAX_LENGTH_LONG
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
-    SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES
+    SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES, UNITS_CHOICES
 from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
 from ..utils import CHAR_MAX_LENGTH
 
@@ -93,6 +93,8 @@ class InterventionEx(Externable, Valueable, ValueableMap, AbstractIntervention, 
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
+    objects = InterventionExManager()
+
     class Meta:
         unique_together = ('interventionset', 'name', 'name_map', 'source')
 
@@ -103,7 +105,7 @@ class Intervention(Valueable, AbstractIntervention):
          In case of dosing/medication the actual dosing is stored in the Valueable.
          In case of a step without dosing, e.g., lifestyle intervention only the category is used.
       """
-    ex = models.ForeignKey(IndividualEx, related_name="interventions", null=True, on_delete=models.CASCADE)
+    ex = models.ForeignKey(InterventionEx, related_name="interventions", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     # TODO: unique together  unique_together = ('ex__interventionset', 'name')
@@ -170,6 +172,18 @@ class Output(Valueable, AbstractOutput):
 
 
 class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
+    """
+    Don't split the mappings to csv for
+    value
+    mean
+    median
+    min
+    max
+    sd
+    se
+    cv
+    time
+    """
 
     source = models.ForeignKey(DataFile, related_name="s_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
@@ -185,8 +199,9 @@ class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Val
 
     objects = TimecourseExManager()
 
+# django-numpy
 
-class Timecourse(Valueable, AbstractOutput):
+class Timecourse(AbstractOutput):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
@@ -194,5 +209,15 @@ class Timecourse(Valueable, AbstractOutput):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
-
     ex = models.ForeignKey(TimecourseEx, related_name="outputs", on_delete=models.CASCADE)
+    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+
+    value = ArrayField(Valueable._meta.get_field('value'))
+    mean = ArrayField(Valueable._meta.get_field('mean'))
+    median = ArrayField(Valueable._meta.get_field('median'))
+    min = ArrayField(Valueable._meta.get_field('min'))
+    max = ArrayField(Valueable._meta.get_field('max'))
+    sd = ArrayField(Valueable._meta.get_field('sd'))
+    se = ArrayField(Valueable._meta.get_field('se'))
+    cv = ArrayField(Valueable._meta.get_field('cv'))
+    time = ArrayField(AbstractOutput._meta.get_field('time'))

@@ -1,3 +1,5 @@
+import copy
+import pandas as pd
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from rest_framework import serializers
@@ -5,10 +7,12 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 from rest_framework.settings import api_settings
 
+from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile, InterventionEx
 from pkdb_app.studies.models import Reference
 from pkdb_app.subjects.models import GroupSet, IndividualSet, GroupEx, IndividualEx
 from pkdb_app.users.models import User
+from pkdb_app.utils import recursive_iter, set_keys
 
 ITEM_SEPARATOR = '||'
 ITEM_MAPPER = '=='
@@ -41,12 +45,10 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
         return instance
 
-
-
-
     # ----------------------------------
     #
     # ----------------------------------
+
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
@@ -93,6 +95,194 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 continue
             transformed_data[k] = v
         return transformed_data
+
+
+    # ----------------------------------
+    # helper for splitting
+    # ----------------------------------
+
+    def number_of_entries(self, entry):
+        """ Splits the data to get number of entries. """
+
+        n_values = []
+        for field, value in entry.items():
+            n = 1
+            try:
+                values = value.split(ITEM_SEPARATOR)
+                n = len(values)
+            except AttributeError:
+                pass
+
+            n_values.append(n)
+
+        # validation (either 1 or max length)
+        n_set = set(n_values)
+        if len(n_set) not in [1, 2]:
+            serializers.ValidationError(
+                f"Fields have different length, check || separators",
+                entry,
+            )
+
+        return max(n_values)
+
+    def split_entry(self, entry):
+        """ Splits entry fields based on separator.
+
+        :param entry:
+        :return: list of entries
+        """
+
+        n = self.number_of_entries(entry)
+        if n == 1:
+            return [entry]
+
+        # create entries by splitting separators
+        entries = [dict() for k in range(n)]
+
+        for field in entry.keys():
+            value = entry[field]
+            try:
+                values = value.split(ITEM_SEPARATOR)
+            except AttributeError:
+                values = [value]
+            for k, value in enumerate(values):
+                if isinstance(value, str):
+                    values[k] = value.strip()
+
+            # --- validation ---
+            # names must be split in a split entry
+            if field == "name" and len(values) != n:
+                raise serializers.ValidationError(
+                    f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain  of name is violated.")
+            # check for old syntax
+            for value in values:
+                if isinstance(value, str):
+                    if "{{" in value or "}}" in value:
+                        raise serializers.ValidationError(
+                            f"Splitting via '{{ }}' syntax not allowed, use '||' in count.")
+            # ------------------
+
+            # extend entries
+            if len(values) == 1:
+                values = values * n
+
+            if len(values) is not n:
+                raise serializers.ValidationError(
+                    ["Values do not have correct length",
+                     field, values, entry]
+                )
+
+            for k in range(n):
+                #if field in ["count"]:
+                #    entries[k][field] = int(values[k])
+                #else:
+                    entries[k][field] = values[k]
+
+        return entries
+
+    def split_entries(self, data):
+        internal = []
+        for entry in data.items():  # output
+            entries = self.split_entry(entry)
+            internal.extend(entries)
+        return internal
+
+    def split_entries_for_key(self, data, key):
+        """ Splits entries in multiple if separators found.
+
+        Gets the subset of data for the key, splits the entries in multiple
+        and overwrites the data in the original data dict!
+
+        :param data:
+        :param key:
+        :return:
+        """
+        # get data for key
+        external = data.get(key, [])  # outputs
+        data[key] = self.split_entries(external)
+
+        return data
+
+    # ----------------------------------
+    # helper for export of entries from file
+    # ----------------------------------
+
+    def df_from_file(self, source, format, subset):
+        delimiter = FORMAT_MAPPING[format].delimiter
+        src = DataFile.objects.get(pk=source)
+        try:
+            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False)
+
+        except:
+            raise serializers.ValidationError({"source": "cannot read csv", "detail": {"source": source,
+                                                                                       "format": format,
+                                                                                       "subset": subset}
+                                               })
+        if subset:
+            values = subset.split("==")
+            values = [v.strip() for v in values]
+            if len(values) != 2:
+                raise serializers.ValidationError(["field has wrong pattern 'col_value'=='cell_value'", subset])
+
+            try:
+                df[values[0]]
+            except KeyError:
+                raise serializers.ValidationError({"subset":f"source <{src.file.url}> has no column <{values[0]}>"})
+
+
+
+            df = df.loc[df[values[0]] == values[1]]
+
+            if len(df) == 0:
+                raise serializers.ValidationError(
+                    [f"the cell value <{values[1]}>' is missing in column <{values[0]}>", subset])
+
+        return df
+
+    def entries_from_file(self, data):
+        entries = []
+        source = data.get("source")
+        if source:
+            template = copy.deepcopy(data)
+            # get data
+            template.pop("source")
+            template.pop("figure")
+            format = template.pop("format",None)
+            if format is None:
+                raise serializers.ValidationError({"format":"format is missing!"})
+            subset = template.pop("subset", None)
+
+            df = self.df_from_file(source, format, subset)
+
+            for entry in df.itertuples():
+                entry_dict = copy.deepcopy(template)
+                recursive_entry_dict = list(recursive_iter(entry_dict))
+
+                for keys, value in recursive_entry_dict:
+
+                    if isinstance(value, str):
+                        if "==" in value:
+                            values = value.split("==")
+                            values = [v.strip() for v in values]
+
+                            if len(values) != 2 or values[0] != "col":
+                                raise serializers.ValidationError(
+                                    ["field has wrong pattern col=='col_value'", data])
+                            try:
+                                entry_value = getattr(entry, values[1])
+
+                            except AttributeError:
+                                raise serializers.ValidationError(
+                                    [f"key <{values[1]}> is missing in file <{source}> ", data])
+
+                            set_keys(entry_dict, entry_value, *keys)
+
+                entries.append(entry_dict)
+
+        else:
+            entries.append(data)
+
+        return entries
 
     # ----------------------------------
     #
@@ -255,6 +445,14 @@ class SidSerializer(WrongKeyValidationSerializer):
             # If the Serializer was instantiated with just an object, and no
             # data={something} proceed as usual
             return super().is_valid(raise_exception)
+
+
+
+
+
+
+
+
 
 '''
 

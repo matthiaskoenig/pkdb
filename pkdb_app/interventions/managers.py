@@ -24,6 +24,15 @@ class InterventionSetManager(models.Manager):
 
         return interventionset
 
+class InterventionExManager(models.Manager):
+    def create(self, *args, **kwargs):
+        interventions = kwargs.pop("interventions", [])
+        intervention_ex = super().create(*args, **kwargs)
+        for intervention in interventions:
+            intervention_ex.interventions.create(**intervention)
+        intervention_ex.save()
+        return intervention_ex
+
 class OutputSetManager(models.Manager):
 
     def create(self, *args, **kwargs):
