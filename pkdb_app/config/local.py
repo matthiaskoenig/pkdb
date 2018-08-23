@@ -46,7 +46,6 @@ class Local(Common):
     }
     '''
 
-
     # Mail
     EMAIL_HOST = 'localhost'
     EMAIL_PORT = 1025
