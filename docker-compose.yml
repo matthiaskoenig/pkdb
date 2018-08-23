@@ -14,8 +14,8 @@ services:
   web:
     restart: always
     environment:
-      - PKPD_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
-      - PKPD_DEFAULT_PASSWORD="pkdb"
+      - PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
+      - PKDB_DEFAULT_PASSWORD="pkdb"
 
     image: web
     build: ./

@@ -53,7 +53,7 @@ if not os.path.exists(DATA_PATH):
 # -----------------------------
 API_URL = "http://0.0.0.0:8000/api/v1"
 
-PASSWORD = os.getenv("PKPD_DEFAULT_PASSWORD")
+PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
 USERS = [
     {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
      "password": PASSWORD},
