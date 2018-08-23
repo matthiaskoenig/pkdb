@@ -1,0 +1,10 @@
+study	group	interventions	source	format	figure	substance	tissue	pktype	time	value	sd	unit
+Akinyinka2000	col==subjects	D1	Akinyinka2000_Fig1.csv	TSV	Akinyinka2000_Fig1.png	paraxanthine	plasma	concentration	col==time	col==caf	col==caf_sd	µg/ml
+Akinyinka2000	col==subjects	D1	Akinyinka2000_Fig1.csv	TSV	Akinyinka2000_Fig2.png	caffeine	plasma	concentration	col==time	col==px	col==px_sd	µg/ml
+Akinyinka2000	col==subjects	D1	Akinyinka2000_Fig1.csv	TSV		paraxanthine/caffeine	plasma	ratio	col==time	col==px_caf	col==px_caf_sd	-
+Benowitz2003			Benowitz2003_Fig3.csv		Benowitz2003_Fig3.png							
+Blanchard1983a			Blanchard1983a_Fig2.csv		Blanchard1983a_Fig2.png							
+Bonati1982			Bonati1982_Fig1.csv		Bonati1982_Fig1.png							
+Haller2002			Haller2002_Fig1C.csv		Haller2002_Fig1.png							
+Healy1991			Healy1991_Fig.csv		Healy1991_Fig.png							
+Kaplan1997			Kaplan1997_Fig1.csv		Kaplan1997_Fig1.png							

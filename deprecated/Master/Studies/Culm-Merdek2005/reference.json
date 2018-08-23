@@ -1,0 +1,28 @@
+{
+    "pmid": 16236038,
+    "name": "Culm-Merdek2005",
+    "sid": 16236038,
+    "date": "2006-05-03",
+    "journal": "British journal of clinical pharmacology",
+    "title": "Fluvoxamine impairs single-dose caffeine clearance without altering caffeine pharmacodynamics.",
+    "abstract": "Fluvoxamine greatly impaired caffeine clearance, but without detectable changes in caffeine pharmacodynamics. However, this study does not rule out possible adverse effects due to extensive accumulation of caffeine with daily ingestion in fluvoxamine-treated individuals.",
+    "authors": [
+        {
+            "first_name": "Kerry E",
+            "last_name": "Culm-Merdek"
+        },
+        {
+            "first_name": "Lisa L",
+            "last_name": "von Moltke"
+        },
+        {
+            "first_name": "Jerold S",
+            "last_name": "Harmatz"
+        },
+        {
+            "first_name": "David J",
+            "last_name": "Greenblatt"
+        }
+    ],
+    "doi": "10.1111/j.1365-2125.2005.02467.x"
+}

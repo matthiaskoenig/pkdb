@@ -1,0 +1,24 @@
+{
+    "pmid": 3608349,
+    "name": "Campbell1987a",
+    "sid": 3608349,
+    "date": "1987-09-21",
+    "journal": "Clinical pharmacology and therapeutics",
+    "title": "A urinary metabolite ratio that reflects systemic caffeine clearance.",
+    "abstract": "Systemic caffeine clearance and urinary metabolite profiles were determined in 15 subjects with diverse exposure histories to cytochrome P-450 inducers (cigarette smoke) and inhibitors (oral contraceptive steroids). A correlation was observed between caffeine clearance and a urinary ratio based on the molar recovery of paraxanthine 7-demethylation products relative to a paraxanthine 8-hydroxylation product (r = 0.91; P less than 0.001). Analysis of urinary metabolites was undertaken in a larger population to assess the effects of gender, age, oral contraceptives, and smoking on the ratio. No gender differences were observed in either adults or children; children (n = 21) showed a higher (P less than 0.001) mean metabolite ratio than adults (n = 61), oral contraceptive users (n = 9) had lower (P less than 0.05) ratios than women not taking oral contraceptives (n = 30), and smokers (n = 26) had higher (P less than 0.001) ratios than nonsmokers (n = 61). The data indicate that a urinary metabolite ratio based on paraxanthine 7-demethylation/8-hydroxylation products reflects systemic caffeine clearance and likely monitors cytochrome P-450 activity inducible by polycyclic aromatic hydrocarbons.",
+    "authors": [
+        {
+            "first_name": "M E",
+            "last_name": "Campbell"
+        },
+        {
+            "first_name": "S P",
+            "last_name": "Spielberg"
+        },
+        {
+            "first_name": "W",
+            "last_name": "Kalow"
+        }
+    ],
+    "doi": ""
+}

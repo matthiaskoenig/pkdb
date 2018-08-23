@@ -1,3 +1,0 @@
-	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
-334	Granfors2005	control	S1	D1	caffeine	Text	E1	plasma	caf_px_6h	yes	1.62	0.71					-	
-335	Granfors2005	oral contraceptive (OC)	S2	D1	caffeine	Text	E2	plasma	caf_px_6h	yes	4.6	2.56					-	caffeine to paraxanthine ratio after 6h

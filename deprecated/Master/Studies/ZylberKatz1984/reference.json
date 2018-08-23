@@ -1,0 +1,24 @@
+{
+    "pmid": 6734043,
+    "name": "ZylberKatz1984",
+    "sid": 6734043,
+    "date": "1984-08-13",
+    "journal": "Clinical pharmacology and therapeutics",
+    "title": "Relationship between caffeine concentrations in plasma and saliva.",
+    "abstract": "Caffeine concentrations in plasma and saliva were measured by HPLC in 12 healthy subjects after a single oral dose of 250 to 350 mg. There was a linear relationship between caffeine concentrations in the two fluids. Mean (+/- SE) saliva: total plasma concentration ratio was 0.79 +/- 0.02, while the ratio of the free (non-protein bound):total concentration of drug in plasma was 0.59 +/- 0.01. We postulate that the higher saliva:total plasma ratio as compared to the plasma free: total ratio is a result of pH partitioning. The mean elimination t 1/2 estimated from plasma and saliva concentration-time curves were much the same (5.7 +/- 0.7 and 5.9 +/- 0.8 hr). Values for total body clearance and apparent volume of distribution obtained from saliva data were higher than values derived from plasma concentrations. These differences could be corrected by multiplying the saliva-derived parameters by the saliva: total plasma concentration ratio. We conclude that saliva sampling could serve as a useful technique for therapeutic drug monitoring as well as for research of caffeine kinetics when many samples are required.",
+    "authors": [
+        {
+            "first_name": "E",
+            "last_name": "Zylber-Katz"
+        },
+        {
+            "first_name": "L",
+            "last_name": "Granit"
+        },
+        {
+            "first_name": "M",
+            "last_name": "Levy"
+        }
+    ],
+    "doi": ""
+}

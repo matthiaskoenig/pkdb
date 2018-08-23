@@ -1,0 +1,32 @@
+{
+    "pmid": 6420303,
+    "name": "Renner1984",
+    "sid": 6420303,
+    "date": "1984-03-12",
+    "journal": "Hepatology (Baltimore, Md.)",
+    "title": "Caffeine: a model compound for measuring liver function.",
+    "abstract": "The effects of liver disease on caffeine plasma clearance (Cl) and on exhalation of 14CO2 following i.v. injection of 2 mu Ci of [3-methyl-14C]caffeine together with 125 mg of the unlabeled compound were measured in 15 patients with cirrhosis, 11 subjects with miscellaneous liver disease, and 10 normal volunteers. Compared to mean values for Cl (2.02 +/- S.D. 0.68 ml per min per kg) and t1/2 (3.8 +/- 0.9 hr) in normal volunteers, cirrhotics were characterized by highly significant reductions in Cl (to 0.76 +/- 0.40) and prolongation in t1/2 (to 13.7 +/- 13.0), whereas the volume of distribution (VD) remained relatively unchanged (0.57 +/- 0.16 vs. 0.64 +/- 0.13 liter per kg in normals). Cumulative 14CO2 production and specific activity of 14CO2 in breath decreased in parallel (r = 0.83) with Cl. Patients with miscellaneous liver disease exhibited only small changes in Cl and t1/2; however, 14CO2 parameters in breath appeared more sensitive in indicating the slight functional derangement. In view of the correlation (Rs = 0.83) of cumulative 14CO2 excretion with the initial disappearance constant for bromosulfophthalein, the caffeine breath test may be considered as a quantitative measure of hepatic microsomal activity; based on a surprisingly close, hyperbolic relationship between Cl and fasting caffeine plasma concentrations, the latter might serve as a simple guide to severity of liver disease.",
+    "authors": [
+        {
+            "first_name": "E",
+            "last_name": "Renner"
+        },
+        {
+            "first_name": "H",
+            "last_name": "Wietholtz"
+        },
+        {
+            "first_name": "P",
+            "last_name": "Huguenin"
+        },
+        {
+            "first_name": "M J",
+            "last_name": "Arnaud"
+        },
+        {
+            "first_name": "R",
+            "last_name": "Preisig"
+        }
+    ],
+    "doi": ""
+}

@@ -4,10 +4,9 @@ Shared django settings.
 import os
 from os.path import join
 from distutils.util import strtobool
-import dj_database_url
 from configurations import Configuration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+print("TEMPLATE_DIR", os.path.join(BASE_DIR, 'templates'))
 
 class Common(Configuration):
 
@@ -25,26 +24,37 @@ class Common(Configuration):
         'rest_framework.authtoken',  # token authentication
         'django_filters',            # for filtering rest endpoints
         'rest_framework_swagger',
+        'debug_toolbar',
+        'corsheaders',
+
         # Your apps
         'pkdb_app.users',
         'pkdb_app.studies',
         'pkdb_app.subjects',
+        'pkdb_app.interventions',
+        'pkdb_app.comments',
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
     MIDDLEWARE = (
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'corsheaders.middleware.CorsMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
+
+    DEBUG_TOOLBAR_PATCH_SETTINGS = False
+    CORS_ORIGIN_WHITELIST = ('0.0.0.0:8080', 'localhost:8080')
+    INTERNAL_IPS = ('172.18.0.1',)
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'pkdb_app.urls'
-    SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+    SECRET_KEY = os.getenv('PKDB_SECRET_KEY')
     WSGI_APPLICATION = 'pkdb_app.wsgi.application'
 
     # Email
@@ -54,13 +64,7 @@ class Common(Configuration):
         ('Author', 'janekg89@hotmail.de'),
     )
 
-    # Postgres
-    DATABASES = {
-        'default': dj_database_url.config(
-            default='postgres://postgres:@postgres:5432/postgres',
-            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-        )
-    }
+
 
     # General
     APPEND_SLASH = False
@@ -76,7 +80,9 @@ class Common(Configuration):
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/2.0/howto/static-files/
     STATIC_ROOT = os.path.normpath(join(os.path.dirname(BASE_DIR), 'static'))
-    STATICFILES_DIRS = []
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
     STATIC_URL = '/static/'
     STATICFILES_FINDERS = (
         'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -90,7 +96,7 @@ class Common(Configuration):
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': STATICFILES_DIRS,
+            'DIRS': STATICFILES_DIRS + [os.path.join(BASE_DIR, "templates")],
             'APP_DIRS': True,
             'OPTIONS': {
                 'context_processors': [
@@ -185,7 +191,8 @@ class Common(Configuration):
 
     # Custom user app
     AUTH_USER_MODEL = 'users.User'
-
+    #STRICT_JSON = False
+    #UNICODE_JSON = True
     # Django Rest Framework
     REST_FRAMEWORK = {
         'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -200,6 +207,8 @@ class Common(Configuration):
         ],
         'DEFAULT_AUTHENTICATION_CLASSES': (
             'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.TokenAuthentication',
+
         ),
         'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
     }

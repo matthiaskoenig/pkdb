@@ -6,9 +6,13 @@ __pycache__/
 # C extensions
 *.so
 
+# open/libre office
+*.ods#
+
+
 # Distribution / packaging
 .Python
-build/
+# build/
 develop-eggs/
 dist/
 downloads/
@@ -57,7 +61,7 @@ coverage.xml
 # Django stuff:
 *.log
 .static_storage/
-.media/
+media/
 local_settings.py
 
 # Flask stuff:
@@ -106,6 +110,12 @@ venv.bak/
 
 # django staticfiles
 /static
-/migrations
+
+*/migrations/
 # mypy
 .mypy_cache/
+pkdb_app/studies/migrations/00*.py
+pkdb_app/users/migrations/00*.py
+pkdb_app/subjects/migrations/00*.py
+pkdb_app/interventions/migrations/00*.py
+pkdb_app/comments/migrations/00*.py

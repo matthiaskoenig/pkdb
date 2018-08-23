@@ -1,0 +1,363 @@
+{
+    "sid": 2729942,
+    "pkdb_version": 1.0,
+    "creator": "mkoenig",
+    "name": "Healy1989",
+    "design": "",
+    "reference": 2729942,
+    "curators": [
+        "mkoenig",
+        "janekg"
+    ],
+    "substances": [
+        "caffeine"
+    ],
+    "groupset": {
+        "description": "10 healthy, nonsmoking, male volunteers with normal renal and hepatic functions participated in this investigation. Subjects were admitted to the Antibiotic Research Unit of the Biopharmaceutics and Pharmacokinetics Center, School of Pharmacy, after internal review board approval and informed written consent were obtained. The mean ± standard deviation age, weight, and serum creatinine of the subjects were 26.7 ± 1.6 years, 76.3 ± 8.6 kg, and 1.0 ± 0.1 mg/dl, respectively. Exclusion criteria included prior hypersensitivity to any drug and the use of medication for chronic illness. Each volunteer was given a list of xanthine-containing products and instructed to abstain from all such items, alcohol, and all other drugs beginning 3.5 days prior to participation in the study. A xanthine-free diet was maintained throughout the study. Subjects fasted for 12 h before and 4 h after both doses of caffeine and after the first and last doses of ciprofloxacin.",
+        "groups": [
+            {
+                "count": 10,
+                "name": "S1",
+                "characteristica": [
+                    {
+                        "category": "age",
+                        "mean": "26.7",
+                        "sd": "1.6",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": null
+                    },
+                    {
+                        "category": "species",
+                        "choice": "homo sapiens"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "76.3",
+                        "sd": "8.6",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M"
+                    },
+                    {
+                        "category": "ethnicity",
+                        "choice": null
+                    }
+                ]
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "Ten xanthine-free, fasting males were given 100 mg of caffeine orally 24 h before being given ciprofloxacin and again with the third dose of ciprofloxacin (750 mg administered every 12 h). On the morning\nof study day 1, subjects received 100 mg of caffeine (No-Doz tablet, lot 6F114; Bristol-Myers Co., New York, N.Y.) with 180 ml of water. Blood samples were collected before drug administration and at 0.25, 0.5, 1, 1.5, 2, 4, 6, 8, 10, 12, 16, and 24 h after dosing. Twenty-four hours after caffeine dose 1 and following an overnight fast, subjects were started on oral ciprofloxacin (Cipro, lot MK-13-69; Miles Laboratories, Inc., West Haven, Conn.) at a dosage of one 750-mg tablet every 12 h, for a total of three doses. Each dose was administered with 180 ml of water. Serial blood samples were collected over the first dosing interval at 0, 0.25, 0.5, 1, 1.5, 2, 4, 6, 8, 10, and 12 h following ciprofioxacin administration. A second 100-mg dose of caffeine was given simultaneously with the last dose of ciprofloxacin, and blood for measurement of caffeine, paraxanthine, and ciprofloxacin concentrations was obtained over the ensuing 24 h as described above.",
+        "interventions": [
+            {
+                "name": "D_CAF",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 100.0,
+                "unit": "mg",
+                "category": "dosing"
+            },
+            {
+                "name": "D_CIP_A || D_CIP_B || D_CIP_C ",
+                "substance": "ciprofloxacin",
+                "time": "24||36||48",
+                "time_unit": "h",
+                "route": "oral",
+                "form": "capsules",
+                "value": 750.0,
+                "unit": "mg",
+                "category": "dosing"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 2.1,
+                "tissue": "plasma",
+                "sd": 0.5,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.2,
+                "tissue": "plasma",
+                "sd": 0.4,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.14,
+                "tissue": "plasma",
+                "sd": 0.03,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 5.2,
+                "tissue": "plasma",
+                "sd": 1.2,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.67,
+                "tissue": "plasma",
+                "sd": 0.19,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 16.3,
+                "tissue": "plasma",
+                "sd": 6.6,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance_tbc",
+                "value": 106.0,
+                "tissue": "plasma",
+                "sd": 41.6,
+                "unit": "ml/min/1.73m^2"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 0.6,
+                "tissue": "plasma",
+                "sd": 0.2,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 6.2,
+                "tissue": "plasma",
+                "sd": 1.7,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "auc",
+                "value": 4.6,
+                "tissue": "plasma",
+                "sd": 1.3,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 2.3,
+                "tissue": "plasma",
+                "sd": 0.4,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "tmax",
+                "value": 1.4,
+                "tissue": "plasma",
+                "sd": 0.6,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "kel",
+                "value": 0.1,
+                "tissue": "plasma",
+                "sd": 0.04,
+                "unit": "1/h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 8.2,
+                "tissue": "plasma",
+                "sd": 2.5,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.62,
+                "tissue": "plasma",
+                "sd": 0.16,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "auc",
+                "value": 25.9,
+                "tissue": "plasma",
+                "sd": 7.8,
+                "unit": "µg/ml*h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance_tbc",
+                "value": 58.2,
+                "tissue": "plasma",
+                "sd": 28.8,
+                "unit": "ml/min/1.73m^2"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "cmax",
+                "value": 0.6,
+                "tissue": "plasma",
+                "sd": 0.2,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "tmax",
+                "value": 10.4,
+                "tissue": "plasma",
+                "sd": 2.7,
+                "unit": "h"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D_CAF",
+                    "D_CIP_A",
+                    "D_CIP_B",
+                    "D_CIP_C"
+                ],
+                "substance": "paraxanthine",
+                "pktype": "auc",
+                "value": 2.5,
+                "tissue": "plasma",
+                "sd": 0.8,
+                "unit": "µg/ml*h"
+            }
+        ]
+    }
+}

@@ -1,6 +1,0 @@
-study	trial	AUC	AUC_SE	Peak_Plasma	Peak_Plasma_SE	time_to_peak	time_to_peak_SE	Kel	Kel_SE	t_half	t_half_SE	Vd 	Vd_SE	Cl_AUC	Cl_AUC_SE
-McLean2002	FR	116.1	11.6	48	1.43	1.75	0.41	0.11	0.01	7.22	0.71	0.56	0.05	0.93	0.1
-McLean2002	LR	117.4	13.4	49.4	2.8	1.6	0.34	0.11	0.02	7.06	0.9	0.66	0.08	1.12	0.15
-McLean2002	FE	99.9	11.1	47	1.8	2.06	0.26	0.12	0.02	6.92	0.85	0.6	0.03	1.14	0.19
-McLean2002	FEH	116	15.7	43.7	2	1.88	0.23	0.1	0.01	8.27	1.15	0.64	0.03	1.05	0.18
-

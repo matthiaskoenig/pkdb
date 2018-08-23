@@ -3,12 +3,20 @@ version: '2'
 services:
   postgres:
     image: postgres:9.6
-    #ports:
-    #  - "5432:5432"
+    ports:
+      - "5433:5432"
+    environment:
+     POSTGRES_USER : postgres
+     POSTGRES_PASSWORD: pass
+     POSTGRES_DB: postgres
+
+
   web:
     restart: always
     environment:
-      - DJANGO_SECRET_KEY=local
+      - PKPD_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
+      - PKPD_DEFAULT_PASSWORD="pkdb"
+
     image: web
     build: ./
     command: >
@@ -30,3 +38,14 @@ services:
       - ./:/code
     ports:
       - "8001:8001"
+
+  #client:
+    #build: ./client
+    #ports:
+    #  - 8080:8080
+    #volumes:
+    #  - ./client:/data
+    #depends_on:
+    #  - web
+    #environment:
+    #  - API_URL=http://localhost:8081/

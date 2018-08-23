@@ -1,3 +1,0 @@
-	study	intervention	subjects	dosing	substance	source	entry	tissue	pktype	per_bw	value	sd	se	cv	min	max	unit	comment
-90	Balogh1992	control	S1	D1	caffeine	Tab1	E1	plasma	clearance	yes	2.52	0.97					ml/min/kg	
-91	Balogh1992	control	S1	D1	caffeine	Tab1	E1	plasma	thalf		3.3	1.14					h	

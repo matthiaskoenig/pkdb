@@ -1,5 +1,0 @@
-	study	subjects	keywords	species	strain	ethnicity	count	gender	healthy	condition	alcohol	caffeine 	smoking	smoking_amount	oc	age	age_sd	age_sem	age_min	age_max	age_unit	bw	bw_sd	bw_sem	bw_min	bw_max	bw_unit	height	height_sd	height_se	height_min	height_max	height_unit	subjects_details
-22	Renner1984	S1		homo sapiens			10	male	yes	healthy			mixed (6 of 10 smoking)		no	38.0	11.0		27.0	56.0	yr	74.0	10.0		58.0	86.0	kg							10 healthy volunteers (information in table 2)
-23	Renner1984	S2		homo sapiens			8	6 male / 2 female	no	cirrhotic liver disease			mixed (3 of 8 smoking)			55.0	10.0		34.0	66.0	yr	66.0	18.0		41.0	100.0	kg							8 patients with cirrhotic liver disease (information in table 1)
-24	Renner1984	S3		homo sapiens			7	female	no	PBC			no			56.0	13.0		42.0	73.0	yr	57.0	8.0		49.0	68.0	kg							7 patients with PBC (information in table 1)
-25	Renner1984	S4		homo sapiens			11	9 male / 2 female	no	Miscellaneous Liver Disease			Mixed (2 of 11 smoking)			52.0	12.0		24.0	71.0	yr	81.0	19.0		55.0	118.0	kg							11 patients with miscellaneous liver disease (information in table 1)

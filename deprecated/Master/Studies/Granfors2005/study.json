@@ -1,0 +1,152 @@
+{
+    "sid": 16198659,
+    "pkdb_version": 1.0,
+    "creator": "mkoenig",
+    "name": "Granfors2005",
+    "design": "",
+    "reference": 16198659,
+    "curators": [
+        "mkoenig",
+        "janekg"
+    ],
+    "substances": [
+        "caffeine"
+    ],
+    "groupset": {
+        "description": "This was an open, parallel-group study with 15 healthy female volunteers (mean age, 22+-2 years [range, 18-25 years]; mean weight, 57+-6 kg [range, 48-63 kg]) using Ocs and 15 healthy female volunteers (mean age, 22+-2 years [range, 19-26 years]; mean weight, 62+-10 kg [range, 52-74 kg]) without any concomitant medication.\nThere were no statistically significant differences in age or weight between the groups. The combined OCs used by the women in this study contained 75 g gestodene and either 20 g ethinyl estradiol (Harmonet tablet [Wyeth, Newbridge, Ireland], 7 subjects; Meliane tablet [Schering, Berlin, Germany], 5 subjects) or 30 g ethinyl estradiol (Femoden tablet [Schering], 2 subjects; Minulet tablet [Wyeth], 1 subject). The OC users had been using these OC preparations for at least 1 menstrual cycle before the study. Before entering the study, all subjects provided written informed consent and were ascertained to be healthy by medical history, physical examination, and routine laboratory tests. For safety reasons, subjects with a systolic blood pressure lower than 110 mm Hg were excluded from the study. None of the subjects were tobacco smokers, and none used any continuous medication except OCs.",
+        "characteristica": [
+            {
+                "category": "smoking",
+                "choice": "N"
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            },
+            {
+                "category": "healthy",
+                "choice": "Y"
+            },
+            {
+                "category": "sex",
+                "choice": "F"
+            },
+            {
+                "category": "ethnicity",
+                "choice": null
+            }
+        ],
+        "groups": [
+            {
+                "count": 15,
+                "name": "S1",
+                "characteristica": [
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "22",
+                        "min": "19",
+                        "max": "26",
+                        "sd": "2",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "62",
+                        "min": "52",
+                        "max": "74",
+                        "sd": "10",
+                        "unit": "kg"
+                    }
+                ]
+            },
+            {
+                "count": 15,
+                "name": "S2",
+                "characteristica": [
+                    {
+                        "category": "age",
+                        "mean": "22",
+                        "min": "18",
+                        "max": "25",
+                        "sd": "2",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "oral contraceptives",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "57",
+                        "min": "48",
+                        "max": "63",
+                        "sd": "6",
+                        "unit": "kg"
+                    }
+                ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "source": "Granfors2005_Fig7B.csv",
+                "figure": "Granfors2005_Fig7.png",
+                "characteristica": []
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "An oral caffeine test was performed on the day before the tizanidine study day. The subjects ingested 100 mg caffeine (one 100-mg Cofi-Tabs tablet; Vitabalans, Hämeenlinna, Finland) at 9 AM, after having abstained from caffeine intake for at least 12 hours, and a blood sample for analysis of plasma caffeine and paraxanthine (1,7-dimethylxanthine) concentrations was taken 6 hours after caffeine intake.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 100.0,
+                "unit": "mg",
+                "category": "dosing"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "source": "Granfors2005_Fig7B.csv",
+                "figure": "Granfors2005_Fig7.png"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "caf_px_6h",
+                "value": 1.62,
+                "tissue": "plasma",
+                "sd": 0.71,
+                "unit": "-"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "caf_px_6h",
+                "value": 4.6,
+                "tissue": "plasma",
+                "sd": 2.56,
+                "unit": "-"
+            }
+        ]
+    }
+}

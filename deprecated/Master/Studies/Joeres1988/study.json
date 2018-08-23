@@ -1,0 +1,642 @@
+{
+    "sid": 3371873,
+    "pkdb_version": 1.0,
+    "creator": "mkoenig",
+    "name": "Joeres1988",
+    "design": "",
+    "reference": 3371873,
+    "curators": [
+        "mkoenig",
+        "janekg"
+    ],
+    "substances": [
+        "caffeine"
+    ],
+    "groupset": {
+        "description": "7 healthy volunteers before abstaining for 3 weeks from smoking; The seven healthy volunteers from the hospital staff aged from 25 to 45 years. All smoked 10-20 cigarettes daily. There was no interfering pharmacotheraphy.||8 smoking healthy volunteers and patients without liver disease||15 non-smoking healthy volunteers and patients without liver disease||18 smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.||30 non-smoking patients with alcoholic liver cirrhosis; The second group consisted of 18 smokers and 30 nonsmokers with clinically established and, in most patients, biopsy-proven alcoholic liver cirrhosis. Cigarette consumption ranged from 5 to 40 cigarettes daily in smokers.",
+        "characteristica": [
+            {
+                "category": "oral contraceptives",
+                "choice": null
+            },
+            {
+                "category": "species",
+                "choice": "homo sapiens"
+            }
+        ],
+        "groups": [
+            {
+                "count": 7,
+                "name": "S1",
+                "characteristica": [
+                    {
+                        "category": "sex",
+                        "choice": null
+                    },
+                    {
+                        "category": "age",
+                        "min": "25",
+                        "max": "45",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    }
+                ]
+            },
+            {
+                "count": 7,
+                "name": "S2",
+                "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    }
+                ]
+            },
+            {
+                "count": 8,
+                "name": "S3",
+                "characteristica": [
+                    {
+                        "category": "sex",
+                        "choice": null
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    }
+                ]
+            },
+            {
+                "count": 15,
+                "name": "S4",
+                "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": null
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "Y"
+                    }
+                ]
+            },
+            {
+                "count": 18,
+                "name": "S5",
+                "characteristica": [
+                    {
+                        "category": "age",
+                        "mean": "46",
+                        "min": "30",
+                        "max": "65",
+                        "sd": "9",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{13}} ||  F {{5}}"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "smoking",
+                        "choice": "Y"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "71",
+                        "min": "51",
+                        "max": "94",
+                        "sd": "14",
+                        "unit": "kg"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
+                    }
+                ]
+            },
+            {
+                "count": 30,
+                "name": "S6",
+                "characteristica": [
+                    {
+                        "category": "smoking",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "sex",
+                        "choice": "M {{21}} || F {{9}}"
+                    },
+                    {
+                        "category": "disease",
+                        "choice": "alcoholic liver cirrhosis"
+                    },
+                    {
+                        "category": "age",
+                        "mean": "51",
+                        "min": "40",
+                        "max": "66",
+                        "sd": "6",
+                        "unit": "yr"
+                    },
+                    {
+                        "category": "healthy",
+                        "choice": "N"
+                    },
+                    {
+                        "category": "weight",
+                        "mean": "75",
+                        "min": "48",
+                        "max": "100",
+                        "sd": "14",
+                        "unit": "kg"
+                    }
+                ]
+            }
+        ]
+    },
+    "individualset": {
+        "description": "",
+        "individuals": [
+            {
+                "source": "Joeres1988_Fig1.csv",
+                "figure": "Joeres1988_Fig1.png",
+                "characteristica": []
+            }
+        ]
+    },
+    "interventionset": {
+        "description": "Oral application of 366mg caffeine.",
+        "interventions": [
+            {
+                "name": "D1",
+                "substance": "caffeine",
+                "time": "0",
+                "time_unit": "h",
+                "route": "oral",
+                "value": 366.0,
+                "unit": "mg",
+                "category": "dosing"
+            }
+        ]
+    },
+    "outputset": {
+        "description": "",
+        "outputs": [
+            {
+                "source": "Joeres1988_Fig1.csv",
+                "figure": "Joeres1988_Fig1.png"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 118.0,
+                "tissue": "plasma",
+                "sd": 33.0,
+                "min": 90.0,
+                "max": 176.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 1.61,
+                "tissue": "plasma",
+                "sd": 0.43,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 43.0,
+                "tissue": "plasma",
+                "sd": 6.0,
+                "min": 33.0,
+                "max": 50.0,
+                "unit": "l"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.58,
+                "tissue": "plasma",
+                "sd": 0.08,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S1",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 257.0,
+                "tissue": "plasma",
+                "sd": 48.0,
+                "min": 195.0,
+                "max": 334.0,
+                "unit": "min"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 77.0,
+                "tissue": "plasma",
+                "sd": 22.0,
+                "min": 58.0,
+                "max": 107.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 1.05,
+                "tissue": "plasma",
+                "sd": 0.28,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 35.0,
+                "tissue": "plasma",
+                "sd": 6.0,
+                "min": 30.0,
+                "max": 43.0,
+                "unit": "l"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.46,
+                "tissue": "plasma",
+                "sd": 0.08,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S2",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 356.0,
+                "tissue": "plasma",
+                "sd": 131.0,
+                "min": 199.0,
+                "max": 516.0,
+                "unit": "min"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 104.0,
+                "tissue": "plasma",
+                "sd": 40.0,
+                "min": 65.0,
+                "max": 176.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 1.43,
+                "tissue": "plasma",
+                "sd": 0.54,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 37.0,
+                "tissue": "plasma",
+                "sd": 11.0,
+                "min": 22.0,
+                "max": 50.0,
+                "unit": "l"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.51,
+                "tissue": "plasma",
+                "sd": 0.13,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S3",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 286.0,
+                "tissue": "plasma",
+                "sd": 76.0,
+                "min": 198.0,
+                "max": 402.0,
+                "unit": "min"
+            },
+            {
+                "group": "S4",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 64.0,
+                "tissue": "plasma",
+                "sd": 20.0,
+                "min": 28.0,
+                "max": 102.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S4",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 0.96,
+                "tissue": "plasma",
+                "sd": 0.35,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S4",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 29.0,
+                "tissue": "plasma",
+                "sd": 8.0,
+                "min": 17.0,
+                "max": 46.0,
+                "unit": "l"
+            },
+            {
+                "group": "S4",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.41,
+                "tissue": "plasma",
+                "sd": 0.07,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S4",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 336.0,
+                "tissue": "plasma",
+                "sd": 134.0,
+                "min": 159.0,
+                "max": 662.0,
+                "unit": "min"
+            },
+            {
+                "group": "S5",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 63.0,
+                "tissue": "plasma",
+                "sd": 63.0,
+                "min": 1.0,
+                "max": 230.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S5",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 0.9,
+                "tissue": "plasma",
+                "sd": 0.85,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S5",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 37.0,
+                "tissue": "plasma",
+                "sd": 15.0,
+                "min": 16.0,
+                "max": 62.0,
+                "unit": "l"
+            },
+            {
+                "group": "S5",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.53,
+                "tissue": "plasma",
+                "sd": 0.22,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S5",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 899.0,
+                "tissue": "plasma",
+                "sd": 683.0,
+                "min": 161.0,
+                "max": 2390.0,
+                "unit": "min"
+            },
+            {
+                "group": "S5",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 2.1,
+                "tissue": "plasma",
+                "sd": 4.5,
+                "min": 0.1,
+                "max": 18.4,
+                "unit": "µg/ml"
+            },
+            {
+                "group": "S6",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 34.0,
+                "tissue": "plasma",
+                "sd": 49.0,
+                "min": 1.0,
+                "max": 270.0,
+                "unit": "ml/min"
+            },
+            {
+                "group": "S6",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "clearance",
+                "value": 0.47,
+                "tissue": "plasma",
+                "sd": 0.67,
+                "unit": "ml/min/kg"
+            },
+            {
+                "group": "S6",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 40.0,
+                "tissue": "plasma",
+                "sd": 20.0,
+                "min": 19.0,
+                "max": 73.0,
+                "unit": "l"
+            },
+            {
+                "group": "S6",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "vd",
+                "value": 0.55,
+                "tissue": "plasma",
+                "sd": 0.26,
+                "unit": "l/kg"
+            },
+            {
+                "group": "S6",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "thalf",
+                "value": 1415.0,
+                "tissue": "plasma",
+                "sd": 1328.0,
+                "min": 148.0,
+                "max": 5542.0,
+                "unit": "min"
+            },
+            {
+                "group": "S6",
+                "interventions": [
+                    "D1"
+                ],
+                "substance": "caffeine",
+                "pktype": "cmax",
+                "value": 5.1,
+                "tissue": "plasma",
+                "sd": 6.1,
+                "min": 0.1,
+                "max": 23.0,
+                "unit": "µg/ml"
+            }
+        ]
+    }
+}
