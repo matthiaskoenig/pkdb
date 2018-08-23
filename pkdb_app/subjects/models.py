@@ -12,7 +12,8 @@ from ..behaviours import Valueable, ValueableMap, Externable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
-from .managers import GroupExManager, GroupSetManager, IndividualExManager, IndividualSetManager
+from .managers import GroupExManager, GroupSetManager, IndividualExManager, IndividualSetManager, IndividualManager, \
+    GroupManager
 
 
 # ----------------------------------
@@ -87,8 +88,7 @@ class Group(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()
     parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
-
-    #objects = GroupManager()
+    objects = GroupManager()
 
     #class Meta:
     #todo: in validator unique_together = ('ex__groupset', 'name')
@@ -164,6 +164,7 @@ class Individual(AbstractIndividual):
     ex = models.ForeignKey(IndividualEx, related_name="individuals", null=True, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals")
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    objects = IndividualManager()
 
     # TODO: unique together  unique_together = ('ex__individualset', 'name')
 
