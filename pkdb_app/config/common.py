@@ -6,6 +6,7 @@ from os.path import join
 from distutils.util import strtobool
 from configurations import Configuration
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print("TEMPLATE_DIR", os.path.join(BASE_DIR, 'templates'))
 
 class Common(Configuration):
 
@@ -53,7 +54,7 @@ class Common(Configuration):
 
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'pkdb_app.urls'
-    SECRET_KEY = os.getenv('PKPD_SECRET_KEY')
+    SECRET_KEY = os.getenv('PKDB_SECRET_KEY')
     WSGI_APPLICATION = 'pkdb_app.wsgi.application'
 
     # Email
@@ -79,7 +80,9 @@ class Common(Configuration):
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/2.0/howto/static-files/
     STATIC_ROOT = os.path.normpath(join(os.path.dirname(BASE_DIR), 'static'))
-    STATICFILES_DIRS = []
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static"),
+    ]
     STATIC_URL = '/static/'
     STATICFILES_FINDERS = (
         'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -93,7 +96,7 @@ class Common(Configuration):
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': STATICFILES_DIRS,
+            'DIRS': STATICFILES_DIRS + [os.path.join(BASE_DIR, "templates")],
             'APP_DIRS': True,
             'OPTIONS': {
                 'context_processors': [
