@@ -5,6 +5,7 @@ import sys
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pkdb_app.config")
     PKDB_DJANGO_CONFIGURATION = os.getenv("PKDB_DJANGO_CONFIGURATION", "Local")
+    print("DJANGO_CONFIGURATION:", PKDB_DJANGO_CONFIGURATION)
     os.environ.setdefault("DJANGO_CONFIGURATION", PKDB_DJANGO_CONFIGURATION)
 
     try:
