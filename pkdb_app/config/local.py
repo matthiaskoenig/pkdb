@@ -25,13 +25,12 @@ class Local(Common):
     ]
 
     # Postgres
-
     DATABASES = {
         'default': dj_database_url.config(
             # postgres://USER:PASSWORD@HOST:PORT/NAME
             default=f'postgres://postgres:pass@postgres:5432/postgres',
             conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-        )
+        ),
     }
     '''
     DATABASES = {
