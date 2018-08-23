@@ -16,6 +16,13 @@ Database and web interface for storing pharmacokinetics information including
 <img src="./docs/images/data_extraction.png" width="600"/>
 Figure 1: Overview over data extraction.
 
+## Access
+http://localhost:8000/api/v1/
+http://localhost:8000/api/v1/studies/17955229/
+
+
+
+
 ## Data model
 Pharmacokinetics data is a special type of experimental data.
 Pharmacokinetics data like clearance, halflife, ... (with units and error measurements) are either directly reported in publications
@@ -51,6 +58,32 @@ Create a superuser to login to the admin:
 docker-compose run --rm web ./manage.py createsuperuser
 ```
 
+# Update after code change
+```
+# reset migrations
+sudo find . -path "*/migrations/*.py" -not -name "__init__.py" -delete && sudo find . -path "*/migrations/*.pyc"  -delete && sudo rm -r media/study/
+
+# rebuild container
+docker-compose down
+docker-compose up --build
+```
+
+
+# Fill database
+From console use the following
+```
+workon pkdb
+(pkdb) pip install -r requirements.txt --upgrade
+(pkdb) python ./pkdb_app/data_management/fill_database.py
+```
+
+
+# Connect database pycharm
+```
+DataSource -> postgres
+```
+Use port defined in `docker-compose.yml` (5433), database name and password in `docker-compose.yml`
+
 # Local Development
 Start the dev server for local development:
 
@@ -69,5 +102,14 @@ Example:
 ```
 
 ----
+# Client
+check out ./client/README.md.
+## Requirements
+- node.js
+- npm
+- vue.js
+
+
+
 
 &copy; 2018 Jan Grzegorzewski & Matthias König.

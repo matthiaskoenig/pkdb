@@ -1,9 +1,11 @@
 """
 Views
 """
+from pkdb_app._version import __version__
+
 from django.shortcuts import render
 from rest_framework_swagger.renderers import SwaggerUIRenderer,OpenAPIRenderer
-from rest_framework.decorators import api_view,renderer_classes,authentication_classes,permission_classes
+from rest_framework.decorators import api_view, renderer_classes,authentication_classes, permission_classes
 from rest_framework.renderers import CoreJSONRenderer
 from rest_framework.schemas import SchemaGenerator
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
@@ -19,3 +21,10 @@ def schema_view(request):
     generator = SchemaGenerator(
         title='PKDB Web API')
     return Response(generator.get_schema(request=request))
+
+
+def about_view(request):
+    return render(request, "pkdb/about.html",
+                  {
+                      "version": __version__,
+                  })
