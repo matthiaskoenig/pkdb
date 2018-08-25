@@ -24,11 +24,6 @@
                         text: 'About',
                         page:'/About'
                     },
-                    {
-                        id: 2,
-                        text: 'Contact',
-                        page:'/Contact'
-                    }
                 ]
             }
         }

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/bg.jpg" height="100">
+    <!--<img alt="Vue logo" src="./assets/bg.jpg" height="100">-->
     <Navigation></Navigation>
     <router-view/>
     <div id="footer">

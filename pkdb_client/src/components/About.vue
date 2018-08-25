@@ -1,11 +1,17 @@
 <template>
   <div>
-    <h1>{{ msg }}</h1>
-    <h2>About</h2>
+    <h1>About</h1>
     <p>
       Pharmacokinetics database<br />
       Version: {{ version }}<br />
-      <a href="/api/v1/" target="_blank">REST API</a>
+      <a href="http://www.pk-db.com/api/v1/" target="_blank">REST API</a>
+    </p>
+    <h2>Contact</h2>
+    <p>
+    <ul>
+      <li>Email: {{ email }}</li>
+      <li>Website: {{ web }}</li>
+    </ul>
     </p>
   </div>
 </template>
@@ -15,6 +21,12 @@ export default {
   name: 'About',
   props: {
     msg: String
+  },
+  data(){
+    return {
+        email: 'konigmatt@googlemail.com',
+        web: 'https://livermetabolism.com'
+    }
   }
 }
 </script>
