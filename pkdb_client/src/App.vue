@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/bg.jpg" height="100">
-    <About msg="Welcome to the PK-DB App"/>
+    <Navigation></Navigation>
+    <router-view/>
     <div id="footer">
       <!-- FOOTER -->
       <p>&copy; 2017-2018 PK-DB</p>
@@ -11,13 +12,13 @@
 </template>
 
 <script>
-import About from './components/About.vue'
+import Navigation from './components/Navigation.vue'
 
 export default {
-  name: 'app',
-  components: {
-      About
-  }
+    name: 'app',
+    components: {
+        'Navigation': Navigation
+    }
 }
 </script>
 
