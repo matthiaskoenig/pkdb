@@ -3,6 +3,8 @@
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
+from rest_framework.permissions import AllowAny, IsAdminUser
+
 
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.subjects.serializers import DataFileSerializer
@@ -41,3 +43,4 @@ class DataFileViewSet(viewsets.ModelViewSet):
 
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
+    permission_classes = (AllowAny,)

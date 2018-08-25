@@ -45,7 +45,7 @@ router.register('authors', AuthorsViewSet, base_name="authors")
 router.register('references', ReferencesViewSet, base_name="references")
 
 router.register('studies', StudyViewSet, base_name="studies")
-router.register('statistics', StatisticsViewSet, base_name="statistics")
+# router.register('statistics', StatisticsViewSet, base_name="statistics")
 
 
 # router.register('groups', GroupsViewSet, base_name="groups")
@@ -98,11 +98,14 @@ schema_view = get_swagger_view(title='PKDB API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', views.about_view, name='index'),
-    url(r'api', schema_view, name='api'),
-    path(r'^api/v1/', include(router.urls)),
+
+
+    path(r'api/v1/', include(router.urls)),
     # path('api-token-auth/', views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'api', schema_view, name='api'),
+    url(r'', views.about_view, name='index'),
+
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
     #re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
