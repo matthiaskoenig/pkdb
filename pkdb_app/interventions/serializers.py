@@ -5,7 +5,7 @@ import pandas as pd
 from copy import deepcopy
 
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from rest_framework import serializers
 
@@ -116,7 +116,21 @@ class InterventionSetSerializer(ExSerializer):
 # ----------------------------------
 
 class OutputSerializer(ExSerializer):
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
+                                               read_only=False, required=False, allow_null=True)
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
+                                                    read_only=False, required=False, allow_null=True)
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
+                                                       read_only=False, required=False, allow_null=True)
+    substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
+                                             read_only=False, required=False, allow_null=True)
 
+
+
+    class Meta:
+        model = OutputEx
+        fields = OUTPUT_FIELDS + VALUE_FIELDS + \
+                 ["group","individual","interventions"]
 
     def to_internal_value(self, data):
 
@@ -137,12 +151,24 @@ class OutputSerializer(ExSerializer):
         if "individual" in data:
 
             if data["individual"]:
+
+                study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
+                #for i in study_individuals:
+                #    print(i.name)
                 try:
-                    data["individual"] = Individual.objects.get(
-                        Q(ex__individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
+                    study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
+
+                    data["individual"] = study_individuals.get(name = data.get("individual")).pk
+
+                    #data["individual"] = Individual.objects.get(
+                    #    Q(ex__individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
                 except ObjectDoesNotExist:
                     msg = f'individual: individual <{data.get("individual")}>  in study: <{study_sid}> does not exist'
                     raise serializers.ValidationError(msg)
+                except MultipleObjectsReturned:
+                    msg = f'individual: Multiple individuals with the name <{data.get("individual")}>  have been declared on study.'
+                    raise serializers.ValidationError(msg)
+
 
         if "interventions" in data:
 
@@ -158,7 +184,6 @@ class OutputSerializer(ExSerializer):
                 data["interventions"] = interventions
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
-
 
 class OutputExSerializer(BaseOutputExSerializer):
     group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
@@ -192,10 +217,11 @@ class OutputExSerializer(BaseOutputExSerializer):
         for output in temp_outputs:
             outputs_from_file = self.entries_from_file(output)
             outputs.extend(outputs_from_file)
-
         # ----------------------------------
         # finished
         # ----------------------------------
+
+
         data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
@@ -211,6 +237,7 @@ class OutputExSerializer(BaseOutputExSerializer):
                 except ObjectDoesNotExist:
                     msg = f'group: {data.get("group_ex")} in study: {study_sid} does not exist'
                     raise serializers.ValidationError(msg)
+
 
         if "individual_ex" in data:
 

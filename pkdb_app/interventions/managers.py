@@ -10,6 +10,8 @@ class InterventionSetManager(models.Manager):
 
         intervention_exs = kwargs.pop("intervention_exs", [])
         descriptions = kwargs.pop("descriptions", [])
+        study = kwargs.pop("study")
+
 
 
         interventionset = super().create(*args, **kwargs)
@@ -36,6 +38,7 @@ class InterventionExManager(models.Manager):
 class OutputSetManager(models.Manager):
 
     def create(self, *args, **kwargs):
+        study = kwargs.pop("study")
         output_exs = kwargs.pop("output_exs", [])
         timecourse_exs = kwargs.pop("timecourse_exs", [])
         descriptions = kwargs.pop("descriptions", [])
@@ -64,9 +67,22 @@ class OutputSetManager(models.Manager):
 class OutputExManager(models.Manager):
     def create(self, *args, **kwargs):
         outputs = kwargs.pop("outputs", [])
+        interventions = kwargs.pop("interventions", [])
+
         output_ex = super().create(*args, **kwargs)
+        for internvention in interventions:
+            output_ex.interventions.add(internvention)
         for output in outputs:
             output_ex.outputs.create(**output)
+        output_ex.save()
+        return output_ex
+class OutputManager(models.Manager):
+    def create(self, *args, **kwargs):
+        interventions = kwargs.pop("interventions", [])
+        output_ex = super().create(*args, **kwargs)
+        for internvention in interventions:
+            output_ex.interventions.add(internvention)
+
         output_ex.save()
         return output_ex
 

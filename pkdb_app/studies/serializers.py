@@ -168,9 +168,9 @@ class StudySerializer(SidSerializer):
             if related[name] is not None:
                 if getattr(study, name):
                         getattr(study, name).delete()
-                instance = model.objects.create(**related[name])
+                instance = model.objects.create(study = study, **related[name])
                 setattr(study, name, instance)
-                study.save()
+            study.save()
 
         for curator_data in related["curators"]:
             curator = self.get_or_val_error(User, username=curator_data)
@@ -190,4 +190,3 @@ class StudySerializer(SidSerializer):
             study.save()
 
         return study
-
