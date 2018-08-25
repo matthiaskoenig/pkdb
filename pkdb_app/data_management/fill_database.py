@@ -25,6 +25,15 @@ import requests
 import bonobo
 from jsonschema import validate
 import logging
+import coloredlogs
+
+coloredlogs.install(
+    level='INFO',
+    fmt="%(module)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
+    # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 # FIXME: remove bonobo
 
@@ -55,6 +64,9 @@ API_URL = "http://0.0.0.0:8000/api/v1"
 # -----------------------------
 
 PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
+if not PASSWORD:
+    raise ValueError("Password could not be read, export the environment variable.")
+
 USERS = [
     {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
      "password": PASSWORD},
@@ -73,10 +85,12 @@ def setup_database(api_url):
     """
     from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
-        requests.post(f'{api_url}/substances/', json={"name": substance})
+        response = requests.post(f'{api_url}/substances/', json={"name": substance})
+        check_json_response(response)
 
     for user in USERS:
-        requests.post(f'{api_url}/users/', json=user)
+        response = requests.post(f'{api_url}/users/', json=user)
+        check_json_response(response)
 
 
 # -------------------------------
@@ -430,7 +444,7 @@ def get_services(**options):
 # -------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-
+    API_URL = "http://0.0.0.0:8000/api/v1"
 
     # core database setup
     setup_database(api_url=API_URL)
