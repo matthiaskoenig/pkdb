@@ -21,7 +21,7 @@ import axios from 'axios'
 export default {
   name: 'About',
   props: {
-    msg: String
+    api: String
   },
   data(){
     return {
@@ -33,7 +33,7 @@ export default {
     }
   },
     mounted() {
-        axios.get(`http://localhost:8000/api/v1/statistics/?format=json`)
+        axios.get(this.api + `/statistics/?format=json`)
             .then(response => {
                 // JSON responses are automatically parsed.
                 this.statistics = response.data

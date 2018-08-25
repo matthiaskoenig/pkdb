@@ -444,7 +444,8 @@ def get_services(**options):
 # -------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-    API_URL = "http://0.0.0.0:8000/api/v1"
+    # API_URL = "http://0.0.0.0:8000/api/v1"
+    API_URL = "http://pk-db.com/api/v1"
 
     # core database setup
     setup_database(api_url=API_URL)

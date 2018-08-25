@@ -1,14 +1,14 @@
 <template>
     <div>
-        <h1>Pharmacokinetics Database {{ statistics['version'] }}</h1>
+        <h1>Pharmacokinetics Database {{ version }}</h1>
         <ul>
-            <li>References: {{ statistics['reference_count'] }}</li>
-            <li>Studies: {{ statistics['study_count'] }}</li>
-            <li>Groups: {{ statistics['group_count'] }}</li>
-            <li>Individuals: {{ statistics['individual_count'] }}</li>
-            <li>Interventions: {{ statistics['intervention_count'] }}</li>
-            <li>Outputs: {{ statistics['output_count'] }}</li>
-            <li>Timecourses: {{ statistics['timecourse_count'] }}</li>
+            <li>References: {{ reference_count }}</li>
+            <li>Studies: {{ study_count }}</li>
+            <li>Groups: {{ group_count }}</li>
+            <li>Individuals: {{ individual_count }}</li>
+            <li>Interventions: {{ intervention_count }}</li>
+            <li>Outputs: {{ output_count }}</li>
+            <li>Timecourses: {{ timecourse_count }}</li>
         </ul>
     </div>
 </template>
@@ -17,21 +17,68 @@
 import axios from 'axios'
 export default {
     name: 'Home',
+    props: {
+        api: String
+    },
+    methods:{
+        get: function(){
+            var api_url
+            api_url = this.api + '/statistics/?format=json'
+
+
+            axios.get(api_url)
+                .then(response => {
+                    // JSON responses are automatically parsed.
+                    this.data = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
+        }
+    },
     data() {
         return {
-            statistics: null,
+            data: {
+                'version': null,
+                'reference_count': null,
+                'study_count': null,
+                'group_count': null,
+                'individual_count': null,
+                'intervention_count': null,
+                'output_count': null,
+                'timecourse_count': null,
+            },
             errors: []
         }
     },
-    mounted() {
-        axios.get(`http://localhost:8000/api/v1/statistics/?format=json`)
-            .then(response => {
-                // JSON responses are automatically parsed.
-                this.statistics = response.data
-            })
-            .catch(e => {
-                this.errors.push(e)
-            })
+    computed: {
+        version: function () {
+            return this.data['version']
+        },
+        reference_count: function () {
+            return this.data['reference_count']
+        },
+        study_count: function () {
+            return this.data['study_count']
+        },
+        group_count: function () {
+            return this.data['group_count']
+        },
+        individual_count: function () {
+            return this.data['individual_count']
+        },
+        intervention_count: function () {
+            return this.data['intervention_count']
+        },
+        output_count: function () {
+            return this.data['output_count']
+        },
+        timecourse_count: function () {
+            return this.data['timecourse_count']
+        },
+    },
+    created() {
+        this.get()
     }
 }
 </script>
