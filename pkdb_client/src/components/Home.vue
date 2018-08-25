@@ -1,13 +1,20 @@
 <template>
     <div>
-        <h1>Home</h1>
-        <p>Here is some information. This is the home page</p>
+        <h1>Pharmacokinetics Database</h1>
+        <ul>
+            <li>Studies: {{ studies_count }}</li>
+            <li>Groups: {{ groups_count }}</li>
+            <li>Individuals: {{ individuals_count }}</li>
+            <li>Interventions: {{ interventions_count }}</li>
+            <li>Outputs: {{ outputs_count }}</li>
+            <li>Timecourses: {{ timecourses_count }}</li>
+        </ul>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'Home' //this is the name of the component
+        name: 'Home'
     }
 </script>
 <style>
