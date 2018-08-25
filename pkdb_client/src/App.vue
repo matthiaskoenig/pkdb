@@ -2,7 +2,7 @@
   <div id="app">
     <!--<img alt="Vue logo" src="./assets/bg.jpg" height="100">-->
     <Navigation></Navigation>
-    <router-view/>
+    <router-view :api="api"></router-view>
     <div id="footer">
       <!-- FOOTER -->
       <p>&copy; 2017-2018 PK-DB</p>
@@ -18,6 +18,12 @@ export default {
     name: 'app',
     components: {
         'Navigation': Navigation
+    },
+    data(){
+        return {
+            // api: "http://localhost:8000/api/v1"
+            api: "http://pk-db.com/api/v1"
+        }
     }
 }
 </script>

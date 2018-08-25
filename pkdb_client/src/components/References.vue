@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h1>References ({{count}})</h1>
-        <table>
+        <h1>References <span v-if="count">({{ count }})</span></h1>
+        <table v-if="count">
             <thead>
             <tr>
                 <th>sid</th>
@@ -34,6 +34,25 @@
 import axios from 'axios';
 export default {
     name: 'References',
+    props: {
+        api: String
+    },
+    methods:{
+        get: function(){
+            var api_url
+            api_url = this.api + '/references/?format=json'
+
+
+            axios.get(api_url)
+                .then(response => {
+                    // JSON responses are automatically parsed.
+                    this.data = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
+        }
+    },
     data() {
         return {
             data: {
@@ -59,25 +78,8 @@ export default {
             return this.data['results']
         },
     },
-    mounted() {
-        axios.get(`http://localhost:8000/api/v1/references/?format=json`)
-            .then(response => {
-                // JSON responses are automatically parsed.
-                this.data = response.data
-            })
-            .catch(e => {
-                this.errors.push(e)
-            })
-
-        // async / await version (created() becomes async created())
-        //
-        // try {
-        //   const response = await axios.get(`http://jsonplaceholder.typicode.com/posts`)
-        //   this.posts = response.data
-        // } catch (e) {
-        //   this.errors.push(e)
-        // }
-
+    created: function() {
+        this.get()
     }
 }
 </script>
