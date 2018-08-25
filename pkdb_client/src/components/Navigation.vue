@@ -21,8 +21,13 @@
                     },
                     {
                         id: 1,
+                        text: 'References',
+                        page:'/references'
+                    },
+                    {
+                        id: 2,
                         text: 'About',
-                        page:'/About'
+                        page:'/about'
                     },
                 ]
             }

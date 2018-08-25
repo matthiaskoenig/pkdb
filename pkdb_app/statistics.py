@@ -16,8 +16,8 @@ class Statistics(object):
     """ Basic database statistics. """
     def __init__(self):
         self.version = __version__
-        self.study_count = Study.objects.count()
         self.reference_count = Reference.objects.count()
+        self.study_count = Study.objects.count()
         self.group_count = Group.objects.count()
         self.individual_count = Individual.objects.count()
         self.intervention_count = Intervention.objects.count()

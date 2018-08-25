@@ -9,14 +9,15 @@
     <h2>Contact</h2>
     <p>
     <ul>
-      <li>Email: {{ email }}</li>
-      <li>Website: {{ web }}</li>
+      <li>Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a></li>
+      <li>Website: <a :href="web" target="_blank">{{web}}</a></li>
     </ul>
     </p>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'About',
   props: {
@@ -24,10 +25,25 @@ export default {
   },
   data(){
     return {
+        version: "-",
         email: 'konigmatt@googlemail.com',
-        web: 'https://livermetabolism.com'
+        web: 'https://livermetabolism.com',
+        statistics: null,
+        errors: []
     }
-  }
+  },
+    mounted() {
+        axios.get(`http://localhost:8000/api/v1/statistics/?format=json`)
+            .then(response => {
+                // JSON responses are automatically parsed.
+                this.statistics = response.data
+                this.version = this.statistics["version"]
+            })
+            .catch(e => {
+                this.errors.push(e)
+            })
+    }
+
 }
 </script>
 

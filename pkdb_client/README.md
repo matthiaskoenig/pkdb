@@ -17,6 +17,8 @@ https://cli.vuejs.org/
 # vue/cli > 3.0
 sudo npm install -g @vue/cli
 sudo npm install vue-router
+npm install --save axios
+
 ```
 
 ## vue project
