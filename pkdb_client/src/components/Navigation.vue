@@ -17,7 +17,7 @@
                     {
                         id: 0,
                         text: 'Home',
-                        page:'/Home'
+                        page:'/'
                     },
                     {
                         id: 1,

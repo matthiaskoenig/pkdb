@@ -181,7 +181,7 @@ def pop_comments(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-def upload_files(file_path, api_url):
+def upload_files(file_path, api_url=API_URL):
     """ Uploads all files in directory of given file.
 
     :param file_path:
@@ -211,7 +211,7 @@ def upload_files(file_path, api_url):
     return data_dict
 
 
-def upload_reference_json(json_reference, api_url):
+def upload_reference_json(json_reference, api_url=API_URL):
     """ Uploads reference JSON. """
     success = True
     validate(json_reference["json"], reference_schema)
@@ -255,7 +255,7 @@ def check_json_response(response):
     return True
 
 
-def upload_study_json(json_study_dict, api_url):
+def upload_study_json(json_study_dict, api_url=API_URL):
     """ Uploads study JSON.
 
     :returns success code
