@@ -22,7 +22,7 @@ export default {
     data(){
         return {
             // api: "http://localhost:8000/api/v1"
-            api: "http://pk-db.com/api/v1"
+            api: "http://www.pk-db.com/api/v1"
         }
     }
 }
