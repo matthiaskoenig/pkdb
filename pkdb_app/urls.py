@@ -45,7 +45,7 @@ router.register('authors', AuthorsViewSet, base_name="authors")
 router.register('references', ReferencesViewSet, base_name="references")
 
 router.register('studies', StudyViewSet, base_name="studies")
-# router.register('statistics', StatisticsViewSet, base_name="statistics")
+router.register('statistics', StatisticsViewSet, base_name="statistics")
 
 
 # router.register('groups', GroupsViewSet, base_name="groups")

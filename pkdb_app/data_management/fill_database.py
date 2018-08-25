@@ -162,11 +162,13 @@ def set_keys(d, value, *keys):
         d = d[key]
     d[keys[-1]] = value
 
+
 def remove_keys(d, value, *keys):
     """ Changes keys in nested dictionary. """
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
+
 
 def pop_comments(d, *keys):
     """ Pops comment in nested dictionary. """
@@ -196,7 +198,6 @@ def upload_files(file_path, api_url=API_URL):
         #exclude files
         forbidden_suffix = (".log",".xlsx#",".idea")
         files = [file for file in files if not file.endswith(forbidden_suffix)]
-
 
         for file in files:
             file_path = os.path.join(root, file)
