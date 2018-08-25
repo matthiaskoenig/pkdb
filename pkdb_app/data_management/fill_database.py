@@ -220,7 +220,7 @@ def upload_reference_json(json_reference, api_url=API_URL):
     # post
     response = requests.post(f'{api_url}/references/', json=json_reference["json"])
     if not response.status_code == 201:
-        logging.info(json_reference["json"]["name"], response.text)
+        logging.info(json_reference["json"]["name"] + "\n" + response.text)
         success = False
 
     # patch
@@ -228,7 +228,7 @@ def upload_reference_json(json_reference, api_url=API_URL):
         response = requests.patch(f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
 
     if not response.status_code == 200:
-        logging.info(json_reference["json"]["name"], response.text)
+        logging.info(json_reference["json"]["name"] + "\n" + response.text)
         success = False
 
     return success
