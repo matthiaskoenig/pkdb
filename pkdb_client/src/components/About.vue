@@ -4,7 +4,7 @@
     <p>
       Pharmacokinetics database<br />
       Version: {{ version }}<br />
-      <a href="http://www.pk-db.com/api/v1/" target="_blank">REST API</a>
+      <a href="http://www.pk-db.com/api/" target="_blank">REST API</a>
     </p>
     <h2>Contact</h2>
     <p>
