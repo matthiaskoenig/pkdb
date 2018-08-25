@@ -32,7 +32,6 @@ https://cli.vuejs.org/guide/deployment.html
 npm run build
 ```
 
-
 ## Project setup
 ```
 npm install
