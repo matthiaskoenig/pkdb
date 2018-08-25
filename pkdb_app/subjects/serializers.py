@@ -98,6 +98,7 @@ class GroupExSerializer(ExSerializer):
                 for characteristica_single in characteristica:
                     temp_characteristica.extend(self.split_entry(characteristica_single))
                 group["characteristica"] = temp_characteristica
+
             groups_from_file = self.entries_from_file(group)
             groups.extend(groups_from_file)
 
@@ -145,13 +146,19 @@ class IndividualSerializer(ExSerializer):
     def to_internal_value(self, data):
         study_sid = self.context['request'].path.split("/")[-2]
 
-        data = self.retransform_map_fields(data)
-        data = self.retransform_ex_fields(data)
+
 
         if "group" in data:
             data["group"] = self.group_to_internal_value(data["group"], study_sid)
 
+
+        data = self.retransform_map_fields(data)
+        data = self.retransform_ex_fields(data)
+
+
         return super(serializers.ModelSerializer,self).to_internal_value(data)
+
+
 
 
 
@@ -185,8 +192,10 @@ class IndividualExSerializer(ExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
-        temp_individuals = self.split_entry(data)
+        print(data)
 
+        temp_individuals = self.split_entry(data)
+        print(temp_individuals)
         individuals = []
         for individual in temp_individuals:
             characteristica = individual.get("characteristica")

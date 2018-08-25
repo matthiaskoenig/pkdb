@@ -7,7 +7,7 @@ group or individual).
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputExManager, \
-    TimecourseExManager, InterventionExManager
+    TimecourseExManager, InterventionExManager,  OutputManager
 from ..behaviours import Valueable, ValueableMap, Externable, CHAR_MAX_LENGTH_LONG
 from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
@@ -168,7 +168,7 @@ class Output(Valueable, AbstractOutput):
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
 
-    #objects = OutputManager()
+    objects = OutputManager()
 
 
 class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):

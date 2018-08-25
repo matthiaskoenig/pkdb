@@ -187,6 +187,7 @@ class AbstractCharacteristica(models.Model):
                               blank=True)
     ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH,
                              default=GROUP_CRITERIA)  # this is for exclusion and inclusion
+    count = models.IntegerField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -229,7 +230,6 @@ class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable):
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    count = models.IntegerField(null=True, blank=True)
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
@@ -239,6 +239,5 @@ class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable):
 
 class Characteristica(AbstractCharacteristica, Valueable, models.Model):
     """ Characteristic. """
-
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, related_name="characteristica", null=True, blank=True, on_delete=models.CASCADE)
