@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/bg.jpg" height="100">
-    <About msg="Welcome to the PK-DB App"/>
+    <!--<img alt="Vue logo" src="./assets/bg.jpg" height="100">-->
+    <Navigation></Navigation>
+    <router-view :api="api"></router-view>
     <div id="footer">
       <!-- FOOTER -->
       <p>&copy; 2017-2018 PK-DB</p>
@@ -11,13 +12,19 @@
 </template>
 
 <script>
-import About from './components/About.vue'
+import Navigation from './components/Navigation.vue'
 
 export default {
-  name: 'app',
-  components: {
-      About
-  }
+    name: 'app',
+    components: {
+        'Navigation': Navigation
+    },
+    data(){
+        return {
+            api: "http://localhost:8000/api/v1"
+            // api: "http://www.pk-db.com/api/v1"
+        }
+    }
 }
 </script>
 

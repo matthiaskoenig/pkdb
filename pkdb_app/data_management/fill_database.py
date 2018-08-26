@@ -25,6 +25,15 @@ import requests
 import bonobo
 from jsonschema import validate
 import logging
+import coloredlogs
+
+coloredlogs.install(
+    level='INFO',
+    fmt="%(module)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
+    # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
+)
+logger = logging.getLogger(__name__)
+
 
 # FIXME: remove bonobo
 
@@ -50,12 +59,15 @@ if not os.path.exists(DATA_PATH):
     raise FileNotFoundError
 
 API_URL = "http://0.0.0.0:8000/api/v1"
+# API_URL = "http://www.pk-db.com/api/v1"
 
 # -----------------------------
 # setup database
 # -----------------------------
 
 PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
+if not PASSWORD:
+    raise ValueError("Password could not be read, export the environment variable.")
 
 USERS = [
     {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
@@ -75,16 +87,14 @@ def setup_database(api_url):
     """
     from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
-        response = requests.post(f'{API_URL}/substances/', json={"name": substance})
+        response = requests.post(f'{api_url}/substances/', json={"name": substance})
         if not  response.status_code == 201:
             logging.warning(f"substance upload failed ")
-            print(response.json())
 
     for user in USERS:
-        response = requests.post(f'{API_URL}/users/', json=user)
+        response = requests.post(f'{api_url}/users/', json=user)
         if not  response.status_code == 201:
             logging.warning(f"user upload failed ")
-            print(response.json())
 
 
 
@@ -171,11 +181,13 @@ def set_keys(d, value, *keys):
         d = d[key]
     d[keys[-1]] = value
 
+
 def remove_keys(d, value, *keys):
     """ Changes keys in nested dictionary. """
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
+
 
 def pop_comments(d, *keys):
     """ Pops comment in nested dictionary. """
@@ -190,7 +202,7 @@ def pop_comments(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-def upload_files(file_path, api_url):
+def upload_files(file_path, api_url=API_URL):
     """ Uploads all files in directory of given file.
 
     :param file_path:
@@ -209,7 +221,6 @@ def upload_files(file_path, api_url):
         files = [file for file in files if not file.endswith(forbidden_suffix)]
         files = [file for file in files if not file.startswith(forbidden_prefix)]
 
-
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'rb') as f:
@@ -223,7 +234,7 @@ def upload_files(file_path, api_url):
     return data_dict
 
 
-def upload_reference_json(json_reference, api_url):
+def upload_reference_json(json_reference, api_url=API_URL):
     """ Uploads reference JSON. """
     success = True
     validate(json_reference["json"], reference_schema)
@@ -231,7 +242,7 @@ def upload_reference_json(json_reference, api_url):
     # post
     response = requests.post(f'{api_url}/references/', json=json_reference["json"])
     if not response.status_code == 201:
-        logging.info(json_reference["json"]["name"], response.text)
+        logging.info(json_reference["json"]["name"] + "\n" + response.text)
         success = False
 
     # patch
@@ -239,7 +250,7 @@ def upload_reference_json(json_reference, api_url):
         response = requests.patch(f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
 
     if not response.status_code == 200:
-        logging.info(json_reference["json"]["name"], response.text)
+        logging.info(json_reference["json"]["name"] + "\n" + response.text)
         success = False
 
     return success
@@ -267,7 +278,7 @@ def check_json_response(response):
     return True
 
 
-def upload_study_json(json_study_dict, api_url):
+def upload_study_json(json_study_dict, api_url=API_URL):
     """ Uploads study JSON.
 
     :returns success code
@@ -445,7 +456,8 @@ def get_services(**options):
 # -------------------------------------------------------------------------------
 if __name__ == '__main__':
 
-
+    API_URL = "http://0.0.0.0:8000/api/v1"
+    # API_URL = "http://www.pk-db.com/api/v1"
 
 
     # core database setup

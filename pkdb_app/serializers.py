@@ -246,7 +246,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             template = copy.deepcopy(data)
             # get data
             template.pop("source")
-            template.pop("figure")
+            template.pop("figure",None)
             format = template.pop("format",None)
             if format is None:
                 raise serializers.ValidationError({"format":"format is missing!"})

@@ -1,5 +1,7 @@
 from rest_framework.exceptions import ValidationError
 
+from rest_framework.permissions import AllowAny, IsAdminUser
+from pkdb_app.subjects.serializers import GroupSerializer
 from .models import Author, Reference, Study
 from .serializers import AuthorValidationSerializer, ReferenceSerializer, StudySerializer
 from rest_framework import viewsets
@@ -9,6 +11,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
 from rest_framework import  views
 
+
 class AuthorsViewSet(viewsets.ModelViewSet):
 
     queryset = Author.objects.all()
@@ -16,6 +19,7 @@ class AuthorsViewSet(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
     filter_fields = ('first_name', 'last_name')
     search_fields = filter_fields
+    permission_classes = (AllowAny,)
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -29,6 +33,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
     #filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
+    permission_classes = (AllowAny,)
 
 
 class FileUploadView(views.APIView):
@@ -45,7 +50,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter,)
     filter_fields = ('sid',)
     search_fields = filter_fields
-
+    permission_classes = (AllowAny,)
 
     @staticmethod
     def group_validation(request):
