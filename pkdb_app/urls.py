@@ -14,6 +14,8 @@ from .interventions.views import SubstancesViewSet
 from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import AuthorsViewSet, ReferencesViewSet, StudyViewSet
 
+from . import views
+
 # views in User
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -34,9 +36,13 @@ schema_view = get_swagger_view(title='PKDB API')
 # url patterns
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', schema_view),
-    path('api/v1/', include(router.urls)),
+    url(r'^$', views.about_view, name='index'),
+    url(r'api', schema_view, name='api'),
+    path(r'^api/v1/', include(router.urls)),
+    # path('api-token-auth/', views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

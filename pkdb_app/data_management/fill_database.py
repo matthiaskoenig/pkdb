@@ -49,13 +49,14 @@ if not os.path.exists(DATA_PATH):
     print("-" * 80)
     raise FileNotFoundError
 
+API_URL = "http://0.0.0.0:8000/api/v1"
+
 # -----------------------------
 # setup database
 # -----------------------------
-API_URL = "http://0.0.0.0:8000/api/v1"
 
-#PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
-PASSWORD = "test"
+PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
+
 USERS = [
     {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
      "password": PASSWORD},
@@ -64,7 +65,7 @@ USERS = [
 ]
 
 
-def setup_database():
+def setup_database(api_url):
     """ Creates core information in database.
 
     This information is independent of study information. E.g., users, substances,
@@ -84,6 +85,7 @@ def setup_database():
         if not  response.status_code == 201:
             logging.warning(f"user upload failed ")
             print(response.json())
+
 
 
 # -------------------------------
@@ -188,7 +190,7 @@ def pop_comments(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-def upload_files(file_path):
+def upload_files(file_path, api_url):
     """ Uploads all files in directory of given file.
 
     :param file_path:
@@ -211,7 +213,7 @@ def upload_files(file_path):
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'rb') as f:
-                response = requests.post(f'{API_URL}/datafiles/', files={"file": f})
+                response = requests.post(f'{api_url}/datafiles/', files={"file": f})
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -221,20 +223,20 @@ def upload_files(file_path):
     return data_dict
 
 
-def upload_reference_json(json_reference):
+def upload_reference_json(json_reference, api_url):
     """ Uploads reference JSON. """
     success = True
     validate(json_reference["json"], reference_schema)
 
     # post
-    response = requests.post(f'{API_URL}/references/', json=json_reference["json"])
+    response = requests.post(f'{api_url}/references/', json=json_reference["json"])
     if not response.status_code == 201:
         logging.info(json_reference["json"]["name"], response.text)
         success = False
 
     # patch
     with open(json_reference["pdf"], 'rb') as f:
-        response = requests.patch(f'{API_URL}/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
+        response = requests.patch(f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
 
     if not response.status_code == 200:
         logging.info(json_reference["json"]["name"], response.text)
@@ -265,7 +267,7 @@ def check_json_response(response):
     return True
 
 
-def upload_study_json(json_study_dict):
+def upload_study_json(json_study_dict, api_url):
     """ Uploads study JSON.
 
     :returns success code
@@ -282,19 +284,12 @@ def upload_study_json(json_study_dict):
 
     comments = []
     for keys, item in recursive_iter(json_study_dict):
-
-
-
         #set_keys(json_study_dict,item.replace(item,file_dict[item]),*keys)
         if isinstance(item,str):
             for file, file_pk in file_dict.items():
-                item = item.replace(file,str(file_pk))
-
+                item = item.replace(file, str(file_pk))
 
             set_keys(json_study_dict, item, *keys)
-
-
-
 
         if "comments" in keys:
             n_keys = []
@@ -336,19 +331,19 @@ def upload_study_json(json_study_dict):
 
     # post
     sid = json_study["sid"]
-    response = requests.patch(f'{API_URL}/studies/{sid}/', json=study_sets)
+    response = requests.patch(f'{api_url}/studies/{sid}/', json=study_sets)
     success = success and check_json_response(response)
 
     # is using group, has to be uploaded separately from the groupset
     if "individualset" in json_study.keys():
-        response = requests.patch(f'{API_URL}/studies/{sid}/',
-                                json = {"individualset": json_study.get("individualset")})
+        response = requests.patch(f'{api_url}/studies/{sid}/',
+                                  json={"individualset": json_study.get("individualset")})
 
         success = success and check_json_response(response)
 
 
     if "outputset" in json_study.keys():
-        response = requests.patch(f'{API_URL}/studies/{sid}/',
+        response = requests.patch(f'{api_url}/studies/{sid}/',
                                   json={"outputset": json_study.get("outputset")})
         success = success and check_json_response(response)
 
@@ -359,7 +354,7 @@ def upload_study_json(json_study_dict):
     return success
 
 
-def upload_study_from_dir(study_dir):
+def upload_study_from_dir(study_dir, api_url=API_URL):
     """ Upload a complete study directory.
 
     Includes
@@ -403,10 +398,10 @@ def upload_study_from_dir(study_dir):
     if os.path.exists(reference_path):
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
-            success_ref = upload_reference_json(read_reference_json(reference_dict))
+            success_ref = upload_reference_json(read_reference_json(reference_dict), api_url)
 
     # upload study.json
-    success_study = upload_study_json(study_dict)
+    success_study = upload_study_json(study_dict, api_url)
 
     if success_ref and success_study:
         logging.info("--- upload successful ---")
@@ -450,8 +445,11 @@ def get_services(**options):
 # -------------------------------------------------------------------------------
 if __name__ == '__main__':
 
+
+
+
     # core database setup
-    setup_database()
+    setup_database(api_url=API_URL)
 
     # run the bonobo chain
     parser = bonobo.get_argument_parser()
