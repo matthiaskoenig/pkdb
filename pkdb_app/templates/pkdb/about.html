@@ -1,0 +1,10 @@
+{% extends "pkdb/base.html" %}
+{% load static %}
+{% block content %}
+    <h1>About PK-DB</h1>
+    <p>
+    Pharmacokinetics database<br />
+    Version: {{ version }}<br />
+    <a href="{% url 'api' %}" target="_blank">REST API</a> <img src="{% static 'pkdb/images/swagger.png' %}" height="30">
+    </p>
+{% endblock %}
