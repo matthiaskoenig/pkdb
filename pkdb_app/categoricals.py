@@ -380,6 +380,9 @@ INTERVENTION_DATA = [
     CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
     CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
+    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "smoking", "grapefruit juice"],
+                   ["year", "week", "day", "h"]),
 ]
 def dict_and_choices(data):
     data_dict = {item.value: item for item in data}
@@ -391,4 +394,3 @@ CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
-

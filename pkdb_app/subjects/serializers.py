@@ -192,10 +192,8 @@ class IndividualExSerializer(ExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
-        print(data)
 
         temp_individuals = self.split_entry(data)
-        print(temp_individuals)
         individuals = []
         for individual in temp_individuals:
             characteristica = individual.get("characteristica")
