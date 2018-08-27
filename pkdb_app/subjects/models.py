@@ -131,8 +131,8 @@ class IndividualEx(Externable, AbstractIndividual):
                                on_delete=models.SET_NULL)
 
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
-    group_ex = models.ForeignKey(GroupEx, on_delete=models.CASCADE, related_name="individual_exs", null=True, blank=True)
-    group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True, blank=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 

@@ -135,62 +135,18 @@ class OutputSerializer(ExSerializer):
     def to_internal_value(self, data):
 
         data = self.retransform_map_fields(data)
-        data = self.retransform_ex_fields(data)
-
-        study_sid = self.context['request'].path.split("/")[-2]
-        if "group" in data:
-
-            if data["group"]:
-                try:
-                    data["group"] = Group.objects.get(
-                        Q(ex__groupset__study__sid=study_sid) & Q(name=data.get("group"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
-                    raise serializers.ValidationError(msg)
-
-        if "individual" in data:
-
-            if data["individual"]:
-
-                study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
-                #for i in study_individuals:
-                #    print(i.name)
-                try:
-                    study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
-
-                    data["individual"] = study_individuals.get(name = data.get("individual")).pk
-
-                    #data["individual"] = Individual.objects.get(
-                    #    Q(ex__individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'individual: individual <{data.get("individual")}>  in study: <{study_sid}> does not exist'
-                    raise serializers.ValidationError(msg)
-                except MultipleObjectsReturned:
-                    msg = f'individual: Multiple individuals with the name <{data.get("individual")}>  have been declared on study.'
-                    raise serializers.ValidationError(msg)
-
-
-        if "interventions" in data:
-
-            if data["interventions"]:
-                interventions = []
-                for intervention in data["interventions"]:
-                    try:
-                        interventions.append(Intervention.objects.get(
-                            Q(ex__interventionset__study__sid=study_sid) & Q(name=intervention)).pk)
-                    except ObjectDoesNotExist:
-                        msg = f'intervention: {intervention} in study: {study_sid} does not exist'
-                        raise serializers.ValidationError(msg)
-                data["interventions"] = interventions
+        #data = self.retransform_ex_fields(data)
+        data =  self.to_internal_related_fields(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+
 class OutputExSerializer(BaseOutputExSerializer):
-    group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
                                                read_only=False, required=False, allow_null=True)
-    individual_ex = serializers.PrimaryKeyRelatedField(queryset=IndividualEx.objects.all(),
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
                                                     read_only=False, required=False, allow_null=True)
-    intervention_exs = serializers.PrimaryKeyRelatedField(queryset=InterventionEx.objects.all(), many=True,
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
                                                        read_only=False, required=False, allow_null=True)
     substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
                                              read_only=False, required=False, allow_null=True)
@@ -204,8 +160,8 @@ class OutputExSerializer(BaseOutputExSerializer):
     class Meta:
         model = OutputEx
         fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
-                 ["group_ex","individual_ex","intervention_exs"] + \
-                 ["group_ex_map","individual_ex_map","intervention_exs_map","outputs"]
+                 ["group","individual","interventions"] + \
+                 ["group_map","individual_map","interventions_map","outputs"]
 
 
     def to_internal_value(self, data):
@@ -220,72 +176,75 @@ class OutputExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
-
-
-        data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
-
         data["outputs"] = outputs
-        study_sid = self.context['request'].path.split("/")[-2]
-
-        if "group_ex" in data:
-
-            if data["group_ex"]:
-                try:
-                    data["group_ex"] = GroupEx.objects.get(
-                        Q(groupset__study__sid=study_sid) & Q(name=data.get("group_ex"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'group: {data.get("group_ex")} in study: {study_sid} does not exist'
-                    raise serializers.ValidationError(msg)
-
-
-        if "individual_ex" in data:
-
-            if data["individual_ex"]:
-                try:
-                    data["individual_ex"] = IndividualEx.objects.get(
-                        Q(individualset__study__sid=study_sid) & Q(name=data.get("individual_ex"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'individual_ex: individual <{data.get("individual_ex")}>  in study: <{study_sid}> does not exist'
-                    raise serializers.ValidationError(msg)
-
-        if "intervention_exs" in data:
-
-            if data["intervention_exs"]:
-                intervention_exs = []
-                for intervention_ex in data["intervention_exs"]:
-                    try:
-                        intervention_exs.append(InterventionEx.objects.get(
-                            Q(interventionset__study__sid=study_sid) & Q(name=intervention_ex)).pk)
-                    except ObjectDoesNotExist:
-                        msg = f'intervention_ex: {intervention_ex} in study: {study_sid} does not exist'
-                        raise serializers.ValidationError(msg)
-                data["intervention_exs"] = intervention_exs
-
-
+        data = self.to_internal_related_fields(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
-class TimecourseExExSerializer(BaseOutputExSerializer):
-    group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(),
+class TimecourseSerializer(BaseOutputExSerializer):
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
                                                read_only=False, required=False, allow_null=True)
-    individual_ex = serializers.PrimaryKeyRelatedField(queryset=IndividualEx.objects.all(),
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
                                                        read_only=False, required=False, allow_null=True)
-    intervention_exs = serializers.PrimaryKeyRelatedField(queryset=InterventionEx.objects.all(), many=True,
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
+                                                          read_only=False, required=False, allow_null=True)
+    substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
+                                             read_only=False, required=False, allow_null=True)
+
+    class Meta:
+        model = Timecourse
+        fields = OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+    def to_internal_value(self, data):
+        # ----------------------------------
+        # decompress external format
+        # ----------------------------------
+        data = self.to_internal_related_fields(data)
+        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+
+
+class TimecourseExSerializer(BaseOutputExSerializer):
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
+                                               read_only=False, required=False, allow_null=True)
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
+                                                       read_only=False, required=False, allow_null=True)
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
                                                           read_only=False, required=False, allow_null=True)
     substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
                                              read_only=False, required=False, allow_null=True)
 
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    # internal data
+    timecourses = TimecourseSerializer(many=True, write_only=True, required=False, allow_null=True)
 
 
 
     class Meta:
         model = TimecourseEx
         fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
-                 ["group_ex", "individual_ex", "intervention_exs"] + \
-                 ["group_ex_map", "individual_ex_map", "intervention_exs_map"]
+                 ["group", "individual", "interventions"] + \
+                 ["group_map", "individual_map", "interventions_map"] + ["timecourses"]
 
+    def to_internal_value(self, data):
+        # ----------------------------------
+        # decompress external format
+        # ----------------------------------
+        temp_timecourses = self.split_entry(data)
+        timecourses = []
+        for timecourse in temp_timecourses:
+            timecourses_from_file = self.array_from_file(timecourse)
+            timecourses.append(timecourses_from_file)
+        # ----------------------------------
+        # finished
+        # ----------------------------------
+
+        # data = self.transform_ex_fields(data)
+        data = self.transform_map_fields(data)
+
+        data["timecourses"] = timecourses
+        data = self.to_internal_related_fields(data)
+        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
 class OutputSetSerializer(ExSerializer):
@@ -293,7 +252,7 @@ class OutputSetSerializer(ExSerializer):
     OutputSet
     """
     output_exs = OutputExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    timecourse_exs = TimecourseExExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    timecourse_exs = TimecourseExSerializer(many=True, read_only=False, required=False, allow_null=True)
     descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
 
     class Meta:
