@@ -56,7 +56,6 @@ router.register('statistics', StatisticsViewSet, base_name="statistics")
 '''
 class JSONOpenAPIRenderer(renderers.OpenAPIRenderer):
     media_type = 'application/json'
-
 def get_swagger_view(title=None, url=None, patterns=None, urlconf=None):
     """
     Returns schema view which renders Swagger/OpenAPI.
@@ -73,7 +72,6 @@ def get_swagger_view(title=None, url=None, patterns=None, urlconf=None):
             renderers.OpenAPIRenderer,
             renderers.SwaggerUIRenderer
         ]
-
         def get(self, request):
             generator = SchemaGenerator(
                 title=title,
@@ -82,14 +80,11 @@ def get_swagger_view(title=None, url=None, patterns=None, urlconf=None):
                 urlconf=urlconf
             )
             schema = generator.get_schema(request=request)
-
             if not schema:
                 raise exceptions.ValidationError(
                     'The schema generator did not return a schema Document'
                 )
-
             return Response(schema)
-
     return SwaggerSchemaView.as_view()
 '''
 

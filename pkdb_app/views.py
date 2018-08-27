@@ -1,3 +1,4 @@
+
 """
 Views
 """
@@ -28,3 +29,4 @@ def about_view(request):
                   {
                       "version": __version__,
                   })
+

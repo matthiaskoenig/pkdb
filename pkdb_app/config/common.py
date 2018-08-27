@@ -65,7 +65,6 @@ class Common(Configuration):
     )
 
 
-
     # General
     APPEND_SLASH = False
     TIME_ZONE = 'UTC'
