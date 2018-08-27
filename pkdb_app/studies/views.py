@@ -3,19 +3,19 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAdminUser
 from pkdb_app.subjects.serializers import GroupSerializer
 from .models import Author, Reference, Study
-from .serializers import AuthorSerializer, ReferenceSerializer, StudySerializer
-from rest_framework import viewsets, generics
+from .serializers import AuthorValidationSerializer, ReferenceSerializer, StudySerializer
+from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.response import Response
-from rest_framework import status, views
+from rest_framework import  views
 
 
 class AuthorsViewSet(viewsets.ModelViewSet):
 
     queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
+    serializer_class = AuthorValidationSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
     filter_fields = ('first_name', 'last_name')
     search_fields = filter_fields
@@ -43,16 +43,6 @@ class FileUploadView(views.APIView):
         # do some stuff with uploaded file
         return Response(status=204)
 
-    """
-        def post(self, request, *args, **kwargs):
-        file_serializer = ReferenceSerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.save()
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    """
-
 
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = Study.objects.all()
@@ -71,6 +61,8 @@ class StudyViewSet(viewsets.ModelViewSet):
                     groups = groupset.get("groups", [])
                     parents = set([group.get("parent") for group in groups if group.get("parent")] )
                     groups = set([group.get("name") for group in groups if group.get("name")])
+
+                    # validate if groups are missing
                     missing_groups = parents - groups
                     if missing_groups:
                         if missing_groups is not None:
@@ -90,48 +82,3 @@ class StudyViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         self.group_validation(request)
         return super().create(request, *args, **kwargs)
-
-    '''
-        study_request = request.copy()
-        study_data = study_request.data
-        basic_keys = ["sid","name","pkdb_version","design","substances","reference","curators","files"]
-        study_core_data = [study_data.pop(basic_keys) for key in basic_keys]
-        request.data = study_core_data
-        response = super().create(request, *args, **kwargs)
-        
-        if "groupset" in study_data:
-            groupset = study_data["groupset"]
-            groups = groupset.get("groups", [])
-            for group in groups:
-                serializer = GroupSerializer(data=group,)
-            
-        if "individualset" in study_data:
-            indivdualset = study_data["individualset"]
-            individuals = indivdualset.get("individuals", [])
-            #upload individuals
-            
-        if "interventionset" in study_data:
-            interventionset = study_data["interventionset"]
-            interventions = interventionset.get("interventions", [])
-            #upload interventions
-
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    '''
-
-
-
-
-
-#class InterventionsViewSet(viewsets.ModelViewSet):
-
-#    queryset = Intervention.objects.all()
-#    serializer_class = InterventionSerializer
-#    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-#    filter_fields = ('comment','description','type')
- #   search_fields = filter_fields
-

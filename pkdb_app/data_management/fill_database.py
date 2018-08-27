@@ -50,6 +50,7 @@ from collections import namedtuple
 # master path
 # -----------------------------
 # DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
+
 DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
 if not os.path.exists(DATA_PATH):
     print("-" * 80)
@@ -87,11 +88,14 @@ def setup_database(api_url):
     from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
         response = requests.post(f'{api_url}/substances/', json={"name": substance})
-        check_json_response(response)
+        if not  response.status_code == 201:
+            logging.warning(f"substance upload failed ")
 
     for user in USERS:
         response = requests.post(f'{api_url}/users/', json=user)
-        check_json_response(response)
+        if not  response.status_code == 201:
+            logging.warning(f"user upload failed ")
+
 
 
 # -------------------------------
@@ -212,7 +216,10 @@ def upload_files(file_path, api_url=API_URL):
         files = set(files) - set(['reference.json', 'study.json', f'{sid}.pdf'])
         #exclude files
         forbidden_suffix = (".log",".xlsx#",".idea")
+        forbidden_prefix = (".lock")
+
         files = [file for file in files if not file.endswith(forbidden_suffix)]
+        files = [file for file in files if not file.startswith(forbidden_prefix)]
 
         for file in files:
             file_path = os.path.join(root, file)
@@ -412,6 +419,9 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
 
     return {}
 
+def print_study(d):
+    logging.info(d["json"]["name"])
+    return d
 
 # -------------------------------
 # Bonobo
@@ -433,6 +443,7 @@ def get_graph_study(**options):
     graph.add_chain(
         get_study_paths,
         read_study_json,
+        print_study,
         upload_study_json,
     )
     return graph
@@ -447,6 +458,7 @@ if __name__ == '__main__':
 
     API_URL = "http://0.0.0.0:8000/api/v1"
     # API_URL = "http://www.pk-db.com/api/v1"
+
 
     # core database setup
     setup_database(api_url=API_URL)

@@ -1,17 +1,17 @@
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, ValidationError
 from rest_framework import serializers
 
-from pkdb_app.utils import update_or_create_multiple, get_or_val_error
-from ..interventions.models import Substance, DataFile
+from pkdb_app.subjects.models import GroupSet, IndividualSet
+from pkdb_app.utils import update_or_create_multiple
+from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
 from .models import Reference, Author, Study
-from ..serializers import BaseSerializer, WrongKeySerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer
 
 
-class AuthorSerializer(WrongKeySerializer):
+class AuthorValidationSerializer(WrongKeyValidationSerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -23,8 +23,8 @@ class AuthorSerializer(WrongKeySerializer):
         return author
 
 
-class ReferenceSerializer(BaseSerializer):
-    authors = AuthorSerializer(many=True, read_only=False)#, queryset=Study.objects.all(), source='studies')
+class ReferenceSerializer(SidSerializer):
+    authors = AuthorValidationSerializer(many=True, read_only=False)
 
     class Meta:
         model = Reference
@@ -46,8 +46,22 @@ class ReferenceSerializer(BaseSerializer):
         return instance
 
 
+class StudySerializer(SidSerializer):
+    """ Study Serializer.
 
-class StudySerializer(BaseSerializer):
+    JSON -> Model_Ex
+    - to_internal_value
+    - validate
+    - is_valid (triggers create or update)
+
+    Validators:
+    - field validators (local)
+    - validate (model)
+
+    Model_Ex -> JSON
+    - to representation
+
+    """
     reference = serializers.PrimaryKeyRelatedField(queryset=Reference.objects.all(), required=False, allow_null=True)
     groupset = GroupSetSerializer(read_only=False, required=False,allow_null=True)
     curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False,allow_null=True)
@@ -55,53 +69,124 @@ class StudySerializer(BaseSerializer):
     substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True,allow_null=True)
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
-    outputset =OutputSetSerializer(read_only=False, required=False, allow_null=True)
+    outputset = OutputSetSerializer(read_only=False, required=False, allow_null=True)
     files = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True, many=True)
 
     class Meta:
         model = Study
-        fields = ('sid',"pkdb_version","creator",'name',"design",'reference',"curators","substances",
-                 "groupset","individualset","interventionset","outputset","files")
+        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design',
+                  'groupset', 'individualset', 'interventionset', 'outputset', 'files')
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        return attrs
+
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
-
-        creator = validated_data.get("creator", None)
-        if creator:
-            validated_data["creator"] = get_or_val_error(User,username=creator)
-
-        study, _ = Study.objects.update_or_create(sid=validated_data["sid"],
-                                                  reference=related["reference"],
-                                                  defaults=validated_data,)
-
-        study = self.create_relations(study,related)
-        return study
-
+        instance, _ = Study.objects.update_or_create(sid=validated_data["sid"],
+                                                     reference=related["reference"],
+                                                     defaults=validated_data,)
+        instance = self.create_relations(instance, related)
+        instance.save()
+        return instance
 
     def update(self, instance, validated_data):
 
+        # remove nested relations (handled via own serializers)
         related = self.pop_relations(validated_data)
-
-        creator = validated_data.get("creator", None)
-        if creator:
-            validated_data["creator"] = get_or_val_error(User, username=creator)
-
 
         for name, value in validated_data.items():
             setattr(instance, name, value)
-
         instance.save()
-        instance = self.create_relations(instance,related)
 
+        instance = self.create_relations(instance, related)
         return instance
+
+    def to_internal_value(self, data):
+
+        creator = data.get("creator")
+        if creator:
+            data["creator"] = self.get_or_val_error(User, username=creator)
+
+        return super().to_internal_value(data)
 
 
     def to_representation(self, instance):
+        """ Convert to JSON.
+
+        :param instance:
+        :return:
+        """
         rep = super().to_representation(instance)
         current_site = f'http://{get_current_site(self.context["request"]).domain}'
 
+        # replace file url
         if "files" in rep:
             rep["files"] = [current_site + file.file.url for file in instance.files.all()]
         return rep
 
 
+    #############################################################################################
+    # Helpers
+    #############################################################################################
+
+    @staticmethod
+    def related_sets():
+        return {
+            "groupset": GroupSet,
+            "individualset": IndividualSet,
+            "interventionset": InterventionSet,
+            "outputset": OutputSet
+        }
+
+    def pop_relations(self, validated_data):
+        """ Remove nested relations (handled via own serializers)
+
+        :param validated_data:
+        :return:
+        """
+        related_foreinkeys = self.related_sets().copy()
+        related_foreinkeys["reference"] = Reference
+        related_many2many = {"substances": Substance, "curators": User, "files": DataFile}
+        related_foreinkeys_dict = {name: validated_data.pop(name, None) for name in related_foreinkeys.keys()}
+        related_many2many_dict = {name: validated_data.pop(name, []) for name in related_many2many.keys()}
+        related = {**related_foreinkeys_dict, **related_many2many_dict}
+        return related
+
+    def create_relations(self, study, related):
+        """ Function creates all the related_sets.
+
+        :param study:
+        :param related:
+        :return:
+        """
+
+
+        for name, model in self.related_sets().items():
+
+            if related[name] is not None:
+                if getattr(study, name):
+                        getattr(study, name).delete()
+                instance = model.objects.create(study = study, **related[name])
+                setattr(study, name, instance)
+            study.save()
+
+        for curator_data in related["curators"]:
+            curator = self.get_or_val_error(User, username=curator_data)
+            study.curators.add(curator)
+        study.save()
+
+        for substance_data in related["substances"]:
+            substance = self.get_or_val_error(Substance, name=substance_data)
+            study.substances.add(substance)
+        study.save()
+
+        if related["files"]:
+            study.files.all().delete()
+
+            for file_pk in related["files"]:
+                study.files.add(file_pk)
+            study.save()
+
+        return study

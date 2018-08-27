@@ -8,7 +8,6 @@ import xml.etree.ElementTree as ET
 from Bio import Entrez
 import json
 import requests
-from pkdb_app.utils import ensure_dir
 
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
@@ -91,7 +90,9 @@ def add_doi(d):
 
 def save_json(d):
     json_file = os.path.join(d["reference_path"],"reference.json")
-    ensure_dir(json_file)
+    directory = os.path.dirname(json_file)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     with open(json_file, 'w') as fp:
         json.dump(d['json'], fp, indent=4)
 
