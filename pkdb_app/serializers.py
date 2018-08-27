@@ -148,19 +148,21 @@ class MappingSerializer(WrongKeyValidationSerializer):
             for k, value in enumerate(values):
                 if isinstance(value, str):
                     values[k] = value.strip()
+                    if field == "interventions":
+                        values[k] = value.split(",")
+
 
             # --- validation ---
             # names must be split in a split entry
             if field == "name" and len(values) != n:
                 raise serializers.ValidationError(
                     f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain  of name is violated.")
-            if field == "interventions":
-                values = [v.split(",") for v in values]
 
 
             # check for old syntax
             for value in values:
                 if isinstance(value, str):
+
                     if "{{" in value or "}}" in value:
                         raise serializers.ValidationError(
                             f"Splitting via '{{ }}' syntax not allowed, use '||' in count.")

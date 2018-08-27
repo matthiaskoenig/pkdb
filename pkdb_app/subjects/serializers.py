@@ -51,6 +51,11 @@ class CharacteristicaSerializer(serializers.ModelSerializer):
 
         return super().to_internal_value(data)
 
+    def validate(self,attr):
+        validate_categorials(attr, "characteristica")
+        return super().validate(attr)
+
+
 # ----------------------------------
 # Group
 # ----------------------------------
