@@ -166,7 +166,7 @@ class IndividualSerializer(ExSerializer):
 class IndividualExSerializer(ExSerializer):
 
     characteristica_ex = CharacteristicaExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    group_ex = serializers.PrimaryKeyRelatedField(queryset=GroupEx.objects.all(), required=False, allow_null=True)
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False, allow_null=True)
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
@@ -175,7 +175,7 @@ class IndividualExSerializer(ExSerializer):
 
     class Meta:
         model = IndividualEx
-        fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group_ex", "group_ex_map", "characteristica_ex","individuals"]
+        fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group", "group_map", "characteristica_ex","individuals"]
 
     @staticmethod
     def group_ex_to_internal_value(group_ex, study_sid):
@@ -186,6 +186,16 @@ class IndividualExSerializer(ExSerializer):
                 msg = f'group: {group_ex} in study: {study_sid} does not exist'
                 raise ValidationError(msg)
         return group_ex
+
+    @staticmethod
+    def group_to_internal_value(group, study_sid):
+        if group:
+            try:
+                group = Group.objects.get(Q(ex__groupset__study__sid=study_sid) & Q(name=group)).pk
+            except ObjectDoesNotExist:
+                msg = f'group: {group} in study: {study_sid} does not exist'
+                raise ValidationError(msg)
+        return group
 
     def to_internal_value(self, data):
 
@@ -210,7 +220,6 @@ class IndividualExSerializer(ExSerializer):
         # finished external format
         # ----------------------------------
 
-        data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
         data["individuals"] = individuals
@@ -218,8 +227,8 @@ class IndividualExSerializer(ExSerializer):
 
         study_sid = self.context['request'].path.split("/")[-2]
 
-        if "group_ex" in data:
-            data["group_ex"] = self.group_ex_to_internal_value(data["group_ex"], study_sid)
+        if "group" in data:
+            data["group"] = self.group_to_internal_value(data.get("group"), study_sid)
 
         return super(WrongKeyValidationSerializer,self).to_internal_value(data)
 
@@ -229,10 +238,10 @@ class IndividualExSerializer(ExSerializer):
 
         if "group" in rep:
             if rep["group"]:
-                if instance.group_ex:
-                    rep["group"] = instance.group_ex.name
-                if instance.group_ex_map:
-                     rep["group"] = instance.group_ex_map
+                if instance.group:
+                    rep["group"] = instance.group.name
+                if instance.group_map:
+                     rep["group"] = instance.group_map
         return rep
 
 

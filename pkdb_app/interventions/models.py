@@ -148,13 +148,13 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     figure = models.ForeignKey(DataFile, related_name="f_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True, blank=True)
 
-    group_ex = models.ForeignKey(GroupEx, null=True, blank=True, on_delete=models.CASCADE)
-    individual_ex = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
-    intervention_exs = models.ManyToManyField(InterventionEx)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    interventions = models.ManyToManyField(Intervention)
 
-    group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    individual_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    intervention_exs_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     objects = OutputExManager()
 
@@ -189,13 +189,13 @@ class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Val
     figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True, blank=True)
 
-    group_ex = models.ForeignKey(GroupEx, null=True, blank=True, on_delete=models.CASCADE)
-    individual_ex = models.ForeignKey(IndividualEx, null=True, blank=True, on_delete=models.CASCADE)
-    intervention_exs = models.ManyToManyField(InterventionEx)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    interventions = models.ManyToManyField(Intervention)
 
-    group_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    individual_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    intervention_exs_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     objects = TimecourseExManager()
 
@@ -209,15 +209,17 @@ class Timecourse(AbstractOutput):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
-    ex = models.ForeignKey(TimecourseEx, related_name="outputs", on_delete=models.CASCADE)
+    ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
-    value = ArrayField(Valueable._meta.get_field('value'))
-    mean = ArrayField(Valueable._meta.get_field('mean'))
-    median = ArrayField(Valueable._meta.get_field('median'))
-    min = ArrayField(Valueable._meta.get_field('min'))
-    max = ArrayField(Valueable._meta.get_field('max'))
-    sd = ArrayField(Valueable._meta.get_field('sd'))
-    se = ArrayField(Valueable._meta.get_field('se'))
-    cv = ArrayField(Valueable._meta.get_field('cv'))
-    time = ArrayField(AbstractOutput._meta.get_field('time'))
+    value = ArrayField(Valueable._meta.get_field('value'),null=True,blank=True)
+    mean = ArrayField(Valueable._meta.get_field('mean'), null=True,blank=True)
+    median = ArrayField(Valueable._meta.get_field('median'), null=True,blank=True)
+    min = ArrayField(Valueable._meta.get_field('min'), null=True,blank=True)
+    max = ArrayField(Valueable._meta.get_field('max'), null=True,blank=True)
+    sd = ArrayField(Valueable._meta.get_field('sd'), null=True,blank=True)
+    se = ArrayField(Valueable._meta.get_field('se'), null=True,blank=True)
+    cv = ArrayField(Valueable._meta.get_field('cv'), null=True,blank=True)
+    time = ArrayField(AbstractOutput._meta.get_field('time'), null=True,blank=True)
+
+    objects = OutputManager()

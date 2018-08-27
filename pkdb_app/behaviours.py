@@ -8,6 +8,7 @@ from pkdb_app.utils import CHAR_MAX_LENGTH
 from .categoricals import UNITS_CHOICES
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
 
+
 class Sidable(models.Model):
     """ Model has an sid. """
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True)
@@ -15,12 +16,14 @@ class Sidable(models.Model):
     class Meta:
         abstract = True
 
+
 class Externable(models.Model):
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     subset_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True, blank=True)
 
     class Meta:
         abstract = True
+
 
 class Valueable(models.Model):
     """ Valuable.
@@ -41,7 +44,6 @@ class Valueable(models.Model):
         abstract = True
 
 
-
 class ValueableMap(models.Model):
     """ ValuableMap. """
     value_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True, blank=True)
@@ -58,4 +60,3 @@ class ValueableMap(models.Model):
 
     class Meta:
         abstract = True
-

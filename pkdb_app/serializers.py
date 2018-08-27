@@ -8,9 +8,9 @@ from collections import OrderedDict
 from rest_framework.settings import api_settings
 
 from pkdb_app.categoricals import FORMAT_MAPPING
-from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile, InterventionEx
+from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile, InterventionEx, Intervention
 from pkdb_app.studies.models import Reference
-from pkdb_app.subjects.models import GroupSet, IndividualSet, GroupEx, IndividualEx
+from pkdb_app.subjects.models import GroupSet, IndividualSet, GroupEx, IndividualEx, Group, Individual
 from pkdb_app.users.models import User
 from pkdb_app.utils import recursive_iter, set_keys
 
@@ -154,6 +154,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if field == "name" and len(values) != n:
                 raise serializers.ValidationError(
                     f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain  of name is violated.")
+            if field == "interventions":
+                values = [v.split(",") for v in values]
+
+
             # check for old syntax
             for value in values:
                 if isinstance(value, str):
@@ -273,7 +277,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                             except AttributeError:
                                 raise serializers.ValidationError(
-                                    [f"key <{values[1]}> is missing in file <{source}> ", data])
+                                    [f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ", data])
 
                             set_keys(entry_dict, entry_value, *keys)
 
@@ -283,6 +287,49 @@ class MappingSerializer(WrongKeyValidationSerializer):
             entries.append(data)
 
         return entries
+
+    def array_from_file(self,data):
+        source = data.get("source")
+        if source:
+            array_dict = copy.deepcopy(data)
+            # get data
+            array_dict.pop("source")
+            array_dict.pop("figure", None)
+            format = array_dict.pop("format", None)
+            if format is None:
+                raise serializers.ValidationError({"format": "format is missing!"})
+            subset = array_dict.pop("subset", None)
+            df = self.df_from_file(source, format, subset)
+            recursive_array_dict = list(recursive_iter(array_dict))
+
+            for keys, value in recursive_array_dict:
+
+                if isinstance(value, str):
+                    if "==" in value:
+                        values = value.split("==")
+                        values = [v.strip() for v in values]
+
+                        if len(values) != 2 or values[0] != "col":
+                            raise serializers.ValidationError(
+                                ["field has wrong pattern col=='col_value'", data])
+                        try:
+                            value_array = df[values[1]]
+                            #print(value_array.values.tolist())
+
+                        except KeyError:
+                            raise serializers.ValidationError(
+                                [f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
+                                 data])
+
+                        set_keys(array_dict, value_array.values.tolist(), *keys)
+
+        else:
+            raise serializers.ValidationError("For timecourse data a source file has to be provided.")
+        from pprint import pprint
+        pprint(array_dict)
+
+        return array_dict
+
 
     # ----------------------------------
     #
@@ -307,6 +354,54 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
+
+    def to_internal_related_fields(self, data):
+        study_sid = self.context['request'].path.split("/")[-2]
+
+        if "group" in data:
+
+            if data["group"]:
+                try:
+                    data["group"] = Group.objects.get(
+                        Q(ex__groupset__study__sid=study_sid) & Q(name=data.get("group"))).pk
+                except ObjectDoesNotExist:
+                    msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
+                    raise serializers.ValidationError(msg)
+
+        if "individual" in data:
+
+            if data["individual"]:
+
+                study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
+                # for i in study_individuals:
+                #    print(i.name)
+                try:
+                    study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
+
+                    data["individual"] = study_individuals.get(name=data.get("individual")).pk
+
+                    # data["individual"] = Individual.objects.get(
+                    #    Q(ex__individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
+                except ObjectDoesNotExist:
+                    msg = f'individual: individual <{data.get("individual")}>  in study: <{study_sid}> does not exist'
+                    raise serializers.ValidationError(msg)
+                except MultipleObjectsReturned:
+                    msg = f'individual: Multiple individuals with the name <{data.get("individual")}>  have been declared on study.'
+                    raise serializers.ValidationError(msg)
+
+        if "interventions" in data:
+
+            if data["interventions"]:
+                interventions = []
+                for intervention in data["interventions"]:
+                    try:
+                        interventions.append(Intervention.objects.get(
+                            Q(ex__interventionset__study__sid=study_sid) & Q(name=intervention)).pk)
+                    except ObjectDoesNotExist:
+                        msg = f'intervention: {intervention} in study: {study_sid} does not exist'
+                        raise serializers.ValidationError(msg)
+                data["interventions"] = interventions
+        return data
 
     @staticmethod
     def ex_mapping():
@@ -360,61 +455,19 @@ class ExSerializer(MappingSerializer):
 
 class BaseOutputExSerializer(ExSerializer):
 
-    def to_internal_value(self, data):
-
-        data = self.transform_ex_fields(data)
-        data = self.transform_map_fields(data)
-
-        study_sid = self.context['request'].path.split("/")[-2]
-
-        if "group_ex" in data:
-
-            if data["group_ex"]:
-                try:
-                    data["group_ex"] = GroupEx.objects.get(
-                        Q(groupset__study__sid=study_sid) & Q(name=data.get("group_ex"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'group: {data.get("group_ex")} in study: {study_sid} does not exist'
-                    raise serializers.ValidationError(msg)
-
-        if "individual_ex" in data:
-
-            if data["individual_ex"]:
-                try:
-                    data["individual_ex"] = IndividualEx.objects.get(
-                        Q(individualset__study__sid=study_sid) & Q(name=data.get("individual_ex"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'individual_ex: individual <{data.get("individual_ex")}>  in study: <{study_sid}> does not exist'
-                    raise serializers.ValidationError(msg)
-
-        if "intervention_exs" in data:
-
-            if data["intervention_exs"]:
-                intervention_exs = []
-                for intervention_ex in data["intervention_exs"]:
-                    try:
-                        intervention_exs.append(InterventionEx.objects.get(
-                            Q(interventionset__study__sid=study_sid) & Q(name=intervention_ex)).pk)
-                    except ObjectDoesNotExist:
-                        msg = f'intervention_ex: {intervention_ex} in study: {study_sid} does not exist'
-                        raise serializers.ValidationError(msg)
-                data["intervention_exs"] = intervention_exs
-
-        return super(WrongKeyValidationSerializer,self).to_internal_value(data)
-
     def to_representation(self, instance):
 
         rep = super().to_representation(instance)
 
         if "group" in rep:
             if rep["group"]:
-                if instance.group_ex:
-                    rep["group"] = instance.group_ex.name
-                if instance.group_ex_map:
-                     rep["group"] = instance.group_ex_map
+                if instance.group:
+                    rep["group"] = instance.group.name
+                if instance.group_map:
+                     rep["group"] = instance.group_map
 
         if "interventions" in rep:
-            rep["interventions"] = [intervention_ex.name for intervention_ex in instance.intervention_exs.all()]
+            rep["interventions"] = [intervention.name for intervention in instance.interventions.all()]
 
         return rep
 

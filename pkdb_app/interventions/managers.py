@@ -49,16 +49,16 @@ class OutputSetManager(models.Manager):
 
         for output_ex in output_exs:
 
-            intervention_ex_ids = output_ex.pop("intervention_exs", [])
+            intervention_ids = output_ex.pop("interventions", [])
             output_ex_instance = outputset.output_exs.create(**output_ex)
-            output_ex_instance.intervention_exs.add(*intervention_ex_ids)
+            output_ex_instance.interventions.add(*intervention_ids)
             output_ex_instance.save()
             outputset.save()
 
         for timecourse_ex in timecourse_exs:
-            intervention_ex_ids = timecourse_ex.pop("intervention_exs", [])
+            intervention_ids = timecourse_ex.pop("interventions", [])
             timecourse_ex_instance = outputset.timecourse_exs.create(**timecourse_ex)
-            timecourse_ex_instance.intervention_exs.add(*intervention_ex_ids)
+            timecourse_ex_instance.interventions.add(*intervention_ids)
             timecourse_ex_instance.save()
             outputset.save()
 
@@ -76,6 +76,7 @@ class OutputExManager(models.Manager):
             output_ex.outputs.create(**output)
         output_ex.save()
         return output_ex
+
 class OutputManager(models.Manager):
     def create(self, *args, **kwargs):
         interventions = kwargs.pop("interventions", [])
@@ -94,3 +95,5 @@ class TimecourseExManager(models.Manager):
             timecourse_ex.timecourses.create(**timecourse)
         timecourse_ex.save()
         return timecourse_ex
+
+
