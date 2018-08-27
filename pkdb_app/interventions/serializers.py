@@ -92,13 +92,17 @@ class InterventionExSerializer(ExSerializer):
         # finished
         # ----------------------------------
 
-        data = self.transform_ex_fields(data)
+        #data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
         data["interventions"] = interventions
-
-
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+
+
+    def validate(self, attrs):
+        validate_categorials(attrs, "intervention")
+        return super().validate(attrs)
+
 
 
 class InterventionSetSerializer(ExSerializer):
