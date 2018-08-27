@@ -2,7 +2,7 @@
 import os
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_TYPE, INTERVENTION_DICT
-
+from rest_framework import serializers
 CHAR_MAX_LENGTH = 100
 
 def create_if_exists(src,src_key,dest,dest_key):
@@ -61,12 +61,12 @@ def validate_categorials(data, model_name):
             if (model_categorical.dtype == CATEGORIAL_TYPE or model_categorical.dtype == BOOLEAN_TYPE):
                 if not choice in model_categorical.choices:
                     msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.value}"
-                    #raise serializers.ValidationError({"choice": msg})
+                    raise serializers.ValidationError({"choice": msg})
 
         elif model_categorical.dtype == NUMERIC_TYPE:
             if not unit in model_categorical.units:
                 msg = f"{unit} is not allowed but unit is required. For {model_categorical.value} allowed units are {model_categorical.units}"
-                #raise serializers.ValidationError({"unit": msg})
+                raise serializers.ValidationError({"unit": msg})
     return data
 
 
