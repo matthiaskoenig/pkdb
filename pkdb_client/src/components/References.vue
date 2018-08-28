@@ -1,5 +1,7 @@
 <template>
+
     <div>
+        <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
         <h1>References <span v-if="count">({{ count }})</span></h1>
         <table v-if="count">
             <thead>
@@ -14,7 +16,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(reference, index) in results" :key="index">
+            <tr v-for="(reference, index) in references" :key="index">
                 <td>{{ reference.sid }}</td>
                 <td>{{ reference.pmid }}</td>
                 <td>{{ reference.name }}</td>
@@ -29,57 +31,28 @@
         </p>
     </div>
 </template>
-
 <script>
-import axios from 'axios';
+import VuePaginator from 'vuejs-paginator';
 export default {
     name: 'References',
+    components: {
+        VPaginator: VuePaginator
+    },
     props: {
         api: String
     },
     methods:{
-        get: function(){
-            var api_url
-            api_url = this.api + '/references/?format=json'
-
-
-            axios.get(api_url)
-                .then(response => {
-                    // JSON responses are automatically parsed.
-                    this.data = response.data
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                })
+        updateResource(data){
+            this.references = data.data
+            this.count = data.count
         }
     },
     data() {
         return {
-            data: {
-                'count': null,
-                'next': null,
-                'previous': null,
-                'results': null,
-            },
-            errors: []
+            references: [],
+            count: null,
+            resource_url: this.api + '/references/?format=json',
+            }
         }
-    },
-    computed: {
-        count: function () {
-            return this.data['count']
-        },
-        next: function () {
-            return this.data['next']
-        },
-        previous: function () {
-            return this.data['previous']
-        },
-        results: function () {
-            return this.data['results']
-        },
-    },
-    created: function() {
-        this.get()
-    }
 }
 </script>

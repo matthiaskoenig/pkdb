@@ -21,14 +21,20 @@
                     },
                     {
                         id: 1,
+                        text: 'Studies',
+                        page:'/studies'
+                    },
+                    {
+                        id: 2,
                         text: 'References',
                         page:'/references'
                     },
                     {
-                        id: 2,
+                        id: 3,
                         text: 'About',
                         page:'/about'
                     },
+
                 ]
             }
         }
