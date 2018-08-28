@@ -49,7 +49,7 @@ class Common(Configuration):
     )
 
     DEBUG_TOOLBAR_PATCH_SETTINGS = False
-    CORS_ORIGIN_WHITELIST = ('0.0.0.0:8080', 'localhost:8080')
+    CORS_ORIGIN_WHITELIST = ('0.0.0.0:8081', 'localhost:8081','0.0.0.0:8080', 'localhost:8080')
     INTERNAL_IPS = ('172.18.0.1',)
 
     ALLOWED_HOSTS = ["*"]
@@ -194,7 +194,9 @@ class Common(Configuration):
     #UNICODE_JSON = True
     # Django Rest Framework
     REST_FRAMEWORK = {
-        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'DEFAULT_PAGINATION_CLASS': 'pkdb_app.pagination.CustomPagination',
+
         'PAGE_SIZE': int(os.getenv('DJANGO_PAGINATION_LIMIT', 10)),
         'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S%z',
         'DEFAULT_RENDERER_CLASSES': (
