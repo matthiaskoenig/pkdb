@@ -90,10 +90,12 @@ class OutputManager(models.Manager):
 class TimecourseExManager(models.Manager):
     def create(self, *args, **kwargs):
         timecourses = kwargs.pop("timecourses", [])
+        interventions = kwargs.pop("interventions", [])
+
         timecourse_ex = super().create(*args, **kwargs)
+        for internvention in interventions:
+            output_ex.interventions.add(internvention)
         for timecourse in timecourses:
             timecourse_ex.timecourses.create(**timecourse)
         timecourse_ex.save()
         return timecourse_ex
-
-

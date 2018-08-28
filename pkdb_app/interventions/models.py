@@ -148,8 +148,8 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     figure = models.ForeignKey(DataFile, related_name="f_output_exs", null=True, blank=True,on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True, blank=True)
 
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
     interventions = models.ManyToManyField(Intervention)
 
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
@@ -162,8 +162,8 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
 class Output(Valueable, AbstractOutput):
 
     """ Storage of data sets. """
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
     interventions = models.ManyToManyField(Intervention)
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
@@ -189,8 +189,8 @@ class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Val
     figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True, blank=True, on_delete=models.SET_NULL)
     outputset = models.ForeignKey(OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True, blank=True)
 
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
     interventions = models.ManyToManyField(Intervention)
 
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)

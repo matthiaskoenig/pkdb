@@ -2,7 +2,7 @@
   <div id="app">
     <!--<img alt="Vue logo" src="./assets/bg.jpg" height="100">-->
     <Navigation></Navigation>
-    <router-view :api="api"></router-view>
+      <router-view :api="api"></router-view>
     <div id="footer">
       <!-- FOOTER -->
       <p>&copy; 2017-2018 PK-DB</p>
@@ -17,7 +17,7 @@ import Navigation from './components/Navigation.vue'
 export default {
     name: 'app',
     components: {
-        'Navigation': Navigation
+        'Navigation': Navigation,
     },
     data(){
         return {

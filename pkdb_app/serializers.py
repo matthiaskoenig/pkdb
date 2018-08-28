@@ -149,7 +149,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if isinstance(value, str):
                     values[k] = value.strip()
                     if field == "interventions":
-                        values[k] = value.split(",")
+                        values[k] = [v.strip() for v in value.split(",")]
 
 
             # --- validation ---
