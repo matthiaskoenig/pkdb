@@ -108,6 +108,9 @@ class IndividualExManager(models.Manager):
         for characteristica_ex_single in characteristica_ex:
             individual_ex.characteristica_ex.create(**characteristica_ex_single)
         for individual in individuals:
+
+
+
             individual_ex.individuals.create(**individual)
         individual_ex.save()
         return individual_ex
