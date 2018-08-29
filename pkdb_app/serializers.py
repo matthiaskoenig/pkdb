@@ -304,7 +304,13 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return entries
 
-    def array_from_file(self,data):
+    def array_from_file(self, data):
+        """ Handle conversion of time course data.
+
+        :param data:
+        :return:
+        """
+
         source = data.get("source")
         if source:
             array_dict = copy.deepcopy(data)
@@ -315,6 +321,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if format is None:
                 raise serializers.ValidationError({"format": "format is missing!"})
             subset = array_dict.pop("subset", None)
+            # read dataframe subset
             df = self.df_from_file(source, format, subset)
             recursive_array_dict = list(recursive_iter(array_dict))
 
