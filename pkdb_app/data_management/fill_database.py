@@ -22,7 +22,6 @@ import os
 import sys
 import json
 import requests
-import bonobo
 from jsonschema import validate
 import logging
 import coloredlogs
@@ -35,8 +34,6 @@ coloredlogs.install(
 logger = logging.getLogger(__name__)
 
 
-# FIXME: remove bonobo
-
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 from pkdb_app.data_management.schemas import reference_schema
@@ -44,7 +41,6 @@ from pkdb_app.data_management.create_reference import run as create_reference
 from collections import namedtuple
 
 
-# FIXME: implement proper logging
 
 # -----------------------------
 # master path
@@ -420,41 +416,7 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
 
     return {}
 
-def print_study(d):
-    logging.info(d["json"]["name"])
-    return d
 
-# -------------------------------
-# Bonobo
-# -------------------------------
-def get_graph_references(**options):
-    graph = bonobo.Graph()
-    # add studies
-    graph.add_chain(
-        get_reference_paths,
-        read_reference_json,
-        upload_reference_json,
-    )
-    return graph
-
-
-def get_graph_study(**options):
-    graph = bonobo.Graph()
-    # add studies
-    graph.add_chain(
-        get_study_paths,
-        read_study_json,
-        print_study,
-        upload_study_json,
-    )
-    return graph
-
-
-def get_services(**options):
-    return {}
-
-
-# -------------------------------------------------------------------------------
 if __name__ == '__main__':
 
     API_URL = "http://0.0.0.0:8000/api/v1"
@@ -464,10 +426,14 @@ if __name__ == '__main__':
     # core database setup
     setup_database(api_url=API_URL)
 
-    # run the bonobo chain
-    parser = bonobo.get_argument_parser()
-    with bonobo.parse_args(parser) as options:
-        bonobo.run(get_graph_references(**options), services=get_services(**options))
-        bonobo.run(get_graph_study(**options), services=get_services(**options))
+
+    for study_path in get_study_paths():
+        study_folder_path = os.path.dirname(study_path)
+        study_name = os.path.basename(study_folder_path)
+
+        logging.info('-' * 80)
+        logging.info(f'Uploading [{study_name}]')
+        upload_study_from_dir(study_folder_path)
+
 
     print("--- done ---")
