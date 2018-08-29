@@ -1,5 +1,6 @@
 import copy
 import pandas as pd
+import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from rest_framework import serializers
@@ -51,8 +52,13 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
 
     def to_internal_value(self, data):
+
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
+
+    def validate(self, attrs):
+        errors = super().validate(attrs)
+        return errors
 
 
     def to_representation(self, instance):
@@ -212,36 +218,44 @@ class MappingSerializer(WrongKeyValidationSerializer):
     # ----------------------------------
     # helper for export of entries from file
     # ----------------------------------
+    def subset_pd(self,subset, df):
+        values = subset.split("==")
+        values = [v.strip() for v in values]
+        if len(values) != 2:
+            raise serializers.ValidationError(["field has wrong pattern 'col_value'=='cell_value'", subset])
+
+        try:
+            df[values[0]]
+        except KeyError:
+            raise serializers.ValidationError({"subset": f"source <{src.file.url}> has no column <{values[0]}>"})
+        try:
+            df = df.loc[df[values[0]] == values[1]]
+        except TypeError:
+            df = df.loc[df[values[0]] == float(values[1])]
+
+        if len(df) == 0:
+            raise serializers.ValidationError(
+                [f"the cell value <{values[1]}>' is missing in column <{values[0]}>", subset])
+        return df
 
     def df_from_file(self, source, format, subset):
         delimiter = FORMAT_MAPPING[format].delimiter
         src = DataFile.objects.get(pk=source)
         try:
-            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False, na_values=['NA','NAN','na','nan'])
+            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False, na_values=['NA','NAN','na','nan',""])
 
-        except:
+        except Exception as e:
             raise serializers.ValidationError({"source": "cannot read csv", "detail": {"source": source,
                                                                                        "format": format,
                                                                                        "subset": subset}
                                                })
         if subset:
-            values = subset.split("==")
-            values = [v.strip() for v in values]
-            if len(values) != 2:
-                raise serializers.ValidationError(["field has wrong pattern 'col_value'=='cell_value'", subset])
+            if "&" in subset:
+                for subset_single in [s.strip() for s in subset.split("&")]:
+                    df = self.subset_pd(subset_single,df)
+            else:
+                df = self.subset_pd(subset,df)
 
-            try:
-                df[values[0]]
-            except KeyError:
-                raise serializers.ValidationError({"subset":f"source <{src.file.url}> has no column <{values[0]}>"})
-
-
-
-            df = df.loc[df[values[0]] == values[1]]
-
-            if len(df) == 0:
-                raise serializers.ValidationError(
-                    [f"the cell value <{values[1]}>' is missing in column <{values[0]}>", subset])
 
         return df
 

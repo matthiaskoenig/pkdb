@@ -104,6 +104,7 @@ def setup_database(api_url):
 def _get_paths(filename):
     """ Finds paths of filename recursively in MASTER_PATH. """
     for root, dirs, files in os.walk(DATA_PATH, topdown=False):
+
         if filename in files:
             yield os.path.join(root, filename)
 

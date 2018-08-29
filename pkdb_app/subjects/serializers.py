@@ -1,6 +1,6 @@
 import pandas as pd
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.categoricals import FORMAT_MAPPING
@@ -131,6 +131,7 @@ class GroupSetSerializer(ExSerializer):
 # Individual
 # ----------------------------------
 class IndividualSerializer(ExSerializer):
+    name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
     characteristica = CharacteristicaSerializer(many=True, read_only=False, required=False, allow_null=True)
 
@@ -145,22 +146,19 @@ class IndividualSerializer(ExSerializer):
                 group = Group.objects.get(Q(ex__groupset__study__sid=study_sid) & Q(name=group)).pk
             except ObjectDoesNotExist:
                 msg = f'group: {group} in study: {study_sid} does not exist'
-                raise ValidationError(msg)
+                raise serializers.ValidationError(msg)
         return group
 
     def to_internal_value(self, data):
         study_sid = self.context['request'].path.split("/")[-2]
 
 
-
         if "group" in data:
             data["group"] = self.group_to_internal_value(data["group"], study_sid)
 
-
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
-
-
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 
 
@@ -183,23 +181,13 @@ class IndividualExSerializer(ExSerializer):
         fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group", "group_map", "characteristica_ex","individuals"]
 
     @staticmethod
-    def group_ex_to_internal_value(group_ex, study_sid):
-        if group_ex:
-            try:
-                group_ex = GroupEx.objects.get(Q(groupset__study__sid=study_sid) & Q(name=group_ex)).pk
-            except ObjectDoesNotExist:
-                msg = f'group: {group_ex} in study: {study_sid} does not exist'
-                raise ValidationError(msg)
-        return group_ex
-
-    @staticmethod
     def group_to_internal_value(group, study_sid):
         if group:
             try:
                 group = Group.objects.get(Q(ex__groupset__study__sid=study_sid) & Q(name=group)).pk
             except ObjectDoesNotExist:
                 msg = f'group: {group} in study: {study_sid} does not exist'
-                raise ValidationError(msg)
+                raise serializers.ValidationError(msg)
         return group
 
     def to_internal_value(self, data):
