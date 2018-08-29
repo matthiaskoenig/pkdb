@@ -1,21 +1,18 @@
 from rest_framework.exceptions import ValidationError
-
 from rest_framework.permissions import AllowAny, IsAdminUser
-from pkdb_app.subjects.serializers import GroupSerializer
 from .models import Author, Reference, Study
-from .serializers import AuthorValidationSerializer, ReferenceSerializer, StudySerializer
+from .serializers import AuthorSerializer, ReferenceSerializer, StudySerializer, StudyReadSerializer, \
+    ReferenceReadSerializer, AuthorReadSerializer
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from rest_framework.response import Response
-from rest_framework import  views
 
 
 class AuthorsViewSet(viewsets.ModelViewSet):
 
     queryset = Author.objects.all()
-    serializer_class = AuthorValidationSerializer
+    serializer_class = AuthorSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
     filter_fields = ('first_name', 'last_name')
     search_fields = filter_fields
@@ -34,14 +31,6 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     #filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (AllowAny,)
-
-
-class FileUploadView(views.APIView):
-    def put(self, request, filename, format=None):
-        file_obj = request.FILES['file']
-
-        # do some stuff with uploaded file
-        return Response(status=204)
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -82,3 +71,34 @@ class StudyViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         self.group_validation(request)
         return super().create(request, *args, **kwargs)
+
+###############################################################################################
+# Read ViewSets
+###############################################################################################
+class StudyReadViewSet(viewsets.ModelViewSet):
+    queryset = Study.objects.all()
+    serializer_class = StudyReadSerializer
+    lookup_field = "sid"
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('sid',)
+    search_fields = filter_fields
+    permission_classes = (AllowAny,)
+
+class ReferencesReadViewSet(viewsets.ModelViewSet):
+
+    queryset = Reference.objects.all()
+    serializer_class = ReferenceReadSerializer
+    lookup_field = "sid"
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
+    filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
+    search_fields = filter_fields
+    permission_classes = (AllowAny,)
+
+class AuthorsReadViewSet(viewsets.ModelViewSet):
+
+    queryset = Author.objects.all()
+    serializer_class = AuthorReadSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
+    filter_fields = ('first_name', 'last_name')
+    search_fields = filter_fields
+    permission_classes = (AllowAny,)

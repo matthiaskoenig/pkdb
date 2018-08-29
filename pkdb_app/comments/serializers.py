@@ -29,3 +29,11 @@ class CommentSerializer(WrongKeyValidationSerializer):
 
     def to_representation(self, instance):
         return [instance.user.username,instance.text]
+
+###############################################################################################
+# Read Serializer
+###############################################################################################
+class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        fields = ["text"]
+        model = Description

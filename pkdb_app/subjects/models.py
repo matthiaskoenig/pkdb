@@ -38,6 +38,12 @@ class DataFile(models.Model):
 class GroupSet(models.Model):
     objects = GroupSetManager()
 
+    @property
+    def groups(self):
+        groups = Group.objects.filter(ex__in=self.group_exs.all())
+        return groups
+
+
 
 class AbstractGroup(models.Model):
     objects = GroupExManager()
@@ -107,6 +113,11 @@ class Group(models.Model):
 # ----------------------------------
 class IndividualSet(models.Model):
     objects = IndividualSetManager()
+
+    @property
+    def individuals(self):
+        individuals = Individual.objects.filter(ex__in=self.individual_exs.all())
+        return individuals
 
 
 class AbstractIndividual(models.Model):
