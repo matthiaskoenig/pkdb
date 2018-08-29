@@ -36,7 +36,10 @@ def update_or_create_multiple(parent,children,related_name):
             instance_cild =  getattr(parent,related_name)
             instance_cild.update_or_create(**child)
 
-
+def create_multiple(parent,children,related_name):
+    for child in children:
+            instance_cild =  getattr(parent,related_name)
+            instance_cild.create(**child)
 
 def validate_categorials(data, model_name):
     """

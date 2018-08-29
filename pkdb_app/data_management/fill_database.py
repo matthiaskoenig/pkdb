@@ -299,15 +299,15 @@ def upload_study_json(json_study_dict, api_url=API_URL):
 
             set_keys(json_study_dict, item, *keys)
 
-        if "comments" in keys:
-            n_keys = []
-            for key in keys:
-                n_keys.append(key)
-                if key == "comments":
-                    break
-            comments.append(tuple(n_keys))
-    for comment in set(comments):
-        pop_comments(json_study_dict, *comment)
+        #if "comments" in keys:
+        #    n_keys = []
+        #    for key in keys:
+        #        n_keys.append(key)
+        #        if key == "comments":
+        #            break
+         #   comments.append(tuple(n_keys))
+    #for comment in set(comments):
+        #pop_comments(json_study_dict, *comment)
     #from pprint import pprint
     #pprint(list(recursive_iter(json_study_dict)))
 

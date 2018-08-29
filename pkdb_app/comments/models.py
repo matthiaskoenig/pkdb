@@ -12,7 +12,7 @@ class Comment(models.Model):
 
     text = models.TextField(blank=True, null=True)
     user = models.ForeignKey(User, related_name="comments", blank=True, null=True, on_delete = models.SET_NULL)
-    time = models.DateTimeField(auto_created=True)
+    date_time = models.DateTimeField(auto_now_add=True, blank=True)
     ####
 
     individual_ex = models.ForeignKey(IndividualEx, related_name="comments", blank=True, null=True, on_delete=models.SET_NULL)

@@ -10,7 +10,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from pkdb_app.categoricals import FORMAT_MAPPING
-from pkdb_app.comments.serializers import DescriptionsSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
     InterventionEx, OutputEx, TimecourseEx
 from pkdb_app.serializers import ExSerializer, MappingSerializer, WrongKeyValidationSerializer, BaseOutputExSerializer
@@ -57,6 +57,7 @@ class InterventionSerializer(ExSerializer):
         fields = VALUE_FIELDS + INTERVENTION_FIELDS
 
     def to_internal_value(self, data):
+        data.pop("comments",None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -68,6 +69,7 @@ class InterventionExSerializer(ExSerializer):
     ######
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     # internal data
     interventions = InterventionSerializer(many=True, write_only=True, required=False, allow_null=True)
@@ -75,7 +77,8 @@ class InterventionExSerializer(ExSerializer):
 
     class Meta:
         model = InterventionEx
-        fields = EXTERN_FILE_FIELDS + VALUE_MAP_FIELDS + VALUE_FIELDS + INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS + ['interventions']
+        fields = EXTERN_FILE_FIELDS + VALUE_MAP_FIELDS + VALUE_FIELDS + INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS +\
+                 ['interventions', "comments"]
 
     def to_internal_value(self, data):
 
@@ -108,11 +111,12 @@ class InterventionExSerializer(ExSerializer):
 class InterventionSetSerializer(ExSerializer):
     """ InterventionSet. """
     intervention_exs = InterventionExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    descriptions = DescriptionsSerializer(many=True, read_only=False, required=False, allow_null=True)
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = InterventionSet
-        fields = ["descriptions", "intervention_exs"]
+        fields = ["descriptions", "intervention_exs", "comments"]
 
 
 # ----------------------------------
@@ -137,9 +141,9 @@ class OutputSerializer(ExSerializer):
                  ["group","individual","interventions"]
 
     def to_internal_value(self, data):
+        data.pop("comments",None)
 
         data = self.retransform_map_fields(data)
-        #data = self.retransform_ex_fields(data)
         data =  self.to_internal_related_fields(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -158,6 +162,8 @@ class OutputExSerializer(BaseOutputExSerializer):
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
+
     # internal data
     outputs = OutputSerializer(many=True, write_only=True, required=False, allow_null=True)
 
@@ -165,7 +171,7 @@ class OutputExSerializer(BaseOutputExSerializer):
         model = OutputEx
         fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
                  ["group","individual","interventions"] + \
-                 ["group_map","individual_map","interventions_map","outputs"]
+                 ["group_map","individual_map","interventions_map","outputs", "comments"]
 
 
     def to_internal_value(self, data):
@@ -200,6 +206,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         fields = OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
+        data.pop("comments",None)
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -219,6 +226,9 @@ class TimecourseExSerializer(BaseOutputExSerializer):
 
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
+
+
     # internal data
     timecourses = TimecourseSerializer(many=True, write_only=True, required=False, allow_null=True)
 
@@ -228,7 +238,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         model = TimecourseEx
         fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
                  ["group", "individual", "interventions"] + \
-                 ["group_map", "individual_map", "interventions_map"] + ["timecourses"]
+                 ["group_map", "individual_map", "interventions_map"] + ["timecourses", "comments"]
 
     def to_internal_value(self, data):
         # ----------------------------------
@@ -257,8 +267,9 @@ class OutputSetSerializer(ExSerializer):
     """
     output_exs = OutputExSerializer(many=True, read_only=False, required=False, allow_null=True)
     timecourse_exs = TimecourseExSerializer(many=True, read_only=False, required=False, allow_null=True)
-    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = OutputSet
-        fields = ["descriptions","timecourse_exs","output_exs"]
+        fields = ["descriptions","timecourse_exs","output_exs", "comments"]

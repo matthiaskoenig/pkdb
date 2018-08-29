@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.categoricals import FORMAT_MAPPING
-from pkdb_app.comments.serializers import DescriptionsSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.utils import recursive_iter, set_keys
 from pkdb_app.utils import validate_categorials
 from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristica, DataFile, Individual, \
@@ -34,10 +34,11 @@ class DataFileSerializer(WrongKeyValidationSerializer):
 # ----------------------------------
 class CharacteristicaExSerializer(MappingSerializer):
     count = serializers.IntegerField(required=False)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = CharacteristicaEx
-        fields = CHARACTERISTISTA_FIELDS + CHARACTERISTISTA_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS
+        fields = CHARACTERISTISTA_FIELDS + CHARACTERISTISTA_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + ["comments"]
 
 
 class CharacteristicaSerializer(serializers.ModelSerializer):
@@ -48,6 +49,7 @@ class CharacteristicaSerializer(serializers.ModelSerializer):
         fields = CHARACTERISTISTA_FIELDS + VALUE_FIELDS
 
     def to_internal_value(self, data):
+        data.pop("comments",None)
 
         return super().to_internal_value(data)
 
@@ -69,6 +71,7 @@ class GroupSerializer(ExSerializer):
             fields = GROUP_FIELDS + ["parent", "characteristica"]
 
     def to_internal_value(self, data):
+        data.pop("comments",None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -80,13 +83,15 @@ class GroupExSerializer(ExSerializer):
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     parent_ex = serializers.CharField()
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
+
 
     # internal data
     groups = GroupSerializer(many=True, write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = GroupEx
-        fields = EXTERN_FILE_FIELDS + GROUP_FIELDS + GROUP_MAP_FIELDS + ["parent_ex", "characteristica_ex", "groups"]
+        fields = EXTERN_FILE_FIELDS + GROUP_FIELDS + GROUP_MAP_FIELDS + ["parent_ex", "characteristica_ex", "groups","comments"]
 
     def to_internal_value(self, data):
 
@@ -120,12 +125,13 @@ class GroupExSerializer(ExSerializer):
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 class GroupSetSerializer(ExSerializer):
-    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True)
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
     group_exs = GroupExSerializer(many=True, read_only=False)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = GroupSet
-        fields = ["descriptions","group_exs"]
+        fields = ["descriptions","group_exs","comments"]
 
 # ----------------------------------
 # Individual
@@ -150,9 +156,8 @@ class IndividualSerializer(ExSerializer):
         return group
 
     def to_internal_value(self, data):
+        data.pop("comments",None)
         study_sid = self.context['request'].path.split("/")[-2]
-
-
         if "group" in data:
             data["group"] = self.group_to_internal_value(data["group"], study_sid)
 
@@ -169,12 +174,14 @@ class IndividualExSerializer(ExSerializer):
     source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
     figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
+
     # internal data
     individuals = IndividualSerializer(many=True, write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = IndividualEx
-        fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group", "group_map", "characteristica_ex","individuals"]
+        fields = EXTERN_FILE_FIELDS + ["name", "name_map", "group", "group_map", "characteristica_ex","individuals","comments"]
 
     @staticmethod
     def group_to_internal_value(group, study_sid):
@@ -237,8 +244,9 @@ class IndividualExSerializer(ExSerializer):
 class IndividualSetSerializer(ExSerializer):
 
     individual_exs = IndividualExSerializer(many=True, read_only=False, required=False )
-    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = IndividualSet
-        fields = ["descriptions", "individual_exs"]
+        fields = ["descriptions", "individual_exs", "comments"]
