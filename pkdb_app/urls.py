@@ -53,40 +53,6 @@ router.register('statistics', StatisticsViewSet, base_name="statistics")
 # router.register('intervention',InterventionsViewSet,base_name="intervention")
 
 
-'''
-class JSONOpenAPIRenderer(renderers.OpenAPIRenderer):
-    media_type = 'application/json'
-def get_swagger_view(title=None, url=None, patterns=None, urlconf=None):
-    """
-    Returns schema view which renders Swagger/OpenAPI.
-    Custom get swagger view.
-    see https://github.com/marcgibbons/django-rest-swagger/issues/701
-    """
-    class SwaggerSchemaView(APIView):
-        _ignore_model_permissions = True
-        exclude_from_schema = True
-        permission_classes = [AllowAny]
-        renderer_classes = [
-            CoreJSONRenderer,
-            JSONOpenAPIRenderer,
-            renderers.OpenAPIRenderer,
-            renderers.SwaggerUIRenderer
-        ]
-        def get(self, request):
-            generator = SchemaGenerator(
-                title=title,
-                url=url,
-                patterns=patterns,
-                urlconf=urlconf
-            )
-            schema = generator.get_schema(request=request)
-            if not schema:
-                raise exceptions.ValidationError(
-                    'The schema generator did not return a schema Document'
-                )
-            return Response(schema)
-    return SwaggerSchemaView.as_view()
-'''
 
 schema_view = get_swagger_view(title='PKDB API')
 
@@ -99,8 +65,8 @@ urlpatterns = [
     # path('api-token-auth/', views.obtain_auth_token),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'api', schema_view, name='api'),
-    url(r'', views.about_view, name='index'),
 
+    #url(r'/', views.about_view, name='index'),
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
     #re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
