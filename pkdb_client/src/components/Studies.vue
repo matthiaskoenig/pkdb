@@ -20,9 +20,6 @@
                 <th>outputs</th>
                 <th>timecourses</th>-->
                 <th>files</th>
-
-
-
             </tr>
             </thead>
             <tbody>
@@ -33,12 +30,12 @@
                 <td>{{ study.reference }}</td>
                 <td>{{ study.creator }}</td>
                 <td>
-                    <li v-for="curator in study.curators">
+                    <li v-for="(curator, index) in study.curators" :key="index">
                         {{ curator }}
                     </li>
                 </td>
                 <td>
-                    <li v-for="substance in study.substances">
+                    <li v-for="(substance, index) in study.substances" :key="index">
                         {{ substance }}
                     </li>
                 </td>
@@ -49,7 +46,7 @@
                 <td>{{ study.outputset.outputs.length }}</td>
                 <td>{{ study.outputset.timecourses.length }}</td>-->
                 <td>
-                    <li v-for="file in study.files">
+                    <li v-for="(file, index) in study.files" :key="index">
                         <a :href="file">{{ file }}</a>
                     </li>
                 </td>
