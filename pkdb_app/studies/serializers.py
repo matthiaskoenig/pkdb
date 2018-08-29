@@ -211,6 +211,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
         model = Study
         fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design', 'individualset','groupset','outputset','files')
 
+
 class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
     authors = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='authors_read-detail')
     study = serializers.HyperlinkedRelatedField(many=True, lookup_field='sid', read_only=True, view_name='studies_read-detail')
