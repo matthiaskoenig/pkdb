@@ -217,7 +217,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         delimiter = FORMAT_MAPPING[format].delimiter
         src = DataFile.objects.get(pk=source)
         try:
-            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False)
+            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False, na_values=['NA','NAN','na','nan'])
 
         except:
             raise serializers.ValidationError({"source": "cannot read csv", "detail": {"source": source,
@@ -316,7 +316,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 ["field has wrong pattern col=='col_value'", data])
                         try:
                             value_array = df[values[1]]
-                            #print(value_array.values.tolist())
 
                         except KeyError:
                             raise serializers.ValidationError(
@@ -327,8 +326,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         else:
             raise serializers.ValidationError("For timecourse data a source file has to be provided.")
-        from pprint import pprint
-        pprint(array_dict)
+
 
         return array_dict
 
