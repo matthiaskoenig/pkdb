@@ -17,8 +17,8 @@ https://cli.vuejs.org/
 # vue/cli > 3.0
 sudo npm install -g @vue/cli
 sudo npm install vue-router
-npm install --save axios
-
+npm install axios --save 
+sudo npm install bootstrap-vue bootstrap --save
 ```
 
 ## vue project
@@ -53,3 +53,6 @@ npm run build
 ```
 npm run lint
 ```
+# Bootstrap
+https://alligator.io/vuejs/using-bootstrap4/
+vue-bootstrap’s current roster of components includes most of the interactive Bootstrap 4 components: Alert, Badge, Breadcrumb, Button, Button group, Card, Collapse, Dropdown, The Usual Form Elements, Jumbotron, List group, Modal, Nav, Navbar, Pagination, Popover, Progress, Table and Tabs
