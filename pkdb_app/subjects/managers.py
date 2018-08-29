@@ -33,6 +33,7 @@ class GroupSetManager(models.Manager):
             study_group_ex = groupset.group_exs.create(**group_ex)
 
             study_group_exs.append(study_group_ex)
+
         groupset.save()
         return groupset
 

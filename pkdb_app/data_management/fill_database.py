@@ -217,7 +217,6 @@ def upload_files(file_path, api_url=API_URL):
 
         files = [file for file in files if not file.endswith(forbidden_suffix)]
         files = [file for file in files if not file.startswith(forbidden_prefix)]
-
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'rb') as f:
@@ -280,7 +279,6 @@ def upload_study_json(json_study_dict, api_url=API_URL):
 
     :returns success code
     """
-    success = True
     json_study = json_study_dict["json"]
     if not json_study:
         logging.warning("No study information in `study.json`")
@@ -290,26 +288,12 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     study_dir = os.path.dirname(json_study_dict["study_path"])
     file_dict = upload_files(study_dir)
 
-    comments = []
     for keys, item in recursive_iter(json_study_dict):
-        #set_keys(json_study_dict,item.replace(item,file_dict[item]),*keys)
         if isinstance(item,str):
             for file, file_pk in file_dict.items():
                 item = item.replace(file, str(file_pk))
-
             set_keys(json_study_dict, item, *keys)
 
-        #if "comments" in keys:
-        #    n_keys = []
-        #    for key in keys:
-        #        n_keys.append(key)
-        #        if key == "comments":
-        #            break
-         #   comments.append(tuple(n_keys))
-    #for comment in set(comments):
-        #pop_comments(json_study_dict, *comment)
-    #from pprint import pprint
-    #pprint(list(recursive_iter(json_study_dict)))
 
     # ---------------------------
     # post study core
