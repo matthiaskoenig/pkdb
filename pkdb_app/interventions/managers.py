@@ -94,7 +94,7 @@ class TimecourseExManager(models.Manager):
 
         timecourse_ex = super().create(*args, **kwargs)
         for internvention in interventions:
-            output_ex.interventions.add(internvention)
+            timecourse_ex.interventions.add(internvention)
         for timecourse in timecourses:
             timecourse_ex.timecourses.create(**timecourse)
         timecourse_ex.save()
