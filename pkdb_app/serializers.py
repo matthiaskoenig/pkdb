@@ -1,6 +1,5 @@
 import copy
 import pandas as pd
-import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from rest_framework import serializers
@@ -9,10 +8,8 @@ from collections import OrderedDict
 from rest_framework.settings import api_settings
 
 from pkdb_app.categoricals import FORMAT_MAPPING
-from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, DataFile, InterventionEx, Intervention
-from pkdb_app.studies.models import Reference
-from pkdb_app.subjects.models import GroupSet, IndividualSet, GroupEx, IndividualEx, Group, Individual
-from pkdb_app.users.models import User
+from pkdb_app.interventions.models import  DataFile, Intervention
+from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
 
 ITEM_SEPARATOR = '||'
@@ -65,8 +62,11 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         """
         display only keys, which are not None
         """
-        result = super().to_representation(instance)
-        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
+        rep = super().to_representation(instance)
+        rep = OrderedDict([(key, rep[key]) for key in rep if rep[key] is not None])
+
+        rep = OrderedDict([(key, rep[key]) for key in rep if not all([isinstance(rep[key],list), not rep[key]])])
+        return rep
 
 
 class MappingSerializer(WrongKeyValidationSerializer):
@@ -512,177 +512,3 @@ class SidSerializer(WrongKeyValidationSerializer):
             # If the Serializer was instantiated with just an object, and no
             # data={something} proceed as usual
             return super().is_valid(raise_exception)
-
-
-
-
-
-
-
-
-
-'''
-
-
-class ParserValidationSerializer(WrongKeyValidationSerializer):
-
-    @staticmethod
-    def split_entries_for_key(data, key):
-        """ Splits entries in multiple if separators found.
-
-        Gets the subset of data for the key, splits the entries in multiple
-        and overwrites the data in the original data dict!
-
-        :param data:
-        :param key:
-        :return:
-        """
-
-        def number_of_entries(entry):
-            """ Splits the data to get number of entries. """
-
-            n_values = []
-            for field, value in entry.items():
-                n = 1
-                try:
-                    values = value.split(ITEM_SEPARATOR)
-                    n = len(values)
-                except AttributeError:
-                    pass
-
-                n_values.append(n)
-
-            # validation (either 1 or max length)
-            n_set = set(n_values)
-            if len(n_set) not in [1, 2]:
-                serializers.ValidationError(
-                    f"Fields have different length, check || separators",
-                    entry,
-                )
-
-            return max(n_values)
-
-        def split_entry(entry):
-            """ Splits entry fields based on separator.
-
-            :param entry:
-            :return: list of entries
-            """
-
-            n = number_of_entries(entry)
-            if n == 1:
-                return [entry]
-
-            # create entries by splitting separators
-            entries = [dict() for k in range(n)]
-
-            for field in entry.keys():
-                value = entry[field]
-                try:
-                    values = value.split(ITEM_SEPARATOR)
-                except AttributeError:
-                    values = [value]
-                for k, value in enumerate(values):
-                    if isinstance(value, str):
-                        values[k] = value.strip()
-
-
-                # --- validation ---
-                # names must be split in a split entry
-                if field == "name" and len(values) != n:
-                    raise serializers.ValidationError(f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain is violated.")
-                # check for old syntax
-                for value in values:
-                    if isinstance(value, str):
-                        if "{{" in value or "}}" in value:
-                            raise serializers.ValidationError(
-                                f"Splitting via '{{ }}' syntax not allowed, use '||' in count.")
-                # ------------------
-
-                # extend entries
-                if len(values) == 1:
-                    values = values * n
-
-                if len(values) is not n:
-                    raise serializers.ValidationError(
-                        ["Values do not have correct length",
-                        field, values, entry]
-                    )
-
-                for k in range(n):
-                    entries[k][field] = values[k]
-
-            return entries
-
-        # get data for key
-        raw = data.get(key, [])  # outputs
-
-        cleaned = []
-        for entry in raw:  # output
-            entries = split_entry(entry)
-            cleaned.extend(entries)
-        data[key] = cleaned
-
-        return data
-
-    @staticmethod
-    def mapping_parser(mapping, table):
-
-        resulting_keys = []
-        for key, value in mapping.items():
-            if "==" in value:
-                values = value.split("==")
-                if not values[0].strip() == "col":
-                    raise serializers.ValidationError(f"Value provided does not match pattern 'col==<file_mapping>', with key:{key} and  value:{values}")
-                resulting_keys.append(values[1].strip())
-
-            else:
-                table[key] = value
-                resulting_keys.append(key)
-
-        return table[resulting_keys]
-
-    @staticmethod
-    def split_to_map(data):
-        splitted_data = {}
-        for key, value in data.items():
-            try:
-                if "==" in value:
-                    splitted_data[f"{key}_map"] = data.get(key)
-                else:
-                    splitted_data[key] = data.get(key)
-            except:
-                splitted_data[key] = data.get(key)
-
-        return splitted_data
-
-    @staticmethod
-    def drop_blank(data):
-        return {k: v for k, v in data.items() if v is not None}
-
-    @staticmethod
-    def drop_empty(data):
-        dropped_empty = {}
-        for k, v in data.items():
-            if isinstance(v, str):
-                if not v:
-                    continue
-            dropped_empty[k] = v
-        #return {k:v for k, v in data.items() if (not v and isinstance(v, str))}
-        return dropped_empty
-
-    @staticmethod
-    def strip(data):
-        data_stripped = {}
-
-        for k, v in data.items():
-            if isinstance(v, str):# and not k=="name"):
-                v = v.strip()
-            data_stripped[k] = v
-
-        return data_stripped
-
-    def to_representation(self, instance):
-        result = super().to_representation(instance)
-        return OrderedDict([(key, result[key]) for key in result if result[key] is not None])
-'''

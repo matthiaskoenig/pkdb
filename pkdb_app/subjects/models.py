@@ -13,7 +13,7 @@ from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTE
     INCLUSION_CRITERIA, EXCLUSION_CRITERIA
 from ..utils import CHAR_MAX_LENGTH
 from .managers import GroupExManager, GroupSetManager, IndividualExManager, IndividualSetManager, IndividualManager, \
-    GroupManager
+    GroupManager, CharacteristicaManager
 
 
 # ----------------------------------
@@ -235,7 +235,7 @@ class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable):
 
     group_ex = models.ForeignKey(GroupEx, related_name="characteristica_ex", null=True, blank=True,on_delete=models.CASCADE)
     individual_ex = models.ForeignKey(IndividualEx, related_name="characteristica_ex", null=True, blank=True, on_delete=models.CASCADE)
-
+    objects = CharacteristicaManager()
 
 class Characteristica(AbstractCharacteristica, Valueable, models.Model):
     """ Characteristic. """
