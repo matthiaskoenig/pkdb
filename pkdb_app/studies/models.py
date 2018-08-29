@@ -50,7 +50,7 @@ class Study(Sidable, models.Model):
     creator =  models.ForeignKey(User,related_name="studies", on_delete=models.CASCADE,null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
-    reference = models.ForeignKey(Reference, on_delete=True, to_field="sid", db_column="reference_sid", related_name='studies', null=True, blank=True)
+    reference = models.ForeignKey(Reference, on_delete=True, related_name='study', null=True, blank=True)
     curators = models.ManyToManyField(User)
     substances = models.ManyToManyField(Substance)
     groupset = models.OneToOneField(GroupSet, on_delete=models.SET_NULL,null=True, blank=True)
@@ -58,6 +58,27 @@ class Study(Sidable, models.Model):
     individualset = models.OneToOneField(IndividualSet, on_delete=models.SET_NULL,null=True, blank=True)
     outputset = models.OneToOneField(OutputSet, on_delete=models.SET_NULL,null=True, blank=True)
     files = models.ManyToManyField(DataFile)
+
+    @property
+    def individuals(self):
+        return self.individualset.individual_exs.individuals.all()
+
+    @property
+    def groups(self):
+        return self.groupset.group_exs.groups.all()
+
+    @property
+    def interventions(self):
+        return self.interventionset.intervention_exs.interventions.all()
+
+    @property
+    def outputs(self):
+        return self.outputset.output_exs.outputs.all()
+
+    @property
+    def timecourses(self):
+        return self.outputset.timecourse_exs.timecourses.all()
+
 
 
 # not yet used

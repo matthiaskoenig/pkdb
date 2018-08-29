@@ -136,7 +136,7 @@ class OutputSerializer(ExSerializer):
 
 
     class Meta:
-        model = OutputEx
+        model = Output
         fields = OUTPUT_FIELDS + VALUE_FIELDS + \
                  ["group","individual","interventions"]
 
@@ -273,3 +273,68 @@ class OutputSetSerializer(ExSerializer):
     class Meta:
         model = OutputSet
         fields = ["descriptions","timecourse_exs","output_exs", "comments"]
+
+###############################################################################################
+# Read Serializer
+###############################################################################################
+class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
+    """ InterventionSet. """
+    study = serializers.HyperlinkedRelatedField(lookup_field="sid", read_only=True, view_name="studies_read-detail")
+    descriptions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="descriptions_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="interventions_read-detail")
+
+
+    class Meta:
+        model = InterventionSet
+        fields = ["study","descriptions", "interventions"]
+
+class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
+    """ InterventionSet. """
+    interventionset = serializers.HyperlinkedRelatedField(read_only=True, view_name="interventionsets_read-detail")
+    substance = serializers.HyperlinkedRelatedField(read_only=True, view_name='substances_read-detail')
+
+
+    class Meta:
+        model = Intervention
+        fields =["interventionset"] + VALUE_FIELDS + INTERVENTION_FIELDS
+
+
+class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
+    study = serializers.HyperlinkedRelatedField(lookup_field="sid", read_only=True, view_name="studies_read-detail")
+    descriptions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="descriptions_read-detail")
+    outputs = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="outputs_read-detail")
+    timecourses = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="timecourses_read-detail")
+
+    class Meta:
+        model = OutputSet
+        fields = ["study","descriptions","outputs","timecourses"]
+
+
+class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
+    outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name="outputsets_read-detail")
+    group = serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
+    individual = serializers.HyperlinkedRelatedField(read_only=True, view_name="individuals_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="interventions_read-detail")
+    substance = serializers.HyperlinkedRelatedField(read_only=True, view_name='substances_read-detail')
+
+    class Meta:
+        model = Output
+        fields = ["outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
+    outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name="outputsets_read-detail")
+    group = serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
+    individual = serializers.HyperlinkedRelatedField(read_only=True, view_name="individuals_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name="interventions_read-detail")
+    substance = serializers.HyperlinkedRelatedField(read_only=True, view_name='substances_read-detail')
+
+    class Meta:
+        model = Timecourse
+        fields = ["outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+
+class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model =  Substance
+        fields = ["name"]

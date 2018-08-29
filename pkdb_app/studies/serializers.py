@@ -11,7 +11,7 @@ from .models import Reference, Author, Study
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
 
 
-class AuthorValidationSerializer(WrongKeyValidationSerializer):
+class AuthorSerializer(WrongKeyValidationSerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -24,7 +24,7 @@ class AuthorValidationSerializer(WrongKeyValidationSerializer):
 
 
 class ReferenceSerializer(SidSerializer):
-    authors = AuthorValidationSerializer(many=True, read_only=False)
+    authors = AuthorSerializer(many=True, read_only=False)
 
     class Meta:
         model = Reference
@@ -33,7 +33,7 @@ class ReferenceSerializer(SidSerializer):
     def create(self, validated_data):
         authors_data = validated_data.pop('authors',[])
         reference = Reference.objects.create(**validated_data)
-        update_or_create_multiple(reference,authors_data,"authors")
+        update_or_create_multiple(reference,authors_data,'authors')
         reference.save()
         return reference
 
@@ -41,7 +41,7 @@ class ReferenceSerializer(SidSerializer):
         authors_data = validated_data.pop('authors',[])
         for name, value in validated_data.items():
             setattr(instance, name, value)
-        update_or_create_multiple(instance,authors_data,"authors")
+        update_or_create_multiple(instance,authors_data,'authors')
         instance.save()
         return instance
 
@@ -190,3 +190,39 @@ class StudySerializer(SidSerializer):
             study.save()
 
         return study
+###############################################################################################
+# Read Serializer
+###############################################################################################
+class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
+
+    curators = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='users_read-detail')
+    substances = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='substances_read-detail')
+    creator = serializers.HyperlinkedRelatedField(read_only=True, view_name='users_read-detail')
+    reference = serializers.HyperlinkedRelatedField(read_only=True, lookup_field='sid', view_name='references_read-detail')
+
+    individualset = serializers.HyperlinkedRelatedField(read_only=True, view_name='individualsets_read-detail')
+    groupset = serializers.HyperlinkedRelatedField(read_only=True, view_name='groupsets_read-detail')
+    outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name='outputsets_read-detail')
+
+
+    files = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name='datafiles_read-detail')
+
+    class Meta:
+        model = Study
+        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design', 'individualset','groupset','outputset','files')
+
+class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
+    authors = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='authors_read-detail')
+    study = serializers.HyperlinkedRelatedField(many=True, lookup_field='sid', read_only=True, view_name='studies_read-detail')
+
+
+    class Meta:
+        model = Reference
+        fields = ('study','pmid', 'sid', 'name', 'doi', 'title', 'abstract', 'journal', 'date', 'authors', 'pdf')
+
+class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
+    references = serializers.HyperlinkedRelatedField(many=True, read_only=True, lookup_field='sid', view_name='references_read-detail')
+
+    class Meta:
+        model = Author
+        fields = ('references','id', 'first_name', 'last_name')

@@ -117,6 +117,16 @@ class Intervention(Valueable, AbstractIntervention):
 class OutputSet(models.Model):
     objects = OutputSetManager()
 
+    @property
+    def outputs(self):
+        outputs = Output.objects.filter(ex__in=self.output_exs.all())
+        return outputs
+
+    @property
+    def timecourses(self):
+        timecourses = Timecourse.objects.filter(ex__in=self.timecourse_exs.all())
+        return timecourses
+
 
 class AbstractOutput(models.Model):
 
