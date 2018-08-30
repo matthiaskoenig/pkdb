@@ -1,9 +1,10 @@
 <template>
-
     <div>
         <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
+
+
         <h1>Studies <span v-if="count">({{ count }})</span></h1>
-        <table v-if="count">
+        <table v-if="count" class="table table-responsive table-condensed table-hover">
             <thead>
             <tr>
                 <th>sid</th>
@@ -53,8 +54,7 @@
             </tr>
             </tbody>
         </table>
-        <p>
-        </p>
+
     </div>
 </template>
 <script>
