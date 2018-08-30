@@ -279,10 +279,10 @@ class OutputSetSerializer(ExSerializer):
         return attrs
 
     def validate_timcourse_exs(self, attrs):
-        for output in attrs:
-            self.validate_group_individual_output(output)
-            self._validate_individual_output(output)
-            self._validate_group_output(output)
+        for timecourse in attrs:
+            self.validate_group_individual_output(timecourse)
+            self._validate_individual_output(timecourse)
+            self._validate_group_output(timecourse)
 
         return attrs
 
