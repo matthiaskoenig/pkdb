@@ -407,15 +407,12 @@ class ExSerializer(MappingSerializer):
             if data["individual"]:
 
                 study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
-                # for i in study_individuals:
-                #    print(i.name)
+
                 try:
                     study_individuals = Individual.objects.filter(ex__individualset__study__sid=study_sid)
-
                     data["individual"] = study_individuals.get(name=data.get("individual")).pk
 
-                    # data["individual"] = Individual.objects.get(
-                    #    Q(ex__individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
+
                 except ObjectDoesNotExist:
                     msg = f'individual: individual <{data.get("individual")}>  in study: <{study_sid}> does not exist'
                     raise serializers.ValidationError(msg)

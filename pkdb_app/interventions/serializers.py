@@ -1,23 +1,17 @@
 """
 Serializers for interventions.
 """
-import pandas as pd
-from copy import deepcopy
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from django.db.models import Q
+import numpy as np
 from rest_framework import serializers
-from rest_framework.settings import api_settings
 
-from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
     InterventionEx, OutputEx, TimecourseEx
-from pkdb_app.serializers import ExSerializer, MappingSerializer, WrongKeyValidationSerializer, BaseOutputExSerializer
+from pkdb_app.serializers import ExSerializer,  WrongKeyValidationSerializer, BaseOutputExSerializer
 
-from pkdb_app.subjects.models import IndividualEx, Group, DataFile, Individual, GroupEx
-from pkdb_app.utils import validate_categorials, recursive_iter, set_keys
+from pkdb_app.subjects.models import Group, DataFile, Individual
+from pkdb_app.utils import validate_categorials
 
 from pkdb_app.subjects.serializers import VALUE_MAP_FIELDS,VALUE_FIELDS,EXTERN_FILE_FIELDS
 
@@ -285,10 +279,10 @@ class OutputSetSerializer(ExSerializer):
         return attrs
 
     def validate_timcourse_exs(self, attrs):
-        for timecourse in attrs:
-            self.validate_group_individual_output(timecourse)
-            self._validate_individual_output(timecourse)
-            self._validate_group_output(timecourse)
+        for output in attrs:
+            self.validate_group_individual_output(output)
+            self._validate_individual_output(output)
+            self._validate_group_output(output)
 
         return attrs
 
@@ -354,6 +348,17 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Timecourse
         fields = ["outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+    def to_representation(self, instance):
+        array_fields =["value", "mean", "median", "min", "max", "sd", "se", "cv","time"]
+        for field in array_fields:
+            array = getattr(instance,field, None)
+            if array:
+                null_array = [None if np.isnan(value) else value for value in array]
+                setattr(instance,field,null_array)
+        return super().to_representation(instance)
+
+
 
 
 class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
