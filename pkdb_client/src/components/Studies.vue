@@ -1,9 +1,8 @@
 <template>
     <div>
-        <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
-
-
         <h1>Studies <span v-if="count">({{ count }})</span></h1>
+
+        <v-paginator :resource_url="resource_url" @update="updateResource"></v-paginator>
         <table v-if="count" class="table table-responsive table-condensed table-hover">
             <thead>
             <tr>
@@ -15,11 +14,6 @@
                 <th>curators</th>
                 <th>substances</th>
                 <th>design</th>
-                <!--<th>groups</th>
-                <th>individuals</th>
-                <th>interventions</th>
-                <th>outputs</th>
-                <th>timecourses</th>-->
                 <th>files</th>
             </tr>
             </thead>
@@ -41,11 +35,6 @@
                     </li>
                 </td>
                 <td>{{ study.design }}</td>
-                <!--<td>{{ study.groupset.groups.length }}</td>
-                <td>{{ study.individualset.individuals.length }}</td>
-                <td>{{ study.interventionset.interventions.length }}</td>
-                <td>{{ study.outputset.outputs.length }}</td>
-                <td>{{ study.outputset.timecourses.length }}</td>-->
                 <td>
                     <li v-for="(file, index) in study.files" :key="index">
                         <a :href="file">{{ file }}</a>
@@ -57,6 +46,7 @@
 
     </div>
 </template>
+
 <script>
     import VuePaginator from 'vuejs-paginator';
     export default {
@@ -80,19 +70,9 @@
                 // Here you define the url of your paginated API
                 resource_url: this.api + '/studies/?format=json',
                 count: null,
-                options: {
-                    remote_data: 'data',
-                    remote_current_page: 'current_page',
-                    remote_last_page: 'last_page',
-                    remote_next_page_url: 'next_page_url',
-                    remote_prev_page_url: 'prev_page_url',
-                    next_button_text: 'Go Next',
-                    previous_button_text: 'Go Back'
-                }
             }
         }
-
-
-
     }
 </script>
+
+<style></style>

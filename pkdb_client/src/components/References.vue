@@ -1,8 +1,7 @@
 <template>
     <div>
-        <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
         <h1>References <span v-if="count">({{ count }})</span></h1>
-
+        <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
         <table v-if="count" class="table table-responsive table-condensed table-hover">
             <thead>
             <tr>
@@ -27,7 +26,6 @@
             </tr>
             </tbody>
         </table>
-
     </div>
 </template>
 <script>
