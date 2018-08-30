@@ -3,7 +3,7 @@
     <div>
         <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
         <h1>References <span v-if="count">({{ count }})</span></h1>
-        <table v-if="count">
+        <table v-if="count" class="table table-responsive table-condensed table-hover">
             <thead>
             <tr>
                 <th>sid</th>
@@ -18,7 +18,7 @@
             <tbody>
             <tr v-for="(reference, index) in references" :key="index">
                 <td>{{ reference.sid }}</td>
-                <td>{{ reference.pmid }}</td>
+                <td><a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" target="_blank">{{ reference.pmid }}</a></td>
                 <td>{{ reference.name }}</td>
                 <td>{{ reference.title }}</td>
                 <td>{{ reference.journal }}</td>

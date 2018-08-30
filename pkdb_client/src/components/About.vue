@@ -9,10 +9,14 @@
     <h2>Contact</h2>
     <p>
     <ul>
-      <li>Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a></li>
       <li>Website: <a :href="web" target="_blank">{{web}}</a></li>
+      <li>Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a></li>
     </ul>
     </p>
+    <h2>Information</h2>
+    TODO
+
+
   </div>
 </template>
 
@@ -26,7 +30,7 @@ export default {
   data(){
     return {
         version: "-",
-        email: 'konigmatt@googlemail.com',
+        email: 'koenigmx@hu-berlin.de',
         web: 'https://livermetabolism.com',
         statistics: null,
         errors: []

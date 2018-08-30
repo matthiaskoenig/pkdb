@@ -54,5 +54,7 @@ npm run build
 npm run lint
 ```
 # Bootstrap
-https://alligator.io/vuejs/using-bootstrap4/
+https://alligator.io/vuejs/using-bootstrap4/  
+https://bootstrap-vue.js.org/docs/
+
 vue-bootstrap’s current roster of components includes most of the interactive Bootstrap 4 components: Alert, Badge, Breadcrumb, Button, Button group, Card, Collapse, Dropdown, The Usual Form Elements, Jumbotron, List group, Modal, Nav, Navbar, Pagination, Popover, Progress, Table and Tabs
