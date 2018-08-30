@@ -65,11 +65,36 @@
                     },
                     {
                         id: 2,
+                        text: 'Groups',
+                        page:'/groups'
+                    },
+                    {
+                        id: 3,
+                        text: 'Individuals',
+                        page:'/individuals'
+                    },
+                    {
+                        id: 4,
+                        text: 'Interventions',
+                        page:'/interventions'
+                    },
+                    {
+                        id: 5,
+                        text: 'Outputs',
+                        page:'/outputs'
+                    },
+                    {
+                        id: 6,
+                        text: 'Timecourses',
+                        page:'/timecourses'
+                    },
+                    {
+                        id: 7,
                         text: 'References',
                         page:'/references'
                     },
                     {
-                        id: 3,
+                        id: 4,
                         text: 'About',
                         page:'/about'
                     },
