@@ -29,7 +29,6 @@ class CommentSerializer(WrongKeyValidationSerializer):
 
     def to_internal_value(self, data):
         self._validate_comment(data)
-
         user = self.get_or_val_error(User, username=data[0])
         return {"text": data[1],"user":user}
 
