@@ -1,8 +1,7 @@
 <template>
-
     <div>
-        <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
         <h1>References <span v-if="count">({{ count }})</span></h1>
+        <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
         <table v-if="count" class="table table-responsive table-condensed table-hover">
             <thead>
             <tr>
@@ -27,11 +26,10 @@
             </tr>
             </tbody>
         </table>
-        <p>
-        </p>
     </div>
 </template>
 <script>
+
 import VuePaginator from 'vuejs-paginator';
 export default {
     name: 'References',
@@ -56,3 +54,6 @@ export default {
         }
 }
 </script>
+<style>
+
+</style>
