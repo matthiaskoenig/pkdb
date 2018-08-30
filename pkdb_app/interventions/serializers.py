@@ -147,7 +147,6 @@ class OutputSerializer(ExSerializer):
         data =  self.retransform_map_fields(data)
         data =  self.to_internal_related_fields(data)
 
-        self._validate_individual_output(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -276,6 +275,27 @@ class OutputSetSerializer(ExSerializer):
     class Meta:
         model = OutputSet
         fields = ["descriptions","timecourse_exs","output_exs", "comments"]
+
+    def validate_output_exs(self, attrs):
+        for output in attrs:
+            self.validate_group_individual_output(output)
+            self._validate_individual_output(output)
+            self._validate_group_output(output)
+
+        return attrs
+
+    def validate_timcourse_exs(self, attrs):
+        for timecourse in attrs:
+            self.validate_group_individual_output(timecourse)
+            self._validate_individual_output(timecourse)
+            self._validate_group_output(timecourse)
+
+        return attrs
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 
 ###############################################################################################
 # Read Serializer

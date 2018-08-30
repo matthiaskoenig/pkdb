@@ -102,6 +102,19 @@ class MappingSerializer(WrongKeyValidationSerializer):
             transformed_data[k] = v
         return transformed_data
 
+    def _retransform_map_list(self, data_list):
+        unmap_list = []
+        for item in data_list:
+            if "_map" in item:
+                item = item[:-4]
+            else:
+                item
+
+            unmap_list.append(item)
+        return unmap_list
+
+
+
 
     # ----------------------------------
     # helper for splitting
@@ -427,17 +440,41 @@ class ExSerializer(MappingSerializer):
     ##########################
     # helpers
     ##########################
+    def _validate_disabled_data(self, data_dict,disabled):
+        disabled = set(disabled)
+        wrong_keys = disabled.intersection(set(data_dict.keys()))
+        if wrong_keys:
+            wrong_keys = self._retransform_map_list(wrong_keys)
+            raise serializers.ValidationError({
+                api_settings.NON_FIELD_ERRORS_KEY: f"The following keys are not allowed<{wrong_keys}>, because of indivdual or group",
+                "detail": data_dict})
 
     def _validate_individual_characteristica(self, data_dict):
-            disabled = {'sd', 'se', 'min', 'max', 'cv'}
-            wrong_keys = disabled.intersection(set(data_dict.keys()))
-            if wrong_keys:
-                raise serializers.ValidationError({
-                                                api_settings.NON_FIELD_ERRORS_KEY: f"The following keys are not allowed on individual<{wrong_keys}>",
-                                                "detail": data_dict})
+        disabled = ['sd', 'se', 'min', 'max', 'cv','mean','median']
+        disabled += ['sd_map', 'se_map', 'min_map', 'max_map', 'cv_map','mean_map','median_map']
+
+        self._validate_disabled_data(data_dict,disabled)
+
     def _validate_individual_output(self, data):
-        if data.get("individual"):
+        if data.get("individual") or data.get("individual_map"):
             self._validate_individual_characteristica(data)
+
+    def _validate_group_output(self, data):
+        if data.get("group") or data.get("group_map"):
+            disabled = ['value','value_map']
+            self._validate_disabled_data(data, disabled)
+
+    def validate_group_individual_output(self,output):
+        is_group = output.get("group") or output.get("group_map")
+        is_individual = output.get("individual") or output.get("individual_map")
+
+        if (is_individual and is_group):
+            raise serializers.ValidationError({
+                api_settings.NON_FIELD_ERRORS_KEY: f"group and individual is not allowed"})
+        elif not (is_individual or is_group):
+            raise serializers.ValidationError({
+                api_settings.NON_FIELD_ERRORS_KEY: f"group or individual is required"})
+
 
     @staticmethod
     def ex_mapping():
@@ -445,7 +482,6 @@ class ExSerializer(MappingSerializer):
                 "individual_ex": "individual",
                 "intervention_exs": "interventions",
                 "group_exs": "groups",
-                "group_ex": "group",
                 "characteristica_ex": "characteristica",
                 "parent_ex": "parent",
                 "output_exs":"outputs",

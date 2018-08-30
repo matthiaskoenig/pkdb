@@ -124,6 +124,7 @@ class GroupExSerializer(ExSerializer):
 
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
+
 class GroupSetSerializer(ExSerializer):
     descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
     group_exs = GroupExSerializer(many=True, read_only=False)
@@ -154,12 +155,6 @@ class IndividualSerializer(ExSerializer):
                 msg = f'group: {group} in study: {study_sid} does not exist'
                 raise serializers.ValidationError(msg)
         return group
-
-    def validate_characteristica(self, attrs):
-        for chara in attrs:
-            self._validate_individual_characteristica(chara)
-        return attrs
-
 
     def to_internal_value(self, data):
         data.pop("comments",None)
@@ -221,18 +216,21 @@ class IndividualExSerializer(ExSerializer):
         # ----------------------------------
         # finished external format
         # ----------------------------------
-
+        data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
         data["individuals"] = individuals
-
-
         study_sid = self.context['request'].path.split("/")[-2]
 
         if "group" in data:
             data["group"] = self.group_to_internal_value(data.get("group"), study_sid)
-
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer,self).to_internal_value(data)
+
+    def validate_characteristica_ex(self, attrs):
+        for characteristica in attrs:
+            self._validate_individual_characteristica(characteristica)
+        return attrs
 
     def to_representation(self, instance):
 
