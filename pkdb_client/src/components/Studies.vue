@@ -75,10 +75,24 @@
         },
         data() {
             return {
+                // The resource variable
                 studies: [],
-                count: null,
+                // Here you define the url of your paginated API
                 resource_url: this.api + '/studies/?format=json',
+                count: null,
+                options: {
+                    remote_data: 'data',
+                    remote_current_page: 'current_page',
+                    remote_last_page: 'last_page',
+                    remote_next_page_url: 'next_page_url',
+                    remote_prev_page_url: 'prev_page_url',
+                    next_button_text: 'Go Next',
+                    previous_button_text: 'Go Back'
+                }
             }
         }
+
+
+
     }
 </script>
