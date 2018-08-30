@@ -13,8 +13,10 @@
       <li>Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a></li>
     </ul>
     </p>
+    <!--
     <h2>Information</h2>
     TODO
+    -->
 
 
   </div>
