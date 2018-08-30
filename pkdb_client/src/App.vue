@@ -1,23 +1,21 @@
 <template>
   <div id="app">
-    <!--<img alt="Vue logo" src="./assets/bg.jpg" height="100">-->
     <Navigation></Navigation>
-      <router-view :api="api"></router-view>
-    <div id="footer">
-      <!-- FOOTER -->
-      <p>&copy; 2017-2018 PK-DB</p>
-    </div>
+    <br />
+    <router-view :api="api"></router-view>
+    <Footer></Footer>
   </div>
-
 </template>
 
 <script>
 import Navigation from './components/Navigation.vue'
+import Footer from './components/Footer.vue'
 
 export default {
     name: 'app',
     components: {
         'Navigation': Navigation,
+        'Footer': Footer
     },
     data(){
         return {
@@ -35,6 +33,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
 }
 </style>
