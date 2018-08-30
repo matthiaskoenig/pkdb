@@ -38,8 +38,9 @@ class StudyHandler(FileSystemEventHandler):
 
         self.path = path
         _, study_name = os.path.split(self.path)
+        self.study_name = study_name
         logging.info('-' * 80)
-        logging.info(f'Watching [{study_name}]')
+        logging.info(f'Watching [{self.study_name}]')
         logging.info(f'\t{self.path}')
         logging.info('-' * 80)
         upload_study_from_dir(self.path)
@@ -49,7 +50,10 @@ class StudyHandler(FileSystemEventHandler):
         :param event:
         :return:
         """
-        print('\n')
+        logging.info('\n')
+        logging.info('-' * 80)
+        logging.info(f'Updating [{self.study_name}]')
+        logging.info('-' * 80)
         upload_study_from_dir(self.path)
 
 
