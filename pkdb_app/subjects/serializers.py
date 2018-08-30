@@ -155,6 +155,12 @@ class IndividualSerializer(ExSerializer):
                 raise serializers.ValidationError(msg)
         return group
 
+    def validate_characteristica(self, attrs):
+        for chara in attrs:
+            self._validate_individual_characteristica(chara)
+        return attrs
+
+
     def to_internal_value(self, data):
         data.pop("comments",None)
         study_sid = self.context['request'].path.split("/")[-2]

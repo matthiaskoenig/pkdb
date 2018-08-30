@@ -6,7 +6,7 @@ from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 from rest_framework.settings import api_settings
-
+from django.forms.models import model_to_dict
 from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.interventions.models import  DataFile, Intervention
 from pkdb_app.subjects.models import Group, Individual
@@ -423,6 +423,21 @@ class ExSerializer(MappingSerializer):
                         raise serializers.ValidationError(msg)
                 data["interventions"] = interventions
         return data
+
+    ##########################
+    # helpers
+    ##########################
+
+    def _validate_individual_characteristica(self, data_dict):
+            disabled = {'sd', 'se', 'min', 'max', 'cv'}
+            wrong_keys = disabled.intersection(set(data_dict.keys()))
+            if wrong_keys:
+                raise serializers.ValidationError({
+                                                api_settings.NON_FIELD_ERRORS_KEY: f"The following keys are not allowed on individual<{wrong_keys}>",
+                                                "detail": data_dict})
+    def _validate_individual_output(self, data):
+        if data.get("individual"):
+            self._validate_individual_characteristica(data)
 
     @staticmethod
     def ex_mapping():

@@ -8,6 +8,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from rest_framework import serializers
+from rest_framework.settings import api_settings
 
 from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
@@ -143,9 +144,10 @@ class OutputSerializer(ExSerializer):
     def to_internal_value(self, data):
         data.pop("comments",None)
 
-        data = self.retransform_map_fields(data)
+        data =  self.retransform_map_fields(data)
         data =  self.to_internal_related_fields(data)
 
+        self._validate_individual_output(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -211,6 +213,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         # decompress external format
         # ----------------------------------
         data = self.to_internal_related_fields(data)
+        self._validate_individual_output(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
