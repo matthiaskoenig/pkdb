@@ -40,5 +40,5 @@ class CommentSerializer(WrongKeyValidationSerializer):
 ###############################################################################################
 class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        fields = ["text"]
+        fields = ["pk","text"]
         model = Description

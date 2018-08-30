@@ -303,7 +303,7 @@ class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = InterventionSet
-        fields = ["study","descriptions", "interventions"]
+        fields = ["pk","study","descriptions", "interventions"]
 
 class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
     """ InterventionSet. """
@@ -313,7 +313,7 @@ class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Intervention
-        fields =["interventionset"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields =["pk","interventionset"] + VALUE_FIELDS + INTERVENTION_FIELDS
 
 
 class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -324,7 +324,7 @@ class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["study","descriptions","outputs","timecourses"]
+        fields = ["pk","study","descriptions","outputs","timecourses"]
 
 
 class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -336,7 +336,7 @@ class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Output
-        fields = ["outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+        fields = ["pk","outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
 
 class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
     outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name="outputsets_read-detail")
@@ -347,7 +347,7 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Timecourse
-        fields = ["outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+        fields = ["pk","outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
 
     def to_representation(self, instance):
         array_fields =["value", "mean", "median", "min", "max", "sd", "se", "cv","time"]
@@ -365,4 +365,4 @@ class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model =  Substance
-        fields = ["name"]
+        fields = ["pk","name"]
