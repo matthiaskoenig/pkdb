@@ -16,7 +16,7 @@ class AuthorSerializer(WrongKeyValidationSerializer):
 
     class Meta:
         model = Author
-        fields = ('id', 'first_name', 'last_name')
+        fields = ('id','first_name', 'last_name')
 
     def create(self, validated_data):
         author, created = Author.objects.update_or_create(**validated_data)
@@ -209,7 +209,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
-        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design', 'individualset','groupset','outputset','files')
+        fields = ('pk','sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design', 'individualset','groupset','outputset','files')
 
 
 class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -219,11 +219,11 @@ class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Reference
-        fields = ('study','pmid', 'sid', 'name', 'doi', 'title', 'abstract', 'journal', 'date', 'authors', 'pdf')
+        fields = ('pk','study','pmid', 'sid', 'name', 'doi', 'title', 'abstract', 'journal', 'date', 'authors', 'pdf')
 
 class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
     references = serializers.HyperlinkedRelatedField(many=True, read_only=True, lookup_field='sid', view_name='references_read-detail')
 
     class Meta:
         model = Author
-        fields = ('references','id', 'first_name', 'last_name')
+        fields = ('pk','references', 'first_name', 'last_name')

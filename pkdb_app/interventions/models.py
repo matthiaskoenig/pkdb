@@ -39,6 +39,11 @@ class Substance(models.Model):
 class InterventionSet(models.Model):
     objects = InterventionSetManager()
 
+    @property
+    def interventions(self):
+        interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all())
+        return interventions
+
 
 class AbstractIntervention(models.Model):
     category = models.CharField(choices=INTERVENTION_CHOICES, max_length=CHAR_MAX_LENGTH)

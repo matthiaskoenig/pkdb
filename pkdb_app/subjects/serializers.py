@@ -268,7 +268,7 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = GroupSet
-        fields = ["study","descriptions","groups"]
+        fields = ["pk", "study","descriptions","groups"]
 
 
 class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -278,7 +278,7 @@ class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = IndividualSet
-        fields = ["study","descriptions", "individuals"]
+        fields = ["pk","study","descriptions", "individuals"]
 
 
 class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -288,7 +288,7 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
             model = Group
-            fields = ["groupset"] + GROUP_FIELDS + ["parent", "characteristica"]
+            fields = ["pk", "groupset"] + GROUP_FIELDS + ["parent", "characteristica"]
 
 
 class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -299,18 +299,18 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Individual
-        fields = ["individualset"] + ["name", "group", "characteristica"]
+        fields =["pk"] + ["individualset"] + ["name", "group", "characteristica"]
 
 
 class CharacteristicaReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Characteristica
-        fields = CHARACTERISTISTA_FIELDS + VALUE_FIELDS
+        fields = ["pk"]+CHARACTERISTISTA_FIELDS + VALUE_FIELDS
 
 
 class DataFileReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = DataFile
-        fields = ["file","filetype","id"]
+        fields = ["pk","file","filetype","id"]
