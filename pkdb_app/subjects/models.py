@@ -107,6 +107,13 @@ class Group(models.Model):
     def figure(self):
         return self.ex.figure
 
+    @property
+    def characteristica_all(self):
+        characteristica_all = self.characteristica.all()
+        if self.parent:
+            characteristica_all = characteristica_all | self.parent.characteristica_all
+        return characteristica_all
+
 
 # ----------------------------------
 # Individual
@@ -177,7 +184,13 @@ class Individual(AbstractIndividual):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     objects = IndividualManager()
 
-    # TODO: unique together  unique_together = ('ex__individualset', 'name')
+    @property
+    def characteristica_all(self):
+        characteristica_all = self.characteristica.all()
+        if self.group:
+            characteristica_all = characteristica_all | self.group.characteristica_all
+        return characteristica_all
+
 
     @property
     def source(self):
