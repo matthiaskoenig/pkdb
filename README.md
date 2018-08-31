@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/131752339.svg)](https://zenodo.org/badge/latestdoi/131752339)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1407035.svg)](https://doi.org/10.5281/zenodo.1407035)
 
 # PKDB - Pharmacokinetics database
 
