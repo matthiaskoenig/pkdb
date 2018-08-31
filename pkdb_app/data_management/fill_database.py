@@ -81,11 +81,19 @@ def setup_database(api_url):
 
     :return:
     """
-    from pkdb_app.categoricals import SUBSTANCES_DATA
+    from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
     for substance in SUBSTANCES_DATA:
         response = requests.post(f'{api_url}/substances/', json={"name": substance})
         if not  response.status_code == 201:
             logging.warning(f"substance upload failed ")
+
+
+    for keyword in KEYWORDS_DATA:
+        response = requests.post(f'{api_url}/keywords/', json={"name": keyword})
+        if not response.status_code == 201:
+            logging.warning(f"keyword upload failed ")
+            logging.warning(response.text)
+
 
     for user in USERS:
         response = requests.post(f'{api_url}/users/', json=user)
@@ -304,6 +312,7 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     study_core["pkdb_version"] = json_study.get("pkdb_version")
     study_core["design"] = json_study.get("design")
     study_core["substances"] = json_study.get("substances")
+    study_core["keywords"] = json_study.get("keywords")
     study_core["reference"] = json_study.get("reference")
     study_core["curators"] = json_study.get("curators")
     study_core["creator"] = json_study.get("creator")

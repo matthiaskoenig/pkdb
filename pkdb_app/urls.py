@@ -29,7 +29,7 @@ from .interventions.views import SubstanceViewSet, SubstanceReadViewSet, Interve
     OutputSetReadViewSet, InterventionReadViewSet, OutputReadViewSet, TimecourseReadViewSet
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import AuthorsViewSet, ReferencesViewSet, StudyViewSet, StudyReadViewSet, AuthorsReadViewSet, \
-    ReferencesReadViewSet
+    ReferencesReadViewSet, KeywordViewSet, KeywordReadViewSet
 #from .subjects.views import GroupsViewSet, CharacteristicValuesViewSet
 
 
@@ -44,6 +44,7 @@ router.register(r'users', UserViewSet, base_name="users")
 router.register(r'users', UserCreateViewSet)
 
 router.register('substances', SubstanceViewSet, base_name="substances")
+router.register('keywords', KeywordViewSet, base_name="keywords")
 
 router.register('datafiles', DataFileViewSet, base_name="datafiles")
 router.register('datafiles_read', DataFileReadViewSet, base_name="datafiles_read")
@@ -70,6 +71,8 @@ router.register(r'users_read', UserReadViewSet, base_name="users_read")
 
 
 router.register('substances_read', SubstanceReadViewSet, base_name="substances_read")
+router.register('keywords_read', KeywordReadViewSet, base_name="keywords_read")
+
 router.register('descriptions_read', DescriptionReadViewSet, base_name="descriptions_read")
 
 
