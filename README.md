@@ -30,13 +30,13 @@ To build the dev server for local development:
 ```bash
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
-docker-compose up build
+docker-compose up --build
 ```
 To update an existing version use
 ```bash
 docker-compose down
 ./remove_migrations.sh
-docker-compose up build
+docker-compose up --build
 ```
 To run an existing version use
 ```bash
