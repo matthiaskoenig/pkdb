@@ -7,15 +7,20 @@ from pkdb_app.interventions.models import OutputSet, Substance, InterventionSet,
 from pkdb_app.storage import OverwriteStorage
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
-from ..behaviours import Sidable
-from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION
+from ..behaviours import Sidable, CHAR_MAX_LENGTH_LONG
+from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_CHOICES
 from ..users.models import User
 
+class Keyword(models.Model):
+    """
+    This class describes the keyowrds / tags of a  publication or any other reference.
+    """
+    name = models.CharField(max_length=CHAR_MAX_LENGTH,choices=KEYWORDS_DATA_CHOICES)
 
 class Author(models.Model):
     """ Author in reference. """
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=150, blank=True)
+    first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
+    last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
 
     def __str__(self):
         return '%s %s' % (self.first_name, self.last_name)
@@ -53,6 +58,8 @@ class Study(Sidable, models.Model):
     reference = models.ForeignKey(Reference, on_delete=True, related_name='study', null=True, blank=True)
     curators = models.ManyToManyField(User)
     substances = models.ManyToManyField(Substance)
+    keywords = models.ManyToManyField(Keyword)
+
     groupset = models.OneToOneField(GroupSet, on_delete=models.SET_NULL,null=True, blank=True)
     interventionset = models.OneToOneField(InterventionSet, on_delete=models.SET_NULL,null=True, blank=True)
     individualset = models.OneToOneField(IndividualSet, on_delete=models.SET_NULL,null=True, blank=True)
@@ -81,10 +88,3 @@ class Study(Sidable, models.Model):
 
 
 
-# not yet used
-class KeyWord(models.Model):
-    """
-    This class describes the keyowrds / tags of a  publication or any other reference.
-    """
-    #name = models.IntegerField(choices=KEY_WORD_CHOICES)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)

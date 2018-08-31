@@ -281,6 +281,10 @@ SUBSTANCES_DATA = [
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
+KEYWORDS_DATA = [
+"test"
+]
+KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
 CHARACTERISTIC_DATA = [
     # -------------- Species --------------

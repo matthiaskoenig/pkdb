@@ -7,10 +7,25 @@ from ..interventions.models import Substance, DataFile, InterventionSet, OutputS
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
-from .models import Reference, Author, Study
+from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
 
+# ----------------------------------
+# Keyword
+# ----------------------------------
+class KeywordSerializer(serializers.ModelSerializer):
+    """ Keyword. """
+    class Meta:
+        model = Keyword
+        fields = ["name"]
 
+    def create(self, validated_data):
+        keyword, created = Keyword.objects.update_or_create(**validated_data)
+        return keyword
+
+# ----------------------------------
+# Study / Reference
+# ----------------------------------
 class AuthorSerializer(WrongKeyValidationSerializer):
     id = serializers.ReadOnlyField()
 
@@ -67,6 +82,8 @@ class StudySerializer(SidSerializer):
     curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False,allow_null=True)
     creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False,allow_null=True)
     substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True,allow_null=True)
+    keywords = serializers.SlugRelatedField(queryset=Keyword.objects.all(), slug_field='name',required=False, many=True,allow_null=True)
+
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
     outputset = OutputSetSerializer(read_only=False, required=False, allow_null=True)
@@ -74,7 +91,7 @@ class StudySerializer(SidSerializer):
 
     class Meta:
         model = Study
-        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design',
+        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances','keywords', 'design',
                   'groupset', 'individualset', 'interventionset', 'outputset', 'files')
 
     def validate(self, attrs):
@@ -104,7 +121,6 @@ class StudySerializer(SidSerializer):
         return instance
 
     def to_internal_value(self, data):
-
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
@@ -148,7 +164,7 @@ class StudySerializer(SidSerializer):
         """
         related_foreinkeys = self.related_sets().copy()
         related_foreinkeys["reference"] = Reference
-        related_many2many = {"substances": Substance, "curators": User, "files": DataFile}
+        related_many2many = {"substances": Substance,"keywords": Keyword, "curators": User, "files": DataFile}
         related_foreinkeys_dict = {name: validated_data.pop(name, None) for name in related_foreinkeys.keys()}
         related_many2many_dict = {name: validated_data.pop(name, []) for name in related_many2many.keys()}
         related = {**related_foreinkeys_dict, **related_many2many_dict}
@@ -172,15 +188,17 @@ class StudySerializer(SidSerializer):
                 setattr(study, name, instance)
             study.save()
 
-        for curator_data in related["curators"]:
-            curator = self.get_or_val_error(User, username=curator_data)
+        for curator in related["curators"]:
             study.curators.add(curator)
+
+        for substance in related["substances"]:
+            study.substances.add(substance)
+
+        for keyword in related["keywords"]:
+            study.keywords.add(keyword)
+
         study.save()
 
-        for substance_data in related["substances"]:
-            substance = self.get_or_val_error(Substance, name=substance_data)
-            study.substances.add(substance)
-        study.save()
 
         if related["files"]:
             study.files.all().delete()
@@ -197,6 +215,8 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     curators = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='users_read-detail')
     substances = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='substances_read-detail')
+    keywords = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name='keywords_read-detail')
+
     creator = serializers.HyperlinkedRelatedField(read_only=True, view_name='users_read-detail')
     reference = serializers.HyperlinkedRelatedField(read_only=True, lookup_field='sid', view_name='references_read-detail')
 
@@ -209,7 +229,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
-        fields = ('pk','sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'design', 'individualset','groupset','outputset','files')
+        fields = ('pk','sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'keywords', 'design', 'individualset','groupset','outputset','files')
 
 
 class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -227,3 +247,11 @@ class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         fields = ('pk','references', 'first_name', 'last_name')
+
+class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
+    studies = serializers.HyperlinkedRelatedField(many=True, lookup_field='sid', read_only=True, view_name='studies_read-detail')
+
+    """ Keyword. """
+    class Meta:
+        model = Keyword
+        fields = ["pk","name", "studies"]
