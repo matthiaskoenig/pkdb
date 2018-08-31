@@ -472,6 +472,23 @@ class ExSerializer(MappingSerializer):
             raise serializers.ValidationError({
                 api_settings.NON_FIELD_ERRORS_KEY: f"group or individual is required"})
 
+    def _key_is(self, data, key):
+        return data.get(key) or data.get(f"{key}_map")
+
+    def _is_required(self, data, key):
+        is_data = self._key_is(data,key)
+        if not is_data:
+            raise serializers.ValidationError({key: f"{key} is required for 'pktype':'auc_end'", "detail": data})
+
+    def _validate_pktype(self, data):
+        pktype = data.get("pktype")
+        if pktype:
+            if pktype == "auc_end":
+                self._is_required(data, "time")
+                self._is_required(data, "time_unit")
+        else:
+            raise serializers.ValidationError({"pktype": f"pktype is required", "detail": data})
+
 
     @staticmethod
     def ex_mapping():

@@ -143,6 +143,9 @@ class OutputSerializer(ExSerializer):
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    def validate(self, attrs):
+        self._validate_pktype(attrs)
+        return super().validate(attrs)
 
 class OutputExSerializer(BaseOutputExSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
@@ -186,6 +189,8 @@ class OutputExSerializer(BaseOutputExSerializer):
         data = self.to_internal_related_fields(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
+
+
 class TimecourseSerializer(BaseOutputExSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
                                                read_only=False, required=False, allow_null=True)
@@ -209,6 +214,9 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_individual_output(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
+    def validate(self, attrs):
+        self._validate_pktype(attrs)
+        return super().validate(attrs)
 
 class TimecourseExSerializer(BaseOutputExSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
