@@ -1,8 +1,0 @@
-study	sex	Smoking status	status	N	cl_mlmin	cl_mlmin_sd	cl_mlmin_min	cl_mlmin_max	cl_mlminkg	cl_mlminkg_sd	thalf	thalf_sd	thalf_min	thalf_max	vd	vd_sd	vd_min	vd_max	vd_kg	vd_kg_sd
-Joeres1988	M	Smoking 10-20 cig day	healthy	7	118	33	90	176	1.61	0.43	257	48	195	334	43	6	33	50	0.58	0.08
-Joeres1988	M	cessation-3wks	healthy	7	77	22	58	107	1.05	0.28	356	131	199	516	35	6	30	43	0.46	0.08
-Joeres1988	M	smokers	healthy	8	104	40	65	176	1.43	0.54	286	76	198	402	37	11	22	50	0.51	0.13
-Joeres1988	M	nonsmokers	healthy	15	64	20	28	102	0.96	0.35	336	134	159	662	29	8	17	46	0.41	0.07
-Joeres1988	M	smokers	alcoholic liver cirrhosis	18	63	63	1	230	0.90	0.85	899	683	161	2390	37	15	16	62	0.53	0.22
-Joeres1988	M	nonsmokers	alcoholic liver cirrhosis	30	34	49	1	270	0.47	0.67	1415	1328	148	5542	40	20	19	73	0.55	0.26
-
