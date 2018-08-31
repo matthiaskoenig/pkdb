@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/131752339.svg)](https://zenodo.org/badge/latestdoi/131752339)
+
 # PKDB - Pharmacokinetics database
 
 <b><a href="https://orcid.org/0000-0002-4588-4925" title="0000-0002-4588-4925"><img src="./docs/images/orcid.png" height="15"/></a> Jan Grzegorzewski</b>
