@@ -19,6 +19,7 @@ sudo npm install -g @vue/cli
 sudo npm install vue-router
 npm install axios --save 
 sudo npm install bootstrap-vue bootstrap --save
+sudo npm install vue-tables-2
 ```
 
 ## vue project
