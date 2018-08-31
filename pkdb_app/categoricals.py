@@ -77,6 +77,7 @@ UNIT_DATA = UNIT_TIME + [
     UnitType("µg*h/ml"),   # -> mg*h/l
     UnitType("µg/ml*h"),   # -> mg*h/l
     UnitType("mg*min/l"),  # -> mg*h/l
+    UnitType("µg*min/ml"),
     UnitType("µmol*h/l"),  # -> mg*h/l (with molar weight)
     UnitType("µmol/l*h"),  # -> mg*h/l (with molar weight)
     UnitType("µg/ml*h/kg"),  # -> mg*h/l/kg
@@ -198,7 +199,9 @@ SUBSTANCES_DATA = [
     "(AAMU+1X+1U)/17U",
     "17U/17X",
     "1U/(1U+1X)",
+    "1U/1X",
     "AFMU/(AFMU+1U+1X)",
+    "AAMU/(AAMU+1U+1X)",
     # caffeine interaction
     "fluvoxamine",
     "naringenin",
@@ -217,6 +220,10 @@ SUBSTANCES_DATA = [
 
     # codeine
     "codeine",
+
+    # chlorzoxazone (CYP2E1)
+    "chlorzoxazone",
+    "6-hydroxychlorzoxazone",
 
     # misc
     "tizanidine",
@@ -269,6 +276,8 @@ SUBSTANCES_DATA = [
     "digoxin",
     "clozapine",
 
+    "carbon monoxide",
+
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
@@ -308,7 +317,7 @@ CHARACTERISTIC_DATA = [
 
     # -------------- Medication --------------
     CharacteristicType('medication', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine"], ["-"]),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
     CharacteristicType('medication amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
 
     CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
@@ -318,19 +327,19 @@ CHARACTERISTIC_DATA = [
                        ["year", "week", "day", "h"]),
 
     # -------------- Caffeine --------------
-    CharacteristicType('caffeine', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('caffeine amount', 'lifestyle', NUMERIC_TYPE, None, ["mg/day"]),
-    CharacteristicType('caffeine amount (beverages)', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
+    CharacteristicType('caffeine', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('caffeine amount', LIFESTYLE, NUMERIC_TYPE, None, ["mg/day"]),
+    CharacteristicType('caffeine amount (beverages)', LIFESTYLE, NUMERIC_TYPE, None, ["1/day"]),
 
     # -------------- Smoking --------------
-    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking amount (cigarettes)', 'lifestyle', NUMERIC_TYPE, None, ["1/day"]),
-    CharacteristicType('smoking amount (packyears)', 'lifestyle', NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('smoking duration (years)', 'lifestyle', NUMERIC_TYPE, None, ["yr"]),
+    CharacteristicType('smoking', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('smoking amount (cigarettes)', LIFESTYLE, NUMERIC_TYPE, None, ["1/day"]),
+    CharacteristicType('smoking amount (packyears)', LIFESTYLE, NUMERIC_TYPE, None, ["yr"]),
+    CharacteristicType('smoking duration (years)', LIFESTYLE, NUMERIC_TYPE, None, ["yr"]),
 
     # -------------- Alcohol --------------
-    CharacteristicType('alcohol', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('alcohol amount', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('alcohol', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('alcohol amount', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
 
     # -------------- Biochemical data --------------
@@ -354,6 +363,7 @@ PK_DATA = [
 
     "clearance",
     "clearance_renal",
+    "clearance_unbound",
     "vd",  # Volume of distribution
     "thalf",  # half-life
     "tmax",  # time of maximum
@@ -363,6 +373,8 @@ PK_DATA = [
     "kabs",  # absorption rate
     "fraction_absorbed",  # "often also absolute bioavailability
     "plasma_binding",
+
+    "recovery",
 ]
 
 OUTPUT_TISSUE_DATA = [
@@ -377,9 +389,14 @@ PK_DATA_CHOICES = create_choices(PK_DATA)
 # class, value, dtype (numeric, boolean, categorial), choices
 INTERVENTION_DATA = [
     CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
-    CharacteristicType('smoking cessation', 'lifestyle', NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('female cycle', 'cycle', STRING_TYPE, None, ["-"]),
+    CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "smoking", "grapefruit juice"],
+                   ["year", "week", "day", "h"]),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
 ]
+
 def dict_and_choices(data):
     data_dict = {item.value: item for item in data}
     data_choices = [(ctype.value, ctype.value) for ctype in data]
@@ -390,4 +407,3 @@ CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
-

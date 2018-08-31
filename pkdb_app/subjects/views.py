@@ -1,46 +1,51 @@
-#from .models import Group, CharacteristicValue
-#from .serializers import GroupSerializer, CharacteristicValueSerializer
+from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
-import django_filters.rest_framework
-from rest_framework import filters
-from rest_framework.permissions import AllowAny, IsAdminUser
+from pkdb_app.subjects.models import DataFile, Characteristica, Individual, Group, GroupSet, IndividualSet
+from pkdb_app.subjects.serializers import DataFileSerializer, DataFileReadSerializer, CharacteristicaReadSerializer, \
+    IndividualReadSerializer, GroupReadSerializer, GroupSetReadSerializer, IndividualSetReadSerializer
 
-
-from pkdb_app.subjects.models import DataFile
-from pkdb_app.subjects.serializers import DataFileSerializer
-
-"""
-class GroupsViewSet(viewsets.ModelViewSet):
-
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ('description',)
-    search_fields = filter_fields
-
-
-class CharacteristicValuesViewSet(viewsets.ModelViewSet):
-
-    queryset = CharacteristicValue.objects.all()
-    serializer_class = CharacteristicValueSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-    filter_fields = ( 'choice', 'count','category')
-    search_fields = filter_fields
-
-"""
-
-
-
-#class InterventionsViewSet(viewsets.ModelViewSet):
-
-#    queryset = Intervention.objects.all()
-#    serializer_class = InterventionSerializer
-#    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
-#    filter_fields = ('comment','description','type')
- #   search_fields = filter_fields
 
 class DataFileViewSet(viewsets.ModelViewSet):
 
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
+    permission_classes = (AllowAny,)
+
+
+class DataFileReadViewSet(viewsets.ModelViewSet):
+
+    queryset = DataFile.objects.all()
+    serializer_class = DataFileReadSerializer
+    permission_classes = (AllowAny,)
+
+class CharacteristicaReadViewSet(viewsets.ModelViewSet):
+
+    queryset = Characteristica.objects.all()
+    serializer_class = CharacteristicaReadSerializer
+    permission_classes = (AllowAny,)
+
+class IndividualReadViewSet(viewsets.ModelViewSet):
+
+    queryset = Individual.objects.all()
+    serializer_class = IndividualReadSerializer
+    permission_classes = (AllowAny,)
+
+class GroupReadViewSet(viewsets.ModelViewSet):
+
+    queryset = Group.objects.all()
+    serializer_class = GroupReadSerializer
+    permission_classes = (AllowAny,)
+
+
+class GroupSetReadViewSet(viewsets.ModelViewSet):
+
+    queryset = GroupSet.objects.all()
+    serializer_class = GroupSetReadSerializer
+    permission_classes = (AllowAny,)
+
+
+class IndividualSetReadViewSet(viewsets.ModelViewSet):
+
+    queryset = IndividualSet.objects.all()
+    serializer_class = IndividualSetReadSerializer
     permission_classes = (AllowAny,)

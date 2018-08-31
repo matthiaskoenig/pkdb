@@ -1,3 +1,4 @@
+
 """
 Views
 """
@@ -11,7 +12,6 @@ from rest_framework.schemas import SchemaGenerator
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
 
 @api_view()
 @renderer_classes([SwaggerUIRenderer, OpenAPIRenderer, CoreJSONRenderer])
@@ -28,3 +28,4 @@ def about_view(request):
                   {
                       "version": __version__,
                   })
+

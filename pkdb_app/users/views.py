@@ -1,7 +1,7 @@
 from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import AllowAny, IsAdminUser
 from .models import User
-from .serializers import CreateUserSerializer, UserSerializer
+from .serializers import CreateUserSerializer, UserSerializer, UserReadSerializer
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
@@ -16,6 +16,7 @@ class UserViewSet(mixins.RetrieveModelMixin,
     # permission_classes = (IsAdminUser,)
 
 
+
 class UserCreateViewSet(mixins.CreateModelMixin,
                         viewsets.GenericViewSet):
     """
@@ -26,3 +27,11 @@ class UserCreateViewSet(mixins.CreateModelMixin,
     permission_classes = (AllowAny,)
     # permission_classes = (IsAdminUser,)
 
+
+class UserReadViewSet(viewsets.ModelViewSet):
+    """
+    Updates and retrieves user accounts
+    """
+    queryset = User.objects.all()
+    serializer_class = UserReadSerializer
+    permission_classes = (AllowAny,)

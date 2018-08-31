@@ -1,10 +1,8 @@
 
 import os
-from django.core.exceptions import ValidationError
-#from rest_framework.exceptions import ValidationError
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_TYPE, INTERVENTION_DICT
-
+from rest_framework import serializers
 CHAR_MAX_LENGTH = 100
 
 def create_if_exists(src,src_key,dest,dest_key):
@@ -38,13 +36,10 @@ def update_or_create_multiple(parent,children,related_name):
             instance_cild =  getattr(parent,related_name)
             instance_cild.update_or_create(**child)
 
-def get_or_val_error(model, *args, **kwargs):
-    try:
-        return model.objects.get(*args, **kwargs)
-    except model.DoesNotExist:
-        msg = f"{model} instance with args:{args}, kwargs:{kwargs} does not exist"
-        raise ValidationError({model:msg})
-
+def create_multiple(parent,children,related_name):
+    for child in children:
+            instance_cild =  getattr(parent,related_name)
+            instance_cild.create(**child)
 
 def validate_categorials(data, model_name):
     """
@@ -69,21 +64,34 @@ def validate_categorials(data, model_name):
             if (model_categorical.dtype == CATEGORIAL_TYPE or model_categorical.dtype == BOOLEAN_TYPE):
                 if not choice in model_categorical.choices:
                     msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.value}"
-                    raise ValidationError({"choice":msg})
+                    raise serializers.ValidationError({"choice": msg})
 
         elif model_categorical.dtype == NUMERIC_TYPE:
             if not unit in model_categorical.units:
                 msg = f"{unit} is not allowed but unit is required. For {model_categorical.value} allowed units are {model_categorical.units}"
-                raise ValidationError({"unit":msg})
+                raise serializers.ValidationError({"unit": msg})
     return data
 
-def un_map(data):
-    cleaned_result = {}
-    for k, v in data.items():
-        if "_map" in k:
-            k = k[:-4]
-        if v is None:
-            continue
-        cleaned_result[k] = v
-    return cleaned_result
 
+
+def recursive_iter(obj, keys=()):
+    """ Creates dictionary with key:object from nested JSON data structure. """
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            yield from recursive_iter(v, keys + (k,))
+    elif any(isinstance(obj, t) for t in (list, tuple)):
+        for idx, item in enumerate(obj):
+            yield from recursive_iter(item, keys + (idx,))
+
+        if len(obj) == 0:
+            yield keys, None
+
+    else:
+        yield keys, obj
+
+
+def set_keys(d, value, *keys):
+    """ Changes keys in nested dictionary. """
+    for key in keys[:-1]:
+        d = d[key]
+    d[keys[-1]] = value

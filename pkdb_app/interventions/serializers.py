@@ -1,19 +1,36 @@
 """
 Serializers for interventions.
 """
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
+
+import numpy as np
 from rest_framework import serializers
 
-from pkdb_app.comments.serializers import DescriptionsSerializer
-from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse
-from pkdb_app.serializers import ParserSerializer
-from pkdb_app.subjects.models import Individual, Group, DataFile
-from pkdb_app.utils import un_map, validate_categorials
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
+from pkdb_app.interventions.models import Substance, InterventionSet, Intervention, Output, OutputSet, Timecourse, \
+    InterventionEx, OutputEx, TimecourseEx
+from pkdb_app.serializers import ExSerializer,  WrongKeyValidationSerializer, BaseOutputExSerializer
 
+from pkdb_app.subjects.models import Group, DataFile, Individual
+from pkdb_app.utils import validate_categorials
 
-class SubstanceSerializer(serializers.ModelSerializer):
+from pkdb_app.subjects.serializers import VALUE_MAP_FIELDS,VALUE_FIELDS,EXTERN_FILE_FIELDS
+
+# ----------------------------------
+# Serializer FIELDS
+# ----------------------------------
+INTERVENTION_FIELDS = ["name","category", "route", "form", "application", "time", "time_unit","substance","route","choice"]
+
+INTERVENTION_MAP_FIELDS = ["name_map", "route_map", "form_map", "application_map","time_map", "time_unit_map",
+                            "unit_map","substance_map","route_map","choice_map"]
+
+OUTPUT_FIELDS = ["pktype", "tissue", "substance", "time", "time_unit"]
+
+OUTPUT_MAP_FIELDS = ["pktype_map", "tissue_map", "substance_map", "time_map", "time_unit_map"]
+
+# ----------------------------------
+# substance
+# ----------------------------------
+class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
     class Meta:
         model = Substance
@@ -24,52 +41,84 @@ class SubstanceSerializer(serializers.ModelSerializer):
         return substance
 
 
-class InterventionSerializer(ParserSerializer):
-    """ Intervention."""
+# ----------------------------------
+# Interventions
+# ----------------------------------
+class InterventionSerializer(ExSerializer):
     substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = Intervention
-        fields = ["category", "name", "route", "form", "application", "time", "time_unit", "value", "unit", "substance"]
+        fields = VALUE_FIELDS + INTERVENTION_FIELDS
 
     def to_internal_value(self, data):
-        data = self.split_to_map(data)
-        data = self.drop_blank(data)
-        data = self.strip(data)
-        return super().to_internal_value(data)
-
-    def validate(self, data):
-        validated_data = super().validate(data)
-        return validate_categorials(validated_data, "intervention")
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        return un_map(rep)
+        data.pop("comments",None)
+        data = self.retransform_map_fields(data)
+        data = self.retransform_ex_fields(data)
+        return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
-class InterventionSetSerializer(ParserSerializer):
+class InterventionExSerializer(ExSerializer):
+    substance = serializers.SlugRelatedField(slug_field="name",queryset=Substance.objects.all(),read_only=False, required=False, allow_null=True)
+
+    ######
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
+
+    # internal data
+    interventions = InterventionSerializer(many=True, write_only=True, required=False, allow_null=True)
+
+
+    class Meta:
+        model = InterventionEx
+        fields = EXTERN_FILE_FIELDS + VALUE_MAP_FIELDS + VALUE_FIELDS + INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS +\
+                 ['interventions', "comments"]
+
+    def to_internal_value(self, data):
+
+
+        # ----------------------------------
+        # decompress external format
+        # ----------------------------------
+        temp_interventions = self.split_entry(data)
+        interventions = []
+        for intervention in temp_interventions:
+            interventions_from_file = self.entries_from_file(intervention)
+            interventions.extend(interventions_from_file)
+        # ----------------------------------
+        # finished
+        # ----------------------------------
+
+        #data = self.transform_ex_fields(data)
+        data = self.transform_map_fields(data)
+
+        data["interventions"] = interventions
+        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+
+
+    def validate(self, attrs):
+        validate_categorials(attrs, "intervention")
+        return super().validate(attrs)
+
+
+
+class InterventionSetSerializer(ExSerializer):
     """ InterventionSet. """
-    interventions = InterventionSerializer(many=True, read_only=False, required=False, allow_null=True)
-    descriptions = DescriptionsSerializer(many=True, read_only=False, required=False, allow_null=True)
+    intervention_exs = InterventionExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = InterventionSet
-        fields = ["descriptions", "interventions"]
-
-    def to_internal_value(self, data):
-        """
-
-        :param data:
-        :return:
-        """
-        data = self.split_entries_for_key(data, "interventions")
-        return super(InterventionSetSerializer, self).to_internal_value(data)
+        fields = ["descriptions", "intervention_exs", "comments"]
 
 
-class OutputSerializer(ParserSerializer):
-    """
-    Output
-    """
+# ----------------------------------
+# results
+# ----------------------------------
+
+class OutputSerializer(ExSerializer):
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
                                                read_only=False, required=False, allow_null=True)
     individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
@@ -78,119 +127,250 @@ class OutputSerializer(ParserSerializer):
                                                        read_only=False, required=False, allow_null=True)
     substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
                                              read_only=False, required=False, allow_null=True)
-    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
-    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+
+
 
     class Meta:
         model = Output
-        fields = ["source", "figure", "format"] + \
-                 ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"] + \
-                 ["value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map", "cv_map", "unit_map"] + \
-                 ["pktype", "pktype_map", "time", "time_unit", "time_unit_map",
-                    "time_map", "group", "group_map", "individual", "individual_map", "interventions", "interventions_map",
-                    "substance", "substance_map", "tissue", "tissue_map", "subset_map"]
+        fields = OUTPUT_FIELDS + VALUE_FIELDS + \
+                 ["group","individual","interventions"]
 
     def to_internal_value(self, data):
-        study_sid = self.context['request'].path.split("/")[-2]
-        data = self.split_to_map(data)
+        data.pop("comments",None)
 
-        if "group" in data :
-            if data["group"]:
-                try:
-                    data["group"] = Group.objects.get(Q(groupset__study__sid=study_sid) & Q(name=data.get("group"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
-                    raise serializers.ValidationError(msg)
+        data =  self.retransform_map_fields(data)
+        data =  self.to_internal_related_fields(data)
 
-        if "individual" in data:
-            if data["individual"]:
-                try:
-                    data["individual"] = Individual.objects.get(Q(individualset__study__sid=study_sid) & Q(name=data.get("individual"))).pk
-                except ObjectDoesNotExist:
-                    msg = f'individual: {data.get("individual")} in study: {study_sid} does not exist'
-                    raise serializers.ValidationError(msg)
+        return super(serializers.ModelSerializer, self).to_internal_value(data)
 
-        if "interventions" in data:
-            if data["interventions"]:
-                interventions = []
-                for internvention in data["interventions"]:
-                    try:
-                        interventions.append(Intervention.objects.get(Q(interventionset__study__sid=study_sid) & Q(name=internvention)).pk)
-                    except ObjectDoesNotExist:
-                        msg = f'intervention: {internvention} in study: {study_sid} does not exist'
-                        raise serializers.ValidationError(msg)
-                    data["interventions"] = interventions
+    def validate(self, attrs):
+        self._validate_pktype(attrs)
+        return super().validate(attrs)
 
-        data = self.strip(data)
-        data = self.drop_blank(data)
-        data = self.drop_empty(data)
+class OutputExSerializer(BaseOutputExSerializer):
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
+                                               read_only=False, required=False, allow_null=True)
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
+                                                    read_only=False, required=False, allow_null=True)
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
+                                                       read_only=False, required=False, allow_null=True)
+    substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
+                                             read_only=False, required=False, allow_null=True)
 
-        return super().to_internal_value(data)
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        if "group" in rep:
-            rep["group"] = instance.group.name
-        if "interventions" in rep:
-            rep["interventions"] = [intervention.name for intervention in instance.interventions.all()]
-        for file in ["source", "figure"]:
-            if file in rep:
-                current_site = f'http://{get_current_site(self.context["request"]).domain}'
-                rep[file] = current_site + getattr(instance, file).file.url
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
-        return un_map(rep)
+    # internal data
+    outputs = OutputSerializer(many=True, write_only=True, required=False, allow_null=True)
 
-    def validate(self, data):
-        validated_data = super().validate(data)
-
-        # either group or individual set
-        if (validated_data.get("individual") and validated_data.get("individual_map")) and (validated_data.get("group") or validated_data.get("group_map")):
-            raise serializers.ValidationError(
-                ["individual and group cannot be set together on output.",
-                validated_data
-            ])
-        if not (validated_data.get("individual") or validated_data.get("individual_map")) and not (validated_data.get("group") or validated_data.get("group_map")):
-            raise serializers.ValidationError(
-                ["either individual or group must be set on output.",
-                validated_data
-            ])
-
-        return validated_data
+    class Meta:
+        model = OutputEx
+        fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
+                 ["group","individual","interventions"] + \
+                 ["group_map","individual_map","interventions_map","outputs", "comments"]
 
 
-class TimecourseSerializer(OutputSerializer):
-    """ Timecourse. """
+    def to_internal_value(self, data):
+        # ----------------------------------
+        # decompress external format
+        # ----------------------------------
+        temp_outputs = self.split_entry(data)
+        outputs = []
+        for output in temp_outputs:
+            outputs_from_file = self.entries_from_file(output)
+            outputs.extend(outputs_from_file)
+        # ----------------------------------
+        # finished
+        # ----------------------------------
+        data = self.transform_map_fields(data)
+        data["outputs"] = outputs
+        data = self.to_internal_related_fields(data)
+        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+
+
+
+class TimecourseSerializer(BaseOutputExSerializer):
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
+                                               read_only=False, required=False, allow_null=True)
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
+                                                       read_only=False, required=False, allow_null=True)
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
+                                                          read_only=False, required=False, allow_null=True)
+    substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
+                                             read_only=False, required=False, allow_null=True)
+
     class Meta:
         model = Timecourse
-        fields = ["source", "figure", "format"] + \
-                 ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit", ] \
-                 + ["value_map", "mean_map", "median_map", "min_map", "max_map", "sd_map", "se_map", "cv_map",
-                    "unit_map"] \
-                 + ["pktype", "pktype_map", "time",
-                    "time_map", "time_unit","subset_map",
-                    "time_unit_map", "group", "group_map", "individual", "individual_map", "interventions",
-                    "interventions_map",
-                    "substance", "substance_map", "tissue", "tissue_map"]
+        fields = OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+    def to_internal_value(self, data):
+        data.pop("comments",None)
+        # ----------------------------------
+        # decompress external format
+        # ----------------------------------
+        data = self.to_internal_related_fields(data)
+        self._validate_individual_output(data)
+        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+
+    def validate(self, attrs):
+        self._validate_pktype(attrs)
+        return super().validate(attrs)
+
+class TimecourseExSerializer(BaseOutputExSerializer):
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
+                                               read_only=False, required=False, allow_null=True)
+    individual = serializers.PrimaryKeyRelatedField(queryset=Individual.objects.all(),
+                                                       read_only=False, required=False, allow_null=True)
+    interventions = serializers.PrimaryKeyRelatedField(queryset=Intervention.objects.all(), many=True,
+                                                          read_only=False, required=False, allow_null=True)
+    substance = serializers.SlugRelatedField(slug_field="name", queryset=Substance.objects.all(),
+                                             read_only=False, required=False, allow_null=True)
+
+    source = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    figure = serializers.PrimaryKeyRelatedField(queryset=DataFile.objects.all(), required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
 
-class OutputSetSerializer(ParserSerializer):
+    # internal data
+    timecourses = TimecourseSerializer(many=True, write_only=True, required=False, allow_null=True)
+
+
+
+    class Meta:
+        model = TimecourseEx
+        fields = EXTERN_FILE_FIELDS + OUTPUT_FIELDS + OUTPUT_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + \
+                 ["group", "individual", "interventions"] + \
+                 ["group_map", "individual_map", "interventions_map"] + ["timecourses", "comments"]
+
+    def to_internal_value(self, data):
+        # ----------------------------------
+        # decompress external format
+        # ----------------------------------
+        temp_timecourses = self.split_entry(data)
+        timecourses = []
+        for timecourse in temp_timecourses:
+            timecourses_from_file = self.array_from_file(timecourse)
+            timecourses.append(timecourses_from_file)
+        # ----------------------------------
+        # finished
+        # ----------------------------------
+
+        # data = self.transform_ex_fields(data)
+        data = self.transform_map_fields(data)
+
+        data["timecourses"] = timecourses
+        data = self.to_internal_related_fields(data)
+        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+
+
+class OutputSetSerializer(ExSerializer):
     """
     OutputSet
     """
-    outputs = OutputSerializer(many=True, read_only=False, required=False, allow_null=True)
-    timecourses = TimecourseSerializer(many=True, read_only=False, required=False, allow_null=True)
-    descriptions = DescriptionsSerializer(many=True,read_only=False,required=False, allow_null=True )
+    output_exs = OutputExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    timecourse_exs = TimecourseExSerializer(many=True, read_only=False, required=False, allow_null=True)
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = OutputSet
-        fields = ["descriptions","outputs","timecourses"]
+        fields = ["descriptions","timecourse_exs","output_exs", "comments"]
+
+    def validate_output_exs(self, attrs):
+        for output in attrs:
+            self.validate_group_individual_output(output)
+            self._validate_individual_output(output)
+            self._validate_group_output(output)
+
+        return attrs
+
+    def validate_timcourse_exs(self, attrs):
+        for timecourse in attrs:
+            self.validate_group_individual_output(timecourse)
+            self._validate_individual_output(timecourse)
+            self._validate_group_output(timecourse)
+
+        return attrs
 
     def to_internal_value(self, data):
-        """
-        :param data:
-        :return:
-        """
-        data = self.split_entries_for_key(data, "outputs")
-        data = self.split_entries_for_key(data, "timecourses")
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 
-        return super().to_internal_value(data)
+###############################################################################################
+# Read Serializer
+###############################################################################################
+class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
+    """ InterventionSet. """
+    study = serializers.HyperlinkedRelatedField(lookup_field="sid", read_only=True, view_name="studies_read-detail")
+    descriptions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="descriptions_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="interventions_read-detail")
+
+
+    class Meta:
+        model = InterventionSet
+        fields = ["pk","study","descriptions", "interventions"]
+
+class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
+    """ InterventionSet. """
+    interventionset = serializers.HyperlinkedRelatedField(read_only=True, view_name="interventionsets_read-detail")
+    substance = serializers.HyperlinkedRelatedField(read_only=True, view_name='substances_read-detail')
+
+
+    class Meta:
+        model = Intervention
+        fields =["pk","interventionset"] + VALUE_FIELDS + INTERVENTION_FIELDS
+
+
+class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
+    study = serializers.HyperlinkedRelatedField(lookup_field="sid", read_only=True, view_name="studies_read-detail")
+    descriptions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="descriptions_read-detail")
+    outputs = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="outputs_read-detail")
+    timecourses = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="timecourses_read-detail")
+
+    class Meta:
+        model = OutputSet
+        fields = ["pk","study","descriptions","outputs","timecourses"]
+
+
+class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
+    outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name="outputsets_read-detail")
+    group = serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
+    individual = serializers.HyperlinkedRelatedField(read_only=True, view_name="individuals_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="interventions_read-detail")
+    substance = serializers.HyperlinkedRelatedField(read_only=True, view_name='substances_read-detail')
+
+    class Meta:
+        model = Output
+        fields = ["pk","outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
+    outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name="outputsets_read-detail")
+    group = serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
+    individual = serializers.HyperlinkedRelatedField(read_only=True, view_name="individuals_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name="interventions_read-detail")
+    substance = serializers.HyperlinkedRelatedField(read_only=True, view_name='substances_read-detail')
+
+    class Meta:
+        model = Timecourse
+        fields = ["pk","outputset"] + OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+
+    def to_representation(self, instance):
+        array_fields =["value", "mean", "median", "min", "max", "sd", "se", "cv","time"]
+        for field in array_fields:
+            array = getattr(instance,field, None)
+            if array:
+                null_array = [None if np.isnan(value) else value for value in array]
+                setattr(instance,field,null_array)
+        return super().to_representation(instance)
+
+
+
+
+class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model =  Substance
+        fields = ["pk","name"]
