@@ -185,14 +185,6 @@ class Individual(AbstractIndividual):
     objects = IndividualManager()
 
     @property
-    def characteristica_all(self):
-        characteristica_all = self.characteristica.all()
-        if self.group:
-            characteristica_all = characteristica_all | self.group.characteristica_all
-        return characteristica_all
-
-
-    @property
     def source(self):
         return self.ex.source
 
