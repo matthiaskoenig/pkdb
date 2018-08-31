@@ -22,7 +22,6 @@ import os
 import sys
 import json
 import requests
-import bonobo
 from jsonschema import validate
 import logging
 import coloredlogs
@@ -35,8 +34,6 @@ coloredlogs.install(
 logger = logging.getLogger(__name__)
 
 
-# FIXME: remove bonobo
-
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
 from pkdb_app.data_management.schemas import reference_schema
@@ -44,12 +41,12 @@ from pkdb_app.data_management.create_reference import run as create_reference
 from collections import namedtuple
 
 
-# FIXME: implement proper logging
 
 # -----------------------------
 # master path
 # -----------------------------
 # DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
+
 DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
 if not os.path.exists(DATA_PATH):
     print("-" * 80)
@@ -87,11 +84,14 @@ def setup_database(api_url):
     from pkdb_app.categoricals import SUBSTANCES_DATA
     for substance in SUBSTANCES_DATA:
         response = requests.post(f'{api_url}/substances/', json={"name": substance})
-        check_json_response(response)
+        if not  response.status_code == 201:
+            logging.warning(f"substance upload failed ")
 
     for user in USERS:
         response = requests.post(f'{api_url}/users/', json=user)
-        check_json_response(response)
+        if not  response.status_code == 201:
+            logging.warning(f"user upload failed ")
+
 
 
 # -------------------------------
@@ -100,6 +100,7 @@ def setup_database(api_url):
 def _get_paths(filename):
     """ Finds paths of filename recursively in MASTER_PATH. """
     for root, dirs, files in os.walk(DATA_PATH, topdown=False):
+
         if filename in files:
             yield os.path.join(root, filename)
 
@@ -212,8 +213,10 @@ def upload_files(file_path, api_url=API_URL):
         files = set(files) - set(['reference.json', 'study.json', f'{sid}.pdf'])
         #exclude files
         forbidden_suffix = (".log",".xlsx#",".idea")
-        files = [file for file in files if not file.endswith(forbidden_suffix)]
+        forbidden_prefix = (".lock")
 
+        files = [file for file in files if not file.endswith(forbidden_suffix)]
+        files = [file for file in files if not file.startswith(forbidden_prefix)]
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, 'rb') as f:
@@ -276,7 +279,6 @@ def upload_study_json(json_study_dict, api_url=API_URL):
 
     :returns success code
     """
-    success = True
     json_study = json_study_dict["json"]
     if not json_study:
         logging.warning("No study information in `study.json`")
@@ -286,26 +288,12 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     study_dir = os.path.dirname(json_study_dict["study_path"])
     file_dict = upload_files(study_dir)
 
-    comments = []
     for keys, item in recursive_iter(json_study_dict):
-        #set_keys(json_study_dict,item.replace(item,file_dict[item]),*keys)
         if isinstance(item,str):
             for file, file_pk in file_dict.items():
                 item = item.replace(file, str(file_pk))
-
             set_keys(json_study_dict, item, *keys)
 
-        if "comments" in keys:
-            n_keys = []
-            for key in keys:
-                n_keys.append(key)
-                if key == "comments":
-                    break
-            comments.append(tuple(n_keys))
-    for comment in set(comments):
-        pop_comments(json_study_dict, *comment)
-    #from pprint import pprint
-    #pprint(list(recursive_iter(json_study_dict)))
 
     # ---------------------------
     # post study core
@@ -413,48 +401,23 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
     return {}
 
 
-# -------------------------------
-# Bonobo
-# -------------------------------
-def get_graph_references(**options):
-    graph = bonobo.Graph()
-    # add studies
-    graph.add_chain(
-        get_reference_paths,
-        read_reference_json,
-        upload_reference_json,
-    )
-    return graph
-
-
-def get_graph_study(**options):
-    graph = bonobo.Graph()
-    # add studies
-    graph.add_chain(
-        get_study_paths,
-        read_study_json,
-        upload_study_json,
-    )
-    return graph
-
-
-def get_services(**options):
-    return {}
-
-
-# -------------------------------------------------------------------------------
 if __name__ == '__main__':
 
     API_URL = "http://0.0.0.0:8000/api/v1"
     # API_URL = "http://www.pk-db.com/api/v1"
 
+
     # core database setup
     setup_database(api_url=API_URL)
 
-    # run the bonobo chain
-    parser = bonobo.get_argument_parser()
-    with bonobo.parse_args(parser) as options:
-        bonobo.run(get_graph_references(**options), services=get_services(**options))
-        bonobo.run(get_graph_study(**options), services=get_services(**options))
+
+    for study_path in get_study_paths():
+        study_folder_path = os.path.dirname(study_path)
+        study_name = os.path.basename(study_folder_path)
+
+        logging.info('-' * 80)
+        logging.info(f'Uploading [{study_name}]')
+        upload_study_from_dir(study_folder_path)
+
 
     print("--- done ---")
