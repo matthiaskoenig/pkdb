@@ -52,13 +52,13 @@ class Study(Sidable, models.Model):
     Mainly reported as a single publication.
     """
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
-    creator =  models.ForeignKey(User,related_name="studies", on_delete=models.CASCADE,null=True, blank=True)
+    creator =  models.ForeignKey(User,related_name="creator_of_studies", on_delete=models.CASCADE,null=True, blank=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True, choices=STUDY_DESIGN_CHOICES)
     reference = models.ForeignKey(Reference, on_delete=True, related_name='study', null=True, blank=True)
-    curators = models.ManyToManyField(User)
-    substances = models.ManyToManyField(Substance)
-    keywords = models.ManyToManyField(Keyword)
+    curators = models.ManyToManyField(User,"curator_of_studies")
+    substances = models.ManyToManyField(Substance, related_name="studies")
+    keywords = models.ManyToManyField(Keyword,"studies")
 
     groupset = models.OneToOneField(GroupSet, on_delete=models.SET_NULL,null=True, blank=True)
     interventionset = models.OneToOneField(InterventionSet, on_delete=models.SET_NULL,null=True, blank=True)
