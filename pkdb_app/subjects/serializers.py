@@ -154,6 +154,9 @@ class IndividualSerializer(ExSerializer):
             except ObjectDoesNotExist:
                 msg = f'group: {group} in study: {study_sid} does not exist'
                 raise serializers.ValidationError(msg)
+        else:
+            msg = {"group": f'group is required on individual',"detail":group}
+            raise serializers.ValidationError(msg)
         return group
 
     def to_internal_value(self, data):
