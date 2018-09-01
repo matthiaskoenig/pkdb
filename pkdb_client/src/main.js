@@ -8,6 +8,7 @@ import VueResource from 'vue-resource';
 // Import the styles directly. (Or you could add them via script tags.)
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import ClientTable from 'vue-tables-2';
 
 Vue.use(BootstrapVue);
 
@@ -15,6 +16,8 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(ClientTable, {}, false, 'bootstrap3', 'default');
+
 
 new Vue({
   router,
