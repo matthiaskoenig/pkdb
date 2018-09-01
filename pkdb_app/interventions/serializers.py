@@ -40,6 +40,12 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         substance, created = Substance.objects.update_or_create(**validated_data)
         return substance
 
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
+
+
 
 # ----------------------------------
 # Interventions
@@ -56,6 +62,7 @@ class InterventionSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -91,12 +98,11 @@ class InterventionExSerializer(ExSerializer):
         # finished
         # ----------------------------------
 
-        #data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
         data["interventions"] = interventions
         self.validate_wrong_keys(data)
-        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+        return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
     def validate(self, attrs):
@@ -115,9 +121,11 @@ class InterventionSetSerializer(ExSerializer):
         model = InterventionSet
         fields = ["descriptions", "intervention_exs", "comments"]
 
+
     def to_internal_value(self, data):
+        data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
-        return super().to_internal_value(data)
+        return data
 
 
 # ----------------------------------
@@ -183,6 +191,7 @@ class OutputExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
+
         temp_outputs = self.split_entry(data)
         outputs = []
         for output in temp_outputs:
@@ -195,7 +204,9 @@ class OutputExSerializer(BaseOutputExSerializer):
         data["outputs"] = outputs
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
-        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+        return super(serializers.ModelSerializer,self).to_internal_value(data)
+
+
 
 
 
@@ -215,15 +226,12 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments",None)
-        # ----------------------------------
-        # decompress external format
-        # ----------------------------------
         data = self.to_internal_related_fields(data)
-        self._validate_individual_output(data)
         self.validate_wrong_keys(data)
-        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+        return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
+        self._validate_individual_output(attrs)
         self._validate_pktype(attrs)
         self._validate_time_unit(attrs)
         return super().validate(attrs)
@@ -255,6 +263,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
                  ["group_map", "individual_map", "interventions_map"] + ["timecourses", "comments"]
 
     def to_internal_value(self, data):
+
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -266,14 +275,13 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
-
-        # data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
         data["timecourses"] = timecourses
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
-        return super(WrongKeyValidationSerializer, self).to_internal_value(data)
+        return super(serializers.ModelSerializer, self).to_internal_value(data)
+
 
 
 class OutputSetSerializer(ExSerializer):
@@ -309,6 +317,11 @@ class OutputSetSerializer(ExSerializer):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
+
+
+
+    def validate(self, attrs):
+        return super().validate(attrs)
 
 ###############################################################################################
 # Read Serializer

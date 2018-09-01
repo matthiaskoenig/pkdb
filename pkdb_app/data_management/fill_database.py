@@ -311,10 +311,10 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     study_core["name"] = json_study.get("name")
     study_core["pkdb_version"] = json_study.get("pkdb_version")
     study_core["design"] = json_study.get("design")
-    study_core["substances"] = json_study.get("substances")
-    study_core["keywords"] = json_study.get("keywords")
+    study_core["substances"] = json_study.get("substances",[])
+    study_core["keywords"] = json_study.get("keywords", [])
     study_core["reference"] = json_study.get("reference")
-    study_core["curators"] = json_study.get("curators")
+    study_core["curators"] = json_study.get("curators",[])
     study_core["creator"] = json_study.get("creator")
     study_core["files"] = list(file_dict.values())
 
