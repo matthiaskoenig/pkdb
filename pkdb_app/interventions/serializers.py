@@ -145,6 +145,7 @@ class OutputSerializer(ExSerializer):
 
     def validate(self, attrs):
         self._validate_pktype(attrs)
+        self._validate_time_unit(attrs)
         return super().validate(attrs)
 
 class OutputExSerializer(BaseOutputExSerializer):
@@ -216,6 +217,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
     def validate(self, attrs):
         self._validate_pktype(attrs)
+        self._validate_time_unit(attrs)
         return super().validate(attrs)
 
 class TimecourseExSerializer(BaseOutputExSerializer):
