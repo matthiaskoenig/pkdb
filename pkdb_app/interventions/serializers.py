@@ -55,6 +55,7 @@ class InterventionSerializer(ExSerializer):
         data.pop("comments",None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -94,6 +95,7 @@ class InterventionExSerializer(ExSerializer):
         data = self.transform_map_fields(data)
 
         data["interventions"] = interventions
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
@@ -112,6 +114,10 @@ class InterventionSetSerializer(ExSerializer):
     class Meta:
         model = InterventionSet
         fields = ["descriptions", "intervention_exs", "comments"]
+
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        return super().to_internal_value(data)
 
 
 # ----------------------------------
@@ -140,7 +146,7 @@ class OutputSerializer(ExSerializer):
 
         data =  self.retransform_map_fields(data)
         data =  self.to_internal_related_fields(data)
-
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -188,6 +194,7 @@ class OutputExSerializer(BaseOutputExSerializer):
         data = self.transform_map_fields(data)
         data["outputs"] = outputs
         data = self.to_internal_related_fields(data)
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
@@ -213,6 +220,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         # ----------------------------------
         data = self.to_internal_related_fields(data)
         self._validate_individual_output(data)
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -264,6 +272,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
 
         data["timecourses"] = timecourses
         data = self.to_internal_related_fields(data)
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
