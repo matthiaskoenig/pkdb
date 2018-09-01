@@ -50,7 +50,7 @@ class CharacteristicaSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments",None)
-
+        self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
     def validate(self,attr):
@@ -74,6 +74,7 @@ class GroupSerializer(ExSerializer):
         data.pop("comments",None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -121,7 +122,7 @@ class GroupExSerializer(ExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
-
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
