@@ -180,6 +180,8 @@ class Output(Valueable, AbstractOutput):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
     interventions = models.ManyToManyField(Intervention)
+    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
+
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
 
@@ -225,7 +227,7 @@ class Timecourse(AbstractOutput):
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
     ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
-    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
 
     value = ArrayField(models.FloatField(null=True, blank=True),null=True,blank=True)
     mean = ArrayField(models.FloatField(null=True, blank=True), null=True,blank=True)
