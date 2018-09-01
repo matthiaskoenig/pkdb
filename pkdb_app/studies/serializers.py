@@ -23,6 +23,10 @@ class KeywordSerializer(serializers.ModelSerializer):
         keyword, created = Keyword.objects.update_or_create(**validated_data)
         return keyword
 
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        return super().to_internal_value(data)
+
 # ----------------------------------
 # Study / Reference
 # ----------------------------------
@@ -36,6 +40,10 @@ class AuthorSerializer(WrongKeyValidationSerializer):
     def create(self, validated_data):
         author, created = Author.objects.update_or_create(**validated_data)
         return author
+
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        return super().to_internal_value(data)
 
 
 class ReferenceSerializer(SidSerializer):
@@ -60,6 +68,9 @@ class ReferenceSerializer(SidSerializer):
         instance.save()
         return instance
 
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        return super().to_internal_value(data)
 
 class StudySerializer(SidSerializer):
     """ Study Serializer.
@@ -81,8 +92,8 @@ class StudySerializer(SidSerializer):
     groupset = GroupSetSerializer(read_only=False, required=False,allow_null=True)
     curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False,allow_null=True)
     creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False,allow_null=True)
-    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True,allow_null=True)
-    keywords = serializers.SlugRelatedField(queryset=Keyword.objects.all(), slug_field='name',required=False, many=True,allow_null=True)
+    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True)
+    keywords = serializers.SlugRelatedField(queryset=Keyword.objects.all(), slug_field='name',required=False, many=True)
 
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
@@ -94,9 +105,7 @@ class StudySerializer(SidSerializer):
         fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances','keywords', 'design',
                   'groupset', 'individualset', 'interventionset', 'outputset', 'files')
 
-    def validate(self, attrs):
-        attrs = super().validate(attrs)
-        return attrs
+
 
 
     def create(self, validated_data):
@@ -125,6 +134,7 @@ class StudySerializer(SidSerializer):
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
 
+        self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
 

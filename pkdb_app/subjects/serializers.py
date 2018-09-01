@@ -28,6 +28,10 @@ class DataFileSerializer(WrongKeyValidationSerializer):
         fields = ["file","filetype","id"]
         extra_kwargs = {'id': {'allow_null': False}}
 
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 
 # ----------------------------------
 # Characteristica
@@ -40,8 +44,17 @@ class CharacteristicaExSerializer(MappingSerializer):
         model = CharacteristicaEx
         fields = CHARACTERISTISTA_FIELDS + CHARACTERISTISTA_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + ["comments"]
 
+    def validate(self, attrs):
+        self.validate_wrong_keys(attrs)
+        return super().validate(attrs)
 
-class CharacteristicaSerializer(serializers.ModelSerializer):
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
+
+
+class CharacteristicaSerializer(WrongKeyValidationSerializer):
     count = serializers.IntegerField(required=False)
 
     class Meta:
@@ -56,6 +69,7 @@ class CharacteristicaSerializer(serializers.ModelSerializer):
     def validate(self,attr):
         validate_categorials(attr, "characteristica")
         return super().validate(attr)
+
 
 
 # ----------------------------------
@@ -122,6 +136,7 @@ class GroupExSerializer(ExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
+
         self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
@@ -135,6 +150,11 @@ class GroupSetSerializer(ExSerializer):
         model = GroupSet
         fields = ["descriptions","group_exs","comments"]
 
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 # ----------------------------------
 # Individual
 # ----------------------------------
@@ -169,6 +189,7 @@ class IndividualSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 
 
@@ -228,6 +249,7 @@ class IndividualExSerializer(ExSerializer):
 
         if "group" in data:
             data["group"] = self.group_to_internal_value(data.get("group"), study_sid)
+
         self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer,self).to_internal_value(data)
 
@@ -235,6 +257,7 @@ class IndividualExSerializer(ExSerializer):
         for characteristica in attrs:
             self._validate_individual_characteristica(characteristica)
         return attrs
+
 
     def to_representation(self, instance):
 
@@ -258,6 +281,12 @@ class IndividualSetSerializer(ExSerializer):
     class Meta:
         model = IndividualSet
         fields = ["descriptions", "individual_exs", "comments"]
+
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 
 
 ###############################################################################################
