@@ -17,6 +17,7 @@ def add_names(d):
         if not d[key]:
             d[key] = key
 
+
 # ----------------------------------------
 # Unit definitions
 # ----------------------------------------
@@ -122,9 +123,13 @@ class UnitConversion(object):
         self.target = target
         self.multiplier = multiplier
 
+    def apply_conversion(self, value):
+        """ Apply the unit conversion to a given unit. """
+        return value * self.multiplier
 
+
+# Supported unit conversions
 UNIT_CONVERSIONS = [
-
     UnitConversion('kg', target='g', multiplier=1000),
     UnitConversion('cm', target='m', multiplier=1E-2),
     UnitConversion('ml', target='l', multiplier=1E-3),
@@ -132,7 +137,7 @@ UNIT_CONVERSIONS = [
     UnitConversion('1/min', target='1/h', multiplier=60),
 
     # Concentrations
-    UnitConversion('mg/dl', target='µg/ml', multiplier="?"),  # FIXME
+    UnitConversion('mg/dl', target='µg/ml', multiplier=1E3/1E-2),
     UnitConversion('mg/l', target='µg/ml', multiplier=1.0),
     UnitConversion('g/dl', target='µg/dl', multiplier=1.0E6),
     UnitConversion('ng/ml', target='µg/ml', multiplier=1.0E-3),
@@ -170,7 +175,11 @@ class NormalizableUnit(dict):
     It provides:
     - allowed choices
     - respective normalized units
-    - conversion factors for the normalization
+    in the form
+    { allowed_unit: normalized_unit, ... , allowed_unit: normalized_unit=None }
+    If normalized_unit=None, the unit is already normalized.
+
+    The actual conversions can be performed using the UnitConversions.
     """
     def __init__(self, from_to_dict):
         super().__init__(from_to_dict)
@@ -203,4 +212,7 @@ class NormalizableUnit(dict):
     def is_valid_unit(self, unit):
         # is the unit in the keys
         return unit in self
+
+    def valid_units(self):
+        return self.keys()
 
