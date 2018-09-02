@@ -41,12 +41,9 @@ from pkdb_app.data_management.create_reference import run as create_reference
 from collections import namedtuple
 
 
-
 # -----------------------------
 # master path
 # -----------------------------
-# DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
-
 DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
 if not os.path.exists(DATA_PATH):
     print("-" * 80)
@@ -99,7 +96,6 @@ def setup_database(api_url):
         response = requests.post(f'{api_url}/users/', json=user)
         if not  response.status_code == 201:
             logging.warning(f"user upload failed ")
-
 
 
 # -------------------------------
@@ -415,18 +411,15 @@ if __name__ == '__main__':
     API_URL = "http://0.0.0.0:8000/api/v1"
     # API_URL = "http://www.pk-db.com/api/v1"
 
-
     # core database setup
     setup_database(api_url=API_URL)
 
-
-    for study_path in get_study_paths():
+    for study_path in sorted(get_study_paths()):
         study_folder_path = os.path.dirname(study_path)
         study_name = os.path.basename(study_folder_path)
 
         logging.info('-' * 80)
         logging.info(f'Uploading [{study_name}]')
         upload_study_from_dir(study_folder_path)
-
 
     print("--- done ---")
