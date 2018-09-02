@@ -472,9 +472,10 @@ class ExSerializer(MappingSerializer):
         return data.get(key) or data.get(f"{key}_map")
 
     def _is_required(self, data, key):
-        is_data = self._key_is(data,key)
+        is_data = self._key_is(data, key)
+        pktype = data.get("pktype")
         if not is_data:
-            raise serializers.ValidationError({key: f"{key} is required for 'pktype':'auc_end'", "detail": data})
+            raise serializers.ValidationError({key: f"{key} is required for 'pktype':'{pktype}'", "detail": data})
 
     def _validate_pktype(self, data):
         pktype = data.get("pktype")
@@ -489,8 +490,8 @@ class ExSerializer(MappingSerializer):
         time = data.get("time")
         time_unit = data.get("time_unit")
 
-        # if there is no data it is of class 'NoneType'
-        if time:
+        # if there is no data it is of class 'NoneType', test via `is time` not working !!!
+        if isinstance(time, str):
             self._is_required(data, "time_unit")
             if not time_unit:
                 raise serializers.ValidationError({"pktype": f"time_unit is required if time is provided", "detail": data})

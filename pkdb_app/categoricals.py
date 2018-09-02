@@ -304,7 +304,7 @@ INTERVENTION_DATA = [
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES,
                        dimensionless_norm_unit),
     CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
-                   NormalizableUnit({"yr": None, "week": None, "day": None, "h": None})),
+                   NormalizableUnit({"-": None,  "yr": None, "week": None, "day": None, "h": None})),
     CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"],
                        dimensionless_norm_unit),
 ]
