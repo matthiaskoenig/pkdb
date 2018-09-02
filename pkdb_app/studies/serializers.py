@@ -1,3 +1,6 @@
+"""
+Studies serializers.
+"""
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
@@ -10,10 +13,11 @@ from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
 
+
 # ----------------------------------
 # Keyword
 # ----------------------------------
-class KeywordSerializer(serializers.ModelSerializer):
+class KeywordSerializer(WrongKeyValidationSerializer):
     """ Keyword. """
     class Meta:
         model = Keyword
@@ -24,8 +28,10 @@ class KeywordSerializer(serializers.ModelSerializer):
         return keyword
 
     def to_internal_value(self, data):
+        # FIXME
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
+
 
 # ----------------------------------
 # Study / Reference
@@ -72,6 +78,7 @@ class ReferenceSerializer(SidSerializer):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
+
 class StudySerializer(SidSerializer):
     """ Study Serializer.
 
@@ -104,9 +111,6 @@ class StudySerializer(SidSerializer):
         model = Study
         fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances','keywords', 'design',
                   'groupset', 'individualset', 'interventionset', 'outputset', 'files')
-
-
-
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
