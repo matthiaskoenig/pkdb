@@ -13,6 +13,7 @@
                 <b-navbar-nav class="ml-auto">
 
                     <b-nav-item active href="http://www.pk-db.com/api/" target="_blank">API <img src="../assets/images/swagger.png" height="20" /></b-nav-item>
+                    <b-nav-item active href="http://www.github.com/matthiaskoenig/pkdb" target="_blank"><font-awesome-icon icon="file-alt" /> Test</b-nav-item>
 
                 </b-navbar-nav>
 
