@@ -17,6 +17,7 @@ from numbers import Number
 ITEM_SEPARATOR = '||'
 ITEM_MAPPER = '=='
 
+
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
     # ----------------------------------
@@ -33,7 +34,6 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise serializers.ValidationError(msg)
 
-
     def get_or_val_error(self, model, *args, **kwargs):
         """ Checks if object exists or raised ValidationError."""
         try:
@@ -41,17 +41,12 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         except model.DoesNotExist:
             instance = None
         if not instance:
-            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY:"instance does not exist","detail":{**kwargs}})
+            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist",
+                                               "detail": {**kwargs}})
 
         return instance
 
-    # ----------------------------------
-    #
-    # ----------------------------------
-
-
     def to_internal_value(self, data):
-
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
@@ -482,9 +477,11 @@ class ExSerializer(MappingSerializer):
         return data.get(key) or data.get(f"{key}_map")
 
     def _is_required(self, data, key):
-        is_data = self._key_is(data,key)
+        is_data = self._key_is(data, key)
+        pktype = data.get("pktype")
         if not is_data:
             raise serializers.ValidationError({key: f"{key} is required", "detail": data})
+
 
     def _validate_pktype(self, data):
         pktype = data.get("pktype")
@@ -499,8 +496,6 @@ class ExSerializer(MappingSerializer):
         time = data.get("time")
         if time:
             self._is_required(data, "time_unit")
-        #else:
-        #    raise serializers.ValidationError({"pktype": f"time_unit is required if time is provided", "detail": data})
 
     def _to_internal_se(self,data):
         input_names = ["count","sd","mean","cv"]
@@ -544,7 +539,6 @@ class ExSerializer(MappingSerializer):
     #   temp_data = {"se": se, "sd": sd, "cv": cv, "mean": mean, "count": count}
     #    temp_data = pd.to_numeric(pd.DataFrame(temp_data))
     #    for da
-
 
 
     @staticmethod

@@ -10,9 +10,11 @@ from pkdb_app.interventions.managers import InterventionSetManager, OutputSetMan
     TimecourseExManager, InterventionExManager,  OutputManager
 from pkdb_app.normalization import get_cv, get_se, get_sd
 from ..behaviours import Valueable, ValueableMap, Externable, CHAR_MAX_LENGTH_LONG
-from ..categoricals import INTERVENTION_CHOICES, TIME_UNITS_CHOICES, \
+from ..categoricals import INTERVENTION_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
-    SUBSTANCES_DATA_CHOICES, OUTPUT_TISSUE_DATA_CHOICES, UNITS_CHOICES
+    OUTPUT_TISSUE_DATA_CHOICES
+from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES
+from ..substances import SUBSTANCES_DATA_CHOICES
 from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
 from ..utils import CHAR_MAX_LENGTH
 import numpy as np
