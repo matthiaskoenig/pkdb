@@ -346,7 +346,7 @@ def validate_categorials(data, category_class):
             # FIXME: this must also happen in the 'to_internal_value' for choices, not only in validation
             unit = "-"  # handle no unit as dimensionless
             if not model_categorical.units.is_valid_unit(unit):
-                msg = f"{unit} is not allowed but unit is required. For {model_categorical.key} allowed units are {model_categorical.units}"
+                msg = f"[{unit}] is not in the allowed units. For {model_categorical.key} allowed units are {model_categorical.units.keys()}"
                 raise ValueError({"unit": msg})
     return data
 
