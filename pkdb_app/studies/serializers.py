@@ -1,3 +1,6 @@
+"""
+Studies serializers.
+"""
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
@@ -9,6 +12,7 @@ from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
+
 
 # ----------------------------------
 # Keyword
@@ -26,6 +30,7 @@ class KeywordSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
+
 
 # ----------------------------------
 # Study / Reference
