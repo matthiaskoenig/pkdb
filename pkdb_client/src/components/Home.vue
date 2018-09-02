@@ -11,7 +11,10 @@
                 <table class="table">
                 <tbody>
                 <tr>
-                    <td><a href=""><font-awesome-icon icon="procedures" /></a></td><td>Studies</td><td>{{study_count}}</td>
+                    <td><a href="#" to="/studies">
+
+
+                        <font-awesome-icon icon="procedures" /></a></td><td>Studies</td><td>{{study_count}}</td>
                 </tr>
                 <tr>
                     <td><font-awesome-icon icon="users" /></td><td>Groups</td><td>{{group_count}}</td>
@@ -23,10 +26,10 @@
                     <td><font-awesome-icon icon="capsules" /></td><td>Interventions</td><td>{{intervention_count}}</td>
                 </tr>
                 <tr>
-                    <td><font-awesome-icon icon="file-medical" /></td><td>Outputs</td><td>{{output_count}}</td>
+                    <td><font-awesome-icon icon="chart-bar" /></td><td>Outputs</td><td>{{output_count}}</td>
                 </tr>
                 <tr>
-                    <td><font-awesome-icon icon="file-medical-alt" /></td><td>Timecourses</td><td>{{timecourse_count}}</td>
+                    <td><font-awesome-icon icon="chart-line" /></td><td>Timecourses</td><td>{{timecourse_count}}</td>
                 </tr>
                 <tr>
                     <td><font-awesome-icon icon="file-alt" /></td><td>References</td><td>{{reference_count}}</td>
@@ -35,7 +38,7 @@
                 </table>
             </div>
             <div class="col-3">
-                <a :href="api+'/statistics/?format=json'" title="JSON"><font-awesome-icon icon="share-square" /></a>
+                <a :href="api+'/statistics/?format=json'" title="JSON" target="_blank"><font-awesome-icon icon="code" /></a>
             </div>
         </div>
     </div>

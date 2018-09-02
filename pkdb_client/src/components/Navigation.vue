@@ -7,13 +7,18 @@
             <b-collapse is-nav id="nav_collapse">
 
                 <b-navbar-nav>
+                    <!--
                     <b-nav-item active href="#" v-for="routes in links" v-bind:key="routes.id" :to="`${routes.page}`">{{routes.text}}</b-nav-item>
+                    -->
+                    <b-nav-item active href="#" v-for="(item, index) in links" :key="index" :to="`${item.page}`"><font-awesome-icon :icon="item.icon" />&nbsp;{{item.text}}</b-nav-item>
+
+
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">
 
-                    <b-nav-item active href="http://www.pk-db.com/api/" target="_blank">API <img src="../assets/images/swagger.png" height="20" /></b-nav-item>
-                    <b-nav-item active href="http://www.github.com/matthiaskoenig/pkdb" target="_blank"><font-awesome-icon icon="file-alt" /> Test</b-nav-item>
+                    <b-nav-item active href="http://www.pk-db.com/api/" target="_blank"><font-awesome-icon icon="laptop-code" />&nbsp;API</b-nav-item>
+                    <b-nav-item active href="http://www.github.com/matthiaskoenig/pkdb" target="_blank"><font-awesome-icon :icon="[ 'fab', 'github' ]" />&nbsp;Code</b-nav-item>
 
                 </b-navbar-nav>
 
@@ -57,47 +62,56 @@
                     {
                         id: 0,
                         text: 'Home',
-                        page:'/'
+                        page: '/',
+                        icon: ''
                     },
                     {
                         id: 1,
                         text: 'Studies',
-                        page:'/studies'
+                        page: '/studies',
+                        icon: 'procedures'
                     },
                     {
                         id: 2,
                         text: 'Groups',
-                        page:'/groups'
+                        page:'/groups',
+                        icon: 'users'
                     },
                     {
                         id: 3,
                         text: 'Individuals',
-                        page:'/individuals'
+                        page:'/individuals',
+                        icon: 'user'
                     },
                     {
                         id: 4,
                         text: 'Interventions',
-                        page:'/interventions'
+                        page:'/interventions',
+                        icon: 'capsules'
                     },
                     {
                         id: 5,
                         text: 'Outputs',
-                        page:'/outputs'
+                        page:'/outputs',
+                        icon: 'chart-bar'
                     },
                     {
                         id: 6,
                         text: 'Timecourses',
-                        page:'/timecourses'
+                        page:'/timecourses',
+                        icon: 'chart-line'
                     },
                     {
                         id: 7,
                         text: 'References',
-                        page:'/references'
+                        page:'/references',
+                        icon: 'file-alt'
                     },
                     {
                         id: 4,
                         text: 'About',
-                        page:'/about'
+                        page:'/about',
+                        icon: 'info-circle'
                     },
 
                 ]

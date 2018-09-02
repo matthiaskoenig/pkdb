@@ -12,15 +12,21 @@ import ClientTable from 'vue-tables-2';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
-    faFileMedicalAlt, faShareSquare} from '@fortawesome/free-solid-svg-icons'
-import {  } from '@fortawesome/free-regular-svg-icons'
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+    faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode
+} from '@fortawesome/free-solid-svg-icons'
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faGithub, faGithubAlt, faGit } from '@fortawesome/free-brands-svg-icons'
 
-library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faGithub, faProcedures, faFileMedical, faFileMedicalAlt, faShareSquare)
+
+
+import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome'
+
+library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
+    faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('font-awesome-layers', FontAwesomeLayers)
+Vue.component('font-awesome-layers-text', FontAwesomeLayersText)
 
 
 Vue.use(BootstrapVue);
