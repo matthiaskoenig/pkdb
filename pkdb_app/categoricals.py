@@ -12,100 +12,32 @@ an ontology which represents the relationship between the differnent values.
 units on CharacteristicType is an ordered iteratable, with the first unit being the default unit.
 
 """
-CURRENT_VERSION = [1.0]
-VERSIONS = [1.0,]
-#considering: to maintain serializers of serval versions of the json file. The version would be read from the json file and the respective
-#serializer would be selected.
-
-# TODO: How to handle the genetic information? Genetic variants?
-
 from collections import namedtuple
-def create_choices(list):
-    return [(utype, utype) for utype in list]
+from pkdb_app.units import UNIT_DATA, UNITS_CHOICES
+from pkdb_app.substances import SUBSTANCES_DATA
 
+CURRENT_VERSION = [1.0]
+VERSIONS = [1.0, ]
 
 CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices", "units"])
-UnitType = namedtuple("UnitType", ["name"])
-
-# TODO: lookup units package and proper units handling (units conversion, default units, ...)
-UNIT_TIME = [
-    UnitType('yr'),
-    UnitType('week'),
-    UnitType('day'),
-    UnitType('h'),
-    UnitType('min'),
-    UnitType('s'),
-]
-TIME_UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_TIME]
-
-UNIT_DATA = UNIT_TIME + [
-    # base units
-    UnitType('-'),
-    UnitType('%'),  # dimensionless * 100
-    UnitType('cm'),
-    UnitType('m'),
-    UnitType('kg'),
-    UnitType("mg"),
-    UnitType("mmHg"),
-    UnitType("µmol"),
-
-    # reverse time units
-    UnitType('1/week'),
-    UnitType('1/day'),
-    UnitType('1/h'),
-    UnitType('1/min'),
-    UnitType('1/s'),
-
-    # misc units
-    UnitType("mg/kg"),
-    UnitType("mg/day"),
-    UnitType('kg/m^2'),
-    UnitType('IU/I'),
-    UnitType("l/h"),
-
-    # concentration
-    UnitType("µg/ml"),
-    UnitType('mg/dl'),  # -> µg/ml
-    UnitType("mg/l"),    # -> µg/ml
-    UnitType("µmol/l"),  # -> µg/ml (with molar weight)
-    UnitType("nmol/l"),  # -> µg/ml (with molar weight)
-    UnitType('g/dl'),    # -> µg/dl
-    UnitType("ng/ml"),   # -> µg/ml
-
-    # AUC
-    UnitType("mg*h/l"),
-    UnitType("µg*h/ml"),   # -> mg*h/l
-    UnitType("µg/ml*h"),   # -> mg*h/l
-    UnitType("mg*min/l"),  # -> mg*h/l
-    UnitType("µg*min/ml"),
-    UnitType("µmol*h/l"),  # -> mg*h/l (with molar weight)
-    UnitType("µmol/l*h"),  # -> mg*h/l (with molar weight)
-    UnitType("µg/ml*h/kg"),  # -> mg*h/l/kg
-
-    # Volume of distribution (vd)
-    UnitType("l"),
-    UnitType('l/kg'),
-    UnitType('ml/kg'),  # -> l/kg
-
-    # clearance
-    UnitType("ml/min"),
-    UnitType("ml/h"),       # -> ml/min
-    UnitType("l/h/kg"),
-    UnitType("ml/h/kg"),    # -> l/h/kg
-    UnitType("ml/min/kg"),  # -> l/h/kg
-    UnitType("ml/min/1.73m^2"),
-]
 
 
-UNITS_CHOICES = [(utype.name, utype.name) for utype in UNIT_DATA]
+def create_choices(collection):
+    """ Creates choices from given list of items.
+    In case of dictionaries the keys are used to create choices.
 
+    :param collection: iterable collection from which choices are created.
+    :return: list of choice tuples
+    """
+    choices = []
+    for item in collection:
+        key = item
+        if not isinstance(item, str):
+            # get_key interface must be provided by item
+            key = item.key
+        choices.append((key, key))
+    return choices
 
-# class, value, dtype (numeric, boolean, categorial), choices
-# dates?
-# How to store NA? Is this necessary?
-#   numeric: NA, None
-#   boolean: NA, None
-#   categorial: NA, None
 
 BOOLEAN_TYPE = 'boolean'
 NUMERIC_TYPE = 'numeric'
@@ -163,129 +95,25 @@ FORMAT_MAPPING = {"TSV": FileFormat("TSV", '\t'),
                   "CSV": FileFormat("CSV", ",")}
 
 STUDY_DESIGN_DATA = [
-    "single group",  # (interventional study)
-    "parallel group",  #  (interventional study)
-    "crossover",  # (interventional study)
-    "cohort",  # (oberservational study)
-    "case control",  # (oberservational study)
+    "single group",     # (interventional study)
+    "parallel group",   # (interventional study)
+    "crossover",        # (interventional study)
+    "cohort",           # (oberservational study)
+    "case control",     # (oberservational study)
 ]
 STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
-SUBSTANCES_DATA = [
-    # acetaminophen
-    "acetaminophen",
 
-    # caffeine (CYP2A1)
-    "caffeine",
-    "paraxanthine",
-    "theobromine",
-    "theophylline",
-    "AFMU",
-    "AAMU",
-    "1U",
-    "17X",
-    "17U",
-    "37X",
-    "1X",
-    "methylxanthine",
-    "paraxanthine/caffeine",
-    "caffeine/paraxanthine",
-    "theobromine/caffeine",
-    "theophylline/caffeine",
-    "1X/caffeine",
-    "1X/paraxanthine",
-    "1X/theophylline",
-    "(AFMU+1U+1X)/17U",
-    "(AAMU+1X+1U)/17U",
-    "17U/17X",
-    "1U/(1U+1X)",
-    "1U/1X",
-    "AFMU/(AFMU+1U+1X)",
-    "AAMU/(AAMU+1U+1X)",
-    # caffeine interaction
-    "fluvoxamine",
-    "naringenin",
-    "grapefruit juice",
-    "quinolone",
-    "pipemidic acid",
-    "norfloxacin",
-    "enoxacin",
-    "ciprofloxacin",
-    "ofloxacin",
-
-    # oral contraceptives
-    "levonorgestrel",
-    "gestodene",
-    "EE2",
-
-    # codeine
-    "codeine",
-
-    # chlorzoxazone (CYP2E1)
-    "chlorzoxazone",
-    "6-hydroxychlorzoxazone",
-
-    # misc
-    "tizanidine",
-    "venlafaxine",
-    "lomefloxacin",
-    "ephedrine",
-    "pseudoephedrine",
-
-    "ibuprofen",
-    "aspirin",
-    "enoxacin",
-    "ciprofloxacin",
-    "pipemidic acid",
-    "norfloxacin",
-    "ofloxacin",
-    "fluvoxamine",
-    "ethanol",
-    "chlorozoxazone",
-    "lomefloxacin",
-
-    "aminopyrine",
-    "antipyrine",
-    "bromsulpthalein",
-    "phenylalanine",
-    "indocyanine green",
-    "morphine",
-
-    "glycerol",
-    "FFA",
-
-    "carbamazepine",
-
-    # midazolam
-    "midazolam",
-    "1-hydroxymidazolam",
-
-    # losartan
-    "losartan",
-    "exp3174",
-
-    # omeprazole (CYP2C19)
-    "omeprazole",
-    "5-hydroxyomeprazole",
-    "5-hydroxyomeprazole/omeprazole",
-
-    # dextromethorphan
-    "dextromethorphan",
-    "dextrorphan",
-
-    "digoxin",
-    "clozapine",
-
-    "carbon monoxide",
-
-]
-SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
 
 KEYWORDS_DATA = [
-"test"
+    "glycolysis",
+    "gluconeogenesis",
+    "oxidative phosphorylation",
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
+
+# TODO: define the units for the characteristic types
 CHARACTERISTIC_DATA = [
     # -------------- Species --------------
     CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["homo sapiens"], ["-"]),
@@ -353,9 +181,11 @@ CHARACTERISTIC_DATA = [
 
 
     # --------------Genetic variants --------------
-    CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, ["CYP2D6 duplication","CYP2D6 wild type", "CYP2D6 poor metabolizer"], ["-"]),
+    CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, ["CYP2D6 duplication", "CYP2D6 wild type",
+                                                                       "CYP2D6 poor metabolizer"], ["-"]),
 ]
 
+# TODO: define the units for the pk data
 PK_DATA = [
     "auc_inf",  # Area under the curve, extrapolated until infinity
     "auc_end",  # Area under the curve, until end time point (time has to be given as time attribute)
@@ -380,6 +210,8 @@ PK_DATA = [
 
     "recovery",
 ]
+PK_DATA_CHOICES = create_choices(PK_DATA)
+
 
 OUTPUT_TISSUE_DATA = [
     "saliva",
@@ -388,15 +220,17 @@ OUTPUT_TISSUE_DATA = [
 ]
 
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
-PK_DATA_CHOICES = create_choices(PK_DATA)
 
+
+
+# TODO: define the units for the interventions
 # class, value, dtype (numeric, boolean, categorial), choices
 INTERVENTION_DATA = [
     CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
     CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
     CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
     CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "smoking", "grapefruit juice"],
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
                    ["year", "week", "day", "h"]),
     CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
 ]
