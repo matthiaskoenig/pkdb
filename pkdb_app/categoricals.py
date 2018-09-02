@@ -295,13 +295,18 @@ INTERVENTION_FORM = [
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
 INTERVENTION_DATA = [
-    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
-    CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None,
+                       NormalizableUnit({"mg": None, "mg/kg": None})),
+    CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None,
+                       dimensionless_norm_unit),
+    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
     CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
-                   ["year", "week", "day", "h"]),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
+                   NormalizableUnit({"yr": None, "week": None, "day": None, "h": None})),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"],
+                       dimensionless_norm_unit),
 ]
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
@@ -314,16 +319,13 @@ def validate_categorials(data, category_class):
     :return:
     """
     category = data.get("category", None)
-
-    print(category)
-
     if category:
         if category_class == "characteristica":
             characteristic_dict = CHARACTERISTIC_DICT
-        elif category_class == "interventions":
+        elif category_class == "intervention":
             characteristic_dict = INTERVENTION_DICT
         else:
-            raise ValueError(f"category_class not supported: {category}")
+            raise ValueError(f"category_class not supported: {category_class}")
 
         choice = data.get("choice", None)
         unit = data.get("unit", None)
@@ -338,7 +340,7 @@ def validate_categorials(data, category_class):
         if choice:
             if (model_categorical.dtype == CATEGORIAL_TYPE) or (model_categorical.dtype == BOOLEAN_TYPE):
                 if choice not in model_categorical.choices:
-                    msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.value}"
+                    msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.key}"
                     raise ValueError({"choice": msg})
 
         # check unit

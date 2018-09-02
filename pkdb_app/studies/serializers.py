@@ -28,6 +28,7 @@ class KeywordSerializer(serializers.ModelSerializer):
         return keyword
 
     def to_internal_value(self, data):
+        # FIXME
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
