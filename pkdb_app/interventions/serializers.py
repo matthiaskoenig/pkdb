@@ -11,7 +11,7 @@ from pkdb_app.interventions.models import Substance, InterventionSet, Interventi
 from pkdb_app.serializers import ExSerializer,  WrongKeyValidationSerializer, BaseOutputExSerializer
 
 from pkdb_app.subjects.models import Group, DataFile, Individual
-from pkdb_app.utils import validate_categorials
+from pkdb_app.categoricals import validate_categorials
 
 from pkdb_app.subjects.serializers import VALUE_MAP_FIELDS,VALUE_FIELDS,EXTERN_FILE_FIELDS
 
@@ -84,8 +84,6 @@ class InterventionExSerializer(ExSerializer):
                  ['interventions', "comments"]
 
     def to_internal_value(self, data):
-
-
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -104,9 +102,13 @@ class InterventionExSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
-
     def validate(self, attrs):
-        validate_categorials(attrs, "intervention")
+        try:
+            # perform via dedicated function on categorials
+            validate_categorials(attrs)
+        except ValueError as err:
+            raise serializers.ValidationError(err)
+
         return super().validate(attrs)
 
 
