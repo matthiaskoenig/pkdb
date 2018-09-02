@@ -1,9 +1,6 @@
 """
 Definition of units and handling of units conversion.
 """
-from collections import namedtuple
-
-
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
 
 def add_names(d):
