@@ -219,7 +219,7 @@ CHARACTERISTIC_DATA = [
                             "smoking",
                             "grapefruit juice"
                        ],
-                       NormalizableUnit({"yr": None, "week": None, "day": None, "h": None})),
+                       NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None})),
 
     # -------------- Caffeine --------------
     CharacteristicType('caffeine', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES,
@@ -299,14 +299,10 @@ INTERVENTION_DATA = [
                        NormalizableUnit({"mg": None, "mg/kg": None})),
     CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None,
                        dimensionless_norm_unit),
-    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES,
-                       dimensionless_norm_unit),
-    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES,
-                       dimensionless_norm_unit),
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
-                   NormalizableUnit({"-": None,  "yr": None, "week": None, "day": None, "h": None})),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"],
-                       dimensionless_norm_unit),
+    CHARACTERISTIC_DICT["medication type"],
+    CHARACTERISTIC_DICT["abstinence"],
+    CHARACTERISTIC_DICT["smoking"],
+    CHARACTERISTIC_DICT["oral contraceptives"],
 ]
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
