@@ -164,7 +164,7 @@ UNIT_CONVERSIONS = [
 UNIT_CONVERSIONS_DICT = {f'[{item.source}] -> [{item.target}]': item for item in UNIT_CONVERSIONS}
 
 
-class NormalizableUnit(object):
+class NormalizableUnit(dict):
     """ Extended unit class, which allows the normalization of the given unit.
 
     It provides:
@@ -173,10 +173,10 @@ class NormalizableUnit(object):
     - conversion factors for the normalization
     """
     def __init__(self, from_to_dict):
+        super().__init__(from_to_dict)
         if not isinstance(from_to_dict, dict):
             raise ValueError(f'NormalizableUnit requires <dict>, not {type(from_to_dict)}: {from_to_dict}')
 
-        self.from_to_dict = from_to_dict
         self.validate()
 
     def validate(self):
@@ -184,18 +184,23 @@ class NormalizableUnit(object):
 
         :return:
         """
-        for source, target in self.from_to_dict.items():
+        for source, target in self.items():
             # check that in allowed units
             if source not in UNITS:
-                raise ValueError(f'source unit <{source}> not in UNITS: {self.from_to_dict}')
+                raise ValueError(f'source unit <{source}> not in UNITS: {self}')
 
             # check that conversion is supported
             if target is not None:
                 if target not in UNITS:
-                    raise ValueError(f'target unit <{target}> not in UNITS: {self.from_to_dict}')
+                    raise ValueError(f'target unit <{target}> not in UNITS: {self}')
 
                 # check that unit conversion is defined
                 conversion_key = f'[{source}] -> [{target}]'
                 conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
                 if not conversion:
-                    raise ValueError(f'conversion <{conversion_key}> is not defined: {self.from_to_dict}')
+                    raise ValueError(f'conversion <{conversion_key}> is not defined: {self}')
+
+    def is_valid_unit(self, unit):
+        # is the unit in the keys
+        return unit in self
+

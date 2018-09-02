@@ -13,8 +13,8 @@ units on CharacteristicType is an ordered iteratable, with the first unit being 
 
 """
 from collections import namedtuple
-from pkdb_app.units import NormalizableUnit
 
+from pkdb_app.units import NormalizableUnit
 from pkdb_app.substances import SUBSTANCES_DATA
 
 CURRENT_VERSION = [1.0]
@@ -41,6 +41,12 @@ def create_choices(collection):
     return choices
 
 
+def dict_and_choices(data):
+    data_dict = {item.key: item for item in data}
+    data_choices = [(ctype.key, ctype.key) for ctype in data]
+    return data_dict, data_choices
+
+
 BOOLEAN_TYPE = 'boolean'
 NUMERIC_TYPE = 'numeric'
 CATEGORIAL_TYPE = 'categorial'
@@ -53,33 +59,8 @@ BOOLEAN_CHOICES = [YES, NO, MIX, NAN]
 
 
 # ---------------------------------------------------
-# Interventions
-# ---------------------------------------------------
-INTERVENTION_ROUTE = [
-    "oral",
-    "iv",
-]
-INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
-INTERVENTION_APPLICATION = [
-    "single dose",
-    "multiple dose",
-    "continuous injection",
-]
-INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
-
-INTERVENTION_FORM = [
-    "tablet",
-    "capsule",
-    "solution",
-    NAN,
-]
-INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
-
-
-# ---------------------------------------------------
 # CharacteristicTypes
 # ---------------------------------------------------
-
 INCLUSION_CRITERIA = "inclusion"
 EXCLUSION_CRITERIA = "exclusion"
 GROUP_CRITERIA = "group"
@@ -284,6 +265,95 @@ CHARACTERISTIC_DATA = [
 ]
 
 
+CHARACTERISTIC_DTYPE = {item.key : item.dtype for item in CHARACTERISTIC_DATA}
+CHARACTERISTIC_CATEGORIES = set([item.key for item in CHARACTERISTIC_DATA])
+CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
+CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
+
+
+# ---------------------------------------------------
+# Interventions
+# ---------------------------------------------------
+INTERVENTION_ROUTE = [
+    "oral",
+    "iv",
+]
+INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
+INTERVENTION_APPLICATION = [
+    "single dose",
+    "multiple dose",
+    "continuous injection",
+]
+INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
+
+INTERVENTION_FORM = [
+    "tablet",
+    "capsule",
+    "solution",
+    NAN,
+]
+INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
+
+INTERVENTION_DATA = [
+    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
+    CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
+                   ["year", "week", "day", "h"]),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
+]
+INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
+
+
+def validate_categorials(data):
+    """ Function which validates given categorial data against categorial defintion and allowed values.
+
+    :param data:
+    :param model_name:
+    :return:
+    """
+    category = data.get("category", None)
+
+    if category:
+        if category == "characteristica":
+            model_categorical = CHARACTERISTIC_DICT
+        elif category == "intervention":
+            model_categorical = INTERVENTION_DICT
+        else:
+            raise ValueError(f"category not supported: {category}")
+
+        choice = data.get("choice", None)
+        unit = data.get("unit", None)
+
+        if choice:
+            if (model_categorical.dtype == CATEGORIAL_TYPE) or (model_categorical.dtype == BOOLEAN_TYPE):
+                if choice not in model_categorical.choices:
+                    msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.value}"
+                    raise ValueError({"choice": msg})
+
+        # check unit
+        if unit is None:
+            # FIXME: this must also happen in the 'to_internal_value' for choices, not only in validation
+            unit = "-"  # handle no unit as dimensionless
+            if not model_categorical.units.is_valid_unit(unit):
+                msg = f"{unit} is not allowed but unit is required. For {model_categorical.value} allowed units are {model_categorical.units}"
+                raise ValueError({"unit": msg})
+    return data
+
+
+# ---------------------------------------------------
+# Output
+# ---------------------------------------------------
+OUTPUT_TISSUE_DATA = [
+    "saliva",
+    "plasma",
+    "urine",
+]
+
+OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
+
+
 # ---------------------------------------------------
 # Pharmacokinetics data
 # ---------------------------------------------------
@@ -415,39 +485,17 @@ PK_DATA = [
 PK_DATA_CHOICES = create_choices(PK_DATA)
 
 
-OUTPUT_TISSUE_DATA = [
-    "saliva",
-    "plasma",
-    "urine",
-]
-
-OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
-
-
-
-# TODO: define the units for the interventions
-# class, value, dtype (numeric, boolean, categorial), choices
-INTERVENTION_DATA = [
-    CharacteristicType('dosing', 'dosing', NUMERIC_TYPE, None, ["mg", "mg/kg"]),
-    CharacteristicType('smoking cessation', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking', 'lifestyle', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
-                   ["year", "week", "day", "h"]),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
-]
-
-def dict_and_choices(data):
-    data_dict = {item.key: item for item in data}
-    data_choices = [(ctype.key, ctype.key) for ctype in data]
-    return data_dict, data_choices
-
-CHARACTERISTIC_DTYPE = {item.key : item.dtype for item in CHARACTERISTIC_DATA}
-CHARACTERISTIC_CATEGORIES = set([item.key for item in CHARACTERISTIC_DATA])
-CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
-CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
-INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
-
-
 if __name__ == "__main__":
-    pass
+    """ 
+    Just run this module to have simple check if all units are working and definitions are correct.
+    """
+
+    unit = NormalizableUnit({
+        "1/min": "1/h",
+        "1/h": None,
+    })
+    print("valid 1/min:", unit.is_valid_unit("1/min"))
+    print("valid mg:", unit.is_valid_unit("mg"))
+
+
+

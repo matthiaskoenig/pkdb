@@ -3,10 +3,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import FORMAT_MAPPING
+from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.utils import recursive_iter, set_keys
-from pkdb_app.utils import validate_categorials
 from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristica, DataFile, Individual, \
     CharacteristicaEx, GroupEx
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
@@ -66,10 +65,15 @@ class CharacteristicaSerializer(WrongKeyValidationSerializer):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
-    def validate(self,attr):
-        validate_categorials(attr, "characteristica")
-        return super().validate(attr)
+    def validate(self, attr):
+        try:
+            # perform via dedicated function on categorials
+            validate_categorials(attr)
+        except ValueError as err:
+            raise serializers.ValidationError(err)
 
+        # validate_categorials(attr, "characteristica")
+        return super().validate(attr)
 
 
 # ----------------------------------
