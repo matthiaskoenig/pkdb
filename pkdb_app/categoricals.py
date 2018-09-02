@@ -20,8 +20,8 @@ from pkdb_app.substances import SUBSTANCES_DATA
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0, ]
 
-CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices", "units"])
-PharmacokineticsType = namedtuple("PharmacokineticsType", ["value", "units", "description"])
+CharacteristicType = namedtuple("CharacteristicType", ["key", "category", "dtype", "choices", "units"])
+PharmacokineticsType = namedtuple("PharmacokineticsType", ["key", "description", "units"])
 
 
 def create_choices(collection):
@@ -49,8 +49,12 @@ YES = "Y"
 NO = 'N'
 MIX = "Mixed"
 NAN = "NaN"
-BOOLEAN_CHOICES = [YES, NO, MIX,NAN]
+BOOLEAN_CHOICES = [YES, NO, MIX, NAN]
 
+
+# ---------------------------------------------------
+# Interventions
+# ---------------------------------------------------
 INTERVENTION_ROUTE = [
     "oral",
     "iv",
@@ -71,6 +75,52 @@ INTERVENTION_FORM = [
 ]
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
+
+# ---------------------------------------------------
+# CharacteristicTypes
+# ---------------------------------------------------
+
+INCLUSION_CRITERIA = "inclusion"
+EXCLUSION_CRITERIA = "exclusion"
+GROUP_CRITERIA = "group"
+CHARACTERISTICA_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
+CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
+
+
+# ---------------------------------------------------
+# File formats
+# ---------------------------------------------------
+FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
+
+FORMAT_MAPPING = {"TSV": FileFormat("TSV", '\t'),
+                  "CSV": FileFormat("CSV", ",")}
+
+# ---------------------------------------------------
+# Study design
+# ---------------------------------------------------
+STUDY_DESIGN_DATA = [
+    "single group",     # (interventional study)
+    "parallel group",   # (interventional study)
+    "crossover",        # (interventional study)
+    "cohort",           # (oberservational study)
+    "case control",     # (oberservational study)
+]
+STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
+
+
+# ---------------------------------------------------
+# Keywords
+# ---------------------------------------------------
+KEYWORDS_DATA = [
+    "glycolysis",
+    "gluconeogenesis",
+    "oxidative phosphorylation",
+]
+KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
+
+# ---------------------------------------------------
+# Characteristics
+# ---------------------------------------------------
 # categories
 SPECIES = "species"
 DEMOGRAPHICS = "demographics"
@@ -84,151 +134,283 @@ HEMATOLOGY_DATA = "hematology data"
 GENETIC_VARIANTS = "genetic variants"
 
 
-INCLUSION_CRITERIA = "inclusion"
-EXCLUSION_CRITERIA = "exclusion"
-GROUP_CRITERIA = "group"
-CHARACTERISTICA_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
-CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
+dimensionless_norm_unit = NormalizableUnit({
+    "-": None,
+})
 
-
-FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
-
-FORMAT_MAPPING = {"TSV": FileFormat("TSV", '\t'),
-                  "CSV": FileFormat("CSV", ",")}
-
-STUDY_DESIGN_DATA = [
-    "single group",     # (interventional study)
-    "parallel group",   # (interventional study)
-    "crossover",        # (interventional study)
-    "cohort",           # (oberservational study)
-    "case control",     # (oberservational study)
-]
-STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
-
-
-
-KEYWORDS_DATA = [
-    "glycolysis",
-    "gluconeogenesis",
-    "oxidative phosphorylation",
-]
-KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
+organweight_norm_unit = NormalizableUnit({
+    "kg": "g",
+    "g": None,
+})
+amountyear_unit = NormalizableUnit({
+    "yr": None,
+})
+amountperday_unit = NormalizableUnit({
+    "1/day": None,
+})
 
 
 # TODO: define the units for the characteristic types
 CHARACTERISTIC_DATA = [
     # -------------- Species --------------
-    CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["homo sapiens"], ["-"]),
+    CharacteristicType('species', SPECIES, CATEGORIAL_TYPE, ["homo sapiens"],
+                       dimensionless_norm_unit),
 
     # -------------- Anthropometry --------------
-    CharacteristicType('height', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm", 'm']),
-    CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
-    CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg/m^2"]),
-    CharacteristicType('waist circumference', ANTHROPOMETRY, NUMERIC_TYPE, None, ["cm"]),
-    CharacteristicType('lean body mass', ANTHROPOMETRY, NUMERIC_TYPE, None, ["kg"]),
-    CharacteristicType('percent fat', ANTHROPOMETRY, NUMERIC_TYPE, None, ["%"]),
+    CharacteristicType('height', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"cm": "m", "m": None})),
+    CharacteristicType('weight', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"kg": None})),
+    CharacteristicType('bmi', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"kg/m^2": None})),
+    CharacteristicType('waist circumference', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"cm": None})),
+    CharacteristicType('lean body mass', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"kg": None})),
+    CharacteristicType('percent fat', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"%": None})),
 
     # -------------- Demography --------------
-    CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], ["-"]),
-    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, ["african", "afroamerican", "asian", "caucasian", NAN], ["-"]),
+    CharacteristicType('age', DEMOGRAPHICS, NUMERIC_TYPE, None,
+                       NormalizableUnit({"yr": None})),
+    CharacteristicType('sex', DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN],
+                       dimensionless_norm_unit),
+    CharacteristicType('ethnicity', DEMOGRAPHICS, CATEGORIAL_TYPE, [
+                            NAN,
+                            "african",
+                            "afroamerican",
+                            "asian",
+                            "caucasian",
+                       ],
+                       dimensionless_norm_unit),
 
     # -------------- Physiology --------------
-    CharacteristicType('blood pressure', PHYSIOLOGY, NUMERIC_TYPE, None, ["mmHg"]),
-    CharacteristicType('heart rate', PHYSIOLOGY, NUMERIC_TYPE, None, ["1/s"]),
+    CharacteristicType('blood pressure', PHYSIOLOGY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"mmHg": None})),
+    CharacteristicType('heart rate', PHYSIOLOGY, NUMERIC_TYPE, None,
+                       NormalizableUnit({"1/s": None})),
 
     # -------------- Organ weights --------------
-    CharacteristicType('liver weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
-    CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None, ["g", "kg"]),
+    CharacteristicType('liver weight', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       organweight_norm_unit),
+    CharacteristicType('kidney weight', ANTHROPOMETRY, NUMERIC_TYPE, None,
+                       organweight_norm_unit),
 
     # -------------- Patient status --------------
-    CharacteristicType('overnight fast', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('fasted', PATIENT_STATUS, NUMERIC_TYPE, None, ["h"]),
-    CharacteristicType('healthy', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('disease', PATIENT_STATUS, CATEGORIAL_TYPE, [NAN, "cirrhosis", "plasmodium falciparum",
-                                                               "alcoholic liver cirrhosis", "cirrhotic liver disease", "PBC",
-                                                               "miscellaneous liver disease", "schizophrenia"], ["-"]),
+    CharacteristicType('overnight fast', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('fasted', PATIENT_STATUS, NUMERIC_TYPE, None,
+                       NormalizableUnit({"h": None})),
+    CharacteristicType('healthy', PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('disease', PATIENT_STATUS, CATEGORIAL_TYPE, [
+                            NAN,
+                            "cirrhosis",
+                            "plasmodium falciparum",
+                            "alcoholic liver cirrhosis",
+                            "cirrhotic liver disease",
+                            "PBC",
+                            "miscellaneous liver disease",
+                            "schizophrenia"
+                        ],
+                        dimensionless_norm_unit),
 
     # -------------- Medication --------------
-    CharacteristicType('medication', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, ["ibuprofen", "paracetamol", "aspirin", "clozapine", "carbon monoxide"], ["-"]),
-    CharacteristicType('medication amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('medication', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, [
+                            "aspirin",
+                            "carbon monoxide"
+                            "clozapine",
+                            "ibuprofen",
+                            "paracetamol",
+                        ],
+                        dimensionless_norm_unit),
+    CharacteristicType('medication amount', MEDICATION, NUMERIC_TYPE, None,
+                       dimensionless_norm_unit),
 
-    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    # CharacteristicType('oral contraceptives amount', MEDICATION, NUMERIC_TYPE, None, ["-"]),
+    CharacteristicType('oral contraceptives', MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
 
-    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE, SUBSTANCES_DATA+["alcohol", "smoking", "grapefruit juice"],
-                       ["year", "week", "day", "h"]),
+    CharacteristicType('abstinence', 'study protocol', CATEGORIAL_TYPE,
+                       SUBSTANCES_DATA + [
+                            "alcohol",
+                            "smoking",
+                            "grapefruit juice"
+                       ],
+                       NormalizableUnit({"yr": None, "week": None, "day": None, "h": None})),
 
     # -------------- Caffeine --------------
-    CharacteristicType('caffeine', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('caffeine amount', LIFESTYLE, NUMERIC_TYPE, None, ["mg/day"]),
-    CharacteristicType('caffeine amount (beverages)', LIFESTYLE, NUMERIC_TYPE, None, ["1/day"]),
+    CharacteristicType('caffeine', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('caffeine amount', LIFESTYLE, NUMERIC_TYPE, None,
+                       NormalizableUnit({'mg/day': None})),
+    CharacteristicType('caffeine amount (beverages)', LIFESTYLE, NUMERIC_TYPE, None,
+                       amountperday_unit),
 
     # -------------- Smoking --------------
-    CharacteristicType('smoking', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('smoking amount (cigarettes)', LIFESTYLE, NUMERIC_TYPE, None, ["1/day"]),
-    CharacteristicType('smoking amount (packyears)', LIFESTYLE, NUMERIC_TYPE, None, ["yr"]),
-    CharacteristicType('smoking duration (years)', LIFESTYLE, NUMERIC_TYPE, None, ["yr"]),
+    CharacteristicType('smoking', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('smoking amount (cigarettes)', LIFESTYLE, NUMERIC_TYPE, None,
+                       amountperday_unit),
+    CharacteristicType('smoking amount (packyears)', LIFESTYLE, NUMERIC_TYPE, None,
+                       amountyear_unit),
+    CharacteristicType('smoking duration (years)', LIFESTYLE, NUMERIC_TYPE, None,
+                       amountyear_unit),
 
     # -------------- Alcohol --------------
-    CharacteristicType('alcohol', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
-    CharacteristicType('alcohol amount', LIFESTYLE, NUMERIC_TYPE, None, ["-"]),
-    CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES, ["-"]),
+    CharacteristicType('alcohol', LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
+    CharacteristicType('alcohol amount', LIFESTYLE, NUMERIC_TYPE, None,
+                       dimensionless_norm_unit),
+    CharacteristicType('alcohol abstinence', 'study protocol', BOOLEAN_TYPE, BOOLEAN_CHOICES,
+                       dimensionless_norm_unit),
 
     # -------------- Biochemical data --------------
-    CharacteristicType('ALT', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
-    CharacteristicType('AST', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["IU/I"]),
-    CharacteristicType('albumin', BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ["g/dl"]),
-
+    CharacteristicType('ALT', BIOCHEMICAL_DATA, NUMERIC_TYPE, None,
+                       NormalizableUnit({'IU/I': None})),
+    CharacteristicType('AST', BIOCHEMICAL_DATA, NUMERIC_TYPE, None,
+                       NormalizableUnit({'IU/I': None})),
+    CharacteristicType('albumin', BIOCHEMICAL_DATA, NUMERIC_TYPE, None,
+                       NormalizableUnit({"g/dl": None})),
 
     # --------------Genetic variants --------------
-    CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, ["CYP2D6 duplication", "CYP2D6 wild type",
-                                                                       "CYP2D6 poor metabolizer"], ["-"]),
+    CharacteristicType('genetics', GENETIC_VARIANTS, CATEGORIAL_TYPE, [
+                        "CYP2D6 duplication",
+                        "CYP2D6 wild type",
+                        "CYP2D6 poor metabolizer"
+                        ],
+                       dimensionless_norm_unit),
 ]
 
-# TODO: define the units for the pk data
-PK_DATA = [
 
-    # Area under the curve, extrapolated until infinity
-    PharmacokineticsType("auc_inf", 
-                         NormalizableUnit({"mg*h/l": None, }, 
-                                          ""))
-
-
+# ---------------------------------------------------
+# Pharmacokinetics data
+# ---------------------------------------------------
+auc_norm_unit =  NormalizableUnit({
     "mg*h/l": None,
-              "µg*h/ml": "mg*h/l"
-"µg/ml*h": None,  # -> mg*h/l
-"mg*min/l": None,  # -> mg*h/l
-"µg*min/ml": None,
-"µmol*h/l": None,  # -> mg*h/l (with molar weight)
-"µmol/l*h": None,  # -> mg*h/l (with molar weight)
-"µg/ml*h/kg": None,  # -> mg*h/l/kg
-    
-    
-    
-    
-    "auc_end",  # Area under the curve, until end time point (time has to be given as time attribute)
+    "µg*h/ml": "mg*h/l",
+    "µg/ml*h": "mg*h/l",
+    "mg*min/l": "mg*h/l",
+    "µg*min/ml": None,
+    "µmol*h/l": None,
+    "µmol/l*h": None,
+    "µg/ml*h/kg": "mg*h/l/kg",
+})
+amount_norm_unit = NormalizableUnit({
+    "mg": None,
+    "mmol": None,
+})
+concentration_norm_unit = NormalizableUnit({
+    "µg/ml": None,
+    'mg/dl': None,
+    "mg/l": None,
+    'g/dl': None,
+    "ng/ml": None,
+    "µmol/l": None,
+    "nmol/l": None,
+    "mmol/l": None,
+})
+ratio_norm_unit = NormalizableUnit({
+    "-": None,
+    '%': '-',
+})
+clearance_norm_unit = NormalizableUnit({
+    "ml/min": None,
+    "ml/h": None,  # -> ml/min
+    "l/h/kg": None,
+    "ml/h/kg": None,  # -> l/h/kg
+    "ml/min/kg": None,  # -> l/h/kg
+    "ml/min/1.73m^2": None,
+})
+vd_norm_unit = NormalizableUnit({
+    "l": None,
+    "ml": 'l',
+    'l/kg': None,
+    'ml/kg': 'l/kg',
+})
+time_norm_unit = NormalizableUnit({
+    "h": None,
+    "min": 'h',
+})
+rate_norm_unit = NormalizableUnit({
+    "1/min": "1/h",
+    "1/h": None,
+})
 
-    "amount",
-    "cum_amount",  # cumulative amount
-    "concentration",
-    "ratio",
 
-    "clearance",
-    "clearance_renal",
-    "clearance_unbound",
-    "vd",  # Volume of distribution
-    "thalf",  # half-life
-    "tmax",  # time of maximum
-    "cmax",  # maximum concentration
+PK_DATA = [
+    PharmacokineticsType("auc_inf",
+                         "Area under the curve (AUC), extrapolated until infinity.",
+                         auc_norm_unit),
 
-    "kel",  # elimination rate (often beta)
-    "kabs",  # absorption rate
-    "fraction_absorbed",  # "often also absolute bioavailability
-    "plasma_binding",
+    PharmacokineticsType("auc_end",
+                         "Area under the curve (AUC), until last time point. Time period is required for calculation.",
+                         auc_norm_unit),
 
-    "recovery",
+    PharmacokineticsType("amount",
+                         "Amount of given substance.",
+                         amount_norm_unit),
+
+    PharmacokineticsType("cum_amount",
+                         "Cummulative amount of given substance. Time period is required for calculation.",
+                         amount_norm_unit),
+
+    PharmacokineticsType("concentration",
+                         "Concentration of given substance.",
+                         concentration_norm_unit),
+
+    PharmacokineticsType("ratio",
+                         "Ratio between substances.",
+                         ratio_norm_unit),
+
+    PharmacokineticsType("clearance",
+                         "Clearance of given substance.",
+                         clearance_norm_unit),
+
+    PharmacokineticsType("clearance_renal",
+                         "Renal clearance of given substance.",
+                         clearance_norm_unit),
+
+    PharmacokineticsType("clearance_unbound",
+                         "Clearance of unbound substance.",
+                         clearance_norm_unit),
+
+    PharmacokineticsType("vd",
+                         "Volume of distribution.",
+                         vd_norm_unit),
+
+    PharmacokineticsType("thalf",
+                         "Half-life for given substance.",
+                         time_norm_unit),
+
+    PharmacokineticsType("tmax",
+                         "Time of maximum for given substance.",
+                         time_norm_unit),
+
+    PharmacokineticsType("cmax",
+                         "Maximum concentration for given substance.",
+                         concentration_norm_unit),
+
+    PharmacokineticsType("kel",
+                         "Elimination rate for given substance.",
+                         rate_norm_unit),
+
+    PharmacokineticsType("kabs",
+                         "Absorption rate for given substance.",
+                         rate_norm_unit),
+
+    PharmacokineticsType("fraction_absorbed",
+                         "Fraction absorbed of given substance.",
+                         ratio_norm_unit),
+
+    PharmacokineticsType("plasma_binding",
+                         "Fraction absorbed of given substance.",
+                         ratio_norm_unit),
+
+    PharmacokineticsType("revovery",
+                         "Fraction recovered of given substance.",
+                         ratio_norm_unit),
 ]
 PK_DATA_CHOICES = create_choices(PK_DATA)
 
@@ -256,12 +438,16 @@ INTERVENTION_DATA = [
 ]
 
 def dict_and_choices(data):
-    data_dict = {item.value: item for item in data}
-    data_choices = [(ctype.value, ctype.value) for ctype in data]
+    data_dict = {item.key: item for item in data}
+    data_choices = [(ctype.key, ctype.key) for ctype in data]
     return data_dict, data_choices
 
-CHARACTERISTIC_DTYPE = {item.value : item.dtype for item in CHARACTERISTIC_DATA}
-CHARACTERISTIC_CATEGORIES = set([item.value for item in CHARACTERISTIC_DATA])
+CHARACTERISTIC_DTYPE = {item.key : item.dtype for item in CHARACTERISTIC_DATA}
+CHARACTERISTIC_CATEGORIES = set([item.key for item in CHARACTERISTIC_DATA])
 CHARACTERISTIC_CATEGORIES_UNDERSCORE = set([c.replace(' ', '_') for c in CHARACTERISTIC_CATEGORIES])
 CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DATA)
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
+
+
+if __name__ == "__main__":
+    pass
