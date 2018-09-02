@@ -68,4 +68,4 @@ vue-bootstrap’s current roster of components includes most of the interactive 
 
 # FontAwesome
 https://fontawesome.com/how-to-use/on-the-web/using-with/vuejs
-https://stackoverflow.com/questions/41537212/use-font-awesome-in-a-vue-app-created-with-vue-cli-webpack
+https://blog.logrocket.com/full-guide-to-using-font-awesome-icons-in-vue-js-apps-5574c74d9b2d
