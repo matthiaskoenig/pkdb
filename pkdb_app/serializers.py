@@ -487,12 +487,13 @@ class ExSerializer(MappingSerializer):
 
     def _validate_time_unit(self, data):
         time = data.get("time")
+        time_unit = data.get("time_unit")
+
+        # if there is no data it is of class 'NoneType'
         if time:
             self._is_required(data, "time_unit")
-        else:
-            raise serializers.ValidationError({"pktype": f"time_unit is required if time is provided", "detail": data})
-
-
+            if not time_unit:
+                raise serializers.ValidationError({"pktype": f"time_unit is required if time is provided", "detail": data})
 
     @staticmethod
     def ex_mapping():
