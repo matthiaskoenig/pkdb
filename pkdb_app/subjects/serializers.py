@@ -68,7 +68,7 @@ class CharacteristicaSerializer(WrongKeyValidationSerializer):
     def validate(self, attr):
         try:
             # perform via dedicated function on categorials
-            validate_categorials(attr)
+            validate_categorials(data=attr, category_class="characteristica")
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -305,7 +305,7 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = GroupSet
-        fields = ["pk", "study","descriptions","groups"]
+        fields = ["pk", "study", "descriptions", "groups"]
 
 
 class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -315,7 +315,7 @@ class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = IndividualSet
-        fields = ["pk","study","descriptions", "individuals"]
+        fields = ["pk", "study", "descriptions", "individuals"]
 
 
 class GroupReadSerializer(serializers.HyperlinkedModelSerializer):

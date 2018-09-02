@@ -306,7 +306,7 @@ INTERVENTION_DATA = [
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
 
-def validate_categorials(data):
+def validate_categorials(data, category_class):
     """ Function which validates given categorial data against categorial defintion and allowed values.
 
     :param data:
@@ -315,17 +315,26 @@ def validate_categorials(data):
     """
     category = data.get("category", None)
 
+    print(category)
+
     if category:
-        if category == "characteristica":
-            model_categorical = CHARACTERISTIC_DICT
-        elif category == "intervention":
-            model_categorical = INTERVENTION_DICT
+        if category_class == "characteristica":
+            characteristic_dict = CHARACTERISTIC_DICT
+        elif category_class == "interventions":
+            characteristic_dict = INTERVENTION_DICT
         else:
-            raise ValueError(f"category not supported: {category}")
+            raise ValueError(f"category_class not supported: {category}")
 
         choice = data.get("choice", None)
         unit = data.get("unit", None)
 
+        # check that allowed category
+        if category not in characteristic_dict:
+            msg = f"category <{category}> is not supported for {category_class}"
+            raise ValueError({"category": msg})
+
+        # get the allowed definition
+        model_categorical = characteristic_dict[category]
         if choice:
             if (model_categorical.dtype == CATEGORIAL_TYPE) or (model_categorical.dtype == BOOLEAN_TYPE):
                 if choice not in model_categorical.choices:
@@ -337,7 +346,7 @@ def validate_categorials(data):
             # FIXME: this must also happen in the 'to_internal_value' for choices, not only in validation
             unit = "-"  # handle no unit as dimensionless
             if not model_categorical.units.is_valid_unit(unit):
-                msg = f"{unit} is not allowed but unit is required. For {model_categorical.value} allowed units are {model_categorical.units}"
+                msg = f"{unit} is not allowed but unit is required. For {model_categorical.key} allowed units are {model_categorical.units}"
                 raise ValueError({"unit": msg})
     return data
 
