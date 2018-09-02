@@ -1,6 +1,7 @@
 """
 Serializers for interventions.
 """
+import pandas as pd
 
 import numpy as np
 from rest_framework import serializers
@@ -154,6 +155,7 @@ class OutputSerializer(ExSerializer):
 
         data =  self.retransform_map_fields(data)
         data =  self.to_internal_related_fields(data)
+        group = data.get("group")
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -228,6 +230,8 @@ class TimecourseSerializer(BaseOutputExSerializer):
         data.pop("comments",None)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
+
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
