@@ -15,7 +15,7 @@ import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faP
     faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets
 } from '@fortawesome/free-solid-svg-icons'
 
-import { faGithub, faGithubAlt, faGit } from '@fortawesome/free-brands-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
 
 
