@@ -38,7 +38,9 @@ UNITS = {
     'm': 'meter',
     'kg': 'kilogram',
     "mg": 'milligram',
+    "g": 'gram',
     "mmHg": None,
+    "mmol": None,
     "µmol": None,
 
     # reverse time units
@@ -59,10 +61,12 @@ UNITS = {
     "µg/ml": None,
     'mg/dl': None,
     "mg/l": None,
-    "µmol/l": None,
-    "nmol/l": None,
     'g/dl': None,
     "ng/ml": None,
+
+    "mmol/l": None,
+    "µmol/l": None,
+    "nmol/l": None,
 
     # AUC
     "mg*h/l": None,
@@ -72,10 +76,13 @@ UNITS = {
     "µg*min/ml": None,
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
+
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
+    "mg*h/l/kg": None,
 
     # Volume of distribution (vd)
     "l": None,
+    "ml": None,
     'l/kg': None,
     'ml/kg': None,  # -> l/kg
 
@@ -105,6 +112,10 @@ TIME_UNITS_CHOICES = [(key, key) for key in TIME_UNITS]
 class UnitConversion(object):
     """ Defines conversion between two units with conversion factor.
         Some conversions require molecular weights
+
+        Multiplier is applied as
+            target = source * multiplier
+
     """
     def __init__(self, source, target, multiplier):
         self.source = source
@@ -113,8 +124,15 @@ class UnitConversion(object):
 
 
 UNIT_CONVERSIONS = [
+
+    UnitConversion('kg', target='g', multiplier=1000),
+    UnitConversion('cm', target='m', multiplier=1E-2),
+    UnitConversion('ml', target='l', multiplier=1E-3),
+    UnitConversion('min', target='h', multiplier=1.0/60),
+    UnitConversion('1/min', target='1/h', multiplier=60),
+
     # Concentrations
-    UnitConversion('mg/dl', target='µg/ml', multiplier="?"),
+    UnitConversion('mg/dl', target='µg/ml', multiplier="?"),  # FIXME
     UnitConversion('mg/l', target='µg/ml', multiplier=1.0),
     UnitConversion('g/dl', target='µg/dl', multiplier=1.0E6),
     UnitConversion('ng/ml', target='µg/ml', multiplier=1.0E-3),
@@ -135,12 +153,15 @@ UNIT_CONVERSIONS = [
     UnitConversion('ml/kg/min', target='l/h/kg', multiplier=1.0E-3/60),
     UnitConversion('ml/min', target='ml/h', multiplier=1.0/60),
 
+    # ratio
+    UnitConversion('%', target='-', multiplier=1.0/100.0),
+
     # "µmol/l": None,  # -> µg/ml (with molar weight)
     # "nmol/l": None,  # -> µg/ml (with molar weight)
     # "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     # "µmol/l*h": None,  # -> mg*h/l (with molar weight)
 ]
-UNIT_CONVERSIONS_DICT = {f'{item.source}->{item.target}': item for item in UNIT_CONVERSIONS}
+UNIT_CONVERSIONS_DICT = {f'[{item.source}] -> [{item.target}]': item for item in UNIT_CONVERSIONS}
 
 
 class NormalizableUnit(object):
@@ -152,6 +173,9 @@ class NormalizableUnit(object):
     - conversion factors for the normalization
     """
     def __init__(self, from_to_dict):
+        if not isinstance(from_to_dict, dict):
+            raise ValueError(f'NormalizableUnit requires <dict>, not {type(from_to_dict)}: {from_to_dict}')
+
         self.from_to_dict = from_to_dict
         self.validate()
 
@@ -165,12 +189,13 @@ class NormalizableUnit(object):
             if source not in UNITS:
                 raise ValueError(f'source unit <{source}> not in UNITS: {self.from_to_dict}')
 
-            if (target is not None) and (target not in UNITS):
-                raise ValueError(f'target unit <{target}> not in UNITS: {self.from_to_dict}')
+            # check that conversion is supported
+            if target is not None:
+                if target not in UNITS:
+                    raise ValueError(f'target unit <{target}> not in UNITS: {self.from_to_dict}')
 
-            # check that unit conversion is defined
-            conversion = UNIT_CONVERSIONS_DICT.get(f'{source}->{target}: {self.from_to_dict}')
-            if not conversion:
-                raise ValueError(f'conversion <[{source}] -> [{target}]> is not defined: {self.from_to_dict}')
-
-
+                # check that unit conversion is defined
+                conversion_key = f'[{source}] -> [{target}]'
+                conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+                if not conversion:
+                    raise ValueError(f'conversion <{conversion_key}> is not defined: {self.from_to_dict}')
