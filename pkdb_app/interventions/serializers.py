@@ -105,7 +105,7 @@ class InterventionExSerializer(ExSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            validate_categorials(attrs)
+            validate_categorials(data=attrs, category_class="intervention")
         except ValueError as err:
             raise serializers.ValidationError(err)
 
