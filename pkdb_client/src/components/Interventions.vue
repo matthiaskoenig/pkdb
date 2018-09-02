@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-1" />
             <div class="col-10" >
@@ -14,14 +14,48 @@
             <table v-if="count" class="table table-responsive table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>sid</th>
+                    <th>pk</th>
+                    <th>name</th>
                     <th>category</th>
+                    <th>choice</th>
+                    <th>route</th>
+                    <th>form</th>
+                    <th>application</th>
+                    <th>substance</th>
+                    <th>time</th>
+                    <th>time unit</th>
+                    <th>unit</th>
+                    <th>value</th>
+                    <th>mean</th>
+                    <th>median</th>
+                    <th>min</th>
+                    <th>max</th>
+                    <th>sd</th>
+                    <th>se</th>
+                    <th>cv</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(intervention, index) in entries" :key="index">
-                    <td>{{ intervention.sid }}</td>
-                    <td>{{ intervention.category }}</td>
+                <tr v-for="(entry, index) in entries" :key="index">
+                    <td>{{ entry.pk }}</td>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.category }}</td>
+                    <td>{{ entry.choice }}</td>
+                    <td>{{ entry.route }}</td>
+                    <td>{{ entry.application }}</td>
+                    <td>{{ entry.tissue }}</td>
+                    <td><a v-if="entry.substance" :href="entry.substance" :title="entry.substance"><font-awesome-icon icon="tablets" /></a></td>
+                    <td>{{ entry.time }}</td>
+                    <td>{{ entry.time_unit }}</td>
+                    <td>{{ entry.unit }}</td>
+                    <td>{{ entry.value }}</td>
+                    <td>{{ entry.mean }}</td>
+                    <td>{{ entry.median }}</td>
+                    <td>{{ entry.min }}</td>
+                    <td>{{ entry.max }}</td>
+                    <td>{{ entry.sd }}</td>
+                    <td>{{ entry.se }}</td>
+                    <td>{{ entry.cv }}</td>
                 </tr>
                 </tbody>
             </table>

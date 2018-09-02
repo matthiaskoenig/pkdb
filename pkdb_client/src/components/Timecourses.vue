@@ -25,6 +25,7 @@
                     <th>time</th>
                     <th>time unit</th>
                     <th>unit</th>
+                    <th>value</th>
                     <th>mean</th>
                     <th>median</th>
                     <th>min</th>
@@ -45,10 +46,11 @@
                         </span>
                     </td>
                     <td>{{ entry.tissue }}</td>
-                    <td><a v-if="entry.substance" :href="entry.individual" :title="entry.substance"><font-awesome-icon icon="tablets" /></a></td>
+                    <td><a v-if="entry.substance" :href="entry.substance" :title="entry.substance"><font-awesome-icon icon="tablets" /></a></td>
                     <td>{{ entry.time }}</td>
                     <td>{{ entry.time_unit }}</td>
                     <td>{{ entry.unit }}</td>
+                    <td>{{ entry.value }}</td>
                     <td>{{ entry.mean }}</td>
                     <td>{{ entry.median }}</td>
                     <td>{{ entry.min }}</td>
