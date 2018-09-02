@@ -27,6 +27,7 @@ OUTPUT_FIELDS = ["pktype", "tissue", "substance", "time", "time_unit"]
 
 OUTPUT_MAP_FIELDS = ["pktype_map", "tissue_map", "substance_map", "time_map", "time_unit_map"]
 
+
 # ----------------------------------
 # substance
 # ----------------------------------

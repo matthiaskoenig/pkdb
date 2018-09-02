@@ -15,6 +15,7 @@ from pkdb_app.utils import recursive_iter, set_keys
 ITEM_SEPARATOR = '||'
 ITEM_MAPPER = '=='
 
+
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
     # ----------------------------------
@@ -31,7 +32,6 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise serializers.ValidationError(msg)
 
-
     def get_or_val_error(self, model, *args, **kwargs):
         """ Checks if object exists or raised ValidationError."""
         try:
@@ -39,17 +39,12 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         except model.DoesNotExist:
             instance = None
         if not instance:
-            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY:"instance does not exist","detail":{**kwargs}})
+            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist",
+                                               "detail": {**kwargs}})
 
         return instance
 
-    # ----------------------------------
-    #
-    # ----------------------------------
-
-
     def to_internal_value(self, data):
-
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 

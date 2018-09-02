@@ -201,7 +201,7 @@ CHARACTERISTIC_DATA = [
                        dimensionless_norm_unit),
     CharacteristicType('medication type', MEDICATION, CATEGORIAL_TYPE, [
                             "aspirin",
-                            "carbon monoxide"
+                            "carbon monoxide",
                             "clozapine",
                             "ibuprofen",
                             "paracetamol",
