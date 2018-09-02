@@ -10,8 +10,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import ClientTable from 'vue-tables-2';
 
-Vue.use(BootstrapVue);
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
+    faFileMedicalAlt, faShareSquare} from '@fortawesome/free-solid-svg-icons'
+import {  } from '@fortawesome/free-regular-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faGithub, faProcedures, faFileMedical, faFileMedicalAlt, faShareSquare)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+
+Vue.use(BootstrapVue);
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
