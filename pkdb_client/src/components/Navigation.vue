@@ -3,7 +3,9 @@
 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
+            <router-link tag="span" to="/">
             <b-navbar-brand href="#">PK-DB</b-navbar-brand>
+            </router-link>
             <b-collapse is-nav id="nav_collapse">
 
                 <b-navbar-nav>
@@ -17,6 +19,10 @@
 
                 <b-navbar-nav class="ml-auto">
 
+
+                    <router-link tag="li" to="/about">
+                        <b-nav-item active href="#"><font-awesome-icon icon="info-circle" />&nbsp;About</b-nav-item>
+                    </router-link>
                     <b-nav-item active href="http://www.pk-db.com/api/" target="_blank"><font-awesome-icon icon="laptop-code" />&nbsp;API</b-nav-item>
                     <b-nav-item active href="http://www.github.com/matthiaskoenig/pkdb" target="_blank"><font-awesome-icon :icon="[ 'fab', 'github' ]" />&nbsp;Code</b-nav-item>
 
@@ -60,12 +66,6 @@
             return {
                 links: [
                     {
-                        id: 0,
-                        text: 'Home',
-                        page: '/',
-                        icon: ''
-                    },
-                    {
                         id: 1,
                         text: 'Studies',
                         page: '/studies',
@@ -106,12 +106,6 @@
                         text: 'References',
                         page:'/references',
                         icon: 'file-alt'
-                    },
-                    {
-                        id: 4,
-                        text: 'About',
-                        page:'/about',
-                        icon: 'info-circle'
                     },
 
                 ]
