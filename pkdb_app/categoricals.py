@@ -13,13 +13,15 @@ units on CharacteristicType is an ordered iteratable, with the first unit being 
 
 """
 from collections import namedtuple
-from pkdb_app.units import UNIT_DATA, UNITS_CHOICES
+from pkdb_app.units import NormalizableUnit
+
 from pkdb_app.substances import SUBSTANCES_DATA
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0, ]
 
 CharacteristicType = namedtuple("CharacteristicType", ["value", "category", "dtype", "choices", "units"])
+PharmacokineticsType = namedtuple("PharmacokineticsType", ["value", "units", "description"])
 
 
 def create_choices(collection):
@@ -187,7 +189,25 @@ CHARACTERISTIC_DATA = [
 
 # TODO: define the units for the pk data
 PK_DATA = [
-    "auc_inf",  # Area under the curve, extrapolated until infinity
+
+    # Area under the curve, extrapolated until infinity
+    PharmacokineticsType("auc_inf", 
+                         NormalizableUnit({"mg*h/l": None, }, 
+                                          ""))
+
+
+    "mg*h/l": None,
+              "µg*h/ml": "mg*h/l"
+"µg/ml*h": None,  # -> mg*h/l
+"mg*min/l": None,  # -> mg*h/l
+"µg*min/ml": None,
+"µmol*h/l": None,  # -> mg*h/l (with molar weight)
+"µmol/l*h": None,  # -> mg*h/l (with molar weight)
+"µg/ml*h/kg": None,  # -> mg*h/l/kg
+    
+    
+    
+    
     "auc_end",  # Area under the curve, until end time point (time has to be given as time attribute)
 
     "amount",
