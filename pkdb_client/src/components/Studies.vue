@@ -1,12 +1,12 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-1" />
             <div class="col-10" >
                 <h1><font-awesome-icon icon="file-alt" /> Studies <span v-if="count">({{ count }})</span></h1>
             </div>
             <div class="col-1" >
-                <a :href="api+'/statistics/?format=json'" title="JSON" target="_blank"><font-awesome-icon icon="code"/></a>
+                <a :href="resource_url" title="JSON" target="_blank"><font-awesome-icon icon="code"/></a>
             </div>
         </div>
         <div class="row">
