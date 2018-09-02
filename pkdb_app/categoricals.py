@@ -489,7 +489,7 @@ PK_DATA = [
                          "Fraction absorbed of given substance.",
                          ratio_norm_unit),
 
-    PharmacokineticsType("revovery",
+    PharmacokineticsType("recovery",
                          "Fraction recovered of given substance.",
                          ratio_norm_unit),
 ]
