@@ -1,9 +1,12 @@
+"""
+Generic utility functions.
+"""
 
 import os
-
 CHAR_MAX_LENGTH = 100
 
-def create_if_exists(src,src_key,dest,dest_key):
+
+def create_if_exists(src, src_key, dest, dest_key):
     if src_key in src.keys():
             dest[dest_key] = src[src_key]
     return dest
@@ -34,9 +37,10 @@ def update_or_create_multiple(parent,children,related_name):
             instance_cild =  getattr(parent,related_name)
             instance_cild.update_or_create(**child)
 
-def create_multiple(parent,children,related_name):
+
+def create_multiple(parent, children, related_name):
     for child in children:
-            instance_cild =  getattr(parent,related_name)
+            instance_cild = getattr(parent, related_name)
             instance_cild.create(**child)
 
 
