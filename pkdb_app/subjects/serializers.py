@@ -63,6 +63,7 @@ class CharacteristicaSerializer(WrongKeyValidationSerializer):
     def to_internal_value(self, data):
         data.pop("comments",None)
         self.validate_wrong_keys(data)
+
         return super().to_internal_value(data)
 
     def validate(self, attr):

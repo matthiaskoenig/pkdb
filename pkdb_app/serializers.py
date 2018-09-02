@@ -9,8 +9,10 @@ from rest_framework.settings import api_settings
 from django.forms.models import model_to_dict
 from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.interventions.models import  DataFile, Intervention
+from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
+from numbers import Number
 
 ITEM_SEPARATOR = '||'
 ITEM_MAPPER = '=='
@@ -270,16 +272,17 @@ class MappingSerializer(WrongKeyValidationSerializer):
     def entries_from_file(self, data):
         entries = []
         source = data.get("source")
-        if source:
-            template = copy.deepcopy(data)
-            # get data
-            template.pop("source")
-            template.pop("figure",None)
-            format = template.pop("format",None)
-            if format is None:
-                raise serializers.ValidationError({"format":"format is missing!"})
-            subset = template.pop("subset", None)
+        template = copy.deepcopy(data)
+        # get data
+        template.pop("source",None)
+        template.pop("figure", None)
+        format = template.pop("format", None)
+        subset = template.pop("subset", None)
 
+        if source:
+
+            if format is None:
+                raise serializers.ValidationError({"format": "format is missing!"})
             df = self.df_from_file(source, format, subset)
 
             for entry in df.itertuples():
@@ -307,8 +310,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                 entries.append(entry_dict)
 
+
         else:
-            entries.append(data)
+
+            entries.append(template)
 
         return entries
 
@@ -475,7 +480,8 @@ class ExSerializer(MappingSerializer):
         is_data = self._key_is(data, key)
         pktype = data.get("pktype")
         if not is_data:
-            raise serializers.ValidationError({key: f"{key} is required for 'pktype':'{pktype}'", "detail": data})
+            raise serializers.ValidationError({key: f"{key} is required", "detail": data})
+
 
     def _validate_pktype(self, data):
         pktype = data.get("pktype")
@@ -488,13 +494,52 @@ class ExSerializer(MappingSerializer):
 
     def _validate_time_unit(self, data):
         time = data.get("time")
-        time_unit = data.get("time_unit")
-
-        # if there is no data it is of class 'NoneType', test via `is time` not working !!!
-        if isinstance(time, str):
+        if time:
             self._is_required(data, "time_unit")
-            if not time_unit:
-                raise serializers.ValidationError({"pktype": f"time_unit is required if time is provided", "detail": data})
+
+    def _to_internal_se(self,data):
+        input_names = ["count","sd","mean","cv"]
+        se_input = {name:data.get(name) for name in input_names}
+        return get_se(**se_input)
+
+    def _to_internal_sd(self,data):
+        input_names = ["count","se","mean","cv"]
+        sd_input = {name:data.get(name) for name in input_names}
+        return get_sd(**sd_input)
+
+    def _to_internal_cv(self,data):
+        input_names = ["count","sd","mean","se"]
+        cv_input = {name:data.get(name) for name in input_names}
+        return get_cv(**cv_input)
+
+    def _add_statistic_values(self, data, count):
+
+        se = data.get("se")
+        sd = data.get("sd")
+        cv = data.get("cv")
+        mean = data.get("mean")
+        temp_data = {"se":se,"sd":sd,"cv":cv,"mean":mean,"count":count}
+        temp_data = pd.to_numeric(pd.Series(temp_data))
+
+        if not data.get("se"):
+            data["se"] = self._to_internal_se(temp_data)
+
+        if not data.get("sd"):
+            data["sd"] = self._to_internal_sd(temp_data)
+
+        if not data.get("cv"):
+            data["cv"] = self._to_internal_cv(temp_data)
+
+        return data
+    #def _add_statistic_arrays(self,data,count):
+    #    se = data.get("se")
+    #    sd = data.get("sd")
+    #    cv = data.get("cv")
+    #    mean = data.get("mean")
+    #   temp_data = {"se": se, "sd": sd, "cv": cv, "mean": mean, "count": count}
+    #    temp_data = pd.to_numeric(pd.DataFrame(temp_data))
+    #    for da
+
 
     @staticmethod
     def ex_mapping():
