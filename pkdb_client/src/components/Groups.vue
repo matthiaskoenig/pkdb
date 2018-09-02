@@ -14,14 +14,21 @@
             <table v-if="count" class="table table-responsive table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>sid</th>
-                    <th>category</th>
+                    <th>pk</th>
+                    <th>name</th>
+                    <th>count</th>
+                    <th>characteristica</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(group, index) in entries" :key="index">
-                    <td>{{ group.sid }}</td>
-                    <td>{{ group.name }}</td>
+                <tr v-for="(entry, index) in entries" :key="index">
+                    <td>{{ entry.pk }}</td>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.count }}</td>
+                    <td><span v-for="(c, index2) in entry.characteristica_all" :key="index2">
+                        <a :href="c" :title="c"><font-awesome-icon icon="cube" /></a>
+                        </span>
+                    </td>
                 </tr>
                 </tbody>
             </table>

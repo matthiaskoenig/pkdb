@@ -42,7 +42,7 @@
                     <td><a v-if="entry.group" :href="entry.group" :title="entry.group"><font-awesome-icon icon="users" /></a></td>
                     <td><a v-if="entry.individual" :href="entry.individual" :title="entry.individual"><font-awesome-icon icon="user" /></a></td>
                     <td><span v-for="(intervention, index2) in entry.interventions" :key="index2">
-                        <a :href="intervention" :title="intervention"><font-awesome-icon icon="capsules" /></a><br />
+                        <a :href="intervention" :title="intervention"><font-awesome-icon icon="capsules" /></a>
                         </span>
                     </td>
                     <td>{{ entry.tissue }}</td>
