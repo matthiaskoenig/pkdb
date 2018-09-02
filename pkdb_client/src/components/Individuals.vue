@@ -22,12 +22,11 @@
                 </thead>
                 <tbody>
                 <tr v-for="(entry, index) in entries" :key="index">
-                    <td>{{ entry.pk }}</td>
+                    <td><font-awesome-icon icon="user" /> {{ entry.pk }}</td>
                     <td>{{ entry.name }}</td>
                     <td><a v-if="entry.group" :href="entry.group" :title="entry.group"><font-awesome-icon icon="users" /></a></td>
                     <td><span v-for="(c, index2) in entry.characteristica" :key="index2">
-                        <a :href="c" :title="c"><font-awesome-icon icon="cube" /></a>
-                        </span>
+                        <a :href="c" :title="c"><font-awesome-icon icon="cube" /></a>&nbsp;</span>
                     </td>
                 </tr>
                 </tbody>
