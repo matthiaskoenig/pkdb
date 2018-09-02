@@ -36,13 +36,12 @@
                 </thead>
                 <tbody>
                 <tr v-for="(entry, index) in entries" :key="index">
-                    <td>{{ entry.pk }}</td>
+                    <td><font-awesome-icon icon="chart-bar" /> {{ entry.pk }}</td>
                     <td>{{ entry.pktype }}</td>
                     <td><a v-if="entry.group" :href="entry.group" :title="entry.group"><font-awesome-icon icon="users" /></a></td>
                     <td><a v-if="entry.individual" :href="entry.individual" :title="entry.individual"><font-awesome-icon icon="user" /></a></td>
                     <td><span v-for="(intervention, index2) in entry.interventions" :key="index2">
-                        <a :href="intervention" :title="intervention"><font-awesome-icon icon="capsules" /></a><br />
-                        </span>
+                        <a :href="intervention" :title="intervention"><font-awesome-icon icon="capsules" /></a>&nbsp;</span>
                     </td>
                     <td>{{ entry.tissue }}</td>
                     <td><a v-if="entry.substance" :href="entry.substance" :title="entry.substance"><font-awesome-icon icon="tablets" /></a></td>

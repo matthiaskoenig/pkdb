@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(entry, index) in entries" :key="index">
-                    <td>{{ entry.pk }}</td>
+                    <td><font-awesome-icon icon="capsules" /> {{ entry.pk }}</td>
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.category }}</td>
                     <td>{{ entry.choice }}</td>

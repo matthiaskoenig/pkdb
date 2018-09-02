@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(reference, index) in references" :key="index">
-                    <td>{{ reference.sid }}</td>
+                    <td><font-awesome-icon icon="file-alt" /> {{ reference.sid }}</td>
                     <td><a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" target="_blank">{{ reference.pmid }}</a></td>
                     <td>{{ reference.name }}</td>
                     <td>{{ reference.title }}</td>

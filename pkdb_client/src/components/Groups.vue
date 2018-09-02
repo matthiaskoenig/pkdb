@@ -22,12 +22,12 @@
                 </thead>
                 <tbody>
                 <tr v-for="(entry, index) in entries" :key="index">
-                    <td>{{ entry.pk }}</td>
+                    <td><font-awesome-icon icon="users" /> {{ entry.pk }}</td>
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.count }}</td>
-                    <td><span v-for="(c, index2) in entry.characteristica_all" :key="index2">
-                        <a :href="c" :title="c"><font-awesome-icon icon="cube" /></a>
-                        </span>
+                    <td>
+                        <span v-for="(c, index2) in entry.characteristica_all" :key="index2">
+                        <a :href="c" :title="c"><font-awesome-icon icon="cube" /></a>&nbsp;</span>
                     </td>
                 </tr>
                 </tbody>
