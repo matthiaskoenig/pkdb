@@ -8,6 +8,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputExManager, \
     TimecourseExManager, InterventionExManager,  OutputManager
+from pkdb_app.normalization import get_cv, get_se, get_sd
 from ..behaviours import Valueable, ValueableMap, Externable, CHAR_MAX_LENGTH_LONG
 from ..categoricals import INTERVENTION_CHOICES, \
     INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
@@ -16,7 +17,7 @@ from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES
 from ..substances import SUBSTANCES_DATA_CHOICES
 from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
 from ..utils import CHAR_MAX_LENGTH
-
+import numpy as np
 
 # -------------------------------------------------
 # Substance
@@ -176,6 +177,8 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     objects = OutputExManager()
 
 
+
+
 class Output(Valueable, AbstractOutput):
 
     """ Storage of data sets. """
@@ -188,6 +191,16 @@ class Output(Valueable, AbstractOutput):
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
 
     objects = OutputManager()
+
+    def save(self, *args, **kwargs):
+        if self.group:
+            if not self.sd:
+                self.sd = get_sd(se=self.se, count = self.group.count, mean=self.mean, cv=self.cv)
+            if not self.se:
+                self.se = get_se(sd=self.sd, count = self.group.count, mean=self.mean, cv=self.cv)
+            if not self.cv:
+                self.cv = get_cv(se=self.se, count = self.group.count, mean=self.mean, sd=self.sd)
+        super().save(*args, **kwargs)
 
 
 class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
@@ -242,3 +255,20 @@ class Timecourse(AbstractOutput):
     time = ArrayField(models.FloatField(null=True, blank=True), null=True,blank=True)
 
     objects = OutputManager()
+
+    def save(self, *args, **kwargs):
+
+        if self.group:
+            if not self.sd:
+                sd = get_sd(se=self.se, count=self.group.count, mean=self.mean, cv=self.cv)
+                if isinstance(sd,np.ndarray):
+                    self.sd = list(sd)
+            if not self.se:
+                se = get_se(sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv)
+                if isinstance(se,np.ndarray):
+                    self.se = list(se)
+            if not self.cv:
+                cv = get_cv(se=self.se, count=self.group.count, mean=self.mean, sd=self.sd)
+                if isinstance(cv,np.ndarray):
+                    self.cv = list(cv)
+            super().save(*args, **kwargs)

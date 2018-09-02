@@ -7,6 +7,7 @@ From the data structure this has to be handled very similar.
 """
 from django.db import models
 
+from pkdb_app.normalization import get_sd, get_se, get_cv
 from pkdb_app.storage import OverwriteStorage
 from ..behaviours import Valueable, ValueableMap, Externable
 from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
@@ -257,3 +258,15 @@ class Characteristica(AbstractCharacteristica, Valueable, models.Model):
     """ Characteristic. """
     group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, related_name="characteristica", null=True, blank=True, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        if not self.sd:
+            self.sd = get_sd(se=self.se, count = self.count, mean=self.mean, cv=self.cv)
+
+        if not self.se:
+            self.se = get_se(sd=self.sd, count = self.count, mean=self.mean, cv=self.cv)
+
+        if not self.cv:
+            self.cv = get_cv(se=self.se, count = self.count, mean=self.mean, sd=self.sd)
+
+        super().save(*args, **kwargs)
