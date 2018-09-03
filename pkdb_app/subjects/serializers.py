@@ -410,11 +410,14 @@ class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="descriptions_read-detail"
     )
+    comments = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="comments_read-detail"
+    )
 
 
     class Meta:
         model = IndividualSet
-        fields = ["pk", "study", "descriptions", "individual_exs","individuals"]
+        fields = ["pk", "study", "descriptions","comments", "individual_exs","individuals"]
 
 
 class GroupReadSerializer(serializers.HyperlinkedModelSerializer):

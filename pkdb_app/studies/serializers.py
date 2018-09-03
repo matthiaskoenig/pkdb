@@ -358,13 +358,13 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
             "substances",
             "keywords",
             "descriptions",
+            "comments",
             "design",
             "individualset",
             "interventionset",
             "groupset",
             "outputset",
             "files",
-            "comments"
         )
 
 
