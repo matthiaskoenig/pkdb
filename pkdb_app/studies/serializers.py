@@ -235,6 +235,8 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     reference = serializers.HyperlinkedRelatedField(read_only=True, lookup_field='sid', view_name='references_read-detail')
 
     individualset = serializers.HyperlinkedRelatedField(read_only=True, view_name='individualsets_read-detail')
+    interventionset = serializers.HyperlinkedRelatedField(read_only=True, view_name='interventionsets_read-detail')
+
     groupset = serializers.HyperlinkedRelatedField(read_only=True, view_name='groupsets_read-detail')
     outputset = serializers.HyperlinkedRelatedField(read_only=True, view_name='outputsets_read-detail')
 
@@ -243,7 +245,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
-        fields = ('pk','sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'keywords', 'design', 'individualset','groupset','outputset','files')
+        fields = ('pk','sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances', 'keywords', 'design', 'individualset','interventionset','groupset','outputset','files')
 
 
 class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
