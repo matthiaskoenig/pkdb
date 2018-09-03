@@ -252,7 +252,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         delimiter = FORMAT_MAPPING[format].delimiter
         src = DataFile.objects.get(pk=source)
         try:
-            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False, na_values=['NA','NAN','na','nan',""])
+            df = pd.read_csv(src.file, delimiter=delimiter, keep_default_na=False, na_values=['NA','NAN','na','nan'])
 
         except Exception as e:
             raise serializers.ValidationError({"source": "cannot read csv", "detail": {"source": source,
