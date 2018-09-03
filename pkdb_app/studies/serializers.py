@@ -340,6 +340,10 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     files = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="datafiles_read-detail"
     )
+    comments = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="comments_read-detail"
+    )
+
 
     class Meta:
         model = Study
@@ -360,6 +364,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
             "groupset",
             "outputset",
             "files",
+            "comments"
         )
 
 

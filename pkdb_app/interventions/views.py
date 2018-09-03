@@ -7,7 +7,7 @@ from pkdb_app.interventions.models import (
     Intervention,
     Output,
     Timecourse,
-)
+    InterventionEx, OutputEx, TimecourseEx)
 from pkdb_app.interventions.serializers import (
     SubstanceSerializer,
     SubstanceReadSerializer,
@@ -16,7 +16,7 @@ from pkdb_app.interventions.serializers import (
     InterventionReadSerializer,
     OutputReadSerializer,
     TimecourseReadSerializer,
-)
+    InterventionExReadSerializer, OutputExReadSerializer, TimecourseExReadSerializer)
 from rest_framework.permissions import AllowAny, IsAdminUser
 
 
@@ -43,6 +43,12 @@ class InterventionReadViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
+class InterventionExReadViewSet(viewsets.ModelViewSet):
+    queryset = InterventionEx.objects.all()
+    serializer_class = InterventionExReadSerializer
+    permission_classes = (AllowAny,)
+
+
 class OutputSetReadViewSet(viewsets.ModelViewSet):
     queryset = OutputSet.objects.all()
     serializer_class = OutputSetReadSerializer
@@ -55,9 +61,21 @@ class OutputReadViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
+class OutputExReadViewSet(viewsets.ModelViewSet):
+    queryset = OutputEx.objects.all()
+    serializer_class = OutputExReadSerializer
+    permission_classes = (AllowAny,)
+
+
 class TimecourseReadViewSet(viewsets.ModelViewSet):
     queryset = Timecourse.objects.all()
     serializer_class = TimecourseReadSerializer
+    permission_classes = (AllowAny,)
+
+
+class TimecourseExReadViewSet(viewsets.ModelViewSet):
+    queryset = TimecourseEx.objects.all()
+    serializer_class = TimecourseExReadSerializer
     permission_classes = (AllowAny,)
 
 

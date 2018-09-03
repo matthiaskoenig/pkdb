@@ -10,7 +10,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
-from pkdb_app.comments.views import DescriptionReadViewSet
+from pkdb_app.comments.views import DescriptionReadViewSet, CommentReadViewSet
 
 """
 from rest_framework_swagger import renderers
@@ -31,7 +31,7 @@ from .subjects.views import (
     IndividualReadViewSet,
     GroupSetReadViewSet,
     IndividualSetReadViewSet,
-)
+    CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet)
 from .interventions.views import (
     SubstanceViewSet,
     SubstanceReadViewSet,
@@ -40,7 +40,7 @@ from .interventions.views import (
     InterventionReadViewSet,
     OutputReadViewSet,
     TimecourseReadViewSet,
-)
+    InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet)
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import (
     AuthorsViewSet,
@@ -99,16 +99,25 @@ router.register("keywords_read", KeywordReadViewSet, base_name="keywords_read")
 router.register(
     "descriptions_read", DescriptionReadViewSet, base_name="descriptions_read"
 )
-
+router.register(
+    "comments_read", CommentReadViewSet, base_name="comments_read"
+)
 
 router.register("groupsets_read", GroupSetReadViewSet, base_name="groupsets_read")
 router.register("groups_read", GroupReadViewSet, base_name="groups_read")
+router.register("groupexs_read", GroupExReadViewSet, base_name="groupexs_read")
+
 router.register(
     "individualsets_read", IndividualSetReadViewSet, base_name="individualsets_read"
 )
 router.register("individuals_read", IndividualReadViewSet, base_name="individuals_read")
+router.register("individualexs_read", IndividualExReadViewSet, base_name="individualexs_read")
+
 router.register(
     "characteristica_read", CharacteristicaReadViewSet, base_name="characteristica_read"
+)
+router.register(
+    "characteristicaex_read", CharacteristicaExReadViewSet, base_name="characteristicaex_read"
 )
 
 router.register(
@@ -119,10 +128,15 @@ router.register(
 router.register(
     "interventions_read", InterventionReadViewSet, base_name="interventions_read"
 )
-
+router.register(
+    "interventionexs_read", InterventionExReadViewSet, base_name="interventionexs_read"
+)
 router.register("outputset_read", OutputSetReadViewSet, base_name="outputsets_read")
 router.register("outputs_read", OutputReadViewSet, base_name="outputs_read")
+router.register("outputexs_read", OutputExReadViewSet, base_name="outputexs_read")
+
 router.register("timecourses_read", TimecourseReadViewSet, base_name="timecourses_read")
+router.register("timecourseexs_read", TimecourseExReadViewSet, base_name="timecourseexs_read")
 
 
 schema_view = get_swagger_view(title="PKDB API")
