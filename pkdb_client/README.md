@@ -17,8 +17,15 @@ https://cli.vuejs.org/
 # vue/cli > 3.0
 sudo npm install -g @vue/cli
 sudo npm install vue-router
-npm install axios --save 
+sudo npm install axios --save 
 sudo npm install bootstrap-vue bootstrap --save
+sudo npm install vue-tables-2
+
+sudo npm i --save @fortawesome/fontawesome-svg-core \
+  npm i --save @fortawesome/free-solid-svg-icons \
+  npm i --save @fortawesome/vue-fontawesome
+sudo npm i --save @fortawesome/free-regular-svg-icons
+sudo npm i --save @fortawesome/free-brands-svg-icons
 ```
 
 ## vue project
@@ -58,3 +65,7 @@ https://alligator.io/vuejs/using-bootstrap4/
 https://bootstrap-vue.js.org/docs/
 
 vue-bootstrap’s current roster of components includes most of the interactive Bootstrap 4 components: Alert, Badge, Breadcrumb, Button, Button group, Card, Collapse, Dropdown, The Usual Form Elements, Jumbotron, List group, Modal, Nav, Navbar, Pagination, Popover, Progress, Table and Tabs
+
+# FontAwesome
+https://fontawesome.com/how-to-use/on-the-web/using-with/vuejs
+https://blog.logrocket.com/full-guide-to-using-font-awesome-icons-in-vue-js-apps-5574c74d9b2d

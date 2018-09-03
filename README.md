@@ -1,4 +1,5 @@
-[![DOI](https://zenodo.org/badge/131752339.svg)](https://zenodo.org/badge/latestdoi/131752339)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1407035.svg)](https://doi.org/10.5281/zenodo.1407035)
+[![Build Status](https://travis-ci.org/matthiaskoenig/pkdb.svg?branch=develop)](https://travis-ci.org/matthiaskoenig/pkdb)
 
 # PKDB - Pharmacokinetics database
 
@@ -30,13 +31,13 @@ To build the dev server for local development:
 ```bash
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
-docker-compose up build
+docker-compose up --build
 ```
 To update an existing version use
 ```bash
 docker-compose down
 ./remove_migrations.sh
-docker-compose up build
+docker-compose up --build
 ```
 To run an existing version use
 ```bash

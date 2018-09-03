@@ -3,10 +3,9 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import FORMAT_MAPPING
+from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.utils import recursive_iter, set_keys
-from pkdb_app.utils import validate_categorials
 from .models import Group, GroupSet, IndividualEx, IndividualSet, Characteristica, DataFile, Individual, \
     CharacteristicaEx, GroupEx
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
@@ -28,6 +27,10 @@ class DataFileSerializer(WrongKeyValidationSerializer):
         fields = ["file","filetype","id"]
         extra_kwargs = {'id': {'allow_null': False}}
 
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 
 # ----------------------------------
 # Characteristica
@@ -40,8 +43,17 @@ class CharacteristicaExSerializer(MappingSerializer):
         model = CharacteristicaEx
         fields = CHARACTERISTISTA_FIELDS + CHARACTERISTISTA_MAP_FIELDS + VALUE_FIELDS + VALUE_MAP_FIELDS + ["comments"]
 
+    def validate(self, attrs):
+        self.validate_wrong_keys(attrs)
+        return super().validate(attrs)
 
-class CharacteristicaSerializer(serializers.ModelSerializer):
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
+
+
+class CharacteristicaSerializer(WrongKeyValidationSerializer):
     count = serializers.IntegerField(required=False)
 
     class Meta:
@@ -50,11 +62,18 @@ class CharacteristicaSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments",None)
+        self.validate_wrong_keys(data)
 
         return super().to_internal_value(data)
 
-    def validate(self,attr):
-        validate_categorials(attr, "characteristica")
+    def validate(self, attr):
+        try:
+            # perform via dedicated function on categorials
+            validate_categorials(data=attr, category_class="characteristica")
+        except ValueError as err:
+            raise serializers.ValidationError(err)
+
+        # validate_categorials(attr, "characteristica")
         return super().validate(attr)
 
 
@@ -74,6 +93,7 @@ class GroupSerializer(ExSerializer):
         data.pop("comments",None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -122,6 +142,7 @@ class GroupExSerializer(ExSerializer):
         # finished
         # ----------------------------------
 
+        self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
 
@@ -134,6 +155,11 @@ class GroupSetSerializer(ExSerializer):
         model = GroupSet
         fields = ["descriptions","group_exs","comments"]
 
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
 # ----------------------------------
 # Individual
 # ----------------------------------
@@ -168,6 +194,7 @@ class IndividualSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 
 
@@ -227,6 +254,7 @@ class IndividualExSerializer(ExSerializer):
 
         if "group" in data:
             data["group"] = self.group_to_internal_value(data.get("group"), study_sid)
+
         self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer,self).to_internal_value(data)
 
@@ -234,6 +262,7 @@ class IndividualExSerializer(ExSerializer):
         for characteristica in attrs:
             self._validate_individual_characteristica(characteristica)
         return attrs
+
 
     def to_representation(self, instance):
 
@@ -259,6 +288,12 @@ class IndividualSetSerializer(ExSerializer):
         fields = ["descriptions", "individual_exs", "comments"]
 
 
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        self.validate_wrong_keys(data)
+        return data
+
+
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
@@ -271,7 +306,7 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = GroupSet
-        fields = ["pk", "study","descriptions","groups"]
+        fields = ["pk", "study", "descriptions", "groups"]
 
 
 class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -281,7 +316,7 @@ class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = IndividualSet
-        fields = ["pk","study","descriptions", "individuals"]
+        fields = ["pk", "study", "descriptions", "individuals"]
 
 
 class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -302,11 +337,10 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
     individualset = serializers.HyperlinkedRelatedField(read_only=True, view_name="individualsets_read-detail")
     group = serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
     characteristica = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="characteristica_read-detail")
-    characteristica_all = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="characteristica_read-detail")
 
     class Meta:
         model = Individual
-        fields =["pk"] + ["individualset"] + ["name", "group", "characteristica","characteristica_all"]
+        fields =["pk"] + ["individualset"] + ["name", "group", "characteristica"]
 
 
 class CharacteristicaReadSerializer(serializers.HyperlinkedModelSerializer):

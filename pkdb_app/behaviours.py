@@ -5,7 +5,7 @@ Reusable behavior for models.
 from django.db import models
 
 from pkdb_app.utils import CHAR_MAX_LENGTH
-from .categoricals import UNITS_CHOICES
+from .units import UNITS_CHOICES
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
 
 

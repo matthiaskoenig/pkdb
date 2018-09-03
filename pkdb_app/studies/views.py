@@ -1,13 +1,17 @@
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny, IsAdminUser
-from .models import Author, Reference, Study
+from .models import Author, Reference, Study, Keyword
 from .serializers import AuthorSerializer, ReferenceSerializer, StudySerializer, StudyReadSerializer, \
-    ReferenceReadSerializer, AuthorReadSerializer
+    ReferenceReadSerializer, AuthorReadSerializer, KeywordSerializer, KeywordReadSerializer
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
+class KeywordViewSet(viewsets.ModelViewSet):
+    queryset = Keyword.objects.all()
+    serializer_class = KeywordSerializer
+    permission_classes = (AllowAny,)
 
 class AuthorsViewSet(viewsets.ModelViewSet):
 
@@ -100,5 +104,13 @@ class AuthorsReadViewSet(viewsets.ModelViewSet):
     serializer_class = AuthorReadSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
     filter_fields = ('first_name', 'last_name')
+    search_fields = filter_fields
+    permission_classes = (AllowAny,)
+
+class KeywordReadViewSet(viewsets.ModelViewSet):
+    queryset = Keyword.objects.all()
+    serializer_class = KeywordReadSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('name',)
     search_fields = filter_fields
     permission_classes = (AllowAny,)
