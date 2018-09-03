@@ -519,7 +519,7 @@ class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = InterventionSet
-        fields = ["pk", "study", "descriptions", "interventions", "intervention_exs","comments"]
+        fields = ["pk", "study", "descriptions","comments", "interventions", "intervention_exs"]
 
 class InterventionExReadSerializer(ExSerializer,serializers.HyperlinkedModelSerializer):
     interventionset = serializers.HyperlinkedRelatedField(
@@ -607,7 +607,7 @@ class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["pk", "study", "descriptions", "outputs","output_exs", "timecourses","timecourse_exs","comments"]
+        fields = ["pk", "study", "descriptions","comments", "outputs","output_exs", "timecourses","timecourse_exs"]
 
 
 class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
