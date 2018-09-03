@@ -87,6 +87,7 @@ class Study(Sidable, models.Model):
     outputset = models.OneToOneField(OutputSet, on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
 
+
     @property
     def individuals(self):
         return self.individualset.individual_exs.individuals.all()

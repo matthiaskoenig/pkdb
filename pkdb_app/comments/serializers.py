@@ -44,6 +44,16 @@ class CommentSerializer(WrongKeyValidationSerializer):
 # Read Serializer
 ###############################################################################################
 class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         fields = ["pk", "text"]
         model = Description
+
+
+class CommentReadSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="users_read-detail"
+    )
+    class Meta:
+        fields = ["pk", "text","user"]
+        model = Comment

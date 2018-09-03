@@ -7,7 +7,7 @@ from pkdb_app.subjects.models import (
     Group,
     GroupSet,
     IndividualSet,
-)
+    GroupEx, CharacteristicaEx, IndividualEx)
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
     DataFileReadSerializer,
@@ -16,7 +16,7 @@ from pkdb_app.subjects.serializers import (
     GroupReadSerializer,
     GroupSetReadSerializer,
     IndividualSetReadSerializer,
-)
+    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer)
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
@@ -39,6 +39,11 @@ class CharacteristicaReadViewSet(viewsets.ModelViewSet):
     serializer_class = CharacteristicaReadSerializer
     permission_classes = (AllowAny,)
 
+class CharacteristicaExReadViewSet(viewsets.ModelViewSet):
+
+    queryset = CharacteristicaEx.objects.all()
+    serializer_class = CharacteristicaExReadSerializer
+    permission_classes = (AllowAny,)
 
 class IndividualReadViewSet(viewsets.ModelViewSet):
 
@@ -46,6 +51,11 @@ class IndividualReadViewSet(viewsets.ModelViewSet):
     serializer_class = IndividualReadSerializer
     permission_classes = (AllowAny,)
 
+class IndividualExReadViewSet(viewsets.ModelViewSet):
+
+    queryset = IndividualEx.objects.all()
+    serializer_class = IndividualExReadSerializer
+    permission_classes = (AllowAny,)
 
 class GroupReadViewSet(viewsets.ModelViewSet):
 
@@ -53,6 +63,11 @@ class GroupReadViewSet(viewsets.ModelViewSet):
     serializer_class = GroupReadSerializer
     permission_classes = (AllowAny,)
 
+class GroupExReadViewSet(viewsets.ModelViewSet):
+
+    queryset = GroupEx.objects.all()
+    serializer_class = GroupExReadSerializer
+    permission_classes = (AllowAny,)
 
 class GroupSetReadViewSet(viewsets.ModelViewSet):
 
