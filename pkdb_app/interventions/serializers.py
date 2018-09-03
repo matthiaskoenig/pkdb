@@ -228,8 +228,7 @@ class OutputSerializer(ExSerializer):
         slug_field="name",
         queryset=Substance.objects.all(),
         read_only=False,
-        required=False,
-        allow_null=True,
+        required=True,
     )
 
     class Meta:
@@ -248,6 +247,8 @@ class OutputSerializer(ExSerializer):
         self._validate_individual_output(attrs)
         self._validate_pktype(attrs)
         self._validate_time_unit(attrs)
+        self._validate_requried_key(attrs,"substance")
+        self._validate_requried_key(attrs,"tissue")
         return super().validate(attrs)
 
 
@@ -338,21 +339,19 @@ class TimecourseSerializer(BaseOutputExSerializer):
         queryset=Individual.objects.all(),
         read_only=False,
         required=False,
-        allow_null=True,
+        allow_null=False,
     )
     interventions = serializers.PrimaryKeyRelatedField(
         queryset=Intervention.objects.all(),
         many=True,
         read_only=False,
         required=False,
-        allow_null=True,
     )
     substance = serializers.SlugRelatedField(
         slug_field="name",
         queryset=Substance.objects.all(),
         read_only=False,
-        required=False,
-        allow_null=True,
+        required=True,
     )
 
     class Meta:
@@ -371,7 +370,12 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_individual_output(attrs)
         self._validate_pktype(attrs)
         self._validate_time_unit(attrs)
+        self._validate_requried_key(attrs,"substance")
+        self._validate_requried_key(attrs,"tissue")
+
         return super().validate(attrs)
+
+
 
 
 class TimecourseExSerializer(BaseOutputExSerializer):

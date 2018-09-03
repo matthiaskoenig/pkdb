@@ -474,6 +474,11 @@ class ExSerializer(MappingSerializer):
     ##########################
     # helpers
     ##########################
+    def _validate_requried_key(self,attrs, key):
+        key_value = attrs.get(key)
+        if key_value is None:
+            raise serializers.ValidationError({key: f"{key} is required"})
+
     def _validate_disabled_data(self, data_dict, disabled):
         disabled = set(disabled)
         wrong_keys = disabled.intersection(set(data_dict.keys()))
