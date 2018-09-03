@@ -4,8 +4,10 @@ Studies serializers.
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
+from pkdb_app.comments.models import Description, Comment
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.subjects.models import GroupSet, IndividualSet
-from pkdb_app.utils import update_or_create_multiple
+from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
@@ -101,6 +103,9 @@ class StudySerializer(SidSerializer):
     creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False,allow_null=True)
     substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=True, many=True)
     keywords = serializers.SlugRelatedField(queryset=Keyword.objects.all(), slug_field='name',required=True, many=True)
+    descriptions = DescriptionSerializer(many=True, read_only=False, required=False, allow_null=True)
+    comments = CommentSerializer(many=True, read_only=False, required=False, allow_null=True)
+
 
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
@@ -109,8 +114,8 @@ class StudySerializer(SidSerializer):
 
     class Meta:
         model = Study
-        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances','keywords', 'design',
-                  'groupset', 'individualset', 'interventionset', 'outputset', 'files')
+        fields = ('sid', 'pkdb_version','name', 'reference', 'creator', 'curators', 'substances','descriptions','keywords', 'design',
+                  'groupset', 'individualset', 'interventionset', 'outputset', 'files', "comments")
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
@@ -178,7 +183,7 @@ class StudySerializer(SidSerializer):
         """
         related_foreinkeys = self.related_sets().copy()
         related_foreinkeys["reference"] = Reference
-        related_many2many = {"substances": Substance,"keywords": Keyword, "curators": User, "files": DataFile}
+        related_many2many = {"substances": Substance,"keywords": Keyword,"descriptions":Description,"comments":Comment, "curators": User, "files": DataFile}
         related_foreinkeys_dict = {name: validated_data.pop(name, None) for name in related_foreinkeys.keys()}
         related_many2many_dict = {name: validated_data.pop(name, []) for name in related_many2many.keys()}
         related = {**related_foreinkeys_dict, **related_many2many_dict}
@@ -202,6 +207,8 @@ class StudySerializer(SidSerializer):
                 setattr(study, name, instance)
             study.save()
 
+
+
         for curator in related["curators"]:
             study.curators.add(curator)
 
@@ -210,6 +217,9 @@ class StudySerializer(SidSerializer):
 
         for keyword in related["keywords"]:
             study.keywords.add(keyword)
+
+        create_multiple(study,related["descriptions"],"descriptions")
+        create_multiple(study,related["comments"],"comments")
 
         study.save()
 

@@ -23,10 +23,9 @@ import os
 import sys
 import json
 import requests
-from jsonschema import validate
 import logging
 import coloredlogs
-import argparse
+
 
 coloredlogs.install(
     level='INFO',
@@ -38,7 +37,8 @@ logger = logging.getLogger(__name__)
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
-from pkdb_app.data_management.schemas import reference_schema
+from pkdb_app.data_management.utils import recursive_iter, set_keys
+
 from pkdb_app.data_management.create_reference import run as create_reference
 from collections import namedtuple
 
@@ -177,35 +177,6 @@ def read_study_json(path):
 # Helpers
 # -------------------------------
 
-def recursive_iter(obj, keys=()):
-    """ Creates dictionary with key:object from nested JSON data structure. """
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            yield from recursive_iter(v, keys + (k,))
-    elif any(isinstance(obj, t) for t in (list, tuple)):
-        for idx, item in enumerate(obj):
-            yield from recursive_iter(item, keys + (idx,))
-
-        if len(obj) == 0:
-            yield keys, None
-
-    else:
-        yield keys, obj
-
-
-def set_keys(d, value, *keys):
-    """ Changes keys in nested dictionary. """
-    for key in keys[:-1]:
-        d = d[key]
-    d[keys[-1]] = value
-
-
-def remove_keys(d, value, *keys):
-    """ Changes keys in nested dictionary. """
-    for key in keys[:-1]:
-        d = d[key]
-    d[keys[-1]] = value
-
 
 def pop_comments(d, *keys):
     """ Pops comment in nested dictionary. """
@@ -254,8 +225,6 @@ def upload_files(file_path, api_url=API_URL):
 def upload_reference_json(json_reference, api_url=API_URL):
     """ Uploads reference JSON. """
     success = True
-    validate(json_reference["json"], reference_schema)
-
     # post
     response = requests.post(f'{api_url}/references/', json=json_reference["json"])
     if not response.status_code == 201:
@@ -320,16 +289,6 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     # post study core
     # ---------------------------
     study_core = copy.deepcopy(json_study)
-    #study_core = {}
-    #study_core["sid"] = json_study.get("sid")
-    #study_core["name"] = json_study.get("name")
-    #study_core["pkdb_version"] = json_study.get("pkdb_version")
-    #study_core["design"] = json_study.get("design")
-    #study_core["substances"] = json_study.get("substances",[])
-    #study_core["keywords"] = json_study.get("keywords", [])
-    #study_core["reference"] = json_study.get("reference")
-    #study_core["curators"] = json_study.get("curators",[])
-    #study_core["creator"] = json_study.get("creator")
     related_sets = ["groupset","interventionset","individualset","outputset"]
     [study_core.pop(this_set, None) for this_set in related_sets]
     study_core["files"] = list(file_dict.values())
@@ -390,11 +349,18 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
         return False
 
     study_dict = read_study_json(study_path)
+
+
     if not study_dict:
         logging.warning("`study.json` is empty.")
         return False
 
     study_json = study_dict.get("json", None)
+    # if you need to change anything in the study for all studies:
+    # if study_json.get("design") == "":
+    #    study_json["design"] = None
+    #    with open(study_path, 'w') as fp:
+    #        json.dump(study_json, fp, indent=4)
 
     # try to create missing reference.json
     reference_path = os.path.join(study_dir, "reference.json")
@@ -431,16 +397,6 @@ def fill_database(args):
     :param args: command line arguments
     :return:
     """
-
-    '''
-    global API_URL
-    # normalize path
-    url = os.path.abspath(args.url)
-    if not url:
-        # default development endpoint
-        url = "http://0.0.0.0:8000/api/v1"
-    API_URL = url
-    '''
 
     # core database setup
     setup_database(api_url=API_URL)
