@@ -386,7 +386,7 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
         for field in array_fields:
             array = getattr(instance, field, None)
             if array:
-                null_array = [None if np.isnan(value) else value for value in array]
+                null_array = [None if any([np.isnan(value), np.isinf(value),np.isneginf(value)]) else value for value in array]
                 setattr(instance, field, null_array)
         return super().to_representation(instance)
 
