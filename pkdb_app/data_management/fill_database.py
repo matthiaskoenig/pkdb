@@ -18,6 +18,7 @@ The upload expects a certain folder structure:
 
 Details about the JSON schema are given elsewhere (JSON schema and REST API).
 """
+import copy
 import os
 import sys
 import json
@@ -303,18 +304,20 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     # ---------------------------
     # post study core
     # ---------------------------
-    study_core = {}
-    study_core["sid"] = json_study.get("sid")
-    study_core["name"] = json_study.get("name")
-    study_core["pkdb_version"] = json_study.get("pkdb_version")
-    study_core["design"] = json_study.get("design")
-    study_core["substances"] = json_study.get("substances",[])
-    study_core["keywords"] = json_study.get("keywords", [])
-    study_core["reference"] = json_study.get("reference")
-    study_core["curators"] = json_study.get("curators",[])
-    study_core["creator"] = json_study.get("creator")
+    study_core = copy.deepcopy(json_study)
+    #study_core = {}
+    #study_core["sid"] = json_study.get("sid")
+    #study_core["name"] = json_study.get("name")
+    #study_core["pkdb_version"] = json_study.get("pkdb_version")
+    #study_core["design"] = json_study.get("design")
+    #study_core["substances"] = json_study.get("substances",[])
+    #study_core["keywords"] = json_study.get("keywords", [])
+    #study_core["reference"] = json_study.get("reference")
+    #study_core["curators"] = json_study.get("curators",[])
+    #study_core["creator"] = json_study.get("creator")
+    related_sets = ["groupset","interventionset","individualset","outputset"]
+    [study_core.pop(this_set, None) for this_set in related_sets]
     study_core["files"] = list(file_dict.values())
-
     response = requests.post(f'{API_URL}/studies/', json=study_core)
     success = check_json_response(response)
 
