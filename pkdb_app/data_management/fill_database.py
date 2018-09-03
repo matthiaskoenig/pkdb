@@ -52,8 +52,8 @@ if not os.path.exists(DATA_PATH):
     print("-" * 80)
     raise FileNotFoundError
 
-# API_URL = "http://0.0.0.0:8000/api/v1"
-API_URL = "http://www.pk-db.com/api/v1"
+API_URL = "http://0.0.0.0:8000/api/v1"
+# API_URL = "http://www.pk-db.com/api/v1"
 
 # -----------------------------
 # setup database
