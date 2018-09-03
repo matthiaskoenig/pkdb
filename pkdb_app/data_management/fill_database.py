@@ -28,14 +28,16 @@ import coloredlogs
 
 
 coloredlogs.install(
-    level='INFO',
+    level="INFO",
     fmt="%(module)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
     # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 
-BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
+BASEPATH = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
+)
 sys.path.append(BASEPATH)
 from pkdb_app.data_management.utils import recursive_iter, set_keys
 
@@ -65,10 +67,20 @@ if not PASSWORD:
     raise ValueError("Password could not be read, export the environment variable.")
 
 USERS = [
-    {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski", "email": "Janekg89@hotmail.de",
-     "password": PASSWORD},
-    {"username": "mkoenig", "first_name": "Matthias", "last_name": "König", "email": "konigmatt@googlemail.com",
-     "password": PASSWORD}
+    {
+        "username": "janekg",
+        "first_name": "Jan",
+        "last_name": "Grzegorzewski",
+        "email": "Janekg89@hotmail.de",
+        "password": PASSWORD,
+    },
+    {
+        "username": "mkoenig",
+        "first_name": "Matthias",
+        "last_name": "König",
+        "email": "konigmatt@googlemail.com",
+        "password": PASSWORD,
+    },
 ]
 
 
@@ -81,22 +93,21 @@ def setup_database(api_url):
     :return:
     """
     from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
+
     for substance in SUBSTANCES_DATA:
-        response = requests.post(f'{api_url}/substances/', json={"name": substance})
-        if not  response.status_code == 201:
+        response = requests.post(f"{api_url}/substances/", json={"name": substance})
+        if not response.status_code == 201:
             logging.warning(f"substance upload failed ")
 
-
     for keyword in KEYWORDS_DATA:
-        response = requests.post(f'{api_url}/keywords/', json={"name": keyword})
+        response = requests.post(f"{api_url}/keywords/", json={"name": keyword})
         if not response.status_code == 201:
             logging.warning(f"keyword upload failed ")
             logging.warning(response.text)
 
-
     for user in USERS:
-        response = requests.post(f'{api_url}/users/', json=user)
-        if not  response.status_code == 201:
+        response = requests.post(f"{api_url}/users/", json=user)
+        if not response.status_code == 201:
             logging.warning(f"user upload failed ")
 
 
@@ -135,9 +146,9 @@ def dict_raise_on_duplicates(ordered_pairs):
     d = {}
     for k, v in ordered_pairs:
         if k in d:
-           raise ValueError("duplicate key: %r" % (k,))
+            raise ValueError("duplicate key: %r" % (k,))
         else:
-           d[k] = v
+            d[k] = v
     return d
 
 
@@ -151,10 +162,10 @@ def _read_json(path):
         try:
             json_data = json.loads(f.read(), object_pairs_hook=dict_raise_on_duplicates)
         except json.decoder.JSONDecodeError as err:
-            logging.warning(f'{err}\nin {path}')
+            logging.warning(f"{err}\nin {path}")
             return
         except ValueError as err:
-            logging.warning(f'{err}\nin {path}')
+            logging.warning(f"{err}\nin {path}")
             return
 
     return json_data
@@ -169,8 +180,7 @@ def read_reference_json(d):
 
 
 def read_study_json(path):
-    return {"json": _read_json(path),
-            "study_path": path}
+    return {"json": _read_json(path), "study_path": path}
 
 
 # -------------------------------
@@ -201,18 +211,18 @@ def upload_files(file_path, api_url=API_URL):
     head, sid = os.path.split(file_path)
     study_dir = os.path.join(head, sid)
     for root, dirs, files in os.walk(study_dir, topdown=False):
-        #exclude files
-        files = set(files) - set(['reference.json', 'study.json', f'{sid}.pdf'])
-        #exclude files
-        forbidden_suffix = (".log",".xlsx#",".idea")
-        forbidden_prefix = (".lock")
+        # exclude files
+        files = set(files) - set(["reference.json", "study.json", f"{sid}.pdf"])
+        # exclude files
+        forbidden_suffix = (".log", ".xlsx#", ".idea")
+        forbidden_prefix = ".lock"
 
         files = [file for file in files if not file.endswith(forbidden_suffix)]
         files = [file for file in files if not file.startswith(forbidden_prefix)]
         for file in files:
             file_path = os.path.join(root, file)
-            with open(file_path, 'rb') as f:
-                response = requests.post(f'{api_url}/datafiles/', files={"file": f})
+            with open(file_path, "rb") as f:
+                response = requests.post(f"{api_url}/datafiles/", files={"file": f})
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -226,14 +236,16 @@ def upload_reference_json(json_reference, api_url=API_URL):
     """ Uploads reference JSON. """
     success = True
     # post
-    response = requests.post(f'{api_url}/references/', json=json_reference["json"])
+    response = requests.post(f"{api_url}/references/", json=json_reference["json"])
     if not response.status_code == 201:
         logging.info(json_reference["json"]["name"] + "\n" + response.text)
         success = False
 
     # patch
-    with open(json_reference["pdf"], 'rb') as f:
-        response = requests.patch(f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f})
+    with open(json_reference["pdf"], "rb") as f:
+        response = requests.patch(
+            f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f}
+        )
 
     if not response.status_code == 200:
         logging.info(json_reference["json"]["name"] + "\n" + response.text)
@@ -250,10 +262,12 @@ def check_json_response(response):
     """
     if response.status_code not in [200, 201]:
         try:
-            json_data = json.loads(response.text,  object_pairs_hook=dict_raise_on_duplicates)
+            json_data = json.loads(
+                response.text, object_pairs_hook=dict_raise_on_duplicates
+            )
 
             msg = json.dumps(json_data, sort_keys=True, indent=2)
-            logging.warning(f'\n{msg}')
+            logging.warning(f"\n{msg}")
 
         except json.decoder.JSONDecodeError as err:
             # something went wrong on the django serializer side
@@ -279,20 +293,19 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     file_dict = upload_files(study_dir)
 
     for keys, item in recursive_iter(json_study_dict):
-        if isinstance(item,str):
+        if isinstance(item, str):
             for file, file_pk in file_dict.items():
                 item = item.replace(file, str(file_pk))
             set_keys(json_study_dict, item, *keys)
-
 
     # ---------------------------
     # post study core
     # ---------------------------
     study_core = copy.deepcopy(json_study)
-    related_sets = ["groupset","interventionset","individualset","outputset"]
+    related_sets = ["groupset", "interventionset", "individualset", "outputset"]
     [study_core.pop(this_set, None) for this_set in related_sets]
     study_core["files"] = list(file_dict.values())
-    response = requests.post(f'{API_URL}/studies/', json=study_core)
+    response = requests.post(f"{API_URL}/studies/", json=study_core)
     success = check_json_response(response)
 
     # ---------------------------
@@ -306,25 +319,27 @@ def upload_study_json(json_study_dict, api_url=API_URL):
 
     # post
     sid = json_study["sid"]
-    response = requests.patch(f'{api_url}/studies/{sid}/', json=study_sets)
+    response = requests.patch(f"{api_url}/studies/{sid}/", json=study_sets)
     success = success and check_json_response(response)
 
     # is using group, has to be uploaded separately from the groupset
     if "individualset" in json_study.keys():
-        response = requests.patch(f'{api_url}/studies/{sid}/',
-                                  json={"individualset": json_study.get("individualset")})
+        response = requests.patch(
+            f"{api_url}/studies/{sid}/",
+            json={"individualset": json_study.get("individualset")},
+        )
 
         success = success and check_json_response(response)
 
-
     if "outputset" in json_study.keys():
-        response = requests.patch(f'{api_url}/studies/{sid}/',
-                                  json={"outputset": json_study.get("outputset")})
+        response = requests.patch(
+            f"{api_url}/studies/{sid}/", json={"outputset": json_study.get("outputset")}
+        )
         success = success and check_json_response(response)
 
     if success:
         # print access URL
-        logging.info(f'{API_URL}/studies/{sid}/')
+        logging.info(f"{API_URL}/studies/{sid}/")
 
     return success
 
@@ -349,7 +364,6 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
         return False
 
     study_dict = read_study_json(study_path)
-
 
     if not study_dict:
         logging.warning("`study.json` is empty.")
@@ -380,7 +394,9 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
     if os.path.exists(reference_path):
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
-            success_ref = upload_reference_json(read_reference_json(reference_dict), api_url)
+            success_ref = upload_reference_json(
+                read_reference_json(reference_dict), api_url
+            )
 
     # upload study.json
     success_study = upload_study_json(study_dict, api_url)
@@ -405,14 +421,14 @@ def fill_database(args):
         study_folder_path = os.path.dirname(study_path)
         study_name = os.path.basename(study_folder_path)
 
-        logging.info('-' * 80)
-        logging.info(f'Uploading [{study_name}]')
+        logging.info("-" * 80)
+        logging.info(f"Uploading [{study_name}]")
         upload_study_from_dir(study_folder_path)
 
     print("--- done ---")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     fill_database(None)
 
     # ----------------------------
@@ -425,4 +441,3 @@ if __name__ == '__main__':
     # args = parser.parse_args()
     # args.func(args)
     # ----------------------------
-

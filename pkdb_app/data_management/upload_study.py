@@ -10,9 +10,11 @@ import coloredlogs
 import logging
 
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='INFO')
+coloredlogs.install(level="INFO")
 
-BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
+BASEPATH = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
+)
 sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.fill_database import upload_study_from_dir
@@ -27,8 +29,12 @@ def run(args):
 
 def main():
     parser = argparse.ArgumentParser(description="Upload a study to PKDB")
-    parser.add_argument("-s", help="directory of study", dest="study", type=str, required=True)
-    parser.add_argument("-u", help="API url to upload", dest="url", type=str, required=False)
+    parser.add_argument(
+        "-s", help="directory of study", dest="study", type=str, required=True
+    )
+    parser.add_argument(
+        "-u", help="API url to upload", dest="url", type=str, required=False
+    )
     parser.add_argument("--r", help="create reference json", action="store_true")
 
     parser.set_defaults(func=run)

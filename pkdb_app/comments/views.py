@@ -12,6 +12,6 @@ class DescriptionReadViewSet(viewsets.ModelViewSet):
     queryset = Description.objects.all()
     serializer_class = DescriptionReadSerializer
     filter_backends = (filters.SearchFilter,)
-    filter_fields = ('text',)
+    filter_fields = ("text",)
     search_fields = filter_fields
     permission_classes = (AllowAny,)
