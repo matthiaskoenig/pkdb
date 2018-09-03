@@ -1,15 +1,73 @@
 <template>
-    <div>
-        <h1>Pharmacokinetics Database {{ version }}</h1>
-        <ul>
-            <li>References: {{ reference_count }}</li>
-            <li>Studies: {{ study_count }}</li>
-            <li>Groups: {{ group_count }}</li>
-            <li>Individuals: {{ individual_count }}</li>
-            <li>Interventions: {{ intervention_count }}</li>
-            <li>Outputs: {{ output_count }}</li>
-            <li>Timecourses: {{ timecourse_count }}</li>
-        </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-1" />
+            <div class="col-10" >
+            <h1>Pharmacokinetics Database {{ version }}</h1>
+            </div>
+            <div class="col-1" >
+                <a :href="api+'/statistics/?format=json'" title="JSON" target="_blank"><font-awesome-icon icon="code"/></a>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-3" />
+            <div class="col-6">
+                <table class="table">
+                <tbody>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/studies">
+                            <a href="#"><font-awesome-icon icon="procedures" /></a>
+                        </router-link>
+                    </td><td>Studies</td><td>{{study_count}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/groups">
+                            <a href="#"><font-awesome-icon icon="users" /></a>
+                        </router-link>
+                    </td><td>Groups</td><td>{{group_count}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/individuals">
+                            <a href="#"><font-awesome-icon icon="user" /></a>
+                        </router-link>
+                    </td><td>Individuals</td><td>{{individual_count}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/interventions">
+                            <a href="#"><font-awesome-icon icon="capsules" /></a>
+                        </router-link>
+                    </td><td>Interventions</td><td>{{intervention_count}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/outputs">
+                            <a href="#"><font-awesome-icon icon="chart-bar" /></a>
+                        </router-link>
+                    </td><td>Outputs</td><td>{{output_count}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/timecourses">
+                            <a href="#"><font-awesome-icon icon="chart-line" /></a>
+                        </router-link>
+                    </td><td>Timecourses</td><td>{{timecourse_count}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <router-link tag="span" to="/references">
+                            <a href="#"><font-awesome-icon icon="file-alt" /></a>
+                        </router-link>
+                        </td><td>References</td><td>{{reference_count}}</td>
+                </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 

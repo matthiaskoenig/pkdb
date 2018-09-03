@@ -76,9 +76,15 @@ class GroupManager(models.Manager):
                     ex = group_ex
             kwargs["parent"] = self.model.objects.get(name=kwargs.get("parent"), ex=ex)
 
+
+
         group = super().create(*args, **kwargs)
 
-        create_multiple(group, characteristica, "characteristica")
+        for characteristica_single in characteristica:
+            characteristica_single["count"] = characteristica_single.get("count", group.count)
+            group.characteristica.create(**characteristica_single)
+
+        #create_multiple(group, characteristica, "characteristica")
 
         group.save()
         return group

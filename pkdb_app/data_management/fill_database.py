@@ -25,6 +25,7 @@ import requests
 from jsonschema import validate
 import logging
 import coloredlogs
+import argparse
 
 coloredlogs.install(
     level='INFO',
@@ -41,12 +42,9 @@ from pkdb_app.data_management.create_reference import run as create_reference
 from collections import namedtuple
 
 
-
 # -----------------------------
 # master path
 # -----------------------------
-# DATA_PATH = os.path.join(BASEPATH, "data", "Master", "Studies")
-
 DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
 if not os.path.exists(DATA_PATH):
     print("-" * 80)
@@ -81,17 +79,24 @@ def setup_database(api_url):
 
     :return:
     """
-    from pkdb_app.categoricals import SUBSTANCES_DATA
+    from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
     for substance in SUBSTANCES_DATA:
         response = requests.post(f'{api_url}/substances/', json={"name": substance})
         if not  response.status_code == 201:
             logging.warning(f"substance upload failed ")
 
+
+    for keyword in KEYWORDS_DATA:
+        response = requests.post(f'{api_url}/keywords/', json={"name": keyword})
+        if not response.status_code == 201:
+            logging.warning(f"keyword upload failed ")
+            logging.warning(response.text)
+
+
     for user in USERS:
         response = requests.post(f'{api_url}/users/', json=user)
         if not  response.status_code == 201:
             logging.warning(f"user upload failed ")
-
 
 
 # -------------------------------
@@ -303,9 +308,10 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     study_core["name"] = json_study.get("name")
     study_core["pkdb_version"] = json_study.get("pkdb_version")
     study_core["design"] = json_study.get("design")
-    study_core["substances"] = json_study.get("substances")
+    study_core["substances"] = json_study.get("substances",[])
+    study_core["keywords"] = json_study.get("keywords", [])
     study_core["reference"] = json_study.get("reference")
-    study_core["curators"] = json_study.get("curators")
+    study_core["curators"] = json_study.get("curators",[])
     study_core["creator"] = json_study.get("creator")
     study_core["files"] = list(file_dict.values())
 
@@ -401,17 +407,27 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
     return {}
 
 
-if __name__ == '__main__':
+def fill_database(args):
+    """ Main function to fill database.
 
-    API_URL = "http://0.0.0.0:8000/api/v1"
-    # API_URL = "http://www.pk-db.com/api/v1"
+    :param args: command line arguments
+    :return:
+    """
 
+    '''
+    global API_URL
+    # normalize path
+    url = os.path.abspath(args.url)
+    if not url:
+        # default development endpoint
+        url = "http://0.0.0.0:8000/api/v1"
+    API_URL = url
+    '''
 
     # core database setup
     setup_database(api_url=API_URL)
 
-
-    for study_path in get_study_paths():
+    for study_path in sorted(get_study_paths()):
         study_folder_path = os.path.dirname(study_path)
         study_name = os.path.basename(study_folder_path)
 
@@ -419,5 +435,20 @@ if __name__ == '__main__':
         logging.info(f'Uploading [{study_name}]')
         upload_study_from_dir(study_folder_path)
 
-
     print("--- done ---")
+
+
+if __name__ == '__main__':
+    fill_database(None)
+
+    # ----------------------------
+    # python fill_database.py -u "http://www.pk-db.com/api/v1"
+    # python fill_database.py -u "http://0.0.0.0:8000/api/v1"
+
+    # parser = argparse.ArgumentParser(description="Watch a study directory for changes")
+    # parser.add_argument("-u", help="url to upload data to", dest="url", type=str, required=True)
+    # parser.set_defaults(func=fill_database)
+    # args = parser.parse_args()
+    # args.func(args)
+    # ----------------------------
+

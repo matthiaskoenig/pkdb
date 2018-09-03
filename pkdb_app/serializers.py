@@ -9,11 +9,14 @@ from rest_framework.settings import api_settings
 from django.forms.models import model_to_dict
 from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.interventions.models import  DataFile, Intervention
+from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
+from numbers import Number
 
 ITEM_SEPARATOR = '||'
 ITEM_MAPPER = '=='
+
 
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
@@ -31,7 +34,6 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
                 msg = {payload_key: f"<{payload_key}> is a wrong key"}
                 raise serializers.ValidationError(msg)
 
-
     def get_or_val_error(self, model, *args, **kwargs):
         """ Checks if object exists or raised ValidationError."""
         try:
@@ -39,17 +41,12 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         except model.DoesNotExist:
             instance = None
         if not instance:
-            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY:"instance does not exist","detail":{**kwargs}})
+            raise serializers.ValidationError({api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist",
+                                               "detail": {**kwargs}})
 
         return instance
 
-    # ----------------------------------
-    #
-    # ----------------------------------
-
-
     def to_internal_value(self, data):
-
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
@@ -275,16 +272,17 @@ class MappingSerializer(WrongKeyValidationSerializer):
     def entries_from_file(self, data):
         entries = []
         source = data.get("source")
-        if source:
-            template = copy.deepcopy(data)
-            # get data
-            template.pop("source")
-            template.pop("figure",None)
-            format = template.pop("format",None)
-            if format is None:
-                raise serializers.ValidationError({"format":"format is missing!"})
-            subset = template.pop("subset", None)
+        template = copy.deepcopy(data)
+        # get data
+        template.pop("source",None)
+        template.pop("figure", None)
+        format = template.pop("format", None)
+        subset = template.pop("subset", None)
 
+        if source:
+
+            if format is None:
+                raise serializers.ValidationError({"format": "format is missing!"})
             df = self.df_from_file(source, format, subset)
 
             for entry in df.itertuples():
@@ -312,8 +310,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                 entries.append(entry_dict)
 
+
         else:
-            entries.append(data)
+
+            entries.append(template)
 
         return entries
 
@@ -437,13 +437,13 @@ class ExSerializer(MappingSerializer):
     ##########################
     # helpers
     ##########################
-    def _validate_disabled_data(self, data_dict,disabled):
+    def _validate_disabled_data(self, data_dict, disabled):
         disabled = set(disabled)
         wrong_keys = disabled.intersection(set(data_dict.keys()))
         if wrong_keys:
             wrong_keys = self._retransform_map_list(wrong_keys)
             raise serializers.ValidationError({
-                api_settings.NON_FIELD_ERRORS_KEY: f"The following keys are not allowed<{wrong_keys}>, because of indivdual or group",
+                api_settings.NON_FIELD_ERRORS_KEY: f"The following keys are not allowed {wrong_keys} due to restricted keys on indivdual or group.",
                 "detail": data_dict})
 
     def _validate_individual_characteristica(self, data_dict):
@@ -461,24 +461,27 @@ class ExSerializer(MappingSerializer):
             disabled = ['value','value_map']
             self._validate_disabled_data(data, disabled)
 
-    def validate_group_individual_output(self,output):
+    def validate_group_individual_output(self, output):
         is_group = output.get("group") or output.get("group_map")
         is_individual = output.get("individual") or output.get("individual_map")
 
         if (is_individual and is_group):
             raise serializers.ValidationError({
-                api_settings.NON_FIELD_ERRORS_KEY: f"group and individual is not allowed"})
+                api_settings.NON_FIELD_ERRORS_KEY: f"Either group or individual allowed on output, remove group from output. "
+                                                   f"The group of an individual is set on the individualset"})
         elif not (is_individual or is_group):
             raise serializers.ValidationError({
-                api_settings.NON_FIELD_ERRORS_KEY: f"group or individual is required"})
+                api_settings.NON_FIELD_ERRORS_KEY: f"group or individual is required on output"})
 
     def _key_is(self, data, key):
         return data.get(key) or data.get(f"{key}_map")
 
     def _is_required(self, data, key):
-        is_data = self._key_is(data,key)
+        is_data = self._key_is(data, key)
+        pktype = data.get("pktype")
         if not is_data:
-            raise serializers.ValidationError({key: f"{key} is required for 'pktype':'auc_end'", "detail": data})
+            raise serializers.ValidationError({key: f"{key} is required", "detail": data})
+
 
     def _validate_pktype(self, data):
         pktype = data.get("pktype")
@@ -488,6 +491,54 @@ class ExSerializer(MappingSerializer):
                 self._is_required(data, "time_unit")
         else:
             raise serializers.ValidationError({"pktype": f"pktype is required", "detail": data})
+
+    def _validate_time_unit(self, data):
+        time = data.get("time")
+        if time:
+            self._is_required(data, "time_unit")
+
+    def _to_internal_se(self,data):
+        input_names = ["count","sd","mean","cv"]
+        se_input = {name:data.get(name) for name in input_names}
+        return get_se(**se_input)
+
+    def _to_internal_sd(self,data):
+        input_names = ["count","se","mean","cv"]
+        sd_input = {name:data.get(name) for name in input_names}
+        return get_sd(**sd_input)
+
+    def _to_internal_cv(self,data):
+        input_names = ["count","sd","mean","se"]
+        cv_input = {name:data.get(name) for name in input_names}
+        return get_cv(**cv_input)
+
+    def _add_statistic_values(self, data, count):
+
+        se = data.get("se")
+        sd = data.get("sd")
+        cv = data.get("cv")
+        mean = data.get("mean")
+        temp_data = {"se":se,"sd":sd,"cv":cv,"mean":mean,"count":count}
+        temp_data = pd.to_numeric(pd.Series(temp_data))
+
+        if not data.get("se"):
+            data["se"] = self._to_internal_se(temp_data)
+
+        if not data.get("sd"):
+            data["sd"] = self._to_internal_sd(temp_data)
+
+        if not data.get("cv"):
+            data["cv"] = self._to_internal_cv(temp_data)
+
+        return data
+    #def _add_statistic_arrays(self,data,count):
+    #    se = data.get("se")
+    #    sd = data.get("sd")
+    #    cv = data.get("cv")
+    #    mean = data.get("mean")
+    #   temp_data = {"se": se, "sd": sd, "cv": cv, "mean": mean, "count": count}
+    #    temp_data = pd.to_numeric(pd.DataFrame(temp_data))
+    #    for da
 
 
     @staticmethod
