@@ -99,8 +99,8 @@ class StudySerializer(SidSerializer):
     groupset = GroupSetSerializer(read_only=False, required=False,allow_null=True)
     curators = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', many=True,required=False,allow_null=True)
     creator = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username',required=False,allow_null=True)
-    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=False, many=True)
-    keywords = serializers.SlugRelatedField(queryset=Keyword.objects.all(), slug_field='name',required=False, many=True)
+    substances = serializers.SlugRelatedField(queryset=Substance.objects.all(), slug_field='name',required=True, many=True)
+    keywords = serializers.SlugRelatedField(queryset=Keyword.objects.all(), slug_field='name',required=True, many=True)
 
     interventionset = InterventionSetSerializer(read_only=False, required=False,allow_null=True)
     individualset = IndividualSetSerializer(read_only=False, required=False, allow_null=True)
