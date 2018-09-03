@@ -6,14 +6,31 @@ group or individual).
 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from pkdb_app.interventions.managers import InterventionSetManager, OutputSetManager, OutputExManager, \
-    TimecourseExManager, InterventionExManager,  OutputManager
+from pkdb_app.interventions.managers import (
+    InterventionSetManager,
+    OutputSetManager,
+    OutputExManager,
+    TimecourseExManager,
+    InterventionExManager,
+    OutputManager,
+)
 from pkdb_app.normalization import get_cv, get_se, get_sd
-from ..behaviours import Valueable, ValueableMap, Externable, CHAR_MAX_LENGTH_LONG, ValueableNotBlank, \
-    ValueableMapNotBlank
-from ..categoricals import INTERVENTION_CHOICES, \
-    INTERVENTION_ROUTE_CHOICES, INTERVENTION_FORM_CHOICES, INTERVENTION_APPLICATION_CHOICES, PK_DATA_CHOICES, \
-    OUTPUT_TISSUE_DATA_CHOICES
+from ..behaviours import (
+    Valueable,
+    ValueableMap,
+    Externable,
+    CHAR_MAX_LENGTH_LONG,
+    ValueableNotBlank,
+    ValueableMapNotBlank,
+)
+from ..categoricals import (
+    INTERVENTION_CHOICES,
+    INTERVENTION_ROUTE_CHOICES,
+    INTERVENTION_FORM_CHOICES,
+    INTERVENTION_APPLICATION_CHOICES,
+    PK_DATA_CHOICES,
+    OUTPUT_TISSUE_DATA_CHOICES,
+)
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES
 from ..substances import SUBSTANCES_DATA_CHOICES
 from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
@@ -29,6 +46,7 @@ class Substance(models.Model):
 
     Has to be extended via ontology (Ontologable)
     """
+
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES)
 
     # ontologies: has set of defined values: is, CHEBI:27732
@@ -50,14 +68,24 @@ class InterventionSet(models.Model):
 
 
 class AbstractIntervention(models.Model):
-    category = models.CharField(choices=INTERVENTION_CHOICES, max_length=CHAR_MAX_LENGTH)
+    category = models.CharField(
+        choices=INTERVENTION_CHOICES, max_length=CHAR_MAX_LENGTH
+    )
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
-    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
-    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
+    form = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES
+    )
+    application = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES
+    )
     time = models.FloatField(null=True)
-    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=TIME_UNITS_CHOICES)
+    time_unit = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, choices=TIME_UNITS_CHOICES
+    )
     substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES)
+    route = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES
+    )
 
     class Meta:
         abstract = True
@@ -91,21 +119,38 @@ class AbstractInterventionMap(models.Model):
         abstract = True
 
 
-class InterventionEx(Externable, ValueableNotBlank, ValueableMapNotBlank, AbstractIntervention, AbstractInterventionMap):
+class InterventionEx(
+    Externable,
+    ValueableNotBlank,
+    ValueableMapNotBlank,
+    AbstractIntervention,
+    AbstractInterventionMap,
+):
     """ Intervention (external curated layer)."""
-    source = models.ForeignKey(DataFile, related_name="s_intervention_exs", null=True,
-                               on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="f_intervention_exs", null=True,
-                               on_delete=models.SET_NULL)
 
-    interventionset = models.ForeignKey(InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE)
+    source = models.ForeignKey(
+        DataFile,
+        related_name="s_intervention_exs",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+    figure = models.ForeignKey(
+        DataFile,
+        related_name="f_intervention_exs",
+        null=True,
+        on_delete=models.SET_NULL,
+    )
+
+    interventionset = models.ForeignKey(
+        InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = InterventionExManager()
 
     class Meta:
-        unique_together = ('interventionset', 'name', 'name_map', 'source')
+        unique_together = ("interventionset", "name", "name_map", "source")
 
 
 class Intervention(ValueableNotBlank, AbstractIntervention):
@@ -114,7 +159,13 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
          In case of dosing/medication the actual dosing is stored in the Valueable.
          In case of a step without dosing, e.g., lifestyle intervention only the category is used.
       """
-    ex = models.ForeignKey(InterventionEx, related_name="interventions", null=True, on_delete=models.CASCADE)
+
+    ex = models.ForeignKey(
+        InterventionEx,
+        related_name="interventions",
+        null=True,
+        on_delete=models.CASCADE,
+    )
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     # TODO: unique together  unique_together = ('ex__interventionset', 'name')
@@ -140,10 +191,16 @@ class OutputSet(models.Model):
 class AbstractOutput(models.Model):
 
     substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
-    tissue = models.CharField(max_length=CHAR_MAX_LENGTH,choices=OUTPUT_TISSUE_DATA_CHOICES, null=True)
-    pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True)
+    tissue = models.CharField(
+        max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
+    )
+    pktype = models.CharField(
+        max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True
+    )
     time = models.FloatField(null=True)
-    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=TIME_UNITS_CHOICES)
+    time_unit = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, choices=TIME_UNITS_CHOICES
+    )
 
     class Meta:
         abstract = True
@@ -151,8 +208,8 @@ class AbstractOutput(models.Model):
 
 class AbstractOutputMap(models.Model):
 
-    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG,null=True)
-    tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH,null=True)
+    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -163,9 +220,15 @@ class AbstractOutputMap(models.Model):
 
 class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
 
-    source = models.ForeignKey(DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="f_output_exs", null=True, on_delete=models.SET_NULL)
-    outputset = models.ForeignKey(OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True)
+    source = models.ForeignKey(
+        DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
+    )
+    figure = models.ForeignKey(
+        DataFile, related_name="f_output_exs", null=True, on_delete=models.SET_NULL
+    )
+    outputset = models.ForeignKey(
+        OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
+    )
 
     group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
@@ -178,16 +241,16 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     objects = OutputExManager()
 
 
-
-
 class Output(ValueableNotBlank, AbstractOutput):
 
     """ Storage of data sets. """
+
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
+    individual = models.ForeignKey(
+        Individual, null=True, blank=True, on_delete=models.SET_NULL
+    )
     interventions = models.ManyToManyField(Intervention)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
-
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
 
@@ -196,15 +259,27 @@ class Output(ValueableNotBlank, AbstractOutput):
     def save(self, *args, **kwargs):
         if self.group:
             if not self.sd:
-                self.sd = get_sd(se=self.se, count = self.group.count, mean=self.mean, cv=self.cv)
+                self.sd = get_sd(
+                    se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
+                )
             if not self.se:
-                self.se = get_se(sd=self.sd, count = self.group.count, mean=self.mean, cv=self.cv)
+                self.se = get_se(
+                    sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
+                )
             if not self.cv:
-                self.cv = get_cv(se=self.se, count = self.group.count, mean=self.mean, sd=self.sd)
+                self.cv = get_cv(
+                    se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
+                )
         super().save(*args, **kwargs)
 
 
-class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, ValueableNotBlank, ValueableMapNotBlank):
+class TimecourseEx(
+    Externable,
+    AbstractOutput,
+    AbstractOutputMap,
+    ValueableNotBlank,
+    ValueableMapNotBlank,
+):
     """
     Don't split the mappings to csv for
     value
@@ -218,9 +293,15 @@ class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, ValueableNotBl
     time
     """
 
-    source = models.ForeignKey(DataFile, related_name="s_timecourse_exs", null=True,  on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="f_timecourse_exs", null=True,  on_delete=models.SET_NULL)
-    outputset = models.ForeignKey(OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True)
+    source = models.ForeignKey(
+        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
+    )
+    figure = models.ForeignKey(
+        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.SET_NULL
+    )
+    outputset = models.ForeignKey(
+        OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True
+    )
 
     group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
@@ -232,20 +313,25 @@ class TimecourseEx(Externable, AbstractOutput, AbstractOutputMap, ValueableNotBl
 
     objects = TimecourseExManager()
 
+
 # django-numpy
+
 
 class Timecourse(AbstractOutput):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
+
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
-    ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
+    ex = models.ForeignKey(
+        TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
+    )
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
 
-    value = ArrayField(models.FloatField(null=True),null=True)
+    value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
     median = ArrayField(models.FloatField(null=True), null=True)
     min = ArrayField(models.FloatField(null=True), null=True)
@@ -261,15 +347,21 @@ class Timecourse(AbstractOutput):
 
         if self.group:
             if not self.sd:
-                sd = get_sd(se=self.se, count=self.group.count, mean=self.mean, cv=self.cv)
-                if isinstance(sd,np.ndarray):
+                sd = get_sd(
+                    se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
+                )
+                if isinstance(sd, np.ndarray):
                     self.sd = list(sd)
             if not self.se:
-                se = get_se(sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv)
-                if isinstance(se,np.ndarray):
+                se = get_se(
+                    sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
+                )
+                if isinstance(se, np.ndarray):
                     self.se = list(se)
             if not self.cv:
-                cv = get_cv(se=self.se, count=self.group.count, mean=self.mean, sd=self.sd)
-                if isinstance(cv,np.ndarray):
+                cv = get_cv(
+                    se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
+                )
+                if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
             super().save(*args, **kwargs)

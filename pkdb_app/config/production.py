@@ -9,26 +9,26 @@ class Production(Common):
     DEBUG = False
 
     INSTALLED_APPS = Common.INSTALLED_APPS
-    POSTGRES_PASSWORD = os.getenv('PKDB_POSTGRES_PASSWORD')
+    POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
 
     # Postgres
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'pkdb',
-            'USER': 'pkdb_user',
-            'HOST': 'localhost',
-            'PASSWORD': POSTGRES_PASSWORD,
-            'PORT': 5432,
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "pkdb",
+            "USER": "pkdb_user",
+            "HOST": "localhost",
+            "PASSWORD": POSTGRES_PASSWORD,
+            "PORT": 5432,
         }
     }
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
     ALLOWED_HOSTS = ["*"]
-    INSTALLED_APPS += ("gunicorn", )
+    INSTALLED_APPS += ("gunicorn",)
 
-    '''
+    """
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/2.0/howto/static-files/
     # http://django-storages.readthedocs.org/en/latest/index.html
@@ -49,4 +49,4 @@ class Production(Common):
     AWS_HEADERS = {
         'Cache-Control': 'max-age=86400, s-maxage=86400, must-revalidate',
     }
-    '''
+    """

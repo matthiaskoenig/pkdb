@@ -13,7 +13,7 @@ def example1():
 
     :return:
     """
-    df = pd.read_csv('data_example1.csv', sep="\t", na_values="NA")
+    df = pd.read_csv("data_example1.csv", sep="\t", na_values="NA")
 
     # ------------------------------------------
     # Pharmacokinetic parameter for caffeine
@@ -37,8 +37,18 @@ def example1():
             print("c")
             print(c)
 
-            pk = pharmacokinetic.f_pk(t=t, c=c, compound=substance, dose=dose, bodyweight=bodyweight,
-                                      t_unit="h", c_unit="mg/L", dose_unit="mg", vd_unit="L", bodyweight_unit="kg")
+            pk = pharmacokinetic.f_pk(
+                t=t,
+                c=c,
+                compound=substance,
+                dose=dose,
+                bodyweight=bodyweight,
+                t_unit="h",
+                c_unit="mg/L",
+                dose_unit="mg",
+                vd_unit="L",
+                bodyweight_unit="kg",
+            )
 
             info = pharmacokinetic.pk_report(pk)
             print(info)
@@ -54,7 +64,7 @@ def example2():
 
     :return:
     """
-    df = pd.read_csv('data_example2.csv', sep="\t", na_values="NA")
+    df = pd.read_csv("data_example2.csv", sep="\t", na_values="NA")
 
     # ------------------------------------------
     # Pharmacokinetic parameter for caffeine
@@ -62,7 +72,12 @@ def example2():
     # get caffeine data
     bodyweight = 70  # [kg]
 
-    for (substance, dose_per_kg) in [["caffeine", 2], ["caffeine", 4], ["paraxanthine", 2], ["paraxanthine", 4]]:
+    for (substance, dose_per_kg) in [
+        ["caffeine", 2],
+        ["caffeine", 4],
+        ["paraxanthine", 2],
+        ["paraxanthine", 4],
+    ]:
         print("substance: {}, dose: {}".format(substance, dose_per_kg))
         data = df[(df.substance == substance) & (df.dose == dose_per_kg)]
 
@@ -79,8 +94,18 @@ def example2():
         print("c")
         print(c)
 
-        pk = pharmacokinetic.f_pk(t=t, c=c, compound=substance, dose=dose, bodyweight=bodyweight,
-                                  t_unit="h", c_unit="mg/L", dose_unit="mg", vd_unit="L", bodyweight_unit="kg")
+        pk = pharmacokinetic.f_pk(
+            t=t,
+            c=c,
+            compound=substance,
+            dose=dose,
+            bodyweight=bodyweight,
+            t_unit="h",
+            c_unit="mg/L",
+            dose_unit="mg",
+            vd_unit="L",
+            bodyweight_unit="kg",
+        )
 
         info = pharmacokinetic.pk_report(pk)
         print(info)

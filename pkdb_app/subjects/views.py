@@ -1,8 +1,22 @@
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
-from pkdb_app.subjects.models import DataFile, Characteristica, Individual, Group, GroupSet, IndividualSet
-from pkdb_app.subjects.serializers import DataFileSerializer, DataFileReadSerializer, CharacteristicaReadSerializer, \
-    IndividualReadSerializer, GroupReadSerializer, GroupSetReadSerializer, IndividualSetReadSerializer
+from pkdb_app.subjects.models import (
+    DataFile,
+    Characteristica,
+    Individual,
+    Group,
+    GroupSet,
+    IndividualSet,
+)
+from pkdb_app.subjects.serializers import (
+    DataFileSerializer,
+    DataFileReadSerializer,
+    CharacteristicaReadSerializer,
+    IndividualReadSerializer,
+    GroupReadSerializer,
+    GroupSetReadSerializer,
+    IndividualSetReadSerializer,
+)
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
@@ -18,17 +32,20 @@ class DataFileReadViewSet(viewsets.ModelViewSet):
     serializer_class = DataFileReadSerializer
     permission_classes = (AllowAny,)
 
+
 class CharacteristicaReadViewSet(viewsets.ModelViewSet):
 
     queryset = Characteristica.objects.all()
     serializer_class = CharacteristicaReadSerializer
     permission_classes = (AllowAny,)
 
+
 class IndividualReadViewSet(viewsets.ModelViewSet):
 
     queryset = Individual.objects.all()
     serializer_class = IndividualReadSerializer
     permission_classes = (AllowAny,)
+
 
 class GroupReadViewSet(viewsets.ModelViewSet):
 

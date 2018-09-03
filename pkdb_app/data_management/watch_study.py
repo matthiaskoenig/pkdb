@@ -17,14 +17,16 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 coloredlogs.install(
-    level='INFO',
+    level="INFO",
     fmt="%(module)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
     # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
 )
 logger = logging.getLogger(__name__)
 
 
-BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
+BASEPATH = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
+)
 sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.fill_database import upload_study_from_dir
@@ -34,15 +36,16 @@ from pkdb_app.data_management.fill_database import upload_study_from_dir
 
 class StudyHandler(FileSystemEventHandler):
     """ Handler for study folder. """
+
     def __init__(self, path):
 
         self.path = path
         _, study_name = os.path.split(self.path)
         self.study_name = study_name
-        logging.info('-' * 80)
-        logging.info(f'Watching [{self.study_name}]')
-        logging.info(f'\t{self.path}')
-        logging.info('-' * 80)
+        logging.info("-" * 80)
+        logging.info(f"Watching [{self.study_name}]")
+        logging.info(f"\t{self.path}")
+        logging.info("-" * 80)
         upload_study_from_dir(self.path)
 
     def on_modified(self, event):
@@ -50,10 +53,10 @@ class StudyHandler(FileSystemEventHandler):
         :param event:
         :return:
         """
-        logging.info('\n')
-        logging.info('-' * 80)
-        logging.info(f'Updating [{self.study_name}]')
-        logging.info('-' * 80)
+        logging.info("\n")
+        logging.info("-" * 80)
+        logging.info(f"Updating [{self.study_name}]")
+        logging.info("-" * 80)
         upload_study_from_dir(self.path)
 
 
@@ -63,7 +66,7 @@ def start_observer(args):
     # normalize path
     path = os.path.abspath(args.path)
     if path.endswith("/"):
-         path = path[:-1]
+        path = path[:-1]
     if not os.path.exists(path) or not os.path.isdir(path):
         print(path)
         raise FileNotFoundError
@@ -83,7 +86,9 @@ def start_observer(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Watch a study directory for changes")
-    parser.add_argument("-s", help="path to study directory", dest="path", type=str, required=True)
+    parser.add_argument(
+        "-s", help="path to study directory", dest="path", type=str, required=True
+    )
     parser.set_defaults(func=start_observer)
     args = parser.parse_args()
     args.func(args)

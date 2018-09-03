@@ -17,7 +17,7 @@ class TestUserListTestCase(APITestCase):
     """
 
     def setUp(self):
-        self.url = reverse('users')
+        self.url = reverse("users")
         self.user_data = model_to_dict(UserFactory.build())
 
     def test_post_request_with_no_data_fails(self):
@@ -28,9 +28,9 @@ class TestUserListTestCase(APITestCase):
         response = self.client.post(self.url, self.user_data)
         eq_(response.status_code, status.HTTP_201_CREATED)
 
-        user = User.objects.get(pk=response.data.get('id'))
-        eq_(user.username, self.user_data.get('username'))
-        ok_(check_password(self.user_data.get('password'), user.password))
+        user = User.objects.get(pk=response.data.get("id"))
+        eq_(user.username, self.user_data.get("username"))
+        ok_(check_password(self.user_data.get("password"), user.password))
 
 
 class TestUserDetailTestCase(APITestCase):
@@ -40,8 +40,8 @@ class TestUserDetailTestCase(APITestCase):
 
     def setUp(self):
         self.user = UserFactory()
-        self.url = reverse('users', kwargs={'pk': self.user.pk})
-        self.client.credentials(HTTP_AUTHORIZATION=f'Token {self.user.auth_token}')
+        self.url = reverse("users", kwargs={"pk": self.user.pk})
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.user.auth_token}")
 
     def test_get_request_returns_a_given_user(self):
         response = self.client.get(self.url)
@@ -49,7 +49,7 @@ class TestUserDetailTestCase(APITestCase):
 
     def test_put_request_updates_a_user(self):
         new_first_name = fake.first_name()
-        payload = {'first_name': new_first_name}
+        payload = {"first_name": new_first_name}
         response = self.client.put(self.url, payload)
         eq_(response.status_code, status.HTTP_200_OK)
 

@@ -6,7 +6,6 @@ from pkdb_app.users.models import User
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
-
     class Meta:
         fields = ["text"]
         model = Description
@@ -17,28 +16,34 @@ class DescriptionSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return instance.text
 
-class CommentSerializer(WrongKeyValidationSerializer):
 
+class CommentSerializer(WrongKeyValidationSerializer):
     class Meta:
-        fields = ["text","user"]
+        fields = ["text", "user"]
         model = Comment
 
     def _validate_comment(self, data):
         if not (isinstance(data, list) and len(data) == 2):
-            raise serializers.ValidationError({"comments": "comment must be a list of the form ['username', 'comment']", "detail":{data}})
+            raise serializers.ValidationError(
+                {
+                    "comments": "comment must be a list of the form ['username', 'comment']",
+                    "detail": {data},
+                }
+            )
 
     def to_internal_value(self, data):
         self._validate_comment(data)
         user = self.get_or_val_error(User, username=data[0])
-        return {"text": data[1],"user":user}
+        return {"text": data[1], "user": user}
 
     def to_representation(self, instance):
-        return [instance.user.username,instance.text]
+        return [instance.user.username, instance.text]
+
 
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
 class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        fields = ["pk","text"]
+        fields = ["pk", "text"]
         model = Description
