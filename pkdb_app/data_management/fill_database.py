@@ -25,6 +25,7 @@ import requests
 from jsonschema import validate
 import logging
 import coloredlogs
+import argparse
 
 coloredlogs.install(
     level='INFO',
@@ -51,8 +52,8 @@ if not os.path.exists(DATA_PATH):
     print("-" * 80)
     raise FileNotFoundError
 
-API_URL = "http://0.0.0.0:8000/api/v1"
-# API_URL = "http://www.pk-db.com/api/v1"
+# API_URL = "http://0.0.0.0:8000/api/v1"
+API_URL = "http://www.pk-db.com/api/v1"
 
 # -----------------------------
 # setup database
@@ -406,10 +407,22 @@ def upload_study_from_dir(study_dir, api_url=API_URL):
     return {}
 
 
-if __name__ == '__main__':
+def fill_database(args):
+    """ Main function to fill database.
 
-    API_URL = "http://0.0.0.0:8000/api/v1"
-    # API_URL = "http://www.pk-db.com/api/v1"
+    :param args: command line arguments
+    :return:
+    """
+
+    '''
+    global API_URL
+    # normalize path
+    url = os.path.abspath(args.url)
+    if not url:
+        # default development endpoint
+        url = "http://0.0.0.0:8000/api/v1"
+    API_URL = url
+    '''
 
     # core database setup
     setup_database(api_url=API_URL)
@@ -423,3 +436,19 @@ if __name__ == '__main__':
         upload_study_from_dir(study_folder_path)
 
     print("--- done ---")
+
+
+if __name__ == '__main__':
+    fill_database(None)
+
+    # ----------------------------
+    # python fill_database.py -u "http://www.pk-db.com/api/v1"
+    # python fill_database.py -u "http://0.0.0.0:8000/api/v1"
+
+    # parser = argparse.ArgumentParser(description="Watch a study directory for changes")
+    # parser.add_argument("-u", help="url to upload data to", dest="url", type=str, required=True)
+    # parser.set_defaults(func=fill_database)
+    # args = parser.parse_args()
+    # args.func(args)
+    # ----------------------------
+
