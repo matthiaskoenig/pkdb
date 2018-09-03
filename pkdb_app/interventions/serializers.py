@@ -372,6 +372,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_time_unit(attrs)
         self._validate_requried_key(attrs,"substance")
         self._validate_requried_key(attrs,"tissue")
+        self._validate_requried_key(attrs,"time")
 
         return super().validate(attrs)
 
