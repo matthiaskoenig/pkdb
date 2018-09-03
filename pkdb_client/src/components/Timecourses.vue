@@ -10,7 +10,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
             <v-paginator :resource_url="resource_url"  @update="updateResource"></v-paginator>
             <table v-if="count" class="table table-responsive table-condensed table-hover">
                 <thead>
@@ -60,7 +59,6 @@
                 </tr>
                 </tbody>
             </table>
-            </div>
         </div>
     </div>
 </template>

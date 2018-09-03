@@ -17,15 +17,15 @@ https://cli.vuejs.org/
 # vue/cli > 3.0
 sudo npm install -g @vue/cli
 sudo npm install vue-router
-npm install axios --save 
+sudo npm install axios --save 
 sudo npm install bootstrap-vue bootstrap --save
 sudo npm install vue-tables-2
 
 sudo npm i --save @fortawesome/fontawesome-svg-core \
   npm i --save @fortawesome/free-solid-svg-icons \
   npm i --save @fortawesome/vue-fontawesome
-sudo npm i --save @fortawesome/free-regular-svg-icons \
-  npm i --save @fortawesome/free-brands-svg-icons
+sudo npm i --save @fortawesome/free-regular-svg-icons
+sudo npm i --save @fortawesome/free-brands-svg-icons
 ```
 
 ## vue project
