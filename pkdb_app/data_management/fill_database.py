@@ -130,6 +130,17 @@ def get_study_paths():
 # -------------------------------
 # Read JSON files
 # -------------------------------
+def dict_raise_on_duplicates(ordered_pairs):
+    """Reject duplicate keys."""
+    d = {}
+    for k, v in ordered_pairs:
+        if k in d:
+           raise ValueError("duplicate key: %r" % (k,))
+        else:
+           d[k] = v
+    return d
+
+
 def _read_json(path):
     """ Reads json.
 
@@ -138,10 +149,14 @@ def _read_json(path):
     """
     with open(path) as f:
         try:
-            json_data = json.loads(f.read())
+            json_data = json.loads(f.read(), object_pairs_hook=dict_raise_on_duplicates)
         except json.decoder.JSONDecodeError as err:
             logging.warning(f'{err}\nin {path}')
             return
+        except ValueError as err:
+            logging.warning(f'{err}\nin {path}')
+            return
+
     return json_data
 
 
@@ -266,7 +281,7 @@ def check_json_response(response):
     """
     if response.status_code not in [200, 201]:
         try:
-            json_data = json.loads(response.text)
+            json_data = json.loads(response.text,  object_pairs_hook=dict_raise_on_duplicates)
 
             msg = json.dumps(json_data, sort_keys=True, indent=2)
             logging.warning(f'\n{msg}')
