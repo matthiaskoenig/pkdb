@@ -9,6 +9,7 @@ from Bio import Entrez
 import json
 import requests
 
+from utils import recursive_iter, set_keys
 
 BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
 sys.path.append(BASEPATH)
@@ -70,6 +71,11 @@ def create_json(d):
         author_dict["last_name"] = author.find("LastName").text
         authors.append(author_dict)
     json_dict["authors"] = authors
+
+    for keys, item in recursive_iter(json_dict):
+        if item == "":
+            set_keys(json_dict, None, *keys)
+
     return {'json': json_dict, 'reference_path': d["reference_path"]}
 
 
@@ -83,7 +89,7 @@ def add_doi(d):
     response = requests.get(f'https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?tool=my_tool&email=my_email@example.com&ids={json_dict["pmid"]}')
     pmcids = ET.fromstring(response.content)
     for records in pmcids.iter("record"):
-         json_dict["doi"] = records.get('doi', "")
+         json_dict["doi"] = records.get('doi', None)
 
     return {"json":json_dict, "reference_path": d["reference_path"]}
 
