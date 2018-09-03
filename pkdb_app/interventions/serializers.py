@@ -155,6 +155,8 @@ class OutputSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
+        self._validate_group_output(attrs)
+        self._validate_individual_output(attrs)
         self._validate_pktype(attrs)
         self._validate_time_unit(attrs)
         return super().validate(attrs)
@@ -227,6 +229,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
+        self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
         self._validate_pktype(attrs)
         self._validate_time_unit(attrs)
