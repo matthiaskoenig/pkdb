@@ -166,6 +166,7 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
         null=True,
         on_delete=models.CASCADE,
     )
+
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     # TODO: unique together  unique_together = ('ex__interventionset', 'name')
@@ -251,7 +252,8 @@ class Output(ValueableNotBlank, AbstractOutput):
     )
     interventions = models.ManyToManyField(Intervention)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
-
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
+    substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
 
     objects = OutputManager()
@@ -329,6 +331,8 @@ class Timecourse(AbstractOutput):
     ex = models.ForeignKey(
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
+    substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
 
     value = ArrayField(models.FloatField(null=True), null=True)
