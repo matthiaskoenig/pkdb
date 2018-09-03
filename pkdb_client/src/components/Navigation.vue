@@ -23,7 +23,7 @@
                     <router-link tag="li" to="/about">
                         <b-nav-item active href="#"><font-awesome-icon icon="info-circle" />&nbsp;About</b-nav-item>
                     </router-link>
-                    <b-nav-item active href="http://www.pk-db.com/api/" target="_blank"><font-awesome-icon icon="laptop-code" />&nbsp;API</b-nav-item>
+                    <b-nav-item active href="http://www.pk-db.com/api/v1/" target="_blank"><font-awesome-icon icon="laptop-code" />&nbsp;API</b-nav-item>
                     <b-nav-item active href="http://www.github.com/matthiaskoenig/pkdb" target="_blank"><font-awesome-icon :icon="[ 'fab', 'github' ]" />&nbsp;Code</b-nav-item>
 
                 </b-navbar-nav>
