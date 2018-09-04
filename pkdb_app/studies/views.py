@@ -1,5 +1,5 @@
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from .models import Author, Reference, Study, Keyword
 from .serializers import (
     AuthorSerializer,
@@ -20,7 +20,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class AuthorsViewSet(viewsets.ModelViewSet):
@@ -33,7 +33,7 @@ class AuthorsViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("first_name", "last_name")
     search_fields = filter_fields
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -50,7 +50,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -62,7 +62,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("sid",)
     search_fields = filter_fields
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     @staticmethod
     def group_validation(request):
@@ -103,7 +103,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Read ViewSets
 ###############################################################################################
-class StudyReadViewSet(viewsets.ModelViewSet):
+class StudyReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Study.objects.all()
     serializer_class = StudyReadSerializer
     lookup_field = "sid"
@@ -116,7 +116,7 @@ class StudyReadViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
-class ReferencesReadViewSet(viewsets.ModelViewSet):
+class ReferencesReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Reference.objects.all()
     serializer_class = ReferenceReadSerializer
@@ -130,7 +130,7 @@ class ReferencesReadViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
-class AuthorsReadViewSet(viewsets.ModelViewSet):
+class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Author.objects.all()
     serializer_class = AuthorReadSerializer
@@ -143,7 +143,7 @@ class AuthorsReadViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
-class KeywordReadViewSet(viewsets.ModelViewSet):
+class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Keyword.objects.all()
     serializer_class = KeywordReadSerializer
     filter_backends = (

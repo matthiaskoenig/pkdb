@@ -7,7 +7,7 @@ from pkdb_app.comments.models import Description, Comment
 from pkdb_app.comments.serializers import DescriptionReadSerializer, CommentReadSerializer
 
 
-class DescriptionReadViewSet(viewsets.ModelViewSet):
+class DescriptionReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Description.objects.all()
     serializer_class = DescriptionReadSerializer
@@ -16,7 +16,7 @@ class DescriptionReadViewSet(viewsets.ModelViewSet):
     search_fields = filter_fields
     permission_classes = (AllowAny,)
 
-class CommentReadViewSet(viewsets.ModelViewSet):
+class CommentReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = Comment.objects.all()
     serializer_class = CommentReadSerializer

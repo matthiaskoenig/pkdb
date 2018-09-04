@@ -25,6 +25,7 @@ import json
 import requests
 import logging
 import coloredlogs
+from requests.auth import HTTPBasicAuth
 
 
 coloredlogs.install(
@@ -55,7 +56,8 @@ if not os.path.exists(DATA_PATH):
     print("-" * 80)
     raise FileNotFoundError
 
-API_URL = "http://0.0.0.0:8000/api/v1"
+API_BASE = "http://0.0.0.0:8000"
+API_URL = API_BASE +"/api/v1"
 # API_URL = "http://www.pk-db.com/api/v1"
 
 # -----------------------------
@@ -65,6 +67,7 @@ API_URL = "http://0.0.0.0:8000/api/v1"
 PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
 if not PASSWORD:
     raise ValueError("Password could not be read, export the environment variable.")
+
 
 USERS = [
     {
@@ -83,6 +86,21 @@ USERS = [
     },
 ]
 
+# create superuser and use it for authenification
+#TOKEN = os.getenv("PKDB_TOKEN")
+response = requests.post("http://0.0.0.0:8000/api-token-auth/",data={"username":"admin","password":PASSWORD})
+TOKEN = response.json().get("token")
+if not TOKEN:
+    os.system(f"docker-compose run --rm web ./manage.py createsuperuser2 --username admin --password {PASSWORD} --email Janekg89@hotmail.de --noinput")
+    response = requests.post("http://0.0.0.0:8000/api-token-auth/", data={"username": "admin", "password": PASSWORD})
+    TOKEN = response.json().get("token")
+    #os.environ["PKDB_TOKEN"] = TOKEN
+
+
+
+
+
+HEADER = {'Authorization': f'token {TOKEN}'}
 
 def setup_database(api_url):
     """ Creates core information in database.
@@ -95,18 +113,21 @@ def setup_database(api_url):
     from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
 
     for substance in SUBSTANCES_DATA:
-        response = requests.post(f"{api_url}/substances/", json={"name": substance})
+        response = requests.post(f"{api_url}/substances/", json={"name": substance}, headers=HEADER
+)
         if not response.status_code == 201:
             logging.warning(f"substance upload failed ")
 
     for keyword in KEYWORDS_DATA:
-        response = requests.post(f"{api_url}/keywords/", json={"name": keyword})
+        response = requests.post(f"{api_url}/keywords/", json={"name": keyword}, headers=HEADER
+)
         if not response.status_code == 201:
             logging.warning(f"keyword upload failed ")
             logging.warning(response.text)
 
     for user in USERS:
-        response = requests.post(f"{api_url}/users/", json=user)
+        response = requests.post(f"{api_url}/users/", json=user, headers=HEADER
+)
         if not response.status_code == 201:
             logging.warning(f"user upload failed ")
 
@@ -222,7 +243,8 @@ def upload_files(file_path, api_url=API_URL):
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, "rb") as f:
-                response = requests.post(f"{api_url}/datafiles/", files={"file": f})
+                response = requests.post(f"{api_url}/datafiles/", files={"file": f}, headers=HEADER
+)
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -236,7 +258,8 @@ def upload_reference_json(json_reference, api_url=API_URL):
     """ Uploads reference JSON. """
     success = True
     # post
-    response = requests.post(f"{api_url}/references/", json=json_reference["json"])
+    response = requests.post(f"{api_url}/references/", json=json_reference["json"], headers=HEADER
+)
     if not response.status_code == 201:
         logging.info(json_reference["json"]["name"] + "\n" + response.text)
         success = False
@@ -244,7 +267,8 @@ def upload_reference_json(json_reference, api_url=API_URL):
     # patch
     with open(json_reference["pdf"], "rb") as f:
         response = requests.patch(
-            f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f}
+            f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f} , headers=HEADER
+
         )
 
     if not response.status_code == 200:
@@ -305,7 +329,7 @@ def upload_study_json(json_study_dict, api_url=API_URL):
     related_sets = ["groupset", "interventionset", "individualset", "outputset"]
     [study_core.pop(this_set, None) for this_set in related_sets]
     study_core["files"] = list(file_dict.values())
-    response = requests.post(f"{API_URL}/studies/", json=study_core)
+    response = requests.post(f"{API_URL}/studies/", json=study_core, headers=HEADER)
     success = check_json_response(response)
 
     # ---------------------------
@@ -319,21 +343,23 @@ def upload_study_json(json_study_dict, api_url=API_URL):
 
     # post
     sid = json_study["sid"]
-    response = requests.patch(f"{api_url}/studies/{sid}/", json=study_sets)
+    response = requests.patch(f"{api_url}/studies/{sid}/", json=study_sets, headers=HEADER
+)
     success = success and check_json_response(response)
 
     # is using group, has to be uploaded separately from the groupset
     if "individualset" in json_study.keys():
         response = requests.patch(
             f"{api_url}/studies/{sid}/",
-            json={"individualset": json_study.get("individualset")},
+            json={"individualset": json_study.get("individualset")},headers=HEADER
         )
 
         success = success and check_json_response(response)
 
     if "outputset" in json_study.keys():
         response = requests.patch(
-            f"{api_url}/studies/{sid}/", json={"outputset": json_study.get("outputset")}
+            f"{api_url}/studies/{sid}/", json={"outputset": json_study.get("outputset") } ,headers=HEADER
+
         )
         success = success and check_json_response(response)
 

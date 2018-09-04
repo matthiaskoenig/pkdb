@@ -6,21 +6,13 @@ from django.urls import path, include
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
+from rest_framework.authtoken.views import obtain_auth_token
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
 from pkdb_app.comments.views import DescriptionReadViewSet, CommentReadViewSet
 
-"""
-from rest_framework_swagger import renderers
-from rest_framework import exceptions
-from rest_framework.permissions import AllowAny
-from rest_framework.renderers import CoreJSONRenderer
-from rest_framework.response import Response
-from rest_framework.schemas import SchemaGenerator
-from rest_framework.views import APIView
-"""
 
 
 from .subjects.views import (
@@ -145,7 +137,7 @@ schema_view = get_swagger_view(title="PKDB API")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(r"api/v1/", include(router.urls)),
-    # path('api-token-auth/', views.obtain_auth_token),
+    path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
     # url(r'/', views.about_view, name='index'),
