@@ -95,11 +95,6 @@ if not TOKEN:
     response = requests.post("http://0.0.0.0:8000/api-token-auth/", data={"username": "admin", "password": PASSWORD})
     TOKEN = response.json().get("token")
     #os.environ["PKDB_TOKEN"] = TOKEN
-
-
-
-
-
 HEADER = {'Authorization': f'token {TOKEN}'}
 
 def setup_database(api_url):

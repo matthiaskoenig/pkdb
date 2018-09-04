@@ -140,7 +140,7 @@ UNIT_CONVERSIONS = [
     # clearance
     UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/kg/h", target="l/h/kg", multiplier=1.0E-3),
-    UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
+    #UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/min/kg", target="l/h/kg", multiplier=1.0E-3 / 60),
     UnitConversion("ml/kg/min", target="l/h/kg", multiplier=1.0E-3 / 60),
     UnitConversion("ml/min", target="ml/h", multiplier=1.0 / 60),

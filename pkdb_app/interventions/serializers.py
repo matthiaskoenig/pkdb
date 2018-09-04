@@ -668,6 +668,7 @@ class OutputExReadSerializer(OutputReadSerializer):
     comments = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="comments_read-detail"
     )
+
     class Meta:
         model = OutputEx
         fields = (

@@ -206,9 +206,6 @@ class IndividualEx(Externable, AbstractIndividual):
     def groups_in_study(self):
         return self.study.groupset.group_exs
 
-    # TODO: validation in one place
-    # TODO: validation: either name or name_map must be set
-
 
 class Individual(AbstractIndividual):
     """ Single individual in data base.
