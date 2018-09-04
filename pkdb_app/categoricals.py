@@ -108,6 +108,7 @@ ANTHROPOMETRY = "anthropometry"
 PHYSIOLOGY = "physiology"
 PATIENT_STATUS = "patient status"
 MEDICATION = "medication"
+DOSING = "dosing"
 LIFESTYLE = "lifestyle"
 BIOCHEMICAL_DATA = "biochemical data"
 HEMATOLOGY_DATA = "hematology data"
@@ -344,7 +345,7 @@ INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 INTERVENTION_DATA = [
     CharacteristicType(
         "dosing",
-        "dosing",
+        DOSING,
         NUMERIC_TYPE,
         None,
         NormalizableUnit({"mg": None, "mg/kg": None}),

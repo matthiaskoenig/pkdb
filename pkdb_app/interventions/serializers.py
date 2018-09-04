@@ -25,7 +25,7 @@ from pkdb_app.serializers import (
 )
 
 from pkdb_app.subjects.models import Group, DataFile, Individual
-from pkdb_app.categoricals import validate_categorials
+from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
 
 from pkdb_app.subjects.serializers import (
     VALUE_MAP_FIELDS,
@@ -112,6 +112,14 @@ class InterventionSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+        category = data.get("category")
+        if  any([category == MEDICATION,category == DOSING]):
+            self._validate_requried_key(data,"substance")
+            self._validate_requried_key(data,"route")
+            self._validate_requried_key(data,"value")
+            self._validate_requried_key(data,"unit")
+
+
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
