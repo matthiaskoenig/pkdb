@@ -255,6 +255,7 @@ class Output(ValueableNotBlank, AbstractOutput):
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
+    norm = models.ForeignKey("Output",related_name="raw",on_delete=models.CASCADE,null=True)
 
     objects = OutputManager()
 
