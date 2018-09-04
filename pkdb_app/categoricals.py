@@ -511,8 +511,7 @@ PK_DATA = [
         "recovery", "Fraction recovered of given substance.", ratio_norm_unit
     ),
 ]
-PK_DATA_CHOICES = create_choices(PK_DATA)
-
+PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
 
 if __name__ == "__main__":
     """ 
