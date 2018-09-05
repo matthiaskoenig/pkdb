@@ -31,7 +31,6 @@ class InterventionExManager(models.Manager):
         comments = kwargs.pop('comments', [])
 
         intervention_ex = super().create(*args, **kwargs)
-
         create_multiple(intervention_ex, interventions, 'interventions')
         create_multiple(intervention_ex, comments, 'comments')
         intervention_ex.save()
@@ -89,10 +88,7 @@ class OutputManager(models.Manager):
     def create(self, *args, **kwargs):
         interventions = kwargs.pop('interventions', [])
         output = super().create(*args, **kwargs)
-
         output.interventions.add(*interventions)
-
-        output.save()
         return output
 
 
@@ -109,4 +105,5 @@ class TimecourseExManager(models.Manager):
         create_multiple(timecourse_ex, timecourses, 'timecourses')
 
         timecourse_ex.save()
+
         return timecourse_ex

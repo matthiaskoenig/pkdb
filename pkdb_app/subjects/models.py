@@ -5,10 +5,13 @@ group or individual).
 How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
+import copy
+import pandas as pd
 from django.db import models
 
 from pkdb_app.normalization import get_sd, get_se, get_cv
 from pkdb_app.storage import OverwriteStorage
+from pkdb_app.units import UNIT_CONVERSIONS_DICT
 from ..behaviours import (
     Valueable,
     ValueableMap,
@@ -32,7 +35,7 @@ from .managers import (
     IndividualSetManager,
     IndividualManager,
     GroupManager,
-    CharacteristicaManager,
+    CharacteristicaExManager,
 )
 
 
@@ -236,8 +239,8 @@ class Individual(AbstractIndividual):
 # ----------------------------------
 class AbstractCharacteristica(models.Model):
     category = models.CharField(
-        choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH
-    )
+        choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
+
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
     ctype = models.CharField(
         choices=CHARACTERISTICA_CHOICES,
@@ -302,10 +305,10 @@ class CharacteristicaEx(
         null=True,
         on_delete=models.CASCADE,
     )
-    objects = CharacteristicaManager()
+    objects = CharacteristicaExManager()
 
 
-class Characteristica(AbstractCharacteristica, Valueable, models.Model):
+class Characteristica(Valueable, AbstractCharacteristica):
     """ Characteristic. """
 
     group = models.ForeignKey(
@@ -314,17 +317,72 @@ class Characteristica(AbstractCharacteristica, Valueable, models.Model):
     individual = models.ForeignKey(
         Individual, related_name="characteristica", null=True, on_delete=models.CASCADE
     )
+    norm = models.ForeignKey("Characteristica", related_name="raw", on_delete=models.CASCADE, null=True)
+    final = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        if not self.sd:
-            self.sd = get_sd(se=self.se, count=self.count, mean=self.mean, cv=self.cv)
-
-        if not self.se:
-            self.se = get_se(sd=self.sd, count=self.count, mean=self.mean, cv=self.cv)
-
-        if not self.cv:
-            self.cv = get_cv(se=self.se, count=self.count, mean=self.mean, sd=self.sd)
-
+    def save(self,no_norm=False , *args, **kwargs):
         super().save(*args, **kwargs)
+        if not no_norm:
+            norm = copy.copy(self)
+            norm.normalize()
+            norm.add_statistics()
 
+            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
+                norm.pk = None
+                norm.final = True
+                norm.save(no_norm=True)
+                self.norm = norm
+                self.save(no_norm=True, force_update=True)
+
+            else:
+                self.final = True
+                self.save(no_norm=True, force_update=True)
+
+
+    def save_no_norm(self, *args, **kwargs):
+            super().save(*args, **kwargs)
+
+    @property
+    def norm_fields(self):
+        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                "sd": self.sd, "se": self.se}
+
+    @property
+    def norm_unit(self):
+        return self.characteristic_data.units.get(self.unit)
+
+    @property
+    def is_norm(self):
+        norm_unit = self.norm_unit
+        return norm_unit is None
+
+    @property
+    def is_convertible(self):
+        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+        return conversion is not None
+
+    def normalize(self):
+        if all([not self.is_norm, self.is_convertible]):
+            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+            self.unit = self.norm_unit
+
+            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+            for key,value in self.norm_fields.items():
+                if not value is None:
+                        setattr(self,key,conversion.apply_conversion(value))
+
+    def add_statistics(self):
+            if not self.sd:
+                self.sd = get_sd(
+                    se=self.se, count=self.count, mean=self.mean, cv=self.cv
+                )
+            if not self.se:
+                self.se = get_se(
+                    sd=self.sd, count=self.count, mean=self.mean, cv=self.cv
+                )
+            if not self.cv:
+                self.cv = get_cv(
+                    se=self.se, count=self.count, mean=self.mean, sd=self.sd
+                )
 
