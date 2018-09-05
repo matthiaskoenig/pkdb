@@ -3,6 +3,8 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 import pandas as pd
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -169,22 +171,30 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     norm = models.ForeignKey("Intervention",related_name="raw",on_delete=models.CASCADE,null=True)
+    final = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
+    def save(self,no_norm=False, *args, **kwargs):
         super().save(*args, **kwargs)
+        if not no_norm:
 
 
-        norm = copy.deepcopy(self)
+            norm = copy.copy(self)
+            norm.normalize()
 
-        norm.normalize()
-        values = [(k, v) for k, v in self.__dict__.items() if k != '_state']
-        norm_values = [(k, v) for k, v in norm.__dict__.items() if k != '_state']
+            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
+                norm.pk = None
+                norm.final = True
+                norm.save(no_norm=True)
+                #self.norm = norm
+                #self.save(no_norm=True,force_update=True)
+            else:
+                self.final = True
+                self.save(no_norm=True,force_update=True)
 
-        if all(pd.Series(values) != pd.Series(norm_values)):
-            norm.pk = None
-            norm.save()
-            norm.raw.add(self)
-            norm.save()
+
+
+    def save_no_norm(self, *args, **kwargs):
+            super().save(*args, **kwargs)
 
     @property
     def norm_unit(self):
@@ -201,18 +211,20 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
         conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
         return conversion is not None
 
+    @property
+    def norm_fields(self):
+        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                      "sd": self.sd, "se": self.se}
 
     def normalize(self):
-
         if all([not self.is_norm, self.is_convertible]):
             conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
             self.unit = self.norm_unit
 
-            fields = {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                      "sd": self.sd, "se": self.se}
+
 
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            for key,value in fields.items():
+            for key,value in self.norm_fields.items():
                 if not value is None:
                         setattr(self,key,conversion.apply_conversion(value))
 
@@ -301,26 +313,33 @@ class Output(ValueableNotBlank, AbstractOutput):
     substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
     norm = models.ForeignKey("Output",related_name="raw",on_delete=models.CASCADE,null=True)
-
+    final = models.BooleanField(default=False)
     objects = OutputManager()
 
-    def save(self, *args, **kwargs):
+    def save(self,no_norm=False, *args, **kwargs):
+        super().save( *args, **kwargs)
+        if not no_norm:
+            norm = copy.copy(self)
+            norm.normalize()
+            norm.add_statistics()
+
+
+            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
+                norm.pk = None
+                norm.final = True
+                norm.save(no_norm=True)
+                self.norm = norm
+                self.save(no_norm=True,force_update=True)
+
+            else:
+                self.final = True
+                self.save(no_norm=True,force_update=True)
+
+
+
+
+    def save_no_norm(self,*args, **kwargs):
         super().save(*args, **kwargs)
-
-
-        norm = copy.deepcopy(self)
-        norm.normalize()
-        norm.add_statistics()
-
-        values = [(k, v) for k, v in self.__dict__.items() if k != '_state']
-        norm_values = [(k, v) for k, v in norm.__dict__.items() if k != '_state']
-
-        if all(pd.Series(values) !=  pd.Series(norm_values)):
-            norm.pk = None
-            norm.save()
-            norm.raw.add(self)
-            norm.save()
-
 
     def add_statistics(self):
         if self.group:
@@ -353,6 +372,10 @@ class Output(ValueableNotBlank, AbstractOutput):
         return norm_unit is None
 
     @property
+    def norm_fields(self):
+        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                "sd": self.sd, "se": self.se}
+    @property
     def is_convertible(self):
         conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
         conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
@@ -365,11 +388,8 @@ class Output(ValueableNotBlank, AbstractOutput):
             #print(conversion_key)
             self.unit = self.norm_unit
 
-            fields = {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                      "sd": self.sd, "se": self.se}
-
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            for key,value in fields.items():
+            for key,value in self.norm_fields.items():
                 if not value is None:
                         setattr(self,key,conversion.apply_conversion(value))
 
@@ -442,10 +462,37 @@ class Timecourse(AbstractOutput):
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
 
+    norm = models.ForeignKey("Timecourse", related_name="raw", on_delete=models.CASCADE, null=True)
+    final = models.BooleanField(default=False)
+
     objects = OutputManager()
 
-    def save(self, *args, **kwargs):
 
+    def save(self,no_norm=False, *args, **kwargs):
+
+        super().save(*args, **kwargs)
+
+
+        if not no_norm:
+            norm = copy.copy(self)
+            self.normalize()
+            self.add_statistics()
+            if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)):
+                norm.pk = None
+                norm.final = True
+                norm.save(no_norm=True)
+                self.norm = norm
+                self.save(no_norm=True,force_update=True)
+
+            else:
+                self.final = True
+                self.save(no_norm=True,force_update=True)
+
+
+    def save_no_norm(self,*args, **kwargs):
+        super().save(*args, **kwargs)
+
+    def add_statistics(self):
         if self.group:
             if not self.sd:
                 sd = get_sd(
@@ -465,4 +512,41 @@ class Timecourse(AbstractOutput):
                 )
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
-            super().save(*args, **kwargs)
+
+    @property
+    def pk_data(self):
+        return PK_DATA_DICT[self.pktype]
+
+    @property
+    def norm_unit(self):
+        return self.pk_data.units.get(self.unit)
+
+    @property
+    def is_norm(self):
+        norm_unit = self.norm_unit
+        return norm_unit is None
+
+    @property
+    def is_convertible(self):
+        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+        return conversion is not None
+
+    @property
+    def norm_fields(self):
+        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                      "sd": self.sd, "se": self.se}
+
+    def normalize(self):
+        if all([not self.is_norm, self.is_convertible]):
+            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+            self.unit = self.norm_unit
+            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+            for key, value in self.norm_fields.items():
+                if not value is None:
+                    setattr(self, key, conversion.apply_conversion(value))
+
+
+
+
+

@@ -81,7 +81,7 @@ class CharacteristicaExSerializer(MappingSerializer):
         return data
 
 
-class CharacteristicaSerializer(WrongKeyValidationSerializer):
+class CharacteristicaSerializer(ExSerializer):
     count = serializers.IntegerField(required=False)
 
     class Meta:
@@ -90,9 +90,9 @@ class CharacteristicaSerializer(WrongKeyValidationSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        self._is_required(data,"category")
         self.validate_wrong_keys(data)
-
-        return super().to_internal_value(data)
+        return super(WrongKeyValidationSerializer,self).to_internal_value(data)
 
     def validate(self, attr):
         try:
@@ -100,8 +100,7 @@ class CharacteristicaSerializer(WrongKeyValidationSerializer):
             validate_categorials(data=attr, category_class="characteristica")
         except ValueError as err:
             raise serializers.ValidationError(err)
-
-        # validate_categorials(attr, "characteristica")
+        #validate_categorials(attr, "characteristica")
         return super().validate(attr)
 
 

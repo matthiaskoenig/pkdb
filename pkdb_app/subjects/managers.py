@@ -89,7 +89,7 @@ class GroupManager(models.Manager):
         return group
 
 
-class CharacteristicaManager(models.Manager):
+class CharacteristicaExManager(models.Manager):
     def create(self, *args, **kwargs):
         comments = kwargs.pop("comments", [])
         instance = super().create(*args, **kwargs)

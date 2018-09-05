@@ -2,7 +2,7 @@
 Definition of units and handling of units conversion.
 """
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
-
+import numpy as np
 
 def add_names(d):
     """ If no value exists adds the key as value.
@@ -115,7 +115,7 @@ class UnitConversion(object):
 
     def apply_conversion(self, value):
         """ Apply the unit conversion to a given unit. """
-        return value * self.multiplier
+        return np.multiply(value,self.multiplier)
 
 
 # Supported unit conversions
