@@ -30,7 +30,7 @@ from ..categoricals import (
     INTERVENTION_APPLICATION_CHOICES,
     PK_DATA_CHOICES,
     OUTPUT_TISSUE_DATA_CHOICES,
-    PK_DATA, PK_DATA_DICT)
+    PK_DATA, PK_DATA_DICT, INTERVENTION_DICT)
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
 from ..substances import SUBSTANCES_DATA_CHOICES
 from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
@@ -96,7 +96,7 @@ class AbstractIntervention(models.Model):
 
         :return:
         """
-        return INTERVENTION_CHOICES[self.category]
+        return INTERVENTION_DICT[self.category]
 
     @property
     def choices(self):
@@ -168,8 +168,53 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    norm = models.ForeignKey("Intervention",related_name="raw",on_delete=models.CASCADE,null=True)
 
-    # TODO: unique together  unique_together = ('ex__interventionset', 'name')
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+
+        norm = copy.deepcopy(self)
+
+        norm.normalize()
+        values = [(k, v) for k, v in self.__dict__.items() if k != '_state']
+        norm_values = [(k, v) for k, v in norm.__dict__.items() if k != '_state']
+
+        if all(pd.Series(values) != pd.Series(norm_values)):
+            norm.pk = None
+            norm.save()
+            norm.raw.add(self)
+            norm.save()
+
+    @property
+    def norm_unit(self):
+        return self.intervention_data.units.get(self.unit)
+
+    @property
+    def is_norm(self):
+        norm_unit = self.norm_unit
+        return norm_unit is None
+
+    @property
+    def is_convertible(self):
+        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+        return conversion is not None
+
+
+    def normalize(self):
+
+        if all([not self.is_norm, self.is_convertible]):
+            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+            self.unit = self.norm_unit
+
+            fields = {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                      "sd": self.sd, "se": self.se}
+
+            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+            for key,value in fields.items():
+                if not value is None:
+                        setattr(self,key,conversion.apply_conversion(value))
 
 
 # -------------------------------------------------
@@ -264,9 +309,7 @@ class Output(ValueableNotBlank, AbstractOutput):
 
 
         norm = copy.deepcopy(self)
-
         norm.normalize()
-        print(f"[{norm.unit}] -> [{norm.norm_unit}]")
         norm.add_statistics()
 
         values = [(k, v) for k, v in self.__dict__.items() if k != '_state']
@@ -275,11 +318,8 @@ class Output(ValueableNotBlank, AbstractOutput):
         if all(pd.Series(values) !=  pd.Series(norm_values)):
             norm.pk = None
             norm.save()
-
             norm.raw.add(self)
             norm.save()
-
-
 
 
     def add_statistics(self):
@@ -335,18 +375,6 @@ class Output(ValueableNotBlank, AbstractOutput):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 class TimecourseEx(
     Externable,
     AbstractOutput,
@@ -386,9 +414,6 @@ class TimecourseEx(
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = TimecourseExManager()
-
-
-# django-numpy
 
 
 class Timecourse(AbstractOutput):
@@ -441,16 +466,3 @@ class Timecourse(AbstractOutput):
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
             super().save(*args, **kwargs)
-
-
-    #def _norm_se(self):
-    #    sd = self.sd
-    #    if not sd:
-    #            sd = get_sd(
-    #                se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
-    #            )
-    #    sd = norm(sd)
-
-
-
-

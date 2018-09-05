@@ -326,3 +326,5 @@ class Characteristica(AbstractCharacteristica, Valueable, models.Model):
             self.cv = get_cv(se=self.se, count=self.count, mean=self.mean, sd=self.sd)
 
         super().save(*args, **kwargs)
+
+
