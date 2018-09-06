@@ -49,12 +49,6 @@ from collections import namedtuple
 # -----------------------------
 # master path
 # -----------------------------
-DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
-if not os.path.exists(DATA_PATH):
-    print("-" * 80)
-    print("DATA_PATH:", DATA_PATH)
-    print("-" * 80)
-    raise FileNotFoundError
 
 API_BASE = "http://0.0.0.0:8000"
 API_URL = API_BASE +"/api/v1"
@@ -450,6 +444,14 @@ def fill_database(args):
 
 
 if __name__ == "__main__":
+
+    DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
+    if not os.path.exists(DATA_PATH):
+        print("-" * 80)
+        print("DATA_PATH:", DATA_PATH)
+        print("-" * 80)
+        raise FileNotFoundError
+
     fill_database(None)
 
     # ----------------------------

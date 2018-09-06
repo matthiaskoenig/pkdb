@@ -3,8 +3,6 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 import pandas as pd
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -31,11 +29,10 @@ from ..categoricals import (
     INTERVENTION_FORM_CHOICES,
     INTERVENTION_APPLICATION_CHOICES,
     PK_DATA_CHOICES,
-    OUTPUT_TISSUE_DATA_CHOICES,
-    PK_DATA, PK_DATA_DICT, INTERVENTION_DICT)
+    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT)
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
 from ..substances import SUBSTANCES_DATA_CHOICES
-from ..subjects.models import Group, IndividualEx, DataFile, GroupEx, Individual
+from ..subjects.models import Group, DataFile, Individual
 from ..utils import CHAR_MAX_LENGTH
 import copy
 import numpy as np
@@ -547,6 +544,36 @@ class Timecourse(AbstractOutput):
             for key, value in self.norm_fields.items():
                 if not value is None:
                     setattr(self, key, conversion.apply_conversion(value))
+
+
+###############################################################################
+    @property
+    def related_subject(self):
+        if self.group:
+            return self.group
+        elif self.individual:
+            return self.individual
+
+    def get_bodyweight(self):
+        self.related_subject.characteristica.filter(category="weight")
+
+    def calculate_pharamcokinatics(self):
+
+        if self.value:
+            pass
+
+    def get_pharamcokinetic_data(self):
+
+        time = self.time
+        dosings = self.interventions.filter(category="dosing")
+        dosing = dosings[-1]
+        #for internvention in self.interventions:
+            #if internvention
+        iinterventions = iter(self.interventions)
+
+        #if value:
+
+
 
 
 
