@@ -314,9 +314,11 @@ class Output(ValueableNotBlank, AbstractOutput):
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
     norm = models.ForeignKey("Output",related_name="raw",on_delete=models.CASCADE,null=True)
     final = models.BooleanField(default=False)
+    timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
     objects = OutputManager()
 
     def save(self,no_norm=False, *args, **kwargs):
+        #fixme: I think, overwriting save function is not best practice.
         super().save( *args, **kwargs)
         if not no_norm:
             norm = copy.copy(self)
