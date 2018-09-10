@@ -460,6 +460,15 @@ if __name__ == "__main__":
 
     fill_database(args=None,header=HEADER)
 
+    DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "codeine"))
+    if not os.path.exists(DATA_PATH):
+        print("-" * 80)
+        print("DATA_PATH:", DATA_PATH)
+        print("-" * 80)
+        raise FileNotFoundError
+
+    fill_database(args=None, header=HEADER)
+
     # ----------------------------
     # python fill_database.py -u "http://www.pk-db.com/api/v1"
     # python fill_database.py -u "http://0.0.0.0:8000/api/v1"

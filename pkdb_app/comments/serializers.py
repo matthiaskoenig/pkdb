@@ -27,7 +27,7 @@ class CommentSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 {
                     "comments": "comment must be a list of the form ['username', 'comment']",
-                    "detail": {data},
+                    "detail": {str(data)},
                 }
             )
 

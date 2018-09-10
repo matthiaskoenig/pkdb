@@ -254,7 +254,7 @@ CHARACTERISTIC_DATA = [
         "abstinence",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice"],
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
     # -------------- Caffeine --------------

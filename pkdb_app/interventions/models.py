@@ -4,6 +4,7 @@ Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
 import pandas as pd
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from pkdb_app.interventions.managers import (
@@ -36,6 +37,8 @@ from ..subjects.models import Group, DataFile, Individual
 from ..utils import CHAR_MAX_LENGTH
 import copy
 import numpy as np
+from pkdb_app.analysis.pharmacokinetic import _auc
+
 # -------------------------------------------------
 # Substance
 # -------------------------------------------------
@@ -558,20 +561,46 @@ class Timecourse(AbstractOutput):
         self.related_subject.characteristica.filter(category="weight")
 
     def calculate_pharamcokinatics(self):
+         pk_data = self.get_pharamcokinetic_data()
 
-        if self.value:
-            pass
+
+
 
     def get_pharamcokinetic_data(self):
+        pk_data = {}
 
-        time = self.time
-        dosings = self.interventions.filter(category="dosing")
-        dosing = dosings[-1]
-        #for internvention in self.interventions:
-            #if internvention
-        iinterventions = iter(self.interventions)
+        if self.value:
+            pk_data["c"] = self.value
+            try:
+                pk_data["weight"] = self.individual.characteristica.get(category="weight").value
+            except ObjectDoesNotExist:
+                pk_data["weight"] = np.NaN
 
-        #if value:
+        elif self.mean:
+            pk_data["c"] = self.mean
+
+            try:
+                weight = self.group.characteristica_all.get(category="weight")
+                pk_data["weight"] = weight.value
+                pk_data["bodyweight_unit"] = weight.unit
+
+
+            except ObjectDoesNotExist:
+                pk_data["weight"] = np.NaN
+        try:
+            dosing = self.interventions.get(category="dosing")
+            pk_data["dose"] = dosing.value
+            pk_data["dosing_unit"] =  dosing.unit
+
+        except ObjectDoesNotExist:
+            pk_data["dose"] = np.NaN
+            pk_data["dosing_unit"] =  np.NaN
+
+            pk_data["t"] = self.time
+
+    def calculate_auc(self):
+        auc = _auc(self.time,self.value)
+        unit = f"{self.unit}"
 
 
 
