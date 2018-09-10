@@ -76,6 +76,8 @@ SUBSTANCES_DATA = [
     "phenylalanine",
     "indocyanine green",
     "morphine",
+    "morphine-3-glucuronide",
+    "morphine-6-glucuronide",
     "glycerol",
     "FFA",
     "carbamazepine",

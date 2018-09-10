@@ -1,5 +1,6 @@
 import json
 
+import requests
 from django.test import TestCase, Client
 import os
 import sys
@@ -23,20 +24,36 @@ class AuthenticationAPITestCase(TestCase):
         self.password = "test"
     def test_api_token_auth(self):
 
-        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": "test"})
+        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
 
-        #response = self.browser(f"{self.api_base}/api-token-auth/", data={"username": "admin", "password": "test"})
+        #response = self.browser(f"{self.api_base}/api-token-auth/", data={"username": "admin", "password": self.password})
 
         assert json.loads(response.content) == {"non_field_errors":["Unable to log in with provided credentials."]} , json.loads(response.content)
 
 
     def test_create_superuser(self):
-        User.objects.create_superuser(username="admin", password="test", email="Janekg89@hotmail.de")
-        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": "test"})
+        User.objects.create_superuser(username="admin", password=self.password, email="")
+        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
 
 
         assert response.status_code == 200, response.status_code
-
         assert "token" in json.loads(response.content) ,json.loads(response.content)
+
+
+class UploadStudy(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.password = "test"
+        User.objects.create_superuser(username="admin", password=self.password, email="")
+        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
+        self.token = json.loads(response.content)["token"]
+
+
+
+
+
+
+
+
 
 

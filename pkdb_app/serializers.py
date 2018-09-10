@@ -168,9 +168,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 values = [value]
             for k, value in enumerate(values):
                 if isinstance(value, str):
+                    print(values)
                     values[k] = value.strip()
                     if field == "interventions":
                         values[k] = [v.strip() for v in value.split(",")]
+
+                    if values[k] in ["NA", "NAN", "na", "nan"]:
+                        values[k] = None
+                    elif values[k] == "[]":
+                        values[k] = []
 
             # --- validation ---
             # names must be split in a split entry
@@ -262,6 +268,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
     def df_from_file(self, source, format, subset):
         delimiter = FORMAT_MAPPING[format].delimiter
+        if isinstance(source,int):
+            pass
+
+        elif isinstance(source,str):
+            if source.isnumeric():
+                pass
+        else:
+            raise serializers.ValidationError({"source":f"<{str(source)}> is not existing","detail":type(source)})
         src = DataFile.objects.get(pk=source)
         try:
             df = pd.read_csv(

@@ -54,6 +54,7 @@ UNITS = {
     "IU/I": None,
     "l/h": None,
     # concentration
+    "µg/l": None,
     "µg/ml": None,
     "mg/dl": None,
     "mg/l": None,
