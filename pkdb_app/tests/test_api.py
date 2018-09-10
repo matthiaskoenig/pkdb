@@ -1,15 +1,9 @@
-from unittest import TestCase
+import json
 
+from django.test import TestCase, Client
 import os
 import sys
-from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-import requests
-from coreapi import Client
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from rest_framework.reverse import reverse
-import socket
+from django.urls import reverse
 
 from pkdb_app.users.models import User
 
@@ -22,41 +16,27 @@ from pkdb_app.data_management.fill_database import get_token,get_header, setup_d
 
 
 
-class UserAPITestCase(StaticLiveServerTestCase):
-    live_server_url = socket.gethostbyname(socket.gethostname())
-
+class AuthenticationAPITestCase(TestCase):
     def setUp(self):
-        self.browser = webdriver.Remote(
-            command_executor="http://selenium:4444/wd/hub",
-            desired_capabilities=DesiredCapabilities.CHROME
-        )
-
+        self.client = Client()
+        self.api = reverse('user-list')
+        self.password = "test"
     def test_api_token_auth(self):
 
-        response = self.browser.post(f"{self.api_base}/api-token-auth/", data={"username": "admin", "password": "test"})
-        assert response.json() == {"non_field_errors":["Unable to log in with provided credentials."]}
+        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": "test"})
+
+        #response = self.browser(f"{self.api_base}/api-token-auth/", data={"username": "admin", "password": "test"})
+
+        assert json.loads(response.content) == {"non_field_errors":["Unable to log in with provided credentials."]} , json.loads(response.content)
+
 
     def test_create_superuser(self):
-        #os.system(f"docker-compose run --rm web ./manage.py createsuperuser2 "
-        #          f"--username admin --password {self.password} --email Janekg89@hotmail.de --noinput")
         User.objects.create_superuser(username="admin", password="test", email="Janekg89@hotmail.de")
-
-        response = self.browser.post(f"{self.api_base}/api-token-auth/", data={"username": "admin", "password": "test"})
-        assert response.json() == {"non_field_errors":"hi"}, response.json()
-
-    #def test_get_token(self):
-    #    token = get_token(self.api_base)
-    #    assert token is not None, f"no Token"
+        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": "test"})
 
 
+        assert response.status_code == 200, response.status_code
+
+        assert "token" in json.loads(response.content) ,json.loads(response.content)
 
 
-
-    #def test_can_get_user_list(self):
-    #    """GET /user returns a list of users"""
-    #    url = reverse("user-list")
-    #    response = requests.get("http://web:8000"+url, headers=self.header)
-    #    print(response)
-    #
-    #   assert response.status_code == 200, \
-    #        "Expect 200 OK. got: {}".format(response.status_code)
