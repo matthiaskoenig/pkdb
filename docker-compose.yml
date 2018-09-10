@@ -10,12 +10,9 @@ services:
      POSTGRES_PASSWORD: pass
      POSTGRES_DB: postgres
 
-
   web:
     restart: always
     environment:
-      - SELENIUM_HOST = http://selenium:4444/wd/hub
-      - TEST_SELENIUM = 'yes'
       - PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
       - PKDB_DEFAULT_PASSWORD="pkdb"
 
@@ -32,7 +29,7 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-      - selenium
+
   documentation:
     restart: always
     build: ./
@@ -42,9 +39,6 @@ services:
     ports:
       - "8001:8001"
 
-  selenium:
-    image: selenium/standalone-chrome-debug
-    ports:
-      - "5900:5900"
+
 
 
