@@ -50,6 +50,11 @@ SUBSTANCES_DATA = [
     "EE2",
     # codeine
     "codeine",
+    "codeine-6-glucuronide",
+    "norcodeine",
+    "norcodeine-glucuronide",
+    "codeine/morphine",
+    "(Mor+M3G+M6G)/(Cod+C6G)",
     # chlorzoxazone (CYP2E1)
     "chlorzoxazone",
     "6-hydroxychlorzoxazone",
@@ -78,6 +83,10 @@ SUBSTANCES_DATA = [
     "morphine",
     "morphine-3-glucuronide",
     "morphine-6-glucuronide",
+    "normorphine",
+    "normorphine-glucuronide",
+    "norcodeine-conjugates",
+    "diclofenac",
     "glycerol",
     "FFA",
     "carbamazepine",
