@@ -60,17 +60,21 @@ UNITS = {
     "mg/l": None,
     "g/dl": None,
     "ng/ml": None,
+    "ng/g":None,
     "mmol/l": None,
     "µmol/l": None,
     "nmol/l": None,
+    "pmol/ml":None,
     # AUC
     "mg*h/l": None,
     "µg*h/ml": None,  # -> mg*h/l
     "µg/ml*h": None,  # -> mg*h/l
     "mg*min/l": None,  # -> mg*h/l
     "µg*min/ml": None,
+    "nmol*h/l": None,
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
+    "pmol*h/ml": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
     # Volume of distribution (vd)

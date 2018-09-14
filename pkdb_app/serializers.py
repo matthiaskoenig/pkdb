@@ -153,6 +153,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         :return: list of entries
         """
 
+
         n = self.number_of_entries(entry)
         if n == 1:
             return [entry]
@@ -168,7 +169,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 values = [value]
             for k, value in enumerate(values):
                 if isinstance(value, str):
-                    print(values)
                     values[k] = value.strip()
                     if field == "interventions":
                         values[k] = [v.strip() for v in value.split(",")]
@@ -181,9 +181,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
             # --- validation ---
             # names must be split in a split entry
             if field == "name" and len(values) != n:
-                raise serializers.ValidationError(
-                    f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain  of name is violated."
-                )
+                if len(values) == 1:
+                    raise serializers.ValidationError(
+                        f"names have to be splitted and not left as <{values}>. Otherwise UniqueConstrain  of name is violated."
+                    )
 
             # check for old syntax
             for value in values:
@@ -268,12 +269,17 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
     def df_from_file(self, source, format, subset):
         delimiter = FORMAT_MAPPING[format].delimiter
+
+
         if isinstance(source,int):
             pass
 
         elif isinstance(source,str):
             if source.isnumeric():
                 pass
+            else:
+                raise serializers.ValidationError(
+                    {"source": f"<{str(source)}> is not existing", "detail": type(source)})
         else:
             raise serializers.ValidationError({"source":f"<{str(source)}> is not existing","detail":type(source)})
         src = DataFile.objects.get(pk=source)
@@ -284,6 +290,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 keep_default_na=False,
                 na_values=["NA", "NAN", "na", "nan"],
             )
+            df.columns = df.columns.str.strip()
+
 
         except Exception as e:
             raise serializers.ValidationError(
@@ -298,6 +306,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     df = self.subset_pd(subset_single, df)
             else:
                 df = self.subset_pd(subset, df)
+
 
         return df
 
@@ -316,7 +325,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if format is None:
                 raise serializers.ValidationError({"format": "format is missing!"})
             df = self.df_from_file(source, format, subset)
-
             for entry in df.itertuples():
                 entry_dict = copy.deepcopy(template)
                 recursive_entry_dict = list(recursive_iter(entry_dict))
@@ -336,10 +344,12 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 entry_value = getattr(entry, values[1])
 
                             except AttributeError:
+
                                 raise serializers.ValidationError(
+
                                     [
                                         f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
-                                        data,
+                                        data
                                     ]
                                 )
 
@@ -389,6 +399,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             value_array = df[values[1]]
 
                         except KeyError:
+                            print("*" * 100)
+                            print(df.columns)
+                            print(values[1])
+                            print("*" * 100)
                             raise serializers.ValidationError(
                                 [
                                     f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",

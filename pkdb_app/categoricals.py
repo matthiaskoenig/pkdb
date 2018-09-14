@@ -113,6 +113,7 @@ LIFESTYLE = "lifestyle"
 BIOCHEMICAL_DATA = "biochemical data"
 HEMATOLOGY_DATA = "hematology data"
 GENETIC_VARIANTS = "genetic variants"
+PHENOTYPE = "phenotype"
 
 
 dimensionless_norm_unit = NormalizableUnit({"-": None})
@@ -254,7 +255,7 @@ CHARACTERISTIC_DATA = [
         "abstinence",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication"],
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication","drug"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
     # -------------- Caffeine --------------
@@ -320,6 +321,21 @@ CHARACTERISTIC_DATA = [
         ["CYP2D6 duplication", "CYP2D6 wild type", "CYP2D6 poor metabolizer"],
         dimensionless_norm_unit,
     ),
+    CharacteristicType(
+        "phenotype",
+        PHENOTYPE,
+        CATEGORIAL_TYPE,
+        ["PM","IM","EM","UM"],
+        dimensionless_norm_unit,
+    ),
+    CharacteristicType(
+        "metabolic ratio",
+         PHENOTYPE,
+         NUMERIC_TYPE,
+        None,
+        dimensionless_norm_unit,
+    ),
+
 ]
 
 
@@ -408,7 +424,7 @@ def validate_categorials(data, category_class):
 # ---------------------------------------------------
 # Output
 # ---------------------------------------------------
-OUTPUT_TISSUE_DATA = ["saliva", "plasma", "urine"]
+OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine"]
 
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
