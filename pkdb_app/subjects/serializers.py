@@ -3,7 +3,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials
+from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.utils import recursive_iter, set_keys
 from .models import (
@@ -61,6 +61,7 @@ class CharacteristicaExSerializer(MappingSerializer):
         many=True, read_only=False, required=False, allow_null=True
     )
 
+
     class Meta:
         model = CharacteristicaEx
         fields = (
@@ -102,6 +103,8 @@ class CharacteristicaSerializer(ExSerializer):
             raise serializers.ValidationError(err)
         #validate_categorials(attr, "characteristica")
         return super().validate(attr)
+
+
 
 
 # ----------------------------------
@@ -533,9 +536,17 @@ class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
                   + ["name", "group", "characteristica_ex","comments"])
 
 class CharacteristicaReadSerializer(serializers.HyperlinkedModelSerializer):
+    options = serializers.SerializerMethodField()
+
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS + VALUE_FIELDS
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS + VALUE_FIELDS + ["options"]
+
+    def get_options(self, obj):
+        options = {}
+        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
+        options["ctypes"] = CHARACTERISTICA_TYPES
+        return options
 
 
 class CharacteristicaExReadSerializer(serializers.HyperlinkedModelSerializer):
