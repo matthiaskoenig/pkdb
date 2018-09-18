@@ -79,10 +79,12 @@ USERS = [
     },
 ]
 
+
 # create superuser and use it for authenification
-#TOKEN = os.getenv("PKDB_TOKEN")
+# TOKEN = os.getenv("PKDB_TOKEN")
 def get_token(api_base=API_BASE):
-    response = requests.post(f"{api_base}/api-token-auth/",data={"username":"admin","password":PASSWORD})
+    response = requests.post(f"{api_base}/api-token-auth/", data={"username": "admin", "password": PASSWORD})
+    response.raise_for_status()
     TOKEN = response.json().get("token")
     if not TOKEN:
         os.system(f"docker-compose run --rm web ./manage.py createsuperuser2 --username admin --password {PASSWORD} --email Janekg89@hotmail.de --noinput")
@@ -90,6 +92,7 @@ def get_token(api_base=API_BASE):
         TOKEN = response.json().get("token")
         #os.environ["PKDB_TOKEN"] = TOKEN
     return TOKEN
+
 
 def get_header(api_base=API_BASE):
     TOKEN = get_token(api_base=api_base)
@@ -108,8 +111,7 @@ def setup_database(api_url,header):
     from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
 
     for substance in SUBSTANCES_DATA:
-        response = requests.post(f"{api_url}/substances/", json={"name": substance}, headers=header
-)
+        response = requests.post(f"{api_url}/substances/", json={"name": substance}, headers=header)
         if not response.status_code == 201:
             logging.warning(f"substance upload failed ")
 
