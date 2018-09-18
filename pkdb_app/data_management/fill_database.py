@@ -49,8 +49,8 @@ from collections import namedtuple
 # master path
 # -----------------------------
 
-# API_BASE = "http://0.0.0.0:8000"
-API_BASE = "http://www.pk-db.com"
+API_BASE = "http://0.0.0.0:8000"
+# API_BASE = "http://www.pk-db.com"
 API_URL = API_BASE + "/api/v1"
 
 # -----------------------------
