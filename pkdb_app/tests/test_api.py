@@ -1,6 +1,5 @@
 import json
 
-import requests
 from django.test import TestCase, Client
 import os
 import sys
@@ -13,7 +12,6 @@ BASEPATH = os.path.abspath(
 )
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.fill_database import get_token,get_header, setup_database
 
 
 
@@ -25,9 +23,6 @@ class AuthenticationAPITestCase(TestCase):
     def test_api_token_auth(self):
 
         response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
-
-        #response = self.browser(f"{self.api_base}/api-token-auth/", data={"username": "admin", "password": self.password})
-
         assert json.loads(response.content) == {"non_field_errors":["Unable to log in with provided credentials."]} , json.loads(response.content)
 
 
@@ -41,6 +36,7 @@ class AuthenticationAPITestCase(TestCase):
 
 
 class UploadStudy(TestCase):
+
     def setUp(self):
         self.client = Client()
         self.password = "test"

@@ -240,7 +240,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
     # helper for export of entries from file
     # ----------------------------------
     def subset_pd(self, subset, df):
-        values = subset.split("==")
+        values = subset.split(ITEM_MAPPER)
         values = [v.strip() for v in values]
         if len(values) != 2:
             raise serializers.ValidationError(
@@ -334,10 +334,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 recursive_entry_dict = list(recursive_iter(entry_dict))
 
                 for keys, value in recursive_entry_dict:
-
                     if isinstance(value, str):
-                        if "==" in value:
-                            values = value.split("==")
+                        if ITEM_MAPPER in value:
+                            values = value.split(ITEM_MAPPER)
                             values = [v.strip() for v in values]
 
                             if len(values) != 2 or values[0] != "col":
@@ -416,8 +415,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
             if isinstance(value, str):
-                if "==" in value:
-                    values = value.split("==")
+                if ITEM_MAPPER in value:
+                    values = value.split(ITEM_MAPPER)
                     values = [v.strip() for v in values]
 
                     if len(values) != 2 or values[0] != "col":
