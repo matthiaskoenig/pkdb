@@ -84,9 +84,10 @@ USERS = [
 # TOKEN = os.getenv("PKDB_TOKEN")
 def get_token(api_base=API_BASE):
     response = requests.post(f"{api_base}/api-token-auth/", data={"username": "admin", "password": PASSWORD})
-    response.raise_for_status()
+    # response.raise_for_status()
     TOKEN = response.json().get("token")
     if not TOKEN:
+        # FIXME: this only works for local deployment!
         os.system(f"docker-compose run --rm web ./manage.py createsuperuser2 --username admin --password {PASSWORD} --email Janekg89@hotmail.de --noinput")
         response = requests.post(f"{api_base}/api-token-auth/", data={"username": "admin", "password": PASSWORD})
         TOKEN = response.json().get("token")
