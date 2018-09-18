@@ -54,6 +54,7 @@ SUBSTANCES_DATA = [
     "norcodeine",
     "norcodeine-glucuronide",
     "codeine/morphine",
+    "morphine/codine",
     "(Mor+M3G+M6G)/(Cod+C6G)",
     # chlorzoxazone (CYP2E1)
     "chlorzoxazone",
