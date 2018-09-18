@@ -173,7 +173,7 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     norm = models.ForeignKey("Intervention",related_name="raw",on_delete=models.CASCADE,null=True)
     final = models.BooleanField(default=False)
 
-    def save(self,no_norm=False, *args, **kwargs):
+    def save(self, no_norm=False, *args, **kwargs):
         super().save(*args, **kwargs)
         if not no_norm:
 
@@ -190,8 +190,6 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
             else:
                 self.final = True
                 self.save(no_norm=True,force_update=True)
-
-
 
     def save_no_norm(self, *args, **kwargs):
             super().save(*args, **kwargs)
@@ -214,23 +212,21 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     @property
     def norm_fields(self):
         return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                      "sd": self.sd, "se": self.se}
+                "sd": self.sd, "se": self.se}
 
     def normalize(self):
         if all([not self.is_norm, self.is_convertible]):
             conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
             self.unit = self.norm_unit
 
-
-
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            for key,value in self.norm_fields.items():
+            for key, value in self.norm_fields.items():
                 if not value is None:
-                        setattr(self,key,conversion.apply_conversion(value))
+                        setattr(self, key, conversion.apply_conversion(value))
 
 
 # -------------------------------------------------
-# RESULTS
+# OUTPUTS
 # -------------------------------------------------
 class OutputSet(models.Model):
     objects = OutputSetManager()
