@@ -267,6 +267,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
             )
         return df
 
+    def group_by(self,groupby, df):
+
+        pass
+
     def df_from_file(self, source, format, subset):
         delimiter = FORMAT_MAPPING[format].delimiter
 
@@ -382,42 +386,71 @@ class MappingSerializer(WrongKeyValidationSerializer):
             subset = array_dict.pop("subset", None)
             # read dataframe subset
             df = self.df_from_file(source, format, subset)
-            recursive_array_dict = list(recursive_iter(array_dict))
 
-            for keys, value in recursive_array_dict:
+            if data.get("groupby"):
+                groupby = array_dict.pop("groupby")
+                if not isinstance(groupby, str):
+                    raise serializers.ValidationError({"groupby":"groupby has to be a string"})
+                groupby = groupby.split("&")
+                array_dicts = []
+                for group_name, group_df in df.groupby(groupby):
+                    array_dict = copy.deepcopy(array_dict)
+                    self.dict_from_array(array_dict, group_df, data, source)
+                    array_dicts.append(array_dict)
 
-                if isinstance(value, str):
-                    if "==" in value:
-                        values = value.split("==")
-                        values = [v.strip() for v in values]
 
-                        if len(values) != 2 or values[0] != "col":
-                            raise serializers.ValidationError(
-                                ["field has wrong pattern col=='col_value'", data]
-                            )
-                        try:
-                            value_array = df[values[1]]
-
-                        except KeyError:
-                            print("*" * 100)
-                            print(df.columns)
-                            print(values[1])
-                            print("*" * 100)
-                            raise serializers.ValidationError(
-                                [
-                                    f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
-                                    data,
-                                ]
-                            )
-
-                        set_keys(array_dict, value_array.values.tolist(), *keys)
+            else:
+                self.dict_from_array(array_dict, df, data, source)
+                array_dicts =[array_dict]
 
         else:
             raise serializers.ValidationError(
                 "For timecourse data a source file has to be provided."
             )
 
-        return array_dict
+        return array_dicts
+
+    def dict_from_array(self,array_dict,df,data,source):
+        recursive_array_dict = list(recursive_iter(array_dict))
+        for keys, value in recursive_array_dict:
+
+
+            if isinstance(value, str):
+                if "==" in value:
+                    values = value.split("==")
+                    values = [v.strip() for v in values]
+
+                    if len(values) != 2 or values[0] != "col":
+                        raise serializers.ValidationError(
+                            ["field has wrong pattern col=='col_value'", data]
+                        )
+
+                    try:
+                        value_array = df[values[1]]
+
+
+                    except KeyError:
+                        raise serializers.ValidationError(
+                            [
+                                f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
+                                data,
+                            ]
+                        )
+
+                    if keys[-1] in ["individual", "group"]:
+                        print("I am here")
+                        unqiue_values = value_array.unique()
+                        if len(unqiue_values) != 1:
+                            raise serializers.ValidationError(
+                                [
+                                f"{values[1]} has to be a unique for one timecourse",
+                                data,
+                                ])
+                        set_keys(array_dict, unqiue_values[0], *keys)
+
+                    else:
+                        set_keys(array_dict, value_array.values.tolist(), *keys)
+
 
     # ----------------------------------
     #

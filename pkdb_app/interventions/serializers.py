@@ -448,7 +448,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         timecourses = []
         for timecourse in temp_timecourses:
             timecourses_from_file = self.array_from_file(timecourse)
-            timecourses.append(timecourses_from_file)
+            timecourses.extend(timecourses_from_file)
         # ----------------------------------
         # finished
         # ----------------------------------
