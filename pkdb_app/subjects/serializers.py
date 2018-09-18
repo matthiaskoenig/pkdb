@@ -19,7 +19,7 @@ from .models import (
 )
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
 
-EXTERN_FILE_FIELDS = ["source", "format", "subset_map", "figure"]
+EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
 VALUE_FIELDS = ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"]
 VALUE_MAP_FIELDS = [
     "value_map",

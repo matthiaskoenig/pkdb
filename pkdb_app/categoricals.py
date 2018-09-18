@@ -328,6 +328,13 @@ CHARACTERISTIC_DATA = [
         ["PM","IM","EM","UM"],
         dimensionless_norm_unit,
     ),
+CharacteristicType(
+        "CYP2D6 genotype",
+        GENETIC_VARIANTS,
+        CATEGORIAL_TYPE,
+        ["*1/*1","*7/*41","*x/*4","*4/*4","*1x2/*1","*1/*41","*4/*41","*1/*4"],
+        dimensionless_norm_unit,
+    ),
     CharacteristicType(
         "metabolic ratio",
          PHENOTYPE,
