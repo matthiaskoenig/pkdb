@@ -1,10 +1,15 @@
 version: '2'
 
+volumes:
+  postgres_data:
+
 services:
   postgres:
     image: postgres:9.5
     ports:
       - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
     environment:
      POSTGRES_USER : postgres
      POSTGRES_PASSWORD: pass
@@ -15,7 +20,6 @@ services:
     environment:
       - PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
       - PKDB_DEFAULT_PASSWORD="pkdb"
-
     image: web
     build: ./
     command: >
