@@ -8,9 +8,11 @@ from pkdb_app.interventions.models import InterventionSet, Intervention, Substan
 class InterventionAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(InterventionSet)
 class InterventionSetAdmin(admin.ModelAdmin):
     pass
+
 
 @admin.register(Substance)
 class SubstanceAdmin(admin.ModelAdmin):

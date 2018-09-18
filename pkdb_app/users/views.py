@@ -4,34 +4,33 @@ from .models import User
 from .serializers import CreateUserSerializer, UserSerializer, UserReadSerializer
 
 
-class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.UpdateModelMixin,
-                  viewsets.GenericViewSet):
+class UserViewSet(
+    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+):
     """
     Updates and retrieves user accounts
     """
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (AllowAny,)
-    # permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser,)
 
 
-
-class UserCreateViewSet(mixins.CreateModelMixin,
-                        viewsets.GenericViewSet):
+class UserCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """
     Creates user accounts
     """
+
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
-    permission_classes = (AllowAny,)
-    # permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser,)
 
 
-class UserReadViewSet(viewsets.ModelViewSet):
+class UserReadViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Updates and retrieves user accounts
     """
+
     queryset = User.objects.all()
     serializer_class = UserReadSerializer
     permission_classes = (AllowAny,)

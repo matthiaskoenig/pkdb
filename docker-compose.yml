@@ -1,23 +1,25 @@
 version: '2'
 
+volumes:
+  postgres_data:
+
 services:
   postgres:
     image: postgres:9.5
     ports:
       - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
     environment:
      POSTGRES_USER : postgres
      POSTGRES_PASSWORD: pass
      POSTGRES_DB: postgres
 
-
   web:
     restart: always
     environment:
-
       - PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
       - PKDB_DEFAULT_PASSWORD="pkdb"
-
     image: web
     build: ./
     command: >
@@ -31,6 +33,7 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+
   documentation:
     restart: always
     build: ./
@@ -40,13 +43,6 @@ services:
     ports:
       - "8001:8001"
 
-  #client:
-    #build: ./client
-    #ports:
-    #  - 8080:8080
-    #volumes:
-    #  - ./client:/data
-    #depends_on:
-    #  - web
-    #environment:
-    #  - API_URL=http://localhost:8081/
+
+
+

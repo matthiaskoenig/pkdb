@@ -14,6 +14,7 @@ from pkdb_app.interventions.models import Intervention, Output, Timecourse
 
 class Statistics(object):
     """ Basic database statistics. """
+
     def __init__(self):
         self.version = __version__
         self.reference_count = Reference.objects.count()
@@ -27,29 +28,37 @@ class Statistics(object):
 
 class StatisticsSerializer(serializers.BaseSerializer):
     """ Serializer for database statistics. """
+
     def to_representation(self, instance):
 
-        return {key: getattr(instance, key) for key in ["version", "study_count",
-                                                        "reference_count", "group_count",
-                                                        "individual_count", "intervention_count", "output_count",
-                                                        "timecourse_count"]}
+        return {
+            key: getattr(instance, key)
+            for key in [
+                "version",
+                "study_count",
+                "reference_count",
+                "group_count",
+                "individual_count",
+                "intervention_count",
+                "output_count",
+                "timecourse_count",
+            ]
+        }
 
 
 class StatisticsViewSet(viewsets.ViewSet):
     """
     Get database statistics including version.
     """
-    '''
+
+    """
     def list(self, request):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)
-    '''
+    """
 
     def list(self, request):
         instance = Statistics()
         serializer = StatisticsSerializer(instance)
         return Response(serializer.data)
-
-
-

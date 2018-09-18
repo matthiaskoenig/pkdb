@@ -10,17 +10,19 @@ import json
 import requests
 
 
-BASEPATH = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '../../'))
+BASEPATH = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
+)
 sys.path.append(BASEPATH)
 
+from pkdb_app.data_management.utils import recursive_iter, set_keys
+
 # FIXME: get proper email
-ENTREZ_EMAIL = 'janekg89@hotmail.de'
+ENTREZ_EMAIL = "janekg89@hotmail.de"
 
 
 def run(args):
-    ref_dict = {"reference_path": args.reference,
-                "name": args.name,
-                "pmid": args.pmid}
+    ref_dict = {"reference_path": args.reference, "name": args.name, "pmid": args.pmid}
     save_json(add_doi(create_json(xml_to_data(load_from_biopython(ref_dict)))))
 
 
@@ -31,14 +33,14 @@ def load_from_biopython(d):
     :return:
     """
     Entrez.email = ENTREZ_EMAIL
-    handle = Entrez.efetch(db='pubmed', id=d['pmid'], retmode='xml')
+    handle = Entrez.efetch(db="pubmed", id=d["pmid"], retmode="xml")
     all_info = handle.read()
     handle.close()
-    return {**d, 'xml': all_info}
+    return {**d, "xml": all_info}
 
 
 def xml_to_data(d):
-    return {**d, 'data': ET.fromstring(d['xml'])}
+    return {**d, "data": ET.fromstring(d["xml"])}
 
 
 def create_json(d):
@@ -48,9 +50,9 @@ def create_json(d):
     json_dict["name"] = d["name"]
     json_dict["sid"] = d["pmid"]
     for date in d["data"].iter("DateCompleted"):
-        year = date.find('Year').text
-        month = date.find('Month').text
-        day = date.find('Day').text
+        year = date.find("Year").text
+        month = date.find("Month").text
+        day = date.find("Day").text
         json_dict["date"] = f"{year}-{str(month).zfill(2)}-{str(day).zfill(2)}"
         continue
     for journal in d["data"].iter("Title"):
@@ -70,7 +72,12 @@ def create_json(d):
         author_dict["last_name"] = author.find("LastName").text
         authors.append(author_dict)
     json_dict["authors"] = authors
-    return {'json': json_dict, 'reference_path': d["reference_path"]}
+
+    for keys, item in recursive_iter(json_dict):
+        if item == "":
+            set_keys(json_dict, None, *keys)
+
+    return {"json": json_dict, "reference_path": d["reference_path"]}
 
 
 def add_doi(d):
@@ -80,27 +87,33 @@ def add_doi(d):
     :return:
     """
     json_dict = d["json"]
-    response = requests.get(f'https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?tool=my_tool&email=my_email@example.com&ids={json_dict["pmid"]}')
+    response = requests.get(
+        f'https://www.ncbi.nlm.nih.gov/pmc/utils/idconv/v1.0/?tool=my_tool&email=my_email@example.com&ids={json_dict["pmid"]}'
+    )
     pmcids = ET.fromstring(response.content)
     for records in pmcids.iter("record"):
-         json_dict["doi"] = records.get('doi', "")
+        json_dict["doi"] = records.get("doi", None)
 
-    return {"json":json_dict, "reference_path": d["reference_path"]}
+    return {"json": json_dict, "reference_path": d["reference_path"]}
 
 
 def save_json(d):
-    json_file = os.path.join(d["reference_path"],"reference.json")
+    json_file = os.path.join(d["reference_path"], "reference.json")
     directory = os.path.dirname(json_file)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    with open(json_file, 'w') as fp:
-        json.dump(d['json'], fp, indent=4)
+    with open(json_file, "w") as fp:
+        json.dump(d["json"], fp, indent=4)
 
 
 def main():
     parser = argparse.ArgumentParser(description="Get Pubmed information as JSON")
-    parser.add_argument("-s", help="directory of a reference", dest="reference", type=str, required=True)
-    parser.add_argument("-n", help="name of reference", dest="name", type=str, required=True)
+    parser.add_argument(
+        "-s", help="directory of a reference", dest="reference", type=str, required=True
+    )
+    parser.add_argument(
+        "-n", help="name of reference", dest="name", type=str, required=True
+    )
     parser.add_argument("-p", help="pmid", dest="pmid", type=str, required=True)
 
     # call run function
@@ -109,5 +122,5 @@ def main():
     args.func(args)
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

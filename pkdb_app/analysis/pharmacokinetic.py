@@ -14,7 +14,18 @@ import warnings
 # Currently only simple calculation of pharmacokinetic parameters
 
 
-def f_pk(t, c, compound, dose=np.nan, bodyweight=np.nan, t_unit="h", c_unit="mg/L", dose_unit="mg", vd_unit="L", bodyweight_unit="kg"):
+def f_pk(
+    t,
+    c,
+    compound,
+    dose=np.nan,
+    bodyweight=np.nan,
+    t_unit="h",
+    c_unit="mg/L",
+    dose_unit="mg",
+    vd_unit="L",
+    bodyweight_unit="kg",
+):
     """ Calculates all the pk parameters from given time course.
 
     The returned data structure can be used to
@@ -67,39 +78,37 @@ def f_pk(t, c, compound, dose=np.nan, bodyweight=np.nan, t_unit="h", c_unit="mg/
         cl = np.nan
 
     return {
-        'compound': compound,
-        'dose': dose,
-        'dose_unit': dose_unit,
-        'bodyweight': bodyweight,
-        'bodyweight_unit': bodyweight_unit,
-        'auc': auc,
-        'auc_unit': '{}*{}'.format(c_unit, t_unit),
-        'aucinf': aucinf,
-        'aucinf_unit': '{}*{}'.format(c_unit, t_unit),
-        'tmax': tmax,
-        'tmax_unit': t_unit,
-        'cmax': cmax,
-        'cmax_unit': c_unit,
-        'tmaxhalf': tmaxhalf,
-        'tmaxhalf_unit': t_unit,
-        'cmaxhalf': cmaxhalf,
-        'cmaxhalf_unit': c_unit,
-
-        'kel': kel,
-        'kel_unit': '1/{}'.format(t_unit),
-        'thalf': thalf,
-        'thalf_unit': t_unit,
-        'vd': vd,
-        'vd_unit': vd_unit,
-        'cl': cl,
-        'cl_unit': '{}/{}'.format(vd_unit, t_unit),
-
-        'slope': slope,
-        'intercept': intercept,
-        'r_value': r_value,
-        'p_value': p_value,
-        'std_err': std_err,
-        'max_idx': max_idx,
+        "compound": compound,
+        "dose": dose,
+        "dose_unit": dose_unit,
+        "bodyweight": bodyweight,
+        "bodyweight_unit": bodyweight_unit,
+        "auc": auc,
+        "auc_unit": "{}*{}".format(c_unit, t_unit),
+        "aucinf": aucinf,
+        "aucinf_unit": "{}*{}".format(c_unit, t_unit),
+        "tmax": tmax,
+        "tmax_unit": t_unit,
+        "cmax": cmax,
+        "cmax_unit": c_unit,
+        "tmaxhalf": tmaxhalf,
+        "tmaxhalf_unit": t_unit,
+        "cmaxhalf": cmaxhalf,
+        "cmaxhalf_unit": c_unit,
+        "kel": kel,
+        "kel_unit": "1/{}".format(t_unit),
+        "thalf": thalf,
+        "thalf_unit": t_unit,
+        "vd": vd,
+        "vd_unit": vd_unit,
+        "cl": cl,
+        "cl_unit": "{}/{}".format(vd_unit, t_unit),
+        "slope": slope,
+        "intercept": intercept,
+        "r_value": r_value,
+        "p_value": p_value,
+        "std_err": std_err,
+        "max_idx": max_idx,
     }
 
 
@@ -116,23 +125,39 @@ def pk_report(pk):
     """
     lines = []
     lines.append("-" * 80)
-    lines.append(pk['compound'])
+    lines.append(pk["compound"])
     lines.append("-" * 80)
-    for key in ['slope', 'intercept', 'r_value', 'p_value', 'std_err']:
-        lines.append(
-            '{:<12}: {:>3.3f}'.format(key, pk[key])
-        )
+    for key in ["slope", "intercept", "r_value", "p_value", "std_err"]:
+        lines.append("{:<12}: {:>3.3f}".format(key, pk[key]))
     lines.append("-" * 80)
-    for key in ['dose', 'bodyweight', 'auc', 'aucinf', 'tmax', 'cmax', 'tmaxhalf', 'cmaxhalf', 'kel', 'thalf', 'vd', 'cl']:
+    for key in [
+        "dose",
+        "bodyweight",
+        "auc",
+        "aucinf",
+        "tmax",
+        "cmax",
+        "tmaxhalf",
+        "cmaxhalf",
+        "kel",
+        "thalf",
+        "vd",
+        "cl",
+    ]:
         lines.append(
-            '\t{:<12}: {:>3.3f} [{}]'.format(key, pk[key], pk['{}_unit'.format(key)])
+            "\t{:<12}: {:>3.3f} [{}]".format(key, pk[key], pk["{}_unit".format(key)])
         )
-    lines.append('')
-    for key in ['dose', 'auc', 'aucinf', 'kel', 'vd', 'cl']:
-        key_bw = '{}/bw'.format(key)
+    lines.append("")
+    for key in ["dose", "auc", "aucinf", "kel", "vd", "cl"]:
+        key_bw = "{}/bw".format(key)
 
         lines.append(
-            '\t{:<12}: {:>3.3f} [{}/{}]'.format(key_bw, 1.0*pk[key]/pk["bodyweight"], pk['{}_unit'.format(key)], pk['bodyweight_unit'])
+            "\t{:<12}: {:>3.3f} [{}/{}]".format(
+                key_bw,
+                1.0 * pk[key] / pk["bodyweight"],
+                pk["{}_unit".format(key)],
+                pk["bodyweight_unit"],
+            )
         )
 
     return "\n".join(lines)
@@ -147,41 +172,63 @@ def pk_figure(t, c, pk):
 
     :return: matplotlib figure instance
     """
-    c_unit = pk['cmax_unit']
-    t_unit = pk['tmax_unit']
-    slope = pk['slope']
-    intercept = pk['intercept']
-    max_idx = pk['max_idx']
+    c_unit = pk["cmax_unit"]
+    t_unit = pk["tmax_unit"]
+    slope = pk["slope"]
+    intercept = pk["intercept"]
+    max_idx = pk["max_idx"]
     if max_idx is None or np.isnan(max_idx):
-        max_idx = c.size-1
+        max_idx = c.size - 1
 
-    kwargs={"markersize": 10}
+    kwargs = {"markersize": 10}
 
     # create figure
     f, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4), dpi=80)
     f.subplots_adjust(wspace=0.3)
 
-    ax1.plot(t, c, '--', color="black", label="__nolabel__", **kwargs)
-    ax1.plot(t[:max_idx+1], c[:max_idx+1], 'o', color="darkgray", **kwargs)
-    if max_idx < c.size-1:
-        ax1.plot(t[max_idx+1:], c[max_idx+1:], 's', color="black", linewidth=2, **kwargs)
+    ax1.plot(t, c, "--", color="black", label="__nolabel__", **kwargs)
+    ax1.plot(t[: max_idx + 1], c[: max_idx + 1], "o", color="darkgray", **kwargs)
+    if max_idx < c.size - 1:
+        ax1.plot(
+            t[max_idx + 1 :],
+            c[max_idx + 1 :],
+            "s",
+            color="black",
+            linewidth=2,
+            **kwargs
+        )
 
-    ax1.set_ylabel('substance [{}]'.format(c_unit))
-    ax1.set_xlabel('time [{}]'.format(t_unit))
+    ax1.set_ylabel("substance [{}]".format(c_unit))
+    ax1.set_xlabel("time [{}]".format(t_unit))
 
-    ax1.plot(t, np.exp(intercept) * np.exp(slope * t), '-', color='blue', label="fit")
+    ax1.plot(t, np.exp(intercept) * np.exp(slope * t), "-", color="blue", label="fit")
     ax1.legend()
 
     # log
-    ax2.plot(t[1:], np.log(c[1:]), '--', color="black", label='__nolabel__', **kwargs)
+    ax2.plot(t[1:], np.log(c[1:]), "--", color="black", label="__nolabel__", **kwargs)
 
-    ax2.plot(t[1:max_idx+1], np.log(c[1:max_idx+1]), 'o', color="darkgray", label='log(substance)', **kwargs)
+    ax2.plot(
+        t[1 : max_idx + 1],
+        np.log(c[1 : max_idx + 1]),
+        "o",
+        color="darkgray",
+        label="log(substance)",
+        **kwargs
+    )
     if max_idx < c.size - 1:
-        ax2.plot(t[max_idx+1:], np.log(c[max_idx+1:]), 's', color="black", linewidth=2, label='log(substance) fit', **kwargs)
+        ax2.plot(
+            t[max_idx + 1 :],
+            np.log(c[max_idx + 1 :]),
+            "s",
+            color="black",
+            linewidth=2,
+            label="log(substance) fit",
+            **kwargs
+        )
 
-    ax2.set_ylabel('log(substance [{}])'.format(c_unit))
-    ax2.set_xlabel('time [{}]'.format(t_unit))
-    ax2.plot(t, intercept + slope * t, '-', color='blue', label="fit")
+    ax2.set_ylabel("log(substance [{}])".format(c_unit))
+    ax2.set_xlabel("time [{}]".format(t_unit))
+    ax2.plot(t, intercept + slope * t, "-", color="blue", label="fit")
     ax2.legend()
 
     return f
@@ -199,8 +246,8 @@ def _aucinf(t, c, slope=None, intercept=None):
         [slope, intercept, r_value, p_value, std_err] = _regression(t, c)
 
     auc = _auc(t, c)
-    auc_d = -intercept/slope * np.exp(slope*t[-1])
-    return (auc + auc_d)
+    auc_d = -intercept / slope * np.exp(slope * t[-1])
+    return auc + auc_d
 
 
 def _max(t, c):
@@ -227,7 +274,7 @@ def _max_half(t, c):
     """
 
     idx = np.argmax(c)
-    if idx == len(c)-1:
+    if idx == len(c) - 1:
         # no maximum reached within the time course
         warnings.warn("No MAXIMUM reached within time course, last value used.")
     if idx == 0:
@@ -237,7 +284,7 @@ def _max_half(t, c):
     cmax = c[idx]
 
     tnew = t[:idx]
-    cnew = np.abs(c[:idx] - 0.5*cmax)
+    cnew = np.abs(c[:idx] - 0.5 * cmax)
     idx_half = np.argmin(cnew)
 
     return tnew[idx_half], c[idx_half]
@@ -317,9 +364,9 @@ def _regression(t, c):
     # TODO: check for distribution and elimination part of curve.
     max_index = np.argmax(c)
     # linear regression
-    x = t[max_index+1:]
-    y = np.log(c[max_index+1:])
-    if max_index == (len(c)-1):
-        return [np.nan]*6
+    x = t[max_index + 1 :]
+    y = np.log(c[max_index + 1 :])
+    if max_index == (len(c) - 1):
+        return [np.nan] * 6
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
     return [slope, intercept, r_value, p_value, std_err, max_index]

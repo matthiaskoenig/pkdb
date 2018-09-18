@@ -7,7 +7,6 @@ FIXME: add types, molecular weights and links to data bases
 SUBSTANCES_DATA = [
     # acetaminophen
     "acetaminophen",
-
     # caffeine (CYP2A1)
     "caffeine",
     "paraxanthine",
@@ -45,26 +44,27 @@ SUBSTANCES_DATA = [
     "enoxacin",
     "ciprofloxacin",
     "ofloxacin",
-
     # oral contraceptives
     "levonorgestrel",
     "gestodene",
     "EE2",
-
     # codeine
     "codeine",
-
+    "codeine-6-glucuronide",
+    "norcodeine",
+    "norcodeine-glucuronide",
+    "codeine/morphine",
+    "morphine/codine",
+    "(Mor+M3G+M6G)/(Cod+C6G)",
     # chlorzoxazone (CYP2E1)
     "chlorzoxazone",
     "6-hydroxychlorzoxazone",
-
     # misc
     "tizanidine",
     "venlafaxine",
     "lomefloxacin",
     "ephedrine",
     "pseudoephedrine",
-
     "ibuprofen",
     "aspirin",
     "enoxacin",
@@ -76,40 +76,36 @@ SUBSTANCES_DATA = [
     "ethanol",
     "chlorozoxazone",
     "lomefloxacin",
-
     "aminopyrine",
     "antipyrine",
     "bromsulpthalein",
     "phenylalanine",
     "indocyanine green",
     "morphine",
-
+    "morphine-3-glucuronide",
+    "morphine-6-glucuronide",
+    "normorphine",
+    "normorphine-glucuronide",
+    "norcodeine-conjugates",
+    "diclofenac",
     "glycerol",
     "FFA",
-
     "carbamazepine",
-
     # midazolam
     "midazolam",
     "1-hydroxymidazolam",
-
     # losartan
     "losartan",
     "exp3174",
-
     # omeprazole (CYP2C19)
     "omeprazole",
     "5-hydroxyomeprazole",
     "5-hydroxyomeprazole/omeprazole",
-
     # dextromethorphan
     "dextromethorphan",
     "dextrorphan",
-
     "digoxin",
     "clozapine",
-
     "carbon monoxide",
-
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]

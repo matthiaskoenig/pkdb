@@ -5,16 +5,38 @@ group or individual).
 How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
+import copy
+import pandas as pd
 from django.db import models
 
 from pkdb_app.normalization import get_sd, get_se, get_cv
 from pkdb_app.storage import OverwriteStorage
-from ..behaviours import Valueable, ValueableMap, Externable
-from ..categoricals import CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES, CHARACTERISTICA_CHOICES, GROUP_CRITERIA, \
-    INCLUSION_CRITERIA, EXCLUSION_CRITERIA
+from pkdb_app.units import UNIT_CONVERSIONS_DICT
+from ..behaviours import (
+    Valueable,
+    ValueableMap,
+    Externable,
+    ValueableMapNotBlank,
+    ValueableNotBlank,
+)
+from ..categoricals import (
+    CHARACTERISTIC_DICT,
+    CHARACTERISTIC_CHOICES,
+    CHARACTERISTICA_CHOICES,
+    GROUP_CRITERIA,
+    INCLUSION_CRITERIA,
+    EXCLUSION_CRITERIA,
+)
 from ..utils import CHAR_MAX_LENGTH
-from .managers import GroupExManager, GroupSetManager, IndividualExManager, IndividualSetManager, IndividualManager, \
-    GroupManager, CharacteristicaManager
+from .managers import (
+    GroupExManager,
+    GroupSetManager,
+    IndividualExManager,
+    IndividualSetManager,
+    IndividualManager,
+    GroupManager,
+    CharacteristicaExManager,
+)
 
 
 # ----------------------------------
@@ -26,8 +48,12 @@ class DataFile(models.Model):
     This should be in a separate class, so that they can be easily displayed/filtered/...
     """
 
-    file = models.FileField(upload_to="data", storage=OverwriteStorage() ,null=True, blank=True)  # table or figure
-    filetype = models.CharField(null=True, blank=True, max_length=CHAR_MAX_LENGTH)  # XLSX, PNG, CSV
+    file = models.FileField(
+        upload_to="data", storage=OverwriteStorage(), null=True, blank=True
+    )  # table or figure
+    filetype = models.CharField(
+        null=True, blank=True, max_length=CHAR_MAX_LENGTH
+    )  # XLSX, PNG, CSV
 
     def __str__(self):
         return self.file.name
@@ -43,7 +69,6 @@ class GroupSet(models.Model):
     def groups(self):
         groups = Group.objects.filter(ex__in=self.group_exs.all())
         return groups
-
 
 
 class AbstractGroup(models.Model):
@@ -62,17 +87,22 @@ class GroupEx(Externable, AbstractGroup):
     Groups are defined via their characteristica.
     A group can be a subgroup of another group via the parent field.
     """
-    source = models.ForeignKey(DataFile, related_name="s_group_exs", null=True, blank=True,
-                                on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="f_group_exs", null=True, blank=True,
-                               on_delete=models.SET_NULL)
-    groupset = models.ForeignKey(GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs")
 
-    parent_ex = models.ForeignKey("GroupEX", null=True, blank=True, on_delete=models.SET_NULL)
+    source = models.ForeignKey(
+        DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
+    )
+    figure = models.ForeignKey(
+        DataFile, related_name="f_group_exs", null=True, on_delete=models.SET_NULL
+    )
+    groupset = models.ForeignKey(
+        GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
+    )
+
+    parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     count = models.IntegerField()
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = GroupExManager()
 
@@ -85,20 +115,23 @@ class GroupEx(Externable, AbstractGroup):
         return self.study.reference
 
     class Meta:
-        unique_together = ('groupset', 'name', 'name_map', 'source')
+        unique_together = ("groupset", "name", "name_map", "source")
 
 
 class Group(models.Model):
     """ Group. """
-    ex = models.ForeignKey(GroupEx, related_name="groups", null=True, on_delete=models.CASCADE)
+
+    ex = models.ForeignKey(
+        GroupEx, related_name="groups", null=True, on_delete=models.CASCADE
+    )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()
-    parent = models.ForeignKey("Group", null=True, blank=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey("Group", null=True, on_delete=models.CASCADE)
     objects = GroupManager()
 
-    #class Meta:
-    #todo: in validator unique_together = ('ex__groupset', 'name')
+    # class Meta:
+    # todo: in validator unique_together = ('ex__groupset', 'name')
 
     @property
     def source(self):
@@ -129,7 +162,6 @@ class IndividualSet(models.Model):
 
 
 class AbstractIndividual(models.Model):
-
     class Meta:
         abstract = True
 
@@ -143,22 +175,28 @@ class IndividualEx(Externable, AbstractIndividual):
     Individuals are defined via their characteristics, analogue to groups.
     """
 
-    source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, blank=True,
-                               on_delete=models.SET_NULL)
+    source = models.ForeignKey(
+        DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL
+    )
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, blank=True,
-                               on_delete=models.SET_NULL)
+    figure = models.ForeignKey(
+        DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL
+    )
 
-    individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True, blank=True)
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    individualset = models.ForeignKey(
+        IndividualSet, on_delete=models.CASCADE, related_name="individual_exs"
+    )
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name="individual_exs", null=True
+    )
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = IndividualExManager()
 
     class Meta:
-        unique_together = ('individualset', 'name', 'name_map', 'source')
+        unique_together = ("individualset", "name", "name_map", "source")
 
     @property
     def study(self):
@@ -171,17 +209,19 @@ class IndividualEx(Externable, AbstractIndividual):
     def groups_in_study(self):
         return self.study.groupset.group_exs
 
-    # TODO: validation in one place
-    # TODO: validation: either name or name_map must be set
-
 
 class Individual(AbstractIndividual):
     """ Single individual in data base.
 
     This does not contain any mappings are splits any more.
     """
-    ex = models.ForeignKey(IndividualEx, related_name="individuals", null=True, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individuals")
+
+    ex = models.ForeignKey(
+        IndividualEx, related_name="individuals", null=True, on_delete=models.CASCADE
+    )
+    group = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name="individuals"
+    )
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     objects = IndividualManager()
 
@@ -194,17 +234,20 @@ class Individual(AbstractIndividual):
         return self.ex.figure
 
 
-
 # ----------------------------------
 # Characteristica
 # ----------------------------------
 class AbstractCharacteristica(models.Model):
-    category = models.CharField(choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True,
-                              blank=True)
-    ctype = models.CharField(choices=CHARACTERISTICA_CHOICES, max_length=CHAR_MAX_LENGTH,
-                             default=GROUP_CRITERIA)  # this is for exclusion and inclusion
-    count = models.IntegerField(null=True, blank=True)
+    category = models.CharField(
+        choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
+
+    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
+    ctype = models.CharField(
+        choices=CHARACTERISTICA_CHOICES,
+        max_length=CHAR_MAX_LENGTH,
+        default=GROUP_CRITERIA,
+    )  # this is for exclusion and inclusion
+    count = models.IntegerField(null=True)
 
     class Meta:
         abstract = True
@@ -230,7 +273,9 @@ class AbstractCharacteristica(models.Model):
         return self.characteristic_data.choices
 
 
-class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable):
+class CharacteristicaEx(
+    AbstractCharacteristica, ValueableMapNotBlank, ValueableNotBlank
+):
     """ Characteristica  (external curated layer).
 
         Characteristics are used to store information about a group of subjects.
@@ -247,26 +292,97 @@ class CharacteristicaEx(AbstractCharacteristica, ValueableMap, Valueable):
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
-    group_ex = models.ForeignKey(GroupEx, related_name="characteristica_ex", null=True, blank=True,on_delete=models.CASCADE)
-    individual_ex = models.ForeignKey(IndividualEx, related_name="characteristica_ex", null=True, blank=True, on_delete=models.CASCADE)
-    objects = CharacteristicaManager()
+    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
-class Characteristica(AbstractCharacteristica, Valueable, models.Model):
+    group_ex = models.ForeignKey(
+        GroupEx, related_name="characteristica_ex", null=True, on_delete=models.CASCADE
+    )
+    individual_ex = models.ForeignKey(
+        IndividualEx,
+        related_name="characteristica_ex",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+    objects = CharacteristicaExManager()
+
+
+class Characteristica(Valueable, AbstractCharacteristica):
     """ Characteristic. """
-    group = models.ForeignKey(Group, related_name="characteristica", null=True, blank=True,on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, related_name="characteristica", null=True, blank=True, on_delete=models.CASCADE)
 
-    def save(self, *args, **kwargs):
-        if not self.sd:
-            self.sd = get_sd(se=self.se, count = self.count, mean=self.mean, cv=self.cv)
+    group = models.ForeignKey(
+        Group, related_name="characteristica", null=True, on_delete=models.CASCADE
+    )
+    individual = models.ForeignKey(
+        Individual, related_name="characteristica", null=True, on_delete=models.CASCADE
+    )
+    norm = models.ForeignKey("Characteristica", related_name="raw", on_delete=models.CASCADE, null=True)
+    final = models.BooleanField(default=False)
 
-        if not self.se:
-            self.se = get_se(sd=self.sd, count = self.count, mean=self.mean, cv=self.cv)
-
-        if not self.cv:
-            self.cv = get_cv(se=self.se, count = self.count, mean=self.mean, sd=self.sd)
-
+    def save(self,no_norm=False , *args, **kwargs):
         super().save(*args, **kwargs)
+        if not no_norm:
+            norm = copy.copy(self)
+            norm.normalize()
+            norm.add_statistics()
+
+            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
+                norm.pk = None
+                norm.final = True
+                norm.save(no_norm=True)
+                self.norm = norm
+                self.save(no_norm=True, force_update=True)
+
+            else:
+                self.final = True
+                self.save(no_norm=True, force_update=True)
+
+
+    def save_no_norm(self, *args, **kwargs):
+            super().save(*args, **kwargs)
+
+    @property
+    def norm_fields(self):
+        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                "sd": self.sd, "se": self.se}
+
+    @property
+    def norm_unit(self):
+        return self.characteristic_data.units.get(self.unit)
+
+    @property
+    def is_norm(self):
+        norm_unit = self.norm_unit
+        return norm_unit is None
+
+    @property
+    def is_convertible(self):
+        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+        return conversion is not None
+
+    def normalize(self):
+        if all([not self.is_norm, self.is_convertible]):
+            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+            self.unit = self.norm_unit
+
+            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+            for key,value in self.norm_fields.items():
+                if not value is None:
+                        setattr(self,key,conversion.apply_conversion(value))
+
+    def add_statistics(self):
+            if not self.sd:
+                self.sd = get_sd(
+                    se=self.se, count=self.count, mean=self.mean, cv=self.cv
+                )
+            if not self.se:
+                self.se = get_se(
+                    sd=self.sd, count=self.count, mean=self.mean, cv=self.cv
+                )
+            if not self.cv:
+                self.cv = get_cv(
+                    se=self.se, count=self.count, mean=self.mean, sd=self.sd
+                )
+
