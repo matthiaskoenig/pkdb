@@ -25,7 +25,8 @@ from pkdb_app.serializers import (
 )
 
 from pkdb_app.subjects.models import Group, DataFile, Individual
-from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
+from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING, INTERVENTION_DICT, INTERVENTION_FORM, \
+    INTERVENTION_APPLICATION, INTERVENTION_ROUTE, PK_DATA_DICT, OUTPUT_TISSUE_DATA
 
 from pkdb_app.subjects.serializers import (
     VALUE_MAP_FIELDS,
@@ -36,6 +37,8 @@ from pkdb_app.subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
+from pkdb_app.units import TIME_UNITS
+
 INTERVENTION_FIELDS = [
     "name",
     "category",
@@ -587,10 +590,22 @@ class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
     )
     ex = serializers.HyperlinkedRelatedField(read_only=True, view_name="interventionexs_read-detail"
                                              )
+    options = serializers.SerializerMethodField()
 
     class Meta:
         model = Intervention
-        fields = ["pk", "interventionset","ex"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields = ["pk", "interventionset","ex"] + VALUE_FIELDS + INTERVENTION_FIELDS +["options"]
+
+    def get_options(self, obj):
+        options = {}
+        options["categories"] = {k:item._asdict() for k, item in sorted(INTERVENTION_DICT.items())}
+        options["substances"] = map( str, Substance.objects.all().order_by('name'))
+        options["route"] = INTERVENTION_ROUTE
+        options["form"] = INTERVENTION_FORM
+        options["application"] = INTERVENTION_APPLICATION
+        options["time_unit"] = TIME_UNITS
+        return options
+
 
 
 class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -645,14 +660,28 @@ class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
         read_only=True, view_name="substances_read-detail"
     )
 
+    options = serializers.SerializerMethodField()
+
+
     class Meta:
         model = Output
         fields = (
             ["pk", "outputset","ex"]
             + OUTPUT_FIELDS
             + VALUE_FIELDS
-            + ["group", "individual", "interventions"]
+            + ["group", "individual", "interventions"] + ["options"]
+
         )
+
+
+    def get_options(self, obj):
+        options = {}
+        options["pktypes"] = {k:item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
+        options["substances"] = map( str, Substance.objects.all().order_by('name'))
+        options["tissue"] = OUTPUT_TISSUE_DATA
+        options["time_unit"] = TIME_UNITS
+        return options
+
 class OutputExReadSerializer(OutputReadSerializer):
     """ Output. """
     outputs = serializers.HyperlinkedRelatedField(
@@ -708,6 +737,8 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
     substance = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="substances_read-detail"
     )
+    options = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Timecourse
@@ -716,7 +747,16 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
             + OUTPUT_FIELDS
             + VALUE_FIELDS
             + ["group", "individual", "interventions"]
+            +["options"]
         )
+
+    def get_options(self, obj):
+        options = {}
+        options["pktypes"] = {k:item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
+        options["substances"] = map( str, Substance.objects.all().order_by('name'))
+        options["tissue"] = OUTPUT_TISSUE_DATA
+        options["time_unit"] = TIME_UNITS
+        return options
 
     def _any_not_json(self, value):
         return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
