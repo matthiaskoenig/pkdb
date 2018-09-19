@@ -214,9 +214,11 @@ class StudySerializer(SidSerializer):
 
         # replace file url
         if "files" in rep:
+
             rep["files"] = [
-                current_site + file.file.url for file in instance.files.all()
+            current_site + file.file.url for file in instance.files.all()
             ]
+
         return rep
 
     #############################################################################################
@@ -283,7 +285,10 @@ class StudySerializer(SidSerializer):
         for keyword in related["keywords"]:
             study.keywords.add(keyword)
 
-        create_multiple(study, related["descriptions"], "descriptions")
+        if related["descriptions"]:
+            study.descriptions.all().delete()
+            create_multiple(study, related["descriptions"], "descriptions")
+
         create_multiple(study, related["comments"], "comments")
 
         study.save()

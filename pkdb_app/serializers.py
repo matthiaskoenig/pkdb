@@ -437,7 +437,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         )
 
                     if keys[-1] in ["individual", "group"]:
-                        print("I am here")
                         unqiue_values = value_array.unique()
                         if len(unqiue_values) != 1:
                             raise serializers.ValidationError(

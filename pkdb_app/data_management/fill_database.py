@@ -18,6 +18,7 @@ The upload expects a certain folder structure:
 
 Details about the JSON schema are given elsewhere (JSON schema and REST API).
 """
+import sys
 import copy
 import os
 import sys
@@ -82,26 +83,40 @@ USERS = [
 
 # create superuser and use it for authenification
 # TOKEN = os.getenv("PKDB_TOKEN")
-def get_token(api_base=API_BASE):
-    response = requests.post(f"{api_base}/api-token-auth/", data={"username": "admin", "password": PASSWORD})
+def get_token(api_base=API_BASE,client=None):
+    response = requests.post(f"{api_base}/api-token-auth/", json={"username": "admin", "password": PASSWORD})
     # response.raise_for_status()
     TOKEN = response.json().get("token")
     if not TOKEN:
         # FIXME: this only works for local deployment!
         os.system(f"docker-compose run --rm web ./manage.py createsuperuser2 --username admin --password {PASSWORD} --email Janekg89@hotmail.de --noinput")
-        response = requests.post(f"{api_base}/api-token-auth/", data={"username": "admin", "password": PASSWORD})
+        response = requests.post(f"{api_base}/api-token-auth/", json={"username": "admin", "password": PASSWORD})
         TOKEN = response.json().get("token")
-        #os.environ["PKDB_TOKEN"] = TOKEN
     return TOKEN
 
 
-def get_header(api_base=API_BASE):
-    TOKEN = get_token(api_base=api_base)
+def get_header(api_base=API_BASE, client=None):
+    TOKEN = get_token(api_base=api_base, client=client)
     HEADER = {'Authorization': f'token {TOKEN}'}
     return HEADER
 
+def requests_with_client(client,requests, *args,**kwargs):
+    method = kwargs.pop("method", None)
 
-def setup_database(api_url,header):
+    if client:
+        if kwargs.get("files"):
+            kwargs["data"] = kwargs.pop("files",None)
+            response = getattr(client,method)(*args, **kwargs)
+
+        else:
+            response = getattr(client,method)(*args, **kwargs, format='json')
+    else:
+        kwargs["json"] = kwargs.pop("data", None)
+        response = getattr(requests,method)(*args, **kwargs)
+
+    return response
+
+def setup_database(api_url,header,client=None):
     """ Creates core information in database.
 
     This information is independent of study information. E.g., users, substances,
@@ -112,22 +127,25 @@ def setup_database(api_url,header):
     from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
 
     for substance in SUBSTANCES_DATA:
-        response = requests.post(f"{api_url}/substances/", json={"name": substance}, headers=header)
+        response = requests_with_client(client, requests,f"{api_url}/substances/",  method="post", data={"name": substance}, headers=header)
         if not response.status_code == 201:
             logging.warning(f"substance upload failed ")
+            logging.warning(response.content)
+
 
     for keyword in KEYWORDS_DATA:
-        response = requests.post(f"{api_url}/keywords/", json={"name": keyword}, headers=header
-)
+        response = requests_with_client(client, requests,  f"{api_url}/keywords/", method="post", data={"name": keyword}, headers=header)
         if not response.status_code == 201:
             logging.warning(f"keyword upload failed ")
-            logging.warning(response.text)
+            logging.warning(response.content)
 
     for user in USERS:
-        response = requests.post(f"{api_url}/users/", json=user, headers=header
-)
+        response = requests_with_client(client, requests, f"{api_url}/users/", method="post", data=user, headers=header)
+
         if not response.status_code == 201:
             logging.warning(f"user upload failed ")
+            logging.warning(response.content)
+
 
 
 # -------------------------------
@@ -220,7 +238,7 @@ def pop_comments(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-def upload_files(file_path, header, api_url=API_URL ):
+def upload_files(file_path, header, api_url=API_URL, client=None):
     """ Uploads all files in directory of given file.
 
     :param file_path:
@@ -241,8 +259,7 @@ def upload_files(file_path, header, api_url=API_URL ):
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, "rb") as f:
-                response = requests.post(f"{api_url}/datafiles/", files={"file": f}, headers=header
-)
+                response = requests_with_client(client, requests, f"{api_url}/datafiles/", method="post", files={"file": f}, headers=header)
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -252,25 +269,27 @@ def upload_files(file_path, header, api_url=API_URL ):
     return data_dict
 
 
-def upload_reference_json(json_reference, header, api_url=API_URL ):
+def upload_reference_json(json_reference, header, api_url=API_URL,client=None):
+
     """ Uploads reference JSON. """
+
     success = True
     # post
-    response = requests.post(f"{api_url}/references/", json=json_reference["json"], headers=header
-)
+    response = requests_with_client(client, requests, f"{api_url}/references/", method="post", data=json_reference["json"],
+                                    headers=header)
+
     if not response.status_code == 201:
-        logging.info(json_reference["json"]["name"] + "\n" + response.text)
+        logging.info(json_reference["json"]["name"] + "\n" + str(response.content))
         success = False
 
     # patch
     with open(json_reference["pdf"], "rb") as f:
-        response = requests.patch(
-            f'{api_url}/references/{json_reference["json"]["sid"]}/', files={"pdf": f} , headers=header
-
-        )
+        response = requests_with_client(client, requests, f"{api_url}/references/{json_reference['json']['sid']}/", method="patch",
+                                        files={"pdf": f},
+                                        headers=header)
 
     if not response.status_code == 200:
-        logging.info(json_reference["json"]["name"] + "\n" + response.text)
+        logging.info(json_reference["json"]["name"] + "\n" + str(response.content))
         success = False
 
     return success
@@ -285,7 +304,7 @@ def check_json_response(response):
     if response.status_code not in [200, 201]:
         try:
             json_data = json.loads(
-                response.text, object_pairs_hook=dict_raise_on_duplicates
+                response.content, object_pairs_hook=dict_raise_on_duplicates
             )
 
             msg = json.dumps(json_data, sort_keys=True, indent=2)
@@ -294,17 +313,19 @@ def check_json_response(response):
         except json.decoder.JSONDecodeError as err:
             # something went wrong on the django serializer side
             logging.error(err)
-            logging.warning(response.text)
+            logging.warning(response.content)
 
         return False
     return True
 
 
-def upload_study_json(json_study_dict, header, api_url=API_URL):
+def upload_study_json(json_study_dict, header, api_url=API_URL, client=None):
     """ Uploads study JSON.
 
     :returns success code
     """
+
+
     json_study = json_study_dict["json"]
     if not json_study:
         logging.warning("No study information in `study.json`")
@@ -312,7 +333,7 @@ def upload_study_json(json_study_dict, header, api_url=API_URL):
 
     # upload files (and get dict for file ids)
     study_dir = os.path.dirname(json_study_dict["study_path"])
-    file_dict = upload_files(study_dir,header=header)
+    file_dict = upload_files(study_dir,header=header, client=client)
 
     for keys, item in recursive_iter(json_study_dict):
         if isinstance(item, str):
@@ -327,7 +348,10 @@ def upload_study_json(json_study_dict, header, api_url=API_URL):
     related_sets = ["groupset", "interventionset", "individualset", "outputset"]
     [study_core.pop(this_set, None) for this_set in related_sets]
     study_core["files"] = list(file_dict.values())
-    response = requests.post(f"{API_URL}/studies/", json=study_core, headers=header)
+
+    response = requests_with_client(client, requests, f"{api_url}/studies/", method="post",
+                                    data=study_core,
+                                    headers=header)
     success = check_json_response(response)
 
     # ---------------------------
@@ -341,24 +365,24 @@ def upload_study_json(json_study_dict, header, api_url=API_URL):
 
     # post
     sid = json_study["sid"]
-    response = requests.patch(f"{api_url}/studies/{sid}/", json=study_sets, headers=header
-)
+    response = requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
+                                    data=study_sets,
+                                    headers=header)
     success = success and check_json_response(response)
 
     # is using group, has to be uploaded separately from the groupset
     if "individualset" in json_study.keys():
-        response = requests.patch(
-            f"{api_url}/studies/{sid}/",
-            json={"individualset": json_study.get("individualset")},headers=header
-        )
+
+        response = requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
+                                       data={"individualset": json_study.get("individualset")},
+                                       headers=header)
 
         success = success and check_json_response(response)
 
     if "outputset" in json_study.keys():
-        response = requests.patch(
-            f"{api_url}/studies/{sid}/", json={"outputset": json_study.get("outputset") } ,headers=header
-
-        )
+        response = requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
+                                        data={"outputset": json_study.get("outputset")},
+                                        headers=header)
         success = success and check_json_response(response)
 
     if success:
@@ -368,7 +392,7 @@ def upload_study_json(json_study_dict, header, api_url=API_URL):
     return success
 
 
-def upload_study_from_dir(study_dir, header, api_url=API_URL):
+def upload_study_from_dir(study_dir, header, api_url=API_URL, client=None):
     """ Upload a complete study directory.
 
     Includes
@@ -381,6 +405,8 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL):
     """
 
     # handle study.json
+
+
     study_path = os.path.join(study_dir, "study.json")
     _, study_name = os.path.split(study_dir)
     if not os.path.exists(study_path):
@@ -418,10 +444,10 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL):
     if os.path.exists(reference_path):
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
-            success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url, header=header)
+            success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url, header=header,client=client)
 
     # upload study.json
-    success_study = upload_study_json(study_dict, api_url=api_url,header=header)
+    success_study = upload_study_json(study_dict, api_url=api_url,header=header, client=client)
 
     if success_ref and success_study:
         logging.info("--- upload successful ---")
@@ -429,7 +455,7 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL):
     return {}
 
 
-def fill_database(args,header,api_url=API_URL):
+def fill_database(args,header,api_url=API_URL, client=None):
     """ Main function to fill database.
 
     :param args: command line arguments
@@ -445,7 +471,7 @@ def fill_database(args,header,api_url=API_URL):
 
         logging.info("-" * 80)
         logging.info(f"Uploading [{study_name}]")
-        upload_study_from_dir(study_folder_path,api_url=api_url, header=header)
+        upload_study_from_dir(study_folder_path,api_url=api_url, header=header,client=client)
 
     print("--- done ---")
 
