@@ -41,9 +41,6 @@ class AuthenticationAPITestCase(APITestCase):
         assert "token" in json.loads(response.content) ,json.loads(response.content)
 
 
-
-
-
 class UploadStudy(APITestCase):
 
     def setUp(self):

@@ -9,6 +9,7 @@ import Outputs from '@/components/Outputs'
 import Timecourses from '@/components/Timecourses'
 import References from '@/components/References'
 import About from '@/components/About'
+import CharacteristicaDetail from '@/components/CharacteristicaDetail'
 
 Vue.use(Router)
 
@@ -58,6 +59,13 @@ export default new Router({
             path: '/about',
             name: 'About',
             component: About
+        },
+        {
+            path:"/characteristica/:id",
+            name:"CharacteristicaDetail",
+            component:CharacteristicaDetail,
+            props: true
+
         },
 
     ]

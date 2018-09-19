@@ -36,6 +36,7 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(VueResource)
+
 Vue.use(ClientTable, {}, false, 'bootstrap3', 'default');
 
 
