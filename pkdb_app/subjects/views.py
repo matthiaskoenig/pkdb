@@ -1,3 +1,4 @@
+import django_filters.rest_framework
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
 from pkdb_app.subjects.models import (
@@ -40,6 +41,10 @@ class CharacteristicaReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Characteristica.objects.all()
     serializer_class = CharacteristicaReadSerializer
     permission_classes = (AllowAny,)
+    filter_backends = (
+        django_filters.rest_framework.DjangoFilterBackend,
+    )
+    filter_fields = ("final",)
 
 class CharacteristicaExReadViewSet(viewsets.ReadOnlyModelViewSet):
 

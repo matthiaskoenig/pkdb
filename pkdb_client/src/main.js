@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 import App from './App.vue'
 import router from './router'
 import VueResource from 'vue-resource';
-
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
 // Import the styles directly. (Or you could add them via script tags.)
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -36,7 +37,7 @@ Vue.use(BootstrapVue);
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 Vue.use(VueResource)
-
+Vue.use(VueMaterial)
 Vue.use(ClientTable, {}, false, 'bootstrap3', 'default');
 
 

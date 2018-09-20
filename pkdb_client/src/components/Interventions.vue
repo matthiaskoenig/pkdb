@@ -83,7 +83,7 @@ export default {
         return {
             entries: [],
             count: null,
-            resource_url: this.api + '/interventions_read/?format=json',
+            resource_url: this.api + '/interventions_read/?format=json&final=True',
             }
         }
 }

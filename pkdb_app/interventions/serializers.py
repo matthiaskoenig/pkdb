@@ -594,7 +594,7 @@ class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Intervention
-        fields = ["pk", "interventionset","ex"] + VALUE_FIELDS + INTERVENTION_FIELDS +["options"]
+        fields = ["pk", "interventionset","ex","final"] + VALUE_FIELDS + INTERVENTION_FIELDS +["options"]
 
     def get_options(self, obj):
         options = {}
@@ -669,7 +669,7 @@ class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
             ["pk", "outputset","ex"]
             + OUTPUT_FIELDS
             + VALUE_FIELDS
-            + ["group", "individual", "interventions"] + ["options"]
+            + ["group", "individual", "interventions","final"] + ["options"]
 
         )
 
@@ -746,7 +746,7 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
             ["pk", "outputset","ex"]
             + OUTPUT_FIELDS
             + VALUE_FIELDS
-            + ["group", "individual", "interventions"]
+            + ["group", "individual", "interventions","final"]
             +["options"]
         )
 

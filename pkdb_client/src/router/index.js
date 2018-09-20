@@ -10,8 +10,11 @@ import Timecourses from '@/components/Timecourses'
 import References from '@/components/References'
 import About from '@/components/About'
 import CharacteristicaDetail from '@/components/CharacteristicaDetail'
+import GroupDetail from '@/components/GroupDetail'
+import IndividualDetail from '@/components/IndividualDetail'
 
-Vue.use(Router)
+
+Vue.use(Router);
 
 export default new Router({
     routes: [
@@ -64,6 +67,20 @@ export default new Router({
             path:"/characteristica/:id",
             name:"CharacteristicaDetail",
             component:CharacteristicaDetail,
+            props: true
+
+        },
+        {
+            path:"/group/:id",
+            name:"GroupDetail",
+            component:GroupDetail,
+            props: true
+
+        },
+        {
+            path:"/individual/:id",
+            name:"IndividualDetail",
+            component:IndividualDetail,
             props: true
 
         },

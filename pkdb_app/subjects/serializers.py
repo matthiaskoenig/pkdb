@@ -432,7 +432,9 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
     characteristica_all = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="characteristica_read-detail"
     )
-
+    characteristica_all_final = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="characteristica_read-detail"
+    )
     parent = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="groups_read-detail"
     )
@@ -445,7 +447,7 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             ["pk", "groupset","ex"]
             + GROUP_FIELDS
-            + ["parent", "characteristica", "characteristica_all"]
+            + ["parent", "characteristica", "characteristica_all","characteristica_all_final"]
         )
 
 class GroupExReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -495,13 +497,17 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
     characteristica = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="characteristica_read-detail"
     )
+    characteristica_final = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="characteristica_read-detail"
+    )
+
     ex = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individualexs_read-detail"
     )
 
     class Meta:
         model = Individual
-        fields = ["pk","ex"] + ["individualset"] + ["name", "group", "characteristica"]
+        fields = ["pk","ex"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final"]
 
 class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -540,7 +546,7 @@ class CharacteristicaReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS + VALUE_FIELDS + ["options"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["options"]
 
     def get_options(self, obj):
         options = {}

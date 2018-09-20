@@ -1,4 +1,4 @@
-
+import django_filters.rest_framework
 from rest_framework import viewsets
 from pkdb_app.interventions.models import (
     Substance,
@@ -41,6 +41,10 @@ class InterventionReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Intervention.objects.all()
     serializer_class = InterventionReadSerializer
     permission_classes = (AllowAny,)
+    filter_backends = (
+        django_filters.rest_framework.DjangoFilterBackend,
+    )
+    filter_fields = ("final",)
 
 
 class InterventionExReadViewSet(viewsets.ReadOnlyModelViewSet):
@@ -59,6 +63,10 @@ class OutputReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Output.objects.all()
     serializer_class = OutputReadSerializer
     permission_classes = (AllowAny,)
+    filter_backends = (
+        django_filters.rest_framework.DjangoFilterBackend,
+    )
+    filter_fields = ("final",)
 
 
 class OutputExReadViewSet(viewsets.ReadOnlyModelViewSet):
@@ -71,6 +79,10 @@ class TimecourseReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Timecourse.objects.all()
     serializer_class = TimecourseReadSerializer
     permission_classes = (AllowAny,)
+    filter_backends = (
+        django_filters.rest_framework.DjangoFilterBackend,
+    )
+    filter_fields = ("final",)
 
 
 class TimecourseExReadViewSet(viewsets.ReadOnlyModelViewSet):

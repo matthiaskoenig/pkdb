@@ -1,0 +1,40 @@
+{
+    "pmid": 16413240,
+    "name": "Loetsch2006",
+    "sid": 16413240,
+    "date": "2006-02-08",
+    "journal": "Clinical pharmacology and therapeutics",
+    "title": "Evidence for morphine-independent central nervous opioid effects after administration of codeine: contribution of other codeine metabolites.",
+    "abstract": "CYP2D6-dependent formation of morphine does not explain exclusively the central nervous effects of codeine. Codeine-6-glucuronide is the most likely additional active moiety.",
+    "authors": [
+        {
+            "first_name": "J\u00f6rn",
+            "last_name": "L\u00f6tsch"
+        },
+        {
+            "first_name": "Carsten",
+            "last_name": "Skarke"
+        },
+        {
+            "first_name": "Helmut",
+            "last_name": "Schmidt"
+        },
+        {
+            "first_name": "Maren",
+            "last_name": "Rohrbacher"
+        },
+        {
+            "first_name": "Ute",
+            "last_name": "Hofmann"
+        },
+        {
+            "first_name": "Matthias",
+            "last_name": "Schwab"
+        },
+        {
+            "first_name": "Gerd",
+            "last_name": "Geisslinger"
+        }
+    ],
+    "doi": null
+}

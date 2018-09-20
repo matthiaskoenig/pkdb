@@ -26,7 +26,7 @@
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.count }}</td>
                     <td>
-                        <span v-for="(c, index2) in entry.characteristica_all" :key="index2">
+                        <span v-for="(c, index2) in entry.characteristica_all_final" :key="index2">
                         <a :href="c" :title="c"><font-awesome-icon icon="cube" /></a>&nbsp;</span>
                     </td>
                 </tr>
@@ -48,7 +48,7 @@ export default {
     },
     methods:{
         updateResource(data){
-            this.entries = data.data
+            this.entries = data.data;
             this.count = data.count
         }
     },

@@ -6,13 +6,11 @@ from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 from rest_framework.settings import api_settings
-from django.forms.models import model_to_dict
 from pkdb_app.categoricals import FORMAT_MAPPING
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
-from numbers import Number
 
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="

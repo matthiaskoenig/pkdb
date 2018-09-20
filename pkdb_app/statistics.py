@@ -21,9 +21,9 @@ class Statistics(object):
         self.study_count = Study.objects.count()
         self.group_count = Group.objects.count()
         self.individual_count = Individual.objects.count()
-        self.intervention_count = Intervention.objects.count()
-        self.output_count = Output.objects.count()
-        self.timecourse_count = Timecourse.objects.count()
+        self.intervention_count = Intervention.objects.filter(final=True).count()
+        self.output_count = Output.objects.filter(final=True).count()
+        self.timecourse_count = Timecourse.objects.filter(final=True).count()
 
 
 class StatisticsSerializer(serializers.BaseSerializer):

@@ -75,7 +75,7 @@
         },
         methods:{
             updateResource(data){
-                this.entries = data.data
+                this.entries = data.data;
                 this.count = data.count
             }
         },

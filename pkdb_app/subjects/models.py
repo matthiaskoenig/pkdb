@@ -148,6 +148,10 @@ class Group(models.Model):
             characteristica_all = characteristica_all | self.parent.characteristica_all
         return characteristica_all
 
+    @property
+    def characteristica_all_final(self):
+        return self.characteristica_all.filter(final=True)
+
 
 # ----------------------------------
 # Individual
@@ -233,6 +237,9 @@ class Individual(AbstractIndividual):
     def figure(self):
         return self.ex.figure
 
+    @property
+    def characteristica_final(self):
+        return self.characteristica.filter(final=True)
 
 # ----------------------------------
 # Characteristica
