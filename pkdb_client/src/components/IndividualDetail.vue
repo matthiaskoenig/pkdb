@@ -6,14 +6,10 @@
         <p> group: {{individual.group}} </p>
 
         <div class="md-layout md-gutter">
-
             <div class="md-layout-item" v-for="(value,index) in individual.characteristica_final" :key="index">
                 <CharacteristicaDetail :api="api" :id="id_from_url(value)" />
             </div>
-
         </div>
-
-
     </div>
 </template>
 
@@ -53,12 +49,9 @@
                 return id_from_url(url);
             }
         }
-
     }
-
 </script>
 
 <style scoped>
-
 
 </style>

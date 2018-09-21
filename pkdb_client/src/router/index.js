@@ -69,28 +69,24 @@ export default new Router({
             name:"CharacteristicaDetail",
             component:CharacteristicaDetail,
             props: true
-
         },
         {
             path:"/timecourse/:id",
             name:"TimecourseDetail",
             component:TimecourseDetail,
             props: true
-
         },
         {
             path:"/group/:id",
             name:"GroupDetail",
             component:GroupDetail,
             props: true
-
         },
         {
             path:"/individual/:id",
             name:"IndividualDetail",
             component:IndividualDetail,
             props: true
-
         }
     ]
 })

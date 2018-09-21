@@ -11,4 +11,4 @@ function clean(obj) {
         }
     }
 }
-export {id_from_url, clean}
+export {id_from_url, clean};
