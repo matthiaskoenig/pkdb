@@ -7,7 +7,7 @@
 
         <v-paginator :resource_url="resource_url" @update="updateResource"></v-paginator>
 
-        <md-table v-if="count">
+        <md-table v-if="count" md-card>
             <thead>
             <md-table-row>
                 <md-table-head>pk</md-table-head>
@@ -69,7 +69,7 @@
                 <md-table-cell><span v-for="(c, index2) in entry.keywords" :key="index2">
                         <a :href="c" :title="c"><font-awesome-icon icon="tablets"/></a>&nbsp;</span>
                 </md-table-cell>
-            </md-table-row>>
+            </md-table-row>
             </tbody>
         </md-table>
     </div>

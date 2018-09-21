@@ -22,12 +22,10 @@
         </md-card>
         <vue-plotly :data="data" :layout="layout" :options="options"/>
         <div>
-            <img :src="timecourse.figure" fluid alt="Responsive image" />
+            <img :src="timecourse.figure" alt="Responsive image" />
         </div>
 
     </div>
-
-
 
 </template>
 

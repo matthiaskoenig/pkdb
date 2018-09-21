@@ -7,13 +7,11 @@
 
         </div>
 
-        <div class="md-layout  md-gutter md-alignment-center">
-
+        <div class="md-layout md-gutter md-alignment-center">
             <div class="md-layout-item md-medium-size-33 md-small-size-50 md-xsmall-size-100" v-for="(value,index) in group.characteristica_all_final" :key="index">
             <CharacteristicaDetail :api="api" :id="id_from_url(value)" :parent_count="group.count"/>
         </div>
         </div>
-
 
     </div>
 </template>
