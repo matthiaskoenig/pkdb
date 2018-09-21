@@ -68,6 +68,7 @@ UNITS = {
     "pmol/ml":None,
     # AUC
     "mg*h/l": None,
+
     "ng*h/ml": None,
 
     "µg*h/ml": None,  # -> mg*h/l

@@ -37,7 +37,8 @@ from ..subjects.models import Group, DataFile, Individual
 from ..utils import CHAR_MAX_LENGTH
 import copy
 import numpy as np
-from pkdb_app.analysis.pharmacokinetic import _auc
+from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf
+
 
 # -------------------------------------------------
 # Substance
@@ -193,6 +194,8 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
 
     def save_no_norm(self, *args, **kwargs):
             super().save(*args, **kwargs)
+
+
 
     @property
     def norm_unit(self):
@@ -490,6 +493,14 @@ class Timecourse(AbstractOutput):
     def save_no_norm(self,*args, **kwargs):
         super().save(*args, **kwargs)
 
+    @property
+    def figure(self):
+
+        try:
+            return self.ex.figure.file.url
+        except:
+            return None
+
     def add_statistics(self):
         if self.group:
             if not self.sd:
@@ -594,9 +605,57 @@ class Timecourse(AbstractOutput):
 
             pk_data["t"] = self.time
 
-    def calculate_auc(self):
-        auc = _auc(self.time,self.value)
-        unit = f"{self.unit}"
+    @property
+    def calculate_auc_end(self):
+        output_data = {}
+        output_data["substance"] = str(self.substance)
+        output_data["tissue"] = str(self.tissue)
+        output_data["pktype"] = "auc_end"
+        output_data["time"] = self.time[-1]
+        if self.value:
+            output_data["value"] = self.try_type_error(self.time,self.value,_auc)
+        if self.mean:
+            output_data["mean"] = self.try_type_error(self.time,self.mean,_auc)
+
+        if self.median:
+            output_data["median"] = self.try_type_error(self.time,self.median,_auc)
+
+        output_data["unit"] = f"({self.unit})*{self.time_unit}"
+
+        return output_data
+
+    @staticmethod
+    def try_type_error(time, array, method):
+        try:
+            value = method(np.array(time),np.array(array))
+
+        except TypeError:
+            value = None
+
+        return value
+
+
+    @property
+    def calculate_auc_inf(self):
+        output_data = {}
+        output_data["substance"] = str(self.substance)
+        output_data["tissue"] = str(self.tissue)
+        output_data["pktype"] = "auc_inf"
+        if self.value:
+            output_data["value"] = self.try_type_error(self.time,self.value,_aucinf)
+        if self.mean:
+            output_data["mean"] = self.try_type_error(self.time,self.mean,_aucinf)
+
+        if self.median:
+            output_data["median"] = self.try_type_error(self.time,self.median,_aucinf)
+
+        output_data["unit"] = f"({self.unit})*{self.time_unit}"
+
+        return output_data
+
+
+
+
 
 
 

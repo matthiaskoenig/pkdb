@@ -4,6 +4,7 @@ Serializers for interventions.
 import pandas as pd
 
 import numpy as np
+from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
@@ -746,7 +747,7 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
             ["pk", "outputset","ex"]
             + OUTPUT_FIELDS
             + VALUE_FIELDS
-            + ["group", "individual", "interventions","final"]
+            + ["group", "individual", "interventions","final","figure","calculate_auc_end","calculate_auc_inf"]
             +["options"]
         )
 
@@ -778,7 +779,15 @@ class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
             if array:
                 null_array = [ None if self._any_not_json(value) else value for value in array ]
                 setattr(instance, field, null_array)
-        return super().to_representation(instance)
+
+        rep = super().to_representation(instance)
+
+        if rep.get("figure"):
+            current_site = f'http://{get_current_site(self.context["request"]).domain}'
+
+            rep["figure"] = current_site + rep["figure"]
+
+        return  rep
 
 class TimecourseExReadSerializer(TimecourseReadSerializer):
     timecourses = serializers.HyperlinkedRelatedField(

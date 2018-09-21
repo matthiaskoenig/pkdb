@@ -243,7 +243,7 @@ def _aucinf(t, c, slope=None, intercept=None):
     """ Calculates the area under the curve (AUC) via trapezoid rule and extrapolated to infinity """
 
     if (slope is None) or (intercept is None):
-        [slope, intercept, r_value, p_value, std_err] = _regression(t, c)
+        [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
 
     auc = _auc(t, c)
     auc_d = -intercept / slope * np.exp(slope * t[-1])

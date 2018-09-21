@@ -12,6 +12,7 @@ import About from '@/components/About'
 import CharacteristicaDetail from '@/components/CharacteristicaDetail'
 import GroupDetail from '@/components/GroupDetail'
 import IndividualDetail from '@/components/IndividualDetail'
+import TimecourseDetail from '@/components/TimecourseDetail'
 
 
 Vue.use(Router);
@@ -71,6 +72,13 @@ export default new Router({
 
         },
         {
+            path:"/timecourse/:id",
+            name:"TimecourseDetail",
+            component:TimecourseDetail,
+            props: true
+
+        },
+        {
             path:"/group/:id",
             name:"GroupDetail",
             component:GroupDetail,
@@ -83,7 +91,6 @@ export default new Router({
             component:IndividualDetail,
             props: true
 
-        },
-
+        }
     ]
 })

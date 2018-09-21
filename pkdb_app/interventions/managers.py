@@ -91,6 +91,16 @@ class OutputManager(models.Manager):
         output.interventions.add(*interventions)
         return output
 
+class TimecourseManager(models.Manager):
+    def create(self, *args, **kwargs):
+        interventions = kwargs.pop('interventions', [])
+        timecourse = super().create(*args, **kwargs)
+        timecourse.interventions.add(*interventions)
+        ######
+        timecourse.pharmacokinetics.create()
+        timecourse.calculate_auc()
+        return timecourse
+
 
 class TimecourseExManager(models.Manager):
     def create(self, *args, **kwargs):
