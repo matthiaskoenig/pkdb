@@ -94,6 +94,10 @@ UNITS = {
     "ml/h/kg": None,  # -> l/h/kg
     "ml/min/kg": None,  # -> l/h/kg
     "ml/min/1.73m^2": None,
+
+    # rate
+    "µmol/kg/min": None,
+    "µmol/min/kg": None,  # -> µmol/kg/min
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)
@@ -160,6 +164,9 @@ UNIT_CONVERSIONS = [
     # "nmol/l": None,  # -> µg/ml (with molar weight)
     # "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     # "µmol/l*h": None,  # -> mg*h/l (with molar weight)
+    # rate
+    UnitConversion("µmol/min/kg", target="µmol/kg/min", multiplier=1.0),
+
 ]
 UNIT_CONVERSIONS_DICT = {
     f"[{item.source}] -> [{item.target}]": item for item in UNIT_CONVERSIONS

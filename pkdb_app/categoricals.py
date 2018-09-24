@@ -498,6 +498,13 @@ clearance_norm_unit = NormalizableUnit(
         "ml/min/1.73m^2": None,
     }
 )
+rate_norm_unit = NormalizableUnit(
+    {
+        "µmol/min/kg": "µmol/kg/min",
+        "µmol/kg/min": None,
+    }
+)
+
 vd_norm_unit = NormalizableUnit({"l": None, "ml": "l", "l/kg": None, "ml/kg": "l/kg"})
 time_norm_unit = NormalizableUnit({"h": None, "min": "h"})
 rate_norm_unit = NormalizableUnit({"1/min": "1/h", "1/h": None})
@@ -555,6 +562,15 @@ PK_DATA = [
     ),
     PharmacokineticsType(
         "recovery", "Fraction recovered of given substance.", ratio_norm_unit
+    ),
+    PharmacokineticsType(
+        "egp", "endogenous glucose production (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "ra", "rate appearance (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "rd", "rate disappearance (rate)", rate_norm_unit
     ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
