@@ -60,12 +60,13 @@ UNITS = {
     "mg/l": None,
     "g/dl": None,
     "ng/ml": None,
-    "ng/g":None,
+    "pg/ml": None,
+    "ng/g": None,
     "mmol/l": None,
     "nmol/ml":None,
     "µmol/l": None,
     "nmol/l": None,
-    "pmol/ml":None,
+    "pmol/l": None,
     # AUC
     "mg*h/l": None,
 

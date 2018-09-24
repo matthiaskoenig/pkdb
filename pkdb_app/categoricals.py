@@ -151,14 +151,15 @@ CHARACTERISTIC_DATA = [
         NormalizableUnit({"cm": None}),
     ),
     CharacteristicType(
-        "lean body mass",
+        "lean body mass",  # fat free mass (FFM)
         ANTHROPOMETRY,
         NUMERIC_TYPE,
         None,
         NormalizableUnit({"kg": None}),
     ),
     CharacteristicType(
-        "percent fat", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
+        "percent fat",  # percent body fat
+        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
     # -------------- Demography --------------
     CharacteristicType(
@@ -227,9 +228,14 @@ CHARACTERISTIC_DATA = [
             "PBC",
             "miscellaneous liver disease",
             "schizophrenia",
+            "t2dm"
         ],
         dimensionless_norm_unit,
     ),
+    CharacteristicType(
+        "disease duration", LIFESTYLE, NUMERIC_TYPE, None, amountyear_unit
+    ),
+
     # -------------- Medication --------------
     CharacteristicType(
         "medication", MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, dimensionless_norm_unit
@@ -238,12 +244,14 @@ CHARACTERISTIC_DATA = [
         "medication type",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol"],
+        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol"],
         dimensionless_norm_unit,
     ),
     CharacteristicType(
         "medication amount", MEDICATION, NUMERIC_TYPE, None, dimensionless_norm_unit
     ),
+
+
     CharacteristicType(
         "oral contraceptives",
         MEDICATION,
@@ -258,6 +266,18 @@ CHARACTERISTIC_DATA = [
         SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication","drug"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
+
+    # -------------- Nutrition -----------------
+
+    CharacteristicType(
+        "metabolic challenge",
+        MEDICATION,
+        CATEGORIAL_TYPE,
+        ["mixed-meal", "oral glucose tolerance test", "intravenous glucose tolerance test"],
+        dimensionless_norm_unit,
+    ),
+
+
     # -------------- Caffeine --------------
     CharacteristicType(
         "caffeine", LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, dimensionless_norm_unit
@@ -377,6 +397,7 @@ INTERVENTION_DATA = [
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
     ),
     CHARACTERISTIC_DICT["medication type"],
+    CHARACTERISTIC_DICT["metabolic challenge"],
     CHARACTERISTIC_DICT["abstinence"],
     CHARACTERISTIC_DICT["smoking"],
     CHARACTERISTIC_DICT["oral contraceptives"],
@@ -457,11 +478,13 @@ concentration_norm_unit = NormalizableUnit(
         "µg/ml": None,
         "mg/dl": None,
         "mg/l": None,
+        "pg/ml": None,
         "g/dl": None,
         "ng/ml": None,
+        "mmol/l": None,
         "µmol/l": None,
         "nmol/l": None,
-        "mmol/l": None,
+        "pmol/l": None,
     }
 )
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})

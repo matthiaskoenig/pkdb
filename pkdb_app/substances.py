@@ -107,5 +107,22 @@ SUBSTANCES_DATA = [
     "digoxin",
     "clozapine",
     "carbon monoxide",
+
+    # ----------------------
+    # glucose metabolism
+    # ----------------------
+    'glucose',
+    'insulin',
+    'c-peptide',
+    'glucagon',
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
+
+
+if __name__ == "__main__":
+    import os
+    os.environ['PKDB_DEFAULT_PASSWORD'] = "pkdb"
+    from pkdb_app.data_management import fill_database
+
+    fill_database.setup_database(api_url=fill_database.API_URL, header=fill_database.get_header())
+

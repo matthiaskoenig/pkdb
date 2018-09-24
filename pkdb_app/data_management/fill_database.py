@@ -116,7 +116,8 @@ def requests_with_client(client,requests, *args,**kwargs):
 
     return response
 
-def setup_database(api_url,header,client=None):
+
+def setup_database(api_url, header, client=None):
     """ Creates core information in database.
 
     This information is independent of study information. E.g., users, substances,
@@ -455,7 +456,7 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL, client=None):
     return {}
 
 
-def fill_database(args,header,api_url=API_URL, client=None):
+def fill_database(args, header, api_url=API_URL, client=None):
     """ Main function to fill database.
 
     :param args: command line arguments
@@ -463,7 +464,7 @@ def fill_database(args,header,api_url=API_URL, client=None):
     """
 
     # core database setup
-    setup_database(api_url=api_url,header=header)
+    setup_database(api_url=api_url, header=header)
 
     for study_path in sorted(get_study_paths()):
         study_folder_path = os.path.dirname(study_path)
@@ -486,7 +487,7 @@ if __name__ == "__main__":
         print("-" * 80)
         raise FileNotFoundError
 
-    fill_database(args=None,header=HEADER)
+    fill_database(args=None, header=HEADER)
 
     DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "codeine"))
     if not os.path.exists(DATA_PATH):
