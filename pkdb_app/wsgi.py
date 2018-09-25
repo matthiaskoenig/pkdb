@@ -18,6 +18,8 @@ environ.Env.read_env()
 
 print("-"*80)
 print(env)
+print(env)
+print(os.environ.items())
 print("-"*80)
 
 
