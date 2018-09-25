@@ -13,10 +13,8 @@ import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faP
     faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets,
     faCube, faCubes, faUserCog, faUserEdit
 } from '@fortawesome/free-solid-svg-icons';
-
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome';
-
 library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
     faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode, faTablet, faTablets, faCube, faCubes,
     faUserCog, faUserEdit);
@@ -30,6 +28,7 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueMaterial);
+
 // Vue.use(ClientTable, {}, false, 'bootstrap3', 'default');
 
 
@@ -38,9 +37,3 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 
-//new Vue({
-//    el: '#app',
-//    router,
-//    template: '<App/>',
-//    components: { App }
-//})

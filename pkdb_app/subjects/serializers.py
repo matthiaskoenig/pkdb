@@ -17,7 +17,7 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
 )
-from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
+from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer, ReadSerializer
 
 EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
 VALUE_FIELDS = ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"]
@@ -441,11 +441,12 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
     ex = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="groupexs_read-detail"
     )
+    individuals = serializers.HyperlinkedRelatedField(read_only=True,many=True, view_name="individuals_read-detail")
 
     class Meta:
         model = Group
         fields = (
-            ["pk", "groupset","ex"]
+            ["pk", "groupset","ex","study_name","individuals"]
             + GROUP_FIELDS
             + ["parent", "characteristica", "characteristica_all","characteristica_all_final"]
         )
@@ -500,14 +501,19 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
     characteristica_final = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="characteristica_read-detail"
     )
+    all_characteristica_final = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="characteristica_read-detail"
+    )
 
     ex = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individualexs_read-detail"
     )
 
+
+
     class Meta:
         model = Individual
-        fields = ["pk","ex"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final"]
+        fields = ["pk","ex","study_name"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final","all_characteristica_final"]
 
 class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -541,12 +547,12 @@ class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
                   + EXTERN_FILE_FIELDS
                   + ["name", "group", "characteristica_ex","comments"])
 
-class CharacteristicaReadSerializer(serializers.HyperlinkedModelSerializer):
+class CharacteristicaReadSerializer(ReadSerializer):
     options = serializers.SerializerMethodField()
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["options"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_name","options"]
 
     def get_options(self, obj):
         options = {}

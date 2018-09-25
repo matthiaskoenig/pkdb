@@ -5,7 +5,6 @@
         <font-awesome-icon icon="code"/>
     </a>
 
-        <v-paginator :resource_url="resource_url" @update="updateResource"></v-paginator>
 
         <md-table v-if="count" md-card>
             <thead>
@@ -72,11 +71,13 @@
             </md-table-row>
             </tbody>
         </md-table>
+        <v-paginator :resource_url="resource_url" @update="updateResource"></v-paginator>
+
     </div>
 </template>
 
 <script>
-    import VuePaginator from 'vuejs-paginator';
+    import VuePaginator from '@/components/VPaginator';
 
     export default {
         name: 'Studies',

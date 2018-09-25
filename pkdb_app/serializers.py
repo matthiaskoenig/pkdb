@@ -757,3 +757,12 @@ class SidSerializer(WrongKeyValidationSerializer):
             # data={something} proceed as usual
             return super().is_valid(raise_exception)
 
+class ReadSerializer(serializers.HyperlinkedModelSerializer):
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for key,value in rep.items():
+            if isinstance(value,float):
+                rep[key] = round(value,2)
+        return rep
+

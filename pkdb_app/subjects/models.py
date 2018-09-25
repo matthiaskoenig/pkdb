@@ -134,6 +134,10 @@ class Group(models.Model):
     # todo: in validator unique_together = ('ex__groupset', 'name')
 
     @property
+    def study_name(self):
+        return self.ex.groupset.study.name
+
+    @property
     def source(self):
         return self.ex.source
 
@@ -241,6 +245,17 @@ class Individual(AbstractIndividual):
     def characteristica_final(self):
         return self.characteristica.filter(final=True)
 
+    @property
+    def group_characteristica_final(self):
+        return self.group.characteristica_all_final
+
+    @property
+    def all_characteristica_final(self):
+        return  (self.characteristica_final | self.group_characteristica_final)
+
+    @property
+    def study_name(self):
+        return self.ex.individualset.study.name
 # ----------------------------------
 # Characteristica
 # ----------------------------------
@@ -326,6 +341,11 @@ class Characteristica(Valueable, AbstractCharacteristica):
     )
     norm = models.ForeignKey("Characteristica", related_name="raw", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
+
+    @property
+    def group_name(self):
+        if self.group:
+            return self.group.name
 
     def save(self,no_norm=False , *args, **kwargs):
         super().save(*args, **kwargs)

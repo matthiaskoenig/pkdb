@@ -18,7 +18,7 @@
                 <div class="card-reservation">
                     <div v-for="(value, key) in characteristica_clean">
                         <span>{{value}} </span>
-                        <div class="md-subhead">{{key}}</div>
+                        <div>{{key}}</div>
 
                     </div>
                 </div>
