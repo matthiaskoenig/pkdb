@@ -5,6 +5,17 @@ import os
 from .common import Common
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# read .env information
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+
 import dj_database_url
 
 POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
