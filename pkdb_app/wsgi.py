@@ -6,8 +6,18 @@ https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/gunicorn/
 """
 import os
 
+# read .env information
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pkdb_app.config")
-os.environ.setdefault("DJANGO_CONFIGURATION", "Production")
+# os.environ.setdefault("DJANGO_CONFIGURATION", "Production")
 
 from configurations.wsgi import get_wsgi_application  # noqa
 
