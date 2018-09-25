@@ -18,6 +18,10 @@ env = environ.Env(
 # reading .env file
 environ.Env.read_env()
 
+if "PKDB_SECRET_KEY" in env:
+    os.environ["PKDB_SECRET_KEY"] = env("PKDB_SECRET_KEY")
+
+
 class Common(Configuration):
 
     INSTALLED_APPS = (

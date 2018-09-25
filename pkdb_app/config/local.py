@@ -16,9 +16,12 @@ env = environ.Env(
 # reading .env file
 environ.Env.read_env()
 
-import dj_database_url
-
+if "PKDB_POSTGRES_PASSWORD" in env:
+    os.environ["PKDB_POSTGRES_PASSWORD"] = env("PKDB_POSTGRES_PASSWORD")
 POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
+
+
+import dj_database_url
 
 
 class Local(Common):

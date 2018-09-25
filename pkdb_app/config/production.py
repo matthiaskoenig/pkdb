@@ -14,6 +14,9 @@ env = environ.Env(
 # reading .env file
 environ.Env.read_env()
 
+if "PKDB_POSTGRES_PASSWORD" in env:
+    os.environ["PKDB_POSTGRES_PASSWORD"] = env("PKDB_POSTGRES_PASSWORD")
+
 
 class Production(Common):
     DEBUG = False
