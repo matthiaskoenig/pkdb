@@ -3,6 +3,18 @@ import os
 import sys
 
 if __name__ == "__main__":
+
+    # read .env information
+    import environ
+
+    env = environ.Env(
+        # set casting, default value
+        DEBUG=(bool, False)
+    )
+    # reading .env file
+    environ.Env.read_env()
+
+
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pkdb_app.config")
     PKDB_DJANGO_CONFIGURATION = os.getenv("PKDB_DJANGO_CONFIGURATION", "Local")
     print("DJANGO_CONFIGURATION:", PKDB_DJANGO_CONFIGURATION)

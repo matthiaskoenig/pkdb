@@ -9,6 +9,10 @@ __pycache__/
 # open/libre office
 *.ods#
 
+# config files
+
+.env
+pkdb_app/config/.env
 
 # Distribution / packaging
 .Python

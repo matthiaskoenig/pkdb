@@ -7,7 +7,6 @@ from distutils.util import strtobool
 from configurations import Configuration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print("TEMPLATE_DIR", os.path.join(BASE_DIR, "templates"))
 
 
 class Common(Configuration):
