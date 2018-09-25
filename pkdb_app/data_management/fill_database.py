@@ -264,8 +264,8 @@ def upload_files(file_path, header, api_url=API_URL, client=None):
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
-                logging.warning(f"File upload failed: {file}")
-                print(response.json())
+                logging.error(f"File upload failed: {file}")
+                logging.error(response.content)
 
     return data_dict
 
@@ -387,7 +387,6 @@ def upload_study_json(json_study_dict, header, api_url=API_URL, client=None):
         success = success and check_json_response(response)
 
     if success:
-        # print access URL
         logging.info(f"{API_URL}/studies/{sid}/")
 
     return success
@@ -472,9 +471,7 @@ def fill_database(args, header, api_url=API_URL, client=None):
 
         logging.info("-" * 80)
         logging.info(f"Uploading [{study_name}]")
-        upload_study_from_dir(study_folder_path,api_url=api_url, header=header,client=client)
-
-    print("--- done ---")
+        upload_study_from_dir(study_folder_path, api_url=api_url, header=header,client=client)
 
 
 if __name__ == "__main__":
@@ -482,18 +479,18 @@ if __name__ == "__main__":
     HEADER = get_header()
     DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
     if not os.path.exists(DATA_PATH):
-        print("-" * 80)
-        print("DATA_PATH:", DATA_PATH)
-        print("-" * 80)
+        logging.info("-" * 80)
+        logging.info("DATA_PATH: " + DATA_PATH)
+        logging.info("-" * 80)
         raise FileNotFoundError
 
     fill_database(args=None, header=HEADER)
 
     DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "codeine"))
     if not os.path.exists(DATA_PATH):
-        print("-" * 80)
-        print("DATA_PATH:", DATA_PATH)
-        print("-" * 80)
+        logging.info("-" * 80)
+        logging.info("DATA_PATH:", DATA_PATH)
+        logging.info("-" * 80)
         raise FileNotFoundError
 
     fill_database(args=None, header=HEADER)
