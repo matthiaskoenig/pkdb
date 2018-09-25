@@ -16,6 +16,11 @@ env = environ.Env(
 # reading .env file
 environ.Env.read_env()
 
+print("-"*80)
+print(env)
+print("-"*80)
+
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pkdb_app.config")
 os.environ.setdefault("DJANGO_CONFIGURATION", "Production")
 
