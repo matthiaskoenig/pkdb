@@ -1,6 +1,7 @@
 """
 Basic information and statistics about data base content.
 """
+import pandas as pd
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
@@ -15,22 +16,38 @@ from pkdb_app.interventions.models import Intervention, Output, Timecourse
 class Statistics(object):
     """ Basic database statistics. """
 
-    def __init__(self):
+    def __init__(self,substance):
         self.version = __version__
-        self.reference_count = Reference.objects.count()
-        self.study_count = Study.objects.count()
-        self.group_count = Group.objects.count()
-        self.individual_count = Individual.objects.count()
-        self.intervention_count = Intervention.objects.filter(final=True).count()
-        self.output_count = Output.objects.filter(final=True).count()
-        self.timecourse_count = Timecourse.objects.filter(final=True).count()
+        self.studies = Study.objects.filter(substances__name__contains=substance)
+        self.study_count = self.studies.count()
+        self.reference_count = self.studies.values_list("reference").count()
+        #self.group_count = self.studies.values_list("groupset__group_exs__groups").count()
+        #self.individual_count = self.studies.values_list("individualset__individual_exs__individuals").count()
+        self.interventions = Intervention.objects.filter(substance__name=substance).filter(final=True)
+        self.intervention_count = self.interventions.count()
+
+        #self.output_count = self.studies.values("outputset__output_exs__outputs").count()
+
+
+        #self.reference_count = Reference.objects.filter(study__substances__name__contains=substance).count()
+        #self.study_count = Study.objects.filter(substances__name__contains=substance).count()
+        #self.group_count = Group.objects.filter(ex__groupset__study__substances__name__contains=substance).count()
+        #self.individual_count = Individual.objects.filter(ex__individualset__study__substances__name__contains=substance).count()
+        #self.intervention_count = Intervention.objects.filter(ex__interventionset__study__substances__name__contains=substance).filter(final=True).count()
+        self.outputs = Output.objects.filter(substance__name=substance).filter(final=True)
+        self.output_count = self.outputs.count()
+        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(final=True)
+        self.timecourse_count = self.timecourses.count()
+        outputs_with_substance = Output.objects.filter(interventions__in=self.interventions)
+        self.individual_count = Individual.objects.filter(output__in= outputs_with_substance).count()
+        self.group_count = Group.objects.filter(output__in= outputs_with_substance).count()
 
 
 class StatisticsSerializer(serializers.BaseSerializer):
     """ Serializer for database statistics. """
 
     def to_representation(self, instance):
-
+        from django.db.models import Count
         return {
             key: getattr(instance, key)
             for key in [
@@ -59,6 +76,18 @@ class StatisticsViewSet(viewsets.ViewSet):
     """
 
     def list(self, request):
-        instance = Statistics()
-        serializer = StatisticsSerializer(instance)
-        return Response(serializer.data)
+        substances = ["caffeine","codeine"]
+        data = {}
+        substances = Intervention.objects.values_list("substance__name",flat=True).distinct()
+        substances = [x for x in substances if x is not None]
+
+
+        for substance in substances:
+
+            instance = Statistics(substance=substance)
+            serializer = StatisticsSerializer(instance)
+
+            data[substance] = serializer.data
+        data = pd.DataFrame(data).T.to_dict("list")
+        data["labels"] = substances
+        return Response(data)

@@ -66,24 +66,32 @@
                 </tr>
                 </tbody>
                 </table>
+
             </div>
+
         </div>
+        <vue-plotly :data="interventions_data" :layout="layout" :options="options"/>
+        <vue-plotly :data="individuals_data" :layout="layout" :options="options"/>
+
     </div>
 </template>
 
 <script>
 import axios from 'axios'
+import VuePlotly from '@statnett/vue-plotly'
+
 export default {
     name: 'Home',
     props: {
         api: String
     },
+    components: {
+        VuePlotly,
+    },
     methods:{
         get: function(){
-            var api_url
-            api_url = this.api + '/statistics/?format=json'
-
-
+            var api_url;
+            api_url = this.api + '/statistics/?format=json';
             axios.get(api_url)
                 .then(response => {
                     // JSON responses are automatically parsed.
@@ -96,44 +104,42 @@ export default {
     },
     data() {
         return {
-            data: {
-                'version': null,
-                'reference_count': null,
-                'study_count': null,
-                'group_count': null,
-                'individual_count': null,
-                'intervention_count': null,
-                'output_count': null,
-                'timecourse_count': null,
-            },
-            errors: []
+            data: {},
+
         }
     },
     computed: {
-        version: function () {
-            return this.data['version']
+        interventions_data(){
+
+
+
+            return [{
+                values: this.data.intervention_count,
+                labels: this.data.labels,
+                type: 'pie'
+            }];
+
         },
-        reference_count: function () {
-            return this.data['reference_count']
+        individuals_data(){
+
+            return [{
+                values: this.data.individual_count,
+                labels: this.data.labels,
+                type: 'pie'
+            }];
+
         },
-        study_count: function () {
-            return this.data['study_count']
+        layout(){
+            //xaxis: {title: this.timecourse.time_unit },
+            var height = 400;
+            var width = 500;
+            return {height:height,width:width};
         },
-        group_count: function () {
-            return this.data['group_count']
+        options(){
+            return {};
         },
-        individual_count: function () {
-            return this.data['individual_count']
-        },
-        intervention_count: function () {
-            return this.data['intervention_count']
-        },
-        output_count: function () {
-            return this.data['output_count']
-        },
-        timecourse_count: function () {
-            return this.data['timecourse_count']
-        },
+
+
     },
     created() {
         this.get()
