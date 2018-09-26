@@ -316,10 +316,10 @@ class Output(ValueableNotBlank, AbstractOutput):
     timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
     objects = OutputManager()
 
-    def save(self,no_norm=False, *args, **kwargs):
+    def save(self, donot_normilize=False, *args, **kwargs):
         #fixme: I think, overwriting save function is not best practice.
         super().save( *args, **kwargs)
-        if not no_norm:
+        if not donot_normilize:
             norm = copy.copy(self)
             norm.normalize()
             norm.add_statistics()
@@ -328,13 +328,14 @@ class Output(ValueableNotBlank, AbstractOutput):
             if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
-                norm.save(no_norm=True)
-                self.norm = norm
-                self.save(no_norm=True,force_update=True)
+                norm.save(donot_normilize=True)
+                norm.raw.add(self)
+                norm.save(donot_normilize=True)
+
 
             else:
                 self.final = True
-                self.save(no_norm=True,force_update=True)
+                self.save(donot_normilize=True, force_update=True)
 
 
 
@@ -469,25 +470,28 @@ class Timecourse(AbstractOutput):
     objects = OutputManager()
 
 
-    def save(self,no_norm=False, *args, **kwargs):
+    def save(self, donot_normilize=False, *args, **kwargs):
 
         super().save(*args, **kwargs)
 
 
-        if not no_norm:
+        if not donot_normilize:
             norm = copy.copy(self)
-            self.normalize()
-            self.add_statistics()
+            norm.normalize()
+            norm.add_statistics()
+
             if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
-                norm.save(no_norm=True)
-                self.norm = norm
-                self.save(no_norm=True,force_update=True)
+                norm.save(donot_normilize=True)
+                norm.raw.add(self)
+                norm.save(donot_normilize=True)
+
+
 
             else:
                 self.final = True
-                self.save(no_norm=True,force_update=True)
+                self.save(donot_normilize=True, force_update=True)
 
 
     def save_no_norm(self,*args, **kwargs):
@@ -622,6 +626,26 @@ class Timecourse(AbstractOutput):
 
         output_data["unit"] = f"({self.unit})*{self.time_unit}"
 
+        def _any_not_json(value):
+            return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
+
+        array_fields = [
+                "value",
+                "mean",
+                "median",
+                "min",
+                "max",
+                "sd",
+                "se",
+                "cv",
+                "time",
+            ]
+        for field in array_fields:
+            value = output_data.get(field, None)
+            if value:
+                if _any_not_json(value):
+                    output_data[field] = None
+
         return output_data
 
     @staticmethod
@@ -650,7 +674,25 @@ class Timecourse(AbstractOutput):
             output_data["median"] = self.try_type_error(self.time,self.median,_aucinf)
 
         output_data["unit"] = f"({self.unit})*{self.time_unit}"
+        def _any_not_json(value):
+            return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
 
+        array_fields = [
+            "value",
+            "mean",
+            "median",
+            "min",
+            "max",
+            "sd",
+            "se",
+            "cv",
+            "time",
+        ]
+        for field in array_fields:
+            value = output_data.get(field, None)
+            if value:
+                if _any_not_json(value):
+                    output_data[field] = None
         return output_data
 
 

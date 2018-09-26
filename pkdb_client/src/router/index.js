@@ -12,6 +12,7 @@ import About from '@/components/About'
 import CharacteristicaDetail from '@/components/CharacteristicaDetail'
 import GroupDetail from '@/components/GroupDetail'
 import IndividualDetail from '@/components/IndividualDetail'
+import StudyDetail from '@/components/StudyDetail'
 import TimecourseDetail from '@/components/TimecourseDetail'
 
 
@@ -28,6 +29,12 @@ export default new Router({
             path: '/studies',
             name: 'Studies',
             component: Studies
+        },
+        {
+            path:"/studies/:id",
+            name:"StudyDetail",
+            component:StudyDetail,
+            props: true
         },
         {
             path: '/groups',

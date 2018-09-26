@@ -6,7 +6,7 @@
                 <md-badge  class="md-square md-primary" :md-content="count">
                     <h3 class="md-title"  style="flex: 1" ><font-awesome-icon icon="users" />   Groups  </h3>
                 </md-badge>
-                <md-button :href="resource_url" title="JSON" target="_blank" class="md-fab md-mini">
+                <md-button :href="resource_url" title="JSON" target="_blank" class="md-icon-button md-raised">
                     <font-awesome-icon icon="code"/>
                 </md-button>
 
@@ -38,16 +38,21 @@
                         <div class="item">
 
                             <md-badge title="Individuals" v-if="item.individuals" class="md-square md-primary " :md-content="item.individuals.length">
-                                <md-button @click="showDialog = true" class="md-icon-button">
+                                <md-button @click="showDialog = true" class="md-icon-button md-raised">
                                     <font-awesome-icon icon="user" />
                                 </md-button>
                             </md-badge>
+
 
                                 <md-dialog :md-active.sync="showDialog">
                                     <md-dialog-content>
                                         <Individuals :api="api"/>
                                     </md-dialog-content>
                                 </md-dialog>
+
+                            <md-button :href="api + '/groups_read/'+ item.pk +'/?format=json'" title="JSON" target="_blank" class="md-icon-button md-raised" >
+                                <font-awesome-icon icon="code"/>
+                            </md-button>
                         </div>
                     </div>
                 </md-table-cell>

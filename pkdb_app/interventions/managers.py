@@ -89,6 +89,8 @@ class OutputManager(models.Manager):
         interventions = kwargs.pop('interventions', [])
         output = super().create(*args, **kwargs)
         output.interventions.add(*interventions)
+        if output.norm:
+            output.norm.interventions.add(*interventions)
         return output
 
 class TimecourseManager(models.Manager):
@@ -97,8 +99,6 @@ class TimecourseManager(models.Manager):
         timecourse = super().create(*args, **kwargs)
         timecourse.interventions.add(*interventions)
         ######
-        timecourse.pharmacokinetics.create()
-        timecourse.calculate_auc()
         return timecourse
 
 
