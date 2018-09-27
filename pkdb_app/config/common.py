@@ -56,10 +56,8 @@ class Common(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
-        # "debug_toolbar.middleware.DebugToolbarMiddleware",
     )
 
-    # DEBUG_TOOLBAR_PATCH_SETTINGS = False
     CORS_ORIGIN_WHITELIST = (
         "0.0.0.0:8081",
         "localhost:8081",

@@ -5,9 +5,9 @@ from django.db import models
 
 from pkdb_app.interventions.models import (
     OutputSet,
-    Substance,
     InterventionSet,
     DataFile,
+    Substance,
 )
 from pkdb_app.storage import OverwriteStorage
 from pkdb_app.subjects.models import GroupSet, IndividualSet
@@ -17,17 +17,16 @@ from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_
 from ..users.models import User
 
 
+
 class Keyword(models.Model):
     """
     This class describes the keywords / tags of a study.
     """
-
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=KEYWORDS_DATA_CHOICES)
 
 
 class Author(models.Model):
     """ Author in reference. """
-
     first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
     last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
 
@@ -40,7 +39,6 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # optional
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -61,7 +59,6 @@ class Study(Sidable, models.Model):
 
     Mainly reported as a single publication.
     """
-
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
     creator = models.ForeignKey(
         User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
@@ -86,7 +83,6 @@ class Study(Sidable, models.Model):
     )
     outputset = models.OneToOneField(OutputSet, on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
-
 
     @property
     def individuals(self):

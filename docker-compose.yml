@@ -12,8 +12,8 @@ services:
       - postgres_data:/var/lib/postgresql
     environment:
      POSTGRES_DB: postgres
-     POSTGRES_USER: pass
-     POSTGRES_PASSWORD: pkdb
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: pass
 
   web:
     restart: always

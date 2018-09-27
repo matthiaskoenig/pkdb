@@ -3,10 +3,16 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
+import copy
+import numpy as np
 import pandas as pd
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+
+from ..subjects.models import Group, DataFile, Individual
+
 from pkdb_app.interventions.managers import (
     InterventionSetManager,
     OutputSetManager,
@@ -32,13 +38,10 @@ from ..categoricals import (
     PK_DATA_CHOICES,
     OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT)
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
-from ..substances import SUBSTANCES_DATA_CHOICES
-from ..subjects.models import Group, DataFile, Individual
-from ..utils import CHAR_MAX_LENGTH
-import copy
-import numpy as np
-from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf
 
+from ..utils import CHAR_MAX_LENGTH
+from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf
+from ..substances import SUBSTANCES_DATA_CHOICES
 
 # -------------------------------------------------
 # Substance
@@ -49,14 +52,10 @@ class Substance(models.Model):
 
     Has to be extended via ontology (Ontologable)
     """
-
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES)
-
-    # ontologies: has set of defined values: is, CHEBI:27732
 
     def __str__(self):
         return self.name
-
 
 # -------------------------------------------------
 # Intervention
@@ -194,8 +193,6 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
 
     def save_no_norm(self, *args, **kwargs):
             super().save(*args, **kwargs)
-
-
 
     @property
     def norm_unit(self):
