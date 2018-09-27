@@ -23,9 +23,9 @@
                 <!-- icon: info-circle -->
                 <md-tab to="/about" md-active-tab="false"  id="tab-about" :md-icon="file_alt" md-label="About"></md-tab>
                 <!-- icon: chart-line -->
-                <md-tab id="tab-api" md-label="API" :md-icon="chart_line" href="http://www.pk-db.com/api/v1/"></md-tab>
+                <md-tab id="tab-api" md-label="API" :md-icon="chart_line" href="https://pk-db.com/api/v1/"></md-tab>
                 <!-- icon: file-alt -->
-                <md-tab id="tab-github" md-label="Code" :md-icon="code" href="http://www.github.com/matthiaskoenig/pkdb"></md-tab>
+                <md-tab id="tab-github" md-label="Code" :md-icon="code" href="https://www.github.com/matthiaskoenig/pkdb"></md-tab>
         </md-tabs>
 
     </div>
