@@ -18,162 +18,51 @@ The upload expects a certain folder structure:
 
 Details about the JSON schema are given elsewhere (JSON schema and REST API).
 """
-import sys
 import copy
 import os
 import sys
 import json
 import requests
 import logging
-import coloredlogs
-
-
-coloredlogs.install(
-    level="INFO",
-    fmt="%(module)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
-    # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
-)
+from pkdb_app import logging_utils
+from pkdb_app.data_management import setup_database as sdb
 logger = logging.getLogger(__name__)
-
 
 BASEPATH = os.path.abspath(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
 )
 sys.path.append(BASEPATH)
-from pkdb_app.data_management.utils import recursive_iter, set_keys
 
+from pkdb_app.data_management.utils import recursive_iter, set_keys
 from pkdb_app.data_management.create_reference import run as create_reference
 from collections import namedtuple
-
-
-# -----------------------------
-# master path
-# -----------------------------
-
-# API_BASE = "http://0.0.0.0:8000"
-API_BASE = "http://www.pk-db.com"
-API_URL = API_BASE + "/api/v1"
-
-# -----------------------------
-# setup database
-# -----------------------------
-
-PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
-if not PASSWORD:
-    raise ValueError("Password could not be read, export the environment variable.")
-
-
-USERS = [
-    {
-        "username": "janekg",
-        "first_name": "Jan",
-        "last_name": "Grzegorzewski",
-        "email": "Janekg89@hotmail.de",
-        "password": PASSWORD,
-    },
-    {
-        "username": "mkoenig",
-        "first_name": "Matthias",
-        "last_name": "König",
-        "email": "konigmatt@googlemail.com",
-        "password": PASSWORD,
-    },
-]
-
-
-# create superuser and use it for authenification
-# TOKEN = os.getenv("PKDB_TOKEN")
-def get_token(api_base=API_BASE,client=None):
-    response = requests.post(f"{api_base}/api-token-auth/", json={"username": "admin", "password": PASSWORD})
-    # response.raise_for_status()
-    TOKEN = response.json().get("token")
-    if not TOKEN:
-        # FIXME: this only works for local deployment!
-        os.system(f"docker-compose run --rm web ./manage.py createsuperuser2 --username admin --password {PASSWORD} --email Janekg89@hotmail.de --noinput")
-        response = requests.post(f"{api_base}/api-token-auth/", json={"username": "admin", "password": PASSWORD})
-        TOKEN = response.json().get("token")
-    return TOKEN
-
-
-def get_header(api_base=API_BASE, client=None):
-    TOKEN = get_token(api_base=api_base, client=client)
-    HEADER = {'Authorization': f'token {TOKEN}'}
-    return HEADER
-
-def requests_with_client(client,requests, *args,**kwargs):
-    method = kwargs.pop("method", None)
-
-    if client:
-        if kwargs.get("files"):
-            kwargs["data"] = kwargs.pop("files",None)
-            response = getattr(client,method)(*args, **kwargs)
-
-        else:
-            response = getattr(client,method)(*args, **kwargs, format='json')
-    else:
-        kwargs["json"] = kwargs.pop("data", None)
-        response = getattr(requests,method)(*args, **kwargs)
-
-    return response
-
-
-def setup_database(api_url, header, client=None):
-    """ Creates core information in database.
-
-    This information is independent of study information. E.g., users, substances,
-    categorials.
-
-    :return:
-    """
-    from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
-
-    for substance in SUBSTANCES_DATA:
-        response = requests_with_client(client, requests,f"{api_url}/substances/",  method="post", data={"name": substance}, headers=header)
-        if not response.status_code == 201:
-            logging.warning(f"substance upload failed ")
-            logging.warning(response.content)
-
-
-    for keyword in KEYWORDS_DATA:
-        response = requests_with_client(client, requests,  f"{api_url}/keywords/", method="post", data={"name": keyword}, headers=header)
-        if not response.status_code == 201:
-            logging.warning(f"keyword upload failed ")
-            logging.warning(response.content)
-
-    for user in USERS:
-        response = requests_with_client(client, requests, f"{api_url}/users/", method="post", data=user, headers=header)
-
-        if not response.status_code == 201:
-            logging.warning(f"user upload failed ")
-            logging.warning(response.content)
-
 
 
 # -------------------------------
 # Paths of JSON files
 # -------------------------------
-def _get_paths(filename):
-    """ Finds paths of filename recursively in MASTER_PATH. """
-    for root, dirs, files in os.walk(DATA_PATH, topdown=False):
+def _get_paths(data_dir, filename):
+    """ Finds paths of filename recursively in base_dir. """
+    for root, dirs, files in os.walk(data_dir, topdown=False):
 
         if filename in files:
             yield os.path.join(root, filename)
 
 
-def get_reference_paths():
+def get_reference_paths(data_dir):
     """ Finds paths of reference JSON files and corresponding PDFs.
 
     :return: dict
     """
-    for path in _get_paths("reference.json"):
+    for path in _get_paths(data_dir, "reference.json"):
         study_name = os.path.basename(os.path.dirname(path))
         pdf_path = os.path.join(os.path.dirname(path), f"{study_name}.pdf")
         yield {"reference_path": path, "pdf": pdf_path}
 
 
-def get_study_paths():
+def get_study_paths(data_dir):
     """ Finds paths of study JSON files. """
-    return _get_paths("study.json")
+    return sorted(_get_paths(data_dir=data_dir, filename="study.json"))
 
 
 # -------------------------------
@@ -224,8 +113,6 @@ def read_study_json(path):
 # -------------------------------
 # Helpers
 # -------------------------------
-
-
 def pop_comments(d, *keys):
     """ Pops comment in nested dictionary. """
     for key in keys:
@@ -239,7 +126,7 @@ def pop_comments(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-def upload_files(file_path, header, api_url=API_URL, client=None):
+def upload_files(file_path, api_url, auth_headers, client=None):
     """ Uploads all files in directory of given file.
 
     :param file_path:
@@ -260,7 +147,7 @@ def upload_files(file_path, header, api_url=API_URL, client=None):
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, "rb") as f:
-                response = requests_with_client(client, requests, f"{api_url}/datafiles/", method="post", files={"file": f}, headers=header)
+                response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post", files={"file": f}, headers=auth_headers)
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -270,14 +157,12 @@ def upload_files(file_path, header, api_url=API_URL, client=None):
     return data_dict
 
 
-def upload_reference_json(json_reference, header, api_url=API_URL,client=None):
-
+def upload_reference_json(json_reference, api_url, auth_headers, client=None):
     """ Uploads reference JSON. """
-
     success = True
     # post
-    response = requests_with_client(client, requests, f"{api_url}/references/", method="post", data=json_reference["json"],
-                                    headers=header)
+    response = sdb.requests_with_client(client, requests, f"{api_url}/references/", method="post", data=json_reference["json"],
+                                        headers=auth_headers)
 
     if not response.status_code == 201:
         logging.info(json_reference["json"]["name"] + "\n" + str(response.content))
@@ -285,9 +170,9 @@ def upload_reference_json(json_reference, header, api_url=API_URL,client=None):
 
     # patch
     with open(json_reference["pdf"], "rb") as f:
-        response = requests_with_client(client, requests, f"{api_url}/references/{json_reference['json']['sid']}/", method="patch",
-                                        files={"pdf": f},
-                                        headers=header)
+        response = sdb.requests_with_client(client, requests, f"{api_url}/references/{json_reference['json']['sid']}/", method="patch",
+                                            files={"pdf": f},
+                                            headers=auth_headers)
 
     if not response.status_code == 200:
         logging.info(json_reference["json"]["name"] + "\n" + str(response.content))
@@ -320,13 +205,11 @@ def check_json_response(response):
     return True
 
 
-def upload_study_json(json_study_dict, header, api_url=API_URL, client=None):
+def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     """ Uploads study JSON.
 
     :returns success code
     """
-
-
     json_study = json_study_dict["json"]
     if not json_study:
         logging.warning("No study information in `study.json`")
@@ -334,7 +217,7 @@ def upload_study_json(json_study_dict, header, api_url=API_URL, client=None):
 
     # upload files (and get dict for file ids)
     study_dir = os.path.dirname(json_study_dict["study_path"])
-    file_dict = upload_files(study_dir,header=header, client=client)
+    file_dict = upload_files(study_dir, api_url=api_url, auth_headers=auth_headers, client=client)
 
     for keys, item in recursive_iter(json_study_dict):
         if isinstance(item, str):
@@ -350,9 +233,9 @@ def upload_study_json(json_study_dict, header, api_url=API_URL, client=None):
     [study_core.pop(this_set, None) for this_set in related_sets]
     study_core["files"] = list(file_dict.values())
 
-    response = requests_with_client(client, requests, f"{api_url}/studies/", method="post",
-                                    data=study_core,
-                                    headers=header)
+    response = sdb.requests_with_client(client, requests, f"{api_url}/studies/", method="post",
+                                        data=study_core,
+                                        headers=auth_headers)
     success = check_json_response(response)
 
     # ---------------------------
@@ -366,33 +249,33 @@ def upload_study_json(json_study_dict, header, api_url=API_URL, client=None):
 
     # post
     sid = json_study["sid"]
-    response = requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
-                                    data=study_sets,
-                                    headers=header)
+    response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
+                                        data=study_sets,
+                                        headers=auth_headers)
     success = success and check_json_response(response)
 
     # is using group, has to be uploaded separately from the groupset
     if "individualset" in json_study.keys():
 
-        response = requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
-                                       data={"individualset": json_study.get("individualset")},
-                                       headers=header)
+        response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
+                                            data={"individualset": json_study.get("individualset")},
+                                            headers=auth_headers)
 
         success = success and check_json_response(response)
 
     if "outputset" in json_study.keys():
-        response = requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
-                                        data={"outputset": json_study.get("outputset")},
-                                        headers=header)
+        response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
+                                            data={"outputset": json_study.get("outputset")},
+                                            headers=auth_headers)
         success = success and check_json_response(response)
 
     if success:
-        logging.info(f"{API_URL}/studies/{sid}/")
+        logging.info(f"{api_url}/studies/{sid}/")
 
     return success
 
 
-def upload_study_from_dir(study_dir, header, api_url=API_URL, client=None):
+def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     """ Upload a complete study directory.
 
     Includes
@@ -403,10 +286,10 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL, client=None):
     :param study_dir:
     :return:
     """
+    # FIXME: studies must be uploaded via the respective creator username (for now everything uploaded via admin)
+    # This requires to get the respective tokens for the users
 
     # handle study.json
-
-
     study_path = os.path.join(study_dir, "study.json")
     _, study_name = os.path.split(study_dir)
     if not os.path.exists(study_path):
@@ -444,10 +327,12 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL, client=None):
     if os.path.exists(reference_path):
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
-            success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url, header=header,client=client)
+            success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url,
+                                                auth_headers=auth_headers, client=client)
 
     # upload study.json
-    success_study = upload_study_json(study_dict, api_url=api_url,header=header, client=client)
+    success_study = upload_study_json(study_dict, api_url=api_url,
+                                      auth_headers=auth_headers, client=client)
 
     if success_ref and success_study:
         logging.info("--- upload successful ---")
@@ -455,53 +340,45 @@ def upload_study_from_dir(study_dir, header, api_url=API_URL, client=None):
     return {}
 
 
-def fill_database(args, header, api_url=API_URL, client=None):
-    """ Main function to fill database.
+def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=None):
+    """ Uploads studies in given data directory.
 
     :param args: command line arguments
     :return:
     """
+    if not os.path.exists(data_dir):
+        logging.error("Data directory does not exist: " + data_dir)
+        raise FileNotFoundError
+    else:
+        logging.info("*"*80)
+        logging.info(data_dir)
+        logging.info("*" * 80)
 
-    # core database setup
-    setup_database(api_url=api_url, header=header)
-
-    for study_path in sorted(get_study_paths()):
+    for study_path in get_study_paths(data_dir):
         study_folder_path = os.path.dirname(study_path)
         study_name = os.path.basename(study_folder_path)
 
         logging.info("-" * 80)
         logging.info(f"Uploading [{study_name}]")
-        upload_study_from_dir(study_folder_path, api_url=api_url, header=header,client=client)
+
+        upload_study_from_dir(study_folder_path, api_url=api_url,
+                              auth_headers=auth_headers, client=client)
 
 
 if __name__ == "__main__":
+    # core database setup (user, substance, keyword data)
 
-    HEADER = get_header()
-    DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "caffeine"))
-    if not os.path.exists(DATA_PATH):
-        logging.info("-" * 80)
-        logging.info("DATA_PATH: " + DATA_PATH)
-        logging.info("-" * 80)
-        raise FileNotFoundError
+    authentication_header = sdb.get_authentication_headers(api_base=sdb.API_BASE, username="admin", password=sdb.DEFAULT_PASSWORD)
+    # run via setup_database
+    # sdb.setup_database(api_url=sdb.API_URL, authentication_header=authentication_header)
 
-    fill_database(args=None, header=HEADER)
+    DATA_BASE_PATH = os.path.join(BASEPATH, "..", "pkdb_data")
+    DATA_PATHS = [
+        os.path.join(DATA_BASE_PATH, "caffeine"),
+        os.path.join(DATA_BASE_PATH, "codeine"),
+    ]
+    DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]
+    for data_dir in DATA_PATHS:
 
-    DATA_PATH = os.path.abspath(os.path.join(BASEPATH, "..", "pkdb_data", "codeine"))
-    if not os.path.exists(DATA_PATH):
-        logging.info("-" * 80)
-        logging.info("DATA_PATH:", DATA_PATH)
-        logging.info("-" * 80)
-        raise FileNotFoundError
-
-    fill_database(args=None, header=HEADER)
-
-    # ----------------------------
-    # python fill_database.py -u "http://www.pk-db.com/api/v1"
-    # python fill_database.py -u "http://0.0.0.0:8000/api/v1"
-
-    # parser = argparse.ArgumentParser(description="Watch a study directory for changes")
-    # parser.add_argument("-u", help="url to upload data to", dest="url", type=str, required=True)
-    # parser.set_defaults(func=fill_database)
-    # args = parser.parse_args()
-    # args.func(args)
-    # ----------------------------
+        upload_studies_from_data_dir(data_dir=data_dir, api_url=sdb.API_URL,
+                                     auth_headers=authentication_header)

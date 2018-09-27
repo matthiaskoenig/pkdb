@@ -140,13 +140,8 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
-    # url(r'/', views.about_view, name='index'),
+
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
     # re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-if settings.DEBUG:
-    import debug_toolbar
-
-    urlpatterns = [url(r"^__debug__/", include(debug_toolbar.urls))] + urlpatterns

@@ -55,7 +55,7 @@ class UploadStudy(APITestCase):
 
 
     def test_setup_database(self):
-        setup_database(api_url=self.api_url,header=self.header,client=self.client)
+        setup_database(api_url=self.api_url, authentication_header=self.header, client=self.client)
         assert hasattr(Substance.objects.first(),"name")
 
 
@@ -67,19 +67,19 @@ class UploadStudy(APITestCase):
 
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         json_reference = read_reference_json(reference_dict)
-        success = upload_reference_json(json_reference,api_url=self.api_url,header=self.header,client=self.client)
+        success = upload_reference_json(json_reference, api_url=self.api_url, auth_headers=self.header, client=self.client)
         assert success
 
     def test_upload_files(self):
         study_name = "test_study"
         study_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), study_name)
-        upload_files(file_path=study_dir,api_url=self.api_url,header=self.header,client=self.client)
+        upload_files(file_path=study_dir, api_url=self.api_url, auth_headers=self.header, client=self.client)
         assert hasattr(DataFile.objects.first(),"file"), DataFile.objects.first()
 
     def test_upload_study_from_dir(self):
         study_test_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),"test_study")
-        setup_database(api_url=self.api_url,header=self.header,client=self.client)
-        upload_study_from_dir(study_dir=study_test_dir, header=self.header, api_url=self.api_url, client=self.client)
+        setup_database(api_url=self.api_url, authentication_header=self.header, client=self.client)
+        upload_study_from_dir(study_dir=study_test_dir, auth_headers=self.header, api_url=self.api_url, client=self.client)
         assert  Study.objects.filter(name="test_study").count() == 1 ,Study.objects.filter(name="test_study")
 
 
