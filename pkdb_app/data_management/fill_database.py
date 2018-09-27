@@ -126,7 +126,7 @@ def pop_comments(d, *keys):
 # -------------------------------
 # Upload JSON in database
 # -------------------------------
-def upload_files(file_path, authentication_header, api_url, client=None):
+def upload_files(file_path, api_url, auth_headers, client=None):
     """ Uploads all files in directory of given file.
 
     :param file_path:
@@ -147,7 +147,7 @@ def upload_files(file_path, authentication_header, api_url, client=None):
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, "rb") as f:
-                response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post", files={"file": f}, headers=authentication_header)
+                response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post", files={"file": f}, headers=auth_headers)
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -157,12 +157,12 @@ def upload_files(file_path, authentication_header, api_url, client=None):
     return data_dict
 
 
-def upload_reference_json(json_reference, authentication_header, api_url, client=None):
+def upload_reference_json(json_reference, api_url, auth_headers, client=None):
     """ Uploads reference JSON. """
     success = True
     # post
     response = sdb.requests_with_client(client, requests, f"{api_url}/references/", method="post", data=json_reference["json"],
-                                        headers=authentication_header)
+                                        headers=auth_headers)
 
     if not response.status_code == 201:
         logging.info(json_reference["json"]["name"] + "\n" + str(response.content))
@@ -172,7 +172,7 @@ def upload_reference_json(json_reference, authentication_header, api_url, client
     with open(json_reference["pdf"], "rb") as f:
         response = sdb.requests_with_client(client, requests, f"{api_url}/references/{json_reference['json']['sid']}/", method="patch",
                                             files={"pdf": f},
-                                            headers=authentication_header)
+                                            headers=auth_headers)
 
     if not response.status_code == 200:
         logging.info(json_reference["json"]["name"] + "\n" + str(response.content))
@@ -205,7 +205,7 @@ def check_json_response(response):
     return True
 
 
-def upload_study_json(json_study_dict, authentication_header, api_url, client=None):
+def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     """ Uploads study JSON.
 
     :returns success code
@@ -217,7 +217,7 @@ def upload_study_json(json_study_dict, authentication_header, api_url, client=No
 
     # upload files (and get dict for file ids)
     study_dir = os.path.dirname(json_study_dict["study_path"])
-    file_dict = upload_files(study_dir, authentication_header=authentication_header, client=client)
+    file_dict = upload_files(study_dir, api_url=api_url, auth_headers=auth_headers, client=client)
 
     for keys, item in recursive_iter(json_study_dict):
         if isinstance(item, str):
@@ -235,7 +235,7 @@ def upload_study_json(json_study_dict, authentication_header, api_url, client=No
 
     response = sdb.requests_with_client(client, requests, f"{api_url}/studies/", method="post",
                                         data=study_core,
-                                        headers=authentication_header)
+                                        headers=auth_headers)
     success = check_json_response(response)
 
     # ---------------------------
@@ -251,7 +251,7 @@ def upload_study_json(json_study_dict, authentication_header, api_url, client=No
     sid = json_study["sid"]
     response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
                                         data=study_sets,
-                                        headers=authentication_header)
+                                        headers=auth_headers)
     success = success and check_json_response(response)
 
     # is using group, has to be uploaded separately from the groupset
@@ -259,23 +259,23 @@ def upload_study_json(json_study_dict, authentication_header, api_url, client=No
 
         response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
                                             data={"individualset": json_study.get("individualset")},
-                                            headers=authentication_header)
+                                            headers=auth_headers)
 
         success = success and check_json_response(response)
 
     if "outputset" in json_study.keys():
         response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
-                                        data={"outputset": json_study.get("outputset")},
-                                        headers=authentication_header)
+                                            data={"outputset": json_study.get("outputset")},
+                                            headers=auth_headers)
         success = success and check_json_response(response)
 
     if success:
-        logging.info(f"{API_URL}/studies/{sid}/")
+        logging.info(f"{api_url}/studies/{sid}/")
 
     return success
 
 
-def upload_study_from_dir(study_dir, authentication_header, api_url, client=None):
+def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     """ Upload a complete study directory.
 
     Includes
@@ -328,11 +328,11 @@ def upload_study_from_dir(study_dir, authentication_header, api_url, client=None
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
         if read_reference_json(reference_dict):
             success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url,
-                                                authentication_header=authentication_header, client=client)
+                                                auth_headers=auth_headers, client=client)
 
     # upload study.json
     success_study = upload_study_json(study_dict, api_url=api_url,
-                                      authentication_header=authentication_header, client=client)
+                                      auth_headers=auth_headers, client=client)
 
     if success_ref and success_study:
         logging.info("--- upload successful ---")
@@ -340,7 +340,7 @@ def upload_study_from_dir(study_dir, authentication_header, api_url, client=None
     return {}
 
 
-def upload_studies_from_data_dir(data_dir, api_url, authentication_header=None, client=None):
+def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=None):
     """ Uploads studies in given data directory.
 
     :param args: command line arguments
@@ -349,6 +349,10 @@ def upload_studies_from_data_dir(data_dir, api_url, authentication_header=None, 
     if not os.path.exists(data_dir):
         logging.error("Data directory does not exist: " + data_dir)
         raise FileNotFoundError
+    else:
+        logging.info("*"*80)
+        logging.info(data_dir)
+        logging.info("*" * 80)
 
     for study_path in get_study_paths(data_dir):
         study_folder_path = os.path.dirname(study_path)
@@ -358,13 +362,13 @@ def upload_studies_from_data_dir(data_dir, api_url, authentication_header=None, 
         logging.info(f"Uploading [{study_name}]")
 
         upload_study_from_dir(study_folder_path, api_url=api_url,
-                              authentication_header=authentication_header, client=client)
+                              auth_headers=auth_headers, client=client)
 
 
 if __name__ == "__main__":
     # core database setup (user, substance, keyword data)
 
-    authentication_header = sdb.get_authentication_header(api_base=sdb.API_BASE, username="admin", password=sdb.DEFAULT_PASSWORD)
+    authentication_header = sdb.get_authentication_headers(api_base=sdb.API_BASE, username="admin", password=sdb.DEFAULT_PASSWORD)
     # run via setup_database
     # sdb.setup_database(api_url=sdb.API_URL, authentication_header=authentication_header)
 
@@ -373,6 +377,8 @@ if __name__ == "__main__":
         os.path.join(DATA_BASE_PATH, "caffeine"),
         os.path.join(DATA_BASE_PATH, "codeine"),
     ]
-    for data_dir in DATA_BASE_PATH:
+    DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]
+    for data_dir in DATA_PATHS:
+
         upload_studies_from_data_dir(data_dir=data_dir, api_url=sdb.API_URL,
-                                     authentication_header=authentication_header)
+                                     auth_headers=authentication_header)

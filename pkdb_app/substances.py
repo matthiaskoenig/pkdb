@@ -2,6 +2,8 @@
 Handling of substance information.
 
 FIXME: add types, molecular weights and links to data bases
+
+To update the database content execute the setup_database script.
 """
 
 SUBSTANCES_DATA = [
@@ -117,15 +119,3 @@ SUBSTANCES_DATA = [
     'glucagon',
 ]
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
-
-
-if __name__ == "__main__":
-    import os
-    os.environ['PKDB_DEFAULT_PASSWORD'] = "pkdb"
-    from pkdb_app.data_management import fill_database
-
-
-
-    fill_database.setup_database(api_url=fill_database.API_URL,
-                                 authentication_header=fill_database.get_authentication_header())
-

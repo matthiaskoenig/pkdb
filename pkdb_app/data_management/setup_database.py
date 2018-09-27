@@ -47,8 +47,8 @@ USERS = [
 ]
 
 
-def get_authentication_header(api_base, username, password):
-    """ Get authentication token for given user. """
+def get_authentication_headers(api_base, username, password):
+    """ Get authentication header with token for given user. """
     response = requests.post(f"{api_base}/api-token-auth/", json={"username": username, "password": password})
     response.raise_for_status()
     token = response.json().get("token")
@@ -72,7 +72,7 @@ def requests_with_client(client, requests, *args, **kwargs):
     return response
 
 
-def setup_database(api_url, authentication_header, client=None):
+def setup_database(api_url, auth_headers, client=None):
     """ Creates core information in database.
 
     This information is independent of study information. E.g., users, substances,
@@ -82,7 +82,7 @@ def setup_database(api_url, authentication_header, client=None):
     """
     for user in USERS:
         response = requests_with_client(client, requests, f"{api_url}/users/", method="post",
-                                        data=user, headers=authentication_header)
+                                        data=user, headers=auth_headers)
 
         if not response.status_code == 201:
             logging.warning(f"user upload failed: {user} ")
@@ -90,19 +90,19 @@ def setup_database(api_url, authentication_header, client=None):
 
     for substance in SUBSTANCES_DATA:
         response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
-                                        data={"name": substance}, headers=authentication_header)
+                                        data={"name": substance}, headers=auth_headers)
         if not response.status_code == 201:
             logging.warning(f"substance upload failed: {substance}")
             logging.warning(response.content)
 
     for keyword in KEYWORDS_DATA:
         response = requests_with_client(client, requests, f"{api_url}/keywords/", method="post",
-                                        data={"name": keyword}, headers=authentication_header)
+                                        data={"name": keyword}, headers=auth_headers)
         if not response.status_code == 201:
             logging.warning(f"keyword upload failed: {keyword} ")
             logging.warning(response.content)
 
 
 if __name__ == "__main__":
-    authentication_header = get_authentication_header(api_base=API_BASE, username="admin", password=DEFAULT_PASSWORD)
-    setup_database(api_url=API_URL, authentication_header=authentication_header)
+    auth_headers = get_authentication_headers(api_base=API_BASE, username="admin", password=DEFAULT_PASSWORD)
+    setup_database(api_url=API_URL, auth_headers=auth_headers)
