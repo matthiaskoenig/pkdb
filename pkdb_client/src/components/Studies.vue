@@ -1,75 +1,66 @@
 <template>
-    <div>
-        <md-table  md-height="800px" class="my-table" v-model="entries" v-if="count" md-card>
+        <GetData :resource_url="resource_url" >
+            <div slot-scope="resource">
+                    <md-table  md-height="800px" class="my-table" v-model="resource.entries" v-if="resource.count" md-card>
 
-            <md-table-toolbar>
-                <md-badge  class="md-square md-primary" :md-content="count">
-                    <h3 class="md-title"  style="flex: 1" >
-                        <font-awesome-icon class="md-icon"  icon="procedures" />
-                        <span class="md-list-item-text">Studies</span>
-                          </h3>
-                </md-badge>
+                        <md-table-toolbar>
+                            <md-badge  class="md-square md-primary" :md-content="resource.count">
+                                <h3 class="md-title"  style="flex: 1" >
+                                    <font-awesome-icon class="md-icon"  icon="procedures" />
+                                    <span class="md-list-item-text">Studies</span>
+                                </h3>
+                            </md-badge>
 
-                <md-button :href="resource_url" title="JSON" target="_blank" class="md-icon-button md-raised">
-                    <font-awesome-icon icon="code"/>
-                </md-button>
-            </md-table-toolbar>
+                            <md-button :href="resource_url" title="JSON" target="_blank" class="md-icon-button md-raised">
+                                <font-awesome-icon icon="code"/>
+                            </md-button>
+                        </md-table-toolbar>
 
-            <md-table-row slot="md-table-row" slot-scope="{item}">
-                <md-table-cell  md-label="Pk">
-                    <md-button :to="'studies/'+ item.pk" class="md-icon-button md-raised">
-                        <font-awesome-icon icon="procedures"/>
-                    </md-button>{{ item.pk }}
+                        <md-table-row slot="md-table-row" slot-scope="{item}">
+                            <md-table-cell  md-label="Pk">
+                                <md-button :to="'studies/'+ item.pk" class="md-icon-button md-raised">
+                                    <font-awesome-icon icon="procedures"/>
+                                </md-button>{{ item.pk }}
 
-                </md-table-cell>
-                <md-table-cell md-label="Pkdb Version" >{{ item.pkdb_version }}</md-table-cell>
-                <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
-                <md-table-cell md-label="Reference"><a v-if="item.reference" :href="item.reference" :title="item.reference"><font-awesome-icon icon="file-alt"/> </a></md-table-cell>
-                <md-table-cell md-label="Creator"><a v-if="item.creator" :href="item.creator" :title="item.creator"><font-awesome-icon icon="user-cog"/></a></md-table-cell>
-                <md-table-cell md-label="Curators"><span v-for="(c, index2) in item.curators" :key="index2"> <a :href="c" :title="c"><font-awesome-icon icon="user-edit"/></a>&nbsp;</span></md-table-cell>
-                <md-table-cell md-label="Substances"><span v-for="(c, index2) in item.substances" :key="index2"><a :href="c" :title="c"><font-awesome-icon icon="tablets"/></a>&nbsp;</span></md-table-cell>
-                <md-table-cell md-label="Files"><span v-for="(f, index2) in item.files" :key="index2"><a :href="f" :title="f"><font-awesome-icon icon="file-medical"/></a>&nbsp;</span> </md-table-cell>
-                <md-table-cell md-label="Groupset"><a v-if="item.groupset" :href="item.groupset" :title="item.groupset"><font-awesome-icon icon="users"/></a></md-table-cell>
-                <md-table-cell md-label="Individualset"><a v-if="item.individualset" :href="item.individualset" :title="item.individualset"><font-awesome-icon icon="user"/></a></md-table-cell>
-                <md-table-cell md-label="Interventionset"><a v-if="item.interventionset" :href="item.interventionset" :title="item.interventionset"><font-awesome-icon icon="capsules"/>
-                </a></md-table-cell>
-                <md-table-cell md-label="Outputset"><a v-if="item.outputset" :href="item.outputset" :title="item.outputset"> <font-awesome-icon icon="chart-bar"/>
-                </a></md-table-cell>
-                <md-table-cell md-label="Design">{{ item.design }}</md-table-cell>
-                <md-table-cell md-label="Keywords"><span v-for="(c, index2) in item.keywords" :key="index2">
-                        <a :href="c" :title="c"><font-awesome-icon icon="tablets"/></a>&nbsp;</span>
-                </md-table-cell>
-            </md-table-row>
-        </md-table>
-        <v-paginator :resource_url="resource_url" @update="updateResource"></v-paginator>
-
-    </div>
+                            </md-table-cell>
+                            <md-table-cell md-label="Pkdb Version" >{{ item.pkdb_version }}</md-table-cell>
+                            <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
+                            <md-table-cell md-label="Reference"><a v-if="item.reference" :href="item.reference" :title="item.reference"><font-awesome-icon icon="file-alt"/> </a></md-table-cell>
+                            <md-table-cell md-label="Creator"><a v-if="item.creator" :href="item.creator" :title="item.creator"><font-awesome-icon icon="user-cog"/></a></md-table-cell>
+                            <md-table-cell md-label="Curators"><span v-for="(c, index2) in item.curators" :key="index2"> <a :href="c" :title="c"><font-awesome-icon icon="user-edit"/></a>&nbsp;</span></md-table-cell>
+                            <md-table-cell md-label="Substances"><span v-for="(c, index2) in item.substances" :key="index2"><a :href="c" :title="c"><font-awesome-icon icon="tablets"/></a>&nbsp;</span></md-table-cell>
+                            <md-table-cell md-label="Files"><span v-for="(f, index2) in item.files" :key="index2"><a :href="f" :title="f"><font-awesome-icon icon="file-medical"/></a>&nbsp;</span> </md-table-cell>
+                            <md-table-cell md-label="Groupset"><a v-if="item.groupset" :href="item.groupset" :title="item.groupset"><font-awesome-icon icon="users"/></a></md-table-cell>
+                            <md-table-cell md-label="Individualset"><a v-if="item.individualset" :href="item.individualset" :title="item.individualset"><font-awesome-icon icon="user"/></a></md-table-cell>
+                            <md-table-cell md-label="Interventionset"><a v-if="item.interventionset" :href="item.interventionset" :title="item.interventionset"><font-awesome-icon icon="capsules"/>
+                            </a></md-table-cell>
+                            <md-table-cell md-label="Outputset"><a v-if="item.outputset" :href="item.outputset" :title="item.outputset"> <font-awesome-icon icon="chart-bar"/>
+                            </a></md-table-cell>
+                            <md-table-cell md-label="Design">{{ item.design }}</md-table-cell>
+                            <md-table-cell md-label="Keywords"><span v-for="(c, index2) in item.keywords" :key="index2">
+                                    <a :href="c" :title="c"><font-awesome-icon icon="tablets"/></a>&nbsp;</span>
+                            </md-table-cell>
+                        </md-table-row>
+                    </md-table>
+            </div>
+        </GetData>
 </template>
 
 <script>
-    import VuePaginator from '@/components/VPaginator';
+    import GetData from './GetPaginatedData'
 
     export default {
         name: 'Studies',
         components: {
-            VPaginator: VuePaginator
+            GetData: GetData,
         },
         props: {
             api: String
         },
-        methods: {
-            updateResource(data) {
-                this.entries = data.data;
-                this.count = data.count
-            }
-        },
         data() {
             return {
-                // The resource variable
-                entries: [],
                 // Here you define the url of your paginated API
                 resource_url: this.api + '/studies_read/?format=json',
-                count: null,
             }
         }
     }
