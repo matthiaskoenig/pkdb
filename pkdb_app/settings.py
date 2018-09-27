@@ -10,7 +10,6 @@ from distutils.util import strtobool
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ------------------------------------------------------------------------------------------------------------------
-
 env = environ.Env(
     DEBUG=(bool, False)
 )
