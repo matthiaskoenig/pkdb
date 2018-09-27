@@ -1,9 +1,10 @@
 """
 Initial setup of database.
+
+Creates basic users and information like substances and keywords.
 """
 import requests
 import logging
-
 from pkdb_app.settings import DEFAULT_PASSWORD
 from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
 
@@ -23,6 +24,7 @@ USERS = [
         "password": DEFAULT_PASSWORD,
     },
 ]
+
 
 def get_authentication_headers(api_base, username, password):
     """ Get authentication header with token for given user. """

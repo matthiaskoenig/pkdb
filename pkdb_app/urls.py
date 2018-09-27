@@ -1,6 +1,9 @@
 """
 Django URLs
 """
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
+
 from django.conf import settings
 from django.urls import path, include
 from django.conf.urls import url
@@ -140,6 +143,14 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
+
+    # user management
+    url('^register/', CreateView.as_view(
+      template_name='register.html',
+      form_class=UserCreationForm,
+      success_url='/'
+    )),
+    url('^accounts/', include('django.contrib.auth.urls')),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter

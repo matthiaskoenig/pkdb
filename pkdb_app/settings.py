@@ -30,7 +30,6 @@ if "PKDB_POSTGRES_PASSWORD" in env:
 DJANGO_CONFIGURATION = os.getenv("PKDB_DJANGO_CONFIGURATION", "Local")
 SECRET_KEY = os.getenv("PKDB_SECRET_KEY")
 API_BASE = os.getenv("PKDB_API_BASE")
-API_URL = API_BASE + "/api/v1"
 DEFAULT_PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
 
 if not SECRET_KEY:
@@ -39,6 +38,8 @@ if not DEFAULT_PASSWORD:
     raise ValueError("DEFAULT_PASSWORD could not be read, export the 'PKDB_DEFAULT_PASSWORD' environment variable.")
 if not API_BASE:
     raise ValueError("API_BASE could not be read, export the 'PKDB_API_BASE' environment variable.")
+
+API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
 
 INSTALLED_APPS = (

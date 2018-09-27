@@ -1,3 +1,4 @@
+#!python3.6
 """
 Creates reference.json from given PMID id.
 """
@@ -8,12 +9,6 @@ import xml.etree.ElementTree as ET
 from Bio import Entrez
 import json
 import requests
-
-
-BASEPATH = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
-)
-sys.path.append(BASEPATH)
 
 from pkdb_app.data_management.utils import recursive_iter, set_keys
 

@@ -72,6 +72,7 @@ Setting up a virtual environment to interact with the data base via python
 ```
 mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
+(pkdb) pip install -e .
 ```
 add your virtual environment to jupyter kernels:
 ```

@@ -1,5 +1,5 @@
 """
-Script to load data into database.
+Script to load study data into database.
 
 Needs location of directory with data.
 Uses bonobo framework, a lightweight extract-transform-load (ETL) framework,
@@ -20,22 +20,17 @@ Details about the JSON schema are given elsewhere (JSON schema and REST API).
 """
 import copy
 import os
-import sys
 import json
 import requests
 import logging
+from collections import namedtuple
+
 from pkdb_app import logging_utils
 from pkdb_app.data_management import setup_database as sdb
-logger = logging.getLogger(__name__)
-
-BASEPATH = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
-)
-sys.path.append(BASEPATH)
-
 from pkdb_app.data_management.utils import recursive_iter, set_keys
 from pkdb_app.data_management.create_reference import run as create_reference
-from collections import namedtuple
+
+logger = logging.getLogger(__name__)
 
 
 # -------------------------------
