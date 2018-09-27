@@ -26,8 +26,11 @@ USERS = [
 ]
 
 
-def get_authentication_headers(api_base, username, password):
-    """ Get authentication header with token for given user. """
+def get_authentication_headers(api_base, username="admin", password=DEFAULT_PASSWORD):
+    """ Get authentication header with token for given user.
+
+    Returns admin authentification as default.
+    """
     response = requests.post(f"{api_base}/api-token-auth/", json={"username": username, "password": password})
     response.raise_for_status()
     token = response.json().get("token")
@@ -83,6 +86,5 @@ def setup_database(api_url, auth_headers, client=None):
 
 
 if __name__ == "__main__":
-    from pkdb_app.settings import API_BASE, API_URL
-    auth_headers = get_authentication_headers(api_base=API_BASE, username="admin", password=DEFAULT_PASSWORD)
-    setup_database(api_url=API_URL, auth_headers=auth_headers)
+    from pkdb_app.settings import API_URL
+    setup_database(api_url=API_URL, auth_headers=get_authentication_headers())

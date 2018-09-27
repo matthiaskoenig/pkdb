@@ -28,7 +28,7 @@ from collections import namedtuple
 from pkdb_app import logging_utils
 from pkdb_app.data_management import setup_database as sdb
 from pkdb_app.data_management.utils import recursive_iter, set_keys
-from pkdb_app.data_management.create_reference import run as create_reference
+from pkdb_app.data_management.create_reference_json import run as create_reference
 
 logger = logging.getLogger(__name__)
 
@@ -281,8 +281,9 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     :param study_dir:
     :return:
     """
-    # FIXME: studies must be uploaded via the respective creator username (for now everything uploaded via admin)
-    # This requires to get the respective tokens for the users
+    if not os.path.exists(study_dir):
+        logging.error(f"Study directory does not exist: {study_dir}")
+        raise FileNotFoundError
 
     # handle study.json
     study_path = os.path.join(study_dir, "study.json")
@@ -361,13 +362,15 @@ def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=No
 
 
 if __name__ == "__main__":
-    # core database setup (user, substance, keyword data)
+    from pkdb_app.settings import API_BASE, DEFAULT_PASSWORD, API_URL
 
-    authentication_header = sdb.get_authentication_headers(api_base=sdb.API_BASE, username="admin", password=sdb.DEFAULT_PASSWORD)
+    authentication_header = sdb.get_authentication_headers(api_base=API_BASE, username="admin", password=DEFAULT_PASSWORD)
     # run via setup_database
     # sdb.setup_database(api_url=sdb.API_URL, authentication_header=authentication_header)
+    # core database setup (user, substance, keyword data)
 
-    DATA_BASE_PATH = os.path.join(BASEPATH, "..", "pkdb_data")
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    DATA_BASE_PATH = os.path.join(BASE_DIR, "..", "..", "pkdb_data")
     DATA_PATHS = [
         os.path.join(DATA_BASE_PATH, "caffeine"),
         os.path.join(DATA_BASE_PATH, "codeine"),
@@ -375,5 +378,5 @@ if __name__ == "__main__":
     DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]
     for data_dir in DATA_PATHS:
 
-        upload_studies_from_data_dir(data_dir=data_dir, api_url=sdb.API_URL,
+        upload_studies_from_data_dir(data_dir=data_dir, api_url=API_URL,
                                      auth_headers=authentication_header)
