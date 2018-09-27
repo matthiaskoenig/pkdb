@@ -3,13 +3,18 @@ Shared django settings.
 """
 import os
 from os.path import join
-import environ
+
 import dj_database_url
 from distutils.util import strtobool
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print("-"*80)
+print(BASE_DIR)
+print("-"*80)
+
 
 # ------------------------------------------------------------------------------------------------------------------
+import environ
 env = environ.Env(
     DEBUG=(bool, False)
 )
@@ -168,9 +173,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": STATICFILES_DIRS + [
-            os.path.join(BASE_DIR, "templates"),
-        ],
+        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -183,6 +186,9 @@ TEMPLATES = [
         },
     }
 ]
+
+from pprint import pprint
+pprint(TEMPLATES)
 
 # Custom user app
 AUTH_USER_MODEL = "users.User"
