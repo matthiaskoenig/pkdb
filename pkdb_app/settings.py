@@ -42,19 +42,44 @@ if not API_BASE:
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
 
+AUTHENTICATION_BACKENDS = (
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+
 INSTALLED_APPS = (
     "django.contrib.admin",
     "django.contrib.auth",
+    "django.contrib.sites",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # Authentication
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.gitlab',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.openid',
+    'allauth.socialaccount.providers.orcid',
+    'allauth.socialaccount.providers.twitter',
+
     # Third party apps
     "rest_framework",  # utilities for rest apis
     "rest_framework.authtoken",  # token authentication
     "django_filters",  # for filtering rest endpoints
     "rest_framework_swagger",
     "corsheaders",
+
     # Your apps
     "pkdb_app.users",
     "pkdb_app.studies",
@@ -125,6 +150,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -134,9 +160,7 @@ TEMPLATES = [
     }
 ]
 
-# Set DEBUG to False as a default for safety
-# https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
+
 
 # Password Validation
 # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
@@ -198,8 +222,7 @@ LOGGING = {
 
 # Custom user app
 AUTH_USER_MODEL = "users.User"
-# STRICT_JSON = False
-# UNICODE_JSON = True
+
 # Django Rest Framework
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -231,6 +254,10 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
 }
 
+
+# Set DEBUG to False as a default for safety
+# https://docs.djangoproject.com/en/dev/ref/settings/#debug
+DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
 # ------------------------------
 # LOCAL
 # ------------------------------
@@ -273,3 +300,5 @@ elif DJANGO_CONFIGURATION == 'Production':
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
     INSTALLED_APPS += ("gunicorn",)
+else:
+    raise ValueError(f"Unsupported DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")

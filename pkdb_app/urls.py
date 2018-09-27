@@ -144,13 +144,8 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
 
-    # user management
-    url('^register/', CreateView.as_view(
-      template_name='register.html',
-      form_class=UserCreationForm,
-      success_url='/'
-    )),
-    url('^accounts/', include('django.contrib.auth.urls')),
+    # authentication
+    url(r'^accounts/', include('allauth.urls')),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter

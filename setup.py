@@ -79,6 +79,7 @@ setup(
         "django-model-utils==3.1.2",
         "django_unique_upload==0.2.1",
         "django-environ>=0.4.5",
+        "django-allauth>=0.37.1",
 
         # Rest API
         "djangorestframework==3.8.2",
