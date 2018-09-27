@@ -138,14 +138,17 @@ schema_view = get_swagger_view(title="PKDB API")
 
 
 urlpatterns = [
+    # authentication
+    url(r'^accounts/', include('allauth.urls')),
+
+    # admin
     path("admin/", admin.site.urls),
+
+    # api
     path(r"api/v1/", include(router.urls)),
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
-
-    # authentication
-    url(r'^accounts/', include('allauth.urls')),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter

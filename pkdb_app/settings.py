@@ -67,11 +67,11 @@ INSTALLED_APPS = (
     'allauth.socialaccount',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.gitlab',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.openid',
-    'allauth.socialaccount.providers.orcid',
-    'allauth.socialaccount.providers.twitter',
+    # 'allauth.socialaccount.providers.gitlab',
+    #'allauth.socialaccount.providers.google',
+    #'allauth.socialaccount.providers.openid',
+    #'allauth.socialaccount.providers.orcid',
+    #'allauth.socialaccount.providers.twitter',
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
@@ -87,6 +87,24 @@ INSTALLED_APPS = (
     "pkdb_app.interventions",
     "pkdb_app.comments",
 )
+
+SITE_ID = 1
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_MIN_LENGTH = 3
+
+SOCIALACCOUNT_PROVIDERS = {
+    'github': {
+        'SCOPE': ['email'],
+        'METHOD': 'oauth2',
+    },
+    # 'google':
+    #     { 'SCOPE': ['profile', 'email'],
+    #       'AUTH_PARAMS': {'access_type': 'online'}
+    #     },
+
+}
 
 # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
 MIDDLEWARE = (
@@ -160,6 +178,8 @@ TEMPLATES = [
     }
 ]
 
+# Custom user app
+AUTH_USER_MODEL = "users.User"
 
 
 # Password Validation
@@ -220,8 +240,7 @@ LOGGING = {
     },
 }
 
-# Custom user app
-AUTH_USER_MODEL = "users.User"
+
 
 # Django Rest Framework
 REST_FRAMEWORK = {

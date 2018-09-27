@@ -1,0 +1,38 @@
+{% extends "bases/bootstrap-auth.html" %}
+
+{% load i18n %}
+{% load bootstrap3 %}
+{% load account socialaccount %}
+
+{% block head_title %}{% trans "Signup" %}BS{% endblock %}
+
+{% block inner-content %}
+{% get_providers as socialaccount_providers %}
+
+<h1>{% trans "Sign Up" %}</h1>
+    
+<div class="row">
+  {% if socialaccount_providers  %}
+  <div class="col-md-5 col-lg-5">
+    {% include "allauth/account/provider_panel.html" with process="login" %}
+  </div>
+  {% endif %}
+
+  <div class="{% if socialaccount_providers %}col-md-7 col-lg-7 {% else %} col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 {% endif %}">
+
+    <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+        
+    <form id="signup_form" method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">{% trans "Sign Up" %}</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
