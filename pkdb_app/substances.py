@@ -124,5 +124,8 @@ if __name__ == "__main__":
     os.environ['PKDB_DEFAULT_PASSWORD'] = "pkdb"
     from pkdb_app.data_management import fill_database
 
-    fill_database.setup_database(api_url=fill_database.API_URL, header=fill_database.get_header())
+
+
+    fill_database.setup_database(api_url=fill_database.API_URL,
+                                 authentication_header=fill_database.get_authentication_header())
 

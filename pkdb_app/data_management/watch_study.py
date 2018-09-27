@@ -29,7 +29,7 @@ BASEPATH = os.path.abspath(
 )
 sys.path.append(BASEPATH)
 
-from pkdb_app.data_management.fill_database import upload_study_from_dir, get_header
+from pkdb_app.data_management.fill_database import upload_study_from_dir, get_authentication_header
 
 
 # FIXME: make sure that removed files are removed from the study (on delete?)
@@ -47,7 +47,7 @@ class StudyHandler(FileSystemEventHandler):
         logging.info(f"Watching [{self.study_name}]")
         logging.info(f"\t{self.path}")
         logging.info("-" * 80)
-        self.HEADER = get_header()
+        self.HEADER = get_authentication_header()
         upload_study_from_dir(self.path,self.HEADER)
 
     def on_modified(self, event):

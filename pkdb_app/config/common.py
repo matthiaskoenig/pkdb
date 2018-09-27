@@ -36,7 +36,7 @@ class Common(Configuration):
         "rest_framework.authtoken",  # token authentication
         "django_filters",  # for filtering rest endpoints
         "rest_framework_swagger",
-        "debug_toolbar",
+        # "debug_toolbar",
         "corsheaders",
         # Your apps
         "pkdb_app.users",
@@ -56,10 +56,10 @@ class Common(Configuration):
         "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django.contrib.messages.middleware.MessageMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
-        "debug_toolbar.middleware.DebugToolbarMiddleware",
+        # "debug_toolbar.middleware.DebugToolbarMiddleware",
     )
 
-    DEBUG_TOOLBAR_PATCH_SETTINGS = False
+    # DEBUG_TOOLBAR_PATCH_SETTINGS = False
     CORS_ORIGIN_WHITELIST = (
         "0.0.0.0:8081",
         "localhost:8081",

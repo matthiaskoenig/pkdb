@@ -11,21 +11,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
     environment:
-     POSTGRES_USER : postgres
-     POSTGRES_PASSWORD: pass
      POSTGRES_DB: postgres
+     POSTGRES_USER: pass
+     POSTGRES_PASSWORD: pkdb
 
   web:
     restart: always
     environment:
-      - PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
-      - PKDB_DEFAULT_PASSWORD="pkdb"
+      PKDB_SECRET_KEY: cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
+      PKDB_API_BASE: http://0.0.0.0:8000
+      PKDB_DEFAULT_PASSWORD: pkdb
+      PKDB_EMAIL: konigmatt@googlemail.com
     image: web
     build: ./
     command: >
       bash -c "python wait_for_postgres.py &&
                ./manage.py makemigrations &&
                ./manage.py migrate &&
+               ./manage.py createsuperuser2 --username admin --password pkdb --email konigmatt@googlemail.com --noinput &&
                ./manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/code
@@ -34,15 +37,11 @@ services:
     depends_on:
       - postgres
 
-  documentation:
-    restart: always
-    build: ./
-    command: "mkdocs serve"
-    volumes:
-      - ./:/code
-    ports:
-      - "8001:8001"
-
-
-
-
+#  documentation:
+#    restart: always
+#    build: ./
+#    command: "mkdocs serve"
+#    volumes:
+#      - ./:/code
+#    ports:
+#      - "8001:8001"
