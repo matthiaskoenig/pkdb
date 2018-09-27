@@ -80,6 +80,7 @@ setup(
         "django_unique_upload==0.2.1",
         "django-environ>=0.4.5",
         "django-allauth>=0.37.1",
+        "django-bootstrap3>=11.0.0",
 
         # Rest API
         "djangorestframework==3.8.2",

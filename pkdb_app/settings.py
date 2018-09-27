@@ -61,7 +61,11 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+
+
     # Authentication
+    'bootstrap3',  # optional module for making bootstrap forms easier
+
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -164,7 +168,9 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "templates")],
+        "DIRS": STATICFILES_DIRS + [
+            os.path.join(BASE_DIR, "templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
