@@ -4,6 +4,7 @@ Initial setup of database.
 import os
 import requests
 import logging
+
 from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
 
 # ---------------------------------------------------------

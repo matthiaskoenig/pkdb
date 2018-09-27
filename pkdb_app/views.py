@@ -1,10 +1,6 @@
-
 """
 Views
 """
-from pkdb_app._version import __version__
-
-from django.shortcuts import render
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 from rest_framework.decorators import (
     api_view,
@@ -30,7 +26,3 @@ from rest_framework.response import Response
 def schema_view(request):
     generator = SchemaGenerator(title="PKDB Web API")
     return Response(generator.get_schema(request=request))
-
-
-def about_view(request):
-    return render(request, "pkdb/about.html", {"version": __version__})
