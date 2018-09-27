@@ -142,7 +142,8 @@ def upload_files(file_path, api_url, auth_headers, client=None):
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, "rb") as f:
-                response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post", files={"file": f}, headers=auth_headers)
+                response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post",
+                                                    files={"file": f}, headers=auth_headers)
             if response.status_code == 201:
                 data_dict[file] = response.json()["id"]
             else:
@@ -281,8 +282,11 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     :param study_dir:
     :return:
     """
-    if not os.path.exists(study_dir):
-        logging.error(f"Study directory does not exist: {study_dir}")
+    # normalize path
+    if study_dir.endswith("/"):
+        study_dir = study_dir[:-1]
+    if not os.path.exists(study_dir) or not os.path.isdir(study_dir):
+        logging.error(f"Study directory does not exist or is not a directory: {study_dir}")
         raise FileNotFoundError
 
     # handle study.json
@@ -308,6 +312,7 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     # try to create missing reference.json
     reference_path = os.path.join(study_dir, "reference.json")
     reference_pdf = os.path.join(study_dir, f"{study_name}.pdf")
+
     if study_json and not os.path.exists(reference_path):
         if study_json:
             pmid = study_json.get("reference", None)
@@ -322,6 +327,7 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     success_ref = True
     if os.path.exists(reference_path):
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
+
         if read_reference_json(reference_dict):
             success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url,
                                                 auth_headers=auth_headers, client=client)

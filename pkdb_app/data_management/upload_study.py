@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 def run(args):
     study_dir = args.study
+    logger.info(f"study_dir: {study_dir}")
+
     upload_study_from_dir(study_dir, api_url=API_URL, auth_headers=get_authentication_headers())
 
 
