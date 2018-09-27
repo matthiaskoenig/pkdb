@@ -1,34 +1,11 @@
 """
 Initial setup of database.
 """
-import os
 import requests
 import logging
 
+from pkdb_app.settings import DEFAULT_PASSWORD
 from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
-
-# ---------------------------------------------------------
-import environ
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-# reading .env file
-environ.Env.read_env()
-
-if "PKDB_API_BASE" in env:
-    os.environ["PKDB_API_BASE"] = env("PKDB_API_BASE")
-if "PKDB_DEFAULT_PASSWORD" in env:
-    os.environ["PKDB_DEFAULT_PASSWORD"] = env("PKDB_DEFAULT_PASSWORD")
-
-API_BASE = os.getenv("PKDB_API_BASE")
-if not API_BASE:
-    raise ValueError("API_BASE could not be read, export the 'PKDB_API_BASE' environment variable.")
-API_URL = API_BASE + "/api/v1"
-
-DEFAULT_PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
-if not DEFAULT_PASSWORD:
-    raise ValueError("Default password could not be read, export the 'PKDB_DEFAULT_PASSWORD' environment variable.")
-# ---------------------------------------------------------
 
 USERS = [
     {
@@ -105,5 +82,6 @@ def setup_database(api_url, auth_headers, client=None):
 
 
 if __name__ == "__main__":
+    from pkdb_app.settings import API_BASE
     auth_headers = get_authentication_headers(api_base=API_BASE, username="admin", password=DEFAULT_PASSWORD)
     setup_database(api_url=API_URL, auth_headers=auth_headers)

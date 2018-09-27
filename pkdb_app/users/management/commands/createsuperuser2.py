@@ -1,5 +1,6 @@
 from django.contrib.auth.management.commands import createsuperuser
 from django.core.management import CommandError
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Command(createsuperuser.Command):
@@ -20,9 +21,10 @@ class Command(createsuperuser.Command):
         if password and not username:
             raise CommandError("--username is required if specifying --password")
 
-        # check if user exists
-        user = self.UserModel._default_manager.db_manager(database).get(username=username)
-        if not user:
+        # only create admin if not existing
+        try:
+            user = self.UserModel._default_manager.db_manager(database).get(username=username)
+        except ObjectDoesNotExist:
             super(Command, self).handle(*args, **options)
             if password:
                 user = self.UserModel._default_manager.db_manager(database).get(username=username)

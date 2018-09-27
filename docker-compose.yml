@@ -21,7 +21,6 @@ services:
       PKDB_SECRET_KEY: cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
       PKDB_API_BASE: http://0.0.0.0:8000
       PKDB_DEFAULT_PASSWORD: pkdb
-      PKDB_EMAIL: konigmatt@googlemail.com
     image: web
     build: ./
     command: >
