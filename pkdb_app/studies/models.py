@@ -17,7 +17,6 @@ from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_
 from ..users.models import User
 
 
-
 class Keyword(models.Model):
     """
     This class describes the keywords / tags of a study.
@@ -83,6 +82,9 @@ class Study(Sidable, models.Model):
     )
     outputset = models.OneToOneField(OutputSet, on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
+
+    class Meta:
+        verbose_name_plural = "studies"
 
     @property
     def individuals(self):
