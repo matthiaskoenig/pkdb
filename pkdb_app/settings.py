@@ -91,6 +91,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_MIN_LENGTH = 3
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+
 
 SOCIALACCOUNT_PROVIDERS = {
     'github': {
@@ -278,6 +280,7 @@ DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
 # ------------------------------
 if DJANGO_CONFIGURATION == 'Local':
     DEBUG = True
+    LOGIN_REDIRECT_URL = "http://172.30.10.11:8080/"
 
     # Postgres
     DATABASES = {
@@ -305,6 +308,7 @@ if DJANGO_CONFIGURATION == 'Local':
 # -------------------------------------------------
 elif DJANGO_CONFIGURATION == 'Production':
     DEBUG = False
+    LOGIN_REDIRECT_URL = "/"
 
     POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
 
