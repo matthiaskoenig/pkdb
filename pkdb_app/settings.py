@@ -7,7 +7,7 @@ from os.path import join
 import dj_database_url
 from distutils.util import strtobool
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ------------------------------------------------------------------------------------------------------------------
 import environ
@@ -147,22 +147,22 @@ LOGIN_REDIRECT_URL = "/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-STATIC_ROOT = os.path.normpath(join(os.path.dirname(BASE_DIR), "static"))
-STATICFILES_DIRS = [os.path.normpath(join(os.path.dirname(BASE_DIR), "static"))]
+STATIC_ROOT = join(os.path.dirname(BASE_DIR), "pkdb_app", "static")
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = "/static/"
-STATICFILES_FINDERS = (
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-)
+# STATICFILES_FINDERS = (
+#    "django.contrib.staticfiles.finders.FileSystemFinder",
+#    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+#)
 
 # Media files
-MEDIA_ROOT = join(os.path.dirname(BASE_DIR), "media")
+MEDIA_ROOT = join(os.path.dirname(BASE_DIR), "pkdb_app", "media")
 MEDIA_URL = "/media/"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "templates"), ],
+        "DIRS": [os.path.join(BASE_DIR, "pkdb_app", "templates"), ],
         "APP_DIRS": False,
         "OPTIONS": {
             "debug": False,

@@ -151,7 +151,7 @@ urlpatterns = [
     url(r"api", schema_view, name="api"),
 
     # for debugging
-    # url(r'test/', views.test_view, name='test'),
+    url(r'test/', views.test_view, name='test'),
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
