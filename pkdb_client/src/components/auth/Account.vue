@@ -10,8 +10,10 @@
         <h2>Django endpoints</h2>
         <ul>
         <li><a :href="domain+'/accounts/signup/'">signup</a></li>
+            <!-- not needed for anything
         <li><a :href="domain+'/accounts/login/'">login</a></li>
         <li><a :href="domain+'/accounts/logout/'">logout</a></li>
+        -->
         <li><a :href="domain+'/accounts/password/change/'">change password</a></li>
         <li><a :href="domain+'/accounts/password/reset/'">reset password</a></li>
         </ul>

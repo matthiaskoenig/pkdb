@@ -79,7 +79,7 @@ const store = new Vuex.Store({
         },
         clearUsername(state){
             localStorage.removeItem('username');
-            state.token = null;
+            state.username = null;
         },
     },
     actions:{

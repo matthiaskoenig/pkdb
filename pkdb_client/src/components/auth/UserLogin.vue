@@ -1,13 +1,20 @@
 <template>
     <div>
-        <input type="text" placeholder="username" v-model="username">
-        <input type="password" placeholder="password" v-model="password">
-        <button v-on:click="login">Login</button>
-        <button v-on:click="logout">Logout</button>
+
+        <div v-if="user">
+            <button v-on:click="logout">Logout</button>
+        </div>
+        <div v-else>
+            <input type="text" placeholder="username" v-model="username">
+            <input type="password" placeholder="password" v-model="password">
+            <button v-on:click="login">Login</button>
+        </div>
         <p>
+            <span v-if="user">
             User: {{ user }}<br />
             Token: {{ token }}<br />
-            Warnings: {{ warnings }}
+            </span>
+            <span v-if="warnings">Warnings: {{ warnings }}</span>
         </p>
     </div>
 </template>
@@ -19,9 +26,9 @@
         name: "UserLogin",
         data: function(){
             return {
-                username: '',
-                password: '',
-                warnings: ''
+                username: null,
+                password: null,
+                warnings: null
             }
         },
         computed: {
@@ -34,8 +41,12 @@
         },
         methods: {
             login: function(){
-                // window.alert("login id: " + this.username + "\n" + "password: " + this.password);
+                // reset store
+                this.logout();
+                // reset warnings
+                this.warnings = null;
 
+                // window.alert("login id: " + this.username + "\n" + "password: " + this.password);
                 const payload = {"username": this.username, "password": this.password};
                 // console.log(payload);
 
@@ -48,7 +59,7 @@
                     })
                     .catch((error)=>{
                         this.warnings = error.response.data;
-                        this.logout()
+
                         console.log(error);
                     })
             },
