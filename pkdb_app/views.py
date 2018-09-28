@@ -1,11 +1,10 @@
 """
 Views
 """
-
-
-from django.shortcuts import render
-def test_view(request):
-    return render(request, "test.html", {"version": 1})
+# for debugging of templates
+# from django.shortcuts import render
+# def test_view(request):
+#     return render(request, "test.html", {"version": 1})
 
 
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
