@@ -280,7 +280,9 @@ DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
 # ------------------------------
 if DJANGO_CONFIGURATION == 'Local':
     DEBUG = True
+    LOGIN_URL = "http://172.30.10.11:8080/"
     LOGIN_REDIRECT_URL = "http://172.30.10.11:8080/"
+    ACCOUNT_LOGOUT_REDIRECT_URL = "http://172.30.10.11:8080/"
 
     # Postgres
     DATABASES = {
@@ -308,7 +310,9 @@ if DJANGO_CONFIGURATION == 'Local':
 # -------------------------------------------------
 elif DJANGO_CONFIGURATION == 'Production':
     DEBUG = False
+    LOGIN_URL = "/"
     LOGIN_REDIRECT_URL = "/"
+    ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
     POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
 
