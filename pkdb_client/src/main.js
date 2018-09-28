@@ -39,7 +39,7 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueMaterial);
 
-import axios from 'axios'
+
 // import VueAxios from 'vue-axios'
 // import jwt_decode from 'jwt-decode'
 
@@ -78,23 +78,15 @@ const store = new Vuex.Store({
             state.username = username;
         },
         clearUsername(state){
-            localStorage.removeItem('token');
+            localStorage.removeItem('username');
             state.token = null;
         },
     },
     actions:{
         login(context, payload){
-            // const payload = {username: username, password: password}
-            console.log(payload);
-
-            axios.post(this.state.endpoints.obtainAuthToken, payload)
-                .then((response)=>{
-                    this.commit('setToken', response.data.token);
-                    this.commit(setUsername, payload['username']);
-                })
-                .catch((error)=>{
-                    console.log(error);
-                })
+            // const payload = {username: username, token: token}
+            this.commit('setToken', payload.token);
+            this.commit('setUsername', payload.username);
         },
         logout(context){
             this.commit('clearToken');
