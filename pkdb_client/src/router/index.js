@@ -9,6 +9,7 @@ import Outputs from '@/components/Outputs'
 import Timecourses from '@/components/Timecourses'
 import References from '@/components/References'
 import About from '@/components/About'
+import Account from '@/components/Account'
 import CharacteristicaDetail from '@/components/CharacteristicaDetail'
 import GroupDetail from '@/components/GroupDetail'
 import IndividualDetail from '@/components/IndividualDetail'
@@ -70,6 +71,11 @@ export default new Router({
             path: '/about',
             name: 'About',
             component: About
+        },
+        {
+            path: '/account',
+            name: 'Account',
+            component: Account
         },
         {
             path:"/characteristica/:id",

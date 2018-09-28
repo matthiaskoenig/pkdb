@@ -5,9 +5,9 @@
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
 
     </head>
-    <Navigation></Navigation>
+    <Navigation :api="api" :domain="domain"></Navigation>
     <br />
-    <router-view :api="api"></router-view>
+    <router-view :api="api" :domain="domain"></router-view>
     <Footer></Footer>
   </div>
 </template>
@@ -24,7 +24,9 @@ export default {
     },
     data(){
         return {
-            api: "http://localhost:8000/api/v1"
+            domain: "http://127.0.0.1:8000",
+            api: "http://127.0.0.1:8000/api/v1"
+            // domain: "https://pk-db.com",
             // api: "https://pk-db.com/api/v1"
         }
     }
