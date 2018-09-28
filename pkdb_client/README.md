@@ -29,29 +29,19 @@ sudo npm i --save @fortawesome/free-brands-svg-icons
 ```
 
 ## vue project
+### Setup
 ```
-# vue create pkdb-client
 cd pkdb-client
-npm run serve 
-```
-
-## deploying
-https://cli.vuejs.org/guide/deployment.html
-```
-npm run build
-```
-
-## Project setup
-```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compile and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compile and minifies for production
+https://cli.vuejs.org/guide/deployment.html
 ```
 npm run build
 ```
@@ -60,11 +50,6 @@ npm run build
 ```
 npm run lint
 ```
-# Bootstrap
-https://alligator.io/vuejs/using-bootstrap4/  
-https://bootstrap-vue.js.org/docs/
-
-vue-bootstrap’s current roster of components includes most of the interactive Bootstrap 4 components: Alert, Badge, Breadcrumb, Button, Button group, Card, Collapse, Dropdown, The Usual Form Elements, Jumbotron, List group, Modal, Nav, Navbar, Pagination, Popover, Progress, Table and Tabs
 
 # FontAwesome
 https://fontawesome.com/how-to-use/on-the-web/using-with/vuejs

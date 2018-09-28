@@ -27,7 +27,7 @@ services:
       bash -c "python wait_for_postgres.py &&
                ./manage.py makemigrations &&
                ./manage.py migrate &&
-               ./manage.py createsuperuser2 --username admin --password pkdb --email konigmatt@googlemail.com --noinput &&
+               ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinput &&
                ./manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/code
