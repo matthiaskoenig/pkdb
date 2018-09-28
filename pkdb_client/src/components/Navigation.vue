@@ -55,7 +55,6 @@
             cogs () {
                 return require('../assets/images/fontawesome/svgs/solid/cogs.svg')
             },
-
             procedures () {
                 return require('../assets/images/fontawesome/svgs/solid/procedures.svg')
             },

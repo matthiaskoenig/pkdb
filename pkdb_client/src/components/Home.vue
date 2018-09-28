@@ -104,15 +104,20 @@ export default {
     },
     data() {
         return {
+            version: '',
+            study_count: '',
+            group_count: '',
+            individual_count: '',
+            intervention_count: '',
+            output_count: '',
+            timecourse_count: '',
+            reference_count: '',
             data: {},
 
         }
     },
     computed: {
         interventions_data(){
-
-
-
             return [{
                 values: this.data.intervention_count,
                 labels: this.data.labels,
