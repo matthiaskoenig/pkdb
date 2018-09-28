@@ -29,8 +29,6 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueMaterial);
 
-// Vue.use(ClientTable, {}, false, 'bootstrap3', 'default');
-
 
 new Vue({
   router,
