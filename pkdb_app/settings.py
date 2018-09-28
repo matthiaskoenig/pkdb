@@ -147,25 +147,24 @@ LOGIN_REDIRECT_URL = "/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-STATIC_ROOT = join(os.path.dirname(BASE_DIR), "pkdb_app", "static")
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.normpath(join(os.path.dirname(BASE_DIR), "static"))
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_URL = "/static/"
-# STATICFILES_FINDERS = (
-#    "django.contrib.staticfiles.finders.FileSystemFinder",
-#    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-#)
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+)
 
 # Media files
-MEDIA_ROOT = join(os.path.dirname(BASE_DIR), "pkdb_app", "media")
+MEDIA_ROOT = join(os.path.dirname(BASE_DIR), "media")
 MEDIA_URL = "/media/"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "pkdb_app", "templates"), ],
-        "APP_DIRS": False,
+        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "pkdb_app", "templates")],
+        "APP_DIRS": True,
         "OPTIONS": {
-            "debug": False,
             "context_processors": [
 
                 "django.template.context_processors.debug",
