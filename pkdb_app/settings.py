@@ -8,10 +8,6 @@ import dj_database_url
 from distutils.util import strtobool
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print("-"*80)
-print(BASE_DIR)
-print("-"*80)
-
 
 # ------------------------------------------------------------------------------------------------------------------
 import environ
@@ -66,21 +62,14 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-
-
     # Authentication
     'bootstrap3',  # optional module for making bootstrap forms easier
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    # ... include the providers you want to enable:
     'allauth.socialaccount.providers.github',
-    # 'allauth.socialaccount.providers.gitlab',
     #'allauth.socialaccount.providers.google',
-    #'allauth.socialaccount.providers.openid',
-    #'allauth.socialaccount.providers.orcid',
-    #'allauth.socialaccount.providers.twitter',
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
@@ -173,15 +162,16 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "templates")],
-        "APP_DIRS": True,
+        "DIRS": [os.path.join(BASE_DIR, "templates"), ],
+        "APP_DIRS": False,
         "OPTIONS": {
+            "debug": True,
             "context_processors": [
 
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
-                "django.contrib.messages.context_processors.messages",
                 "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ]
         },
     }
@@ -301,6 +291,14 @@ if DJANGO_CONFIGURATION == 'Local':
             conn_max_age=int(os.getenv("POSTGRES_CONN_MAX_AGE", 600)),
         )
     }
+
+    # DATABASES = {
+    #    'default': {
+    #        'ENGINE': 'django.db.backends.sqlite3',
+    #        'NAME': 'test',
+    #    }
+    # }
+
     # Mail
     EMAIL_HOST = "localhost"
     EMAIL_PORT = 1025
