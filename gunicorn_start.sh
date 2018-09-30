@@ -5,7 +5,7 @@ SOCKFILE=/var/git/pkdb/run/gunicorn.sock           # we will communicate using t
 USER=mkoenig                                       # the user to run as (*)
 GROUP=mkoenig                                      # the group to run as (*)
 NUM_WORKERS=32                                     # how many worker processes should Gunicorn spawn (*)
-DJANGO_SETTINGS_MODULE=pkdb_app.config.production  # which settings file should Django use (*)
+DJANGO_SETTINGS_MODULE=pkdb_app.settings           # which settings file should Django use (*)
 DJANGO_WSGI_MODULE=pkdb_app.wsgi                   # WSGI module name (*)
 
 echo "Starting $NAME as `whoami`"
