@@ -20,7 +20,7 @@ USERS = [
         "username": "mkoenig",
         "first_name": "Matthias",
         "last_name": "König",
-        "email": "konigmatt@googlemail.com",
+        "email": "matthiaskoenig@charite.de",
         "password": DEFAULT_PASSWORD,
     },
 ]
