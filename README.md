@@ -60,13 +60,6 @@ or to run migrations
 docker-compose run --rm web python manage.py makemigrations
 ```
 
-## Fill database
-The database can be filled via the `fill_database` scripts using curated data folders.
-The curated data is currently not made available, but only accessible via the REST API.
-```
-(pkdb) python ./pkdb_app/data_management/fill_database.py
-```
-
 ## Python (Virtual Environment)
 Setting up a virtual environment to interact with the data base via python
 ```
@@ -82,6 +75,18 @@ add your virtual environment to jupyter kernels:
 ## Frontend 
 Documentation of the `vue.js` frontend is available in
 ./pkdb_client/README.md
+
+## Fill database
+The database can be filled via the `setup_database.py` and `upload_studies.py` scripts using curated data folders.
+The curated data is currently not made available, but only accessible via the REST API.
+
+First change in `/pkdb/pkdb_app/.env` the endpoints and passwords to the correct values by setting the environment
+variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
+
+```
+(pkdb) python setup_database.py
+(pkdb) python upload_studies.py
+```
 
 
 &copy; 2017-2018 Jan Grzegorzewski & Matthias König.

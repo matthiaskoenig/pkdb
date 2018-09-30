@@ -87,4 +87,6 @@ def setup_database(api_url, auth_headers, client=None):
 
 if __name__ == "__main__":
     from pkdb_app.settings import API_URL
-    setup_database(api_url=API_URL, auth_headers=get_authentication_headers())
+
+    authentication_headers = get_authentication_headers(api_base=API_BASE, username="admin", password=DEFAULT_PASSWORD)
+    setup_database(api_url=API_URL, auth_headers=authentication_headers)
