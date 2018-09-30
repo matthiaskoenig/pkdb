@@ -34,21 +34,23 @@ Vue.use(VueMaterial);
 // import VueAxios from 'vue-axios'
 // import jwt_decode from 'jwt-decode'
 
-/**
- -------------------------------
- Vuex store
- -------------------------------
+/** -------------------------------
+ *  Domain
+ *  -------------------------------
+ *  Change these for deployment (FIXME: use environment variable)
  */
+const backend_domain = 'http://127.0.0.1:8000';
+// const backend_domain = 'https://pk-db.com';
+// const backend_domain = 'https://develop.pk-db.com';
+
+/** -------------------------------
+ *  Vuex store
+ *  ------------------------------- */
 Vue.use(Vuex);
 // Vue.use(VueAxios, axios);
 
-const backend_domain = 'http://127.0.0.1:8000';
-// const backend_domain = 'https://pk-db.com',
-// const backend_domain = 'https://develop.pk-db.com',
-
 const store = new Vuex.Store({
     state: {
-        // vue_domain is frontend server domain!, django_domain is backend server domain!
         django_domain: backend_domain,
 
         endpoints: {
@@ -98,4 +100,3 @@ new Vue({
     store,
     render: h => h(App)
 }).$mount('#app');
-
