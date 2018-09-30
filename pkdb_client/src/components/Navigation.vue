@@ -12,10 +12,10 @@
 
                 <!-- TODO: right aligned -->
                 <md-tab to="/about" md-active-tab="false"  id="tab-about" :md-icon="info_circle" md-label="About"></md-tab>
-                <md-tab id="tab-api" md-label="API" :md-icon="code" :href="api+'/api/v1/'"></md-tab>
+                <md-tab id="tab-api" md-label="API" :md-icon="code" :href="api"></md-tab>
                 <md-tab id="tab-github" md-label="Code" :md-icon="github" href="https://www.github.com/matthiaskoenig/pkdb"></md-tab>
 
-                <md-tab id="tab-admin" md-label="Admin" :md-icon="cogs" :href="domain+'/admin/'"></md-tab>
+                <md-tab id="tab-admin" md-label="Admin" :md-icon="cogs" :href="django_domain+'/admin/'"></md-tab>
                 <md-tab id="tab-accounts" md-label="Account" :md-icon="user_circle" to="/account"></md-tab>
         </md-tabs>
 
@@ -27,13 +27,15 @@
     export default {
         name: 'Navigation',
         props: {
-            api: String,
-            domain: String
+            domain: String,
+            api: String
         },
         data(){
             return {}
         },
         computed: {
+            // vuex store
+
             home () {
                 return require('../assets/images/fontawesome/svgs/solid/home.svg')
             },
@@ -78,6 +80,5 @@
 </script>
 
 <style>
-
 
 </style>

@@ -21,15 +21,6 @@ library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, 
 
 import Vuex from 'vuex'
 
-
-
-// TODO: define the api endpoints once in a store
-
-// domain: "http://127.0.0.1:8000",
-// api: "http://127.0.0.1:8000/api/v1"
-// domain: "https://pk-db.com",
-// api: "https://pk-db.com/api/v1"
-
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('font-awesome-layers', FontAwesomeLayers);
 Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
@@ -51,13 +42,18 @@ Vue.use(VueMaterial);
 Vue.use(Vuex);
 // Vue.use(VueAxios, axios);
 
+const backend_domain = 'http://127.0.0.1:8000';
+// const backend_domain = 'https://pk-db.com',
+// const backend_domain = 'https://develop.pk-db.com',
 
 const store = new Vuex.Store({
     state: {
-        domain: 'http://127.0.0.1:8000',
+        // vue_domain is frontend server domain!, django_domain is backend server domain!
+        django_domain: backend_domain,
+
         endpoints: {
-            api: 'http://127.0.0.1:8000/api/v1',
-            obtainAuthToken: 'http://127.0.0.1:8000/api-token-auth/',
+            api: backend_domain + '/api/v1',
+            obtainAuthToken: backend_domain + '/api-token-auth/'
         },
 
         username: localStorage.getItem('username'),
@@ -94,8 +90,6 @@ const store = new Vuex.Store({
         },
     }
 });
-
-
 
 new Vue({
     router,

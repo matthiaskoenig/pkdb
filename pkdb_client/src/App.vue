@@ -5,9 +5,9 @@
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
 
     </head>
-    <Navigation :api="api" :domain="domain"></Navigation>
+    <Navigation v-bind:api="api" v-bind:domain="domain"></Navigation>
     <br />
-    <router-view :api="api" :domain="domain"></router-view>
+    <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
     <Footer></Footer>
   </div>
 </template>
@@ -23,13 +23,16 @@ export default {
         'Footer': Footer
     },
     data(){
-        return {
-            domain: "http://127.0.0.1:8000",
-            api: "http://127.0.0.1:8000/api/v1"
-            // domain: "https://pk-db.com",
-            // api: "https://pk-db.com/api/v1"
+        return {}
+    },
+    computed: {
+        domain() {
+            return this.$store.state.django_domain;
+        },
+        api() {
+            return this.$store.state.endpoints.api;
         }
-    }
+    },
 }
 </script>
 

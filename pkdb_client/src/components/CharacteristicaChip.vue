@@ -41,7 +41,6 @@
             id: String,
             parent_count: Number,
             color: String
-
         },
 
         data() {
