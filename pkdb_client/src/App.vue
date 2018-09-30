@@ -3,7 +3,9 @@
     <head>
       <!-- TODO: check if needed, move to main.js -->
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
-
+      <meta name="description" content="PK-DB">
+      <meta name="author" content="Jan Grzegorzewski and Matthias Koenig">
+      <title>PK-DB</title>
     </head>
     <Navigation v-bind:api="api" v-bind:domain="domain"></Navigation>
     <br />
