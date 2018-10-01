@@ -26,4 +26,8 @@ exec /home/mkoenig/envs/pkdb/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
   --name $NAME \
   --workers $NUM_WORKERS \
   --user $USER \
-  --bind=unix:$SOCKFILE
+  --bind=unix:$SOCKFILE \
+  --access-logfile /var/www/logs/gunicorn-pkdb-access.log \
+  --error-logfile /var/www/logs/gunicorn-pkdb-error.log \
+  --log-level info \
+  --capture-output
