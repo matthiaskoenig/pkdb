@@ -7,7 +7,10 @@
         <md-table-row v-for="(item, name) in items" :key="item.name">
             <md-table-cell>
                 <router-link tag="span" :to="item.to">
-                    <a href="#"><font-awesome-icon :icon="item.icon" /></a>
+                    <a href="#"><font-awesome-icon :icon="item.icon" /></a>&nbsp;&nbsp;
+                </router-link>
+                <router-link tag="span" :to="item.to">
+                    <a href="#">{{ item.name }}</a>
                 </router-link>
             </md-table-cell>
             <md-table-cell>
