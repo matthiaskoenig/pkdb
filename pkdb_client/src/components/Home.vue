@@ -1,8 +1,6 @@
 <template>
     <div>
-        <h1>Pharmacokinetics Database {{ version }}</h1>
-        <a :href="api+'/statistics/?format=json'" title="JSON" target="_blank"><font-awesome-icon icon="code"/></a>
-        <br />
+        <h1>Pharmacokinetics Database</h1>
         <div class="md-layout">
             <CountTable></CountTable>
         </div>

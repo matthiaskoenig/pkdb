@@ -4,10 +4,15 @@
 ########################################################
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-# delete old migrations
+
 docker-compose down
-./remove_migrations.sh
+sudo ./remove_migrations.sh
 docker-compose up --build
 
-# TODO: setup_database
-# TODO: upload_studies
+export PKDB_API_BASE="http://0.0.0.0:8000"
+export PKDB_DEFAULT_PASSWORD="pkdb"
+python pkdb_app/data_management/setup_database.py
+python pkdb_app/data_management/upload_studies.py
+
+
+

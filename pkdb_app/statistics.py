@@ -16,31 +16,25 @@ from pkdb_app.interventions.models import Intervention, Output, Timecourse
 class Statistics(object):
     """ Basic database statistics. """
 
-    def __init__(self,substance):
+    def __init__(self):
         self.version = __version__
-        self.studies = Study.objects.filter(substances__name__contains=substance)
-        self.study_count = self.studies.count()
-        self.reference_count = self.studies.values_list("reference").count()
-        #self.group_count = self.studies.values_list("groupset__group_exs__groups").count()
-        #self.individual_count = self.studies.values_list("individualset__individual_exs__individuals").count()
-        self.interventions = Intervention.objects.filter(substance__name=substance).filter(final=True)
-        self.intervention_count = self.interventions.count()
-
-        #self.output_count = self.studies.values("outputset__output_exs__outputs").count()
+        self.study_count = Study.objects.count()
+        self.reference_count = Reference.objects.count()
+        self.group_count = Group.objects.count()
+        self.individual_count = Individual.objects.count()
+        self.intervention_count = Intervention.objects.count()
+        self.output_count = Output.objects.count()
+        self.timecourse_count = Timecourse.objects.count()
 
 
-        #self.reference_count = Reference.objects.filter(study__substances__name__contains=substance).count()
-        #self.study_count = Study.objects.filter(substances__name__contains=substance).count()
-        #self.group_count = Group.objects.filter(ex__groupset__study__substances__name__contains=substance).count()
-        #self.individual_count = Individual.objects.filter(ex__individualset__study__substances__name__contains=substance).count()
-        #self.intervention_count = Intervention.objects.filter(ex__interventionset__study__substances__name__contains=substance).filter(final=True).count()
-        self.outputs = Output.objects.filter(substance__name=substance).filter(final=True)
-        self.output_count = self.outputs.count()
-        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(final=True)
-        self.timecourse_count = self.timecourses.count()
-        outputs_with_substance = Output.objects.filter(interventions__in=self.interventions)
-        self.individual_count = Individual.objects.filter(output__in= outputs_with_substance).count()
-        self.group_count = Group.objects.filter(output__in= outputs_with_substance).count()
+class StatisticsViewSet(viewsets.ViewSet):
+    """
+    Get database statistics including version.
+    """
+    def list(self, request):
+        instance = Statistics()
+        serializer = StatisticsSerializer(instance)
+        return Response(serializer.data)
 
 
 class StatisticsSerializer(serializers.BaseSerializer):
@@ -63,28 +57,38 @@ class StatisticsSerializer(serializers.BaseSerializer):
         }
 
 
-class StatisticsViewSet(viewsets.ViewSet):
+class StatisticsData(object):
+    """ More complex statistics data for plots and overviews. """
+
+    def __init__(self, substance):
+        self.version = __version__
+        self.studies = Study.objects.filter(substances__name__contains=substance)
+        self.study_count = self.studies.count()
+        self.reference_count = self.studies.values_list("reference").count()
+        self.interventions = Intervention.objects.filter(substance__name=substance).filter(final=True)
+        self.intervention_count = self.interventions.count()
+        self.outputs = Output.objects.filter(substance__name=substance).filter(final=True)
+        self.output_count = self.outputs.count()
+        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(final=True)
+        self.timecourse_count = self.timecourses.count()
+        outputs_with_substance = Output.objects.filter(interventions__in=self.interventions)
+        self.individual_count = Individual.objects.filter(output__in=outputs_with_substance).count()
+        self.group_count = Group.objects.filter(output__in=outputs_with_substance).count()
+
+
+class StatisticsDataViewSet(viewsets.ViewSet):
     """
     Get database statistics including version.
     """
-
-    """
     def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
-    """
-
-    def list(self, request):
-        substances = ["caffeine","codeine"]
+        # substances = ["caffeine", "codeine"]
         data = {}
-        substances = Intervention.objects.values_list("substance__name",flat=True).distinct()
+        substances = Intervention.objects.values_list("substance__name", flat=True).distinct()
         substances = [x for x in substances if x is not None]
-
 
         for substance in substances:
 
-            instance = Statistics(substance=substance)
+            instance = StatisticsData(substance=substance)
             serializer = StatisticsSerializer(instance)
 
             data[substance] = serializer.data

@@ -11,16 +11,13 @@
 
     export default {
         name: "Statistics",
-        props: {
-            api: String
-        },
         components: {
             VuePlotly,
         },
         methods: {
             get: function () {
                 var api_url;
-                api_url = this.api + '/statistics/?format=json';
+                api_url = this.api + '/statistics_data/?format=json';
                 console.log("api_url:" + api_url);
                 axios.get(api_url)
                     .then(response => {

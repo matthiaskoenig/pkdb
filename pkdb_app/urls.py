@@ -51,7 +51,7 @@ from .studies.views import (
 # from .subjects.views import GroupsViewSet, CharacteristicValuesViewSet
 
 
-from .statistics import StatisticsViewSet
+from .statistics import StatisticsViewSet, StatisticsDataViewSet
 from . import views
 
 # views in User
@@ -75,7 +75,9 @@ router.register("references", ReferencesViewSet, base_name="references")
 
 router.register("studies", StudyViewSet, base_name="studies")
 
+
 router.register("statistics", StatisticsViewSet, base_name="statistics")
+router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_data")
 
 
 ###############################################################################################
