@@ -4,7 +4,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionReadSerializer, \
+    CommentReadSerializer
 from pkdb_app.utils import recursive_iter, set_keys
 from .models import (
     Group,
@@ -379,24 +380,52 @@ class IndividualSetSerializer(ExSerializer):
 # Read Serializer
 ###############################################################################################
 
+class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
+    groupset = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="groupsets_read-detail"
+    )
+    characteristica = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="characteristica_read-detail"
+    )
+    characteristica_all = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="characteristica_read-detail"
+    )
+    characteristica_all_final = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="characteristica_read-detail"
+    )
+    parent = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="groups_read-detail"
+    )
+    ex = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="groupexs_read-detail"
+    )
+    individuals = serializers.HyperlinkedRelatedField(read_only=True,many=True, view_name="individuals_read-detail")
+
+    class Meta:
+        model = Group
+        fields = (
+            ["pk", "groupset","ex","study_name","individuals"]
+            + GROUP_FIELDS
+            + ["parent", "characteristica", "characteristica_all","characteristica_all_final"]
+        )
+
+
+
 
 class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
     study = serializers.HyperlinkedRelatedField(
         lookup_field="sid", read_only=True, view_name="studies_read-detail"
     )
-    descriptions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="descriptions_read-detail"
-    )
-    groups = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="groups_read-detail"
-    )
+    descriptions = DescriptionReadSerializer(many=True, read_only=True)
+    comments = CommentReadSerializer(many=True, read_only=True)
+    groups = GroupReadSerializer(many=True, read_only=True)
     group_exs = serializers.HyperlinkedRelatedField(many=True,
                                                  read_only=True, view_name="groupexs_read-detail"
                                                  )
 
     class Meta:
         model = GroupSet
-        fields = ["pk", "study", "descriptions", "groups","group_exs"]
+        fields = ["pk", "study", "descriptions", "groups","group_exs", "comments"]
 class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
 
     individualset = serializers.HyperlinkedRelatedField(
@@ -448,34 +477,7 @@ class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk", "study", "descriptions","comments", "individual_exs","individuals"]
 
 
-class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    characteristica = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    characteristica_all = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    characteristica_all_final = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    parent = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupexs_read-detail"
-    )
-    individuals = serializers.HyperlinkedRelatedField(read_only=True,many=True, view_name="individuals_read-detail")
 
-    class Meta:
-        model = Group
-        fields = (
-            ["pk", "groupset","ex","study_name","individuals"]
-            + GROUP_FIELDS
-            + ["parent", "characteristica", "characteristica_all","characteristica_all_final"]
-        )
 
 class GroupExReadSerializer(serializers.HyperlinkedModelSerializer):
     groupset = serializers.HyperlinkedRelatedField(

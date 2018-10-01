@@ -9,13 +9,18 @@
 
         <h2>Django endpoints</h2>
         <ul>
-        <li><a :href="domain+'/accounts/signup/'">signup</a></li>
+        <span v-if="user">
+        <li><a :href="domain+'/accounts/password/change/'+user">change password</a></li>
+        <li><a :href="domain+'/accounts/password/reset/'+user">reset password</a></li>
+        </span>
+        <span v-else>
+            <li><a :href="domain+'/accounts/signup/'">signup</a></li>
             <!-- not needed for anything
-        <li><a :href="domain+'/accounts/login/'">login</a></li>
-        <li><a :href="domain+'/accounts/logout/'">logout</a></li>
-        -->
-        <li><a :href="domain+'/accounts/password/change/'">change password</a></li>
-        <li><a :href="domain+'/accounts/password/reset/'">reset password</a></li>
+            <li><a :href="domain+'/accounts/login/'">login</a></li>
+            <li><a :href="domain+'/accounts/logout/'">logout</a></li>
+            -->
+        </span>
+
         </ul>
 
     </div>
@@ -34,7 +39,12 @@
         },
         data() {
             return {}
-        }
+        },
+        computed: {
+            user() {
+                return this.$store.state.username;
+            },
+        },
     }
 </script>
 

@@ -41,6 +41,8 @@
         },
         methods: {
             login: function(){
+                //FIXME: login in django
+
                 // reset store
                 this.logout();
                 // reset warnings
@@ -65,6 +67,8 @@
             },
 
             logout: function(){
+
+                //FIXME: logout in django
                 // window.alert("logout id: " + this.username);
                 this.$store.dispatch('logout')
             }

@@ -11,7 +11,11 @@ function clean(obj) {
         }
     }
 }
-export {id_from_url, clean};
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
+export {id_from_url, clean,isEmpty};
 
 
 // vue paginator
@@ -32,6 +36,7 @@ const getNestedValue = (obj, path) => {
     //if(typeof res === 'undefined') {console.log(`[VuePaginator] Response doesn't contain key ${originalPath}!`)}
     return res
 };
+
 
 export const utils = { merge_objects, getNestedValue };
 
