@@ -17,12 +17,6 @@ __pycache__/
 .env
 pkdb_app/.env
 pkdb_client/.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
 # ----------------------------
 # Distribution / packaging
