@@ -328,6 +328,22 @@ elif DJANGO_CONFIGURATION == 'Production':
         }
     }
 
+    # Mail
+    # Mail is sent using the SMTP host and port specified in the EMAIL_HOST and EMAIL_PORT settings.
+    # The EMAIL_HOST_USER and EMAIL_HOST_PASSWORD settings, if set, are used to authenticate to the SMTP server,
+    # and the EMAIL_USE_TLS and EMAIL_USE_SSL settings control whether a secure connection is used.
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "localhost"
+    EMAIL_PORT = 25
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = False
+    DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
+
+    # EMAIL_USE_SSL = True
+    # EMAIL_SSL_KEYFILE = ""
+    # EMAIL_SSL_CERTFILE = ""
+
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
     INSTALLED_APPS += ("gunicorn",)
