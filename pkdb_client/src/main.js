@@ -36,12 +36,16 @@ Vue.use(VueMaterial);
 
 /** -------------------------------
  *  Domain
- *  -------------------------------
- *  Change these for deployment (FIXME: use environment variable)
- */
-const backend_domain = 'http://127.0.0.1:8000';
-// const backend_domain = 'https://pk-db.com';
-// const backend_domain = 'https://develop.pk-db.com';
+ *  ------------------------------- */
+// export PKDB_API_BASE='https://pk-db.com';
+// export PKDB_API_BASE='https://develop.pk-db.com';
+var backend_domain = process.env.PKDB_API_BASE;
+if (!backend_domain){
+    // running in develop, no environment variable set
+    console.warn('No PKDB backend set via environment variable: PKDB_API_BASE');
+    backend_domain = 'http://127.0.0.1:8000';
+}
+console.log('PKDB backend: ' + backend_domain);
 
 /** -------------------------------
  *  Vuex store

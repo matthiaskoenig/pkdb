@@ -15,7 +15,7 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 # reading .env file
-environ.Env.read_env()
+environ.Env.read_env(env_file=join(BASE_DIR, '.env'))
 
 # overwrite environment variables with local .env settings
 if "PKDB_SECRET_KEY" in env:
