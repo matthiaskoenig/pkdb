@@ -1,13 +1,22 @@
 <template>
-    <div>
-        <vue-plotly :data="interventions_data" :layout="layout" :options="options"/>
-        <vue-plotly :data="individuals_data" :layout="layout" :options="options"/>
+    <div class="md-layout">
+        <div class="col-5">
+            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options"/>
+        </div>
+        <div class="col-2">&nbsp;</div>
+        <div class="col-5">
+            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options"/>
+        </div>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
     import VuePlotly from '@statnett/vue-plotly'
+
+    // size of individual plots
+    var height = 600;
+    var width = 600;
 
     export default {
         name: "Statistics",
@@ -39,25 +48,33 @@
             api() {
                     return this.$store.state.endpoints.api;
             },
-            interventions_data() {
-                return [{
-                    values: this.data.intervention_count,
-                    labels: this.data.labels,
-                    type: 'pie'
-                }];
+            interventions() {
+                return {
+                    layout: {
+                        title: 'Interventions',
+                        height: height,
+                        width: width
+                    },
+                    data: [{
+                        values: this.data.intervention_count,
+                        labels: this.data.labels,
+                        type: 'pie'
+                    }]
+                };
             },
-            individuals_data() {
-                return [{
-                    values: this.data.individual_count,
-                    labels: this.data.labels,
-                    type: 'pie'
-                }];
-            },
-            layout() {
-                // xaxis: {title: this.timecourse.time_unit },
-                var height = 400;
-                var width = 500;
-                return {height: height, width: width};
+            individuals() {
+                return {
+                    layout: {
+                        title: 'Individuals',
+                        height: height,
+                        width: width
+                    },
+                    data: [{
+                        values: this.data.individual_count,
+                        labels: this.data.labels,
+                        type: 'pie'
+                    }]
+                };
             },
             options() {
                 return {};

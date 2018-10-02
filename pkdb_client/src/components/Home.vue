@@ -1,9 +1,8 @@
 <template>
     <div>
+        <div class="md-layout-item"></div>
         <h1>Pharmacokinetics Database</h1>
-        <div class="md-layout">
-            <CountTable></CountTable>
-        </div>
+        <CountTable></CountTable>
     </div>
 </template>
 
