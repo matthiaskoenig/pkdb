@@ -10,10 +10,7 @@
                                     <span class="md-list-item-text">Studies</span>
                                 </h3>
                             </md-badge>
-
-                            <md-button :href="resource_url" title="JSON" target="_blank" class="md-icon-button md-raised">
-                                <font-awesome-icon icon="code"/>
-                            </md-button>
+                            <JsonButton :resource_url="resource_url"/>
                         </md-table-toolbar>
 
                         <md-table-row slot="md-table-row" slot-scope="{item}">
@@ -56,10 +53,12 @@
 <script>
     import Table from '@/components/tables/Table';
     import GetData from '@/components/api/GetPaginatedData';
+    import JsonButton from "./lib/JsonButton";
 
     export default {
         name: 'Studies',
         components: {
+            JsonButton,
             GetData: GetData,
         },
         computed: {

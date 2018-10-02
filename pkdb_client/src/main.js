@@ -35,6 +35,10 @@ Vue.use(VueMaterial);
  *  Library components
  *  ------------------------------- */
 import { JsonButton } from '@/components/lib/JsonButton';
+import { Comments } from '@/components/lib/Comments';
+import { Descriptions } from '@/components/lib/Descriptions';
+import { UserAvatar } from '@/components/lib/UserAvatar';
+
 Vue.component('JsonButton');
 
 // import VueAxios from 'vue-axios'

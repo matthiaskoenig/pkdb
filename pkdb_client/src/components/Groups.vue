@@ -1,20 +1,22 @@
 <template>
-    <GetData :resource_url="resource_url">
-        <div slot-scope="resource">
-            <GroupsTable :resource="resource" :resource_url="resource_url" />
+
+    <GetPaginatedData :resource_url="resource_url">
+        <div slot-scope="data">
+            <GroupsTable :resource="data" :resource_url="resource_url" />
         </div>
-    </GetData>
+    </GetPaginatedData>
+
 
 </template>
 <script>
 
-    import GetData from '@/components/api/GetPaginatedData';
+    import GetPaginatedData from '@/components/api/GetPaginatedData';
     import GroupsTable from "@/components/tables/GroupsTable";
 
     export default {
         name: 'Groups',
         components: {
-            GetData: GetData,
+            GetPaginatedData: GetPaginatedData,
             GroupsTable: GroupsTable,
 
         },
