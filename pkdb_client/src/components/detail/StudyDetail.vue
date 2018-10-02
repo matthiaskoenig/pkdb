@@ -72,7 +72,7 @@
                     </md-app-drawer>
 
                     <md-app-content>
-
+                        <!-- General Overview -->
                         <md-card v-if="GeneralVisible">
                             <md-list  class="md-double-line">
                                 <md-list-item>
@@ -132,25 +132,27 @@
                             </md-list>
                         </md-card>
 
+                        <!-- Groups -->
                         <GetData v-if="study.data.groupset" :api_url="study.data.groupset">
                             <template slot-scope="groupset" >
-
                                 <div v-if="groupset.loaded">
+                                    <Descriptions :descriptions="groupset.data.descriptions"/>
+                                    <Comments :comments="groupset.data.comments"/>
 
-                                    {{checkhasGroups(groupset.data.groups)}}
-                                    <GroupsTable v-if="GroupsVisible" :resource="resource(groupset.data.groups)" :descriptions="groupset.data.descriptions" :comments="groupset.data.comments"/>
+                                    {{ checkhasGroups(groupset.data.groups) }}
+                                    <GroupsTable v-if="GroupsVisible" :data="resource(groupset.data.groups)" />
                                 </div>
                             </template>
                         </GetData>
 
 
-
                         <GetData v-if="study.data.individualset" :api_url="study.data.individualset">
                             <template slot-scope="individualset" >
                                 <div v-if="individualset.loaded">
-                                    {{checkhasIndividuals(individualset.data.individuals)}}
-
-                                    <IndividualsTable  v-if="IndividualsVisible"  :resource="resource(individualset.data.individuals)"   :descriptions="individualset.data.descriptions" :comments="individualset.data.comments"/>
+                                    <Descriptions :descriptions="individualset.data.descriptions"/>
+                                    <Comments :comments="individualset.data.comments"/>
+                                    {{ checkhasIndividuals(individualset.data.individuals) }}
+                                    <IndividualsTable  v-if="IndividualsVisible" :data="resource(individualset.data.individuals)"/>
                                 </div>
                             </template>
                         </GetData>
@@ -158,8 +160,10 @@
                         <GetData v-if="study.data.interventionset" :api_url="study.data.interventionset">
                             <template slot-scope="interventionset" >
                                 <div v-if="interventionset.loaded">
-                                    {{checkhasInterventions(interventionset.data.interventions)}}
-                                    <InterventionsTable v-if="InterventionsVisible" :resource="resource(interventionset.data.interventions)"   :descriptions="interventionset.data.descriptions" :comments="interventionset.data.comments"/>
+                                    {{ checkhasInterventions(interventionset.data.interventions) }}
+                                    <Descriptions :descriptions="interventionset.data.descriptions"/>
+                                    <Comments :comments="interventionset.data.comments"/>
+                                    <InterventionsTable v-if="InterventionsVisible" :data="resource(interventionset.data.interventions)"/>
                                 </div>
                             </template>
                         </GetData>
@@ -167,21 +171,18 @@
                         <GetData v-if="study.data.outputset" :api_url="study.data.outputset">
                             <template slot-scope="outputset">
                                 <div v-if="outputset.loaded">
-
-                                    {{checkhasOutputs(outputset.data.outputs)}}
-                                    {{checkhasTimecourses(outputset.data.timecourses)}}
-
-                                    <OutputsTable v-if="OutputsVisible" :resource="resource(outputset.data.outputs)"   :descriptions="outputset.data.descriptions" :comments="outputset.data.comments"/>
-                                    <TimecoursesTable v-if="TimecoursesVisible" :resource="resource(outputset.data.timecourses)"   :descriptions="outputset.data.descriptions" :comments="outputset.data.comments"/>
-
+                                    {{ checkhasOutputs(outputset.data.outputs) }}
+                                    {{ checkhasTimecourses(outputset.data.timecourses) }}
+                                    <Descriptions :descriptions="outputset.data.descriptions"/>
+                                    <Comments :comments="outputset.data.comments"/>
+                                    <OutputsTable v-if="OutputsVisible" :data="resource(outputset.data.outputs)"/>
+                                    <TimecoursesTable v-if="TimecoursesVisible" :data="resource(outputset.data.timecourses)"/>
                                 </div>
                             </template>
                         </GetData>
                     </md-app-content>
                 </md-app>
-
             </template>
-
         </GetData>
 
     </div>
