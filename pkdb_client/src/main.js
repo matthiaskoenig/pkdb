@@ -39,7 +39,10 @@ import { Comments } from '@/components/lib/Comments';
 import { Descriptions } from '@/components/lib/Descriptions';
 import { UserAvatar } from '@/components/lib/UserAvatar';
 
-Vue.component('JsonButton');
+Vue.component('JsonButton', JsonButton);
+Vue.component('Comments', Comments);
+Vue.component('Descriptions', Descriptions);
+Vue.component('UserAvatar', UserAvatar);
 
 // import VueAxios from 'vue-axios'
 // import jwt_decode from 'jwt-decode'

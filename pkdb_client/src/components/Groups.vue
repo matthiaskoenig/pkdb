@@ -2,7 +2,7 @@
 
     <GetPaginatedData :resource_url="resource_url">
         <div slot-scope="data">
-            <GroupsTable :resource="data" :resource_url="resource_url" />
+            <GroupsTable :data="data" :resource_url="resource_url" />
         </div>
     </GetPaginatedData>
 
