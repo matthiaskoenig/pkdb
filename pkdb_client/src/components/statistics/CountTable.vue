@@ -1,8 +1,7 @@
 <template>
     <div>
-        Version: {{ data.version }}<br />
-        <a :href="api+'/statistics/?format=json'" title="JSON" target="_blank"><font-awesome-icon icon="code"/></a>
-        <br />
+    <JsonButton :resource_url="resource_url" />
+
     <md-table class="my-table">
         <md-table-row v-for="(item, name) in items" :key="item.name">
             <md-table-cell>
@@ -23,10 +22,12 @@
 
 <script>
     import axios from 'axios'
+    import JsonButton from "../lib/JsonButton";
 
     export default {
         name: 'CountTable',
         components: {
+            JsonButton
         },
         methods: {
             get: function () {
@@ -57,6 +58,9 @@
             }
         },
         computed: {
+            resource_url(){
+                return this.api+'/statistics/?format=json'
+            },
             api() {
                 return this.$store.state.endpoints.api;
             },

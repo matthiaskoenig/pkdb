@@ -31,6 +31,12 @@ Vue.use(VueResource);
 Vue.use(VueMaterial);
 
 
+/** -------------------------------
+ *  Library components
+ *  ------------------------------- */
+import { JsonButton } from '@/components/lib/JsonButton';
+Vue.component('JsonButton');
+
 // import VueAxios from 'vue-axios'
 // import jwt_decode from 'jwt-decode'
 
