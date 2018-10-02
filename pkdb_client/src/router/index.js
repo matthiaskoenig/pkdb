@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+/* Home */
 import Home from '@/components/Home'
+
+/* TableViews */
 import Studies from '@/components/Studies'
 import Groups from '@/components/Groups'
 import Individuals from '@/components/Individuals'
@@ -8,8 +12,14 @@ import Interventions from '@/components/Interventions'
 import Outputs from '@/components/Outputs'
 import Timecourses from '@/components/Timecourses'
 import References from '@/components/References'
+
+/* About */
 import About from '@/components/About'
+
+/* Account */
 import Account from '@/components/auth/Account'
+
+/* DetailViews */
 import CharacteristicaDetail from '@/components/CharacteristicaDetail'
 import GroupDetail from '@/components/GroupDetail'
 import IndividualDetail from '@/components/IndividualDetail'
@@ -77,6 +87,7 @@ export default new Router({
             name: 'Account',
             component: Account
         },
+
         {
             path:"/characteristica/:id",
             name:"CharacteristicaDetail",

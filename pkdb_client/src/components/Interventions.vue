@@ -7,7 +7,7 @@
 </template>
 <script>
     import GetData from './GetPaginatedData';
-    import InterventionsTable from './InterventionsTable';
+    import InterventionsTable from './tables/InterventionsTable';
 
     export default {
     name: 'Interventions',

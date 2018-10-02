@@ -8,7 +8,7 @@
 </template>
 <script>
 
-    import GroupsTable from "./GroupsTable";
+    import GroupsTable from "./tables/GroupsTable";
     import {id_from_url} from "./utils";
     import GetData from './GetPaginatedData';
 

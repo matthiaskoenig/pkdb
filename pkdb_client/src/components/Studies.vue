@@ -47,6 +47,7 @@
 </template>
 
 <script>
+    import Table from '@/components/tables/Table'
     import GetData from './GetPaginatedData'
 
     export default {

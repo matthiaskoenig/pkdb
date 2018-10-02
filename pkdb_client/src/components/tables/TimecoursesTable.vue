@@ -33,10 +33,12 @@
         </Table>
     </div>
 </template>
-<script>
-    import Table from "./Table"
 
-    import TimecourseSmall from './TimecourseSmall';
+<script>
+
+    import Table from '@/components/tables/Table'
+    import Individuals from '@/components/TimecourseSmall'
+
 export default {
     name: 'TimecoursesTable',
     components: {
@@ -53,5 +55,6 @@ export default {
     }
 }
 </script>
+
 <style>
 </style>

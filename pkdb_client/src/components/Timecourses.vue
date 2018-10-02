@@ -8,7 +8,7 @@
 <script>
     import TimecourseSmall from './TimecourseSmall';
     import GetData from './GetPaginatedData';
-    import TimecoursesTable from "./TimecoursesTable";
+    import TimecoursesTable from "./tables/TimecoursesTable";
 
 export default {
     name: 'Timecourses',

@@ -134,11 +134,11 @@
 </template>
 
 <script>
-    import GroupsTable from "./GroupsTable";
-    import IndividualsTable from './IndividualsTable';
-    import InterventionsTable from "./InterventionsTable";
-    import OutputsTable from "./OutputsTable";
-    import TimecoursesTable from "./TimecoursesTable";
+    import GroupsTable from "./tables/GroupsTable";
+    import IndividualsTable from './tables/IndividualsTable';
+    import InterventionsTable from "./tables/InterventionsTable";
+    import OutputsTable from "./tables/OutputsTable";
+    import TimecoursesTable from "./tables/TimecoursesTable";
 
 
     import GetData from "./GetData";

@@ -30,7 +30,9 @@
     </div>
 </template>
 <script>
-    import Table from "./Table"
+
+    import Table from '@/components/tables/Table';
+
     export default {
     name: 'InterventionsTable',
     components: {

@@ -7,7 +7,7 @@
 </template>
 <script>
     import GetData from './GetPaginatedData';
-    import OutputsTable from './OutputsTable';
+    import OutputsTable from './tables/OutputsTable';
     export default {
         name: 'Outputs',
         components: {

@@ -28,6 +28,7 @@
 
 </template>
 <script>
+    import Table from '@/components/tables/Table'
     import VuePaginator from '@/components/VPaginator';
 export default {
     name: 'References',
