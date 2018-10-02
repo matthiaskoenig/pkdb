@@ -22,7 +22,7 @@
                 required: true
             },
             resource_url: {
-                type: Object,
+                type: String,
             },
             title: {
                 type: String,

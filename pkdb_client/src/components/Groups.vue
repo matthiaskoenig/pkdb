@@ -22,7 +22,7 @@
             return {
             }
         },
-        computed: { // vuex store
+        computed: {
             api() {
                 return this.$store.state.endpoints.api;
             },

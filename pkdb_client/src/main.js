@@ -41,12 +41,19 @@ import Descriptions from '@/components/lib/Descriptions';
 import UserAvatar from '@/components/lib/UserAvatar';
 import Heading from '@/components/lib/Heading';
 
+import GroupInfo from '@/components/detail/GroupInfo';
+import IndividualInfo from '@/components/detail/IndividualInfo';
+
+
 Vue.component('JsonButton', JsonButton);
 Vue.component('DetailButton', DetailButton);
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);
+Vue.component('GroupInfo', GroupInfo);
+Vue.component('IndividualInfo', IndividualInfo);
+
 
 // import VueAxios from 'vue-axios'
 // import jwt_decode from 'jwt-decode'
