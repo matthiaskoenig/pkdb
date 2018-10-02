@@ -7,14 +7,11 @@
             <md-table-cell md-label="Name">{{ table.item.name }}</md-table-cell>
             <md-table-cell md-label="Reference"><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference"><font-awesome-icon icon="file-alt"/> </a></md-table-cell>
             <md-table-cell md-label="Creator">
-                <md-list>
-                    <md-list-item>
-                        <font-awesome-icon class="md-icon" icon="user-cog"/>
-                    </md-list-item>
-                    <span class="md-list-item-text">{{table.item.creator.first_name}} {{table.item.creator.last_name}}</span>
-                </md-list>
+                <UserAvatar :user="table.item.creator"/>
             </md-table-cell>
-            <md-table-cell md-label="Curators"><span v-for="(c, index2) in table.item.curators" :key="index2"> <font-awesome-icon icon="user-edit"/>{{c.first_name}} {{c.last_name}} </span></md-table-cell>
+            <md-table-cell md-label="Curators">
+                <span v-for="(c, index2) in table.item.curators" :key="index2"><UserAvatar :user="c"/></span>
+            </md-table-cell>
             <md-table-cell md-label="Substances"><span v-for="(c, index2) in table.item.substances" :key="index2"><font-awesome-icon icon="tablets"/> {{c.name}}</span></md-table-cell>
             <md-table-cell md-label="Files"><span v-for="(f, index2) in table.item.files" :key="index2"><a :href="f" :title="f"><font-awesome-icon icon="file-medical"/></a>&nbsp;</span> </md-table-cell>
             <md-table-cell md-label="Groupset"><a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset"><font-awesome-icon icon="users"/></a></md-table-cell>

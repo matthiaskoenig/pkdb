@@ -34,17 +34,19 @@ Vue.use(VueMaterial);
 /** -------------------------------
  *  Library components
  *  ------------------------------- */
-import { JsonButton } from '@/components/lib/JsonButton';
-import { DetailButton } from '@/components/lib/DetailButton';
-import { Comments } from '@/components/lib/Comments';
-import { Descriptions } from '@/components/lib/Descriptions';
-import { UserAvatar } from '@/components/lib/UserAvatar';
+import JsonButton from '@/components/lib/JsonButton';
+import DetailButton from '@/components/lib/DetailButton';
+import Comments from '@/components/lib/Comments';
+import Descriptions from '@/components/lib/Descriptions';
+import UserAvatar from '@/components/lib/UserAvatar';
+import Heading from '@/components/lib/Heading';
 
 Vue.component('JsonButton', JsonButton);
 Vue.component('DetailButton', DetailButton);
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('UserAvatar', UserAvatar);
+Vue.component('Heading', Heading);
 
 // import VueAxios from 'vue-axios'
 // import jwt_decode from 'jwt-decode'
