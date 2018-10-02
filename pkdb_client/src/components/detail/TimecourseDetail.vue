@@ -31,8 +31,8 @@
 
 <script>
     import axios from 'axios'
-    import {clean} from "./utils"
     import VuePlotly from '@statnett/vue-plotly'
+    import {clean} from "@/utils"
 
     export default {
         name: "TimecourseDetail",
@@ -64,7 +64,6 @@
                 .catch(e => {
                     this.errors.push(e)
                 })
-
         },
         computed: {
             timecourse_no_options(){
@@ -77,10 +76,7 @@
                 if (this.parent_count === this.timecourse_no_options.count ) {
                     delete this.timecourse_no_options.count
                 }
-
-
                 clean(this.timecourse_no_options);
-
 
                 return this.timecourse_no_options;
             },

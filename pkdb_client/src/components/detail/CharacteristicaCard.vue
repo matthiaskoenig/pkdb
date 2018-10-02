@@ -26,15 +26,13 @@
         </md-card>
 
     </div>
-
-
 </template>
 
 <script>
     import axios from 'axios'
-    import {clean} from "./utils"
+    import {clean} from "@/utils"
     export default {
-        name: "CharacteristicaChip",
+        name: "CharacteristicaCard",
 
         props: {
             api: String,
@@ -60,7 +58,6 @@
                 .catch(e => {
                     this.errors.push(e)
                 })
-
         },
         computed: {
             characteristica_no_options(){
@@ -82,24 +79,15 @@
                     delete this.characteristica_no_options.count
                 }
 
-
                 clean(this.characteristica_no_options);
-
 
                 return this.characteristica_no_options;
             }
-
         }
-
     }
-
-
 </script>
 
 <style  scoped>
-
-
-
     .key{
         opacity: .54;
         font-size: 14px;
@@ -131,18 +119,9 @@
         margin: 1px;
         position: absolute;
         bottom: 0;
-
-
-
-
     }
     .md-card-content:last-of-type {
         padding-bottom: 0px;
     }
     .values {padding: 2px}
-
-
-
-
-
 </style>

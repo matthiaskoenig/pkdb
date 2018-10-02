@@ -1,39 +1,33 @@
 <template>
-    <GetData :resource_url="resource_url" >
+    <GetData :resource_url="resource_url">
         <div slot-scope="resource">
-            <GroupsTable :resource="resource" :api="api" />
+            <GroupsTable :resource="resource" :api="api"/>
         </div>
     </GetData>
 
 </template>
 <script>
 
-    import GroupsTable from "./tables/GroupsTable";
-    import {id_from_url} from "./utils";
-    import GetData from './GetPaginatedData';
+    import GetData from '@/components/api/GetPaginatedData';
+    import GroupsTable from "@/components/tables/GroupsTable";
 
     export default {
-    name: 'Groups',
-    components: {
-        GetData: GetData,
-        GroupsTable:GroupsTable,
+        name: 'Groups',
+        components: {
+            GetData: GetData,
+            GroupsTable: GroupsTable,
 
-    },
-    props: {
-        api: String
-    },
-    methods:{
-
-        id_from_url(url){
-            return id_from_url(url);
+        },
+        props: {
+            api: String
+        },
+        methods: {},
+        data() {
+            return {
+                resource_url: this.api + '/groups_read/?format=json',
+            }
         }
-    },
-    data() {
-        return {
-            resource_url: this.api + '/groups_read/?format=json',
-        }
-        }
-}
+    }
 </script>
 <style>
 </style>

@@ -5,7 +5,6 @@
                 <font-awesome-icon icon="capsules"/>   Interventions
             </template>
             <template slot="tableRow" slot-scope="table">
-
                 <md-table-cell md-label="Pk"> <font-awesome-icon icon="capsules" /> {{table.item.pk }} </md-table-cell>
                 <md-table-cell md-label="Name" >{{table.item.name }}</md-table-cell>
                 <md-table-cell md-label="Category" >{{table.item.category }}</md-table-cell>

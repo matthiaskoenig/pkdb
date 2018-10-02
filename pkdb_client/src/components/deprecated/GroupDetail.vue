@@ -20,8 +20,8 @@
 
 <script>
     import axios from 'axios'
-    import CharacteristicaDetail from './CharacteristicaDetail'
-    import {id_from_url} from "./utils";
+    import CharacteristicaDetail from '@/components/detail/CharacteristicaDetail'
+    import {id_from_url} from "@/utils";
 
     export default {
         name: "GroupDetail",

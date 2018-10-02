@@ -129,9 +129,6 @@
                                         <span>Descriptions</span>
                                     </div>
                                 </md-list-item>
-
-
-
                             </md-list>
                         </md-card>
 
@@ -176,10 +173,6 @@
                                 </div>
                             </template>
                         </GetData>
-
-
-
-
                     </md-app-content>
                 </md-app>
 
@@ -191,32 +184,30 @@
 </template>
 
 <script>
-    import GroupsTable from "./tables/GroupsTable";
-    import IndividualsTable from './tables/IndividualsTable';
-    import InterventionsTable from "./tables/InterventionsTable";
-    import OutputsTable from "./tables/OutputsTable";
-    import TimecoursesTable from "./tables/TimecoursesTable";
+    import GroupsTable from "@/components/tables/GroupsTable";
+    import IndividualsTable from '@/components/tables/IndividualsTable';
+    import InterventionsTable from "@/components/tables/InterventionsTable";
+    import OutputsTable from "@/components/tables/OutputsTable";
+    import TimecoursesTable from "@/components/tables/TimecoursesTable";
 
 
-    import GetData from "./GetData";
-    import {isEmpty} from "./utils"
+    import GetData from "@/components/api/GetData";
+    import {isEmpty} from "@/utils"
 
     export default {
         name: "StudyDetail",
         components: {
-            GroupsTable:GroupsTable,
+            GroupsTable: GroupsTable,
             IndividualsTable: IndividualsTable,
             GetData: GetData,
             InterventionsTable: InterventionsTable,
             OutputsTable: OutputsTable,
             TimecoursesTable: TimecoursesTable,
-
         },
         props: {
             api: String,
             id: String,
         },
-
         data() {
             return {
                 resource_url: this.api + '/studies_read/' + this.id + '/?format=json',
@@ -228,14 +219,11 @@
                 TimecoursesVisible: false,
                 GeneralVisible: true,
 
-
                 hasOutputs:false,
                 hasTimecourses:false,
                 hasInterventions:false,
                 hasIndividuals:false,
                 hasGroups:false,
-
-
             }
         },
         // Fetches posts when the component is created.
@@ -300,12 +288,7 @@
                 else{return "";}
 
             }
-
-
-
         }
-
-
     }
 </script>
 
@@ -317,7 +300,4 @@
     .menu-botton{
 
     }
-
-
-
 </style>

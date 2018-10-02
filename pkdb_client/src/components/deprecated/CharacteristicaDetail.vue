@@ -28,24 +28,18 @@
         </md-card>
 
     </div>
-
-
-
 </template>
 
 <script>
     import axios from 'axios'
-    import {clean} from "./utils"
+    import {clean} from "@/utils"
     export default {
         name: "CharacteristicaDetail",
-
         props: {
             api: String,
             id: String,
             parent_count: Number,
-
         },
-
         data() {
             return {
                 characteristica: {},
@@ -63,7 +57,6 @@
                 .catch(e => {
                     this.errors.push(e)
                 })
-
         },
         computed: {
             characteristica_no_options(){
@@ -80,22 +73,15 @@
                     delete this.characteristica_no_options.count
                 }
 
-
                 clean(this.characteristica_no_options);
-
 
                 return this.characteristica_no_options;
             }
-
         }
-
     }
-
-
 </script>
 
 <style  scoped>
-
     .md-card {
         width: 320px;
         margin: 4px;

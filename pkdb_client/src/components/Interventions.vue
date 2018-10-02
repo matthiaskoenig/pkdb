@@ -6,8 +6,8 @@
     </GetData>
 </template>
 <script>
-    import GetData from './GetPaginatedData';
-    import InterventionsTable from './tables/InterventionsTable';
+    import GetData from '@/components/api/GetPaginatedData';
+    import InterventionsTable from '@/components/tables/InterventionsTable';
 
     export default {
     name: 'Interventions',

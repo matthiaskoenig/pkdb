@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import CountTable from './statistics/CountTable'
+    import CountTable from '@/components/statistics/CountTable'
 
     export default {
         name: 'Home',

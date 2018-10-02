@@ -25,7 +25,6 @@
                 <md-table-cell md-label="Sd">{{ table.item.sd }}</md-table-cell>
                 <md-table-cell md-label="Se">{{ table.item.se }}</md-table-cell>
                 <md-table-cell md-label="Cv">{{ table.item.cv }}</md-table-cell>
-
             </template>
         </Table>
     </div>

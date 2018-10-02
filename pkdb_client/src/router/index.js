@@ -1,30 +1,27 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
 /* Home */
-import Home from '@/components/Home'
+import Home from '@/components/Home';
 
 /* TableViews */
-import Studies from '@/components/Studies'
-import Groups from '@/components/Groups'
-import Individuals from '@/components/Individuals'
-import Interventions from '@/components/Interventions'
-import Outputs from '@/components/Outputs'
-import Timecourses from '@/components/Timecourses'
-import References from '@/components/References'
+import Studies from '@/components/Studies';
+import Groups from '@/components/Groups';
+import Individuals from '@/components/Individuals';
+import Interventions from '@/components/Interventions';
+import Outputs from '@/components/Outputs';
+import Timecourses from '@/components/Timecourses';
+import References from '@/components/References';
 
 /* About */
-import About from '@/components/About'
+import About from '@/components/About';
 
 /* Account */
-import Account from '@/components/auth/Account'
+import Account from '@/components/auth/Account';
 
 /* DetailViews */
-import CharacteristicaDetail from '@/components/CharacteristicaDetail'
-import GroupDetail from '@/components/GroupDetail'
-import IndividualDetail from '@/components/IndividualDetail'
-import StudyDetail from '@/components/StudyDetail'
-import TimecourseDetail from '@/components/TimecourseDetail'
+import StudyDetail from '@/components/detail/StudyDetail';
+import TimecourseDetail from '@/components/detail/TimecourseDetail';
 
 
 Vue.use(Router);
@@ -40,12 +37,6 @@ export default new Router({
             path: '/studies',
             name: 'Studies',
             component: Studies
-        },
-        {
-            path:"/studies/:id",
-            name:"StudyDetail",
-            component:StudyDetail,
-            props: true
         },
         {
             path: '/groups',
@@ -89,28 +80,16 @@ export default new Router({
         },
 
         {
-            path:"/characteristica/:id",
-            name:"CharacteristicaDetail",
-            component:CharacteristicaDetail,
+            path:"/studies/:id",
+            name:"StudyDetail",
+            component:StudyDetail,
             props: true
         },
         {
-            path:"/timecourse/:id",
+            path:"/timecourses/:id",
             name:"TimecourseDetail",
             component:TimecourseDetail,
             props: true
         },
-        {
-            path:"/group/:id",
-            name:"GroupDetail",
-            component:GroupDetail,
-            props: true
-        },
-        {
-            path:"/individual/:id",
-            name:"IndividualDetail",
-            component:IndividualDetail,
-            props: true
-        }
     ]
 })

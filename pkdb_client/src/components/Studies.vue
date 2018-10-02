@@ -47,8 +47,8 @@
 </template>
 
 <script>
-    import Table from '@/components/tables/Table'
-    import GetData from './GetPaginatedData'
+    import Table from '@/components/tables/Table';
+    import GetData from '@/components/api/GetPaginatedData';
 
     export default {
         name: 'Studies',

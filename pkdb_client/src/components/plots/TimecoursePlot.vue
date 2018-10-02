@@ -2,15 +2,14 @@
     <div class="small-timeseries">
         <vue-plotly :data="data" :layout="layout" :options="options"/>
     </div>
-
 </template>
 
 <script>
-    import {clean} from "./utils"
+    import {clean} from "@/utils"
     import VuePlotly from '@statnett/vue-plotly'
 
     export default {
-        name: "TimecourseSmall",
+        name: "TimecoursePlot",
 
         props: {
             timecourse: Object,
@@ -30,11 +29,7 @@
                 if (this.parent_count === this.timecourse_no_options.count ) {
                     delete this.timecourse_no_options.count
                 }
-
-
                 clean(this.timecourse_no_options);
-
-
                 return this.timecourse_no_options;
             },
             values(){
@@ -88,10 +83,7 @@
         }
 
     }
-
-
 </script>
 
-<style  scoped>
-
+<style scoped>
 </style>

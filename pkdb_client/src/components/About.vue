@@ -19,8 +19,8 @@
 </template>
 
 <script>
-    import Statistics from '@/components/statistics/Statistics'
     import axios from 'axios'
+    import Statistics from '@/components/statistics/Statistics'
 
     export default {
         name: 'About',

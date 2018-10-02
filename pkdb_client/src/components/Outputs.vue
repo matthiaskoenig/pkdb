@@ -5,9 +5,11 @@
         </div>
     </GetData>
 </template>
+
 <script>
-    import GetData from './GetPaginatedData';
-    import OutputsTable from './tables/OutputsTable';
+    import GetData from '@/components/api/GetPaginatedData';
+    import OutputsTable from '@/components/tables/OutputsTable';
+
     export default {
         name: 'Outputs',
         components: {
@@ -17,7 +19,6 @@
         props: {
             api: String
         },
-
         data() {
             return {
                 resource_url: this.api + '/outputs_read/?format=json&final=True',
