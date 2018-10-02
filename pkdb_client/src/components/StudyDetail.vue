@@ -73,10 +73,67 @@
 
                     <md-app-content>
 
-                        <template v-if="GeneralVisible">
-                            {{study.sid}}
+                        <md-card v-if="GeneralVisible">
+                            <md-list  class="md-double-line">
+                                <md-list-item>
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.sid}}</span>
+                                        <span>Sid</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item>
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.pkdb_version}}</span>
+                                        <span>PkDB Version</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item>
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.creator}}</span>
+                                        <span>Creator</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item>
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.curators}}</span>
+                                        <span>curators</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item v-if="study.data.design">
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.design}}</span>
+                                        <span>Design</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item v-if="study.data.substances.length !== 0">
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.substances}}</span>
+                                        <span>Substances</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item v-if="study.data.keywords.length !== 0">
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.keywords}}</span>
+                                        <span>Keywords</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item v-if="study.data.comments.length !== 0">
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.comments}}</span>
+                                        <span>Comments</span>
+                                    </div>
+                                </md-list-item>
+                                <md-list-item v-if="study.data.descriptions.length !== 0">
+                                    <div class="md-list-item-text">
+                                        <span>{{study.data.descriptions}}</span>
+                                        <span>Descriptions</span>
+                                    </div>
+                                </md-list-item>
 
-                        </template>
+
+
+                            </md-list>
+                        </md-card>
 
                         <GetData v-if="study.data.groupset" :api_url="study.data.groupset">
                             <template slot-scope="groupset" >
