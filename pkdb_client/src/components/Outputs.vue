@@ -1,19 +1,19 @@
 <template>
-    <GetData :resource_url="resource_url" >
-        <div slot-scope="resource">
-            <OutputsTable :resource="resource"  :resource_url="resource_url" />
+    <GetPaginatedData :resource_url="resource_url" >
+        <div slot-scope="data">
+            <OutputsTable :data="data"  :resource_url="resource_url" />
         </div>
-    </GetData>
+    </GetPaginatedData>
 </template>
 
 <script>
-    import GetData from '@/components/api/GetPaginatedData';
+    import GetPaginatedData from '@/components/api/GetPaginatedData';
     import OutputsTable from '@/components/tables/OutputsTable';
 
     export default {
         name: 'Outputs',
         components: {
-            GetData: GetData,
+            GetPaginatedData: GetPaginatedData,
             OutputsTable: OutputsTable,
         },
 
@@ -24,7 +24,6 @@
                 return this.api + '/outputs_read/?format=json&final=True';
             },
         }
-
     }
 </script>
 <style>

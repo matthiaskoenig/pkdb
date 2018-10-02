@@ -1,18 +1,18 @@
 <template>
-    <GetData :resource_url="resource_url" >
-    <div slot-scope="resource">
-        <InterventionsTable :resource="resource"  :resource_url="resource_url" />
+    <GetPaginatedData :resource_url="resource_url" >
+    <div slot-scope="data">
+        <InterventionsTable :data="data" :resource_url="resource_url" />
     </div>
-    </GetData>
+    </GetPaginatedData>
 </template>
 <script>
-    import GetData from '@/components/api/GetPaginatedData';
+    import GetPaginatedData from '@/components/api/GetPaginatedData';
     import InterventionsTable from '@/components/tables/InterventionsTable';
 
     export default {
     name: 'Interventions',
     components: {
-        GetData: GetData,
+        GetPaginatedData: GetPaginatedData,
         InterventionsTable: InterventionsTable,
     },
     computed: {
@@ -20,11 +20,8 @@
 
         resource_url() {
             return this.api + '/interventions_read/?format=json&final=True';
-        },
+        }
     }
-
-
-
 }
 </script>
 <style>

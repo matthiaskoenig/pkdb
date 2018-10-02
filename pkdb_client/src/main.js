@@ -35,11 +35,13 @@ Vue.use(VueMaterial);
  *  Library components
  *  ------------------------------- */
 import { JsonButton } from '@/components/lib/JsonButton';
+import { DetailButton } from '@/components/lib/DetailButton';
 import { Comments } from '@/components/lib/Comments';
 import { Descriptions } from '@/components/lib/Descriptions';
 import { UserAvatar } from '@/components/lib/UserAvatar';
 
 Vue.component('JsonButton', JsonButton);
+Vue.component('DetailButton', DetailButton);
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('UserAvatar', UserAvatar);

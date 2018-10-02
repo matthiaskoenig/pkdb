@@ -1,15 +1,12 @@
 <template>
-
     <GetPaginatedData :resource_url="resource_url">
         <div slot-scope="data">
             <GroupsTable :data="data" :resource_url="resource_url" />
         </div>
     </GetPaginatedData>
-
-
 </template>
-<script>
 
+<script>
     import GetPaginatedData from '@/components/api/GetPaginatedData';
     import GroupsTable from "@/components/tables/GroupsTable";
 
