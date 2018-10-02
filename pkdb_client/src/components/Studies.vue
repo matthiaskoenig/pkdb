@@ -26,9 +26,9 @@
                             <md-table-cell md-label="Pkdb Version" >{{ item.pkdb_version }}</md-table-cell>
                             <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
                             <md-table-cell md-label="Reference"><a v-if="item.reference" :href="item.reference" :title="item.reference"><font-awesome-icon icon="file-alt"/> </a></md-table-cell>
-                            <md-table-cell md-label="Creator"><a v-if="item.creator" :href="item.creator" :title="item.creator"><font-awesome-icon icon="user-cog"/></a></md-table-cell>
-                            <md-table-cell md-label="Curators"><span v-for="(c, index2) in item.curators" :key="index2"> <a :href="c" :title="c"><font-awesome-icon icon="user-edit"/></a>&nbsp;</span></md-table-cell>
-                            <md-table-cell md-label="Substances"><span v-for="(c, index2) in item.substances" :key="index2"><a :href="c" :title="c"><font-awesome-icon icon="tablets"/></a>&nbsp;</span></md-table-cell>
+                            <md-table-cell md-label="Creator"><font-awesome-icon icon="user-cog"/> {{item.creator.first_name}} {{item.creator.last_name}}</md-table-cell>
+                            <md-table-cell md-label="Curators"><span v-for="(c, index2) in item.curators" :key="index2"> <font-awesome-icon icon="user-edit"/>{{c.first_name}} {{c.last_name}} </span></md-table-cell>
+                            <md-table-cell md-label="Substances"><span v-for="(c, index2) in item.substances" :key="index2"><font-awesome-icon icon="tablets"/> {{c.name}}</span></md-table-cell>
                             <md-table-cell md-label="Files"><span v-for="(f, index2) in item.files" :key="index2"><a :href="f" :title="f"><font-awesome-icon icon="file-medical"/></a>&nbsp;</span> </md-table-cell>
                             <md-table-cell md-label="Groupset"><a v-if="item.groupset" :href="item.groupset" :title="item.groupset"><font-awesome-icon icon="users"/></a></md-table-cell>
                             <md-table-cell md-label="Individualset"><a v-if="item.individualset" :href="item.individualset" :title="item.individualset"><font-awesome-icon icon="user"/></a></md-table-cell>
@@ -54,9 +54,6 @@
         name: 'Studies',
         components: {
             GetData: GetData,
-        },
-        props: {
-            api: String
         },
         computed: {
             api() {return this.$store.state.endpoints.api},
