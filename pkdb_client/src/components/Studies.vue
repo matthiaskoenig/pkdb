@@ -26,7 +26,14 @@
                             <md-table-cell md-label="Pkdb Version" >{{ item.pkdb_version }}</md-table-cell>
                             <md-table-cell md-label="Name">{{ item.name }}</md-table-cell>
                             <md-table-cell md-label="Reference"><a v-if="item.reference" :href="item.reference" :title="item.reference"><font-awesome-icon icon="file-alt"/> </a></md-table-cell>
-                            <md-table-cell md-label="Creator"><font-awesome-icon icon="user-cog"/> {{item.creator.first_name}} {{item.creator.last_name}}</md-table-cell>
+                            <md-table-cell md-label="Creator">
+                                <md-list>
+                                    <md-list-item>
+                                         <font-awesome-icon class="md-icon" icon="user-cog"/>
+                                    </md-list-item>
+                                    <span class="md-list-item-text">{{item.creator.first_name}} {{item.creator.last_name}}</span>
+                                </md-list>
+                            </md-table-cell>
                             <md-table-cell md-label="Curators"><span v-for="(c, index2) in item.curators" :key="index2"> <font-awesome-icon icon="user-edit"/>{{c.first_name}} {{c.last_name}} </span></md-table-cell>
                             <md-table-cell md-label="Substances"><span v-for="(c, index2) in item.substances" :key="index2"><font-awesome-icon icon="tablets"/> {{c.name}}</span></md-table-cell>
                             <md-table-cell md-label="Files"><span v-for="(f, index2) in item.files" :key="index2"><a :href="f" :title="f"><font-awesome-icon icon="file-medical"/></a>&nbsp;</span> </md-table-cell>
