@@ -1,11 +1,11 @@
 <template>
     <div class="md-layout">
         <div class="col-5">
-            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options"/>
+            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
         </div>
         <div class="col-2">&nbsp;</div>
         <div class="col-5">
-            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options"/>
+            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
         </div>
     </div>
 </template>
@@ -15,8 +15,8 @@
     import VuePlotly from '@statnett/vue-plotly'
 
     // size of individual plots
-    var height = 600;
-    var width = 600;
+    // var height = 500;
+    //var width = 500;
 
     export default {
         name: "Statistics",
@@ -52,8 +52,8 @@
                 return {
                     layout: {
                         title: 'Interventions',
-                        height: height,
-                        width: width
+                        //height: height,
+                        //width: width
                     },
                     data: [{
                         values: this.data.intervention_count,
@@ -66,8 +66,8 @@
                 return {
                     layout: {
                         title: 'Individuals',
-                        height: height,
-                        width: width
+                        //height: height,
+                        //width: width
                     },
                     data: [{
                         values: this.data.individual_count,
