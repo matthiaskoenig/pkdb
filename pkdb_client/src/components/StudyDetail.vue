@@ -3,6 +3,7 @@
         <GetData :api_url="resource_url">
             <template slot-scope="study">
                 <md-app v-if="study.loaded">
+
                     <md-app-toolbar class="md-primary" md-elevation="0">
                         <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
                             <md-icon>menu</md-icon>
@@ -23,6 +24,14 @@
                         </md-toolbar>
 
                         <md-list>
+                            <md-list-item>
+                                <md-button  :class="'md-icon-button md-fixed' + isActive(GeneralVisible)" @click="toggleGeneral">
+                                    <font-awesome-icon  icon="procedures" />
+                                </md-button>
+
+                                <span class="md-list-item-text">General</span>
+                            </md-list-item>
+
                             <md-list-item>
                                      <md-button  :class="'md-icon-button md-fixed' + isActive(GroupsVisible)" @click="toggleGroups" :disabled="!hasGroups" >
                                     <font-awesome-icon icon="users" />
@@ -63,6 +72,12 @@
                     </md-app-drawer>
 
                     <md-app-content>
+
+                        <template v-if="GeneralVisible">
+                            {{study.sid}}
+
+                        </template>
+
                         <GetData v-if="study.data.groupset" :api_url="study.data.groupset">
                             <template slot-scope="groupset" >
                                 <div v-if="groupset.loaded">
@@ -154,6 +169,8 @@
                 InterventionsVisible: false,
                 OutputsVisible: false,
                 TimecoursesVisible: false,
+                GeneralVisible: true,
+
 
                 hasOutputs:false,
                 hasTimecourses:false,
@@ -168,6 +185,9 @@
         methods:{
             toggleMenu () {
                 this.menuVisible = !this.menuVisible
+            },
+            toggleGeneral () {
+                this.GeneralVisible = !this.GeneralVisible
             },
             toggleIndividuals () {
                 this.IndividualsVisible = !this.IndividualsVisible
