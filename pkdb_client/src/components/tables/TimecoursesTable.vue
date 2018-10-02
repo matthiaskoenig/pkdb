@@ -37,7 +37,7 @@
 <script>
 
     import Table from '@/components/tables/Table'
-    import Individuals from '@/components/TimecourseSmall'
+    import TimecourseSmall from '@/components/TimecourseSmall'
 
 export default {
     name: 'TimecoursesTable',

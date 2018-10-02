@@ -23,8 +23,8 @@
 </template>
 
 <script>
-    import Navigation from './components/Navigation.vue'
-    import Footer from './components/Footer.vue'
+    import Navigation from '@/components/Navigation.vue';
+    import Footer from '@/components/Footer.vue';
 
     export default {
         name: 'app',
@@ -48,9 +48,6 @@
 
 
 <style>
-    html {
-        background-color: black;
-    }
 
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
