@@ -322,9 +322,7 @@ class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
 
 class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
-    curators = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="users_read-detail"
-    )
+    curators = UserReadSerializer( many=True, read_only=True)
     substances = SubstanceReadSerializer(many=True, read_only=True)
     keywords = KeywordReadSerializer(many=True, read_only=True)
     descriptions = DescriptionReadSerializer( many=True, read_only=True)
@@ -333,21 +331,18 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     reference = serializers.HyperlinkedRelatedField(
         read_only=True, lookup_field="sid", view_name="references_read-detail"
     )
-
     individualset = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individualsets_read-detail"
     )
     interventionset = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="interventionsets_read-detail"
     )
-
     groupset = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="groupsets_read-detail"
     )
     outputset = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="outputsets_read-detail"
     )
-
     files = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="datafiles_read-detail"
     )
