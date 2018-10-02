@@ -2,7 +2,7 @@
     <Table :data="data" :resource_url="resource_url" title="Studies" icon="procedures">
         <template slot="row" slot-scope="table">
             <md-table-cell md-label="Pk">
-                <DetailButton :to="'studies/'+ table.item.pk" :title="Study" :icon="procedures"/>{{ table.item.pk }}
+                <DetailButton :to="'studies/'+ table.item.pk" title="Study" icon="procedures"/>{{ table.item.pk }}
             </md-table-cell>
             <md-table-cell md-label="Name">{{ table.item.name }}</md-table-cell>
             <md-table-cell md-label="Reference"><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference"><font-awesome-icon icon="file-alt"/> </a></md-table-cell>

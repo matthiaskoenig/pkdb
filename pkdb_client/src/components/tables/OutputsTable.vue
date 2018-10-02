@@ -1,7 +1,9 @@
 <template>
     <Table :data="data" :resource_url="resource_url" title="Outputs" icon="chart-bar">
         <template slot="row" slot-scope="table">
-            <md-table-cell md-label="Pk"><font-awesome-icon icon="chart-bar" /> {{ table.item.pk }}</md-table-cell>
+            <md-table-cell md-label="Pk">
+                <DetailButton title="Output" icon="chart-bar"/>{{ table.item.pk }}
+            </md-table-cell>
             <md-table-cell md-label="PK Type" >{{ table.item.pktype }}</md-table-cell>
             <md-table-cell md-label="Group" ><a v-if="table.item.group" :href="table.item.group" :title="table.item.group"><font-awesome-icon icon="users" /></a></md-table-cell>
             <md-table-cell md-label="Individual"><a v-if="table.item.individual" :href="table.item.individual" :title="table.item.individual"><font-awesome-icon icon="user" /></a></md-table-cell>

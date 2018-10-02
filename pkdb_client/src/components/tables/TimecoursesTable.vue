@@ -2,7 +2,9 @@
     <Table :data="data" :resource_url="resource_url" title="Timecourses" icon="chart-line">
 
         <template slot="icon" slot-scope="table">
-            <md-table-cell md-label="Pk"><font-awesome-icon icon="chart-line"/> {{ table.item.pk }}</md-table-cell>
+            <md-table-cell md-label="Pk">
+                <DetailButton title="Timecourse" icon="chart-line"/>{{ table.item.pk }}
+            </md-table-cell>
             <md-table-cell md-label="PK Type">{{ table.item.pktype }}</md-table-cell>
             <md-table-cell md-label="Group"><a v-if="table.item.group" :href="table.item.group"
                                                :title="table.item.group">

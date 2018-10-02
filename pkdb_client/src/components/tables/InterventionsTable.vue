@@ -1,7 +1,9 @@
 <template>
     <Table :data="data" :resource_url="resource_url" title="Interventions" icon="capsules">
         <template slot="row" slot-scope="table">
-            <md-table-cell md-label="Pk"><font-awesome-icon icon="capsules" />{{ table.item.pk }}</md-table-cell>
+            <md-table-cell md-label="Pk">
+                <DetailButton title="Intervention" icon="capsules"/>{{ table.item.pk }}
+            </md-table-cell>
             <md-table-cell md-label="Name" >{{table.item.name }}</md-table-cell>
             <md-table-cell md-label="Category" >{{table.item.category }}</md-table-cell>
             <md-table-cell md-label="Choice">{{table.item.choice }}</md-table-cell>

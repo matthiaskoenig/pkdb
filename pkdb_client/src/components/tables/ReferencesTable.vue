@@ -1,6 +1,9 @@
 <template>
     <Table :data="data" :resource_url="resource_url" title="References" icon="file-alt">
         <template slot="row" slot-scope="table">
+            <md-table-cell md-label="Pk">
+                <DetailButton title="Reference" icon="file-alt"/>{{ table.item.pk }}
+            </md-table-cell>
             <md-table-cell md-label="Sid">
                 <font-awesome-icon icon="file-alt"/>{{ table.item.sid }}
             </md-table-cell>

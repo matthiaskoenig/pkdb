@@ -139,7 +139,6 @@
 
                                     {{checkhasGroups(groupset.data.groups)}}
                                     <GroupsTable v-if="GroupsVisible" :resource="resource(groupset.data.groups)" :descriptions="groupset.data.descriptions" :comments="groupset.data.comments"/>
-
                                 </div>
                             </template>
                         </GetData>
