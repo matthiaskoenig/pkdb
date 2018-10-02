@@ -67,7 +67,6 @@
             },
 
             logout: function(){
-
                 //FIXME: logout in django
                 // window.alert("logout id: " + this.username);
                 this.$store.dispatch('logout')

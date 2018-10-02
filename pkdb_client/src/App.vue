@@ -9,7 +9,7 @@
         </head>
         <div class="container">
             <div class="row">
-                <Navigation v-bind:api="api" v-bind:domain="domain"></Navigation>
+                <Navigation></Navigation>
             </div>
             <div class="row">
                 <router-view v-bind:api="api" v-bind:domain="domain"></router-view>

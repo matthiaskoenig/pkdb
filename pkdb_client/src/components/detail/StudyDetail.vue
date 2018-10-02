@@ -134,12 +134,17 @@
 
                         <GetData v-if="study.data.groupset" :api_url="study.data.groupset">
                             <template slot-scope="groupset" >
+
                                 <div v-if="groupset.loaded">
+
                                     {{checkhasGroups(groupset.data.groups)}}
-                                    <GroupsTable v-if="GroupsVisible" :resource="resource(groupset.data.groups)" :api="api" :descriptions="groupset.data.descriptions" :comments="groupset.data.comments"/>
+                                    <GroupsTable v-if="GroupsVisible" :resource="resource(groupset.data.groups)" :descriptions="groupset.data.descriptions" :comments="groupset.data.comments"/>
+
                                 </div>
                             </template>
                         </GetData>
+
+
 
                         <GetData v-if="study.data.individualset" :api_url="study.data.individualset">
                             <template slot-scope="individualset" >
@@ -205,7 +210,6 @@
             TimecoursesTable: TimecoursesTable,
         },
         props: {
-            api: String,
             id: String,
         },
         data() {
@@ -225,6 +229,12 @@
                 hasIndividuals:false,
                 hasGroups:false,
             }
+        },
+        computed: {
+            // vuex store
+            api() {
+                return this.$store.state.endpoints.api;
+            },
         },
         // Fetches posts when the component is created.
         methods:{
@@ -271,7 +281,6 @@
                     this.hasGroups = true
                 }
             },
-
             toggleTimecourses () {
 
                 this.TimecoursesVisible = !this.TimecoursesVisible
@@ -286,7 +295,6 @@
                 if(bool){
                     return " md-raised md-primary";}
                 else{return "";}
-
             }
         }
     }

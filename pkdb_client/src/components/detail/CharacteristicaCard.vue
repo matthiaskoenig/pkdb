@@ -33,21 +33,18 @@
     import {clean} from "@/utils"
     export default {
         name: "CharacteristicaCard",
-
         props: {
-            api: String,
             id: String,
             parent_count: Number,
             color: String
         },
-
         data() {
             return {
                 characteristica: {},
                 resource_url: this.api + '/characteristica_read/' + this.id + '/?format=json',
-
             }
         },
+        //FIXME: rewrite
         // Fetches posts when the component is created.
         created() {
             axios.get(this.resource_url)
@@ -60,6 +57,10 @@
                 })
         },
         computed: {
+            // vuex store
+            api() {
+                return this.$store.state.endpoints.api;
+            },
             characteristica_no_options(){
                 delete this.characteristica.options;
                 return this.characteristica;

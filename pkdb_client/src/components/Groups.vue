@@ -1,7 +1,7 @@
 <template>
     <GetData :resource_url="resource_url">
         <div slot-scope="resource">
-            <GroupsTable :resource="resource" :api="api"/>
+            <GroupsTable :resource="resource" :resource_url="resource_url" />
         </div>
     </GetData>
 

@@ -33,13 +33,13 @@
         components: {
             UserLogin
         },
-        props: {
-            domain: String
-        },
         data() {
             return {}
         },
         computed: {
+            domain() {
+                return this.$store.state.django_domain;
+            },
             user() {
                 return this.$store.state.username;
             },
