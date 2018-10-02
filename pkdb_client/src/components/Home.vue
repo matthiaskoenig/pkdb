@@ -11,9 +11,6 @@
 
     export default {
         name: 'Home',
-        props: {
-            api: String
-        },
         components: {
             CountTable,
         }

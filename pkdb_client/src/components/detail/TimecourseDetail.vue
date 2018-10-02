@@ -50,7 +50,6 @@
         data() {
             return {
                 timecourse: {},
-                resource_url: this.api + '/timecourses_read/' + this.id + '/?format=json',
 
             }
         },
@@ -66,6 +65,9 @@
                 })
         },
         computed: {
+            resource_url() {
+                return this.api + '/timecourses_read/' + this.id + '/?format=json';
+            },
             timecourse_no_options(){
                 delete this.timecourse.options;
                 return this.timecourse;

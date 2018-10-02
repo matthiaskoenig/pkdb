@@ -151,7 +151,7 @@
                                 <div v-if="individualset.loaded">
                                     {{checkhasIndividuals(individualset.data.individuals)}}
 
-                                    <IndividualsTable  v-if="IndividualsVisible"  :resource="resource(individualset.data.individuals)" :api="api"  :descriptions="individualset.data.descriptions" :comments="individualset.data.comments"/>
+                                    <IndividualsTable  v-if="IndividualsVisible"  :resource="resource(individualset.data.individuals)"   :descriptions="individualset.data.descriptions" :comments="individualset.data.comments"/>
                                 </div>
                             </template>
                         </GetData>
@@ -160,7 +160,7 @@
                             <template slot-scope="interventionset" >
                                 <div v-if="interventionset.loaded">
                                     {{checkhasInterventions(interventionset.data.interventions)}}
-                                    <InterventionsTable v-if="InterventionsVisible" :resource="resource(interventionset.data.interventions)" :api="api"  :descriptions="interventionset.data.descriptions" :comments="interventionset.data.comments"/>
+                                    <InterventionsTable v-if="InterventionsVisible" :resource="resource(interventionset.data.interventions)"   :descriptions="interventionset.data.descriptions" :comments="interventionset.data.comments"/>
                                 </div>
                             </template>
                         </GetData>
@@ -172,8 +172,8 @@
                                     {{checkhasOutputs(outputset.data.outputs)}}
                                     {{checkhasTimecourses(outputset.data.timecourses)}}
 
-                                    <OutputsTable v-if="OutputsVisible" :resource="resource(outputset.data.outputs)" :api="api"  :descriptions="outputset.data.descriptions" :comments="outputset.data.comments"/>
-                                    <TimecoursesTable v-if="TimecoursesVisible" :resource="resource(outputset.data.timecourses)" :api="api"  :descriptions="outputset.data.descriptions" :comments="outputset.data.comments"/>
+                                    <OutputsTable v-if="OutputsVisible" :resource="resource(outputset.data.outputs)"   :descriptions="outputset.data.descriptions" :comments="outputset.data.comments"/>
+                                    <TimecoursesTable v-if="TimecoursesVisible" :resource="resource(outputset.data.timecourses)"   :descriptions="outputset.data.descriptions" :comments="outputset.data.comments"/>
 
                                 </div>
                             </template>
@@ -214,7 +214,6 @@
         },
         data() {
             return {
-                resource_url: this.api + '/studies_read/' + this.id + '/?format=json',
                 menuVisible: false,
                 IndividualsVisible: false,
                 GroupsVisible: false,
@@ -235,6 +234,11 @@
             api() {
                 return this.$store.state.endpoints.api;
             },
+
+            resource_url() {
+                return this.api + '/studies_read/' + this.id + '/?format=json';
+            },
+
         },
         // Fetches posts when the component is created.
         methods:{

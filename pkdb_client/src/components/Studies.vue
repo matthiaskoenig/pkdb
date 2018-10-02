@@ -58,11 +58,11 @@
         props: {
             api: String
         },
-        data() {
-            return {
-                // Here you define the url of your paginated API
-                resource_url: this.api + '/studies_read/?format=json',
-            }
+        computed: {
+            api() {return this.$store.state.endpoints.api},
+            resource_url() {
+                return this.api + '/studies_read/?format=json';
+            },
         }
     }
 </script>

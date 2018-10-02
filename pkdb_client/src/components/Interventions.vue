@@ -1,7 +1,7 @@
 <template>
     <GetData :resource_url="resource_url" >
     <div slot-scope="resource">
-        <InterventionsTable :resource="resource" :api="api" :resource_url="resource_url" />
+        <InterventionsTable :resource="resource"  :resource_url="resource_url" />
     </div>
     </GetData>
 </template>
@@ -15,15 +15,16 @@
         GetData: GetData,
         InterventionsTable: InterventionsTable,
     },
-    props: {
-        api: String
-    },
+    computed: {
+        api() {return this.$store.state.endpoints.api},
 
-    data() {
-        return {
-            resource_url: this.api + '/interventions_read/?format=json&final=True',
-            }
-        }
+        resource_url() {
+            return this.api + '/interventions_read/?format=json&final=True';
+        },
+    }
+
+
+
 }
 </script>
 <style>

@@ -5,11 +5,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from pkdb_app.comments.models import Description, Comment
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentReadSerializer, \
+    DescriptionReadSerializer
 from pkdb_app.subjects.models import GroupSet, IndividualSet
+from pkdb_app.users.serializers import UserReadSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer
+from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
@@ -306,24 +308,28 @@ class StudySerializer(SidSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
+class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
+    studies = serializers.HyperlinkedRelatedField(many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
+    )
+
+    """ Keyword. """
+
+    class Meta:
+        model = Keyword
+        fields = ["pk", "name", "studies"]
+
+
+
 class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     curators = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="users_read-detail"
     )
-    substances = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="substances_read-detail"
-    )
-    keywords = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="keywords_read-detail"
-    )
-    descriptions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="descriptions_read-detail"
-    )
+    substances = SubstanceReadSerializer(many=True, read_only=True)
+    keywords = KeywordReadSerializer(many=True, read_only=True)
+    descriptions = DescriptionReadSerializer( many=True, read_only=True)
+    creator = UserReadSerializer(read_only=True)
 
-    creator = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="users_read-detail"
-    )
     reference = serializers.HyperlinkedRelatedField(
         read_only=True, lookup_field="sid", view_name="references_read-detail"
     )
@@ -345,9 +351,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     files = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="datafiles_read-detail"
     )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
+    comments = CommentReadSerializer(many=True, read_only=True)
 
 
     class Meta:
@@ -412,13 +416,3 @@ class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = ("pk", "references", "first_name", "last_name")
 
 
-class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
-    studies = serializers.HyperlinkedRelatedField(
-        many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-
-    """ Keyword. """
-
-    class Meta:
-        model = Keyword
-        fields = ["pk", "name", "studies"]

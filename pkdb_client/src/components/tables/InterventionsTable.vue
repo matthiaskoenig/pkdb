@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table  :resource="resource" :api="api" :resource_url="resource_url" :comments="comments" :descriptions="descriptions">
+        <Table  :resource="resource"  :resource_url="resource_url" :comments="comments" :descriptions="descriptions">
             <template slot="title">
                 <font-awesome-icon icon="capsules"/>   Interventions
             </template>
@@ -39,16 +39,10 @@
     },
     props: {
         resource: Object,
-        api:String,
         descriptions:Array,
         comments:Array,
         resource_url:String,
     },
-    data() {
-        return {
-            resource_url: this.api + '/interventions_read/?format=json&final=True',
-            }
-        }
 }
 </script>
 <style>

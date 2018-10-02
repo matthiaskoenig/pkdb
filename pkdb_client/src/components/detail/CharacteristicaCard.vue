@@ -41,7 +41,6 @@
         data() {
             return {
                 characteristica: {},
-                resource_url: this.api + '/characteristica_read/' + this.id + '/?format=json',
             }
         },
         //FIXME: rewrite
@@ -60,6 +59,9 @@
             // vuex store
             api() {
                 return this.$store.state.endpoints.api;
+            },
+            resource_url() {
+                return this.api + '/characteristica_read/' + this.id + '/?format=json';
             },
             characteristica_no_options(){
                 delete this.characteristica.options;

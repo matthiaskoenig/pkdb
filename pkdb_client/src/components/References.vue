@@ -42,9 +42,6 @@
         components: {
             VPaginator: VuePaginator
         },
-        props: {
-            api: String
-        },
         methods: {
             updateResource(data) {
                 this.references = data.data;
@@ -55,9 +52,15 @@
             return {
                 references: [],
                 count: null,
-                resource_url: this.api + '/references/?format=json',
             }
+        },
+        computed: {
+            api() {return this.$store.state.endpoints.api},
+            resource_url() {
+                return this.api + '/references/?format=json';
+            },
         }
+
     }
 </script>
 <style>

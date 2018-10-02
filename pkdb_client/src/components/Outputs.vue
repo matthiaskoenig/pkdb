@@ -1,7 +1,7 @@
 <template>
     <GetData :resource_url="resource_url" >
         <div slot-scope="resource">
-            <OutputsTable :resource="resource" :api="api" :resource_url="resource_url" />
+            <OutputsTable :resource="resource"  :resource_url="resource_url" />
         </div>
     </GetData>
 </template>
@@ -16,14 +16,15 @@
             GetData: GetData,
             OutputsTable: OutputsTable,
         },
-        props: {
-            api: String
-        },
-        data() {
-            return {
-                resource_url: this.api + '/outputs_read/?format=json&final=True',
-                }
-            }
+
+        computed: {
+            api() {return this.$store.state.endpoints.api},
+
+            resource_url() {
+                return this.api + '/outputs_read/?format=json&final=True';
+            },
+        }
+
     }
 </script>
 <style>

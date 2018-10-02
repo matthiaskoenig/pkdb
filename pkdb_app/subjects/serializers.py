@@ -419,9 +419,7 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionReadSerializer(many=True, read_only=True)
     comments = CommentReadSerializer(many=True, read_only=True)
     groups = GroupReadSerializer(many=True, read_only=True)
-    group_exs = serializers.HyperlinkedRelatedField(many=True,
-                                                 read_only=True, view_name="groupexs_read-detail"
-                                                 )
+    group_exs = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name="groupexs_read-detail")
 
     class Meta:
         model = GroupSet

@@ -18,14 +18,18 @@
             GroupsTable: GroupsTable,
 
         },
-        props: {
-            api: String
-        },
         methods: {},
         data() {
             return {
-                resource_url: this.api + '/groups_read/?format=json',
             }
+        },
+        computed: { // vuex store
+            api() {
+                return this.$store.state.endpoints.api;
+            },
+            resource_url() {
+                return this.api + '/groups_read/?format=json';
+            },
         }
     }
 </script>

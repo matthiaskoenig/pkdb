@@ -24,9 +24,7 @@
 
     export default {
         name: 'About',
-        props: {
-            api: String
-        },
+
         components: {
             Statistics
         },
@@ -38,6 +36,9 @@
                 statistics: null,
                 errors: []
             }
+        },
+        computed: { // vuex store
+            api() {return this.$store.state.endpoints.api}
         },
         mounted() {
             axios.get(this.api + `/statistics/?format=json`)

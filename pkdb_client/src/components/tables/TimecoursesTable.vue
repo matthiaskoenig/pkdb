@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Table :resource="resource" :api="api" :resource_url="resource_url" :comments="comments"
+        <Table :resource="resource"  :resource_url="resource_url" :comments="comments"
                :descriptions="descriptions">
             <template slot="title">
                 <font-awesome-icon icon="chart-line"/>
@@ -56,7 +56,6 @@
         },
         props: {
             resource: Object,
-            api: String,
             descriptions: Array,
             comments: Array,
             resource_url: String,
