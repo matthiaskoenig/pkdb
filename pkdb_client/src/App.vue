@@ -14,6 +14,7 @@
             <div class="row">
                 <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
             </div>
+
             <div class="row">
                 <Footer></Footer>
             </div>
