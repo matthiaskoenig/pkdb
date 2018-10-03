@@ -339,16 +339,12 @@ elif DJANGO_CONFIGURATION == 'Production':
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
-    EMAIL_HOST_USER = ''
-    EMAIL_HOST_PASSWORD = ''
     # EMAIL_PORT = 25
 
-    EMAIL_USE_TLS = True
     EMAIL_PORT = 587
-    # EMAIL_USE_SSL = True
-    EMAIL_SSL_KEYFILE = "/etc/letsencrypt/live/pk-db.com/privkey.pem"
-    EMAIL_SSL_CERTFILE = "/etc/letsencrypt/live/pk-db.com/fullchain.pem"
-
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.getenv("PKDB_EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.getenv("PKDB_EMAIL_HOST_USER")
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
