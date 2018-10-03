@@ -333,7 +333,9 @@ elif DJANGO_CONFIGURATION == 'Production':
     # The EMAIL_HOST_USER and EMAIL_HOST_PASSWORD settings, if set, are used to authenticate to the SMTP server,
     # and the EMAIL_USE_TLS and EMAIL_USE_SSL settings control whether a secure connection is used.
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = "localhost"
+    # EMAIL_HOST = "localhost"
+    # EMAIL_PORT = 25
+    EMAIL_HOST = "mailhost.cms.hu-berlin.de"
     EMAIL_PORT = 25
     EMAIL_HOST_USER = ''
     EMAIL_HOST_PASSWORD = ''
