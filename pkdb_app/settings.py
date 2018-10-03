@@ -9,10 +9,6 @@ from distutils.util import strtobool
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-from django.core.mail import EmailMessage
-EmailMessage.send
-
 # ------------------------------------------------------------------------------------------------------------------
 import environ
 env = environ.Env(
@@ -22,14 +18,16 @@ env = environ.Env(
 environ.Env.read_env(env_file=join(BASE_DIR, '.env'))
 
 # overwrite environment variables with local .env settings
-if "PKDB_SECRET_KEY" in env:
-    os.environ["PKDB_SECRET_KEY"] = env("PKDB_SECRET_KEY")
-if "PKDB_API_BASE" in env:
-    os.environ["PKDB_API_BASE"] = env("PKDB_API_BASE")
-if "PKDB_DEFAULT_PASSWORD" in env:
-    os.environ["PKDB_DEFAULT_PASSWORD"] = env("PKDB_DEFAULT_PASSWORD")
-if "PKDB_POSTGRES_PASSWORD" in env:
-    os.environ["PKDB_POSTGRES_PASSWORD"] = env("PKDB_POSTGRES_PASSWORD")
+for key in [
+            "PKDB_SECRET_KEY",
+            "PKDB_API_BASE",
+            "PKDB_DEFAULT_PASSWORD",
+            "PKDB_POSTGRES_PASSWORD",
+            "PKDB_EMAIL_HOST_USER",
+            "PKDB_EMAIL_HOST_PASSWORD",
+            ]:
+    os.environ[key] = env(key)
+
 
 # either 'Local' or 'Production'
 DJANGO_CONFIGURATION = os.getenv("PKDB_DJANGO_CONFIGURATION", "Local")
@@ -345,6 +343,11 @@ elif DJANGO_CONFIGURATION == 'Production':
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = os.getenv("PKDB_EMAIL_HOST_USER")
     EMAIL_HOST_PASSWORD = os.getenv("PKDB_EMAIL_HOST_USER")
+
+    if not EMAIL_HOST_USER:
+        raise ValueError("EMAIL_HOST_USER could not be read, export the 'PKDB_EMAIL_HOST_USER' environment variable.")
+    if not EMAIL_HOST_PASSWORD:
+        raise ValueError("EMAIL_HOST_PASSWORD could not be read, export the 'PKDB_EMAIL_HOST_PASSWORD' environment variable.")
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
