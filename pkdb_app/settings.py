@@ -9,6 +9,10 @@ from distutils.util import strtobool
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
+from django.core.mail import EmailMessage
+EmailMessage.send
+
 # ------------------------------------------------------------------------------------------------------------------
 import environ
 env = environ.Env(
@@ -333,18 +337,18 @@ elif DJANGO_CONFIGURATION == 'Production':
     # The EMAIL_HOST_USER and EMAIL_HOST_PASSWORD settings, if set, are used to authenticate to the SMTP server,
     # and the EMAIL_USE_TLS and EMAIL_USE_SSL settings control whether a secure connection is used.
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    # EMAIL_HOST = "localhost"
-    # EMAIL_PORT = 25
+    DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
-    EMAIL_PORT = 25
     EMAIL_HOST_USER = ''
     EMAIL_HOST_PASSWORD = ''
-    EMAIL_USE_TLS = False
-    DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
+    # EMAIL_PORT = 25
 
-    # EMAIL_USE_SSL = True
-    # EMAIL_SSL_KEYFILE = ""
-    # EMAIL_SSL_CERTFILE = ""
+    # EMAIL_USE_TLS = False
+    EMAIL_PORT = 587
+    EMAIL_USE_SSL = True
+    EMAIL_SSL_KEYFILE = "/etc/letsencrypt/live/pk-db.com/privkey.pem"
+    EMAIL_SSL_CERTFILE = "/etc/letsencrypt/live/pk-db.com/fullchain.pem"
+
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
