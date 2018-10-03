@@ -343,9 +343,9 @@ elif DJANGO_CONFIGURATION == 'Production':
     EMAIL_HOST_PASSWORD = ''
     # EMAIL_PORT = 25
 
-    # EMAIL_USE_TLS = False
+    EMAIL_USE_TLS = True
     EMAIL_PORT = 587
-    EMAIL_USE_SSL = True
+    # EMAIL_USE_SSL = True
     EMAIL_SSL_KEYFILE = "/etc/letsencrypt/live/pk-db.com/privkey.pem"
     EMAIL_SSL_CERTFILE = "/etc/letsencrypt/live/pk-db.com/fullchain.pem"
 
