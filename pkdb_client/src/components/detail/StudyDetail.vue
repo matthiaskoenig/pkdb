@@ -305,11 +305,4 @@
 </script>
 
 <style scoped>
-
-    .md-app {
-        min-height: 350px;
-    }
-    .menu-botton{
-
-    }
 </style>
