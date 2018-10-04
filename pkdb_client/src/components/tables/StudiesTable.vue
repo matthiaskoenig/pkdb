@@ -1,4 +1,9 @@
 <template>
+    <v-card>
+    <v-card-title>
+        <Heading :count="data.count" :icon="icon('study')" title="Studies" :resource_url="resource_url"/>
+    </v-card-title>
+
     <v-data-table
             :headers="headers"
             :items="data.entries"
@@ -8,9 +13,11 @@
             <td>
                 <LinkButton :to="'studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
             </td>
+            <td>{{ table.item.name }}</td>
             <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
                 <font-awesome-icon icon="file-alt"/>
-            </a></td>
+            </a>
+            </td>
             <td>
                 <UserAvatar :user="table.item.creator"/>
             </td>
@@ -41,6 +48,8 @@
             </td>
         </template>
     </v-data-table>
+    </v-card>
+
 </template>
 
 <script>

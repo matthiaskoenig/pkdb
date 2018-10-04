@@ -2,7 +2,7 @@
     <div id="user-avatar">
 
         <v-avatar color="red">
-            <span class="white--text headline" :size="32" :title="username">{{ initials }}</span>
+            <span class="white--text headline" size="32" :title="username">{{ initials }}</span>
         </v-avatar>
 
         <!--
