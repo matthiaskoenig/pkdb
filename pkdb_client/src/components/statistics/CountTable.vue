@@ -3,21 +3,15 @@
 
         <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
             <template slot="items" slot-scope="props">
-                <td>{{ props.item.name }}
-                    <!--
-                    <md-button :to="props.item.to" :title="props.item.name" class="md-icon-button md-raised md-primary">
-                        <font-awesome-icon :icon="item.icon"/>
-                    </md-button>
-                    -->
+                <td>
                     <v-icon>{{ props.item.icon }}</v-icon>
                 </td>
                 <td class="text-xs-right">
                     <Heading :title="props.item.name" :count="parseInt(props.item.count)"/>
                 </td>
-                <td class="text-xs-right">{{ props.item.description }}</td>
+                <td class="text-xs-left">{{ props.item.description }}</td>
             </template>
         </v-data-table>
-
     </div>
 </template>
 
@@ -30,7 +24,7 @@
         data() {
             return {
                 headers: [
-                    { text: 'Name', value: 'name'},
+                    { text: 'Data', value: 'name'},
                     { text: 'Count', value: 'count' },
                     { text: 'Description', value: 'description' },
                 ],

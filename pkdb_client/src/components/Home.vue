@@ -1,14 +1,13 @@
 <template>
     <div id="home">
-        <div class="row">
-            <div class="col-md-12 col-lg-6">
-                <CountTable></CountTable>
-            </div>
-
-            <div class="col-md-12 col-lg-6">
+        <v-layout row wrap>
+            <v-flex xs6>
+                <CountTable />
+            </v-flex>
+            <v-flex xs6>
                 <AboutInformation />
-            </div>
-        </div>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

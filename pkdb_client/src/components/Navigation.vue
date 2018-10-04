@@ -1,6 +1,31 @@
 <template>
     <div id="navigation">
 
+        <v-toolbar dark color="primary">
+            <v-toolbar-side-icon></v-toolbar-side-icon>
+
+            <v-toolbar-title class="white--text">Title</v-toolbar-title>
+
+            <v-spacer></v-spacer>
+
+            <v-btn icon>
+                <v-icon>{{ icon('home') }}</v-icon>
+            </v-btn>
+
+            <v-btn icon>
+                <v-icon>{{ icon('home') }}</v-icon>
+            </v-btn>
+
+            <v-btn icon>
+                <v-icon>{{ icon('home') }}</v-icon>
+            </v-btn>
+
+            <v-btn icon>
+                <v-icon>{{ icon('home') }}</v-icon>
+            </v-btn>
+        </v-toolbar>
+
+        <!--
         <md-tabs class="md-layout">
                 <md-tab id="tab-home" md-label="Home" :md-icon="md_icon('home')" to="/"> </md-tab>
                 <md-tab id="tab-studies" md-label="Studies" :md-icon="md_icon('studies')" to="/studies"></md-tab>
@@ -11,7 +36,6 @@
                 <md-tab id="tab-timecourses" md-label="Timecourses" :md-icon="md_icon('timecourses')" to="/timecourses"></md-tab>
                 <md-tab id="tab-references" md-label="References" :md-icon="md_icon('references')" to="/references"></md-tab>
 
-                <!-- TODO: right aligned -->
                 <md-tab to="/about" md-active-tab="false"  id="tab-about" :md-icon="md_icon('about')" md-label="About"></md-tab>
                 <md-tab id="tab-api" md-label="API" :md-icon="md_icon('api')" :href="api_url"></md-tab>
                 <md-tab id="tab-github" md-label="Code" :md-icon="md_icon('github')" href="https://www.github.com/matthiaskoenig/pkdb"></md-tab>
@@ -19,6 +43,7 @@
                 <md-tab id="tab-admin" md-label="Admin" :md-icon="md_icon('admin')" :href="admin_url"></md-tab>
                 <md-tab id="tab-accounts" md-label="Account" :md-icon="md_icon('account')" to="/account"></md-tab>
         </md-tabs>
+        -->
     </div>
 
 </template>

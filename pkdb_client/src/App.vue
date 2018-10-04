@@ -1,27 +1,27 @@
 <template>
     <div id="app">
         <head>
-            <!-- TODO: check if needed, move to main.js -->
-            <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
             <meta name="description" content="PK-DB">
             <meta name="author" content="Jan Grzegorzewski and Matthias Koenig">
             <title>PK-DB</title>
         </head>
-        <div class="container-fluid">
-            <div class="row">
-                <Navigation></Navigation>
-            </div>
 
-            <div class="row">
-                <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
-            </div>
+        <v-container grid-list-md text-xs-center>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    Navigation
+                    <Navigation></Navigation>
+                </v-flex>
 
-            <div class="row">
-                <div class="col-12">
-                    <Footer></Footer>
-                </div>
-            </div>
-        </div>
+                <v-flex xs12>
+                    <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
+                </v-flex>
+                <v-flex>
+                <Footer></Footer>
+                </v-flex>
+            </v-layout>
+        </v-container>
+
     </div>
 </template>
 
@@ -49,16 +49,10 @@
     }
 </script>
 
-
 <style>
-
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        background-color: #ffffff;
-
-        margin-left: 25px;
-        margin-right: 25px;
     }
 </style>

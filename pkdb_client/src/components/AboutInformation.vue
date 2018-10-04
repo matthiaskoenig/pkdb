@@ -8,7 +8,7 @@
         Data base for the standardized storage of clinical and experimental data sets from pharmacokinetics studies.
         </p>
         <p>
-        <img src="/assets/images/workflow.png" width="600"/>
+        <v-img src="/assets/images/workflow.png" max-width="600"/>
         </p>
         <strong>Overview of data data curation workflow</strong>
         A) Literature research is performed for
@@ -34,7 +34,7 @@
 
         <h3>Contact</h3>
         <span v-for="item in contact_items">
-            <font-awesome-icon v-if="icon" :icon="item.icon"/> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br />
+            <v-icon>{{ item.icon }}</v-icon> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br />
         </span>
     </div>
 </template>
@@ -55,12 +55,13 @@
                 contact_items: [
                     {
                         name: 'Email',
-                        icon: 'envelope',
+                        icon: 'fas fa-envelope',
                         title: 'koenigmx@hu-berlin.de',
                         to: 'mailto:koenigmx@hu-berlin.de'
                     },
                     {
                         name: 'GitHub',
+                        icon: 'fas fa-github',
                         title: 'https://github.com/matthiaskoenig/pkdb',
                         to: 'mailto:koenigmx@hu-berlin.de'
                     }
