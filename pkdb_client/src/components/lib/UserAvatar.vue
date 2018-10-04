@@ -1,6 +1,10 @@
 <template>
     <div id="user-avatar">
-        <md-avatar class="md-avatar-icon md-small" :title="username">{{ initials }}</md-avatar>
+
+        <v-avatar color="red">
+            <span class="white--text headline" :size="32" :title="username">{{ initials }}</span>
+        </v-avatar>
+
         <!--
         <font-awesome-icon class="md-icon" icon="user-cog"/>
         <font-awesome-icon icon="user-edit"/>

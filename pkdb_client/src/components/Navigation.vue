@@ -1,7 +1,7 @@
 <template>
     <div id="navigation">
 
-        <v-toolbar dark color="primary">
+        <v-toolbar>
             <v-toolbar-side-icon></v-toolbar-side-icon>
 
             <!--

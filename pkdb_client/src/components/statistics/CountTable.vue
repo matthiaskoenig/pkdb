@@ -23,7 +23,7 @@
         data() {
             return {
                 headers: [
-                    { text: 'Data', value: 'name'},
+                    { text: 'Data', value: 'name', sortable: false,},
                     { text: 'Count', value: 'count' },
                     { text: 'Description', value: 'description' },
                 ],

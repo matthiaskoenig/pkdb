@@ -1,8 +1,8 @@
 <template>
 <div class="detail-button">
-    <md-button :to="to" :title="title" class="md-icon-button md-raised md-dense md-primary" :disabled="to ? false : true">
-        <font-awesome-icon :icon="icon"/>
-    </md-button>
+    <v-btn color="primary" fab small dark :to="to" :title="title" :disabled="to ? false : true">
+        <v-icon>{{ icon }}</v-icon>
+    </v-btn>
 </div>
 </template>
 

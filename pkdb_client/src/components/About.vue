@@ -1,17 +1,13 @@
 <template>
-    <div>
-        <div id="home">
-            <div class="row">
-                <div class="col-md-12 col-lg-6">
-                    <AboutInformation/>
-                </div>
-
-                <div class="col-md-12 col-lg-6">
-                    <h2>Statistics</h2>
-                    <Statistics/>
-                </div>
-            </div>
-        </div>
+    <div id="about">
+        <v-layout row wrap>
+            <v-flex xs6>
+                <AboutInformation/>
+            </v-flex>
+            <v-flex xs6>
+                <Statistics/>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

@@ -2,7 +2,7 @@
 const icons_table = {
     home: 'fas fa-home',
     studies: 'fas fa-procedures',
-    study: 'fas fa-procedure',
+    study: 'fas fa-procedures',
     groups: 'fas fa-users',
     group: 'fas fa-user',
     individuals: 'fas fa-user',

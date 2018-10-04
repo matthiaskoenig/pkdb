@@ -1,7 +1,19 @@
 <template>
     <div id="statistics">
-            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
-            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
+        <v-card>
+            <v-toolbar color="primary" dark>
+                <v-toolbar-title>Statistics<br/>
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-container fluid grid-list-lg>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
+                        <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-card>
         </div>
     </div>
 </template>
