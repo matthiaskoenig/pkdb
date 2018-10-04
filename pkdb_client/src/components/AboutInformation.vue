@@ -5,36 +5,19 @@
             <strong>Version</strong>: {{ version }}<br/>
         </p>
         <p>
-        Data base for the standardized storage of clinical and experimental data sets from pharmacokinetics studies.
+            Data base for the standardized storage of clinical and experimental data sets from pharmacokinetics studies.
         </p>
         <p>
-        <v-img src="/assets/images/workflow.png" max-width="600"/>
-        </p>
-        <strong>Overview of data data curation workflow</strong>
-        A) Literature research is performed for
-        substances in liver function tests. Study
-        data for the integration of datasets with
-        computational models is extracted. This
-        includes information about study design,
-        subjects, interventions, and dosing
-        schema. Important lifestyle factors like
-        smoking behavior, alcohol consumption,
-        oral contraceptives, or coffee
-        consumption are recorded. Datasets
-        depicted in the figures and tables are
-        digitized in machine-readable formats
-        and basic metadata is annotated.
-        Pharmacokinetics parameters are
-        extracted from publication text, tables
-        and figures. B) Study information,
-        datasets, and corresponding metadata
-        are made accessible under FAIR
-        principles.
+            <v-img src="/assets/images/workflow.png" max-width="600"/>
+    </p>
+        <p>
+        <strong>Overview of data data curation workflow</strong><br />
+        A) Literature research is performed for substances in liver function tests. Study data for the integration of datasets with computational models is extracted. This includes information about study design, subjects, interventions, and dosing schema. Important lifestyle factors like smoking behavior, alcohol consumption, oral contraceptives, or coffee consumption are recorded. Datasets depicted in the figures and tables are digitized in machine-readable formats and basic metadata is annotated. Pharmacokinetics parameters are extracted from publication text, tables and figures. B) Study information, datasets, and corresponding metadata are made accessible under FAIR principles.
         </p>
 
         <h3>Contact</h3>
         <span v-for="item in contact_items">
-            <v-icon>{{ item.icon }}</v-icon> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br />
+            <v-icon>{{ item.icon }}</v-icon> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br/>
         </span>
     </div>
 </template>
@@ -61,7 +44,7 @@
                     },
                     {
                         name: 'GitHub',
-                        icon: 'fas fa-github',
+                        icon: 'fab fa-github',
                         title: 'https://github.com/matthiaskoenig/pkdb',
                         to: 'mailto:koenigmx@hu-berlin.de'
                     }
@@ -71,7 +54,9 @@
             }
         },
         computed: { // vuex store
-            api() {return this.$store.state.endpoints.api}
+            api() {
+                return this.$store.state.endpoints.api
+            }
         },
         methods: {
             icon: function (key) {

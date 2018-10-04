@@ -4,46 +4,37 @@
         <v-toolbar dark color="primary">
             <v-toolbar-side-icon></v-toolbar-side-icon>
 
-            <v-toolbar-title class="white--text">Title</v-toolbar-title>
+            <!--
+            <v-toolbar-title class="white--text">PK-DB</v-toolbar-title>
+            -->
+            <v-btn icon to="/" title="Home">
+                <v-icon>{{ icon('home') }}</v-icon>
+            </v-btn>
+            <v-spacer></v-spacer>
+
+            <v-btn icon to="/studies" title="Studies"><v-icon>{{ icon('studies') }}</v-icon></v-btn>
+            <v-btn icon to="/groups" title="Groups"><v-icon>{{ icon('groups') }}</v-icon></v-btn>
+            <v-btn icon to="/individuals" title="Individuals"><v-icon>{{ icon('individuals') }}</v-icon></v-btn>
+            <v-btn icon to="/interventions" title="Interventions"><v-icon>{{ icon('interventions') }}</v-icon></v-btn>
+            <v-btn icon to="/outputs" title="Outputs"><v-icon>{{ icon('outputs') }}</v-icon></v-btn>
+            <v-btn icon to="/timecourses" title="Timecourses"><v-icon>{{ icon('timecourses') }}</v-icon></v-btn>
+            <v-btn icon to="/references" title="References"><v-icon>{{ icon('references') }}</v-icon></v-btn>
+
 
             <v-spacer></v-spacer>
 
-            <v-btn icon>
-                <v-icon>{{ icon('home') }}</v-icon>
+            <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
+            <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
+            <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository">
+                <v-icon>{{ icon('github')}}</v-icon>
             </v-btn>
-
-            <v-btn icon>
-                <v-icon>{{ icon('home') }}</v-icon>
+            <v-btn icon :href="admin_url" title="Django admin interface">
+                <v-icon>{{ icon('admin') }}</v-icon>
             </v-btn>
-
-            <v-btn icon>
-                <v-icon>{{ icon('home') }}</v-icon>
-            </v-btn>
-
-            <v-btn icon>
-                <v-icon>{{ icon('home') }}</v-icon>
+            <v-btn icon to="/account" title="User account settings">
+                <v-icon>{{ icon('account') }}</v-icon>
             </v-btn>
         </v-toolbar>
-
-        <!--
-        <md-tabs class="md-layout">
-                <md-tab id="tab-home" md-label="Home" :md-icon="md_icon('home')" to="/"> </md-tab>
-                <md-tab id="tab-studies" md-label="Studies" :md-icon="md_icon('studies')" to="/studies"></md-tab>
-                <md-tab id="tab-groups" md-label="Groups" :md-icon="md_icon('groups')" to="/groups"></md-tab>
-                <md-tab id="tab-individuals" md-label="Individuals" :md-icon="md_icon('individuals')" to="/individuals"></md-tab>
-                <md-tab id="tab-interventions" md-label="Interventions" :md-icon="md_icon('interventions')" to="/interventions"></md-tab>
-                <md-tab id="tab-outputs" md-label="Outputs" :md-icon="md_icon('outputs')" to="/outputs"></md-tab>
-                <md-tab id="tab-timecourses" md-label="Timecourses" :md-icon="md_icon('timecourses')" to="/timecourses"></md-tab>
-                <md-tab id="tab-references" md-label="References" :md-icon="md_icon('references')" to="/references"></md-tab>
-
-                <md-tab to="/about" md-active-tab="false"  id="tab-about" :md-icon="md_icon('about')" md-label="About"></md-tab>
-                <md-tab id="tab-api" md-label="API" :md-icon="md_icon('api')" :href="api_url"></md-tab>
-                <md-tab id="tab-github" md-label="Code" :md-icon="md_icon('github')" href="https://www.github.com/matthiaskoenig/pkdb"></md-tab>
-
-                <md-tab id="tab-admin" md-label="Admin" :md-icon="md_icon('admin')" :href="admin_url"></md-tab>
-                <md-tab id="tab-accounts" md-label="Account" :md-icon="md_icon('account')" to="/account"></md-tab>
-        </md-tabs>
-        -->
     </div>
 
 </template>
@@ -69,9 +60,6 @@
             },
         },
         methods: {
-            md_icon: function (key) {
-                return lookup_md_icon(key)
-            },
             icon: function (key) {
                 return lookup_icon(key)
             },
@@ -80,12 +68,4 @@
 </script>
 
 <style>
-    #navigation {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: #ffffff;
-
-        margin-bottom: 5px;
-    }
 </style>

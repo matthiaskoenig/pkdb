@@ -19,6 +19,7 @@ const icons_table = {
     api: 'fas fa-code',
     admin: 'fas fa-cogs',
     account: 'fas fa-user-circle',
+    github: 'fab fa-github',
 };
 
 function lookup_icon(key){
