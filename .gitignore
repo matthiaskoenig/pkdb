@@ -26,7 +26,7 @@ develop-eggs/
 downloads/
 eggs/
 .eggs/
-lib/
+pkdb_client/src/components/lib2/
 lib64/
 parts/
 sdist/
