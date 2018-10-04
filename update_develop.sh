@@ -5,7 +5,6 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 git pull
 
-
 # backend update
 python manage.py collectstatic
 sudo service gunicorn_pkdb restart
