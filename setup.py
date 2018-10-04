@@ -67,7 +67,7 @@ setup(
 
         # Core
         "pytz==2018.4",
-        "Django==2.1.1",
+        "Django==2.1.2",
         "gunicorn==19.8.1",
         "newrelic==3.2.2.94",
 
@@ -109,9 +109,9 @@ setup(
         "boto3==1.7.39",
 
         "biopython>=1.72",
-        "ipykernel>=4.9.0",
+        "ipykernel>=5.0.0",
         "pandas>=0.23.4",
-        "numpy>=0.15.1",
+        "numpy>=0.15.2",
         "scipy>=1.1.0",
         "matplotlib>=2.2.3",
 

@@ -26,7 +26,6 @@ develop-eggs/
 downloads/
 eggs/
 .eggs/
-pkdb_client/src/components/lib2/
 lib64/
 parts/
 sdist/
@@ -120,4 +119,3 @@ celerybeat-schedule
 
 # C extensions
 *.so
-
