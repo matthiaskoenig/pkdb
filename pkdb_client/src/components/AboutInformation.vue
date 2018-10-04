@@ -2,12 +2,37 @@
     <div id="about-information">
         <h2>Pharmacokinetics database (PK-DB)</h2>
         <p>
-            Version: {{ version }}<br/>
+            <strong>Version</strong>: {{ version }}<br/>
         </p>
         <p>
+        Data base for the standardized storage of clinical and experimental data sets from pharmacokinetics studies.
+        </p>
+        <p>
+        <img src="/assets/images/workflow.png" width="600"/>
+        </p>
+        <strong>Overview of data data curation workflow</strong>
+        A) Literature research is performed for
+        substances in liver function tests. Study
+        data for the integration of datasets with
+        computational models is extracted. This
+        includes information about study design,
+        subjects, interventions, and dosing
+        schema. Important lifestyle factors like
+        smoking behavior, alcohol consumption,
+        oral contraceptives, or coffee
+        consumption are recorded. Datasets
+        depicted in the figures and tables are
+        digitized in machine-readable formats
+        and basic metadata is annotated.
+        Pharmacokinetics parameters are
+        extracted from publication text, tables
+        and figures. B) Study information,
+        datasets, and corresponding metadata
+        are made accessible under FAIR
+        principles.
+        </p>
 
-        </p
-        >
+
         <h3>Contact</h3>
         <p>
             <ul>

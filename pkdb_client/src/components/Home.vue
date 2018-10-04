@@ -9,9 +9,7 @@
                 <AboutInformation />
             </div>
         </div>
-
     </div>
-
 </template>
 
 <script>
