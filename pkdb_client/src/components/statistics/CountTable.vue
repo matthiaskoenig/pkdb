@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="count-table">
         <md-table class="my-table">
             <md-table-row v-for="item in items" :key="item.name">
                 <md-table-cell>

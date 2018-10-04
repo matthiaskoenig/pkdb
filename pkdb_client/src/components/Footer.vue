@@ -5,7 +5,6 @@
             Website: <a :href="web" target="_blank">{{web}}</a> &nbsp;&nbsp;
             Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a> &nbsp;&nbsp;
         </p>
-
     </div>
 </template>
 
@@ -22,7 +21,7 @@
 </script>
 <style>
     #footer {
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 0px;
     }
 </style>

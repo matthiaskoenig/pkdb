@@ -10,13 +10,14 @@ import VueMaterial from 'vue-material';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
     faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets,
-    faCube, faCubes, faUserCog, faUserEdit
+    faCube, faCubes, faUserCog, faUserEdit, faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+
 import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome';
 library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
     faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode, faTablet, faTablets, faCube, faCubes,
-    faUserCog, faUserEdit);
+    faUserCog, faUserEdit, faEnvelope);
 
 import Vuex from 'vuex'
 

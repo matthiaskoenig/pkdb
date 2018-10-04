@@ -32,34 +32,51 @@
         principles.
         </p>
 
-
         <h3>Contact</h3>
-        <p>
-            <ul>
-                <li>Website: <a :href="web" target="_blank">{{web}}</a></li>
-                <li>Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a></li>
-            </ul>
-        </p>
+        <span v-for="item in contact_items">
+            <font-awesome-icon :icon="item.icon"/> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br />
+        </span>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
-    import Statistics from '@/components/statistics/Statistics'
+    import {lookup_icon} from "@/icons"
 
     export default {
         name: 'AboutInformation',
         data() {
             return {
                 version: "-",
-                email: 'koenigmx@hu-berlin.de',
+
                 web: 'https://livermetabolism.com',
                 statistics: null,
-                errors: []
+                errors: [],
+                contact_items: [
+                    {
+                        name: 'Email',
+                        icon: 'envelope',
+                        title: 'koenigmx@hu-berlin.de',
+                        to: 'mailto:koenigmx@hu-berlin.de'
+                    },
+                    {
+                        name: 'GitHub',
+                        icon: 'fab github',
+                        title: 'https://github.com/matthiaskoenig/pkdb',
+                        to: 'mailto:koenigmx@hu-berlin.de'
+                    }
+
+                ]
+
             }
         },
         computed: { // vuex store
             api() {return this.$store.state.endpoints.api}
+        },
+        methods: {
+            icon: function (key) {
+                return lookup_icon(key)
+            }
         },
         mounted() {
             axios.get(this.api + `/statistics/?format=json`)
