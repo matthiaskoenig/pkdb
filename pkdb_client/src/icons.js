@@ -1,12 +1,29 @@
-/*
-const icons_table = {
 
+const icons_table = {
+    home: 'home',
+    studies: 'procedures',
+    study: 'procedure',
+    groups: 'users',
+    group: 'user',
+    individuals: 'user',
+    individual: 'user',
+    interventions: 'capsules',
+    intervention: 'capsule',
+    outputs: 'chart-bar',
+    output: 'chart-bar',
+    timecourses: 'chart-line',
+    timecourse: 'chart-line',
+    references: 'file-alt',
+    reference: 'file-alt',
+    about: 'info-circle',
+    api: 'code',
+    admin: 'cogs',
+    account: 'user-circle',
 };
 
 function lookup_icon(key){
-    return null
+    return icons_table[key]
 }
-*/
 
 /**
  * Lookup icon from given font-awesome branch which can be used in md-icon context.
@@ -60,7 +77,6 @@ function lookup_md_icon(key){
     else {
         return require('./assets/images/fontawesome/svgs/solid/circle.svg')
     }
-
 }
 
-export {lookup_md_icon};
+export {lookup_icon, lookup_md_icon};

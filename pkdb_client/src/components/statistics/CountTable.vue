@@ -24,27 +24,10 @@
 
 <script>
     import axios from 'axios'
-    import JsonButton from "../lib/JsonButton";
+    import {lookup_icon} from "@/icons"
 
     export default {
         name: 'CountTable',
-        components: {
-            JsonButton
-        },
-        methods: {
-            get: function () {
-                var api_url = this.api + '/statistics/?format=json';
-                console.log("api_url:" + api_url);
-                axios.get(api_url)
-                    .then(response => {
-                        this.data = response.data
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        this.errors.push(e)
-                    })
-            }
-        },
         data() {
             return {
                 data: {
@@ -71,46 +54,63 @@
                     {
                         name: 'Studies',
                         to: '/studies',
-                        icon: 'procedures',
+                        icon: this.icon('studies'),
                         count: this.data.study_count,
                     },
                     {
                         name: 'Groups',
                         to: '/groups',
-                        icon: 'users',
+                        icon: this.icon('groups'),
                         count: this.data.group_count,
                     },
                     {
                         name: 'Individuals',
                         to: '/individuals',
-                        icon: 'user',
+                        icon: this.icon('individuals'),
                         count: this.data.individual_count,
                     },
                     {
                         name: 'Interventions',
                         to: '/interventions',
-                        icon: 'capsules',
+                        icon: this.icon('interventions'),
                         count: this.data.intervention_count,
                     },
                     {
                         name: 'Outputs',
                         to: '/outputs',
-                        icon: 'chart-bar',
+                        icon: this.icon('outputs'),
                         count: this.data.output_count,
                     },
                     {
                         name: 'Timecourses',
                         to: '/timecourses',
-                        icon: 'chart-line',
+                        icon: this.icon('timecourses'),
                         count: this.data.timecourse_count,
                     },
                     {
                         name: 'References',
                         to: '/references',
-                        icon: 'file-alt',
+                        icon: this.icon('references'),
                         count: this.data.reference_count,
                     },
                 ]
+            }
+        },
+        methods: {
+            get: function () {
+                var api_url = this.api + '/statistics/?format=json';
+                console.log("api_url:" + api_url);
+                axios.get(api_url)
+                    .then(response => {
+                        this.data = response.data
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        this.errors.push(e)
+                    })
+            },
+            icon: function (key) {
+                return lookup_icon(key)
             }
         },
         created() {
