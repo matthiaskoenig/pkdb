@@ -11,6 +11,7 @@
             <div class="row">
                 <Navigation></Navigation>
             </div>
+
             <div class="row">
                 <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
             </div>

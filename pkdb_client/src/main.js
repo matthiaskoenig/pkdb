@@ -35,24 +35,22 @@ Vue.use(VueMaterial);
  *  Library components
  *  ------------------------------- */
 import JsonButton from '@/components/lib/JsonButton';
-import DetailButton from '@/components/lib/DetailButton';
+import LinkButton from '@/components/lib/LinkButton';
 import Comments from '@/components/lib/Comments';
 import Descriptions from '@/components/lib/Descriptions';
 import UserAvatar from '@/components/lib/UserAvatar';
 import Heading from '@/components/lib/Heading';
-import TableHeading from '@/components/lib/TableHeading';
 
 import GroupInfo from '@/components/detail/GroupInfo';
 import IndividualInfo from '@/components/detail/IndividualInfo';
 
 
 Vue.component('JsonButton', JsonButton);
-Vue.component('DetailButton', DetailButton);
+Vue.component('LinkButton', LinkButton);
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);
-Vue.component('TableHeading', TableHeading);
 
 Vue.component('GroupInfo', GroupInfo);
 Vue.component('IndividualInfo', IndividualInfo);

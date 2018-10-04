@@ -1,5 +1,5 @@
 <template>
-    <div class="md-layout">
+    <div id="statistics">
         <div class="col-5">
             <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
         </div>

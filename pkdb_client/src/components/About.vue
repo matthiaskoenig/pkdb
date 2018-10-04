@@ -13,8 +13,6 @@
             <li>Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a></li>
         </ul>
         </p>
-        <h2>Statistics</h2>
-        <Statistics></Statistics>
     </div>
 </template>
 
