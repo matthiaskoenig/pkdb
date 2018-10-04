@@ -58,7 +58,7 @@
         -moz-osx-font-smoothing: grayscale;
         background-color: #ffffff;
 
-        margin-left: 20px;
-        margin-right: 20px;
+        margin-left: 25px;
+        margin-right: 25px;
     }
 </style>

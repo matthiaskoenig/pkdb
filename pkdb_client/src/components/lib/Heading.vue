@@ -1,9 +1,12 @@
 <template>
+<div id="heading">
     <md-badge :md-content="count">
-        <h1 class="md-title"><font-awesome-icon v-if="icon" :icon="icon" /> {{ title }}</h1>
-        <JsonButton :resource_url="resource_url"/>
     </md-badge>
+    <h1 class="md-title"><font-awesome-icon :icon="icon" /> {{ title }}</h1>
+    <JsonButton :resource_url="resource_url"/>
+</div>
 </template>
+
 
 <script>
     export default {
@@ -25,5 +28,5 @@
     }
 </script>
 
-<style scoped>
+<style>
 </style>

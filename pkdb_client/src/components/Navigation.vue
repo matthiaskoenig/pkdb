@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="navigation">
         <md-tabs class="md-layout">
                 <md-tab id="tab-home" md-label="Home" :md-icon="icon('home')" to="/"> </md-tab>
                 <md-tab id="tab-studies" md-label="Studies" :md-icon="icon('studies')" to="/studies"></md-tab>
@@ -18,7 +18,6 @@
                 <md-tab id="tab-admin" md-label="Admin" :md-icon="icon('admin')" :href="admin_url"></md-tab>
                 <md-tab id="tab-accounts" md-label="Account" :md-icon="icon('account')" to="/account"></md-tab>
         </md-tabs>
-
     </div>
 
 </template>
@@ -50,5 +49,12 @@
 </script>
 
 <style>
+    #navigation {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #ffffff;
 
+        margin-bottom: 5px;
+    }
 </style>
