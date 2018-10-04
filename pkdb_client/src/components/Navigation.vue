@@ -1,7 +1,7 @@
 <template>
     <div>
         <md-tabs class="md-layout">
-                <md-tab id="tab-home" md-label="Home" :md-icon="home" to="/"> </md-tab>
+                <md-tab id="tab-home" md-label="Home" :md-icon="icon('home')" to="/"> </md-tab>
                 <md-tab id="tab-studies" md-label="Studies" :md-icon="procedures" to="/studies"></md-tab>
                 <md-tab id="tab-groups" md-label="Groups" :md-icon="users" to="/groups"></md-tab>
                 <md-tab id="tab-individuals" md-label="Individuals" :md-icon="user" to="/individuals"></md-tab>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+    import {lookup_md_icon} from "@/icons"
+
     export default {
         name: 'Navigation',
         data(){
@@ -35,46 +37,13 @@
                 return this.$store.state.django_domain + '/admin/';
             },
             api_url() {
+
                 return this.$store.state.endpoints.api;
             },
-            home () {
-                return require('../assets/images/fontawesome/svgs/solid/home.svg')
-            },
-            user () {
-                return require('../assets/images/fontawesome/svgs/solid/user.svg')
-            },
-            user_circle () {
-                return require('../assets/images/fontawesome/svgs/solid/user-circle.svg')
-            },
-            users () {
-                return require('../assets/images/fontawesome/svgs/solid/users.svg')
-            },
-            capsules () {
-                return require('../assets/images/fontawesome/svgs/solid/capsules.svg')
-            },
-            code () {
-                return require('../assets/images/fontawesome/svgs/solid/code.svg')
-            },
-            cogs () {
-                return require('../assets/images/fontawesome/svgs/solid/cogs.svg')
-            },
-            procedures () {
-                return require('../assets/images/fontawesome/svgs/solid/procedures.svg')
-            },
-            chart_bar () {
-                return require('../assets/images/fontawesome/svgs/solid/chart-bar.svg')
-            },
-            chart_line () {
-                return require('../assets/images/fontawesome/svgs/solid/chart-line.svg')
-            },
-            github () {
-                return require('../assets/images/fontawesome/svgs/brands/github.svg')
-            },
-            file_alt () {
-                return require('../assets/images/fontawesome/svgs/solid/file-alt.svg')
-            },
-            info_circle () {
-                return require('../assets/images/fontawesome/svgs/solid/info-circle.svg')
+        },
+        methods: {
+            icon: function (key) {
+                return lookup_md_icon(key)
             }
         }
     }
