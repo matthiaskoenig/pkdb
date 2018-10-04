@@ -1,59 +1,50 @@
+import '@babel/polyfill'
 import Vue from 'vue';
+import './plugins/vuetify'
+import Vuex from 'vuex'
 import VueRouter from 'vue-router';
+import VueResource from 'vue-resource';
 import App from './App.vue';
 import router from './router';
-import VueResource from 'vue-resource';
-import VueMaterial from 'vue-material';
 
 
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
+Vue.use(VueResource);
+Vue.use(Vuex);
 
+/** --------------------------------------------------------------
+ *  FontAwesome
+ *  -------------------------------------------------------------- */
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome';
+
 import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
     faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets,
     faCube, faCubes, faUserCog, faUserEdit, faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome';
 library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
     faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode, faTablet, faTablets, faCube, faCubes,
     faUserCog, faUserEdit, faEnvelope);
-
-import Vuex from 'vuex'
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('font-awesome-layers', FontAwesomeLayers);
 Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
 
-Vue.config.productionTip = false;
-Vue.use(VueRouter);
-Vue.use(VueResource);
-Vue.use(VueMaterial);
 
-
-// Import the styles directly. (Or you could add them via script tags.)
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap-vue/dist/bootstrap-vue.css';
-import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
-Vue.use(BootstrapVue);
-
-import 'vue-material/dist/vue-material.min.css';
-import 'vue-material/dist/theme/default.css'
-
-
-/** -------------------------------
+/** --------------------------------------------------------------
  *  Library components
- *  ------------------------------- */
+ *  -------------------------------------------------------------- */
 import JsonButton from '@/components/lib/JsonButton';
 import LinkButton from '@/components/lib/LinkButton';
 import Comments from '@/components/lib/Comments';
 import Descriptions from '@/components/lib/Descriptions';
 import UserAvatar from '@/components/lib/UserAvatar';
 import Heading from '@/components/lib/Heading';
-
 import GroupInfo from '@/components/detail/GroupInfo';
 import IndividualInfo from '@/components/detail/IndividualInfo';
-
 
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
@@ -61,17 +52,13 @@ Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);
-
 Vue.component('GroupInfo', GroupInfo);
 Vue.component('IndividualInfo', IndividualInfo);
 
 
-// import VueAxios from 'vue-axios'
-// import jwt_decode from 'jwt-decode'
-
-/** -------------------------------
+/** --------------------------------------------------------------
  *  Domain
- *  ------------------------------- */
+ *  -------------------------------------------------------------- */
 //  read from .env.template file
 var backend_domain = process.env.VUE_APP_API_BASE;
 if (!backend_domain){
@@ -81,12 +68,9 @@ if (!backend_domain){
 }
 console.log('PKDB backend: ' + backend_domain);
 
-/** -------------------------------
+/** --------------------------------------------------------------
  *  Vuex store
- *  ------------------------------- */
-Vue.use(Vuex);
-// Vue.use(VueAxios, axios);
-
+ *  -------------------------------------------------------------- */
 const store = new Vuex.Store({
     state: {
         django_domain: backend_domain,
@@ -131,6 +115,9 @@ const store = new Vuex.Store({
     }
 });
 
+/** --------------------------------------------------------------
+ *  App
+ *  -------------------------------------------------------------- */
 new Vue({
     router,
     // provide the store using the "store" option.

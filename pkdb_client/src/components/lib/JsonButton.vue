@@ -1,9 +1,9 @@
 <template>
 <div class="json-button">
     <span v-if="resource_url">
-        <md-button :href="resource_url" title="JSON" target="_blank" class="md-icon-button md-dense md-primary" :disabled="resource_url ? false : true">
-            <font-awesome-icon icon="code"/>
-        </md-button>
+        <v-btn fab dark small color="primary" :to="resource_url" :disabled="resource_url ? false : true" :title="JSON">
+            <v-icon dark>fas fa-code</v-icon>
+        </v-btn>
     </span>
 </div>
 </template>

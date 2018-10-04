@@ -1,22 +1,23 @@
 <template>
     <div id="count-table">
-        <md-table class="my-table">
-            <md-table-row v-for="item in items" :key="item.name">
-                <md-table-cell>
 
-                    <md-button :to="item.to" :title="item.name" class="md-icon-button md-raised md-primary">
+        <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
+            <template slot="items" slot-scope="props">
+                <td>{{ props.item.name }}
+                    <!--
+                    <md-button :to="props.item.to" :title="props.item.name" class="md-icon-button md-raised md-primary">
                         <font-awesome-icon :icon="item.icon"/>
                     </md-button>
+                    -->
+                    <v-icon>{{ props.item.icon }}</v-icon>
+                </td>
+                <td class="text-xs-right">
+                    <Heading :title="props.item.name" :count="parseInt(props.item.count)"/>
+                </td>
+                <td class="text-xs-right">{{ props.item.description }}</td>
+            </template>
+        </v-data-table>
 
-                </md-table-cell>
-                <md-table-cell>
-                    <Heading :title="item.name" :count="parseInt(item.count)"/>
-                </md-table-cell>
-                <md-table-cell>
-                    {{ item.description }}
-                </md-table-cell>
-            </md-table-row>
-        </md-table>
     </div>
 </template>
 
@@ -28,8 +29,12 @@
         name: 'CountTable',
         data() {
             return {
+                headers: [
+                    { text: 'Name', value: 'name'},
+                    { text: 'Count', value: 'count' },
+                    { text: 'Description', value: 'description' },
+                ],
                 data: {
-                    version: '-',
                     study_count: '-',
                     group_count: '-',
                     individual_count: '-',
@@ -37,7 +42,7 @@
                     output_count: '-',
                     timecourse_count: '-',
                     reference_count: '-',
-                }
+                },
             }
         },
         computed: {
@@ -111,7 +116,6 @@
                         this.data = response.data
                     })
                     .catch(e => {
-                        console.log(e);
                         this.errors.push(e)
                     })
             },
