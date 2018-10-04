@@ -1,10 +1,7 @@
 <template>
     <div id="statistics">
-        <div class="col-md-12 col-lg-6">
-            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="true"/>
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="true"/>
+            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
+            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
         </div>
     </div>
 </template>
