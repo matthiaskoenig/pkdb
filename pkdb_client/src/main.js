@@ -5,8 +5,7 @@ import router from './router';
 import VueResource from 'vue-resource';
 import VueMaterial from 'vue-material';
 
-import 'vue-material/dist/vue-material.min.css';
-import 'vue-material/dist/theme/default.css'
+
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
@@ -29,6 +28,16 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueMaterial);
+
+
+// Import the styles directly. (Or you could add them via script tags.)
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+Vue.use(BootstrapVue);
+
+import 'vue-material/dist/vue-material.min.css';
+import 'vue-material/dist/theme/default.css'
 
 
 /** -------------------------------

@@ -7,7 +7,7 @@
             <meta name="author" content="Jan Grzegorzewski and Matthias Koenig">
             <title>PK-DB</title>
         </head>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <Navigation></Navigation>
             </div>
