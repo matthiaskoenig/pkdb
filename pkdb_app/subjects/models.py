@@ -365,6 +365,21 @@ class Characteristica(Valueable, AbstractCharacteristica):
         if self.group:
             return self.group.name
 
+    @property
+    def group_pk(self):
+        if self.group:
+            return self.group.pk
+
+    @property
+    def individual_name(self):
+        if self.individual:
+            return self.individual.name
+
+    @property
+    def individual_pk(self):
+        if self.individual:
+            return self.individual.pk
+
     def save(self,no_norm=False , *args, **kwargs):
         super().save(*args, **kwargs)
         if not no_norm:

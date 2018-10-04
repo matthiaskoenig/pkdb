@@ -549,11 +549,10 @@ class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
                   + ["name", "group", "characteristica_ex","comments"])
 
 class CharacteristicaReadSerializer(ReadSerializer):
-    options = serializers.SerializerMethodField()
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_name","options"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name"]
 
     def get_options(self, obj):
         options = {}

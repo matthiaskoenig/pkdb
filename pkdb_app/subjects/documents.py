@@ -1,15 +1,15 @@
 from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import DocType, Index, fields
 from django.conf import settings
-from pkdb_app.subjects.models import Individual
+from pkdb_app.subjects.models import Individual, Characteristica
 
 # Name of the Elasticsearch index
-INDEX = Index("individuals")
+INDEX = Index("subjects")
 
 # See Elasticsearch Indices API reference for available settings
 INDEX.settings(
     number_of_shards=1,
-    number_of_replicas=0
+    number_of_replicas=1
 )
 
 html_strip = analyzer(
@@ -27,6 +27,8 @@ class IndividualDocument(DocType):
         analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
+            'suggest': fields.CompletionField(),
+
         }
     )
 
@@ -43,6 +45,7 @@ class IndividualDocument(DocType):
         analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
+
         }
     )
 
@@ -72,12 +75,53 @@ class IndividualDocument(DocType):
 
     class Meta:
         model=Individual
+
+
+
 
 @INDEX.doc_type
-class IndividualDocument(DocType):
-    """Individual elastic search document"""
+class CharacteristicaDocument(DocType):
+    """Characteristica elastic search document"""
     id = fields.IntegerField(attr='id')
-    name = fields.StringField(
+
+    group_name = fields.StringField(
+        attr='group_name',
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+            #'suggest': fields.CompletionField(),
+
+        }
+    )
+    group_pk = fields.IntegerField(attr='group_id')
+    individual_name = fields.StringField(
+        attr='individual_name',
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+            #'suggest': fields.CompletionField(),
+
+        }
+    )
+    individual_pk = fields.IntegerField(attr='individual_id')
+
+    category = fields.StringField(
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+            'suggest': fields.CompletionField(),
+        }
+    )
+
+    choice = fields.StringField(
+        analyzer=html_strip,
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+            #'suggest': fields.CompletionField(),
+
+        }
+    )
+    ctype = fields.StringField(
         analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
@@ -85,27 +129,24 @@ class IndividualDocument(DocType):
 
         }
     )
-
-    group = fields.StringField(
-        attr='group_indexing',
+    unit = fields.StringField(
         analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            'suggest': fields.CompletionField(),
+            #'suggest': fields.CompletionField(),
 
         }
     )
 
-    study = fields.StringField(
-        attr='study_indexing',
-        analyzer=html_strip,
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-            'suggest': fields.CompletionField(),
-
-        }
-    )
-
+    count = fields.IntegerField()
+    value = fields.FloatField(attr='value')
+    mean = fields.FloatField(attr='mean')
+    median = fields.FloatField(attr='median')
+    min = fields.FloatField(attr='min')
+    max = fields.FloatField(attr='max')
+    se = fields.FloatField(attr='se')
+    sd = fields.FloatField(attr='sd')
+    cv = fields.FloatField(attr='cv')
 
     """
        categories = fields.StringField(
@@ -131,4 +172,4 @@ class IndividualDocument(DocType):
 
 
     class Meta:
-        model=Individual
+        model=Characteristica
