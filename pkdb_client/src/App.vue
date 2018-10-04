@@ -17,7 +17,9 @@
             </div>
 
             <div class="row">
-                <Footer></Footer>
+                <div class="col-12">
+                    <Footer></Footer>
+                </div>
             </div>
         </div>
     </div>

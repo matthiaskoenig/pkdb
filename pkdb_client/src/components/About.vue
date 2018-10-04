@@ -1,10 +1,22 @@
 <template>
     <div>
-        <h1>About</h1>
-        <AboutInformation/>
+        <div id="home">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <AboutInformation/>
+                </div>
 
-        <h1>Statistics</h1>
-        <Statistics/>
+                <div class="col-md-12 col-lg-6">
+                    <h2>Statistics</h2>
+                    <Statistics/>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
     </div>
 </template>
 
