@@ -14,7 +14,7 @@
 
                 </md-table-cell>
                 <md-table-cell>
-                    <Heading :title="item.name" :count="item.count"/>
+                    <Heading :title="item.name" :count="parseInt(item.count)"/>
                 </md-table-cell>
                 <md-table-cell>
                     {{ item.description }}
