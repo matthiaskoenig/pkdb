@@ -21,6 +21,5 @@
 <style>
     #footer {
         margin-top: 25px;
-        margin-bottom: 0px;
     }
 </style>

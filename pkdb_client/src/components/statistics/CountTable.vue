@@ -1,6 +1,5 @@
 <template>
     <div id="count-table">
-
         <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
             <template slot="items" slot-scope="props">
                 <td>

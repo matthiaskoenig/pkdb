@@ -2,7 +2,7 @@
 <div id="heading">
     <font-awesome-icon :icon="icon" />
     <v-badge right color="red">
-        <span slot="badge">10</span>
+        <span slot="badge">{{ count }}</span>
         <!-- <v-icon large color="grey lighten-1">icon</v-icon>-->
         <h3>{{ title }}</h3>
     </v-badge>
