@@ -1,22 +1,24 @@
 <template>
     <div>
-    <JsonButton :resource_url="resource_url" />
+        <TableHeading title="Overview" :resource_url="resource_url"/>
 
-    <md-table class="my-table">
-        <md-table-row v-for="(item, name) in items" :key="item.name">
-            <md-table-cell>
-                <router-link tag="span" :to="item.to">
-                    <a href="#"><font-awesome-icon :icon="item.icon" /></a>&nbsp;&nbsp;
-                </router-link>
-                <router-link tag="span" :to="item.to">
-                    <a href="#">{{ item.name }}</a>
-                </router-link>
-            </md-table-cell>
-            <md-table-cell>
-                {{ item.count }}
-            </md-table-cell>
-        </md-table-row>
-    </md-table>
+        <md-table class="my-table">
+            <md-table-row v-for="item in items" :key="item.name">
+                <md-table-cell>
+                    <router-link tag="span" :to="item.to">
+                        <a href="#">
+                            <font-awesome-icon :icon="item.icon"/>
+                        </a>&nbsp;&nbsp;
+                    </router-link>
+                    <router-link tag="span" :to="item.to">
+                        <a href="#">{{ item.name }}</a>
+                    </router-link>
+                </md-table-cell>
+                <md-table-cell>
+                    {{ item.count }}
+                </md-table-cell>
+            </md-table-row>
+        </md-table>
     </div>
 </template>
 
@@ -58,13 +60,13 @@
             }
         },
         computed: {
-            resource_url(){
-                return this.api+'/statistics/?format=json'
+            resource_url() {
+                return this.api + '/statistics/?format=json'
             },
             api() {
                 return this.$store.state.endpoints.api;
             },
-            items(){
+            items() {
                 return [
                     {
                         name: 'Studies',

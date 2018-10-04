@@ -1,6 +1,6 @@
 <template>
 <div class="detail-button">
-    <md-button :to="to" :title="title" class="md-icon-button md-raised" :disabled="to ? false : true">
+    <md-button :to="to" :title="title" class="md-icon-button md-raised md-dense md-primary" :disabled="to ? false : true">
         <font-awesome-icon :icon="icon"/>
     </md-button>
 
@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: "JsonButton",
+        name: "DetailButton",
         props: {
             title: {
                 type: String,
