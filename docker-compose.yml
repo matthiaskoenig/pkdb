@@ -37,6 +37,14 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+      - elasticsearch
+
+
+  elasticsearch:
+    image: elasticsearch
+    volumes:
+      - postgres_data:/usr/share/elasticsearch/data
+
 
 #  documentation:
 #    restart: always

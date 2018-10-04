@@ -81,6 +81,13 @@ INSTALLED_APPS = (
     "rest_framework_swagger",
     "corsheaders",
 
+    #Elastic Search
+    # Django Elasticsearch integration
+    'django_elasticsearch_dsl',
+
+    # Django REST framework Elasticsearch integration (this package)
+    'django_elasticsearch_dsl_drf',
+
     # Your apps
     "pkdb_app.users",
     "pkdb_app.studies",
@@ -247,7 +254,7 @@ LOGGING = {
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     "DEFAULT_PAGINATION_CLASS": "pkdb_app.pagination.CustomPagination",
-    "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 10)),
+    "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 100)),
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S%z",
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
@@ -278,6 +285,15 @@ SWAGGER_SETTINGS = {
 # Set DEBUG to False as a default for safety
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
+
+# ------------------------------
+# Elastic Search
+# ------------------------------
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}
 # ------------------------------
 # LOCAL
 # ------------------------------

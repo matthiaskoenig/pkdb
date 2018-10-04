@@ -1,12 +1,14 @@
-import pandas as pd
-from django.contrib.sites.shortcuts import get_current_site
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
+from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionReadSerializer, \
     CommentReadSerializer
-from pkdb_app.utils import recursive_iter, set_keys
+#elastic search
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+
+from pkdb_app.subjects.documents import IndividualDocument
 from .models import (
     Group,
     GroupSet,
@@ -579,3 +581,16 @@ class DataFileReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = DataFile
         fields = ["pk", "file", "filetype", "id"]
+
+###############################################################################################
+# Elastic Search Serializer
+###############################################################################################
+class IndividualDocumentSerializer(DocumentSerializer):
+    class Meta:
+        document = IndividualDocument
+        fields = (
+            'id',
+            'group',
+            'name',
+            'study',
+        )
