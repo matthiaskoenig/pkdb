@@ -34,7 +34,7 @@
 
         <h3>Contact</h3>
         <span v-for="item in contact_items">
-            <font-awesome-icon :icon="item.icon"/> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br />
+            <font-awesome-icon v-if="icon" :icon="item.icon"/> {{ item.name }} <a :href="item.to" :title="item.title">{{ item.title }}</a><br />
         </span>
     </div>
 </template>
@@ -61,7 +61,6 @@
                     },
                     {
                         name: 'GitHub',
-                        icon: 'fab github',
                         title: 'https://github.com/matthiaskoenig/pkdb',
                         to: 'mailto:koenigmx@hu-berlin.de'
                     }
