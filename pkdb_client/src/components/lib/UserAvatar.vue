@@ -2,7 +2,8 @@
     <div id="user-avatar">
 
         <v-avatar color="red">
-            <span class="white--text headline" size="32" :title="username">{{ initials }}</span>
+            <img v-if="src" :src="src"/>
+            <span v-if="!src" class="white--text headline" :title="username">{{ initials }}</span>
         </v-avatar>
 
         <!--
@@ -27,7 +28,17 @@
             },
             initials() {
                 return this.user.first_name[0] + this.user.last_name[0];
+            },
+            src() {
+                var img_dir = '/assets/images/avatars/';
+                if (this.initials == 'MK'){
+                    return img_dir + 'koenig_128.png';
+                } else if (this.initials == 'JG'){
+                    return img_dir + 'grzegorzewski_128.png';
+                }
+                return null;
             }
+
         }
     }
 </script>

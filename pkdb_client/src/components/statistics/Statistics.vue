@@ -35,14 +35,12 @@
             get: function () {
                 var api_url;
                 api_url = this.api + '/statistics_data/?format=json';
-                console.log("api_url:" + api_url);
                 axios.get(api_url)
                     .then(response => {
                         // JSON responses are automatically parsed.
                         this.data = response.data
                     })
                     .catch(e => {
-                        console.log(e);
                         this.errors.push(e)
                     })
             }

@@ -1,14 +1,14 @@
 <template>
     <div id="count-table">
         <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
-            <template slot="items" slot-scope="props">
+            <template slot="items" slot-scope="counts">
                 <td>
-                    <v-icon>{{ props.item.icon }}</v-icon>
+                    <LinkButton :to="counts.item.to" :title="counts.item.name" :icon="counts.item.icon"/>
                 </td>
                 <td class="text-xs-right">
-                    <Heading :title="props.item.name" :count="parseInt(props.item.count)"/>
+                    <Heading :title="counts.item.name" :count="parseInt(counts.item.count)"/>
                 </td>
-                <td class="text-xs-left">{{ props.item.description }}</td>
+                <td class="text-xs-left">{{ counts.item.description }}</td>
             </template>
         </v-data-table>
     </div>
@@ -23,9 +23,9 @@
         data() {
             return {
                 headers: [
-                    { text: 'Data', value: 'name', sortable: false,},
-                    { text: 'Count', value: 'count' },
-                    { text: 'Description', value: 'description' },
+                    { text: 'Data', value: 'name', sortable: false},
+                    { text: 'Count', value: 'count', sortable: false},
+                    { text: 'Description', value: 'description', sortable: false},
                 ],
                 data: {
                     study_count: '-',
@@ -95,7 +95,7 @@
                         to: '/references',
                         icon: this.icon('references'),
                         count: this.data.reference_count,
-                        description: "Literature references."
+                        description: "Literature references from which the data was digitized and curated."
                     },
                 ]
             }
@@ -103,7 +103,6 @@
         methods: {
             get: function () {
                 var api_url = this.api + '/statistics/?format=json';
-                console.log("api_url:" + api_url);
                 axios.get(api_url)
                     .then(response => {
                         this.data = response.data

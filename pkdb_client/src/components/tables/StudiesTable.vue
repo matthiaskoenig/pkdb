@@ -11,7 +11,7 @@
             class="elevation-1">
         <template slot="items" slot-scope="table">
             <td>
-                <LinkButton :to="'studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
+                <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
             </td>
             <td>{{ table.item.name }}</td>
             <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
@@ -68,7 +68,7 @@
         data() {
             return {
                 headers: [
-                    {text: 'Study', value: 'studies'},
+                    {text: 'Study', value: 'study'},
                     {text: 'Name', value: 'name'},
                     {text: 'Reference', value: 'reference'},
                     {text: 'Creator', value: 'creator'},

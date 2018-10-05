@@ -2,9 +2,8 @@
     <div id="navigation">
 
         <v-toolbar>
-            <v-toolbar-side-icon></v-toolbar-side-icon>
-
             <!--
+            <v-toolbar-side-icon></v-toolbar-side-icon>
             <v-toolbar-title class="white--text">PK-DB</v-toolbar-title>
             -->
             <v-btn icon to="/" title="Home">

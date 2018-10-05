@@ -95,8 +95,8 @@
             axios.get(this.api + `/statistics/?format=json`)
                 .then(response => {
                     // JSON responses are automatically parsed.
-                    this.statistics = response.data
-                    this.version = this.statistics["version"]
+                    this.statistics = response.data;
+                    this.version = this.statistics["version"];
                 })
                 .catch(e => {
                     this.errors.push(e)
