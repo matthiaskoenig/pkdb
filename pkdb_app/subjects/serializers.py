@@ -406,7 +406,7 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = (
-            ["pk", "groupset","ex","study_name","individuals"]
+            ["pk", "groupset","ex","study_name","study_pk","individuals"]
             + GROUP_FIELDS
             + ["parent", "characteristica", "characteristica_all","characteristica_all_final"]
         )
@@ -452,7 +452,7 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Individual
-        fields = ["pk","ex","study_name"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final","all_characteristica_final"]
+        fields = ["pk","ex","study_name","study_pk"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final","all_characteristica_final"]
 
 
 class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
