@@ -20,11 +20,14 @@ import About from '@/components/About';
 import Account from '@/components/auth/Account';
 
 /* DetailViews */
-import StudyDetail from '@/components/detail/StudyDetail';
+
+import Study from '@/components/Study';
 import Group from '@/components/Group';
 import Individual from '@/components/Individual';
-import TimecourseDetail from '@/components/detail/TimecourseDetail';
-
+import Intervention from '@/components/Intervention';
+import Output from '@/components/Output';
+import Timecourse from '@/components/Timecourse';
+import Reference from '@/components/Reference';
 
 Vue.use(Router);
 
@@ -83,8 +86,8 @@ export default new Router({
 
         {
             path:"/studies/:id",
-            name:"StudyDetail",
-            component:StudyDetail,
+            name:"Study",
+            component:Study,
             props: true
         },
         {
@@ -99,11 +102,28 @@ export default new Router({
             component:Individual,
             props: true
         },
-
         {
-            path:"/timecourses/:id",
-            name:"TimecourseDetail",
-            component:TimecourseDetail,
+            path:"/interventions/:id",
+            name:"Intervention",
+            component:Intervention,
+            props: true
+        },
+        {
+            path: "/outputs/:id",
+            name: "Output",
+            component: Output,
+            props: true
+        },
+        {
+            path: "/timecourses/:id",
+            name: "Timecourse",
+            component: Timecourse,
+            props: true
+        },
+        {
+            path: "/references/:id",
+            name: "Reference",
+            component: Reference,
             props: true
         },
     ]

@@ -1,9 +1,9 @@
 <template>
-    <div id="group-detail">
+    <div id="reference">
         <GetData :resource_url="resource_url">
-            <div slot-scope="individual">
-                <div v-if="individual.loaded">
-                    <IndividualDetail :individual="individual.data" :resource_url="resource_url" />
+            <div slot-scope="reference">
+                <div v-if="reference.loaded">
+                    <ReferenceDetail :reference="reference.data" :resource_url="resource_url" />
                 </div>
             </div>
         </GetData>
@@ -11,19 +11,19 @@
 </template>
 
 <script>
-    import IndividualDetail from '@/components/detail/IndividualDetail'
+    import ReferenceDetail from '@/components/detail/ReferenceDetail'
 
     export default {
-        name: 'Individual',
+        name: 'Reference',
         components: {
-            IndividualDetail
+            ReferenceDetail
         },
         computed: {
             resource_url() {
                 var path = this.$route.path;
                 var tokens = path.split('/');
                 var entry_id = tokens[tokens.length-1];
-                return this.$store.state.endpoints.api + '/individuals_read/'+ entry_id +'/?format=json';
+                return this.$store.state.endpoints.api + '/references_read/'+ entry_id +'/?format=json';
             }
         },
     }

@@ -1,9 +1,9 @@
 <template>
-    <div id="group-detail">
+    <div id="timecourse">
         <GetData :resource_url="resource_url">
-            <div slot-scope="individual">
-                <div v-if="individual.loaded">
-                    <IndividualDetail :individual="individual.data" :resource_url="resource_url" />
+            <div slot-scope="timecourse">
+                <div v-if="timecourse.loaded">
+                    <TimecourseDetail :timecourse="timecourse.data" :resource_url="resource_url" />
                 </div>
             </div>
         </GetData>
@@ -11,19 +11,19 @@
 </template>
 
 <script>
-    import IndividualDetail from '@/components/detail/IndividualDetail'
+    import TimecourseDetail from '@/components/detail/TimecourseDetail'
 
     export default {
-        name: 'Individual',
+        name: 'Timecourse',
         components: {
-            IndividualDetail
+            TimecourseDetail
         },
         computed: {
             resource_url() {
                 var path = this.$route.path;
                 var tokens = path.split('/');
                 var entry_id = tokens[tokens.length-1];
-                return this.$store.state.endpoints.api + '/individuals_read/'+ entry_id +'/?format=json';
+                return this.$store.state.endpoints.api + '/timecourses_read/'+ entry_id +'/?format=json';
             }
         },
     }

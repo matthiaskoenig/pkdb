@@ -14,7 +14,7 @@
     import GroupDetail from '@/components/detail/GroupDetail'
 
     export default {
-        name: 'Groups',
+        name: 'Group',
         components: {
             GroupDetail: GroupDetail
         },
