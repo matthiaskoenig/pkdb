@@ -17,7 +17,30 @@ from pkdb_app.subjects.serializers import (
     GroupReadSerializer,
     GroupSetReadSerializer,
     IndividualSetReadSerializer,
-    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer)
+    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer, IndividualDocumentSerializer)
+
+from pkdb_app.subjects.documents import IndividualDocument
+
+############################################################
+#Elastic Search Views
+###########################################################
+from django_elasticsearch_dsl_drf.constants import (
+    LOOKUP_FILTER_RANGE,
+    LOOKUP_QUERY_IN,
+    LOOKUP_QUERY_GT,
+    LOOKUP_QUERY_GTE,
+    LOOKUP_QUERY_LT,
+    LOOKUP_QUERY_LTE,
+)
+from django_elasticsearch_dsl_drf.filter_backends import (
+    FilteringFilterBackend,
+    OrderingFilterBackend,
+    DefaultOrderingFilterBackend,
+    SearchFilterBackend,
+    IdsFilterBackend, SuggesterFilterBackend)
+from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
+
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
@@ -88,3 +111,71 @@ class IndividualSetReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = IndividualSet.objects.all()
     serializer_class = IndividualSetReadSerializer
     permission_classes = (AllowAny,)
+
+###########################################################
+#Elastic Search Views
+###########################################################
+
+
+class IndividualViewSet(DocumentViewSet):
+    document = IndividualDocument
+    serializer_class = IndividualDocumentSerializer
+    lookup_field = 'id'
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        DefaultOrderingFilterBackend,
+        SearchFilterBackend,
+        SuggesterFilterBackend,
+
+    ]
+
+    # Define search fields
+    search_fields = (
+        'name',
+        'study',
+        'group',
+
+
+    )
+
+    # Filter fields
+    filter_fields = {
+        'id': {
+            'field': 'id',
+            'lookups': [
+                LOOKUP_FILTER_RANGE,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_GT,
+                LOOKUP_QUERY_GTE,
+                LOOKUP_QUERY_LT,
+                LOOKUP_QUERY_LTE,
+            ],
+        },
+        'name': 'name.raw',
+
+        #'group': 'group.raw',
+        #'study': 'study.raw',
+
+    }
+
+    # Define ordering fields
+    ordering_fields = {
+        'id':'id',
+        #'study': 'study.raw',
+        #'group': 'group.raw',
+        'name': 'name.raw',
+    }
+
+    # Specify default ordering
+    ordering = ('id',)
+    suggester_fields = {
+        'study_suggest':
+            {'field':'study.suggest',
+             'suggesters': [
+                SUGGESTER_COMPLETION,
+            ],},
+        'name_suggest': 'name.suggest',
+        'group_suggest': 'group.suggest',
+    }

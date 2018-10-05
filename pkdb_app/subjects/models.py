@@ -254,8 +254,26 @@ class Individual(AbstractIndividual):
         return  (self.characteristica_final | self.group_characteristica_final)
 
     @property
+    def study_indexing(self):
+        return self.ex.individualset.study.name
+
+    @property
     def study_name(self):
         return self.ex.individualset.study.name
+
+    @property
+    def group_indexing(self):
+        return self.group.name
+
+    @property
+    def characteristica_categories(self):
+        return [characteristica.category for characteristica in self.all_characteristica_final.all()]
+
+    @property
+    def characteristica_choices(self):
+        return {characteristica.category: characteristica.choice for characteristica in self.all_characteristica_final.all() }
+
+
 # ----------------------------------
 # Characteristica
 # ----------------------------------
