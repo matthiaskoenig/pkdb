@@ -1,5 +1,13 @@
 import django_filters.rest_framework
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
+    SuggesterFilterBackend
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
+from rest_framework.response import Response
+
+from pkdb_app.categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION, \
+    OUTPUT_TISSUE_DATA, PK_DATA_DICT
+from pkdb_app.interventions.documents import SubstanceDocument
 from pkdb_app.interventions.models import (
     Substance,
     InterventionSet,
@@ -18,6 +26,8 @@ from pkdb_app.interventions.serializers import (
     TimecourseReadSerializer,
     InterventionExReadSerializer, OutputExReadSerializer, TimecourseExReadSerializer)
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
+
+from pkdb_app.units import TIME_UNITS
 
 
 class SubstanceViewSet(viewsets.ModelViewSet):
@@ -45,6 +55,51 @@ class InterventionReadViewSet(viewsets.ReadOnlyModelViewSet):
         django_filters.rest_framework.DjangoFilterBackend,
     )
     filter_fields = ("final",)
+
+class InterventionOptionViewSet(viewsets.ViewSet):
+
+    @staticmethod
+    def get_options():
+        options = {}
+        options["categories"] = {k: item._asdict() for k, item in sorted(INTERVENTION_DICT.items())}
+        options["substances"] = map(str, Substance.objects.all().order_by('name'))
+        options["route"] = INTERVENTION_ROUTE
+        options["form"] = INTERVENTION_FORM
+        options["application"] = INTERVENTION_APPLICATION
+        options["time_unit"] = TIME_UNITS
+        return options
+
+    def list(self, request):
+        return Response(self.get_options())
+
+class OutputOptionViewSet(viewsets.ViewSet):
+
+    @staticmethod
+    def get_options():
+        options = {}
+        options["pktypes"] = {k:item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
+        options["substances"] = map( str, Substance.objects.all().order_by('name'))
+        options["tissue"] = OUTPUT_TISSUE_DATA
+        options["time_unit"] = TIME_UNITS
+        return options
+
+    def list(self, request):
+        return Response(self.get_options())
+
+class TimecourseOptionViewSet(viewsets.ViewSet):
+
+    @staticmethod
+    def get_options():
+            options = {}
+            options["pktypes"] = {k: item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
+            options["substances"] = map(str, Substance.objects.all().order_by('name'))
+            options["tissue"] = OUTPUT_TISSUE_DATA
+            options["time_unit"] = TIME_UNITS
+            return options
+
+    def list(self, request):
+        return Response(self.get_options())
+
 
 
 class InterventionExReadViewSet(viewsets.ReadOnlyModelViewSet):
@@ -95,3 +150,19 @@ class SubstanceReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceReadSerializer
     permission_classes = (AllowAny,)
+
+
+class ElasticSubstanceViewSet(DocumentViewSet):
+    document = SubstanceDocument
+    serializer_class = SubstanceSerializer
+    lookup_field = "pk"
+    filter_backends = [FilteringFilterBackend,SearchFilterBackend,SuggesterFilterBackend]
+    search_fields = ('name',)
+    filter_fields = {'name': 'name.raw',}
+    suggester_fields = {
+        'name_suggest': 'name.suggest',
+    }
+
+
+
+

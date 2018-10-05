@@ -1,8 +1,6 @@
 """
 Django URLs
 """
-from django.views.generic.edit import CreateView
-from django.contrib.auth.forms import UserCreationForm
 
 from django.conf import settings
 from django.urls import path, include
@@ -26,7 +24,8 @@ from .subjects.views import (
     IndividualReadViewSet,
     GroupSetReadViewSet,
     IndividualSetReadViewSet,
-    CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet, IndividualViewSet)
+    CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet, IndividualViewSet,
+    CharacteristicaViewSet, CharacteristicaOptionViewSet)
 from .interventions.views import (
     SubstanceViewSet,
     SubstanceReadViewSet,
@@ -35,7 +34,8 @@ from .interventions.views import (
     InterventionReadViewSet,
     OutputReadViewSet,
     TimecourseReadViewSet,
-    InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet)
+    InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet, InterventionOptionViewSet,
+    OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet)
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import (
     AuthorsViewSet,
@@ -91,6 +91,8 @@ router.register(r"users_read", UserReadViewSet, base_name="users_read")
 
 
 router.register("substances_read", SubstanceReadViewSet, base_name="substances_read")
+router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
+
 router.register("keywords_read", KeywordReadViewSet, base_name="keywords_read")
 
 router.register(
@@ -109,6 +111,8 @@ router.register(
 )
 router.register("individuals_read", IndividualReadViewSet, base_name="individuals_read")
 router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
+router.register("characteristica_elastic", CharacteristicaViewSet, base_name="characteristica_elastic")
+
 
 router.register("individualexs_read", IndividualExReadViewSet, base_name="individualexs_read")
 
@@ -127,6 +131,7 @@ router.register(
 router.register(
     "interventions_read", InterventionReadViewSet, base_name="interventions_read"
 )
+
 router.register(
     "interventionexs_read", InterventionExReadViewSet, base_name="interventionexs_read"
 )
@@ -137,7 +142,19 @@ router.register("outputexs_read", OutputExReadViewSet, base_name="outputexs_read
 router.register("timecourses_read", TimecourseReadViewSet, base_name="timecourses_read")
 router.register("timecourseexs_read", TimecourseExReadViewSet, base_name="timecourseexs_read")
 
-
+# Options
+router.register(
+    "characteristica_options", CharacteristicaOptionViewSet, base_name="characteristica_option"
+)
+router.register(
+    "intervention_options", InterventionOptionViewSet, base_name="intervention_option"
+)
+router.register(
+    "output_options", OutputOptionViewSet, base_name="output_option"
+)
+router.register(
+    "timecourse_options", TimecourseOptionViewSet, base_name="timecourse_option"
+)
 schema_view = get_swagger_view(title="PKDB API")
 
 
