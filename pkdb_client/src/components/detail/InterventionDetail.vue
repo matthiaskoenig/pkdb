@@ -26,7 +26,7 @@
 
 <script>
     import {lookup_icon} from "@/icons"
-    import CharacteristicaCard from '../detail/CharacteristicaCard';
+    import CharacteristicaCard from './CharacteristicaCard';
 
     export default {
         name: "InterventionDetail",
