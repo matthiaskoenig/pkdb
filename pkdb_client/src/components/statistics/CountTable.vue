@@ -1,22 +1,21 @@
 <template>
     <div id="count-table">
-        <GetData :resource_url="resource_url">
-            <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
-                <template slot="items" slot-scope="table">
-                    <td>
-                        <LinkButton :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
-                    </td>
-                    <td class="text-xs-right">
-                        <Heading :title="table.item.name" :count="parseInt(table.item.count)"/>
-                    </td>
-                    <td class="text-xs-left">{{ table.item.description }}</td>
-                </template>
-            </v-data-table>
-        </GetData>
+        <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
+            <template slot="items" slot-scope="table">
+                <td>
+                    <LinkButton :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
+                </td>
+                <td class="text-xs-right">
+                    <Heading :title="table.item.name" :count="parseInt(table.item.count)"/>
+                </td>
+                <td class="text-xs-left">{{ table.item.description }}</td>
+            </template>
+        </v-data-table>
     </div>
 </template>
 
 <script>
+    import axios from 'axios'
     import {lookup_icon} from "@/icons"
 
     export default {
@@ -104,8 +103,24 @@
         methods: {
             icon: function (key) {
                 return lookup_icon(key)
+            },
+            fetch_data(url){
+                axios.get(url)
+                    .then(response => {
+                        this.data = response.data;
+                        console.log(this.data)
+                    })
+                    .catch((error)=>{
+                        this.data = null;
+                        console.error(this.resource_url);
+                        console.error(error);
+                        this.errors = error.response.data;
+                    })
             }
         },
+        created() {
+                this.fetch_data(this.resource_url);
+        }
     }
 </script>
 
