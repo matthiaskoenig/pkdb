@@ -117,28 +117,6 @@ class CharacteristicaDocument(DocType):
     sd = fields.FloatField(attr='sd')
     cv = fields.FloatField(attr='cv')
 
-    """
-       categories = fields.StringField(
-        attr='characteristica_categories',
-        analyzer=html_strip,
-        fields={
-            'raw': fields.StringField(analyzer='keyword', multi=True),
-        }
-    )
-
-
-    choices = fields.StringField(
-        attr='characteristica_choices',
-        analyzer=html_strip,
-        fields={
-            'raw': fields.StringField(analyzer='keyword', multi=True),
-            'suggest': fields.CompletionField(multi=True),
-
-        }
-    )
-    """
-
-
 
     class Meta:
         model=Characteristica
