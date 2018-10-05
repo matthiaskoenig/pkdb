@@ -42,6 +42,8 @@ import JsonButton from './components/lib/JsonButton';
 import LinkButton from './components/lib/LinkButton';
 import Comments from './components/lib/Comments';
 import Descriptions from './components/lib/Descriptions';
+import Annotations from './components/lib/Annotations';
+
 import UserAvatar from './components/lib/UserAvatar';
 import Heading from './components/lib/Heading';
 import GroupInfo from './components/detail/GroupInfo';
@@ -53,6 +55,8 @@ Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
+Vue.component('Annotations', Annotations);
+
 Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);
 Vue.component('GroupInfo', GroupInfo);

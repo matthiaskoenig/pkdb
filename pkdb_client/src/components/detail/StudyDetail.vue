@@ -1,29 +1,28 @@
 <template>
     <div id="study-detail">
-    <v-card>
-        <Heading :title="'Study: '+study.pk" :icon="icon('study')" :resource_url="resource_url"/>
-    </v-card>
 
     <!-- General Overview -->
-    <span v-if="GeneralVisible">
-        <StudyInfo :study="study"/>
+    <span v-if="generalVisible">
+        <v-card>
+            <Heading :title="'Study: '+study.pk" :icon="icon('study')" :resource_url="resource_url"/>
+            <StudyInfo :study="study"/>
+            <Annotations :item="study"/>
+        </v-card>
     </span>
 
     <!-- Groups -->
-        <!--
     <GetData v-if="study.groupset" :resource_url="study.groupset">
         <template slot-scope="groupset" >
             <div v-if="groupset.loaded">
 
-                <Descriptions :descriptions="groupset.descriptions"/>
-                <Comments :comments="groupset.comments"/>
+                <Annotations :item="groupset.data"/>
+                <!--{{ checkhasGroups(groupset.data.groups) }}-->
+                <GroupsTable v-if="groupsVisible" :data="resource(groupset.data.groups)" />
 
-                {{ checkhasGroups(groupset.groups) }}
-                <GroupsTable v-if="GroupsVisible" :groups="resource(groupset.groups)" />
             </div>
         </template>
     </GetData>
-    -->
+
 
     <!-- Individuals -->
         <!--
@@ -107,18 +106,19 @@
         data() {
             return {
                 menuVisible: false,
-                IndividualsVisible: false,
-                GroupsVisible: false,
-                InterventionsVisible: false,
-                OutputsVisible: false,
-                TimecoursesVisible: false,
-                GeneralVisible: true,
 
-                hasOutputs:false,
-                hasTimecourses:false,
-                hasInterventions:false,
-                hasIndividuals:false,
-                hasGroups:false,
+                generalVisible: true,
+                groupsVisible: true,
+                individualsVisible: true,
+                interventionsVisible: true,
+                outputsVisible: true,
+                timecoursesVisible: true,
+
+                hasOutputs: false,
+                hasTimecourses: false,
+                hasInterventions: false,
+                hasIndividuals: false,
+                hasGroups: false,
             }
         },
         computed: {

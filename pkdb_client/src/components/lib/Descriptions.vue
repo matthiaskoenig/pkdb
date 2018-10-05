@@ -1,8 +1,6 @@
 <template>
     <div id="descriptions">
-        <md-list>
-            <md-list-item v-for="item in descriptions" :key="item"></md-list-item>
-        </md-list>
+        <span v-for="item in descriptions" :key="item.pk">{{ item }}<br /></span>
     </div>
 </template>
 
