@@ -1,10 +1,10 @@
 <template>
     <div id="about">
-        <v-layout row wrap>
-            <v-flex xs6>
+        <v-layout row>
+            <v-flex xs12 lg6>
                 <AboutInformation/>
             </v-flex>
-            <v-flex xs6>
+            <v-flex xs12 lg6>
                 <Statistics/>
             </v-flex>
         </v-layout>
