@@ -38,14 +38,16 @@ Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
 /** --------------------------------------------------------------
  *  Library components
  *  -------------------------------------------------------------- */
-import JsonButton from '@/components/lib/JsonButton';
-import LinkButton from '@/components/lib/LinkButton';
-import Comments from '@/components/lib/Comments';
-import Descriptions from '@/components/lib/Descriptions';
-import UserAvatar from '@/components/lib/UserAvatar';
-import Heading from '@/components/lib/Heading';
-import GroupInfo from '@/components/detail/GroupInfo';
-import IndividualInfo from '@/components/detail/IndividualInfo';
+import JsonButton from './components/lib/JsonButton';
+import LinkButton from './components/lib/LinkButton';
+import Comments from './components/lib/Comments';
+import Descriptions from './components/lib/Descriptions';
+import UserAvatar from './components/lib/UserAvatar';
+import Heading from './components/lib/Heading';
+import GroupInfo from './components/detail/GroupInfo';
+import IndividualInfo from './components/detail/IndividualInfo';
+import GetData from './components/api/GetData';
+import GetPaginatedData from './components/api/GetPaginatedData';
 
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
@@ -55,6 +57,10 @@ Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);
 Vue.component('GroupInfo', GroupInfo);
 Vue.component('IndividualInfo', IndividualInfo);
+
+Vue.component('GetData', GetData);
+Vue.component('GetPaginatedData', GetPaginatedData);
+
 
 
 /** --------------------------------------------------------------

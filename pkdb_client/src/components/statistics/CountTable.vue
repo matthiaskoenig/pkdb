@@ -1,21 +1,22 @@
 <template>
     <div id="count-table">
-        <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
-            <template slot="items" slot-scope="counts">
-                <td>
-                    <LinkButton :to="counts.item.to" :title="counts.item.name" :icon="counts.item.icon"/>
-                </td>
-                <td class="text-xs-right">
-                    <Heading :title="counts.item.name" :count="parseInt(counts.item.count)"/>
-                </td>
-                <td class="text-xs-left">{{ counts.item.description }}</td>
-            </template>
-        </v-data-table>
+        <GetData :resource_url="resource_url">
+            <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
+                <template slot="items" slot-scope="table">
+                    <td>
+                        <LinkButton :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
+                    </td>
+                    <td class="text-xs-right">
+                        <Heading :title="table.item.name" :count="parseInt(table.item.count)"/>
+                    </td>
+                    <td class="text-xs-left">{{ table.item.description }}</td>
+                </template>
+            </v-data-table>
+        </GetData>
     </div>
 </template>
 
 <script>
-    import axios from 'axios'
     import {lookup_icon} from "@/icons"
 
     export default {
@@ -101,23 +102,10 @@
             }
         },
         methods: {
-            get: function () {
-                var api_url = this.api + '/statistics/?format=json';
-                axios.get(api_url)
-                    .then(response => {
-                        this.data = response.data
-                    })
-                    .catch(e => {
-                        this.errors.push(e)
-                    })
-            },
             icon: function (key) {
                 return lookup_icon(key)
             }
         },
-        created() {
-            this.get()
-        }
     }
 </script>
 
