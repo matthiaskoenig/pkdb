@@ -1,8 +1,7 @@
 <template>
     <v-card>
-        <Heading :title="'Intervention: '+intervention.pk" :count="1" :icon="icon('intervention')" :resource_url="resource_url"/>
+        <Heading :title="'Intervention: '+intervention.pk" :icon="icon('intervention')" :resource_url="resource_url"/>
 
-        Pk {{ intervention.pk }}<br />
         Name: {{intervention.name }}<br />
         Category: {{intervention.category }}<br />
         Choice: {{intervention.choice }}<br />
