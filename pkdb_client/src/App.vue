@@ -1,11 +1,5 @@
 <template>
     <div id="app">
-        <head>
-            <meta name="description" content="PK-DB">
-            <meta name="author" content="Jan Grzegorzewski and Matthias Koenig">
-            <title>PK-DB</title>
-            <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-        </head>
         <v-container grid-list-md text-xs-center>
             <v-layout row wrap>
                 <v-flex xs12>

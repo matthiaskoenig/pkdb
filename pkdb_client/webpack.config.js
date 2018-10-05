@@ -1,17 +1,20 @@
-module: {
-    loaders: [
-        {
-            test: /\.vue$/,
-            loader: 'vue'
-        },
-        {
-            test: /\.s[a|c]ss$/,
-            loader: 'style!css!sass'
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+module.exports = {
+    module: {
+        loaders: [
+            {
+                test: /\.vue$/,
+                loader: 'vue'
+            },
+            {
+                test: /\.s[a|c]ss$/,
+                loader: 'style!css!sass'
+            }
+        ]
+    },
+    vue: {
+        loaders: {
+            scss: 'style!css!sass'
         }
-    ]
-},
-vue: {
-    loaders: {
-        scss: 'style!css!sass'
     }
 }
