@@ -22,7 +22,7 @@
                 <td>{{table.item.form}}</td>
                 <td>{{table.item.application}}</td>
                 <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('substance') }}</v-icon> </a></td>
-                <td>{{table.item.time}} [{{table.item.time_unit }}]</td>
+                <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
                 <td>{{table.item.unit}} </td>
                 <td>{{table.item.value }} </td>
                 <td>{{table.item.mean }}</td>
@@ -39,7 +39,6 @@
 
 <script>
     import {lookup_icon} from "@/icons"
-    import CharacteristicaCard from '../detail/CharacteristicaCard';
 
     export default {
         name: 'InterventionsTable',
