@@ -17,7 +17,6 @@
                             <div class="key">{{key}}</div>
                         </div>
 
-
                     </div>
                 </div>
 
@@ -56,7 +55,7 @@
                 })
         },
         computed: {
-            // vuex store
+
             api() {
                 return this.$store.state.endpoints.api;
             },
@@ -81,50 +80,12 @@
                 if (this.parent_count === this.characteristica_no_options.count) {
                     delete this.characteristica_no_options.count
                 }
-
                 clean(this.characteristica_no_options);
-
                 return this.characteristica_no_options;
             }
         }
     }
 </script>
 
-<style  scoped>
-    .key{
-        opacity: .54;
-        font-size: 14px;
-        letter-spacing: .01em;
-        line-height: 20px;
-    }
-
-    .card-reservation {
-        margin-top: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-    }
-
-    .md-card {
-        width: 300px;
-        height: 110px;
-        margin: 5px;
-        display: inline-block;
-        vertical-align: top;
-        position: relative;
-
-
-    }
-    .md-card-content {
-        padding-top: 1px;
-        padding-bottom: 1px;
-        margin: 1px;
-        position: absolute;
-        bottom: 0;
-    }
-    .md-card-content:last-of-type {
-        padding-bottom: 0px;
-    }
-    .values {padding: 2px}
+<style scoped>
 </style>
