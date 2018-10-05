@@ -4,7 +4,7 @@ const icons_table = {
     studies: 'fas fa-procedures',
     study: 'fas fa-procedures',
     groups: 'fas fa-users',
-    group: 'fas fa-user',
+    group: 'fas fa-users',
     individuals: 'fas fa-user',
     individual: 'fas fa-user',
     interventions: 'fas fa-capsules',
@@ -20,6 +20,9 @@ const icons_table = {
     admin: 'fas fa-cogs',
     account: 'fas fa-user-circle',
     github: 'fab fa-github',
+    files: 'fas fa-file-medical',
+    file: 'fas fa-file-medical',
+    substance: 'fas fa-tablets'
 };
 
 function lookup_icon(key){

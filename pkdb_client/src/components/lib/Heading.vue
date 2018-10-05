@@ -1,6 +1,6 @@
 <template>
 <div id="heading">
-    <font-awesome-icon :icon="icon" />
+    <v-icon>{{ icon }}</v-icon>&nbsp;
     <v-badge right color="red">
         <span slot="badge">{{ count }}</span>
         <!-- <v-icon large color="grey lighten-1">icon</v-icon>-->

@@ -15,7 +15,8 @@
             </td>
             <td>{{ table.item.name }}</td>
             <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
-                <font-awesome-icon icon="file-alt"/>
+                <v-icon>{{ icon('reference') }}</v-icon>
+
             </a>
             </td>
             <td>
@@ -25,26 +26,30 @@
                 <span v-for="(c, index2) in table.item.curators" :key="index2"><UserAvatar :user="c"/></span>
             </td>
             <td>
-                <span v-for="(c, index2) in table.item.substances" :key="index2"><font-awesome-icon icon="tablets"/> {{c.name}}</span>
+                <span v-for="(c, index2) in table.item.substances" :key="index2">
+
+                    <v-icon>{{ icon('substance') }}</v-icon>{{c.name}}
+                </span>
             </td>
             <td>
-                <span v-for="(f, index2) in table.item.files" :key="index2"><a :href="f" :title="f"><font-awesome-icon icon="file-medical"/></a>&nbsp;</span>
+                <span v-for="(f, index2) in table.item.files" :key="index2"><a :href="f" :title="f">
+                        <v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
             </td>
             <td>
                 <a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset">
-                <font-awesome-icon icon="users"/></a>
+                    <v-icon>{{ icon('groups') }}</v-icon></a>
             </td>
             <td>
                 <a v-if="table.item.individualset" :href="table.item.individualset" :title="table.item.individualset">
-                <font-awesome-icon icon="user"/></a>
+                    <v-icon>{{ icon('individuals') }}</v-icon></a>
             </td>
             <td>
-                <a v-if="table.item.interventionset" :href="table.item.interventionset"
-                   :title="table.item.interventionset"><font-awesome-icon icon="capsules"/></a>
+                <a v-if="table.item.interventionset" :href="table.item.interventionset" :title="table.item.interventionset">
+                    <v-icon>{{ icon('interventions') }}</v-icon></a>
             </td>
             <td>
                 <a v-if="table.item.outputset" :href="table.item.outputset" :title="table.item.outputset">
-                <font-awesome-icon icon="chart-bar"/></a>
+                    <v-icon>{{ icon('outputs') }}</v-icon></a>
             </td>
         </template>
     </v-data-table>
