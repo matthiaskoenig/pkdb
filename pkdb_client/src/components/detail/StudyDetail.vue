@@ -6,7 +6,7 @@
         <v-card>
             <Heading :title="'Study: '+study.pk" :icon="icon('study')" :resource_url="resource_url"/>
             <StudyInfo :study="study"/>
-            <Annotations :item="study"/>
+            <!-- <Annotations :item="study"/>-->
         </v-card>
     </span>
 
@@ -14,60 +14,50 @@
     <GetData v-if="study.groupset" :resource_url="study.groupset">
         <template slot-scope="groupset" >
             <div v-if="groupset.loaded">
-
+                <!--
                 <Annotations :item="groupset.data"/>
-                <!--{{ checkhasGroups(groupset.data.groups) }}-->
+                -->
                 <GroupsTable v-if="groupsVisible" :data="resource(groupset.data.groups)" />
-
             </div>
         </template>
     </GetData>
 
 
     <!-- Individuals -->
-        <!--
     <GetData v-if="study.individualset" :resource_url="study.individualset">
         <template slot-scope="individualset" >
             <div v-if="individualset.loaded">
-
-                <Descriptions :descriptions="individualset.descriptions"/>
-                <Comments :comments="individualset.comments"/>
-                {{ checkhasIndividuals(individualset.individuals) }}
-                <IndividualsTable  v-if="IndividualsVisible" :individuals="resource(individualset.individuals)"/>
+                <!--
+                <Annotations :item="individualset.data"/>
+                -->
+                <IndividualsTable v-if="individualsVisible" :data="resource(individualset.data.individuals)"/>
             </div>
         </template>
     </GetData>
-    -->
 
     <!-- Interventions -->
-        <!--
     <GetData v-if="study.interventionset" :resource_url="study.interventionset">
         <template slot-scope="interventionset" >
             <div v-if="interventionset.loaded">
-                {{ checkhasInterventions(interventionset.interventions) }}
-                <Descriptions :descriptions="interventionset.descriptions"/>
-                <Comments :comments="interventionset.comments"/>
-                <InterventionsTable v-if="InterventionsVisible" :interventions="resource(interventionset.interventions)"/>
+                <InterventionsTable v-if="interventionsVisible" :data="resource(interventionset.data.interventions)"/>
             </div>
         </template>
     </GetData>
-    -->
 
     <!-- Outputs -->
-        <!--
     <GetData v-if="study.outputset" :resource_url="study.outputset">
         <template slot-scope="outputset">
             <div v-if="outputset.loaded">
+                <!--
                 {{ checkhasOutputs(outputset.outputs) }}
                 {{ checkhasTimecourses(outputset.timecourses) }}
-                <Descriptions :descriptions="outputset.descriptions"/>
-                <Comments :comments="outputset.comments"/>
-                <OutputsTable v-if="OutputsVisible" :outputs="resource(outputset.outputs)"/>
-                <TimecoursesTable v-if="TimecoursesVisible" :timecourses="resource(outputset.timecourses)"/>
+                -->
+
+                <OutputsTable v-if="outputsVisible" :data="resource(outputset.data.outputs)"/>
+                <TimecoursesTable v-if="timecoursesVisible" :data="resource(outputset.data.timecourses)"/>
             </div>
         </template>
     </GetData>
-    -->
 
     </div>
 </template>
