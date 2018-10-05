@@ -22,6 +22,7 @@ import Account from '@/components/auth/Account';
 /* DetailViews */
 import StudyDetail from '@/components/detail/StudyDetail';
 import Group from '@/components/Group';
+import Individual from '@/components/Individual';
 import TimecourseDetail from '@/components/detail/TimecourseDetail';
 
 
@@ -90,6 +91,12 @@ export default new Router({
             path:"/groups/:id",
             name:"Group",
             component:Group,
+            props: true
+        },
+        {
+            path:"/individuals/:id",
+            name:"Individual",
+            component:Individual,
             props: true
         },
 
