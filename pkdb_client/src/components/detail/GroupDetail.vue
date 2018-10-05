@@ -10,6 +10,16 @@
                     </div>
                 </GetData>
         </span>
+        <hr>
+        This gets only characteristica on current group, not on parents !
+        <GetData :resource_url="characteristica_url">
+            <div slot-scope="cdata">
+            <span v-for="item in cdata.data.results">
+                <CharacteristicaCard :data="item"/>
+            </span>
+            </div>
+        </GetData>
+
     </v-card>
 </template>
 
@@ -31,6 +41,12 @@
             }
         },
         computed: {
+            characteristica_url() {
+                var url = this.$store.state.endpoints.api + '/characteristica_elastic/?group_pk='+ this.group.pk +'&final=true';
+                console.log(url);
+
+                return url;
+            }
         },
         methods: {
             icon: function (key) {
