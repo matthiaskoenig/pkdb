@@ -138,6 +138,10 @@ class Group(models.Model):
         return self.ex.groupset.study.name
 
     @property
+    def study_pk(self):
+        return self.ex.groupset.study.pk
+
+    @property
     def source(self):
         return self.ex.source
 
@@ -256,6 +260,10 @@ class Individual(AbstractIndividual):
     @property
     def study_indexing(self):
         return self.ex.individualset.study.name
+
+    @property
+    def study_pk(self):
+        return self.ex.individualset.study.pk
 
     @property
     def study_name(self):
