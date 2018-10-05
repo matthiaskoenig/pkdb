@@ -5,7 +5,7 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 
-docker-compose down
+docker-compose down -v
 sudo ./remove_migrations.sh
 docker-compose up --build
 

@@ -26,7 +26,7 @@ from .subjects.views import (
     IndividualReadViewSet,
     GroupSetReadViewSet,
     IndividualSetReadViewSet,
-    CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet)
+    CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet, IndividualViewSet)
 from .interventions.views import (
     SubstanceViewSet,
     SubstanceReadViewSet,
@@ -108,6 +108,8 @@ router.register(
     "individualsets_read", IndividualSetReadViewSet, base_name="individualsets_read"
 )
 router.register("individuals_read", IndividualReadViewSet, base_name="individuals_read")
+router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
+
 router.register("individualexs_read", IndividualExReadViewSet, base_name="individualexs_read")
 
 router.register(
