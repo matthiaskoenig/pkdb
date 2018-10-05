@@ -1,7 +1,7 @@
 <template>
     <div id="navigation">
 
-        <v-toolbar>
+        <v-toolbar flat>
             <!--
             <v-toolbar-side-icon></v-toolbar-side-icon>
             <v-toolbar-title class="white--text">PK-DB</v-toolbar-title>

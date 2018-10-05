@@ -4,7 +4,7 @@
         <v-layout justify-center>
             <v-flex xs12 sm6>
 
-                <v-toolbar color="secondary" dark maxwith="1000">
+                <v-toolbar color="secondary" dark dense maxwith="1000">
                     <v-toolbar-title>
                         <Heading :title="'Reference: '+reference.pk" :icon="icon('reference')"
                                  :resource_url="resource_url"/>
@@ -12,7 +12,7 @@
                 </v-toolbar>
                 <v-card max-width="1000">
 
-                    <v-btn depressed small color="primary">{{ reference.name }}</v-btn>
+                    <v-btn depressed small color="primary" disabled>{{ reference.name }}</v-btn>
 
                     <b>{{ reference.title }}</b><br/>
                     <span v-for="author_url in reference.authors">
