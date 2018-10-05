@@ -21,12 +21,8 @@
         computed: {
             resource_url() {
                 var path = this.$route.path;
-                console.log(path);
-                console.log(typeof path);
-                var matches = path.match('groups\/(\d+)');
-                console.log(matches);
-
-                var group_id = 1; // matches[1]
+                var tokens = path.split('/');
+                var group_id = tokens[tokens.length-1];
                 return this.$store.state.endpoints.api + '/groups_read/'+ group_id +'/?format=json';
             }
         },
