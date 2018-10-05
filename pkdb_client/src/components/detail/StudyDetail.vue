@@ -10,57 +10,65 @@
     </span>
 
     <!-- Groups -->
-    <GetData v-if="study.data.groupset" :resource_url="study.data.groupset">
+        <!--
+    <GetData v-if="study.groupset" :resource_url="study.groupset">
         <template slot-scope="groupset" >
             <div v-if="groupset.loaded">
 
-                <Descriptions :descriptions="groupset.data.descriptions"/>
-                <Comments :comments="groupset.data.comments"/>
+                <Descriptions :descriptions="groupset.descriptions"/>
+                <Comments :comments="groupset.comments"/>
 
-                {{ checkhasGroups(groupset.data.groups) }}
-                <GroupsTable v-if="GroupsVisible" :groups="resource(groupset.data.groups)" />
+                {{ checkhasGroups(groupset.groups) }}
+                <GroupsTable v-if="GroupsVisible" :groups="resource(groupset.groups)" />
             </div>
         </template>
     </GetData>
+    -->
 
     <!-- Individuals -->
-    <GetData v-if="study.data.individualset" :resource_url="study.data.individualset">
+        <!--
+    <GetData v-if="study.individualset" :resource_url="study.individualset">
         <template slot-scope="individualset" >
             <div v-if="individualset.loaded">
 
-                <Descriptions :descriptions="individualset.data.descriptions"/>
-                <Comments :comments="individualset.data.comments"/>
-                {{ checkhasIndividuals(individualset.data.individuals) }}
-                <IndividualsTable  v-if="IndividualsVisible" :individuals="resource(individualset.data.individuals)"/>
+                <Descriptions :descriptions="individualset.descriptions"/>
+                <Comments :comments="individualset.comments"/>
+                {{ checkhasIndividuals(individualset.individuals) }}
+                <IndividualsTable  v-if="IndividualsVisible" :individuals="resource(individualset.individuals)"/>
             </div>
         </template>
     </GetData>
+    -->
 
     <!-- Interventions -->
-    <GetData v-if="study.data.interventionset" :resource_url="study.data.interventionset">
+        <!--
+    <GetData v-if="study.interventionset" :resource_url="study.interventionset">
         <template slot-scope="interventionset" >
             <div v-if="interventionset.loaded">
-                {{ checkhasInterventions(interventionset.data.interventions) }}
-                <Descriptions :descriptions="interventionset.data.descriptions"/>
-                <Comments :comments="interventionset.data.comments"/>
-                <InterventionsTable v-if="InterventionsVisible" :interventions="resource(interventionset.data.interventions)"/>
+                {{ checkhasInterventions(interventionset.interventions) }}
+                <Descriptions :descriptions="interventionset.descriptions"/>
+                <Comments :comments="interventionset.comments"/>
+                <InterventionsTable v-if="InterventionsVisible" :interventions="resource(interventionset.interventions)"/>
             </div>
         </template>
     </GetData>
+    -->
 
     <!-- Outputs -->
-    <GetData v-if="study.data.outputset" :resource_url="study.data.outputset">
+        <!--
+    <GetData v-if="study.outputset" :resource_url="study.outputset">
         <template slot-scope="outputset">
             <div v-if="outputset.loaded">
-                {{ checkhasOutputs(outputset.data.outputs) }}
-                {{ checkhasTimecourses(outputset.data.timecourses) }}
-                <Descriptions :descriptions="outputset.data.descriptions"/>
-                <Comments :comments="outputset.data.comments"/>
-                <OutputsTable v-if="OutputsVisible" :outputs="resource(outputset.data.outputs)"/>
-                <TimecoursesTable v-if="TimecoursesVisible" :timecourses="resource(outputset.data.timecourses)"/>
+                {{ checkhasOutputs(outputset.outputs) }}
+                {{ checkhasTimecourses(outputset.timecourses) }}
+                <Descriptions :descriptions="outputset.descriptions"/>
+                <Comments :comments="outputset.comments"/>
+                <OutputsTable v-if="OutputsVisible" :outputs="resource(outputset.outputs)"/>
+                <TimecoursesTable v-if="TimecoursesVisible" :timecourses="resource(outputset.timecourses)"/>
             </div>
         </template>
     </GetData>
+    -->
 
     </div>
 </template>
@@ -69,15 +77,18 @@
     import {isEmpty} from "@/utils"
     import {lookup_icon} from "@/icons"
 
+    import StudyInfo from "./StudyInfo";
     import GroupsTable from "@/components/tables/GroupsTable";
     import IndividualsTable from '@/components/tables/IndividualsTable';
     import InterventionsTable from "@/components/tables/InterventionsTable";
     import OutputsTable from "@/components/tables/OutputsTable";
     import TimecoursesTable from "@/components/tables/TimecoursesTable";
 
+
     export default {
         name: "StudyDetail",
         components: {
+            StudyInfo: StudyInfo,
             GroupsTable: GroupsTable,
             IndividualsTable: IndividualsTable,
             InterventionsTable: InterventionsTable,
@@ -121,27 +132,27 @@
             icon: function (key) {
                 return lookup_icon(key)
             },
-            checkhasOutputs (array ) {
+            checkhasOutputs(array) {
                 if (array.length !== 0){
                     this.hasOutputs = true
                 }
             },
-            checkhasTimecourses (array) {
+            checkhasTimecourses(array) {
                 if (array.length !== 0){
                     this.hasTimecourses = true
                 }
             },
-            checkhasInterventions (array) {
+            checkhasInterventions(array) {
                 if (array.length !== 0){
                     this.hasInterventions = true
                 }
             },
-            checkhasIndividuals (array) {
+            checkhasIndividuals(array) {
                 if (array.length !== 0){
                     this.hasIndividuals = true
                 }
             },
-            checkhasGroups (array) {
+            checkhasGroups(array) {
                 if (array.length !== 0){
                     this.hasGroups = true
                 }
