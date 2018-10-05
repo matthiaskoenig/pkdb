@@ -1,16 +1,19 @@
 <template>
     <div id="app">
         <v-app>
-            <v-container grid-list-md text-xs-center>
-                <v-layout row wrap>
-                    <v-flex xs12>
+            <v-container fluid grid-list-xl>
+                <v-layout row>
+                    <v-flex lg12>
                         <Navigation></Navigation>
                     </v-flex>
-
-                    <v-flex xs12>
+                </v-layout>
+                <v-layout row>
+                    <v-flex lg12>
                         <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
                     </v-flex>
-                    <v-flex>
+                </v-layout>
+                <v-layout row>
+                    <v-flex lg12>
                     <Footer></Footer>
                     </v-flex>
                 </v-layout>
