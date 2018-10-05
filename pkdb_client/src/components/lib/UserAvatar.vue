@@ -1,16 +1,10 @@
 <template>
-    <div id="user-avatar">
-
-        <v-avatar color="red">
+    <span id="user-avatar">
+        <v-avatar color="red" size="35" :title="username">
             <img v-if="src" :src="src"/>
-            <span v-if="!src" class="white--text headline" :title="username">{{ initials }}</span>
+            <span v-if="!src" class="white--text headline" >{{ initials }}</span>
         </v-avatar>
-
-        <!--
-        <font-awesome-icon class="md-icon" icon="user-cog"/>
-        <font-awesome-icon icon="user-edit"/>
-        -->
-    </div>
+    </span>
 </template>
 
 <script>
