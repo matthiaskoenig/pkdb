@@ -12,6 +12,7 @@
         <template slot="items" slot-scope="table">
             <td>
                 <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
+                <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
             </td>
             <td>{{ table.item.name }}</td>
             <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
@@ -80,6 +81,11 @@
                     {text: 'InterventionSet', value: 'interventionset'},
                     {text: 'OutputSet', value: 'outputset'},
                 ],
+            }
+        },
+        computed: {
+            api() {
+                return this.$store.state.endpoints.api;
             }
         },
         methods: {

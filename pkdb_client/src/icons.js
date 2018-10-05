@@ -1,3 +1,6 @@
+/**
+ * Helpers to work with icons.
+ */
 
 const icons_table = {
     home: 'fas fa-home',
@@ -8,7 +11,7 @@ const icons_table = {
     individuals: 'fas fa-user',
     individual: 'fas fa-user',
     interventions: 'fas fa-capsules',
-    intervention: 'fas fa-capsule',
+    intervention: 'fas fa-capsules',
     outputs: 'fas fa-chart-bar',
     output: 'fas fa-chart-bar',
     timecourses: 'fas fa-chart-line',

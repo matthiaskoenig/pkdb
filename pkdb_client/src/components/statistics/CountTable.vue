@@ -1,14 +1,14 @@
 <template>
     <div id="count-table">
         <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
-            <template slot="items" slot-scope="counts">
+            <template slot="items" slot-scope="table">
                 <td>
-                    <LinkButton :to="counts.item.to" :title="counts.item.name" :icon="counts.item.icon"/>
+                    <LinkButton :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
                 </td>
                 <td class="text-xs-right">
-                    <Heading :title="counts.item.name" :count="parseInt(counts.item.count)"/>
+                    <Heading :title="table.item.name" :count="parseInt(table.item.count)"/>
                 </td>
-                <td class="text-xs-left">{{ counts.item.description }}</td>
+                <td class="text-xs-left">{{ table.item.description }}</td>
             </template>
         </v-data-table>
     </div>
@@ -101,22 +101,25 @@
             }
         },
         methods: {
-            get: function () {
-                var api_url = this.api + '/statistics/?format=json';
-                axios.get(api_url)
-                    .then(response => {
-                        this.data = response.data
-                    })
-                    .catch(e => {
-                        this.errors.push(e)
-                    })
-            },
             icon: function (key) {
                 return lookup_icon(key)
+            },
+            fetch_data(url){
+                axios.get(url)
+                    .then(response => {
+                        this.data = response.data;
+                        console.log(this.data)
+                    })
+                    .catch((error)=>{
+                        this.data = null;
+                        console.error(this.resource_url);
+                        console.error(error);
+                        this.errors = error.response.data;
+                    })
             }
         },
         created() {
-            this.get()
+                this.fetch_data(this.resource_url);
         }
     }
 </script>

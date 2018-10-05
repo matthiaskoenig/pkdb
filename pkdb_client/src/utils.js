@@ -15,7 +15,7 @@ function isEmpty(str) {
     return (!str || 0 === str.length);
 }
 
-export {id_from_url, clean,isEmpty};
+export {id_from_url, clean, isEmpty};
 
 
 // vue paginator

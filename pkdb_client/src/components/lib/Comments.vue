@@ -1,9 +1,9 @@
 <template>
     <div id="comments">
-        <md-chip v-for="comment in comments" :key="comment">
+        <span v-for="item in comments" :key="item.pk">
             <UserAvatar :user="comment.user"></UserAvatar>
-            {{ comment.text }}
-        </md-chip>
+            {{ comment.text }}<br />
+        </span>
     </div>
 </template>
 
