@@ -1,11 +1,14 @@
 import '@babel/polyfill'
 import Vue from 'vue'
+import './plugins/vuetify'
 
 import VueResource from 'vue-resource';
-import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+import './assets/pkdb.css';
+import './stylus/main.styl'
 
 Vue.use(VueResource);
 
