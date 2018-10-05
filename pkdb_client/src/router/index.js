@@ -21,6 +21,7 @@ import Account from '@/components/auth/Account';
 
 /* DetailViews */
 import StudyDetail from '@/components/detail/StudyDetail';
+import Group from '@/components/Group';
 import TimecourseDetail from '@/components/detail/TimecourseDetail';
 
 
@@ -85,6 +86,13 @@ export default new Router({
             component:StudyDetail,
             props: true
         },
+        {
+            path:"/groups/:id",
+            name:"Group",
+            component:Group,
+            props: true
+        },
+
         {
             path:"/timecourses/:id",
             name:"TimecourseDetail",
