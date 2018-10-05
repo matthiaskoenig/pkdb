@@ -3,11 +3,55 @@
 
         <v-layout row>
             <v-flex xs2>
-                Side menu for navigation.
+                <!-- Side menu for navigation. -->
+                <v-card height="350px">
+                    <v-navigation-drawer
+                            v-model="drawer"
+                            permanent
+                            absolute
+                    >
+                        <v-toolbar flat class="transparent">
+                            <v-list class="pa-0">
+                                <v-list-tile avatar>
+                                    <v-list-tile-avatar>
+                                        Icon
+                                    </v-list-tile-avatar>
+
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>Study</v-list-tile-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </v-list>
+                        </v-toolbar>
+
+                        <v-list class="pt-0" dense>
+                            <v-divider></v-divider>
+
+                            <v-list-tile
+                                    v-for="item in items"
+                                    :key="item.title"
+                                    @click=""
+                            >
+                                <v-list-tile-action>
+                                    <v-icon>{{ item.icon }}</v-icon>
+                                </v-list-tile-action>
+
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
+                    </v-navigation-drawer>
+                </v-card>
+
+
+
+
             </v-flex>
             <v-flex xs10>
-                <!-- General Overview -->
+                <!-- Study content -->
 
+                <!-- General Overview -->
                 <v-card v-if="generalVisible">
                     <Heading :title="'Study: '+study.pk" :icon="icon('study')" :resource_url="resource_url"/>
                     <StudyInfo :study="study"/>
