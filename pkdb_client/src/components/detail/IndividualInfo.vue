@@ -1,19 +1,8 @@
 <template>
     <div id="individual-info">
-        <md-list class="md-double-line">
-            <div class="md-list-item-text">
-                <span>{{ individual.name }}</span>
-                <span>Name</span>
-            </div>
-            <div class="md-list-item-text">
-                <span>{{ individual.study_name }}</span>
-                <span>Study</span>
-            </div>
-            <div class="md-list-item-text">
-                <span>{{ individual.group }}</span>
-                <span>Group</span>
-            </div>
-        </md-list>
+        Name: {{ individual.name }}<br />
+        Group: {{ individual.group }}<br />
+        Study: {{ individual.study_name }}<br />
     </div>
 </template>
 
@@ -23,7 +12,7 @@
         props: {
             individual: {
                 type: Object,
-                //required: true,
+                required: true,
             }
         }
     }

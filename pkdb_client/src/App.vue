@@ -6,7 +6,6 @@
             <title>PK-DB</title>
             <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
         </head>
-
         <v-container grid-list-md text-xs-center>
             <v-layout row wrap>
                 <v-flex xs12>
@@ -48,10 +47,11 @@
     }
 </script>
 
-<style>
+<style lang="scss">
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        text-align: center;
     }
 </style>
