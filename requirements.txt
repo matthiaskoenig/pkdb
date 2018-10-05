@@ -26,8 +26,10 @@ django-cors-headers==2.4.0
 coreapi>=2.3.3
 
 # Elastic Search
-elasticsearch-dsl<6.0.0
-django-elasticsearch-dsl-drf
+elasticsearch-dsl==6.0
+django-elasticsearch-dsl==0.5.0
+django-elasticsearch-dsl-drf==0.11
+
 
 # Developer Tools
 ipdb==0.11

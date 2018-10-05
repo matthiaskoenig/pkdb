@@ -1,13 +1,12 @@
 from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import DocType, Index, fields
-from django.conf import settings
 from pkdb_app.subjects.models import Individual, Characteristica
 
 # Name of the Elasticsearch index
-INDEX = Index("subjects")
+individuals_index = Index("individuals")
 
 # See Elasticsearch Indices API reference for available settings
-INDEX.settings(
+individuals_index.settings(
     number_of_shards=1,
     number_of_replicas=1
 )
@@ -19,7 +18,7 @@ html_strip = analyzer(
     char_filter=["html_strip"]
 )
 
-@INDEX.doc_type
+@individuals_index.doc_type
 class IndividualDocument(DocType):
     """Individual elastic search document"""
     id = fields.IntegerField(attr='id')
@@ -77,9 +76,16 @@ class IndividualDocument(DocType):
         model=Individual
 
 
+# Name of the Elasticsearch index
+characteristica_index = Index("individuals")
 
+# See Elasticsearch Indices API reference for available settings
+characteristica_index.settings(
+    number_of_shards=1,
+    number_of_replicas=1
+)
 
-@INDEX.doc_type
+@characteristica_index.doc_type
 class CharacteristicaDocument(DocType):
     """Characteristica elastic search document"""
     id = fields.IntegerField(attr='id')

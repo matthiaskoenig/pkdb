@@ -548,6 +548,7 @@ class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
                   + EXTERN_FILE_FIELDS
                   + ["name", "group", "characteristica_ex","comments"])
 
+
 class CharacteristicaReadSerializer(ReadSerializer):
 
     class Meta:

@@ -1,6 +1,9 @@
 import django_filters.rest_framework
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
+from rest_framework.response import Response
+
+from pkdb_app.categoricals import CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.subjects.models import (
     DataFile,
     Characteristica,
@@ -38,7 +41,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     OrderingFilterBackend,
     DefaultOrderingFilterBackend,
     SearchFilterBackend,
-    IdsFilterBackend, SuggesterFilterBackend, CompoundSearchFilterBackend)
+    IdsFilterBackend, SuggesterFilterBackend)
 
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentViewSet
 
@@ -111,6 +114,20 @@ class IndividualSetReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = IndividualSet.objects.all()
     serializer_class = IndividualSetReadSerializer
     permission_classes = (AllowAny,)
+
+
+class CharacteristicaOptionViewSet(viewsets.ViewSet):
+
+    @staticmethod
+    def get_options():
+        options = {}
+        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
+        options["ctypes"] = CHARACTERISTICA_TYPES
+        return options
+
+    def list(self, request):
+        return Response(self.get_options())
+
 
 ###########################################################
 #Elastic Search Views

@@ -1,8 +1,6 @@
 """
 Django URLs
 """
-from django.views.generic.edit import CreateView
-from django.contrib.auth.forms import UserCreationForm
 
 from django.conf import settings
 from django.urls import path, include
@@ -27,7 +25,7 @@ from .subjects.views import (
     GroupSetReadViewSet,
     IndividualSetReadViewSet,
     CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet, IndividualViewSet,
-    CharacteristicaViewSet)
+    CharacteristicaViewSet, CharacteristicaOptionViewSet)
 from .interventions.views import (
     SubstanceViewSet,
     SubstanceReadViewSet,
@@ -36,7 +34,8 @@ from .interventions.views import (
     InterventionReadViewSet,
     OutputReadViewSet,
     TimecourseReadViewSet,
-    InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet)
+    InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet, InterventionOptionViewSet,
+    OutputOptionViewSet, TimecourseOptionViewSet)
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import (
     AuthorsViewSet,
@@ -130,6 +129,7 @@ router.register(
 router.register(
     "interventions_read", InterventionReadViewSet, base_name="interventions_read"
 )
+
 router.register(
     "interventionexs_read", InterventionExReadViewSet, base_name="interventionexs_read"
 )
@@ -140,7 +140,19 @@ router.register("outputexs_read", OutputExReadViewSet, base_name="outputexs_read
 router.register("timecourses_read", TimecourseReadViewSet, base_name="timecourses_read")
 router.register("timecourseexs_read", TimecourseExReadViewSet, base_name="timecourseexs_read")
 
-
+# Options
+router.register(
+    "characteristica_options", CharacteristicaOptionViewSet, base_name="characteristica_option"
+)
+router.register(
+    "intervention_options", InterventionOptionViewSet, base_name="intervention_option"
+)
+router.register(
+    "output_options", OutputOptionViewSet, base_name="output_option"
+)
+router.register(
+    "timecourse_options", TimecourseOptionViewSet, base_name="timecourse_option"
+)
 schema_view = get_swagger_view(title="PKDB API")
 
 
