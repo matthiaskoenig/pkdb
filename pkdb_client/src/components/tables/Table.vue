@@ -1,10 +1,13 @@
 <template>
+
     <md-table v-model="data.entries" v-if="data.count">
-        <TableHeading :count="data.count" :icon="icon" :title="title" :resource_url="resource_url"/>
+        <Heading :count="data.count" :icon="icon" :title="title" :resource_url="resource_url"/>
+
         <md-table-row slot="md-table-row" slot-scope="{item}">
             <slot name="row" :item="item"></slot>
         </md-table-row>
     </md-table>
+
 </template>
 
 <script>

@@ -554,11 +554,6 @@ class CharacteristicaReadSerializer(ReadSerializer):
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name"]
 
-    def get_options(self, obj):
-        options = {}
-        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
-        options["ctypes"] = CHARACTERISTICA_TYPES
-        return options
 
 
 class CharacteristicaExReadSerializer(serializers.HyperlinkedModelSerializer):

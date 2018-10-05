@@ -1,24 +1,16 @@
 <template>
-    <div>
-        <TableHeading title="Overview" :resource_url="resource_url"/>
-
-        <md-table class="my-table">
-            <md-table-row v-for="item in items" :key="item.name">
-                <md-table-cell>
-                    <router-link tag="span" :to="item.to">
-                        <a href="#">
-                            <font-awesome-icon :icon="item.icon"/>
-                        </a>&nbsp;&nbsp;
-                    </router-link>
-                    <router-link tag="span" :to="item.to">
-                        <a href="#">{{ item.name }}</a>
-                    </router-link>
-                </md-table-cell>
-                <md-table-cell>
-                    {{ item.count }}
-                </md-table-cell>
-            </md-table-row>
-        </md-table>
+    <div id="count-table">
+        <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
+            <template slot="items" slot-scope="counts">
+                <td>
+                    <LinkButton :to="counts.item.to" :title="counts.item.name" :icon="counts.item.icon"/>
+                </td>
+                <td class="text-xs-right">
+                    <Heading :title="counts.item.name" :count="parseInt(counts.item.count)"/>
+                </td>
+                <td class="text-xs-left">{{ counts.item.description }}</td>
+            </template>
+        </v-data-table>
     </div>
 </template>
 
@@ -30,8 +22,12 @@
         name: 'CountTable',
         data() {
             return {
+                headers: [
+                    { text: 'Data', value: 'name', sortable: false},
+                    { text: 'Count', value: 'count', sortable: false},
+                    { text: 'Description', value: 'description', sortable: false},
+                ],
                 data: {
-                    version: '-',
                     study_count: '-',
                     group_count: '-',
                     individual_count: '-',
@@ -39,7 +35,7 @@
                     output_count: '-',
                     timecourse_count: '-',
                     reference_count: '-',
-                }
+                },
             }
         },
         computed: {
@@ -56,42 +52,50 @@
                         to: '/studies',
                         icon: this.icon('studies'),
                         count: this.data.study_count,
+                        description: "Clinical or experimental study measuring data in either single or multiple groups and/or single or multiple individuals."
                     },
                     {
                         name: 'Groups',
                         to: '/groups',
                         icon: this.icon('groups'),
                         count: this.data.group_count,
+                        description: "Group of individuals defined by certain characteristica, e.g., smoking status or medication."
                     },
                     {
                         name: 'Individuals',
                         to: '/individuals',
                         icon: this.icon('individuals'),
                         count: this.data.individual_count,
+                        description: "A single subject, characterized by the group it belongs to and personal characteristica like age, body weight or sex."
                     },
                     {
                         name: 'Interventions',
                         to: '/interventions',
                         icon: this.icon('interventions'),
                         count: this.data.intervention_count,
+                        description: "Intervention which was performed in the study. Often this is the application of substances, e.g. caffeine or codeine, or changes in " +
+                            "lifestyle like smoking cessation."
                     },
                     {
                         name: 'Outputs',
                         to: '/outputs',
                         icon: this.icon('outputs'),
                         count: this.data.output_count,
+                        description: "Clinical or experimental output. These can be single parameters or variables, e.g. pharmacokinetic parameters like AUC, clearance or half-life of the applied substances."
                     },
                     {
                         name: 'Timecourses',
                         to: '/timecourses',
                         icon: this.icon('timecourses'),
                         count: this.data.timecourse_count,
+                        description: "Clinical or experimental time course measurements."
                     },
                     {
                         name: 'References',
                         to: '/references',
                         icon: this.icon('references'),
                         count: this.data.reference_count,
+                        description: "Literature references from which the data was digitized and curated."
                     },
                 ]
             }
@@ -99,13 +103,11 @@
         methods: {
             get: function () {
                 var api_url = this.api + '/statistics/?format=json';
-                console.log("api_url:" + api_url);
                 axios.get(api_url)
                     .then(response => {
                         this.data = response.data
                     })
                     .catch(e => {
-                        console.log(e);
                         this.errors.push(e)
                     })
             },

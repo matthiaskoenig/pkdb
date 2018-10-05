@@ -1,8 +1,15 @@
 <template>
-    <md-badge :md-content="count">
-        <h1 class="md-title"><font-awesome-icon :icon="icon" /> {{ title }}</h1>
-    </md-badge>
+<div id="heading">
+    <v-icon>{{ icon }}</v-icon>&nbsp;
+    <v-badge right color="red">
+        <span slot="badge">{{ count }}</span>
+        <!-- <v-icon large color="grey lighten-1">icon</v-icon>-->
+        <h3>{{ title }}</h3>
+    </v-badge>
+    <JsonButton :resource_url="resource_url"/>
+</div>
 </template>
+
 
 <script>
     export default {
@@ -16,10 +23,13 @@
             },
             icon: {
                 type: String,
+            },
+            resource_url: {
+                type: String
             }
         }
     }
 </script>
 
-<style scoped>
+<style>
 </style>

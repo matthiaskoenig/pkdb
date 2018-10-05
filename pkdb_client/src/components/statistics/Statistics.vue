@@ -1,11 +1,19 @@
 <template>
-    <div class="md-layout">
-        <div class="col-5">
-            <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
-        </div>
-        <div class="col-2">&nbsp;</div>
-        <div class="col-5">
-            <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
+    <div id="statistics">
+        <v-card>
+            <v-toolbar color="primary" dark>
+                <v-toolbar-title>Statistics<br/>
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-container fluid grid-list-lg>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
+                        <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-card>
         </div>
     </div>
 </template>
@@ -15,8 +23,8 @@
     import VuePlotly from '@statnett/vue-plotly'
 
     // size of individual plots
-    // var height = 500;
-    //var width = 500;
+    var height = 500;
+    var width = 500;
 
     export default {
         name: "Statistics",
@@ -27,14 +35,12 @@
             get: function () {
                 var api_url;
                 api_url = this.api + '/statistics_data/?format=json';
-                console.log("api_url:" + api_url);
                 axios.get(api_url)
                     .then(response => {
                         // JSON responses are automatically parsed.
                         this.data = response.data
                     })
                     .catch(e => {
-                        console.log(e);
                         this.errors.push(e)
                     })
             }
@@ -52,8 +58,8 @@
                 return {
                     layout: {
                         title: 'Interventions',
-                        //height: height,
-                        //width: width
+                        height: height,
+                        width: width
                     },
                     data: [{
                         values: this.data.intervention_count,
@@ -66,8 +72,8 @@
                 return {
                     layout: {
                         title: 'Individuals',
-                        //height: height,
-                        //width: width
+                        height: height,
+                        width: width
                     },
                     data: [{
                         values: this.data.individual_count,
@@ -87,6 +93,6 @@
     }
 </script>
 
-<style scoped>
+<style>
 
 </style>
