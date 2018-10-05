@@ -1,11 +1,12 @@
 <template>
 <div id="heading">
             <v-icon>{{ icon }}</v-icon>&nbsp;
-            <v-badge right color="red">
+            <v-badge v-if="count" right color="red">
                 <span slot="badge">{{ count }}</span>
                 <!-- <v-icon large color="grey lighten-1">icon</v-icon>-->
-                <strong>{{ title }}</strong>
-            </v-badge>&nbsp;&nbsp;
+                {{ title }}
+            </v-badge>&nbsp;
+            <span v-if="!count">{{ title }}</span>
             <JsonButton :resource_url="resource_url"/>
 </div>
 </template>
