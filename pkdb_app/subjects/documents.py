@@ -23,7 +23,6 @@ class IndividualDocument(DocType):
     """Individual elastic search document"""
     id = fields.IntegerField(attr='id')
     name = fields.StringField(
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
             'suggest': fields.CompletionField(),
@@ -33,7 +32,6 @@ class IndividualDocument(DocType):
 
     group = fields.StringField(
         attr='group_indexing',
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }
@@ -41,43 +39,18 @@ class IndividualDocument(DocType):
 
     study = fields.StringField(
         attr='study_indexing',
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
 
         }
     )
 
-
-    """
-       categories = fields.StringField(
-        attr='characteristica_categories',
-        analyzer=html_strip,
-        fields={
-            'raw': fields.StringField(analyzer='keyword', multi=True),
-        }
-    )
-
-
-    choices = fields.StringField(
-        attr='characteristica_choices',
-        analyzer=html_strip,
-        fields={
-            'raw': fields.StringField(analyzer='keyword', multi=True),
-            'suggest': fields.CompletionField(multi=True),
-
-        }
-    )
-    """
-
-
-
     class Meta:
         model=Individual
 
 
 # Name of the Elasticsearch index
-characteristica_index = Index("individuals")
+characteristica_index = Index("characteristica")
 
 # See Elasticsearch Indices API reference for available settings
 characteristica_index.settings(
@@ -89,30 +62,26 @@ characteristica_index.settings(
 class CharacteristicaDocument(DocType):
     """Characteristica elastic search document"""
     id = fields.IntegerField(attr='id')
+    final = fields.BooleanField()
 
     group_name = fields.StringField(
         attr='group_name',
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            #'suggest': fields.CompletionField(),
 
         }
     )
     group_pk = fields.IntegerField(attr='group_id')
     individual_name = fields.StringField(
         attr='individual_name',
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            #'suggest': fields.CompletionField(),
 
         }
     )
     individual_pk = fields.IntegerField(attr='individual_id')
 
     category = fields.StringField(
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
             'suggest': fields.CompletionField(),
@@ -120,26 +89,20 @@ class CharacteristicaDocument(DocType):
     )
 
     choice = fields.StringField(
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            #'suggest': fields.CompletionField(),
 
         }
     )
     ctype = fields.StringField(
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
             'suggest': fields.CompletionField(),
-
         }
     )
     unit = fields.StringField(
-        analyzer=html_strip,
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            #'suggest': fields.CompletionField(),
 
         }
     )

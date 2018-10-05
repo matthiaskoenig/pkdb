@@ -206,6 +206,8 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
         OrderingFilterBackend,
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
+        SuggesterFilterBackend
+
     ]
     search_fields = (
         'choice',
@@ -312,6 +314,7 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
                 LOOKUP_QUERY_LTE,
             ],
         },
+        'final':'final',
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',
         'individual_name': 'individual_name.raw',

@@ -1,5 +1,6 @@
 import django_filters.rest_framework
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
+    SuggesterFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -155,7 +156,7 @@ class ElasticSubstanceViewSet(DocumentViewSet):
     document = SubstanceDocument
     serializer_class = SubstanceSerializer
     lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,SearchFilterBackend,]
+    filter_backends = [FilteringFilterBackend,SearchFilterBackend,SuggesterFilterBackend]
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
     suggester_fields = {
