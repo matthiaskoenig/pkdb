@@ -1,216 +1,97 @@
 <template>
-    <div class="page-container">
-        <GetData :api_url="resource_url">
-            <template slot-scope="study">
-                <md-app v-if="study.loaded">
+    <div id="study-detail">
+    <v-card>
+        <Heading :title="'Study: '+study.pk" :icon="icon('study')" :resource_url="resource_url"/>
+    </v-card>
 
-                    <md-app-toolbar class="md-primary" md-elevation="0">
-                        <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
-                            <md-icon>menu</md-icon>
-                        </md-button>
-                        <span class="md-title">{{study.data.name}}</span>
-                    </md-app-toolbar>
+    <!-- General Overview -->
+    <span v-if="GeneralVisible">
+        <StudyInfo :study="study"/>
+    </span>
 
-                    <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini">
+    <!-- Groups -->
+    <GetData v-if="study.data.groupset" :resource_url="study.data.groupset">
+        <template slot-scope="groupset" >
+            <div v-if="groupset.loaded">
 
-                        <md-toolbar class="md-transparent" md-elevation="0">
-                            <span>Navigation</span>
+                <Descriptions :descriptions="groupset.data.descriptions"/>
+                <Comments :comments="groupset.data.comments"/>
 
-                            <div class="md-toolbar-section-end">
-                                <md-button class="md-icon-button" @click="toggleMenu" >
-                                    <md-icon>keyboard_arrow_left</md-icon>
-                                </md-button>
-                            </div>
-                        </md-toolbar>
+                {{ checkhasGroups(groupset.data.groups) }}
+                <GroupsTable v-if="GroupsVisible" :groups="resource(groupset.data.groups)" />
+            </div>
+        </template>
+    </GetData>
 
-                        <md-list>
-                            <md-list-item>
-                                <md-button  :class="'md-icon-button md-fixed' + isActive(GeneralVisible)" @click="toggleGeneral">
-                                    <font-awesome-icon  icon="procedures" />
-                                </md-button>
+    <!-- Individuals -->
+    <GetData v-if="study.data.individualset" :resource_url="study.data.individualset">
+        <template slot-scope="individualset" >
+            <div v-if="individualset.loaded">
 
-                                <span class="md-list-item-text">General</span>
-                            </md-list-item>
+                <Descriptions :descriptions="individualset.data.descriptions"/>
+                <Comments :comments="individualset.data.comments"/>
+                {{ checkhasIndividuals(individualset.data.individuals) }}
+                <IndividualsTable  v-if="IndividualsVisible" :individuals="resource(individualset.data.individuals)"/>
+            </div>
+        </template>
+    </GetData>
 
-                            <md-list-item>
-                                     <md-button  :class="'md-icon-button md-fixed' + isActive(GroupsVisible)" @click="toggleGroups" :disabled="!hasGroups" >
-                                    <font-awesome-icon icon="users" />
-                                </md-button>
+    <!-- Interventions -->
+    <GetData v-if="study.data.interventionset" :resource_url="study.data.interventionset">
+        <template slot-scope="interventionset" >
+            <div v-if="interventionset.loaded">
+                {{ checkhasInterventions(interventionset.data.interventions) }}
+                <Descriptions :descriptions="interventionset.data.descriptions"/>
+                <Comments :comments="interventionset.data.comments"/>
+                <InterventionsTable v-if="InterventionsVisible" :interventions="resource(interventionset.data.interventions)"/>
+            </div>
+        </template>
+    </GetData>
 
-
-                                <span class="md-list-item-text">Groups</span>
-                            </md-list-item>
-
-                            <md-list-item>
-                                <md-button  :class="'md-icon-button md-fixed' + isActive(IndividualsVisible)" @click="toggleIndividuals" :disabled="!hasIndividuals" >
-                                    <font-awesome-icon icon="user" />
-                                </md-button>
-                                <span class="md-list-item-text">Individuals</span>
-                            </md-list-item>
-
-                            <md-list-item>
-                                <md-button  :class="'md-icon-button md-fixed' + isActive(InterventionsVisible)" @click="toggleInterventions" :disabled="!hasInterventions" >
-                                    <font-awesome-icon icon="capsules" />
-                                </md-button>
-                                <span class="md-list-item-text">Interventions</span>
-                            </md-list-item>
-
-                            <md-list-item>
-                                <md-button  :class="'md-icon-button md-fixed' + isActive(OutputsVisible)" @click="toggleOutputs" :disabled="!hasOutputs" >
-                                    <font-awesome-icon icon="chart-bar" />
-                                </md-button>
-                                <span class="md-list-item-text">Outputs</span>
-                            </md-list-item>
-
-                            <md-list-item>
-                                <md-button  :class="'md-icon-button md-fixed' + isActive(TimecoursesVisible)" @click="toggleTimecourses" :disabled="!hasTimecourses">
-                                    <font-awesome-icon icon="chart-line" />
-                                </md-button>
-                                <span class="md-list-item-text">Timecourses</span>
-                            </md-list-item>
-                        </md-list>
-                    </md-app-drawer>
-
-                    <md-app-content>
-                        <!-- General Overview -->
-                        <md-card v-if="GeneralVisible">
-                            <md-list  class="md-double-line">
-                                <md-list-item>
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.sid}}</span>
-                                        <span>Sid</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item>
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.pkdb_version}}</span>
-                                        <span>PkDB Version</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item>
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.creator}}</span>
-                                        <span>Creator</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item>
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.curators}}</span>
-                                        <span>curators</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item v-if="study.data.design">
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.design}}</span>
-                                        <span>Design</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item v-if="study.data.substances.length !== 0">
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.substances}}</span>
-                                        <span>Substances</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item v-if="study.data.keywords.length !== 0">
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.keywords}}</span>
-                                        <span>Keywords</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item v-if="study.data.comments.length !== 0">
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.comments}}</span>
-                                        <span>Comments</span>
-                                    </div>
-                                </md-list-item>
-                                <md-list-item v-if="study.data.descriptions.length !== 0">
-                                    <div class="md-list-item-text">
-                                        <span>{{study.data.descriptions}}</span>
-                                        <span>Descriptions</span>
-                                    </div>
-                                </md-list-item>
-                            </md-list>
-                        </md-card>
-
-                        <!-- Groups -->
-                        <GetData v-if="study.data.groupset" :api_url="study.data.groupset">
-                            <template slot-scope="groupset" >
-                                <div v-if="groupset.loaded">
-                                    <Descriptions :descriptions="groupset.data.descriptions"/>
-                                    <Comments :comments="groupset.data.comments"/>
-
-                                    {{ checkhasGroups(groupset.data.groups) }}
-                                    <GroupsTable v-if="GroupsVisible" :data="resource(groupset.data.groups)" />
-                                </div>
-                            </template>
-                        </GetData>
-
-
-                        <GetData v-if="study.data.individualset" :api_url="study.data.individualset">
-                            <template slot-scope="individualset" >
-                                <div v-if="individualset.loaded">
-                                    <Descriptions :descriptions="individualset.data.descriptions"/>
-                                    <Comments :comments="individualset.data.comments"/>
-                                    {{ checkhasIndividuals(individualset.data.individuals) }}
-                                    <IndividualsTable  v-if="IndividualsVisible" :data="resource(individualset.data.individuals)"/>
-                                </div>
-                            </template>
-                        </GetData>
-
-                        <GetData v-if="study.data.interventionset" :api_url="study.data.interventionset">
-                            <template slot-scope="interventionset" >
-                                <div v-if="interventionset.loaded">
-                                    {{ checkhasInterventions(interventionset.data.interventions) }}
-                                    <Descriptions :descriptions="interventionset.data.descriptions"/>
-                                    <Comments :comments="interventionset.data.comments"/>
-                                    <InterventionsTable v-if="InterventionsVisible" :data="resource(interventionset.data.interventions)"/>
-                                </div>
-                            </template>
-                        </GetData>
-
-                        <GetData v-if="study.data.outputset" :api_url="study.data.outputset">
-                            <template slot-scope="outputset">
-                                <div v-if="outputset.loaded">
-                                    {{ checkhasOutputs(outputset.data.outputs) }}
-                                    {{ checkhasTimecourses(outputset.data.timecourses) }}
-                                    <Descriptions :descriptions="outputset.data.descriptions"/>
-                                    <Comments :comments="outputset.data.comments"/>
-                                    <OutputsTable v-if="OutputsVisible" :data="resource(outputset.data.outputs)"/>
-                                    <TimecoursesTable v-if="TimecoursesVisible" :data="resource(outputset.data.timecourses)"/>
-                                </div>
-                            </template>
-                        </GetData>
-                    </md-app-content>
-                </md-app>
-            </template>
-        </GetData>
+    <!-- Outputs -->
+    <GetData v-if="study.data.outputset" :resource_url="study.data.outputset">
+        <template slot-scope="outputset">
+            <div v-if="outputset.loaded">
+                {{ checkhasOutputs(outputset.data.outputs) }}
+                {{ checkhasTimecourses(outputset.data.timecourses) }}
+                <Descriptions :descriptions="outputset.data.descriptions"/>
+                <Comments :comments="outputset.data.comments"/>
+                <OutputsTable v-if="OutputsVisible" :outputs="resource(outputset.data.outputs)"/>
+                <TimecoursesTable v-if="TimecoursesVisible" :timecourses="resource(outputset.data.timecourses)"/>
+            </div>
+        </template>
+    </GetData>
 
     </div>
 </template>
 
 <script>
+    import {isEmpty} from "@/utils"
+    import {lookup_icon} from "@/icons"
+
     import GroupsTable from "@/components/tables/GroupsTable";
     import IndividualsTable from '@/components/tables/IndividualsTable';
     import InterventionsTable from "@/components/tables/InterventionsTable";
     import OutputsTable from "@/components/tables/OutputsTable";
     import TimecoursesTable from "@/components/tables/TimecoursesTable";
 
-
-    import GetData from "@/components/api/GetData";
-    import {isEmpty} from "@/utils"
-
     export default {
         name: "StudyDetail",
         components: {
             GroupsTable: GroupsTable,
             IndividualsTable: IndividualsTable,
-            GetData: GetData,
             InterventionsTable: InterventionsTable,
             OutputsTable: OutputsTable,
             TimecoursesTable: TimecoursesTable,
         },
+
         props: {
-            id: String,
+            study: {
+                type: Object,
+            },
+            resource_url: {
+                type: String
+            }
         },
         data() {
             return {
@@ -234,31 +115,11 @@
             api() {
                 return this.$store.state.endpoints.api;
             },
-
-            resource_url() {
-                return this.api + '/studies_read/' + this.id + '/?format=json';
-            },
-
         },
         // Fetches posts when the component is created.
         methods:{
-            toggleMenu () {
-                this.menuVisible = !this.menuVisible
-            },
-            toggleGeneral () {
-                this.GeneralVisible = !this.GeneralVisible
-            },
-            toggleIndividuals () {
-                this.IndividualsVisible = !this.IndividualsVisible
-            },
-            toggleGroups () {
-                this.GroupsVisible = !this.GroupsVisible
-            },
-            toggleInterventions () {
-                this.InterventionsVisible = !this.InterventionsVisible
-            },
-            toggleOutputs () {
-                this.OutputsVisible = !this.OutputsVisible
+            icon: function (key) {
+                return lookup_icon(key)
             },
             checkhasOutputs (array ) {
                 if (array.length !== 0){
@@ -284,6 +145,24 @@
                 if (array.length !== 0){
                     this.hasGroups = true
                 }
+            },
+            toggleMenu () {
+                this.menuVisible = !this.menuVisible
+            },
+            toggleGeneral () {
+                this.GeneralVisible = !this.GeneralVisible
+            },
+            toggleIndividuals () {
+                this.IndividualsVisible = !this.IndividualsVisible
+            },
+            toggleGroups () {
+                this.GroupsVisible = !this.GroupsVisible
+            },
+            toggleInterventions () {
+                this.InterventionsVisible = !this.InterventionsVisible
+            },
+            toggleOutputs () {
+                this.OutputsVisible = !this.OutputsVisible
             },
             toggleTimecourses () {
 
