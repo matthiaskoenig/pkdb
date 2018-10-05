@@ -87,6 +87,30 @@ variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
 (pkdb) python setup_database.py
 (pkdb) python upload_studies.py
 ```
+## Elastic Search 
+Elastic Search engine is running on `0.0.0.0:9200` but is also reachable via django views.
 
+Filtering example:
+```
+ http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
+```
+Advanced Filtering example:
+```
+http://localhost:8000/api/v1/characteristica_elastic/?value__gt=80&category=weight&final=true
+```
+Search example:
+```
+http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
+```
 
+Suggest example:
+```
+http://localhost:8000/api/v1/substances_elastic/suggest/?name_suggest__completion=cod
+```
+rebuild index:
+```
+docker-compose run --rm web ./manage.py search_index --rebuild
+```
+ 
+## Read 
 &copy; 2017-2018 Jan Grzegorzewski & Matthias König.
