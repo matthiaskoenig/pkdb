@@ -1,19 +1,21 @@
 <template>
     <div id="app">
-        <v-container grid-list-md text-xs-center>
-            <v-layout row wrap>
-                <v-flex xs12>
-                    <Navigation></Navigation>
-                </v-flex>
+        <v-app>
+            <v-container grid-list-md text-xs-center>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <Navigation></Navigation>
+                    </v-flex>
 
-                <v-flex xs12>
-                    <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
-                </v-flex>
-                <v-flex>
-                <Footer></Footer>
-                </v-flex>
-            </v-layout>
-        </v-container>
+                    <v-flex xs12>
+                        <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
+                    </v-flex>
+                    <v-flex>
+                    <Footer></Footer>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-app>
     </div>
 </template>
 

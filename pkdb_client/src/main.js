@@ -8,6 +8,7 @@ import router from './router'
 import store from './store'
 
 import './assets/pkdb.css';
+import './stylus/main.styl'
 
 Vue.use(VueResource);
 

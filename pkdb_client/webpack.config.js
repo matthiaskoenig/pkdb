@@ -10,6 +10,12 @@ module.exports = {
                 test: /\.s[a|c]ss$/,
                 loader: 'style!css!sass'
             }
+        ],
+        rules: [
+            {
+                test: /\.styl$/,
+                loader: ['style-loader', 'css-loader', 'stylus-loader']
+            }
         ]
     },
     vue: {
