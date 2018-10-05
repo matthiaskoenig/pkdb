@@ -96,7 +96,8 @@ Filtering example:
 ```
 Advanced Filtering example:
 ```
-http://localhost:8000/api/v1/characteristica_elastic/?value__gt=80&category=weight&final=true```
+http://localhost:8000/api/v1/characteristica_elastic/?value__gt=80&category=weight&final=true
+```
 Search example:
 ```
 http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
@@ -104,7 +105,8 @@ http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&f
 
 Suggest example:
 ```
-http://localhost:8000/api/v1/substances_elastic/suggest/?name_suggest__completion=cod```
+http://localhost:8000/api/v1/substances_elastic/suggest/?name_suggest__completion=cod
+```
 rebuild index:
 ```
 docker-compose run --rm web ./manage.py search_index --rebuild
