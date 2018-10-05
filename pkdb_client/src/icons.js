@@ -1,3 +1,6 @@
+/**
+ * Helpers to work with icons.
+ */
 
 const icons_table = {
     home: 'fas fa-home',
