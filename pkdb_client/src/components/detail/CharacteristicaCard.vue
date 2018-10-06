@@ -35,7 +35,6 @@
         name: "CharacteristicaCard",
         props: {
             data: Object,
-            resource_url: String,
         },
         computed: {
             value() {
@@ -76,8 +75,6 @@
                         }
                     }
                 }
-
-
                 return value;
             }
         },

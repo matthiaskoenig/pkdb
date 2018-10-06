@@ -1,3 +1,4 @@
+import axios from 'axios'
 
 function id_from_url(url){
     var characteristic_id = url.match(/_read\/(\d+)/);
@@ -14,8 +15,17 @@ function clean(obj) {
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
+function  fetch_data(url){
+    axios.get(url)
+        .then(response => {
+            return response.data
+        })
+        .catch((error)=>{
+            console.error(error);
+        })
+}
 
-export {id_from_url, clean, isEmpty};
+export {id_from_url, clean, isEmpty,fetch_data};
 
 
 // vue paginator
