@@ -1,8 +1,8 @@
 <template>
     <div id="about-information">
         <v-card>
-            <v-toolbar color="primary" dark>
-                <v-toolbar-title>Pharmacokinetics database (PK-DB)<br/>
+            <v-toolbar color="secondary" dark dense>
+                <v-toolbar-title  dense>About<br/>
                 </v-toolbar-title>
             </v-toolbar>
             <v-container fluid grid-list-lg>
@@ -10,7 +10,8 @@
                     <v-flex xs12>
 
                         <p>
-                            <strong>Version</strong>: {{ version }}<br/>
+                            <heading title="Pharmacokinetics database (PK-DB)" />
+                            <strong>Version</strong>: {{ version }}
                         </p>
                         <p>
                             Data base for the standardized storage of clinical and experimental data sets from

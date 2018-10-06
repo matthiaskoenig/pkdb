@@ -20,13 +20,13 @@ import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fort
 
 import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
     faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets,
-    faCube, faCubes, faUserCog, faUserEdit, faEnvelope
+    faCube, faCubes, faUserCog, faUserEdit, faEnvelope, faTicketAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
     faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode, faTablet, faTablets, faCube, faCubes,
-    faUserCog, faUserEdit, faEnvelope);
+    faUserCog, faUserEdit, faEnvelope, faTicketAlt);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('font-awesome-layers', FontAwesomeLayers);
@@ -68,6 +68,9 @@ Vue.component('IndividualInfo', IndividualInfo);
 
 Vue.component('GetData', GetData);
 Vue.component('GetPaginatedData', GetPaginatedData);
+
+
+import { lookup_icon} from "./icons";
 
 
 Vue.config.productionTip = false;

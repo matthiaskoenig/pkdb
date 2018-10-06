@@ -8,7 +8,7 @@
                     </v-flex>
                 </v-layout>
                 <v-layout row>
-                    <v-flex lg12>
+                    <v-flex lg12">
                         <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
                     </v-flex>
                 </v-layout>
