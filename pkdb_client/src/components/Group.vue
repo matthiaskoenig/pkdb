@@ -17,11 +17,15 @@
             GroupDetail: GroupDetail
         },
         computed: {
+
+            api() {
+                return this.$store.state.endpoints.api;
+            },
             resource_url() {
                 var path = this.$route.path;
                 var tokens = path.split('/');
                 var group_id = tokens[tokens.length-1];
-                return this.$store.state.endpoints.api + '/groups_read/'+ group_id +'/?format=json';
+                return this.api + '/groups_read/'+ group_id +'/?format=json';
             }
         },
     }
