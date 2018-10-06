@@ -1,4 +1,4 @@
-
+<!--
 <template>
     <list-view :resource_url="resource_url">
         <template slot="listview">
@@ -7,7 +7,7 @@
     </list-view>
 </template>
 
-
+-->
 <template>
     <GetPaginatedData :resource_url="resource_url">
         <div slot-scope="data">

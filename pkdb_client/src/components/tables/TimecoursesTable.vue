@@ -1,7 +1,6 @@
 <template>
-    <div id="timecourses-table">
-    <Heading :count="data.count" :icon="icon('timecourses')" title="Timecourses" :resource_url="resource_url"/>
-    <v-card>
+    <v-card id="timecourses-table">
+        <heading-toolbar :count="data.count" :icon="icon('timecourses')" title="Timecourses" :resource_url="resource_url"/>
         <v-data-table
                 :headers="headers"
                 :items="data.entries"
@@ -36,7 +35,6 @@
             </template>
         </v-data-table>
     </v-card>
-    </div>
 </template>
 
 <script>

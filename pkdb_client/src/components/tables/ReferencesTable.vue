@@ -1,7 +1,6 @@
 <template>
-    <div id="references-table">
-    <heading :count="data.count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
-    <v-card>
+    <v-card id="references-table">
+        <heading-toolbar :count="data.count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
         <v-data-table
                 :headers="headers"
                 :items="data.entries"
@@ -25,7 +24,6 @@
             </template>
         </v-data-table>
     </v-card>
-    </div>
 </template>
 
 

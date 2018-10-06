@@ -1,7 +1,6 @@
 <template>
-    <div id="outputs-table">
-    <Heading :count="data.count" :icon="icon('outputs')" title="Outputs" :resource_url="resource_url"/>
-    <v-card>
+    <v-card id="outputs-table">
+        <heading-toolbar :count="data.count" :icon="icon('outputs')" title="Outputs" :resource_url="resource_url"/>
         <v-data-table
                 :headers="headers"
                 :items="data.entries"
@@ -43,7 +42,6 @@
             </template>
         </v-data-table>
     </v-card>
-    </div>
 </template>
 
 
