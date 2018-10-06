@@ -1,60 +1,57 @@
 <template>
-    <div id="studies-table">
-        <Heading :count="data.count" :icon="icon('study')" title="Studies" :resource_url="resource_url"/>
+    <v-card id="studies-table">
+        <heading-toolbar :count="data.count" :icon="icon('study')" title="Studies" :resource_url="resource_url"/>
+        <v-data-table
+                :headers="headers"
+                :items="data.entries"
+                hide-actions
+                class="elevation-1">
+            <template slot="items" slot-scope="table">
+                <td>
+                    <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
+                    <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
+                </td>
+                <td>{{ table.item.name }}</td>
+                <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
+                    <v-icon>{{ icon('reference') }}</v-icon>
 
-    <v-card>
-    <v-data-table
-            :headers="headers"
-            :items="data.entries"
-            hide-actions
-            class="elevation-1">
-        <template slot="items" slot-scope="table">
-            <td>
-                <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
-                <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
-            </td>
-            <td>{{ table.item.name }}</td>
-            <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
-                <v-icon>{{ icon('reference') }}</v-icon>
+                </a>
+                </td>
+                <td>
+                    <UserAvatar :user="table.item.creator"/>
+                </td>
+                <td>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><UserAvatar :user="c"/></span>
+                </td>
+                <td>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2">
 
-            </a>
-            </td>
-            <td>
-                <UserAvatar :user="table.item.creator"/>
-            </td>
-            <td>
-                <span v-for="(c, index2) in table.item.curators" :key="index2"><UserAvatar :user="c"/></span>
-            </td>
-            <td>
-                <span v-for="(c, index2) in table.item.substances" :key="index2">
-
-                    <v-icon>{{ icon('substance') }}</v-icon>{{c.name}}
-                </span>
-            </td>
-            <td>
-                <span v-for="(f, index2) in table.item.files" :key="index2"><a :href="f" :title="f">
-                        <v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
-            </td>
-            <td>
-                <a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset">
-                    <v-icon>{{ icon('groups') }}</v-icon></a>
-            </td>
-            <td>
-                <a v-if="table.item.individualset" :href="table.item.individualset" :title="table.item.individualset">
-                    <v-icon>{{ icon('individuals') }}</v-icon></a>
-            </td>
-            <td>
-                <a v-if="table.item.interventionset" :href="table.item.interventionset" :title="table.item.interventionset">
-                    <v-icon>{{ icon('interventions') }}</v-icon></a>
-            </td>
-            <td>
-                <a v-if="table.item.outputset" :href="table.item.outputset" :title="table.item.outputset">
-                    <v-icon>{{ icon('outputs') }}</v-icon></a>
-            </td>
-        </template>
-    </v-data-table>
+                        <v-icon>{{ icon('substance') }}</v-icon>{{c.name}}
+                    </span>
+                </td>
+                <td>
+                    <span v-for="(f, index2) in table.item.files" :key="index2"><a :href="f" :title="f">
+                            <v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
+                </td>
+                <td>
+                    <a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset">
+                        <v-icon>{{ icon('groups') }}</v-icon></a>
+                </td>
+                <td>
+                    <a v-if="table.item.individualset" :href="table.item.individualset" :title="table.item.individualset">
+                        <v-icon>{{ icon('individuals') }}</v-icon></a>
+                </td>
+                <td>
+                    <a v-if="table.item.interventionset" :href="table.item.interventionset" :title="table.item.interventionset">
+                        <v-icon>{{ icon('interventions') }}</v-icon></a>
+                </td>
+                <td>
+                    <a v-if="table.item.outputset" :href="table.item.outputset" :title="table.item.outputset">
+                        <v-icon>{{ icon('outputs') }}</v-icon></a>
+                </td>
+            </template>
+        </v-data-table>
     </v-card>
-    </div>
 </template>
 
 <script>

@@ -16,7 +16,7 @@
                     </p>
 
                     <p>
-                        <v-img src="/assets/images/workflow.png"/>
+                        <v-img src="/assets/images/workflow.png" max-width="600"/>
                     </p>
 
                     <p>

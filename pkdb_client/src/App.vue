@@ -7,7 +7,7 @@
                         <Navigation></Navigation>
                     </v-flex>
                 </v-layout>
-                <v-layout row>
+                <v-layout row style="padding-top: 55px;">
                     <v-flex lg12">
                         <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
                     </v-flex>

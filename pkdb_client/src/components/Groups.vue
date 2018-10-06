@@ -1,3 +1,13 @@
+
+<template>
+    <list-view :resource_url="resource_url">
+        <template slot="listview">
+            <groups-table :data="data" :resource_url="resource_url"/>
+        </template>
+    </list-view>
+</template>
+
+
 <template>
     <GetPaginatedData :resource_url="resource_url">
         <div slot-scope="data">
@@ -6,9 +16,11 @@
     </GetPaginatedData>
 </template>
 
+
 <script>
-    import GetPaginatedData from '@/components/api/GetPaginatedData';
-    import GroupsTable from "@/components/tables/GroupsTable";
+    import GetPaginatedData from './api/GetPaginatedData';
+    import GroupsTable from "./tables/GroupsTable";
+    import ListView from "./ListView";
 
     export default {
         name: 'Groups',
@@ -22,7 +34,7 @@
             return {
             }
         },
-        computed: {
+        computed: { // vuex store
             api() {
                 return this.$store.state.endpoints.api;
             },
@@ -32,5 +44,5 @@
         }
     }
 </script>
-<style>
-</style>
+
+<style></style>

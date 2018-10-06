@@ -1,5 +1,4 @@
 <template>
-    <v-card flat dark class="accent">
     <v-layout id="group-info" row wrap>
         <v-flex>
             <info-text>Name</info-text><br/>
@@ -14,7 +13,6 @@
             {{ group.individuals.length }}
         </v-flex>
     </v-layout>
-    </v-card>
 </template>
 
 <script>
