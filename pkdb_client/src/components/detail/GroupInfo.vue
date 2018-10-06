@@ -1,4 +1,5 @@
 <template>
+    <v-card flat dark class="accent">
     <v-layout id="group-info" row wrap>
         <v-flex>
             <info-text>Name</info-text><br/>
@@ -10,9 +11,10 @@
         </v-flex>
         <v-flex v-if="(group.individuals && group.individuals.length>0)">
             <info-text>individuals</info-text><br/>
-            {{ group.individuals.count }}
+            {{ group.individuals.length }}
         </v-flex>
     </v-layout>
+    </v-card>
 </template>
 
 <script>
