@@ -1,9 +1,16 @@
 <template>
-    <div id="individual-info">
-        Name: {{ individual.name }}<br />
-        Group: {{ individual.group }}<br />
-        Study: {{ individual.study_name }}<br />
-    </div>
+    <v-layout id="individual-info" row wrap>
+        <v-flex>
+            <info-text>Name</info-text><br/>
+            {{ individual.name }}
+        </v-flex>
+        <v-flex>
+            <info-text>Group</info-text><br/>
+            <!--<GetData d
+            {{ individual.group }}
+            -->
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
