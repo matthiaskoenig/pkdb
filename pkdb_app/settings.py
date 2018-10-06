@@ -286,14 +286,7 @@ SWAGGER_SETTINGS = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
 
-# ------------------------------
-# Elastic Search
-# ------------------------------
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'elasticsearch:9200'
-    },
-}
+
 # ------------------------------
 # LOCAL
 # ------------------------------
@@ -312,17 +305,17 @@ if DJANGO_CONFIGURATION == 'Local':
         )
     }
 
-    # DATABASES = {
-    #    'default': {
-    #        'ENGINE': 'django.db.backends.sqlite3',
-    #        'NAME': 'test',
-    #    }
-    # }
-
     # Mail
     EMAIL_HOST = "localhost"
     EMAIL_PORT = 1025
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+    # Elastic Search
+    ELASTICSEARCH_DSL = {
+        'default': {
+            'hosts': 'elasticsearch:9200'
+        },
+    }
 
 # -------------------------------------------------
 # Production
@@ -366,6 +359,13 @@ elif DJANGO_CONFIGURATION == 'Production':
         raise ValueError("EMAIL_HOST_USER could not be read, export the 'PKDB_EMAIL_HOST_USER' environment variable.")
     if not EMAIL_HOST_PASSWORD:
         raise ValueError("EMAIL_HOST_PASSWORD could not be read, export the 'PKDB_EMAIL_HOST_PASSWORD' environment variable.")
+
+    # Elastic Search
+    ELASTICSEARCH_DSL = {
+        'default': {
+            'hosts': 'elasticsearch:9200'
+        },
+    }
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
