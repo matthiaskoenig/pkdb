@@ -1,14 +1,14 @@
 <template>
     <v-card>
-        <Heading :title="'Individual: '+individual.pk" :count="1" :icon="icon('individual')" :resource_url="resource_url"/>
-        <IndividualInfo :individual="individual"/>
+        <heading :title="'Individual: '+individual.pk" :count="1" :icon="icon('individual')" :resource_url="resource_url"/>
+        <individual-info :individual="individual"/>
 
         <span v-for="(c_url, index1) in individual.all_characteristica_final" :key="index1">
-                <GetData :resource_url="c_url">
+                <get-data :resource_url="c_url">
                     <div slot-scope="cdata">
-                        <CharacteristicaCard :data="cdata.data" :resource_url="c_url"/>
+                        <characteristica-card :data="cdata.data" :resource_url="c_url"/>
                     </div>
-                </GetData>
+                </get-data>
         </span>
     </v-card>
 </template>

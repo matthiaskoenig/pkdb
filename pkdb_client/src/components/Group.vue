@@ -1,10 +1,10 @@
 <template>
     <div id="group-detail">
-        <GetData :resource_url="resource_url">
+        <get-data :resource_url="resource_url">
             <div slot-scope="group">
-                <GroupDetail :group="group.data" :resource_url="resource_url" />
+                <group-detail :group="group.data" :resource_url="resource_url" />
             </div>
-        </GetData>
+        </get-data>
     </div>
 </template>
 
