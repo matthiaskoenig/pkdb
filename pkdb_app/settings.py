@@ -254,7 +254,7 @@ LOGGING = {
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     "DEFAULT_PAGINATION_CLASS": "pkdb_app.pagination.CustomPagination",
-    "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 100)),
+    "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 20)),
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S%z",
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
