@@ -427,6 +427,8 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = GroupSet
         fields = ["pk", "study", "descriptions", "groups","group_exs", "comments"]
+
+
 class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
 
     individualset = serializers.HyperlinkedRelatedField(
@@ -441,9 +443,8 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
     characteristica_final = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="characteristica_read-detail"
     )
-    all_characteristica_final = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
+    characteristica_all_final = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
 
     ex = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individualexs_read-detail"
@@ -453,7 +454,7 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Individual
-        fields = ["pk","ex","study_name","study_pk"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final","all_characteristica_final"]
+        fields = ["pk","ex","study_name","study_pk"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final","characteristica_all_final"]
 
 
 class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):

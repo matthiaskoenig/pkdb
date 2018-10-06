@@ -1,22 +1,16 @@
 <template>
     <v-card>
-        <Heading :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
-        <GroupInfo :group="group"/>
+        <heading :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
+        <group-info :group="group"/>
 
-        <!-- <span v-for="(c_url, index1) in group.characteristica_all_final" :key="index1">
-                <GetData :resource_url="c_url">
-                    <div slot-scope="cdata">
-                        <CharacteristicaCard :data="cdata.data" :resource_url="c_url"/>
-                    </div>
-                </GetData>
-        </span> -->
-        <GetData :resource_url="characteristica_url">
+
+        <get-data :resource_url="characteristica_url">
             <div slot-scope="cdata">
             <span v-for="item in cdata.data.results">
-                <CharacteristicaCard :data="item"/>
+                <characteristica-card :data="item" :resource_url="characteristica_url"/>
             </span>
             </div>
-        </GetData>
+        </get-data>
 
     </v-card>
 </template>

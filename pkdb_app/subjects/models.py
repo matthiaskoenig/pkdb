@@ -261,7 +261,7 @@ class Individual(AbstractIndividual):
         return self.group.characteristica_all_final
 
     @property
-    def all_characteristica_final(self):
+    def characteristica_all_final(self):
         return  (self.characteristica_final | self.group_characteristica_final)
 
     @property
