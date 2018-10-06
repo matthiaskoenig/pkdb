@@ -3,13 +3,13 @@
         <Heading :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
         <GroupInfo :group="group"/>
 
-        <span v-for="(c_url, index1) in group.characteristica_all_final" :key="index1">
+        <!-- <span v-for="(c_url, index1) in group.characteristica_all_final" :key="index1">
                 <GetData :resource_url="c_url">
                     <div slot-scope="cdata">
                         <CharacteristicaCard :data="cdata.data" :resource_url="c_url"/>
                     </div>
                 </GetData>
-        </span>
+        </span> -->
         <hr>
         This gets only characteristica on current group, not on parents !
         <GetData :resource_url="characteristica_url">
@@ -41,8 +41,9 @@
             }
         },
         computed: {
+
             characteristica_url() {
-                var url = this.$store.state.endpoints.api + '/characteristica_elastic/?group_pk='+ this.group.pk +'&final=true';
+                var url = this.$store.state.endpoints.api + '/characteristica_elastic/?ids='+ this.group.characteristica_all_final.join('__');
                 console.log(url);
 
                 return url;

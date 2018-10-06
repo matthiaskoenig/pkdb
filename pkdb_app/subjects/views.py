@@ -34,8 +34,8 @@ from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_QUERY_GTE,
     LOOKUP_QUERY_LT,
     LOOKUP_QUERY_LTE,
-    SUGGESTER_COMPLETION
-)
+    SUGGESTER_COMPLETION,
+    LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE)
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
@@ -140,7 +140,6 @@ class IndividualViewSet(BaseDocumentViewSet):
     lookup_field = 'id'
     filter_backends = [
         FilteringFilterBackend,
-        IdsFilterBackend,
         OrderingFilterBackend,
         DefaultOrderingFilterBackend,
         SearchFilterBackend,
@@ -198,6 +197,7 @@ class IndividualViewSet(BaseDocumentViewSet):
 
     }
 class CharacteristicaViewSet(BaseDocumentViewSet):
+
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
     lookup_field = 'id'
@@ -205,6 +205,7 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
         FilteringFilterBackend,
         OrderingFilterBackend,
         DefaultOrderingFilterBackend,
+        IdsFilterBackend,
         SearchFilterBackend,
         SuggesterFilterBackend
 
@@ -215,6 +216,16 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
     )
 
     filter_fields = {
+        'all_group_pks': {
+            'field': 'all_group_pks',
+            'lookups': [
+                LOOKUP_FILTER_TERMS,
+                LOOKUP_FILTER_PREFIX,
+                LOOKUP_FILTER_WILDCARD,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
         'id': {
             'field': 'id',
             'lookups': [
@@ -318,10 +329,7 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',
         'individual_name': 'individual_name.raw',
-        'individual_pk': 'individual_pk'
-
-
-
+        'individual_pk': 'individual_pk',
     }
     suggester_fields = {
         'category_suggest': {

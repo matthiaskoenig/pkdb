@@ -392,9 +392,10 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
     characteristica_all = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="characteristica_read-detail"
     )
-    characteristica_all_final = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
+    #characteristica_all_final = serializers.HyperlinkedRelatedField(
+    #    many=True, read_only=True, view_name="characteristica_read-detail"
+    #)
+    characteristica_all_final = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     parent = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="groups_read-detail"
     )
@@ -408,7 +409,7 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             ["pk", "groupset","ex","study_name","study_pk","individuals"]
             + GROUP_FIELDS
-            + ["parent", "characteristica", "characteristica_all","characteristica_all_final"]
+            + ["parent","parents", "characteristica", "characteristica_all","characteristica_all_final"]
         )
 
 
@@ -553,7 +554,7 @@ class CharacteristicaReadSerializer(ReadSerializer):
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
 
 
 

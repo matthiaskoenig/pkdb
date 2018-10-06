@@ -71,12 +71,13 @@ class CharacteristicaDocument(DocType):
 
         }
     )
+
     group_pk = fields.IntegerField(attr='group_id')
+
     individual_name = fields.StringField(
         attr='individual_name',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-
         }
     )
     individual_pk = fields.IntegerField(attr='individual_id')

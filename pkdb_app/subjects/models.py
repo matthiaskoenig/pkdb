@@ -150,6 +150,13 @@ class Group(models.Model):
         return self.ex.figure
 
     @property
+    def parents(self):
+        parents = []
+        if self.parent:
+            parents = [self.parent.pk] + self.parent.parents
+        return parents
+
+    @property
     def characteristica_all(self):
         characteristica_all = self.characteristica.all()
         if self.parent:
@@ -367,6 +374,13 @@ class Characteristica(Valueable, AbstractCharacteristica):
     )
     norm = models.ForeignKey("Characteristica", related_name="raw", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
+
+    @property
+    def all_group_pks(self):
+        parents = []
+        if self.group:
+            parents = [self.group.pk] + self.group.parents
+        return parents
 
     @property
     def group_name(self):
