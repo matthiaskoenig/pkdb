@@ -371,11 +371,15 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
             "files",
         )
 
+class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Author
+        fields = ("pk", "first_name", "last_name")
 
 class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
-    authors = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="authors_read-detail"
-    )
+    authors = AuthorReadSerializer(
+        many=True, read_only=True)
     study = serializers.HyperlinkedRelatedField(
         many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
     )
@@ -399,16 +403,6 @@ class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
-    references = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        lookup_field="sid",
-        view_name="references_read-detail",
-    )
 
-    class Meta:
-        model = Author
-        fields = ("pk", "references", "first_name", "last_name")
 
 
