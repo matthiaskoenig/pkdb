@@ -52,6 +52,10 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def study_pk(self):
+        return self.study.first().pk
+
 
 class Study(Sidable, models.Model):
     """ Single clinical study.

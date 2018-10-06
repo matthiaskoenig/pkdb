@@ -385,6 +385,7 @@ class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "pk",
             "study",
+            "study_pk",
             "pmid",
             "sid",
             "name",
