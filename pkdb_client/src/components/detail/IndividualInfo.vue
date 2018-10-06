@@ -6,11 +6,13 @@
         </v-flex>
         <v-flex>
             <info-text>Group</info-text><br/>
+
             <GetData :resource_url="individual.group">
                 <span slot-scope="group">
                     <GroupInfo :group="group.data" :resource_url="individual.group" />
                 </span>
             </GetData>
+
         </v-flex>
     </v-layout>
 </template>

@@ -32,8 +32,8 @@ import Account from './components/auth/Account';
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
-  base: process.env.VUE_APP_API_BASE,
+  // mode: 'history',
+  // base: process.env.VUE_APP_API_BASE,
   routes: [
       {
           path: '/',

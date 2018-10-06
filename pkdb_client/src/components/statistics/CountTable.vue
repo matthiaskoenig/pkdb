@@ -1,17 +1,21 @@
 <template>
-    <div id="count-table">
+    <v-card id="count-table">
+        <v-toolbar color="secondary" dark dense>
+            <v-toolbar-title>Pharmacokinetics Database (PK-DB)</v-toolbar-title>
+        </v-toolbar>
         <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
             <template slot="items" slot-scope="table">
-                <td>
+
+                <td xs2>
                     <LinkButton :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
                 </td>
-                <td class="text-xs-right">
+                <td class="text-xs-right" xs4>
                     <Heading :title="table.item.name" :count="parseInt(table.item.count)"/>
                 </td>
-                <td class="text-xs-left">{{ table.item.description }}</td>
+                <td class="text-xs-left" xs6>{{ table.item.description }}</td>
             </template>
         </v-data-table>
-    </div>
+    </v-card>
 </template>
 
 <script>
