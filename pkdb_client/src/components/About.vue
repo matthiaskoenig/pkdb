@@ -8,9 +8,11 @@
                 <Statistics/>
             </v-flex>
         </v-layout>
+
         <v-layout row>
             <SearchAuto/>
         </v-layout>
+
     </div>
 </template>
 

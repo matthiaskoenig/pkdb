@@ -364,7 +364,7 @@ elif DJANGO_CONFIGURATION == 'Production':
     # Elastic Search
     ELASTICSEARCH_DSL = {
         'default': {
-            'hosts': 'elasticsearch:9200'
+            'hosts': 'localhost:9200'
         },
     }
 
