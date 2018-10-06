@@ -1,5 +1,7 @@
 <template>
     <div class="characteristica-card">
+
+
         {{ data }}
     </div>
 </template>

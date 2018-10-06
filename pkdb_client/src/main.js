@@ -38,6 +38,8 @@ Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
  *  -------------------------------------------------------------- */
 import JsonButton from './components/lib/JsonButton';
 import LinkButton from './components/lib/LinkButton';
+import InfoText from './components/lib/InfoText';
+
 import Comments from './components/lib/Comments';
 import Descriptions from './components/lib/Descriptions';
 import Annotations from './components/lib/Annotations';
@@ -52,6 +54,8 @@ import GetPaginatedData from './components/api/GetPaginatedData';
 
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
+Vue.component('InfoText', InfoText);
+
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('Annotations', Annotations);
