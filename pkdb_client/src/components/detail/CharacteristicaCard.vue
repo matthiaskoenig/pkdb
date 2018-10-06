@@ -1,27 +1,24 @@
 <template>
     <div class="characteristica-card">
-        <v-card>
-        <v-layout id="study-info">
+        <v-card width="250" height="80" flat>
+        <v-layout>
             <v-flex xs2>
                 <v-badge right color="red">
                     <span slot="badge">{{ data.count }}</span>
                     <v-icon>{{ icon('characteristica') }}</v-icon>
                 </v-badge>&nbsp;
             </v-flex>
+            <v-flex xs5>
+                <strong>{{ data.category }}</strong><span v-if="data.unit"> [{{ data.unit }}]</span><br/>
+                <span v-if="data.choice">
+                    <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
+                    <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
+                    {{ data.choice }}
+                </span>
+            </v-flex>
             <v-flex xs4>
-                <strong>{{ data.category }}</strong><span v-if="data.unit"> [{{ data.unit }}]</span>
-            </v-flex>
-            <v-flex xs2>
-                <span v-if="data.choice">{{ data.choice }}</span>
-            </v-flex>
-            <v-flex xs2>
                 <span v-if="value">{{ value }}</span>
             </v-flex>
-            <!--
-            <v-flex xs2>
-                {{ data }}
-            </v-flex>
-            -->
         </v-layout>
         </v-card>
     </div>
@@ -57,12 +54,11 @@
                 // min, max
                 if (this.data.min || this.data.max){
 
-
-                    const min_value = '(' + (this.data.min ? this.data.min : '')  + ' - ' + (this.data.max ? this.data.max : '') + ')'
+                    const range = '[' + (this.data.min ? this.data.min : '')  + ' - ' + (this.data.max ? this.data.max : '') + ']'
                     if (value){
-                        value += ' ' + min_value
+                        value += ' ' + range
                     } else {
-                        value = min_value
+                        value = range
                     }
                 }
                 // sd, se, cv, unit
