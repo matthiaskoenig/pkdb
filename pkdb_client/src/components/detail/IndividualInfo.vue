@@ -6,9 +6,11 @@
         </v-flex>
         <v-flex>
             <info-text>Group</info-text><br/>
-            <!--<GetData d
-            {{ individual.group }}
-            -->
+            <GetData :resource_url="individual.group">
+                <span slot-scope="group">
+                    <GroupInfo :group="group.data" :resource_url="individual.group" />
+                </span>
+            </GetData>
         </v-flex>
     </v-layout>
 </template>
@@ -26,5 +28,7 @@
 </script>
 
 <style scoped>
-
+    .v-card{
+        padding: 0px;
+    }
 </style>

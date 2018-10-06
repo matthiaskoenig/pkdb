@@ -1,9 +1,8 @@
 <template>
-    <v-card>
-    <v-card-title>
+    <div id="studies-table">
         <Heading :count="data.count" :icon="icon('study')" title="Studies" :resource_url="resource_url"/>
-    </v-card-title>
 
+    <v-card>
     <v-data-table
             :headers="headers"
             :items="data.entries"
@@ -55,7 +54,7 @@
         </template>
     </v-data-table>
     </v-card>
-
+    </div>
 </template>
 
 <script>

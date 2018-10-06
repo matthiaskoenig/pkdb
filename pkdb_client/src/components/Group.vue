@@ -2,9 +2,7 @@
     <div id="group-detail">
         <GetData :resource_url="resource_url">
             <div slot-scope="group">
-                <div v-if="group.loaded">
-                    <GroupDetail :group="group.data" :resource_url="resource_url" />
-                </div>
+                <GroupDetail :group="group.data" :resource_url="resource_url" />
             </div>
         </GetData>
     </div>

@@ -44,71 +44,81 @@
                     </v-navigation-drawer>
                 </v-card>
 
-
-
-
             </v-flex>
             <v-flex xs10>
                 <!-- Study content -->
 
-                <!-- General Overview -->
-                <v-card v-if="generalVisible">
-                    <Heading :title="'Study: '+study.pk" :icon="icon('study')" :resource_url="resource_url"/>
-                    <StudyInfo :study="study"/>
-                    <!-- <Annotations :item="study"/>-->
-                </v-card>
+                <v-layout row wrap>
+                    <v-flex xs12>
+                        <!-- General Overview -->
+                        <v-card v-if="generalVisible">
+                            <heading-toolbar :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
+                            <study-info :study="study"/>
+                            <!-- <Annotations :item="study"/>-->
+                        </v-card>
+                    </v-flex>
 
 
-                <!-- Groups -->
-                <GetData v-if="study.groupset" :resource_url="study.groupset">
-                    <template slot-scope="groupset">
-                        <div v-if="groupset.loaded">
-                            <!--
-                            <Annotations :item="groupset.data"/>
-                            -->
-                            <GroupsTable v-if="groupsVisible" :data="resource(groupset.data.groups)"/>
-                        </div>
-                    </template>
-                </GetData>
+                    <v-flex xs12>
+                        <!-- Groups -->
+                        <GetData v-if="study.groupset" :resource_url="study.groupset">
+                            <template slot-scope="groupset">
+                                <div v-if="groupset.loaded">
+                                    <!--
+                                    <Annotations :item="groupset.data"/>
+                                    -->
+                                    <GroupsTable v-if="groupsVisible" :data="resource(groupset.data.groups)"/>
+                                </div>
+                            </template>
+                        </GetData>
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <!-- Individuals -->
+                        <GetData v-if="study.individualset" :resource_url="study.individualset">
+                            <template slot-scope="individualset">
+                                <div v-if="individualset.loaded">
+                                    <!--
+                                    <Annotations :item="individualset.data"/>
+                                    -->
+                                    <IndividualsTable v-if="individualsVisible"
+                                                      :data="resource(individualset.data.individuals)"/>
+                                </div>
+                            </template>
+                        </GetData>
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <!-- Interventions -->
+                        <GetData v-if="study.interventionset" :resource_url="study.interventionset">
+                            <template slot-scope="interventionset">
+                                <div v-if="interventionset.loaded">
+                                    <InterventionsTable v-if="interventionsVisible"
+                                                        :data="resource(interventionset.data.interventions)"/>
+                                </div>
+                            </template>
+                        </GetData>
+                    </v-flex>
+
+                    <v-flex xs12>
+                        <!-- Outputs -->
+                        <GetData v-if="study.outputset" :resource_url="study.outputset">
+                            <template slot-scope="outputset">
+                                <div v-if="outputset.loaded">
+                                    <!--
+                                    {{ checkhasOutputs(outputset.outputs) }}
+                                    {{ checkhasTimecourses(outputset.timecourses) }}
+                                    -->
+
+                                    <OutputsTable v-if="outputsVisible" :data="resource(outputset.data.outputs)"/>
+                                    <TimecoursesTable v-if="timecoursesVisible" :data="resource(outputset.data.timecourses)"/>
+                                </div>
+                            </template>
+                        </GetData>
+                    </v-flex>
+                    </v-layout>
 
 
-                <!-- Individuals -->
-                <GetData v-if="study.individualset" :resource_url="study.individualset">
-                    <template slot-scope="individualset">
-                        <div v-if="individualset.loaded">
-                            <!--
-                            <Annotations :item="individualset.data"/>
-                            -->
-                            <IndividualsTable v-if="individualsVisible"
-                                              :data="resource(individualset.data.individuals)"/>
-                        </div>
-                    </template>
-                </GetData>
-
-                <!-- Interventions -->
-                <GetData v-if="study.interventionset" :resource_url="study.interventionset">
-                    <template slot-scope="interventionset">
-                        <div v-if="interventionset.loaded">
-                            <InterventionsTable v-if="interventionsVisible"
-                                                :data="resource(interventionset.data.interventions)"/>
-                        </div>
-                    </template>
-                </GetData>
-
-                <!-- Outputs -->
-                <GetData v-if="study.outputset" :resource_url="study.outputset">
-                    <template slot-scope="outputset">
-                        <div v-if="outputset.loaded">
-                            <!--
-                            {{ checkhasOutputs(outputset.outputs) }}
-                            {{ checkhasTimecourses(outputset.timecourses) }}
-                            -->
-
-                            <OutputsTable v-if="outputsVisible" :data="resource(outputset.data.outputs)"/>
-                            <TimecoursesTable v-if="timecoursesVisible" :data="resource(outputset.data.timecourses)"/>
-                        </div>
-                    </template>
-                </GetData>
             </v-flex>
         </v-layout>
     </div>

@@ -25,7 +25,10 @@ const icons_table = {
     github: 'fab fa-github',
     files: 'fas fa-file-medical',
     file: 'fas fa-file-medical',
-    substance: 'fas fa-tablets'
+    substance: 'fas fa-tablets',
+    substances: 'fas fa-tablets',
+    characteristicas: 'fas fa-ticket-alt',
+    characteristica: 'fas fa-ticket-alt',
 };
 
 function lookup_icon(key){
