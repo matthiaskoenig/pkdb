@@ -107,6 +107,7 @@ Suggest example:
 ```
 http://localhost:8000/api/v1/substances_elastic/suggest/?name_suggest__completion=cod
 ```
+
 rebuild index:
 ```
 docker-compose run --rm web ./manage.py search_index --rebuild

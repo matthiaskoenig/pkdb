@@ -1,16 +1,10 @@
 <template>
-<span id="heading">
-    <v-icon :title="title">{{ icon }}</v-icon>&nbsp;
-    <v-badge v-if="count" right color="red">
-        <span slot="badge">{{ count }}</span>
-        <!-- <v-icon large color="grey lighten-1">icon</v-icon>-->
-        {{ title }}
-    </v-badge>&nbsp;
-    <span v-if="!count">{{ title }}</span>
-    <JsonButton :resource_url="resource_url"/>
-</span>
+    <v-toolbar id="heading-toolbar" color="secondary" dark dense>
+        <v-toolbar-title>
+            <Heading :count="count" :icon="icon" :title="title" :resource_url="resource_url"/>
+        </v-toolbar-title>
+    </v-toolbar>
 </template>
-
 
 <script>
     export default {

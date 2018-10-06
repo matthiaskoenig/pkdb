@@ -1,9 +1,9 @@
 <template>
     <div id="app">
         <v-app>
-            <v-container fluid grid-list-xl>
+            <v-container fluid grid-list-xl style="padding: 0;">
                 <v-layout row>
-                    <v-flex lg12>
+                    <v-flex lg12 style="padding-top: 0; padding-bottom: 0;">
                         <Navigation></Navigation>
                     </v-flex>
                 </v-layout>

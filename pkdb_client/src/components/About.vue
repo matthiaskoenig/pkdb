@@ -25,7 +25,7 @@
             AboutInformation,
             Statistics,
             SearchAuto
-        },
+        }
     }
 </script>
 
