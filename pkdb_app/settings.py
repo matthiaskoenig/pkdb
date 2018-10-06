@@ -325,6 +325,7 @@ elif DJANGO_CONFIGURATION == 'Production':
     LOGIN_URL = "/#/account"
     LOGIN_REDIRECT_URL = "/#/account"
     ACCOUNT_LOGOUT_REDIRECT_URL = "/#/account"
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
 
