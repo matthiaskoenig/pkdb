@@ -1,6 +1,6 @@
 <template>
-<div id="heading">
-    <v-icon>{{ icon }}</v-icon>&nbsp;
+<span id="heading">
+    <v-icon :title="title">{{ icon }}</v-icon>&nbsp;
     <v-badge v-if="count" right color="red">
         <span slot="badge">{{ count }}</span>
         <!-- <v-icon large color="grey lighten-1">icon</v-icon>-->
@@ -8,7 +8,7 @@
     </v-badge>&nbsp;
     <span v-if="!count">{{ title }}</span>
     <JsonButton :resource_url="resource_url"/>
-</div>
+</span>
 </template>
 
 
