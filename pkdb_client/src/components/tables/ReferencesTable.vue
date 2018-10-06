@@ -1,6 +1,6 @@
 <template>
     <div id="references-table">
-    <Heading :count="data.count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
+    <heading :count="data.count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
     <v-card>
         <v-data-table
                 :headers="headers"
@@ -9,8 +9,8 @@
                 class="elevation-1">
             <template slot="items" slot-scope="table">
                 <td>
-                    <LinkButton :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
-                    <JsonButton :resource_url="api + '/references_read/'+ table.item.pk +'/?format=json'"/>
+                    <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
+                    <json-button :resource_url="api + '/references_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>{{ table.item.sid }}</td>
                 <td>
@@ -64,6 +64,5 @@
     }
 </script>
 <style>
-
 
 </style>
