@@ -10,8 +10,6 @@
                     </div>
                 </GetData>
         </span> -->
-        <hr>
-        This gets only characteristica on current group, not on parents !
         <GetData :resource_url="characteristica_url">
             <div slot-scope="cdata">
             <span v-for="item in cdata.data.results">
