@@ -1,30 +1,32 @@
 <template>
-    <div class="characteristica-card">
-        <v-card width="250" height="80" flat>
-        <v-layout>
-            <v-flex xs5>
-                <v-badge right color="red">
-                    <span slot="badge">{{ data.count }}</span>
-                    <strong>{{ data.category }}</strong><br/>
-                    <span v-if="data.choice">
-                        <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
-                        <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
-                        <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
-                        <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
-                        {{ data.choice }}
-                    </span>
-                    <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
 
-                </v-badge>&nbsp;
-            </v-flex>
-        </v-layout>
-        </v-card>
-    </div>
+    <span class="characteristica card" flat>
+    <v-badge right color="red">
+        <span slot="badge">{{ data.count }}</span>
+        <strong>{{ data.category }}</strong><br/>
+        <span v-if="data.choice">
+            <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
+            <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
+            <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
+            <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
+            {{ data.choice }}
+        </span>
+        <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+    </v-badge>
+    </span>
+
 </template>
+
+<style scoped>
+    .characteristica_card : {
+        width: 200px;
+        height: 200px;
+        border-color: black;
+    }
+</style>
 
 <script>
     import {lookup_icon} from "@/icons"
-
 
     export default {
         name: "CharacteristicaCard",
@@ -78,6 +80,3 @@
         }
     }
 </script>
-
-<style scoped>
-</style>
