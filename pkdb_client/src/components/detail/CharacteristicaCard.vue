@@ -78,11 +78,12 @@
     }
 
     .characteristica_card {
-        padding-top: 20px;
+        padding-top: 25px;
         padding-right: 10px;
         padding-left: 30px;
+        margin-bottom: 20px;
         width: 110px;
-        height: 100px;
+        height: 85px;
         // background-color: #0d47a1;
 
         border-style: none;

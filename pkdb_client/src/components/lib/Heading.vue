@@ -3,9 +3,9 @@
         <v-icon :title="title">{{ icon }}</v-icon>&nbsp;
         <v-badge v-if="count" right color="red">
             <span slot="badge">{{ count }}</span>
-            <v-toolbar-title>{{ title }}</v-toolbar-title>
+            <span class="heading-title">{{ title }}</span>
         </v-badge>&nbsp;
-        <span v-if="!count"><v-toolbar-title>{{ title }}</v-toolbar-title></span>
+        <span v-if="!count" class="heading-title">{{ title }}</span>
         <JsonButton :resource_url="resource_url"/>
     </span>
 </template>
@@ -31,4 +31,7 @@
 </script>
 
 <style>
+    .heading-title {
+        font-size: large;
+    }
 </style>
