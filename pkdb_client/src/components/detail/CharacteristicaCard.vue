@@ -11,7 +11,7 @@
                     <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
                     {{ data.choice }}
                 </span>
-                <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+                <span v-if="value"><strong>{{ value }}</strong></span>&nbsp;<span v-if="error">{{ error }}</span><span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
             </v-badge>
         </span>
         <span v-else>
@@ -23,7 +23,7 @@
                 <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
                 {{ data.choice }}
             </span>
-            <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+            <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span><span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
         </span>
     </div>
 
