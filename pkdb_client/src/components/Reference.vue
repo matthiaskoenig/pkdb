@@ -1,17 +1,15 @@
 <template>
-    <div id="reference">
-        <GetData :resource_url="resource_url">
+    <span id="reference">
+        <get-data :resource_url="resource_url">
             <div slot-scope="reference">
-                <div v-if="reference.loaded">
-                    <ReferenceDetail :reference="reference.data" :resource_url="resource_url" />
-                </div>
+                <reference-detail :reference="reference.data" :resource_url="resource_url" />
             </div>
-        </GetData>
-    </div>
+        </get-data>
+    </span>
 </template>
 
 <script>
-    import ReferenceDetail from '@/components/detail/ReferenceDetail'
+    import ReferenceDetail from './detail/ReferenceDetail'
 
     export default {
         name: 'Reference',

@@ -1,17 +1,15 @@
 <template>
-    <div id="timecourse">
-        <GetData :resource_url="resource_url">
+    <span id="timecourse">
+        <get-data :resource_url="resource_url">
             <div slot-scope="timecourse">
-                <div v-if="timecourse.loaded">
-                    <TimecourseDetail :timecourse="timecourse.data" :resource_url="resource_url" />
-                </div>
+                <timecourse-detail :timecourse="timecourse.data" :resource_url="resource_url" />
             </div>
-        </GetData>
-    </div>
+        </get-data>
+    </span>
 </template>
 
 <script>
-    import TimecourseDetail from '@/components/detail/TimecourseDetail'
+    import TimecourseDetail from './detail/TimecourseDetail'
 
     export default {
         name: 'Timecourse',

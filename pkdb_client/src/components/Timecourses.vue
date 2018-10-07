@@ -1,14 +1,14 @@
 <template>
-    <GetPaginatedData :resource_url="resource_url">
+    <get-paginated-data :resource_url="resource_url">
         <div slot-scope="data">
-            <TimecoursesTable :data="data" :resource_url="resource_url"/>
+            <timecourses-table :data="data" :resource_url="resource_url"/>
         </div>
-    </GetPaginatedData>
+    </get-paginated-data>
 </template>
 
 <script>
-    import GetPaginatedData from '@/components/api/GetPaginatedData';
-    import TimecoursesTable from "@/components/tables/TimecoursesTable";
+    import GetPaginatedData from './api/GetPaginatedData';
+    import TimecoursesTable from "./tables/TimecoursesTable";
 
     export default {
         name: 'Timecourses',
