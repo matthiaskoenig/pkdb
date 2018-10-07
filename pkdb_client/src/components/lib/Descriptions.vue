@@ -1,5 +1,6 @@
 <template>
-    <div id="descriptions">
+    <div id="descriptions" v-if="descriptions">
+        Descriptions
         <span v-for="item in descriptions" :key="item.pk">{{ item }}<br /></span>
     </div>
 </template>
@@ -16,5 +17,4 @@
 </script>
 
 <style scoped>
-
 </style>

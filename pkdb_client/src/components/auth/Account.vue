@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <span>
         <h1>User Account</h1>
-    <h2>Vue login</h2>
-    <div id="login-example">
-        <UserLogin></UserLogin>
-        <CountTable></CountTable>
-    </div>
+        <h2>Vue login</h2>
+        <div id="login-example">
+            <user-login></user-login>
+        </div>
+
         <h2>Django endpoints</h2>
         <ul>
             <span v-if="user">
@@ -19,14 +19,12 @@
                 <li><a :href="domain+'/accounts/logout/'">logout</a></li>
                 -->
             </span>
-
         </ul>
-
-    </div>
+    </span>
 </template>
 
 <script>
-    import UserLogin from '@/components/auth/UserLogin'
+    import UserLogin from './UserLogin'
 
     export default {
         name: "Account",
@@ -48,5 +46,4 @@
 </script>
 
 <style scoped>
-
 </style>
