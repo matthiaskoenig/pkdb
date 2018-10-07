@@ -1,9 +1,8 @@
 <template>
-
-    <span class="characteristica card" flat>
+    <div class="characteristica_card">
     <v-badge right color="red">
         <span slot="badge">{{ data.count }}</span>
-        <strong>{{ data.category }}</strong><br/>
+        <span class="attribute">{{ data.category }}</span><br />
         <span v-if="data.choice">
             <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
             <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
@@ -13,17 +12,9 @@
         </span>
         <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
     </v-badge>
-    </span>
+    </div>
 
 </template>
-
-<style scoped>
-    .characteristica_card : {
-        width: 200px;
-        height: 200px;
-        border-color: black;
-    }
-</style>
 
 <script>
     import {lookup_icon} from "@/icons"
@@ -80,3 +71,23 @@
         }
     }
 </script>
+
+<style scoped lang="css">
+    .attribute {
+        font-weight: bold;
+        background-color: lightgray;
+    }
+
+    .characteristica_card {
+        padding-top: 20px;
+        padding-right: 30px;
+        padding-left: 20px;
+        width: 100px;
+        height: 100px;
+        // background-color: #0d47a1;
+
+        border-style: groove;
+        border-width: thin;
+        border-color: gray;
+    }
+</style>

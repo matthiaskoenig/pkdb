@@ -53,7 +53,6 @@ import GetPaginatedData from './components/api/GetPaginatedData';
 
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
-Vue.component('InfoText', InfoText);
 
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
