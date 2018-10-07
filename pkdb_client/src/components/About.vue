@@ -2,15 +2,15 @@
     <div id="about">
         <v-layout row>
             <v-flex xs12 lg6>
-                <AboutInformation/>
+                <about-information/>
             </v-flex>
             <v-flex xs12 lg6>
-                <Statistics/>
+                <statistics/>
             </v-flex>
         </v-layout>
 
         <v-layout row>
-            <SearchAuto/>
+            <search-auto/>
         </v-layout>
 
     </div>
@@ -19,7 +19,7 @@
 <script>
     import Statistics from '@/components/statistics/Statistics'
     import AboutInformation from "./AboutInformation";
-    import SearchAuto from "@/views/SearchAuto"
+    import SearchAuto from ".views/SearchAuto"
     export default {
         name: 'About',
 

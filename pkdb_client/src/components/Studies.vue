@@ -1,14 +1,14 @@
 <template>
-    <GetPaginatedData :resource_url="resource_url">
+    <get-paginated-data :resource_url="resource_url">
         <div slot-scope="data">
-            <StudiesTable :data="data" :resource_url="resource_url" />
+            <studies-table :data="data" :resource_url="resource_url" />
         </div>
-    </GetPaginatedData>
+    </get-paginated-data>
 </template>
 
 <script>
-    import GetPaginatedData from '@/components/api/GetPaginatedData';
-    import StudiesTable from "@/components/tables/StudiesTable";
+    import GetPaginatedData from './api/GetPaginatedData';
+    import StudiesTable from "./tables/StudiesTable";
 
     export default {
         name: 'References',
