@@ -4,7 +4,7 @@
             <v-container fluid grid-list-xl style="padding: 0;">
                 <v-layout row>
                     <v-flex lg12 style="padding-top: 0; padding-bottom: 0;">
-                        <Navigation></Navigation>
+                        <navigation></navigation>
                     </v-flex>
                 </v-layout>
                 <v-layout row style="padding-top: 55px;">
@@ -14,7 +14,7 @@
                 </v-layout>
                 <v-layout row>
                     <v-flex lg12>
-                    <Footer></Footer>
+                    <footer></footer>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -23,8 +23,8 @@
 </template>
 
 <script>
-    import Navigation from '@/components/Navigation.vue';
-    import Footer from '@/components/Footer.vue';
+    import Navigation from './components/Navigation.vue';
+    import Footer from './components/Footer.vue';
 
     export default {
         name: 'app',
