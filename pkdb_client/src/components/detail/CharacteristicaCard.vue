@@ -1,17 +1,30 @@
 <template>
     <div class="characteristica_card">
-    <v-badge right color="black" left>
-        <span slot="badge">{{ data.count }}</span>
-        <span class="attr attr-characteristica">{{ data.category }}</span><br />
-        <span v-if="data.choice">
-            <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
-            <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
-            <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
-            <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
-            {{ data.choice }}
+        <span v-if="data.count">
+            <v-badge right color="black" left>
+                <span slot="badge">{{ data.count }}</span>
+                <span class="attr attr-characteristica">{{ data.category }}</span><br />
+                <span v-if="data.choice">
+                    <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
+                    <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
+                    <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
+                    <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
+                    {{ data.choice }}
+                </span>
+                <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+            </v-badge>
         </span>
-        <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
-    </v-badge>
+        <span v-else>
+            <span class="attr attr-characteristica">{{ data.category }}</span><br />
+            <span v-if="data.choice">
+                <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
+                <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
+                <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
+                <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
+                {{ data.choice }}
+            </span>
+            <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+        </span>
     </div>
 
 </template>

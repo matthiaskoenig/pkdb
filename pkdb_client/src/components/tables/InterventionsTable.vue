@@ -15,20 +15,20 @@
                 <td>{{table.item.name }}</td>
                 <td>{{table.item.category }}</td>
                 <td>{{table.item.choice }}</td>
-                <td>{{table.item.route }}</td>
-                <td>{{table.item.form}}</td>
-                <td>{{table.item.application}}</td>
-                <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('substance') }}</v-icon> </a></td>
-                <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
-                <td>{{table.item.unit}} </td>
-                <td>{{table.item.value }} </td>
-                <td>{{table.item.mean }}</td>
-                <td>{{table.item.median }}</td>
-                <td>{{table.item.min }}</td>
-                <td>{{table.item.max }}</td>
-                <td>{{table.item.sd }}</td>
-                <td>{{table.item.se }}</td>
-                <td>{{table.item.cv }}</td>
+                <td>
+                    {{table.item.application }}<br/>
+                    {{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span><br />
+                    {{ table.item.route }}<br/>
+                    {{table.item.form}}
+                </td>
+                <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
+                    <get-data :resource_url="table.item.substance">
+                        <div slot-scope="data">
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
+                </td>
+                <td><characteristica-card :data="table.item" /></td>
             </template>
         </v-data-table>
     </v-card>
@@ -36,9 +36,13 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
         name: 'InterventionsTable',
+        components: {
+            CharacteristicaCard
+        },
         props: {
             data: Object,
             resource_url: String,
@@ -50,20 +54,9 @@
                     {text: 'Name', value: 'name'},
                     {text: 'Category', value: 'category'},
                     {text: 'Choice', value: 'choice'},
-                    {text: 'Route', value: 'route'},
-                    {text: 'Form', value: 'form'},
                     {text: 'Application', value: 'application'},
                     {text: 'Substance', value: 'substance'},
-                    {text: 'Time', value: 'time'},
-                    {text: 'Unit', value: 'unit'},
                     {text: 'Value', value: 'value'},
-                    {text: 'Mean', value: 'mean'},
-                    {text: 'Median', value: 'median'},
-                    {text: 'Min', value: 'min'},
-                    {text: 'Max', value: 'max'},
-                    {text: 'Sd', value: 'sd'},
-                    {text: 'Se', value: 'se'},
-                    {text: 'Cv', value: 'cv'},
                 ],
             }
         },
