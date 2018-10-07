@@ -53,4 +53,9 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
     }
+
+    /* attributes */
+    .attr {
+        font-weight: bold;
+    }
 </style>

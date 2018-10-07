@@ -3,7 +3,6 @@
         <heading :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
         <group-info :group="group"/>
 
-
         <get-data :resource_url="characteristica_url">
             <div slot-scope="cdata">
             <span v-for="item in cdata.data.results">

@@ -1,8 +1,8 @@
 <template>
     <div class="characteristica_card">
-    <v-badge right color="red">
+    <v-badge right color="red" left>
         <span slot="badge">{{ data.count }}</span>
-        <span class="attribute">{{ data.category }}</span><br />
+        <span class="attr attr-characteristica">{{ data.category }}</span><br />
         <span v-if="data.choice">
             <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
             <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
@@ -73,16 +73,15 @@
 </script>
 
 <style scoped lang="css">
-    .attribute {
-        font-weight: bold;
+    .attr-characteristica {
         background-color: lightgray;
     }
 
     .characteristica_card {
         padding-top: 20px;
-        padding-right: 30px;
-        padding-left: 20px;
-        width: 100px;
+        padding-right: 10px;
+        padding-left: 30px;
+        width: 110px;
         height: 100px;
         // background-color: #0d47a1;
 
