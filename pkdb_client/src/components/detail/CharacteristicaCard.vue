@@ -1,6 +1,6 @@
 <template>
     <div class="characteristica_card">
-    <v-badge right color="red" left>
+    <v-badge right color="black" left>
         <span slot="badge">{{ data.count }}</span>
         <span class="attr attr-characteristica">{{ data.category }}</span><br />
         <span v-if="data.choice">
@@ -85,7 +85,7 @@
         height: 100px;
         // background-color: #0d47a1;
 
-        border-style: groove;
+        border-style: none;
         border-width: thin;
         border-color: gray;
     }
