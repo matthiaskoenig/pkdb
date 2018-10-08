@@ -1,21 +1,22 @@
 <template>
     <v-dialog v-model="dialog" class="detail-dialog">
-        <v-btn slot="activator" fab small title="individual.name">
-            <v-icon>{{ icon('individual') }}</v-icon></a>
+        <v-btn slot="activator" fab small title="group.name">
+            <v-icon>{{ icon('group') }}</v-icon></a>
+            {{ group.name }}
         </v-btn>
-        <individual-detail :individual="individual"/>
+        <group-detail :group="group"/>
     </v-dialog>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
-    import IndividualDetail from '../detail/IndividualDetail'
+    import GroupDetail from '../detail/GroupDetail'
 
     export default {
-        name: "IndividualButton",
-        components: {IndividualDetail},
+        name: "GroupButton",
+        components: {GroupDetail},
         props: {
-            individual: {
+            group: {
                 type: Object,
                 required: true
             },
@@ -31,5 +32,4 @@
 </script>
 
 <style scoped>
-
 </style>

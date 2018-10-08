@@ -1,6 +1,6 @@
 <template>
     <v-card class="detail-card">
-        <heading :title="'Individual: '+individual.pk" :count="1" :icon="icon('individual')" :resource_url="resource_url"/>
+        <heading-toolbar :title="'Individual: '+individual.pk" :count="1" :icon="icon('individual')" :resource_url="resource_url"/>
 
         <v-layout>
             <v-flex>

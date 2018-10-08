@@ -1,12 +1,20 @@
 <template>
     <v-card>
         <Heading :title="'Output: '+output.pk" :icon="icon('output')" :resource_url="resource_url"/>
+        <div>
+        Group:
+        <get-data v-if="output.group" :resource_url="output.group">
+            <span slot-scope="data">
+                <group-button :group="data.data"/>
+            </span>
+        </get-data><br />
 
-        Group: <a v-if="output.group" :href="output.group" :title="output.group"><v-icon>{{ icon('group') }}</v-icon></a><br />
-        Individual: <a v-if="output.individual" :href="output.individual" :title="output.individual">
-            <v-icon>{{ icon('individual') }}</v-icon></a><br />
-
-        <individual-button :individual_url="output.individual"/>
+        Individual:
+        <get-data v-if="output.individual" :resource_url="output.individual">
+            <span slot-scope="data">
+                <individual-button :individual="data.data"/>
+            </span>
+        </get-data><br />
 
         Interventions: <span v-for="(intervention, index2) in output.interventions" :key="index2"><br />
                     <a :href="intervention" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;</span><br />
@@ -23,6 +31,7 @@
         Sd: {{ output.sd }}<br />
         Se: {{ output.se }}<br />
         Cv: {{ output.cv }}<br />
+        </div>
 
     </v-card>
 </template>
@@ -30,6 +39,7 @@
 <script>
     import {lookup_icon} from "@/icons"
     import IndividualButton from '../lib/IndividualButton'
+    import GroupButton from '../lib/GroupButton'
 
     export default {
         name: "OutputDetail",

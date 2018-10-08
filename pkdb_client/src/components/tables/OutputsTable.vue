@@ -13,17 +13,18 @@
                 </td>
                 <td>{{table.item.pktype }}</td>
                 <td>
-                    <a v-if="table.item.group" :href="table.item.group" :title="table.item.group">
-                        <v-icon>{{ icon('group') }}</v-icon></a>
-                    <get-data :resource_url="table.item.group">
+                    <get-data v-if="table.item.group" :resource_url="table.item.group">
                         <div slot-scope="data">
-                            {{ data.data.name }}
+                            <group-button group="data.data" />
                         </div>
                     </get-data>
                 </td>
                 <td>
-                    <a v-if="table.item.individual" :href="table.item.individual" :title="table.item.individual">
-                        <v-icon>{{ icon('individual') }}</v-icon></a></td>
+                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                        <div slot-scope="data">
+                            <individual-button individual="data.data" />
+                        </div>
+                    </get-data>
                 <td>
                     <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
                     <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>
@@ -54,11 +55,16 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import GroupButton from '../lib/GroupButton'
+    import IndividualButton from '../lib/IndividualButton'
+    import DetailButton from '../lib/DetailButton'
     import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
         name: 'OutputsTable',
         components: {
+            GroupButton,
+            IndividualButton,
             CharacteristicaCard
         },
         props: {

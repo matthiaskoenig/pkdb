@@ -74,5 +74,9 @@
     .detail-card {
         padding: 10px;
     }
+    .detail-dialog {
+        width: 200px;
+    }
+
 
 </style>
