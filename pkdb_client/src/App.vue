@@ -71,5 +71,8 @@
         padding-left: 10px;
         padding-right: 10px;
     }
+    .detail-card {
+        padding: 10px;
+    }
 
 </style>

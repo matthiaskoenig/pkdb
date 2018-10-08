@@ -1,15 +1,22 @@
 <template>
-    <v-card>
+    <v-card class="detail-card">
         <heading :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
+        <v-layout>
+            <v-flex>
         <group-info :group="group"/>
-
-        <get-data :resource_url="characteristica_url">
-            <div slot-scope="cdata">
-            <span v-for="item in cdata.data.results">
-                <characteristica-card :data="item" :resource_url="characteristica_url"/>
-            </span>
-            </div>
-        </get-data>
+            </v-flex>
+            <v-flex>
+                <get-data :resource_url="characteristica_url">
+                    <span slot-scope="cdata">
+                        <v-layout wrap>
+                        <span v-for="item in cdata.data.results">
+                            <characteristica-card :data="item" :resource_url="characteristica_url"/>
+                        </span>
+                        </v-layout>
+                    </span>
+                </get-data>
+            </v-flex>
+        </v-layout>
 
 
     </v-card>
@@ -50,5 +57,4 @@
 </script>
 
 <style scoped>
-
 </style>

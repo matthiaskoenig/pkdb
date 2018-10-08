@@ -1,13 +1,13 @@
 <template>
     <div class="individual-info">
     <v-layout>
-        <v-flex xs6>
+        <v-flex>
             <div class="attr-card">
             <span class="attr"> Individual Name</span><br />
             {{ individual.name }}
             </div>
         </v-flex>
-        <v-flex xs6>
+        <v-flex>
             <get-data :resource_url="individual.group">
                 <span slot-scope="group">
                     <group-info :group="group.data" :resource_url="individual.group" />

@@ -1,15 +1,23 @@
 <template>
-    <v-card>
+    <v-card class="detail-card">
         <heading :title="'Individual: '+individual.pk" :count="1" :icon="icon('individual')" :resource_url="resource_url"/>
-        <individual-info :individual="individual"/>
 
-        <span v-for="(c_url, index1) in individual.all_characteristica_final" :key="index1">
-                <get-data :resource_url="c_url">
-                    <div slot-scope="cdata">
-                        <characteristica-card :data="cdata.data" :resource_url="c_url"/>
-                    </div>
-                </get-data>
-        </span>
+        <v-layout>
+            <v-flex>
+        <individual-info :individual="individual"/>
+            </v-flex>
+        <v-flex>
+            <get-data :resource_url="characteristica_url">
+                    <span slot-scope="cdata">
+                        <v-layout wrap>
+                        <span v-for="item in cdata.data.results">
+                            <characteristica-card :data="item" :resource_url="characteristica_url"/>
+                        </span>
+                        </v-layout>
+                    </span>
+            </get-data>
+        </v-flex>
+        </v-layout>
     </v-card>
 </template>
 
@@ -31,6 +39,12 @@
             }
         },
         computed: {
+            characteristica_url() {
+                var url = this.$store.state.endpoints.api + '/characteristica_elastic/?ids='+ this.individual.characteristica_all_final.join('__');
+                console.log(url);
+
+                return url;
+            }
         },
         methods: {
             icon: function (key) {
