@@ -5,6 +5,9 @@
         Group: <a v-if="output.group" :href="output.group" :title="output.group"><v-icon>{{ icon('group') }}</v-icon></a><br />
         Individual: <a v-if="output.individual" :href="output.individual" :title="output.individual">
             <v-icon>{{ icon('individual') }}</v-icon></a><br />
+
+        <individual-button :individual_url="output.individual"/>
+
         Interventions: <span v-for="(intervention, index2) in output.interventions" :key="index2"><br />
                     <a :href="intervention" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;</span><br />
         Tissue: {{output.tissue}}<br />
@@ -26,9 +29,11 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import IndividualButton from '../lib/IndividualButton'
 
     export default {
         name: "OutputDetail",
+        components: {IndividualButton},
         props: {
             output: {
                 type: Object,
