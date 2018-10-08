@@ -15,14 +15,16 @@
                 <td>
                     <get-data v-if="table.item.group" :resource_url="table.item.group">
                         <div slot-scope="data">
-                            <group-button group="data.data" />
+                            <group-button :group="data.data" />
+                            {{ data.data.name }}
                         </div>
                     </get-data>
                 </td>
                 <td>
                     <get-data v-if="table.item.individual" :resource_url="table.item.individual">
                         <div slot-scope="data">
-                            <individual-button individual="data.data" />
+                            <individual-button :individual="data.data" />
+                            {{ data.data.name }}
                         </div>
                     </get-data>
                 <td>

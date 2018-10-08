@@ -1,6 +1,6 @@
 <template>
     <v-card class="detail-card">
-        <heading :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
+        <heading-toolbar :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
         <v-layout>
             <v-flex>
         <group-info :group="group"/>
