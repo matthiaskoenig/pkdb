@@ -12,14 +12,13 @@
         <v-layout row>
             <search-auto/>
         </v-layout>
-
     </div>
 </template>
 
 <script>
-    import Statistics from '@/components/statistics/Statistics'
+    import Statistics from './statistics/Statistics'
     import AboutInformation from "./AboutInformation";
-    import SearchAuto from ".views/SearchAuto"
+    import SearchAuto from "./views/SearchAuto"
     export default {
         name: 'About',
 

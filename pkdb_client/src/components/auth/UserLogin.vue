@@ -1,6 +1,5 @@
 <template>
-    <div>
-
+    <span id="user-login">
         <div v-if="user">
             <button v-on:click="logout">Logout</button>
         </div>
@@ -16,7 +15,7 @@
             </span>
             <span v-if="warnings">Warnings: {{ warnings }}</span>
         </p>
-    </div>
+    </span>
 </template>
 
 <script>

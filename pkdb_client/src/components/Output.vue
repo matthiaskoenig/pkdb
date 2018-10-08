@@ -1,17 +1,15 @@
 <template>
-    <div id="output">
-        <GetData :resource_url="resource_url">
+    <span id="output">
+        <get-data :resource_url="resource_url">
             <div slot-scope="output">
-                <div v-if="output.loaded">
-                    <OutputDetail :output="output.data" :resource_url="resource_url" />
-                </div>
+                <output-detail :output="output.data" :resource_url="resource_url" />
             </div>
-        </GetData>
-    </div>
+        </get-data>
+    </span>
 </template>
 
 <script>
-    import OutputDetail from '@/components/detail/OutputDetail'
+    import OutputDetail from './detail/OutputDetail'
 
     export default {
         name: 'Output',

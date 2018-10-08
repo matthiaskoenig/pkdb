@@ -1,24 +1,17 @@
 <template>
-    <v-container id="list-view">
-        <v-layout fluid row wrap>
-            <v-flex>
+    <span id="list-view"></span>
+        <get-paginated-data :resource_url="resource_url">
+            <template slot="data">
 
-                <get-paginated-data :resource_url="resource_url">
-                    <template slot="data">
+                    <slot name="listview" v-bind:data="data"></slot>
 
-                            <slot name="listview" v-bind:data="data"></slot>
+            </template>
 
-                    </template>
-
-                    <!--<span slot-scope="data"></span>-->
-                        <!--{{ data }}-->
-                        <!--<slot v-bind:data="data"></slot>-->
-                </get-paginated-data>
-
-            </v-flex>
-
-        </v-layout>
-    </v-container>
+            <!--<span slot-scope="data"></span>-->
+                <!--{{ data }}-->
+                <!--<slot v-bind:data="data"></slot>-->
+        </get-paginated-data>
+    </template>
 </template>
 
 <script>

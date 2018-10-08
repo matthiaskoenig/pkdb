@@ -38,20 +38,16 @@
                 if  (this.timecourse.value != null && this.timecourse.value !== undefined) {
                     y = this.timecourse.value;
                     title_y = "value"
-
-
                 }
                 else if (this.timecourse.mean != null && this.timecourse.mean !== undefined){
                     y = this.timecourse.mean;
                     title_y = "mean"
-
                 }
                 else if (this.timecourse.median != null && this.timecourse.median !== undefined){
                     y = this.timecourse.median;
                     title_y = "median"
-
                 }
-                return {y,title_y};
+                return {y, title_y};
             },
             data(){
                 var x = this.timecourse.time;
@@ -61,7 +57,6 @@
                         array: this.timecourse.sd,
                 };
                 return [{x,y:this.values.y,type,error_y}];
-
             },
             layout(){
                 var   margin = {
@@ -71,7 +66,6 @@
                     t: 5,
                     pad: 4
                 };
-
                 var yaxis = {title: this.timecourse.pktype+" "+ this.values.title_y +" "+ this.timecourse.calculate_auc_end.substance + " [" + this.timecourse.unit+ "]"};
                 var xaxis = {title: "time [" + this.timecourse.time_unit+ "]"};
 

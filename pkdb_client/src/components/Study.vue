@@ -1,17 +1,15 @@
 <template>
-    <div id="study">
-        <GetData :resource_url="resource_url">
+    <span id="study">
+        <get-data :resource_url="resource_url">
             <div slot-scope="study">
-                <div v-if="study.loaded">
-                    <StudyDetail :study="study.data" :resource_url="resource_url" />
-                </div>
+                <StudyDetail :study="study.data" :resource_url="resource_url" />
             </div>
-        </GetData>
-    </div>
+        </get-data>
+    </span>
 </template>
 
 <script>
-    import StudyDetail from '@/components/detail/StudyDetail'
+    import StudyDetail from './detail/StudyDetail'
 
     export default {
         name: 'Study',

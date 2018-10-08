@@ -1,17 +1,15 @@
 <template>
-    <div id="intervention">
-        <GetData :resource_url="resource_url">
+    <span id="intervention">
+        <get-data :resource_url="resource_url">
             <div slot-scope="intervention">
-                <div v-if="intervention.loaded">
-                    <InterventionDetail :intervention="intervention.data" :resource_url="resource_url" />
-                </div>
+                <intervention-detail :intervention="intervention.data" :resource_url="resource_url" />
             </div>
-        </GetData>
-    </div>
+        </get-data>
+    </span>
 </template>
 
 <script>
-    import InterventionDetail from '@/components/detail/InterventionDetail'
+    import InterventionDetail from './detail/InterventionDetail'
 
     export default {
         name: 'Intervention',

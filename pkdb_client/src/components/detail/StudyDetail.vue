@@ -2,8 +2,9 @@
     <div id="study-detail">
 
         <v-layout row>
-            <v-flex xs2>
+            <v-flex xs2 v-if="false">
                 <!-- Side menu for navigation. -->
+                <div class="study-navigation">
                 <v-card height="350px">
                     <v-navigation-drawer
                             v-model="drawer"
@@ -43,9 +44,10 @@
                         </v-list>
                     </v-navigation-drawer>
                 </v-card>
+                </div>
 
             </v-flex>
-            <v-flex xs10>
+            <v-flex xs12>
                 <!-- Study content -->
 
                 <v-layout row wrap>
@@ -247,4 +249,7 @@
 </script>
 
 <style scoped>
+    .study-navigation {
+        fixed: true;
+    }
 </style>

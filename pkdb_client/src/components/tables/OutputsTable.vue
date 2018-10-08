@@ -13,32 +13,42 @@
                 </td>
                 <td>{{table.item.pktype }}</td>
                 <td>
-                    <a v-if="table.item.group" :href="table.item.group" :title="table.item.group">
-                        <v-icon>{{ icon('group') }}</v-icon></a>
+                    <get-data v-if="table.item.group" :resource_url="table.item.group">
+                        <div slot-scope="data">
+                            <group-button :group="data.data" />
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
                 </td>
                 <td>
-                    <a v-if="table.item.individual" :href="table.item.individual" :title="table.item.individual">
-                        <v-icon>{{ icon('individual') }}</v-icon></a></td>
+                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                        <div slot-scope="data">
+                            <individual-button :individual="data.data" />
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
                 <td>
-                    <span v-for="(intervention, index2) in table.item.interventions" :key="index2">
-                    <a :href="intervention" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;
+                    <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
+                    <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>
+                        <get-data :resource_url="intervention_url">
+                        <div slot-scope="data">
+                            {{ data.data.name }}
+                        </div>
+                        </get-data>&nbsp;
                     </span>
                 </td>
                 <td>{{table.item.tissue}}</td>
                 <td>
                     <a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance">
                         <v-icon>{{ icon('substance') }}</v-icon> </a>
+                    <get-data :resource_url="table.item.substance">
+                        <div slot-scope="data">
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
                 </td>
                 <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
-                <td>{{table.item.unit}} </td>
-                <td>{{table.item.value }} </td>
-                <td>{{table.item.mean }}</td>
-                <td>{{table.item.median }}</td>
-                <td>{{table.item.min }}</td>
-                <td>{{table.item.max }}</td>
-                <td>{{table.item.sd }}</td>
-                <td>{{table.item.se }}</td>
-                <td>{{table.item.cv }}</td>
+                <td><characteristica-card :data="table.item"/></td>
             </template>
         </v-data-table>
     </v-card>
@@ -47,9 +57,18 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import GroupButton from '../lib/GroupButton'
+    import IndividualButton from '../lib/IndividualButton'
+    import DetailButton from '../lib/DetailButton'
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
         name: 'OutputsTable',
+        components: {
+            GroupButton,
+            IndividualButton,
+            CharacteristicaCard
+        },
         props: {
             data: Object,
             resource_url: String,
@@ -65,15 +84,7 @@
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
                     {text: 'Time', value: 'time'},
-                    {text: 'Unit', value: 'unit'},
                     {text: 'Value', value: 'value'},
-                    {text: 'Mean', value: 'mean'},
-                    {text: 'Median', value: 'median'},
-                    {text: 'Min', value: 'min'},
-                    {text: 'Max', value: 'max'},
-                    {text: 'Sd', value: 'sd'},
-                    {text: 'Se', value: 'se'},
-                    {text: 'Cv', value: 'cv'},
                 ],
             }
         },

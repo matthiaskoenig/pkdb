@@ -1,14 +1,16 @@
 <template>
-    <GetPaginatedData :resource_url="resource_url">
-        <div slot-scope="data">
-            <ReferencesTable :data="data" :resource_url="resource_url" />
-        </div>
-    </GetPaginatedData>
+    <span id="references">
+        <get-paginated-data :resource_url="resource_url">
+            <div slot-scope="data">
+                <references-table :data="data" :resource_url="resource_url" />
+            </div>
+        </get-paginated-data>
+    </span>
 </template>
 
 <script>
-    import GetPaginatedData from '@/components/api/GetPaginatedData';
-    import ReferencesTable from "@/components/tables/ReferencesTable";
+    import GetPaginatedData from './api/GetPaginatedData';
+    import ReferencesTable from './tables/ReferencesTable';
 
     export default {
         name: 'References',

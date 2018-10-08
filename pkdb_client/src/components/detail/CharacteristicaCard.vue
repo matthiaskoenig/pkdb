@@ -1,30 +1,24 @@
 <template>
-    <div class="characteristica-card">
-        <v-card width="250" height="80" flat>
-        <v-layout>
-            <v-flex xs5>
-                <v-badge right color="red">
-                    <span slot="badge">{{ data.count }}</span>
-                    <strong>{{ data.category }}</strong><br/>
-                    <span v-if="data.choice">
-                        <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
-                        <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
-                        <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
-                        <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
-                        {{ data.choice }}
-                    </span>
-                    <span v-if="value"><strong>{{ value }}</strong></span>&nbsp; <span v-if="error">{{ error }}</span>&nbsp; <span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+    <div class="characteristica_card">
 
-                </v-badge>&nbsp;
-            </v-flex>
-        </v-layout>
-        </v-card>
+        <v-badge right color="black" left>
+            <span slot="badge">{{ count }}</span>
+            <span class="attr attr-characteristica">{{ data.category }}</span><br />
+            <span v-if="data.choice">
+                <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
+                <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
+                <span v-if="data.choice=='F'"><v-icon color="primary">fa fa-female</v-icon></span>
+                <span v-if="data.choice=='M'"><v-icon color="primary">fa fa-male</v-icon></span>
+                {{ data.choice }}
+            </span>
+            <span v-if="value"><strong>{{ value }}</strong></span>&nbsp;<span v-if="error">{{ error }}</span><span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+        </v-badge>
     </div>
+
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
-
 
     export default {
         name: "CharacteristicaCard",
@@ -32,6 +26,13 @@
             data: Object,
         },
         computed: {
+            count() {
+                if (!this.data.count){
+                    return 1;  // individual has no count ? FIXME bug
+                } else {
+                    return this.data.count
+                }
+            },
             error() {
                 var value = null;
 
@@ -79,5 +80,22 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="css">
+    .attr-characteristica {
+        background-color: lightgray;
+    }
+
+    .characteristica_card {
+        padding-top: 25px;
+        padding-right: 10px;
+        padding-left: 30px;
+        margin-bottom: 20px;
+        width: 110px;
+        height: 85px;
+        // background-color: #0d47a1;
+
+        border-style: none;
+        border-width: thin;
+        border-color: gray;
+    }
 </style>

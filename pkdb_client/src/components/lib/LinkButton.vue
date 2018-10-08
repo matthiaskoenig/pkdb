@@ -1,9 +1,9 @@
 <template>
-<span class="detail-button">
-    <v-btn color="primary" fab small dark :to="to" :title="title" :disabled="to ? false : true">
-        <v-icon>{{ icon }}</v-icon>
-    </v-btn>
-</span>
+    <span class="link-button">
+        <v-btn color="primary" fab small dark :to="to" :title="title" :disabled="to ? false : true">
+            <v-icon>{{ icon }}</v-icon>
+        </v-btn>
+    </span>
 </template>
 
 <script>

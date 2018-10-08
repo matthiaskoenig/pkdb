@@ -1,14 +1,14 @@
 <template>
-    <GetPaginatedData :resource_url="resource_url" >
+    <get-paginated-data :resource_url="resource_url" >
         <div slot-scope="data">
-            <OutputsTable :data="data"  :resource_url="resource_url" />
+            <outputs-table :data="data"  :resource_url="resource_url" />
         </div>
-    </GetPaginatedData>
+    </get-paginated-data>
 </template>
 
 <script>
-    import GetPaginatedData from '@/components/api/GetPaginatedData';
-    import OutputsTable from '@/components/tables/OutputsTable';
+    import GetPaginatedData from './api/GetPaginatedData';
+    import OutputsTable from './tables/OutputsTable';
 
     export default {
         name: 'Outputs',

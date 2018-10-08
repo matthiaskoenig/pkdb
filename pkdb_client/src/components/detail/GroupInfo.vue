@@ -1,18 +1,27 @@
 <template>
-    <v-layout id="group-info" row wrap>
-        <v-flex>
-            <info-text>Name</info-text><br/>
+    <div class="group-info">
+        <!--
+        <div class="group-card">
+            <v-icon color="primary">{{ icon('group') }}</v-icon>
+        </div>
+        -->
+        <div class="attr-card">
+            <span class="attr">Group Name</span><br />
             {{ group.name }}
-        </v-flex>
-        <v-flex>
-            <info-text>Group Size</info-text><br/>
+        </div>
+        <div class="attr-card">
+            <span class="attr">Group Size</span><br />
             {{ group.count }}
-        </v-flex>
-        <v-flex v-if="(group.individuals && group.individuals.length>0)">
-            <info-text>individuals</info-text><br/>
-            {{ group.individuals.length }}
-        </v-flex>
-    </v-layout>
+        </div>
+        <div class="attr-card">
+            <span class="attr">Individuals</span><br />
+            <span v-if="(group.individuals && group.individuals.length>0)">
+            <v-icon>fa fa-check-circle</v-icon> {{ group.individuals.length }}</span>
+            <span v-else>
+            <v-icon>fa fa-times-circle</v-icon>
+        </span>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -29,6 +38,7 @@
             icon: function (key) {
                 return lookup_icon(key)
             },
+
         }
     }
 </script>

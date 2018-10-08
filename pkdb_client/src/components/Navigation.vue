@@ -17,7 +17,6 @@
         <v-btn icon to="/timecourses" title="Timecourses"><v-icon>{{ icon('timecourses') }}</v-icon></v-btn>
         <v-btn icon to="/references" title="References"><v-icon>{{ icon('references') }}</v-icon></v-btn>
 
-
         <v-spacer></v-spacer>
 
         <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
@@ -35,7 +34,7 @@
 </template>
 
 <script>
-    import {lookup_md_icon, lookup_icon} from "@/icons"
+    import {lookup_icon} from "@/icons"
     export default {
         name: 'Navigation',
         data(){

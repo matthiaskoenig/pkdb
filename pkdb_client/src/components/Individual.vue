@@ -1,17 +1,17 @@
 <template>
     <div id="group-detail">
-        <GetData :resource_url="resource_url">
+        <get-data :resource_url="resource_url">
             <div slot-scope="individual">
                 <div v-if="individual.loaded">
-                    <IndividualDetail :individual="individual.data" :resource_url="resource_url" />
+                    <individual-detail :individual="individual.data" :resource_url="resource_url" />
                 </div>
             </div>
-        </GetData>
+        </get-data>
     </div>
 </template>
 
 <script>
-    import IndividualDetail from '@/components/detail/IndividualDetail'
+    import IndividualDetail from './detail/IndividualDetail'
 
     export default {
         name: 'Individual',

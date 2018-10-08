@@ -1,20 +1,21 @@
 <template>
-    <v-layout id="individual-info" row wrap>
+    <div class="individual-info">
+    <v-layout>
         <v-flex>
-            <info-text>Name</info-text><br/>
+            <div class="attr-card">
+            <span class="attr"> Individual Name</span><br />
             {{ individual.name }}
+            </div>
         </v-flex>
         <v-flex>
-            <info-text>Group</info-text><br/>
-
-            <GetData :resource_url="individual.group">
+            <get-data :resource_url="individual.group">
                 <span slot-scope="group">
-                    <GroupInfo :group="group.data" :resource_url="individual.group" />
+                    <group-info :group="group.data" :resource_url="individual.group" />
                 </span>
-            </GetData>
-
+            </get-data>
         </v-flex>
     </v-layout>
+    </div>
 </template>
 
 <script>
@@ -30,7 +31,5 @@
 </script>
 
 <style scoped>
-    .v-card{
-        padding: 0px;
-    }
+
 </style>

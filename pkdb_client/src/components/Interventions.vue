@@ -1,13 +1,13 @@
 <template>
-    <GetPaginatedData :resource_url="resource_url" >
-    <div slot-scope="data">
-        <InterventionsTable :data="data" :resource_url="resource_url" />
-    </div>
-    </GetPaginatedData>
+    <get-paginated-data :resource_url="resource_url" >
+        <div slot-scope="data">
+            <interventions-table :data="data" :resource_url="resource_url" />
+        </div>
+    </get-paginated-data>
 </template>
 <script>
-    import GetPaginatedData from '@/components/api/GetPaginatedData';
-    import InterventionsTable from '@/components/tables/InterventionsTable';
+    import GetPaginatedData from './api/GetPaginatedData';
+    import InterventionsTable from './tables/InterventionsTable';
 
     export default {
     name: 'Interventions',

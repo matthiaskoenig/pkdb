@@ -1,7 +1,8 @@
 <template>
-    <div id="comments">
+    <div id="comments" v-if="comments">
+        Comments
         <span v-for="item in comments" :key="item.pk">
-            <UserAvatar :user="comment.user"></UserAvatar>
+            <user-avatar :user="comment.user"></user-avatar>
             {{ comment.text }}<br />
         </span>
     </div>

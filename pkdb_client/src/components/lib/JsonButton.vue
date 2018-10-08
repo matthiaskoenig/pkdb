@@ -1,9 +1,9 @@
 <template>
     <span v-if="resource_url">
-            <v-btn slot="activator" fab dark small flat color="success" :href="resource_url"
-                   :disabled="resource_url ? false : true" title="JSON">
-                <v-icon dark>fas fa-code</v-icon>
-            </v-btn>
+        <v-btn slot="activator" fab dark small flat color="success" :href="resource_url"
+               :disabled="resource_url ? false : true" title="JSON">
+            <v-icon dark>fas fa-code</v-icon>
+        </v-btn>
     </span>
 </template>
 

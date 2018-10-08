@@ -1,20 +1,20 @@
 <template>
     <div id="app">
-        <v-app>
-            <v-container fluid grid-list-xl style="padding: 0;">
+        <v-app class="app">
+            <v-container fluid grid-list-xl>
                 <v-layout row>
                     <v-flex lg12 style="padding-top: 0; padding-bottom: 0;">
-                        <Navigation></Navigation>
+                        <navigation></navigation>
                     </v-flex>
                 </v-layout>
                 <v-layout row style="padding-top: 55px;">
-                    <v-flex lg12">
+                    <v-flex lg12>
                         <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
                     </v-flex>
                 </v-layout>
                 <v-layout row>
                     <v-flex lg12>
-                    <Footer></Footer>
+                    <footer></footer>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -23,8 +23,8 @@
 </template>
 
 <script>
-    import Navigation from '@/components/Navigation.vue';
-    import Footer from '@/components/Footer.vue';
+    import Navigation from './components/Navigation.vue';
+    import Footer from './components/Footer.vue';
 
     export default {
         name: 'app',
@@ -53,4 +53,30 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
     }
+
+    .app {
+        padding: 0;
+    }
+
+    /* attributes */
+    .attr {
+        font-weight: bold;
+    }
+    .attr-card {
+        width: 110px;
+        height: 50px;
+    }
+    .attr-card-no-width {
+        height: 50px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .detail-card {
+        padding: 10px;
+    }
+    .detail-dialog {
+        width: 200px;
+    }
+
+
 </style>

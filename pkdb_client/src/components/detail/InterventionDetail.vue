@@ -12,6 +12,7 @@
         <v-icon>{{ icon('substance') }}</v-icon></a><br />
         Time:  {{intervention.time}} <br />
         Time Unit:  {{intervention.time_unit }} <br />
+        <!--
         Unit:  {{intervention.unit}} <br />
         Value:  {{intervention.value }} <br />
         Mean:  {{intervention.mean }}<br />
@@ -21,6 +22,9 @@
         Sd: {{intervention.sd }}<br />
         Se: {{intervention.se }}<br />
         Cv: {{intervention.cv }}<br />
+        -->
+
+        <characteristica-card :data="intervention" />
     </v-card>
 </template>
 

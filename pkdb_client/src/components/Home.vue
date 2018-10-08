@@ -2,18 +2,18 @@
     <div id="home">
         <v-layout row wrap>
             <v-flex xs6>
-                <CountTable />
+                <count-table />
             </v-flex>
             <v-flex xs6>
-                <AboutInformation />
+                <about-information />
             </v-flex>
         </v-layout>
     </div>
 </template>
 
 <script>
-    import CountTable from '@/components/statistics/CountTable'
-    import AboutInformation from '@/components/AboutInformation'
+    import CountTable from './statistics/CountTable'
+    import AboutInformation from './AboutInformation'
 
     export default {
         name: 'Home',
