@@ -55,6 +55,10 @@ class DataFile(models.Model):
         null=True, blank=True, max_length=CHAR_MAX_LENGTH
     )  # XLSX, PNG, CSV
 
+    @property
+    def name(self):
+        return self.file.name
+
     def __str__(self):
         return self.file.name
 

@@ -12,7 +12,7 @@ from pkdb_app.users.serializers import UserReadSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer
-from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer
+from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileReadSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
@@ -343,9 +343,13 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     outputset = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="outputsets_read-detail"
     )
-    files = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="datafiles_read-detail"
-    )
+    files = DataFileReadSerializer(many=True,
+             read_only=True,)
+
+
+    #serializers.HyperlinkedRelatedField(
+    #    many=True, read_only=True, view_name="datafiles_read-detail"
+    #)
     comments = CommentReadSerializer(many=True, read_only=True)
 
 

@@ -21,17 +21,19 @@
                     <UserAvatar :user="table.item.creator"/>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.curators" :key="index2"><UserAvatar :user="c"/></span>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c"/></span>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.substances" :key="index2">
-
-                        <v-icon>{{ icon('substance') }}</v-icon>{{c.name}}
-                    </span>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :substance="c"/></span>
                 </td>
                 <td>
-                    <span v-for="(f, index2) in table.item.files" :key="index2"><a :href="f" :title="f">
-                            <v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
+                    <v-container fluid grid-list-md>
+                        <v-data-iterator  :items="table.item.files" :rows-per-page-items=5 wrap >
+                            <span slot="item" slot-scope="props" xs12 sm6  md4 lg3>
+                                <file-chip  :file="props.item"/>
+                            </span>
+                        </v-data-iterator>
+                    </v-container>
                 </td>
                 <td>
                     <a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset">
@@ -56,8 +58,15 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import SubstanceChip from "../detail/SubstanceChip"
+    import FileChip from "../detail/FileChip"
+
     export default {
         name: 'StudiesTable',
+        components: {
+            SubstanceChip: SubstanceChip,
+            FileChip:FileChip,
+        },
         props: {
             data: Object,
             resource_url: String,
@@ -85,10 +94,11 @@
             }
         },
         methods: {
-            icon: function (key) {
+            icon(key) {
                 return lookup_icon(key)
             },
         }
+
     }
 </script>
 

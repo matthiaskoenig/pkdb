@@ -18,7 +18,7 @@ html_strip = analyzer(
 class SubstanceDocument(DocType):
     pk = fields.IntegerField(attr='pk')
     name = fields.StringField(
-        #analyzer=html_strip,
+        analyzer=html_strip,
         fields = {'raw': fields.KeywordField(),
                   'suggest':fields.CompletionField(),
                   })

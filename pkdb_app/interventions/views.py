@@ -1,4 +1,5 @@
 import django_filters.rest_framework
+from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
     SuggesterFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
@@ -160,7 +161,10 @@ class ElasticSubstanceViewSet(DocumentViewSet):
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
     suggester_fields = {
-        'name_suggest': 'name.suggest',
+        'name_suggest': {'field':'name.suggest',
+                         'suggesters': [SUGGESTER_TERM,SUGGESTER_PHRASE,SUGGESTER_COMPLETION],
+                         'default_suggester': SUGGESTER_COMPLETION,
+                         }
     }
 
 
