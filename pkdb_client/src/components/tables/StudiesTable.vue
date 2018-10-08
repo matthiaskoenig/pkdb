@@ -28,7 +28,10 @@
                 </td>
                 <td>
                     <v-container fluid grid-list-md>
-                        <v-data-iterator  :items="table.item.files" :rows-per-page-items=5 wrap >
+                        <v-data-iterator  :items="table.item.files"
+                                          rows-per-page-items=3
+                                          content-tag="v-layout"
+                                          wrap row>
                             <span slot="item" slot-scope="props" xs12 sm6  md4 lg3>
                                 <file-chip  :file="props.item"/>
                             </span>
