@@ -113,6 +113,7 @@
                                     -->
 
                                     <OutputsTable v-if="outputsVisible" :data="resource(outputset.data.outputs)"/>
+                                    <br />
                                     <TimecoursesTable v-if="timecoursesVisible" :data="resource(outputset.data.timecourses)"/>
                                 </div>
                             </template>
@@ -131,11 +132,11 @@
     import {lookup_icon} from "@/icons"
 
     import StudyInfo from "./StudyInfo";
-    import GroupsTable from "@/components/tables/GroupsTable";
-    import IndividualsTable from '@/components/tables/IndividualsTable';
-    import InterventionsTable from "@/components/tables/InterventionsTable";
-    import OutputsTable from "@/components/tables/OutputsTable";
-    import TimecoursesTable from "@/components/tables/TimecoursesTable";
+    import GroupsTable from "../tables/GroupsTable";
+    import IndividualsTable from '../tables/IndividualsTable';
+    import InterventionsTable from "../tables/InterventionsTable";
+    import OutputsTable from "../tables/OutputsTable";
+    import TimecoursesTable from "../tables/TimecoursesTable";
 
 
     export default {

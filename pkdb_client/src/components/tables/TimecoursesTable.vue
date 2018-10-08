@@ -13,17 +13,20 @@
                 </td>
                 <td>{{table.item.pktype }}</td>
                 <td>
-                    <a v-if="table.item.group" :href="table.item.group" :title="table.item.group">
-                        <v-icon>{{ icon('group') }}</v-icon></a>
-                    <get-data :resource_url="table.item.group">
+                    <get-data v-if="table.item.group" :resource_url="table.item.group">
                         <div slot-scope="data">
+                            <group-button :group="data.data" />
                             {{ data.data.name }}
                         </div>
                     </get-data>
                 </td>
                 <td>
-                    <a v-if="table.item.individual" :href="table.item.individual" :title="table.item.individual">
-                        <v-icon>{{ icon('individual') }}</v-icon></a></td>
+                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                        <div slot-scope="data">
+                            <individual-button :individual="data.data" />
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
                 <td>
                     <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
                     <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;
@@ -54,11 +57,15 @@
 
 <script>
     import {lookup_icon} from "@/icons"
-    import TimecoursePlot from '@/components/plots/TimecoursePlot';
+    import TimecoursePlot from '../plots/TimecoursePlot'
+    import GroupButton from '../lib/GroupButton'
+    import IndividualButton from '../lib/IndividualButton'
 
     export default {
         name: 'TimecoursesTable',
         components: {
+            GroupButton: GroupButton,
+            IndividualButton: IndividualButton,
             TimecoursePlot: TimecoursePlot,
         },
         props: {
