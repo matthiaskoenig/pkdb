@@ -1,5 +1,12 @@
+from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
+from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend, FilteringFilterBackend, \
+    SuggesterFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend, HighlightBackend
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
+
+from pkdb_app.pagination import CustomPagination
+from pkdb_app.studies.documents import ReferenceDocument
 from .models import Author, Reference, Study, Keyword
 from .serializers import (
     AuthorSerializer,
@@ -124,9 +131,12 @@ class ReferencesReadViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (
         django_filters.rest_framework.DjangoFilterBackend,
         filters.SearchFilter,
+        filters.OrderingFilter,
     )
     filter_fields = ("pmid", "doi", "title", "abstract", "journal", "date", "authors")
+    paginate_by_param = 'page_size'
     search_fields = filter_fields
+    ordering_fields = filter_fields
     permission_classes = (AllowAny,)
 
 
@@ -153,3 +163,52 @@ class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ("name",)
     search_fields = filter_fields
     permission_classes = (AllowAny,)
+
+
+
+class ElasticReferenceViewSet(DocumentViewSet):
+    document = ReferenceDocument
+    pagination_class = CustomPagination
+    serializer_class = ReferenceReadSerializer
+    lookup_field = "pk"
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,HighlightBackend, SearchFilterBackend,SuggesterFilterBackend]
+    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    filter_fields = {'name': 'name.raw',}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk":'pk',
+        "study_name":"study_name",
+        "study_pk":"study_pk",
+        "pmid":"pmid",
+        "name":"name.raw",
+        "doi":"doi",
+        "title":"title.raw",
+        "abstract":"abstract.raw",
+        "journal":"journal.raw",
+        "date":"date",
+        "pdf":"pdf",
+        "authors":"authors.last_name",
+    }
+    suggester_fields = {
+        'name_suggest': {'field':'name.suggest',
+                         'suggesters': [SUGGESTER_TERM,SUGGESTER_PHRASE,SUGGESTER_COMPLETION],
+                         'default_suggester': SUGGESTER_COMPLETION,
+                         }
+    }
+    highlight_fields = {
+        'title': {
+            'enabled': True,
+            'options': {
+                'pre_tags': ["<b>"],
+                'post_tags': ["</b>"],
+            }
+        },
+        'name': {
+            'options': {
+                'fragment_size': 50,
+                'number_of_fragments': 3
+            }
+        },
+    }
+
+

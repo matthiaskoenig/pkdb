@@ -11,11 +11,26 @@ class DescriptionSerializer(serializers.ModelSerializer):
         model = Description
 
     def to_internal_value(self, data):
+        self._validate_description(data=data)
         return super().to_internal_value({"text": data})
 
     def to_representation(self, instance):
         return instance.text
 
+    def _validate_description(self, data):
+        if not (isinstance(data, str)):
+            raise serializers.ValidationError(
+                {
+                    "descriptions": "Description must be a String",
+                    "detail": {str(data)},
+                }
+            )
+        elif len(data) == 0:
+            raise serializers.ValidationError(
+                {
+                    "descriptions": "empty descriptions are not allowed",
+                    "detail": {str(data)},
+                })
 
 class CommentSerializer(WrongKeyValidationSerializer):
     class Meta:
@@ -30,10 +45,18 @@ class CommentSerializer(WrongKeyValidationSerializer):
                     "detail": {str(data)},
                 }
             )
+        elif len(data[1]) == 0:
+            raise serializers.ValidationError(
+                {
+                    "comments": "empty comments are not allowed",
+                    "detail": {str(data)},
+                })
+
 
     def to_internal_value(self, data):
         self._validate_comment(data)
         user = self.get_or_val_error(User, username=data[0])
+
         return {"text": data[1], "user": user}
 
     def to_representation(self, instance):

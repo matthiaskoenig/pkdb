@@ -384,15 +384,15 @@ class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
 class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorReadSerializer(
         many=True, read_only=True)
-    study = serializers.HyperlinkedRelatedField(
-        many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
+    #study_name = serializers.HyperlinkedRelatedField(
+    #    many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
+    #)
 
     class Meta:
         model = Reference
         fields = (
             "pk",
-            "study",
+            "study_name",
             "study_pk",
             "pmid",
             "sid",

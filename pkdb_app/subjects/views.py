@@ -1,4 +1,5 @@
 import django_filters.rest_framework
+from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -197,7 +198,7 @@ class IndividualViewSet(BaseDocumentViewSet):
 
     }
 class CharacteristicaViewSet(BaseDocumentViewSet):
-
+    pagination_class = PageNumberPagination
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
     lookup_field = 'id'

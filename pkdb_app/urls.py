@@ -46,7 +46,7 @@ from .studies.views import (
     ReferencesReadViewSet,
     KeywordViewSet,
     KeywordReadViewSet,
-)
+    ElasticReferenceViewSet)
 
 # from .subjects.views import GroupsViewSet, CharacteristicValuesViewSet
 
@@ -85,6 +85,8 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 ###############################################################################################
 router.register("studies_read", StudyReadViewSet, base_name="studies_read")
 router.register("references_read", ReferencesReadViewSet, base_name="references_read")
+router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
+
 router.register("authors_read", AuthorsReadViewSet, base_name="authors_read")
 
 router.register(r"users_read", UserReadViewSet, base_name="users_read")

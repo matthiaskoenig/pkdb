@@ -51,6 +51,9 @@ import IndividualInfo from './components/detail/IndividualInfo';
 import GetData from './components/api/GetData';
 import GetPaginatedData from './components/api/GetPaginatedData';
 
+import TextHighlight from 'vue-text-highlight';
+
+
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
 
@@ -67,6 +70,7 @@ Vue.component('IndividualInfo', IndividualInfo);
 Vue.component('GetData', GetData);
 Vue.component('GetPaginatedData', GetPaginatedData);
 
+Vue.component('text-highlight', TextHighlight);
 
 import { lookup_icon} from "./icons";
 

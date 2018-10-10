@@ -10,7 +10,8 @@
         </v-layout>
 
         <v-layout row>
-            <search-auto/>
+            <!--<search-auto/> -->
+            <search-table></search-table>
         </v-layout>
     </div>
 </template>
@@ -19,13 +20,15 @@
     import Statistics from './statistics/Statistics'
     import AboutInformation from "./AboutInformation";
     import SearchAuto from "./views/SearchAuto"
+    import SearchTable from "./tables/SearchTable"
     export default {
         name: 'About',
 
         components: {
             AboutInformation,
             Statistics,
-            SearchAuto
+            SearchAuto,
+            SearchTable
         }
     }
 </script>

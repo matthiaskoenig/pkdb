@@ -4,6 +4,8 @@
         <v-data-table
                 :headers="headers"
                 :items="data.entries"
+                :pagination.sync="pagination"
+
                 hide-actions
                 class="elevation-1">
             <template slot="items" slot-scope="table">
