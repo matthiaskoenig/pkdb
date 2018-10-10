@@ -4,16 +4,19 @@
 
     <v-card>
         <v-card-title>
-            References
-            <v-spacer></v-spacer>
-            <v-text-field
-                    v-model="search"
-                    append-icon="fa-search"
-                    label="Search"
-                    single-line
-                    hide-details
-            >
-            </v-text-field>
+            <v-toolbar id="heading-toolbar" color="secondary" dark>
+                <Heading :count="count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
+                <v-spacer></v-spacer>
+                <v-text-field
+                        v-model="search"
+                        append-icon="fa-search"
+                        label="Search"
+                        single-line
+                        hide-details
+                >
+                </v-text-field>
+            </v-toolbar>
+
         </v-card-title>
 
         <v-data-table
@@ -66,6 +69,7 @@
         },
         data () {
                 return {
+                    recourse_url: this.$store.state.endpoints.api  + '/references_elastic/?format=json',
                     count: 0,
                     entries: [],
                     loading: true,
