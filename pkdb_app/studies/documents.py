@@ -1,34 +1,36 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from elasticsearch_dsl import analyzer, tokenizer, token_filter
+from elasticsearch_dsl import analyzer, token_filter
 from pkdb_app.studies.models import Reference
 
 INDEX = Index("references")
 INDEX.settings(number_of_shards=1,
                number_of_replicas=1,)
 
-html_strip = analyzer(
-    'html_strip',
-    tokenizer="standard",
-    filter=["standard", "lowercase", "stop", "snowball"],
-    char_filter=["html_strip"]
-)
-my_analyzer = analyzer('my_analyzer',
-    tokenizer=tokenizer('trigram', 'edge_ngram', min_gram=1, max_gram=20),
-                       filter=["standard", "lowercase", "stop", "snowball"],
-                       char_filter=["html_strip"])
 
-edge_ngram_analyzer = analyzer(
-    'edge_ngram_analyzer',
-    type='custom',
-    tokenizer='standard',
-    filter=[
-        'lowercase',
-        token_filter(
-            'edge_ngram_filter', type='edgeNGram',
-            min_gram=1, max_gram=20
-        )
-    ]
+
+edge_ngram_filter =  token_filter(
+            'edge_ngram_filter',
+            type="edge_ngram",
+            min_gram=1, max_gram=20)
+
+
+autocomplete_search = analyzer(
+    'autocomplete_search',
+    tokenizer="standard",
+    filter=["lowercase"],
 )
+
+
+autocomplete = analyzer('autocomplete',
+    tokenizer="standard",
+    filter=[ "lowercase",edge_ngram_filter],
+    char_filter=["html_strip"],
+    chars=["letter"],
+    token_chars=["letter"])
+
+
+
+
 
 @INDEX.doc_type
 class ReferenceDocument(DocType):
@@ -40,42 +42,49 @@ class ReferenceDocument(DocType):
 
     name = fields.StringField(
         fielddata = True,
-        analyzer=html_strip,
+        analyzer=autocomplete,
+        search_analyzer=autocomplete_search,
         fields = {'raw': fields.KeywordField(),
                   'suggest':fields.CompletionField(),
-                  })
+                  }
+        )
+
 
     doi = fields.StringField(attr='doi',fielddata=True)
 
     title = fields.TextField(
         fielddata = True,
-        analyzer=html_strip,
+        analyzer=autocomplete,
+        search_analyzer=autocomplete_search,
         fields = {'raw': fields.KeywordField(),
                   'suggest':fields.CompletionField(),
                   })
     abstract = fields.TextField(
         fielddata = True,
-        analyzer=html_strip,
+        analyzer=autocomplete,
+        search_analyzer=autocomplete_search,
         fields={'raw': fields.KeywordField(),
                 })
 
     journal = fields.TextField(
         fielddata = True,
-        analyzer=html_strip,
+        analyzer=autocomplete,
+        search_analyzer=autocomplete_search,
         fields={'raw': fields.KeywordField(),
                 'suggest': fields.CompletionField(),
                 })
-    date = fields.DateField()
+    date = fields.DateField(
+    )
     pdf = fields.FileField(fielddata=True)
     authors = fields.ObjectField(properties={
         'first_name': fields.StringField(
-            analyzer=html_strip,
+            analyzer=autocomplete,
             fields={
                 'raw': fields.KeywordField(),
             },),
         'last_name': fields.StringField(
             fielddata = True,
-            analyzer=html_strip,
+            analyzer=autocomplete,
             fields={
             'raw': fields.KeywordField(),
         }),

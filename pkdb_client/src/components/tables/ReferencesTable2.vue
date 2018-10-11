@@ -38,7 +38,7 @@
                     <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+table.item.pmid"
                        target="_blank">{{ table.item.pmid }}</a>
                 </td>
-                <td>   <text-highlight :queries="[search]">{{ table.item.name }}</text-highlight> </td>
+                <td> <text-highlight :queries="[search]">{{ table.item.name }}</text-highlight> </td>
                 <td> <text-highlight :queries="[search]">{{table.item.title}}</text-highlight></td>
                 <td> <text-highlight :queries="[search]">{{table.item.journal}}</text-highlight></td>
                 <td> <text-highlight :queries="[search]">{{table.item.date}}</text-highlight></td>
@@ -61,12 +61,6 @@
 
     export default {
         name: "searchtable",
-        filters: {
-            // Filter definitions
-            highlight: function(words, query){
-                return words.replace(query, '<span class=\'highlight\'>' + query + '</span>')
-            }
-        },
         data () {
                 return {
                     recourse_url: this.$store.state.endpoints.api  + '/references_elastic/?format=json',
@@ -101,9 +95,6 @@
                     },
                     deep: true
                 }
-
-
-
             },
             mounted () {
                 this.getData()
@@ -127,9 +118,6 @@
                 icon: function (key) {
                     return lookup_icon(key)
                 },
-                highlight: function(words, query){
-                    return words.replace(query, '<span class=\'highlight\'>' + query + '</span>')
-                },
                 getData() {
 
                     let url = this.$store.state.endpoints.api
@@ -150,10 +138,6 @@
                         .finally(() => this.loading = false);
 
                 }
-
-
-
-
             }
         }
 </script>
