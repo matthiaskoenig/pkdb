@@ -3,6 +3,7 @@ from rest_framework import serializers
 from pkdb_app.comments.models import Description, Comment
 from pkdb_app.serializers import WrongKeyValidationSerializer
 from pkdb_app.users.models import User
+from pkdb_app.users.serializers import UserReadSerializer
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
@@ -74,9 +75,10 @@ class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentReadSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="users_read-detail"
-    )
+    user = UserReadSerializer(read_only=True)
+    #user = serializers.HyperlinkedRelatedField(
+    #    read_only=True, view_name="users_read-detail"
+    #)
     class Meta:
         fields = ["pk", "text","user"]
         model = Comment

@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.studies.documents import ReferenceDocument
+from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
 from .models import Author, Reference, Study, Keyword
 from .serializers import (
     AuthorSerializer,
@@ -17,7 +17,7 @@ from .serializers import (
     AuthorReadSerializer,
     KeywordSerializer,
     KeywordReadSerializer,
-)
+    StudyElasticSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
@@ -171,7 +171,7 @@ class ElasticReferenceViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     serializer_class = ReferenceReadSerializer
     lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,HighlightBackend, SearchFilterBackend,SuggesterFilterBackend]
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
     filter_fields = {'name': 'name.raw',}
     ordering_fields = {
@@ -189,26 +189,49 @@ class ElasticReferenceViewSet(DocumentViewSet):
         "pdf":"pdf",
         "authors":"authors.last_name",
     }
-    suggester_fields = {
-        'name_suggest': {'field':'name.suggest',
-                         'suggesters': [SUGGESTER_TERM,SUGGESTER_PHRASE,SUGGESTER_COMPLETION],
-                         'default_suggester': SUGGESTER_COMPLETION,
-                         }
+
+class ElasticStudyViewSet(DocumentViewSet):
+    document = StudyDocument
+    pagination_class = CustomPagination
+    serializer_class = StudyElasticSerializer
+    lookup_field = "pk"
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
+    search_fields = ('sid',
+                     'pk_version',
+
+                     #'creator.first_name',
+                     #'creator.last_name',
+                     #'creator.user',
+
+                     #'curators.first_name',
+                     #'curators.last_name',
+                     #'curators.user',
+
+                     #'name',
+                     #'design',
+                     #'reference',
+                     #'substances',
+                     #'keywords',
+                     #'files'
+                     )
+
+    filter_fields = {'name': 'name.raw',}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk_version":'pk_version',
+        #"name":"name.raw",
+        #"design": "design.raw",
+        #"refernce": "refernce",
+        #"substance": "substance.raw",
+        #"keywords": "keywords.raw",
+
+        #"files":"files",
+
+        #"creator":"creator.last_name",
+        #"curators": "curators.last_name",
+
     }
-    highlight_fields = {
-        'title': {
-            'enabled': True,
-            'options': {
-                'pre_tags': ["<b>"],
-                'post_tags': ["</b>"],
-            }
-        },
-        'name': {
-            'options': {
-                'fragment_size': 50,
-                'number_of_fragments': 3
-            }
-        },
-    }
+
+
 
 

@@ -112,3 +112,20 @@ class Study(Sidable, models.Model):
     @property
     def timecourses(self):
         return self.outputset.timecourse_exs.timecourses.all()
+
+    @property
+    def substances_name(self):
+        return [substance.name for substance in self.substances.all()]
+
+    @property
+    def files_url(self):
+        return [file.file.name for file in self.files.all()]
+
+
+    @property
+    def keywords_name(self):
+        return [keyword.name for keyword in self.keywords.all()]
+
+    @property
+    def reference_name(self):
+        return self.reference.name
