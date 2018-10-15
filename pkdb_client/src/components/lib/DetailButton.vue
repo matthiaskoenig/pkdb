@@ -1,6 +1,6 @@
 <template>
 <span class="detail-button">
-    <v-btn color="primary" fab small dark :to="to" :title="title" :disabled="to ? false : true">
+    <v-btn color="primary" fab small dark flat :to="to" :title="title" :disabled="to ? false : true">
         <v-icon>{{ icon }}</v-icon>
     </v-btn>
 </span>
