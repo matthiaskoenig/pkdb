@@ -199,17 +199,17 @@ class ElasticStudyViewSet(DocumentViewSet):
     search_fields = ('sid',
                      'pk_version',
 
-                     #'creator.first_name',
-                     #'creator.last_name',
-                     #'creator.user',
+                     'creator.first_name',
+                     'creator.last_name',
+                     'creator.user',
 
-                     #'curators.first_name',
-                     #'curators.last_name',
-                     #'curators.user',
+                     'curators.first_name',
+                     'curators.last_name',
+                     'curators.user',
 
-                     #'name',
-                     #'design',
-                     #'reference',
+                     'name',
+                     'design',
+                     'reference',
                      #'substances',
                      #'keywords',
                      #'files'
