@@ -62,7 +62,7 @@
 
                     <!-- Groups -->
                     <v-flex xs12 v-show="visible.groups">
-                        <GetData v-if="study.groupset" :resource_url="study.groupset">
+                        <get-data v-if="study.groupset" :resource_url="study.groupset">
                             <template slot-scope="groupset">
                                 <div v-if="groupset.loaded">
                                     <!--
@@ -71,12 +71,12 @@
                                     <GroupsTable :data="resource(groupset.data.groups)"/>
                                 </div>
                             </template>
-                        </GetData>
+                        </get-data>
                     </v-flex>
 
                     <!-- Individuals -->
                     <v-flex xs12 v-show="visible.individuals">
-                        <GetData v-if="study.individualset" :resource_url="study.individualset">
+                        <get-data v-if="study.individualset" :resource_url="study.individualset">
                             <template slot-scope="individualset">
                                 <div v-if="individualset.loaded">
                                     <!--
@@ -85,23 +85,23 @@
                                     <IndividualsTable :data="resource(individualset.data.individuals)"/>
                                 </div>
                             </template>
-                        </GetData>
+                        </get-data>
                     </v-flex>
 
                     <!-- Interventions -->
                     <v-flex xs12 v-show="visible.interventions">
-                        <GetData v-if="study.interventionset" :resource_url="study.interventionset">
+                        <get-data v-if="study.interventionset" :resource_url="study.interventionset">
                             <template slot-scope="interventionset">
                                 <div v-if="interventionset.loaded">
                                     <InterventionsTable :data="resource(interventionset.data.interventions)"/>
                                 </div>
                             </template>
-                        </GetData>
+                        </get-data>
                     </v-flex>
 
                     <!-- Outputs -->
                     <v-flex xs12>
-                        <GetData v-if="study.outputset" :resource_url="study.outputset">
+                        <get-data v-if="study.outputset" :resource_url="study.outputset">
                             <template slot-scope="outputset">
                                 <div v-if="outputset.loaded">
                                     <!--
@@ -113,7 +113,7 @@
                                     <TimecoursesTable v-show="visible.timecourses" :data="resource(outputset.data.timecourses)"/>
                                 </div>
                             </template>
-                        </GetData>
+                        </get-data>
                     </v-flex>
                 </v-layout>
 

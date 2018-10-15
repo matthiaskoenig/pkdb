@@ -1,55 +1,93 @@
 <template>
     <div class="study-info">
         <v-layout>
-            <v-flex>
-        <div class="attr-card">
-            <span class="attr">Name</span>
-            {{ study.name }}
-        </div>
+
+            <v-flex xs2>
+                <v-flex>
+                    <div class="attr-card">
+                        <span class="attr">Name</span>
+                        {{ study.name }}
+                    </div>
+                </v-flex>
+
+                <v-flex>
+                    <div class="attr-card">
+                        <span class="attr">Creator</span><br/>
+                        <user-avatar :user="study.creator"/>
+                    </div>
+                </v-flex>
+                <v-flex>
+                    <div class="attr-card">
+                        <span class="attr">Curators</span><br/>
+                        <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
+                    </div>
+                </v-flex>
+                <v-flex>
+                    <div class="attr-card-no-width">
+                        <span class="attr">Substances</span><br/>
+                        <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>{{c.name}}</span>
+                    </div>
+                </v-flex>
+                <v-flex>
+                    <div class="attr-card-no-width">
+                        <span class="attr">Files</span><br/>
+                        <span v-for="f in study.files" :key="f.name"><a :href="f.pk" :title="f.name"><v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
+                    </div>
+                </v-flex>
+
             </v-flex>
-            <v-flex>
-        <div class="attr-card">
-            <span class="attr">Reference</span><br />
-            <a v-if="study.reference" :href="study.reference" :title="study.reference"><v-icon>{{ icon('reference') }}</v-icon></a>
-        </div>
+            <v-flex xs5>
+                <get-data v-if="study.reference" :resource_url="study.reference">
+                    <template slot-scope="reference">
+                        <reference-detail :reference="reference.data" :resource_url="study.reference"/>
+                    </template>
+                </get-data>
             </v-flex>
-            <v-flex>
-        <div class="attr-card">
-            <span class="attr">Creator</span><br />
-            <user-avatar :user="study.creator"/>
-        </div>
+
+            <v-flex xs5>
+                <v-flex>
+                    <v-carousel>
+                        <v-carousel-item
+                                :cycle="False"
+                                v-for="(item,i) in images"
+                                :key="i"
+                                :src="item.file"
+                        ></v-carousel-item>
+                    </v-carousel>
+                </v-flex>
             </v-flex>
-            <v-flex>
-        <div class="attr-card">
-            <span class="attr">Curators</span><br />
-            <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
-        </div>
-            </v-flex>
-            <v-flex>
-        <div class="attr-card-no-width">
-            <span class="attr">Substances</span><br />
-            <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>{{c.name}}</span>
-        </div>
-            </v-flex>
-            <v-flex>
-        <div class="attr-card-no-width">
-            <span class="attr">Files</span><br />
-            <span v-for="f in study.files" :key="f"><a :href="f.pk" :title="f"><v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
-        </div>
-            </v-flex>
+
         </v-layout>
     </div>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+    import ReferenceDetail from "./ReferenceDetail"
 
     export default {
         name: "StudyInfo",
+        components: {
+            ReferenceDetail: ReferenceDetail
+        },
         props: {
             study: {
                 type: Object,
                 required: true,
+            }
+        },
+
+        computed: {
+            images() {
+                var list = [];
+                for (var k=0; k<this.study.files.length; k++){
+                    var item = this.study.files[k];
+                    console.log(item);
+                    if (item.name.endsWith("png")){
+                        list.push(item)
+                    }
+                }
+                return list;
             }
         },
         methods: {
@@ -63,6 +101,6 @@
 <style scoped>
     .study-info {
         padding-top: 10px;
-        //height: 70px;
+    / / height: 70 px;
     }
 </style>

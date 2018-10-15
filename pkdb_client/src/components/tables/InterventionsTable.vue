@@ -22,7 +22,7 @@
                     {{table.item.form}}
                 </td>
                 <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
-                    <get-data :resource_url="table.item.substance">
+                    <get-data :resource_url="table.item.substance" v-if="table.item.substance">
                         <div slot-scope="data">
                             {{ data.data.name }}
                         </div>
