@@ -415,14 +415,16 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     keywords = KeywordReadSerializer(many=True, read_only=True)
     descriptions = DescriptionReadSerializer( many=True, read_only=True)
     creator = UserReadSerializer(read_only=True)
-
+    reference = serializers.HyperlinkedRelatedField(
+        read_only=True, lookup_field="sid", view_name="references_read-detail"
+    )
     #reference = serializers.HyperlinkedRelatedField(
     #    read_only=True, lookup_field="sid", view_name="references_read-detail"
     #)
-    reference = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='name'
-     )
+    #reference = serializers.SlugRelatedField(
+    #    read_only=True,
+    #    slug_field='name'
+    # )
 
     individualset = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individualsets_read-detail"

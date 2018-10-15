@@ -215,7 +215,7 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'files'
                      )
 
-    filter_fields = {'name': 'name.raw',}
+    filter_fields = {'name': 'name.raw','pk':'pk'}
     ordering_fields = {
         'sid': 'sid',
         "pk_version":'pk_version',

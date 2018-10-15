@@ -1,13 +1,9 @@
-
-
-
-
 <template>
 
     <v-card>
         <v-card-title>
             <v-toolbar id="heading-toolbar" color="secondary" dark>
-                <Heading :count="count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
+                <Heading :count="count" :icon="icon('interventions')" title="References" :Interventions="resource_url"/>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -47,6 +43,31 @@
                 <td> <text-highlight :queries="[search]">{{table.item.abstract}}</text-highlight></td>
             </template>
 
+            <template slot="items" slot-scope="table">
+
+                <td>
+                    <LinkButton :to="'/interventions/'+ table.item.pk" :title="'Group: '+table.item.pk" :icon="icon('intervention')"/>
+                    <JsonButton :resource_url="api + '/interventions_read/'+ table.item.pk +'/?format=json'"/>
+                </td>
+                <td> <text-highlight :queries="[search]"> {{table.item.name }} </text-highlight></td>
+                <td>  <text-highlight :queries="[search]"> {{table.item.category }}</text-highlight></td>
+                <td>  <text-highlight :queries="[search]"> {{table.item.choice }} </text-highlight></td>
+                <td>
+                    <text-highlight :queries="[search]"> {{table.item.application }} </text-highlight><br/>
+                    <text-highlight :queries="[search]">{{table.item.time}} </text-highlight> <span v-if="table.item.time_unit">[ <text-highlight :queries="[search]">{{table.item.time_unit }} </text-highlight> ]</span><br />
+                    <text-highlight :queries="[search]">{{ table.item.route }} </text-highlight> <br/>
+                    <text-highlight :queries="[search]">{{table.item.form}} </text-highlight>
+                </td>
+                <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
+                    <get-data :resource_url="table.item.substance">
+                        <div slot-scope="data">
+                            <text-highlight :queries="[search]">{{ data.data.name }} </text-highlight>
+                        </div>
+                    </get-data>
+                </td>
+                <td><characteristica-card :data="table.item" /></td>
+            </template>
+
             <template slot="no-data">
                 <v-alert :value="true" color="error" icon="fas fa-exclamation">
                     Sorry, nothing to display here :(
@@ -60,9 +81,13 @@
 <script>
     import axios from 'axios'
     import {lookup_icon} from "@/icons"
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
-        name: "searchtable",
+        name: "InterventionsTable",
+        components: {
+            CharacteristicaCard
+        },
         data () {
             return {
                 count: 0,
@@ -72,15 +97,14 @@
                 pagination: {},
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
-                    {text: '', value: 'buttons',sortable: false},
-                    {text: 'Sid', value: 'sid'},
-                    {text: 'Pmid', value: 'pmid'},
+                    {text: 'Intervention', value: 'intervention'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Title', value: 'title'},
-                    {text: 'Journal', value: 'journal'},
-                    {text: 'Date', value: 'date'},
-                    {text: 'Abstract', value: 'abstract'},
-                ]
+                    {text: 'Category', value: 'category'},
+                    {text: 'Choice', value: 'choice'},
+                    {text: 'Application', value: 'application'},
+                    {text: 'Substance', value: 'substance'},
+                    {text: 'Value', value: 'value'},
+                ],
             }
         },
         watch: {
@@ -106,7 +130,7 @@
 
             },
             resource_url() {
-                return this.$store.state.endpoints.api  + '/references_elastic/?format=json'
+                return this.$store.state.endpoints.api  + '/interventions_elastic/?format=json'
             },
             descending() {
                 if(this.pagination.descending){
@@ -125,7 +149,7 @@
             getData() {
 
                 let url = this.$store.state.endpoints.api
-                    + '/references_elastic/?format=json'
+                    + '/interventions_elastic/?format=json'
                     +'&page='+ this.pagination.page
                     +'&page_size='+ this.pagination.rowsPerPage
                     +'&ordering='+ this.descending+ this.pagination.sortBy;

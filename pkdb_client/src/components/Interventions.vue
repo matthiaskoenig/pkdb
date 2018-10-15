@@ -1,27 +1,14 @@
 <template>
-    <get-paginated-data :resource_url="resource_url" >
-        <div slot-scope="data">
-            <interventions-table :data="data" :resource_url="resource_url" />
-        </div>
-    </get-paginated-data>
+            <interventions-table2 />
 </template>
 <script>
-    import GetPaginatedData from './api/GetPaginatedData';
-    import InterventionsTable from './tables/InterventionsTable';
+    import InterventionsTable2 from './tables/InterventionsTable2';
 
     export default {
     name: 'Interventions',
     components: {
-        GetPaginatedData: GetPaginatedData,
-        InterventionsTable: InterventionsTable,
+        InterventionsTable2: InterventionsTable2,
     },
-    computed: {
-        api() {return this.$store.state.endpoints.api},
-
-        resource_url() {
-            return this.api + '/interventions_read/?format=json&final=True';
-        }
-    }
 }
 </script>
 <style>

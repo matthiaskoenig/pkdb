@@ -172,4 +172,4 @@ class ElasticInterventionViewSet(DocumentViewSet):
     lookup_field = "pk"
     filter_backends = [FilteringFilterBackend,SearchFilterBackend]
     search_fields = ('name','pk','category','choice')
-    filter_fields = {'name': 'name.raw',}
+    filter_fields = {'name': 'name.raw','pk':'pk'}
