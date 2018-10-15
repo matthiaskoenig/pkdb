@@ -1,109 +1,106 @@
 <template>
     <div id="study-detail">
-
-        <v-layout row>
-            <v-flex xs2 v-if="false">
-                <!-- Side menu for navigation. -->
-                <div class="study-navigation">
-                <v-card height="350px">
+        <v-layout>
+            <!-- Side menu for navigation. -->
+            <v-flex xs2 class="study-navigation">
+                <v-card class="d-inline-block elevation-12">
                     <v-navigation-drawer
-                            v-model="drawer"
+                            floating
                             permanent
-                            absolute
+                            stateless
+                            value="true"
                     >
-                        <v-toolbar flat class="transparent">
-                            <v-list class="pa-0">
-                                <v-list-tile avatar>
-                                    <v-list-tile-avatar>
-                                        Icon
-                                    </v-list-tile-avatar>
+                        <v-list>
+                        <v-list-tile>
 
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>Study</v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                            </v-list>
-                        </v-toolbar>
+                            <v-list-tile-content>
+                                <heading :title="study.name" :icon="icon('study')" :resource_url="resource_url"/>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        </v-list>
+                        <v-divider></v-divider>
 
-                        <v-list class="pt-0" dense>
-                            <v-divider></v-divider>
-
+                        <v-list dense>
                             <v-list-tile
-                                    v-for="item in items"
+                                    v-for="item in navigation"
                                     :key="item.title"
-                                    @click=""
+                                    @click="toggleVisibility(item.id)"
                             >
                                 <v-list-tile-action>
-                                    <v-icon>{{ item.icon }}</v-icon>
+                                    <span v-if="visible[item.id]" :title="'Hide ' + item.title">
+                                        <v-icon color="primary" >{{ icon(item.icon) }}</v-icon>
+                                    </span>
+                                    <span v-else :title="'Hide ' + item.title">
+                                        <v-icon>{{ icon(item.icon) }}</v-icon>
+                                    </span>
                                 </v-list-tile-action>
 
                                 <v-list-tile-content>
                                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                                 </v-list-tile-content>
+
                             </v-list-tile>
                         </v-list>
                     </v-navigation-drawer>
                 </v-card>
-                </div>
-
             </v-flex>
-            <v-flex xs12>
+
+            <v-flex class="study-content" xs2>&nbsp;</v-flex>
+            <v-flex class="study-content" xs10>
                 <!-- Study content -->
 
                 <v-layout row wrap>
-                    <v-flex xs12>
-                        <!-- General Overview -->
-                        <v-card v-if="generalVisible">
+
+                    <!-- General Overview -->
+                    <v-flex xs12 v-show="visible.general">
+                        <v-card>
                             <heading-toolbar :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
                             <study-info :study="study"/>
                             <!-- <Annotations :item="study"/>-->
                         </v-card>
                     </v-flex>
 
-
-                    <v-flex xs12>
-                        <!-- Groups -->
+                    <!-- Groups -->
+                    <v-flex xs12 v-show="visible.groups">
                         <GetData v-if="study.groupset" :resource_url="study.groupset">
                             <template slot-scope="groupset">
                                 <div v-if="groupset.loaded">
                                     <!--
                                     <Annotations :item="groupset.data"/>
                                     -->
-                                    <GroupsTable v-if="groupsVisible" :data="resource(groupset.data.groups)"/>
+                                    <GroupsTable :data="resource(groupset.data.groups)"/>
                                 </div>
                             </template>
                         </GetData>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <!-- Individuals -->
+                    <!-- Individuals -->
+                    <v-flex xs12 v-show="visible.individuals">
                         <GetData v-if="study.individualset" :resource_url="study.individualset">
                             <template slot-scope="individualset">
                                 <div v-if="individualset.loaded">
                                     <!--
                                     <Annotations :item="individualset.data"/>
                                     -->
-                                    <IndividualsTable v-if="individualsVisible"
-                                                      :data="resource(individualset.data.individuals)"/>
+                                    <IndividualsTable :data="resource(individualset.data.individuals)"/>
                                 </div>
                             </template>
                         </GetData>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <!-- Interventions -->
+                    <!-- Interventions -->
+                    <v-flex xs12 v-show="visible.interventions">
                         <GetData v-if="study.interventionset" :resource_url="study.interventionset">
                             <template slot-scope="interventionset">
                                 <div v-if="interventionset.loaded">
-                                    <InterventionsTable v-if="interventionsVisible"
-                                                        :data="resource(interventionset.data.interventions)"/>
+                                    <InterventionsTable :data="resource(interventionset.data.interventions)"/>
                                 </div>
                             </template>
                         </GetData>
                     </v-flex>
 
+                    <!-- Outputs -->
                     <v-flex xs12>
-                        <!-- Outputs -->
                         <GetData v-if="study.outputset" :resource_url="study.outputset">
                             <template slot-scope="outputset">
                                 <div v-if="outputset.loaded">
@@ -111,15 +108,14 @@
                                     {{ checkhasOutputs(outputset.outputs) }}
                                     {{ checkhasTimecourses(outputset.timecourses) }}
                                     -->
-
-                                    <OutputsTable v-if="outputsVisible" :data="resource(outputset.data.outputs)"/>
+                                    <OutputsTable v-show="visible.outputs" :data="resource(outputset.data.outputs)"/>
                                     <br />
-                                    <TimecoursesTable v-if="timecoursesVisible" :data="resource(outputset.data.timecourses)"/>
+                                    <TimecoursesTable v-show="visible.timecourses" :data="resource(outputset.data.timecourses)"/>
                                 </div>
                             </template>
                         </GetData>
                     </v-flex>
-                    </v-layout>
+                </v-layout>
 
 
             </v-flex>
@@ -160,20 +156,46 @@
         },
         data() {
             return {
-                menuVisible: false,
-
-                generalVisible: true,
-                groupsVisible: true,
-                individualsVisible: true,
-                interventionsVisible: true,
-                outputsVisible: true,
-                timecoursesVisible: true,
-
-                hasOutputs: false,
-                hasTimecourses: false,
-                hasInterventions: false,
-                hasIndividuals: false,
-                hasGroups: false,
+                visible: {
+                    general: true,
+                    groups: true,
+                    individuals: true,
+                    interventions: true,
+                    outputs: true,
+                    timecourses: true
+                },
+                navigation : [
+                    {
+                        id: 'general',
+                        icon: 'about',
+                        title: 'Overview'
+                    },
+                    {
+                        id: 'groups',
+                        icon: 'groups',
+                        title: 'Groups'
+                    },
+                    {
+                        id: 'individuals',
+                        icon: 'individuals',
+                        title: 'Individuals'
+                    },
+                    {
+                        id: 'interventions',
+                        icon: 'interventions',
+                        title: 'Interventions'
+                    },
+                    {
+                        id: 'outputs',
+                        icon: 'outputs',
+                        title: 'Outputs'
+                    },
+                    {
+                        id: 'timecourses',
+                        icon: 'timecourses',
+                        title: 'Timecourses'
+                    },
+                ]
             }
         },
         computed: {
@@ -187,6 +209,12 @@
             icon: function (key) {
                 return lookup_icon(key)
             },
+
+            toggleVisibility(item_id){
+                this.visible[item_id] = !this.visible[item_id];
+            },
+
+
             checkhasOutputs(array) {
                 if (array.length !== 0){
                     this.hasOutputs = true
@@ -212,28 +240,6 @@
                     this.hasGroups = true
                 }
             },
-            toggleMenu () {
-                this.menuVisible = !this.menuVisible
-            },
-            toggleGeneral () {
-                this.GeneralVisible = !this.GeneralVisible
-            },
-            toggleIndividuals () {
-                this.IndividualsVisible = !this.IndividualsVisible
-            },
-            toggleGroups () {
-                this.GroupsVisible = !this.GroupsVisible
-            },
-            toggleInterventions () {
-                this.InterventionsVisible = !this.InterventionsVisible
-            },
-            toggleOutputs () {
-                this.OutputsVisible = !this.OutputsVisible
-            },
-            toggleTimecourses () {
-
-                this.TimecoursesVisible = !this.TimecoursesVisible
-            },
             resource(data){
                 return {entries:data, count:data.length}
             },
@@ -251,6 +257,15 @@
 
 <style scoped>
     .study-navigation {
-        fixed: true;
+
+        height: 100%; /* 100% Full-height */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Stay on top */
+        top: 50px; /* Stay at the top */
+        left: 0;
+        #background-color: #111; /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
     }
+
+
 </style>
