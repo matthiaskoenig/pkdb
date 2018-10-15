@@ -3,7 +3,7 @@
     <v-card>
         <v-card-title>
             <v-toolbar id="heading-toolbar" color="secondary" dark>
-                <Heading :count="count" :icon="icon('interventions')" title="References" :Interventions="resource_url"/>
+                <Heading :count="count" :icon="icon('interventions')" title="Interventions" :Interventions="resource_url"/>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -25,24 +25,6 @@
                 :loading="loading"
                 class="elevation-1"
         >
-
-            <template slot="items" slot-scope="table">
-                <td>
-                    <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
-                    <json-button :resource_url="api + '/references_read/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>
-                <td>
-                    <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+table.item.pmid"
-                       target="_blank"><text-highlight :queries="[search]">{{ table.item.pmid }}</text-highlight></a>
-                </td>
-                <td> <text-highlight :queries="[search]">{{ table.item.name }}</text-highlight> </td>
-                <td> <text-highlight :queries="[search]">{{table.item.title}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.journal}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.date}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.abstract}}</text-highlight></td>
-            </template>
-
             <template slot="items" slot-scope="table">
 
                 <td>
@@ -58,12 +40,15 @@
                     <text-highlight :queries="[search]">{{ table.item.route }} </text-highlight> <br/>
                     <text-highlight :queries="[search]">{{table.item.form}} </text-highlight>
                 </td>
-                <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
-                    <get-data :resource_url="table.item.substance">
+                <td>
+                    <!--<a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
+                   <get-data :resource_url="table.item.substance">
                         <div slot-scope="data">
                             <text-highlight :queries="[search]">{{ data.data.name }} </text-highlight>
                         </div>
                     </get-data>
+                    -->
+                    <substance-chip :substance="table.item.substance.name" :search="search"/>
                 </td>
                 <td><characteristica-card :data="table.item" /></td>
             </template>
@@ -82,11 +67,13 @@
     import axios from 'axios'
     import {lookup_icon} from "@/icons"
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import SubstanceChip from "../detail/SubstanceChip"
 
     export default {
         name: "InterventionsTable",
         components: {
-            CharacteristicaCard
+            CharacteristicaCard,
+            SubstanceChip
         },
         data () {
             return {
@@ -97,7 +84,8 @@
                 pagination: {},
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
-                    {text: 'Intervention', value: 'intervention'},
+                    //{text: 'Intervention', value: 'intervention'},
+                    {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
                     {text: 'Category', value: 'category'},
                     {text: 'Choice', value: 'choice'},

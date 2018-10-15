@@ -94,7 +94,8 @@
                     pagination: {},
                     rowsPerPageItems: [5, 10, 20, 50, 100],
                     headers: [
-                        {text: 'Study', value: 'study'},
+                        //{text: 'Study', value: 'study'},
+                        {text: '', value: 'buttons',sortable: false},
                         {text: 'Name', value: 'name'},
                         {text: 'Reference', value: 'reference'},
                         {text: 'Creator', value: 'creator'},

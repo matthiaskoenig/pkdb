@@ -1,7 +1,7 @@
 import django_filters.rest_framework
 from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
-    SuggesterFilterBackend
+    SuggesterFilterBackend, OrderingFilterBackend
 from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
@@ -170,6 +170,12 @@ class ElasticInterventionViewSet(DocumentViewSet):
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,SearchFilterBackend]
-    search_fields = ('name','pk','category','choice')
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    search_fields = ('name','category','substance.name')
     filter_fields = {'name': 'name.raw','pk':'pk'}
+    ordering_fields = {'name': 'name.raw',
+                       'category':'category.raw',
+                       'choice':'choice.raw',
+                       'application':'application.raw',
+                       'substance':'substance.name',
+                       'value':'value'}

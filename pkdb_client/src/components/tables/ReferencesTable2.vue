@@ -1,7 +1,3 @@
-
-
-
-
 <template>
 
     <v-card>
