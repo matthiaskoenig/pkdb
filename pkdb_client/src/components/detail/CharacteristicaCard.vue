@@ -41,12 +41,15 @@
                     value = '[' + (this.data.min ? this.data.min : '')  + ' - ' + (this.data.max ? this.data.max : '') + ']'
                 }
                 // sd, se, cv, unit
-                for (var field in ['sd', 'se', 'cv']){
+                var error_fields = ['sd', 'se', 'cv'];
+                for (var i=0; i<error_fields.length; i++){
+                    var field = error_fields[i];
                     if (this.data[field]){
+                        const token = ' ± ' + this.data[field] + ' (' + field + ')';
                         if (value){
-                            value += field + '=' + this.data[field]
+                            value += token
                         } else {
-                            value = field + '=' + this.data[field]
+                            value = token
                         }
                     }
                 }
