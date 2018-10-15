@@ -15,24 +15,11 @@
 
 
     export default {
-        name: 'References',
+        name: 'Studies',
         components: {
             StudiesTable2: StudiesTable2,
 
         },
-        methods: {},
-        data() {
-            return {
-            }
-        },
-        computed: { // vuex store
-            api() {
-                return this.$store.state.endpoints.api;
-            },
-            resource_url() {
-                return this.api + '/studies_read/?format=json';
-            },
-        }
     }
 </script>
 

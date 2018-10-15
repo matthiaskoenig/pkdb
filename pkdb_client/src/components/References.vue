@@ -19,21 +19,7 @@
         name: 'References',
         components: {
             ReferencesTable2: ReferencesTable2,
-
         },
-        methods: {},
-        data() {
-            return {
-            }
-        },
-        computed: { // vuex store
-            api() {
-                return this.$store.state.endpoints.api;
-            },
-            resource_url() {
-                return this.api + '/references_read/?format=json';
-            },
-        }
     }
 </script>
 

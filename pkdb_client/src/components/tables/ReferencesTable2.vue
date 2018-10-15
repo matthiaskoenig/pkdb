@@ -63,7 +63,6 @@
         name: "searchtable",
         data () {
                 return {
-                    recourse_url: this.$store.state.endpoints.api  + '/references_elastic/?format=json',
                     count: 0,
                     entries: [],
                     loading: true,
@@ -104,6 +103,9 @@
                     return this.$store.state.endpoints.api;
 
                 },
+                resource_url() {
+                     return this.$store.state.endpoints.api  + '/references_elastic/?format=json'
+                },
                 descending() {
                     if(this.pagination.descending){
                         return "-";
@@ -143,7 +145,5 @@
 </script>
 
 <style scoped>
-    .highlight {
-        font-weight: bold;
-    }
+
 </style>

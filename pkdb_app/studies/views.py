@@ -195,7 +195,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
     lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('sid',
                      'pk_version',
 
