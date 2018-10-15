@@ -1,6 +1,6 @@
 <template>
     <div id="file-chip" class="text-xs-center">
-        <a :href="file.file" :title="file.file"><v-chip> <v-icon>{{ icon('file') }}</v-icon>{{name(file.file)}}</v-chip> </a>
+        <a :href="backend+file.file" :title="backend+file.file"><v-chip> <v-icon>{{ icon('file') }}</v-icon>{{name(file.file)}}</v-chip> </a>
     </div>
 </template>
 
@@ -16,7 +16,14 @@
                 return lookup_icon(key)
             },
                 name(url){return url.substr(url.lastIndexOf('/') + 1);}
-        }
+
+        },
+        computed: {
+            backend() {
+                return this.$store.state.django_domain;
+            },
+
+        },
     }
 </script>
 

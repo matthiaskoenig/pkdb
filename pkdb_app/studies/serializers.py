@@ -328,6 +328,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
     reference = serializers.CharField(read_only=True)
     design = serializers.CharField(read_only=True)
     pkdb_version = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
 
 
     curators = UserReadSerializer(many=True, read_only=True)
@@ -349,6 +350,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
         fields = (
             "pk",
             "reference",
+            "name",
             "design",
             "sid",
             "pkdb_version",
