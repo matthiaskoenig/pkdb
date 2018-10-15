@@ -10,28 +10,16 @@
 
     export default {
         name: "TimecoursePlot",
-
         props: {
-            timecourse: Object,
-
+            timecourse: {
+                type: Object,
+                required: true
+            },
         },
         components: {
             VuePlotly,
         },
         computed: {
-            timecourse_no_options(){
-                delete this.timecourse.options;
-                return this.timecourse;
-            },
-            timecourse_clean(){
-                delete this.timecourse_no_options.pk;
-                //delete this.timecourse_no_options.final;
-                if (this.parent_count === this.timecourse_no_options.count ) {
-                    delete this.timecourse_no_options.count
-                }
-                clean(this.timecourse_no_options);
-                return this.timecourse_no_options;
-            },
             values(){
                 var y;
                 var title_y;
@@ -49,30 +37,82 @@
                 }
                 return {y, title_y};
             },
+            errors(){
+                var y;
+                var title_y;
+                if  (this.timecourse.sd != null && this.timecourse.sd !== undefined) {
+                    y = this.timecourse.sd;
+                    title_y = "sd"
+                }
+                else if (this.timecourse.se != null && this.timecourse.se !== undefined){
+                    y = this.timecourse.se;
+                    title_y = "se"
+                }
+                else if (this.timecourse.cv != null && this.timecourse.cv !== undefined){
+                    y = this.timecourse.cv;
+                    title_y = "cv"
+                }
+                return {y, title_y};
+            },
             data(){
-                var x = this.timecourse.time;
-                var type = 'scatter';
-                var error_y = {
-                    type: 'data',
-                        array: this.timecourse.sd,
-                };
-                return [{x,y:this.values.y,type,error_y}];
+                return [{
+                    x: this.timecourse.time,
+                    y: this.values.y,
+                    type: 'scatter',
+                    error_y: {
+                        type: 'data',
+                        array: this.errors.y,
+                        visible: true,
+                        color: '#555555',
+                    },
+                    marker: {
+                        color: '#000000',
+                        size: 8
+                    },
+                }]
             },
             layout(){
-                var   margin = {
-                    l: 5,
-                    r: 5,
-                    b: 5,
-                    t: 5,
-                    pad: 4
+                var xaxis = {
+                    title: "time [" + this.timecourse.time_unit+ "]",
+                    titlefont: {
+                        size: 10,
+                        color: 'black'
+                    },
+                    showticklabels: true,
+                    tickfont: {
+                        size: 10,
+                        color: 'black'
+                    },
                 };
-                var yaxis = {title: this.timecourse.pktype+" "+ this.values.title_y +" "+ this.timecourse.calculate_auc_end.substance + " [" + this.timecourse.unit+ "]"};
-                var xaxis = {title: "time [" + this.timecourse.time_unit+ "]"};
+                var yaxis = {
+                    title: this.timecourse.calculate_auc_end.substance + " [" + this.timecourse.unit+ "]",
+                    titlefont: {
+                        size: 10,
+                        color: 'black'
+                    },
+                    showticklabels: true,
+                    tickfont: {
+                        size: 10,
+                        color: 'black'
+                    },
+                };
 
-                return {xaxis,yaxis,autosize: false,width: 400,height: 200, margin:margin};
+
+                return {
+                    xaxis,
+                    yaxis,
+
+                    autosize: true,
+                    width: 300,
+                    height: 200,
+                    margin:{ l: 40, r: 0, b: 30, t: 5, pad: 0 }
+
+                };
             },
             options(){
-                return {};
+                return {
+                    displayModeBar: false
+                };
             },
         }
 
