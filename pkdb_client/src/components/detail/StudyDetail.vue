@@ -27,7 +27,12 @@
                                     @click="toggleVisibility(item.id)"
                             >
                                 <v-list-tile-action>
-                                    <v-icon>{{ icon(item.icon) }}</v-icon>
+                                    <span v-if="visible[item.id]" :title="'Hide ' + item.title">
+                                        <v-icon color="primary" >{{ icon(item.icon) }}</v-icon>
+                                    </span>
+                                    <span v-else :title="'Hide ' + item.title">
+                                        <v-icon>{{ icon(item.icon) }}</v-icon>
+                                    </span>
                                 </v-list-tile-action>
 
                                 <v-list-tile-content>
@@ -110,8 +115,7 @@
                             </template>
                         </GetData>
                     </v-flex>
-
-                    </v-layout>
+                </v-layout>
 
 
             </v-flex>
@@ -235,28 +239,6 @@
                 if (array.length !== 0){
                     this.hasGroups = true
                 }
-            },
-            toggleMenu () {
-                this.menuVisible = !this.menuVisible
-            },
-            toggleGeneral () {
-                this.GeneralVisible = !this.GeneralVisible
-            },
-            toggleIndividuals () {
-                this.IndividualsVisible = !this.IndividualsVisible
-            },
-            toggleGroups () {
-                this.GroupsVisible = !this.GroupsVisible
-            },
-            toggleInterventions () {
-                this.InterventionsVisible = !this.InterventionsVisible
-            },
-            toggleOutputs () {
-                this.OutputsVisible = !this.OutputsVisible
-            },
-            toggleTimecourses () {
-
-                this.TimecoursesVisible = !this.TimecoursesVisible
             },
             resource(data){
                 return {entries:data, count:data.length}
