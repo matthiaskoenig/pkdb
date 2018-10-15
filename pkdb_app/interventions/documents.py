@@ -1,7 +1,7 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from elasticsearch_dsl import analyzer
 
-from pkdb_app.interventions.models import Substance, Intervention
+from pkdb_app.interventions.models import Substance, Intervention, Output
 from pkdb_app.studies.documents import autocomplete, autocomplete_search
 substance_index = Index("substances")
 substance_index.settings(number_of_shards=1,
@@ -36,10 +36,12 @@ class InterventionDocument(DocType):
     choice = string_field('choice')
     application = string_field('application')
     time_unit = string_field('time_unit')
+    time = fields.FloatField()
     substance = fields.ObjectField(properties={
         'name': string_field('name')}
         )
     route = string_field('route')
+    form = string_field('form')
     name = string_field('name')
     final = fields.BooleanField()
     value = fields.FloatField()
@@ -54,4 +56,15 @@ class InterventionDocument(DocType):
     class Meta(object):
         model = Intervention
 
+
+output_index = Index("outputs")
+output_index.settings(number_of_shards=1,
+               number_of_replicas=1,)
+
+
+@output_index.doc_type
+class OutputDocument(DocType):
+    pk = fields.IntegerField('pk')
+    class Meta(object):
+            model = Output
 

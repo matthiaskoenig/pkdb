@@ -17,7 +17,6 @@
                 return lookup_icon(key)
             },
                 name(url){return url.substr(url.lastIndexOf('/') + 1);}
-
         },
         computed: {
             backend() {
