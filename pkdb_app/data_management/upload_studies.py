@@ -361,7 +361,7 @@ def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=No
         study_name = os.path.basename(study_folder_path)
 
         logging.info("-" * 80)
-        logging.info(f"Uploading [{study_name}]")
+        logging.info(f"Uploading [{study_name}] --> {api_url}")
 
         upload_study_from_dir(study_folder_path, api_url=api_url,
                               auth_headers=auth_headers, client=client)
