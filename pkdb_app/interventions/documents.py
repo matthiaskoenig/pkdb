@@ -41,6 +41,7 @@ class InterventionDocument(DocType):
         'name': string_field('name')}
         )
     route = string_field('route')
+    form = string_field('form')
     name = string_field('name')
     final = fields.BooleanField()
     value = fields.FloatField()
