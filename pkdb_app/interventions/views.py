@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from pkdb_app.categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION, \
     OUTPUT_TISSUE_DATA, PK_DATA_DICT
-from pkdb_app.interventions.documents import SubstanceDocument
+from pkdb_app.interventions.documents import SubstanceDocument, InterventionDocument
 from pkdb_app.interventions.models import (
     Substance,
     InterventionSet,
@@ -26,9 +26,10 @@ from pkdb_app.interventions.serializers import (
     InterventionReadSerializer,
     OutputReadSerializer,
     TimecourseReadSerializer,
-    InterventionExReadSerializer, OutputExReadSerializer, TimecourseExReadSerializer)
+    InterventionExReadSerializer, OutputExReadSerializer, TimecourseExReadSerializer, InterventionElasticSerializer)
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 
+from pkdb_app.pagination import CustomPagination
 from pkdb_app.units import TIME_UNITS
 
 
@@ -157,18 +158,18 @@ class SubstanceReadViewSet(viewsets.ReadOnlyModelViewSet):
 class ElasticSubstanceViewSet(DocumentViewSet):
     document = SubstanceDocument
     serializer_class = SubstanceSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
     lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,SearchFilterBackend,SuggesterFilterBackend]
+    filter_backends = [FilteringFilterBackend,SearchFilterBackend]
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
-    suggester_fields = {
-        'name_suggest': {'field':'name.suggest',
-                         'suggesters': [SUGGESTER_TERM,SUGGESTER_PHRASE,SUGGESTER_COMPLETION],
-                         'default_suggester': SUGGESTER_COMPLETION,
-                         }
-    }
 
 
-
-
+class ElasticInterventionViewSet(DocumentViewSet):
+    document = InterventionDocument
+    serializer_class = InterventionElasticSerializer
+    pagination_class = CustomPagination
+    lookup_field = "pk"
+    filter_backends = [FilteringFilterBackend,SearchFilterBackend]
+    search_fields = ('name','pk','category','choice')
+    filter_fields = {'name': 'name.raw',}

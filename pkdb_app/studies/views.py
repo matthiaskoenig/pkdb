@@ -219,16 +219,14 @@ class ElasticStudyViewSet(DocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
         "pk_version":'pk_version',
-        #"name":"name.raw",
-        #"design": "design.raw",
-        #"refernce": "refernce",
-        #"substance": "substance.raw",
+        "name":"name.raw",
+        "design": "design.raw",
+        "refernce": "refernce",
+        "substance": "substance.raw",
         #"keywords": "keywords.raw",
-
         #"files":"files",
-
-        #"creator":"creator.last_name",
-        #"curators": "curators.last_name",
+        "creator":"creator.last_name",
+        "curators": "curators.last_name",
 
     }
 

@@ -213,15 +213,9 @@ class StudyDocument(DocType):
         search_analyzer=autocomplete_search,
         fields = {'raw': fields.KeywordField(),
                   })
-
-    reference = fields.TextField(
-        attr="reference_name",
-        fielddata=True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields={'raw': fields.KeywordField(),
-             }
-    )
+    reference = fields.ObjectField(properties={
+        'sid': fields.IntegerField(attr='sid')
+    })
 
     curators = fields.ObjectField(
         properties={
