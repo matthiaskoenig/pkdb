@@ -24,7 +24,7 @@
                             <v-list-tile
                                     v-for="item in navigation"
                                     :key="item.title"
-                                    @click=""
+                                    @click="toggleVisibility(item.id)"
                             >
                                 <v-list-tile-action>
                                     <v-icon>{{ icon(item.icon) }}</v-icon>
@@ -205,6 +205,12 @@
             icon: function (key) {
                 return lookup_icon(key)
             },
+
+            toggleVisibility(item_id){
+                this.visible[item_id] = !this.visible[item_id];
+            },
+
+
             checkhasOutputs(array) {
                 if (array.length !== 0){
                     this.hasOutputs = true
