@@ -532,6 +532,12 @@ class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk", "interventionset","ex","final"] + VALUE_FIELDS + INTERVENTION_FIELDS
 
 
+
+
+
+
+
+
 class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
     """ InterventionSet. """
 
@@ -824,9 +830,19 @@ class TimecourseExReadSerializer(TimecourseReadSerializer):
 
 
 
+
 class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
     """ Substance. """
 
     class Meta:
         model = Substance
-        fields = ["pk", "name"]
+        fields = ["pk","name"]
+
+class InterventionElasticSerializer(serializers.ModelSerializer):
+    substance = serializers.SerializerMethodField()
+    class Meta:
+        model = Intervention
+        fields = ["pk","final"] + VALUE_FIELDS + INTERVENTION_FIELDS
+
+    def get_substance(self,obj):
+        return obj.substance.to_dict()

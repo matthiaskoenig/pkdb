@@ -322,10 +322,14 @@ class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class StudyElasticSerializer(serializers.ModelSerializer):
+class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
+
     pk = serializers.CharField(read_only=True)
     sid = serializers.CharField(read_only=True)
-    reference = serializers.CharField(read_only=True)
+    reference = serializers.HyperlinkedRelatedField(
+    read_only=True, lookup_field="sid", view_name="references_read-detail"
+    )
+    #reference = serializers.CharField(read_only=True)
     design = serializers.CharField(read_only=True)
     pkdb_version = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)

@@ -136,3 +136,7 @@ class Study(Sidable, models.Model):
     @property
     def reference_name(self):
         return self.reference.name
+
+    @property
+    def reference_pk(self):
+        return self.reference.pk

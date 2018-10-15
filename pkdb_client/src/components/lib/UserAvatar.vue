@@ -1,8 +1,8 @@
 <template>
-    <span :class="pulse" id="user-avatar">
-        <v-avatar color="red" size="35" :title="username">
-            <img v-if="src" :src="src"/>
-            <span v-if="!src" class="white--text headline" >{{ initials }}</span>
+    <span  id="user-avatar">
+        <v-avatar  color="red" size="35" :title="username">
+            <img :class="pulse" v-if="src" :src="src"/>
+            <span :class="pulse" v-if="!src" class="white--text headline" >{{ initials }}</span>
         </v-avatar>
     </span>
 </template>
@@ -25,7 +25,7 @@
             }
         },
         data() {return {
-            pulse : "not_pulse"
+            pulse : ""
 
         }},
         computed: {
@@ -53,7 +53,7 @@
                     this.pulse = "pulse"
                 }
                 else {
-                    this.pulse = "not_pulse"
+                    this.pulse = ""
                 }
             }
         }
@@ -61,18 +61,8 @@
 </script>
 
 <style scoped>
-    .not_pulse{
-        display: block;
-        width: 35px;
-        height: 35px;
-    }
 
     .pulse {
-        display: block;
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        box-shadow: 0 0 0 rgba(204,169,44, 0.4);
         animation: pulse 0.5s infinite;
     }
 
@@ -81,7 +71,7 @@
             -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
         }
         70% {
-            -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+            -webkit-box-shadow: 0 0 0 15px rgba(204,169,44, 0);
         }
         100% {
             -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
@@ -93,8 +83,8 @@
             box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
         }
         70% {
-            -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
-            box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+            -moz-box-shadow: 0 0 0 15px rgba(204,169,44, 0);
+            box-shadow: 0 0 0 15px rgba(204,169,44, 0);
         }
         100% {
             -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);

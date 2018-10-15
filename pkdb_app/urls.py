@@ -35,7 +35,7 @@ from .interventions.views import (
     OutputReadViewSet,
     TimecourseReadViewSet,
     InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet, InterventionOptionViewSet,
-    OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet)
+    OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet, ElasticInterventionViewSet)
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import (
     AuthorsViewSet,
@@ -134,7 +134,9 @@ router.register(
 router.register(
     "interventions_read", InterventionReadViewSet, base_name="interventions_read"
 )
-
+router.register(
+    "interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic"
+)
 router.register(
     "interventionexs_read", InterventionExReadViewSet, base_name="interventionexs_read"
 )
