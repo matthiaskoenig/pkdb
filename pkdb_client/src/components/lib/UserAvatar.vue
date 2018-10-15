@@ -25,7 +25,7 @@
             }
         },
         data() {return {
-            pulse : ""
+            pulse : "not_pulse"
 
         }},
         computed: {
