@@ -33,7 +33,7 @@
                     <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
                     <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td>{{ table.item.name }}</td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }} </text-highlight></td>
 
                 <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
                     <v-icon>{{ icon('reference') }}</v-icon>
@@ -41,13 +41,13 @@
                 </a>
                 </td>
                 <td>
-                    <UserAvatar :user="table.item.creator"/>
+                    <UserAvatar :user="table.item.creator" :search="search"/>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c"/></span>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c" :search="search"/></span>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :substance="c"/></span>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :substance="c" :search="search"/></span>
                 </td>
                 <td>
                     <v-container fluid grid-list-md>
@@ -55,7 +55,7 @@
                                           content-tag="v-layout"
                                           wrap row>
                             <span slot="item" slot-scope="props" xs12 sm6  md4 lg3>
-                                <file-chip  :file="props.item"/>
+                               <file-chip  :file="props.item" :search="search"/>
                             </span>
                         </v-data-iterator>
                     </v-container>
@@ -63,7 +63,7 @@
             </template>
 
             <template slot="no-data">
-                <v-alert :value="true" color="error" icon="warning">
+                <v-alert :value="true" color="error" icon="fas fa-exclamation">
                     Sorry, nothing to display here :(
                 </v-alert>
             </template>

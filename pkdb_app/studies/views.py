@@ -210,9 +210,9 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'name',
                      'design',
                      'reference',
-                     #'substances',
-                     #'keywords',
-                     #'files'
+                     'substances',
+                     'keywords',
+                     'files'
                      )
 
     filter_fields = {'name': 'name.raw',}

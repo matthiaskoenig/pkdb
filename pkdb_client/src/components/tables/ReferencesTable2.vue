@@ -46,7 +46,7 @@
             </template>
 
             <template slot="no-data">
-                <v-alert :value="true" color="error" icon="warning">
+                <v-alert :value="true" color="error" icon="fas fa-exclamation">
                     Sorry, nothing to display here :(
                 </v-alert>
             </template>

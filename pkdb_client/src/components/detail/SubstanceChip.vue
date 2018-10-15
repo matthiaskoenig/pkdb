@@ -1,6 +1,6 @@
 <template>
     <div class="text-xs-center">
-        <v-chip> <v-icon>{{ icon('substance') }}</v-icon>{{substance}}</v-chip>
+        <v-chip> <v-icon>{{ icon('substance') }}</v-icon> <text-highlight :queries="search.split(/[ ,]+/)"> {{substance}} </text-highlight> </v-chip>
     </div>
 </template>
 
@@ -10,6 +10,7 @@
         name: "SubstanceChip",
         props: {
             substance : String,
+            search: String,
         },
         methods: {
             icon(key) {

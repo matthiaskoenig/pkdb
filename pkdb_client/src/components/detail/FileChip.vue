@@ -1,6 +1,6 @@
 <template>
     <div id="file-chip" class="text-xs-center">
-        <a :href="backend+file.file" :title="backend+file.file"><v-chip> <v-icon>{{ icon('file') }}</v-icon>{{name(file.file)}}</v-chip> </a>
+        <a :href="backend+file.file" :title="backend+file.file"><v-chip> <v-icon>{{ icon('file') }}</v-icon> <text-highlight :queries="search.split(/[ ,]+/)"> {{name(file.file)}} </text-highlight> </v-chip> </a>
     </div>
 </template>
 
@@ -10,6 +10,7 @@
         name: "FileChip",
         props: {
             file : Object,
+            search:String,
         },
         methods: {
             icon(key) {
