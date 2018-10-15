@@ -5,7 +5,7 @@
     <v-card>
         <v-card-title>
             <v-toolbar id="heading-toolbar" color="secondary" dark>
-                <Heading :count="count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
+                <Heading :count="count" :icon="icon('study')" title="Studies" :resource_url="resource_url"/>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -30,19 +30,52 @@
 
             <template slot="items" slot-scope="table">
                 <td>
-                    <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
-                    <json-button :resource_url="api + '/references_read/'+ table.item.pk +'/?format=json'"/>
+                    <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
+                    <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>
+                <td><text-highlight :queries="[search]">{{ table.item.name }}</text-highlight></td>
+                <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
+                    <v-icon>{{ icon('reference') }}</v-icon>
+
+                </a>
+                </td>
                 <td>
-                    <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+table.item.pmid"
-                       target="_blank"><text-highlight :queries="[search]">{{ table.item.pmid }}</text-highlight></a>
+                    <UserAvatar :user="table.item.creator"/>
                 </td>
-                <td> <text-highlight :queries="[search]">{{ table.item.name }}</text-highlight> </td>
-                <td> <text-highlight :queries="[search]">{{table.item.title}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.journal}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.date}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.abstract}}</text-highlight></td>
+                <td>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c"/></span>
+                </td>
+                <td>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :substance="c"/></span>
+                </td>
+                <td>
+                    <v-container fluid grid-list-md>
+                        <v-data-iterator  :items="table.item.files"
+                                          rows-per-page-items=3
+                                          content-tag="v-layout"
+                                          wrap row>
+                            <span slot="item" slot-scope="props" xs12 sm6  md4 lg3>
+                                <file-chip  :file="props.item"/>
+                            </span>
+                        </v-data-iterator>
+                    </v-container>
+                </td>
+                <td>
+                    <a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset">
+                        <v-icon>{{ icon('groups') }}</v-icon></a>
+                </td>
+                <td>
+                    <a v-if="table.item.individualset" :href="table.item.individualset" :title="table.item.individualset">
+                        <v-icon>{{ icon('individuals') }}</v-icon></a>
+                </td>
+                <td>
+                    <a v-if="table.item.interventionset" :href="table.item.interventionset" :title="table.item.interventionset">
+                        <v-icon>{{ icon('interventions') }}</v-icon></a>
+                </td>
+                <td>
+                    <a v-if="table.item.outputset" :href="table.item.outputset" :title="table.item.outputset">
+                        <v-icon>{{ icon('outputs') }}</v-icon></a>
+                </td>
             </template>
 
             <template slot="no-data">
@@ -60,7 +93,7 @@
     import {lookup_icon} from "@/icons"
 
     export default {
-        name: "searchtable",
+        name: "StudiesTable2",
         data () {
                 return {
                     recourse_url: this.$store.state.endpoints.api  + '/references_elastic/?format=json',
@@ -121,7 +154,7 @@
                 getData() {
 
                     let url = this.$store.state.endpoints.api
-                        + '/references_elastic/?format=json'
+                        + '/studies_elastic/?format=json'
                         +'&page='+ this.pagination.page
                         +'&page_size='+ this.pagination.rowsPerPage
                         +'&ordering='+ this.descending+ this.pagination.sortBy;

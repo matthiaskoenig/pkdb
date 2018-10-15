@@ -13,13 +13,11 @@
 </template>
 
 <script>
-    import GetPaginatedData from './api/GetPaginatedData';
     import ReferencesTable2 from './tables/ReferencesTable2';
 
     export default {
         name: 'References',
         components: {
-            GetPaginatedData: GetPaginatedData,
             ReferencesTable2: ReferencesTable2,
 
         },

@@ -72,7 +72,7 @@ Vue.component('GetPaginatedData', GetPaginatedData);
 
 Vue.component('text-highlight', TextHighlight);
 
-import { lookup_icon} from "./icons";
+//import { lookup_icon} from "./icons";
 
 
 Vue.config.productionTip = false;
