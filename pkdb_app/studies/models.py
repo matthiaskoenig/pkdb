@@ -54,11 +54,18 @@ class Reference(models.Model):
 
     @property
     def study_pk(self):
-        return self.study.first().pk
+        if self.study.first():
+            return self.study.first().pk
+        else:
+            return ""
 
     @property
     def study_name(self):
-        return self.study.first().name
+        if self.study.first():
+            return self.study.first().name
+        else:
+            return ""
+
 
 class Study(Sidable, models.Model):
     """ Single clinical study.
