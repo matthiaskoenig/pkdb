@@ -117,5 +117,10 @@ SUBSTANCES_DATA = [
     'insulin',
     'c-peptide',
     'glucagon',
+    'TAA',  # total amino acids
+    'EAA',  # essential amino acids
+    'NEAA',  # non-essential amino acids
+    'BCAA',  # branch-chained amino acids
 ]
+
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
