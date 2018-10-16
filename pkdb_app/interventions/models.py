@@ -5,6 +5,7 @@ group or individual).
 """
 import copy
 import numpy as np
+import math
 import pandas as pd
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -374,6 +375,7 @@ class Output(ValueableNotBlank, AbstractOutput):
     def norm_fields(self):
         return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
                 "sd": self.sd, "se": self.se}
+
     @property
     def is_convertible(self):
         conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
@@ -391,6 +393,49 @@ class Output(ValueableNotBlank, AbstractOutput):
             for key,value in self.norm_fields.items():
                 if not value is None:
                         setattr(self,key,conversion.apply_conversion(value))
+
+    def null_attr(self,attr):
+        value = getattr(self,attr)
+        if value not in ['nan','NA','NAN','na',np.NaN, None] and not math.isnan(value):
+            return value
+
+    def null_value(self):
+        return self.null_attr('value')
+
+    def null_mean(self):
+        return self.null_attr('mean')
+
+    def null_median(self):
+        return self.null_attr('median')
+
+    def null_min(self):
+        return self.null_attr('min')
+
+    def null_max(self):
+        return self.null_attr('max')
+
+    def null_se(self):
+        return self.null_attr('se')
+
+    def null_sd(self):
+        return self.null_attr('sd')
+
+    def null_cv(self):
+        return self.null_attr('cv')
+
+    def null_unit(self):
+        return self.null_attr('unit')
+
+    def null_time(self):
+        return self.null_attr('time')
+
+    def group_name(self):
+        group_name =  None
+        if self.group:
+            group_name = self.group.name
+        #print({'pk':group_name})
+        #return {'pk':group_name}
+        return group_name
 
 
 

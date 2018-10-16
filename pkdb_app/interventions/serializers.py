@@ -598,7 +598,30 @@ class InterventionExReadSerializer(ExSerializer,serializers.HyperlinkedModelSeri
         #rep = self.retransform_map_fields(rep)
         return rep
 
+class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
+    group = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="groups_read-detail"
+    )
 
+    individual = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="individuals_read-detail"
+    )
+    interventions = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="interventions_read-detail"
+    )
+    substance = serializers.SerializerMethodField()
+
+    class Meta:
+            model = Output
+            fields = (
+                ["pk", ]
+                + OUTPUT_FIELDS
+                + VALUE_FIELDS
+                + ["group", "individual", "interventions","final"])
+
+
+    def get_substance(self, obj):
+        return obj.substance.to_dict()
 
 
 class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -634,6 +657,7 @@ class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
             + ["group", "individual", "interventions","final"]
 
         )
+
 
     def to_representation(self, instance):
         fields = [

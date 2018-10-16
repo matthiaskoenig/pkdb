@@ -249,7 +249,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             df[values[0]]
         except KeyError:
             raise serializers.ValidationError(
-                {"subset": f"source <{src.file.url}> has no column <{values[0]}>"}
+                {"subset": f"your source file has no column <{values[0]}>"}
             )
         try:
             df = df.loc[df[values[0]] == values[1]]
@@ -292,6 +292,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 keep_default_na=False,
                 na_values=["NA", "NAN", "na", "nan"],
             )
+
             df.columns = df.columns.str.strip()
 
 
@@ -370,33 +371,39 @@ class MappingSerializer(WrongKeyValidationSerializer):
         :param data:
         :return:
         """
+        from pprint import pprint
 
         source = data.get("source")
         if source:
-            array_dict = copy.deepcopy(data)
+            template = copy.deepcopy(data)
             # get data
-            array_dict.pop("source")
-            array_dict.pop("figure", None)
-            format = array_dict.pop("format", None)
+            template.pop("source")
+            template.pop("figure", None)
+            format = template.pop("format", None)
             if format is None:
                 raise serializers.ValidationError({"format": "format is missing!"})
-            subset = array_dict.pop("subset", None)
+            subset = template.pop("subset", None)
             # read dataframe subset
             df = self.df_from_file(source, format, subset)
+            template = copy.deepcopy(template)
 
             if data.get("groupby"):
-                groupby = array_dict.pop("groupby")
+                groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
                     raise serializers.ValidationError({"groupby":"groupby has to be a string"})
                 groupby = groupby.split("&")
                 array_dicts = []
+
                 for group_name, group_df in df.groupby(groupby):
-                    array_dict = copy.deepcopy(array_dict)
+                    array_dict = copy.deepcopy(template)
                     self.dict_from_array(array_dict, group_df, data, source)
+                    pprint(array_dict)
+
                     array_dicts.append(array_dict)
 
 
             else:
+                array_dict = copy.deepcopy(template)
                 self.dict_from_array(array_dict, df, data, source)
                 array_dicts =[array_dict]
 
@@ -404,14 +411,12 @@ class MappingSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 "For timecourse data a source file has to be provided."
             )
-
         return array_dicts
 
     def dict_from_array(self,array_dict,df,data,source):
         recursive_array_dict = list(recursive_iter(array_dict))
+
         for keys, value in recursive_array_dict:
-
-
             if isinstance(value, str):
                 if ITEM_MAPPER in value:
                     values = value.split(ITEM_MAPPER)
@@ -426,6 +431,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         value_array = df[values[1]]
 
 
+
                     except KeyError:
                         raise serializers.ValidationError(
                             [
@@ -433,7 +439,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 data,
                             ]
                         )
-
+                    #to get rid of dict
                     if keys[-1] in ["individual", "group"]:
                         unqiue_values = value_array.unique()
                         if len(unqiue_values) != 1:
