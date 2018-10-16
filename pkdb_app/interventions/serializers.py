@@ -600,12 +600,13 @@ class InterventionExReadSerializer(ExSerializer,serializers.HyperlinkedModelSeri
 
 class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
+        read_only=True, view_name="groups_read-detail", required=False
     )
 
     individual = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individuals_read-detail"
     )
+
     interventions = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="interventions_read-detail"
     )
@@ -614,14 +615,26 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
             model = Output
             fields = (
-                ["pk", ]
+                ["pk",]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "interventions","final"])
-
+                + ["group", "individual", "final","interventions"])
 
     def get_substance(self, obj):
         return obj.substance.to_dict()
+
+
+
+    def get_individual(self, obj):
+        if obj.individual:
+            #return obj.individual.to_dict()
+            return serializers.HyperlinkedRelatedField(read_only=True, view_name="individuals_read-detail")
+
+
+    def get_group(self, obj):
+        if obj.group:
+            #return obj.group.to_dict()
+            self.serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
 
 
 class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -864,6 +877,7 @@ class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
     substance = serializers.SerializerMethodField()
+
     class Meta:
         model = Intervention
         fields = ["pk","final"] + VALUE_FIELDS + INTERVENTION_FIELDS

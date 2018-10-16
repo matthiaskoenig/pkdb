@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import DocType, Index, fields
+from django_elasticsearch_dsl import DocType, Index, fields, DEDField, Object, collections
 from elasticsearch_dsl import analyzer
 
 from pkdb_app.interventions.models import Substance, Intervention, Output
@@ -64,19 +64,64 @@ output_index.settings(number_of_shards=1,
                number_of_replicas=1,)
 
 
+class ObjectField(DEDField, Object):
+    def _get_inner_field_data(self, obj, field_value_to_ignore=None):
+        data = {}
+        if hasattr(self, 'properties'):
+            for name, field in self.properties.to_dict().items():
+                if not isinstance(field, DEDField):
+                    continue
+
+                if field._path == []:
+                    field._path = [name]
+
+                data[name] = field.get_value_from_instance(
+                    obj, field_value_to_ignore
+                )
+        else:
+            for name, field in self._doc_class._doc_type.mapping.properties._params.get('properties', {}).items(): # noqa
+                if not isinstance(field, DEDField):
+                    continue
+
+                if field._path == []:
+                    field._path = [name]
+
+                data[name] = field.get_value_from_instance(
+                    obj, field_value_to_ignore
+                )
+
+        return data
+
+    def get_value_from_instance(self, instance, field_value_to_ignore=None):
+        objs = super(ObjectField, self).get_value_from_instance(
+            instance, field_value_to_ignore
+        )
+
+        if objs is None:
+            return None
+        if isinstance(objs, collections.Iterable):
+            return [
+                self._get_inner_field_data(obj, field_value_to_ignore)
+                for obj in objs if obj != field_value_to_ignore
+            ]
+
+        return self._get_inner_field_data(objs, field_value_to_ignore)
+
+
 @output_index.doc_type
 class OutputDocument(DocType):
     pk = fields.IntegerField('pk')
 
-    #group = fields.ObjectField(properties={
-    #    'pk': fields.IntegerField(),
-    #    'name': string_field('name')})
-    #individual = fields.ObjectField(properties={
-    #    'pk': fields.IntegerField(),
-    #    'name': string_field('name')})
+    group = ObjectField(properties={
+        'pk': fields.IntegerField(),
+        'name': string_field('name')})
 
-    interventions = fields.ObjectField(properties={
-        'name': string_field('name')}, multi=True)
+    individual = ObjectField(properties={
+        'pk': fields.IntegerField(),
+        'name': string_field('name')})
+
+    interventions = ObjectField(properties={
+        'pk': fields.IntegerField()}, multi=True)
 
     substance = fields.ObjectField(properties={
         'name': string_field('name')}
@@ -102,6 +147,8 @@ class OutputDocument(DocType):
 
     class Meta(object):
             model = Output
+
+
 
 
 

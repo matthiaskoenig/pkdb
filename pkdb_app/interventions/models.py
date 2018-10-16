@@ -429,13 +429,11 @@ class Output(ValueableNotBlank, AbstractOutput):
     def null_time(self):
         return self.null_attr('time')
 
-    def group_name(self):
-        group_name =  None
-        if self.group:
-            group_name = self.group.name
-        #print({'pk':group_name})
-        #return {'pk':group_name}
-        return group_name
+    def group_pk(self):
+
+        group_pk =  None
+        if self.group is not None:
+            return {'pk':group_pk}
 
 
 

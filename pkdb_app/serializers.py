@@ -397,7 +397,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 for group_name, group_df in df.groupby(groupby):
                     array_dict = copy.deepcopy(template)
                     self.dict_from_array(array_dict, group_df, data, source)
-                    pprint(array_dict)
 
                     array_dicts.append(array_dict)
 
