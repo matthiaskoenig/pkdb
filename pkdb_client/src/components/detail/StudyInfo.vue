@@ -46,14 +46,7 @@
 
             <v-flex xs5>
                 <v-flex>
-                    <v-carousel>
-                        <v-carousel-item
-                                :cycle="False"
-                                v-for="(item,i) in images"
-                                :key="i"
-                                :src="item.file"
-                        ></v-carousel-item>
-                    </v-carousel>
+                    <file-image-view v-if="study.files" :files="study.files" />
                 </v-flex>
             </v-flex>
 
@@ -64,11 +57,13 @@
 <script>
     import {lookup_icon} from "@/icons"
     import ReferenceDetail from "./ReferenceDetail"
+    import FileImageView from "./FileImageView"
 
     export default {
         name: "StudyInfo",
         components: {
-            ReferenceDetail: ReferenceDetail
+            ReferenceDetail: ReferenceDetail,
+            FileImageView: FileImageView
         },
         props: {
             study: {
