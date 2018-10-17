@@ -121,7 +121,9 @@ class OutputDocument(DocType):
         'name': string_field('name')})
 
     interventions = ObjectField(properties={
-        'pk': fields.IntegerField()}, multi=True)
+        'pk': fields.IntegerField(),
+        'name': string_field('name')
+    }, multi=True)
 
     substance = fields.ObjectField(properties={
         'name': string_field('name')}
@@ -169,7 +171,9 @@ class TimecourseDocument(DocType):
         'name': string_field('name')})
 
     interventions = ObjectField(properties={
-        'pk': fields.IntegerField()}, multi=True)
+        'pk': fields.IntegerField(),
+        'name': string_field('name')
+    }, multi=True)
 
     substance = fields.ObjectField(properties={
         'name': string_field('name')}

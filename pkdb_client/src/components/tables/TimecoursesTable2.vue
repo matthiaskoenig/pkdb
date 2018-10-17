@@ -103,11 +103,11 @@
                 pagination: {},
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
-                    {text: 'Output', value: 'output'},
+                    {text: '', value: 'buttons',sortable: false},
                     {text: 'Type', value: 'type'},
                     {text: 'Group', value: 'group'},
                     {text: 'Individual', value: 'individual'},
-                    {text: 'Interventions', value: 'interventions'},
+                    {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
                     {text: 'Timecourse', value: 'timecourse'},
@@ -137,7 +137,7 @@
 
             },
             resource_url() {
-                return this.$store.state.endpoints.api  + '/timecourses_elastic/?format=json'
+                return this.$store.state.endpoints.api  + '/timecourses_elastic/?format=json&final=true'
             },
             descending() {
                 if(this.pagination.descending){
@@ -156,7 +156,7 @@
             getData() {
 
                 let url = this.$store.state.endpoints.api
-                    + '/timecourses_elastic/?format=json'
+                    + '/timecourses_elastic/?format=json&final=true'
                     +'&page='+ this.pagination.page
                     +'&page_size='+ this.pagination.rowsPerPage
                     +'&ordering='+ this.descending+ this.pagination.sortBy;

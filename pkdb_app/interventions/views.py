@@ -181,19 +181,29 @@ class ElasticInterventionViewSet(DocumentViewSet):
                        'substance':'substance.name',
                        'value':'value'}
 
+
+
 class ElasticOutputViewSet(DocumentViewSet):
     document = OutputDocument
     serializer_class = OutputElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "pk"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    search_fields = ('pktype','substance.name',"tissue",'time_unit')
-    filter_fields = {'pk':'pk'}
+    search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit')
+    filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
                        'substance':'substance.name',
+                       'group': 'group.name',
+                       'individual': 'individual.name',
                        'value':'value',
                        }
+
+    #search_nested_fields = {
+    #    'interventions': {
+    #        'fields': ['name'],
+    #    }
+    #}
 
 class ElasticTimecourseViewSet(DocumentViewSet):
     document = TimecourseDocument
@@ -201,10 +211,20 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     lookup_field = "pk"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    search_fields = ('pktype','substance.name',"tissue",'time_unit')
-    filter_fields = {'pk':'pk'}
+    search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name')
+    filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
+                       'group':'group.name',
+                       'individual': 'individual.name',
                        'substance':'substance.name',
                        'value':'value',
                        }
+
+
+
+    #search_nested_fields = {
+    #    'interventions': {
+    #        'fields': ['name'],
+    #    }
+    #}

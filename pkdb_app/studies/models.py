@@ -140,3 +140,33 @@ class Study(Sidable, models.Model):
     @property
     def reference_pk(self):
         return self.reference.pk
+
+    @property
+    def group_count(self):
+        if self.groupset:
+            return self.groupset.groups.count()
+        return 0
+
+    @property
+    def timecourse_count(self):
+        if self.outputset:
+            return self.outputset.timecourses.count()
+        return 0
+
+    @property
+    def individual_count(self):
+        if self.individualset:
+            return self.individualset.individuals.count()
+        return 0
+
+    @property
+    def intervention_count(self):
+        if self.interventionset:
+            return self.interventionset.interventions.count()
+        return 0
+
+    @property
+    def output_count(self):
+        if self.outputset:
+            return self.outputset.outputs.count()
+        return 0

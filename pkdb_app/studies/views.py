@@ -226,7 +226,7 @@ class ElasticStudyViewSet(DocumentViewSet):
         #"keywords": "keywords.raw",
         #"files":"files",
         "creator":"creator.last_name",
-        "curators": "curators.last_name",
+        #"curators": "curators.last_name",
 
     }
 

@@ -99,9 +99,9 @@
                         {text: 'Name', value: 'name'},
                         {text: 'Reference', value: 'reference'},
                         {text: 'Creator', value: 'creator'},
-                        {text: 'Curators', value: 'curators'},
-                        {text: 'Substances', value: 'substances'},
-                        {text: 'Files', value: 'files'},
+                        {text: 'Curators', value: 'curators',sortable: false},
+                        {text: 'Substances', value: 'substances',sortable: false},
+                        {text: 'Files', value: 'files',sortable: false},
 
                     ],
                 }

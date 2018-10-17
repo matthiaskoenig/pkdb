@@ -48,10 +48,10 @@
                         </div>
                     </get-data>
                 <td>
-                    <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
-                    <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>
+                    <span v-if="table.item.interventions" v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url">
                         <div slot-scope="data">
+                            <a :href="intervention_url" :title="data.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>
                             <text-highlight :queries="search.split(/[ ,]+/)">
                             {{ data.data.name }}
                             </text-highlight>
@@ -107,11 +107,11 @@
                 pagination: {},
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
-                    {text: 'Output', value: 'output'},
+                    {text: '', value: 'buttons',sortable: false},
                     {text: 'Type', value: 'pktype'},
                     {text: 'Group', value: 'group'},
                     {text: 'Individual', value: 'individual'},
-                    {text: 'Interventions', value: 'interventions'},
+                    {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
                     {text: 'Time', value: 'time'},
@@ -142,7 +142,7 @@
 
             },
             resource_url() {
-                return this.$store.state.endpoints.api  + '/outputs_elastic/?format=json'
+                return this.$store.state.endpoints.api  + '/outputs_elastic/?format=json&final=true'
             },
             descending() {
                 if(this.pagination.descending){
@@ -162,6 +162,7 @@
 
                 let url = this.$store.state.endpoints.api
                     + '/outputs_elastic/?format=json'
+                    +'&final=true'
                     +'&page='+ this.pagination.page
                     +'&page_size='+ this.pagination.rowsPerPage
                     +'&ordering='+ this.descending+ this.pagination.sortBy;

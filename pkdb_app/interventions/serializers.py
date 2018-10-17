@@ -679,7 +679,7 @@ class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
             ["pk", "outputset","ex"]
             + OUTPUT_FIELDS
             + VALUE_FIELDS
-            + ["group", "individual", "interventions","final"]
+            + ["group", "individual", "interventions","final",]
 
         )
 

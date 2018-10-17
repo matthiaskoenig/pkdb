@@ -450,7 +450,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
-        fields = (
+        fields = [
             "pk",
             "sid",
             "pkdb_version",
@@ -468,7 +468,9 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
             "groupset",
             "outputset",
             "files",
-        )
+        ] + ["group_count","individual_count","intervention_count","output_count","timecourse_count"]
+
+
 
 class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
 
