@@ -90,10 +90,6 @@
         },
     }
 
-
-
-
-
 </script>
 
 <style scoped>

@@ -41,8 +41,6 @@
         computed: {
             characteristica_url() {
                 var url = this.$store.state.endpoints.api + '/characteristica_elastic/?ids='+ this.individual.characteristica_all_final.join('__');
-                console.log(url);
-
                 return url;
             }
         },
