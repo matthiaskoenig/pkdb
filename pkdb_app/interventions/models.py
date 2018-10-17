@@ -394,6 +394,8 @@ class Output(ValueableNotBlank, AbstractOutput):
                 if not value is None:
                         setattr(self,key,conversion.apply_conversion(value))
 
+    # for elastic search. NaNs are not allowed in elastic search
+
     def null_attr(self,attr):
         value = getattr(self,attr)
         if value not in ['nan','NA','NAN','na',np.NaN, None] and not math.isnan(value):
@@ -429,11 +431,6 @@ class Output(ValueableNotBlank, AbstractOutput):
     def null_time(self):
         return self.null_attr('time')
 
-    def group_pk(self):
-
-        group_pk =  None
-        if self.group is not None:
-            return {'pk':group_pk}
 
 
 
@@ -599,6 +596,49 @@ class Timecourse(AbstractOutput):
                 if not value is None:
                     setattr(self, key, conversion.apply_conversion(value))
 
+        # for elastic search. NaNs are not allowed in elastic search
+
+    def null_attr(self, attr):
+        value_list = getattr(self, attr)
+        value_list_none = []
+        if value_list:
+            for value in value_list:
+                if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):
+                    value_list_none.append(value)
+                else:
+                    value_list_none.append(None)
+            return value_list_none
+
+
+    def null_value(self):
+        return self.null_attr('value')
+
+    def null_mean(self):
+        return self.null_attr('mean')
+
+    def null_median(self):
+        return self.null_attr('median')
+
+    def null_min(self):
+        return self.null_attr('min')
+
+    def null_max(self):
+        return self.null_attr('max')
+
+    def null_se(self):
+        return self.null_attr('se')
+
+    def null_sd(self):
+        return self.null_attr('sd')
+
+    def null_cv(self):
+        return self.null_attr('cv')
+
+    def null_unit(self):
+        return self.null_attr('unit')
+
+    def null_time(self):
+        return self.null_attr('time')
 
 ###############################################################################
     @property
