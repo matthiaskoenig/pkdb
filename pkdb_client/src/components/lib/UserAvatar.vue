@@ -1,9 +1,19 @@
 <template>
-    <span  id="user-avatar">
+    <span id="user-avatar">
+         <v-chip :class="pulse">
+          <v-avatar>
+            <img :src="src">
+          </v-avatar>
+          {{ username }}
+        </v-chip>
+
+
+        <!--
         <v-avatar  color="red" size="35" :title="username">
             <img :class="pulse" v-if="src" :src="src"/>
             <span :class="pulse" v-if="!src" class="white--text headline" >{{ initials }}</span>
         </v-avatar>
+        -->
     </span>
 </template>
 
@@ -45,7 +55,6 @@
                 return null;
             },
 
-
         },
         methods:{
             calculate_size(){
@@ -61,11 +70,9 @@
 </script>
 
 <style scoped>
-
     .pulse {
         animation: pulse 0.5s infinite;
     }
-
     @-webkit-keyframes pulse {
         0% {
             -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);

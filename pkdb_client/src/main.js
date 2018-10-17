@@ -20,13 +20,13 @@ import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fort
 
 import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
     faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets,
-    faCube, faCubes, faUserCog, faUserEdit, faEnvelope, faTicketAlt, faCheckCircle, faTimesCircle, faBookReader
+    faCube, faCubes, faUserCog, faUserEdit, faEnvelope, faTicketAlt, faCheckCircle, faTimesCircle, faBookReader, faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
     faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode, faTablet, faTablets, faCube, faCubes,
-    faUserCog, faUserEdit, faEnvelope, faTicketAlt, faCheckCircle, faTimesCircle, faBookReader);
+    faUserCog, faUserEdit, faEnvelope, faTicketAlt, faCheckCircle, faTimesCircle, faBookReader, faTrashAlt);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('font-awesome-layers', FontAwesomeLayers);
