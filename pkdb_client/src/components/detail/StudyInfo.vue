@@ -1,39 +1,33 @@
 <template>
     <div class="study-info">
         <v-layout>
-
             <v-flex xs2>
-                <v-flex>
-                    <div class="attr-card">
-                        <span class="attr">Name</span>
-                        {{ study.name }}
-                    </div>
-                </v-flex>
+            <v-card flat>
 
-                <v-flex>
-                    <div class="attr-card">
-                        <span class="attr">Creator</span><br/>
-                        <user-avatar :user="study.creator"/>
-                    </div>
-                </v-flex>
-                <v-flex>
-                    <div class="attr-card">
-                        <span class="attr">Curators</span><br/>
-                        <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
-                    </div>
-                </v-flex>
-                <v-flex>
-                    <div class="attr-card-no-width">
-                        <span class="attr">Substances</span><br/>
-                        <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>{{c.name}}</span>
-                    </div>
-                </v-flex>
-                <v-flex>
-                    <div class="attr-card-no-width">
-                        <span class="attr">Files</span><br/>
-                        <span v-for="f in study.files" :key="f.name"><a :href="f.pk" :title="f.name"><v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
-                    </div>
-                </v-flex>
+                <div>
+                    <span class="attr">Name</span><br />
+                    {{ study.name }}
+                </div>
+
+                <div>
+                    <span class="attr">Creator</span><br />
+                    <user-avatar :user="study.creator"/>
+                </div>
+
+                <div>
+                    <span class="attr">Curators</span><br />
+                    <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
+                </div>
+
+                <div>
+                    <span class="attr">Substances</span><br />
+                    <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>{{c.name}}</span><br />
+                </div>
+                <div>
+                    <span class="attr">Files</span><br />
+                    <span v-for="f in study.files" :key="f.name"><a :href="f.pk" :title="f.name"><v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
+                </div>
+            </v-card>
 
             </v-flex>
             <v-flex xs5>
@@ -43,11 +37,8 @@
                     </template>
                 </get-data>
             </v-flex>
-
-            <v-flex xs5>
-                <v-flex>
-                    <file-image-view v-if="study.files" :files="study.files" />
-                </v-flex>
+            <v-flex>
+                <file-image-view v-if="study.files" :files="study.files"/>
             </v-flex>
 
         </v-layout>
@@ -75,10 +66,10 @@
         computed: {
             images() {
                 var list = [];
-                for (var k=0; k<this.study.files.length; k++){
+                for (var k = 0; k < this.study.files.length; k++) {
                     var item = this.study.files[k];
                     console.log(item);
-                    if (item.name.endsWith("png")){
+                    if (item.name.endsWith("png")) {
                         list.push(item)
                     }
                 }

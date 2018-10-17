@@ -1,7 +1,7 @@
 <template>
     <div id="reference-detail">
         <!-- <heading-toolbar :title="reference.name" :icon="icon('reference')" :resource_url="resource_url"/>-->
-        <v-card max-width="1000">
+        <v-card max-width="1000" flat>
             <v-icon>{{ icon('reference') }}</v-icon>&nbsp;<b>{{ reference.title }}</b><br/>
             <span v-for="author in reference.authors">
                 {{ author.first_name }} {{ author.last_name }},
