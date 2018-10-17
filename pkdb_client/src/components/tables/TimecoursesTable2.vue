@@ -31,12 +31,12 @@
                     <LinkButton :to="'/timecourses/'+ table.item.pk" :title="'Timecourse: '+table.item.pk" :icon="icon('output')"/>
                     <JsonButton :resource_url="api + '/timecourses_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td>{{table.item.pktype }}</td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }}</text-highlight></td>
                 <td>
                     <get-data v-if="table.item.group" :resource_url="table.item.group">
                         <div slot-scope="data">
                             <group-button :group="data.data" />
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 </td>
@@ -44,7 +44,7 @@
                     <get-data v-if="table.item.individual" :resource_url="table.item.individual">
                         <div slot-scope="data">
                             <individual-button :individual="data.data" />
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 <td>
@@ -52,12 +52,18 @@
                     <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;
                         <get-data :resource_url="intervention_url">
                         <div slot-scope="data">
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">
+                                {{ data.data.name }}
+                            </text-highlight>
                         </div>
                     </get-data>
                     </span>
                 </td>
-                <td>{{table.item.tissue}}</td>
+                <td>
+                    <text-highlight :queries="search.split(/[ ,]+/)">
+                        {{table.item.tissue}}
+                    </text-highlight>
+                </td>
                 <td>
                     <substance-chip :substance="table.item.substance.name" :search="search"/>
                 </td>
