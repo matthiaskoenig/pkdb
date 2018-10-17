@@ -1,7 +1,7 @@
 from django_elasticsearch_dsl import DocType, Index, fields, DEDField, Object, collections
 from elasticsearch_dsl import analyzer
 
-from pkdb_app.interventions.models import Substance, Intervention, Output
+from pkdb_app.interventions.models import Substance, Intervention, Output, Timecourse
 from pkdb_app.studies.documents import autocomplete, autocomplete_search
 substance_index = Index("substances")
 substance_index.settings(number_of_shards=1,
@@ -149,7 +149,51 @@ class OutputDocument(DocType):
             model = Output
 
 
+timecourses_index = Index("timecourses")
+timecourses_index.settings(number_of_shards=1,
+               number_of_replicas=1,)
 
 
+
+
+@timecourses_index.doc_type
+class TimecourseDocument(DocType):
+    pk = fields.IntegerField('pk')
+
+    group = ObjectField(properties={
+        'pk': fields.IntegerField(),
+        'name': string_field('name')})
+
+    individual = ObjectField(properties={
+        'pk': fields.IntegerField(),
+        'name': string_field('name')})
+
+    interventions = ObjectField(properties={
+        'pk': fields.IntegerField()}, multi=True)
+
+    substance = fields.ObjectField(properties={
+        'name': string_field('name')}
+        )
+    ex = fields.ObjectField(properties={
+        'pk': string_field('pk')}
+        )
+    final = fields.BooleanField()
+    value = fields.FloatField('null_value',multi=True)
+    mean = fields.FloatField('null_mean', multi=True)
+    median = fields.FloatField('null_median', multi=True)
+    min = fields.FloatField('null_min', multi=True)
+    max = fields.FloatField('null_max', multi=True)
+    se = fields.FloatField('null_se', multi=True)
+    sd = fields.FloatField('null_sd', multi=True)
+    cv = fields.FloatField('null_cv', multi=True)
+    unit = string_field('unit')
+
+    time_unit = string_field('time_unit')
+    time = fields.FloatField('null_time',multi=True)
+    tissue = string_field('tissue')
+    pktype = string_field("pktype")
+
+    class Meta(object):
+            model = Timecourse
 
 

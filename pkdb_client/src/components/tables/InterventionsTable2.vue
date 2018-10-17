@@ -41,13 +41,6 @@
                     <text-highlight :queries="[search]">{{table.item.form}} </text-highlight>
                 </td>
                 <td>
-                    <!--<a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
-                   <get-data :resource_url="table.item.substance">
-                        <div slot-scope="data">
-                            <text-highlight :queries="[search]">{{ data.data.name }} </text-highlight>
-                        </div>
-                    </get-data>
-                    -->
                     <substance-chip :substance="table.item.substance.name" :search="search"/>
                 </td>
                 <td><characteristica-card :data="table.item" /></td>
