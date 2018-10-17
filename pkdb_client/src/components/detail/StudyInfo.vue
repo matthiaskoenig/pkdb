@@ -2,13 +2,8 @@
     <div class="study-info">
         <v-layout>
             <v-flex xs2>
+
             <v-card flat>
-
-                <div>
-                    <span class="attr">Name</span><br />
-                    {{ study.name }}
-                </div>
-
                 <div>
                     <span class="attr">Creator</span><br />
                     <user-avatar :user="study.creator"/>
