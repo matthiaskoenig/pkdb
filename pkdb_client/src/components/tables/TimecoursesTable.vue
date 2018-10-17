@@ -29,12 +29,12 @@
                     </get-data>
                 <td>
                     <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
-                    <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;
                         <get-data :resource_url="intervention_url">
-                        <div slot-scope="data">
-                            {{ data.data.name }}
-                        </div>
-                    </get-data>
+                            <div slot-scope="intervention">
+                                <a :href="intervention_url" :title="intervention.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;
+                                {{ intervention.data.name }}
+                            </div>
+                        </get-data>
                     </span>
                 </td>
                 <td>{{table.item.tissue}}</td>
