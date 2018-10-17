@@ -114,6 +114,8 @@ SUBSTANCES_DATA = [
     # glucose metabolism
     # ----------------------
     'glucose',
+    '[2-3H]glucose',
+    '[6-3H]glucose',
     'insulin',
     'c-peptide',
     'glucagon',

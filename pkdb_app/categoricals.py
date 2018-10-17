@@ -571,6 +571,9 @@ PK_DATA = [
     PharmacokineticsType(
         "rd", "rate disappearance (rate)", rate_norm_unit
     ),
+    PharmacokineticsType(
+        "rate_cycling", "rate cycling (rate)", rate_norm_unit
+    ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
 
