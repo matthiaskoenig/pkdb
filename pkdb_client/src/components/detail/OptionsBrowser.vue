@@ -1,14 +1,13 @@
 <template>
     <span>
-  <v-card color="blue lighten-1" dark>
+  <v-card dark>
     <v-card-title class="headline blue">
       Browse options
     </v-card-title>
     <v-card-text>
       <v-autocomplete
-              v-model="options"
+              v-model="model"
               :items="items"
-              :search-input.sync="search"
               color="white"
               hide-no-data
               hide-selected
@@ -16,42 +15,33 @@
               item-value="API"
               label="Categories"
               placeholder="Start typing to Search"
+              persistent-hint
               return-object
       ></v-autocomplete>
     </v-card-text>
 
     <v-divider></v-divider>
+      <v-card-text v-if="class_category">
+          <strong>Class:</strong> {{ class_category }}<br />
+          <strong>Data type:</strong> {{ dtype }}<br />
+          <strong>Units:</strong> {{ units }}
+      </v-card-text>
 
-    <v-expand-transition>
-      <v-list v-if="options" class="red lighten-3">
-        <v-list-tile
-                v-for="(field, i) in fields"
-                :key="i"
-        >
+    <v-expand-transition color="blue lighten-1">
+
+      <v-list v-if="choices.length">
+          <v-card-text>Choices</v-card-text>
+        <v-list-tile v-for="(field, i) in choices" :key="i">
           <v-list-tile-content>
-            <v-list-tile-title v-text="field.value"></v-list-tile-title>
-            <v-list-tile-sub-title v-text="field.key"></v-list-tile-sub-title>
+            <v-list-tile-title v-text="field"></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-expand-transition>
 
-      <!--
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn
-              :disabled="!options"
-              color="grey darken-3"
-              @click="model = null"
-      >
-        Clear
-        <v-icon right>fas fa-trash-alt</v-icon>
-      </v-btn>
-    </v-card-actions>
-    -->
   </v-card>
+        <!--{{ options }}-->
 
-        {{ options }}
     </span>
 </template>
 
@@ -65,27 +55,37 @@
             }
         },
         data: () => ({
-            categories: [],
-            class: null,
-            dtype: null,
-            choices: [],
-            entries: [],
             model: null,
-            search: null
+            class_category: null,
+            dtype: null,
+            units: null
         }),
         computed: {
             items () {
-                return this.options.keys
-            },
-            fields () {
-                if (!this.model) return []
+                return Object.keys(this.options['categories'])
 
-                return Object.keys(this.model).map(key => {
-                    return {
-                        key: key,
-                        value: this.model[key] || 'n/a'
-                    }
-                })
+            },
+
+            choices () {
+                if (!this.model) {
+                    this.class_category = null;
+                    this.dtype = null;
+                    this.units = null;
+                    return []
+                }
+                var data = this.options['categories'][this.model];
+                this.class_category = data['category'];
+                this.dtype = data['dtype'];
+                this.units = data['units'];
+                if (this.units){
+                    this.units = Object.keys(this.units)
+                }
+                var choices = data['choices'];
+                if (choices){
+                    return choices.sort()
+                } else {
+                    return []
+                }
             },
         },
     }

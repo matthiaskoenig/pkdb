@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" class="detail-dialog">
+    <v-dialog class="detail-dialog">
         <v-btn slot="activator" fab small title="individual.name">
             <v-icon>{{ icon('individual') }}</v-icon></a>
         </v-btn>
