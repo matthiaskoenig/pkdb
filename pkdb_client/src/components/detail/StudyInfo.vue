@@ -21,7 +21,7 @@
 
                 <div>
                     <span class="attr">Substances</span><br />
-                    <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>{{c.name}}</span><br />
+                    <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>
                 </div>
                 <div>
                     <span class="attr">Files</span><br />
@@ -39,6 +39,10 @@
             </v-flex>
             <v-flex>
                 <file-image-view v-if="study.files" :files="study.files"/>
+            </v-flex>
+
+            <v-flex>
+            <Annotations :item="study"/>
             </v-flex>
 
         </v-layout>
