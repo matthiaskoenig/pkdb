@@ -3,7 +3,7 @@
     <v-card>
         <v-card-title>
             <v-toolbar id="heading-toolbar" color="secondary" dark>
-                <Heading :count="count" :icon="icon('interventions')" title="Interventions" :Interventions="resource_url"/>
+                <Heading :count="count" :icon="icon('outputs')" title="Outputs" :resource_url="resource_url"/>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -25,32 +25,50 @@
                 :loading="loading"
                 class="elevation-1"
         >
-            <template slot="items" slot-scope="table">
 
+            <template slot="items" slot-scope="table">
                 <td>
-                    <LinkButton :to="'/interventions/'+ table.item.pk" :title="'Group: '+table.item.pk" :icon="icon('intervention')"/>
-                    <JsonButton :resource_url="api + '/interventions_read/'+ table.item.pk +'/?format=json'"/>
+                    <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon('output')"/>
+                    <JsonButton :resource_url="api + '/outputs_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td> <text-highlight :queries="[search]"> {{table.item.name }} </text-highlight></td>
-                <td>  <text-highlight :queries="[search]"> {{table.item.category }}</text-highlight></td>
-                <td>  <text-highlight :queries="[search]"> {{table.item.choice }} </text-highlight></td>
+                <td>{{table.item.pktype }}</td>
                 <td>
-                    <text-highlight :queries="[search]"> {{table.item.application }} </text-highlight><br/>
-                    <text-highlight :queries="[search]">{{table.item.time}} </text-highlight> <span v-if="table.item.time_unit">[ <text-highlight :queries="[search]">{{table.item.time_unit }} </text-highlight> ]</span><br />
-                    <text-highlight :queries="[search]">{{ table.item.route }} </text-highlight> <br/>
-                    <text-highlight :queries="[search]">{{table.item.form}} </text-highlight>
-                </td>
-                <td>
-                    <!--<a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
-                   <get-data :resource_url="table.item.substance">
+                    <get-data v-if="table.item.group" :resource_url="table.item.group">
                         <div slot-scope="data">
-                            <text-highlight :queries="[search]">{{ data.data.name }} </text-highlight>
+                            <group-button :group="data.data" />
+                            {{ data.data.name }}
                         </div>
                     </get-data>
-                    -->
-                    <substance-chip :substance="table.item.substance.name" :search="search"/>
                 </td>
-                <td><characteristica-card :data="table.item" /></td>
+                <td>
+                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                        <div slot-scope="data">
+                            <individual-button :individual="data.data" />
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
+                <td>
+                    <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
+                    <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>
+                        <get-data :resource_url="intervention_url">
+                        <div slot-scope="data">
+                            {{ data.data.name }}
+                        </div>
+                        </get-data>&nbsp;
+                    </span>
+                </td>
+                <td>{{table.item.tissue}}</td>
+                <td>
+                    <a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance">
+                        <v-icon>{{ icon('substance') }}</v-icon> </a>
+                    <get-data :resource_url="table.item.substance">
+                        <div slot-scope="data">
+                            {{ data.data.name }}
+                        </div>
+                    </get-data>
+                </td>
+                <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
+                <td><characteristica-card :data="table.item"/></td>
             </template>
 
             <template slot="no-data">
@@ -66,14 +84,17 @@
 <script>
     import axios from 'axios'
     import {lookup_icon} from "@/icons"
+    import GroupButton from '../lib/GroupButton'
+    import IndividualButton from '../lib/IndividualButton'
     import CharacteristicaCard from '../detail/CharacteristicaCard'
-    import SubstanceChip from "../detail/SubstanceChip"
+
 
     export default {
-        name: "InterventionsTable",
-        components: {
-            CharacteristicaCard,
-            SubstanceChip
+        name: "OutputsTable2",
+        components:{
+            GroupButton,
+            IndividualButton,
+            CharacteristicaCard
         },
         data () {
             return {
@@ -84,15 +105,16 @@
                 pagination: {},
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
-                    //{text: 'Intervention', value: 'intervention'},
-                    {text: '', value: 'buttons',sortable: false},
-                    {text: 'Name', value: 'name'},
-                    {text: 'Category', value: 'category'},
-                    {text: 'Choice', value: 'choice'},
-                    {text: 'Application', value: 'application'},
+                    {text: 'Output', value: 'output'},
+                    {text: 'Type', value: 'type'},
+                    {text: 'Group', value: 'group'},
+                    {text: 'Individual', value: 'individual'},
+                    {text: 'Interventions', value: 'interventions'},
+                    {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
+                    {text: 'Time', value: 'time'},
                     {text: 'Value', value: 'value'},
-                ],
+                ]
             }
         },
         watch: {
@@ -118,7 +140,7 @@
 
             },
             resource_url() {
-                return this.$store.state.endpoints.api  + '/interventions_elastic/?format=json'
+                return this.$store.state.endpoints.api  + '/outputs_elastic/?format=json'
             },
             descending() {
                 if(this.pagination.descending){
@@ -137,7 +159,7 @@
             getData() {
 
                 let url = this.$store.state.endpoints.api
-                    + '/interventions_elastic/?format=json'
+                    + '/outputs_elastic/?format=json'
                     +'&page='+ this.pagination.page
                     +'&page_size='+ this.pagination.rowsPerPage
                     +'&ordering='+ this.descending+ this.pagination.sortBy;
