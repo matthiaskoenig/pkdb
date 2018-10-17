@@ -38,7 +38,6 @@
         </v-list-tile>
       </v-list>
     </v-expand-transition>
-
   </v-card>
         <!--{{ options }}-->
 
@@ -47,7 +46,7 @@
 
 <script>
     export default {
-        name: "OptionsBrowser",
+        name: "CharacteristicaBrowser",
         props: {
             options: {
                 type: Object,
