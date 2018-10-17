@@ -1,29 +1,25 @@
 <template>
+    <!--
     <get-paginated-data :resource_url="resource_url" >
         <div slot-scope="data">
             <outputs-table :data="data"  :resource_url="resource_url" />
         </div>
     </get-paginated-data>
+
+    -->
+    <outputs-table2/>
+
 </template>
 
 <script>
-    import GetPaginatedData from './api/GetPaginatedData';
-    import OutputsTable from './tables/OutputsTable';
+    import OutputsTable2 from './tables/OutputsTable2';
 
     export default {
         name: 'Outputs',
         components: {
-            GetPaginatedData: GetPaginatedData,
-            OutputsTable: OutputsTable,
+            OutputsTable2: OutputsTable2,
         },
 
-        computed: {
-            api() {return this.$store.state.endpoints.api},
-
-            resource_url() {
-                return this.api + '/outputs_read/?format=json&final=True';
-            },
-        }
     }
 </script>
 <style>
