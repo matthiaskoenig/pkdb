@@ -189,7 +189,7 @@ class ElasticOutputViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     lookup_field = "pk"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit')
+    search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
@@ -199,19 +199,13 @@ class ElasticOutputViewSet(DocumentViewSet):
                        'value':'value',
                        }
 
-    #search_nested_fields = {
-    #    'interventions': {
-    #        'fields': ['name'],
-    #    }
-    #}
-
 class ElasticTimecourseViewSet(DocumentViewSet):
     document = TimecourseDocument
     serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "pk"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name')
+    search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
     filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
@@ -219,12 +213,8 @@ class ElasticTimecourseViewSet(DocumentViewSet):
                        'individual': 'individual.name',
                        'substance':'substance.name',
                        'value':'value',
+
                        }
 
 
 
-    #search_nested_fields = {
-    #    'interventions': {
-    #        'fields': ['name'],
-    #    }
-    #}
