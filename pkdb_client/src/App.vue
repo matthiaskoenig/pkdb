@@ -64,7 +64,7 @@
     }
     .attr-card {
         width: 110px;
-        height: 50px;
+        min-height: 50px;
     }
     .attr-card-no-width {
         height: 50px;
