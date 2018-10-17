@@ -1,7 +1,9 @@
 <template>
     <div id="annotations">
-        <comments :comments="item.comments"/>
-        <descriptions :descriptions="item.descriptions"/>
+        <v-card v-if="(item.comments && item.comments.length>0) || (item.descriptions && item.descriptions.length>0)">
+            <comments :comments="item.comments"/>
+            <descriptions :descriptions="item.descriptions"/>
+        </v-card>
     </div>
 </template>
 

@@ -27,6 +27,7 @@
                                     @click="toggleVisibility(item.id)"
                             >
                                 <v-list-tile-action>
+
                                     <span v-if="visible[item.id]" :title="'Hide ' + item.title">
                                         <v-icon color="primary" >{{ icon(item.icon) }}</v-icon>
                                     </span>
@@ -56,7 +57,6 @@
                         <v-card>
                             <heading-toolbar :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
                             <study-info :study="study"/>
-                            <!-- <Annotations :item="study"/>-->
                         </v-card>
                     </v-flex>
 
@@ -65,10 +65,8 @@
                         <get-data v-if="study.groupset" :resource_url="study.groupset">
                             <template slot-scope="groupset">
                                 <div v-if="groupset.loaded">
-                                    <!--
-                                    <Annotations :item="groupset.data"/>
-                                    -->
-                                    <GroupsTable :data="resource(groupset.data.groups)"/>
+                                    <annotations :item="groupset.data"/>
+                                    <groups-table :data="resource(groupset.data.groups)"/>
                                 </div>
                             </template>
                         </get-data>
@@ -79,10 +77,8 @@
                         <get-data v-if="study.individualset" :resource_url="study.individualset">
                             <template slot-scope="individualset">
                                 <div v-if="individualset.loaded">
-                                    <!--
-                                    <Annotations :item="individualset.data"/>
-                                    -->
-                                    <IndividualsTable :data="resource(individualset.data.individuals)"/>
+                                    <annotations :item="individualset.data"/>
+                                    <individuals-table :data="resource(individualset.data.individuals)"/>
                                 </div>
                             </template>
                         </get-data>
@@ -93,21 +89,19 @@
                         <get-data v-if="study.interventionset" :resource_url="study.interventionset">
                             <template slot-scope="interventionset">
                                 <div v-if="interventionset.loaded">
-                                    <InterventionsTable :data="resource(interventionset.data.interventions)"/>
+                                    <annotations :item="interventionset.data"/>
+                                    <interventions-table :data="resource(interventionset.data.interventions)"/>
                                 </div>
                             </template>
                         </get-data>
                     </v-flex>
 
                     <!-- Outputs -->
-                    <v-flex xs12>
+                    <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                         <get-data v-if="study.outputset" :resource_url="study.outputset">
                             <template slot-scope="outputset">
                                 <div v-if="outputset.loaded">
-                                    <!--
-                                    {{ checkhasOutputs(outputset.outputs) }}
-                                    {{ checkhasTimecourses(outputset.timecourses) }}
-                                    -->
+                                    <annotations :item="outputset.data"/>
                                     <OutputsTable v-show="visible.outputs" :data="resource(outputset.data.outputs)"/>
                                     <br />
                                     <TimecoursesTable v-show="visible.timecourses" :data="resource(outputset.data.timecourses)"/>
@@ -162,7 +156,7 @@
                     individuals: true,
                     interventions: true,
                     outputs: true,
-                    timecourses: true
+                    timecourses: true,
                 },
                 navigation : [
                     {
@@ -199,10 +193,7 @@
             }
         },
         computed: {
-            // vuex store
-            api() {
-                return this.$store.state.endpoints.api;
-            },
+
         },
         // Fetches posts when the component is created.
         methods:{
@@ -211,6 +202,7 @@
             },
 
             toggleVisibility(item_id){
+                console.log(this.count)
                 this.visible[item_id] = !this.visible[item_id];
             },
 

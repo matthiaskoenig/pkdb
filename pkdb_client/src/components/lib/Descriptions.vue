@@ -1,7 +1,7 @@
 <template>
-    <div id="descriptions" v-if="descriptions">
-        Descriptions
-        <span v-for="item in descriptions" :key="item.pk">{{ item }}<br /></span>
+    <div id="descriptions" v-if="descriptions && descriptions.length>0">
+        <span class="attr">Descriptions</span><br/>
+        <span v-for="item in descriptions" :key="item.pk">{{ item.text }}<br /></span>
     </div>
 </template>
 
@@ -10,7 +10,7 @@
         name: "Descriptions",
         props: {
             descriptions: {
-                type: Object,
+                type: Array,
             }
         }
     }
