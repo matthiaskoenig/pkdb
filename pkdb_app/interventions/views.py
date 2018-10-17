@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from pkdb_app.categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION, \
     OUTPUT_TISSUE_DATA, PK_DATA_DICT
-from pkdb_app.interventions.documents import SubstanceDocument, InterventionDocument, OutputDocument
+from pkdb_app.interventions.documents import SubstanceDocument, InterventionDocument, OutputDocument, TimecourseDocument
 from pkdb_app.interventions.models import (
     Substance,
     InterventionSet,
@@ -27,7 +27,7 @@ from pkdb_app.interventions.serializers import (
     OutputReadSerializer,
     TimecourseReadSerializer,
     InterventionExReadSerializer, OutputExReadSerializer, TimecourseExReadSerializer, InterventionElasticSerializer,
-    OutputElasticSerializer)
+    OutputElasticSerializer, TimecourseElasticSerializer)
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
@@ -184,6 +184,20 @@ class ElasticInterventionViewSet(DocumentViewSet):
 class ElasticOutputViewSet(DocumentViewSet):
     document = OutputDocument
     serializer_class = OutputElasticSerializer
+    pagination_class = CustomPagination
+    lookup_field = "pk"
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    search_fields = ('pktype','substance.name',"tissue",'time_unit')
+    filter_fields = {'pk':'pk'}
+    ordering_fields = {'pktype':'pktype.raw',
+                       'tissue':'tissue.raw',
+                       'substance':'substance.name',
+                       'value':'value',
+                       }
+
+class ElasticTimecourseViewSet(DocumentViewSet):
+    document = TimecourseDocument
+    serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "pk"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]

@@ -623,18 +623,30 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     def get_substance(self, obj):
         return obj.substance.to_dict()
 
+class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
+    group = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="groups_read-detail", required=False
+    )
 
+    individual = serializers.HyperlinkedRelatedField(
+        read_only=True, view_name="individuals_read-detail"
+    )
 
-    def get_individual(self, obj):
-        if obj.individual:
-            #return obj.individual.to_dict()
-            return serializers.HyperlinkedRelatedField(read_only=True, view_name="individuals_read-detail")
+    interventions = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name="interventions_read-detail"
+    )
+    substance = serializers.SerializerMethodField()
 
+    class Meta:
+            model = Timecourse
+            fields = (
+                ["pk",]
+                + OUTPUT_FIELDS
+                + VALUE_FIELDS
+                + ["group", "individual", "final","interventions","figure","calculate_auc_end","calculate_auc_inf"])
 
-    def get_group(self, obj):
-        if obj.group:
-            #return obj.group.to_dict()
-            self.serializers.HyperlinkedRelatedField(read_only=True, view_name="groups_read-detail")
+    def get_substance(self, obj):
+        return obj.substance.to_dict()
 
 
 class OutputReadSerializer(serializers.HyperlinkedModelSerializer):

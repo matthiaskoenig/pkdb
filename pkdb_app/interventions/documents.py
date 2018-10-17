@@ -189,9 +189,32 @@ class TimecourseDocument(DocType):
     unit = string_field('unit')
 
     time_unit = string_field('time_unit')
+    figure = string_field('figure')
+
     time = fields.FloatField('null_time',multi=True)
     tissue = string_field('tissue')
     pktype = string_field("pktype")
+
+    calculate_auc_end = ObjectField(properties={
+
+        'substance': string_field('substance'),
+        'tissue': string_field('tissue'),
+        'pktype': string_field('pktype'),
+        'unit': string_field('unit'),
+        'value' : fields.FloatField('null_value'),
+        'mean' : fields.FloatField('null_mean'),
+        'median' : fields.FloatField('null_median'),
+         })
+
+    calculate_auc_inf = ObjectField(properties={
+        'substance': string_field('substance'),
+        'tissue': string_field('tissue'),
+        'pktype': string_field('pktype'),
+        'unit': string_field('unit'),
+        'value': fields.FloatField('value'),
+        'mean': fields.FloatField('mean'),
+        'median': fields.FloatField('median'),})
+
 
     class Meta(object):
             model = Timecourse
