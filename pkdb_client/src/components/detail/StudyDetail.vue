@@ -27,7 +27,6 @@
                                     @click="toggleVisibility(item.id)"
                             >
                                 <v-list-tile-action>
-
                                     <span v-if="visible[item.id]" :title="'Hide ' + item.title">
                                         <v-icon color="primary" >{{ icon(item.icon) }}</v-icon>
                                     </span>
@@ -37,7 +36,10 @@
                                 </v-list-tile-action>
 
                                 <v-list-tile-content>
-                                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                    <v-list-tile-title v-if="item.id == 'general'">{{ item.title }}</v-list-tile-title>
+                                    <v-list-tile-title v-else>
+                                        {{ item.title }} ({{counts[item.id]}})
+                                    </v-list-tile-title>
                                 </v-list-tile-content>
 
                             </v-list-tile>
@@ -193,63 +195,53 @@
             }
         },
         computed: {
+            counts() {
+                return {
+                    general: 1,
+                    groups: this.study.group_count,
+                    individuals: this.study.individual_count,
+                    interventions: this.study.intervention_count,
+                    outputs: this.study.output_count,
+                    timecourses: this.study.timecourse_count
+                }
+            }
 
         },
-        // Fetches posts when the component is created.
         methods:{
             icon: function (key) {
                 return lookup_icon(key)
             },
 
             toggleVisibility(item_id){
-                console.log(this.count)
-                this.visible[item_id] = !this.visible[item_id];
+                // only items with counts can be made visible
+                if (this.counts[item_id]>0){
+                    this.visible[item_id] = !this.visible[item_id];
+                }
             },
 
-
-            checkhasOutputs(array) {
-                if (array.length !== 0){
-                    this.hasOutputs = true
-                }
-            },
-            checkhasTimecourses(array) {
-                if (array.length !== 0){
-                    this.hasTimecourses = true
-                }
-            },
-            checkhasInterventions(array) {
-                if (array.length !== 0){
-                    this.hasInterventions = true
-                }
-            },
-            checkhasIndividuals(array) {
-                if (array.length !== 0){
-                    this.hasIndividuals = true
-                }
-            },
-            checkhasGroups(array) {
-                if (array.length !== 0){
-                    this.hasGroups = true
+            resetVisibility(){
+                var keys = Object.keys(this.counts);
+                for (var k=0; k<keys.length; k++){
+                    var key = keys[k];
+                    if (this.counts[key] > 0){
+                        this.visible[key] = true
+                    } else {
+                        this.visible[key] = false
+                    }
                 }
             },
             resource(data){
                 return {entries:data, count:data.length}
             },
-            isEmpty(string){
-                return isEmpty(string);
-            },
-            isActive(bool){
-                if(bool){
-                    return " md-raised md-primary";}
-                else{return "";}
-            }
+        },
+        created: function() {
+            this.resetVisibility();
         }
     }
 </script>
 
 <style scoped>
     .study-navigation {
-
         height: 100%; /* 100% Full-height */
         position: fixed; /* Stay in place */
         z-index: 1; /* Stay on top */
@@ -258,6 +250,4 @@
         #background-color: #111; /* Black*/
         overflow-x: hidden; /* Disable horizontal scroll */
     }
-
-
 </style>
