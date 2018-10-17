@@ -21,7 +21,7 @@
     export default {
         name: "UserAvatar",
         props: {
-            search: String,
+            search: {type:String, default:""},
             user: {
                 type: Object,
                 required: true,
