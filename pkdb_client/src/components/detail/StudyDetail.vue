@@ -27,6 +27,7 @@
                                     @click="toggleVisibility(item.id)"
                             >
                                 <v-list-tile-action>
+
                                     <span v-if="visible[item.id]" :title="'Hide ' + item.title">
                                         <v-icon color="primary" >{{ icon(item.icon) }}</v-icon>
                                     </span>
@@ -155,7 +156,7 @@
                     individuals: true,
                     interventions: true,
                     outputs: true,
-                    timecourses: true
+                    timecourses: true,
                 },
                 navigation : [
                     {
@@ -192,10 +193,7 @@
             }
         },
         computed: {
-            // vuex store
-            api() {
-                return this.$store.state.endpoints.api;
-            },
+
         },
         // Fetches posts when the component is created.
         methods:{
@@ -204,6 +202,7 @@
             },
 
             toggleVisibility(item_id){
+                console.log(this.count)
                 this.visible[item_id] = !this.visible[item_id];
             },
 

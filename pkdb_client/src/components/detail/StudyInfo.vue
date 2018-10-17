@@ -80,6 +80,7 @@
                 return lookup_icon(key)
             },
         }
+
     }
 </script>
 
