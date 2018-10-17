@@ -31,12 +31,12 @@
                     <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon('output')"/>
                     <JsonButton :resource_url="api + '/outputs_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td>{{table.item.pktype }}</td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }} </text-highlight> </td>
                 <td>
                     <get-data v-if="table.item.group" :resource_url="table.item.group">
                         <div slot-scope="data">
                             <group-button :group="data.data" />
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 </td>
@@ -44,7 +44,7 @@
                     <get-data v-if="table.item.individual" :resource_url="table.item.individual">
                         <div slot-scope="data">
                             <individual-button :individual="data.data" />
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 <td>
@@ -52,20 +52,20 @@
                     <a :href="intervention_url" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>
                         <get-data :resource_url="intervention_url">
                         <div slot-scope="data">
+                            <text-highlight :queries="search.split(/[ ,]+/)">
                             {{ data.data.name }}
+                            </text-highlight>
                         </div>
                         </get-data>&nbsp;
                     </span>
                 </td>
-                <td>{{table.item.tissue}}</td>
                 <td>
-                    <a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance">
-                        <v-icon>{{ icon('substance') }}</v-icon> </a>
-                    <get-data :resource_url="table.item.substance">
-                        <div slot-scope="data">
-                            {{ data.data.name }}
-                        </div>
-                    </get-data>
+                    <text-highlight :queries="search.split(/[ ,]+/)">
+                        {{table.item.tissue}}
+                    </text-highlight>
+                </td>
+                <td>
+                    <substance-chip :substance="table.item.substance.name" :search="search"/>
                 </td>
                 <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
                 <td><characteristica-card :data="table.item"/></td>
@@ -87,6 +87,7 @@
     import GroupButton from '../lib/GroupButton'
     import IndividualButton from '../lib/IndividualButton'
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import SubstanceChip from "../detail/SubstanceChip"
 
 
     export default {
@@ -94,7 +95,8 @@
         components:{
             GroupButton,
             IndividualButton,
-            CharacteristicaCard
+            CharacteristicaCard,
+            SubstanceChip
         },
         data () {
             return {
@@ -106,7 +108,7 @@
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
                     {text: 'Output', value: 'output'},
-                    {text: 'Type', value: 'type'},
+                    {text: 'Type', value: 'pktype'},
                     {text: 'Group', value: 'group'},
                     {text: 'Individual', value: 'individual'},
                     {text: 'Interventions', value: 'interventions'},
