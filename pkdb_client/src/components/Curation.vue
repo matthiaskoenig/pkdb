@@ -2,29 +2,34 @@
     <div id="about">
         <v-layout>
             <v-flex xs6>
-                <h1>Characteristica</h1>
                 <get-data :resource_url="characteristica_options_url">
                   <template slot-scope="characteristica">
-                      <characteristica-browser :options="characteristica.data" />
+                      <characteristica-browser :options="characteristica.data" title="Characteristica"/>
                   </template>
                 </get-data>
             </v-flex>
             <v-flex xs6>
-                <h1>Interventions</h1>
                 <get-data :resource_url="intervention_options_url">
                     <template slot-scope="intervention">
-                        <characteristica-browser :options="intervention.data" />
+                        <characteristica-browser :options="intervention.data" title="Interventions"/>
                     </template>
                 </get-data>
             </v-flex>
             <v-flex xs6>
-                <h1>Outputs</h1>
                 <get-data :resource_url="output_options_url">
                     <template slot-scope="output">
-                        <output-browser :options="output.data" />
+                        <output-browser :options="output.data" title="PK types"/>
                     </template>
                 </get-data>
             </v-flex>
+            <v-flex xs6>
+                <get-data :resource_url="output_options_url">
+                    <template slot-scope="output">
+                        <substance-browser :options="output.data" title="Substances"/>
+                    </template>
+                </get-data>
+            </v-flex>
+
 
         </v-layout>
     </div>
@@ -33,12 +38,14 @@
 <script>
     import CharacteristicaBrowser from "./curation/CharacteristicaBrowser"
     import OutputBrowser from "./curation/OutputBrowser"
+    import SubstanceBrowser from "./curation/SubstanceBrowser"
 
     export default {
         name: "Curation",
         components: {
             CharacteristicaBrowser,
-            OutputBrowser
+            OutputBrowser,
+            SubstanceBrowser
         },
         computed: {
             characteristica_options_url() {
