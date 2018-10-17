@@ -268,7 +268,7 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     if success:
         logging.info(f"{api_url}/studies/{sid}/")
 
-    return success
+    return success, sid
 
 
 def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
@@ -333,11 +333,11 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
                                                 auth_headers=auth_headers, client=client)
 
     # upload study.json
-    success_study = upload_study_json(study_dict, api_url=api_url,
+    success_study, sid = upload_study_json(study_dict, api_url=api_url,
                                       auth_headers=auth_headers, client=client)
 
     if success_ref and success_study:
-        logging.info("--- upload successful ---")
+        logging.info(f"--- upload successful ( http://localhost:8080/#/studies/{sid} ) ---")
 
     return {}
 
