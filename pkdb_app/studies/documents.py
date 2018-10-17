@@ -207,7 +207,7 @@ class StudyDocument(DocType):
                 }
     )
 
-    design = fields.TextField(
+    design = fields.StringField(
         fielddata = True,
         analyzer=autocomplete,
         search_analyzer=autocomplete_search,
@@ -285,6 +285,11 @@ class StudyDocument(DocType):
         },
         multi=True
     )
+    group_count = fields.FloatField()
+    individual_count = fields.FloatField()
+    intervention_count = fields.FloatField()
+    output_count =  fields.FloatField()
+    timecourse_count = fields.FloatField()
 
     class Meta(object):
         model = Study

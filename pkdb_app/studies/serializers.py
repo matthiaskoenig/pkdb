@@ -351,7 +351,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
-        fields = (
+        fields = [
             "pk",
             "reference",
             "name",
@@ -364,7 +364,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "keywords",
             "files",
             "comments",
-            "descriptions")
+            "descriptions"]+["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
 
         read_only_fields = fields
 

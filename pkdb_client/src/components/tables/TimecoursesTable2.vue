@@ -116,7 +116,7 @@
                     {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
-                    {text: 'Timecourse', value: 'timecourse'},
+                    {text: 'Timecourse', value: 'auc_end'},
                 ]
             }
         },

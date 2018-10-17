@@ -643,7 +643,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk",]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "final","interventions","figure","calculate_auc_end","calculate_auc_inf"])
+                + ["group", "individual", "final","interventions","figure","auc_end"])
 
     def get_substance(self, obj):
         return obj.substance.to_dict()

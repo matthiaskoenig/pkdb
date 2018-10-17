@@ -728,6 +728,14 @@ class Timecourse(AbstractOutput):
 
         return output_data
 
+    @property
+    def auc_end(self):
+        instance_calc_end = self.calculate_auc_end
+        for value in ['value','mean','median']:
+            if instance_calc_end.get(value):
+                return instance_calc_end[value]
+
+
     @staticmethod
     def try_type_error(time, array, method):
         try:
