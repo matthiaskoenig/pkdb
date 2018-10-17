@@ -29,6 +29,7 @@ const icons_table = {
     substances: 'fas fa-tablets',
     characteristicas: 'fas fa-ticket-alt',
     characteristica: 'fas fa-ticket-alt',
+    curation: 'fas fa-book-reader'
 };
 
 function lookup_icon(key){

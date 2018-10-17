@@ -23,6 +23,7 @@ import Timecourse from './components/Timecourse';
 import Reference from './components/Reference';
 
 /* About */
+import Curation from './components/Curation';
 import About from './components/About';
 
 /* Account */
@@ -79,6 +80,11 @@ export default new Router({
           path: '/about',
           name: 'About',
           component: About
+      },
+      {
+          path: '/curation',
+          name: 'Curation',
+          component: Curation
       },
       {
           path: '/account',

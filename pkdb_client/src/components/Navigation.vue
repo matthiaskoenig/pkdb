@@ -19,7 +19,12 @@
 
         <v-spacer></v-spacer>
 
+        <v-btn icon to="/curation" title="Curate data"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
+
+        <v-spacer></v-spacer>
+
         <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
+
         <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository">
             <v-icon>{{ icon('github')}}</v-icon>
