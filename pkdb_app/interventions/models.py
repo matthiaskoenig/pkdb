@@ -322,7 +322,6 @@ class Output(ValueableNotBlank, AbstractOutput):
             norm.normalize()
             norm.add_statistics()
 
-
             if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
@@ -335,10 +334,7 @@ class Output(ValueableNotBlank, AbstractOutput):
                 self.final = True
                 self.save(donot_normilize=True, force_update=True)
 
-
-
-
-    def save_no_norm(self,*args, **kwargs):
+    def save_no_norm(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
     def add_statistics(self):
@@ -355,8 +351,6 @@ class Output(ValueableNotBlank, AbstractOutput):
                 self.cv = get_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
-
-
 
     @property
     def pk_data(self):
@@ -432,8 +426,6 @@ class Output(ValueableNotBlank, AbstractOutput):
         return self.null_attr('time')
 
 
-
-
 class TimecourseEx(
     Externable,
     AbstractOutput,
@@ -506,11 +498,8 @@ class Timecourse(AbstractOutput):
 
     objects = OutputManager()
 
-
     def save(self, donot_normilize=False, *args, **kwargs):
-
         super().save(*args, **kwargs)
-
 
         if not donot_normilize:
             norm = copy.copy(self)
@@ -523,13 +512,9 @@ class Timecourse(AbstractOutput):
                 norm.save(donot_normilize=True)
                 norm.raw.add(self)
                 norm.save(donot_normilize=True)
-
-
-
             else:
                 self.final = True
                 self.save(donot_normilize=True, force_update=True)
-
 
     def save_no_norm(self,*args, **kwargs):
         super().save(*args, **kwargs)
@@ -654,9 +639,6 @@ class Timecourse(AbstractOutput):
     def calculate_pharamcokinatics(self):
          pk_data = self.get_pharamcokinetic_data()
 
-
-
-
     def get_pharamcokinetic_data(self):
         pk_data = {}
 
@@ -675,7 +657,6 @@ class Timecourse(AbstractOutput):
                 pk_data["weight"] = weight.value
                 pk_data["bodyweight_unit"] = weight.unit
 
-
             except ObjectDoesNotExist:
                 pk_data["weight"] = np.NaN
         try:
@@ -685,7 +666,7 @@ class Timecourse(AbstractOutput):
 
         except ObjectDoesNotExist:
             pk_data["dose"] = np.NaN
-            pk_data["dosing_unit"] =  np.NaN
+            pk_data["dosing_unit"] = np.NaN
 
             pk_data["t"] = self.time
 
@@ -746,7 +727,6 @@ class Timecourse(AbstractOutput):
 
         return value
 
-
     @property
     def calculate_auc_inf(self):
         output_data = {}
@@ -754,14 +734,15 @@ class Timecourse(AbstractOutput):
         output_data["tissue"] = str(self.tissue)
         output_data["pktype"] = "auc_inf"
         if self.value:
-            output_data["value"] = self.try_type_error(self.time,self.value,_aucinf)
+            output_data["value"] = self.try_type_error(self.time, self.value, _aucinf)
         if self.mean:
-            output_data["mean"] = self.try_type_error(self.time,self.mean,_aucinf)
+            output_data["mean"] = self.try_type_error(self.time, self.mean, _aucinf)
 
         if self.median:
-            output_data["median"] = self.try_type_error(self.time,self.median,_aucinf)
+            output_data["median"] = self.try_type_error(self.time, self.median, _aucinf)
 
         output_data["unit"] = f"({self.unit})*{self.time_unit}"
+
         def _any_not_json(value):
             return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
 
@@ -782,14 +763,3 @@ class Timecourse(AbstractOutput):
                 if _any_not_json(value):
                     output_data[field] = None
         return output_data
-
-
-
-
-
-
-
-
-
-
-

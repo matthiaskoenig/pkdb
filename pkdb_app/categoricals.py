@@ -273,7 +273,11 @@ CHARACTERISTIC_DATA = [
         "metabolic challenge",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["mixed-meal", "oral glucose tolerance test", "intravenous glucose tolerance test", "protein solution"],
+        ["mixed-meal",
+         "oral glucose tolerance test",
+         "intravenous glucose tolerance test",
+         "hypoglycemic clamp",
+         "protein solution"],
         dimensionless_norm_unit,
     ),
 

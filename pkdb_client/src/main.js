@@ -51,6 +51,9 @@ import IndividualInfo from './components/detail/IndividualInfo';
 import GetData from './components/api/GetData';
 import GetPaginatedData from './components/api/GetPaginatedData';
 
+import SubstanceChip from './components/detail/SubstanceChip';
+import FileChip from './components/detail/FileChip';
+
 import TextHighlight from 'vue-text-highlight';
 
 
@@ -69,6 +72,9 @@ Vue.component('IndividualInfo', IndividualInfo);
 
 Vue.component('GetData', GetData);
 Vue.component('GetPaginatedData', GetPaginatedData);
+
+Vue.component('SubstanceChip', SubstanceChip);
+Vue.component('FileChip', FileChip);
 
 Vue.component('text-highlight', TextHighlight);
 

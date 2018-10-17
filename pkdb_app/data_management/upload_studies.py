@@ -209,7 +209,7 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     json_study = json_study_dict["json"]
     if not json_study:
         logging.warning("No study information in `study.json`")
-        return False
+        return False, None
 
     # upload files (and get dict for file ids)
     study_dir = os.path.dirname(json_study_dict["study_path"])

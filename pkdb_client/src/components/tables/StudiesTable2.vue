@@ -47,7 +47,7 @@
                     <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c" :search="search"/></span>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :substance="c" :search="search"/></span>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
                 <td>
                     <v-container fluid grid-list-md>

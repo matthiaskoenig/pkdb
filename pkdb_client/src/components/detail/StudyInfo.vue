@@ -16,7 +16,11 @@
 
                 <div>
                     <span class="attr">Substances</span><br />
-                    <span v-for="c in study.substances" :key="c.pk"><v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>
+
+                    <span v-for="c in study.substances" :key="c.pk">
+                        <substance-chip :title="c.name"/>
+                    </span>
+                        <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
                 </div>
                 <div>
                     <span class="attr">Files</span><br />

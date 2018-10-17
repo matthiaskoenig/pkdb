@@ -99,6 +99,8 @@ UNITS = {
     # rate
     "µmol/kg/min": None,
     "µmol/min/kg": None,  # -> µmol/kg/min
+    "pmol/kg/min": None,
+    "pmol/min/kg": None,
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)

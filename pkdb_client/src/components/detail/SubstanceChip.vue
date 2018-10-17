@@ -1,16 +1,26 @@
 <template>
     <div class="text-xs-center">
-        <v-chip v-if="substance"> <v-icon>{{ icon('substance') }}</v-icon> <text-highlight :queries="search.split(/[ ,]+/)"> {{substance}} </text-highlight> </v-chip>
+        <v-chip v-if="title" color="success">
+            <v-icon>{{ icon('substance') }}</v-icon>&nbsp;
+            <text-highlight :queries="search.split(/[ ,]+/)">{{ title }}</text-highlight>
+        </v-chip>
     </div>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+
     export default {
         name: "SubstanceChip",
         props: {
-            substance : String,
-            search: String,
+            title: {
+                type: String,
+                required: true
+            },
+            search: {
+                type: String,
+                default: ''
+            },
         },
         methods: {
             icon(key) {

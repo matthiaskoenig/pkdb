@@ -118,11 +118,17 @@ SUBSTANCES_DATA = [
     '[6-3H]glucose',
     'insulin',
     'c-peptide',
+    'cortisol',
+    'epinephrine',
+    'norepinephrine',
+    'cortisol',
+    'growth hormone',
     'glucagon',
     'TAA',  # total amino acids
     'EAA',  # essential amino acids
     'NEAA',  # non-essential amino acids
     'BCAA',  # branch-chained amino acids
+    'exenatide',  # GLP1 analoque
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
