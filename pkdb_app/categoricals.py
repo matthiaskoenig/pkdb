@@ -498,16 +498,15 @@ clearance_norm_unit = NormalizableUnit(
         "ml/min/1.73m^2": None,
     }
 )
-rate_norm_unit = NormalizableUnit(
-    {
-        "µmol/min/kg": "µmol/kg/min",
-        "µmol/kg/min": None,
-    }
-)
 
 vd_norm_unit = NormalizableUnit({"l": None, "ml": "l", "l/kg": None, "ml/kg": "l/kg"})
 time_norm_unit = NormalizableUnit({"h": None, "min": "h"})
-rate_norm_unit = NormalizableUnit({"1/min": "1/h", "1/h": None, "µmol/min/kg": None})
+rate_norm_unit = NormalizableUnit({
+    "1/min": "1/h",
+    "1/h": None,
+    "µmol/min/kg": "µmol/kg/min",
+    "µmol/kg/min": None
+})
 
 
 PK_DATA = [
