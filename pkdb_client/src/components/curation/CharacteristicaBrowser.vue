@@ -2,7 +2,7 @@
     <span>
   <v-card dark>
     <v-card-title class="headline blue">
-      Browse options
+      {{ title }}
     </v-card-title>
     <v-card-text>
       <v-autocomplete
@@ -50,6 +50,10 @@
         props: {
             options: {
                 type: Object,
+                required: true
+            },
+            title: {
+                type: String,
                 required: true
             }
         },

@@ -507,7 +507,7 @@ rate_norm_unit = NormalizableUnit(
 
 vd_norm_unit = NormalizableUnit({"l": None, "ml": "l", "l/kg": None, "ml/kg": "l/kg"})
 time_norm_unit = NormalizableUnit({"h": None, "min": "h"})
-rate_norm_unit = NormalizableUnit({"1/min": "1/h", "1/h": None})
+rate_norm_unit = NormalizableUnit({"1/min": "1/h", "1/h": None, "µmol/min/kg": None})
 
 
 PK_DATA = [
