@@ -189,6 +189,8 @@ class TimecourseDocument(DocType):
     unit = string_field('unit')
 
     time_unit = string_field('time_unit')
+    figure = string_field('figure')
+
     time = fields.FloatField('null_time',multi=True)
     tissue = string_field('tissue')
     pktype = string_field("pktype")
