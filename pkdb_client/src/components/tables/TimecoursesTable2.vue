@@ -59,13 +59,7 @@
                 </td>
                 <td>{{table.item.tissue}}</td>
                 <td>
-                    <a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance">
-                        <v-icon>{{ icon('substance') }}</v-icon> </a>
-                    <get-data :resource_url="table.item.substance">
-                        <div slot-scope="data">
-                            {{ data.data.name }}
-                        </div>
-                    </get-data>
+                    <substance-chip :substance="table.item.substance.name" :search="search"/>
                 </td>
                 <td>
                     <TimecoursePlot :timecourse="table.item"/>
@@ -88,6 +82,7 @@
     import TimecoursePlot from '../plots/TimecoursePlot'
     import GroupButton from '../lib/GroupButton'
     import IndividualButton from '../lib/IndividualButton'
+    import SubstanceChip from "../detail/SubstanceChip"
 
 
     export default {
@@ -96,6 +91,7 @@
             GroupButton,
             IndividualButton,
             TimecoursePlot,
+            SubstanceChip,
 
         },
         data () {

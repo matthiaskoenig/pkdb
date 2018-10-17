@@ -195,25 +195,16 @@ class TimecourseDocument(DocType):
     tissue = string_field('tissue')
     pktype = string_field("pktype")
 
-    calculate_auc_end = ObjectField(properties={
+    #calculate_auc_end =
 
-        'substance': string_field('substance'),
-        'tissue': string_field('tissue'),
-        'pktype': string_field('pktype'),
-        'unit': string_field('unit'),
-        'value' : fields.FloatField('null_value'),
-        'mean' : fields.FloatField('null_mean'),
-        'median' : fields.FloatField('null_median'),
-         })
-
-    calculate_auc_inf = ObjectField(properties={
-        'substance': string_field('substance'),
-        'tissue': string_field('tissue'),
-        'pktype': string_field('pktype'),
-        'unit': string_field('unit'),
-        'value': fields.FloatField('value'),
-        'mean': fields.FloatField('mean'),
-        'median': fields.FloatField('median'),})
+    #calculate_auc_inf = ObjectField(properties={
+    #    'substance': string_field('substance'),
+    #    'tissue': string_field('tissue'),
+    #    'pktype': string_field('pktype'),
+    #    'unit': string_field('unit'),
+    #    'value': fields.FloatField('value'),
+    #    'mean': fields.FloatField('mean'),
+    #    'median': fields.FloatField('median'),})
 
 
     class Meta(object):
