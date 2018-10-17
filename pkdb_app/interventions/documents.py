@@ -199,6 +199,8 @@ class TimecourseDocument(DocType):
     tissue = string_field('tissue')
     pktype = string_field("pktype")
 
+    auc_end = fields.FloatField(attr='auc_end')
+
     class Meta(object):
             model = Timecourse
 

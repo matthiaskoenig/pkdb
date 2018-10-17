@@ -212,7 +212,7 @@ class ElasticTimecourseViewSet(DocumentViewSet):
                        'group':'group.name',
                        'individual': 'individual.name',
                        'substance':'substance.name',
-                       'value':'value',
+                       'auc_end':'auc_end'
 
                        }
 
