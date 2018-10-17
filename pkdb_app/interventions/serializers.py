@@ -343,6 +343,15 @@ class OutputExSerializer(BaseOutputExSerializer):
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    def validate(self, attrs):
+        try:
+            # perform via dedicated function on categorials
+            validate_categorials(data=attrs, category_class="intervention")
+        except ValueError as err:
+            raise serializers.ValidationError(err)
+
+        return super().validate(attrs)
+
 
 class TimecourseSerializer(BaseOutputExSerializer):
     group = serializers.PrimaryKeyRelatedField(

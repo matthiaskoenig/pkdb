@@ -4,7 +4,7 @@
           <v-avatar>
             <img :src="src">
           </v-avatar>
-          {{ username }}
+             <text-highlight :queries="search.split(/[ ,]+/)">{{ username }} </text-highlight>
         </v-chip>
 
 
@@ -21,7 +21,7 @@
     export default {
         name: "UserAvatar",
         props: {
-            search: String,
+            search: {type:String, default:""},
             user: {
                 type: Object,
                 required: true,
@@ -58,7 +58,7 @@
         },
         methods:{
             calculate_size(){
-                if (this.search.length > 0 && this.username.includes(this.search)) {
+                if (this.search.length > 0 && this.username.toLowerCase().includes(this.search.toLowerCase())) {
                     this.pulse = "pulse"
                 }
                 else {
