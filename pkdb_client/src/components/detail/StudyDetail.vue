@@ -96,14 +96,10 @@
                     </v-flex>
 
                     <!-- Outputs -->
-                    <v-flex xs12>
+                    <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                         <get-data v-if="study.outputset" :resource_url="study.outputset">
                             <template slot-scope="outputset">
                                 <div v-if="outputset.loaded">
-                                    <!--
-                                    {{ checkhasOutputs(outputset.outputs) }}
-                                    {{ checkhasTimecourses(outputset.timecourses) }}
-                                    -->
                                     <annotations :item="outputset.data"/>
                                     <OutputsTable v-show="visible.outputs" :data="resource(outputset.data.outputs)"/>
                                     <br />
