@@ -2,11 +2,10 @@ sudo: required
 language: python
 services:
   - docker
-env:
-  PKDB_POSTGRES_PASSWORD = "pass"
 python:
   - "3.6"
 before_script:
+  - cp .env.template .env
   - docker-compose build
 script:
 
