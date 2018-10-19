@@ -32,8 +32,8 @@
 
 <script>
     import {searchTableMixin} from "./mixins";
-    import TableToolbar from '../lib/TableToolbar';
-    import NoData from '../lib/NoData';
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
 
     export default {
         name: "ReferencesTable3",

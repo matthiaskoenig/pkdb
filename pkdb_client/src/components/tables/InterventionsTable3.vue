@@ -45,8 +45,8 @@
 
 <script>
     import {searchTableMixin} from "./mixins";
-    import TableToolbar from '../lib/TableToolbar';
-    import NoData from '../lib/NoData';
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
     import SubstanceChip from "../detail/SubstanceChip"
 
