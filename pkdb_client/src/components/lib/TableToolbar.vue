@@ -12,6 +12,7 @@
             label="Search"
             single-line
             hide-details
+            autofocus
     />
 </v-toolbar>
 </template>
