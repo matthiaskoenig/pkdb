@@ -1,14 +1,14 @@
 <template>
-    <outputs-table2/>
+    <outputs-table3 />
 </template>
 
 <script>
-    import OutputsTable2 from './tables/OutputsTable2';
+    import OutputsTable3 from './tables/OutputsTable3';
 
     export default {
         name: 'Outputs',
         components: {
-            OutputsTable2: OutputsTable2,
+            OutputsTable3: OutputsTable3,
         },
     }
 </script>
