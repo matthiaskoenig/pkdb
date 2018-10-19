@@ -8,9 +8,9 @@
             </div>
         </v-flex>
         <v-flex>
-            <get-data :resource_url="individual.group">
+            <get-data :resource_url="individual.group.url">
                 <span slot-scope="group">
-                    <group-info :group="group.data" :resource_url="individual.group" />
+                    <group-info :group="group.data" :resource_url="individual.group.url" />
                 </span>
             </get-data>
         </v-flex>

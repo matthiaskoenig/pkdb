@@ -1,0 +1,61 @@
+<template>
+    <v-card>
+        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
+        <v-data-table
+                :headers="headers"
+                :items="entries"
+                :pagination.sync="pagination"
+                :total-items="count"
+                :loading="loading"
+                :class="table_class"
+        >
+            <template slot="items" slot-scope="table">
+                <td>
+                    <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
+                    <json-button :resource_url="api + '/individuals_read/'+ table.item.pk +'/?format=json'"/>
+                </td>
+                <td>
+                    <individual-info :individual="table.item"/>
+                </td>
+                <td>
+                     <v-layout wrap>
+                        <span v-for="item in table.item.characteristica_all_final" :key="item.pk">
+                            <characteristica-card :data="item" :resource_url="get_characterica_url(ids(table.item.characteristica_all_final))" />
+                        </span>
+                     </v-layout>
+                </td>
+            </template>
+            <no-data/>
+        </v-data-table>
+    </v-card>
+</template>
+
+<script>
+    import {searchTableMixin} from "./mixins";
+    import TableToolbar from '../lib/TableToolbar';
+    import NoData from '../lib/NoData';
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
+
+    export default {
+        name: "GroupsTable3",
+        components: {
+            NoData,
+            TableToolbar,
+            CharacteristicaCard,
+        },
+        mixins: [searchTableMixin],
+        data () {
+            return {
+                otype: "individuals",
+                otype_single: "individual",
+                headers: [
+                    {text: '', value: 'buttons',sortable: false},
+                    {text: 'Info', value: 'info'},
+                    {text: 'Characteristica', value: 'characteristica'},
+                ]
+            }
+        },
+    }
+</script>
+
+<style scoped></style>

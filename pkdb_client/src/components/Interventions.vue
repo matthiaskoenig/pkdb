@@ -1,6 +1,7 @@
 <template>
-            <interventions-table3 />
+    <interventions-table3 />
 </template>
+
 <script>
     import InterventionsTable3 from './tables/InterventionsTable3';
 
@@ -11,6 +12,6 @@
     },
 }
 </script>
-<style>
 
+<style>
 </style>

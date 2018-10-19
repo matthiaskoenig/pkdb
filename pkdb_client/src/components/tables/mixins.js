@@ -59,6 +59,12 @@ var searchTableMixin = {
         searchUpdate (newValue) {
             this.search = newValue
         },
+        ids(array_of_obj) {
+            return array_of_obj.map(i => i.pk)
+        },
+        get_characterica_url(ids) {
+            return this.$store.state.endpoints.api + '/characteristica_elastic/?ids=' + ids.join('__')
+        },
         getData() {
             axios.get(this.url)
                 .then(res => {
