@@ -5,10 +5,9 @@ from rest_framework import serializers
 from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionReadSerializer, \
     CommentReadSerializer
-#elastic search
-from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from pkdb_app.studies.models import Study
+from operator import itemgetter
 
-from pkdb_app.subjects.documents import IndividualDocument
 from .models import (
     Group,
     GroupSet,
@@ -582,12 +581,57 @@ class DataFileReadSerializer(serializers.HyperlinkedModelSerializer):
 ###############################################################################################
 # Elastic Search Serializer
 ###############################################################################################
-class IndividualDocumentSerializer(DocumentSerializer):
+class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
-        document = IndividualDocument
+        model = Characteristica
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS
+
+class GroupSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+    class Meta:
+        model = Group
+        fields = ["pk",'name', 'url']
+
+class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(read_only=True,lookup_field="sid",view_name="studies_read-detail")
+    class Meta:
+        model = Study
+        fields = ["pk",'name','url']
+
+class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
+    study = StudyElasticSerializer(read_only=True)
+    group = GroupSmallElasticSerializer(read_only=True)
+    characteristica_all_final = serializers.SerializerMethodField()
+    class Meta:
+        model = Individual
         fields = (
-            'id',
+            'pk',
             'group',
             'name',
             'study',
+            'characteristica_all_final',
         )
+
+    def get_characteristica_all_final(self, instance):
+        characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+        return CharacteristicaElasticSerializer(characteristica,many=True, read_only=True).data
+
+class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
+    study = StudyElasticSerializer(read_only=True)
+    parent = GroupSmallElasticSerializer(read_only=True)
+    characteristica_all_final = serializers.SerializerMethodField()
+    class Meta:
+        model = Group
+        fields = (
+            'pk',
+            'parent',
+            'count',
+            'name',
+            'study',
+            'characteristica_all_final',
+        )
+
+    def get_characteristica_all_final(self, instance):
+        characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+        return CharacteristicaElasticSerializer(characteristica,many=True, read_only=True).data

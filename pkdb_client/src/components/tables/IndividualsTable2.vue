@@ -1,13 +1,9 @@
-
-
-
-
 <template>
 
     <v-card>
         <v-card-title>
             <v-toolbar id="heading-toolbar" color="secondary" dark>
-                <Heading :count="count" :icon="icon('references')" title="References" :resource_url="resource_url"/>
+                <Heading :count="count" :icon="icon('individuals')" title="Individuals" :resource_url="resource_url"/>
                 <v-spacer></v-spacer>
                 <v-text-field
                         v-model="search"
@@ -32,25 +28,21 @@
 
             <template slot="items" slot-scope="table">
                 <td>
-                    <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
-                    <json-button :resource_url="api + '/references_read/'+ table.item.pk +'/?format=json'"/>
+                    <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
+                    <json-button :resource_url="api + '/individuals_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>
                 <td>
-                    <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+table.item.pmid"
-                       target="_blank"><text-highlight :queries="[search]">{{ table.item.pmid }}</text-highlight></a>
+                    <individual-info :individual="table.item"/>
                 </td>
-                <td> <text-highlight :queries="[search]">{{ table.item.name }}</text-highlight> </td>
-                <td> <text-highlight :queries="[search]">{{table.item.title}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.journal}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.date}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.abstract}}</text-highlight></td>
-            </template>
 
-            <template slot="no-data">
-                <v-alert :value="true" color="error" icon="fas fa-exclamation">
-                    Sorry, nothing to display here :(
-                </v-alert>
+                <td>
+                     <v-layout wrap>
+                            <span v-for="item in table.item.characteristica_all_final" :key="item">
+                                <characteristica-card :data="item" :resource_url="get_characterica_url(ids(table.item.characteristica_all_final))" />
+                            </span>
+                     </v-layout>
+
+                </td>
             </template>
 
         </v-data-table>
@@ -60,9 +52,15 @@
 <script>
     import axios from 'axios'
     import {lookup_icon} from "@/icons"
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
+
 
     export default {
-        name: "searchtable",
+        name: "IndividualsTable2",
+        components:{
+            CharacteristicaCard,
+
+        },
         data () {
             return {
                 count: 0,
@@ -73,13 +71,8 @@
                 rowsPerPageItems: [5, 10, 20, 50, 100],
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Sid', value: 'sid'},
-                    {text: 'Pmid', value: 'pmid'},
-                    {text: 'Name', value: 'name'},
-                    {text: 'Title', value: 'title'},
-                    {text: 'Journal', value: 'journal'},
-                    {text: 'Date', value: 'date'},
-                    {text: 'Abstract', value: 'abstract'},
+                    {text: 'Info', value: 'info'},
+                    {text: 'Characteristica', value: 'characteristica'},
                 ]
             }
         },
@@ -106,7 +99,7 @@
 
             },
             resource_url() {
-                return this.$store.state.endpoints.api  + '/references_elastic/?format=json'
+                return this.$store.state.endpoints.api  + '/individuals_elastic/?format=json'
             },
             descending() {
                 if(this.pagination.descending){
@@ -119,13 +112,22 @@
         },
 
         methods: {
+            ids(array_of_obj){
+                return array_of_obj.map(i => i.pk)
+            },
+
+            get_characterica_url(ids){
+                return this.$store.state.endpoints.api + '/characteristica_elastic/?ids='+ ids.join('__')+'&ordering=-count'
+            },
+
             icon: function (key) {
                 return lookup_icon(key)
             },
+
             getData() {
 
                 let url = this.$store.state.endpoints.api
-                    + '/references_elastic/?format=json'
+                    + '/individuals_elastic/?format=json'
                     +'&page='+ this.pagination.page
                     +'&page_size='+ this.pagination.rowsPerPage
                     +'&ordering='+ this.descending+ this.pagination.sortBy;

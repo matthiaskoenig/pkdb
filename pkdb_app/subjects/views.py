@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from pkdb_app.categoricals import CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
+from pkdb_app.pagination import CustomPagination
 from pkdb_app.subjects.models import (
     DataFile,
     Characteristica,
@@ -21,9 +22,10 @@ from pkdb_app.subjects.serializers import (
     GroupReadSerializer,
     GroupSetReadSerializer,
     IndividualSetReadSerializer,
-    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer, IndividualDocumentSerializer)
+    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer,
+    IndividualElasticSerializer, GroupElasticSerializer)
 
-from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument
+from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 
 ############################################################
 #Elastic Search Views
@@ -137,23 +139,20 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
 class IndividualViewSet(BaseDocumentViewSet):
     document = IndividualDocument
-    serializer_class = IndividualDocumentSerializer
-    lookup_field = 'id'
-    filter_backends = [
-        FilteringFilterBackend,
-        OrderingFilterBackend,
-        DefaultOrderingFilterBackend,
-        SearchFilterBackend,
-        SuggesterFilterBackend,
+    serializer_class = IndividualElasticSerializer
+    lookup_field = 'pk'
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    pagination_class = CustomPagination
 
-    ]
 
     # Define search fields
     search_fields = (
         'name',
-        'study',
-        'group',
-
+        'study.name',
+        'group.name',
+        'characteristica_all_final.category',
+        'characteristica_all_final.choice',
+        'characteristica_all_final.ctype',
 
     )
 
@@ -171,9 +170,9 @@ class IndividualViewSet(BaseDocumentViewSet):
             ],
         },
         'name': 'name.raw',
-
-        #'group': 'group.raw',
-        'study': 'study.raw',
+        'group': 'group.name.raw',
+        'study': 'study.name.raw',
+        'ctype':'ctype.raw'
 
     }
 
@@ -185,36 +184,68 @@ class IndividualViewSet(BaseDocumentViewSet):
         'name': 'name.raw',
     }
 
-    # Specify default ordering
-    ordering = ('id',)
+class GroupViewSet(BaseDocumentViewSet):
+    document = GroupDocument
+    serializer_class = GroupElasticSerializer
+    lookup_field = 'pk'
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    pagination_class = CustomPagination
 
-    suggester_fields = {
-        'name_suggest':{
-            'field':'name.suggest',
-            'suggesters': [
-                SUGGESTER_COMPLETION,
+
+    # Define search fields
+    search_fields = (
+        'name',
+        'study.name',
+        'parent.name',
+        'characteristica_all_final.category',
+        'characteristica_all_final.choice',
+        'characteristica_all_final.ctype',
+
+    )
+
+    # Filter fields
+    filter_fields = {
+        'id': {
+            'field': 'id',
+            'lookups': [
+                LOOKUP_FILTER_RANGE,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_GT,
+                LOOKUP_QUERY_GTE,
+                LOOKUP_QUERY_LT,
+                LOOKUP_QUERY_LTE,
             ],
         },
+        'name': 'name.raw',
+        'parent': 'group.name.raw',
+        'study': 'study.name.raw',
+        'ctype':'ctype.raw'
 
     }
+
+    # Define ordering fields
+    ordering_fields = {
+        'id':'id',
+        'study': 'study.raw',
+        #'group': 'group.raw',
+        'name': 'name.raw',
+    }
+
 class CharacteristicaViewSet(BaseDocumentViewSet):
     pagination_class = PageNumberPagination
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
     lookup_field = 'id'
-    filter_backends = [
-        FilteringFilterBackend,
-        OrderingFilterBackend,
-        DefaultOrderingFilterBackend,
-        IdsFilterBackend,
-        SearchFilterBackend,
-        SuggesterFilterBackend
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
 
-    ]
     search_fields = (
         'choice',
         'group_name',
     )
+    ordering_fields = {
+        'choice': 'choice.raw',
+        "count": 'count',
+    }
 
     filter_fields = {
         'all_group_pks': {
@@ -332,14 +363,7 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
         'individual_name': 'individual_name.raw',
         'individual_pk': 'individual_pk',
     }
-    suggester_fields = {
-        'category_suggest': {
-            'field': 'category.suggest',
-            'suggesters': [
-                SUGGESTER_COMPLETION,
-            ],
 
-        },
 
-    }
+
 

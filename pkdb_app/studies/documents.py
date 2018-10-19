@@ -1,7 +1,6 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from elasticsearch_dsl import analyzer, token_filter
 from pkdb_app.studies.models import Reference, Study
-
 reference_index = Index("references")
 reference_index.settings(number_of_shards=1,
                number_of_replicas=1,)

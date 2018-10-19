@@ -9,24 +9,25 @@
 
 -->
 <template>
+    <!--
+
     <get-paginated-data :resource_url="resource_url">
         <div slot-scope="data">
             <groups-table :data="data" :resource_url="resource_url" />
         </div>
     </get-paginated-data>
+    -->
+    <groups-table2/>
 </template>
 
 
 <script>
-    import GetPaginatedData from './api/GetPaginatedData';
-    import GroupsTable from "./tables/GroupsTable";
-    // import ListView from "./ListView";
+    import GroupsTable2 from "./tables/GroupsTable2";
 
     export default {
         name: 'Groups',
         components: {
-            GetPaginatedData: GetPaginatedData,
-            GroupsTable: GroupsTable,
+            GroupsTable2: GroupsTable2,
 
         },
         methods: {},

@@ -1,6 +1,7 @@
 from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import DocType, Index, fields
-from pkdb_app.subjects.models import Individual, Characteristica
+from pkdb_app.subjects.models import Individual, Characteristica, Group
+from pkdb_app.interventions.documents import string_field, ObjectField
 
 # Name of the Elasticsearch index
 individuals_index = Index("individuals")
@@ -21,32 +22,101 @@ html_strip = analyzer(
 @individuals_index.doc_type
 class IndividualDocument(DocType):
     """Individual elastic search document"""
-    id = fields.IntegerField(attr='id')
-    name = fields.StringField(
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-            'suggest': fields.CompletionField(),
+    pk = fields.IntegerField(attr='pk')
 
-        }
-    )
+    name = string_field('name')
+    group = ObjectField(properties={
+        'name': string_field('name'),
+        'pk':fields.IntegerField('pk'),
+    })
 
-    group = fields.StringField(
-        attr='group_indexing',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
+    study = ObjectField(properties={
+        'name': string_field('name'),
+        'pk':fields.IntegerField('pk'),
+        'sid': fields.IntegerField('sid')
 
-    study = fields.StringField(
-        attr='study_indexing',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
+    })
+    ex = ObjectField(properties={
+        'pk':fields.IntegerField('pk')
+    })
 
-        }
-    )
+    characteristica_all_final = fields.ObjectField(
+        properties={
+            'pk': fields.IntegerField(),
+            'category': string_field('category'),
+            'choice': string_field('choice'),
+            'ctype' : string_field('ctype'),
+            'value' : fields.FloatField(),
+            'mean' : fields.FloatField(),
+            'median' : fields.FloatField(),
+            'min' : fields.FloatField(),
+            'max' : fields.FloatField(),
+            'se' : fields.FloatField(),
+            'sd' : fields.FloatField(),
+            'cv' : fields.FloatField(),
+            'unit' : string_field('unit'),
+            'count': fields.IntegerField('count'),
+
+        },
+        multi = True)
 
     class Meta:
         model=Individual
+
+# Name of the Elasticsearch index
+group_index = Index("groups")
+
+# See Elasticsearch Indices API reference for available settings
+group_index.settings(
+    number_of_shards=1,
+    number_of_replicas=1
+)
+
+@group_index.doc_type
+class GroupDocument(DocType):
+    """Individual elastic search document"""
+    pk = fields.IntegerField(attr='pk')
+    name = string_field('name')
+    count = fields.IntegerField(attr='count')
+    parent = ObjectField(properties={
+        'name': string_field('name'),
+        'pk': fields.IntegerField('pk'),
+    })
+
+
+    study = ObjectField(properties={
+        'name': string_field('name'),
+        'pk': fields.IntegerField('pk'),
+        'sid': fields.IntegerField('sid')
+
+    })
+    ex = ObjectField(properties={
+        'pk': fields.IntegerField('pk')
+    })
+
+    characteristica_all_final = fields.ObjectField(
+        properties={
+            'pk': fields.IntegerField(),
+            'category': string_field('category'),
+            'choice': string_field('choice'),
+            'ctype': string_field('ctype'),
+            'value': fields.FloatField('value'),
+            'mean': fields.FloatField(),
+            'median': fields.FloatField(),
+            'min': fields.FloatField(),
+            'max': fields.FloatField(),
+            'se': fields.FloatField(),
+            'sd': fields.FloatField(),
+            'cv': fields.FloatField(),
+            'unit': string_field('unit'),
+            'count': fields.IntegerField('count'),
+
+        },
+        multi=True)
+
+
+    class Meta:
+        model = Group
 
 
 # Name of the Elasticsearch index
@@ -85,7 +155,6 @@ class CharacteristicaDocument(DocType):
     category = fields.StringField(
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            'suggest': fields.CompletionField(),
         }
     )
 
@@ -98,7 +167,6 @@ class CharacteristicaDocument(DocType):
     ctype = fields.StringField(
         fields={
             'raw': fields.StringField(analyzer='keyword'),
-            'suggest': fields.CompletionField(),
         }
     )
     unit = fields.StringField(

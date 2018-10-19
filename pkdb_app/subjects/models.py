@@ -146,12 +146,17 @@ class Group(models.Model):
         return self.ex.groupset.study.pk
 
     @property
+    def study(self):
+        return self.ex.groupset.study
+
+    @property
     def source(self):
         return self.ex.source
 
     @property
     def figure(self):
         return self.ex.figure
+
 
     @property
     def parents(self):
@@ -170,6 +175,7 @@ class Group(models.Model):
     @property
     def characteristica_all_final(self):
         return self.characteristica_all.filter(final=True)
+
 
 
 # ----------------------------------
@@ -269,8 +275,8 @@ class Individual(AbstractIndividual):
         return  (self.characteristica_final | self.group_characteristica_final)
 
     @property
-    def study_indexing(self):
-        return self.ex.individualset.study.name
+    def study(self):
+        return self.ex.individualset.study
 
     @property
     def study_pk(self):
@@ -286,11 +292,11 @@ class Individual(AbstractIndividual):
 
     @property
     def characteristica_categories(self):
-        return [characteristica.category for characteristica in self.all_characteristica_final.all()]
+        return [characteristica.category for characteristica in self.characteristica_all_final.all()]
 
     @property
     def characteristica_choices(self):
-        return {characteristica.category: characteristica.choice for characteristica in self.all_characteristica_final.all() }
+        return {characteristica.category: characteristica.choice for characteristica in self.characteristica_all_final.all()}
 
 
 # ----------------------------------
@@ -378,6 +384,8 @@ class Characteristica(Valueable, AbstractCharacteristica):
     )
     norm = models.ForeignKey("Characteristica", related_name="raw", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
+    count = models.IntegerField(default=1)
+
 
     @property
     def all_group_pks(self):

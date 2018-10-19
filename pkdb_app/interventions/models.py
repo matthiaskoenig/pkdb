@@ -583,15 +583,14 @@ class Timecourse(AbstractOutput):
 
         # for elastic search. NaNs are not allowed in elastic search
 
+    @staticmethod
+    def _any_not_json(value):
+        return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
+
     def null_attr(self, attr):
         value_list = getattr(self, attr)
-        value_list_none = []
         if value_list:
-            for value in value_list:
-                if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):
-                    value_list_none.append(value)
-                else:
-                    value_list_none.append(None)
+            value_list_none = [ None if self._any_not_json(value) else value for value in value_list ]
             return value_list_none
 
 
@@ -687,8 +686,7 @@ class Timecourse(AbstractOutput):
 
         output_data["unit"] = f"({self.unit})*{self.time_unit}"
 
-        def _any_not_json(value):
-            return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
+
 
         array_fields = [
                 "value",
@@ -704,7 +702,7 @@ class Timecourse(AbstractOutput):
         for field in array_fields:
             value = output_data.get(field, None)
             if value:
-                if _any_not_json(value):
+                if self._any_not_json(value):
                     output_data[field] = None
 
         return output_data
@@ -743,8 +741,7 @@ class Timecourse(AbstractOutput):
 
         output_data["unit"] = f"({self.unit})*{self.time_unit}"
 
-        def _any_not_json(value):
-            return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
+
 
         array_fields = [
             "value",
@@ -760,6 +757,6 @@ class Timecourse(AbstractOutput):
         for field in array_fields:
             value = output_data.get(field, None)
             if value:
-                if _any_not_json(value):
+                if self._any_not_json(value):
                     output_data[field] = None
         return output_data
