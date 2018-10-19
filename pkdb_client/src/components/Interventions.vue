@@ -1,13 +1,13 @@
 <template>
-            <interventions-table2 />
+            <interventions-table3 />
 </template>
 <script>
-    import InterventionsTable2 from './tables/InterventionsTable2';
+    import InterventionsTable3 from './tables/InterventionsTable3';
 
     export default {
     name: 'Interventions',
     components: {
-        InterventionsTable2: InterventionsTable2,
+        InterventionsTable3: InterventionsTable3,
     },
 }
 </script>

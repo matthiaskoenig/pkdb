@@ -146,7 +146,6 @@
                     })
                     .catch(err => console.log(err.response.data))
                     .finally(() => this.loading = false);
-
             }
         }
     }
