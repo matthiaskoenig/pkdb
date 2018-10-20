@@ -76,6 +76,7 @@ UNITS = {
     "µg*h/ml": None,  # -> mg*h/l
     "µg/ml*h": None,  # -> mg*h/l
     "mg*min/l": None,  # -> mg*h/l
+    "mg/l*min": None,  # -> mg*h/l
     "µg*min/ml": None,
     "nmol*h/l": None,
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
@@ -151,6 +152,7 @@ UNIT_CONVERSIONS = [
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0E-3),
     UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0E-3),
     UnitConversion("mg*min/l", target="mg*h/l", multiplier=60),
+    UnitConversion("mg/l*min", target="mg*h/l", multiplier=60),
     UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0E-3),
     # Vd
     UnitConversion("ml/kg", target="l/kg", multiplier=1.0E-3),

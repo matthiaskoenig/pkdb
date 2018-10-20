@@ -470,6 +470,7 @@ auc_norm_unit = NormalizableUnit(
         "µg*h/ml": "mg*h/l",
         "µg/ml*h": "mg*h/l",
         "mg*min/l": "mg*h/l",
+        "mg/l*min": "mg*h/l",
         "µg*min/ml": None,
         "µmol*h/l": None,
         "µmol/l*h": None,
