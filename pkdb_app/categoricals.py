@@ -144,6 +144,10 @@ CHARACTERISTIC_DATA = [
         "bmi", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg/m^2": None})
     ),
     CharacteristicType(
+        "body surface area", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"m^2": None})
+    ),
+
+    CharacteristicType(
         "waist circumference",
         ANTHROPOMETRY,
         NUMERIC_TYPE,

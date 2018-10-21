@@ -41,6 +41,9 @@ UNITS = {
     "mmHg": None,
     "mmol": None,
     "µmol": None,
+
+    "m^2": None,
+
     # reverse time units
     "1/week": None,
     "1/day": None,
