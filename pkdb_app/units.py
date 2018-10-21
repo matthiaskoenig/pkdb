@@ -51,6 +51,7 @@ UNITS = {
     "1/min": None,
     "1/s": None,
     # misc units
+    "g/kg": None,
     "mg/kg": None,
     "mg/day": None,
     "kg/m^2": None,
@@ -60,6 +61,7 @@ UNITS = {
     "µg/l": None,
     "µg/ml": None,
     "mg/dl": None,
+    "mg/100ml": None,
     "mg/l": None,
     "ng/l": None,
     "g/dl": None,
@@ -72,6 +74,8 @@ UNITS = {
     "nmol/l": None,
     "pmol/l": None,
     "pmol/ml": None,
+    "µU/ml": None,
+
     # AUC
     "mg*h/l": None,
 
@@ -107,6 +111,7 @@ UNITS = {
     "pmol/kg/min": None,
     "pmol/min/kg": None,
     "pmol/min": None,
+    "mU/min": None,
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)

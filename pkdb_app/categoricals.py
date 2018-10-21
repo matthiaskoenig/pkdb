@@ -399,7 +399,7 @@ INTERVENTION_DATA = [
         DOSING,
         NUMERIC_TYPE,
         None,
-        NormalizableUnit({"mg": None, "mg/kg": None}),
+        NormalizableUnit({"mg": None, "mg/kg": None, "g/kg": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
@@ -484,6 +484,7 @@ auc_norm_unit = NormalizableUnit(
 amount_norm_unit = NormalizableUnit({"mg": None, "mmol": None})
 concentration_norm_unit = NormalizableUnit(
     {
+        "mg/100ml": None,
         "µg/ml": None,
         "mg/dl": None,
         "mg/l": None,
@@ -495,6 +496,7 @@ concentration_norm_unit = NormalizableUnit(
         "µmol/l": None,
         "nmol/l": None,
         "pmol/l": None,
+        "µU/ml": None,
     }
 )
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})
