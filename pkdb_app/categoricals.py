@@ -146,7 +146,6 @@ CHARACTERISTIC_DATA = [
     CharacteristicType(
         "body surface area", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"m^2": None})
     ),
-
     CharacteristicType(
         "waist circumference",
         ANTHROPOMETRY,
@@ -165,6 +164,12 @@ CHARACTERISTIC_DATA = [
         "percent fat",  # percent body fat
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
+    CharacteristicType(
+        "obesity index",
+        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
+    ),
+
+
     # -------------- Demography --------------
     CharacteristicType(
         "age", DEMOGRAPHICS, NUMERIC_TYPE, None, NormalizableUnit({"yr": None})
@@ -335,12 +340,16 @@ CHARACTERISTIC_DATA = [
         "AST", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"IU/I": None})
     ),
     CharacteristicType(
-        "albumin",
-        BIOCHEMICAL_DATA,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"g/dl": None}),
+        "albumin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"g/dl": None}),
     ),
+    CharacteristicType(
+        "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mg/dl": None, "mmol/l": None}),
+    ),
+    CharacteristicType(
+        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"µU/ml": None}),
+    ),
+
+
     # --------------Genetic variants --------------
     CharacteristicType(
         "genetics",
