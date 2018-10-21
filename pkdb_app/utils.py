@@ -4,7 +4,7 @@ Generic utility functions.
 
 import os
 
-CHAR_MAX_LENGTH = 100
+CHAR_MAX_LENGTH = 200
 
 
 def create_if_exists(src, src_key, dest, dest_key):

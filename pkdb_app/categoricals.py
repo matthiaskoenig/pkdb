@@ -509,6 +509,7 @@ time_norm_unit = NormalizableUnit({"h": None, "min": "h"})
 rate_norm_unit = NormalizableUnit({
     "1/min": "1/h",
     "1/h": None,
+    "pmol/min": None,
     "µmol/min/kg": "µmol/kg/min",
     "µmol/kg/min": None
 })
@@ -578,6 +579,9 @@ PK_DATA = [
     ),
     PharmacokineticsType(
         "rate_cycling", "rate cycling (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "rate_secretion", "rate secretion (rate)", rate_norm_unit
     ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
