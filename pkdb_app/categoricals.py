@@ -483,6 +483,7 @@ concentration_norm_unit = NormalizableUnit(
         "µg/ml": None,
         "mg/dl": None,
         "mg/l": None,
+        "ng/l": None,
         "pg/ml": None,
         "g/dl": None,
         "ng/ml": None,

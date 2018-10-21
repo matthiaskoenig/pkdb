@@ -58,6 +58,7 @@ UNITS = {
     "µg/ml": None,
     "mg/dl": None,
     "mg/l": None,
+    "ng/l": None,
     "g/dl": None,
     "ng/ml": None,
     "pg/ml": None,
