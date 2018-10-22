@@ -97,15 +97,19 @@ UNITS = {
     "ml": None,
     "l/kg": None,
     "ml/kg": None,  # -> l/kg
+
     # clearance
     "ml/min": None,
     "ml/h": None,  # -> ml/min
     "l/h/kg": None,
     "ml/h/kg": None,  # -> l/h/kg
+    "ml/kg/min": None,
     "ml/min/kg": None,  # -> l/h/kg
     "ml/min/1.73m^2": None,
 
     # rate
+    "mg/kg/min": None,
+    "mg/min/kg": None,
     "µmol/kg/min": None,
     "µmol/min/kg": None,  # -> µmol/kg/min
     "pmol/kg/min": None,

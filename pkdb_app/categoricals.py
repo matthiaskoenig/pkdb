@@ -515,6 +515,7 @@ clearance_norm_unit = NormalizableUnit(
         "ml/h": None,  # -> ml/min
         "l/h/kg": None,
         "ml/h/kg": None,  # -> l/h/kg
+        "ml/kg/min": None,
         "ml/min/kg": None,  # -> l/h/kg
         "ml/min/1.73m^2": None,
     }
@@ -527,7 +528,8 @@ rate_norm_unit = NormalizableUnit({
     "1/h": None,
     "pmol/min": None,
     "µmol/min/kg": "µmol/kg/min",
-    "µmol/kg/min": None
+    "µmol/kg/min": None,
+    "mg/kg/min": None,
 })
 
 
