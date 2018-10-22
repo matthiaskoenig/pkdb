@@ -42,9 +42,8 @@ from django_elasticsearch_dsl_drf.constants import (
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
-    DefaultOrderingFilterBackend,
     SearchFilterBackend,
-    IdsFilterBackend, SuggesterFilterBackend)
+    IdsFilterBackend, )
 
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentViewSet
 
@@ -236,7 +235,7 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
 
     search_fields = (
         'choice',
