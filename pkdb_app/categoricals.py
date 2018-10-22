@@ -144,6 +144,9 @@ CHARACTERISTIC_DATA = [
         "bmi", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg/m^2": None})
     ),
     CharacteristicType(
+        "body surface area", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"m^2": None})
+    ),
+    CharacteristicType(
         "waist circumference",
         ANTHROPOMETRY,
         NUMERIC_TYPE,
@@ -161,6 +164,12 @@ CHARACTERISTIC_DATA = [
         "percent fat",  # percent body fat
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
+    CharacteristicType(
+        "obesity index",
+        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
+    ),
+
+
     # -------------- Demography --------------
     CharacteristicType(
         "age", DEMOGRAPHICS, NUMERIC_TYPE, None, NormalizableUnit({"yr": None})
@@ -331,12 +340,16 @@ CHARACTERISTIC_DATA = [
         "AST", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"IU/I": None})
     ),
     CharacteristicType(
-        "albumin",
-        BIOCHEMICAL_DATA,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"g/dl": None}),
+        "albumin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"g/dl": None}),
     ),
+    CharacteristicType(
+        "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mg/dl": None, "mmol/l": None}),
+    ),
+    CharacteristicType(
+        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"µU/ml": None}),
+    ),
+
+
     # --------------Genetic variants --------------
     CharacteristicType(
         "genetics",
@@ -395,7 +408,7 @@ INTERVENTION_DATA = [
         DOSING,
         NUMERIC_TYPE,
         None,
-        NormalizableUnit({"mg": None, "mg/kg": None}),
+        NormalizableUnit({"mg": None, "mg/kg": None, "g/kg": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
@@ -470,6 +483,7 @@ auc_norm_unit = NormalizableUnit(
         "µg*h/ml": "mg*h/l",
         "µg/ml*h": "mg*h/l",
         "mg*min/l": "mg*h/l",
+        "mg/l*min": "mg*h/l",
         "µg*min/ml": None,
         "µmol*h/l": None,
         "µmol/l*h": None,
@@ -479,9 +493,11 @@ auc_norm_unit = NormalizableUnit(
 amount_norm_unit = NormalizableUnit({"mg": None, "mmol": None})
 concentration_norm_unit = NormalizableUnit(
     {
+        "mg/100ml": None,
         "µg/ml": None,
         "mg/dl": None,
         "mg/l": None,
+        "ng/l": None,
         "pg/ml": None,
         "g/dl": None,
         "ng/ml": None,
@@ -489,6 +505,7 @@ concentration_norm_unit = NormalizableUnit(
         "µmol/l": None,
         "nmol/l": None,
         "pmol/l": None,
+        "µU/ml": None,
     }
 )
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})
@@ -508,6 +525,7 @@ time_norm_unit = NormalizableUnit({"h": None, "min": "h"})
 rate_norm_unit = NormalizableUnit({
     "1/min": "1/h",
     "1/h": None,
+    "pmol/min": None,
     "µmol/min/kg": "µmol/kg/min",
     "µmol/kg/min": None
 })
@@ -577,6 +595,9 @@ PK_DATA = [
     ),
     PharmacokineticsType(
         "rate_cycling", "rate cycling (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "rate_secretion", "rate secretion (rate)", rate_norm_unit
     ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)

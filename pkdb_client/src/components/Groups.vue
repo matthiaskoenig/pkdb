@@ -1,48 +1,16 @@
-<!--
 <template>
-    <list-view :resource_url="resource_url">
-        <template slot="listview">
-            <groups-table :data="data" :resource_url="resource_url"/>
-        </template>
-    </list-view>
+    <groups-table3/>
 </template>
-
--->
-<template>
-    <!--
-
-    <get-paginated-data :resource_url="resource_url">
-        <div slot-scope="data">
-            <groups-table :data="data" :resource_url="resource_url" />
-        </div>
-    </get-paginated-data>
-    -->
-    <groups-table2/>
-</template>
-
 
 <script>
-    import GroupsTable2 from "./tables/GroupsTable2";
+    import GroupsTable3 from "./tables/GroupsTable3";
 
     export default {
         name: 'Groups',
         components: {
-            GroupsTable2: GroupsTable2,
+            GroupsTable3: GroupsTable3,
 
         },
-        methods: {},
-        data() {
-            return {
-            }
-        },
-        computed: { // vuex store
-            api() {
-                return this.$store.state.endpoints.api;
-            },
-            resource_url() {
-                return this.api + '/groups_read/?format=json';
-            },
-        }
     }
 </script>
 

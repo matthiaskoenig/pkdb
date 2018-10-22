@@ -1,34 +1,17 @@
 <template>
-
     <v-card>
-        <v-card-title>
-            <v-toolbar id="heading-toolbar" color="secondary" dark>
-                <Heading :count="count" :icon="icon('outputs')" title="Outputs" :resource_url="resource_url"/>
-                <v-spacer></v-spacer>
-                <v-text-field
-                        v-model="search"
-                        append-icon="fa-search"
-                        label="Search"
-                        single-line
-                        hide-details
-                >
-                </v-text-field>
-            </v-toolbar>
-
-        </v-card-title>
-
+        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
                 :items="entries"
                 :pagination.sync="pagination"
                 :total-items="count"
                 :loading="loading"
-                class="elevation-1"
+                :class="table_class"
         >
-
             <template slot="items" slot-scope="table">
                 <td>
-                    <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon('output')"/>
+                    <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon(otype)"/>
                     <JsonButton :resource_url="api + '/outputs_read/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }} </text-highlight> </td>
@@ -65,47 +48,42 @@
                     </text-highlight>
                 </td>
                 <td>
-                    <substance-chip :substance="table.item.substance.name" :search="search"/>
+                    <span v-if="table.item.substance && Object.keys(table.item.substance)>0">
+                        <substance-chip :title="table.item.substance.name" :search="search"/>
+                    </span>
                 </td>
                 <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
                 <td><characteristica-card :data="table.item"/></td>
             </template>
-
-            <template slot="no-data">
-                <v-alert :value="true" color="error" icon="fas fa-exclamation">
-                    Sorry, nothing to display here :(
-                </v-alert>
-            </template>
-
+            <no-data/>
         </v-data-table>
     </v-card>
 </template>
 
 <script>
-    import axios from 'axios'
-    import {lookup_icon} from "@/icons"
+    import {searchTableMixin} from "./mixins";
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
     import GroupButton from '../lib/GroupButton'
     import IndividualButton from '../lib/IndividualButton'
     import CharacteristicaCard from '../detail/CharacteristicaCard'
     import SubstanceChip from "../detail/SubstanceChip"
 
-
     export default {
-        name: "OutputsTable2",
-        components:{
+        name: "OutputsTable3",
+        components: {
+            NoData,
+            TableToolbar,
             GroupButton,
             IndividualButton,
             CharacteristicaCard,
             SubstanceChip
         },
+        mixins: [searchTableMixin],
         data () {
             return {
-                count: 0,
-                entries: [],
-                loading: true,
-                search: '',
-                pagination: {},
-                rowsPerPageItems: [5, 10, 20, 50, 100],
+                otype: "outputs",
+                otype_single: "output",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Type', value: 'pktype'},
@@ -119,70 +97,7 @@
                 ]
             }
         },
-        watch: {
-            pagination: {
-                handler () {
-                    this.getData()
-                },
-                deep: true
-            },
-            search: {
-                handler () {
-                    this.getData();
-                },
-                deep: true
-            }
-        },
-        mounted () {
-            this.getData()
-        },
-        computed: {
-            api() {
-                return this.$store.state.endpoints.api;
-
-            },
-            resource_url() {
-                return this.$store.state.endpoints.api  + '/outputs_elastic/?format=json&final=true'
-            },
-            descending() {
-                if(this.pagination.descending){
-                    return "-";
-                }
-                else{
-                    return ""
-                }
-            }
-        },
-
-        methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
-            getData() {
-
-                let url = this.$store.state.endpoints.api
-                    + '/outputs_elastic/?format=json'
-                    +'&final=true'
-                    +'&page='+ this.pagination.page
-                    +'&page_size='+ this.pagination.rowsPerPage
-                    +'&ordering='+ this.descending+ this.pagination.sortBy;
-                if(this.search){
-                    url += '&search='+ this.search
-                }
-
-                axios.get(url)
-                    .then(res => {
-                        this.entries = res.data.data.data;
-                        this.count = res.data.data.count;
-                    })
-                    .catch(err => console.log(err.response.data))
-                    .finally(() => this.loading = false);
-
-            }
-        }
     }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

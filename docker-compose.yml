@@ -2,10 +2,14 @@ version: '2'
 
 volumes:
   postgres_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
 
 services:
   postgres:
     image: postgres:10.5
+    container_name: postgres
     ports:
       - "5433:5432"
     volumes:
@@ -14,6 +18,14 @@ services:
      POSTGRES_DB: postgres
      POSTGRES_USER: postgres
      POSTGRES_PASSWORD: pass
+
+  elasticsearch:
+    image: elasticsearch:6.4.2
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
 
   web:
     restart: always
@@ -39,12 +51,6 @@ services:
       - postgres
       - elasticsearch
 
-  elasticsearch:
-    image: elasticsearch
-    ports:
-      - "9200:9200"
-    volumes:
-      - postgres_data:/usr/share/elasticsearch/data
 
 
 #  documentation:

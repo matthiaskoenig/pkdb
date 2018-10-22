@@ -41,6 +41,9 @@ UNITS = {
     "mmHg": None,
     "mmol": None,
     "µmol": None,
+
+    "m^2": None,
+
     # reverse time units
     "1/week": None,
     "1/day": None,
@@ -48,6 +51,7 @@ UNITS = {
     "1/min": None,
     "1/s": None,
     # misc units
+    "g/kg": None,
     "mg/kg": None,
     "mg/day": None,
     "kg/m^2": None,
@@ -57,7 +61,9 @@ UNITS = {
     "µg/l": None,
     "µg/ml": None,
     "mg/dl": None,
+    "mg/100ml": None,
     "mg/l": None,
+    "ng/l": None,
     "g/dl": None,
     "ng/ml": None,
     "pg/ml": None,
@@ -68,6 +74,8 @@ UNITS = {
     "nmol/l": None,
     "pmol/l": None,
     "pmol/ml": None,
+    "µU/ml": None,
+
     # AUC
     "mg*h/l": None,
 
@@ -76,6 +84,7 @@ UNITS = {
     "µg*h/ml": None,  # -> mg*h/l
     "µg/ml*h": None,  # -> mg*h/l
     "mg*min/l": None,  # -> mg*h/l
+    "mg/l*min": None,  # -> mg*h/l
     "µg*min/ml": None,
     "nmol*h/l": None,
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
@@ -101,6 +110,8 @@ UNITS = {
     "µmol/min/kg": None,  # -> µmol/kg/min
     "pmol/kg/min": None,
     "pmol/min/kg": None,
+    "pmol/min": None,
+    "mU/min": None,
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)
@@ -151,6 +162,7 @@ UNIT_CONVERSIONS = [
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0E-3),
     UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0E-3),
     UnitConversion("mg*min/l", target="mg*h/l", multiplier=60),
+    UnitConversion("mg/l*min", target="mg*h/l", multiplier=60),
     UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0E-3),
     # Vd
     UnitConversion("ml/kg", target="l/kg", multiplier=1.0E-3),

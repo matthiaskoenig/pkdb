@@ -7,8 +7,10 @@ import requests
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient, RequestsClient
 
-from pkdb_app.data_management.fill_database import upload_study_from_dir, setup_database, read_reference_json, \
+from pkdb_app.data_management.setup_database import setup_database
+from pkdb_app.data_management.upload_studies import upload_study_from_dir, read_reference_json, \
     upload_reference_json, upload_files
+
 from pkdb_app.interventions.models import Substance
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import DataFile
@@ -18,8 +20,6 @@ BASEPATH = os.path.abspath(
     os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
 )
 sys.path.append(BASEPATH)
-
-
 
 
 class AuthenticationAPITestCase(APITestCase):

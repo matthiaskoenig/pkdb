@@ -10,7 +10,7 @@
                 :key="i"
                 ripple
         >
-            F{{i}}
+            {{ id_from_name(item.name) }}
 
         </v-tab>
         <v-tab-item v-for="item in images" :key="item.name">
@@ -60,6 +60,12 @@
             }
         },
         methods: {
+            id_from_name: function (name) {
+                let tokens = name.split("_");
+                let id = tokens[tokens.length-1];
+                id = id.split(".")[0];
+                return id
+            },
             icon: function (key) {
                 return lookup_icon(key)
             },

@@ -5,6 +5,7 @@ services:
 python:
   - "3.6"
 before_script:
+  - cp .env.template .env
   - docker-compose build
 script:
 
@@ -36,5 +37,3 @@ notifications:
 cache:
   pip: true
 
-env:
-  PKDB_POSTGRES_PASSWORD = "test"
