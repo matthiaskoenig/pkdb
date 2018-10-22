@@ -12,7 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
-                    <json-button :resource_url="api + '/references_read/'+ table.item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + '/references_elastic/'+ table.item.pk +'/'"/>
                 </td>
                 <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>
                 <td>

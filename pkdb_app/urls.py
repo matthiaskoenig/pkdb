@@ -1,7 +1,6 @@
 """
 Django URLs
 """
-
 from django.conf import settings
 from django.urls import path, include
 from django.conf.urls import url
@@ -14,17 +13,14 @@ from rest_framework_swagger.views import get_swagger_view
 
 from pkdb_app.comments.views import DescriptionReadViewSet, CommentReadViewSet
 
-
-
 from .subjects.views import (
     DataFileViewSet,
     DataFileReadViewSet,
-    GroupReadViewSet,
     CharacteristicaReadViewSet,
     IndividualReadViewSet,
     GroupSetReadViewSet,
     IndividualSetReadViewSet,
-    CharacteristicaExReadViewSet, GroupExReadViewSet, IndividualExReadViewSet, IndividualViewSet,
+    CharacteristicaExReadViewSet, IndividualExReadViewSet, IndividualViewSet,
     CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import (
     SubstanceViewSet,
@@ -42,20 +38,22 @@ from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
     StudyReadViewSet,
-    AuthorsReadViewSet,
-    ReferencesReadViewSet,
+
     KeywordViewSet,
     KeywordReadViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet)
 
 # from .subjects.views import GroupsViewSet, CharacteristicValuesViewSet
-
-
 from .statistics import StatisticsViewSet, StatisticsDataViewSet
 from . import views
 
+
 # views in User
 router = DefaultRouter()
+router.register("references", ReferencesViewSet, base_name="references")
+router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
+
+
 
 router.register(r"users", UserViewSet, base_name="users")
 
@@ -68,7 +66,6 @@ router.register("datafiles", DataFileViewSet, base_name="datafiles")
 router.register("datafiles_read", DataFileReadViewSet, base_name="datafiles_read")
 
 
-router.register("references", ReferencesViewSet, base_name="references")
 
 
 router.register("studies", StudyViewSet, base_name="studies")
@@ -82,11 +79,9 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 ###############################################################################################
 # Read URLs
 ###############################################################################################
-router.register("studies_read", StudyReadViewSet, base_name="studies_read")
-router.register("references_read", ReferencesReadViewSet, base_name="references_read")
-router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
 
-router.register("authors_read", AuthorsReadViewSet, base_name="authors_read")
+router.register("studies_read", StudyReadViewSet, base_name="studies_read")
+
 
 router.register(r"users_read", UserReadViewSet, base_name="users_read")
 
@@ -104,8 +99,6 @@ router.register(
 )
 
 router.register("groupsets_read", GroupSetReadViewSet, base_name="groupsets_read")
-router.register("groups_read", GroupReadViewSet, base_name="groups_read")
-router.register("groupexs_read", GroupExReadViewSet, base_name="groupexs_read")
 
 router.register(
     "individualsets_read", IndividualSetReadViewSet, base_name="individualsets_read"

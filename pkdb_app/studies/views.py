@@ -24,19 +24,12 @@ from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from types import SimpleNamespace
 
-class KeywordViewSet(viewsets.ModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
-
-
-
+###################
+# References
+###################
 class ReferencesViewSet(viewsets.ModelViewSet):
-
+    """Post/Update references"""
     queryset = Reference.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ReferenceSerializer
@@ -50,6 +43,45 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+class ElasticReferenceViewSet(DocumentViewSet):
+    """Read/query/search references. """
+    document = ReferenceDocument
+    pagination_class = CustomPagination
+    serializer_class = ReferenceReadSerializer
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
+    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    filter_fields = {'name': 'name.raw',}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk":'pk',
+        "study_name":"study_name",
+        "study_pk":"study_pk",
+        "pmid":"pmid",
+        "name":"name.raw",
+        "doi":"doi",
+        "title":"title.raw",
+        "abstract":"abstract.raw",
+        "journal":"journal.raw",
+        "date":"date",
+        "pdf":"pdf",
+        "authors":"authors.last_name",
+    }
+
+
+
+
+class KeywordViewSet(viewsets.ModelViewSet):
+    queryset = Keyword.objects.all()
+    serializer_class = KeywordSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+
+
+
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -115,35 +147,6 @@ class StudyReadViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
 
 
-class ReferencesReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Reference.objects.all()
-    serializer_class = ReferenceReadSerializer
-    lookup_field = "sid"
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    )
-    filter_fields = ("pmid", "doi", "title", "abstract", "journal", "date", "authors")
-    paginate_by_param = 'page_size'
-    search_fields = filter_fields
-    ordering_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Author.objects.all()
-    serializer_class = AuthorReadSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("first_name", "last_name")
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
 
 class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Keyword.objects.all()
@@ -158,29 +161,6 @@ class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 
-class ElasticReferenceViewSet(DocumentViewSet):
-    document = ReferenceDocument
-    pagination_class = CustomPagination
-    serializer_class = ReferenceReadSerializer
-    lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
-    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
-    filter_fields = {'name': 'name.raw',}
-    ordering_fields = {
-        'sid': 'sid',
-        "pk":'pk',
-        "study_name":"study_name",
-        "study_pk":"study_pk",
-        "pmid":"pmid",
-        "name":"name.raw",
-        "doi":"doi",
-        "title":"title.raw",
-        "abstract":"abstract.raw",
-        "journal":"journal.raw",
-        "date":"date",
-        "pdf":"pdf",
-        "authors":"authors.last_name",
-    }
 
 class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument

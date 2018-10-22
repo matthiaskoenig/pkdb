@@ -48,62 +48,6 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentViewSet
 
 
-class DataFileViewSet(viewsets.ModelViewSet):
-
-    queryset = DataFile.objects.all()
-    serializer_class = DataFileSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-############################################################
-#Read Views
-###########################################################
-
-class DataFileReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = DataFile.objects.all()
-    serializer_class = DataFileReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class CharacteristicaReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Characteristica.objects.all()
-    serializer_class = CharacteristicaReadSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-    )
-    filter_fields = ("final",)
-
-class CharacteristicaExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = CharacteristicaEx.objects.all()
-    serializer_class = CharacteristicaExReadSerializer
-    permission_classes = (AllowAny,)
-
-class IndividualReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Individual.objects.all()
-    serializer_class = IndividualReadSerializer
-    permission_classes = (AllowAny,)
-
-class IndividualExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = IndividualEx.objects.all()
-    serializer_class = IndividualExReadSerializer
-    permission_classes = (AllowAny,)
-
-class GroupReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Group.objects.all()
-    serializer_class = GroupReadSerializer
-    permission_classes = (AllowAny,)
-
-class GroupExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = GroupEx.objects.all()
-    serializer_class = GroupExReadSerializer
-    permission_classes = (AllowAny,)
-
 class GroupSetReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = GroupSet.objects.all()
@@ -111,29 +55,52 @@ class GroupSetReadViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (AllowAny,)
 
 
-class IndividualSetReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = IndividualSet.objects.all()
-    serializer_class = IndividualSetReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class CharacteristicaOptionViewSet(viewsets.ViewSet):
-
-    @staticmethod
-    def get_options():
-        options = {}
-        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
-        options["ctypes"] = CHARACTERISTICA_TYPES
-        return options
-
-    def list(self, request):
-        return Response(self.get_options())
+class GroupViewSet(BaseDocumentViewSet):
+    document = GroupDocument
+    serializer_class = GroupElasticSerializer
+    lookup_field = 'pk'
+    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    pagination_class = CustomPagination
 
 
-###########################################################
-#Elastic Search Views
-###########################################################
+    # Define search fields
+    search_fields = (
+        'name',
+        'study.name',
+        'parent.name',
+        'characteristica_all_final.category',
+        'characteristica_all_final.choice',
+        'characteristica_all_final.ctype',
+
+    )
+
+    # Filter fields
+    filter_fields = {
+        'id': {
+            'field': 'id',
+            'lookups': [
+                LOOKUP_FILTER_RANGE,
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_GT,
+                LOOKUP_QUERY_GTE,
+                LOOKUP_QUERY_LT,
+                LOOKUP_QUERY_LTE,
+            ],
+        },
+        'name': 'name.raw',
+        'parent': 'group.name.raw',
+        'study': 'study.name.raw',
+        'ctype':'ctype.raw'
+
+    }
+
+    # Define ordering fields
+    ordering_fields = {
+        'id':'id',
+        'study': 'study.raw',
+        #'group': 'group.raw',
+        'name': 'name.raw',
+    }
 
 
 class IndividualViewSet(BaseDocumentViewSet):
@@ -183,52 +150,99 @@ class IndividualViewSet(BaseDocumentViewSet):
         'name': 'name.raw',
     }
 
-class GroupViewSet(BaseDocumentViewSet):
-    document = GroupDocument
-    serializer_class = GroupElasticSerializer
-    lookup_field = 'pk'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    pagination_class = CustomPagination
+class IndividualReadViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = Individual.objects.all()
+    serializer_class = IndividualReadSerializer
+    permission_classes = (AllowAny,)
+
+class IndividualExReadViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = IndividualEx.objects.all()
+    serializer_class = IndividualExReadSerializer
+    permission_classes = (AllowAny,)
 
 
-    # Define search fields
-    search_fields = (
-        'name',
-        'study.name',
-        'parent.name',
-        'characteristica_all_final.category',
-        'characteristica_all_final.choice',
-        'characteristica_all_final.ctype',
 
+class IndividualSetReadViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = IndividualSet.objects.all()
+    serializer_class = IndividualSetReadSerializer
+    permission_classes = (AllowAny,)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class DataFileViewSet(viewsets.ModelViewSet):
+
+    queryset = DataFile.objects.all()
+    serializer_class = DataFileSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+
+
+############################################################
+#Read Views
+###########################################################
+
+class DataFileReadViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = DataFile.objects.all()
+    serializer_class = DataFileReadSerializer
+    permission_classes = (AllowAny,)
+
+
+class CharacteristicaReadViewSet(viewsets.ReadOnlyModelViewSet):
+
+    queryset = Characteristica.objects.all()
+    serializer_class = CharacteristicaReadSerializer
+    permission_classes = (AllowAny,)
+    filter_backends = (
+        django_filters.rest_framework.DjangoFilterBackend,
     )
+    filter_fields = ("final",)
 
-    # Filter fields
-    filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'name': 'name.raw',
-        'parent': 'group.name.raw',
-        'study': 'study.name.raw',
-        'ctype':'ctype.raw'
+class CharacteristicaExReadViewSet(viewsets.ReadOnlyModelViewSet):
 
-    }
+    queryset = CharacteristicaEx.objects.all()
+    serializer_class = CharacteristicaExReadSerializer
+    permission_classes = (AllowAny,)
 
-    # Define ordering fields
-    ordering_fields = {
-        'id':'id',
-        'study': 'study.raw',
-        #'group': 'group.raw',
-        'name': 'name.raw',
-    }
+
+
+class CharacteristicaOptionViewSet(viewsets.ViewSet):
+
+    @staticmethod
+    def get_options():
+        options = {}
+        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
+        options["ctypes"] = CHARACTERISTICA_TYPES
+        return options
+
+    def list(self, request):
+        return Response(self.get_options())
+
+
+###########################################################
+#Elastic Search Views
+###########################################################
+
+
+
 
 class CharacteristicaViewSet(BaseDocumentViewSet):
     pagination_class = PageNumberPagination
