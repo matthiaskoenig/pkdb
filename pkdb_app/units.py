@@ -108,14 +108,18 @@ UNITS = {
     "ml/min/1.73m^2": None,
 
     # rate
+    "mg/min": None,
     "mg/kg/min": None,
     "mg/min/kg": None,
+    "µmol/min": None,
     "µmol/kg/min": None,
     "µmol/min/kg": None,  # -> µmol/kg/min
+    "pmol/min": None,
     "pmol/kg/min": None,
     "pmol/min/kg": None,
-    "pmol/min": None,
     "mU/min": None,
+    "mU/min/kg": None,
+    "mU/kg/min": None,
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)

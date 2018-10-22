@@ -348,7 +348,9 @@ CHARACTERISTIC_DATA = [
     CharacteristicType(
         "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"µU/ml": None}),
     ),
-
+    CharacteristicType(
+        "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"%": None}),
+    ),
 
     # --------------Genetic variants --------------
     CharacteristicType(
@@ -529,6 +531,8 @@ rate_norm_unit = NormalizableUnit({
     "pmol/min": None,
     "µmol/min/kg": "µmol/kg/min",
     "µmol/kg/min": None,
+
+    "mg/min": None,
     "mg/kg/min": None,
 })
 
