@@ -286,7 +286,9 @@ CHARACTERISTIC_DATA = [
          "oral glucose tolerance test",
          "intravenous glucose tolerance test",
          "hypoglycemic clamp",
-         "protein solution"],
+         "protein solution",
+         "lipid-glucose-protein drink"
+         ],
         dimensionless_norm_unit,
     ),
 
