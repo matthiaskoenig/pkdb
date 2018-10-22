@@ -39,7 +39,6 @@ from .interventions.views import (
     ElasticOutputViewSet, ElasticTimecourseViewSet)
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import (
-    AuthorsViewSet,
     ReferencesViewSet,
     StudyViewSet,
     StudyReadViewSet,
@@ -68,14 +67,12 @@ router.register("keywords", KeywordViewSet, base_name="keywords")
 router.register("datafiles", DataFileViewSet, base_name="datafiles")
 router.register("datafiles_read", DataFileReadViewSet, base_name="datafiles_read")
 
-# views in studies
-router.register("authors", AuthorsViewSet, base_name="authors")
 
 router.register("references", ReferencesViewSet, base_name="references")
 
 
 router.register("studies", StudyViewSet, base_name="studies")
-router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elasic")
+router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elastic")
 
 
 router.register("statistics", StatisticsViewSet, base_name="statistics")

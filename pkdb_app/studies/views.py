@@ -1,6 +1,8 @@
+from django.http import Http404
 from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend, FilteringFilterBackend, \
     SuggesterFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend, HighlightBackend
+from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
@@ -22,7 +24,7 @@ from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-
+from types import SimpleNamespace
 
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
@@ -30,17 +32,7 @@ class KeywordViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-class AuthorsViewSet(viewsets.ModelViewSet):
 
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("first_name", "last_name")
-    search_fields = filter_fields
-    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -170,7 +162,7 @@ class ElasticReferenceViewSet(DocumentViewSet):
     document = ReferenceDocument
     pagination_class = CustomPagination
     serializer_class = ReferenceReadSerializer
-    lookup_field = "pk"
+    lookup_field = "id"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
     filter_fields = {'name': 'name.raw',}
@@ -194,11 +186,10 @@ class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
-    lookup_field = "sid"
+    lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    search_fields = ('sid',
+    search_fields = (
                      'pk_version',
-
                      'creator.first_name',
                      'creator.last_name',
                      'creator.user',
@@ -215,9 +206,10 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'files'
                      )
 
-    filter_fields = {'name': 'name.raw','pk':'pk'}
+    filter_fields = {'name': 'name.raw'}
     ordering_fields = {
         'sid': 'sid',
+        "pk": 'pk',
         "pk_version":'pk_version',
         "name":"name.raw",
         "design": "design.raw",
@@ -229,6 +221,43 @@ class ElasticStudyViewSet(DocumentViewSet):
         #"curators": "curators.last_name",
 
     }
+
+    def get_object(self):
+        """Get object."""
+        queryset = self.get_queryset()
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        if lookup_url_kwarg not in self.kwargs:
+            raise AttributeError(
+                "Expected view %s to be called with a URL keyword argument "
+                "named '%s'. Fix your URL conf, or set the `.lookup_field` "
+                "attribute on the view correctly." % (
+                    self.__class__.__name__,
+                    lookup_url_kwarg
+                )
+            )
+
+        if lookup_url_kwarg == 'id':
+            obj = self.document.get(id=self.kwargs[lookup_url_kwarg])
+            return DictionaryProxy(obj.to_dict())
+        else:
+            queryset = queryset.filter(
+                'term',
+                **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
+            )
+
+            count = queryset.count()
+            if count == 1:
+                obj = queryset.execute().hits.hits[0]['_source']
+                return DictionaryProxy(obj)
+
+            elif count > 1:
+                raise Http404(
+                    "Multiple results matches the given query. "
+                    "Expected a single result."
+                )
+
+            raise Http404("No result matches the given query.")
+
 
 
 
