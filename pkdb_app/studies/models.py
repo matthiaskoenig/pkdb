@@ -53,6 +53,9 @@ class Reference(models.Model):
         return self.title
 
     @property
+    def id(self):
+        return self.pk
+    @property
     def study_pk(self):
         if self.study.first():
             return self.study.first().pk

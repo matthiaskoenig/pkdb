@@ -371,7 +371,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
         :param data:
         :return:
         """
-        from pprint import pprint
 
         source = data.get("source")
         if source:

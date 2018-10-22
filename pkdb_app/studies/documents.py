@@ -213,7 +213,10 @@ class StudyDocument(DocType):
         fields = {'raw': fields.KeywordField(),
                   })
     reference = fields.ObjectField(properties={
-        'sid': fields.IntegerField(attr='sid')
+        'sid': fields.IntegerField(attr='sid'),
+        'pk':fields.IntegerField(attr='pk'),
+        'id': fields.IntegerField(attr='pk')
+
     })
 
     curators = fields.ObjectField(

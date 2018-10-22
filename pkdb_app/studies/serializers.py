@@ -322,84 +322,6 @@ class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
-
-    pk = serializers.CharField(read_only=True)
-    sid = serializers.CharField(read_only=True)
-    reference = serializers.HyperlinkedRelatedField(
-    read_only=True, lookup_field="sid", view_name="references_read-detail"
-    )
-    #reference = serializers.CharField(read_only=True)
-    design = serializers.CharField(read_only=True)
-    pkdb_version = serializers.CharField(read_only=True)
-    name = serializers.CharField(read_only=True)
-
-
-    curators = UserReadSerializer(many=True, read_only=True)
-    creator = UserReadSerializer( read_only=True)
-
-    substances = serializers.SerializerMethodField()
-    keywords = serializers.SerializerMethodField()
-    files = serializers.SerializerMethodField()
-
-    #files = DataFileReadSerializer(many=True, read_only=True,)
-
-    comments = CommentReadSerializer(many=True, read_only=True)
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
-
-
-
-    class Meta:
-        model = Study
-        fields = [
-            "pk",
-            "reference",
-            "name",
-            "design",
-            "sid",
-            "pkdb_version",
-            "curators",
-            "creator",
-            "substances",
-            "keywords",
-            "files",
-            "comments",
-            "descriptions"]+["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
-
-        read_only_fields = fields
-
-
-    def get_substances(self, obj):
-        """Get substances."""
-        if obj.substances:
-            return list(obj.substances)
-        else:
-            return []
-
-    def get_keywords(self, obj):
-        """Get substances."""
-        if obj.keywords:
-            return list(obj.keywords)
-        else:
-            return []
-
-
-    def get_files(self,obj):
-        #current_site = f'http://{get_current_site(self.context["request"]).domain}'
-
-        if "files" in obj:
-            files = []
-            for n,file in enumerate(obj.files):
-                #if file.file:
-                #    file.file =  current_site + file.file
-                files.append(file.to_dict())
-
-            return list(files)
-        else:
-            return list([])
-
-
-
 
 
 
@@ -500,6 +422,87 @@ class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
             "pdf",
         )
 
+
+class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
+    class Meta:
+        model = Reference
+        fields = ["sid", ]#'url']
+
+class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
+
+
+    #reference = serializers.HyperlinkedRelatedField(
+    #read_only=True, lookup_field="sid", view_name="references_read-detail"
+    #)
+    reference = ReferenceSmallElasticSerializer()
+
+    design = serializers.CharField(read_only=True)
+    pkdb_version = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
+
+    curators = UserReadSerializer(many=True, read_only=True)
+    creator = UserReadSerializer( read_only=True)
+
+    substances = serializers.SerializerMethodField()
+    keywords = serializers.SerializerMethodField()
+    #files = serializers.SerializerMethodField()
+
+    #files = DataFileReadSerializer(many=True, read_only=True,)
+
+    comments = CommentReadSerializer(many=True, read_only=True)
+    descriptions = DescriptionReadSerializer(many=True, read_only=True)
+
+
+
+    class Meta:
+        model = Study
+        fields = [
+                     "pk","sid",
+            "reference",
+            "name",
+            "design",
+            "pkdb_version",
+            "curators",
+            "creator",
+            "substances",
+            "keywords",
+            #"files",
+            "comments",
+            "descriptions"] + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
+
+        read_only_fields = fields
+
+
+    def get_substances(self, obj):
+        """Get substances."""
+        if obj.substances:
+            return list(obj.substances)
+        else:
+            return []
+
+    def get_keywords(self, obj):
+        """Get substances."""
+        if obj.keywords:
+            return list(obj.keywords)
+        else:
+            return []
+
+
+    def get_files(self,obj):
+        #current_site = f'http://{get_current_site(self.context["request"]).domain}'
+
+        if "files" in obj:
+            files = []
+            for n,file in enumerate(obj.files):
+                #if file.file:
+                #    file.file =  current_site + file.file
+                files.append(file.to_dict())
+
+            return list(files)
+        else:
+            return list([])
 
 
 
