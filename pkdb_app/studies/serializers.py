@@ -14,7 +14,7 @@ from ..interventions.models import Substance, DataFile, InterventionSet, OutputS
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer, \
     InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
-    GroupSetElasticSerializer, GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
+     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer

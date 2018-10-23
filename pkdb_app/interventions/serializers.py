@@ -32,7 +32,7 @@ from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
 from pkdb_app.subjects.serializers import (
     VALUE_MAP_FIELDS,
     VALUE_FIELDS,
-    EXTERN_FILE_FIELDS, pk_serializer)
+    EXTERN_FILE_FIELDS)
 
 # ----------------------------------
 # Serializer FIELDS

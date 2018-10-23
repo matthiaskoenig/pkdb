@@ -14,21 +14,11 @@ from rest_framework_swagger.views import get_swagger_view
 from pkdb_app.comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
 from .subjects.views import (
     DataFileViewSet,
-    DataFileReadViewSet,
-    CharacteristicaReadViewSet,
-    IndividualReadViewSet,
-    GroupSetReadViewSet,
-    IndividualSetReadViewSet,
-    CharacteristicaExReadViewSet, IndividualExReadViewSet, IndividualViewSet,
+    IndividualViewSet,
     CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import (
     SubstanceViewSet,
-    InterventionSetReadViewSet,
-    OutputSetReadViewSet,
-    InterventionReadViewSet,
-    OutputReadViewSet,
-    TimecourseReadViewSet,
-    InterventionExReadViewSet, OutputExReadViewSet, TimecourseExReadViewSet, InterventionOptionViewSet,
+    InterventionOptionViewSet,
     OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet, ElasticInterventionViewSet,
     ElasticOutputViewSet, ElasticTimecourseViewSet)
 from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
@@ -74,7 +64,6 @@ router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substa
 
 
 router.register("datafiles", DataFileViewSet, base_name="datafiles")
-router.register("datafiles_read", DataFileReadViewSet, base_name="datafiles_read")
 
 
 
@@ -96,35 +85,13 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 router.register(r"users_read", UserReadViewSet, base_name="users_read")
 
 
-router.register("groupsets_read", GroupSetReadViewSet, base_name="groupsets_read")
 
-router.register(
-    "individualsets_read", IndividualSetReadViewSet, base_name="individualsets_read"
-)
-router.register("individuals_read", IndividualReadViewSet, base_name="individuals_read")
 router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
 router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
 
 router.register("characteristica_elastic", CharacteristicaViewSet, base_name="characteristica_elastic")
 
 
-router.register("individualexs_read", IndividualExReadViewSet, base_name="individualexs_read")
-
-router.register(
-    "characteristica_read", CharacteristicaReadViewSet, base_name="characteristica_read"
-)
-router.register(
-    "characteristicaex_read", CharacteristicaExReadViewSet, base_name="characteristicaex_read"
-)
-
-router.register(
-    "interventionsets_read",
-    InterventionSetReadViewSet,
-    base_name="interventionsets_read",
-)
-router.register(
-    "interventions_read", InterventionReadViewSet, base_name="interventions_read"
-)
 router.register(
     "interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic"
 )
@@ -134,15 +101,7 @@ router.register(
 router.register(
     "outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic"
 )
-router.register(
-    "interventionexs_read", InterventionExReadViewSet, base_name="interventionexs_read"
-)
-router.register("outputset_read", OutputSetReadViewSet, base_name="outputsets_read")
-router.register("outputs_read", OutputReadViewSet, base_name="outputs_read")
-router.register("outputexs_read", OutputExReadViewSet, base_name="outputexs_read")
 
-router.register("timecourses_read", TimecourseReadViewSet, base_name="timecourses_read")
-router.register("timecourseexs_read", TimecourseExReadViewSet, base_name="timecourseexs_read")
 
 # Options
 router.register(

@@ -380,61 +380,16 @@ class IndividualSetSerializer(ExSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-
-class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    characteristica = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    characteristica_all = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-
-    characteristica_all_final = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    parent = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupexs_read-detail"
-    )
-    individuals = serializers.HyperlinkedRelatedField(read_only=True,many=True, view_name="individuals_read-detail")
+class CharacteristicaReadSerializer(ReadSerializer):
 
     class Meta:
-        model = Group
-        fields = (
-            ["pk", "groupset","ex","study_name","study_pk","individuals"]
-            + GROUP_FIELDS
-            + ["parent","parents", "characteristica", "characteristica_all","characteristica_all_final"]
-        )
+        model = Characteristica
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
 
-
-class GroupSetElasticSerializer(serializers.HyperlinkedModelSerializer):
-    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
-    comments = CommentElasticSerializer(many=True, read_only=True)
-    groups = GroupReadSerializer(many=True, read_only=True)
-    group_exs = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name="groupexs_read-detail")
-
-    class Meta:
-        model = GroupSet
-        fields = ["pk", "study", "descriptions", "groups","group_exs", "comments"]
-
-
-def pk_serializer(model,**kwargs):
-    _model = model
-    class PKSerializer(serializers.ModelSerializer):
-        class Meta:
-            model = _model
-            fields = ["pk"]
-
-    return PKSerializer(**kwargs)
-
-
-def get_output(self, objs):
-    return [obj.pk for obj in objs]
-
-
+###############################################################################################
+# Elastic Search Serializer
+###############################################################################################
+#maybe depreciated
 
 class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -468,147 +423,6 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
             result = [int(group["pk"]) for group in relevant_field]
         return result
 
-class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    individualset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualsets_read-detail"
-    )
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    characteristica = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    characteristica_final = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    characteristica_all_final = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualexs_read-detail"
-    )
-
-    class Meta:
-        model = Individual
-        fields = ["pk","ex","study_name","study_pk"] + ["individualset"] + ["name", "group", "characteristica","characteristica_final","characteristica_all_final"]
-
-
-class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
-    study = serializers.HyperlinkedRelatedField(
-        lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-    individuals = IndividualReadSerializer(
-        many=True, read_only=True)
-    individual_exs = serializers.HyperlinkedRelatedField(many=True,
-        read_only=True, view_name="groups_read-detail"
-    )
-    descriptions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="descriptions_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-
-    class Meta:
-        model = IndividualSet
-        fields = ["pk", "study", "descriptions","comments", "individual_exs","individuals"]
-
-
-
-
-class GroupExReadSerializer(serializers.HyperlinkedModelSerializer):
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    characteristica_ex = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristicaex_read-detail"
-    )
-
-    parent_ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupexs_read-detail"
-    )
-    groups = serializers.HyperlinkedRelatedField(many=True,
-        read_only=True, view_name="groups_read-detail"
-    )
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-    class Meta:
-        model = GroupEx
-        fields = (
-
-            ["pk", "groupset","groups"]
-            + EXTERN_FILE_FIELDS
-            + GROUP_FIELDS
-            + GROUP_MAP_FIELDS
-            + ["parent_ex", "characteristica_ex","comments"]
-        )
-
-
-class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    individualset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualsets_read-detail"
-    )
-
-    individuals = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="individuals_read-detail")
-
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    characteristica_ex = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristicaex_read-detail"
-    )
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-    class Meta:
-        model = IndividualEx
-        fields = (["pk", "individualset","individuals"]
-                  + EXTERN_FILE_FIELDS
-                  + ["name", "group", "characteristica_ex","comments"])
-
-
-class CharacteristicaReadSerializer(ReadSerializer):
-
-    class Meta:
-        model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
-
-
-
-class CharacteristicaExReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-    class Meta:
-        model = CharacteristicaEx
-        fields = (
-            CHARACTERISTISTA_FIELDS
-            + CHARACTERISTISTA_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
-            + ["comments"]
-        )
 
 class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -616,9 +430,8 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = DataFile
         fields = ["pk", "name"]
 
-###############################################################################################
-# Elastic Search Serializer
-###############################################################################################
+
+
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
@@ -626,16 +439,16 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS
 
 class GroupSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+    #url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
     class Meta:
         model = Group
-        fields = ["pk",'name', 'url']
+        fields = ["pk",'name']#, 'url']
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedIdentityField(read_only=True,lookup_field="sid",view_name="studies_read-detail")
+    #url = serializers.HyperlinkedIdentityField(read_only=True,lookup_field="sid",view_name="studies_read-detail")
     class Meta:
         model = Study
-        fields = ["pk",'name','url']
+        fields = ["pk",'name']#,'url']
 
 class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
     study = StudyElasticSerializer(read_only=True)

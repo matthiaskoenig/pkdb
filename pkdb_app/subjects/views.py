@@ -8,22 +8,11 @@ from pkdb_app.categoricals import CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.subjects.models import (
     DataFile,
-    Characteristica,
-    Individual,
-    Group,
-    GroupSet,
-    IndividualSet,
-    GroupEx, CharacteristicaEx, IndividualEx)
+)
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
     DataFileElasticSerializer,
-    CharacteristicaReadSerializer,
-    IndividualReadSerializer,
-    GroupReadSerializer,
-    GroupSetElasticSerializer,
-    IndividualSetReadSerializer,
-    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer,
-    IndividualElasticSerializer, GroupElasticSerializer)
+    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 
@@ -37,7 +26,6 @@ from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_QUERY_GTE,
     LOOKUP_QUERY_LT,
     LOOKUP_QUERY_LTE,
-    SUGGESTER_COMPLETION,
     LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE)
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
@@ -45,20 +33,14 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     SearchFilterBackend,
     IdsFilterBackend, )
 
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
 
-class GroupSetReadViewSet(viewsets.ReadOnlyModelViewSet):
 
-    queryset = GroupSet.objects.all()
-    serializer_class = GroupSetElasticSerializer
-    permission_classes = (AllowAny,)
-
-
-class GroupViewSet(BaseDocumentViewSet):
+class GroupViewSet(DocumentViewSet):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
-    lookup_field = 'pk'
+    lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     pagination_class = CustomPagination
 
@@ -76,17 +58,7 @@ class GroupViewSet(BaseDocumentViewSet):
 
     # Filter fields
     filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
+        'id': 'id',
         'name': 'name.raw',
         'parent': 'group.name.raw',
         'study': 'study.name.raw',
@@ -103,10 +75,10 @@ class GroupViewSet(BaseDocumentViewSet):
     }
 
 
-class IndividualViewSet(BaseDocumentViewSet):
+class IndividualViewSet(DocumentViewSet):
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
-    lookup_field = 'pk'
+    lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     pagination_class = CustomPagination
 
@@ -150,38 +122,6 @@ class IndividualViewSet(BaseDocumentViewSet):
         'name': 'name.raw',
     }
 
-class IndividualReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Individual.objects.all()
-    serializer_class = IndividualReadSerializer
-    permission_classes = (AllowAny,)
-
-class IndividualExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = IndividualEx.objects.all()
-    serializer_class = IndividualExReadSerializer
-    permission_classes = (AllowAny,)
-
-
-
-class IndividualSetReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = IndividualSet.objects.all()
-    serializer_class = IndividualSetReadSerializer
-    permission_classes = (AllowAny,)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -198,31 +138,6 @@ class DataFileViewSet(viewsets.ModelViewSet):
 ############################################################
 #Read Views
 ###########################################################
-
-class DataFileReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = DataFile.objects.all()
-    serializer_class = DataFileElasticSerializer
-    permission_classes = (AllowAny,)
-
-
-class CharacteristicaReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Characteristica.objects.all()
-    serializer_class = CharacteristicaReadSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-    )
-    filter_fields = ("final",)
-
-class CharacteristicaExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = CharacteristicaEx.objects.all()
-    serializer_class = CharacteristicaExReadSerializer
-    permission_classes = (AllowAny,)
-
-
 
 class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
@@ -244,7 +159,7 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
 
 
-class CharacteristicaViewSet(BaseDocumentViewSet):
+class CharacteristicaViewSet(DocumentViewSet):
     pagination_class = PageNumberPagination
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
