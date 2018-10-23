@@ -1,8 +1,5 @@
-import django_filters.rest_framework
-from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
-    SuggesterFilterBackend, OrderingFilterBackend
-from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
+    OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -11,28 +8,18 @@ from pkdb_app.categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVE
     OUTPUT_TISSUE_DATA, PK_DATA_DICT
 from pkdb_app.interventions.documents import SubstanceDocument, InterventionDocument, OutputDocument, TimecourseDocument
 from pkdb_app.interventions.models import (
-    Substance,
-    InterventionSet,
-    OutputSet,
-    Intervention,
-    Output,
-    Timecourse,
-    InterventionEx, OutputEx, TimecourseEx)
+    Substance)
 from pkdb_app.interventions.serializers import (
-    SubstanceSerializer,
-    SubstanceReadSerializer,
-    InterventionSetReadSerializer,
-    OutputSetReadSerializer,
-    InterventionReadSerializer,
-    OutputReadSerializer,
-    TimecourseReadSerializer,
-    InterventionExReadSerializer, OutputExReadSerializer, TimecourseExReadSerializer, InterventionElasticSerializer,
+    SubstanceSerializer,InterventionElasticSerializer,
     OutputElasticSerializer, TimecourseElasticSerializer)
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.units import TIME_UNITS
 
+###############################################################################################
+# Upload/External Views
+###############################################################################################
 
 class SubstanceViewSet(viewsets.ModelViewSet):
     queryset = Substance.objects.all()
@@ -41,24 +28,9 @@ class SubstanceViewSet(viewsets.ModelViewSet):
 
 
 ###############################################################################################
-# Read Views
+# Option Views
 ###############################################################################################
 
-
-class InterventionSetReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = InterventionSet.objects.all()
-    serializer_class = InterventionSetReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class InterventionReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Intervention.objects.all()
-    serializer_class = InterventionReadSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-    )
-    filter_fields = ("final",)
 
 class InterventionOptionViewSet(viewsets.ViewSet):
 
@@ -104,64 +76,17 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
     def list(self, request):
         return Response(self.get_options())
 
-
-
-class InterventionExReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = InterventionEx.objects.all()
-    serializer_class = InterventionExReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class OutputSetReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = OutputSet.objects.all()
-    serializer_class = OutputSetReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class OutputReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Output.objects.all()
-    serializer_class = OutputReadSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-    )
-    filter_fields = ("final",)
-
-
-class OutputExReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = OutputEx.objects.all()
-    serializer_class = OutputExReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class TimecourseReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Timecourse.objects.all()
-    serializer_class = TimecourseReadSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-    )
-    filter_fields = ("final",)
-
-
-class TimecourseExReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TimecourseEx.objects.all()
-    serializer_class = TimecourseExReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class SubstanceReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Substance.objects.all()
-    serializer_class = SubstanceReadSerializer
-    permission_classes = (AllowAny,)
+###############################################################################################
+# Elastic Views
+###############################################################################################
 
 
 class ElasticSubstanceViewSet(DocumentViewSet):
     document = SubstanceDocument
     serializer_class = SubstanceSerializer
     pagination_class = CustomPagination
-    lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,SearchFilterBackend]
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,SearchFilterBackend]
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
 
@@ -170,8 +95,8 @@ class ElasticInterventionViewSet(DocumentViewSet):
     document = InterventionDocument
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
-    lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('name','category','substance.name',"form","application",'route','time_unit')
     filter_fields = {'name': 'name.raw','pk':'pk'}
     ordering_fields = {'name': 'name.raw',
@@ -187,8 +112,8 @@ class ElasticOutputViewSet(DocumentViewSet):
     document = OutputDocument
     serializer_class = OutputElasticSerializer
     pagination_class = CustomPagination
-    lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
@@ -203,8 +128,8 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     document = TimecourseDocument
     serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination
-    lookup_field = "pk"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
     filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
@@ -215,6 +140,3 @@ class ElasticTimecourseViewSet(DocumentViewSet):
                        'auc_end':'auc_end'
 
                        }
-
-
-

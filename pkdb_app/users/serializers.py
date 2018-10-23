@@ -32,11 +32,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 
 ###############################################################################################
-# Read Serializer
+# Elastic Serializer
 ###############################################################################################
 
 
-class UserReadSerializer(serializers.ModelSerializer):
+class UserElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("id", "username", "first_name", "last_name")

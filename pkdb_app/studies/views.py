@@ -1,42 +1,29 @@
 from django.http import Http404
-from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend, FilteringFilterBackend, \
-    SuggesterFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend, HighlightBackend
+    OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from .models import Author, Reference, Study, Keyword
+from .models import Reference, Study
 from .serializers import (
-    AuthorSerializer,
     ReferenceSerializer,
     StudySerializer,
-    StudyReadSerializer,
-    ReferenceReadSerializer,
-    AuthorReadSerializer,
-    KeywordSerializer,
-    KeywordReadSerializer,
+    ReferenceElasticSerializer,
     StudyElasticSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from types import SimpleNamespace
 
-class KeywordViewSet(viewsets.ModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
-
-
-
+###################
+# References
+###################
 class ReferencesViewSet(viewsets.ModelViewSet):
-
+    """Post/Update references"""
     queryset = Reference.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ReferenceSerializer
@@ -46,11 +33,35 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filter_fields = ("sid",)
-
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+
+class ElasticReferenceViewSet(DocumentViewSet):
+    """Read/query/search references. """
+    document = ReferenceDocument
+    pagination_class = CustomPagination
+    serializer_class = ReferenceElasticSerializer
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend, SearchFilterBackend]
+    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    filter_fields = {'name': 'name.raw',}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk":'pk',
+        "study_name":"study_name",
+        "study_pk":"study_pk",
+        "pmid":"pmid",
+        "name":"name.raw",
+        "doi":"doi",
+        "title":"title.raw",
+        "abstract":"abstract.raw",
+        "journal":"journal.raw",
+        "date":"date",
+        "pdf":"pdf",
+        "authors":"authors.last_name",
+    }
 
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = Study.objects.all()
@@ -100,94 +111,15 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 
 ###############################################################################################
-# Read ViewSets
+# Elastic ViewSets
 ###############################################################################################
-class StudyReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Study.objects.all()
-    serializer_class = StudyReadSerializer
-    lookup_field = "sid"
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("sid",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-class ReferencesReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Reference.objects.all()
-    serializer_class = ReferenceReadSerializer
-    lookup_field = "sid"
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    )
-    filter_fields = ("pmid", "doi", "title", "abstract", "journal", "date", "authors")
-    paginate_by_param = 'page_size'
-    search_fields = filter_fields
-    ordering_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Author.objects.all()
-    serializer_class = AuthorReadSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("first_name", "last_name")
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordReadSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("name",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-
-class ElasticReferenceViewSet(DocumentViewSet):
-    document = ReferenceDocument
-    pagination_class = CustomPagination
-    serializer_class = ReferenceReadSerializer
-    lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
-    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
-    filter_fields = {'name': 'name.raw',}
-    ordering_fields = {
-        'sid': 'sid',
-        "pk":'pk',
-        "study_name":"study_name",
-        "study_pk":"study_pk",
-        "pmid":"pmid",
-        "name":"name.raw",
-        "doi":"doi",
-        "title":"title.raw",
-        "abstract":"abstract.raw",
-        "journal":"journal.raw",
-        "date":"date",
-        "pdf":"pdf",
-        "authors":"authors.last_name",
-    }
 
 class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = (
                      'pk_version',
                      'creator.first_name',

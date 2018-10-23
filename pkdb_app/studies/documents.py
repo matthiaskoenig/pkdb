@@ -1,274 +1,129 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from elasticsearch_dsl import analyzer, token_filter
+from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, ObjectField
 from pkdb_app.studies.models import Reference, Study
+
+
+# Elastic Reference
 reference_index = Index("references")
-reference_index.settings(number_of_shards=1,
-               number_of_replicas=1,)
-
-
-
-edge_ngram_filter =  token_filter(
-            'edge_ngram_filter',
-            type="edge_ngram",
-            min_gram=1, max_gram=20)
-
-
-autocomplete_search = analyzer(
-    'autocomplete_search',
-    tokenizer="standard",
-    filter=["lowercase"],
-)
-
-
-autocomplete = analyzer('autocomplete',
-    tokenizer="standard",
-    filter=[ "lowercase",edge_ngram_filter],
-    char_filter=["html_strip"],
-    chars=["letter"],
-    token_chars=["letter"])
-
-
-
-
+reference_index.settings(**elastic_settings)
 
 @reference_index.doc_type
 class ReferenceDocument(DocType):
     pk = fields.IntegerField(attr='pk')
-    pmid = fields.StringField(attr='pmid',fielddata=True)
-    sid = fields.StringField(attr='sid',fielddata=True)
-    study_name = fields.StringField(fielddata=True)
-    study_pk = fields.StringField(fielddata=True)
-
-    name = fields.StringField(
-        fielddata = True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields = {'raw': fields.KeywordField(),
-                  'suggest':fields.CompletionField(),
-                  }
-        )
-
-
-    doi = fields.StringField(attr='doi',fielddata=True)
-
-    title = fields.TextField(
-        fielddata = True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields = {'raw': fields.KeywordField(),
-                  'suggest':fields.CompletionField(),
-                  })
-    abstract = fields.TextField(
-        fielddata = True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields={'raw': fields.KeywordField(),
-                })
-
-    journal = fields.TextField(
-        fielddata = True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields={'raw': fields.KeywordField(),
-                'suggest': fields.CompletionField(),
-                })
-    date = fields.DateField(
-    )
-    pdf = fields.FileField(fielddata=True)
-    authors = fields.ObjectField(properties={
-        'first_name': fields.StringField(
-            analyzer=autocomplete,
-            fields={
-                'raw': fields.KeywordField(),
-            },),
-        'last_name': fields.StringField(
-            fielddata = True,
-            analyzer=autocomplete,
-            fields={
-            'raw': fields.KeywordField(),
-        }),
-        'pk' : fields.IntegerField(),
-
+    sid = string_field(attr='sid')
+    pmid = string_field(attr='pmid')
+    study = ObjectField(properties={
+        "pk":fields.IntegerField(),
+        "name": string_field('name'),
     })
 
+    name = string_field("name")
+    doi = string_field("doi")
+    title = string_field("title")
+    abstract = text_field("abstract")
+    journal = text_field("abstract")
+    date = fields.DateField()
+    pdf = fields.FileField(fielddata=True)
+
+    authors = ObjectField(properties={
+        'first_name': string_field("first_name"),
+        'last_name': string_field("last_name"),
+        'pk' : fields.IntegerField(),
+    })
     class Meta(object):
         model = Reference
 
-
+# Elastic Study
 study_index = Index("studies")
-study_index.settings(number_of_shards=1,
-               number_of_replicas=1,)
+study_index.settings(**elastic_settings)
 
+
+
+def common_setfields(model):
+    return ObjectField(
+        properties = {
+            "descriptions" : ObjectField(
+                properties={
+                    'text': text_field("text"),
+                    'pk': fields.IntegerField()
+                },
+                multi=True),
+            "count" : fields.FloatField(),
+
+            model: ObjectField(
+                properties = {
+                    "pk" : fields.FloatField(),
+                }
+            ),
+            "comments" : fields.ObjectField(
+        properties={
+            'text': text_field("text"),
+            'user': fields.ObjectField(
+                properties={
+                    'first_name': string_field("first_name"),
+                    'last_name': string_field("last_name"),
+                    'pk': string_field("last_name"),
+                    'username': string_field("username"),
+                }
+            )
+        },
+        multi=True)
+        }
+    )
 @study_index.doc_type
 class StudyDocument(DocType):
     pk = fields.IntegerField(attr='pk')
-    sid = fields.StringField(attr='sid',fielddata=True)
+    sid = string_field(attr='sid')
     pkdb_version= fields.IntegerField(attr='pkdb_version')
-
-    descriptions = fields.ObjectField(
+    descriptions = ObjectField(
         properties={
-            'text': fields.StringField(
-                analyzer=autocomplete,
-                search_analyzer=autocomplete_search,
-
-                fields={
-                    'raw': fields.KeywordField(),
-                },
-            ),
+            'text': text_field("text"),
             'pk': fields.IntegerField()
-
         },
         multi=True)
 
     comments = fields.ObjectField(
         properties={
-            'text': fields.StringField(
-                analyzer=autocomplete,
-                search_analyzer=autocomplete_search,
-
-                fields={
-                    'raw': fields.KeywordField(),
-                },
-            ),
-            'user' : fields.ObjectField(properties={
-                'first_name': fields.StringField(
-                    analyzer=autocomplete,
-                    search_analyzer=autocomplete_search,
-
-                    fields={
-                        'raw': fields.KeywordField(),
-                    }, ),
-                'last_name': fields.StringField(
-                    fielddata=True,
-                    analyzer=autocomplete,
-                    search_analyzer=autocomplete_search,
-                    fields={
-                        'raw': fields.KeywordField(),
-                    }),
-                'pk': fields.StringField(
-                    fielddata=True,
-                    analyzer=autocomplete,
-                    fields={
-                        'raw': fields.KeywordField(),
-                    }),
-                'username': fields.StringField(
-                    fielddata=True,
-                    analyzer=autocomplete,
-                    search_analyzer=autocomplete_search,
-
-                    fields={
-                        'raw': fields.KeywordField(),
-                    })
-                ,
-
-            })
+            'text': text_field("text"),
+            'user' : fields.ObjectField(
+                properties={
+                    'first_name': string_field("first_name"),
+                    'last_name': string_field("last_name"),
+                    'pk':string_field("last_name"),
+                    'username': string_field("username"),
+                }
+            )
         },
         multi=True)
-
-
-    creator = fields.ObjectField(properties={
-        'first_name': fields.StringField(
-            analyzer=autocomplete,
-            search_analyzer=autocomplete_search,
-
-            fields={
-                'raw': fields.KeywordField(),
-            }, ),
-        'last_name': fields.StringField(
-            fielddata=True,
-            analyzer=autocomplete,
-            search_analyzer=autocomplete_search,
-            fields={
-                'raw': fields.KeywordField(),
-            }),
-        'pk': fields.StringField(
-            fielddata=True,
-            analyzer=autocomplete,
-            fields={
-                'raw': fields.KeywordField(),
-            }),
-        'username': fields.StringField(
-            fielddata=True,
-            analyzer=autocomplete,
-            search_analyzer=autocomplete_search,
-
-            fields={
-                'raw': fields.KeywordField(),
-            })
-        ,
-
-    })
-    name = fields.StringField(
-        fielddata=True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields={'raw': fields.KeywordField(),
+    creator = fields.ObjectField(
+                properties={
+                    'first_name': string_field("first_name"),
+                    'last_name': string_field("last_name"),
+                    'pk':string_field("last_name"),
+                    'username': string_field("username"),
                 }
-    )
+            )
+    name = string_field("name")
+    design = string_field("design")
 
-    design = fields.StringField(
-        fielddata = True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields = {'raw': fields.KeywordField(),
-                  })
-    reference = fields.ObjectField(properties={
+    reference = ObjectField(properties={
         'sid': fields.IntegerField(attr='sid'),
         'pk':fields.IntegerField(attr='pk'),
-        'id': fields.IntegerField(attr='pk')
-
+        'name': string_field("name")
     })
 
     curators = fields.ObjectField(
         properties={
-            'first_name': fields.StringField(
-                analyzer=autocomplete,
-                search_analyzer=autocomplete_search,
-
-                fields={'raw': fields.KeywordField(),},
-            ),
-            'last_name': fields.StringField(
-                fielddata=True,
-                analyzer=autocomplete,
-                search_analyzer=autocomplete_search,
-
-                fields={'raw': fields.KeywordField(),}
-            ),
-            'pk': fields.StringField(
-                fielddata=True,
-                analyzer=autocomplete,
-                fields={'raw': fields.KeywordField(),}
-            ),
-            'username': fields.StringField(
-                fielddata=True,
-                analyzer=autocomplete,
-                search_analyzer=autocomplete_search,
-                fields={'raw': fields.KeywordField(),}
-            ),
+            'first_name': string_field("first_name"),
+            'last_name': string_field("last_name"),
+            'pk': string_field("last_name"),
+            'username': string_field("username"),
         },
         multi=True
     )
-    substances = fields.StringField(
-        attr= "substances_name",
-        fielddata=True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields={'raw': fields.KeywordField(multi=True),
-                },
-        multi=True,
-
-    )
-    keywords = fields.StringField(
-        attr="keywords_name",
-        fielddata=True,
-        analyzer=autocomplete,
-        search_analyzer=autocomplete_search,
-        fields={'raw': fields.KeywordField(),
-                },
-        multi=True,
-    )
-
-    files = fields.ObjectField(
+    substances = string_field(attr="substances_name", multi=True)
+    keywords = string_field(attr="keywords_name",multi=True)
+    files = ObjectField(
         properties={
             'pk': fields.IntegerField(),
             'file': fields.StringField(
@@ -287,6 +142,47 @@ class StudyDocument(DocType):
         },
         multi=True
     )
+
+    groupset = common_setfields("groups")
+    individualset = common_setfields("individuals")
+    interventionset = common_setfields("interventions")
+    outputset = ObjectField(
+        properties = {
+            "descriptions" : ObjectField(
+                properties={
+                    'text': text_field("text"),
+                    'pk': fields.IntegerField()
+                },
+                multi=True),
+            "count_outputs" : fields.FloatField(),
+            "outputs": ObjectField(
+                properties = {
+                    "pk" : fields.FloatField(),
+                }
+            ),
+            "count_timecourses": fields.FloatField(),
+            "timecourses": ObjectField(
+                properties={
+                    "pk": fields.FloatField(),
+                }
+            ),
+            "comments" : fields.ObjectField(
+                properties={
+                    'text': text_field("text"),
+                    'user': fields.ObjectField(
+                        properties={
+                            'first_name': string_field("first_name"),
+                            'last_name': string_field("last_name"),
+                            'pk': string_field("last_name"),
+                            'username': string_field("username"),
+                        }
+                    )
+                },
+        multi=True)
+        }
+    )
+
+
     group_count = fields.FloatField()
     individual_count = fields.FloatField()
     intervention_count = fields.FloatField()

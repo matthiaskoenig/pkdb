@@ -3,7 +3,7 @@ from rest_framework import serializers
 from pkdb_app.comments.models import Description, Comment
 from pkdb_app.serializers import WrongKeyValidationSerializer
 from pkdb_app.users.models import User
-from pkdb_app.users.serializers import UserReadSerializer
+from pkdb_app.users.serializers import UserElasticSerializer
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
@@ -32,6 +32,7 @@ class DescriptionSerializer(serializers.ModelSerializer):
                     "descriptions": "empty descriptions are not allowed",
                     "detail": {str(data)},
                 })
+
 
 class CommentSerializer(WrongKeyValidationSerializer):
     class Meta:
@@ -67,18 +68,16 @@ class CommentSerializer(WrongKeyValidationSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
+class DescriptionElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         fields = ["pk", "text"]
         model = Description
 
 
-class CommentReadSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserReadSerializer(read_only=True)
-    #user = serializers.HyperlinkedRelatedField(
-    #    read_only=True, view_name="users_read-detail"
-    #)
+class CommentElasticSerializer(serializers.HyperlinkedModelSerializer):
+    user = UserElasticSerializer(read_only=True)
+
     class Meta:
         fields = ["pk", "text","user"]
         model = Comment

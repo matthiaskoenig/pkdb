@@ -7,8 +7,8 @@ import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionReadSerializer, \
-    CommentReadSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+    CommentElasticSerializer
 from pkdb_app.interventions.models import (
     Substance,
     InterventionSet,
@@ -27,19 +27,18 @@ from pkdb_app.serializers import (
 )
 
 from pkdb_app.subjects.models import Group, DataFile, Individual
-from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING, INTERVENTION_DICT, INTERVENTION_FORM, \
-    INTERVENTION_APPLICATION, INTERVENTION_ROUTE, PK_DATA_DICT, OUTPUT_TISSUE_DATA
+from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
 
 from pkdb_app.subjects.serializers import (
     VALUE_MAP_FIELDS,
     VALUE_FIELDS,
-    EXTERN_FILE_FIELDS,
-)
+    EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
 
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
 from pkdb_app.units import TIME_UNITS
+from pkdb_app.utils import list_of_pk
 
 INTERVENTION_FIELDS = [
     "name",
@@ -522,103 +521,69 @@ class OutputSetSerializer(ExSerializer):
 
 
 ###############################################################################################
-# Read Serializer
+# Elastic Serializer
 ###############################################################################################
-class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
-    """ Intervention. """
-
-    interventionset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="interventionsets_read-detail"
-    )
-    substance = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="substances_read-detail"
-    )
-    ex = serializers.HyperlinkedRelatedField(read_only=True, view_name="interventionexs_read-detail"
-                                             )
-
-    class Meta:
-        model = Intervention
-        fields = ["pk", "interventionset","ex","final"] + VALUE_FIELDS + INTERVENTION_FIELDS
 
 
-
-
-
-
-
-
-class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
-    """ InterventionSet. """
-
-    study = serializers.HyperlinkedRelatedField(
-        lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-
-    interventions = InterventionReadSerializer(many=True, read_only=True)
-
-    intervention_exs = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="interventionexs_read-detail"
-    )
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
-    comments = CommentReadSerializer(many=True, read_only=True)
-
+class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    interventions = serializers.SerializerMethodField()
 
     class Meta:
         model = InterventionSet
-        fields = ["pk", "study", "descriptions","comments", "interventions", "intervention_exs"]
+        fields = ["pk","descriptions", "interventions","comments","count"]
 
-class InterventionExReadSerializer(ExSerializer,serializers.HyperlinkedModelSerializer):
-    interventionset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="interventionsets_read-detail"
-    )
-    substance = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="substances_read-detail"
-    )
+    def get_interventions(self,obj):
 
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
+        return list_of_pk("interventions",obj)
 
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
 
-    interventions = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True, view_name="interventions_read-detail"
-    )
+# Intervention related Serializer
+class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+    class Meta:
+        model = Intervention
+        fields = ["pk", 'name']  # , 'url']
+
+
+class InterventionElasticSerializer(serializers.ModelSerializer):
+    substance = serializers.SerializerMethodField()
 
     class Meta:
-        model = InterventionEx
-        fields = (
-            ["pk", "interventionset"] +
-            EXTERN_FILE_FIELDS
-            + VALUE_MAP_FIELDS
-            + VALUE_FIELDS
-            + INTERVENTION_FIELDS
-            + INTERVENTION_MAP_FIELDS
-            + ["interventions", "comments"]
-        )
-    def to_representation(self, instance):
-        rep =  super(serializers.HyperlinkedModelSerializer,self).to_representation(instance)
-        #rep = self.retransform_map_fields(rep)
-        return rep
+        model = Intervention
+        fields = ["pk", "final"] + VALUE_FIELDS + INTERVENTION_FIELDS
+
+    def get_substance(self, obj):
+        if obj.substance:
+            try:
+                return obj.substance.to_dict()
+            except AttributeError:
+                return obj.substance
+
+
+
+class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    outputs = serializers.SerializerMethodField()
+    timecourses = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OutputSet
+        fields = ["pk","descriptions", "outputs","timecourses","comments","count_outputs","count_timecourses"]
+
+    def get_outputs(self,obj):
+        return list_of_pk("outputs",obj)
+
+    def get_timecourses(self,obj):
+        return list_of_pk("timecourses",obj)
+
 
 class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail", required=False
-    )
-
-    individual = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individuals_read-detail"
-    )
-
-    interventions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="interventions_read-detail"
-    )
+    group = GroupSmallElasticSerializer()
+    individual = IndividualSmallElasticSerializer()
+    interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
 
     class Meta:
@@ -629,21 +594,17 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 + VALUE_FIELDS
                 + ["group", "individual", "final","interventions"])
 
-    def get_substance(self, obj):
-        return obj.substance.to_dict()
+    def get_substance(self,obj):
+        if obj.substance:
+            try:
+                return obj.substance.to_dict()
+            except AttributeError:
+                return obj.substance
 
 class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail", required=False
-    )
-
-    individual = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individuals_read-detail"
-    )
-
-    interventions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="interventions_read-detail"
-    )
+    group = GroupSmallElasticSerializer()
+    individual =  IndividualSmallElasticSerializer()
+    interventions =  InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
 
     class Meta:
@@ -654,253 +615,11 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 + VALUE_FIELDS
                 + ["group", "individual", "final","interventions","figure","auc_end"])
 
-    def get_substance(self, obj):
-        return obj.substance.to_dict()
-
-
-class OutputReadSerializer(serializers.HyperlinkedModelSerializer):
-    """ Output. """
-
-    outputset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="outputsets_read-detail"
-    )
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="outputexs_read-detail"
-    )
-    individual = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individuals_read-detail"
-    )
-    interventions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="interventions_read-detail"
-    )
-    substance = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="substances_read-detail"
-    )
-
-
-
-    class Meta:
-        model = Output
-        fields = (
-            ["pk", "outputset","ex"]
-            + OUTPUT_FIELDS
-            + VALUE_FIELDS
-            + ["group", "individual", "interventions","final",]
-
-        )
-
-
-    def to_representation(self, instance):
-        fields = [
-            "value",
-            "mean",
-            "median",
-            "min",
-            "max",
-            "sd",
-            "se",
-            "cv",
-            "time",
-        ]
-        rep = super().to_representation(instance)
-        for field in fields:
-            value = rep.get(field, None)
-            if value:
-                if self._any_not_json(value):
-                 rep[field] = None
-        return rep
-
-
-
-    def _any_not_json(self, value):
-                    return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
-
-
-
-
-
-class TimecourseReadSerializer(serializers.HyperlinkedModelSerializer):
-    """ Timecourse. """
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="timecourseexs_read-detail"
-    )
-    outputset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="outputsets_read-detail"
-    )
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    individual = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individuals_read-detail"
-    )
-    interventions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="interventions_read-detail"
-    )
-    substance = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="substances_read-detail"
-    )
-
-
-    class Meta:
-        model = Timecourse
-        fields = (
-            ["pk", "outputset","ex"]
-            + OUTPUT_FIELDS
-            + VALUE_FIELDS
-            + ["group", "individual", "interventions","final","figure","calculate_auc_end","calculate_auc_inf"]
-        )
-
-
-
-    def _any_not_json(self, value):
-        return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
-
-    def to_representation(self, instance):
-        array_fields = [
-            "value",
-            "mean",
-            "median",
-            "min",
-            "max",
-            "sd",
-            "se",
-            "cv",
-            "time",
-        ]
-        for field in array_fields:
-            array = getattr(instance, field, None)
-            if array:
-                null_array = [ None if self._any_not_json(value) else value for value in array ]
-                setattr(instance, field, null_array)
-
-        rep = super().to_representation(instance)
-
-        if rep.get("figure"):
-            current_site = f'http://{get_current_site(self.context["request"]).domain}'
-
-            rep["figure"] = current_site + rep["figure"]
-
-        return rep
-
-
-class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
-    """ OuputSet. """
-
-    study = serializers.HyperlinkedRelatedField(
-        lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-
-    outputs = OutputReadSerializer(many=True, read_only=True)
-
-    output_exs = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="outputexs_read-detail"
-    )
-    timecourses = TimecourseReadSerializer(many=True, read_only=True)
-    timecourse_exs = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="timecourseexs_read-detail"
-    )
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
-    comments = CommentReadSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = OutputSet
-        fields = ["pk", "study", "descriptions","comments", "output_exs", "timecourse_exs","timecourses","outputs"]
-
-
-
-
-class OutputExReadSerializer(OutputReadSerializer):
-    """ Output. """
-    outputs = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="outputs_read-detail"
-    )
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-    class Meta:
-        model = OutputEx
-        fields = (
-            ["pk", "outputset"]
-            + EXTERN_FILE_FIELDS
-            + OUTPUT_FIELDS
-            + OUTPUT_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
-            + ["group", "individual", "interventions"]
-            + [
-                "group_map",
-                "individual_map",
-                "interventions_map",
-                "outputs",
-                "comments",
-            ]
-        )
-
-
-
-class TimecourseExReadSerializer(TimecourseReadSerializer):
-    timecourses = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="timecourses_read-detail"
-    )
-
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-    class Meta:
-        model = TimecourseEx
-        fields = (
-            ["pk", "outputset"]
-            + EXTERN_FILE_FIELDS
-            + OUTPUT_FIELDS
-            + OUTPUT_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
-            + ["group", "individual", "interventions"]
-            + [
-                "group_map",
-                "individual_map",
-                "interventions_map",
-                "timecourses",
-                "comments",
-            ]
-        )
-    def to_representation(self, instance):
-        return super(serializers.HyperlinkedModelSerializer,self).to_representation(instance)
-
-
-
-class SubstanceReadSerializer(serializers.HyperlinkedModelSerializer):
-    """ Substance. """
-
-    class Meta:
-        model = Substance
-        fields = ["pk","name"]
-
-class InterventionElasticSerializer(serializers.ModelSerializer):
-    substance = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Intervention
-        fields = ["pk","final"] + VALUE_FIELDS + INTERVENTION_FIELDS
-
     def get_substance(self,obj):
-        return obj.substance.to_dict()
+        if obj.substance:
+            try:
+                return obj.substance.to_dict()
+            except AttributeError:
+                return obj.substance
+
+

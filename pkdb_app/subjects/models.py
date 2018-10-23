@@ -75,6 +75,14 @@ class GroupSet(models.Model):
         return groups
 
 
+    @property
+    def count(self):
+        if self.groups:
+            return self.groups.count()
+        else:
+            return 0
+
+
 class AbstractGroup(models.Model):
     objects = GroupExManager()
 
@@ -188,6 +196,13 @@ class IndividualSet(models.Model):
     def individuals(self):
         individuals = Individual.objects.filter(ex__in=self.individual_exs.all())
         return individuals
+
+    @property
+    def count(self):
+        if self.individuals:
+            return self.individuals.count()
+        else:
+            return 0
 
 
 class AbstractIndividual(models.Model):

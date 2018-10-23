@@ -8,22 +8,11 @@ from pkdb_app.categoricals import CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.subjects.models import (
     DataFile,
-    Characteristica,
-    Individual,
-    Group,
-    GroupSet,
-    IndividualSet,
-    GroupEx, CharacteristicaEx, IndividualEx)
+)
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    DataFileReadSerializer,
-    CharacteristicaReadSerializer,
-    IndividualReadSerializer,
-    GroupReadSerializer,
-    GroupSetReadSerializer,
-    IndividualSetReadSerializer,
-    GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer,
-    IndividualElasticSerializer, GroupElasticSerializer)
+    DataFileElasticSerializer,
+    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 
@@ -37,7 +26,6 @@ from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_QUERY_GTE,
     LOOKUP_QUERY_LT,
     LOOKUP_QUERY_LTE,
-    SUGGESTER_COMPLETION,
     LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE)
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
@@ -45,7 +33,86 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     SearchFilterBackend,
     IdsFilterBackend, )
 
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+
+
+
+class GroupViewSet(DocumentViewSet):
+    document = GroupDocument
+    serializer_class = GroupElasticSerializer
+    lookup_field = 'id'
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    pagination_class = CustomPagination
+
+
+    # Define search fields
+    search_fields = (
+        'name',
+        'study.name',
+        'parent.name',
+        'characteristica_all_final.category',
+        'characteristica_all_final.choice',
+        'characteristica_all_final.ctype',
+
+    )
+
+    # Filter fields
+    filter_fields = {
+        'id': 'id',
+        'name': 'name.raw',
+        'parent': 'group.name.raw',
+        'study': 'study.name.raw',
+        'ctype':'ctype.raw'
+
+    }
+
+    # Define ordering fields
+    ordering_fields = {
+        'id':'id',
+        'study': 'study.raw',
+        #'group': 'group.raw',
+        'name': 'name.raw',
+    }
+
+
+class IndividualViewSet(DocumentViewSet):
+    document = IndividualDocument
+    serializer_class = IndividualElasticSerializer
+    lookup_field = 'id'
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    pagination_class = CustomPagination
+
+
+    # Define search fields
+    search_fields = (
+        'name',
+        'study.name',
+        'group.name',
+        'characteristica_all_final.category',
+        'characteristica_all_final.choice',
+        'characteristica_all_final.ctype',
+
+    )
+
+    # Filter fields
+    filter_fields = {
+        'id': 'id',
+        'name': 'name.raw',
+        'group': 'group.name.raw',
+        'study': 'study.name.raw',
+        'ctype':'ctype.raw'
+    }
+
+    # Define ordering fields
+    ordering_fields = {
+        'id':'id',
+        'study': 'study.raw',
+        'group': 'group.raw',
+        'name': 'name.raw',
+    }
+
+
+
 
 
 class DataFileViewSet(viewsets.ModelViewSet):
@@ -53,70 +120,13 @@ class DataFileViewSet(viewsets.ModelViewSet):
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+
+
+
 ############################################################
 #Read Views
 ###########################################################
-
-class DataFileReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = DataFile.objects.all()
-    serializer_class = DataFileReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class CharacteristicaReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Characteristica.objects.all()
-    serializer_class = CharacteristicaReadSerializer
-    permission_classes = (AllowAny,)
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-    )
-    filter_fields = ("final",)
-
-class CharacteristicaExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = CharacteristicaEx.objects.all()
-    serializer_class = CharacteristicaExReadSerializer
-    permission_classes = (AllowAny,)
-
-class IndividualReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Individual.objects.all()
-    serializer_class = IndividualReadSerializer
-    permission_classes = (AllowAny,)
-
-class IndividualExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = IndividualEx.objects.all()
-    serializer_class = IndividualExReadSerializer
-    permission_classes = (AllowAny,)
-
-class GroupReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Group.objects.all()
-    serializer_class = GroupReadSerializer
-    permission_classes = (AllowAny,)
-
-class GroupExReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = GroupEx.objects.all()
-    serializer_class = GroupExReadSerializer
-    permission_classes = (AllowAny,)
-
-class GroupSetReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = GroupSet.objects.all()
-    serializer_class = GroupSetReadSerializer
-    permission_classes = (AllowAny,)
-
-
-class IndividualSetReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = IndividualSet.objects.all()
-    serializer_class = IndividualSetReadSerializer
-    permission_classes = (AllowAny,)
-
 
 class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
@@ -136,101 +146,9 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
 ###########################################################
 
 
-class IndividualViewSet(BaseDocumentViewSet):
-    document = IndividualDocument
-    serializer_class = IndividualElasticSerializer
-    lookup_field = 'pk'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    pagination_class = CustomPagination
 
 
-    # Define search fields
-    search_fields = (
-        'name',
-        'study.name',
-        'group.name',
-        'characteristica_all_final.category',
-        'characteristica_all_final.choice',
-        'characteristica_all_final.ctype',
-
-    )
-
-    # Filter fields
-    filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'name': 'name.raw',
-        'group': 'group.name.raw',
-        'study': 'study.name.raw',
-        'ctype':'ctype.raw'
-
-    }
-
-    # Define ordering fields
-    ordering_fields = {
-        'id':'id',
-        'study': 'study.raw',
-        #'group': 'group.raw',
-        'name': 'name.raw',
-    }
-
-class GroupViewSet(BaseDocumentViewSet):
-    document = GroupDocument
-    serializer_class = GroupElasticSerializer
-    lookup_field = 'pk'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
-    pagination_class = CustomPagination
-
-
-    # Define search fields
-    search_fields = (
-        'name',
-        'study.name',
-        'parent.name',
-        'characteristica_all_final.category',
-        'characteristica_all_final.choice',
-        'characteristica_all_final.ctype',
-
-    )
-
-    # Filter fields
-    filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'name': 'name.raw',
-        'parent': 'group.name.raw',
-        'study': 'study.name.raw',
-        'ctype':'ctype.raw'
-
-    }
-
-    # Define ordering fields
-    ordering_fields = {
-        'id':'id',
-        'study': 'study.raw',
-        #'group': 'group.raw',
-        'name': 'name.raw',
-    }
-
-class CharacteristicaViewSet(BaseDocumentViewSet):
+class CharacteristicaViewSet(DocumentViewSet):
     pagination_class = PageNumberPagination
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
@@ -249,113 +167,16 @@ class CharacteristicaViewSet(BaseDocumentViewSet):
     filter_fields = {
         'all_group_pks': {
             'field': 'all_group_pks',
-            'lookups': [
-                LOOKUP_FILTER_TERMS,
-                LOOKUP_FILTER_PREFIX,
-                LOOKUP_FILTER_WILDCARD,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_EXCLUDE,
-            ],
         },
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'value': {
-            'field': 'value',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'mean': {
-            'field': 'mean',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'median': {
-            'field': 'median',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'min': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'max': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'se': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'sd': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'cv': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
+        'id': 'id',
+        'value': 'value',
+        'mean': 'mean',
+        'median': 'median',
+        'min': 'min',
+        'max':'max',
+        'se':  'se',
+        'sd':  'sd',
+        'cv':'cv',
         'final':'final',
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',

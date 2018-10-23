@@ -5,14 +5,16 @@ from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from pkdb_app.comments.models import Description, Comment
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentReadSerializer, \
-    DescriptionReadSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
+    DescriptionElasticSerializer
 from pkdb_app.subjects.models import GroupSet, IndividualSet
-from pkdb_app.users.serializers import UserReadSerializer
+from pkdb_app.users.serializers import UserElasticSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer
-from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileReadSerializer
+from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer,\
+    InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
+from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
+     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
@@ -33,7 +35,6 @@ class KeywordSerializer(WrongKeyValidationSerializer):
         return keyword
 
     def to_internal_value(self, data):
-        # FIXME
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
@@ -308,102 +309,14 @@ class StudySerializer(SidSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
-    studies = serializers.HyperlinkedRelatedField(many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-
-    """ Keyword. """
-
-    class Meta:
-        model = Keyword
-        fields = ["pk", "name", "studies"]
-
-
-
-
-
-
-
-
-
-
-
-
-
-class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    curators = UserReadSerializer( many=True, read_only=True)
-    substances = SubstanceReadSerializer(many=True, read_only=True)
-    keywords = KeywordReadSerializer(many=True, read_only=True)
-    descriptions = DescriptionReadSerializer( many=True, read_only=True)
-    creator = UserReadSerializer(read_only=True)
-    reference = serializers.HyperlinkedRelatedField(
-        read_only=True, lookup_field="sid", view_name="references_read-detail"
-    )
-    #reference = serializers.HyperlinkedRelatedField(
-    #    read_only=True, lookup_field="sid", view_name="references_read-detail"
-    #)
-    #reference = serializers.SlugRelatedField(
-    #    read_only=True,
-    #    slug_field='name'
-    # )
-
-    individualset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualsets_read-detail"
-    )
-    interventionset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="interventionsets_read-detail"
-    )
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    outputset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="outputsets_read-detail"
-    )
-    files = DataFileReadSerializer(many=True,
-             read_only=True,)
-
-
-    #serializers.HyperlinkedRelatedField(
-    #    many=True, read_only=True, view_name="datafiles_read-detail"
-    #)
-    comments = CommentReadSerializer(many=True, read_only=True)
-
-
-    class Meta:
-        model = Study
-        fields = [
-            "pk",
-            "sid",
-            "pkdb_version",
-            "name",
-            "reference",
-            "creator",
-            "curators",
-            "substances",
-            "keywords",
-            "descriptions",
-            "comments",
-            "design",
-            "individualset",
-            "interventionset",
-            "groupset",
-            "outputset",
-            "files",
-        ] + ["group_count","individual_count","intervention_count","output_count","timecourse_count"]
-
-
-
-class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
-
+class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
 
-class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
-    authors = AuthorReadSerializer(
-        many=True, read_only=True)
-
+class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
+    authors = AuthorElasticSerializer(many=True, read_only=True)
+    pdf = serializers.CharField(read_only=True)
     class Meta:
         model = Reference
         fields = (
@@ -422,19 +335,17 @@ class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
             "pdf",
         )
 
-
 class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
         model = Reference
-        fields = ["sid", ]#'url']
+        fields = ["sid"]#, 'url']
+
+
+
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
-
-    #reference = serializers.HyperlinkedRelatedField(
-    #read_only=True, lookup_field="sid", view_name="references_read-detail"
-    #)
     reference = ReferenceSmallElasticSerializer()
 
     design = serializers.CharField(read_only=True)
@@ -442,35 +353,44 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     name = serializers.CharField(read_only=True)
 
 
-    curators = UserReadSerializer(many=True, read_only=True)
-    creator = UserReadSerializer( read_only=True)
+    curators = UserElasticSerializer(many=True, read_only=True)
+    creator = UserElasticSerializer(read_only=True)
 
     substances = serializers.SerializerMethodField()
     keywords = serializers.SerializerMethodField()
-    #files = serializers.SerializerMethodField()
 
-    #files = DataFileReadSerializer(many=True, read_only=True,)
+    files = DataFileElasticSerializer(many=True, read_only=True)
 
-    comments = CommentReadSerializer(many=True, read_only=True)
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    groupset = GroupSetElasticSmallSerializer(read_only=True)
+    individualset = IndividualSetElasticSmallSerializer(read_only=True)
+    interventionset = InterventionSetElasticSmallSerializer(read_only =True)
+    outputset = OutputSetElasticSmallSerializer(read_only=True)
 
 
 
     class Meta:
         model = Study
         fields = [
-                     "pk","sid",
-            "reference",
+            "pk",
+            "sid",
             "name",
+            "descriptions",
+            "reference",
             "design",
             "pkdb_version",
             "curators",
             "creator",
             "substances",
             "keywords",
-            #"files",
+            "files",
             "comments",
-            "descriptions"] + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
+            "groupset",
+            "individualset",
+            "interventionset",
+            "outputset",
+            ]
 
         read_only_fields = fields
 
@@ -489,20 +409,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
         else:
             return []
 
-
-    def get_files(self,obj):
-        #current_site = f'http://{get_current_site(self.context["request"]).domain}'
-
-        if "files" in obj:
-            files = []
-            for n,file in enumerate(obj.files):
-                #if file.file:
-                #    file.file =  current_site + file.file
-                files.append(file.to_dict())
-
-            return list(files)
-        else:
-            return list([])
 
 
 
