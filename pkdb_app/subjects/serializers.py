@@ -8,6 +8,7 @@ from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializ
 from pkdb_app.studies.models import Study
 from operator import itemgetter
 
+from pkdb_app.utils import list_of_pk
 from .models import (
     Group,
     GroupSet,
@@ -423,11 +424,8 @@ class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk", "descriptions", "groups", "comments", "count"]
 
     def get_groups(self, obj):
-        result = []
-        relevant_field = obj.to_dict().get("groups")
-        if relevant_field:
-            result = [int(group["pk"]) for group in relevant_field]
-        return result
+        list_of_pk("groups", obj)
+        return list_of_pk("groups", obj)
 
 
 class GroupSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
@@ -459,6 +457,11 @@ class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 
 # Individual related Serializer
+class IndividualSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+    class Meta:
+        model = Individual
+        fields = ["pk", 'name']  # , 'url']
 
 class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -470,11 +473,7 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
         fields = ["pk","descriptions", "individuals","comments","count"]
 
     def get_individuals(self,obj):
-        result = []
-        relevant_field = obj.to_dict().get("individuals")
-        if relevant_field:
-            result = [int(group["pk"]) for group in relevant_field]
-        return result
+        return list_of_pk("individuals", obj)
 
 
 class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):

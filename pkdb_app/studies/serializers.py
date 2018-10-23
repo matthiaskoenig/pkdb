@@ -8,10 +8,10 @@ from pkdb_app.comments.models import Description, Comment
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
     DescriptionElasticSerializer
 from pkdb_app.subjects.models import GroupSet, IndividualSet
-from pkdb_app.users.serializers import UserReadSerializer
+from pkdb_app.users.serializers import UserElasticSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer, \
+from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer,\
     InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
      GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
@@ -353,8 +353,8 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     name = serializers.CharField(read_only=True)
 
 
-    curators = UserReadSerializer(many=True, read_only=True)
-    creator = UserReadSerializer( read_only=True)
+    curators = UserElasticSerializer(many=True, read_only=True)
+    creator = UserElasticSerializer(read_only=True)
 
     substances = serializers.SerializerMethodField()
     keywords = serializers.SerializerMethodField()

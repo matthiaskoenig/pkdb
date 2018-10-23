@@ -31,3 +31,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
 
+###############################################################################################
+# Elastic Serializer
+###############################################################################################
+
+
+class UserElasticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "username", "first_name", "last_name")
+        read_only_fields = ("username",)

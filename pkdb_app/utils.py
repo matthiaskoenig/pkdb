@@ -25,6 +25,16 @@ def clean_import(data):
 
     return clean_dict
 
+def list_of_pk(field,obj):
+    result = []
+    try:
+        relevant_field = obj.to_dict().get(field)
+    except AttributeError:
+        relevant_field = obj.get(field)
+
+    if relevant_field:
+        result = [int(field_list["pk"]) for field_list in relevant_field]
+    return result
 
 def ensure_dir(file_path):
     """ Checks for directory and creates if non-existant."""

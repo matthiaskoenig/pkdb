@@ -3,7 +3,7 @@ from rest_framework import serializers
 from pkdb_app.comments.models import Description, Comment
 from pkdb_app.serializers import WrongKeyValidationSerializer
 from pkdb_app.users.models import User
-from pkdb_app.users.serializers import UserReadSerializer
+from pkdb_app.users.serializers import UserElasticSerializer
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
@@ -76,7 +76,7 @@ class DescriptionElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentElasticSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserReadSerializer(read_only=True)
+    user = UserElasticSerializer(read_only=True)
 
     class Meta:
         fields = ["pk", "text","user"]

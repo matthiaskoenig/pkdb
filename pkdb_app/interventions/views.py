@@ -1,8 +1,5 @@
-import django_filters.rest_framework
-from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
-    SuggesterFilterBackend, OrderingFilterBackend
-from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
+    OrderingFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -31,7 +28,7 @@ class SubstanceViewSet(viewsets.ModelViewSet):
 
 
 ###############################################################################################
-# Elastic Views
+# Option Views
 ###############################################################################################
 
 
@@ -79,11 +76,16 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
     def list(self, request):
         return Response(self.get_options())
 
+###############################################################################################
+# Elastic Views
+###############################################################################################
+
+
 class ElasticSubstanceViewSet(DocumentViewSet):
     document = SubstanceDocument
     serializer_class = SubstanceSerializer
     pagination_class = CustomPagination
-    lookup_field = "pk"
+    lookup_field = "id"
     filter_backends = [FilteringFilterBackend,SearchFilterBackend]
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
@@ -93,7 +95,7 @@ class ElasticInterventionViewSet(DocumentViewSet):
     document = InterventionDocument
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
-    lookup_field = "pk"
+    lookup_field = "id"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('name','category','substance.name',"form","application",'route','time_unit')
     filter_fields = {'name': 'name.raw','pk':'pk'}
@@ -138,6 +140,3 @@ class ElasticTimecourseViewSet(DocumentViewSet):
                        'auc_end':'auc_end'
 
                        }
-
-
-
