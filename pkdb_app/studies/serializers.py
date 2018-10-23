@@ -427,7 +427,7 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
         model = Reference
-        fields = ["sid", ]#'url']
+        fields = ["sid"]#, 'url']
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 

@@ -29,6 +29,7 @@ The database with backend and frontend is available as docker container for loca
 ## Build docker container
 To build the dev server for local development:
 ```bash
+sudo sysctl -w vm.max_map_count=262144
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
 docker-compose up --build
