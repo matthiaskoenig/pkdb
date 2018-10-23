@@ -109,6 +109,38 @@ class StudyDocument(DocType):
         },
         multi=True
     )
+
+    groupset = ObjectField(
+        properties = {
+            "descriptions" : ObjectField(
+                properties={
+                    'text': text_field("text"),
+                    'pk': fields.IntegerField()
+                },
+                multi=True),
+            "count" : fields.FloatField(),
+            "groups": ObjectField(
+                properties = {
+                    "pk" : fields.FloatField(),
+                }
+            ),
+            "comments" : fields.ObjectField(
+        properties={
+            'text': text_field("text"),
+            'user': fields.ObjectField(
+                properties={
+                    'first_name': string_field("first_name"),
+                    'last_name': string_field("last_name"),
+                    'pk': string_field("last_name"),
+                    'username': string_field("username"),
+                }
+            )
+        },
+        multi=True)
+        }
+    )
+
+
     group_count = fields.FloatField()
     individual_count = fields.FloatField()
     intervention_count = fields.FloatField()

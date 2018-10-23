@@ -75,6 +75,14 @@ class GroupSet(models.Model):
         return groups
 
 
+    @property
+    def count(self):
+        if self.groups:
+            return self.groups.count()
+        else:
+            return 0
+
+
 class AbstractGroup(models.Model):
     objects = GroupExManager()
 

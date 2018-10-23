@@ -12,7 +12,8 @@ from pkdb_app.users.serializers import UserReadSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer
-from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer
+from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
+    GroupSetElasticSerializer, GroupSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
@@ -358,6 +359,11 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     comments = CommentElasticSerializer(many=True, read_only=True)
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    groupset = GroupSetElasticSmallSerializer(read_only=True)
+
+    #individualset = DescriptionElasticSerializer(many=True, read_only=True)
+    #outputset = DescriptionElasticSerializer(many=True, read_only=True)
+    #timecourseset = DescriptionElasticSerializer(many=True, read_only=True)
 
 
 
@@ -377,7 +383,8 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "keywords",
             "files",
             "comments",
-            ] + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
+            "groupset",
+            ]  # + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
 
         read_only_fields = fields
 

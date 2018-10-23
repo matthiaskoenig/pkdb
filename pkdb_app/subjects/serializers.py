@@ -391,9 +391,7 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
     characteristica_all = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="characteristica_read-detail"
     )
-    #characteristica_all_final = serializers.HyperlinkedRelatedField(
-    #    many=True, read_only=True, view_name="characteristica_read-detail"
-    #)
+
     characteristica_all_final = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     parent = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="groups_read-detail"
@@ -412,12 +410,7 @@ class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-
-
-class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
-    study = serializers.HyperlinkedRelatedField(
-        lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
+class GroupSetElasticSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     groups = GroupReadSerializer(many=True, read_only=True)
@@ -426,6 +419,21 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = GroupSet
         fields = ["pk", "study", "descriptions", "groups","group_exs", "comments"]
+
+
+class GroupElasticSmallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ["pk"]
+
+class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    groups = GroupElasticSmallSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = GroupSet
+        fields = ["pk","descriptions", "groups","comments","count"]
 
 
 class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
@@ -448,8 +456,6 @@ class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
     ex = serializers.HyperlinkedRelatedField(
         read_only=True, view_name="individualexs_read-detail"
     )
-
-
 
     class Meta:
         model = Individual

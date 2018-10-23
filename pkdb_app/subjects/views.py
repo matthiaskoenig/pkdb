@@ -20,7 +20,7 @@ from pkdb_app.subjects.serializers import (
     CharacteristicaReadSerializer,
     IndividualReadSerializer,
     GroupReadSerializer,
-    GroupSetReadSerializer,
+    GroupSetElasticSerializer,
     IndividualSetReadSerializer,
     GroupExReadSerializer, CharacteristicaExReadSerializer, IndividualExReadSerializer,
     IndividualElasticSerializer, GroupElasticSerializer)
@@ -51,7 +51,7 @@ from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentV
 class GroupSetReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = GroupSet.objects.all()
-    serializer_class = GroupSetReadSerializer
+    serializer_class = GroupSetElasticSerializer
     permission_classes = (AllowAny,)
 
 
