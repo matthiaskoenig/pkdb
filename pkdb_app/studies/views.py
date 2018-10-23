@@ -1,19 +1,18 @@
 from django.http import Http404
 from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend, FilteringFilterBackend, \
-     OrderingFilterBackend
+    OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from .models import Reference, Study, Keyword
+from .models import Reference, Study
 from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    KeywordSerializer,
     StudyElasticSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
@@ -45,7 +44,7 @@ class ElasticReferenceViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     serializer_class = ReferenceElasticSerializer
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend, SearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
     filter_fields = {'name': 'name.raw',}
     ordering_fields = {
@@ -63,13 +62,6 @@ class ElasticReferenceViewSet(DocumentViewSet):
         "pdf":"pdf",
         "authors":"authors.last_name",
     }
-
-
-class KeywordViewSet(viewsets.ModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
 
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = Study.objects.all()
@@ -119,7 +111,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 
 ###############################################################################################
-# Read ViewSets
+# Elastic ViewSets
 ###############################################################################################
 
 class ElasticStudyViewSet(DocumentViewSet):
@@ -127,7 +119,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = (
                      'pk_version',
                      'creator.first_name',

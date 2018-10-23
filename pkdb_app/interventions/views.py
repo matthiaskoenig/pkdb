@@ -1,5 +1,5 @@
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, SearchFilterBackend, \
-    OrderingFilterBackend
+    OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -86,7 +86,7 @@ class ElasticSubstanceViewSet(DocumentViewSet):
     serializer_class = SubstanceSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,SearchFilterBackend]
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
 
@@ -96,7 +96,7 @@ class ElasticInterventionViewSet(DocumentViewSet):
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('name','category','substance.name',"form","application",'route','time_unit')
     filter_fields = {'name': 'name.raw','pk':'pk'}
     ordering_fields = {'name': 'name.raw',
@@ -113,7 +113,7 @@ class ElasticOutputViewSet(DocumentViewSet):
     serializer_class = OutputElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',
@@ -129,7 +129,7 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
     filter_fields = {'pk':'pk','final':'final'}
     ordering_fields = {'pktype':'pktype.raw',

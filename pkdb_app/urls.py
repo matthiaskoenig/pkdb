@@ -25,8 +25,6 @@ from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-
-    KeywordViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet

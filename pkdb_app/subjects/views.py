@@ -41,7 +41,7 @@ class GroupViewSet(DocumentViewSet):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -79,7 +79,7 @@ class IndividualViewSet(DocumentViewSet):
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -96,29 +96,18 @@ class IndividualViewSet(DocumentViewSet):
 
     # Filter fields
     filter_fields = {
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
+        'id': 'id',
         'name': 'name.raw',
         'group': 'group.name.raw',
         'study': 'study.name.raw',
         'ctype':'ctype.raw'
-
     }
 
     # Define ordering fields
     ordering_fields = {
         'id':'id',
         'study': 'study.raw',
-        #'group': 'group.raw',
+        'group': 'group.raw',
         'name': 'name.raw',
     }
 
@@ -178,113 +167,16 @@ class CharacteristicaViewSet(DocumentViewSet):
     filter_fields = {
         'all_group_pks': {
             'field': 'all_group_pks',
-            'lookups': [
-                LOOKUP_FILTER_TERMS,
-                LOOKUP_FILTER_PREFIX,
-                LOOKUP_FILTER_WILDCARD,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_EXCLUDE,
-            ],
         },
-        'id': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'value': {
-            'field': 'value',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'mean': {
-            'field': 'mean',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'median': {
-            'field': 'median',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'min': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'max': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'se': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'sd': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
-        'cv': {
-            'field': 'id',
-            'lookups': [
-                LOOKUP_FILTER_RANGE,
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_GT,
-                LOOKUP_QUERY_GTE,
-                LOOKUP_QUERY_LT,
-                LOOKUP_QUERY_LTE,
-            ],
-        },
+        'id': 'id',
+        'value': 'value',
+        'mean': 'mean',
+        'median': 'median',
+        'min': 'min',
+        'max':'max',
+        'se':  'se',
+        'sd':  'sd',
+        'cv':'cv',
         'final':'final',
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',
