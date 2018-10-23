@@ -1,7 +1,6 @@
 from django.http import Http404
-from django_elasticsearch_dsl_drf.constants import SUGGESTER_TERM, SUGGESTER_PHRASE, SUGGESTER_COMPLETION
 from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend, FilteringFilterBackend, \
-    SuggesterFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend, HighlightBackend
+     OrderingFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
@@ -9,14 +8,11 @@ from rest_framework.permissions import AllowAny,IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from .models import Author, Reference, Study, Keyword
+from .models import Reference, Study, Keyword
 from .serializers import (
-    AuthorSerializer,
     ReferenceSerializer,
     StudySerializer,
-    StudyReadSerializer,
-    ReferenceReadSerializer,
-    AuthorReadSerializer,
+    ReferenceElasticSerializer,
     KeywordSerializer,
     KeywordReadSerializer,
     StudyElasticSerializer)
@@ -39,7 +35,6 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filter_fields = ("sid",)
-
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -49,7 +44,7 @@ class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document = ReferenceDocument
     pagination_class = CustomPagination
-    serializer_class = ReferenceReadSerializer
+    serializer_class = ReferenceElasticSerializer
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,OrderingFilterBackend, SearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
@@ -71,17 +66,10 @@ class ElasticReferenceViewSet(DocumentViewSet):
     }
 
 
-
-
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
-
-
-
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -134,17 +122,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Read ViewSets
 ###############################################################################################
-class StudyReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Study.objects.all()
-    serializer_class = StudyReadSerializer
-    lookup_field = "sid"
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("sid",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
 
 
 
@@ -158,8 +135,6 @@ class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ("name",)
     search_fields = filter_fields
     permission_classes = (AllowAny,)
-
-
 
 
 class ElasticStudyViewSet(DocumentViewSet):

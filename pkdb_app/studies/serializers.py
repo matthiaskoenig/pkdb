@@ -319,78 +319,13 @@ class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk", "name", "studies"]
 
 
-
-class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    curators = UserReadSerializer( many=True, read_only=True)
-    substances = SubstanceReadSerializer(many=True, read_only=True)
-    keywords = KeywordReadSerializer(many=True, read_only=True)
-    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
-    creator = UserReadSerializer(read_only=True)
-    reference = serializers.HyperlinkedRelatedField(
-        read_only=True, lookup_field="sid", view_name="references_read-detail"
-    )
-    #reference = serializers.HyperlinkedRelatedField(
-    #    read_only=True, lookup_field="sid", view_name="references_read-detail"
-    #)
-    #reference = serializers.SlugRelatedField(
-    #    read_only=True,
-    #    slug_field='name'
-    # )
-
-    individualset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualsets_read-detail"
-    )
-    interventionset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="interventionsets_read-detail"
-    )
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    outputset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="outputsets_read-detail"
-    )
-    files = DataFileReadSerializer(many=True,
-             read_only=True,)
-
-
-    #serializers.HyperlinkedRelatedField(
-    #    many=True, read_only=True, view_name="datafiles_read-detail"
-    #)
-    comments = CommentElasticSerializer(many=True, read_only=True)
-
-
-    class Meta:
-        model = Study
-        fields = [
-            "pk",
-            "sid",
-            "pkdb_version",
-            "name",
-            "reference",
-            "creator",
-            "curators",
-            "substances",
-            "keywords",
-            "descriptions",
-            "comments",
-            "design",
-            "individualset",
-            "interventionset",
-            "groupset",
-            "outputset",
-            "files",
-        ] + ["group_count","individual_count","intervention_count","output_count","timecourse_count"]
-
-
-
 class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
 
-class ReferenceReadSerializer(serializers.HyperlinkedModelSerializer):
+class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorReadSerializer(
         many=True, read_only=True)
 
