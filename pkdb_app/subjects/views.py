@@ -16,7 +16,7 @@ from pkdb_app.subjects.models import (
     GroupEx, CharacteristicaEx, IndividualEx)
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    DataFileReadSerializer,
+    DataFileElasticSerializer,
     CharacteristicaReadSerializer,
     IndividualReadSerializer,
     GroupReadSerializer,
@@ -202,7 +202,7 @@ class DataFileViewSet(viewsets.ModelViewSet):
 class DataFileReadViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = DataFile.objects.all()
-    serializer_class = DataFileReadSerializer
+    serializer_class = DataFileElasticSerializer
     permission_classes = (AllowAny,)
 
 

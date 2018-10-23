@@ -12,7 +12,7 @@ from pkdb_app.users.serializers import UserReadSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer
-from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileReadSerializer
+from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
@@ -33,7 +33,6 @@ class KeywordSerializer(WrongKeyValidationSerializer):
         return keyword
 
     def to_internal_value(self, data):
-        # FIXME
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
@@ -308,26 +307,13 @@ class StudySerializer(SidSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
-    studies = serializers.HyperlinkedRelatedField(many=True, lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-
-    """ Keyword. """
-
-    class Meta:
-        model = Keyword
-        fields = ["pk", "name", "studies"]
-
-
-class AuthorReadSerializer(serializers.HyperlinkedModelSerializer):
-
+class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
-    authors = AuthorReadSerializer(
-        many=True, read_only=True)
+    authors = AuthorElasticSerializer(many=True, read_only=True)
 
     class Meta:
         model = Reference
@@ -347,7 +333,6 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
             "pdf",
         )
 
-
 class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
@@ -356,10 +341,6 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
-
-    #reference = serializers.HyperlinkedRelatedField(
-    #read_only=True, lookup_field="sid", view_name="references_read-detail"
-    #)
     reference = ReferenceSmallElasticSerializer()
 
     design = serializers.CharField(read_only=True)
@@ -372,9 +353,8 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     substances = serializers.SerializerMethodField()
     keywords = serializers.SerializerMethodField()
-    #files = serializers.SerializerMethodField()
 
-    #files = DataFileReadSerializer(many=True, read_only=True,)
+    files = DataFileElasticSerializer(many=True, read_only=True)
 
     comments = CommentElasticSerializer(many=True, read_only=True)
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -384,18 +364,20 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Study
         fields = [
-                     "pk","sid",
-            "reference",
+            "pk",
+            "sid",
             "name",
+            "descriptions",
+            "reference",
             "design",
             "pkdb_version",
             "curators",
             "creator",
             "substances",
             "keywords",
-            #"files",
+            "files",
             "comments",
-            "descriptions"] + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
+            ] + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
 
         read_only_fields = fields
 
@@ -414,20 +396,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
         else:
             return []
 
-
-    def get_files(self,obj):
-        #current_site = f'http://{get_current_site(self.context["request"]).domain}'
-
-        if "files" in obj:
-            files = []
-            for n,file in enumerate(obj.files):
-                #if file.file:
-                #    file.file =  current_site + file.file
-                files.append(file.to_dict())
-
-            return list(files)
-        else:
-            return list([])
 
 
 

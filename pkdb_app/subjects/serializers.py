@@ -573,10 +573,11 @@ class CharacteristicaExReadSerializer(serializers.HyperlinkedModelSerializer):
             + ["comments"]
         )
 
-class DataFileReadSerializer(serializers.HyperlinkedModelSerializer):
+class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
+
     class Meta:
         model = DataFile
-        fields = ["pk", "file", "name", "filetype", "id"]
+        fields = ["pk", "name"]
 
 ###############################################################################################
 # Elastic Search Serializer

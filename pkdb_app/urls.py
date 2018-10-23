@@ -73,8 +73,6 @@ router.register("substances", SubstanceViewSet, base_name="substances")
 router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
 
 
-router.register("keywords", KeywordViewSet, base_name="keywords")
-
 router.register("datafiles", DataFileViewSet, base_name="datafiles")
 router.register("datafiles_read", DataFileReadViewSet, base_name="datafiles_read")
 

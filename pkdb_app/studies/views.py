@@ -14,7 +14,6 @@ from .serializers import (
     StudySerializer,
     ReferenceElasticSerializer,
     KeywordSerializer,
-    KeywordReadSerializer,
     StudyElasticSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
@@ -122,20 +121,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Read ViewSets
 ###############################################################################################
-
-
-
-class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordReadSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("name",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
 
 class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
