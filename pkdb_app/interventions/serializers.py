@@ -7,8 +7,8 @@ import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionReadSerializer, \
-    CommentReadSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+    CommentElasticSerializer
 from pkdb_app.interventions.models import (
     Substance,
     InterventionSet,
@@ -559,8 +559,8 @@ class InterventionSetReadSerializer(serializers.HyperlinkedModelSerializer):
     intervention_exs = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="interventionexs_read-detail"
     )
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
-    comments = CommentReadSerializer(many=True, read_only=True)
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
 
 
     class Meta:
@@ -802,8 +802,8 @@ class OutputSetReadSerializer(serializers.HyperlinkedModelSerializer):
     timecourse_exs = serializers.HyperlinkedRelatedField(
         many=True, read_only=True, view_name="timecourseexs_read-detail"
     )
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
-    comments = CommentReadSerializer(many=True, read_only=True)
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
 
     class Meta:
         model = OutputSet

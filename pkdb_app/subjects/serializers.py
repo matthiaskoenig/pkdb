@@ -3,8 +3,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
 from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionReadSerializer, \
-    CommentReadSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+    CommentElasticSerializer
 from pkdb_app.studies.models import Study
 from operator import itemgetter
 
@@ -418,8 +418,8 @@ class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
     study = serializers.HyperlinkedRelatedField(
         lookup_field="sid", read_only=True, view_name="studies_read-detail"
     )
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
-    comments = CommentReadSerializer(many=True, read_only=True)
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
     groups = GroupReadSerializer(many=True, read_only=True)
     group_exs = serializers.HyperlinkedRelatedField(many=True,read_only=True, view_name="groupexs_read-detail")
 

@@ -1,36 +1,14 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from elasticsearch_dsl import analyzer, token_filter
+from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings
 from pkdb_app.studies.models import Reference, Study
+
+
+
+
+
+# Elastic Reference
 reference_index = Index("references")
-reference_index.settings(number_of_shards=1,
-               number_of_replicas=1,)
-
-
-
-edge_ngram_filter =  token_filter(
-            'edge_ngram_filter',
-            type="edge_ngram",
-            min_gram=1, max_gram=20)
-
-
-autocomplete_search = analyzer(
-    'autocomplete_search',
-    tokenizer="standard",
-    filter=["lowercase"],
-)
-
-
-autocomplete = analyzer('autocomplete',
-    tokenizer="standard",
-    filter=[ "lowercase",edge_ngram_filter],
-    char_filter=["html_strip"],
-    chars=["letter"],
-    token_chars=["letter"])
-
-
-
-
-
+reference_index.settings(**elastic_settings)
 @reference_index.doc_type
 class ReferenceDocument(DocType):
     pk = fields.IntegerField(attr='pk')
@@ -94,10 +72,9 @@ class ReferenceDocument(DocType):
     class Meta(object):
         model = Reference
 
-
+# Elastic Study
 study_index = Index("studies")
-study_index.settings(number_of_shards=1,
-               number_of_replicas=1,)
+study_index.settings(**elastic_settings)
 
 @study_index.doc_type
 class StudyDocument(DocType):

@@ -11,8 +11,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
-from pkdb_app.comments.views import DescriptionReadViewSet, CommentReadViewSet
-
+from pkdb_app.comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
 from .subjects.views import (
     DataFileViewSet,
     DataFileReadViewSet,
@@ -24,7 +23,6 @@ from .subjects.views import (
     CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import (
     SubstanceViewSet,
-    SubstanceReadViewSet,
     InterventionSetReadViewSet,
     OutputSetReadViewSet,
     InterventionReadViewSet,
@@ -37,29 +35,38 @@ from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-    StudyReadViewSet,
 
     KeywordViewSet,
-    KeywordReadViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet)
 
-# from .subjects.views import GroupsViewSet, CharacteristicValuesViewSet
 from .statistics import StatisticsViewSet, StatisticsDataViewSet
 from . import views
 
 
-# views in User
 router = DefaultRouter()
+###############################################################################################
+# Comments and Descriptions URLs
+###############################################################################################
+router.register(r"comments_elastic", ElasticCommentViewSet, base_name="comments_elastic")
+router.register(r"descriptions_elastic", ElasticDescriptionViewSet, base_name="descriptions_elastic")
+
+#external format / import
 router.register("references", ReferencesViewSet, base_name="references")
+# elastic search
 router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
 
 
 
-router.register(r"users", UserViewSet, base_name="users")
 
+# user
+router.register(r"users", UserViewSet, base_name="users")
 router.register(r"users", UserCreateViewSet)
 
+#substance
 router.register("substances", SubstanceViewSet, base_name="substances")
+router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
+
+
 router.register("keywords", KeywordViewSet, base_name="keywords")
 
 router.register("datafiles", DataFileViewSet, base_name="datafiles")
@@ -80,23 +87,10 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 # Read URLs
 ###############################################################################################
 
-router.register("studies_read", StudyReadViewSet, base_name="studies_read")
 
-
+# ??????? do I need this?????
 router.register(r"users_read", UserReadViewSet, base_name="users_read")
 
-
-router.register("substances_read", SubstanceReadViewSet, base_name="substances_read")
-router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
-
-router.register("keywords_read", KeywordReadViewSet, base_name="keywords_read")
-
-router.register(
-    "descriptions_read", DescriptionReadViewSet, base_name="descriptions_read"
-)
-router.register(
-    "comments_read", CommentReadViewSet, base_name="comments_read"
-)
 
 router.register("groupsets_read", GroupSetReadViewSet, base_name="groupsets_read")
 

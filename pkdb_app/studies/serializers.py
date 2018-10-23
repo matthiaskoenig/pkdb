@@ -5,8 +5,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from pkdb_app.comments.models import Description, Comment
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentReadSerializer, \
-    DescriptionReadSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
+    DescriptionElasticSerializer
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.serializers import UserReadSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
@@ -335,7 +335,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     curators = UserReadSerializer( many=True, read_only=True)
     substances = SubstanceReadSerializer(many=True, read_only=True)
     keywords = KeywordReadSerializer(many=True, read_only=True)
-    descriptions = DescriptionReadSerializer( many=True, read_only=True)
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     creator = UserReadSerializer(read_only=True)
     reference = serializers.HyperlinkedRelatedField(
         read_only=True, lookup_field="sid", view_name="references_read-detail"
@@ -367,7 +367,7 @@ class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
     #serializers.HyperlinkedRelatedField(
     #    many=True, read_only=True, view_name="datafiles_read-detail"
     #)
-    comments = CommentReadSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
 
 
     class Meta:
@@ -451,8 +451,8 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     #files = DataFileReadSerializer(many=True, read_only=True,)
 
-    comments = CommentReadSerializer(many=True, read_only=True)
-    descriptions = DescriptionReadSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
 
 
 
