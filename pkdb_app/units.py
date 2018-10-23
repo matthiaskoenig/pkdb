@@ -53,10 +53,13 @@ UNITS = {
     # misc units
     "g/kg": None,
     "mg/kg": None,
+    "mU/kg": None,
+    "U/kg": None,
     "mg/day": None,
     "kg/m^2": None,
     "IU/I": None,
     "l/h": None,
+
     # concentration
     "µg/l": None,
     "µg/ml": None,
@@ -74,6 +77,7 @@ UNITS = {
     "nmol/l": None,
     "pmol/l": None,
     "pmol/ml": None,
+    "fmol/l": None,
     "µU/ml": None,
 
     # AUC

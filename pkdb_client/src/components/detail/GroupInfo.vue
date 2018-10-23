@@ -11,7 +11,8 @@
         </div>
         <div class="attr-card">
             <span class="attr">Group Size</span><br />
-            {{ group.count }}
+            <v-btn small color="black" fab dark>{{ group.count }}</v-btn>
+
         </div>
         <div class="attr-card">
             <span class="attr">Individuals</span><br />

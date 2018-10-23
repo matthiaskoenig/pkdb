@@ -95,7 +95,14 @@ STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 # ---------------------------------------------------
 # Keywords
 # ---------------------------------------------------
-KEYWORDS_DATA = ["glycolysis", "gluconeogenesis", "oxidative phosphorylation"]
+KEYWORDS_DATA = [
+    "glycolysis",
+    "gluconeogenesis",
+    "oxidative phosphorylation",
+    "hypoglycemia",
+    "insulin secretion",
+    "diabetes",
+]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
 # ---------------------------------------------------
@@ -412,7 +419,7 @@ INTERVENTION_DATA = [
         DOSING,
         NUMERIC_TYPE,
         None,
-        NormalizableUnit({"mg": None, "mg/kg": None, "g/kg": None}),
+        NormalizableUnit({"mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
@@ -509,6 +516,8 @@ concentration_norm_unit = NormalizableUnit(
         "µmol/l": None,
         "nmol/l": None,
         "pmol/l": None,
+        "pmol/ml": None,
+        "fmol/l": None,
         "µU/ml": None,
     }
 )
