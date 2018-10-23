@@ -21,7 +21,7 @@ from .interventions.views import (
     InterventionOptionViewSet,
     OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet, ElasticInterventionViewSet,
     ElasticOutputViewSet, ElasticTimecourseViewSet)
-from .users.views import UserViewSet, UserCreateViewSet, UserReadViewSet
+from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
@@ -80,28 +80,12 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 # Read URLs
 ###############################################################################################
 
-
-# ??????? do I need this?????
-router.register(r"users_read", UserReadViewSet, base_name="users_read")
-
-
-
 router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
 router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
-
 router.register("characteristica_elastic", CharacteristicaViewSet, base_name="characteristica_elastic")
-
-
-router.register(
-    "interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic"
-)
-router.register(
-    "timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic"
-)
-router.register(
-    "outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic"
-)
-
+router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
+router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
+router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")
 
 # Options
 router.register(

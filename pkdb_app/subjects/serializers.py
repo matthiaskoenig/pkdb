@@ -391,7 +391,6 @@ class CharacteristicaReadSerializer(ReadSerializer):
 ###############################################################################################
 #maybe depreciated
 
-
 class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
