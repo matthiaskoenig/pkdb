@@ -69,6 +69,13 @@ class InterventionSet(models.Model):
         interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all())
         return interventions
 
+    @property
+    def count(self):
+        if self.interventions:
+            return self.interventions.count()
+        else:
+            return 0
+
 
 class AbstractIntervention(models.Model):
     category = models.CharField(
@@ -237,10 +244,25 @@ class OutputSet(models.Model):
         outputs = Output.objects.filter(ex__in=self.output_exs.all())
         return outputs
 
+
+    @property
+    def count_outputs(self):
+        if self.outputs:
+            return self.outputs.count()
+        else:
+            return 0
+
     @property
     def timecourses(self):
         timecourses = Timecourse.objects.filter(ex__in=self.timecourse_exs.all())
         return timecourses
+
+    @property
+    def count_timecourses(self):
+        if self.timecourses:
+            return self.timecourses.count()
+        else:
+            return 0
 
 
 class AbstractOutput(models.Model):

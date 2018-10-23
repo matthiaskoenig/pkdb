@@ -37,6 +37,39 @@ class ReferenceDocument(DocType):
 study_index = Index("studies")
 study_index.settings(**elastic_settings)
 
+
+
+def common_setfields(model):
+    return ObjectField(
+        properties = {
+            "descriptions" : ObjectField(
+                properties={
+                    'text': text_field("text"),
+                    'pk': fields.IntegerField()
+                },
+                multi=True),
+            "count" : fields.FloatField(),
+
+            model: ObjectField(
+                properties = {
+                    "pk" : fields.FloatField(),
+                }
+            ),
+            "comments" : fields.ObjectField(
+        properties={
+            'text': text_field("text"),
+            'user': fields.ObjectField(
+                properties={
+                    'first_name': string_field("first_name"),
+                    'last_name': string_field("last_name"),
+                    'pk': string_field("last_name"),
+                    'username': string_field("username"),
+                }
+            )
+        },
+        multi=True)
+        }
+    )
 @study_index.doc_type
 class StudyDocument(DocType):
     pk = fields.IntegerField(attr='pk')
@@ -110,7 +143,10 @@ class StudyDocument(DocType):
         multi=True
     )
 
-    groupset = ObjectField(
+    groupset = common_setfields("groups")
+    individualset = common_setfields("individuals")
+    interventionset = common_setfields("interventions")
+    outputset = ObjectField(
         properties = {
             "descriptions" : ObjectField(
                 properties={
@@ -118,24 +154,30 @@ class StudyDocument(DocType):
                     'pk': fields.IntegerField()
                 },
                 multi=True),
-            "count" : fields.FloatField(),
-            "groups": ObjectField(
+            "count_outputs" : fields.FloatField(),
+            "outputs": ObjectField(
                 properties = {
                     "pk" : fields.FloatField(),
                 }
             ),
-            "comments" : fields.ObjectField(
-        properties={
-            'text': text_field("text"),
-            'user': fields.ObjectField(
+            "count_timecourses": fields.FloatField(),
+            "timecourses": ObjectField(
                 properties={
-                    'first_name': string_field("first_name"),
-                    'last_name': string_field("last_name"),
-                    'pk': string_field("last_name"),
-                    'username': string_field("username"),
+                    "pk": fields.FloatField(),
                 }
-            )
-        },
+            ),
+            "comments" : fields.ObjectField(
+                properties={
+                    'text': text_field("text"),
+                    'user': fields.ObjectField(
+                        properties={
+                            'first_name': string_field("first_name"),
+                            'last_name': string_field("last_name"),
+                            'pk': string_field("last_name"),
+                            'username': string_field("username"),
+                        }
+                    )
+                },
         multi=True)
         }
     )

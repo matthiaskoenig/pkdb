@@ -11,9 +11,10 @@ from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.serializers import UserReadSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer
+from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer, SubstanceReadSerializer, \
+    InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
-    GroupSetElasticSerializer, GroupSetElasticSmallSerializer
+    GroupSetElasticSerializer, GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
@@ -315,7 +316,7 @@ class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
-
+    pdf = serializers.CharField(read_only=True)
     class Meta:
         model = Reference
         fields = (
@@ -340,6 +341,9 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = Reference
         fields = ["sid"]#, 'url']
 
+
+
+
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     reference = ReferenceSmallElasticSerializer()
@@ -360,10 +364,9 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     comments = CommentElasticSerializer(many=True, read_only=True)
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     groupset = GroupSetElasticSmallSerializer(read_only=True)
-
-    #individualset = DescriptionElasticSerializer(many=True, read_only=True)
-    #outputset = DescriptionElasticSerializer(many=True, read_only=True)
-    #timecourseset = DescriptionElasticSerializer(many=True, read_only=True)
+    individualset = IndividualSetElasticSmallSerializer(read_only=True)
+    interventionset = InterventionSetElasticSmallSerializer(read_only =True)
+    outputset = OutputSetElasticSmallSerializer(read_only=True)
 
 
 
@@ -384,7 +387,10 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "files",
             "comments",
             "groupset",
-            ]  # + ["group_count", "individual_count", "intervention_count", "output_count", "timecourse_count"]
+            "individualset",
+            "interventionset",
+            "outputset",
+            ]
 
         read_only_fields = fields
 

@@ -27,14 +27,12 @@ from pkdb_app.serializers import (
 )
 
 from pkdb_app.subjects.models import Group, DataFile, Individual
-from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING, INTERVENTION_DICT, INTERVENTION_FORM, \
-    INTERVENTION_APPLICATION, INTERVENTION_ROUTE, PK_DATA_DICT, OUTPUT_TISSUE_DATA
+from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
 
 from pkdb_app.subjects.serializers import (
     VALUE_MAP_FIELDS,
     VALUE_FIELDS,
-    EXTERN_FILE_FIELDS,
-)
+    EXTERN_FILE_FIELDS, pk_serializer)
 
 # ----------------------------------
 # Serializer FIELDS
@@ -542,8 +540,47 @@ class InterventionReadSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
+class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    interventions = serializers.SerializerMethodField()
+
+    class Meta:
+        model = InterventionSet
+        fields = ["pk","descriptions", "interventions","comments","count"]
+
+    def get_interventions(self,obj):
+        result = []
+        relevant_field = obj.to_dict().get("interventions")
+        if relevant_field:
+            result = [int(group["pk"]) for group in relevant_field]
+        return result
 
 
+class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    outputs = serializers.SerializerMethodField()
+    timecourses = serializers.SerializerMethodField()
+
+    class Meta:
+        model = OutputSet
+        fields = ["pk","descriptions", "outputs","timecourses","comments","count_outputs","count_timecourses"]
+
+    def get_outputs(self,obj):
+        result = []
+        relevant_field = obj.to_dict().get("outputs")
+        if relevant_field:
+            result = [int(group["pk"]) for group in relevant_field]
+        return result
+
+
+    def get_timecourses(self,obj):
+        result = []
+        relevant_field = obj.to_dict().get("timecourses")
+        if relevant_field:
+            result = [int(group["pk"]) for group in relevant_field]
+        return result
 
 
 
