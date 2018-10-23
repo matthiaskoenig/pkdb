@@ -102,6 +102,7 @@ KEYWORDS_DATA = [
     "hypoglycemia",
     "insulin secretion",
     "diabetes",
+    "oral glucose tolerance test"
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
@@ -293,6 +294,7 @@ CHARACTERISTIC_DATA = [
          "oral glucose tolerance test",
          "intravenous glucose tolerance test",
          "hypoglycemic clamp",
+         "isoglycemic glucose infusion",
          "protein solution",
          "lipid-glucose-protein drink"
          ],

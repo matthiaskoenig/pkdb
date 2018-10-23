@@ -130,6 +130,8 @@ SUBSTANCES_DATA = [
     'NEAA',  # non-essential amino acids
     'BCAA',  # branch-chained amino acids
     'exenatide',  # GLP1 analoque
+    'GIP',
+    'GLP-1',
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
