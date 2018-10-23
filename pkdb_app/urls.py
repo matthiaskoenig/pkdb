@@ -47,12 +47,18 @@ router = DefaultRouter()
 ###############################################################################################
 # Comments and Descriptions URLs
 ###############################################################################################
+# elastic search format
 router.register(r"comments_elastic", ElasticCommentViewSet, base_name="comments_elastic")
 router.register(r"descriptions_elastic", ElasticDescriptionViewSet, base_name="descriptions_elastic")
 
+
+###############################################################################################
+# Studies and References URLs
+###############################################################################################
 #external format / import
 router.register("references", ReferencesViewSet, base_name="references")
-# elastic search
+
+# elastic search format
 router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
 
 

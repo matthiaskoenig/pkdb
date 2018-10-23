@@ -27,8 +27,18 @@ autocomplete = analyzer('autocomplete',
     token_chars=["letter"])
 
 
-def string_field(attr):
+def string_field(attr,**kwargs):
     return fields.StringField(
+
+        attr=attr,
+        fielddata=True,
+        analyzer=autocomplete,
+        search_analyzer=autocomplete_search,
+        fields={'raw': fields.KeywordField()},
+        **kwargs
+        )
+def text_field(attr):
+    return fields.TextField(
         attr=attr,
         fielddata=True,
         analyzer=autocomplete,

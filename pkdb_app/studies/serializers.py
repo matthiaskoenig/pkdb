@@ -320,16 +320,6 @@ class KeywordReadSerializer(serializers.HyperlinkedModelSerializer):
 
 
 
-
-
-
-
-
-
-
-
-
-
 class StudyReadSerializer(serializers.HyperlinkedModelSerializer):
 
     curators = UserReadSerializer( many=True, read_only=True)
