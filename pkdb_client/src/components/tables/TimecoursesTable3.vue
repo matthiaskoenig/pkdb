@@ -12,11 +12,11 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/timecourses/'+ table.item.pk" :title="'Timecourse: '+table.item.pk" :icon="icon('output')"/>
-                    <JsonButton :resource_url="api + '/timecourses_read/'+ table.item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + '/timecourses_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }}</text-highlight></td>
                 <td>
-                    <get-data v-if="table.item.group" :resource_url="table.item.group">
+                    <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
                         <div slot-scope="data">
                             <group-button :group="data.data" />
                             <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
@@ -24,17 +24,17 @@
                     </get-data>
                 </td>
                 <td>
-                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                    <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
                         <div slot-scope="data">
                             <individual-button :individual="data.data" />
                             <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 <td>
-                    <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
-                    <a :href="intervention_url"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;
-                        <get-data :resource_url="intervention_url">
+                    <span v-for="(intervention, index2) in table.item.interventions" :key="index2">
+                        <get-data :resource_url="intervention_url(intervention.pk)">
                         <div slot-scope="data">
+                            <a :href="intervention_url(intervention.pk)"><v-icon>{{ icon('intervention') }}</v-icon></a>
                             <text-highlight :queries="search.split(/[ ,]+/)">
                                 {{ data.data.name }}
                             </text-highlight>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import {searchTableMixin} from "./mixins";
+    import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import GroupButton from '../lib/GroupButton'
@@ -80,7 +80,7 @@
             TimecoursePlot,
             SubstanceChip,
         },
-        mixins: [searchTableMixin],
+        mixins: [searchTableMixin, UrlMixin],
         data() {
             return {
                 otype: "timecourses",

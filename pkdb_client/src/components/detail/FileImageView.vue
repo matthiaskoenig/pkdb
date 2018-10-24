@@ -15,8 +15,8 @@
         </v-tab>
         <v-tab-item v-for="item in images" :key="item.name">
             <v-card flat>
-                <a :href="item.file" target="blank">{{ item.name }}</a>
-                <v-img :src="item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
+                <a :href="backend+item.file" target="blank">{{ item.name }}</a>
+                <v-img :src="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
             </v-card>
 
         </v-tab-item>
@@ -46,6 +46,9 @@
             }
         },
         computed: {
+            backend(){
+                    return this.$store.state.django_domain;
+                },
             images() {
                 var list = [];
                 for (var k=0; k<this.files.length; k++){
@@ -60,6 +63,7 @@
             }
         },
         methods: {
+
             id_from_name: function (name) {
                 let tokens = name.split("_");
                 let id = tokens[tokens.length-1];

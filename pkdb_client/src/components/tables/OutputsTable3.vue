@@ -12,11 +12,11 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon(otype)"/>
-                    <JsonButton :resource_url="api + '/outputs_read/'+ table.item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + '/outputs_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }} </text-highlight> </td>
                 <td>
-                    <get-data v-if="table.item.group" :resource_url="table.item.group">
+                    <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
                         <div slot-scope="data">
                             <group-button :group="data.data" />
                             <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
@@ -24,17 +24,17 @@
                     </get-data>
                 </td>
                 <td>
-                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                    <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
                         <div slot-scope="data">
                             <individual-button :individual="data.data" />
                             <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 <td>
-                    <span v-if="table.item.interventions" v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
-                        <get-data :resource_url="intervention_url">
+                    <span v-if="table.item.interventions" v-for="(intervention, index2) in table.item.interventions" :key="index2">
+                        <get-data :resource_url="intervention_url(intervention.pk)">
                         <div slot-scope="data">
-                            <a :href="intervention_url" :title="data.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>
+                            <a :href="intervention_url(intervention.pk)" :title="data.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>
                             <text-highlight :queries="search.split(/[ ,]+/)">
                             {{ data.data.name }}
                             </text-highlight>
@@ -61,7 +61,7 @@
 </template>
 
 <script>
-    import {searchTableMixin} from "./mixins";
+    import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import GroupButton from '../lib/GroupButton'
@@ -79,7 +79,7 @@
             CharacteristicaCard,
             SubstanceChip
         },
-        mixins: [searchTableMixin],
+        mixins: [searchTableMixin, UrlMixin],
         data () {
             return {
                 otype: "outputs",

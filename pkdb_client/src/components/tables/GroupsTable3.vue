@@ -22,7 +22,7 @@
                     <v-layout wrap>
                         <span v-for="item in table.item.characteristica_all_final" :key="item.pk">
                             <characteristica-card :data="item"
-                                                  :resource_url="get_characterica_url(ids(table.item.characteristica_all_final))"/>
+                                                  :resource_url="characterica_url(ids(table.item.characteristica_all_final))"/>
                         </span>
                     </v-layout>
                 </td>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import {searchTableMixin} from "./mixins";
+    import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
@@ -45,7 +45,7 @@
             TableToolbar,
             CharacteristicaCard,
         },
-        mixins: [searchTableMixin],
+        mixins: [searchTableMixin,UrlMixin],
         data () {
             return {
                 otype: "groups",

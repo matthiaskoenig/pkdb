@@ -7,15 +7,11 @@
         <individual-info :individual="individual"/>
             </v-flex>
         <v-flex>
-            <get-data :resource_url="characteristica_url">
-                    <span slot-scope="cdata">
-                        <v-layout wrap>
-                        <span v-for="item in cdata.data.results">
-                            <characteristica-card :data="item" :resource_url="characteristica_url"/>
-                        </span>
-                        </v-layout>
-                    </span>
-            </get-data>
+            <v-layout wrap>
+            <span v-for="item in this.individual.characteristica_all_final">
+                <characteristica-card :data="item" />
+            </span>
+            </v-layout>
         </v-flex>
         </v-layout>
     </v-card>
@@ -38,16 +34,12 @@
                 type: String
             }
         },
-        computed: {
-            characteristica_url() {
-                var url = this.$store.state.endpoints.api + '/characteristica_elastic/?ids='+ this.individual.characteristica_all_final.join('__');
-                return url;
-            }
-        },
+
         methods: {
             icon: function (key) {
                 return lookup_icon(key)
             },
+
         }
     }
 </script>

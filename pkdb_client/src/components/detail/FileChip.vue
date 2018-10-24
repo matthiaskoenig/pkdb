@@ -16,7 +16,7 @@
         name: "FileChip",
         props: {
             file: String,
-            search: String,
+            search: {type:String, default:""},
         },
         methods: {
             icon(key) {

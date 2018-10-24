@@ -17,22 +17,24 @@
                 <div>
                     <span class="attr">Substances</span><br />
 
-                    <span v-for="c in study.substances" :key="c.pk">
-                        <substance-chip :title="c.name"/>
+                    <span v-for="s in study.substances">
+                        <substance-chip :title="s"/>
                     </span>
                         <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
                 </div>
                 <div>
                     <span class="attr">Files</span><br />
-                    <span v-for="f in study.files" :key="f.name"><a :href="f.pk" :title="f.name"><v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>
+
+                    <file-chip v-for="file in study.files" :file="file.file" />
+                    <!--<span v-for="f in study.files" :key="f.name"><a :href="f.pk" :title="f.name"><v-icon>{{ icon('file') }}</v-icon></a>&nbsp;</span>-->
                 </div>
             </v-card>
 
             </v-flex>
             <v-flex xs5>
-                <get-data v-if="study.reference" :resource_url="study.reference">
+                <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
                     <template slot-scope="reference">
-                        <reference-detail :reference="reference.data" :resource_url="study.reference"/>
+                        <reference-detail :reference="reference.data" :resource_url="reference_url(study.reference.sid)"/>
                     </template>
                 </get-data>
             </v-flex>
@@ -52,6 +54,7 @@
     import {lookup_icon} from "@/icons"
     import ReferenceDetail from "./ReferenceDetail"
     import FileImageView from "./FileImageView"
+    import {UrlMixin} from "../tables/mixins";
 
     export default {
         name: "StudyInfo",
@@ -65,6 +68,7 @@
                 required: true,
             }
         },
+        mixins: [UrlMixin],
 
         computed: {
             images() {

@@ -65,9 +65,7 @@ var searchTableMixin = {
         ids(array_of_obj) {
             return array_of_obj.map(i => i.pk)
         },
-        get_characterica_url(ids) {
-            return this.$store.state.endpoints.api + '/characteristica_elastic/?ids=' + ids.join('__')
-        },
+
         getData() {
             axios.get(this.url)
                 .then(res => {
@@ -76,8 +74,34 @@ var searchTableMixin = {
                 })
                 .catch(err => console.log(err.response.data))
                 .finally(() => this.loading = false);
-        }
+        },
+
     }
 };
 
-export {searchTableMixin}
+var UrlMixin = {
+    methods: {group_url(pk) {
+            return this.$store.state.endpoints.api  + '/groups_elastic/'+ pk +'/'
+
+
+        },
+        individual_url(pk) {
+            return this.$store.state.endpoints.api  + '/individuals_elastic/'+ pk +'/'
+
+
+        },
+        intervention_url(pk) {
+            return this.$store.state.endpoints.api  + '/interventions_elastic/'+ pk +'/'
+
+
+        },
+        reference_url(pk) {
+            return this.$store.state.endpoints.api  + '/references_elastic/'+ pk +'/'
+
+
+        },
+        characterica_url(ids) {
+            return this.$store.state.endpoints.api + '/characteristica_elastic/?ids=' + ids.join('__')
+        },}
+};
+export {searchTableMixin,UrlMixin}
