@@ -1,6 +1,4 @@
-import django_filters.rest_framework
-from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -19,18 +17,10 @@ from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocum
 ############################################################
 #Elastic Search Views
 ###########################################################
-from django_elasticsearch_dsl_drf.constants import (
-    LOOKUP_FILTER_RANGE,
-    LOOKUP_QUERY_IN,
-    LOOKUP_QUERY_GT,
-    LOOKUP_QUERY_GTE,
-    LOOKUP_QUERY_LT,
-    LOOKUP_QUERY_LTE,
-    LOOKUP_FILTER_TERMS, LOOKUP_FILTER_PREFIX, LOOKUP_FILTER_WILDCARD, LOOKUP_QUERY_EXCLUDE)
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
-    SearchFilterBackend,
+    CompoundSearchFilterBackend,
     IdsFilterBackend, )
 
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
@@ -41,7 +31,7 @@ class GroupViewSet(DocumentViewSet):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -79,7 +69,7 @@ class IndividualViewSet(DocumentViewSet):
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -112,48 +102,12 @@ class IndividualViewSet(DocumentViewSet):
     }
 
 
-
-
-
-class DataFileViewSet(viewsets.ModelViewSet):
-
-    queryset = DataFile.objects.all()
-    serializer_class = DataFileSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
-
-
-############################################################
-#Read Views
-###########################################################
-
-class CharacteristicaOptionViewSet(viewsets.ViewSet):
-
-    @staticmethod
-    def get_options():
-        options = {}
-        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
-        options["ctypes"] = CHARACTERISTICA_TYPES
-        return options
-
-    def list(self, request):
-        return Response(self.get_options())
-
-
-###########################################################
-#Elastic Search Views
-###########################################################
-
-
-
-
 class CharacteristicaViewSet(DocumentViewSet):
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPagination
     document = CharacteristicaDocument
     serializer_class = CharacteristicaReadSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
 
     search_fields = (
         'choice',
@@ -183,6 +137,27 @@ class CharacteristicaViewSet(DocumentViewSet):
         'individual_name': 'individual_name.raw',
         'individual_pk': 'individual_pk',
     }
+
+############################################################
+#Views queried not from elastic search
+###########################################################
+class DataFileViewSet(viewsets.ModelViewSet):
+
+    queryset = DataFile.objects.all()
+    serializer_class = DataFileSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+
+class CharacteristicaOptionViewSet(viewsets.ViewSet):
+
+    @staticmethod
+    def get_options():
+        options = {}
+        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
+        options["ctypes"] = CHARACTERISTICA_TYPES
+        return options
+
+    def list(self, request):
+        return Response(self.get_options())
 
 
 

@@ -39,5 +39,5 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "username", "first_name", "last_name")
+        fields = ("id", "first_name", "last_name")
         read_only_fields = ("username",)

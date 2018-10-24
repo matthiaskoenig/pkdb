@@ -12,14 +12,18 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
-                    <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
+                    <LinkButton :to="'/references/'+ table.item.reference.sid" :title="'Refernce: '+table.item.reference.sid" :icon="icon('reference')"/>
+                    <JsonButton :resource_url="api + '/studies_elastic/'+ table.item.pk +'/?format=json'"/>
+                    <export-format-button :resource_url="api + '/studies/'+ table.item.pk +'/?format=json'"/>
+
                 </td>
                 <td>
                     <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
                 </td>
                 <td>
-                    <a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
-                    <v-icon>{{ icon('reference') }}</v-icon></a>
+                    <span v-for="description in table.item.descriptions" > {{description.text}}</span>
+                    <comments :comments="table.item.comments" :search="search"/>
+
                 </td>
                 <td>
                     <UserAvatar :user="table.item.creator" :search="search"/>
@@ -36,7 +40,7 @@
                                           content-tag="v-layout"
                                           wrap row>
                             <span slot="item" slot-scope="props" xs12 sm6 md4 lg3>
-                               <file-chip :file="props.item" :search="search"/>
+                               <file-chip :file="props.item.file" :search="search"/>
                             </span>
                         </v-data-iterator>
                     </v-container>
@@ -68,7 +72,7 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Reference', value: 'reference'},
+                    {text: 'Descriptions', value: 'descriptions'},
                     {text: 'Creator', value: 'creator'},
                     {text: 'Curators', value: 'curators',sortable: false},
                     {text: 'Substances', value: 'substances',sortable: false},

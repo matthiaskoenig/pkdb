@@ -38,6 +38,8 @@ Vue.component('font-awesome-layers-text', FontAwesomeLayersText);
  *  -------------------------------------------------------------- */
 import JsonButton from './components/lib/JsonButton';
 import LinkButton from './components/lib/LinkButton';
+import FileButton from './components/lib/FileButton';
+import ExportFormatButton from './components/lib/ExportFormatButton';
 
 import Comments from './components/lib/Comments';
 import Descriptions from './components/lib/Descriptions';
@@ -56,13 +58,15 @@ import FileChip from './components/detail/FileChip';
 
 import TextHighlight from 'vue-text-highlight';
 
-
+Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
+Vue.component('FileButton', FileButton);
 
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('Annotations', Annotations);
+
 
 Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);

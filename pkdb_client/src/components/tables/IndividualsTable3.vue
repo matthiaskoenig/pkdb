@@ -12,7 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
-                    <json-button :resource_url="api + '/individuals_read/'+ table.item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + '/individuals_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
                     <individual-info :individual="table.item"/>

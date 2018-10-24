@@ -11,8 +11,11 @@
         >
             <template slot="items" slot-scope="table">
                 <td>
-                    <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.pk" :icon="icon('reference')"/>
+                    <link-button :to="'/references/'+ table.item.pk" :title="'Reference: '+table.item.name" :icon="icon('reference')"/>
+                    <link-button v-for="s in table.item.study" :to="'/studies/'+ s.pk" :title="'Study: '+s.name" :icon="icon('study')"/>
+                    <file-button :resource_url='backend+table.item.pdf' :title="table.item.pdf"/>
                     <json-button :resource_url="api + '/references_elastic/'+ table.item.pk +'/'"/>
+
                 </td>
                 <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>
                 <td>

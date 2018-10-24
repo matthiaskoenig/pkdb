@@ -1,6 +1,8 @@
 from django.http import Http404
-from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend, FilteringFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend
+from django_elasticsearch_dsl_drf.constants import MATCHING_OPTION_MUST
+from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
+    SimpleQueryStringSearchFilterBackend, FilteringFilterBackend, \
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
@@ -38,15 +40,21 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
+
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document = ReferenceDocument
     pagination_class = CustomPagination
     serializer_class = ReferenceElasticSerializer
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend, SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    #multi_match_search_fields = {f:f for f in search_fields}
+    #multi_match_options = {
+    #    'type': 'filter'
+    #}
     filter_fields = {'name': 'name.raw',}
+    #filter_fields = {f:f for f in search_fields}
     ordering_fields = {
         'sid': 'sid',
         "pk":'pk',
@@ -119,7 +127,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,SearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = (
                      'pk_version',
                      'creator.first_name',

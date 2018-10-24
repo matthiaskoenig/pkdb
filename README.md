@@ -90,23 +90,25 @@ variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
 ```
 ## Elastic Search 
 Elastic Search engine is running on `0.0.0.0:9200` but is also reachable via django views.
+General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
-Filtering example:
+query examples:
 ```
- http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
-```
-Advanced Filtering example:
-```
-http://localhost:8000/api/v1/characteristica_elastic/?value__gt=80&category=weight&final=true
-```
-Search example:
-```
+http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
+http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
 http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
+http://localhost:8000/api/v1/substances_elastic/?search:name=cod
+http://localhost:8000/api/v1/substances_elastic/?search=cod 
+http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
+http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
+http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
+
+
 ```
 
 Suggest example:
 ```
-http://localhost:8000/api/v1/substances_elastic/suggest/?name_suggest__completion=cod
+http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
 rebuild index:

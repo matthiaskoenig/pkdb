@@ -8,7 +8,7 @@
             </div>
         </v-flex>
         <v-flex>
-            <get-data :resource_url="individual.group.url">
+            <get-data :resource_url="url(individual.group.pk)">
                 <span slot-scope="group">
                     <group-info :group="group.data" :resource_url="individual.group.url" />
                 </span>
@@ -26,7 +26,16 @@
                 type: Object,
                 required: true,
             }
+        },
+
+        methods: {
+            url(pk) {
+                return this.$store.state.endpoints.api  + '/groups_elastic/'+ pk +'/'
+
+
+            }
         }
+
     }
 </script>
 

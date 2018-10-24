@@ -307,22 +307,28 @@ class StudySerializer(SidSerializer):
 
 
 ###############################################################################################
-# Read Serializer
+# Elastic Serializer
 ###############################################################################################
 class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
 
+class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
+    class Meta:
+        model = Reference
+        fields = ["pk","name"]#, 'url']
+
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
     pdf = serializers.CharField(read_only=True)
+    study = StudySmallElasticSerializer(many=True)
     class Meta:
         model = Reference
         fields = (
             "pk",
-            "study_name",
-            "study_pk",
+            "study",
             "pmid",
             "sid",
             "name",
@@ -376,6 +382,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "pk",
             "sid",
             "name",
+            "comments",
             "descriptions",
             "reference",
             "design",
@@ -385,7 +392,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "substances",
             "keywords",
             "files",
-            "comments",
             "groupset",
             "individualset",
             "interventionset",

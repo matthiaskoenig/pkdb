@@ -393,10 +393,10 @@ class CharacteristicaReadSerializer(ReadSerializer):
 #maybe depreciated
 
 class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
-
+    file = serializers.CharField()
     class Meta:
         model = DataFile
-        fields = ["pk", "name"]
+        fields = ["pk", "name","file"]
 
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
 

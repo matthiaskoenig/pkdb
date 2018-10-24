@@ -13,7 +13,7 @@
                 <td>
                     <link-button :to="'/groups/'+ table.item.pk" :title="'Group: '+table.item.pk"
                                  :icon="icon('group')"/>
-                    <json-button :resource_url="api + '/groups_read/'+ table.item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + '/groups_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
                     <group-info :group="table.item"/>

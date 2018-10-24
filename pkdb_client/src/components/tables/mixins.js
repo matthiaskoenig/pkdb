@@ -32,6 +32,9 @@ var searchTableMixin = {
         }
     },
     computed: {
+        backend(){
+            return this.$store.state.django_domain;
+        },
         api(){
             return this.$store.state.endpoints.api;
         },

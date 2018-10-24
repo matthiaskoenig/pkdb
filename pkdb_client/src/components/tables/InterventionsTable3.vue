@@ -12,7 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/interventions/'+ table.item.pk" :title="'Group: '+table.item.pk" :icon="icon(otype_single)"/>
-                    <JsonButton :resource_url="api + '/interventions_read/'+ table.item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + '/interventions_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
                     <text-highlight :queries="[search]">{{table.item.name }}</text-highlight>
