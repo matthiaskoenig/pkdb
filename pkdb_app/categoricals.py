@@ -14,8 +14,10 @@ units on CharacteristicType is an ordered iteratable, with the first unit being 
 """
 from collections import namedtuple
 
+
 from pkdb_app.units import NormalizableUnit
 from pkdb_app.substances import SUBSTANCES_DATA
+
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -435,6 +437,9 @@ INTERVENTION_DATA = [
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
 
+
+
+
 def validate_categorials(data, category_class):
     """ Function which validates given categorial data against categorial defintion and allowed values.
 
@@ -620,6 +625,8 @@ PK_DATA = [
     ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
+
+
 
 if __name__ == "__main__":
     """ 
