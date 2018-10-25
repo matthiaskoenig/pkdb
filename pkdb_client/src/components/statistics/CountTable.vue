@@ -7,10 +7,13 @@
             <template slot="items" slot-scope="table">
 
                 <td xs2>
-                    <LinkButton :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
+                    <link-button :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
+                </td>
+                <td>
+                    <heading :title="table.item.name"/>
                 </td>
                 <td class="text-xs-right" xs4>
-                    <Heading :title="table.item.name" :count="parseInt(table.item.count)"/>
+                    <v-btn depressed small color="primary" :to="table.item.to">{{table.item.count}}</v-btn>
                 </td>
                 <td class="text-xs-left" xs6>{{ table.item.description }}</td>
             </template>
@@ -28,6 +31,7 @@
             return {
                 headers: [
                     { text: 'Data', value: 'name', sortable: false},
+                    { text: 'Class', value: 'class', sortable: false},
                     { text: 'Count', value: 'count', sortable: false},
                     { text: 'Description', value: 'description', sortable: false},
                 ],
