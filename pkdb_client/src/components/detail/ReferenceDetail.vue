@@ -3,7 +3,16 @@
         <!-- <heading-toolbar :title="reference.name" :icon="icon('reference')" :resource_url="resource_url"/>-->
 
         <v-toolbar color="secondary" dark>
-            <v-icon>{{ icon('reference') }}</v-icon>&nbsp;&nbsp;{{ reference.title }}
+            <v-layout>
+                <v-flex xs2>
+                    <v-icon>{{ icon('reference') }}</v-icon>
+                </v-flex>
+                <v-flex xs10>
+                    {{ reference.title }}
+                </v-flex>
+
+            </v-layout>
+
         </v-toolbar>
 
         <v-card max-width="1000" flat>
@@ -21,9 +30,12 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import VListTile from "vuetify/src/components/VList/VListTile";
+    import VListTileAvatar from "vuetify/src/components/VList/VListTileAvatar";
 
     export default {
         name: "ReferenceDetail",
+        components: {VListTileAvatar, VListTile},
         props: {
             reference: {
                 type: Object,

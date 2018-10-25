@@ -16,7 +16,6 @@
 
                 <div v-if="study.substances && study.substances.length>0">
                     <span class="attr">Substances</span><br />
-
                     <span v-for="s in study.substances">
                         <substance-chip :title="s"/>
                     </span>
@@ -31,7 +30,6 @@
                     <span v-for="file in study.files">
                         <file-chip v-if="!is_image(file.file)" :file="file.file" />
                     </span>
-
                 </div>
             </v-card>
 

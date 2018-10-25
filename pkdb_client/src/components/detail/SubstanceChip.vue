@@ -1,10 +1,10 @@
 <template>
-    <div class="text-xs-center">
+    <span class="text-xs-center">
         <v-chip v-if="title" color="success">
             <v-icon small>{{ icon('substance') }}</v-icon>&nbsp;
             <text-highlight :queries="search.split(/[ ,]+/)">{{ title }}</text-highlight>
         </v-chip>
-    </div>
+    </span>
 </template>
 
 <script>
