@@ -7,7 +7,7 @@
             <v-layout row wrap>
                 <v-flex xs12>
                     <p>
-                        <heading title="Pharmacokinetics database (PK-DB)"/>
+                        <heading title="Pharmacokinetics database (PK-DB)"/><br/>
                         <strong>Version</strong>: {{ version }}
                     </p>
                     <p>
