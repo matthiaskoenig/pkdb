@@ -59,6 +59,9 @@ var searchTableMixin = {
             }
             if(this.ids.length > 0){
                 url += '&ids=' + this.ids.join("__")
+            }
+            if(["interventions","outputs","timecourses"].includes(this.otype)){
+                url += '&final=true'
 
             }
             return url
