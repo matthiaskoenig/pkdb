@@ -12,6 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
+                    <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+ table.item.study.name" :icon="icon('study')"/>-->
                     <json-button :resource_url="api + '/individuals_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
@@ -50,7 +51,7 @@
                 otype_single: "individual",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Info', value: 'info'},
+                    {text: 'Group Info', value: 'info'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }

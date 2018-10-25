@@ -13,6 +13,8 @@
                 <td>
                     <link-button :to="'/groups/'+ table.item.pk" :title="'Group: '+table.item.pk"
                                  :icon="icon('group')"/>
+
+                    <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+table.item.study.name" :icon="icon('study')"/>-->
                     <json-button :resource_url="api + '/groups_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
@@ -52,7 +54,7 @@
                 otype_single: "group",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Info', value: 'info'},
+                    {text: 'Group Info', value: 'info'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }
