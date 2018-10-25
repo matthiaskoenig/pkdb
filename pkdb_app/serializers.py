@@ -6,7 +6,7 @@ from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 from rest_framework.settings import api_settings
-from pkdb_app.categoricals import FORMAT_MAPPING
+from pkdb_app.categoricals import FORMAT_MAPPING, PK_DATA_DICT
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
@@ -604,7 +604,6 @@ class ExSerializer(MappingSerializer):
 
     def _is_required(self, data, key):
         is_data = self._key_is(data, key)
-        pktype = data.get("pktype")
         if not is_data:
             raise serializers.ValidationError(
                 {key: f"{key} is required", "detail": data}
@@ -612,10 +611,23 @@ class ExSerializer(MappingSerializer):
 
     def _validate_pktype(self, data):
         pktype = data.get("pktype")
+        unit = data.get("unit")
+        if not unit:
+             raise serializers.ValidationError(
+                {"unit": f"unit is required", "detail": data}
+            )
         if pktype:
+            unit = data.get("unit", None)
+            pk_data = PK_DATA_DICT.get(pktype)
+            if unit not in pk_data.units:
+                raise serializers.ValidationError({
+                    "unit": f"for pktype <{pktype}> the unit <{unit}> is not allowed. Choice from <{pk_data.units}>."})
+
             if pktype == "auc_end":
                 self._is_required(data, "time")
                 self._is_required(data, "time_unit")
+
+
         else:
             raise serializers.ValidationError(
                 {"pktype": f"pktype is required", "detail": data}
