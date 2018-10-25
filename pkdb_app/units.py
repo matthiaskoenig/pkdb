@@ -95,6 +95,8 @@ UNITS = {
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
     "pmol*h/ml": None,
+    "pmol/ml*h": None,
+    "nmol*h/l": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
 

@@ -105,6 +105,7 @@ KEYWORDS_DATA = [
     "insulin secretion",
     "diabetes",
     "oral glucose tolerance test",
+
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
@@ -505,6 +506,8 @@ auc_norm_unit = NormalizableUnit(
         "µg*min/ml": None,
         "µmol*h/l": None,
         "µmol/l*h": None,
+        "pmol/ml*h": None,
+        "nmol*h/l": None,
         "µg/ml*h/kg": "mg*h/l/kg",
         "ng*h/ml": None,
     }
@@ -553,6 +556,7 @@ rate_norm_unit = NormalizableUnit({
     "1/min": "1/h",
     "1/h": None,
     "pmol/min": None,
+    "pmol/kg/min": None,
     "µmol/min/kg": "µmol/kg/min",
     "µmol/kg/min": None,
     "mU/min": None,
