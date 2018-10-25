@@ -10,13 +10,11 @@
                 <v-flex xs10>
                     {{ reference.title }}
                 </v-flex>
-
             </v-layout>
 
         </v-toolbar>
 
         <v-card max-width="1000" flat>
-
             <span v-for="author in reference.authors">
                 {{ author.first_name }} {{ author.last_name }},
             </span><br />
