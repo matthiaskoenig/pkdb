@@ -138,7 +138,11 @@ class StudyDocument(DocType):
                 analyzer=autocomplete,
                 search_analyzer=autocomplete_search,
                 fields={'raw': fields.KeywordField(),}
-            )
+            ),
+            'timecourses': ObjectField(
+                properties={
+                    'pk': fields.IntegerField(multi=True),
+                }, multi=True)
         },
         multi=True
     )

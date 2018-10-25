@@ -38,6 +38,7 @@ from .managers import (
     CharacteristicaExManager,
 )
 
+from django.apps import apps
 
 # ----------------------------------
 # DataFile
@@ -58,6 +59,13 @@ class DataFile(models.Model):
     @property
     def name(self):
         return self.file.name
+
+    def timecourses(self):
+        Timecourse = apps.get_model('interventions', 'Timecourse')
+        return Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(final=True)
+
+
+
 
     def __str__(self):
         return self.file.name

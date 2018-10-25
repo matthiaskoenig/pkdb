@@ -394,9 +394,13 @@ class CharacteristicaReadSerializer(ReadSerializer):
 
 class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
     file = serializers.CharField()
+    timecourses = serializers.SerializerMethodField()
     class Meta:
         model = DataFile
-        fields = ["pk", "name","file"]
+        fields = ["pk", "name","file", "timecourses"]
+
+    def get_timecourses(self, obj):
+        return list_of_pk("timecourses", obj)
 
 
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
@@ -433,7 +437,6 @@ class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk", "descriptions", "groups", "comments", "count"]
 
     def get_groups(self, obj):
-        list_of_pk("groups", obj)
         return list_of_pk("groups", obj)
 
 

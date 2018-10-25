@@ -17,6 +17,15 @@
             <v-card flat>
                 <a :href="backend+item.file" target="blank">{{ item.name }}</a>
                 <v-img :src="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
+                <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
+                    <div slot-scope="timecourses">
+                        <span v-for="timecourse in timecourses.data.data.data" :key="timecourse.pk">
+                            <timecourse-plot :timecourse="timecourse"/>
+
+                        </span>
+                    </div>
+                </get-data>
+
             </v-card>
 
         </v-tab-item>
@@ -30,16 +39,19 @@
      * Displaying files from the database.
      */
     import {lookup_icon} from "@/icons"
+    import {UrlMixin} from "../tables/mixins";
+    import TimecoursePlot from "../plots/TimecoursePlot";
 
     export default {
         name: "FileImageView",
-        components: {},
+        components: {TimecoursePlot},
         props: {
             files: {
                 type: Array,
                 required: true,
             }
         },
+        mixins:[UrlMixin],
         data () {
             return {
                 active: null,
