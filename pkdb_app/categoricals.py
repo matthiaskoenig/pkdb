@@ -104,7 +104,7 @@ KEYWORDS_DATA = [
     "hypoglycemia",
     "insulin secretion",
     "diabetes",
-    "oral glucose tolerance test"
+    "oral glucose tolerance test",
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
@@ -506,6 +506,7 @@ auc_norm_unit = NormalizableUnit(
         "µmol*h/l": None,
         "µmol/l*h": None,
         "µg/ml*h/kg": "mg*h/l/kg",
+        "ng*h/ml": None,
     }
 )
 amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
@@ -528,6 +529,8 @@ concentration_norm_unit = NormalizableUnit(
         "pmol/ml": None,
         "fmol/l": None,
         "µU/ml": None,
+
+        "ng/g": None, # per g plasma
     }
 )
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})

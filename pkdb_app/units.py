@@ -79,6 +79,7 @@ UNITS = {
     "pmol/ml": None,
     "fmol/l": None,
     "µU/ml": None,
+    "ng/g": None,  # per g plasma
 
     # AUC
     "mg*h/l": None,
@@ -96,6 +97,8 @@ UNITS = {
     "pmol*h/ml": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
+
+
     # Volume of distribution (vd)
     "l": None,
     "ml": None,
