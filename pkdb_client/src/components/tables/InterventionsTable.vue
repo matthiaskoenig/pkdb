@@ -1,56 +1,70 @@
 <template>
-    <v-card  id="interventions-table">
-        <heading-toolbar :count="data.count" :icon="icon('interventions')" title="Interventions" :resource_url="resource_url"/>
+    <v-card>
+        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
-                :items="data.entries"
-                hide-actions
-                class="elevation-1">
+                :items="entries"
+                :pagination.sync="pagination"
+                :total-items="count"
+                :loading="loading"
+                :class="table_class"
+        >
             <template slot="items" slot-scope="table">
-
                 <td>
-                    <LinkButton :to="'/interventions/'+ table.item.pk" :title="'Group: '+table.item.pk" :icon="icon('intervention')"/>
-                    <JsonButton :resource_url="api + '/interventions_read/'+ table.item.pk +'/?format=json'"/>
+                    <LinkButton :to="'/interventions/'+ table.item.pk" :title="'Group: '+table.item.pk" :icon="icon(otype_single)"/>
+                    <JsonButton :resource_url="api + '/interventions_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td>{{table.item.name }}</td>
-                <td>{{table.item.category }}</td>
-                <td>{{table.item.choice }}</td>
                 <td>
-                    {{table.item.application }}<br/>
-                    {{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span><br />
-                    {{ table.item.route }}<br/>
-                    {{table.item.form}}
+                    <text-highlight :queries="[search]">{{table.item.name }}</text-highlight>
                 </td>
-                <td><a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance"><v-icon>{{ icon('intervention') }}</v-icon> </a>
-                    <get-data :resource_url="table.item.substance" v-if="table.item.substance">
-                        <div slot-scope="data">
-                            {{ data.data.name }}
-                        </div>
-                    </get-data>
+                <td>
+                    <text-highlight :queries="[search]"> {{table.item.category }}</text-highlight>
+                </td>
+                <td>
+                    <text-highlight :queries="[search]"> {{table.item.choice }}</text-highlight>
+                </td>
+                <td>
+                    <text-highlight :queries="[search]"> {{table.item.application }}</text-highlight><br />
+                    <text-highlight :queries="[search]">{{table.item.time}}</text-highlight>
+                        <span v-if="table.item.time_unit"> [<text-highlight :queries="[search]">{{table.item.time_unit }}</text-highlight>]</span><br />
+                    <text-highlight :queries="[search]">{{ table.item.route }}</text-highlight><br />
+                    <text-highlight :queries="[search]">{{table.item.form}}</text-highlight>
+                </td>
+                <td>
+                    <span v-if="table.item.substance && Object.keys(table.item.substance).length>0">
+                        <substance-chip :title="table.item.substance.name" :search="search"/>
+                    </span>
                 </td>
                 <td><characteristica-card :data="table.item" /></td>
             </template>
+
+            <no-data/>
         </v-data-table>
     </v-card>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {searchTableMixin} from "./mixins";
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import SubstanceChip from "../detail/SubstanceChip"
 
     export default {
-        name: 'InterventionsTable',
+        name: "InterventionsTable",
         components: {
-            CharacteristicaCard
+            NoData,
+            TableToolbar,
+            CharacteristicaCard,
+            SubstanceChip
         },
-        props: {
-            data: Object,
-            resource_url: String,
-        },
-        data() {
+        mixins: [searchTableMixin],
+        data () {
             return {
+                otype: "interventions",
+                otype_single: "intervention",
                 headers: [
-                    {text: 'Intervention', value: 'intervention'},
+                    {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
                     {text: 'Category', value: 'category'},
                     {text: 'Choice', value: 'choice'},
@@ -60,19 +74,8 @@
                 ],
             }
         },
-        computed: {
-            api() {
-                return this.$store.state.endpoints.api;
-            }
-        },
-        methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
-        }
     }
 </script>
-<style>
 
-
+<style scoped>
 </style>

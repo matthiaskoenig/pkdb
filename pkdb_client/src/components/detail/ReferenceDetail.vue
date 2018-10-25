@@ -18,7 +18,7 @@
         </v-toolbar>
 
         <v-card max-width="1000" flat>
-            <span v-for="author in reference.authors">
+            <span v-for="(author, index) in reference.authors" :key="index">
                 {{ author.first_name }} {{ author.last_name }},
             </span><br />
             <i>{{ reference.journal }}, {{reference.date}}</i><br/>

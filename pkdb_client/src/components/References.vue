@@ -1,16 +1,16 @@
 <template>
     <span id="references">
-        <references-table3></references-table3>
+        <references-table />
     </span>
 </template>
 
 <script>
-    import ReferencesTable3 from './tables/ReferencesTable3';
+    import ReferencesTable from './tables/ReferencesTable';
 
     export default {
         name: 'References',
         components: {
-            ReferencesTable3: ReferencesTable3,
+            ReferencesTable: ReferencesTable,
         },
     }
 </script>

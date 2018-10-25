@@ -1,14 +1,14 @@
 <template>
-    <groups-table3/>
+    <groups-table/>
 </template>
 
 <script>
-    import GroupsTable3 from "./tables/GroupsTable3";
+    import GroupsTable from "./tables/GroupsTable";
 
     export default {
         name: 'Groups',
         components: {
-            GroupsTable3: GroupsTable3,
+            GroupsTable: GroupsTable,
 
         },
     }

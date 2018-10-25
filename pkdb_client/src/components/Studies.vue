@@ -3,12 +3,12 @@
 </template>
 
 <script>
-    import StudiesTable3 from "./tables/StudiesTable3";
+    import StudiesTable from "./tables/StudiesTable";
 
     export default {
         name: 'Studies',
         components: {
-            StudiesTable3: StudiesTable3,
+            StudiesTable: StudiesTable,
         },
     }
 </script>

@@ -1,14 +1,14 @@
 <template>
-    <timecourses-table3/>
+    <timecourses-table/>
 </template>
 
 <script>
-    import TimecoursesTable3 from "./tables/TimecoursesTable3";
+    import TimecoursesTable from "./tables/TimecoursesTable";
 
     export default {
         name: 'Timecourses',
         components: {
-            TimecoursesTable3,
+            TimecoursesTable,
         }
     }
 </script>

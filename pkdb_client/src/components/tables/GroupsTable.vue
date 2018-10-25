@@ -1,1 +1,65 @@
-<template>    <v-card id="groups-table">        <heading-toolbar :count="data.count" :icon="icon('group')" title="Groups" :resource_url="resource_url"/>        <v-data-table                :headers="headers"                :items="data.entries"                hide-actions                class="elevation-1">            <template slot="items" slot-scope="table">                <td>                    <link-button :to="'/groups/'+ table.item.pk" :title="'Group: '+table.item.pk" :icon="icon('group')"/>                    <json-button :resource_url="api + '/groups_read/'+ table.item.pk +'/?format=json'"/>                </td>                <!--                <td>                    <link-button :to="'/studies/'+ table.item.study_pk" :title="'Study: '+table.item.study_pk" :icon="icon('study')"/>                </td>                -->                <td>                    <group-info :group="table.item"/>                </td>                <td>                    <get-data :resource_url="get_characterica_url(table.item.characteristica_all_final)">                        <div slot-scope="cdata">                            <v-layout wrap>                            <span v-for="item in cdata.data.results">                                <characteristica-card :data="item" :resource_url="get_characterica_url(table.item.characteristica_all_final)" />                            </span>                            </v-layout>                        </div>                    </get-data>                </td>            </template>        </v-data-table>    </v-card></template><script>    import {lookup_icon} from "@/icons"    import CharacteristicaCard from '../detail/CharacteristicaCard';    export default {        name: 'GroupsTable',        components: {            CharacteristicaCard,        },        props: {            data: Object,            resource_url: String,        },        data() {            return {                headers: [                    {text: 'Group', value: 'group'},                    {text: 'Info', value: 'info'},                    {text: 'Characteristica', value: 'characteristica'},                ],            }        },        computed: {            api() {                return this.$store.state.endpoints.api;            }        },        methods: {            characterica_url(ids){                let url = this.$store.state.endpoints.api + '/characteristica_elastic/?get_ids='+ ids.join('__')                console.log(url)                return url            },            icon: function (key) {                return lookup_icon(key)            },        }    }</script><style></style>
+<template>
+    <v-card>
+        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
+        <v-data-table
+                :headers="headers"
+                :items="entries"
+                :pagination.sync="pagination"
+                :total-items="count"
+                :loading="loading"
+                :class="table_class"
+        >
+            <template slot="items" slot-scope="table">
+                <td>
+                    <link-button :to="'/groups/'+ table.item.pk" :title="'Group: '+table.item.pk"
+                                 :icon="icon('group')"/>
+                    <json-button :resource_url="api + '/groups_elastic/'+ table.item.pk +'/?format=json'"/>
+                </td>
+                <td>
+                    <group-info :group="table.item"/>
+                </td>
+                <td>
+                    <v-layout wrap>
+                        <span v-for="item in table.item.characteristica_all_final" :key="item.pk">
+                            <characteristica-card :data="item"
+                                                  :resource_url="characterica_url(get_ids(table.item.characteristica_all_final))"/>
+                        </span>
+                    </v-layout>
+                </td>
+            </template>
+            <no-data/>
+        </v-data-table>
+    </v-card>
+</template>
+
+<script>
+    import {searchTableMixin, UrlMixin} from "./mixins";
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
+
+    export default {
+        name: "GroupsTable",
+        components: {
+            NoData,
+            TableToolbar,
+            CharacteristicaCard,
+        },
+        mixins: [searchTableMixin,UrlMixin],
+        data () {
+            return {
+                otype: "groups",
+                otype_single: "group",
+                headers: [
+                    {text: '', value: 'buttons', sortable: false},
+                    {text: 'Info', value: 'info'},
+                    {text: 'Characteristica', value: 'characteristica'},
+                ]
+            }
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>

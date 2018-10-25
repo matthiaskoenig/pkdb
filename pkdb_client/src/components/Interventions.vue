@@ -3,12 +3,12 @@
 </template>
 
 <script>
-    import InterventionsTable3 from './tables/InterventionsTable3';
+    import InterventionsTable from './tables/InterventionsTable';
 
     export default {
     name: 'Interventions',
     components: {
-        InterventionsTable3: InterventionsTable3,
+        InterventionsTable: InterventionsTable,
     },
 }
 </script>

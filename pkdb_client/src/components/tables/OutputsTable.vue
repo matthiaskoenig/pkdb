@@ -1,103 +1,101 @@
 <template>
-    <v-card id="outputs-table">
-        <heading-toolbar :count="data.count" :icon="icon('outputs')" title="Outputs" :resource_url="resource_url"/>
+    <v-card>
+        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
-                :items="data.entries"
-                hide-actions
-                class="elevation-1">
+                :items="entries"
+                :pagination.sync="pagination"
+                :total-items="count"
+                :loading="loading"
+                :class="table_class"
+        >
             <template slot="items" slot-scope="table">
                 <td>
-                    <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon('output')"/>
-                    <JsonButton :resource_url="api + '/outputs_read/'+ table.item.pk +'/?format=json'"/>
+                    <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon(otype)"/>
+                    <JsonButton :resource_url="api + '/outputs_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td>{{table.item.pktype }}</td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }} </text-highlight> </td>
                 <td>
-                    <get-data v-if="table.item.group" :resource_url="table.item.group">
+                    <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
                         <div slot-scope="data">
                             <group-button :group="data.data" />
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 </td>
                 <td>
-                    <get-data v-if="table.item.individual" :resource_url="table.item.individual">
+                    <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
                         <div slot-scope="data">
                             <individual-button :individual="data.data" />
-                            {{ data.data.name }}
+                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
                     </get-data>
                 <td>
-                    <span v-for="(intervention_url, index2) in table.item.interventions" :key="index2">
-                        <get-data :resource_url="intervention_url">
-                            <div slot-scope="intervention">
-                                <a :href="intervention_url" :title="intervention.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>
-                                {{ intervention.data.name }}
-                            </div>
+                    <span v-if="table.item.interventions" v-for="(intervention, index2) in table.item.interventions" :key="index2">
+                        <get-data :resource_url="intervention_url(intervention.pk)">
+                        <div slot-scope="data">
+                            <a :href="intervention_url(intervention.pk)" :title="data.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>
+                            <text-highlight :queries="search.split(/[ ,]+/)">
+                            {{ data.data.name }}
+                            </text-highlight>
+                        </div>
                         </get-data>&nbsp;
                     </span>
                 </td>
-                <td>{{table.item.tissue}}</td>
                 <td>
-                    <a v-if="table.item.substance" :href="table.item.substance" :title="table.item.substance">
-                        <v-icon>{{ icon('substance') }}</v-icon> </a>
-                    <get-data :resource_url="table.item.substance">
-                        <div slot-scope="data">
-                            {{ data.data.name }}
-                        </div>
-                    </get-data>
+                    <text-highlight :queries="search.split(/[ ,]+/)">
+                        {{table.item.tissue}}
+                    </text-highlight>
+                </td>
+                <td>
+                        <substance-chip :title="table.item.substance.name" :search="search"/>
                 </td>
                 <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
                 <td><characteristica-card :data="table.item"/></td>
             </template>
+            <no-data/>
         </v-data-table>
     </v-card>
 </template>
 
-
 <script>
-    import {lookup_icon} from "@/icons"
+    import {searchTableMixin, UrlMixin} from "./mixins";
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
     import GroupButton from '../lib/GroupButton'
     import IndividualButton from '../lib/IndividualButton'
-    import DetailButton from '../lib/DetailButton'
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import SubstanceChip from "../detail/SubstanceChip"
 
     export default {
-        name: 'OutputsTable',
+        name: "OutputsTable3",
         components: {
+            NoData,
+            TableToolbar,
             GroupButton,
             IndividualButton,
-            CharacteristicaCard
+            CharacteristicaCard,
+            SubstanceChip
         },
-        props: {
-            data: Object,
-            resource_url: String,
-        },
-        data() {
+        mixins: [searchTableMixin, UrlMixin],
+        data () {
             return {
+                otype: "outputs",
+                otype_single: "output",
                 headers: [
-                    {text: 'Output', value: 'output'},
-                    {text: 'Type', value: 'type'},
+                    {text: '', value: 'buttons',sortable: false},
+                    {text: 'Type', value: 'pktype'},
                     {text: 'Group', value: 'group'},
                     {text: 'Individual', value: 'individual'},
-                    {text: 'Interventions', value: 'interventions'},
+                    {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
                     {text: 'Time', value: 'time'},
                     {text: 'Value', value: 'value'},
-                ],
+                ]
             }
         },
-        computed: {
-            api() {
-                return this.$store.state.endpoints.api;
-            }
-        },
-        methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
-        }
     }
 </script>
-<style></style>
+
+<style scoped></style>

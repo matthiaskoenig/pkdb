@@ -1,1 +1,1 @@
-<template>    <individuals-table3/></template><script>    import IndividualsTable3 from './tables/IndividualsTable3';    export default {        name: 'Individuals',        components: {            IndividualsTable3,        },    }</script><style></style>
+<template>    <individuals-table/></template><script>    import IndividualsTable from './tables/IndividualsTable';    export default {        name: 'Individuals',        components: {            IndividualsTable,        },    }</script><style></style>

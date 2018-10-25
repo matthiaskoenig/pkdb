@@ -99,24 +99,24 @@
     import {isEmpty} from "@/utils"
     import {lookup_icon} from "@/icons"
 
-    import StudyInfo from "./StudyInfo";
-    import IndividualsTable3 from '../tables/IndividualsTable3';
-    import InterventionsTable3 from "../tables/InterventionsTable3";
-    import OutputsTable3 from "../tables/OutputsTable3";
-    import TimecoursesTable3 from "../tables/TimecoursesTable3";
     import {UrlMixin} from "../tables/mixins";
-    import GroupsTable3 from "../tables/GroupsTable3";
+    import StudyInfo from "./StudyInfo";
+    import IndividualsTable from '../tables/IndividualsTable';
+    import InterventionsTable from "../tables/InterventionsTable";
+    import OutputsTable from "../tables/OutputsTable";
+    import TimecoursesTable from "../tables/TimecoursesTable";
+    import GroupsTable from "../tables/GroupsTable";
 
 
     export default {
         name: "StudyDetail",
         components: {
             StudyInfo: StudyInfo,
-            GroupsTable3: GroupsTable3,
-            IndividualsTable3: IndividualsTable3,
-            InterventionsTable3: InterventionsTable3,
-            OutputsTable3: OutputsTable3,
-            TimecoursesTable3: TimecoursesTable3,
+            GroupsTable: GroupsTable,
+            IndividualsTable: IndividualsTable,
+            InterventionsTable: InterventionsTable,
+            OutputsTable: OutputsTable,
+            TimecoursesTable: TimecoursesTable,
 
         },
         mixins :[UrlMixin],

@@ -1,108 +1,75 @@
 <template>
-    <v-card id="studies-table">
-        <heading-toolbar :count="data.count" :icon="icon('study')" title="Studies" :resource_url="resource_url"/>
+    <v-card>
+        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
-                :items="data.entries"
-                hide-actions
-                class="elevation-1">
+                :items="entries"
+                :pagination.sync="pagination"
+                :total-items="count"
+                :loading="loading"
+                :class="table_class"
+        >
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/studies/'+ table.item.pk" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
-                    <JsonButton :resource_url="api + '/studies_read/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td>{{ table.item.name }}</td>
-                <td><a v-if="table.item.reference" :href="table.item.reference" :title="table.item.reference">
-                    <v-icon>{{ icon('reference') }}</v-icon>
-
-                </a>
+                    <LinkButton :to="'/references/'+ table.item.reference.sid" :title="'Refernce: '+table.item.reference.sid" :icon="icon('reference')"/>
+                    <JsonButton :resource_url="api + '/studies_elastic/'+ table.item.pk +'/?format=json'"/>
+                    <export-format-button :resource_url="api + '/studies/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
-                    <UserAvatar :user="table.item.creator"/>
+                    <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c"/></span>
+                    <UserAvatar :user="table.item.creator" :search="search"/>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :substance="c"/></span>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c" :search="search"/></span>
                 </td>
                 <td>
-                    <v-container fluid grid-list-md>
-                        <v-data-iterator  :items="table.item.files"
-                                          rows-per-page-items=3
-                                          content-tag="v-layout"
-                                          wrap row>
-                            <span slot="item" slot-scope="props" xs12 sm6  md4 lg3>
-                                <file-chip  :file="props.item"/>
-                            </span>
-                        </v-data-iterator>
-                    </v-container>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
                 <td>
-                    <a v-if="table.item.groupset" :href="table.item.groupset" :title="table.item.groupset">
-                        <v-icon>{{ icon('groups') }}</v-icon></a>
+                    <span v-for="(f, index2) in table.item.files" :key="index2"><file-chip :file="f.file" :search="search"/></span>
                 </td>
                 <td>
-                    <a v-if="table.item.individualset" :href="table.item.individualset" :title="table.item.individualset">
-                        <v-icon>{{ icon('individuals') }}</v-icon></a>
-                </td>
-                <td>
-                    <a v-if="table.item.interventionset" :href="table.item.interventionset" :title="table.item.interventionset">
-                        <v-icon>{{ icon('interventions') }}</v-icon></a>
-                </td>
-                <td>
-                    <a v-if="table.item.outputset" :href="table.item.outputset" :title="table.item.outputset">
-                        <v-icon>{{ icon('outputs') }}</v-icon></a>
+                    <annotations :item="table.item"></annotations>
                 </td>
             </template>
+            <no-data/>
         </v-data-table>
     </v-card>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
-    import SubstanceChip from "../detail/SubstanceChip"
-    import FileChip from "../detail/FileChip"
+    import {searchTableMixin} from "./mixins";
+    import TableToolbar from './TableToolbar';
+    import NoData from './NoData';
+    import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
-        name: 'StudiesTable',
+        name: "GroupsTable3",
         components: {
-            SubstanceChip: SubstanceChip,
-            FileChip:FileChip,
+            NoData,
+            TableToolbar,
+            CharacteristicaCard,
         },
-        props: {
-            data: Object,
-            resource_url: String,
-        },
-        data() {
+        mixins: [searchTableMixin],
+        data () {
             return {
+                otype: "studies",
+                otype_single: "study",
                 headers: [
-                    {text: 'Study', value: 'study'},
+                    {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Reference', value: 'reference'},
                     {text: 'Creator', value: 'creator'},
-                    {text: 'Curators', value: 'curators'},
-                    {text: 'Substances', value: 'substances'},
-                    {text: 'Files', value: 'files'},
-                    {text: 'Groupset', value: 'groupset'},
-                    {text: 'IndividualSet', value: 'individualset'},
-                    {text: 'InterventionSet', value: 'interventionset'},
-                    {text: 'OutputSet', value: 'outputset'},
+                    {text: 'Curators', value: 'curators',sortable: false},
+                    {text: 'Substances', value: 'substances',sortable: false},
+                    {text: 'Files', value: 'files',sortable: false},
+                    {text: 'Annotations', value: 'Annotations'},
                 ],
             }
         },
-        computed: {
-            api() {
-                return this.$store.state.endpoints.api;
-            }
-        },
-        methods: {
-            icon(key) {
-                return lookup_icon(key)
-            },
-        }
-
     }
 </script>
 
-<style></style>
+<style scoped></style>
