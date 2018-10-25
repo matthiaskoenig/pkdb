@@ -15,15 +15,9 @@
                     <LinkButton :to="'/references/'+ table.item.reference.sid" :title="'Refernce: '+table.item.reference.sid" :icon="icon('reference')"/>
                     <JsonButton :resource_url="api + '/studies_elastic/'+ table.item.pk +'/?format=json'"/>
                     <export-format-button :resource_url="api + '/studies/'+ table.item.pk +'/?format=json'"/>
-
                 </td>
                 <td>
                     <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
-                </td>
-                <td>
-                    <span v-for="description in table.item.descriptions" > {{description.text}}</span>
-                    <comments :comments="table.item.comments" :search="search"/>
-
                 </td>
                 <td>
                     <UserAvatar :user="table.item.creator" :search="search"/>
@@ -35,15 +29,10 @@
                     <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
                 <td>
-                    <v-container fluid grid-list-md>
-                        <v-data-iterator  :items="table.item.files"
-                                          content-tag="v-layout"
-                                          wrap row>
-                            <span slot="item" slot-scope="props" xs12 sm6 md4 lg3>
-                               <file-chip :file="props.item.file" :search="search"/>
-                            </span>
-                        </v-data-iterator>
-                    </v-container>
+                    <span v-for="(f, index2) in table.item.files" :key="index2"><file-chip :file="f.file" :search="search"/></span>
+                </td>
+                <td>
+                    <annotations :item="table.item"></annotations>
                 </td>
             </template>
             <no-data/>
@@ -72,11 +61,11 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Descriptions', value: 'descriptions'},
                     {text: 'Creator', value: 'creator'},
                     {text: 'Curators', value: 'curators',sortable: false},
                     {text: 'Substances', value: 'substances',sortable: false},
                     {text: 'Files', value: 'files',sortable: false},
+                    {text: 'Annotations', value: 'Annotations'},
                 ],
             }
         },

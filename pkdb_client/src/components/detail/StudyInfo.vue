@@ -28,7 +28,10 @@
                 </div>
                 <div>
                     <span class="attr">Files</span><br />
-                    <file-chip v-for="file in study.files" :file="file.file" />
+                    <span v-for="file in study.files">
+                        <file-chip v-if="!is_image(file.file)" :file="file.file" />
+                    </span>
+
                 </div>
             </v-card>
 
@@ -90,6 +93,9 @@
             icon: function (key) {
                 return lookup_icon(key)
             },
+            is_image(file){
+                return (file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg"));
+            }
         }
 
     }
