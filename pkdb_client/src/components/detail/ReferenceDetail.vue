@@ -2,7 +2,7 @@
     <div id="reference-detail">
         <!-- <heading-toolbar :title="reference.name" :icon="icon('reference')" :resource_url="resource_url"/>-->
 
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="secondary" dark>
             <v-icon>{{ icon('reference') }}</v-icon>&nbsp;{{ reference.title }}
         </v-toolbar>
 

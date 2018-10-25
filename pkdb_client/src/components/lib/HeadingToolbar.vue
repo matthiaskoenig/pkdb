@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar id="heading-toolbar" color="blue" lighten-3 dark>
+    <v-toolbar id="heading-toolbar" color="primary" dark>
             <Heading :count="count" :icon="icon" :title="title" :resource_url="resource_url"/>
     </v-toolbar>
 </template>

@@ -14,7 +14,7 @@
                     <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
                 </div>
 
-                <div v-if="study.substances">
+                <div v-if="study.substances && study.substances.length>0">
                     <span class="attr">Substances</span><br />
 
                     <span v-for="s in study.substances">
@@ -22,7 +22,7 @@
                     </span>
                         <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
                 </div>
-                <div v-if="study.keywords">
+                <div v-if="study.keywords && study.keywords.length>0">
                     <span class="attr">Keywords</span><br />
                     <span v-for="keyword in study.keywords">{{keyword}}<br /></span>
                 </div>

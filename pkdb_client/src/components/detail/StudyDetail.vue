@@ -12,7 +12,6 @@
                     >
                         <v-list>
                         <v-list-tile>
-
                             <v-list-tile-content>
                                 <heading :title="study.name" :icon="icon('study')" :resource_url="resource_url"/>
                             </v-list-tile-content>
