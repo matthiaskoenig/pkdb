@@ -55,6 +55,8 @@
 
                     <!-- General Overview -->
                     <v-flex xs12 v-show="visible.general">
+                        <v-text-field v-show="false" autofocus />
+
                         <v-card>
                             <heading-toolbar :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
                             <study-info :study="study"/>
@@ -64,27 +66,27 @@
                     <!-- Groups -->
                     <v-flex xs12 v-show="visible.groups">
                         <annotations :item="study.groupset"/>
-                        <groups-table3 :ids="study.groupset.groups"/>
+                        <groups-table :ids="study.groupset.groups"/>
                     </v-flex>
 
                     <!-- Individuals -->
                     <v-flex xs12 v-show="visible.individuals">
                         <annotations :item="study.individualset"/>
-                        <individuals-table3 :ids="study.individualset.individuals"/>
+                        <individuals-table :ids="study.individualset.individuals"/>
                     </v-flex>
 
                     <!-- Interventions -->
                     <v-flex xs12 v-show="visible.interventions">
                         <annotations :item="study.interventionset"/>
-                        <interventions-table3 :ids="study.interventionset.interventions"/>
+                        <interventions-table :ids="study.interventionset.interventions"/>
                     </v-flex>
 
                     <!-- Outputs -->
                     <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                         <annotations :item="study.outputset"/>
-                        <outputs-table3 v-show="visible.outputs" :ids="study.outputset.outputs"/>
+                        <outputs-table v-show="visible.outputs" :ids="study.outputset.outputs"/>
                         <br />
-                        <timecourses-table3 v-show="visible.timecourses" :ids="study.outputset.timecourses"/>
+                        <timecourses-table v-show="visible.timecourses" :ids="study.outputset.timecourses"/>
 
                     </v-flex>
                 </v-layout>

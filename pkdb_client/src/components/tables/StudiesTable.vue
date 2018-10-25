@@ -47,7 +47,7 @@
     import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
-        name: "GroupsTable3",
+        name: "StudiesTable",
         components: {
             NoData,
             TableToolbar,

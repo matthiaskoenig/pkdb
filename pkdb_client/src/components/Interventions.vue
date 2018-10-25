@@ -1,5 +1,5 @@
 <template>
-    <interventions-table3 />
+    <interventions-table />
 </template>
 
 <script>

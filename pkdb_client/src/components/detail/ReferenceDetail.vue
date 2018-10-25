@@ -3,18 +3,14 @@
         <!-- <heading-toolbar :title="reference.name" :icon="icon('reference')" :resource_url="resource_url"/>-->
 
         <v-toolbar color="secondary" dark>
-            <v-list>
-                <v-list-tile>
-                    <v-list-tile-avatar>
-                        <v-icon>{{ icon('reference') }}</v-icon>
-                    </v-list-tile-avatar>
-                <v-list-tile-content>
+            <v-layout>
+                <v-flex xs1>
+                    <v-icon>{{ icon('reference') }}</v-icon>
+                </v-flex>
+                <v-flex xs11>
                     {{ reference.title }}
-                </v-list-tile-content>
-
-                </v-list-tile>
-            </v-list>
-
+                </v-flex>
+            </v-layout>
         </v-toolbar>
 
         <v-card max-width="1000" flat>

@@ -1,5 +1,5 @@
 <template>
-    <studies-table3></studies-table3>
+    <studies-table></studies-table>
 </template>
 
 <script>
