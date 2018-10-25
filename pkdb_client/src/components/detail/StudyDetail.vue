@@ -48,8 +48,8 @@
                 </v-card>
             </v-flex>
 
-            <v-flex class="study-content" xs2>&nbsp;</v-flex>
-            <v-flex class="study-content" xs10>
+
+            <v-flex class="study-content" xs10 offset-xs2>
                 <!-- Study content -->
 
                 <v-layout row wrap>
