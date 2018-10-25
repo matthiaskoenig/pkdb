@@ -17,15 +17,19 @@
             <v-card flat>
                 <a :href="backend+item.file" target="blank">{{ item.name }}</a>
                 <v-img :src="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
+            </v-card>
+            <br />
+            <v-divider></v-divider>
+            <br />
+                <!-- Timecourse plots -->
+            <v-card flat>
                 <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
-                    <div slot-scope="timecourses">
+                    <span slot-scope="timecourses">
                         <span v-for="timecourse in timecourses.data.data.data" :key="timecourse.pk">
                             <timecourse-plot :timecourse="timecourse"/>
-
                         </span>
-                    </div>
+                    </span>
                 </get-data>
-
             </v-card>
 
         </v-tab-item>
