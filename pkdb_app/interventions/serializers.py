@@ -344,12 +344,14 @@ class OutputExSerializer(BaseOutputExSerializer):
 
     def validate(self, attrs):
         try:
-            # perform via dedicated function on categorials
             validate_categorials(data=attrs, category_class="intervention")
         except ValueError as err:
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
+
+    def validate_figure(self, value):
+        return self._validate_figure(value)
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
@@ -383,7 +385,6 @@ class TimecourseSerializer(BaseOutputExSerializer):
         data.pop("comments", None)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
-
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -471,6 +472,9 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
+    def validate_figure(self, value):
+        return self._validate_figure(value)
 
 
 class OutputSetSerializer(ExSerializer):

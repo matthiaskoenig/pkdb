@@ -21,7 +21,7 @@ class ReferenceDocument(DocType):
     doi = string_field("doi")
     title = string_field("title")
     abstract = text_field("abstract")
-    journal = text_field("abstract")
+    journal = text_field("journal")
     date = fields.DateField()
     pdf = fields.FileField(fielddata=True)
 

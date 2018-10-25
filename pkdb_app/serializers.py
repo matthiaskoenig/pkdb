@@ -535,6 +535,12 @@ class ExSerializer(MappingSerializer):
     ##########################
     # helpers
     ##########################
+    def _validate_figure(self,datafile):
+        if datafile:
+            allowed_endings = ['png','jpg','jpeg','tif','tiff']
+            if not any([datafile.file.name.endswith(ending)for ending in allowed_endings]):
+                raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
+
     def _validate_requried_key(self,attrs, key):
         key_value = attrs.get(key)
         if key_value is None:
