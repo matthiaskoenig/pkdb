@@ -1,7 +1,12 @@
 <template>
     <div id="descriptions" v-if="descriptions && descriptions.length>0">
-        <span class="attr">Descriptions</span><br/>
-        <span v-for="item in descriptions" :key="item.pk">{{ item.text }}<br /></span>
+        <template v-for="(item, index) in descriptions">
+
+            <v-card flat>
+                <v-icon small>fas fa-align-left</v-icon>&nbsp;&nbsp;
+                {{item.text}}
+            </v-card>
+        </template>
     </div>
 </template>
 
@@ -17,4 +22,5 @@
 </script>
 
 <style scoped>
+
 </style>

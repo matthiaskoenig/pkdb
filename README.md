@@ -113,7 +113,7 @@ http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 
 rebuild index:
 ```
-docker-compose run --rm web ./manage.py search_index --rebuild
+docker-compose run --rm web ./manage.py search_index --rebuild -f
 ```
  
 ## Read 

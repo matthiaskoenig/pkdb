@@ -1,7 +1,7 @@
 <template>
-    <div class="small-timeseries">
+    <span class="small-timeseries">
         <vue-plotly :data="data" :layout="layout" :options="options"/>
-    </div>
+    </span>
 </template>
 
 <script>
