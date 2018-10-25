@@ -48,9 +48,7 @@
                     </text-highlight>
                 </td>
                 <td>
-                    <span v-if="table.item.substance && Object.keys(table.item.substance)>0">
                         <substance-chip :title="table.item.substance.name" :search="search"/>
-                    </span>
                 </td>
                 <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
                 <td><characteristica-card :data="table.item"/></td>
