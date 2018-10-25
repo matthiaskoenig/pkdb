@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
+        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
                 :items="entries"
@@ -37,7 +37,7 @@
     import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
-        name: "GroupsTable3",
+        name: "IndividualsTable",
         components: {
             NoData,
             TableToolbar,

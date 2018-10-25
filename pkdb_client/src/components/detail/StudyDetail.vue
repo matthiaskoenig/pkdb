@@ -64,7 +64,7 @@
                     <!-- Groups -->
                     <v-flex xs12 v-show="visible.groups">
                         <annotations :item="study.groupset"/>
-                        <groups-table :ids="study.groupset.groups" :autofocus="false"/>
+                        <groups-table :ids="study.groupset.groups" autofocus="false"/>
                     </v-flex>
 
                     <!-- Individuals -->
@@ -82,7 +82,7 @@
                     <!-- Outputs -->
                     <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                         <annotations :item="study.outputset"/>
-                        <outputs-table v-show="visible.outputs" :ids="study.outputset.outputs"/>
+                        <outputs-table v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
                         <br />
                         <timecourses-table v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 

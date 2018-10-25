@@ -40,7 +40,7 @@
             },
             autofocus: {
                 type: Boolean,
-                default: false
+                default: true
             }
         },
         methods: {
