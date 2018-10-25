@@ -398,8 +398,17 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = DataFile
         fields = ["pk", "name","file"]
 
+
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
 
+    value = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    mean = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    median = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    min = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    max = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    sd = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    se = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    cv = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS
@@ -479,7 +488,8 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
-    characteristica_all_final = serializers.SerializerMethodField()
+    #characteristica_all_final = serializers.SerializerMethodField()
+    characteristica_all_final = CharacteristicaElasticSerializer(many=True, read_only=True)
     class Meta:
         model = Individual
         fields = (

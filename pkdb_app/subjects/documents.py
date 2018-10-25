@@ -46,7 +46,7 @@ class IndividualDocument(DocType):
             'category': string_field('category'),
             'choice': string_field('choice'),
             'ctype' : string_field('ctype'),
-            'value' : fields.FloatField(),
+            'value' : fields.FloatField('value'),
             'mean' : fields.FloatField(),
             'median' : fields.FloatField(),
             'min' : fields.FloatField(),

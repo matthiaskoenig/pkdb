@@ -550,6 +550,14 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 class InterventionElasticSerializer(serializers.ModelSerializer):
     substance = serializers.SerializerMethodField()
 
+    value = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    mean = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    median = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    min = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    max = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    sd = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    se = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    cv = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
     class Meta:
         model = Intervention
         fields = ["pk", "final"] + VALUE_FIELDS + INTERVENTION_FIELDS
@@ -586,6 +594,15 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
 
+    value = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    mean = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    median = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    min = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    max = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    sd = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    se = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    cv = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+
     class Meta:
             model = Output
             fields = (
@@ -606,6 +623,8 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
+
+
 
     class Meta:
             model = Timecourse
