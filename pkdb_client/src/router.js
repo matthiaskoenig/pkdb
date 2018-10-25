@@ -134,5 +134,9 @@ export default new Router({
           component: Reference,
           props: true
       },
-  ]
+  ],
+    scrollBehavior (to, from, savedPosition) {
+        return { x: 0, y: 0 }
+    }
+
 })

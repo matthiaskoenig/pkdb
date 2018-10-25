@@ -12,7 +12,7 @@
             label="Search"
             single-line
             hide-details
-            autofocus
+            :autofocus="autofocus"
     />
 </v-toolbar>
 </template>
@@ -37,6 +37,10 @@
             },
             url: {
                 type: String
+            },
+            autofocus: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {

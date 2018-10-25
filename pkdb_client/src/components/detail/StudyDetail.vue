@@ -55,8 +55,6 @@
 
                     <!-- General Overview -->
                     <v-flex xs12 v-show="visible.general">
-                        <v-text-field v-show="false" autofocus />
-
                         <v-card>
                             <heading-toolbar :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
                             <study-info :study="study"/>
@@ -66,19 +64,19 @@
                     <!-- Groups -->
                     <v-flex xs12 v-show="visible.groups">
                         <annotations :item="study.groupset"/>
-                        <groups-table :ids="study.groupset.groups"/>
+                        <groups-table :ids="study.groupset.groups" :autofocus="false"/>
                     </v-flex>
 
                     <!-- Individuals -->
                     <v-flex xs12 v-show="visible.individuals">
                         <annotations :item="study.individualset"/>
-                        <individuals-table :ids="study.individualset.individuals"/>
+                        <individuals-table :ids="study.individualset.individuals" :autofocus="false"/>
                     </v-flex>
 
                     <!-- Interventions -->
                     <v-flex xs12 v-show="visible.interventions">
                         <annotations :item="study.interventionset"/>
-                        <interventions-table :ids="study.interventionset.interventions"/>
+                        <interventions-table :ids="study.interventionset.interventions" :autofocus="false"/>
                     </v-flex>
 
                     <!-- Outputs -->
@@ -86,7 +84,7 @@
                         <annotations :item="study.outputset"/>
                         <outputs-table v-show="visible.outputs" :ids="study.outputset.outputs"/>
                         <br />
-                        <timecourses-table v-show="visible.timecourses" :ids="study.outputset.timecourses"/>
+                        <timecourses-table v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 
                     </v-flex>
                 </v-layout>
