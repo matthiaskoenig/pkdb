@@ -58,7 +58,7 @@ UNITS = {
     "mg/day": None,
     "kg/m^2": None,
     "IU/I": None,
-    "l/h": None,
+
 
     # concentration
     "µg/l": None,
@@ -72,7 +72,7 @@ UNITS = {
     "pg/ml": None,
     "ng/g": None,
     "mmol/l": None,
-    "nmol/ml":None,
+    "nmol/ml": None,
     "µmol/l": None,
     "nmol/l": None,
     "pmol/l": None,
@@ -105,6 +105,7 @@ UNITS = {
     # clearance
     "ml/min": None,
     "ml/h": None,  # -> ml/min
+    "l/h": None,
     "l/h/kg": None,
     "ml/h/kg": None,  # -> l/h/kg
     "ml/kg/min": None,

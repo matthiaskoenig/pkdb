@@ -508,11 +508,12 @@ auc_norm_unit = NormalizableUnit(
         "µg/ml*h/kg": "mg*h/l/kg",
     }
 )
-amount_norm_unit = NormalizableUnit({"mg": None, "mmol": None})
+amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
 concentration_norm_unit = NormalizableUnit(
     {
         "mg/100ml": None,
         "µg/ml": None,
+        "µg/l": None,
         "mg/dl": None,
         "mg/l": None,
         "ng/l": None,
@@ -522,6 +523,7 @@ concentration_norm_unit = NormalizableUnit(
         "mmol/l": None,
         "µmol/l": None,
         "nmol/l": None,
+        "nmol/ml": None,
         "pmol/l": None,
         "pmol/ml": None,
         "fmol/l": None,
@@ -533,6 +535,7 @@ clearance_norm_unit = NormalizableUnit(
     {
         "ml/min": None,
         "ml/h": None,  # -> ml/min
+        "l/h": None,
         "l/h/kg": None,
         "ml/h/kg": None,  # -> l/h/kg
         "ml/kg/min": None,
@@ -549,7 +552,7 @@ rate_norm_unit = NormalizableUnit({
     "pmol/min": None,
     "µmol/min/kg": "µmol/kg/min",
     "µmol/kg/min": None,
-
+    "mU/min": None,
     "mg/min": None,
     "mg/kg/min": None,
 })

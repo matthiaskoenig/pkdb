@@ -102,8 +102,6 @@ http://localhost:8000/api/v1/substances_elastic/?search=cod
 http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
 http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
 http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
-
-
 ```
 
 Suggest example:
