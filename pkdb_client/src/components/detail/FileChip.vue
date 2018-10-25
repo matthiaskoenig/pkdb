@@ -2,7 +2,7 @@
     <div id="file-chip" class="text-xs-center">
         <a :href="backend+file" :title="backend+file">
             <v-chip>
-                <v-icon>{{ icon('file') }}</v-icon>&nbsp;
+                <v-icon small>{{ icon('file') }}</v-icon>&nbsp;
                 <text-highlight :queries="search.split(/[ ,]+/)">{{name(file)}}</text-highlight>
             </v-chip>
         </a>

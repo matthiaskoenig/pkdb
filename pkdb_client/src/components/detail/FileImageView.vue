@@ -15,12 +15,12 @@
         </v-tab>
         <v-tab-item v-for="item in images" :key="item.name">
             <v-card flat>
-                <a :href="backend+item.file" target="blank">{{ item.name }}</a>
+
+                <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
+
                 <v-img :src="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
             </v-card>
-            <br />
             <v-divider></v-divider>
-            <br />
                 <!-- Timecourse plots -->
             <v-card flat>
                 <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
@@ -98,5 +98,7 @@
 </script>
 
 <style scoped>
-
+    .v-card {
+        padding: 10px;
+    }
 </style>

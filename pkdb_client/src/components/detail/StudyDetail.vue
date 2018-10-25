@@ -1,8 +1,8 @@
 <template>
     <div id="study-detail">
-        <v-layout>
+        <v-layout wrap>
             <!-- Side menu for navigation. -->
-            <v-flex xs2 class="study-navigation">
+            <v-flex xs4 md2 class="study-navigation">
                 <v-card class="d-inline-block elevation-12">
                     <v-navigation-drawer
                             floating
@@ -48,7 +48,7 @@
             </v-flex>
 
 
-            <v-flex class="study-content" xs10 offset-xs2>
+            <v-flex class="study-content" xs8 offset-xs4 md10 offset-md2>
                 <!-- Study content -->
 
                 <v-layout row wrap>

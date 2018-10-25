@@ -57,6 +57,10 @@
     .app {
         padding: 0;
     }
+    .v-card {
+        padding: 5px;
+        text-align: left;
+    }
 
     /* attributes */
     .attr {
