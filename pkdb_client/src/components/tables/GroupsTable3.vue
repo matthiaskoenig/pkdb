@@ -22,7 +22,7 @@
                     <v-layout wrap>
                         <span v-for="item in table.item.characteristica_all_final" :key="item.pk">
                             <characteristica-card :data="item"
-                                                  :resource_url="characterica_url(ids(table.item.characteristica_all_final))"/>
+                                                  :resource_url="characterica_url(get_ids(table.item.characteristica_all_final))"/>
                         </span>
                     </v-layout>
                 </td>

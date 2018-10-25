@@ -7,13 +7,21 @@ var searchTableMixin = {
         return {
             count: 0,
             entries: [],
+            search:"",
             loading: true,
-            search: '',
             pagination: {},
             rowsPerPageItems: [5, 10, 20, 50, 100],
             table_class: "elevation-1",
         }
     },
+    props:{
+            ids:{
+                type: Array,
+                default: () => []
+
+            },
+
+        },
     mounted () {
         this.getData()
     },
@@ -49,6 +57,10 @@ var searchTableMixin = {
             if(this.search){
                 url += '&search='+ this.search
             }
+            if(this.ids.length > 0){
+                url += '&ids=' + this.ids.join("__")
+
+            }
             return url
         },
         descending() {
@@ -62,7 +74,7 @@ var searchTableMixin = {
         searchUpdate (newValue) {
             this.search = newValue
         },
-        ids(array_of_obj) {
+        get_ids(array_of_obj) {
             return array_of_obj.map(i => i.pk)
         },
 
@@ -101,7 +113,7 @@ var UrlMixin = {
 
         },
         characterica_url(ids) {
-            return this.$store.state.endpoints.api + '/characteristica_elastic/?ids=' + ids.join('__')
+            return this.$store.state.endpoints.api + '/characteristica_elastic/?get_ids=' + ids.join('__')
         },}
 };
 export {searchTableMixin,UrlMixin}

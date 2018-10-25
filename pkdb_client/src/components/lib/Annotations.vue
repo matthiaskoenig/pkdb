@@ -1,8 +1,8 @@
 <template>
     <div id="annotations">
         <v-card v-if="(item.comments && item.comments.length>0) || (item.descriptions && item.descriptions.length>0)">
-            <comments :comments="item.comments"/>
-            <descriptions :descriptions="item.descriptions"/>
+            <comments v-if="item.comments" :comments="item.comments"/>
+            <descriptions v-if="item.descriptions" :descriptions="item.descriptions"/>
         </v-card>
     </div>
 </template>

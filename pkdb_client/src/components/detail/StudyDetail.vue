@@ -64,52 +64,29 @@
 
                     <!-- Groups -->
                     <v-flex xs12 v-show="visible.groups">
-                        <get-data v-if="study.groupset" :resource_url="study.groupset">
-                            <template slot-scope="groupset">
-                                <div v-if="groupset.loaded">
-                                    <annotations :item="groupset.data"/>
-                                    <groups-table :data="resource(groupset.data.groups)"/>
-                                </div>
-                            </template>
-                        </get-data>
+                        <annotations :item="study.groupset"/>
+                        <groups-table3 :ids="study.groupset.groups"/>
                     </v-flex>
 
                     <!-- Individuals -->
                     <v-flex xs12 v-show="visible.individuals">
-                        <get-data v-if="study.individualset" :resource_url="study.individualset">
-                            <template slot-scope="individualset">
-                                <div v-if="individualset.loaded">
-                                    <annotations :item="individualset.data"/>
-                                    <individuals-table :data="resource(individualset.data.individuals)"/>
-                                </div>
-                            </template>
-                        </get-data>
+                        <annotations :item="study.individualset"/>
+                        <individuals-table3 :ids="study.individualset.individuals"/>
                     </v-flex>
 
                     <!-- Interventions -->
                     <v-flex xs12 v-show="visible.interventions">
-                        <get-data v-if="study.interventionset" :resource_url="study.interventionset">
-                            <template slot-scope="interventionset">
-                                <div v-if="interventionset.loaded">
-                                    <annotations :item="interventionset.data"/>
-                                    <interventions-table :data="resource(interventionset.data.interventions)"/>
-                                </div>
-                            </template>
-                        </get-data>
+                        <annotations :item="study.interventionset"/>
+                        <interventions-table3 :ids="study.interventionset.interventions"/>
                     </v-flex>
 
                     <!-- Outputs -->
                     <v-flex xs12 v-show="visible.outputs || visible.timecourses">
-                        <get-data v-if="study.outputset" :resource_url="study.outputset">
-                            <template slot-scope="outputset">
-                                <div v-if="outputset.loaded">
-                                    <annotations :item="outputset.data"/>
-                                    <OutputsTable v-show="visible.outputs" :data="resource(outputset.data.outputs)"/>
-                                    <br />
-                                    <TimecoursesTable v-show="visible.timecourses" :data="resource(outputset.data.timecourses)"/>
-                                </div>
-                            </template>
-                        </get-data>
+                        <annotations :item="study.outputset"/>
+                        <outputs-table3 v-show="visible.outputs" :ids="study.outputset.outputs"/>
+                        <br />
+                        <timecourses-table3 v-show="visible.timecourses" :ids="study.outputset.timecourses"/>
+
                     </v-flex>
                 </v-layout>
 
@@ -124,24 +101,26 @@
     import {lookup_icon} from "@/icons"
 
     import StudyInfo from "./StudyInfo";
-    import GroupsTable from "../tables/GroupsTable";
-    import IndividualsTable from '../tables/IndividualsTable';
-    import InterventionsTable from "../tables/InterventionsTable";
-    import OutputsTable from "../tables/OutputsTable";
-    import TimecoursesTable from "../tables/TimecoursesTable";
+    import IndividualsTable3 from '../tables/IndividualsTable3';
+    import InterventionsTable3 from "../tables/InterventionsTable3";
+    import OutputsTable3 from "../tables/OutputsTable3";
+    import TimecoursesTable3 from "../tables/TimecoursesTable3";
+    import {UrlMixin} from "../tables/mixins";
+    import GroupsTable3 from "../tables/GroupsTable3";
 
 
     export default {
         name: "StudyDetail",
         components: {
             StudyInfo: StudyInfo,
-            GroupsTable: GroupsTable,
-            IndividualsTable: IndividualsTable,
-            InterventionsTable: InterventionsTable,
-            OutputsTable: OutputsTable,
-            TimecoursesTable: TimecoursesTable,
-        },
+            GroupsTable3: GroupsTable3,
+            IndividualsTable3: IndividualsTable3,
+            InterventionsTable3: InterventionsTable3,
+            OutputsTable3: OutputsTable3,
+            TimecoursesTable3: TimecoursesTable3,
 
+        },
+        mixins :[UrlMixin],
         props: {
             study: {
                 type: Object,
@@ -198,11 +177,11 @@
             counts() {
                 return {
                     general: 1,
-                    groups: this.study.group_count,
-                    individuals: this.study.individual_count,
-                    interventions: this.study.intervention_count,
-                    outputs: this.study.output_count,
-                    timecourses: this.study.timecourse_count
+                    groups: this.study.groupset.count,
+                    individuals: this.study.individualset.count,
+                    interventions: this.study.interventionset.count,
+                    outputs: this.study.outputset.count_outputs,
+                    timecourses: this.study.outputset.count_timecourses
                 }
             }
 
