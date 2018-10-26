@@ -18,6 +18,9 @@
                     <json-button :resource_url="api + '/groups_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
+                    <group-chip :group="table.item" :search="search"/>
+                </td>
+                <td>
                     <group-info :group="table.item"/>
                 </td>
                 <td>
@@ -39,6 +42,7 @@
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import GroupChip from '../detail/GroupChip'
 
     export default {
         name: "GroupsTable",
@@ -46,6 +50,7 @@
             NoData,
             TableToolbar,
             CharacteristicaCard,
+            GroupChip
         },
         mixins: [searchTableMixin,UrlMixin],
         data () {
@@ -54,6 +59,7 @@
                 otype_single: "group",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
+                    {text: 'Name', value: 'name'},
                     {text: 'Group Info', value: 'info'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]

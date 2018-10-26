@@ -51,7 +51,7 @@ import UserAvatar from './components/lib/UserAvatar';
 import Heading from './components/lib/Heading';
 import HeadingToolbar from './components/lib/HeadingToolbar';
 import GroupInfo from './components/detail/GroupInfo';
-import IndividualInfo from './components/detail/IndividualInfo';
+
 import GetData from './components/api/GetData';
 import GetPaginatedData from './components/api/GetPaginatedData';
 
@@ -74,7 +74,6 @@ Vue.component('UserAvatar', UserAvatar);
 Vue.component('Heading', Heading);
 Vue.component('HeadingToolbar', HeadingToolbar);
 Vue.component('GroupInfo', GroupInfo);
-Vue.component('IndividualInfo', IndividualInfo);
 
 Vue.component('GetData', GetData);
 Vue.component('GetPaginatedData', GetPaginatedData);

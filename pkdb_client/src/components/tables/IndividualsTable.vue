@@ -16,7 +16,17 @@
                     <json-button :resource_url="api + '/individuals_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
-                    <individual-info :individual="table.item"/>
+                    <div class="attr-card">
+                        <individual-chip :individual="table.item" :search="search"/>
+                    </div>
+                </td>
+                <td>
+                    <get-data :resource_url="group_url(table.item.group.pk)">
+                        <span slot-scope="group">
+                            <group-chip :group="group.data" :search="search"/>
+                            <group-info :group="group.data" :resource_url="table.item.group.url" />
+                        </span>
+                    </get-data>
                 </td>
                 <td>
                      <v-layout wrap>
@@ -36,6 +46,8 @@
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import GroupChip from '../detail/GroupChip'
+    import IndividualChip from '../detail/IndividualChip'
 
     export default {
         name: "IndividualsTable",
@@ -43,6 +55,8 @@
             NoData,
             TableToolbar,
             CharacteristicaCard,
+            IndividualChip,
+            GroupChip
         },
         mixins: [searchTableMixin, UrlMixin],
         data () {
@@ -51,7 +65,8 @@
                 otype_single: "individual",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Group Info', value: 'info'},
+                    {text: 'Individual', value: 'individual'},
+                    {text: 'Group', value: 'group'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }

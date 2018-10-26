@@ -1,32 +1,22 @@
 <template>
-    <div class="group-info">
-        <div class="attr-card">
+    <span class="group-info">
+        <span class="attr-card">
             <v-btn small color="black" fab dark title="Group Size">{{ group.count }}</v-btn><br/>
-
-            <span class="attr" title="Group Name">{{ group.name }}</span><br />
-
-            <group-chip :group="group"/>
-
+        </span>
+        <!--
+        <div class="attr-card" v-if="(group.individuals && group.individuals.length>0)">
+            <span class="attr"></span><br />
+            <v-icon>fa fa-check-circle</v-icon> {{ group.individuals.length }} Individuals
         </div>
-        <div class="attr-card">
-            <span v-if="(group.individuals && group.individuals.length>0)">
-                <span class="attr"></span><br />
-                <v-icon>fa fa-check-circle</v-icon> {{ group.individuals.length }} Individuals
-            </span>
-
-        </div>
-    </div>
+        -->
+    </span>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
-    import GroupChip from '../detail/GroupChip'
 
     export default {
         name: "GroupInfo",
-        components: {
-            GroupChip
-        },
         props: {
             group: {
                 type: Object,
