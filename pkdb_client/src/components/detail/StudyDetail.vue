@@ -176,7 +176,7 @@
             counts() {
                 return {
                     general: 1,
-                    groups: (this.study.groupset ? 0:this.study.groupset.count),
+                    groups: (this.study.groupset ? 0: this.study.groupset.count),
                     individuals: (this.study.individualset ? 0:this.study.individualset.count),
                     interventions: (this.study.interventionset ? 0:this.study.interventionset.count),
                     outputs: (this.study.outputset ? 0:this.study.outputset.count_outputs),
