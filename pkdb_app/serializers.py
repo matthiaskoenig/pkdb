@@ -13,7 +13,7 @@ from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
-
+from pprint import pprint
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
 
@@ -265,9 +265,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             )
         return df
 
-    def group_by(self,groupby, df):
 
-        pass
 
     def df_from_file(self, source, format, subset):
         delimiter = FORMAT_MAPPING[format].delimiter
@@ -366,6 +364,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 entries.append(entry_dict)
         else:
             entries.append(template)
+
         return entries
 
 

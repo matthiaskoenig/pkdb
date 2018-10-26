@@ -109,7 +109,6 @@ class TimecourseExManager(models.Manager):
         comments = kwargs.pop('comments', [])
 
         timecourse_ex = super().create(*args, **kwargs)
-
         timecourse_ex.interventions.add(*interventions)
         create_multiple(timecourse_ex, comments, 'comments')
         create_multiple(timecourse_ex, timecourses, 'timecourses')

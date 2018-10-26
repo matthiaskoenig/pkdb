@@ -60,9 +60,11 @@ class DataFile(models.Model):
     def name(self):
         return self.file.name
 
+    @property
     def timecourses(self):
         Timecourse = apps.get_model('interventions', 'Timecourse')
-        return Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(final=True)
+        tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(final=True)
+        return tc
 
 
 

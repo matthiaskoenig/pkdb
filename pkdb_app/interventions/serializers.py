@@ -351,7 +351,8 @@ class OutputExSerializer(BaseOutputExSerializer):
         return super().validate(attrs)
 
     def validate_figure(self, value):
-        return self._validate_figure(value)
+        self._validate_figure(value)
+        return value
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
@@ -460,6 +461,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         temp_timecourses = self.split_entry(data)
         timecourses = []
+
         for timecourse in temp_timecourses:
             timecourses_from_file = self.array_from_file(timecourse)
             timecourses.extend(timecourses_from_file)
@@ -471,10 +473,13 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         data["timecourses"] = timecourses
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
+        print(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_figure(self, value):
-        return self._validate_figure(value)
+        self._validate_figure(value)
+        return value
+
 
 
 class OutputSetSerializer(ExSerializer):
