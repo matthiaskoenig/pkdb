@@ -3,10 +3,17 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
+import copy
+import numpy as np
+import math
 import pandas as pd
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+
+from ..subjects.models import Group, DataFile, Individual
+
 from pkdb_app.interventions.managers import (
     InterventionSetManager,
     OutputSetManager,
@@ -32,12 +39,10 @@ from ..categoricals import (
     PK_DATA_CHOICES,
     OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT)
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
-from ..substances import SUBSTANCES_DATA_CHOICES
-from ..subjects.models import Group, DataFile, Individual
+
 from ..utils import CHAR_MAX_LENGTH
-import copy
-import numpy as np
-from pkdb_app.analysis.pharmacokinetic import _auc
+from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf
+from ..substances import SUBSTANCES_DATA_CHOICES
 
 # -------------------------------------------------
 # Substance
@@ -48,14 +53,10 @@ class Substance(models.Model):
 
     Has to be extended via ontology (Ontologable)
     """
-
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES)
-
-    # ontologies: has set of defined values: is, CHEBI:27732
 
     def __str__(self):
         return self.name
-
 
 # -------------------------------------------------
 # Intervention
@@ -65,8 +66,15 @@ class InterventionSet(models.Model):
 
     @property
     def interventions(self):
-        interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all())
+        interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all()).filter(final=True)
         return interventions
+
+    @property
+    def count(self):
+        if self.interventions:
+            return self.interventions.count()
+        else:
+            return 0
 
 
 class AbstractIntervention(models.Model):
@@ -173,7 +181,7 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     norm = models.ForeignKey("Intervention",related_name="raw",on_delete=models.CASCADE,null=True)
     final = models.BooleanField(default=False)
 
-    def save(self,no_norm=False, *args, **kwargs):
+    def save(self, no_norm=False, *args, **kwargs):
         super().save(*args, **kwargs)
         if not no_norm:
 
@@ -190,8 +198,6 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
             else:
                 self.final = True
                 self.save(no_norm=True,force_update=True)
-
-
 
     def save_no_norm(self, *args, **kwargs):
             super().save(*args, **kwargs)
@@ -214,36 +220,49 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     @property
     def norm_fields(self):
         return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                      "sd": self.sd, "se": self.se}
+                "sd": self.sd, "se": self.se}
 
     def normalize(self):
         if all([not self.is_norm, self.is_convertible]):
             conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
             self.unit = self.norm_unit
 
-
-
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            for key,value in self.norm_fields.items():
+            for key, value in self.norm_fields.items():
                 if not value is None:
-                        setattr(self,key,conversion.apply_conversion(value))
+                        setattr(self, key, conversion.apply_conversion(value))
 
 
 # -------------------------------------------------
-# RESULTS
+# OUTPUTS
 # -------------------------------------------------
 class OutputSet(models.Model):
     objects = OutputSetManager()
 
     @property
     def outputs(self):
-        outputs = Output.objects.filter(ex__in=self.output_exs.all())
+        outputs = Output.objects.filter(ex__in=self.output_exs.all()).filter(final=True)
         return outputs
+
+
+    @property
+    def count_outputs(self):
+        if self.outputs:
+            return self.outputs.count()
+        else:
+            return 0
 
     @property
     def timecourses(self):
-        timecourses = Timecourse.objects.filter(ex__in=self.timecourse_exs.all())
+        timecourses = Timecourse.objects.filter(ex__in=self.timecourse_exs.all()).filter(final=True)
         return timecourses
+
+    @property
+    def count_timecourses(self):
+        if self.timecourses:
+            return self.timecourses.count()
+        else:
+            return 0
 
 
 class AbstractOutput(models.Model):
@@ -317,30 +336,27 @@ class Output(ValueableNotBlank, AbstractOutput):
     timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
     objects = OutputManager()
 
-    def save(self,no_norm=False, *args, **kwargs):
+    def save(self, donot_normilize=False, *args, **kwargs):
         #fixme: I think, overwriting save function is not best practice.
         super().save( *args, **kwargs)
-        if not no_norm:
+        if not donot_normilize:
             norm = copy.copy(self)
             norm.normalize()
             norm.add_statistics()
 
-
             if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
-                norm.save(no_norm=True)
-                self.norm = norm
-                self.save(no_norm=True,force_update=True)
+                norm.save(donot_normilize=True)
+                norm.raw.add(self)
+                norm.save(donot_normilize=True)
+
 
             else:
                 self.final = True
-                self.save(no_norm=True,force_update=True)
+                self.save(donot_normilize=True, force_update=True)
 
-
-
-
-    def save_no_norm(self,*args, **kwargs):
+    def save_no_norm(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
     def add_statistics(self):
@@ -357,8 +373,6 @@ class Output(ValueableNotBlank, AbstractOutput):
                 self.cv = get_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
-
-
 
     @property
     def pk_data(self):
@@ -377,6 +391,7 @@ class Output(ValueableNotBlank, AbstractOutput):
     def norm_fields(self):
         return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
                 "sd": self.sd, "se": self.se}
+
     @property
     def is_convertible(self):
         conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
@@ -395,6 +410,42 @@ class Output(ValueableNotBlank, AbstractOutput):
                 if not value is None:
                         setattr(self,key,conversion.apply_conversion(value))
 
+    # for elastic search. NaNs are not allowed in elastic search
+
+    def null_attr(self,attr):
+        value = getattr(self,attr)
+        if value not in ['nan','NA','NAN','na',np.NaN, None] and not math.isnan(value):
+            return value
+
+    def null_value(self):
+        return self.null_attr('value')
+
+    def null_mean(self):
+        return self.null_attr('mean')
+
+    def null_median(self):
+        return self.null_attr('median')
+
+    def null_min(self):
+        return self.null_attr('min')
+
+    def null_max(self):
+        return self.null_attr('max')
+
+    def null_se(self):
+        return self.null_attr('se')
+
+    def null_sd(self):
+        return self.null_attr('sd')
+
+    def null_cv(self):
+        return self.null_attr('cv')
+
+    def null_unit(self):
+        return self.null_attr('unit')
+
+    def null_time(self):
+        return self.null_attr('time')
 
 
 class TimecourseEx(
@@ -469,30 +520,34 @@ class Timecourse(AbstractOutput):
 
     objects = OutputManager()
 
-
-    def save(self,no_norm=False, *args, **kwargs):
-
+    def save(self, donot_normilize=False, *args, **kwargs):
         super().save(*args, **kwargs)
 
-
-        if not no_norm:
+        if not donot_normilize:
             norm = copy.copy(self)
-            self.normalize()
-            self.add_statistics()
+            norm.normalize()
+            norm.add_statistics()
+
             if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
-                norm.save(no_norm=True)
-                self.norm = norm
-                self.save(no_norm=True,force_update=True)
-
+                norm.save(donot_normilize=True)
+                norm.raw.add(self)
+                norm.save(donot_normilize=True)
             else:
                 self.final = True
-                self.save(no_norm=True,force_update=True)
-
+                self.save(donot_normilize=True, force_update=True)
 
     def save_no_norm(self,*args, **kwargs):
         super().save(*args, **kwargs)
+
+    @property
+    def figure(self):
+
+        try:
+            return self.ex.figure.file.url
+        except:
+            return None
 
     def add_statistics(self):
         if self.group:
@@ -548,6 +603,48 @@ class Timecourse(AbstractOutput):
                 if not value is None:
                     setattr(self, key, conversion.apply_conversion(value))
 
+        # for elastic search. NaNs are not allowed in elastic search
+
+    @staticmethod
+    def _any_not_json(value):
+        return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
+
+    def null_attr(self, attr):
+        value_list = getattr(self, attr)
+        if value_list:
+            value_list_none = [ None if self._any_not_json(value) else value for value in value_list ]
+            return value_list_none
+
+
+    def null_value(self):
+        return self.null_attr('value')
+
+    def null_mean(self):
+        return self.null_attr('mean')
+
+    def null_median(self):
+        return self.null_attr('median')
+
+    def null_min(self):
+        return self.null_attr('min')
+
+    def null_max(self):
+        return self.null_attr('max')
+
+    def null_se(self):
+        return self.null_attr('se')
+
+    def null_sd(self):
+        return self.null_attr('sd')
+
+    def null_cv(self):
+        return self.null_attr('cv')
+
+    def null_unit(self):
+        return self.null_attr('unit')
+
+    def null_time(self):
+        return self.null_attr('time')
 
 ###############################################################################
     @property
@@ -562,9 +659,6 @@ class Timecourse(AbstractOutput):
 
     def calculate_pharamcokinatics(self):
          pk_data = self.get_pharamcokinetic_data()
-
-
-
 
     def get_pharamcokinetic_data(self):
         pk_data = {}
@@ -584,7 +678,6 @@ class Timecourse(AbstractOutput):
                 pk_data["weight"] = weight.value
                 pk_data["bodyweight_unit"] = weight.unit
 
-
             except ObjectDoesNotExist:
                 pk_data["weight"] = np.NaN
         try:
@@ -594,17 +687,98 @@ class Timecourse(AbstractOutput):
 
         except ObjectDoesNotExist:
             pk_data["dose"] = np.NaN
-            pk_data["dosing_unit"] =  np.NaN
+            pk_data["dosing_unit"] = np.NaN
 
             pk_data["t"] = self.time
 
-    def calculate_auc(self):
-        auc = _auc(self.time,self.value)
-        unit = f"{self.unit}"
+    @property
+    def calculate_auc_end(self):
+        output_data = {}
+        output_data["substance"] = str(self.substance)
+        output_data["tissue"] = str(self.tissue)
+        output_data["pktype"] = "auc_end"
+        output_data["time"] = self.time[-1]
+        if self.value:
+            output_data["value"] = self.try_type_error(self.time,self.value,_auc)
+        if self.mean:
+            output_data["mean"] = self.try_type_error(self.time,self.mean,_auc)
+
+        if self.median:
+            output_data["median"] = self.try_type_error(self.time,self.median,_auc)
+
+        output_data["unit"] = f"({self.unit})*{self.time_unit}"
 
 
 
+        array_fields = [
+                "value",
+                "mean",
+                "median",
+                "min",
+                "max",
+                "sd",
+                "se",
+                "cv",
+                "time",
+            ]
+        for field in array_fields:
+            value = output_data.get(field, None)
+            if value:
+                if self._any_not_json(value):
+                    output_data[field] = None
+
+        return output_data
+
+    @property
+    def auc_end(self):
+        instance_calc_end = self.calculate_auc_end
+        for value in ['value','mean','median']:
+            if instance_calc_end.get(value):
+                return instance_calc_end[value]
+
+
+    @staticmethod
+    def try_type_error(time, array, method):
+        try:
+            value = method(np.array(time),np.array(array))
+
+        except TypeError:
+            value = None
+
+        return value
+
+    @property
+    def calculate_auc_inf(self):
+        output_data = {}
+        output_data["substance"] = str(self.substance)
+        output_data["tissue"] = str(self.tissue)
+        output_data["pktype"] = "auc_inf"
+        if self.value:
+            output_data["value"] = self.try_type_error(self.time, self.value, _aucinf)
+        if self.mean:
+            output_data["mean"] = self.try_type_error(self.time, self.mean, _aucinf)
+
+        if self.median:
+            output_data["median"] = self.try_type_error(self.time, self.median, _aucinf)
+
+        output_data["unit"] = f"({self.unit})*{self.time_unit}"
 
 
 
-
+        array_fields = [
+            "value",
+            "mean",
+            "median",
+            "min",
+            "max",
+            "sd",
+            "se",
+            "cv",
+            "time",
+        ]
+        for field in array_fields:
+            value = output_data.get(field, None)
+            if value:
+                if self._any_not_json(value):
+                    output_data[field] = None
+        return output_data

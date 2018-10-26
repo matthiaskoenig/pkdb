@@ -89,7 +89,17 @@ class OutputManager(models.Manager):
         interventions = kwargs.pop('interventions', [])
         output = super().create(*args, **kwargs)
         output.interventions.add(*interventions)
+        if output.norm:
+            output.norm.interventions.add(*interventions)
         return output
+
+class TimecourseManager(models.Manager):
+    def create(self, *args, **kwargs):
+        interventions = kwargs.pop('interventions', [])
+        timecourse = super().create(*args, **kwargs)
+        timecourse.interventions.add(*interventions)
+        ######
+        return timecourse
 
 
 class TimecourseExManager(models.Manager):

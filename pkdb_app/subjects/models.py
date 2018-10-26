@@ -38,6 +38,7 @@ from .managers import (
     CharacteristicaExManager,
 )
 
+from django.apps import apps
 
 # ----------------------------------
 # DataFile
@@ -55,6 +56,17 @@ class DataFile(models.Model):
         null=True, blank=True, max_length=CHAR_MAX_LENGTH
     )  # XLSX, PNG, CSV
 
+    @property
+    def name(self):
+        return self.file.name
+
+    def timecourses(self):
+        Timecourse = apps.get_model('interventions', 'Timecourse')
+        return Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(final=True)
+
+
+
+
     def __str__(self):
         return self.file.name
 
@@ -69,6 +81,14 @@ class GroupSet(models.Model):
     def groups(self):
         groups = Group.objects.filter(ex__in=self.group_exs.all())
         return groups
+
+
+    @property
+    def count(self):
+        if self.groups:
+            return self.groups.count()
+        else:
+            return 0
 
 
 class AbstractGroup(models.Model):
@@ -134,6 +154,18 @@ class Group(models.Model):
     # todo: in validator unique_together = ('ex__groupset', 'name')
 
     @property
+    def study_name(self):
+        return self.ex.groupset.study.name
+
+    @property
+    def study_pk(self):
+        return self.ex.groupset.study.pk
+
+    @property
+    def study(self):
+        return self.ex.groupset.study
+
+    @property
     def source(self):
         return self.ex.source
 
@@ -141,12 +173,25 @@ class Group(models.Model):
     def figure(self):
         return self.ex.figure
 
+
+    @property
+    def parents(self):
+        parents = []
+        if self.parent:
+            parents = [self.parent.pk] + self.parent.parents
+        return parents
+
     @property
     def characteristica_all(self):
         characteristica_all = self.characteristica.all()
         if self.parent:
             characteristica_all = characteristica_all | self.parent.characteristica_all
         return characteristica_all
+
+    @property
+    def characteristica_all_final(self):
+        return self.characteristica_all.filter(final=True)
+
 
 
 # ----------------------------------
@@ -159,6 +204,13 @@ class IndividualSet(models.Model):
     def individuals(self):
         individuals = Individual.objects.filter(ex__in=self.individual_exs.all())
         return individuals
+
+    @property
+    def count(self):
+        if self.individuals:
+            return self.individuals.count()
+        else:
+            return 0
 
 
 class AbstractIndividual(models.Model):
@@ -232,6 +284,42 @@ class Individual(AbstractIndividual):
     @property
     def figure(self):
         return self.ex.figure
+
+    @property
+    def characteristica_final(self):
+        return self.characteristica.filter(final=True)
+
+    @property
+    def group_characteristica_final(self):
+        return self.group.characteristica_all_final
+
+    @property
+    def characteristica_all_final(self):
+        return  (self.characteristica_final | self.group_characteristica_final)
+
+    @property
+    def study(self):
+        return self.ex.individualset.study
+
+    @property
+    def study_pk(self):
+        return self.ex.individualset.study.pk
+
+    @property
+    def study_name(self):
+        return self.ex.individualset.study.name
+
+    @property
+    def group_indexing(self):
+        return self.group.name
+
+    @property
+    def characteristica_categories(self):
+        return [characteristica.category for characteristica in self.characteristica_all_final.all()]
+
+    @property
+    def characteristica_choices(self):
+        return {characteristica.category: characteristica.choice for characteristica in self.characteristica_all_final.all()}
 
 
 # ----------------------------------
@@ -319,6 +407,35 @@ class Characteristica(Valueable, AbstractCharacteristica):
     )
     norm = models.ForeignKey("Characteristica", related_name="raw", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
+    count = models.IntegerField(default=1)
+
+
+    @property
+    def all_group_pks(self):
+        parents = []
+        if self.group:
+            parents = [self.group.pk] + self.group.parents
+        return parents
+
+    @property
+    def group_name(self):
+        if self.group:
+            return self.group.name
+
+    @property
+    def group_pk(self):
+        if self.group:
+            return self.group.pk
+
+    @property
+    def individual_name(self):
+        if self.individual:
+            return self.individual.name
+
+    @property
+    def individual_pk(self):
+        if self.individual:
+            return self.individual.pk
 
     def save(self,no_norm=False , *args, **kwargs):
         super().save(*args, **kwargs)

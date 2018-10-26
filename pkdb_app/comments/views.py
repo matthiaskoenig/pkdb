@@ -1,26 +1,26 @@
 
 # Create your views here.
-from rest_framework import viewsets, filters
-from rest_framework.permissions import AllowAny
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, IdsFilterBackend
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from pkdb_app.comments.documents import CommentDocument, DescriptionDocument
+from pkdb_app.comments.serializers import DescriptionElasticSerializer, CommentElasticSerializer
 
-from pkdb_app.comments.models import Description, Comment
-from pkdb_app.comments.serializers import DescriptionReadSerializer, CommentReadSerializer
+
+class ElasticCommentViewSet(DocumentViewSet):
+    document = CommentDocument
+    serializer_class = CommentElasticSerializer
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,CompoundSearchFilterBackend]
+    search_fields = ('text','user.username','user.first_name','user.last_name')
+    filter_fields = {'text': 'text','user_lastname':'user.last_name.raw',}
 
 
-class DescriptionReadViewSet(viewsets.ReadOnlyModelViewSet):
+class ElasticDescriptionViewSet(DocumentViewSet):
+    document = DescriptionDocument
+    serializer_class = DescriptionElasticSerializer
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,CompoundSearchFilterBackend]
+    search_fields = ('text',)
+    filter_fields = {'text': 'text.raw',}
 
-    queryset = Description.objects.all()
-    serializer_class = DescriptionReadSerializer
-    filter_backends = (filters.SearchFilter,)
-    filter_fields = ("text",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
 
-class CommentReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Comment.objects.all()
-    serializer_class = CommentReadSerializer
-    filter_backends = (filters.SearchFilter,)
-    filter_fields = ("text",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)

@@ -1,4 +1,6 @@
 import copy
+import numpy as np
+import numbers
 import pandas as pd
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
@@ -6,13 +8,11 @@ from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
 from rest_framework.settings import api_settings
-from django.forms.models import model_to_dict
-from pkdb_app.categoricals import FORMAT_MAPPING
+from pkdb_app.categoricals import FORMAT_MAPPING, PK_DATA_DICT
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
-from numbers import Number
 
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
@@ -113,8 +113,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
         for item in data_list:
             if "_map" in item:
                 item = item[:-4]
-            else:
-                item
 
             unmap_list.append(item)
         return unmap_list
@@ -251,7 +249,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             df[values[0]]
         except KeyError:
             raise serializers.ValidationError(
-                {"subset": f"source <{src.file.url}> has no column <{values[0]}>"}
+                {"subset": f"your source file has no column <{values[0]}>"}
             )
         try:
             df = df.loc[df[values[0]] == values[1]]
@@ -294,7 +292,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 keep_default_na=False,
                 na_values=["NA", "NAN", "na", "nan"],
             )
+
             df.columns = df.columns.str.strip()
+
 
 
         except Exception as e:
@@ -329,6 +329,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if format is None:
                 raise serializers.ValidationError({"format": "format is missing!"})
             df = self.df_from_file(source, format, subset)
+
+
+
             for entry in df.itertuples():
                 entry_dict = copy.deepcopy(template)
                 recursive_entry_dict = list(recursive_iter(entry_dict))
@@ -355,16 +358,16 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                         data
                                     ]
                                 )
-
+                            if isinstance(entry_value,numbers.Number):
+                                if np.isnan(entry_value):
+                                    entry_value = None
                             set_keys(entry_dict, entry_value, *keys)
 
                 entries.append(entry_dict)
-
         else:
-
             entries.append(template)
-
         return entries
+
 
     def array_from_file(self, data):
         """ Handle conversion of time course data.
@@ -375,30 +378,34 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         source = data.get("source")
         if source:
-            array_dict = copy.deepcopy(data)
+            template = copy.deepcopy(data)
             # get data
-            array_dict.pop("source")
-            array_dict.pop("figure", None)
-            format = array_dict.pop("format", None)
+            template.pop("source")
+            template.pop("figure", None)
+            format = template.pop("format", None)
             if format is None:
                 raise serializers.ValidationError({"format": "format is missing!"})
-            subset = array_dict.pop("subset", None)
+            subset = template.pop("subset", None)
             # read dataframe subset
             df = self.df_from_file(source, format, subset)
+            template = copy.deepcopy(template)
 
             if data.get("groupby"):
-                groupby = array_dict.pop("groupby")
+                groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
                     raise serializers.ValidationError({"groupby":"groupby has to be a string"})
                 groupby = groupby.split("&")
                 array_dicts = []
+
                 for group_name, group_df in df.groupby(groupby):
-                    array_dict = copy.deepcopy(array_dict)
+                    array_dict = copy.deepcopy(template)
                     self.dict_from_array(array_dict, group_df, data, source)
+
                     array_dicts.append(array_dict)
 
 
             else:
+                array_dict = copy.deepcopy(template)
                 self.dict_from_array(array_dict, df, data, source)
                 array_dicts =[array_dict]
 
@@ -406,14 +413,13 @@ class MappingSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 "For timecourse data a source file has to be provided."
             )
-
         return array_dicts
+
 
     def dict_from_array(self,array_dict,df,data,source):
         recursive_array_dict = list(recursive_iter(array_dict))
+
         for keys, value in recursive_array_dict:
-
-
             if isinstance(value, str):
                 if ITEM_MAPPER in value:
                     values = value.split(ITEM_MAPPER)
@@ -428,6 +434,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         value_array = df[values[1]]
 
 
+
                     except KeyError:
                         raise serializers.ValidationError(
                             [
@@ -435,9 +442,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 data,
                             ]
                         )
-
+                    #to get rid of dict
                     if keys[-1] in ["individual", "group"]:
-                        print("I am here")
                         unqiue_values = value_array.unique()
                         if len(unqiue_values) != 1:
                             raise serializers.ValidationError(
@@ -534,6 +540,12 @@ class ExSerializer(MappingSerializer):
     ##########################
     # helpers
     ##########################
+    def _validate_figure(self,datafile):
+        if datafile:
+            allowed_endings = ['png','jpg','jpeg','tif','tiff']
+            if not any([datafile.file.name.endswith(ending)for ending in allowed_endings]):
+                raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
+
     def _validate_requried_key(self,attrs, key):
         key_value = attrs.get(key)
         if key_value is None:
@@ -597,7 +609,6 @@ class ExSerializer(MappingSerializer):
 
     def _is_required(self, data, key):
         is_data = self._key_is(data, key)
-        pktype = data.get("pktype")
         if not is_data:
             raise serializers.ValidationError(
                 {key: f"{key} is required", "detail": data}
@@ -605,10 +616,23 @@ class ExSerializer(MappingSerializer):
 
     def _validate_pktype(self, data):
         pktype = data.get("pktype")
+        unit = data.get("unit")
+        if not unit:
+             raise serializers.ValidationError(
+                {"unit": f"unit is required", "detail": data}
+            )
         if pktype:
+            unit = data.get("unit", None)
+            pk_data = PK_DATA_DICT.get(pktype)
+            if unit not in pk_data.units:
+                raise serializers.ValidationError({
+                    "unit": f"for pktype <{pktype}> the unit <{unit}> is not allowed. Choice from <{pk_data.units}>."})
+
             if pktype == "auc_end":
                 self._is_required(data, "time")
                 self._is_required(data, "time_unit")
+
+
         else:
             raise serializers.ValidationError(
                 {"pktype": f"pktype is required", "detail": data}
@@ -759,4 +783,13 @@ class SidSerializer(WrongKeyValidationSerializer):
             # If the Serializer was instantiated with just an object, and no
             # data={something} proceed as usual
             return super().is_valid(raise_exception)
+
+class ReadSerializer(serializers.HyperlinkedModelSerializer):
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for key,value in rep.items():
+            if isinstance(value,float):
+                rep[key] = round(value,2)
+        return rep
 

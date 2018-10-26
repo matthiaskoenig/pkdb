@@ -41,6 +41,9 @@ UNITS = {
     "mmHg": None,
     "mmol": None,
     "µmol": None,
+
+    "m^2": None,
+
     # reverse time units
     "1/week": None,
     "1/day": None,
@@ -48,50 +51,85 @@ UNITS = {
     "1/min": None,
     "1/s": None,
     # misc units
+    "g/kg": None,
     "mg/kg": None,
+    "mU/kg": None,
+    "U/kg": None,
     "mg/day": None,
     "kg/m^2": None,
     "IU/I": None,
-    "l/h": None,
+
+
     # concentration
     "µg/l": None,
     "µg/ml": None,
     "mg/dl": None,
+    "mg/100ml": None,
     "mg/l": None,
+    "ng/l": None,
     "g/dl": None,
     "ng/ml": None,
-    "ng/g":None,
+    "pg/ml": None,
+    "ng/g": None,
     "mmol/l": None,
-    "nmol/ml":None,
+    "nmol/ml": None,
     "µmol/l": None,
     "nmol/l": None,
-    "pmol/ml":None,
+    "pmol/l": None,
+    "pmol/ml": None,
+    "fmol/l": None,
+    "µU/ml": None,
+    "ng/g": None,  # per g plasma
+
     # AUC
     "mg*h/l": None,
+
     "ng*h/ml": None,
 
     "µg*h/ml": None,  # -> mg*h/l
     "µg/ml*h": None,  # -> mg*h/l
     "mg*min/l": None,  # -> mg*h/l
+    "mg/l*min": None,  # -> mg*h/l
     "µg*min/ml": None,
     "nmol*h/l": None,
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
     "pmol*h/ml": None,
+    "pmol/ml*h": None,
+    "nmol*h/l": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
+
+
     # Volume of distribution (vd)
     "l": None,
     "ml": None,
     "l/kg": None,
     "ml/kg": None,  # -> l/kg
+
     # clearance
     "ml/min": None,
     "ml/h": None,  # -> ml/min
+    "l/h": None,
     "l/h/kg": None,
     "ml/h/kg": None,  # -> l/h/kg
+    "ml/kg/min": None,
     "ml/min/kg": None,  # -> l/h/kg
     "ml/min/1.73m^2": None,
+
+    # rate
+    "mg/min": None,
+    "mg/kg/min": None,
+    "mg/min/kg": None,
+    "µmol/min": None,
+    "µmol/kg/min": None,
+    "µmol/min/kg": None,  # -> µmol/kg/min
+    "pmol/min": None,
+    "pmol/kg/min": None,
+    "pmol/min/kg": None,
+    "mU/min": None,
+    "mU/min/kg": None,
+    "mU/kg/min": None,
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)
@@ -142,6 +180,7 @@ UNIT_CONVERSIONS = [
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0E-3),
     UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0E-3),
     UnitConversion("mg*min/l", target="mg*h/l", multiplier=60),
+    UnitConversion("mg/l*min", target="mg*h/l", multiplier=60),
     UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0E-3),
     # Vd
     UnitConversion("ml/kg", target="l/kg", multiplier=1.0E-3),
@@ -158,6 +197,9 @@ UNIT_CONVERSIONS = [
     # "nmol/l": None,  # -> µg/ml (with molar weight)
     # "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     # "µmol/l*h": None,  # -> mg*h/l (with molar weight)
+    # rate
+    UnitConversion("µmol/min/kg", target="µmol/kg/min", multiplier=1.0),
+
 ]
 UNIT_CONVERSIONS_DICT = {
     f"[{item.source}] -> [{item.target}]": item for item in UNIT_CONVERSIONS

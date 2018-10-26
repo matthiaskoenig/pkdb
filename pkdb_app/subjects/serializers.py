@@ -1,11 +1,14 @@
-import pandas as pd
-from django.contrib.sites.shortcuts import get_current_site
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import FORMAT_MAPPING, validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
-from pkdb_app.utils import recursive_iter, set_keys
+from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+    CommentElasticSerializer
+from pkdb_app.studies.models import Study
+from operator import itemgetter
+
+from pkdb_app.utils import list_of_pk
 from .models import (
     Group,
     GroupSet,
@@ -17,7 +20,7 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
 )
-from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer
+from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer, ReadSerializer
 
 EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
 VALUE_FIELDS = ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"]
@@ -378,193 +381,129 @@ class IndividualSetSerializer(ExSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
+class CharacteristicaReadSerializer(ReadSerializer):
+
+    class Meta:
+        model = Characteristica
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
+
+###############################################################################################
+# Elastic Search Serializer
+###############################################################################################
+#maybe depreciated
+
+class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
+    file = serializers.CharField()
+    timecourses = serializers.SerializerMethodField()
+    class Meta:
+        model = DataFile
+        fields = ["pk", "name","file", "timecourses"]
+
+    def get_timecourses(self, obj):
+        return list_of_pk("timecourses", obj)
 
 
-class GroupSetReadSerializer(serializers.HyperlinkedModelSerializer):
-    study = serializers.HyperlinkedRelatedField(
-        lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-    descriptions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="descriptions_read-detail"
-    )
-    groups = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="groups_read-detail"
-    )
-    group_exs = serializers.HyperlinkedRelatedField(many=True,
-                                                 read_only=True, view_name="groupexs_read-detail"
-                                                 )
+class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
+
+    value = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    mean = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    median = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    min = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    max = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    sd = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    se = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    cv = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    class Meta:
+        model = Characteristica
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS
+
+
+
+class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    #url = serializers.HyperlinkedIdentityField(read_only=True,lookup_field="sid",view_name="studies_read-detail")
+    class Meta:
+        model = Study
+        fields = ["pk",'name']#,'url']
+
+
+# Group related Serializer
+class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    groups = serializers.SerializerMethodField()
 
     class Meta:
         model = GroupSet
-        fields = ["pk", "study", "descriptions", "groups","group_exs"]
+        fields = ["pk", "descriptions", "groups", "comments"]
+
+    def get_groups(self, obj):
+        return list_of_pk("groups", obj)
 
 
-class IndividualSetReadSerializer(serializers.HyperlinkedModelSerializer):
-    study = serializers.HyperlinkedRelatedField(
-        lookup_field="sid", read_only=True, view_name="studies_read-detail"
-    )
-    individuals = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="individuals_read-detail"
-    )
-    individual_exs = serializers.HyperlinkedRelatedField(many=True,
-        read_only=True, view_name="groups_read-detail"
-    )
-    descriptions = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="descriptions_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-
+class GroupSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
     class Meta:
-        model = IndividualSet
-        fields = ["pk", "study", "descriptions","comments", "individual_exs","individuals"]
+        model = Group
+        fields = ["pk", 'name']  # , 'url']
 
 
-class GroupReadSerializer(serializers.HyperlinkedModelSerializer):
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    characteristica = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    characteristica_all = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-
-    parent = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupexs_read-detail"
-    )
+class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
+    study = StudySmallElasticSerializer(read_only=True)
+    parent = GroupSmallElasticSerializer(read_only=True)
+    characteristica_all_final = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
         fields = (
-            ["pk", "groupset","ex"]
-            + GROUP_FIELDS
-            + ["parent", "characteristica", "characteristica_all"]
+            'pk',
+            'parent',
+            'count',
+            'name',
+            'study',
+            'characteristica_all_final',
         )
 
-class GroupExReadSerializer(serializers.HyperlinkedModelSerializer):
-    groupset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupsets_read-detail"
-    )
-    characteristica_ex = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristicaex_read-detail"
-    )
+    def get_characteristica_all_final(self, instance):
+        characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+        return CharacteristicaElasticSerializer(characteristica, many=True, read_only=True).data
 
-    parent_ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groupexs_read-detail"
-    )
-    groups = serializers.HyperlinkedRelatedField(many=True,
-        read_only=True, view_name="groups_read-detail"
-    )
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
 
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-
-    class Meta:
-        model = GroupEx
-        fields = (
-
-            ["pk", "groupset","groups"]
-            + EXTERN_FILE_FIELDS
-            + GROUP_FIELDS
-            + GROUP_MAP_FIELDS
-            + ["parent_ex", "characteristica_ex","comments"]
-        )
-
-class IndividualReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    individualset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualsets_read-detail"
-    )
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    characteristica = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristica_read-detail"
-    )
-    ex = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualexs_read-detail"
-    )
-
+# Individual related Serializer
+class IndividualSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
     class Meta:
         model = Individual
-        fields = ["pk","ex"] + ["individualset"] + ["name", "group", "characteristica"]
+        fields = ["pk", 'name']  # , 'url']
 
-class IndividualExReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    individualset = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="individualsets_read-detail"
-    )
-
-    individuals = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="individuals_read-detail")
-
-    group = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="groups_read-detail"
-    )
-    characteristica_ex = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="characteristicaex_read-detail"
-    )
-    source = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-
-    figure = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="datafiles_read-detail"
-    )
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
+class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    individuals = serializers.SerializerMethodField()
 
     class Meta:
-        model = IndividualEx
-        fields = (["pk", "individualset","individuals"]
-                  + EXTERN_FILE_FIELDS
-                  + ["name", "group", "characteristica_ex","comments"])
+        model = IndividualSet
+        fields = ["pk","descriptions", "individuals","comments"]
 
-class CharacteristicaReadSerializer(serializers.HyperlinkedModelSerializer):
-    options = serializers.SerializerMethodField()
+    def get_individuals(self,obj):
+        return list_of_pk("individuals", obj)
 
+
+class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
+    study = StudySmallElasticSerializer(read_only=True)
+    group = GroupSmallElasticSerializer(read_only=True)
+    #characteristica_all_final = serializers.SerializerMethodField()
+    characteristica_all_final = CharacteristicaElasticSerializer(many=True, read_only=True)
     class Meta:
-        model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS + VALUE_FIELDS + ["options"]
-
-    def get_options(self, obj):
-        options = {}
-        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
-        options["ctypes"] = CHARACTERISTICA_TYPES
-        return options
-
-
-class CharacteristicaExReadSerializer(serializers.HyperlinkedModelSerializer):
-
-    comments = serializers.HyperlinkedRelatedField(
-        many=True, read_only=True, view_name="comments_read-detail"
-    )
-    class Meta:
-        model = CharacteristicaEx
+        model = Individual
         fields = (
-            CHARACTERISTISTA_FIELDS
-            + CHARACTERISTISTA_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
-            + ["comments"]
+            'pk',
+            'group',
+            'name',
+            'study',
+            'characteristica_all_final',
         )
 
-class DataFileReadSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = DataFile
-        fields = ["pk", "file", "filetype", "id"]
+    def get_characteristica_all_final(self, instance):
+        characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+        return CharacteristicaElasticSerializer(characteristica,many=True, read_only=True).data
+

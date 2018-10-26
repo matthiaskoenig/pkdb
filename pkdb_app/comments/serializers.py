@@ -3,6 +3,7 @@ from rest_framework import serializers
 from pkdb_app.comments.models import Description, Comment
 from pkdb_app.serializers import WrongKeyValidationSerializer
 from pkdb_app.users.models import User
+from pkdb_app.users.serializers import UserElasticSerializer
 
 
 class DescriptionSerializer(serializers.ModelSerializer):
@@ -11,10 +12,26 @@ class DescriptionSerializer(serializers.ModelSerializer):
         model = Description
 
     def to_internal_value(self, data):
+        self._validate_description(data=data)
         return super().to_internal_value({"text": data})
 
     def to_representation(self, instance):
         return instance.text
+
+    def _validate_description(self, data):
+        if not (isinstance(data, str)):
+            raise serializers.ValidationError(
+                {
+                    "descriptions": "Description must be a String",
+                    "detail": {str(data)},
+                }
+            )
+        elif len(data) == 0:
+            raise serializers.ValidationError(
+                {
+                    "descriptions": "empty descriptions are not allowed",
+                    "detail": {str(data)},
+                })
 
 
 class CommentSerializer(WrongKeyValidationSerializer):
@@ -30,10 +47,18 @@ class CommentSerializer(WrongKeyValidationSerializer):
                     "detail": {str(data)},
                 }
             )
+        elif len(data[1]) == 0:
+            raise serializers.ValidationError(
+                {
+                    "comments": "empty comments are not allowed",
+                    "detail": {str(data)},
+                })
+
 
     def to_internal_value(self, data):
         self._validate_comment(data)
         user = self.get_or_val_error(User, username=data[0])
+
         return {"text": data[1], "user": user}
 
     def to_representation(self, instance):
@@ -43,17 +68,16 @@ class CommentSerializer(WrongKeyValidationSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class DescriptionReadSerializer(serializers.HyperlinkedModelSerializer):
+class DescriptionElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         fields = ["pk", "text"]
         model = Description
 
 
-class CommentReadSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HyperlinkedRelatedField(
-        read_only=True, view_name="users_read-detail"
-    )
+class CommentElasticSerializer(serializers.HyperlinkedModelSerializer):
+    user = UserElasticSerializer(read_only=True)
+
     class Meta:
         fields = ["pk", "text","user"]
         model = Comment

@@ -2,30 +2,46 @@ version: '2'
 
 volumes:
   postgres_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
 
 services:
   postgres:
-    image: postgres:9.5
+    image: postgres:10.5
+    container_name: postgres
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
     environment:
-     POSTGRES_USER : postgres
-     POSTGRES_PASSWORD: pass
      POSTGRES_DB: postgres
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: pass
+
+  elasticsearch:
+    image: elasticsearch:6.4.2
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
 
   web:
     restart: always
     environment:
-      - PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
-      - PKDB_DEFAULT_PASSWORD="pkdb"
+      PKDB_SECRET_KEY: cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
+      PKDB_API_BASE: http://0.0.0.0:8000
+      PKDB_DEFAULT_PASSWORD: pkdb
+      PKDB_EMAIL_HOST_USER: ""
+      PKDB_EMAIL_HOST_PASSWORD: ""
     image: web
     build: ./
     command: >
       bash -c "python wait_for_postgres.py &&
                ./manage.py makemigrations &&
                ./manage.py migrate &&
+               ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinput &&
                ./manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./:/code
@@ -33,16 +49,15 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-
-  documentation:
-    restart: always
-    build: ./
-    command: "mkdocs serve"
-    volumes:
-      - ./:/code
-    ports:
-      - "8001:8001"
+      - elasticsearch
 
 
 
-
+#  documentation:
+#    restart: always
+#    build: ./
+#    command: "mkdocs serve"
+#    volumes:
+#      - ./:/code
+#    ports:
+#      - "8001:8001"

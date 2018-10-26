@@ -1,10 +1,20 @@
-
 """
 Views
 """
-from pkdb_app._version import __version__
-
+from django.http import HttpResponse
 from django.shortcuts import render
+
+
+# for debugging of templates
+def test_view(request):
+    return render(request, "test.html", {"version": 1})
+
+
+def test_500_view(request):
+    # Return an "Internal Server Error" 500 response code.
+    return HttpResponse(status=500)
+
+
 from rest_framework_swagger.renderers import SwaggerUIRenderer, OpenAPIRenderer
 from rest_framework.decorators import (
     api_view,
@@ -30,7 +40,3 @@ from rest_framework.response import Response
 def schema_view(request):
     generator = SchemaGenerator(title="PKDB Web API")
     return Response(generator.get_schema(request=request))
-
-
-def about_view(request):
-    return render(request, "pkdb/about.html", {"version": __version__})

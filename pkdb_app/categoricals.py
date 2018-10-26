@@ -14,8 +14,10 @@ units on CharacteristicType is an ordered iteratable, with the first unit being 
 """
 from collections import namedtuple
 
+
 from pkdb_app.units import NormalizableUnit
 from pkdb_app.substances import SUBSTANCES_DATA
+
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -95,7 +97,16 @@ STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 # ---------------------------------------------------
 # Keywords
 # ---------------------------------------------------
-KEYWORDS_DATA = ["glycolysis", "gluconeogenesis", "oxidative phosphorylation"]
+KEYWORDS_DATA = [
+    "glycolysis",
+    "gluconeogenesis",
+    "oxidative phosphorylation",
+    "hypoglycemia",
+    "insulin secretion",
+    "diabetes",
+    "oral glucose tolerance test",
+
+]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
 # ---------------------------------------------------
@@ -144,6 +155,9 @@ CHARACTERISTIC_DATA = [
         "bmi", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg/m^2": None})
     ),
     CharacteristicType(
+        "body surface area", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"m^2": None})
+    ),
+    CharacteristicType(
         "waist circumference",
         ANTHROPOMETRY,
         NUMERIC_TYPE,
@@ -151,15 +165,22 @@ CHARACTERISTIC_DATA = [
         NormalizableUnit({"cm": None}),
     ),
     CharacteristicType(
-        "lean body mass",
+        "lean body mass",  # fat free mass (FFM)
         ANTHROPOMETRY,
         NUMERIC_TYPE,
         None,
         NormalizableUnit({"kg": None}),
     ),
     CharacteristicType(
-        "percent fat", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
+        "percent fat",  # percent body fat
+        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
+    CharacteristicType(
+        "obesity index",
+        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
+    ),
+
+
     # -------------- Demography --------------
     CharacteristicType(
         "age", DEMOGRAPHICS, NUMERIC_TYPE, None, NormalizableUnit({"yr": None})
@@ -227,9 +248,14 @@ CHARACTERISTIC_DATA = [
             "PBC",
             "miscellaneous liver disease",
             "schizophrenia",
+            "t2dm"
         ],
         dimensionless_norm_unit,
     ),
+    CharacteristicType(
+        "disease duration", LIFESTYLE, NUMERIC_TYPE, None, amountyear_unit
+    ),
+
     # -------------- Medication --------------
     CharacteristicType(
         "medication", MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, dimensionless_norm_unit
@@ -238,12 +264,14 @@ CHARACTERISTIC_DATA = [
         "medication type",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol"],
+        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol"],
         dimensionless_norm_unit,
     ),
     CharacteristicType(
         "medication amount", MEDICATION, NUMERIC_TYPE, None, dimensionless_norm_unit
     ),
+
+
     CharacteristicType(
         "oral contraceptives",
         MEDICATION,
@@ -258,6 +286,25 @@ CHARACTERISTIC_DATA = [
         SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication","drug"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
+
+    # -------------- Nutrition -----------------
+
+    CharacteristicType(
+        "metabolic challenge",
+        MEDICATION,
+        CATEGORIAL_TYPE,
+        ["mixed-meal",
+         "oral glucose tolerance test",
+         "intravenous glucose tolerance test",
+         "hypoglycemic clamp",
+         "isoglycemic glucose infusion",
+         "protein solution",
+         "lipid-glucose-protein drink"
+         ],
+        dimensionless_norm_unit,
+    ),
+
+
     # -------------- Caffeine --------------
     CharacteristicType(
         "caffeine", LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, dimensionless_norm_unit
@@ -307,12 +354,18 @@ CHARACTERISTIC_DATA = [
         "AST", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"IU/I": None})
     ),
     CharacteristicType(
-        "albumin",
-        BIOCHEMICAL_DATA,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"g/dl": None}),
+        "albumin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"g/dl": None}),
     ),
+    CharacteristicType(
+        "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mg/dl": None, "mmol/l": None}),
+    ),
+    CharacteristicType(
+        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"µU/ml": None}),
+    ),
+    CharacteristicType(
+        "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"%": None}),
+    ),
+
     # --------------Genetic variants --------------
     CharacteristicType(
         "genetics",
@@ -371,17 +424,21 @@ INTERVENTION_DATA = [
         DOSING,
         NUMERIC_TYPE,
         None,
-        NormalizableUnit({"mg": None, "mg/kg": None}),
+        NormalizableUnit({"mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
     ),
     CHARACTERISTIC_DICT["medication type"],
+    CHARACTERISTIC_DICT["metabolic challenge"],
     CHARACTERISTIC_DICT["abstinence"],
     CHARACTERISTIC_DICT["smoking"],
     CHARACTERISTIC_DICT["oral contraceptives"],
 ]
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
+
+
+
 
 
 def validate_categorials(data, category_class):
@@ -445,23 +502,38 @@ auc_norm_unit = NormalizableUnit(
         "µg*h/ml": "mg*h/l",
         "µg/ml*h": "mg*h/l",
         "mg*min/l": "mg*h/l",
+        "mg/l*min": "mg*h/l",
         "µg*min/ml": None,
         "µmol*h/l": None,
         "µmol/l*h": None,
+        "pmol/ml*h": None,
+        "nmol*h/l": None,
         "µg/ml*h/kg": "mg*h/l/kg",
+        "ng*h/ml": None,
     }
 )
-amount_norm_unit = NormalizableUnit({"mg": None, "mmol": None})
+amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
 concentration_norm_unit = NormalizableUnit(
     {
+        "mg/100ml": None,
         "µg/ml": None,
+        "µg/l": None,
         "mg/dl": None,
         "mg/l": None,
+        "ng/l": None,
+        "pg/ml": None,
         "g/dl": None,
         "ng/ml": None,
+        "mmol/l": None,
         "µmol/l": None,
         "nmol/l": None,
-        "mmol/l": None,
+        "nmol/ml": None,
+        "pmol/l": None,
+        "pmol/ml": None,
+        "fmol/l": None,
+        "µU/ml": None,
+
+        "ng/g": None, # per g plasma
     }
 )
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})
@@ -469,15 +541,28 @@ clearance_norm_unit = NormalizableUnit(
     {
         "ml/min": None,
         "ml/h": None,  # -> ml/min
+        "l/h": None,
         "l/h/kg": None,
         "ml/h/kg": None,  # -> l/h/kg
+        "ml/kg/min": None,
         "ml/min/kg": None,  # -> l/h/kg
         "ml/min/1.73m^2": None,
     }
 )
+
 vd_norm_unit = NormalizableUnit({"l": None, "ml": "l", "l/kg": None, "ml/kg": "l/kg"})
 time_norm_unit = NormalizableUnit({"h": None, "min": "h"})
-rate_norm_unit = NormalizableUnit({"1/min": "1/h", "1/h": None})
+rate_norm_unit = NormalizableUnit({
+    "1/min": "1/h",
+    "1/h": None,
+    "pmol/min": None,
+    "pmol/kg/min": None,
+    "µmol/min/kg": "µmol/kg/min",
+    "µmol/kg/min": None,
+    "mU/min": None,
+    "mg/min": None,
+    "mg/kg/min": None,
+})
 
 
 PK_DATA = [
@@ -533,8 +618,25 @@ PK_DATA = [
     PharmacokineticsType(
         "recovery", "Fraction recovered of given substance.", ratio_norm_unit
     ),
+    PharmacokineticsType(
+        "egp", "endogenous glucose production (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "ra", "rate appearance (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "rd", "rate disappearance (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "rate_cycling", "rate cycling (rate)", rate_norm_unit
+    ),
+    PharmacokineticsType(
+        "rate_secretion", "rate secretion (rate)", rate_norm_unit
+    ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
+
+
 
 if __name__ == "__main__":
     """ 

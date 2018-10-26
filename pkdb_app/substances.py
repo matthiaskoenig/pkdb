@@ -2,6 +2,8 @@
 Handling of substance information.
 
 FIXME: add types, molecular weights and links to data bases
+
+To update the database content execute the setup_database script.
 """
 
 SUBSTANCES_DATA = [
@@ -107,5 +109,29 @@ SUBSTANCES_DATA = [
     "digoxin",
     "clozapine",
     "carbon monoxide",
+
+    # ----------------------
+    # glucose metabolism
+    # ----------------------
+    'glucose',
+    'lactate',
+    '[2-3H]glucose',
+    '[6-3H]glucose',
+    'insulin',
+    'c-peptide',
+    'cortisol',
+    'epinephrine',
+    'norepinephrine',
+    'cortisol',
+    'growth hormone',
+    'glucagon',
+    'TAA',  # total amino acids
+    'EAA',  # essential amino acids
+    'NEAA',  # non-essential amino acids
+    'BCAA',  # branch-chained amino acids
+    'exenatide',  # GLP1 analoque
+    'GIP',
+    'GLP-1',
 ]
+
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]

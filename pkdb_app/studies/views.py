@@ -1,16 +1,19 @@
+from django.http import Http404
+from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
+    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend
+from django_elasticsearch_dsl_drf.utils import DictionaryProxy
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
-from .models import Author, Reference, Study, Keyword
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+
+from pkdb_app.pagination import CustomPagination
+from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
+from .models import Reference, Study, Keyword
 from .serializers import (
-    AuthorSerializer,
     ReferenceSerializer,
     StudySerializer,
-    StudyReadSerializer,
-    ReferenceReadSerializer,
-    AuthorReadSerializer,
-    KeywordSerializer,
-    KeywordReadSerializer,
-)
+    ReferenceElasticSerializer,
+    StudyElasticSerializer, KeywordSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
@@ -20,24 +23,13 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
-
-class AuthorsViewSet(viewsets.ModelViewSet):
-
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("first_name", "last_name")
-    search_fields = filter_fields
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-
-
+###################
+# References
+###################
 class ReferencesViewSet(viewsets.ModelViewSet):
-
+    """Post/Update references"""
     queryset = Reference.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ReferenceSerializer
@@ -47,10 +39,12 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filter_fields = ("sid",)
-
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
+
+
+
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -62,7 +56,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("sid",)
     search_fields = filter_fields
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
     @staticmethod
     def group_validation(request):
@@ -101,55 +95,119 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 
 ###############################################################################################
-# Read ViewSets
+# Elastic ViewSets
 ###############################################################################################
-class StudyReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Study.objects.all()
-    serializer_class = StudyReadSerializer
-    lookup_field = "sid"
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("sid",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
+class ElasticKeywordViewSet(DocumentViewSet):
+    document = KeywordDocument
+    pagination_class = CustomPagination
+    serializer_class = KeywordSerializer
+    lookup_field = 'id'
+
+class ElasticStudyViewSet(DocumentViewSet):
+    document = StudyDocument
+    pagination_class = CustomPagination
+    serializer_class = StudyElasticSerializer
+    lookup_field = 'id'
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    search_fields = (
+                     'pk_version',
+                     'creator.first_name',
+                     'creator.last_name',
+                     'creator.user',
+
+                     'curators.first_name',
+                     'curators.last_name',
+                     'curators.user',
+
+                     'name',
+                     'design',
+                     'reference',
+                     'substances',
+                     'keywords',
+                     'files'
+                     )
+
+    filter_fields = {'name': 'name.raw'}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk": 'pk',
+        "pk_version":'pk_version',
+        "name":"name.raw",
+        "design": "design.raw",
+        "refernce": "refernce",
+        "substance": "substance.raw",
+        #"keywords": "keywords.raw",
+        #"files":"files",
+        "creator":"creator.last_name",
+        #"curators": "curators.last_name",
+
+    }
+
+    def get_object(self):
+        """Get object."""
+        queryset = self.get_queryset()
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        if lookup_url_kwarg not in self.kwargs:
+            raise AttributeError(
+                "Expected view %s to be called with a URL keyword argument "
+                "named '%s'. Fix your URL conf, or set the `.lookup_field` "
+                "attribute on the view correctly." % (
+                    self.__class__.__name__,
+                    lookup_url_kwarg
+                )
+            )
+
+        if lookup_url_kwarg == 'id':
+            obj = self.document.get(id=self.kwargs[lookup_url_kwarg])
+            return DictionaryProxy(obj.to_dict())
+        else:
+            queryset = queryset.filter(
+                'term',
+                **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
+            )
+
+            count = queryset.count()
+            if count == 1:
+                obj = queryset.execute().hits.hits[0]['_source']
+                return DictionaryProxy(obj)
+
+            elif count > 1:
+                raise Http404(
+                    "Multiple results matches the given query. "
+                    "Expected a single result."
+                )
+
+            raise Http404("No result matches the given query.")
+
+class ElasticReferenceViewSet(DocumentViewSet):
+    """Read/query/search references. """
+    document = ReferenceDocument
+    pagination_class = CustomPagination
+    serializer_class = ReferenceElasticSerializer
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    #multi_match_search_fields = {f:f for f in search_fields}
+    #multi_match_options = {
+    #    'type': 'filter'
+    #}
+    filter_fields = {'name': 'name.raw',}
+    #filter_fields = {f:f for f in search_fields}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk":'pk',
+        "study_name":"study_name",
+        "study_pk":"study_pk",
+        "pmid":"pmid",
+        "name":"name.raw",
+        "doi":"doi",
+        "title":"title.raw",
+        "abstract":"abstract.raw",
+        "journal":"journal.raw",
+        "date":"date",
+        "pdf":"pdf",
+        "authors":"authors.last_name",
+    }
 
 
-class ReferencesReadViewSet(viewsets.ReadOnlyModelViewSet):
 
-    queryset = Reference.objects.all()
-    serializer_class = ReferenceReadSerializer
-    lookup_field = "sid"
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("pmid", "doi", "title", "abstract", "journal", "date", "authors")
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
-
-    queryset = Author.objects.all()
-    serializer_class = AuthorReadSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("first_name", "last_name")
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)
-
-
-class KeywordReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordReadSerializer
-    filter_backends = (
-        django_filters.rest_framework.DjangoFilterBackend,
-        filters.SearchFilter,
-    )
-    filter_fields = ("name",)
-    search_fields = filter_fields
-    permission_classes = (AllowAny,)

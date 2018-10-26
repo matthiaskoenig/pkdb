@@ -5,9 +5,9 @@ from django.db import models
 
 from pkdb_app.interventions.models import (
     OutputSet,
-    Substance,
     InterventionSet,
     DataFile,
+    Substance,
 )
 from pkdb_app.storage import OverwriteStorage
 from pkdb_app.subjects.models import GroupSet, IndividualSet
@@ -21,13 +21,11 @@ class Keyword(models.Model):
     """
     This class describes the keywords / tags of a study.
     """
-
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=KEYWORDS_DATA_CHOICES)
 
 
 class Author(models.Model):
     """ Author in reference. """
-
     first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
     last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
 
@@ -40,7 +38,6 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # optional
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -55,13 +52,29 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def id(self):
+        return self.pk
+    @property
+    def study_pk(self):
+        if self.study.first():
+            return self.study.first().pk
+        else:
+            return ""
+
+    @property
+    def study_name(self):
+        if self.study.first():
+            return self.study.first().name
+        else:
+            return ""
+
 
 class Study(Sidable, models.Model):
     """ Single clinical study.
 
     Mainly reported as a single publication.
     """
-
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
     creator = models.ForeignKey(
         User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
@@ -87,6 +100,8 @@ class Study(Sidable, models.Model):
     outputset = models.OneToOneField(OutputSet, on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
 
+    class Meta:
+        verbose_name_plural = "studies"
 
     @property
     def individuals(self):
@@ -107,3 +122,54 @@ class Study(Sidable, models.Model):
     @property
     def timecourses(self):
         return self.outputset.timecourse_exs.timecourses.all()
+
+    @property
+    def substances_name(self):
+        return [substance.name for substance in self.substances.all()]
+
+    @property
+    def files_url(self):
+        return [file.file.name for file in self.files.all()]
+
+
+    @property
+    def keywords_name(self):
+        return [keyword.name for keyword in self.keywords.all()]
+
+    @property
+    def reference_name(self):
+        return self.reference.name
+
+    @property
+    def reference_pk(self):
+        return self.reference.pk
+
+    @property
+    def group_count(self):
+        if self.groupset:
+            return self.groupset.groups.count()
+        return 0
+
+    @property
+    def timecourse_count(self):
+        if self.outputset:
+            return self.outputset.timecourses.filter(final=True).count()
+        return 0
+
+    @property
+    def individual_count(self):
+        if self.individualset:
+            return self.individualset.individuals.count()
+        return 0
+
+    @property
+    def intervention_count(self):
+        if self.interventionset:
+            return self.interventionset.interventions.filter(final=True).count()
+        return 0
+
+    @property
+    def output_count(self):
+        if self.outputset:
+            return self.outputset.outputs.filter(final=True).count()
+        return 0

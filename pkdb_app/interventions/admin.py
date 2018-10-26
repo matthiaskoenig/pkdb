@@ -1,19 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
-from pkdb_app.interventions.models import InterventionSet, Intervention, Substance
-
-
-@admin.register(Intervention)
-class InterventionAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(InterventionSet)
-class InterventionSetAdmin(admin.ModelAdmin):
-    pass
+from pkdb_app.interventions.models import Substance
 
 
 @admin.register(Substance)
 class SubstanceAdmin(admin.ModelAdmin):
-    pass
+    fields = ('pk', 'name',)
+    list_display = ('pk', 'name',)
+    # list_filter = ('name',)
+    search_fields = ('name',)

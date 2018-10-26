@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """
 Watchdog to observe study folder for changes.
 Updates study on changes.
@@ -6,33 +5,19 @@ Updates study on changes.
 (pkdb) python ~/git/pkdb/pkdb_app/data_management/watch_study.py -s PATH_TO_DIRECTORY
 
 """
-
 import os
-import sys
 import time
 import argparse
-import coloredlogs
 import logging
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-coloredlogs.install(
-    level="INFO",
-    fmt="%(pathname)s:%(lineno)s %(funcName)s %(levelname) -10s %(message)s"
-    # fmt="%(levelname) -10s %(asctime)s %(module)s:%(lineno)s %(funcName)s %(message)s"
-)
+from pkdb_app import logging_utils
+from pkdb_app.settings import API_URL
+from pkdb_app.data_management.upload_studies import upload_study_from_dir
+from pkdb_app.data_management.setup_database import get_authentication_headers
+
 logger = logging.getLogger(__name__)
-
-
-BASEPATH = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
-)
-sys.path.append(BASEPATH)
-
-from pkdb_app.data_management.fill_database import upload_study_from_dir, get_header
-
-
-# FIXME: make sure that removed files are removed from the study (on delete?)
 
 
 class StudyHandler(FileSystemEventHandler):
@@ -43,12 +28,14 @@ class StudyHandler(FileSystemEventHandler):
         self.path = path
         _, study_name = os.path.split(self.path)
         self.study_name = study_name
+        self.auth_headers = get_authentication_headers()
+
         logging.info("-" * 80)
         logging.info(f"Watching [{self.study_name}]")
         logging.info(f"\t{self.path}")
         logging.info("-" * 80)
-        self.HEADER = get_header()
-        upload_study_from_dir(self.path,self.HEADER)
+        self._changed()
+
 
     def on_modified(self, event):
         """ Executed on modified event.
@@ -59,19 +46,15 @@ class StudyHandler(FileSystemEventHandler):
         logging.info("-" * 80)
         logging.info(f"Updating [{self.study_name}]")
         logging.info("-" * 80)
-        upload_study_from_dir(self.path,self.HEADER)
+        self._changed()
+
+    def _changed(self):
+        upload_study_from_dir(study_dir=self.path, api_url=API_URL, auth_headers=self.auth_headers)
 
 
 def start_observer(args):
     """ Run observer. """
-
-    # normalize path
     path = os.path.abspath(args.path)
-    if path.endswith("/"):
-        path = path[:-1]
-    if not os.path.exists(path) or not os.path.isdir(path):
-        print(path)
-        raise FileNotFoundError
 
     # start event handling
     event_handler = StudyHandler(path=path)

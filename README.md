@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1407035.svg)](https://doi.org/10.5281/zenodo.1407035)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1407035.svg)](https://doi.org/10.5281/zenodo.1406979)
 [![Build Status](https://travis-ci.org/matthiaskoenig/pkdb.svg?branch=develop)](https://travis-ci.org/matthiaskoenig/pkdb)
 
 # PKDB - Pharmacokinetics database
@@ -29,6 +29,7 @@ The database with backend and frontend is available as docker container for loca
 ## Build docker container
 To build the dev server for local development:
 ```bash
+sudo sysctl -w vm.max_map_count=262144
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
 docker-compose up --build
@@ -60,18 +61,12 @@ or to run migrations
 docker-compose run --rm web python manage.py makemigrations
 ```
 
-## Fill database
-The database can be filled via the `fill_database` scripts using curated data folders.
-The curated data is currently not made available, but only accessible via the REST API.
-```
-(pkdb) python ./pkdb_app/data_management/fill_database.py
-```
-
 ## Python (Virtual Environment)
 Setting up a virtual environment to interact with the data base via python
 ```
 mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
+(pkdb) pip install -e .
 ```
 add your virtual environment to jupyter kernels:
 ```
@@ -82,5 +77,42 @@ add your virtual environment to jupyter kernels:
 Documentation of the `vue.js` frontend is available in
 ./pkdb_client/README.md
 
+## Fill database
+The database can be filled via the `setup_database.py` and `upload_studies.py` scripts using curated data folders.
+The curated data is currently not made available, but only accessible via the REST API.
 
+First change in `/pkdb/pkdb_app/.env` the endpoints and passwords to the correct values by setting the environment
+variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
+
+```
+(pkdb) python setup_database.py
+(pkdb) python upload_studies.py
+```
+## Elastic Search 
+Elastic Search engine is running on `0.0.0.0:9200` but is also reachable via django views.
+General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
+
+query examples:
+```
+http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
+http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
+http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
+http://localhost:8000/api/v1/substances_elastic/?search:name=cod
+http://localhost:8000/api/v1/substances_elastic/?search=cod 
+http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
+http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
+http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
+```
+
+Suggest example:
+```
+http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
+```
+
+rebuild index:
+```
+docker-compose run --rm web ./manage.py search_index --rebuild -f
+```
+ 
+## Read 
 &copy; 2017-2018 Jan Grzegorzewski & Matthias König.

@@ -1,11 +1,9 @@
 <template>
     <div id="footer">
-        <br />
-        <p class="small alert-info">&copy; 2017-2018 PK-DB &nbsp;&nbsp;
+        <span class="small">&copy; 2017-2018 PK-DB &nbsp;&nbsp;
             Website: <a :href="web" target="_blank">{{web}}</a> &nbsp;&nbsp;
             Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a> &nbsp;&nbsp;
-        </p>
-
+        </span>
     </div>
 </template>
 
@@ -21,4 +19,7 @@
     }
 </script>
 <style>
+    #footer {
+        margin-top: 25px;
+    }
 </style>

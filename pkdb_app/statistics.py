@@ -1,6 +1,7 @@
 """
 Basic information and statistics about data base content.
 """
+import pandas as pd
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
@@ -17,8 +18,8 @@ class Statistics(object):
 
     def __init__(self):
         self.version = __version__
-        self.reference_count = Reference.objects.count()
         self.study_count = Study.objects.count()
+        self.reference_count = Reference.objects.count()
         self.group_count = Group.objects.count()
         self.individual_count = Individual.objects.count()
         self.intervention_count = Intervention.objects.count()
@@ -26,11 +27,21 @@ class Statistics(object):
         self.timecourse_count = Timecourse.objects.count()
 
 
+class StatisticsViewSet(viewsets.ViewSet):
+    """
+    Get database statistics including version.
+    """
+    def list(self, request):
+        instance = Statistics()
+        serializer = StatisticsSerializer(instance)
+        return Response(serializer.data)
+
+
 class StatisticsSerializer(serializers.BaseSerializer):
     """ Serializer for database statistics. """
 
     def to_representation(self, instance):
-
+        from django.db.models import Count
         return {
             key: getattr(instance, key)
             for key in [
@@ -46,19 +57,41 @@ class StatisticsSerializer(serializers.BaseSerializer):
         }
 
 
-class StatisticsViewSet(viewsets.ViewSet):
+class StatisticsData(object):
+    """ More complex statistics data for plots and overviews. """
+
+    def __init__(self, substance):
+        self.version = __version__
+        self.studies = Study.objects.filter(substances__name__contains=substance)
+        self.study_count = self.studies.count()
+        self.reference_count = self.studies.values_list("reference").count()
+        self.interventions = Intervention.objects.filter(substance__name=substance).filter(final=True)
+        self.intervention_count = self.interventions.count()
+        self.outputs = Output.objects.filter(substance__name=substance).filter(final=True)
+        self.output_count = self.outputs.count()
+        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(final=True)
+        self.timecourse_count = self.timecourses.count()
+        outputs_with_substance = Output.objects.filter(interventions__in=self.interventions)
+        self.individual_count = Individual.objects.filter(output__in=outputs_with_substance).count()
+        self.group_count = Group.objects.filter(output__in=outputs_with_substance).count()
+
+
+class StatisticsDataViewSet(viewsets.ViewSet):
     """
     Get database statistics including version.
     """
-
-    """
     def list(self, request):
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
-    """
+        # substances = ["caffeine", "codeine"]
+        data = {}
+        substances = Intervention.objects.values_list("substance__name", flat=True).distinct()
+        substances = [x for x in substances if x is not None]
 
-    def list(self, request):
-        instance = Statistics()
-        serializer = StatisticsSerializer(instance)
-        return Response(serializer.data)
+        for substance in substances:
+
+            instance = StatisticsData(substance=substance)
+            serializer = StatisticsSerializer(instance)
+
+            data[substance] = serializer.data
+        data = pd.DataFrame(data).T.to_dict("list")
+        data["labels"] = substances
+        return Response(data)
