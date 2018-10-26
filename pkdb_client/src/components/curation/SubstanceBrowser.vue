@@ -7,7 +7,7 @@
     <v-card-text>
       <v-autocomplete
               v-model="model"
-              :items="items"
+              :items="substances"
               color="white"
               hide-no-data
               hide-selected
@@ -22,7 +22,7 @@
 
     <v-divider></v-divider>
   </v-card>
-
+  {{ substances }}
     </span>
 </template>
 
@@ -30,8 +30,8 @@
     export default {
         name: "SubstanceBrowser",
         props: {
-            options: {
-                type: Object,
+            substances: {
+                type: Array,
                 required: true
             },
             title: {
@@ -43,9 +43,6 @@
             model: null,
         }),
         computed: {
-            items () {
-                return this.options["substances"]
-            },
             choices () {
                 if (!this.model) {
                     return []

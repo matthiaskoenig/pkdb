@@ -181,6 +181,7 @@
                     interventions: this.study.intervention_count,
                     outputs: this.study.output_count,
                     timecourses: this.study.timecourse_count,
+
                 }
 
             }
