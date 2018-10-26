@@ -17,27 +17,23 @@
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }}</text-highlight></td>
                 <td>
                     <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
-                        <div slot-scope="data">
-                            <group-button :group="data.data" />
-                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
-
-
-                        </div>
+                        <span slot-scope="data">
+                            <group-chip :group="data.data" :search="search"/>
+                        </span>
                     </get-data>
                 </td>
                 <td>
                     <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
-                        <div slot-scope="data">
-                            <individual-button :individual="data.data" />
-                            <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
-                        </div>
+                        <span slot-scope="data">
+                            <individual-chip :individual="data.data" :search="search"/>
+                        </span>
                     </get-data>
                 <td>
                     <span v-for="(intervention, index2) in table.item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
-                        <div slot-scope="data">
-                            <intervention-chip :title="data.data.name" :search="search"/>
-                        </div>
+                        <span slot-scope="data">
+                            <intervention-chip :intervention="data.data" :search="search"/>
+                        </span>
                     </get-data>
                     </span>
                 </td>

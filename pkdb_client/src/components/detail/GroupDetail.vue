@@ -3,7 +3,7 @@
         <heading-toolbar :title="'Group: '+group.pk" :count="group.count" :icon="icon('group')" :resource_url="resource_url"/>
         <v-layout>
             <v-flex>
-                <group-info :group="group"/>
+                <v-btn small color="black" fab dark title="Group Size">{{ group.count }}</v-btn>
             </v-flex>
             <v-flex>
                 <v-layout wrap>
@@ -13,8 +13,6 @@
                 </v-layout>
             </v-flex>
         </v-layout>
-
-
     </v-card>
 </template>
 

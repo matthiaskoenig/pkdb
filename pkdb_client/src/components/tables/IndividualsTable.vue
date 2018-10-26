@@ -24,7 +24,6 @@
                     <get-data :resource_url="group_url(table.item.group.pk)">
                         <span slot-scope="group">
                             <group-chip :group="group.data" :search="search"/>
-                            <group-info :group="group.data" :resource_url="table.item.group.url" />
                         </span>
                     </get-data>
                 </td>

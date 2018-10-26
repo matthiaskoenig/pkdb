@@ -15,7 +15,7 @@
                     <JsonButton :resource_url="api + '/interventions_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
-                    <intervention-chip :title="table.item.name" :search="search"/>
+                    <intervention-chip :intervention="table.item" :search="search"/>
                 </td>
                 <td>
                     <text-highlight :queries="[search]"> {{table.item.category }}</text-highlight>

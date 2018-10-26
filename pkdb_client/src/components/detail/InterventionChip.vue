@@ -1,20 +1,27 @@
 <template>
-    <span class="text-xs-center">
-        <v-chip v-if="title" color="blue">
-            <v-icon small>{{ icon('intervention') }}</v-icon>&nbsp;
-            <text-highlight :queries="search.split(/[ ,]+/)">{{ title }}</text-highlight>
-        </v-chip>
-    </span>
+    <v-dialog class="detail-dialog text-xs-center">
+        <span slot="activator">
+            <v-chip v-if="intervention" color="blue" title="Intervention Details">
+                <v-icon small>{{ icon('intervention') }}</v-icon>&nbsp;
+                <text-highlight :queries="search.split(/[ ,]+/)">{{ intervention.name }}</text-highlight>
+            </v-chip>
+        </span>
+        <intervention-detail :intervention="intervention"/>
+    </v-dialog>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+    import InterventionDetail from "./InterventionDetail"
 
     export default {
         name: "InterventionChip",
+        components: {
+            InterventionDetail
+        },
         props: {
-            title: {
-                type: String,
+            intervention: {
+                type: Object,
                 required: true
             },
             search: {

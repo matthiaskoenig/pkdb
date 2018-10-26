@@ -21,9 +21,6 @@
                     <group-chip :group="table.item" :search="search"/>
                 </td>
                 <td>
-                    <group-info :group="table.item"/>
-                </td>
-                <td>
                     <v-layout wrap>
                         <span v-for="item in table.item.characteristica_all_final" :key="item.pk">
                             <characteristica-card :data="item"
@@ -60,7 +57,6 @@
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Group Info', value: 'info'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }
