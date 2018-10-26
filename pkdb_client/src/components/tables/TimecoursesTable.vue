@@ -20,6 +20,8 @@
                         <div slot-scope="data">
                             <group-button :group="data.data" />
                             <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
+
+
                         </div>
                     </get-data>
                 </td>
@@ -34,10 +36,7 @@
                     <span v-for="(intervention, index2) in table.item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
                         <div slot-scope="data">
-                            <a :href="intervention_url(intervention.pk)"><v-icon>{{ icon('intervention') }}</v-icon></a>
-                            <text-highlight :queries="search.split(/[ ,]+/)">
-                                {{ data.data.name }}
-                            </text-highlight>
+                            <intervention-chip :title="data.data.name" :search="search"/>
                         </div>
                     </get-data>
                     </span>
@@ -68,6 +67,9 @@
     import IndividualButton from '../lib/IndividualButton'
     import TimecoursePlot from '../plots/TimecoursePlot'
     import SubstanceChip from "../detail/SubstanceChip"
+    import InterventionChip from "../detail/InterventionChip"
+    import GroupChip from "../detail/GroupChip"
+    import IndividualChip from "../detail/IndividualChip"
 
 
     export default {
@@ -79,6 +81,9 @@
             IndividualButton,
             TimecoursePlot,
             SubstanceChip,
+            InterventionChip,
+            GroupChip,
+            IndividualChip
         },
         mixins: [searchTableMixin, UrlMixin],
         data() {

@@ -36,7 +36,6 @@
                         corresponding
                         metadata are made accessible under FAIR principles.
                     </p>
-
                     <h2>Contact</h2>
                     <span v-for="item in contact_items">
                         <v-btn color="primary" fab small dark flat :title="item.name" :to="item.to"><v-icon>{{ item.icon }}</v-icon></v-btn>
@@ -54,7 +53,6 @@
                         <br /><br/>
                         <a href="https://www.bmbf.de/" target="_blank"><img src="/assets/images/bmbf.png" height="75"></img></a>&nbsp;
                         <a href="http://www.lisym.org" target="_blank"><img src="/assets/images/lisym.png" height="50"></img></a>
-
                     </p>
 
                 </v-flex>

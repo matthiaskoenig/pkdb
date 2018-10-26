@@ -15,7 +15,7 @@
                     <JsonButton :resource_url="api + '/interventions_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
-                    <text-highlight :queries="[search]">{{table.item.name }}</text-highlight>
+                    <intervention-chip :title="table.item.name" :search="search"/>
                 </td>
                 <td>
                     <text-highlight :queries="[search]"> {{table.item.category }}</text-highlight>
@@ -49,6 +49,7 @@
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
     import SubstanceChip from "../detail/SubstanceChip"
+    import InterventionChip from "../detail/InterventionChip"
 
     export default {
         name: "InterventionsTable",
@@ -56,7 +57,8 @@
             NoData,
             TableToolbar,
             CharacteristicaCard,
-            SubstanceChip
+            SubstanceChip,
+            InterventionChip
         },
         mixins: [searchTableMixin],
         data () {

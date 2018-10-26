@@ -18,6 +18,9 @@
                 <td>
                     <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
                         <div slot-scope="data">
+
+                            <group-chip :group="data.data" :search="search"/>
+
                             <group-button :group="data.data" />
                             <text-highlight :queries="search.split(/[ ,]+/)">{{ data.data.name }}</text-highlight>
                         </div>
@@ -33,12 +36,9 @@
                 <td>
                     <span v-if="table.item.interventions" v-for="(intervention, index2) in table.item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
-                        <div slot-scope="data">
-                            <a :href="intervention_url(intervention.pk)" :title="data.data.name"><v-icon>{{ icon('intervention') }}</v-icon></a>
-                            <text-highlight :queries="search.split(/[ ,]+/)">
-                            {{ data.data.name }}
-                            </text-highlight>
-                        </div>
+                        <span slot-scope="data">
+                            <intervention-chip :title="data.data.name" :search="search"/>
+                        </span>
                         </get-data>&nbsp;
                     </span>
                 </td>
@@ -48,9 +48,12 @@
                     </text-highlight>
                 </td>
                 <td>
-                        <substance-chip :title="table.item.substance.name" :search="search"/>
+                    <substance-chip :title="table.item.substance.name" :search="search"/>
                 </td>
-                <td>{{table.item.time}} <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span></td>
+                <td>
+                    {{table.item.time}}
+                    <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span>
+                </td>
                 <td><characteristica-card :data="table.item"/></td>
             </template>
             <no-data/>
@@ -66,6 +69,9 @@
     import IndividualButton from '../lib/IndividualButton'
     import CharacteristicaCard from '../detail/CharacteristicaCard'
     import SubstanceChip from "../detail/SubstanceChip"
+    import InterventionChip from "../detail/InterventionChip"
+    import GroupChip from "../detail/GroupChip"
+    import IndividualChip from "../detail/IndividualChip"
 
     export default {
         name: "OutputsTable",
@@ -75,7 +81,10 @@
             GroupButton,
             IndividualButton,
             CharacteristicaCard,
-            SubstanceChip
+            SubstanceChip,
+            InterventionChip,
+            GroupChip,
+            IndividualChip
         },
         mixins: [searchTableMixin, UrlMixin],
         data () {
