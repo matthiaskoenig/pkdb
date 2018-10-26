@@ -1,4 +1,6 @@
 import copy
+import numpy as np
+import numbers
 import pandas as pd
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
@@ -111,8 +113,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
         for item in data_list:
             if "_map" in item:
                 item = item[:-4]
-            else:
-                item
 
             unmap_list.append(item)
         return unmap_list
@@ -296,6 +296,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             df.columns = df.columns.str.strip()
 
 
+
         except Exception as e:
             raise serializers.ValidationError(
                 {
@@ -328,6 +329,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if format is None:
                 raise serializers.ValidationError({"format": "format is missing!"})
             df = self.df_from_file(source, format, subset)
+
+
+
             for entry in df.itertuples():
                 entry_dict = copy.deepcopy(template)
                 recursive_entry_dict = list(recursive_iter(entry_dict))
@@ -354,16 +358,16 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                         data
                                     ]
                                 )
-
+                            if isinstance(entry_value,numbers.Number):
+                                if np.isnan(entry_value):
+                                    entry_value = None
                             set_keys(entry_dict, entry_value, *keys)
 
                 entries.append(entry_dict)
-
         else:
-
             entries.append(template)
-
         return entries
+
 
     def array_from_file(self, data):
         """ Handle conversion of time course data.
@@ -410,6 +414,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 "For timecourse data a source file has to be provided."
             )
         return array_dicts
+
 
     def dict_from_array(self,array_dict,df,data,source):
         recursive_array_dict = list(recursive_iter(array_dict))
