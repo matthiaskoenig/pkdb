@@ -13,7 +13,7 @@ from pkdb_app.interventions.models import (
 from pkdb_app.interventions.serializers import (
     SubstanceSerializer,InterventionElasticSerializer,
     OutputElasticSerializer, TimecourseElasticSerializer)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.units import TIME_UNITS
@@ -25,7 +25,7 @@ from pkdb_app.units import TIME_UNITS
 class SubstanceViewSet(viewsets.ModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
 
 ###############################################################################################
