@@ -1,30 +1,36 @@
 <template>
     <v-card>
-        <Heading :title="'Intervention: '+intervention.pk" :icon="icon('intervention')" :resource_url="resource_url"/>
+        <heading-toolbar :title="'Intervention: '+intervention.pk" :icon="icon('intervention')" :resource_url="resource_url"/>
 
-        Name: {{intervention.name }}<br />
-        Category: {{intervention.category }}<br />
-        Choice: {{intervention.choice }}<br />
-        Route: {{intervention.route }}<br />
-        Form: {{intervention.form}}<br />
-        Application: {{intervention.application}}<br />
-        Substance: <a v-if="intervention.substance" :href="intervention.substance" :title="intervention.substance"/>
-        <v-icon>{{ icon('substance') }}</v-icon></a><br />
-        Time:  {{intervention.time}} <br />
-        Time Unit:  {{intervention.time_unit }} <br />
-        <!--
-        Unit:  {{intervention.unit}} <br />
-        Value:  {{intervention.value }} <br />
-        Mean:  {{intervention.mean }}<br />
-        Median:  {{intervention.median }}<br />
-        Min: {{intervention.min }}<br />
-        Max: {{intervention.max }}<br />
-        Sd: {{intervention.sd }}<br />
-        Se: {{intervention.se }}<br />
-        Cv: {{intervention.cv }}<br />
-        -->
+        <v-layout wrao>
+            <v-flex xs4>
+                <characteristica-card :data="intervention" />
+            </v-flex>
+            <v-flex xs4>
+                <span class="attr">Name</span><br /> {{intervention.name }}<br />
+                <span class="attr">Category</span><br /> {{intervention.category }}<br />
+                <span class="attr">Choice</span><br /> {{intervention.choice }}<br />
+                <span class="attr">Route</span><br /> {{intervention.route }}<br />
+                <span class="attr">Form</span><br /> {{intervention.form}}<br />
+                <span class="attr">Application</span><br /> {{intervention.application}}<br />
+                <span class="attr">Substance</span><br /> <a v-if="intervention.substance" :href="intervention.substance" :title="intervention.substance"/>
 
-        <characteristica-card :data="intervention" />
+                <span class="attr">Time</span><br /> {{intervention.time}} <br />
+                <span class="attr">Time Unit</span><br /> {{intervention.time_unit }} <br />
+            </v-flex>
+            <v-flex xs4>
+                <span class="attr">Unit</span><br /> {{intervention.unit}} <br />
+                <span class="attr">Value</span><br /> {{intervention.value }} <br />
+                <span class="attr">Mean</span><br /> {{intervention.mean }}<br />
+                <span class="attr">Median</span><br /> {{intervention.median }}<br />
+                <span class="attr">Min</span><br /> {{intervention.min }}<br />
+                <span class="attr">Max</span><br /> {{intervention.max }}<br />
+                <span class="attr">Sd</span><br /> {{intervention.sd }}<br />
+                <span class="attr">Se</span><br /> {{intervention.se }}<br />
+                <span class="attr">Cv</span><br /> {{intervention.cv }}<br />
+            </v-flex>
+
+        </v-layout>
     </v-card>
 </template>
 

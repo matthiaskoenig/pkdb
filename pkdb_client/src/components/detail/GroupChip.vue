@@ -4,6 +4,7 @@
             <v-chip v-if="group" color="orange" title="Group Details">
                 <v-icon small>{{ icon('group') }}</v-icon>&nbsp;
                 <text-highlight :queries="search.split(/[ ,]+/)">{{ group.name }}</text-highlight>
+                <v-btn small color="black" fab dark title="Group Size">{{ group.count }}</v-btn>
             </v-chip>
         </span>
         <group-detail :group="group"/>
