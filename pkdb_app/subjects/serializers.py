@@ -434,7 +434,7 @@ class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = GroupSet
-        fields = ["pk", "descriptions", "groups", "comments", "count"]
+        fields = ["pk", "descriptions", "groups", "comments"]
 
     def get_groups(self, obj):
         return list_of_pk("groups", obj)
@@ -482,7 +482,7 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 
     class Meta:
         model = IndividualSet
-        fields = ["pk","descriptions", "individuals","comments","count"]
+        fields = ["pk","descriptions", "individuals","comments"]
 
     def get_individuals(self,obj):
         return list_of_pk("individuals", obj)

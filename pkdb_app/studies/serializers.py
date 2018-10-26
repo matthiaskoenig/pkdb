@@ -396,6 +396,11 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "individualset",
             "interventionset",
             "outputset",
+            "group_count",
+            "individual_count",
+            "intervention_count",
+            "output_count",
+            "timecourse_count"
             ]
 
         read_only_fields = fields

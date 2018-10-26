@@ -176,12 +176,13 @@
             counts() {
                 return {
                     general: 1,
-                    groups: (this.study.groupset ? 0:this.study.groupset.count),
-                    individuals: (this.study.individualset ? 0:this.study.individualset.count),
-                    interventions: (this.study.interventionset ? 0:this.study.interventionset.count),
-                    outputs: (this.study.outputset ? 0:this.study.outputset.count_outputs),
-                    timecourses: (this.study.outputset ? 0:this.study.outputset.count_timecourses),
+                    groups: this.study.group_count,
+                    individuals: this.study.individual_count,
+                    interventions: this.study.intervention_count,
+                    outputs: this.study.output_count,
+                    timecourses: this.study.timecourse_count,
                 }
+
             }
 
         },

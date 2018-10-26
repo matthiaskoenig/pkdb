@@ -45,7 +45,7 @@ def common_setfields(model):
                     'pk': fields.IntegerField()
                 },
                 multi=True),
-            "count" : fields.FloatField(),
+            #"count" : fields.FloatField(),
 
             model: ObjectField(
                 properties = {
@@ -72,6 +72,7 @@ class StudyDocument(DocType):
     pk = fields.IntegerField(attr='pk')
     sid = string_field(attr='sid')
     pkdb_version= fields.IntegerField(attr='pkdb_version')
+
     descriptions = ObjectField(
         properties={
             'text': text_field("text"),
@@ -155,13 +156,13 @@ class StudyDocument(DocType):
                     'pk': fields.IntegerField()
                 },
                 multi=True),
-            "count_outputs" : fields.FloatField(),
+            #"count_outputs" : fields.FloatField(),
             "outputs": ObjectField(
                 properties = {
                     "pk" : fields.FloatField(),
                 }
             ),
-            "count_timecourses": fields.FloatField(),
+            #"count_timecourses": fields.FloatField(),
             "timecourses": ObjectField(
                 properties={
                     "pk": fields.FloatField(),
@@ -182,13 +183,12 @@ class StudyDocument(DocType):
         multi=True)
         }
     )
+    group_count = fields.IntegerField()
+    individual_count = fields.IntegerField()
+    intervention_count = fields.IntegerField()
+    output_count = fields.IntegerField()
+    timecourse_count = fields.IntegerField()
 
-
-    group_count = fields.FloatField()
-    individual_count = fields.FloatField()
-    intervention_count = fields.FloatField()
-    output_count =  fields.FloatField()
-    timecourse_count = fields.FloatField()
 
     class Meta(object):
         model = Study

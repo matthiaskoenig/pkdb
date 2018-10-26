@@ -536,7 +536,7 @@ class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializ
 
     class Meta:
         model = InterventionSet
-        fields = ["pk","descriptions", "interventions","comments","count"]
+        fields = ["pk","descriptions", "interventions","comments"]
 
     def get_interventions(self,obj):
 
@@ -583,7 +583,7 @@ class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["pk","descriptions", "outputs","timecourses","comments","count_outputs","count_timecourses"]
+        fields = ["pk","descriptions", "outputs","timecourses","comments"]
 
     def get_outputs(self,obj):
         return list_of_pk("outputs",obj)
