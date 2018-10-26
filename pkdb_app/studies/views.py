@@ -4,10 +4,10 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
+from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
 from .models import Reference, Study, Keyword
 from .serializers import (
     ReferenceSerializer,
@@ -23,7 +23,7 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
 ###################
 # References
@@ -41,7 +41,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     filter_fields = ("sid",)
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
 
 
@@ -56,7 +56,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("sid",)
     search_fields = filter_fields
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
     @staticmethod
     def group_validation(request):
@@ -97,6 +97,10 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
+class ElasticKeywordViewSet(DocumentViewSet):
+    document = KeywordDocument
+    serializer_class = KeywordSerializer
+    lookup_field = 'id'
 
 class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
