@@ -6,8 +6,9 @@
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex xs12>
+
+                    <h1>Pharmacokinetics database (PK-DB)</h1>
                     <p>
-                        <heading title="Pharmacokinetics database (PK-DB)"/><br/>
                         <strong>Version</strong>: {{ version }}
                     </p>
                     <p>
@@ -36,12 +37,26 @@
                         metadata are made accessible under FAIR principles.
                     </p>
 
-                    <h3>Contact</h3>
+                    <h2>Contact</h2>
                     <span v-for="item in contact_items">
+                        <v-btn color="primary" fab small dark flat :title="item.name" :to="item.to"><v-icon>{{ item.icon }}</v-icon></v-btn>
+                        <a :href="item.to" :title="item.title">{{ item.title }}</a>
+                    </span>
 
-                <v-btn color="primary" fab small dark flat :title="item.name" :to="item.to"><v-icon>{{ item.icon }}</v-icon></v-btn>
-                <a :href="item.to" :title="item.title">{{ item.title }}</a>
-                </span>
+                    <h2>Citation</h2>
+                    <p>
+                    <a href="https://doi.org/10.5281/zenodo.1406979"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg" alt="DOI"></a>
+                    </p>
+
+                    <h2>Funding</h2>
+                    <p>
+                    This project is supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054).
+                        <br /><br/>
+                        <a href="https://www.bmbf.de/" target="_blank"><img src="/assets/images/bmbf.png" height="75"></img></a>&nbsp;
+                        <a href="http://www.lisym.org" target="_blank"><img src="/assets/images/lisym.png" height="50"></img></a>
+
+                    </p>
+
                 </v-flex>
             </v-layout>
         </v-container>

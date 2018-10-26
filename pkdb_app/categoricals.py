@@ -104,7 +104,8 @@ KEYWORDS_DATA = [
     "hypoglycemia",
     "insulin secretion",
     "diabetes",
-    "oral glucose tolerance test"
+    "oral glucose tolerance test",
+
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
@@ -505,14 +506,18 @@ auc_norm_unit = NormalizableUnit(
         "µg*min/ml": None,
         "µmol*h/l": None,
         "µmol/l*h": None,
+        "pmol/ml*h": None,
+        "nmol*h/l": None,
         "µg/ml*h/kg": "mg*h/l/kg",
+        "ng*h/ml": None,
     }
 )
-amount_norm_unit = NormalizableUnit({"mg": None, "mmol": None})
+amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
 concentration_norm_unit = NormalizableUnit(
     {
         "mg/100ml": None,
         "µg/ml": None,
+        "µg/l": None,
         "mg/dl": None,
         "mg/l": None,
         "ng/l": None,
@@ -522,10 +527,13 @@ concentration_norm_unit = NormalizableUnit(
         "mmol/l": None,
         "µmol/l": None,
         "nmol/l": None,
+        "nmol/ml": None,
         "pmol/l": None,
         "pmol/ml": None,
         "fmol/l": None,
         "µU/ml": None,
+
+        "ng/g": None, # per g plasma
     }
 )
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})
@@ -533,6 +541,7 @@ clearance_norm_unit = NormalizableUnit(
     {
         "ml/min": None,
         "ml/h": None,  # -> ml/min
+        "l/h": None,
         "l/h/kg": None,
         "ml/h/kg": None,  # -> l/h/kg
         "ml/kg/min": None,
@@ -547,9 +556,10 @@ rate_norm_unit = NormalizableUnit({
     "1/min": "1/h",
     "1/h": None,
     "pmol/min": None,
+    "pmol/kg/min": None,
     "µmol/min/kg": "µmol/kg/min",
     "µmol/kg/min": None,
-
+    "mU/min": None,
     "mg/min": None,
     "mg/kg/min": None,
 })

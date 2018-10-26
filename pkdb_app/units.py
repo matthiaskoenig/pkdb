@@ -58,7 +58,7 @@ UNITS = {
     "mg/day": None,
     "kg/m^2": None,
     "IU/I": None,
-    "l/h": None,
+
 
     # concentration
     "µg/l": None,
@@ -72,13 +72,14 @@ UNITS = {
     "pg/ml": None,
     "ng/g": None,
     "mmol/l": None,
-    "nmol/ml":None,
+    "nmol/ml": None,
     "µmol/l": None,
     "nmol/l": None,
     "pmol/l": None,
     "pmol/ml": None,
     "fmol/l": None,
     "µU/ml": None,
+    "ng/g": None,  # per g plasma
 
     # AUC
     "mg*h/l": None,
@@ -94,8 +95,12 @@ UNITS = {
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
     "pmol*h/ml": None,
+    "pmol/ml*h": None,
+    "nmol*h/l": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
+
+
     # Volume of distribution (vd)
     "l": None,
     "ml": None,
@@ -105,6 +110,7 @@ UNITS = {
     # clearance
     "ml/min": None,
     "ml/h": None,  # -> ml/min
+    "l/h": None,
     "l/h/kg": None,
     "ml/h/kg": None,  # -> l/h/kg
     "ml/kg/min": None,

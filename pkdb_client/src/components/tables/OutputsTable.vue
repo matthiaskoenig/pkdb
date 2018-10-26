@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
+        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
                 :items="entries"
@@ -68,7 +68,7 @@
     import SubstanceChip from "../detail/SubstanceChip"
 
     export default {
-        name: "OutputsTable3",
+        name: "OutputsTable",
         components: {
             NoData,
             TableToolbar,

@@ -20,6 +20,10 @@ var searchTableMixin = {
                 default: () => []
 
             },
+            autofocus: {
+                type: Boolean,
+                default: true
+            }
 
         },
     mounted () {

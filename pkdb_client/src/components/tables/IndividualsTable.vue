@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <table-toolbar :otype="otype" :count="count" :url="url" @update="searchUpdate"/>
+        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
                 :items="entries"
@@ -12,6 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
+                    <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+ table.item.study.name" :icon="icon('study')"/>-->
                     <json-button :resource_url="api + '/individuals_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
@@ -37,7 +38,7 @@
     import CharacteristicaCard from '../detail/CharacteristicaCard'
 
     export default {
-        name: "GroupsTable3",
+        name: "IndividualsTable",
         components: {
             NoData,
             TableToolbar,
@@ -50,7 +51,7 @@
                 otype_single: "individual",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Info', value: 'info'},
+                    {text: 'Group Info', value: 'info'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }

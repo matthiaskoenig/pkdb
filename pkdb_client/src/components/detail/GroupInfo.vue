@@ -6,21 +6,16 @@
         </div>
         -->
         <div class="attr-card">
-            <span class="attr">Group Name</span><br />
-            {{ group.name }}
-        </div>
-        <div class="attr-card">
-            <span class="attr">Group Size</span><br />
-            <v-btn small color="black" fab dark>{{ group.count }}</v-btn>
+            <v-btn small color="black" fab dark title="Group Size">{{ group.count }}</v-btn><br/>
 
+            <span class="attr" title="Group Name">{{ group.name }}</span><br />
         </div>
         <div class="attr-card">
-            <span class="attr">Individuals</span><br />
             <span v-if="(group.individuals && group.individuals.length>0)">
-            <v-icon>fa fa-check-circle</v-icon> {{ group.individuals.length }}</span>
-            <span v-else>
-            <v-icon>fa fa-times-circle</v-icon>
-        </span>
+                <span class="attr"></span><br />
+                <v-icon>fa fa-check-circle</v-icon> {{ group.individuals.length }} Individuals
+            </span>
+
         </div>
     </div>
 </template>
