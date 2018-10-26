@@ -63,25 +63,25 @@
 
                     <!-- Groups -->
                     <v-flex xs12 v-show="visible.groups">
-                        <annotations :item="study.groupset"/>
+                        <annotations  v-if="study.groupset" :item="study.groupset"/>
                         <groups-table v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
                     </v-flex>
 
                     <!-- Individuals -->
                     <v-flex xs12 v-show="visible.individuals">
-                        <annotations :item="study.individualset"/>
+                        <annotations   v-if="study.individualset" :item="study.individualset"/>
                         <individuals-table v-if="counts['individuals']>0" :ids="study.individualset.individuals" :autofocus="false"/>
                     </v-flex>
 
                     <!-- Interventions -->
                     <v-flex xs12 v-show="visible.interventions">
-                        <annotations :item="study.interventionset"/>
+                        <annotations v-if="study.interventionset" :item="study.interventionset"/>
                         <interventions-table v-if="counts['interventions']>0" :ids="study.interventionset.interventions" :autofocus="false"/>
                     </v-flex>
 
                     <!-- Outputs -->
                     <v-flex xs12 v-show="visible.outputs || visible.timecourses">
-                        <annotations :item="study.outputset"/>
+                        <annotations  v-if="study.outputset" :item="study.outputset"/>
                         <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
                         <br />
                         <timecourses-table  v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
