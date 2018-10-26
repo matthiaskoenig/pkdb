@@ -99,6 +99,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 class ElasticKeywordViewSet(DocumentViewSet):
     document = KeywordDocument
+    pagination_class = CustomPagination
     serializer_class = KeywordSerializer
     lookup_field = 'id'
 
