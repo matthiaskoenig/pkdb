@@ -1,27 +1,24 @@
 <template>
-    <span class="text-xs-center">
-
-    <v-dialog class="detail-dialog">
-        <!--<v-btn slot="activator" fab small :title="group.name">-->
+    <v-dialog class="detail-dialog text-xs-center">
         <span slot="activator">
-            <v-chip v-if="title" color="warning">
+            <v-chip v-if="group" color="orange" title="Group Details">
                 <v-icon small>{{ icon('group') }}</v-icon>&nbsp;
-                <text-highlight :queries="search.split(/[ ,]+/)">{{ title }}</text-highlight>
+                <text-highlight :queries="search.split(/[ ,]+/)">{{ group.name }}</text-highlight>
             </v-chip>
         </span>
-        <!--</v-btn>-->
         <group-detail :group="group"/>
-        Test
     </v-dialog>
-
-    </span>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+    import GroupDetail from "./GroupDetail"
 
     export default {
         name: "GroupChip",
+        components: {
+            GroupDetail
+        },
         props: {
             group: {
                 type: Object,

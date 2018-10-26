@@ -3,10 +3,11 @@
         <heading-toolbar :title="'Individual: '+individual.pk" :count="1" :icon="icon('individual')" :resource_url="resource_url"/>
 
         <v-layout>
-            <v-flex>
-        <individual-info :individual="individual"/>
+            <v-flex xs2>
+                <span class="attr">Individual Name</span><br />
+                {{ individual.name }}
             </v-flex>
-        <v-flex>
+        <v-flex xs10>
             <v-layout wrap>
             <span v-for="item in this.individual.characteristica_all_final">
                 <characteristica-card :data="item" />

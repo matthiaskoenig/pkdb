@@ -1,20 +1,27 @@
 <template>
-    <span class="text-xs-center">
-        <v-chip v-if="title" color="warning">
-            <v-icon small>{{ icon('individual') }}</v-icon>&nbsp;
-            <text-highlight :queries="search.split(/[ ,]+/)">{{ title }}</text-highlight>
-        </v-chip>
-    </span>
+    <v-dialog class="detail-dialog text-xs-center">
+        <span slot="activator">
+            <v-chip v-if="individual" color="orange" title="Group Details">
+                <v-icon small>{{ icon('individual') }}</v-icon>&nbsp;
+                <text-highlight :queries="search.split(/[ ,]+/)">{{ individual.name }}</text-highlight>
+            </v-chip>
+        </span>
+        <individual-detail :individual="individual"/>
+    </v-dialog>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+    import IndividualDetail from "./IndividualDetail"
 
     export default {
         name: "IndividualChip",
+        components: {
+            IndividualDetail
+        },
         props: {
-            title: {
-                type: String,
+            individual: {
+                type: Object,
                 required: true
             },
             search: {
