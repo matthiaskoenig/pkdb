@@ -7,7 +7,7 @@
     <v-card-text>
       <v-autocomplete
               v-model="model"
-              :items="substances"
+              :items="items"
               color="white"
               hide-no-data
               hide-selected
@@ -43,6 +43,14 @@
             model: null,
         }),
         computed: {
+            items () {
+                var items = [];
+                for (var k=0; k<this.substances.length; k++){
+                    var keyword = this.substances[k];
+                    items.push(keyword['name'])
+                }
+                return items;
+            },
             choices () {
                 if (!this.model) {
                     return []

@@ -48,13 +48,9 @@
                 var items = [];
                 for (var k=0; k<this.keywords.length; k++){
                     var keyword = this.keywords[k];
-                    console.log(keyword)
                     items.push(keyword['name'])
                 }
-                console.log(this.keywords)
-                console.log(items);
                 return items;
-
             },
             choices () {
                 if (!this.model) {
