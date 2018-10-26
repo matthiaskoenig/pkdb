@@ -23,21 +23,19 @@
                 </get-data>
             </v-flex>
             <v-flex xs3>
-                <get-data :resource_url="output_options_url">
-                    <template slot-scope="output">
-                        <substance-browser :options="output.data" title="Substances"/>
+                <get-data :resource_url="substances_url">
+                    <template slot-scope="substances">
+                        <substance-browser :substances="substances.data.results" title="Substances"/>
                     </template>
                 </get-data>
             </v-flex>
-            <!--
             <v-flex xs3>
-                <get-data :resource_url="output_options_url">
-                    <template slot-scope="output">
-                        <keyword-browser :options="output.data" title="Keywords"/>
+                <get-data :resource_url="keywords_url">
+                    <template slot-scope="keywords">
+                        <keyword-browser :keywords="keywords.data.results" title="Keywords"/>
                     </template>
                 </get-data>
             </v-flex>
-            -->
 
 
         </v-layout>
@@ -67,6 +65,12 @@
             },
             output_options_url() {
                 return this.$store.state.endpoints.api + '/output_options/';
+            },
+            substances_url() {
+                return this.$store.state.endpoints.api + '/substances_elastic/';
+            },
+            keywords_url() {
+                return this.$store.state.endpoints.api + '/keywords_elastic/';
             },
 
         }

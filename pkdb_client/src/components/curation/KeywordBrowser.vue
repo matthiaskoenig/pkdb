@@ -22,7 +22,7 @@
 
     <v-divider></v-divider>
   </v-card>
-      {{ options }}
+      {{ keywords }}
 
     </span>
 </template>
@@ -31,8 +31,8 @@
     export default {
         name: "KeywordBrowser",
         props: {
-            options: {
-                type: Object,
+            keywords: {
+                type: Array,
                 required: true
             },
             title: {
@@ -45,7 +45,7 @@
         }),
         computed: {
             items () {
-                return this.options["keywords"]
+
             },
             choices () {
                 if (!this.model) {
