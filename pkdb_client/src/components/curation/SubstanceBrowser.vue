@@ -22,7 +22,6 @@
 
     <v-divider></v-divider>
   </v-card>
-  {{ substances }}
     </span>
 </template>
 
@@ -45,8 +44,8 @@
         computed: {
             items () {
                 var items = [];
-                for (var k=0; k<this.substances.length; k++){
-                    var keyword = this.substances[k];
+                for (var k=0; k<this.substances.data.length; k++){
+                    var keyword = this.substances.data[k];
                     items.push(keyword['name'])
                 }
                 return items;

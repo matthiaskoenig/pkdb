@@ -25,19 +25,17 @@
             <v-flex xs3>
                 <get-data :resource_url="substances_url">
                     <template slot-scope="substances">
-                        <substance-browser :substances="substances.data.results" title="Substances"/>
+                        <substance-browser :substances="substances.data.data" title="Substances"/>
                     </template>
                 </get-data>
             </v-flex>
             <v-flex xs3>
                 <get-data :resource_url="keywords_url">
                     <template slot-scope="keywords">
-                        <keyword-browser :keywords="keywords.data.results" title="Keywords"/>
+                        <keyword-browser :keywords="keywords.data.data" title="Keywords"/>
                     </template>
                 </get-data>
             </v-flex>
-
-
         </v-layout>
     </div>
 </template>
