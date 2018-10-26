@@ -37,8 +37,6 @@ class ReferenceDocument(DocType):
 study_index = Index("studies")
 study_index.settings(**elastic_settings)
 
-
-
 def common_setfields(model):
     return ObjectField(
         properties = {

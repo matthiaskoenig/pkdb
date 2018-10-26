@@ -1,8 +1,6 @@
 from django.http import Http404
-from django_elasticsearch_dsl_drf.constants import MATCHING_OPTION_MUST
 from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
-    SimpleQueryStringSearchFilterBackend, FilteringFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
+    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework.exceptions import ValidationError
@@ -10,16 +8,22 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from .models import Reference, Study
+from .models import Reference, Study, Keyword
 from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer)
+    StudyElasticSerializer, KeywordSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
+
+class KeywordViewSet(viewsets.ModelViewSet):
+    queryset = Keyword.objects.all()
+    serializer_class = KeywordSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 ###################
 # References
@@ -41,35 +45,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
 
 
-class ElasticReferenceViewSet(DocumentViewSet):
-    """Read/query/search references. """
-    document = ReferenceDocument
-    pagination_class = CustomPagination
-    serializer_class = ReferenceElasticSerializer
-    lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
-    #multi_match_search_fields = {f:f for f in search_fields}
-    #multi_match_options = {
-    #    'type': 'filter'
-    #}
-    filter_fields = {'name': 'name.raw',}
-    #filter_fields = {f:f for f in search_fields}
-    ordering_fields = {
-        'sid': 'sid',
-        "pk":'pk',
-        "study_name":"study_name",
-        "study_pk":"study_pk",
-        "pmid":"pmid",
-        "name":"name.raw",
-        "doi":"doi",
-        "title":"title.raw",
-        "abstract":"abstract.raw",
-        "journal":"journal.raw",
-        "date":"date",
-        "pdf":"pdf",
-        "authors":"authors.last_name",
-    }
+
 
 class StudyViewSet(viewsets.ModelViewSet):
     queryset = Study.objects.all()
@@ -198,7 +174,35 @@ class ElasticStudyViewSet(DocumentViewSet):
 
             raise Http404("No result matches the given query.")
 
-
+class ElasticReferenceViewSet(DocumentViewSet):
+    """Read/query/search references. """
+    document = ReferenceDocument
+    pagination_class = CustomPagination
+    serializer_class = ReferenceElasticSerializer
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    #multi_match_search_fields = {f:f for f in search_fields}
+    #multi_match_options = {
+    #    'type': 'filter'
+    #}
+    filter_fields = {'name': 'name.raw',}
+    #filter_fields = {f:f for f in search_fields}
+    ordering_fields = {
+        'sid': 'sid',
+        "pk":'pk',
+        "study_name":"study_name",
+        "study_pk":"study_pk",
+        "pmid":"pmid",
+        "name":"name.raw",
+        "doi":"doi",
+        "title":"title.raw",
+        "abstract":"abstract.raw",
+        "journal":"journal.raw",
+        "date":"date",
+        "pdf":"pdf",
+        "authors":"authors.last_name",
+    }
 
 
 
