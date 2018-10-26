@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
@@ -12,7 +13,7 @@ from pkdb_app.interventions.models import (
 from pkdb_app.interventions.serializers import (
     SubstanceSerializer,InterventionElasticSerializer,
     OutputElasticSerializer, TimecourseElasticSerializer)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.units import TIME_UNITS
@@ -24,7 +25,7 @@ from pkdb_app.units import TIME_UNITS
 class SubstanceViewSet(viewsets.ModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminUser,)
 
 
 ###############################################################################################
@@ -38,7 +39,7 @@ class InterventionOptionViewSet(viewsets.ViewSet):
     def get_options():
         options = {}
         options["categories"] = {k: item._asdict() for k, item in sorted(INTERVENTION_DICT.items())}
-        options["substances"] = map(str, Substance.objects.all().order_by('name'))
+        options["substances"] = reverse('substances_elastic-list')
         options["route"] = INTERVENTION_ROUTE
         options["form"] = INTERVENTION_FORM
         options["application"] = INTERVENTION_APPLICATION
@@ -54,7 +55,7 @@ class OutputOptionViewSet(viewsets.ViewSet):
     def get_options():
         options = {}
         options["pktypes"] = {k:item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
-        options["substances"] = map( str, Substance.objects.all().order_by('name'))
+        options["substances"] = reverse('substances_elastic-list')
         options["tissue"] = OUTPUT_TISSUE_DATA
         options["time_unit"] = TIME_UNITS
         return options
@@ -68,7 +69,7 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
     def get_options():
             options = {}
             options["pktypes"] = {k: item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
-            options["substances"] = map(str, Substance.objects.all().order_by('name'))
+            options["substances"] = reverse('substances_elastic-list')
             options["tissue"] = OUTPUT_TISSUE_DATA
             options["time_unit"] = TIME_UNITS
             return options

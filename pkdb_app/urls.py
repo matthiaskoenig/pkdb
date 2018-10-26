@@ -25,7 +25,7 @@ from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-    ElasticReferenceViewSet, ElasticStudyViewSet, KeywordViewSet)
+    ElasticReferenceViewSet, ElasticStudyViewSet, KeywordViewSet, ElasticKeywordViewSet)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet
 from . import views
@@ -49,6 +49,7 @@ router.register("references", ReferencesViewSet, base_name="references")
 # elastic search format
 router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
 router.register("keywords", KeywordViewSet, base_name="keywords")
+router.register("keywords_elastic", ElasticKeywordViewSet, base_name="keywords_elastic")
 
 
 

@@ -1,7 +1,6 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, ObjectField
-from pkdb_app.studies.models import Reference, Study
-
+from pkdb_app.studies.models import Reference, Study, Keyword
 
 # Elastic Reference
 reference_index = Index("references")
@@ -193,3 +192,13 @@ class StudyDocument(DocType):
 
     class Meta(object):
         model = Study
+
+# Elastic Study
+keyword_index = Index("keywords")
+keyword_index.settings(**elastic_settings)
+
+@keyword_index.doc_type
+class KeywordDocument(DocType):
+    name = string_field(attr="name")
+    class Meta(object):
+        model = Keyword
