@@ -279,20 +279,24 @@ class StudySerializer(SidSerializer):
                 setattr(study, name, instance)
             study.save()
 
-        for curator in related["curators"]:
-            study.curators.add(curator)
 
-        for substance in related["substances"]:
-            study.substances.add(substance)
+        many_2_many_fields = ["curators","keywords","substances"]
+        for field in many_2_many_fields:
+            if len(related[field]) > 0 :
+                related_m2m_field = getattr(study,field)
+                related_m2m_field.clear()
+                for instance in related[field]:
+                    related_m2m_field.add(instance)
 
-        for keyword in related["keywords"]:
-            study.keywords.add(keyword)
+
 
         if related["descriptions"]:
             study.descriptions.all().delete()
             create_multiple(study, related["descriptions"], "descriptions")
 
-        create_multiple(study, related["comments"], "comments")
+        if related["comments"]:
+            study.comments.all().delete()
+            create_multiple(study, related["comments"], "comments")
 
         study.save()
 

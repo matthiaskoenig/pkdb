@@ -25,9 +25,7 @@
             <v-card flat>
                 <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
                     <span slot-scope="timecourses">
-                        <span v-for="timecourse in timecourses.data.data.data" :key="timecourse.pk">
-                            <timecourse-plot :timecourse="timecourse"/>
-                        </span>
+                        <timecourses-plot :timecourses="timecourses.data.data.data"/>
                     </span>
                 </get-data>
             </v-card>
@@ -44,11 +42,11 @@
      */
     import {lookup_icon} from "@/icons"
     import {UrlMixin} from "../tables/mixins";
-    import TimecoursePlot from "../plots/TimecoursePlot";
+    import TimecoursesPlot from "../plots/TimecoursesPlot";
 
     export default {
         name: "FileImageView",
-        components: {TimecoursePlot},
+        components: {TimecoursesPlot},
         props: {
             files: {
                 type: Array,

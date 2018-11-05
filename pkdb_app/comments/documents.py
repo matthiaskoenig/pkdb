@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from pkdb_app.documents import elastic_settings, string_field, ObjectField, text_field
 from pkdb_app.comments.models import Comment, Description
+from pkdb_app.users.models import User
 
 comments_index = Index("comments")
 comments_index.settings(**elastic_settings)
@@ -17,6 +18,7 @@ class CommentDocument(DocType):
 
     class Meta(object):
         model = Comment
+        #related_models = [User]
 
 
 descriptions_index = Index("descriptions")

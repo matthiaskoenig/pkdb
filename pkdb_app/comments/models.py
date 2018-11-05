@@ -69,6 +69,9 @@ class Comment(models.Model):
     )
 
 
+
+
+
 class Description(models.Model):
     text = models.TextField(blank=True, null=True)
 
@@ -90,3 +93,4 @@ class Description(models.Model):
     study = models.ForeignKey(
         Study, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
+
