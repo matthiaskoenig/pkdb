@@ -97,11 +97,39 @@
             },
 
             layout(){
+                let unqiue_time_unit = [...new Set( this.timecourses.map(x => x.time_unit))];
+                let time_unit = "";
+                let y_font_color = "black";
+                let x_font_color = "black";
+
+                if ( unqiue_time_unit.length !== 1) {
+                    time_unit = "Problem: multiple units"
+                    x_font_color = "red"
+
+                }
+                else {
+                    time_unit = unqiue_time_unit[0]
+                }
+
+                let unqiue_unit = [...new Set( this.timecourses.map(x => x.unit))];
+                let unit = "";
+                if ( unqiue_unit.length !== 1) {
+                    unit = "Problem: multiple units";
+                    y_font_color = "red"
+                }
+                else {
+                    unit = unqiue_unit[0]
+                }
+
+
+
+
                 var xaxis = {
-                    title: "time [" + this.timecourses[0].time_unit+ "]",
+
+                    title: "time [" +time_unit+ "]",
                     titlefont: {
                         size: 10,
-                        color: 'black'
+                        color: x_font_color
                     },
                     showticklabels: true,
                     tickfont: {
@@ -110,10 +138,10 @@
                     },
                 };
                 var yaxis = {
-                    title: this.timecourses[0].substance.name + " [" + this.timecourses[0].unit+ "]",
+                    title: this.timecourses[0].substance.name + " [" + unit+ "]",
                     titlefont: {
                         size: 10,
-                        color: 'black'
+                        color: y_font_color
                     },
                     showticklabels: true,
                     tickfont: {
