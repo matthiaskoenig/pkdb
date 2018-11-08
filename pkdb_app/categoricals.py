@@ -410,7 +410,7 @@ CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DA
 # ---------------------------------------------------
 # Interventions
 # ---------------------------------------------------
-INTERVENTION_ROUTE = ["oral", "iv"]
+INTERVENTION_ROUTE = ["oral", "iv","intramuscular"]
 INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
 INTERVENTION_APPLICATION = ["single dose", "multiple dose", "continuous injection"]
 INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)

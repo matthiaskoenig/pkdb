@@ -641,7 +641,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk",]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "final","interventions","figure","auc_end"])
+                + ["group", "individual", "final","interventions","figure","auc_end","kel"])
 
     def get_substance(self,obj):
         if obj.substance:

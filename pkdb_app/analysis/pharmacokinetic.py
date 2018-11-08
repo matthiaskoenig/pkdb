@@ -305,7 +305,7 @@ def _kel(t, c, slope=None):
     line (on a logarithmic y scale).
     """
     if slope is None:
-        [slope, intercept, r_value, p_value, std_err] = _regression(t, c)
+        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
     return -slope
 
 

@@ -116,7 +116,7 @@ class ElasticOutputViewSet(DocumentViewSet):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
-    filter_fields = {'pk':'pk','final':'final'}
+    filter_fields = {'pk':'pk','final':'final','substance':'substance.name.raw','pktype':'pktype.raw'}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
                        'substance':'substance.name',
@@ -132,7 +132,7 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
-    filter_fields = {'pk':'pk','final':'final'}
+    filter_fields = {'pk':'pk','final':'final','substance':'substance.name.raw','pktype':'pktype.raw'}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
                        'group':'group.name',

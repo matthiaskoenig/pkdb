@@ -140,6 +140,8 @@ class TimecourseDocument(DocType):
 
     auc_end = fields.FloatField(attr='auc_end')
 
+    kel = fields.FloatField(attr='kel')
+
     class Meta(object):
             model = Timecourse
 
