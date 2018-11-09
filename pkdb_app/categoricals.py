@@ -474,6 +474,9 @@ def validate_categorials(data, category_class):
                 if choice not in model_categorical.choices:
                     msg = f"{choice} is not part of {model_categorical.choices} for {model_categorical.key}"
                     raise ValueError({"choice": msg})
+            else:
+                msg = f"for category: <{category}> no choices are allowed. If you are trying to insert a numerical value, use keword value, mean or median"
+                raise ValueError({"choice": msg})
 
         # check unit
         if unit is None:
