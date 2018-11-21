@@ -13,7 +13,7 @@
                 <span class="attr">Route</span><br /> {{intervention.route }}<br />
                 <span class="attr">Form</span><br /> {{intervention.form}}<br />
                 <span class="attr">Application</span><br /> {{intervention.application}}<br />
-                <span class="attr">Substance</span><br /> <a v-if="intervention.substance" :href="intervention.substance" :title="intervention.substance"/>
+                <span class="attr">Substance</span><br /> {{intervention.substance}}<br />
 
                 <span class="attr">Time</span><br /> {{intervention.time}} <br />
                 <span class="attr">Time Unit</span><br /> {{intervention.time_unit }} <br />

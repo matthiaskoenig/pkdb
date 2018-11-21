@@ -68,7 +68,7 @@ Fill in basic information for study, use the `PMID` for `sid` and `reference` fi
 * Keywords relevant for the study should be mentioned in the `keywords` list. 
 
 
-## 3. Curation of groups/groupset
+## 3. Curation of groups/groupset and individuals/individualset
 The next step is curating the groups used in the study. The information is stored in the `groupset` of the following form.
 ```json
 {
@@ -144,7 +144,7 @@ The next step is curating the groups used in the study. The information is store
 * The possible values of categorial are accessible via the curation web interface and in `categorials.py`.
 * The group names have to be unique within the groupset and should be descriptive, e.g., smoker, nonsmoker, contraceptive.
 
-All available fields for characteristica on group and groupset are:
+All available fields for characteristica on group are:
 ```json
 {
     "count": "int",
@@ -164,6 +164,9 @@ All available fields for characteristica on group and groupset are:
 }
 ```
 * Inclusion and exclusion criteria for study can be defined via the `ctype` on groupset or group with values in {`exclusion`, `inclusion`}
+
+Individuals are curated like groups with the exception that individuals must belong
+to a given group, i.e., the `group` attribute must be set.
 
 ## 4. Curation of interventions/interventionset
 ```json
