@@ -174,15 +174,18 @@ to a given group, i.e., the `group` attribute must be set.
     "interventionset": {
         "description": "All patients and volunteers fasted overnight and, at 0800 hours, were given orally 300 mg caffeine dissolved in 150 ml water; food intake was allowed 3 h after administration of caffeine.",
         "interventions": [
-            {
-                "name": "D1",
-                "substance": "caffeine",
-                "time": "0",
-                "time_unit": "h",
-                "route": "oral",
-                "value": 300.0,
-                "unit": "mg"
-            }
+          {
+            "name": "glciv",
+            "time": "0",
+            "time_unit": "h",
+            "route": "iv",
+            "form": "solution",
+            "application": "single dose",
+            "category": "dosing",
+            "substance": "glucose",
+            "value": "0.5",
+            "unit": "g/kg"
+          }
         ]
     }
 }
