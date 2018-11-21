@@ -63,6 +63,7 @@ UNITS = {
     # concentration
     "µg/l": None,
     "µg/ml": None,
+    "µg/dl": None,
     "mg/dl": None,
     "mg/100ml": None,
     "mg/l": None,

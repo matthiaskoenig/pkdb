@@ -176,7 +176,7 @@ CHARACTERISTIC_DATA = [
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
     CharacteristicType(
-        "obesity index",
+        "obesity index",  # percent of normal body weight
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
 
@@ -248,7 +248,8 @@ CHARACTERISTIC_DATA = [
             "PBC",
             "miscellaneous liver disease",
             "schizophrenia",
-            "t2dm"
+            "t2dm",
+            "t1dm"
         ],
         dimensionless_norm_unit,
     ),
@@ -301,6 +302,28 @@ CHARACTERISTIC_DATA = [
          "protein solution",
          "lipid-glucose-protein drink"
          ],
+        dimensionless_norm_unit,
+    ),
+
+    # -------------- sleeping & circadian rhythm -----------------
+
+    CharacteristicType(
+        "sleeping",
+        LIFESTYLE,
+        CATEGORIAL_TYPE,
+        ["asleep",
+         "awake"
+        ],
+        dimensionless_norm_unit,
+    ),
+
+    CharacteristicType(
+        "circadian",
+        LIFESTYLE,
+        CATEGORIAL_TYPE,
+        ["daytime",
+         "nighttime"
+        ],
         dimensionless_norm_unit,
     ),
 
@@ -434,6 +457,8 @@ INTERVENTION_DATA = [
     CHARACTERISTIC_DICT["abstinence"],
     CHARACTERISTIC_DICT["smoking"],
     CHARACTERISTIC_DICT["oral contraceptives"],
+    CHARACTERISTIC_DICT["sleeping"],
+    CHARACTERISTIC_DICT["circadian"],
 ]
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
@@ -521,6 +546,7 @@ concentration_norm_unit = NormalizableUnit(
         "mg/100ml": None,
         "µg/ml": None,
         "µg/l": None,
+        "µg/dl": None,
         "mg/dl": None,
         "mg/l": None,
         "ng/l": None,
