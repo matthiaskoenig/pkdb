@@ -176,7 +176,7 @@ CHARACTERISTIC_DATA = [
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
     CharacteristicType(
-        "obesity index",
+        "obesity index",  # percent of normal body weight
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
 
