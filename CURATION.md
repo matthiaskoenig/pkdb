@@ -1,52 +1,65 @@
 # Curation information
-Collection of resources and information on how experimental data
-should be curated from manuscripts for upload/inclusion in PKDB.
+Collection of resources and information on how to curate data and information
+from manuscripts for the PKDB.
 
-In the curation JSON files for the study and reference are created which are parsed
- by the model serializers
+A single study is hereby stored in one folder which can be uploaded and iteratively curated using the `watch_study` script
 ```
-serializers.py
-studies/serializers.py
-interventions/serializers.py
-subjects/serializers.py
+cd pkdb
+(pkdb) python pkdb_app/data_management/watch_study.py -s $STUDYFOLDER
 ```
 
 ## 1. PDF, Reference, Figures & Tables
-For upload a certain folder structure is expected
-- folder name is STUDYNAME, e.g., Albert1974
-- folder contains pdf as STUDYNAME.pdf, e.g., Albert1974.pdf
-- folder contains reference information as `reference.json`
+For upload a certain folder structure and organisation is expected of the `$STUDYFOLDER`:
+- folder name is `STUDYNAME`, e.g., Albert1974
+- folder contains the pdf as `STUDYNAME.pdf`, e.g., Albert1974.pdf
 - folder contains study information as `study.json`
+- folder contains reference information as `reference.json`
 - folder contains additional files associated with study, i.e.,
-    - tables, named STUDYNAME_Tab[0-9]*.png, e.g., Albert1974_Tab1.png
-    - figures, named STUDYNAME_Fig[0-9]*.png, e.g., Albert1974_Fig2.png
-    - excel file, named STUDYNAME.xlsx, e.g., Albert1974.xlsx
-    - data files, named STUDYNAME_Tab[0-9]*.csv or STUDYNAME_Fig[0-9]*.csv
-* Start watchdog `watch_study.py` via pycharm with `-s PATH_TO_DIRECTORY` argument
-
+    - tables, named `STUDYNAME_Tab[0-9]*.png`, e.g., Albert1974_Tab1.png
+    - figures, named `STUDYNAME_Fig[0-9]*.png`, e.g., Albert1974_Fig2.png
+    - excel file, named `STUDYNAME.xlsx`, e.g., Albert1974.xlsx
+    - data files, named `STUDYNAME_Tab[0-9]*.csv` or `STUDYNAME_Fig[0-9]*.csv`
 
 ## 2. Initial study information (`study.json`)
 Fill in basic information for study, use the `PMID` for `sid` and `reference` field, use StudyName for `name` field.
  
 ```json
 {
-    "sid": 10877011,
+    "sid": 123456789,
     "pkdb_version": 1.0,
     "creator": "mkoenig",
-    "name": "Akinyinka2000",
-    "design": "parallel group",
-    "reference": 10877011,
+    "name": "Author2007",
+    "design": "",
+    "reference": 123456789,
     "curators": [
         "mkoenig",
         "janekg"
     ],
-    "substances": [
-        "caffeine",
-        "acetaminophen"
-    ],
-    "comments": [
-      ["mkoenig", "Comment on the study"]
-    ]
+    "substances": [],
+    "keywords": [],
+    "descriptions": [],
+    "comments": [],
+    "groupset": {
+        "descriptions": [],
+        "comments": [],
+        "groups": []
+    },
+    "individualset": {
+        "descriptions": [],
+        "comments": [],
+        "individuals": []
+    },
+    "interventionset": {
+      "descriptions": [],
+      "comments": [],
+      "interventions": []
+    },
+    "outputset": {
+      "descriptions": [],
+      "comments": [],
+      "outputs": [],
+      "timecourses": []
+    }
 }
 ```
 * The `creator` and `curators` should map to existing data base users (but is no requirement for now).

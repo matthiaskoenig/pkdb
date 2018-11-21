@@ -32,21 +32,32 @@ To build the dev server for local development:
 sudo sysctl -w vm.max_map_count=262144
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
-docker-compose up --build
+./docker_update.sh
 ```
 To update an existing version use
 ```bash
-docker-compose down
-./remove_migrations.sh
-docker-compose up --build
+./docker_update.sh
 ```
-To run an existing version use
+To start an existing version use
 ```bash
 docker-compose up
 ```
 
+## Fill database
+The database can be filled via the `setup_database.py` and `upload_studies.py` scripts using curated data folders.
+The curated data is currently not made available, but only accessible via the REST API.
+
+First change in `/pkdb/pkdb_app/.env` the endpoints and passwords to the correct values by setting the environment
+variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
+
+```
+(pkdb) ./fill_database.sh
+docker-compose run --rm web ./manage.py search_index --rebuild -f
+```
+
+## Accessing backend
 PKDB can than be accessed via the locally running server at  
-http://localhost:8000/api/v1/  
+`http://localhost:8000/api/v1/`.  
 
 To run commands inside the docker container use
 ```bash
@@ -77,17 +88,7 @@ add your virtual environment to jupyter kernels:
 Documentation of the `vue.js` frontend is available in
 ./pkdb_client/README.md
 
-## Fill database
-The database can be filled via the `setup_database.py` and `upload_studies.py` scripts using curated data folders.
-The curated data is currently not made available, but only accessible via the REST API.
 
-First change in `/pkdb/pkdb_app/.env` the endpoints and passwords to the correct values by setting the environment
-variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
-
-```
-(pkdb) python setup_database.py
-(pkdb) python upload_studies.py
-```
 ## Elastic Search 
 Elastic Search engine is running on `0.0.0.0:9200` but is also reachable via django views.
 General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
