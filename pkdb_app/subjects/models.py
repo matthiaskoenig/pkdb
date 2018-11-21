@@ -186,8 +186,9 @@ class Group(models.Model):
     @property
     def characteristica_all(self):
         characteristica_all = self.characteristica.all()
+        this_categories = characteristica_all.values_list("category", flat=True)
         if self.parent:
-            characteristica_all = characteristica_all | self.parent.characteristica_all
+            characteristica_all = characteristica_all | self.parent.characteristica_all.exclude(category__in=this_categories)
         return characteristica_all
 
     @property
@@ -297,7 +298,10 @@ class Individual(AbstractIndividual):
 
     @property
     def characteristica_all_final(self):
-        return  (self.characteristica_final | self.group_characteristica_final)
+        characteristica_final = self.characteristica_final
+        this_categories = characteristica_final.values_list("category", flat=True)
+
+        return (characteristica_final | self.group_characteristica_final.exclude(category__in=this_categories))
 
     @property
     def study(self):

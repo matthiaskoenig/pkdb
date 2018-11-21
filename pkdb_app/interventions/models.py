@@ -336,10 +336,10 @@ class Output(ValueableNotBlank, AbstractOutput):
     timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
     objects = OutputManager()
 
-    def save(self, donot_normilize=False, *args, **kwargs):
+    def save(self, donot_normalize=False, *args, **kwargs):
         #fixme: I think, overwriting save function is not best practice.
         super().save( *args, **kwargs)
-        if not donot_normilize:
+        if not donot_normalize:
             norm = copy.copy(self)
             norm.normalize()
             norm.add_statistics()
@@ -347,14 +347,15 @@ class Output(ValueableNotBlank, AbstractOutput):
             if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
-                norm.save(donot_normilize=True)
+                norm.save(donot_normalize=True)
                 norm.raw.add(self)
-                norm.save(donot_normilize=True)
+                norm.save(donot_normalize=True)
 
 
             else:
                 self.final = True
-                self.save(donot_normilize=True, force_update=True)
+                self.save(donot_normalize=True, force_update=True)
+
 
     def save_no_norm(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -520,10 +521,10 @@ class Timecourse(AbstractOutput):
 
     objects = OutputManager()
 
-    def save(self, donot_normilize=False, *args, **kwargs):
+    def save(self, donot_normalize=False, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        if not donot_normilize:
+        if not donot_normalize:
             norm = copy.copy(self)
             norm.normalize()
             norm.add_statistics()
@@ -531,12 +532,12 @@ class Timecourse(AbstractOutput):
             if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)):
                 norm.pk = None
                 norm.final = True
-                norm.save(donot_normilize=True)
+                norm.save(donot_normalize=True)
                 norm.raw.add(self)
-                norm.save(donot_normilize=True)
+                norm.save(donot_normalize=True)
             else:
                 self.final = True
-                self.save(donot_normilize=True, force_update=True)
+                self.save(donot_normalize=True, force_update=True)
 
     def save_no_norm(self,*args, **kwargs):
         super().save(*args, **kwargs)
@@ -825,3 +826,4 @@ class Timecourse(AbstractOutput):
         for value in ['value', 'mean', 'median']:
             if instance_calc_kel.get(value):
                 return instance_calc_kel[value]
+
