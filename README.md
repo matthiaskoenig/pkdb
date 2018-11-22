@@ -27,9 +27,17 @@ The database with backend and frontend is available as docker container for loca
 - Python3.6
 
 ## Build docker container
+System settings for elasticsearch:
+```
+sudo sysctl -w vm.max_map_count=262144
+```
+To set the value permanently change the value in 
+```
+/etc/sysctl.conf
+```
+
 To build the dev server for local development:
 ```bash
-sudo sysctl -w vm.max_map_count=262144
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
 ./docker_update.sh
