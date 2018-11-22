@@ -207,6 +207,10 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
         return self.intervention_data.units.get(self.unit)
 
     @property
+    def study(self):
+        return self.ex.interventionset.study.name
+
+    @property
     def is_norm(self):
         norm_unit = self.norm_unit
         return norm_unit is None
@@ -376,6 +380,10 @@ class Output(ValueableNotBlank, AbstractOutput):
                 )
 
     @property
+    def study(self):
+        return self.ex.outputset.study.name
+
+    @property
     def pk_data(self):
         return PK_DATA_DICT[self.pktype]
 
@@ -541,6 +549,10 @@ class Timecourse(AbstractOutput):
 
     def save_no_norm(self,*args, **kwargs):
         super().save(*args, **kwargs)
+
+    @property
+    def study(self):
+        return self.ex.outputset.study.name
 
     @property
     def figure(self):

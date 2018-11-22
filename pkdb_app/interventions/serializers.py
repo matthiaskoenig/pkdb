@@ -473,7 +473,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         data["timecourses"] = timecourses
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
-        print(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_figure(self, value):
@@ -569,7 +568,7 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     cv = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
     class Meta:
         model = Intervention
-        fields = ["pk", "final"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields = ["pk","study", "final"] + VALUE_FIELDS + INTERVENTION_FIELDS
 
     def get_substance(self, obj):
         if obj.substance:
@@ -615,7 +614,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
             model = Output
             fields = (
-                ["pk",]
+                ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
                 + ["group", "individual", "final","interventions"])
@@ -638,7 +637,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
             model = Timecourse
             fields = (
-                ["pk",]
+                ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
                 + ["group", "individual", "final","interventions","figure","auc_end","kel"])

@@ -2,3 +2,4 @@ pandas
 seaborn
 ipykernel
 requests
+xlrd

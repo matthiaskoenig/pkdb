@@ -1,9 +1,11 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, ObjectField
-from pkdb_app.interventions.models import Substance
+from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet
 from pkdb_app.studies.models import Reference, Study, Keyword
 
 # Elastic Reference
+from pkdb_app.subjects.models import GroupSet, IndividualSet, Group, Individual
+
 reference_index = Index("references")
 reference_index.settings(**elastic_settings)
 
@@ -193,7 +195,7 @@ class StudyDocument(DocType):
 
     class Meta(object):
         model = Study
-        related_models = [Substance,Reference,Keyword]
+        related_models = [Substance,Reference,Keyword,Individual]
 
     def get_instances_from_related(self, related_instance):
         """If related_models is set, define how to retrieve the  instance(s) from the related model.
@@ -206,6 +208,9 @@ class StudyDocument(DocType):
             return related_instance.study.all()
         elif isinstance(related_instance, Keyword):
             return related_instance.studies.all()
+        elif isinstance(related_instance, Individual):
+            return related_instance.study
+
 
     # Elastic Study
 keyword_index = Index("keywords")

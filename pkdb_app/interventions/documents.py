@@ -30,6 +30,7 @@ class InterventionDocument(DocType):
     substance = ObjectField(properties={
         'name': string_field('name')}
         )
+    study = string_field('study')
     route = string_field('route')
     form = string_field('form')
     name = string_field('name')
@@ -54,6 +55,8 @@ output_index.settings(**elastic_settings)
 @output_index.doc_type
 class OutputDocument(DocType):
     pk = fields.IntegerField('pk')
+    study = string_field('study')
+
 
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
@@ -99,6 +102,7 @@ timecourses_index.settings(**elastic_settings)
 
 @timecourses_index.doc_type
 class TimecourseDocument(DocType):
+    study = string_field('study')
     pk = fields.IntegerField('pk')
 
     group = ObjectField(properties={

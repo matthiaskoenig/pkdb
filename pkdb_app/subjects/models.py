@@ -305,7 +305,8 @@ class Individual(AbstractIndividual):
 
     @property
     def study(self):
-        return self.ex.individualset.study
+        if hasattr(self.ex.individualset,"study"):
+            return self.ex.individualset.study
 
     @property
     def study_pk(self):

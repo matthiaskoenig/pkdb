@@ -90,14 +90,14 @@ class Study(Sidable, models.Model):
     substances = models.ManyToManyField(Substance, related_name="studies")
     keywords = models.ManyToManyField(Keyword, related_name="studies")
 
-    groupset = models.OneToOneField(GroupSet, on_delete=models.SET_NULL, null=True)
+    groupset = models.OneToOneField(GroupSet,related_name="study", on_delete=models.SET_NULL, null=True)
     interventionset = models.OneToOneField(
-        InterventionSet, on_delete=models.SET_NULL, null=True
+        InterventionSet, related_name="study",on_delete=models.SET_NULL, null=True
     )
     individualset = models.OneToOneField(
-        IndividualSet, on_delete=models.SET_NULL, null=True
+        IndividualSet,related_name="study", on_delete=models.SET_NULL, null=True
     )
-    outputset = models.OneToOneField(OutputSet, on_delete=models.SET_NULL, null=True)
+    outputset = models.OneToOneField(OutputSet,related_name="study", on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
 
     class Meta:
