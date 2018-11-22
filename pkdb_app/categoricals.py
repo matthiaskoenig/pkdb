@@ -217,6 +217,11 @@ CHARACTERISTIC_DATA = [
     CharacteristicType(
         "kidney weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
     ),
+    CharacteristicType(
+        # muscle mass
+        "muscle weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
+    ),
+
     # -------------- Patient status --------------
     CharacteristicType(
         "overnight fast",
@@ -298,6 +303,7 @@ CHARACTERISTIC_DATA = [
          "oral glucose tolerance test",
          "intravenous glucose tolerance test",
          "hypoglycemic clamp",
+         "hyperinsulinemic euglycemic clamp",
          "isoglycemic glucose infusion",
          "protein solution",
          "lipid-glucose-protein drink"
@@ -383,7 +389,10 @@ CHARACTERISTIC_DATA = [
         "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mg/dl": None, "mmol/l": None}),
     ),
     CharacteristicType(
-        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"µU/ml": None}),
+        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"µU/ml": None, "pmol/l": None}),
+    ),
+    CharacteristicType(
+        "glucagon", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"pmol/l": None}),
     ),
     CharacteristicType(
         "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"%": None}),
