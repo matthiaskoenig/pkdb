@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
@@ -116,7 +117,20 @@ class ElasticOutputViewSet(DocumentViewSet):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
-    filter_fields = {'pk':'pk','final':'final','substance':'substance.name.raw','pktype':'pktype.raw'}
+    filter_fields = {'pk':'pk',
+                     'final':'final',
+                     'substance':'substance.name.raw',
+                     'pktype':'pktype.raw',
+                     'group_pk': {'field': 'group.pk',
+                                    'lookups': [
+                                        LOOKUP_QUERY_IN,
+                                    ],
+                                },
+                     'individual_pk': {'field': 'individual.pk',
+                                  'lookups': [
+                                      LOOKUP_QUERY_IN,
+                                  ],
+                                  }}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
                        'substance':'substance.name',
@@ -132,7 +146,20 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
-    filter_fields = {'pk':'pk','final':'final','substance':'substance.name.raw','pktype':'pktype.raw'}
+    filter_fields = {'pk': 'pk',
+                     'final': 'final',
+                     'substance': 'substance.name.raw',
+                     'pktype': 'pktype.raw',
+                     'group_pk': {'field': 'group.pk',
+                                  'lookups': [
+                                      LOOKUP_QUERY_IN,
+                                  ],
+                                  },
+                     'individual_pk': {'field': 'individual.pk',
+                                       'lookups': [
+                                           LOOKUP_QUERY_IN,
+                                       ],
+                                       }}
     ordering_fields = {'pktype':'pktype.raw',
                        'tissue':'tissue.raw',
                        'group':'group.name',
