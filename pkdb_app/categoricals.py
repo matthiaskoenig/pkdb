@@ -253,8 +253,9 @@ CHARACTERISTIC_DATA = [
             "PBC",
             "miscellaneous liver disease",
             "schizophrenia",
-            "t2dm",
-            "t1dm"
+            "impaired glucose tolerance",
+            "diabetes melitus type 2",
+            "diabetes melitus type 1"
         ],
         dimensionless_norm_unit,
     ),
@@ -276,8 +277,6 @@ CHARACTERISTIC_DATA = [
     CharacteristicType(
         "medication amount", MEDICATION, NUMERIC_TYPE, None, dimensionless_norm_unit
     ),
-
-
     CharacteristicType(
         "oral contraceptives",
         MEDICATION,
@@ -289,7 +288,7 @@ CHARACTERISTIC_DATA = [
         "abstinence",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication","drug"],
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
 
