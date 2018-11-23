@@ -41,7 +41,7 @@ from ..categoricals import (
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
 
 from ..utils import CHAR_MAX_LENGTH
-from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf, _kel
+from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf, _kel, _vd
 from ..substances import SUBSTANCES_DATA_CHOICES
 
 # -------------------------------------------------
@@ -838,4 +838,39 @@ class Timecourse(AbstractOutput):
         for value in ['value', 'mean', 'median']:
             if instance_calc_kel.get(value):
                 return instance_calc_kel[value]
+
+    @property
+    def calculate_vd(self):
+            output_data = {}
+            output_data["substance"] = str(self.substance)
+            output_data["tissue"] = str(self.tissue)
+            output_data["pktype"] = "vd"
+            if self.value:
+                output_data["value"] = self.try_type_error(self.time, self.value, _vd)
+            if self.mean:
+                output_data["mean"] = self.try_type_error(self.time, self.mean, _vd)
+            if self.median:
+                output_data["median"] = self.try_type_error(self.time, self.median, _vd)
+
+            output_data["unit"] = f"({self.unit})/{self.time_unit}"
+
+            array_fields = [
+                "value",
+                "mean",
+                "median",
+                "min",
+                "max",
+                "sd",
+                "se",
+                "cv",
+                "time",
+            ]
+            for field in array_fields:
+                value = output_data.get(field, None)
+                if value:
+                    if self._any_not_json(value):
+                        output_data[field] = None
+
+            return output_data
+
 

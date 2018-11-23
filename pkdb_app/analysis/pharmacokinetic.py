@@ -350,7 +350,7 @@ def _vd(t, c, dose, intercept=None):
     determined from Vd; only that it goes somewhere.
     """
     if intercept is None:
-        [slope, intercept, r_value, p_value, std_err] = _regression(t, c)
+        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
     return dose / np.exp(intercept)
 
 

@@ -71,7 +71,6 @@ UNITS = {
     "g/dl": None,
     "ng/ml": None,
     "pg/ml": None,
-    "ng/g": None,
     "mmol/l": None,
     "nmol/ml": None,
     "µmol/l": None,
@@ -92,7 +91,6 @@ UNITS = {
     "mg*min/l": None,  # -> mg*h/l
     "mg/l*min": None,  # -> mg*h/l
     "µg*min/ml": None,
-    "nmol*h/l": None,
     "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
     "pmol*h/ml": None,
@@ -178,20 +176,19 @@ UNIT_CONVERSIONS = [
     UnitConversion("g/dl", target="µg/dl", multiplier=1.0E6),
     UnitConversion("ng/ml", target="µg/ml", multiplier=1.0E-3),
     # AUC
-    UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0E-3),
-    UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0E-3),
-    UnitConversion("mg*min/l", target="mg*h/l", multiplier=60),
-    UnitConversion("mg/l*min", target="mg*h/l", multiplier=60),
-    UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0E-3),
+    UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0),
+    UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0),
+    UnitConversion("mg*min/l", target="mg*h/l", multiplier=1.0/60),
+    UnitConversion("mg/l*min", target="mg*h/l", multiplier=1.0/60),
+    UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0),
     # Vd
     UnitConversion("ml/kg", target="l/kg", multiplier=1.0E-3),
     # clearance
     UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/kg/h", target="l/h/kg", multiplier=1.0E-3),
-    #UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/min/kg", target="l/h/kg", multiplier=1.0E-3 / 60),
     UnitConversion("ml/kg/min", target="l/h/kg", multiplier=1.0E-3 / 60),
-    UnitConversion("ml/min", target="ml/h", multiplier=1.0 / 60),
+    UnitConversion("ml/min", target="l/h", multiplier=1.0 / 60),
     # ratio
     UnitConversion("%", target="-", multiplier=1.0 / 100.0),
     # "µmol/l": None,  # -> µg/ml (with molar weight)

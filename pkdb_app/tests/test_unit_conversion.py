@@ -1,96 +1,53 @@
-import json
+from collections import namedtuple
 
-import os
-import sys
+from django.test import TestCase
+from pkdb_app.units import UNIT_CONVERSIONS, UnitConversion, UNIT_CONVERSIONS_DICT
 
-import requests
-from django.urls import reverse
-from rest_framework.test import APITestCase, APIClient, RequestsClient
+Measurement = namedtuple('Measurement',["value","unit"])
+Transform = namedtuple('Transform',["input","output"])
 
-from pkdb_app.data_management.setup_database import setup_database
-from pkdb_app.data_management.upload_studies import upload_study_from_dir, read_reference_json, \
-    upload_reference_json, upload_files
+test_data = [
+    Transform(input=Measurement(80000,"g"),output=Measurement(80,"kg")),
+    Transform(input=Measurement(180, "cm"), output=Measurement(1.8, "m")),
+    Transform(input=Measurement(1000, "ml"), output=Measurement(1, "l")),
+    Transform(input=Measurement(60, "min"), output=Measurement(1, "h")),
+    Transform(input=Measurement(1, "1/min"), output=Measurement(60, "1/h")),
+    # Concentrations
+    Transform(input=Measurement(1, "mg/dl"), output=Measurement(10, "µg/ml")),
+    Transform(input=Measurement(1, "mg/l"), output=Measurement(1, "µg/ml")),
+    Transform(input=Measurement(1, "g/dl"), output=Measurement(10000, "µg/ml")),
+    Transform(input=Measurement(1, "ng/ml"), output=Measurement(0.001, "µg/ml")),
+    Transform(input=Measurement(1, "ng/ml"), output=Measurement(0.001, "µg/ml")),
+    # AUC
+    Transform(input=Measurement(1, "µg*h/ml"), output=Measurement(1, "mg*h/l")),
+    Transform(input=Measurement(60, "µg*min/ml"), output=Measurement(1, "mg*h/l")),
+    Transform(input=Measurement(1, "µg/ml*h/kg"), output=Measurement(1, "mg*h/l/kg")),
 
-from pkdb_app.interventions.models import Substance
-from pkdb_app.studies.models import Study
-from pkdb_app.subjects.models import DataFile
-from pkdb_app.users.models import User
+    # Vd
+    Transform(input=Measurement(1, "ml/kg"), output=Measurement(0.001, "l/kg")),
+    # clearance
+    Transform(input=Measurement(1, "ml/h/kg"), output=Measurement(0.001, "l/h/kg")),
+    Transform(input=Measurement(1, "ml/min/kg"), output=Measurement(0.06, "l/h/kg")),
+    Transform(input=Measurement(1, "ml/min"), output=Measurement(1.0/60, "l/h")),
+    Transform(input=Measurement(100, "%"), output=Measurement(1, "-")),
 
-BASEPATH = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), "../../")
-)
-sys.path.append(BASEPATH)
+]
 
+class TestUnitConversion(TestCase):
 
-class AuthenticationAPITestCase(APITestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.api = reverse('user-list')
-        self.password = "test"
-    def test_api_token_auth(self):
+    def test_conversions(self):
+        for transform in test_data:
+            value = transform.input.value
+            unit = transform.input.unit
+            norm_value = transform.output.value
+            norm_unit = transform.output.unit
 
-        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
-        assert json.loads(response.content) == {"non_field_errors":["Unable to log in with provided credentials."]} , json.loads(response.content)
+            conversion_key = f"[{unit}] -> [{norm_unit}]"
+            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
 
+            calculated_value = conversion.apply_conversion(value)
 
-    def test_create_superuser(self):
-        User.objects.create_superuser(username="admin", password=self.password, email="")
-        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
-
-        assert response.status_code == 200, response.status_code
-        assert "token" in json.loads(response.content) ,json.loads(response.content)
-
-
-class UploadStudy(APITestCase):
-
-    def setUp(self):
-        self.client =  APIClient()
-        self.password = "test"
-        User.objects.create_superuser(username="admin", password=self.password, email="")
-        response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
-        self.token = json.loads(response.content)["token"]
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token)
-        self.header = {'Authorization': f'token {self.token}','Content-type': 'application/json'}
-        self.api_url="/api/v1"
-
-
-    def test_setup_database(self):
-        setup_database(api_url=self.api_url, authentication_header=self.header, client=self.client)
-        assert hasattr(Substance.objects.first(),"name")
-
-
-    def test_upload_reference_json(self):
-        study_name = "test_study"
-        study_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), study_name)
-        reference_path = os.path.join(study_dir, "reference.json")
-        reference_pdf = os.path.join(study_dir, f"{study_name}.pdf")
-
-        reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
-        json_reference = read_reference_json(reference_dict)
-        success = upload_reference_json(json_reference, api_url=self.api_url, auth_headers=self.header, client=self.client)
-        assert success
-
-    def test_upload_files(self):
-        study_name = "test_study"
-        study_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), study_name)
-        upload_files(file_path=study_dir, api_url=self.api_url, auth_headers=self.header, client=self.client)
-        assert hasattr(DataFile.objects.first(),"file"), DataFile.objects.first()
-
-    def test_upload_study_from_dir(self):
-        study_test_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),"test_study")
-        setup_database(api_url=self.api_url, authentication_header=self.header, client=self.client)
-        upload_study_from_dir(study_dir=study_test_dir, auth_headers=self.header, api_url=self.api_url, client=self.client)
-        assert  Study.objects.filter(name="test_study").count() == 1 ,Study.objects.filter(name="test_study")
-
-
-
-
-
-
-
-
-
-
+            self.assertEqual(calculated_value,norm_value)
 
 
 
