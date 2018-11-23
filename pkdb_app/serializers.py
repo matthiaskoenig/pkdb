@@ -312,6 +312,38 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return df
 
+    def make_entry(self, entry, template,data):
+        entry_dict = copy.deepcopy(template)
+        recursive_entry_dict = list(recursive_iter(entry_dict))
+
+        for keys, value in recursive_entry_dict:
+            if isinstance(value, str):
+                if ITEM_MAPPER in value:
+                    values = value.split(ITEM_MAPPER)
+                    values = [v.strip() for v in values]
+
+                    if len(values) != 2 or values[0] != "col":
+                        raise serializers.ValidationError(
+                            ["field has wrong pattern col=='col_value'", data]
+                        )
+                    try:
+                        entry_value = getattr(entry, values[1])
+
+                    except AttributeError:
+
+                        raise serializers.ValidationError(
+
+                            [
+                                f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
+                                data
+                            ]
+                        )
+                    if isinstance(entry_value, numbers.Number):
+                        if np.isnan(entry_value):
+                            entry_value = None
+                    set_keys(entry_dict, entry_value, *keys)
+        return entry_dict
+
     def entries_from_file(self, data):
         entries = []
         source = data.get("source")
@@ -329,39 +361,21 @@ class MappingSerializer(WrongKeyValidationSerializer):
             df = self.df_from_file(source, format, subset)
 
 
+            template = copy.deepcopy(template)
+            if data.get("groupby"):
+                groupby = template.pop("groupby")
+                if not isinstance(groupby, str):
+                    raise serializers.ValidationError({"groupby": "groupby has to be a string"})
+                groupby = [v.strip() for v in groupby.split("&")]
+                for group_name, group_df in df.groupby(groupby):
+                    for entry in group_df.itertuples():
+                        entry_dict = self.make_entry(entry, template, data)
+                        entries.append(entry_dict)
+            else:
+                for entry in df.itertuples():
+                    entry_dict = self.make_entry(entry, template, data)
+                    entries.append(entry_dict)
 
-            for entry in df.itertuples():
-                entry_dict = copy.deepcopy(template)
-                recursive_entry_dict = list(recursive_iter(entry_dict))
-
-                for keys, value in recursive_entry_dict:
-                    if isinstance(value, str):
-                        if ITEM_MAPPER in value:
-                            values = value.split(ITEM_MAPPER)
-                            values = [v.strip() for v in values]
-
-                            if len(values) != 2 or values[0] != "col":
-                                raise serializers.ValidationError(
-                                    ["field has wrong pattern col=='col_value'", data]
-                                )
-                            try:
-                                entry_value = getattr(entry, values[1])
-
-                            except AttributeError:
-
-                                raise serializers.ValidationError(
-
-                                    [
-                                        f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
-                                        data
-                                    ]
-                                )
-                            if isinstance(entry_value,numbers.Number):
-                                if np.isnan(entry_value):
-                                    entry_value = None
-                            set_keys(entry_dict, entry_value, *keys)
-
-                entries.append(entry_dict)
         else:
             entries.append(template)
 
@@ -393,7 +407,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
                     raise serializers.ValidationError({"groupby":"groupby has to be a string"})
-                groupby = groupby.split("&")
+                groupby = [v.strip() for v in groupby.split("&")]
                 array_dicts = []
 
                 for group_name, group_df in df.groupby(groupby):
