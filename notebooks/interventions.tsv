@@ -128,6 +128,7 @@ Chen1991	761	COD_M4	dosing	oral	30.00	mg	codeine	h	-24.0	tablet
 Mitrakou1992	800	glc	dosing	oral	1.00	g/kg	glucose	h	0.0	solution	single dose				
 Chen1991	762	COD_M5	dosing	oral	30.00	mg	codeine	h	-16.0	tablet					
 Patwardhan1980	807	Dcaf	dosing	oral	250.00	mg	caffeine	h	0.0	capsule	single dose				
+Test243	818	Dcaf	dosing	oral	50.00	mg	caffeine	h	0.0	tablet	single dose				
 Harder1988	652	D_OFL_D	dosing	oral	200.00	mg	ofloxacin	h	72.0						
 Harder1988	653	D_NOR_A	dosing	oral	400.00	mg	norfloxacin	h	0.0						
 Harder1988	654	D_NOR_B	dosing	oral	400.00	mg	norfloxacin	h	24.0						

@@ -37,7 +37,15 @@ Harder1988	13627	cmax	mg/l	plasma	648	caffeine			518.0	3.99	0.23			0.20	0.80
 Harder1988	13629	thalf	h	plasma	648	caffeine			518.0	3.40	0.35			0.35	1.20			
 Harder1988	13631	auc_inf	mg*h/l	plasma	648	caffeine			518.0	21.80	2.51			0.40	8.70			
 Harder1988	13633	tmax	h	plasma	648	caffeine			518.0	1.00	0.14			0.50	0.50			
+Test243	16044	auc_inf	mg*h/l	plasma	818	caffeine	2218.0	3.11										
+Test243	16045	auc_inf	mg*h/l	plasma	818	caffeine	2219.0	6.36										
 Chen1991	15009	tmax	h	plasma	757	codeine-6-glucuronide	2051.0	1.25										
+Test243	16046	auc_inf	mg*h/l	plasma	818	caffeine	2220.0	3.88										
+Test243	16047	auc_inf	mg*h/l	plasma	818	caffeine	2221.0	5.01										
+Test243	16048	auc_inf	mg*h/l	plasma	818	caffeine	2222.0	4.08										
+Test243	16049	auc_inf	mg*h/l	plasma	818	caffeine	2223.0	8.77										
+Test243	16050	auc_inf	mg*h/l	plasma	818	caffeine	2224.0	4.24										
+Test243	16051	auc_inf	mg*h/l	plasma	818	caffeine	2225.0	5.10										
 ZylberKatz1984	14660	thalf	h	plasma	751	caffeine	2039.0	3.10										
 Harder1988	13635	cmax	mg/l	plasma	648	caffeine			518.0	4.27	0.18			0.15	0.62			
 Harder1988	13637	thalf	h	plasma	648	caffeine			518.0	3.30	0.38			0.39	1.30			
@@ -109,6 +117,7 @@ Harder1988	13713	tmax	h	plasma	648	paraxanthine			518.0	5.50	0.75			0.47	2.60
 Chen1991	15027	clearance_renal	ml/min	plasma	757	codeine-6-glucuronide	2053.0	101.00										
 Chen1991	15028	clearance_renal	ml/min	plasma	757	codeine-6-glucuronide	2054.0	32.30										
 Chen1991	15029	clearance_renal	ml/min	plasma	757	codeine-6-glucuronide	2055.0	52.90										
+Test243	16052	auc_inf	mg*h/l	plasma	818	caffeine	2226.0	11.46										
 Chen1991	15030	clearance_renal	ml/min	plasma	757	codeine-6-glucuronide	2056.0	59.60										
 Chen1991	15031	clearance_renal	ml/min	plasma	757	codeine-6-glucuronide	2057.0	36.20										
 Harder1988	13715	cmax	mg/l	plasma	648	paraxanthine			518.0	1.57	0.08			0.17	0.27			
@@ -194,6 +203,7 @@ Granfors2005	13501	ratio	-	plasma	646	caffeine/paraxanthine			515.0	1.62	0.18	6.
 Granfors2005	13503	ratio	-	plasma	646	caffeine/paraxanthine			516.0	4.60	0.66	6.0	h	0.56	2.56			
 ZylberKatz1984	14673	clearance	ml/min/kg	plasma	751	caffeine	2042.0	0.70										
 ZylberKatz1984	14674	clearance	ml/min/kg	plasma	751	caffeine	2043.0	1.00										
+Test243	16053	auc_inf	mg*h/l	plasma	818	caffeine	2227.0	9.29										
 ZylberKatz1984	14675	vd	l/kg	plasma	751	caffeine	2039.0	0.44										
 ZylberKatz1984	14676	vd	l/kg	plasma	751	caffeine	2040.0	0.47										
 Haller2002	13505	tmax	h	plasma	647	caffeine	1879.0	2.00				14.0	h					
@@ -360,6 +370,7 @@ ZylberKatz1984	14754	vd	l/kg	saliva	753	caffeine	2049.0	0.65
 ZylberKatz1984	14755	vd	l/kg	saliva	753	caffeine	2050.0	0.57										
 Chen1991	15090	recovery	-	plasma	757	codeine-6-glucuronide	2051.0	0.58										
 Chen1991	15092	recovery	-	plasma	757	codeine-6-glucuronide	2053.0	0.64										
+Test243	16054	auc_inf	mg*h/l	plasma	818	caffeine	2228.0	12.85										
 Carbo1989	12841	ratio	-	urine	626	paraxanthine/caffeine			494.0	4.77	1.17	24.0	h					
 Chen1991	15094	recovery	-	plasma	757	codeine-6-glucuronide	2054.0	0.40										
 Chen1991	15096	recovery	-	plasma	757	codeine-6-glucuronide	2055.0	0.63										
@@ -410,49 +421,282 @@ Chen1991	15172	recovery	-	plasma	757	norcodeine-conjugates	2054.0	0.04
 Harder1989	13893	clearance	ml/h/kg	plasma	685	caffeine			519.0	164.00	20.21			0.43	70.00			
 Chen1991	15174	recovery	-	plasma	757	norcodeine-conjugates	2055.0	0.01										
 Chen1991	15176	recovery	-	plasma	757	norcodeine-conjugates	2056.0	0.02										
+Test243	16055	auc_inf	mg*h/l	plasma	818	caffeine	2229.0	5.12										
+Test243	16056	auc_inf	mg*h/l	plasma	818	caffeine	2230.0	3.88										
+Test243	16057	auc_inf	mg*h/l	plasma	818	caffeine	2231.0	10.32										
+Test243	16058	auc_inf	mg*h/l	plasma	818	caffeine	2232.0	5.82										
+Test243	16059	auc_inf	mg*h/l	plasma	818	caffeine	2233.0	3.74										
+Test243	16060	auc_inf	mg*h/l	plasma	818	caffeine	2234.0	6.51										
+Test243	16061	auc_inf	mg*h/l	plasma	818	caffeine	2235.0	4.32										
+Test243	16062	auc_inf	mg*h/l	plasma	818	caffeine	2236.0	3.69										
+Test243	16063	auc_inf	mg*h/l	plasma	818	caffeine	2237.0	3.12										
+Test243	16064	auc_inf	mg*h/l	plasma	818	caffeine	2238.0	4.13										
+Test243	16065	auc_inf	mg*h/l	plasma	818	caffeine	2239.0	3.43										
+Test243	16066	auc_inf	mg*h/l	plasma	818	caffeine	2240.0	5.92										
+Test243	16067	auc_inf	mg*h/l	plasma	818	caffeine	2241.0	3.15										
+Test243	16068	auc_inf	mg*h/l	plasma	818	caffeine	2242.0	4.36										
+Test243	16069	auc_inf	mg*h/l	plasma	818	caffeine	2243.0	9.72										
+Test243	16070	auc_inf	mg*h/l	plasma	818	caffeine	2244.0	4.93										
+Test243	16071	auc_inf	mg*h/l	plasma	818	caffeine	2245.0	2.87										
+Test243	16072	auc_inf	mg*h/l	plasma	818	caffeine	2246.0	3.78										
+Test243	16073	auc_inf	mg*h/l	plasma	818	caffeine	2247.0	3.75										
+Test243	16074	auc_inf	mg*h/l	plasma	818	caffeine	2248.0	4.39										
+Test243	16075	auc_inf	mg*h/l	plasma	818	caffeine	2249.0	5.43										
+Test243	16076	auc_inf	mg*h/l	plasma	818	caffeine	2250.0	2.44										
+Test243	16077	auc_inf	mg*h/l	plasma	818	caffeine	2251.0	5.31										
+Test243	16078	auc_inf	mg*h/l	plasma	818	caffeine	2252.0	6.62										
+Test243	16079	auc_inf	mg*h/l	plasma	818	caffeine	2253.0	2.08										
+Test243	16080	auc_inf	mg*h/l	plasma	818	caffeine	2254.0	5.01										
+Test243	16081	auc_inf	mg*h/l	plasma	818	caffeine	2255.0	2.94										
+Test243	16082	auc_inf	mg*h/l	plasma	818	caffeine	2256.0	5.05										
+Test243	16083	auc_inf	mg*h/l	plasma	818	caffeine	2257.0	4.55										
+Test243	16084	auc_inf	mg*h/l	plasma	818	caffeine	2258.0	5.62										
+Test243	16085	auc_inf	mg*h/l	plasma	818	caffeine	2259.0	14.79										
+Test243	16086	auc_inf	mg*h/l	plasma	818	caffeine	2260.0	3.21										
+Test243	16087	auc_inf	mg*h/l	plasma	818	caffeine	2261.0	3.54										
+Test243	16088	auc_inf	mg*h/l	plasma	818	caffeine	2262.0	6.12										
+Test243	16089	auc_inf	mg*h/l	plasma	818	caffeine	2263.0	9.97										
+Test243	16090	auc_inf	mg*h/l	plasma	818	caffeine	2264.0	7.36										
+Test243	16091	auc_inf	mg*h/l	plasma	818	caffeine	2265.0	4.90										
+Test243	16092	auc_inf	mg*h/l	plasma	818	caffeine	2266.0	6.76										
+Test243	16093	auc_inf	mg*h/l	plasma	818	caffeine	2267.0	5.24										
+Test243	16094	auc_inf	mg*h/l	plasma	818	caffeine	2268.0	3.89										
+Test243	16095	auc_inf	mg*h/l	plasma	818	caffeine	2269.0	7.32										
+Test243	16096	auc_inf	mg*h/l	plasma	818	caffeine	2270.0	10.32										
+Test243	16097	auc_inf	mg*h/l	plasma	818	caffeine	2271.0	8.17										
+Test243	16098	auc_inf	mg*h/l	plasma	818	caffeine	2272.0	7.66										
+Test243	16099	auc_inf	mg*h/l	plasma	818	caffeine	2273.0	4.12										
+Test243	16100	auc_inf	mg*h/l	plasma	818	caffeine	2274.0	5.86										
+Test243	16101	auc_inf	mg*h/l	plasma	818	caffeine	2275.0	4.11										
+Test243	16102	auc_inf	mg*h/l	plasma	818	caffeine	2276.0	2.99										
+Test243	16103	auc_inf	mg*h/l	plasma	818	caffeine	2277.0	3.23										
+Test243	16104	auc_inf	mg*h/l	plasma	818	caffeine	2278.0	1.79										
+Test243	16105	auc_inf	mg*h/l	plasma	818	caffeine	2279.0	1.85										
+Test243	16106	auc_inf	mg*h/l	plasma	818	caffeine	2280.0	5.59										
+Test243	16107	auc_inf	mg*h/l	plasma	818	caffeine	2281.0	3.51										
+Test243	16108	auc_inf	mg*h/l	plasma	818	caffeine	2282.0	3.01										
+Test243	16109	auc_inf	mg*h/l	plasma	818	caffeine	2283.0	3.16										
+Test243	16110	auc_inf	mg*h/l	plasma	818	caffeine	2284.0	4.31										
+Test243	16111	auc_inf	mg*h/l	plasma	818	caffeine	2285.0	3.51										
+Test243	16112	auc_inf	mg*h/l	plasma	818	caffeine	2286.0	4.68										
+Test243	16113	auc_inf	mg*h/l	plasma	818	caffeine	2287.0	5.71										
+Test243	16114	auc_inf	mg*h/l	plasma	818	caffeine	2288.0	2.46										
+Test243	16115	auc_inf	mg*h/l	plasma	818	caffeine	2289.0	3.32										
+Test243	16116	auc_inf	mg*h/l	plasma	818	caffeine	2290.0	4.49										
+Test243	16117	auc_inf	mg*h/l	plasma	818	caffeine	2291.0	5.17										
+Test243	16118	auc_inf	mg*h/l	plasma	818	caffeine	2292.0	5.82										
+Test243	16119	auc_inf	mg*h/l	plasma	818	caffeine	2293.0	3.20										
+Test243	16120	auc_inf	mg*h/l	plasma	818	caffeine	2294.0	5.65										
+Test243	16121	auc_inf	mg*h/l	plasma	818	caffeine	2295.0	3.33										
+Test243	16122	auc_inf	mg*h/l	plasma	818	caffeine	2296.0	9.29										
+Test243	16123	auc_inf	mg*h/l	plasma	818	caffeine	2297.0	12.24										
+Test243	16124	auc_inf	mg*h/l	plasma	818	caffeine	2298.0	3.67										
+Test243	16125	auc_inf	mg*h/l	plasma	818	caffeine	2299.0	3.78										
+Test243	16126	auc_inf	mg*h/l	plasma	818	caffeine	2300.0	8.92										
+Test243	16127	auc_inf	mg*h/l	plasma	818	caffeine	2301.0	5.49										
+Test243	16128	auc_inf	mg*h/l	plasma	818	caffeine	2302.0	7.00										
+Test243	16129	auc_inf	mg*h/l	plasma	818	caffeine	2303.0	2.30										
 Chen1991	15178	recovery	-	plasma	757	norcodeine-conjugates	2057.0	0.02										
 Chen1991	15180	recovery	-	plasma	757	norcodeine-conjugates	2058.0	0.02										
+Test243	16130	auc_inf	mg*h/l	plasma	818	caffeine	2304.0	6.46										
 Chen1991	15182	recovery	-	plasma	757	norcodeine-conjugates	2052.0	0.05										
+Test243	16131	auc_inf	mg*h/l	plasma	818	caffeine	2305.0	2.78										
+Test243	16132	auc_inf	mg*h/l	plasma	818	caffeine	2306.0	3.48										
+Test243	16133	auc_inf	mg*h/l	plasma	818	caffeine	2307.0	5.83										
+Test243	16134	auc_inf	mg*h/l	plasma	818	caffeine	2308.0	4.37										
+Test243	16135	auc_inf	mg*h/l	plasma	818	caffeine	2309.0	4.15										
+Test243	16136	auc_inf	mg*h/l	plasma	818	caffeine	2310.0	3.41										
+Test243	16137	auc_inf	mg*h/l	plasma	818	caffeine	2311.0	3.08										
+Test243	16138	auc_inf	mg*h/l	plasma	818	caffeine	2312.0	6.07										
+Test243	16139	auc_inf	mg*h/l	plasma	818	caffeine	2313.0	5.86										
+Test243	16140	auc_inf	mg*h/l	plasma	818	caffeine	2314.0	1.77										
+Test243	16141	auc_inf	mg*h/l	plasma	818	caffeine	2315.0	7.37										
+Test243	16142	auc_inf	mg*h/l	plasma	818	caffeine	2316.0	5.87										
+Test243	16143	auc_inf	mg*h/l	plasma	818	caffeine	2317.0	5.88										
+Test243	16144	auc_inf	mg*h/l	plasma	818	caffeine	2318.0	4.16										
+Test243	16145	auc_inf	mg*h/l	plasma	818	caffeine	2319.0	5.47										
+Test243	16146	clearance	l/h	plasma	818	caffeine	2218.0	12.17										
+Test243	16147	clearance	l/h	plasma	818	caffeine	2219.0	6.56										
 Parsons1978	14232	thalf	h	saliva	744	caffeine	1977.0	3.00										
 Parsons1978	14233	thalf	h	saliva	744	caffeine	1978.0	1.50										
 Parsons1978	14234	thalf	h	saliva	744	caffeine	1979.0	2.30										
 Parsons1978	14235	thalf	h	saliva	744	caffeine	1980.0	5.90										
+Test243	16148	clearance	l/h	plasma	818	caffeine	2220.0	9.63										
 Parsons1978	14236	thalf	h	saliva	744	caffeine	1981.0	4.40										
+Test243	16149	clearance	l/h	plasma	818	caffeine	2221.0	8.10										
 Parsons1978	14237	thalf	h	saliva	744	caffeine	1982.0	5.90										
+Test243	16150	clearance	l/h	plasma	818	caffeine	2222.0	8.83										
 Parsons1978	14238	thalf	h	saliva	744	caffeine	1983.0	3.80										
 Parsons1978	14239	thalf	h	saliva	744	caffeine	1984.0	4.30										
 Parsons1978	14240	thalf	h	saliva	744	caffeine	1985.0	1.60										
 Parsons1978	14241	thalf	h	saliva	744	caffeine	1986.0	4.10										
 Parsons1978	14242	thalf	h	saliva	744	caffeine	1987.0	4.00										
+Test243	16151	clearance	l/h	plasma	818	caffeine	2223.0	3.96										
 Parsons1978	14243	thalf	h	saliva	744	caffeine	1988.0	2.60										
+Test243	16152	clearance	l/h	plasma	818	caffeine	2224.0	7.69										
 Parsons1978	14244	thalf	h	saliva	744	caffeine	1989.0	2.60										
 Parsons1978	14245	kel	1/h	saliva	744	caffeine	1977.0	0.23										
 Parsons1978	14246	kel	1/h	saliva	744	caffeine	1978.0	0.46										
+Test243	16153	clearance	l/h	plasma	818	caffeine	2225.0	6.02										
 Parsons1978	14247	kel	1/h	saliva	744	caffeine	1979.0	0.30										
 Parsons1978	14248	kel	1/h	saliva	744	caffeine	1980.0	0.12										
 Parsons1978	14249	kel	1/h	saliva	744	caffeine	1981.0	0.16										
+Test243	16154	clearance	l/h	plasma	818	caffeine	2226.0	2.72										
 Parsons1978	14250	kel	1/h	saliva	744	caffeine	1982.0	0.12										
 Parsons1978	14251	kel	1/h	saliva	744	caffeine	1983.0	0.18										
+Test243	16155	clearance	l/h	plasma	818	caffeine	2227.0	2.13										
+Test243	16156	clearance	l/h	plasma	818	caffeine	2228.0	2.39										
 Parsons1978	14252	kel	1/h	saliva	744	caffeine	1984.0	0.16										
+Test243	16157	clearance	l/h	plasma	818	caffeine	2229.0	4.73										
+Test243	16158	clearance	l/h	plasma	818	caffeine	2230.0	10.05										
 Parsons1978	14253	kel	1/h	saliva	744	caffeine	1985.0	0.42										
+Test243	16159	clearance	l/h	plasma	818	caffeine	2231.0	2.00										
+Test243	16160	clearance	l/h	plasma	818	caffeine	2232.0	4.68										
+Test243	16161	clearance	l/h	plasma	818	caffeine	2233.0	11.42										
 Parsons1978	14254	kel	1/h	saliva	744	caffeine	1986.0	0.17										
+Test243	16162	clearance	l/h	plasma	818	caffeine	2234.0	2.96										
+Test243	16163	clearance	l/h	plasma	818	caffeine	2235.0	7.65										
 Parsons1978	14255	kel	1/h	saliva	744	caffeine	1987.0	0.17										
 Parsons1978	14256	kel	1/h	saliva	744	caffeine	1988.0	0.25										
+Test243	16164	clearance	l/h	plasma	818	caffeine	2236.0	9.04										
 Parsons1978	14257	kel	1/h	saliva	744	caffeine	1989.0	0.26										
+Test243	16165	clearance	l/h	plasma	818	caffeine	2237.0	9.66										
+Test243	16166	clearance	l/h	plasma	818	caffeine	2238.0	8.63										
 Parsons1978	14259	vd	l/kg	saliva	744	caffeine	1977.0	0.70										
+Test243	16167	clearance	l/h	plasma	818	caffeine	2239.0	11.12										
+Test243	16168	clearance	l/h	plasma	818	caffeine	2240.0	4.19										
 Parsons1978	14261	vd	l/kg	saliva	744	caffeine	1978.0	0.48										
+Test243	16169	clearance	l/h	plasma	818	caffeine	2241.0	12.83										
 Parsons1978	14263	vd	l/kg	saliva	744	caffeine	1979.0	0.66										
+Test243	16170	clearance	l/h	plasma	818	caffeine	2242.0	9.75										
 Parsons1978	14265	vd	l/kg	saliva	744	caffeine	1980.0	0.90										
+Test243	16171	clearance	l/h	plasma	818	caffeine	2243.0	2.81										
+Test243	16172	clearance	l/h	plasma	818	caffeine	2244.0	6.47										
+Test243	16173	clearance	l/h	plasma	818	caffeine	2245.0	14.68										
+Test243	16174	clearance	l/h	plasma	818	caffeine	2246.0	7.69										
+Test243	16175	clearance	l/h	plasma	818	caffeine	2247.0	9.12										
+Test243	16176	clearance	l/h	plasma	818	caffeine	2248.0	8.21										
+Test243	16177	clearance	l/h	plasma	818	caffeine	2249.0	7.42										
+Test243	16178	clearance	l/h	plasma	818	caffeine	2250.0	15.77										
+Test243	16179	clearance	l/h	plasma	818	caffeine	2251.0	6.17										
+Test243	16180	clearance	l/h	plasma	818	caffeine	2252.0	3.79										
+Test243	16181	clearance	l/h	plasma	818	caffeine	2253.0	21.88										
 Parsons1978	14267	vd	l/kg	saliva	744	caffeine	1981.0	0.44										
+Test243	16182	clearance	l/h	plasma	818	caffeine	2254.0	6.92										
 Parsons1978	14269	vd	l/kg	saliva	744	caffeine	1982.0	0.97										
 Parsons1978	14271	vd	l/kg	saliva	744	caffeine	1983.0	0.12										
+Test243	16183	clearance	l/h	plasma	818	caffeine	2255.0	9.77										
 Parsons1978	14273	vd	l/kg	saliva	744	caffeine	1984.0	0.85										
 Parsons1978	14275	vd	l/kg	saliva	744	caffeine	1985.0	0.64										
+Test243	16184	clearance	l/h	plasma	818	caffeine	2256.0	6.43										
+Test243	16185	clearance	l/h	plasma	818	caffeine	2257.0	6.52										
+Test243	16186	clearance	l/h	plasma	818	caffeine	2258.0	5.99										
+Test243	16187	clearance	l/h	plasma	818	caffeine	2259.0	1.74										
+Test243	16188	clearance	l/h	plasma	818	caffeine	2260.0	10.43										
+Test243	16189	clearance	l/h	plasma	818	caffeine	2261.0	8.73										
+Test243	16190	clearance	l/h	plasma	818	caffeine	2262.0	5.28										
+Test243	16191	clearance	l/h	plasma	818	caffeine	2263.0	3.43										
+Test243	16192	clearance	l/h	plasma	818	caffeine	2264.0	4.58										
+Test243	16193	clearance	l/h	plasma	818	caffeine	2265.0	5.67										
+Test243	16194	clearance	l/h	plasma	818	caffeine	2266.0	4.86										
+Test243	16195	clearance	l/h	plasma	818	caffeine	2267.0	7.32										
+Test243	16196	clearance	l/h	plasma	818	caffeine	2268.0	9.18										
+Test243	16197	clearance	l/h	plasma	818	caffeine	2269.0	4.02										
+Test243	16198	clearance	l/h	plasma	818	caffeine	2270.0	3.08										
+Test243	16199	clearance	l/h	plasma	818	caffeine	2271.0	2.91										
+Test243	16200	clearance	l/h	plasma	818	caffeine	2272.0	4.74										
+Test243	16201	clearance	l/h	plasma	818	caffeine	2273.0	8.49										
+Test243	16202	clearance	l/h	plasma	818	caffeine	2274.0	4.66										
+Test243	16203	clearance	l/h	plasma	818	caffeine	2275.0	6.41										
+Test243	16204	clearance	l/h	plasma	818	caffeine	2276.0	10.74										
+Test243	16205	clearance	l/h	plasma	818	caffeine	2277.0	11.95										
+Test243	16206	clearance	l/h	plasma	818	caffeine	2278.0	24.14										
+Test243	16207	clearance	l/h	plasma	818	caffeine	2279.0	21.66										
+Test243	16208	clearance	l/h	plasma	818	caffeine	2280.0	6.74										
+Test243	16209	clearance	l/h	plasma	818	caffeine	2281.0	10.43										
+Test243	16210	clearance	l/h	plasma	818	caffeine	2282.0	10.59										
+Test243	16211	clearance	l/h	plasma	818	caffeine	2283.0	5.60										
+Test243	16212	clearance	l/h	plasma	818	caffeine	2284.0	7.94										
+Test243	16213	clearance	l/h	plasma	818	caffeine	2285.0	8.65										
+Test243	16214	clearance	l/h	plasma	818	caffeine	2286.0	7.84										
+Test243	16215	clearance	l/h	plasma	818	caffeine	2287.0	5.46										
+Test243	16216	clearance	l/h	plasma	818	caffeine	2288.0	13.90										
+Test243	16217	clearance	l/h	plasma	818	caffeine	2289.0	7.35										
+Test243	16218	clearance	l/h	plasma	818	caffeine	2290.0	3.67										
+Test243	16219	clearance	l/h	plasma	818	caffeine	2291.0	4.06										
+Test243	16220	clearance	l/h	plasma	818	caffeine	2292.0	5.87										
+Test243	16221	clearance	l/h	plasma	818	caffeine	2293.0	9.15										
+Test243	16222	clearance	l/h	plasma	818	caffeine	2294.0	6.34										
+Test243	16223	clearance	l/h	plasma	818	caffeine	2295.0	10.06										
+Test243	16224	clearance	l/h	plasma	818	caffeine	2296.0	3.04										
+Test243	16225	clearance	l/h	plasma	818	caffeine	2297.0	2.17										
+Test243	16226	clearance	l/h	plasma	818	caffeine	2298.0	7.69										
+Test243	16227	clearance	l/h	plasma	818	caffeine	2299.0	8.53										
+Test243	16228	clearance	l/h	plasma	818	caffeine	2300.0	3.52										
+Test243	16229	clearance	l/h	plasma	818	caffeine	2301.0	6.43										
+Test243	16230	clearance	l/h	plasma	818	caffeine	2302.0	5.32										
+Test243	16231	clearance	l/h	plasma	818	caffeine	2303.0	17.26										
+Test243	16232	clearance	l/h	plasma	818	caffeine	2304.0	4.71										
+Test243	16233	clearance	l/h	plasma	818	caffeine	2305.0	7.25										
+Test243	16234	clearance	l/h	plasma	818	caffeine	2306.0	11.69										
+Test243	16235	clearance	l/h	plasma	818	caffeine	2307.0	5.08										
+Test243	16236	clearance	l/h	plasma	818	caffeine	2308.0	7.86										
+Test243	16237	clearance	l/h	plasma	818	caffeine	2309.0	7.78										
+Test243	16238	clearance	l/h	plasma	818	caffeine	2310.0	10.27										
+Test243	16239	clearance	l/h	plasma	818	caffeine	2311.0	9.94										
+Test243	16240	clearance	l/h	plasma	818	caffeine	2312.0	4.48										
+Test243	16241	clearance	l/h	plasma	818	caffeine	2313.0	5.84										
+Test243	16242	clearance	l/h	plasma	818	caffeine	2314.0	19.76										
+Test243	16243	clearance	l/h	plasma	818	caffeine	2315.0	4.23										
+Test243	16244	clearance	l/h	plasma	818	caffeine	2316.0	6.67										
+Test243	16245	clearance	l/h	plasma	818	caffeine	2317.0	6.52										
+Test243	16246	clearance	l/h	plasma	818	caffeine	2318.0	8.50										
+Test243	16247	clearance	l/h	plasma	818	caffeine	2319.0	6.12										
+Test243	16248	kel	1/h	plasma	818	caffeine	2218.0	0.26										
+Test243	16249	kel	1/h	plasma	818	caffeine	2219.0	0.23										
+Test243	16250	kel	1/h	plasma	818	caffeine	2220.0	0.19										
+Test243	16251	kel	1/h	plasma	818	caffeine	2221.0	0.22										
+Test243	16252	kel	1/h	plasma	818	caffeine	2222.0	0.17										
+Test243	16253	kel	1/h	plasma	818	caffeine	2223.0	0.12										
+Test243	16254	kel	1/h	plasma	818	caffeine	2224.0	0.15										
+Test243	16255	kel	1/h	plasma	818	caffeine	2225.0	0.13										
+Test243	16256	kel	1/h	plasma	818	caffeine	2226.0	0.09										
+Test243	16257	kel	1/h	plasma	818	caffeine	2227.0	0.05										
+Test243	16258	kel	1/h	plasma	818	caffeine	2228.0	0.09										
+Test243	16259	kel	1/h	plasma	818	caffeine	2229.0	0.09										
+Test243	16260	kel	1/h	plasma	818	caffeine	2230.0	0.20										
+Test243	16261	kel	1/h	plasma	818	caffeine	2231.0	0.05										
+Test243	16262	kel	1/h	plasma	818	caffeine	2232.0	0.10										
+Test243	16263	kel	1/h	plasma	818	caffeine	2233.0	0.25										
+Test243	16264	kel	1/h	plasma	818	caffeine	2234.0	0.06										
+Test243	16265	kel	1/h	plasma	818	caffeine	2235.0	0.16										
+Test243	16266	kel	1/h	plasma	818	caffeine	2236.0	0.19										
+Test243	16267	kel	1/h	plasma	818	caffeine	2237.0	0.16										
+Test243	16268	kel	1/h	plasma	818	caffeine	2238.0	0.19										
+Test243	16269	kel	1/h	plasma	818	caffeine	2239.0	0.25										
+Test243	16270	kel	1/h	plasma	818	caffeine	2240.0	0.09										
+Test243	16271	kel	1/h	plasma	818	caffeine	2241.0	0.23										
+Test243	16272	kel	1/h	plasma	818	caffeine	2242.0	0.21										
+Test243	16273	kel	1/h	plasma	818	caffeine	2243.0	0.08										
 Parsons1978	14277	vd	l/kg	saliva	744	caffeine	1986.0	0.48										
 Parsons1978	14279	vd	l/kg	saliva	744	caffeine	1987.0	0.95										
+Test243	16274	kel	1/h	plasma	818	caffeine	2244.0	0.14										
 Parsons1978	14281	vd	l/kg	saliva	744	caffeine	1988.0	0.74										
+Test243	16275	kel	1/h	plasma	818	caffeine	2245.0	0.25										
+Test243	16276	kel	1/h	plasma	818	caffeine	2246.0	0.14										
+Test243	16277	kel	1/h	plasma	818	caffeine	2247.0	0.18										
+Test243	16278	kel	1/h	plasma	818	caffeine	2248.0	0.16										
+Test243	16279	kel	1/h	plasma	818	caffeine	2249.0	0.20										
+Test243	16280	kel	1/h	plasma	818	caffeine	2250.0	0.25										
+Test243	16281	kel	1/h	plasma	818	caffeine	2251.0	0.13										
 Parsons1978	14283	vd	l/kg	saliva	744	caffeine	1989.0	0.40										
+Test243	16282	kel	1/h	plasma	818	caffeine	2252.0	0.08										
+Test243	16283	kel	1/h	plasma	818	caffeine	2253.0	0.33										
+Test243	16284	kel	1/h	plasma	818	caffeine	2254.0	0.16										
 Parsons1978	14284	clearance	ml/h/kg	saliva	744	caffeine	1977.0	159.00										
+Test243	16285	kel	1/h	plasma	818	caffeine	2255.0	0.15										
+Test243	16286	kel	1/h	plasma	818	caffeine	2256.0	0.16										
+Test243	16287	kel	1/h	plasma	818	caffeine	2257.0	0.12										
 Parsons1978	14285	clearance	ml/h/kg	saliva	744	caffeine	1978.0	220.00										
 Parsons1978	14286	clearance	ml/h/kg	saliva	744	caffeine	1979.0	196.00										
 Parsons1978	14287	clearance	ml/h/kg	saliva	744	caffeine	1980.0	106.00										
@@ -492,15 +736,22 @@ Parsons1978	14320	kel	1/h	saliva	744	caffeine	2000.0	0.10
 Parsons1978	14321	kel	1/h	saliva	744	caffeine	2001.0	0.12										
 Parsons1978	14322	kel	1/h	saliva	744	caffeine	2002.0	0.18										
 Parsons1978	14324	vd	l/kg	saliva	744	caffeine	1990.0	0.37										
+Test243	16288	kel	1/h	plasma	818	caffeine	2258.0	0.15										
 Parsons1978	14326	vd	l/kg	saliva	744	caffeine	1991.0	0.12										
 Parsons1978	14328	vd	l/kg	saliva	744	caffeine	1992.0	0.58										
+Test243	16289	kel	1/h	plasma	818	caffeine	2259.0	0.06										
 Parsons1978	14330	vd	l/kg	saliva	744	caffeine	1993.0	0.39										
 Parsons1978	14332	vd	l/kg	saliva	744	caffeine	1994.0	0.33										
+Test243	16290	kel	1/h	plasma	818	caffeine	2260.0	0.17										
 Parsons1978	14334	vd	l/kg	saliva	744	caffeine	1995.0	0.79										
 Parsons1978	14336	vd	l/kg	saliva	744	caffeine	1996.0	0.29										
+Test243	16291	kel	1/h	plasma	818	caffeine	2261.0	0.15										
 Parsons1978	14338	vd	l/kg	saliva	744	caffeine	1997.0	0.61										
 Parsons1978	14340	vd	l/kg	saliva	744	caffeine	1998.0	0.68										
+Test243	16292	kel	1/h	plasma	818	caffeine	2262.0	0.12										
 Parsons1978	14342	vd	l/kg	saliva	744	caffeine	1999.0	0.16										
+Test243	16293	kel	1/h	plasma	818	caffeine	2263.0	0.11										
+Test243	16294	kel	1/h	plasma	818	caffeine	2264.0	0.12										
 Parsons1978	14344	vd	l/kg	saliva	744	caffeine	2000.0	0.78										
 Parsons1978	14346	vd	l/kg	saliva	744	caffeine	2001.0	1.02										
 Parsons1978	14348	vd	l/kg	saliva	744	caffeine	2002.0	0.73										
@@ -525,37 +776,251 @@ Parsons1978	14369	thalf	h	saliva	744	caffeine			535.0	3.50
 Parsons1978	14371	kel	1/h	saliva	744	caffeine			535.0	0.23	0.01			0.13	0.03			
 Parsons1978	14373	vd	l/kg	saliva	744	caffeine			535.0	0.72	0.02			0.09	0.07			
 Parsons1978	14375	clearance	ml/h/kg	saliva	744	caffeine			535.0	155.00	4.44			0.10	16.00			
+Test243	16295	kel	1/h	plasma	818	caffeine	2265.0	0.11										
+Test243	16296	kel	1/h	plasma	818	caffeine	2266.0	0.12										
+Test243	16297	kel	1/h	plasma	818	caffeine	2267.0	0.17										
+Test243	16298	kel	1/h	plasma	818	caffeine	2268.0	0.16										
+Test243	16299	kel	1/h	plasma	818	caffeine	2269.0	0.11										
+Test243	16300	kel	1/h	plasma	818	caffeine	2270.0	0.09										
+Test243	16301	kel	1/h	plasma	818	caffeine	2271.0	0.07										
+Test243	16302	kel	1/h	plasma	818	caffeine	2272.0	0.15										
+Test243	16303	kel	1/h	plasma	818	caffeine	2273.0	0.18										
+Test243	16304	kel	1/h	plasma	818	caffeine	2274.0	0.10										
+Test243	16305	kel	1/h	plasma	818	caffeine	2275.0	0.12										
+Test243	16306	kel	1/h	plasma	818	caffeine	2276.0	0.18										
+Test243	16307	kel	1/h	plasma	818	caffeine	2277.0	0.21										
+Test243	16308	kel	1/h	plasma	818	caffeine	2278.0	0.35										
+Test243	16309	kel	1/h	plasma	818	caffeine	2279.0	0.29										
+Test243	16310	kel	1/h	plasma	818	caffeine	2280.0	0.17										
+Test243	16311	kel	1/h	plasma	818	caffeine	2281.0	0.26										
+Test243	16312	kel	1/h	plasma	818	caffeine	2282.0	0.17										
+Test243	16313	kel	1/h	plasma	818	caffeine	2283.0	0.09										
+Test243	16314	kel	1/h	plasma	818	caffeine	2284.0	0.17										
+Test243	16315	kel	1/h	plasma	818	caffeine	2285.0	0.16										
+Test243	16316	kel	1/h	plasma	818	caffeine	2286.0	0.18										
+Test243	16317	kel	1/h	plasma	818	caffeine	2287.0	0.13										
+Test243	16318	kel	1/h	plasma	818	caffeine	2288.0	0.21										
+Test243	16319	kel	1/h	plasma	818	caffeine	2289.0	0.12										
+Test243	16320	kel	1/h	plasma	818	caffeine	2290.0	0.07										
+Test243	16321	kel	1/h	plasma	818	caffeine	2291.0	0.08										
+Test243	16322	kel	1/h	plasma	818	caffeine	2292.0	0.15										
+Test243	16323	kel	1/h	plasma	818	caffeine	2293.0	0.16										
+Test243	16324	kel	1/h	plasma	818	caffeine	2294.0	0.15										
+Test243	16325	kel	1/h	plasma	818	caffeine	2295.0	0.19										
+Test243	16326	kel	1/h	plasma	818	caffeine	2296.0	0.08										
+Test243	16327	kel	1/h	plasma	818	caffeine	2297.0	0.06										
+Test243	16328	kel	1/h	plasma	818	caffeine	2298.0	0.15										
+Test243	16329	kel	1/h	plasma	818	caffeine	2299.0	0.15										
+Test243	16330	kel	1/h	plasma	818	caffeine	2300.0	0.10										
+Test243	16331	kel	1/h	plasma	818	caffeine	2301.0	0.16										
+Test243	16332	kel	1/h	plasma	818	caffeine	2302.0	0.15										
+Test243	16333	kel	1/h	plasma	818	caffeine	2303.0	0.28										
+Test243	16334	kel	1/h	plasma	818	caffeine	2304.0	0.11										
+Test243	16335	kel	1/h	plasma	818	caffeine	2305.0	0.11										
+Test243	16336	kel	1/h	plasma	818	caffeine	2306.0	0.25										
+Test243	16337	kel	1/h	plasma	818	caffeine	2307.0	0.12										
+Test243	16338	kel	1/h	plasma	818	caffeine	2308.0	0.17										
+Test243	16339	kel	1/h	plasma	818	caffeine	2309.0	0.15										
+Test243	16340	kel	1/h	plasma	818	caffeine	2310.0	0.18										
+Test243	16341	kel	1/h	plasma	818	caffeine	2311.0	0.16										
+Test243	16342	kel	1/h	plasma	818	caffeine	2312.0	0.09										
+Test243	16343	kel	1/h	plasma	818	caffeine	2313.0	0.16										
+Test243	16344	kel	1/h	plasma	818	caffeine	2314.0	0.28										
+Test243	16345	kel	1/h	plasma	818	caffeine	2315.0	0.11										
+Test243	16346	kel	1/h	plasma	818	caffeine	2316.0	0.18										
+Test243	16347	kel	1/h	plasma	818	caffeine	2317.0	0.17										
+Test243	16348	kel	1/h	plasma	818	caffeine	2318.0	0.17										
+Test243	16349	kel	1/h	plasma	818	caffeine	2319.0	0.14										
+Test243	16350	thalf	h	plasma	818	caffeine	2218.0	2.62										
+Test243	16351	thalf	h	plasma	818	caffeine	2219.0	3.03										
+Test243	16352	thalf	h	plasma	818	caffeine	2220.0	3.61										
+Test243	16353	thalf	h	plasma	818	caffeine	2221.0	3.10										
+Test243	16354	thalf	h	plasma	818	caffeine	2222.0	3.96										
+Test243	16355	thalf	h	plasma	818	caffeine	2223.0	5.67										
+Test243	16356	thalf	h	plasma	818	caffeine	2224.0	4.66										
+Test243	16357	thalf	h	plasma	818	caffeine	2225.0	5.39										
+Test243	16358	thalf	h	plasma	818	caffeine	2226.0	7.81										
+Test243	16359	thalf	h	plasma	818	caffeine	2227.0	13.91										
+Test243	16360	thalf	h	plasma	818	caffeine	2228.0	7.67										
+Test243	16361	thalf	h	plasma	818	caffeine	2229.0	7.53										
+Test243	16362	thalf	h	plasma	818	caffeine	2230.0	3.51										
+Test243	16363	thalf	h	plasma	818	caffeine	2231.0	13.84										
 Patwardhan1980	15639	thalf	h	plasma	807	caffeine			628.0	5.50	0.72			0.47	2.60			
+Test243	16364	thalf	h	plasma	818	caffeine	2232.0	6.86										
 Patwardhan1980	15641	thalf	h	plasma	807	caffeine			629.0	6.20	0.53			0.26	1.60			
+Test243	16365	thalf	h	plasma	818	caffeine	2233.0	2.75										
 Patwardhan1980	15643	thalf	h	plasma	807	caffeine			630.0	10.70	1.00			0.28	3.00			
 Patwardhan1980	15645	vd	l/kg	plasma	807	caffeine			628.0	0.54	0.05			0.33	0.18			
+Test243	16366	thalf	h	plasma	818	caffeine	2234.0	11.25										
 Patwardhan1980	15647	vd	l/kg	plasma	807	caffeine			629.0	0.69	0.05			0.23	0.16			
 Patwardhan1980	15649	vd	l/kg	plasma	807	caffeine			630.0	0.72	0.08			0.33	0.24			
+Test243	16367	thalf	h	plasma	818	caffeine	2235.0	4.35										
 Patwardhan1980	15651	vd	l/kg	plasma	807	caffeine			628.0	0.54	0.04			0.24	0.13			
 Patwardhan1980	15653	vd	l/kg	plasma	807	caffeine			629.0	0.70	0.05			0.20	0.14			
+Test243	16368	thalf	h	plasma	818	caffeine	2236.0	3.60										
 Patwardhan1980	15655	vd	l/kg	plasma	807	caffeine			630.0	0.75	0.09			0.37	0.28			
 Patwardhan1980	15657	clearance	ml/min/kg	plasma	807	caffeine			628.0	1.30	0.36			1.00	1.30			
+Test243	16369	thalf	h	plasma	818	caffeine	2237.0	4.44										
 Patwardhan1980	15659	clearance	ml/min/kg	plasma	807	caffeine			629.0	1.30	0.43			1.00	1.30			
 Patwardhan1980	15661	clearance	ml/min/kg	plasma	807	caffeine			630.0	0.79	0.26			1.00	0.79			
+Test243	16370	thalf	h	plasma	818	caffeine	2238.0	3.72										
 Patwardhan1980	15663	plasma_binding	-	plasma	807	caffeine			628.0	0.31	0.01			0.06	0.02			
 Patwardhan1980	15665	plasma_binding	-	plasma	807	caffeine			629.0	0.32	0.02			0.14	0.04			
+Test243	16371	thalf	h	plasma	818	caffeine	2239.0	2.78										
 Patwardhan1980	15667	plasma_binding	-	plasma	807	caffeine			630.0	0.29	0.01			0.07	0.02			
 Patwardhan1980	15669	clearance_unbound	ml/min/kg	plasma	807	caffeine			628.0	1.80	0.17			0.33	0.60			
+Test243	16372	thalf	h	plasma	818	caffeine	2240.0	7.87										
 Patwardhan1980	15671	clearance_unbound	ml/min/kg	plasma	807	caffeine			629.0	1.97	0.19			0.29	0.57			
 Patwardhan1980	15673	clearance_unbound	ml/min/kg	plasma	807	caffeine			630.0	1.12	0.09			0.25	0.28			
+Test243	16373	thalf	h	plasma	818	caffeine	2241.0	2.98										
+Test243	16374	thalf	h	plasma	818	caffeine	2242.0	3.29										
+Test243	16375	thalf	h	plasma	818	caffeine	2243.0	9.08										
+Test243	16376	thalf	h	plasma	818	caffeine	2244.0	5.07										
+Test243	16377	thalf	h	plasma	818	caffeine	2245.0	2.73										
+Test243	16378	thalf	h	plasma	818	caffeine	2246.0	4.94										
+Test243	16379	thalf	h	plasma	818	caffeine	2247.0	3.86										
+Test243	16380	thalf	h	plasma	818	caffeine	2248.0	4.44										
+Test243	16381	thalf	h	plasma	818	caffeine	2249.0	3.51										
+Test243	16382	thalf	h	plasma	818	caffeine	2250.0	2.81										
+Test243	16383	thalf	h	plasma	818	caffeine	2251.0	5.14										
+Test243	16384	thalf	h	plasma	818	caffeine	2252.0	8.17										
+Test243	16385	thalf	h	plasma	818	caffeine	2253.0	2.09										
+Test243	16386	thalf	h	plasma	818	caffeine	2254.0	4.47										
+Test243	16387	thalf	h	plasma	818	caffeine	2255.0	4.57										
+Test243	16388	thalf	h	plasma	818	caffeine	2256.0	4.24										
+Test243	16389	thalf	h	plasma	818	caffeine	2257.0	5.57										
+Test243	16390	thalf	h	plasma	818	caffeine	2258.0	4.73										
+Test243	16391	thalf	h	plasma	818	caffeine	2259.0	12.22										
+Test243	16392	thalf	h	plasma	818	caffeine	2260.0	3.97										
+Test243	16393	thalf	h	plasma	818	caffeine	2261.0	4.70										
+Test243	16394	thalf	h	plasma	818	caffeine	2262.0	5.71										
+Test243	16395	thalf	h	plasma	818	caffeine	2263.0	6.24										
+Test243	16396	thalf	h	plasma	818	caffeine	2264.0	5.63										
+Test243	16397	thalf	h	plasma	818	caffeine	2265.0	6.36										
+Test243	16398	thalf	h	plasma	818	caffeine	2266.0	5.56										
+Test243	16399	thalf	h	plasma	818	caffeine	2267.0	3.99										
+Test243	16400	thalf	h	plasma	818	caffeine	2268.0	4.21										
+Test243	16401	thalf	h	plasma	818	caffeine	2269.0	6.27										
+Test243	16402	thalf	h	plasma	818	caffeine	2270.0	7.60										
+Test243	16403	thalf	h	plasma	818	caffeine	2271.0	10.08										
+Test243	16404	thalf	h	plasma	818	caffeine	2272.0	4.50										
+Test243	16405	thalf	h	plasma	818	caffeine	2273.0	3.77										
+Test243	16406	thalf	h	plasma	818	caffeine	2274.0	6.94										
+Test243	16407	thalf	h	plasma	818	caffeine	2275.0	5.96										
+Test243	16408	thalf	h	plasma	818	caffeine	2276.0	3.90										
+Test243	16409	thalf	h	plasma	818	caffeine	2277.0	3.36										
+Test243	16410	thalf	h	plasma	818	caffeine	2278.0	1.98										
+Test243	16411	thalf	h	plasma	818	caffeine	2279.0	2.39										
+Test243	16412	thalf	h	plasma	818	caffeine	2280.0	4.04										
+Test243	16413	thalf	h	plasma	818	caffeine	2281.0	2.71										
+Test243	16414	thalf	h	plasma	818	caffeine	2282.0	4.01										
+Test243	16415	thalf	h	plasma	818	caffeine	2283.0	7.52										
+Test243	16416	thalf	h	plasma	818	caffeine	2284.0	4.01										
+Test243	16417	thalf	h	plasma	818	caffeine	2285.0	4.46										
+Test243	16418	thalf	h	plasma	818	caffeine	2286.0	3.82										
+Test243	16419	thalf	h	plasma	818	caffeine	2287.0	5.18										
+Test243	16420	thalf	h	plasma	818	caffeine	2288.0	3.38										
+Test243	16421	thalf	h	plasma	818	caffeine	2289.0	5.60										
+Test243	16422	thalf	h	plasma	818	caffeine	2290.0	10.39										
+Test243	16423	thalf	h	plasma	818	caffeine	2291.0	9.00										
+Test243	16424	thalf	h	plasma	818	caffeine	2292.0	4.58										
+Test243	16425	thalf	h	plasma	818	caffeine	2293.0	4.37										
+Test243	16426	thalf	h	plasma	818	caffeine	2294.0	4.68										
+Test243	16427	thalf	h	plasma	818	caffeine	2295.0	3.57										
+Test243	16428	thalf	h	plasma	818	caffeine	2296.0	8.46										
+Test243	16429	thalf	h	plasma	818	caffeine	2297.0	11.30										
+Test243	16430	thalf	h	plasma	818	caffeine	2298.0	4.77										
+Test243	16431	thalf	h	plasma	818	caffeine	2299.0	4.56										
+Test243	16432	thalf	h	plasma	818	caffeine	2300.0	7.24										
+Test243	16433	thalf	h	plasma	818	caffeine	2301.0	4.47										
+Test243	16434	thalf	h	plasma	818	caffeine	2302.0	4.48										
+Test243	16435	thalf	h	plasma	818	caffeine	2303.0	2.50										
+Test243	16436	thalf	h	plasma	818	caffeine	2304.0	6.57										
+Test243	16437	thalf	h	plasma	818	caffeine	2305.0	6.26										
+Test243	16438	thalf	h	plasma	818	caffeine	2306.0	2.82										
+Test243	16439	thalf	h	plasma	818	caffeine	2307.0	5.96										
+Test243	16440	thalf	h	plasma	818	caffeine	2308.0	4.11										
+Test243	16441	thalf	h	plasma	818	caffeine	2309.0	4.73										
+Test243	16442	thalf	h	plasma	818	caffeine	2310.0	3.85										
+Test243	16443	thalf	h	plasma	818	caffeine	2311.0	4.44										
+Test243	16444	thalf	h	plasma	818	caffeine	2312.0	7.32										
+Test243	16445	thalf	h	plasma	818	caffeine	2313.0	4.32										
+Test243	16446	thalf	h	plasma	818	caffeine	2314.0	2.47										
+Test243	16447	thalf	h	plasma	818	caffeine	2315.0	6.32										
+Test243	16448	thalf	h	plasma	818	caffeine	2316.0	3.94										
+Test243	16449	thalf	h	plasma	818	caffeine	2317.0	4.11										
+Test243	16450	thalf	h	plasma	818	caffeine	2318.0	4.02										
+Test243	16451	thalf	h	plasma	818	caffeine	2319.0	5.00										
+Test243	16452	vd	l	plasma	818	caffeine	2218.0	46.09										
+Test243	16453	vd	l	plasma	818	caffeine	2219.0	28.68										
+Test243	16454	vd	l	plasma	818	caffeine	2220.0	50.14										
+Test243	16455	vd	l	plasma	818	caffeine	2221.0	36.17										
+Test243	16456	vd	l	plasma	818	caffeine	2222.0	50.47										
+Test243	16457	vd	l	plasma	818	caffeine	2223.0	32.35										
+Test243	16458	vd	l	plasma	818	caffeine	2224.0	51.72										
+Test243	16459	vd	l	plasma	818	caffeine	2225.0	46.79										
+Test243	16460	vd	l	plasma	818	caffeine	2226.0	30.66										
+Test243	16461	vd	l	plasma	818	caffeine	2227.0	42.77										
+Test243	16462	vd	l	plasma	818	caffeine	2228.0	26.42										
+Test243	16463	vd	l	plasma	818	caffeine	2229.0	51.37										
+Test243	16464	vd	l	plasma	818	caffeine	2230.0	50.85										
+Test243	16465	vd	l	plasma	818	caffeine	2231.0	39.94										
+Test243	16466	vd	l	plasma	818	caffeine	2232.0	46.37										
+Test243	16467	vd	l	plasma	818	caffeine	2233.0	45.33										
+Test243	16468	vd	l	plasma	818	caffeine	2234.0	48.04										
+Test243	16469	vd	l	plasma	818	caffeine	2235.0	48.00										
+Test243	16470	vd	l	plasma	818	caffeine	2236.0	46.99										
+Test243	16471	vd	l	plasma	818	caffeine	2237.0	61.88										
+Test243	16472	vd	l	plasma	818	caffeine	2238.0	46.33										
+Test243	16473	vd	l	plasma	818	caffeine	2239.0	44.52										
+Test243	16474	vd	l	plasma	818	caffeine	2240.0	47.59										
+Test243	16475	vd	l	plasma	818	caffeine	2241.0	55.07										
+Test243	16476	vd	l	plasma	818	caffeine	2242.0	46.33										
+Test243	16477	vd	l	plasma	818	caffeine	2243.0	36.80										
+Test243	16478	vd	l	plasma	818	caffeine	2244.0	47.33										
+Test243	16479	vd	l	plasma	818	caffeine	2245.0	57.70										
+Test243	16480	vd	l	plasma	818	caffeine	2246.0	54.79										
+Test243	16481	vd	l	plasma	818	caffeine	2247.0	50.77										
+Test243	16482	vd	l	plasma	818	caffeine	2248.0	52.56										
+Test243	16483	vd	l	plasma	818	caffeine	2249.0	37.56										
+Test243	16484	vd	l	plasma	818	caffeine	2250.0	63.91										
+Test243	16485	vd	l	plasma	818	caffeine	2251.0	45.72										
+Test243	16486	vd	l	plasma	818	caffeine	2252.0	44.68										
+Test243	16487	vd	l	plasma	818	caffeine	2253.0	66.05										
+Test243	16488	vd	l	plasma	818	caffeine	2254.0	44.65										
+Test243	16489	vd	l	plasma	818	caffeine	2255.0	64.42										
+Test243	16490	vd	l	plasma	818	caffeine	2256.0	39.38										
+Test243	16491	vd	l	plasma	818	caffeine	2257.0	52.45										
+Test243	16492	vd	l	plasma	818	caffeine	2258.0	40.86										
+Test243	16493	vd	l	plasma	818	caffeine	2259.0	30.69										
+Test243	16494	vd	l	plasma	818	caffeine	2260.0	59.81										
+Test243	16495	vd	l	plasma	818	caffeine	2261.0	59.16										
+Test243	16496	vd	l	plasma	818	caffeine	2262.0	43.50										
+Test243	16497	vd	l	plasma	818	caffeine	2263.0	30.91										
 Lafolie1996	15294	recovery	-	urine	768	codeine	2059.0	0.56										
+Test243	16498	vd	l	plasma	818	caffeine	2264.0	37.19										
 Lafolie1996	15296	recovery	-	urine	768	codeine	2060.0	0.62										
 Lafolie1996	15298	recovery	-	urine	768	codeine	2061.0	0.76										
+Test243	16499	vd	l	plasma	818	caffeine	2265.0	52.04										
 Lafolie1996	15300	recovery	-	urine	768	codeine	2062.0	0.82										
 Lafolie1996	15302	recovery	-	urine	768	codeine	2063.0	0.98										
+Test243	16500	vd	l	plasma	818	caffeine	2266.0	39.01										
 Lafolie1996	15304	recovery	-	urine	768	codeine	2064.0	0.90										
 Lafolie1996	15306	recovery	-	urine	768	codeine	2065.0	0.35										
+Test243	16501	vd	l	plasma	818	caffeine	2267.0	42.16										
 Lafolie1996	15308	recovery	-	urine	768	codeine	2066.0	0.71										
+Test243	16502	vd	l	plasma	818	caffeine	2268.0	55.79										
+Test243	16503	vd	l	plasma	818	caffeine	2269.0	36.40										
 Lafolie1996	15310	recovery	-	urine	768	codeine	2067.0	0.63										
 Lafolie1996	15312	recovery	-	urine	768	codeine	2068.0	0.65										
+Test243	16504	vd	l	plasma	818	caffeine	2270.0	33.74										
 Lafolie1996	15314	recovery	-	urine	768	codeine	2069.0	0.53										
+Test243	16505	vd	l	plasma	818	caffeine	2271.0	42.39										
+Test243	16506	vd	l	plasma	818	caffeine	2272.0	30.79										
 Lafolie1996	15316	recovery	-	urine	768	codeine	2070.0	0.38										
 Lafolie1996	15318	recovery	-	urine	768	codeine	2071.0	0.65										
+Test243	16507	vd	l	plasma	818	caffeine	2273.0	46.16										
+Test243	16508	vd	l	plasma	818	caffeine	2274.0	46.71										
 Lafolie1996	15320	recovery	-	urine	768	morphine	2059.0	0.03										
 Lafolie1996	15322	recovery	-	urine	768	morphine	2060.0	0.04										
 Lafolie1996	15324	recovery	-	urine	768	morphine	2061.0	0.02										
@@ -582,6 +1047,13 @@ Lafolie1996	15364	ratio	-	urine	768	morphine/codine	2068.0	0.12
 Lafolie1996	15366	ratio	-	urine	768	morphine/codine	2069.0	0.14										
 Lafolie1996	15368	ratio	-	urine	768	morphine/codine	2070.0	0.17										
 Lafolie1996	15370	ratio	-	urine	768	morphine/codine	2071.0	0.03										
+Test243	16509	vd	l	plasma	818	caffeine	2275.0	55.09										
+Test243	16510	vd	l	plasma	818	caffeine	2276.0	60.35										
+Test243	16511	vd	l	plasma	818	caffeine	2277.0	57.94										
+Test243	16512	vd	l	plasma	818	caffeine	2278.0	68.96										
+Test243	16513	vd	l	plasma	818	caffeine	2279.0	74.68										
+Test243	16514	vd	l	plasma	818	caffeine	2280.0	39.27										
+Test243	16515	vd	l	plasma	818	caffeine	2281.0	40.73										
 Carbo1989	12859	cmax	µg/ml	plasma	626	caffeine	1794.0	6.50				24.0	h					
 Carbo1989	12860	cmax	µg/ml	plasma	626	caffeine	1795.0	8.11				24.0	h					
 Carbo1989	12861	cmax	µg/ml	plasma	626	caffeine	1796.0	5.87				24.0	h					
@@ -691,12 +1163,30 @@ Backman2008	11931	ratio	-	plasma	600	paraxanthine/caffeine	1673.0	0.61				6.0	h
 Backman2008	11932	ratio	-	plasma	600	paraxanthine/caffeine	1674.0	0.72				6.0	h					
 Carbo1989	12882	auc_end	mg*h/l	plasma	626	caffeine	1799.0	49.87				24.0	h					
 Backman2008	11933	ratio	-	plasma	600	paraxanthine/caffeine	1675.0	0.69				6.0	h					
+Test243	16516	vd	l	plasma	818	caffeine	2282.0	61.19										
 Backman2008	11934	ratio	-	plasma	600	paraxanthine/caffeine	1676.0	0.66				6.0	h					
+Test243	16517	vd	l	plasma	818	caffeine	2283.0	60.81										
+Test243	16518	vd	l	plasma	818	caffeine	2284.0	45.93										
 Backman2008	11935	ratio	-	plasma	600	paraxanthine/caffeine	1677.0	0.73				6.0	h					
+Test243	16519	vd	l	plasma	818	caffeine	2285.0	55.65										
+Test243	16520	vd	l	plasma	818	caffeine	2286.0	43.17										
+Test243	16521	vd	l	plasma	818	caffeine	2287.0	40.86										
 Backman2008	11936	ratio	-	plasma	600	paraxanthine/caffeine	1678.0	0.77				6.0	h					
+Test243	16522	vd	l	plasma	818	caffeine	2288.0	67.72										
+Test243	16523	vd	l	plasma	818	caffeine	2289.0	59.40										
+Test243	16524	vd	l	plasma	818	caffeine	2290.0	55.05										
 Backman2008	11937	ratio	-	plasma	600	paraxanthine/caffeine	1679.0	0.77				6.0	h					
+Test243	16525	vd	l	plasma	818	caffeine	2291.0	52.70										
+Test243	16526	vd	l	plasma	818	caffeine	2292.0	38.85										
+Test243	16527	vd	l	plasma	818	caffeine	2293.0	57.72										
 Backman2008	11938	ratio	-	plasma	600	paraxanthine/caffeine	1680.0	0.80				6.0	h					
+Test243	16528	vd	l	plasma	818	caffeine	2294.0	42.76										
+Test243	16529	vd	l	plasma	818	caffeine	2295.0	51.86										
+Test243	16530	vd	l	plasma	818	caffeine	2296.0	37.14										
 Backman2008	11939	ratio	-	plasma	600	paraxanthine/caffeine	1681.0	1.01				6.0	h					
+Test243	16531	vd	l	plasma	818	caffeine	2297.0	35.35										
+Test243	16532	vd	l	plasma	818	caffeine	2298.0	52.93										
+Test243	16533	vd	l	plasma	818	caffeine	2299.0	56.08										
 Backman2008	11940	ratio	-	plasma	600	paraxanthine/caffeine	1682.0	1.13				6.0	h					
 Backman2008	11941	ratio	-	plasma	600	paraxanthine/caffeine	1683.0	0.85				6.0	h					
 Backman2008	11942	ratio	-	plasma	600	paraxanthine/caffeine	1684.0	1.01				6.0	h					
@@ -746,11 +1236,23 @@ Backman2008	11985	ratio	-	plasma	600	paraxanthine/caffeine	1727.0	0.98				6.0	h
 Backman2008	11986	ratio	-	plasma	600	paraxanthine/caffeine	1728.0	0.92				6.0	h					
 Backman2008	11987	ratio	-	plasma	600	paraxanthine/caffeine	1729.0	1.17				6.0	h					
 Carbo1989	12883	auc_inf	mg*h/l	plasma	626	caffeine	1794.0	30.91				24.0	h					
+Test243	16534	vd	l	plasma	818	caffeine	2300.0	36.75										
+Test243	16535	vd	l	plasma	818	caffeine	2301.0	41.44										
+Test243	16536	vd	l	plasma	818	caffeine	2302.0	34.36										
+Test243	16537	vd	l	plasma	818	caffeine	2303.0	62.14										
+Test243	16538	vd	l	plasma	818	caffeine	2304.0	44.66										
+Test243	16539	vd	l	plasma	818	caffeine	2305.0	65.53										
+Test243	16540	vd	l	plasma	818	caffeine	2306.0	47.53										
+Test243	16541	vd	l	plasma	818	caffeine	2307.0	43.67										
+Test243	16542	vd	l	plasma	818	caffeine	2308.0	46.61										
+Test243	16543	vd	l	plasma	818	caffeine	2309.0	53.03										
+Test243	16544	vd	l	plasma	818	caffeine	2310.0	57.03										
 Backman2008	11988	ratio	-	plasma	600	paraxanthine/caffeine	1730.0	1.19				6.0	h					
 Carbo1989	12884	auc_inf	mg*h/l	plasma	626	caffeine	1795.0	42.71				24.0	h					
 Perera2011	14413	auc_inf	mg*h/l	plasma	746	caffeine			542.0	15.50	1.15	24.0	h	0.41	6.30			
 Lafolie1996	15372	recovery	-	urine	768	norcodeine	2059.0	0.02										
 Perera2011	14415	auc_end	mg*h/l	plasma	746	caffeine			542.0	14.10	0.91	24.0	h	0.35	5.00			
+Test243	16545	vd	l	plasma	818	caffeine	2311.0	63.65										
 Perera2011	14417	clearance	ml/h/kg	plasma	746	caffeine			542.0	95.00	5.86	24.0	h	0.34	32.10			
 Perera2011	14419	thalf	h	plasma	746	caffeine			542.0	5.50	0.35	24.0	h	0.35	1.90			
 Perera2011	14421	tmax	h	plasma	746	caffeine			542.0	1.00		24.0	h					
@@ -761,16 +1263,24 @@ Perera2011	14427	auc_end	mg*h/l	saliva	746	caffeine			542.0	10.90	0.71	24.0	h	0.
 Perera2011	14429	clearance	ml/h/kg	saliva	746	caffeine			542.0	120.80	6.68	24.0	h	0.30	36.60			
 Lafolie1996	15376	recovery	-	urine	768	norcodeine	2061.0	0.05										
 Perera2011	14431	thalf	h	saliva	746	caffeine			542.0	5.30	0.33	24.0	h	0.34	1.80			
+Test243	16546	vd	l	plasma	818	caffeine	2312.0	47.37										
 Lafolie1996	15378	recovery	-	urine	768	norcodeine	2062.0	0.04										
 Lafolie1996	15380	recovery	-	urine	768	norcodeine	2063.0	0.02										
+Test243	16547	vd	l	plasma	818	caffeine	2313.0	36.42										
 Lafolie1996	15382	recovery	-	urine	768	norcodeine	2064.0	0.04										
 Lafolie1996	15384	recovery	-	urine	768	norcodeine	2065.0	0.02										
+Test243	16548	vd	l	plasma	818	caffeine	2314.0	70.30										
 Lafolie1996	15386	recovery	-	urine	768	norcodeine	2066.0	0.03										
 Lafolie1996	15388	recovery	-	urine	768	norcodeine	2067.0	0.02										
+Test243	16549	vd	l	plasma	818	caffeine	2315.0	38.58										
 Lafolie1996	15390	recovery	-	urine	768	norcodeine	2068.0	0.02										
 Lafolie1996	15391	recovery	%	urine	768	norcodeine	2069.0											
 Lafolie1996	15392	recovery	%	urine	768	norcodeine	2070.0											
 Lafolie1996	15393	recovery	%	urine	768	norcodeine	2071.0											
+Test243	16550	vd	l	plasma	818	caffeine	2316.0	37.87										
+Test243	16551	vd	l	plasma	818	caffeine	2317.0	38.70										
+Test243	16552	vd	l	plasma	818	caffeine	2318.0	49.29										
+Test243	16553	vd	l	plasma	818	caffeine	2319.0	44.15										
 Backman2008	11989	ratio	-	plasma	600	paraxanthine/caffeine	1731.0	1.36				6.0	h					
 Haller2002	13552	vd	l/kg	plasma	647	caffeine	1879.0	0.51				14.0	h					
 Carbo1989	12885	auc_inf	mg*h/l	plasma	626	caffeine	1796.0	20.09				24.0	h					
