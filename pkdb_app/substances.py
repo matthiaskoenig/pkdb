@@ -94,6 +94,8 @@ SUBSTANCES_DATA = [
     "FFA",
     "carbamazepine",
     # midazolam
+    "metropolol",
+    "warfarin",
     "midazolam",
     "1-hydroxymidazolam",
     # losartan
