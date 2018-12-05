@@ -2,7 +2,7 @@ pip==18.1
 
 # Core
 pytz==2018.4
-Django==2.1.2
+Django==2.1.4
 gunicorn==19.8.1
 newrelic==3.2.2.94
 
@@ -28,8 +28,8 @@ coreapi>=2.3.3
 # Elastic Search
 # >=6.0,<7.0 see https://github.com/sabricot/django-elasticsearch-dsl/issues/115
 elasticsearch-dsl==6.1.0
-django-elasticsearch-dsl>=0.5.0
-django-elasticsearch-dsl-drf>=0.16.2
+django-elasticsearch-dsl>=0.5.1
+django-elasticsearch-dsl-drf>=0.16.3
 
 
 # Developer Tools
@@ -44,7 +44,7 @@ factory-boy==2.11.1
 django-nose==1.4.5
 nose-progressive==1.5.1
 coverage==4.5.1
-pytest-django
+pytest-django>=3.4.4
 
 
 # Static and Media Storage
@@ -54,15 +54,15 @@ boto3==1.7.39
 biopython>=1.72
 ipykernel>=5.0.0
 pandas>=0.23.4
-numpy>=0.15.2
+numpy>=1.15.4
 scipy>=1.1.0
-matplotlib>=2.2.3
+matplotlib>=3.0.2
 
 jsonschema>=2.6.0
 django-extra-fields>=1.0.0
 PyPDF2>=1.26.0
 watchdog>=0.9.0
-requests>=2.19.1
+requests>=2.20.1
 coloredlogs>=10.0
 
 
