@@ -24,6 +24,7 @@ import json
 import requests
 import logging
 from collections import namedtuple
+import multiprocessing
 
 from pkdb_app import logging_utils
 from pkdb_app.data_management import setup_database as sdb
@@ -357,9 +358,9 @@ def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=No
         logging.info("*" * 80)
 
     for study_path in get_study_paths(data_dir):
+
         study_folder_path = os.path.dirname(study_path)
         study_name = os.path.basename(study_folder_path)
-
         logging.info("-" * 80)
         logging.info(f"Uploading [{study_name}] --> {api_url}")
 

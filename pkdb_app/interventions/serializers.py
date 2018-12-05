@@ -2,7 +2,7 @@
 Serializers for interventions.
 """
 import pandas as pd
-
+from decimal import Decimal
 import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
@@ -32,7 +32,7 @@ from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
 from pkdb_app.subjects.serializers import (
     VALUE_MAP_FIELDS,
     VALUE_FIELDS,
-    EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
+    EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer, VALUE_FIELDS_NO_UNIT)
 
 # ----------------------------------
 # Serializer FIELDS
@@ -563,14 +563,14 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 class InterventionElasticSerializer(serializers.ModelSerializer):
     substance = serializers.SerializerMethodField()
 
-    value = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    mean = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    median = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    min = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    max = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    sd = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    se = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    cv = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
     class Meta:
         model = Intervention
         fields = ["pk","study", "final"] + VALUE_FIELDS + INTERVENTION_FIELDS
@@ -581,6 +581,16 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
                 return obj.substance.to_dict()
             except AttributeError:
                 return obj.substance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT + ["time"]:
+                try:
+                    rep[field] = '{:.2e}'.format(rep[field])
+                except (ValueError, TypeError):
+                    pass
+        return rep
+
 
 
 
@@ -607,14 +617,14 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
 
-    value = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    mean = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    median = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    min = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    max = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    sd = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    se = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
-    cv = serializers.DecimalField(max_digits=20, decimal_places=2, allow_null=True)
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
 
     class Meta:
             model = Output
@@ -630,6 +640,17 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 return obj.substance.to_dict()
             except AttributeError:
                 return obj.substance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT:
+                try:
+                    rep[field] = '{:.2e}'.format(rep[field])
+                except (ValueError, TypeError):
+                    pass
+        return rep
+
+
 
 class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
@@ -653,5 +674,20 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 return obj.substance.to_dict()
             except AttributeError:
                 return obj.substance
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT + ['time']:
+            try:
+                result = []
+                for x in rep[field]:
+                    try:
+                        result.append('{:.2e}'.format(x))
+                    except (ValueError, TypeError):
+                        result.append(x)
+                rep[field] = result
+            except TypeError:
+                pass
+        return rep
 
 

@@ -165,36 +165,55 @@ class UnitConversion(object):
 
 # Supported unit conversions
 UNIT_CONVERSIONS = [
-    UnitConversion("kg", target="g", multiplier=1000),
+    #Time
+    UnitConversion("kg", target="g", multiplier=1000.0),
     UnitConversion("cm", target="m", multiplier=1E-2),
     UnitConversion("ml", target="l", multiplier=1E-3),
     UnitConversion("min", target="h", multiplier=1.0 / 60),
-    UnitConversion("1/min", target="1/h", multiplier=60),
+    UnitConversion("1/min", target="1/h", multiplier=60.0),
     # Concentrations
     UnitConversion("mg/dl", target="µg/ml", multiplier=1E3 / 1E-2),
+    UnitConversion("µg/l", target="µg/ml", multiplier=0.001),
+    UnitConversion("µg/dl", target="µg/ml", multiplier=0.01),
+
     UnitConversion("mg/l", target="µg/ml", multiplier=1.0),
-    UnitConversion("g/dl", target="µg/dl", multiplier=1.0E6),
+    UnitConversion("g/dl", target="µg/ml", multiplier=10000.0),
     UnitConversion("ng/ml", target="µg/ml", multiplier=1.0E-3),
+    UnitConversion("ng/l", target="µg/ml", multiplier=1.0),
+
     # AUC
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0),
+
+    UnitConversion("µg*min/ml", target="mg*h/l", multiplier=1.0/60),
+
+    UnitConversion("ng*h/ml", target="mg*h/l", multiplier=1000.0),
     UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0),
     UnitConversion("mg*min/l", target="mg*h/l", multiplier=1.0/60),
     UnitConversion("mg/l*min", target="mg*h/l", multiplier=1.0/60),
     UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0),
+
+    UnitConversion("µmol/l*h", target="µmol*h/l", multiplier=1.0),
+    UnitConversion("nmol/l*h", target="µmol*h/l", multiplier=1.0E-3),
+    UnitConversion("nmol*h/l", target="µmol*h/l", multiplier=1.0E-3),
+
     # Vd
     UnitConversion("ml/kg", target="l/kg", multiplier=1.0E-3),
+
     # clearance
     UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/kg/h", target="l/h/kg", multiplier=1.0E-3),
-    UnitConversion("ml/min/kg", target="l/h/kg", multiplier=1.0E-3 / 60),
-    UnitConversion("ml/kg/min", target="l/h/kg", multiplier=1.0E-3 / 60),
-    UnitConversion("ml/min", target="l/h", multiplier=1.0 / 60),
+    UnitConversion("ml/min/kg", target="l/h/kg", multiplier=1.0E-3 * 60),
+    UnitConversion("ml/kg/min", target="l/h/kg", multiplier=1.0E-3 * 60),
+    UnitConversion("ml/min", target="l/h", multiplier=1.0E-3 * 60),
+    UnitConversion("ml/h", target="l/h", multiplier=1.0E-3),
+
     # ratio
     UnitConversion("%", target="-", multiplier=1.0 / 100.0),
     # "µmol/l": None,  # -> µg/ml (with molar weight)
     # "nmol/l": None,  # -> µg/ml (with molar weight)
     # "µmol*h/l": None,  # -> mg*h/l (with molar weight)
     # "µmol/l*h": None,  # -> mg*h/l (with molar weight)
+
     # rate
     UnitConversion("µmol/min/kg", target="µmol/kg/min", multiplier=1.0),
 

@@ -1,8 +1,7 @@
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
+from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, NUMERIC_TYPE
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from pkdb_app.studies.models import Study
@@ -23,7 +22,9 @@ from .models import (
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer, ReadSerializer
 
 EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
-VALUE_FIELDS = ["value", "mean", "median", "min", "max", "sd", "se", "cv", "unit"]
+VALUE_FIELDS_NO_UNIT = ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
+VALUE_FIELDS = VALUE_FIELDS_NO_UNIT +  ["unit"]
+
 VALUE_MAP_FIELDS = [
     "value_map",
     "mean_map",
@@ -130,6 +131,11 @@ class GroupSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+
+        for characteristica_single in data.get("characteristica",[]):
+            disabled = ["value"]
+            self._validate_disabled_data(characteristica_single, disabled)
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -252,6 +258,11 @@ class IndividualSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+
+        for characteristica_single in data.get("characteristica",[]):
+            disabled = ["mean", "median", "sd", "se", "cv"]
+            self._validate_disabled_data(characteristica_single, disabled)
+
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -405,18 +416,26 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
 
-    value = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    mean = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    median = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    min = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    max = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    sd = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    se = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
-    cv = serializers.DecimalField(max_digits=20,decimal_places=2, allow_null=True)
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT:
+                try:
+                    rep[field] = '{:.2e}'.format(rep[field])
+                except (ValueError, TypeError):
+                    pass
+        return rep
 
 
 class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):

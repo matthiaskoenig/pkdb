@@ -73,7 +73,6 @@ GROUP_CRITERIA = "group"
 CHARACTERISTICA_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
 CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
 
-
 # ---------------------------------------------------
 # File formats
 # ---------------------------------------------------
@@ -539,13 +538,13 @@ auc_norm_unit = NormalizableUnit(
         "µg/ml*h": "mg*h/l",
         "mg*min/l": "mg*h/l",
         "mg/l*min": "mg*h/l",
-        "µg*min/ml": None,
+        "ng*h/ml": "mg*h/l",
+        "µg*min/ml": "mg*h/l",
         "µmol*h/l": None,
-        "µmol/l*h": None,
+        "µmol/l*h": "µmol*h/l",
         "pmol/ml*h": None,
-        "nmol*h/l": None,
+        "nmol*h/l": "µmol*h/l",
         "µg/ml*h/kg": "mg*h/l/kg",
-        "ng*h/ml": None,
     }
 )
 amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
@@ -553,14 +552,14 @@ concentration_norm_unit = NormalizableUnit(
     {
         "mg/100ml": None,
         "µg/ml": None,
-        "µg/l": None,
-        "µg/dl": None,
-        "mg/dl": None,
-        "mg/l": None,
-        "ng/l": None,
+        "µg/l": "µg/ml",
+        "µg/dl": "µg/ml",
+        "mg/dl": "µg/ml",
+        "mg/l": "µg/ml",
+        "ng/l": "µg/ml",
         "pg/ml": None,
-        "g/dl": None,
-        "ng/ml": None,
+        "g/dl": "µg/ml",
+        "ng/ml": "µg/ml",
         "mmol/l": None,
         "µmol/l": None,
         "nmol/l": None,
@@ -576,14 +575,15 @@ concentration_norm_unit = NormalizableUnit(
 ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})
 clearance_norm_unit = NormalizableUnit(
     {
-        "ml/min": None,
-        "ml/h": None,  # -> ml/min
+        "ml/min": "l/h",
+        "ml/h": "l/h",  # -> ml/min
         "l/h": None,
         "l/h/kg": None,
-        "ml/h/kg": None,  # -> l/h/kg
+        "ml/h/kg": "l/h/kg",  # -> l/h/kg
         "ml/kg/min": None,
-        "ml/min/kg": None,  # -> l/h/kg
+        "ml/min/kg": "l/h/kg",  # -> l/h/kg
         "ml/min/1.73m^2": None,
+        "µmol/l*h": "µmol*h/l",
     }
 )
 

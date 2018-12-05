@@ -118,6 +118,7 @@ class ElasticOutputViewSet(DocumentViewSet):
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk',
+                     'study':'study.raw',
                      'final':'final',
                      'substance':'substance.name.raw',
                      'pktype':'pktype.raw',

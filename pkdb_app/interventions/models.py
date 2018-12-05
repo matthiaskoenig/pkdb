@@ -348,7 +348,7 @@ class Output(ValueableNotBlank, AbstractOutput):
             norm.normalize()
             norm.add_statistics()
 
-            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
+            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)) or self.unit != norm.unit:
                 norm.pk = None
                 norm.final = True
                 norm.save(donot_normalize=True)
@@ -359,6 +359,7 @@ class Output(ValueableNotBlank, AbstractOutput):
             else:
                 self.final = True
                 self.save(donot_normalize=True, force_update=True)
+
 
 
     def save_no_norm(self, *args, **kwargs):
@@ -411,13 +412,13 @@ class Output(ValueableNotBlank, AbstractOutput):
 
         if all([not self.is_norm, self.is_convertible]):
             conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-            #print(conversion_key)
             self.unit = self.norm_unit
-
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+
             for key,value in self.norm_fields.items():
                 if not value is None:
                         setattr(self,key,conversion.apply_conversion(value))
+
 
     # for elastic search. NaNs are not allowed in elastic search
 
@@ -537,7 +538,7 @@ class Timecourse(AbstractOutput):
             norm.normalize()
             norm.add_statistics()
 
-            if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)):
+            if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields))or self.unit != norm.unit:
                 norm.pk = None
                 norm.final = True
                 norm.save(donot_normalize=True)
@@ -614,7 +615,7 @@ class Timecourse(AbstractOutput):
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
             for key, value in self.norm_fields.items():
                 if not value is None:
-                    setattr(self, key, conversion.apply_conversion(value))
+                    setattr(self, key, list(conversion.apply_conversion(value)))
 
         # for elastic search. NaNs are not allowed in elastic search
 
