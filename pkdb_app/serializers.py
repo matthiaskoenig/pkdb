@@ -312,7 +312,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return df
 
-    def make_entry(self, entry, template,data):
+    def make_entry(self, entry, template,data, source):
         entry_dict = copy.deepcopy(template)
         recursive_entry_dict = list(recursive_iter(entry_dict))
 
@@ -369,11 +369,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 groupby = [v.strip() for v in groupby.split("&")]
                 for group_name, group_df in df.groupby(groupby):
                     for entry in group_df.itertuples():
-                        entry_dict = self.make_entry(entry, template, data)
+                        entry_dict = self.make_entry(entry, template, data, source)
                         entries.append(entry_dict)
             else:
                 for entry in df.itertuples():
-                    entry_dict = self.make_entry(entry, template, data)
+                    entry_dict = self.make_entry(entry, template, data,source)
                     entries.append(entry_dict)
 
         else:
