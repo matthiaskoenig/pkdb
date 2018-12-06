@@ -104,6 +104,7 @@ KEYWORDS_DATA = [
     "insulin secretion",
     "diabetes",
     "oral glucose tolerance test",
+    "intravenous glucose tolerance test"
 
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
@@ -178,8 +179,13 @@ CHARACTERISTIC_DATA = [
         "obesity index",  # percent of normal body weight
         ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
     ),
-
-
+    CharacteristicType(
+        "obese",
+        ANTHROPOMETRY,
+        BOOLEAN_TYPE,
+        BOOLEAN_CHOICES,
+        dimensionless_norm_unit,
+    ),
     # -------------- Demography --------------
     CharacteristicType(
         "age", DEMOGRAPHICS, NUMERIC_TYPE, None, NormalizableUnit({"yr": None})
