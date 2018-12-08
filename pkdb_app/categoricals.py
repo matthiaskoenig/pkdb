@@ -551,6 +551,7 @@ auc_norm_unit = NormalizableUnit(
         "pmol/ml*h": None,
         "nmol*h/l": "µmol*h/l",
         "µg/ml*h/kg": "mg*h/l/kg",
+        "µU/ml*min": None,
     }
 )
 amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})

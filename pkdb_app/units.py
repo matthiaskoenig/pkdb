@@ -99,6 +99,8 @@ UNITS = {
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
 
+    "µU/ml*min": None,
+
 
     # Volume of distribution (vd)
     "l": None,
