@@ -136,6 +136,7 @@ SUBSTANCES_DATA = [
     'exenatide',  # GLP1 analoque
     'GIP',
     'GLP-1',
+    'insulin/glucose',
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]

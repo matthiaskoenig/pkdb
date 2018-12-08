@@ -33,6 +33,10 @@ UNITS = {
     # base units
     "-": "dimensionless",
     "%": "percent",
+    "mega": None,
+    "kilo": None,
+     "milli": None,
+     "micro": None,
     "cm": "centimeter",
     "m": "meter",
     "kg": "kilogram",
