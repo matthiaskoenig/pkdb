@@ -119,6 +119,8 @@ SUBSTANCES_DATA = [
     'lactate',
     '[2-3H]glucose',
     '[6-3H]glucose',
+    '[U-13C]glucose',
+    '[3-OMG]glucose',
     'insulin',
     'c-peptide',
     'cortisol',
