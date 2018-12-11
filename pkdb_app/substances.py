@@ -119,6 +119,8 @@ SUBSTANCES_DATA = [
     'lactate',
     '[2-3H]glucose',
     '[6-3H]glucose',
+    '[U-13C]glucose',
+    '[3-OMG]glucose',
     'insulin',
     'c-peptide',
     'cortisol',
@@ -134,6 +136,7 @@ SUBSTANCES_DATA = [
     'exenatide',  # GLP1 analoque
     'GIP',
     'GLP-1',
+    'insulin/glucose',
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]

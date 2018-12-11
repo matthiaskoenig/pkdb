@@ -33,6 +33,10 @@ UNITS = {
     # base units
     "-": "dimensionless",
     "%": "percent",
+    "mega": None,
+    "kilo": None,
+     "milli": None,
+     "micro": None,
     "cm": "centimeter",
     "m": "meter",
     "kg": "kilogram",
@@ -98,6 +102,8 @@ UNITS = {
     "nmol*h/l": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
+
+    "µU/ml*min": None,
 
 
     # Volume of distribution (vd)

@@ -201,7 +201,7 @@ CHARACTERISTIC_DATA = [
         "ethnicity",
         DEMOGRAPHICS,
         CATEGORIAL_TYPE,
-        [NAN, "african", "afroamerican", "asian", "caucasian"],
+        [NAN, "african", "afroamerican", "asian", "caucasian", "korean"],
         dimensionless_norm_unit,
     ),
     # -------------- Physiology --------------
@@ -399,6 +399,18 @@ CHARACTERISTIC_DATA = [
         "glucagon", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"pmol/l": None}),
     ),
     CharacteristicType(
+        "cholesterol", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mmol/l": None}),
+    ),
+    CharacteristicType(
+        "triglyceride", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mmol/l": None}),
+    ),
+    CharacteristicType(
+        "LDL-C", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mmol/l": None}),
+    ),
+    CharacteristicType(
+        "LDL-H", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"mmol/l": None}),
+    ),
+    CharacteristicType(
         "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, NormalizableUnit({"%": None}),
     ),
 
@@ -551,6 +563,7 @@ auc_norm_unit = NormalizableUnit(
         "pmol/ml*h": None,
         "nmol*h/l": "µmol*h/l",
         "µg/ml*h/kg": "mg*h/l/kg",
+        "µU/ml*min": None,
     }
 )
 amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
@@ -578,7 +591,14 @@ concentration_norm_unit = NormalizableUnit(
         "ng/g": None, # per g plasma
     }
 )
-ratio_norm_unit = NormalizableUnit({"-": None, "%": "-"})
+ratio_norm_unit = NormalizableUnit(
+    {"-": None,
+     "%": "-",
+     "mega": None,
+     "kilo": None,
+     "milli": None,
+     "micro": None,
+     })
 clearance_norm_unit = NormalizableUnit(
     {
         "ml/min": "l/h",
@@ -675,6 +695,22 @@ PK_DATA = [
     ),
     PharmacokineticsType(
         "rate_secretion", "rate secretion (rate)", rate_norm_unit
+    ),
+
+    PharmacokineticsType(
+        "Matsuda index", "Matsuda index", NormalizableUnit({"-": None})
+    ),
+    PharmacokineticsType(
+        "QUICKI", "quantitative insulin sensitivity check index", NormalizableUnit({"-": None})
+    ),
+    PharmacokineticsType(
+        "HOMA-IR", "homeostatic model assessment for insulin resistance", NormalizableUnit({"-": None})
+    ),
+    PharmacokineticsType(
+        "Insulinogenic index", "Insulinogenic index", NormalizableUnit({"-": None})
+    ),
+    PharmacokineticsType(
+        "Oral disposition index", "Oral disposition index", NormalizableUnit({"-": None})
     ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
