@@ -37,11 +37,11 @@ from ..categoricals import (
     INTERVENTION_FORM_CHOICES,
     INTERVENTION_APPLICATION_CHOICES,
     PK_DATA_CHOICES,
-    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT)
+    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT, TIME_NORM_UNIT)
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
 
 from ..utils import CHAR_MAX_LENGTH
-from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf, _kel, _vd
+from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf, _kel, _vd, f_pk
 from ..substances import SUBSTANCES_DATA_CHOICES
 
 # -------------------------------------------------
@@ -538,12 +538,13 @@ class Timecourse(AbstractOutput):
             norm.normalize()
             norm.add_statistics()
 
-            if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields))or self.unit != norm.unit:
+            if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)) or self.unit != norm.unit or self.time_unit != norm.time_unit:
                 norm.pk = None
                 norm.final = True
                 norm.save(donot_normalize=True)
                 norm.raw.add(self)
                 norm.save(donot_normalize=True)
+
             else:
                 self.final = True
                 self.save(donot_normalize=True, force_update=True)
@@ -593,29 +594,45 @@ class Timecourse(AbstractOutput):
         return self.pk_data.units.get(self.unit)
 
     @property
-    def is_norm(self):
-        norm_unit = self.norm_unit
-        return norm_unit is None
+    def norm_time_unit(self):
+        return TIME_NORM_UNIT
 
     @property
-    def is_convertible(self):
-        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
+    def is_norm(self):
+        return self.norm_unit is None
+
+
+    @staticmethod
+    def is_convertible(unit,norm_unit):
+        conversion_key = f"[{unit}] -> [{norm_unit}]"
         conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
         return conversion is not None
+
+
 
     @property
     def norm_fields(self):
         return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
                       "sd": self.sd, "se": self.se}
 
+
+
     def normalize(self):
-        if all([not self.is_norm, self.is_convertible]):
+        if all([not self.is_norm, self.is_convertible(self.unit,self.norm_unit)]):
             conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
             self.unit = self.norm_unit
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
             for key, value in self.norm_fields.items():
                 if not value is None:
                     setattr(self, key, list(conversion.apply_conversion(value)))
+
+        #for time_unit
+        if self.is_convertible(self.time_unit, self.norm_time_unit):
+            conversion_key = f"[{self.time_unit}] -> [{self.norm_time_unit}]"
+            self.time_unit = self.norm_time_unit
+            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+            self.time = list(conversion.apply_conversion(self.time))
+
 
         # for elastic search. NaNs are not allowed in elastic search
 
@@ -672,7 +689,8 @@ class Timecourse(AbstractOutput):
         self.related_subject.characteristica.filter(category="weight")
 
     def calculate_pharamcokinatics(self):
-         pk_data = self.get_pharamcokinetic_data()
+        pk_data = self.get_pharamcokinetic_data()
+        #return f_pk(t=pk_data["t"],c=pk_data["c"],compound=self.substance.name,dose=)
 
     def get_pharamcokinetic_data(self):
         pk_data = {}
@@ -689,7 +707,7 @@ class Timecourse(AbstractOutput):
 
             try:
                 weight = self.group.characteristica_all.get(category="weight")
-                pk_data["weight"] = weight.value
+                pk_data["weight"] = weight.get("mean")
                 pk_data["bodyweight_unit"] = weight.unit
 
             except ObjectDoesNotExist:

@@ -6,6 +6,110 @@ import pandas as pd
 import attr
 from pathlib import Path
 
+
+# Styles for plots
+ccolors = {'control': 'black',
+           'smoking': 'blue',
+           'oc': 'green',
+           'outlier': 'red',
+          }
+markers = {'control': 's',
+           'smoking': 'd',
+           'oc': 'o',
+            'outlier': 'x',
+
+          }
+
+def unstring(value):
+    if isinstance(value,str):
+        return eval(value)
+    else:
+        return value
+    
+def array_from_string(value):
+    try:
+        return np.array(unstring(value)).astype('float32')
+    except SyntaxError:
+        return np.fromstring(value.strip('[]') ,dtype=float, sep=" ")
+    
+    
+        
+        
+    
+category_filter = {
+    'control':{
+        ('smoking', 'choice'):"N",
+        ('oral contraceptives', 'choice'):'N',
+       'outlier':False
+    },
+    'smoking':{
+        ('smoking', 'choice'):"Y",
+        'outlier':False
+    }, 
+    'oc':{
+        ('oral contraceptives', 'choice'):'Y',
+        'outlier':False
+    },
+    'outlier':{
+        'outlier':True
+    }}
+
+
+def convert_unit(df, unit_in, unit_out, factor=1.0, 
+                 unit_field="unit", data_fields=['mean','median','value', 'sd', 'se', 'min', 'max'], inplace=True, subset=False):
+    """ Unit conversion in given data frame. """
+    if not inplace:
+        df = df.copy()
+    if subset:
+        for column in subset:
+            is_weightidx =  df[column].notnull() 
+            df = df[is_weightidx]     
+            if isinstance(factor, pd.Series):
+                factor = factor[is_weightidx]
+        
+        
+    idx = (df[unit_field] == unit_in)
+    
+
+    for key in data_fields:
+        df.loc[idx, key] = df.loc[idx, key]*factor
+    df.loc[idx, unit_field] = unit_out
+    
+    if subset:
+        return df[idx]
+    
+    return df
+
+def caffeine_idx(data):
+    return (data.substance_name_intervention == 'caffeine') \
+           & (data.substance_name == 'caffeine') \
+           & (data[ ('healthy', 'choice')] == 'Y') \
+           & (data['tissue'] == 'plasma')
+
+def pktype_data(data,pktype):
+    return data[data.pktype==pktype]
+    
+
+def abs_idx(data,unit_field):
+    return ~rel_idx(data,unit_field)
+
+def rel_idx(data,unit_field):
+    return data[unit_field].str.contains('kg')
+
+def filter_out(data,unit_field,units):
+    return data[~data[unit_field].isin(units)]
+
+def filter_df(filter_dict, df):
+    for filter_key, filter_value in filter_dict.items():
+        df = df[df[filter_key]==filter_value]
+    return df
+
+def group_idx(data):
+    return data["subject_type"] == 'group'
+
+def individual_idx(data):
+    return data["subject_type"] == 'individual'
+
 def get_data(url,**kwargs):
     """
     gets the data from a paginated rest api. 
@@ -59,30 +163,6 @@ def add_level_to_df(df, level_name):
     df.columns = pd.MultiIndex.from_tuples(list(zip(df.columns, len(df.columns)*[level_name])))
     return  df.swaplevel(axis=1)     
 
-def convert_unit(df, unit_in, unit_out, factor=1.0, 
-                 unit_field="unit", data_fields=['mean','median','value', 'sd', 'se', 'min', 'max'], inplace=True, subset=False):
-    """ Unit conversion in given data frame. """
-    if not inplace:
-        df = df.copy()
-    if subset:
-        is_weightidx =  df[subset].notnull()
-        df =  df[is_weightidx]     
-    if isinstance(factor, pd.Series):
-        factor = factor[is_weightidx]
-        
-        
-    idx = (df[unit_field] == unit_in)
-    
-
-    for key in data_fields:
-        print(np.array(df.loc[idx, key].values),factor)
-        df.loc[idx, key] =  np.multiply(df.loc[idx, key].values,factor)
-    df.loc[idx, unit_field] = unit_out
-    
-    if subset:
-        return df[idx]
-    
-    return df
 
 @attr.s
 class PkdbModel(object):
@@ -135,7 +215,7 @@ class PkdbModel(object):
              return {'header' :[0,1],'index_col': [0,1,2]}
         elif self.name in ["all_subjects"]:
             return {'header':[0,1], "index_col":[0,1,2,3]}
-        elif self.name in ["all_complete","groups_complete","individuals_complete"]:
+        elif self.name in ["all_complete","groups_complete","individuals_complete","caffeine_timecourse","caffeine_clearance"]:
             return {'header':[0], "index_col":[0]}
         elif self.name in ["all_results"]:
             return {'header':[0]}
@@ -149,6 +229,13 @@ class PkdbModel(object):
     def read(self):
         self.data = pd.read_csv(self.path, sep="\t",**self.read_kwargs)
         self.data.columns = [eval(c) if "," in c else c for c in list(self.data.columns) ]
+    
+    def to_array(self):
+        for value in ["mean","median","sd","se","cv","value","time"]:
+            self.data[value] = self.data[value].apply(lambda x :array_from_string(x))
+            
+        
+          
 
     def report(self):
         print("_"*60)
@@ -158,6 +245,11 @@ class PkdbModel(object):
         print(f"saved: {self.saved}")
         if all([self.loaded,self.preprocessed,self.saved]):
             print(f"{self.name} were succsesfully saved to <{self.path}>")
+    
+    @property
+    def select_output(output):
+        return 
+        
         
     def _preprocess_outputs(self):
         if self.name in ["outputs","timecourses"]:

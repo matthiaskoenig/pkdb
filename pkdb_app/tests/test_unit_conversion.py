@@ -7,7 +7,7 @@ Measurement = namedtuple('Measurement',["value","unit"])
 Transform = namedtuple('Transform',["input","output"])
 
 test_data = [
-    Transform(input=Measurement(80000,"g"),output=Measurement(80,"kg")),
+    Transform(input=Measurement(80,"kg"),output=Measurement(80000,"g")),
     Transform(input=Measurement(180, "cm"), output=Measurement(1.8, "m")),
     Transform(input=Measurement(1000, "ml"), output=Measurement(1, "l")),
     Transform(input=Measurement(60, "min"), output=Measurement(1, "h")),
@@ -44,10 +44,11 @@ class TestUnitConversion(TestCase):
 
             conversion_key = f"[{unit}] -> [{norm_unit}]"
             conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+            self.assertTrue(conversion, msg=f"conversion{conversion_key} does not exist")
 
             calculated_value = conversion.apply_conversion(value)
 
-            self.assertEqual(calculated_value,norm_value)
+            self.assertEqual(calculated_value,norm_value, msg=f"For conversion {conversion_key}")
 
 
 

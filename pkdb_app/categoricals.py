@@ -62,7 +62,7 @@ NO = "N"
 MIX = "Mixed"
 NAN = "NaN"
 BOOLEAN_CHOICES = [YES, NO, MIX, NAN]
-
+TIME_NORM_UNIT = "h"
 
 # ---------------------------------------------------
 # CharacteristicTypes
