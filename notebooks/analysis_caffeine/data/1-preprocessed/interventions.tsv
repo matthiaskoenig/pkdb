@@ -2,7 +2,6 @@ study	pk	name	category	route	value	unit	substance_name	time_unit	time	form	appli
 Abernethy1985	1	D1	dosing	oral	1.62e+02	mg	caffeine	h	0.00e+00						
 Akinyinka2000	2	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
 Backman2008	5	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Balogh1992	6	caf	dosing	oral	2.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
 Barnet1990	13	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
 Barnet1990	14	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
 Barnet1990	15	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
@@ -45,80 +44,6 @@ Ghassabian2009	51	Ddex	dosing	oral	1.00e+02	mg	dextromethorphan	h	0.00e+00
 Ghassabian2009	52	Dmid	dosing	oral	2.00e+00	mg	midazolam	h	0.00e+00						
 Granfors2005	53	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
 Haller2002	54	Dcaf	dosing	oral	1.75e+02	mg	caffeine	h	0.00e+00	capsule					
-Harder1988	55	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Harder1988	56	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Harder1988	57	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Harder1988	58	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Harder1988	59	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Harder1988	60	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
-Harder1988	61	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
-Harder1988	62	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
-Harder1988	63	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
-Harder1988	64	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
-Harder1988	65	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
-Harder1988	66	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
-Harder1988	67	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
-Harder1988	68	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	69	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	70	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	71	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	72	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	73	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	74	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	75	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	76	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	77	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	78	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	79	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	80	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	81	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	82	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	83	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	84	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	85	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	86	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	87	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	88	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	89	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	90	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	91	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	92	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Harder1989	93	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Harder1989	94	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Harder1989	95	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Harder1989	96	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Harder1989	97	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
-Harder1989	98	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
-Harder1989	99	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
-Harder1989	100	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
-Harder1989	101	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
-Harder1989	102	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
-Harder1989	103	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
-Harder1989	104	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
-Harder1989	105	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	106	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	107	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	108	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	109	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	110	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	111	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	112	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	113	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	114	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	115	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	116	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	117	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	118	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	119	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	120	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	121	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	122	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	123	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	124	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	125	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	126	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	127	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	128	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
 Healy1989	129	D_CAF	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
 Healy1989	130	D_CIP_A	dosing	oral	7.50e+02	mg	ciprofloxacin	h	2.40e+01	capsule					
 Healy1989	131	D_CIP_B	dosing	oral	7.50e+02	mg	ciprofloxacin	h	3.60e+01	capsule					
@@ -207,7 +132,82 @@ Mitrakou1991	213	hypoglycemic clamp	metabolic challenge	iv						solution		hypogl
 Mitrakou1991	214	euglycemic clamp	metabolic challenge	iv						solution		hyperinsulinemic euglycemic clamp			
 Mitrakou1992	215	glc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00	solution	single dose				
 Thomaseth2008	216	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
+Harder1988	259	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	260	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	261	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	262	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	263	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	264	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	265	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	266	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
 Balogh1995	237	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
 Balogh1995	238	DA	dosing	oral	7.50e-02	mg	gestodene								
 Balogh1995	239	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
 Balogh1995	240	DEE2	dosing	oral	3.00e-02	mg	EE2								
+Balogh1992	241	caf	dosing	oral	2.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Harder1988	242	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Harder1988	243	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Harder1988	244	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Harder1988	245	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Harder1988	246	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Harder1988	247	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
+Harder1988	248	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
+Harder1988	249	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
+Harder1988	250	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
+Harder1988	251	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
+Harder1988	252	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
+Harder1988	253	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
+Harder1988	254	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
+Harder1988	255	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	256	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	257	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	258	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	267	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	268	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	269	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	270	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	271	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	272	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	273	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	274	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	275	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	276	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	277	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	278	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	279	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Harder1989	280	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Harder1989	281	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Harder1989	282	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Harder1989	283	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Harder1989	284	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
+Harder1989	285	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
+Harder1989	286	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
+Harder1989	287	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
+Harder1989	288	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
+Harder1989	289	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
+Harder1989	290	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
+Harder1989	291	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
+Harder1989	292	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	293	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	294	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	295	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	296	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	297	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	298	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	299	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	300	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	301	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	302	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	303	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	304	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	305	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	306	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	307	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	308	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	309	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	310	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	311	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	312	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	313	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	314	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	315	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
