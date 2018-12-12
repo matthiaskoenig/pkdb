@@ -178,7 +178,7 @@ UNIT_CONVERSIONS = [
     UnitConversion("min", target="h", multiplier=1.0 / 60),
     UnitConversion("1/min", target="1/h", multiplier=60.0),
     # Concentrations
-    UnitConversion("mg/dl", target="µg/ml", multiplier=1E3 / 1E-2),
+    UnitConversion("mg/dl", target="µg/ml", multiplier=10),
     UnitConversion("µg/l", target="µg/ml", multiplier=0.001),
     UnitConversion("µg/dl", target="µg/ml", multiplier=0.01),
 

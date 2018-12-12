@@ -1,0 +1,11 @@
+study	group	treatment	oc	cycle	intgroup	interventions 	info	n	cl	cl_sd	cl_unit	cmax	cmax_sd	cmax_unit	tmax	tmax_sd	tmax_unit	thalf	thalf_sd	thalf_unit	vd	vd_sd	vd
+Balogh1995	A_no_oc	A	N	I	NO_OC	Dcaf	prior treatment	10	87.6	30.5	ml/min	4.97	0.88	µg/ml	1.96	0.65	h	4.44	1.48	h	30.6	3.72	l
+Balogh1995	A_no_oc	A	N	II	NO_OC	Dcaf	prior treatment	10	80.3	27.4	ml/min	5.23	0.98	µg/ml	1.89	0.98	h	4.82	2.41	h	29.3	4	l
+Balogh1995	A_no_oc	A	N	III	NO_OC	Dcaf	prior treatment	10	84.8	30.1	ml/min	5.15	0.97	µg/ml	1.82	0.45	h	4.66	2.11	h	29.8	3.52	l
+Balogh1995	A_oc	A	Y	IV	A	Dcaf, DA, DEE2	during treatment	10	38.8	10.6	ml/min	6.01	0.39	µg/ml	2.6	1.21	h	8.92	3.08	h	27.8	5.2	l
+Balogh1995	A_no_oc	A	N	V	NO_OC	Dcaf	after treatment	10	78.7	28.7	ml/min	5.55	1.25	µg/ml	1.75	0.8	h	4.7	1.52	h	28.9	3.8	l
+Balogh1995	B_no_oc	B	N	I	NO_OC	Dcaf	prior treatment	10	107	21.5	ml/min	4.28	0.99	µg/ml	2.23	0.96	h	3.32	0.84	h	29.5	4.5	l
+Balogh1995	B_no_oc	B	N	II	NO_OC	Dcaf	prior treatment	10	99.9	40.3	ml/min	4.86	1.18	µg/ml	1.66	0.84	h	4.15	1.59	h	31.7	4.3	l
+Balogh1995	B_no_oc	B	N	III	NO_OC	Dcaf	prior treatment	10	97	24.4	ml/min	4.89	0.95	µg/ml	1.58	0.77	h	3.96	1.21	h	31.2	3.9	l
+Balogh1995	B_oc	B	Y	IV	B	Dcaf, DB, DEE2	during treatment	10	46.6	13.5	ml/min	5.1	0.9	µg/ml	1.83	0.75	h	9.15	2.65	h	34.4	4.73	l
+Balogh1995	B_no_oc	B	N	V	NO_OC	Dcaf	after treatment	10	92.3	23.8	ml/min	4.79	0.87	µg/ml	1.79	0.66	h	4.19	1.26	h	31.3	2.8	l

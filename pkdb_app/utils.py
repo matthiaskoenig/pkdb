@@ -50,10 +50,12 @@ def update_or_create_multiple(parent, children, related_name):
 
 
 def create_multiple(parent, children, related_name):
+    instance_child = getattr(parent, related_name)
     for child in children:
-        instance_cild = getattr(parent, related_name)
-        instance_cild.create(**child)
+        instance_child.create(**child)
 
+def create_multiple_bulk(parent,related_name_parent,children,class_child):
+    class_child.objects.bulk_create([class_child(**{related_name_parent:parent,**child}) for child in children])
 
 def recursive_iter(obj, keys=()):
     """ Creates dictionary with key:object from nested JSON data structure. """

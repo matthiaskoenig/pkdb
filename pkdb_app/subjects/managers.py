@@ -2,22 +2,27 @@
 the managers can be used to overwrite class methods of the models module.
 """
 from django.db import models
-
-from pkdb_app.utils import create_multiple
+from django.apps import apps
+from pkdb_app.utils import create_multiple, create_multiple_bulk
 
 
 class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         study = kwargs.pop("study")
+        group_exs = kwargs.pop("group_exs", [])
 
         descriptions = kwargs.pop("descriptions", [])
-        group_exs = kwargs.pop("group_exs", [])
         comments = kwargs.pop("comments", [])
+        #Comment = apps.get_model('comments', 'Comment')
+        #Description = apps.get_model('comments', 'Description')
 
         groupset = super().create(*args, **kwargs)
 
         create_multiple(groupset, descriptions, "descriptions")
         create_multiple(groupset, comments, "comments")
+        #create_multiple_bulk(groupset,"groupset", descriptions, Description)
+        #create_multiple_bulk(groupset,"groupset", comments, Comment)
+
 
         study_group_exs = []
         for group_ex in group_exs:
@@ -100,18 +105,24 @@ class CharacteristicaExManager(models.Manager):
 
 
 class IndividualSetManager(models.Manager):
+
     def create(self, *args, **kwargs):
         individual_exs = kwargs.pop("individual_exs", [])
         descriptions = kwargs.pop("descriptions", [])
         kwargs.pop("study")
         comments = kwargs.pop("comments", [])
 
+        Comment = apps.get_model('comments','Comment')
+        Description = apps.get_model('comments','Description')
+
+
         individualset = super().create(*args, **kwargs)
 
-        create_multiple(individualset, descriptions, "descriptions")
+        #create_multiple(individualset, descriptions, "descriptions")
+        #create_multiple_bulk(individualset,"individualset", individual_exs, IndividualEx)
         create_multiple(individualset, individual_exs, "individual_exs")
-        create_multiple(individualset, comments, "comments")
-
+        create_multiple_bulk(individualset,"individualset", descriptions, Description)
+        create_multiple_bulk(individualset,"individualset", comments, Comment)
         individualset.save()
         return individualset
 
@@ -123,11 +134,15 @@ class IndividualExManager(models.Manager):
         individuals = kwargs.pop("individuals", [])
         comments = kwargs.pop("comments", [])
 
+        Comment = apps.get_model('comments','Comment')
+
         individual_ex = super().create(*args, **kwargs)
 
         create_multiple(individual_ex, characteristica_ex, "characteristica_ex")
         create_multiple(individual_ex, individuals, "individuals")
-        create_multiple(individual_ex, comments, "comments")
+        #create_multiple(individual_ex, comments, "comments")
+
+        create_multiple_bulk(individual_ex,"ex", comments, Comment)
 
         individual_ex.save()
         return individual_ex

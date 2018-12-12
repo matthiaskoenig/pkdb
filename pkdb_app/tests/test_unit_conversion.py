@@ -28,7 +28,7 @@ test_data = [
     # clearance
     Transform(input=Measurement(1, "ml/h/kg"), output=Measurement(0.001, "l/h/kg")),
     Transform(input=Measurement(1, "ml/min/kg"), output=Measurement(0.06, "l/h/kg")),
-    Transform(input=Measurement(1, "ml/min"), output=Measurement(1.0/60, "l/h")),
+    Transform(input=Measurement(1, "ml/min"), output=Measurement(0.06, "l/h")),
     Transform(input=Measurement(100, "%"), output=Measurement(1, "-")),
 
 ]
