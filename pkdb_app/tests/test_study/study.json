@@ -147,9 +147,31 @@
         "group": "col==group",
         "source": "test_study_TabA.csv",
         "format": "TSV"
-      }
-    ]
-  },
+      },
+      {
+        "name": "col==subject",
+        "group": "col==fake_group",
+        "source": "test_study_Tab3.csv",
+        "format": "TSV",
+        "figure": "test_study_Tab3.png",
+        "characteristica": [
+          {
+            "category": "age",
+            "value": "col==age",
+            "unit": "yr"
+          },
+          {
+            "category": "weight",
+            "value": "col==weight",
+            "unit": "col==weight_unit"
+          },
+          {
+            "category": "sex",
+            "choice": "col==sex"
+          }
+	]
+   }
+  ]},
   "interventionset": {
     "descriptions": [
       "The drug (200 mg caffeine as uncoated tablet, Berlin Chemie, Germany) was administered in the morning after an overnight fast, together with 200 ml herbal tea. On day 21 of the treatment cycle, caffeine was administered 30min after the intake of the oral contraceptive. All volunteers had been instructed to refrain for at least 36 h prior to and during the caffeine test from all methylxanthine-containing beverages and food.",
@@ -279,6 +301,45 @@
         "sd": "col==cl_sd || col==cmax_sd || col==tmax_sd || col==thalf_sd || col==vd_sd",
         "tissue": "plasma",
         "unit": "ml/min || µg/ml || h || h || l"
+      }
+    ],
+	"timecourses": [
+      {
+        "group": "col==subject",
+        "subset": "subject_type==group",
+        "groupby": "subject",
+        "interventions": [
+          "Dcaf"
+        ],
+        "source": "test_study_Fig3.csv",
+        "format": "TSV",
+        "figure": "test_study_Fig3.png",
+        "substance": "caffeine || paraxanthine || paraxanthine/caffeine",
+        "tissue": "plasma",
+        "pktype": "concentration || concentration || ratio",
+        "time": "col==time",
+        "time_unit": "h",
+        "mean": "col==caf || col==px || col==px_caf",
+        "sd": "col==caf_sd || col==px_sd || col==px_caf_sd",
+        "unit": "µg/ml || µg/ml || -"
+      },
+ {
+        "individual": "col==subject",
+        "subset": "subject_type==individual",
+        "groupby": "subject",
+        "interventions": [
+          "Dcaf"
+        ],
+        "source": "test_study_Fig3.csv",
+        "format": "TSV",
+        "figure": "test_study_Fig3.png",
+        "substance": "caffeine || paraxanthine || paraxanthine/caffeine",
+        "tissue": "plasma",
+        "pktype": "concentration || concentration || ratio",
+        "time": "col==time",
+        "time_unit": "h",
+        "value": "col==caf || col==px || col==px_caf",
+        "unit": "µg/ml || mg/l || -"
       }
     ]
   }

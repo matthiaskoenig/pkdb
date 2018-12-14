@@ -208,6 +208,7 @@ class IndividualSet(models.Model):
         individuals = Individual.objects.filter(ex__in=self.individual_exs.all())
         return individuals
 
+
     @property
     def count(self):
         if self.individuals:

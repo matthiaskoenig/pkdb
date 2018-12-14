@@ -66,7 +66,14 @@ class InterventionSet(models.Model):
 
     @property
     def interventions(self):
-        interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all()).filter(final=True)
+        """ all interventions """
+        interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all())
+        return interventions
+
+    @property
+    def interventions_final(self):
+        """ all interventions """
+        interventions = self.interventions.filter(final=True)
         return interventions
 
     @property
@@ -245,7 +252,12 @@ class OutputSet(models.Model):
 
     @property
     def outputs(self):
-        outputs = Output.objects.filter(ex__in=self.output_exs.all()).filter(final=True)
+        outputs = Output.objects.filter(ex__in=self.output_exs.all())
+        return outputs
+
+    @property
+    def outputs_final(self):
+        outputs = self.outputs.filter(final=True)
         return outputs
 
 
@@ -258,7 +270,12 @@ class OutputSet(models.Model):
 
     @property
     def timecourses(self):
-        timecourses = Timecourse.objects.filter(ex__in=self.timecourse_exs.all()).filter(final=True)
+        timecourses = Timecourse.objects.filter(ex__in=self.timecourse_exs.all())
+        return timecourses
+
+    @property
+    def timecourses_final(self):
+        timecourses = self.timecourses.filter(final=True)
         return timecourses
 
     @property

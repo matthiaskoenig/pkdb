@@ -645,11 +645,16 @@ class ExSerializer(MappingSerializer):
                 self._is_required(data, "time")
                 self._is_required(data, "time_unit")
 
-
         else:
             raise serializers.ValidationError(
                 {"pktype": f"pktype is required", "detail": data}
             )
+
+
+
+
+
+
 
     def _validate_time_unit(self, data):
         time = data.get("time")

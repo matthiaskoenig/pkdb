@@ -39,7 +39,9 @@ class ReferenceDocument(DocType):
 study_index = Index("studies")
 study_index.settings(**elastic_settings)
 
-def common_setfields(model):
+def common_setfields(model,attr=None):
+    if attr is None:
+        attr = model
     return ObjectField(
         properties = {
             "descriptions" : ObjectField(
@@ -51,6 +53,7 @@ def common_setfields(model):
             #"count" : fields.FloatField(),
 
             model: ObjectField(
+                attr = attr,
                 properties = {
                     "pk" : fields.FloatField(),
                 }
@@ -150,7 +153,7 @@ class StudyDocument(DocType):
 
     groupset = common_setfields("groups")
     individualset = common_setfields("individuals")
-    interventionset = common_setfields("interventions")
+    interventionset = common_setfields("interventions","interventions_final")
     outputset = ObjectField(
         properties = {
             "descriptions" : ObjectField(
@@ -161,12 +164,14 @@ class StudyDocument(DocType):
                 multi=True),
             #"count_outputs" : fields.FloatField(),
             "outputs": ObjectField(
+                attr = "outputs_final",
                 properties = {
                     "pk" : fields.FloatField(),
                 }
             ),
             #"count_timecourses": fields.FloatField(),
             "timecourses": ObjectField(
+                attr="timecourses_final",
                 properties={
                     "pk": fields.FloatField(),
                 }

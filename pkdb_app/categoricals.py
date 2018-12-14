@@ -18,7 +18,6 @@ from collections import namedtuple
 from pkdb_app.units import NormalizableUnit
 from pkdb_app.substances import SUBSTANCES_DATA
 
-
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
 
@@ -149,7 +148,7 @@ CHARACTERISTIC_DATA = [
         NormalizableUnit({"cm": "m", "m": None}),
     ),
     CharacteristicType(
-        "weight", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg": None})
+        "weight", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg": None, "g": "kg"})
     ),
     CharacteristicType(
         "bmi", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg/m^2": None})
@@ -501,9 +500,9 @@ def validate_categorials(data, category_class):
     category = data.get("category", None)
     if category:
         if category_class == "characteristica":
-            characteristic_dict = CHARACTERISTIC_DICT
+            allowed_category_dict = CHARACTERISTIC_DICT
         elif category_class == "intervention":
-            characteristic_dict = INTERVENTION_DICT
+            allowed_category_dict = INTERVENTION_DICT
         else:
             raise ValueError(f"category_class not supported: {category_class}")
 
@@ -511,12 +510,12 @@ def validate_categorials(data, category_class):
         unit = data.get("unit", None)
 
         # check that allowed category
-        if category not in characteristic_dict:
+        if category not in allowed_category_dict:
             msg = f"category <{category}> is not supported for {category_class}"
             raise ValueError({"category": msg})
 
         # get the allowed definition
-        model_categorical = characteristic_dict[category]
+        model_categorical = allowed_category_dict[category]
         if choice:
             if (model_categorical.dtype == CATEGORIAL_TYPE) or (
                 model_categorical.dtype == BOOLEAN_TYPE
@@ -530,11 +529,11 @@ def validate_categorials(data, category_class):
 
         # check unit
         if unit is None:
-            # FIXME: this must also happen in the 'to_internal_value' for choices, not only in validation
             unit = "-"  # handle no unit as dimensionless
-            if not model_categorical.units.is_valid_unit(unit):
+        if not model_categorical.units.is_valid_unit(unit):
                 msg = f"[{unit}] is not in the allowed units. For {model_categorical.key} allowed units are {model_categorical.units.keys()}"
                 raise ValueError({"unit": msg})
+
     return data
 
 

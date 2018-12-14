@@ -173,6 +173,8 @@ class UnitConversion(object):
 UNIT_CONVERSIONS = [
     #Time
     UnitConversion("kg", target="g", multiplier=1000.0),
+    UnitConversion("g", target="kg", multiplier=1/1000.0),
+
     UnitConversion("cm", target="m", multiplier=1E-2),
     UnitConversion("ml", target="l", multiplier=1E-3),
     UnitConversion("min", target="h", multiplier=1.0 / 60),
