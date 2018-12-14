@@ -3,7 +3,7 @@ the managers can be used to overwrite class methods of the models module.
 """
 from django.db import models
 from django.apps import apps
-from pkdb_app.utils import create_multiple, create_multiple_bulk
+from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 
 class GroupSetManager(models.Manager):
@@ -81,17 +81,20 @@ class GroupManager(models.Manager):
             kwargs["parent"] = self.model.objects.get(name=kwargs.get("parent"), ex=ex)
 
         group = super().create(*args, **kwargs)
+        characteristica_updated = []
+        Characteristica = apps.get_model('subjects', 'Characteristica')
 
         for characteristica_single in characteristica:
-            characteristica_single["count"] = characteristica_single.get(
-                "count", group.count
-            )
-            group.characteristica.create(**characteristica_single)
+            characteristica_single["count"] = characteristica_single.get( "count", group.count)
+            characteristica_updated.append(characteristica_single)
 
-        # create_multiple(group, characteristica, "characteristica")
+        not_norm_group = create_multiple_bulk(group, "group", characteristica_updated, Characteristica)
+        create_multiple_bulk_normalized(not_norm_group, Characteristica)
+
 
         group.save()
         return group
+
 
 
 class CharacteristicaExManager(models.Manager):
@@ -152,7 +155,8 @@ class IndividualManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica = kwargs.pop("characteristica", [])
         individual = super().create(*args, **kwargs)
-
-        create_multiple(individual, characteristica, "characteristica")
+        Characteristica = apps.get_model('subjects','Characteristica')
+        not_norm_individual = create_multiple_bulk(individual,"individual", characteristica, Characteristica)
+        create_multiple_bulk_normalized(not_norm_individual,Characteristica)
         individual.save()
         return individual

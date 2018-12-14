@@ -155,7 +155,7 @@ class UploadStudy(APITestCase):
             get_or_assert(queryset=characteristica, category="weight",min=51,max=75,unit="kg")
             get_or_assert(queryset=characteristica, category="sex",choice="F")
 
-        test_group_all_characteristica(groups_all_characteristica)
+        test_group_all_characteristica(groups_all_characteristica.filter(final=True))
         group_all_ex = group_all.ex
         assert group_all_ex.count == 20
         groups_all_ex_characteristica = group_all_ex.characteristica_ex
@@ -207,11 +207,11 @@ class UploadStudy(APITestCase):
         individual_1C = get_or_assert(queryset=individuals, name="1C", group=All_group,ex=this_individual_ex2)
         individual_10M = get_or_assert(queryset=individuals, name="10M", group=All_group,ex=this_individual_ex2)
 
-        assert set(individual_1C.characteristica.all()) == set(individual_1C.characteristica_final)
+        assert set(individual_1C.characteristica.all()) > set(individual_1C.characteristica_final)
         assert set(individual_10M.characteristica.all()) > set(individual_10M.characteristica_final)
-        not_norm_characteristca = get_or_assert(individual_10M.characteristica, final=False)
+        not_norm_characteristca = get_or_assert(individual_10M.characteristica, final=False, category="weight")
         assert not_norm_characteristca.unit == "g"
-        assert not_norm_characteristca.norm.unit == not_norm_characteristca.norm_unit
+        assert not_norm_characteristca.norm.first().unit == not_norm_characteristca.norm_unit
 
 
 
@@ -266,7 +266,7 @@ class UploadStudy(APITestCase):
         assert comment.intervention_ex == da_intervention_ex
 
         interventions = interventionset.interventions
-        assert len(interventions.all()) == 4
+        assert len(interventions.filter(final=True)) == 4
         da_intervention = get_or_assert(queryset=interventions,
                                         name="DA",
                                         substance=gestodene,
@@ -274,10 +274,11 @@ class UploadStudy(APITestCase):
                                         value=0.075,
                                         unit="mg",
                                         category="dosing",
+                                        final=True
                                         )
         dcaf_intervention = get_or_assert(queryset=interventions,
                                         name="Dcaf",
-
+                                        final=True
                                         )
 
         assert da_intervention.ex == da_intervention_ex

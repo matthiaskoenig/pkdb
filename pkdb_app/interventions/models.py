@@ -185,29 +185,9 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    norm = models.ForeignKey("Intervention",related_name="raw",on_delete=models.CASCADE,null=True)
+    raw = models.ForeignKey("Intervention", related_name="norm", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
 
-    def save(self, no_norm=False, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not no_norm:
-
-
-            norm = copy.copy(self)
-            norm.normalize()
-
-            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)):
-                norm.pk = None
-                norm.final = True
-                norm.save(no_norm=True)
-                #self.norm = norm
-                #self.save(no_norm=True,force_update=True)
-            else:
-                self.final = True
-                self.save(no_norm=True,force_update=True)
-
-    def save_no_norm(self, *args, **kwargs):
-            super().save(*args, **kwargs)
 
     @property
     def norm_unit(self):

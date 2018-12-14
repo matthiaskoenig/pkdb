@@ -3,6 +3,7 @@ Generic utility functions.
 """
 
 import os
+import copy
 
 CHAR_MAX_LENGTH = 200
 
@@ -55,7 +56,26 @@ def create_multiple(parent, children, related_name):
         instance_child.create(**child)
 
 def create_multiple_bulk(parent,related_name_parent,children,class_child):
-    class_child.objects.bulk_create([class_child(**{related_name_parent:parent,**child}) for child in children])
+    return class_child.objects.bulk_create([class_child(**{related_name_parent:parent,**child}) for child in children])
+
+def create_multiple_bulk_normalized(notnormalized_instances, model_class):
+    if notnormalized_instances:
+        model_class.objects.bulk_create([initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
+
+def initialize_normed(notnorm_instance):
+    norm = copy.copy(notnorm_instance)
+    norm.pk = None
+    norm.final = True
+    norm.normalize()
+    norm.raw_id = notnorm_instance.pk
+    #interventions have no add statistics because they should have no mean,median,sd,se,cv ...
+    try:
+        norm.add_statistics()
+    except AttributeError:
+        pass
+    return norm
+
+
 
 def recursive_iter(obj, keys=()):
     """ Creates dictionary with key:object from nested JSON data structure. """
