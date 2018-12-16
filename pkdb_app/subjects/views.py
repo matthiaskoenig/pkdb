@@ -13,7 +13,6 @@ from pkdb_app.subjects.serializers import (
     IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
-
 ############################################################
 #Elastic Search Views
 ###########################################################
@@ -25,6 +24,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
+from pkdb_app.views import CreateListModelMixin
 
 
 class GroupViewSet(DocumentViewSet):
@@ -147,6 +147,10 @@ class DataFileViewSet(viewsets.ModelViewSet):
     serializer_class = DataFileSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+
+
+
+
 class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
     @staticmethod
@@ -158,7 +162,5 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
     def list(self, request):
         return Response(self.get_options())
-
-
 
 

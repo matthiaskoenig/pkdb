@@ -21,6 +21,8 @@ Details about the JSON schema are given elsewhere (JSON schema and REST API).
 import copy
 import os
 import json
+from contextlib import ExitStack
+
 import requests
 import logging
 from collections import namedtuple
@@ -135,11 +137,37 @@ def upload_files(file_path, api_url, auth_headers, client=None):
         # exclude files
         files = set(files) - set(["reference.json", "study.json", f"{sid}.pdf"])
         # exclude files
-        forbidden_suffix = (".log", ".xlsx#", ".idea")
-        forbidden_prefix = ".lock"
+        def allowed_filename(fname):
+            forbidden_suffix = (".log", ".xlsx#", ".idea")
+            forbidden_prefix = ".lock"
+            return fname.endswith(forbidden_suffix) & fname.startswith(forbidden_prefix)
 
-        files = [file for file in files if not file.endswith(forbidden_suffix)]
-        files = [file for file in files if not file.startswith(forbidden_prefix)]
+        files = [file for file in files if not allowed_filename(file)]
+        #file_paths = [os.path.join(root, file) for file in files if not allowed_filename(file)]
+        #with ExitStack() as stack:
+            #files = [stack.enter_context(open(fpath,"rb")) for fpath in file_paths]
+            # All opened files will automatically be closed at the end of
+            # the with statement, even if attempts to open files later
+            # in the list raise an exception
+            #response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post",
+            #                                    files={"files": files, "many":True}, headers=auth_headers)
+            # if response.status_code == 201:
+            #   return {k: v["id"] for k, v in zip(file_names, response.json())}
+
+            # else:
+            #    logging.error("Files failed to upload")
+            #    logging.error(response.content)
+            #for file in files:
+            #    response = sdb.requests_with_client(client, requests, f"{api_url}/datafiles/", method="post",
+            #                                            files={"file": file}, headers=auth_headers)
+            #    if response.status_code == 201:
+            #        data_dict[file] = response.json()["id"]
+            #    else:
+            #        logging.error(f"File upload failed: {file}")
+            #        logging.error(response.content)
+
+
+
         for file in files:
             file_path = os.path.join(root, file)
             with open(file_path, "rb") as f:

@@ -40,3 +40,15 @@ from rest_framework.response import Response
 def schema_view(request):
     generator = SchemaGenerator(title="PKDB Web API")
     return Response(generator.get_schema(request=request))
+
+class CreateListModelMixin(object):
+    def get_serializer(self, *args, **kwargs):
+        """ if an array is passed, set serializer to many """
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+            return super(CreateListModelMixin, self).get_serializer(*args, **kwargs)
+        #elif kwargs.get('many', False):
+        #   new_kwargs['many'] = True
+        #    new_kwargs['data'] = kwargs["data"].get("files")
+        #    return super(CreateListModelMixin, self).get_serializer(*args, **new_kwargs)
+

@@ -18,16 +18,18 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.units import TIME_UNITS
+from pkdb_app.views import CreateListModelMixin
+
 
 ###############################################################################################
 # Upload/External Views
 ###############################################################################################
 
-class SubstanceViewSet(viewsets.ModelViewSet):
+
+class SubstanceViewSet(CreateListModelMixin,viewsets.ModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceSerializer
     permission_classes = (IsAdminUser,)
-
 
 ###############################################################################################
 # Option Views

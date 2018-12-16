@@ -13,6 +13,11 @@ class SubstanceDocument(DocType):
     name = string_field('name')
     class Meta(object):
         model = Substance
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
 
 
 
@@ -94,6 +99,11 @@ class OutputDocument(DocType):
 
     class Meta(object):
             model = Output
+            # Ignore auto updating of Elasticsearch when a model is saved
+            # or deleted:
+            ignore_signals = True
+            # Don't perform an index refresh after every update (overrides global setting):
+            auto_refresh = False
 
 
 
@@ -148,5 +158,10 @@ class TimecourseDocument(DocType):
 
     class Meta(object):
             model = Timecourse
+            # Ignore auto updating of Elasticsearch when a model is saved
+            # or deleted:
+            ignore_signals = True
+            # Don't perform an index refresh after every update (overrides global setting):
+            auto_refresh = False
 
 

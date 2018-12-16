@@ -62,6 +62,11 @@ class IndividualDocument(DocType):
 
     class Meta:
         model=Individual
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
 
 # Name of the Elasticsearch index
 group_index = Index("groups")
@@ -117,6 +122,11 @@ class GroupDocument(DocType):
 
     class Meta:
         model = Group
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
 
 
 # Name of the Elasticsearch index
@@ -189,3 +199,8 @@ class CharacteristicaDocument(DocType):
 
     class Meta:
         model=Characteristica
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False

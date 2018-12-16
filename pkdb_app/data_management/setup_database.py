@@ -70,12 +70,20 @@ def setup_database(api_url, auth_headers, client=None):
             logging.warning(f"user upload failed: {user} ")
             logging.warning(response.content)
 
-    for substance in SUBSTANCES_DATA:
-        response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
-                                        data={"name": substance}, headers=auth_headers)
-        if not response.status_code == 201:
-            logging.warning(f"substance upload failed: {substance}")
-            logging.warning(response.content)
+    substances_json = [{"name": substance} for substance in SUBSTANCES_DATA]
+    response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
+                                        data=substances_json, headers=auth_headers)
+    if not response.status_code == 201:
+        logging.warning("substances upload failed")
+        logging.warning(response.content)
+
+    #for substance in SUBSTANCES_DATA:
+    #
+    #    response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
+    #                                    data={"name": substance}, headers=auth_headers)
+    #    if not response.status_code == 201:
+    #        logging.warning(f"substance upload failed: {substance}")
+    #        logging.warning(response.content)
 
     for keyword in KEYWORDS_DATA:
         response = requests_with_client(client, requests, f"{api_url}/keywords/", method="post",

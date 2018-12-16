@@ -34,6 +34,11 @@ class ReferenceDocument(DocType):
     })
     class Meta(object):
         model = Reference
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
 
 # Elastic Study
 study_index = Index("studies")
@@ -201,6 +206,11 @@ class StudyDocument(DocType):
     class Meta(object):
         model = Study
         related_models = [Substance,Reference,Keyword,Individual]
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
 
     def get_instances_from_related(self, related_instance):
         """If related_models is set, define how to retrieve the  instance(s) from the related model.
@@ -221,7 +231,7 @@ class StudyDocument(DocType):
 keyword_index = Index("keywords")
 keyword_index.settings(**elastic_settings)
 
-@keyword_index.doc_type
+#@keyword_index.doc_type
 class KeywordDocument(DocType):
     name = string_field(attr="name")
     class Meta(object):

@@ -89,12 +89,6 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         substance, created = Substance.objects.update_or_create(**validated_data)
         return substance
 
-    def to_internal_value(self, data):
-        data = super().to_internal_value(data)
-        self.validate_wrong_keys(data)
-        return data
-
-
 # ----------------------------------
 # Interventions
 # ----------------------------------
