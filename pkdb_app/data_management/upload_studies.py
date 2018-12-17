@@ -27,7 +27,8 @@ import requests
 import logging
 from collections import namedtuple
 import multiprocessing
-
+from datetime import timedelta
+import time
 from pkdb_app import logging_utils
 from pkdb_app.data_management import setup_database as sdb
 from pkdb_app.data_management.utils import recursive_iter, set_keys
@@ -242,6 +243,7 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
 
     # upload files (and get dict for file ids)
     study_dir = os.path.dirname(json_study_dict["study_path"])
+    start_time = time.time()
     file_dict = upload_files(study_dir, api_url=api_url, auth_headers=auth_headers, client=client)
 
     for keys, item in recursive_iter(json_study_dict):
@@ -250,9 +252,15 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
                 item = item.replace(file, str(file_pk))
             set_keys(json_study_dict, item, *keys)
 
+    files_upload_time = time.time() - start_time
+    files_upload_time = timedelta(seconds=files_upload_time).total_seconds()
+    logging.info(f"--- {files_upload_time} files upload time in seconds ---")
+
     # ---------------------------
     # post study core
     # ---------------------------
+    start_time = time.time()
+
     study_core = copy.deepcopy(json_study)
     related_sets = ["groupset", "interventionset", "individualset", "outputset"]
     [study_core.pop(this_set, None) for this_set in related_sets]
@@ -262,10 +270,14 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
                                         data=study_core,
                                         headers=auth_headers)
     success = check_json_response(response)
-
+    stuy_core_upload_time = time.time() - start_time
+    stuy_core_upload_time = timedelta(seconds=stuy_core_upload_time).total_seconds()
+    logging.info(f"--- {stuy_core_upload_time} study core upload time in seconds ---")
     # ---------------------------
     # post study sets
     # ---------------------------
+    start_time = time.time()
+
     study_sets = {}
     study_sets["groupset"] = json_study.get("groupset")
     study_sets["interventionset"] = json_study.get("interventionset")
@@ -297,6 +309,10 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     if success:
         logging.info(f"{api_url}/studies/{sid}/")
 
+    stuy_sets_upload_time = time.time() - start_time
+    stuy_sets_upload_time = timedelta(seconds=stuy_sets_upload_time).total_seconds()
+    logging.info(f"--- {stuy_sets_upload_time} study sets upload time in seconds ---")
+
     return success, sid
 
 
@@ -312,6 +328,7 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     :return:
     """
     # normalize path
+
     if study_dir.endswith("/"):
         study_dir = study_dir[:-1]
     if not os.path.exists(study_dir) or not os.path.isdir(study_dir):
@@ -354,12 +371,17 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
 
     # upload reference.json
     success_ref = True
+    start_time = time.time()
+
     if os.path.exists(reference_path):
         reference_dict = {"reference_path": reference_path, "pdf": reference_pdf}
 
         if read_reference_json(reference_dict):
             success_ref = upload_reference_json(read_reference_json(reference_dict), api_url=api_url,
                                                 auth_headers=auth_headers, client=client)
+    reference_upload_time = time.time() - start_time
+    reference_upload_time = timedelta(seconds=reference_upload_time).total_seconds()
+    logging.info(f"--- {reference_upload_time} refencene upload time in seconds ---")
 
     # upload study.json
     success_study, sid = upload_study_json(study_dict, api_url=api_url,

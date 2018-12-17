@@ -82,7 +82,8 @@ class OutputExManager(models.Manager):
 
         output_ex.interventions.add(*interventions)
         create_multiple(output_ex, comments, 'comments')
-        create_multiple(output_ex, outputs, 'outputs')
+        outputs_dj = create_multiple(output_ex, outputs, 'outputs')
+        create_multiple_bulk_normalized(outputs_dj,)
 
         output_ex.save()
         return output_ex
@@ -102,6 +103,7 @@ class TimecourseManager(models.Manager):
         interventions = kwargs.pop('interventions', [])
         timecourse = super().create(*args, **kwargs)
         timecourse.interventions.add(*interventions)
+
         ######
         return timecourse
 

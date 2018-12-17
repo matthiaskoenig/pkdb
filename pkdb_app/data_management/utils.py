@@ -31,3 +31,5 @@ def remove_keys(d, value, *keys):
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
+
+
