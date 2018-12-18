@@ -313,7 +313,7 @@ class UploadStudy(APITestCase):
                       subset_map="intgroup==NO_OC || intgroup==A || intgroup==B",
                       format="TSV",
                       individual_map="col==subject",
-                      interventions_map="Dcaf || Dcaf || Dcaf",
+                      interventions_map="Dcaf,DB || Dcaf || Dcaf",
                       substance=caffeine,
                       pktype="clearance",
                       value_map="col==cl",
@@ -333,12 +333,28 @@ class UploadStudy(APITestCase):
                                               unit="ml/min"
                                               )
 
+        outputs_individual_norm = get_or_assert(queryset=output_exs_individual.outputs,
+                                                substance=caffeine,
+                                                pktype="clearance",
+                                                tissue="plasma",
+                                                raw=outputs_individual,
+                                                final=True
+                                                )
+
+
+
         assert outputs_individual.individual == test_individual
-        assert len(outputs_individual.interventions.all()) == 1
-        assert dcaf_intervention in outputs_individual.interventions.all()
+        assert outputs_individual_norm.individual == test_individual
         assert outputs_individual.final == False
-        assert outputs_individual.norm in outputset.outputs_final.all()
-        assert outputs_individual.norm_unit == outputs_individual.norm.unit
+
+        assert len(outputs_individual.interventions.all()) == 2
+        assert dcaf_intervention in outputs_individual.interventions.all()
+        assert len(outputs_individual_norm.interventions.all()) == 2
+        assert dcaf_intervention in outputs_individual_norm.interventions.all()
+
+
+        assert outputs_individual_norm in outputset.outputs_final.all()
+        assert outputs_individual.norm_unit == outputs_individual_norm.unit
 
 
 
@@ -355,10 +371,13 @@ class UploadStudy(APITestCase):
                                               unit_map= "ml/min || µg/ml || h || h || l"
                                               )
 
+
+
         assert "test_study_Tab2.png" in this_output_ex_group.figure.file.name
         assert "test_study_Tab2.csv" in this_output_ex_group.source.file.name
         assert len(this_output_ex_group.interventions.all()) == 1
         assert dcaf_intervention in this_output_ex_group.interventions.all()
+
 
 
 
@@ -369,15 +388,28 @@ class UploadStudy(APITestCase):
                                            tissue="plasma",
                                            unit="ml/min"
                                            )
+        this_output_group_norm = get_or_assert(queryset=this_output_ex_group.outputs,
+                                                  substance=caffeine,
+                                                  pktype="clearance",
+                                                  tissue="plasma",
+                                                  raw=this_output_group,
+                                                  final=True
+                                                  )
+        assert this_output_group_norm.raw == this_output_group
+
 
         assert this_output_group.ex == this_output_ex_group
         assert this_output_group.final == False
-        assert this_output_group.norm in outputset.outputs_final.all()
-        assert this_output_group.norm_unit == this_output_group.norm.unit
+
+        assert len(this_output_group_norm.interventions.all()) == 1
+        assert dcaf_intervention in this_output_group_norm.interventions.all()
+
+        assert this_output_group_norm in outputset.outputs_final.all()
+        assert this_output_group.norm_unit == this_output_group_norm.unit
         assert this_output_group.se is None
         assert this_output_group.cv is None
-        assert this_output_group.norm.se is not None
-        assert this_output_group.norm.cv is not None
+        assert this_output_group_norm.se is not None
+        assert this_output_group_norm.cv is not None
 
 
         outputs = outputset.outputs
@@ -394,22 +426,25 @@ class UploadStudy(APITestCase):
 
 
         assert len(timecourse_exs.all()) == 2
-        assert len(timecourses.all()) == 14
-        assert len(timecourses.filter(final=False)) == 5
-        timecourse_notnorm = get_or_assert(timecourses.filter(final=False),individual=individual_1C)
-        assert timecourse_notnorm.unit == "mg/l"
-        assert timecourse_notnorm.norm_unit == timecourse_notnorm.norm.unit
-        assert timecourse_notnorm.norm in timecourses_final.all()
+        assert len(timecourses.all()) == 18
+        assert len(timecourses.filter(final=False)) == 9
+        timecourse_notnorm = get_or_assert(timecourses.filter(final=False),individual=individual_1C,substance=caffeine)
+        timecourse_norm = get_or_assert(timecourses.filter(final=True),individual=individual_1C,substance=caffeine)
+        assert timecourse_norm.raw == timecourse_notnorm
+        assert timecourse_notnorm.unit == "µg/ml"
+        assert timecourse_norm.unit == "µg/ml"
+        assert timecourse_norm in timecourses_final.all()
 
         timecourse_notnorm_group = get_or_assert(timecourses.filter(final=False),group=All_group,substance=caffeine)
+        timecourse_norm_group = get_or_assert(timecourses.filter(final=True),group=All_group,substance=caffeine)
 
 
         assert timecourse_notnorm_group.se is None
         assert timecourse_notnorm_group.cv is None
-        assert timecourse_notnorm_group.norm.se is not None
-        assert timecourse_notnorm_group.norm.cv is not None
+        assert timecourse_norm_group.se is not None
+        assert timecourse_norm_group.cv is not None
 
-        assert timecourse_notnorm_group.norm in timecourses_final.all()
+        assert timecourse_norm_group in timecourses_final.all()
         assert len(timecourses_final.all()) == 9
 
 

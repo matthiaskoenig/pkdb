@@ -1,40 +1,40 @@
-study	time	subject	caf	caf_sd	px	px_sd	px_caf	px_caf_sd	subject_type
-Akinyinka2000	0	1C	0	nan	0.006	nan	nan	nan	individual
-Akinyinka2000	0.2	1C	5.315	nan	0.183	0.09	0.034	nan	individual
-Akinyinka2000	0.4	1C	4.64	nan	0.2	0.081	0.043	nan	individual
-Akinyinka2000	0.7	1C	5.378	nan	0.284	0.093	0.053	nan	individual
-Akinyinka2000	1	1C	4.724	0.791	0.479	0.183	0.101	0.042	individual
-Akinyinka2000	2	1C	4.377	0.675	0.667	0.218	0.153	0.055	individual
-Akinyinka2000	3	1C	3.28	0.443	0.687	0.227	0.21	0.075	individual
-Akinyinka2000	4	1C	3.734	0.517	0.998	0.322	0.267	0.094	individual
-Akinyinka2000	6	1C	3.07	0.58	1.076	0.221	0.35	0.098	individual
-Akinyinka2000	8	1C	2.459	0.517	1.032	0.256	0.42	0.136	individual
-Akinyinka2000	12	1C	1.743	0.453	1.004	0.189	0.576	0.185	individual
-Akinyinka2000	24	1C	0.692	0.274	0.466	0.18	0.674	0.373	individual
-Akinyinka2000	36	1C	0.347	0.169	0.236	0.113	0.682	0.465	individual
-Akinyinka2000	0	1M	0.011	nan	0	nan	nan	nan	individual
-Akinyinka2000	0.2	1M	2.953	nan	0.096	0.046	0.032	nan	individual
-Akinyinka2000	0.4	1M	4.144	nan	0.177	0.044	0.043	nan	individual
-Akinyinka2000	0.7	1M	4.376	0.938	0.215	0.078	0.049	0.021	individual
-Akinyinka2000	1	1M	4.197	0.907	0.264	0.087	0.063	0.025	individual
-Akinyinka2000	2	1M	4.029	0.875	0.299	0.09	0.074	0.028	individual
-Akinyinka2000	3	1M	4.155	0.844	0.51	0.105	0.123	0.035	individual
-Akinyinka2000	4	1M	3.818	0.78	0.632	0.171	0.166	0.056	individual
-Akinyinka2000	6	1M	3.408	0.78	0.719	0.136	0.211	0.063	individual
-Akinyinka2000	8	1M	2.86	0.443	0.733	0.148	0.256	0.065	individual
-Akinyinka2000	12	1M	2.323	0.633	0.836	0.18	0.36	0.125	individual
-Akinyinka2000	24	1M	1.019	0.337	0.554	0.139	0.543	0.226	individual
-Akinyinka2000	36	1M	0.4	0.221	0.213	0.084	0.533	0.363	individual
-Akinyinka2000	0	all	0.011	nan	0	nan	nan	nan	group
-Akinyinka2000	0.2	all	2.953	nan	0.096	0.046	0.032	nan	group
-Akinyinka2000	0.4	all	4.144	nan	0.177	0.044	0.043	nan	group
-Akinyinka2000	0.7	all	4.376	0.938	0.215	0.078	0.049	0.021	group
-Akinyinka2000	1	all	4.197	0.907	0.264	0.087	0.063	0.025	group
-Akinyinka2000	2	all	4.029	0.875	0.299	0.09	0.074	0.028	group
-Akinyinka2000	3	all	4.155	0.844	0.51	0.105	0.123	0.035	group
-Akinyinka2000	4	all	3.818	0.78	0.632	0.171	0.166	0.056	group
-Akinyinka2000	6	all	3.408	0.78	0.719	0.136	0.211	0.063	group
-Akinyinka2000	8	all	2.86	0.443	0.733	0.148	0.256	0.065	group
-Akinyinka2000	12	all	2.323	0.633	0.836	0.18	0.36	0.125	group
-Akinyinka2000	24	all	1.019	0.337	0.554	0.139	0.543	0.226	group
-Akinyinka2000	36	all	0.4	0.221	0.213	0.084	0.533	0.363	group
+study	time	subject	caf	caf_sd	px	px_sd	px_caf	px_caf_sd	subject_type	interventions
+Akinyinka2000	0	1C	0	nan	0.006	nan	nan	nan	individual	Dcaf
+Akinyinka2000	0.2	1C	5.315	nan	0.183	0.09	0.034	nan	individual	Dcaf
+Akinyinka2000	0.4	1C	4.64	nan	0.2	0.081	0.043	nan	individual	Dcaf
+Akinyinka2000	0.7	1C	5.378	nan	0.284	0.093	0.053	nan	individual	Dcaf
+Akinyinka2000	1	1C	4.724	0.791	0.479	0.183	0.101	0.042	individual	Dcaf
+Akinyinka2000	2	1C	4.377	0.675	0.667	0.218	0.153	0.055	individual	Dcaf
+Akinyinka2000	3	1C	3.28	0.443	0.687	0.227	0.21	0.075	individual	Dcaf
+Akinyinka2000	4	1C	3.734	0.517	0.998	0.322	0.267	0.094	individual	Dcaf
+Akinyinka2000	6	1C	3.07	0.58	1.076	0.221	0.35	0.098	individual	Dcaf
+Akinyinka2000	8	1C	2.459	0.517	1.032	0.256	0.42	0.136	individual	Dcaf
+Akinyinka2000	12	1C	1.743	0.453	1.004	0.189	0.576	0.185	individual	Dcaf
+Akinyinka2000	24	1C	0.692	0.274	0.466	0.18	0.674	0.373	individual	Dcaf
+Akinyinka2000	36	1C	0.347	0.169	0.236	0.113	0.682	0.465	individual	Dcaf
+Akinyinka2000	0	1M	0.011	nan	0	nan	nan	nan	individual	Dcaf
+Akinyinka2000	0.2	1M	2.953	nan	0.096	0.046	0.032	nan	individual	Dcaf
+Akinyinka2000	0.4	1M	4.144	nan	0.177	0.044	0.043	nan	individual	Dcaf
+Akinyinka2000	0.7	1M	4.376	0.938	0.215	0.078	0.049	0.021	individual	Dcaf
+Akinyinka2000	1	1M	4.197	0.907	0.264	0.087	0.063	0.025	individual	Dcaf
+Akinyinka2000	2	1M	4.029	0.875	0.299	0.09	0.074	0.028	individual	Dcaf
+Akinyinka2000	3	1M	4.155	0.844	0.51	0.105	0.123	0.035	individual	Dcaf
+Akinyinka2000	4	1M	3.818	0.78	0.632	0.171	0.166	0.056	individual	Dcaf
+Akinyinka2000	6	1M	3.408	0.78	0.719	0.136	0.211	0.063	individual	Dcaf
+Akinyinka2000	8	1M	2.86	0.443	0.733	0.148	0.256	0.065	individual	Dcaf
+Akinyinka2000	12	1M	2.323	0.633	0.836	0.18	0.36	0.125	individual	Dcaf
+Akinyinka2000	24	1M	1.019	0.337	0.554	0.139	0.543	0.226	individual	Dcaf
+Akinyinka2000	36	1M	0.4	0.221	0.213	0.084	0.533	0.363	individual	Dcaf
+Akinyinka2000	0	all	0.011	nan	0	nan	nan	nan	group	Dcaf,DB
+Akinyinka2000	0.2	all	2.953	nan	0.096	0.046	0.032	nan	group	Dcaf,DB
+Akinyinka2000	0.4	all	4.144	nan	0.177	0.044	0.043	nan	group	Dcaf,DB
+Akinyinka2000	0.7	all	4.376	0.938	0.215	0.078	0.049	0.021	group	Dcaf,DB
+Akinyinka2000	1	all	4.197	0.907	0.264	0.087	0.063	0.025	group	Dcaf,DB
+Akinyinka2000	2	all	4.029	0.875	0.299	0.09	0.074	0.028	group	Dcaf,DB
+Akinyinka2000	3	all	4.155	0.844	0.51	0.105	0.123	0.035	group	Dcaf,DB
+Akinyinka2000	4	all	3.818	0.78	0.632	0.171	0.166	0.056	group	Dcaf,DB
+Akinyinka2000	6	all	3.408	0.78	0.719	0.136	0.211	0.063	group	Dcaf,DB
+Akinyinka2000	8	all	2.86	0.443	0.733	0.148	0.256	0.065	group	Dcaf,DB
+Akinyinka2000	12	all	2.323	0.633	0.836	0.18	0.36	0.125	group	Dcaf,DB
+Akinyinka2000	24	all	1.019	0.337	0.554	0.139	0.543	0.226	group	Dcaf,DB
+Akinyinka2000	36	all	0.4	0.221	0.213	0.084	0.533	0.363	group	Dcaf,DB

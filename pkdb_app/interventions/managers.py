@@ -1,9 +1,11 @@
 """
 the managers can be used to overwrite class methods of the models module.
 """
+from datetime import timedelta
 from django.db import models
 from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from django.apps import apps
+import time
 
 
 class InterventionSetManager(models.Manager):
@@ -44,6 +46,7 @@ class InterventionExManager(models.Manager):
 
 class OutputSetManager(models.Manager):
     def create(self, *args, **kwargs):
+        start_time = time.time()
         kwargs.pop('study')
         output_exs = kwargs.pop('output_exs', [])
         timecourse_exs = kwargs.pop('timecourse_exs', [])
@@ -69,6 +72,10 @@ class OutputSetManager(models.Manager):
             timecourse_ex_instance.save()
 
         outputset.save()
+
+        outputset_upload_time = time.time() - start_time
+        outputset_upload_time = timedelta(seconds=outputset_upload_time).total_seconds()
+        print(f"--- {outputset_upload_time} outputset create time in seconds ---")
         return outputset
 
 
@@ -82,10 +89,13 @@ class OutputExManager(models.Manager):
 
         output_ex.interventions.add(*interventions)
         create_multiple(output_ex, comments, 'comments')
-        outputs_dj = create_multiple(output_ex, outputs, 'outputs')
-        create_multiple_bulk_normalized(outputs_dj,)
 
+        outputs_dj = create_multiple(output_ex, outputs, 'outputs')
+
+        Output = apps.get_model('interventions', 'Output')
+        create_multiple_bulk_normalized(outputs_dj,Output)
         output_ex.save()
+
         return output_ex
 
 
@@ -93,23 +103,12 @@ class OutputManager(models.Manager):
     def create(self, *args, **kwargs):
         interventions = kwargs.pop('interventions', [])
         output = super().create(*args, **kwargs)
-        output.interventions.add(*interventions)
-        if output.norm:
-            output.norm.interventions.add(*interventions)
+        output._interventions.add(*interventions)
         return output
-
-class TimecourseManager(models.Manager):
-    def create(self, *args, **kwargs):
-        interventions = kwargs.pop('interventions', [])
-        timecourse = super().create(*args, **kwargs)
-        timecourse.interventions.add(*interventions)
-
-        ######
-        return timecourse
-
 
 class TimecourseExManager(models.Manager):
     def create(self, *args, **kwargs):
+
         timecourses = kwargs.pop('timecourses', [])
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
@@ -117,8 +116,15 @@ class TimecourseExManager(models.Manager):
         timecourse_ex = super().create(*args, **kwargs)
         timecourse_ex.interventions.add(*interventions)
         create_multiple(timecourse_ex, comments, 'comments')
-        create_multiple(timecourse_ex, timecourses, 'timecourses')
+
+        timecourses_dj = create_multiple(timecourse_ex, timecourses, 'timecourses')
+
+        Timecourse = type(timecourses_dj[0])
+        create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
+        #Timecourse = apps.get_model('pkdb_app.interventions', ' Timecourse')
 
         timecourse_ex.save()
+
+
 
         return timecourse_ex

@@ -13,7 +13,6 @@ from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
-from pprint import pprint
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
 
@@ -211,29 +210,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return entries
 
-    def split_entries(self, data):
-        internal = []
-        for entry in data.items():  # output
-            entries = self.split_entry(entry)
-            internal.extend(entries)
-        return internal
-
-    def split_entries_for_key(self, data, key):
-        """ Splits entries in multiple if separators found.
-
-        Gets the subset of data for the key, splits the entries in multiple
-        and overwrites the data in the original data dict!
-
-        :param data:
-        :param key:
-        :return:
-        """
-        # get data for key
-        external = data.get(key, [])  # outputs
-        data[key] = self.split_entries(external)
-
-        return data
-
     # ----------------------------------
     # helper for export of entries from file
     # ----------------------------------
@@ -316,6 +292,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         entry_dict = copy.deepcopy(template)
         recursive_entry_dict = list(recursive_iter(entry_dict))
 
+
         for keys, value in recursive_entry_dict:
             if isinstance(value, str):
                 if ITEM_MAPPER in value:
@@ -341,7 +318,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if isinstance(entry_value, numbers.Number):
                         if np.isnan(entry_value):
                             entry_value = None
-                    set_keys(entry_dict, entry_value, *keys)
+
+                    if keys[0] == "interventions":
+                        set_keys(entry_dict, entry_value.split(","), *keys[:-1])
+                    else:
+                        set_keys(entry_dict, entry_value, *keys)
         return entry_dict
 
     def entries_from_file(self, data):
@@ -456,7 +437,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             ]
                         )
                     #to get rid of dict
-                    if keys[-1] in ["individual", "group"]:
+
+                    if keys[0] in ["individual", "group","interventions"]:
                         unqiue_values = value_array.unique()
                         if len(unqiue_values) != 1:
                             raise serializers.ValidationError(
@@ -464,7 +446,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 f"{values[1]} has to be a unique for one timecourse",
                                 data,
                                 ])
-                        set_keys(array_dict, unqiue_values[0], *keys)
+                        if keys[0] == "interventions":
+                            set_keys(array_dict, unqiue_values[0].split(","), *keys[:-1])
+                        else:
+                            set_keys(array_dict, unqiue_values[0], *keys)
+
 
                     else:
                         set_keys(array_dict, value_array.values.tolist(), *keys)
@@ -536,6 +522,7 @@ class ExSerializer(MappingSerializer):
 
             if data["interventions"]:
                 interventions = []
+
                 for intervention in data["interventions"]:
                     try:
                         interventions.append(

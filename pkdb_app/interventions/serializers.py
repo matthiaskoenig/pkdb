@@ -2,6 +2,7 @@
 Serializers for interventions.
 """
 import pandas as pd
+from datetime import timedelta
 from decimal import Decimal
 import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
@@ -519,8 +520,14 @@ class OutputSetSerializer(ExSerializer):
         return attrs
 
     def to_internal_value(self, data):
+        import time
+
+        start_time = time.time()
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
+        outputset_upload_time = time.time() - start_time
+        outputset_upload_time = timedelta(seconds=outputset_upload_time).total_seconds()
+        print(f"--- {outputset_upload_time} outputset to internal value time in seconds ---")
         return data
 
     def validate(self, attrs):

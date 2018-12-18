@@ -25,7 +25,7 @@ from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-    ElasticReferenceViewSet, ElasticStudyViewSet, KeywordViewSet, ElasticKeywordViewSet)
+    ElasticReferenceViewSet, ElasticStudyViewSet, KeywordViewSet, ElasticKeywordViewSet, update_index)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet
 from . import views
@@ -112,6 +112,8 @@ urlpatterns = [
 
     # api
     path(r"api/v1/", include(router.urls)),
+    path("api/v1/update_index/", update_index),
+
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),

@@ -21,20 +21,17 @@ Details about the JSON schema are given elsewhere (JSON schema and REST API).
 import copy
 import os
 import json
-from contextlib import ExitStack
-
 import requests
 import logging
 from collections import namedtuple
-import multiprocessing
 from datetime import timedelta
 import time
-from pkdb_app import logging_utils
 from pkdb_app.data_management import setup_database as sdb
 from pkdb_app.data_management.utils import recursive_iter, set_keys
 from pkdb_app.data_management.create_reference_json import run as create_reference
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 # -------------------------------
@@ -255,11 +252,31 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     files_upload_time = time.time() - start_time
     files_upload_time = timedelta(seconds=files_upload_time).total_seconds()
     logging.info(f"--- {files_upload_time} files upload time in seconds ---")
+    # ---------------------------
+    # delete related elastic search indexes
+    # ---------------------------
+    sid = json_study["sid"]
+
+
+    response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="get",
+                                        headers=auth_headers)
+
+    if response.status_code == 200:
+        start_time = time.time()
+
+        response = sdb.requests_with_client(client, requests, f"{api_url}/update_index/", method="post",
+                                        data={"sid": sid, "action": "delete"},
+                                        headers=auth_headers)
+        check_json_response(response)
+        indexing_time = time.time() - start_time
+        indexing_time = timedelta(seconds=indexing_time).total_seconds()
+        logging.info(f"--- {indexing_time} delete indexes time in seconds ---")
 
     # ---------------------------
     # post study core
     # ---------------------------
     start_time = time.time()
+
 
     study_core = copy.deepcopy(json_study)
     related_sets = ["groupset", "interventionset", "individualset", "outputset"]
@@ -285,13 +302,17 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     # FIXME: Where are groupset, individualset and interventionset uploaded?
 
     # post
-    sid = json_study["sid"]
     response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
                                         data=study_sets,
                                         headers=auth_headers)
     success = success and check_json_response(response)
 
+    stuy_group_inter_upload_time = time.time() - start_time
+    stuy_group_inter_upload_time = timedelta(seconds=stuy_group_inter_upload_time).total_seconds()
+    logging.info(f"--- {stuy_group_inter_upload_time} study group_inter upload time in seconds ---")
+
     # is using group, has to be uploaded separately from the groupset
+    start_time = time.time()
     if "individualset" in json_study.keys():
 
         response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
@@ -299,6 +320,12 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
                                             headers=auth_headers)
 
         success = success and check_json_response(response)
+
+    stuy_individual_upload_time = time.time() - start_time
+    stuy_individual_upload_time = timedelta(seconds=stuy_individual_upload_time).total_seconds()
+    logging.info(f"--- {stuy_individual_upload_time} study individual upload time in seconds ---")
+
+    start_time = time.time()
 
     if "outputset" in json_study.keys():
         response = sdb.requests_with_client(client, requests, f"{api_url}/studies/{sid}/", method="patch",
@@ -309,9 +336,19 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     if success:
         logging.info(f"{api_url}/studies/{sid}/")
 
-    stuy_sets_upload_time = time.time() - start_time
-    stuy_sets_upload_time = timedelta(seconds=stuy_sets_upload_time).total_seconds()
-    logging.info(f"--- {stuy_sets_upload_time} study sets upload time in seconds ---")
+    study_outputset_upload_time = time.time() - start_time
+    study_outputset_upload_time = timedelta(seconds=study_outputset_upload_time).total_seconds()
+    logging.info(f"--- {study_outputset_upload_time} study outputset upload time in seconds ---")
+
+    start_time = time.time()
+    response = sdb.requests_with_client(client, requests, f"{api_url}/update_index/", method="post",
+                                        data={"sid": sid},
+                                        headers=auth_headers)
+    check_json_response(response)
+
+    indexing_time = time.time() - start_time
+    indexing_time = timedelta(seconds=indexing_time).total_seconds()
+    logging.info(f"--- {indexing_time} indexing time in seconds ---")
 
     return success, sid
 
@@ -387,8 +424,11 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
     success_study, sid = upload_study_json(study_dict, api_url=api_url,
                                       auth_headers=auth_headers, client=client)
 
+
+
     if success_ref and success_study:
         logging.info(f"--- upload successful ( http://localhost:8080/#/studies/{sid} ) ---")
+
 
     return {}
 

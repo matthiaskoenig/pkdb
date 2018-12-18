@@ -8,6 +8,8 @@ import logging
 from pkdb_app.settings import DEFAULT_PASSWORD, API_BASE
 from pkdb_app.categoricals import SUBSTANCES_DATA, KEYWORDS_DATA
 
+logging.getLogger().setLevel(logging.INFO)
+
 USERS = [
     {
         "username": "janekg",

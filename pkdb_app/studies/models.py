@@ -105,23 +105,40 @@ class Study(Sidable, models.Model):
 
     @property
     def individuals(self):
-        return self.individualset.individual_exs.individuals.all()
+        try:
+            return self.individualset.individuals.all()
+        except AttributeError:
+            return []
+
 
     @property
     def groups(self):
-        return self.groupset.group_exs.groups.all()
+        try:
+            return self.groupset.groups.all()
+        except AttributeError:
+            return []
+
 
     @property
     def interventions(self):
-        return self.interventionset.intervention_exs.interventions.all()
+        try:
+            return self.interventionset.interventions.all()
+        except AttributeError:
+            return []
 
     @property
     def outputs(self):
-        return self.outputset.output_exs.outputs.all()
+        try:
+            return self.outputset.outputs.all()
+        except AttributeError:
+            return []
 
     @property
     def timecourses(self):
-        return self.outputset.timecourse_exs.timecourses.all()
+        try:
+            return self.outputset.timecourses.all()
+        except AttributeError:
+            return []
 
     @property
     def substances_name(self):

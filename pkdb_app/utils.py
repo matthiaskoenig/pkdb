@@ -52,15 +52,15 @@ def update_or_create_multiple(parent, children, related_name):
 
 def create_multiple(parent, children, related_name):
     instance_child = getattr(parent, related_name)
-    for child in children:
-        instance_child.create(**child)
+    return [instance_child.create(**child) for child in children]
+
 
 def create_multiple_bulk(parent,related_name_parent,children,class_child):
     return class_child.objects.bulk_create([class_child(**{related_name_parent:parent,**child}) for child in children])
 
 def create_multiple_bulk_normalized(notnormalized_instances, model_class):
     if notnormalized_instances:
-        model_class.objects.bulk_create([initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
+        return model_class.objects.bulk_create([initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
 
 def initialize_normed(notnorm_instance):
     norm = copy.copy(notnorm_instance)
@@ -68,6 +68,18 @@ def initialize_normed(notnorm_instance):
     norm.final = True
     norm.normalize()
     norm.raw_id = notnorm_instance.pk
+    try:
+        norm.individual_id = notnorm_instance.individual.pk
+
+    except AttributeError:
+        pass
+
+    try:
+        norm.group_id = notnorm_instance.group.pk
+
+    except AttributeError:
+        pass
+
     #interventions have no add statistics because they should have no mean,median,sd,se,cv ...
     try:
         norm.add_statistics()

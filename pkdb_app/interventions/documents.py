@@ -52,6 +52,11 @@ class InterventionDocument(DocType):
 
     class Meta(object):
         model = Intervention
+        # Ignore auto updating of Elasticsearch when a model is saved
+        # or deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
 
 
 output_index = Index("outputs")

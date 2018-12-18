@@ -247,7 +247,7 @@
         "format": "TSV",
         "figure": "test_study_Tab1.png",
         "individual": "col==subject",
-        "interventions": "Dcaf || Dcaf || Dcaf",
+        "interventions": "Dcaf,DB || Dcaf || Dcaf",
         "substance": "caffeine",
         "pktype": "clearance",
         "value": "col==cl",
@@ -292,9 +292,7 @@
         "subset": "intgroup==B",
         "figure": "test_study_Tab2.png",
         "group": "col==group",
-        "interventions": [
-          "Dcaf"
-        ],
+        "interventions": "col==interventions",
         "substance": "caffeine",
         "pktype": "clearance || cmax || tmax || thalf || vd",
         "mean": "col==cl || col==cmax || col==tmax || col==thalf || col==vd",
@@ -308,9 +306,7 @@
         "group": "col==subject",
         "subset": "subject_type==group",
         "groupby": "subject",
-        "interventions": [
-          "Dcaf"
-        ],
+        "interventions": "col==interventions",
         "source": "test_study_Fig3.csv",
         "format": "TSV",
         "figure": "test_study_Fig3.png",

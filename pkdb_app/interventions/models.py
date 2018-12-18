@@ -327,40 +327,24 @@ class Output(ValueableNotBlank, AbstractOutput):
     individual = models.ForeignKey(
         Individual, null=True, blank=True, on_delete=models.SET_NULL
     )
-    interventions = models.ManyToManyField(Intervention)
+    _interventions = models.ManyToManyField(Intervention)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
-    norm = models.ForeignKey("Output",related_name="raw",on_delete=models.CASCADE,null=True)
+    raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
+
     final = models.BooleanField(default=False)
     timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
     objects = OutputManager()
 
-    def save(self, donot_normalize=False, *args, **kwargs):
-        #fixme: I think, overwriting save function is not best practice.
-        super().save( *args, **kwargs)
-        if not donot_normalize:
-            norm = copy.copy(self)
-            norm.normalize()
-            norm.add_statistics()
-
-            if not pd.Series(self.norm_fields).equals(pd.Series(norm.norm_fields)) or self.unit != norm.unit:
-                norm.pk = None
-                norm.final = True
-                norm.save(donot_normalize=True)
-                norm.raw.add(self)
-                norm.save(donot_normalize=True)
-
-
-            else:
-                self.final = True
-                self.save(donot_normalize=True, force_update=True)
-
-
-
-    def save_no_norm(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+    @property
+    def interventions(self):
+        interventions = self._interventions
+        if interventions.all():
+            return interventions
+        else:
+            return self.raw._interventions
 
     def add_statistics(self):
         if self.group:
@@ -376,6 +360,7 @@ class Output(ValueableNotBlank, AbstractOutput):
                 self.cv = get_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
+
 
     @property
     def study(self):
@@ -504,7 +489,7 @@ class Timecourse(AbstractOutput):
 
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention)
+    _interventions = models.ManyToManyField(Intervention)
     ex = models.ForeignKey(
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
@@ -521,33 +506,18 @@ class Timecourse(AbstractOutput):
     se = ArrayField(models.FloatField(null=True), null=True)
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
+    raw = models.ForeignKey("Timecourse", related_name="norm", on_delete=models.CASCADE, null=True)
 
-    norm = models.ForeignKey("Timecourse", related_name="raw", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
-
     objects = OutputManager()
 
-    def save(self, donot_normalize=False, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        if not donot_normalize:
-            norm = copy.copy(self)
-            norm.normalize()
-            norm.add_statistics()
-
-            if not pd.DataFrame(self.norm_fields).equals(pd.DataFrame(norm.norm_fields)) or self.unit != norm.unit or self.time_unit != norm.time_unit:
-                norm.pk = None
-                norm.final = True
-                norm.save(donot_normalize=True)
-                norm.raw.add(self)
-                norm.save(donot_normalize=True)
-
-            else:
-                self.final = True
-                self.save(donot_normalize=True, force_update=True)
-
-    def save_no_norm(self,*args, **kwargs):
-        super().save(*args, **kwargs)
+    @property
+    def interventions(self):
+        interventions = self._interventions
+        if interventions is not None:
+            return interventions
+        else:
+            return self.raw._interventions
 
     @property
     def study(self):
