@@ -264,6 +264,7 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     if response.status_code == 200:
         start_time = time.time()
 
+
         response = sdb.requests_with_client(client, requests, f"{api_url}/update_index/", method="post",
                                         data={"sid": sid, "action": "delete"},
                                         headers=auth_headers)
@@ -287,9 +288,9 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
                                         data=study_core,
                                         headers=auth_headers)
     success = check_json_response(response)
-    stuy_core_upload_time = time.time() - start_time
-    stuy_core_upload_time = timedelta(seconds=stuy_core_upload_time).total_seconds()
-    logging.info(f"--- {stuy_core_upload_time} study core upload time in seconds ---")
+    study_core_upload_time = time.time() - start_time
+    study_core_upload_time = timedelta(seconds=study_core_upload_time).total_seconds()
+    logging.info(f"--- {study_core_upload_time} study core upload time in seconds ---")
     # ---------------------------
     # post study sets
     # ---------------------------
@@ -309,7 +310,7 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
 
     study_group_inter_upload_time = time.time() - start_time
     study_group_inter_upload_time = timedelta(seconds=study_group_inter_upload_time).total_seconds()
-    logging.info(f"--- {stuy_group_inter_upload_time} study groupset and interventionset upload time in seconds ---")
+    logging.info(f"--- {study_group_inter_upload_time} study groupset and interventionset upload time in seconds ---")
 
     # is using group, has to be uploaded separately from the groupset
     start_time = time.time()
@@ -323,7 +324,7 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
 
     study_individual_upload_time = time.time() - start_time
     study_individual_upload_time = timedelta(seconds=study_individual_upload_time).total_seconds()
-    logging.info(f"--- {stuy_individual_upload_time} study individual upload time in seconds ---")
+    logging.info(f"--- {study_individual_upload_time} study individual upload time in seconds ---")
 
     start_time = time.time()
 

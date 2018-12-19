@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
 from concurrent.futures import ThreadPoolExecutor
 from django.http import JsonResponse
-
+from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument, TimecourseDocument, OutputDocument
 from pkdb_app.pagination import CustomPagination
 
@@ -127,7 +127,13 @@ def update_index(request):
 
 
         for doc, instances in update_instances.items():
+            try:
                 doc().update(thing=instances,action=action)
+            except helpers.BulkIndexError:
+                pass
+
+
+
         return JsonResponse({"success":"True"})
 
 
