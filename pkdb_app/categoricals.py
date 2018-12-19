@@ -376,7 +376,7 @@ CHARACTERISTIC_DATA = [
         "study protocol",
         BOOLEAN_TYPE,
         BOOLEAN_CHOICES,
-        dimensionless_norm_unit,
+        NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
     # -------------- Biochemical data --------------
     CharacteristicType(

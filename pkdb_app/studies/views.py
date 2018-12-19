@@ -3,18 +3,17 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
     FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from django_elasticsearch_dsl.registries import registry
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
-from concurrent.futures import ThreadPoolExecutor
 from django.http import JsonResponse
 from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument, TimecourseDocument, OutputDocument
 from pkdb_app.pagination import CustomPagination
-
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument
+from wait_for_postgres import pg_isready, config
+import psycopg2
 from .models import Reference, Study, Keyword
 from .serializers import (
     ReferenceSerializer,
@@ -115,7 +114,14 @@ def update_index(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         update_instances = {}
-        study = Study.objects.get(sid=data["sid"])
+        try:
+            study = Study.objects.get(sid=data["sid"])
+        except psycopg2.OperationalError:
+            pg_isready(**config)
+            study = Study.objects.get(sid=data["sid"])
+
+
+
         action = data.get("action",'index')
         update_instances[StudyDocument] = study
         update_instances[ReferenceDocument] = study.reference
