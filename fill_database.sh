@@ -11,8 +11,8 @@ export PKDB_EMAIL_HOST_USER=""
 export PKDB_EMAIL_HOST_PASSWORD=""
 
 python pkdb_app/data_management/setup_database.py
-docker-compose run --rm web ./manage.py search_index --delete -f
-docker-compose run --rm web ./manage.py search_index --create -f
+#docker-compose run --rm web ./manage.py search_index --delete -f
+#docker-compose run --rm web ./manage.py search_index --create -f
 python pkdb_app/data_management/upload_studies.py
 
 

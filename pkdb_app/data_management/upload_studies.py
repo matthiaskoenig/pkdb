@@ -307,9 +307,9 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
                                         headers=auth_headers)
     success = success and check_json_response(response)
 
-    stuy_group_inter_upload_time = time.time() - start_time
-    stuy_group_inter_upload_time = timedelta(seconds=stuy_group_inter_upload_time).total_seconds()
-    logging.info(f"--- {stuy_group_inter_upload_time} study group_inter upload time in seconds ---")
+    study_group_inter_upload_time = time.time() - start_time
+    study_group_inter_upload_time = timedelta(seconds=study_group_inter_upload_time).total_seconds()
+    logging.info(f"--- {stuy_group_inter_upload_time} study groupset and interventionset upload time in seconds ---")
 
     # is using group, has to be uploaded separately from the groupset
     start_time = time.time()
@@ -321,8 +321,8 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
 
         success = success and check_json_response(response)
 
-    stuy_individual_upload_time = time.time() - start_time
-    stuy_individual_upload_time = timedelta(seconds=stuy_individual_upload_time).total_seconds()
+    study_individual_upload_time = time.time() - start_time
+    study_individual_upload_time = timedelta(seconds=study_individual_upload_time).total_seconds()
     logging.info(f"--- {stuy_individual_upload_time} study individual upload time in seconds ---")
 
     start_time = time.time()

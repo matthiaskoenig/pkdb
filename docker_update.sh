@@ -10,6 +10,7 @@ docker rm $(docker ps -a -q)
 
 sudo ./remove_migrations.sh
 docker-compose up --build
-docker-compose run --rm web ./manage.py search_index --rebuild -f
+docker-compose run --rm web ./manage.py search_index --create -f
+
 
 
