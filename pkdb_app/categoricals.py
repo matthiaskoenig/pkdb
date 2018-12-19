@@ -552,6 +552,7 @@ OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 auc_norm_unit = NormalizableUnit(
     {
         "mg*h/l": None,
+        "mg/l*h": "mg*h/l",
         "µg*h/ml": "mg*h/l",
         "µg/ml*h": "mg*h/l",
         "mg*min/l": "mg*h/l",
