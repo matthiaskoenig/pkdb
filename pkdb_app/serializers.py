@@ -320,7 +320,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             entry_value = None
 
                     if keys[0] == "interventions":
-                        set_keys(entry_dict, entry_value.split(","), *keys[:-1])
+                        entry_value = [v.strip() for v in entry_value.split(",")]
+                        set_keys(entry_dict, entry_value, *keys[:1])
                     else:
                         set_keys(entry_dict, entry_value, *keys)
         return entry_dict

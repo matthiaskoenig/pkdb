@@ -259,7 +259,8 @@ CHARACTERISTIC_DATA = [
             "schizophrenia",
             "impaired glucose tolerance",
             "diabetes melitus type 2",
-            "diabetes melitus type 1"
+            "diabetes melitus type 1",
+            "end-stage renal disease"
         ],
         dimensionless_norm_unit,
     ),

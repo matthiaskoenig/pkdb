@@ -7,6 +7,7 @@ from decimal import Decimal
 import numpy as np
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
+import time
 
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
@@ -125,6 +126,8 @@ class InterventionSerializer(ExSerializer):
 
 
 
+
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 
@@ -213,6 +216,7 @@ class InterventionSetSerializer(ExSerializer):
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
+
         return data
 
 
@@ -252,6 +256,9 @@ class OutputSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
+
+
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -340,6 +347,10 @@ class OutputExSerializer(BaseOutputExSerializer):
         data["outputs"] = outputs
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
+
+        from pprint import pprint
+        pprint(data["outputs"])
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -520,7 +531,6 @@ class OutputSetSerializer(ExSerializer):
         return attrs
 
     def to_internal_value(self, data):
-        import time
 
         start_time = time.time()
         data = super().to_internal_value(data)
