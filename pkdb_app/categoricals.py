@@ -254,6 +254,7 @@ CHARACTERISTIC_DATA = [
             "plasmodium falciparum",
             "alcoholic liver cirrhosis",
             "cirrhotic liver disease",
+            "chronic viral hepatitis",
             "PBC",
             "miscellaneous liver disease",
             "schizophrenia",

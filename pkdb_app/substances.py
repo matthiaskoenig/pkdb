@@ -9,6 +9,7 @@ To update the database content execute the setup_database script.
 SUBSTANCES_DATA = [
     # acetaminophen
     "acetaminophen",
+
     # caffeine (CYP2A1)
     "caffeine",
     "paraxanthine",
@@ -37,6 +38,7 @@ SUBSTANCES_DATA = [
     "AFMU/(AFMU+1U+1X)",
     "AAMU/(AAMU+1U+1X)",
     # caffeine interaction
+    "cimetidine",
     "fluvoxamine",
     "naringenin",
     "grapefruit juice",
