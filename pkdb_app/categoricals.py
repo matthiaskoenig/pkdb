@@ -474,7 +474,7 @@ INTERVENTION_DATA = [
         DOSING,
         NUMERIC_TYPE,
         None,
-        NormalizableUnit({"g": None, "mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None}),
+        NormalizableUnit({"g": None, "mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None, "pmol/kg/min": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
