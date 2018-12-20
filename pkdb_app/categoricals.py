@@ -260,7 +260,8 @@ CHARACTERISTIC_DATA = [
             "impaired glucose tolerance",
             "diabetes melitus type 2",
             "diabetes melitus type 1",
-            "end-stage renal disease"
+            "end-stage renal disease",
+            "chronic viral hepatitis",
         ],
         dimensionless_norm_unit,
     ),

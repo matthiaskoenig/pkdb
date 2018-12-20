@@ -514,7 +514,7 @@ class Timecourse(AbstractOutput):
     @property
     def interventions(self):
         interventions = self._interventions
-        if interventions is not None:
+        if interventions.all():
             return interventions
         else:
             return self.raw._interventions
