@@ -261,7 +261,8 @@ CHARACTERISTIC_DATA = [
             "impaired glucose tolerance",
             "diabetes melitus type 2",
             "diabetes melitus type 1",
-            "end-stage renal disease"
+            "end-stage renal disease",
+            "chronic viral hepatitis",
         ],
         dimensionless_norm_unit,
     ),
@@ -277,7 +278,7 @@ CHARACTERISTIC_DATA = [
         "medication type",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol"],
+        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol","hemodialysis"],
         dimensionless_norm_unit,
     ),
     CharacteristicType(
