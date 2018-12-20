@@ -276,7 +276,7 @@ CHARACTERISTIC_DATA = [
         "medication type",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol"],
+        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol","hemodialysis"],
         dimensionless_norm_unit,
     ),
     CharacteristicType(

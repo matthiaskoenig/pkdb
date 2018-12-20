@@ -439,7 +439,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         )
                     #to get rid of dict
 
-                    if keys[0] in ["individual", "group","interventions"]:
+                    if keys[0] in ["individual", "group","interventions","substance","tissue","time_unit"]:
                         unqiue_values = value_array.unique()
                         if len(unqiue_values) != 1:
                             raise serializers.ValidationError(
