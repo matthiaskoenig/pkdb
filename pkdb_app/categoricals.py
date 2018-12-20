@@ -260,7 +260,8 @@ CHARACTERISTIC_DATA = [
             "impaired glucose tolerance",
             "diabetes melitus type 2",
             "diabetes melitus type 1",
-            "end-stage renal disease"
+            "end-stage renal disease",
+            "chronic viral hepatitis",
         ],
         dimensionless_norm_unit,
     ),
@@ -552,6 +553,7 @@ OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 auc_norm_unit = NormalizableUnit(
     {
         "mg*h/l": None,
+        "mg/l*h": "mg*h/l",
         "µg*h/ml": "mg*h/l",
         "µg/ml*h": "mg*h/l",
         "mg*min/l": "mg*h/l",

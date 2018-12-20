@@ -87,6 +87,7 @@ UNITS = {
 
     # AUC
     "mg*h/l": None,
+    "mg/l*h": None,
 
     "ng*h/ml": None,
 
@@ -191,6 +192,7 @@ UNIT_CONVERSIONS = [
 
     # AUC
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0),
+    UnitConversion("mg/l*h", target="mg*h/l", multiplier=1.0),
 
     UnitConversion("µg*min/ml", target="mg*h/l", multiplier=1.0/60),
 
