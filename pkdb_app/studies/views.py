@@ -25,6 +25,7 @@ import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
+from django.core.exceptions import ObjectDoesNotExist
 
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
@@ -119,8 +120,8 @@ def update_index(request):
         except psycopg2.OperationalError:
             pg_isready(**config)
             study = Study.objects.get(sid=data["sid"])
-
-
+        except ObjectDoesNotExist:
+            return JsonResponse({"success": "False"})
 
         action = data.get("action",'index')
         update_instances[StudyDocument] = study

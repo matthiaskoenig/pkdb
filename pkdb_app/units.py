@@ -45,7 +45,7 @@ UNITS = {
     "mmHg": None,
     "mmol": None,
     "µmol": None,
-
+    "nmol":None,
     "m^2": None,
 
     # reverse time units
