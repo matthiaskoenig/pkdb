@@ -121,7 +121,7 @@ def update_index(request):
             pg_isready(**config)
             study = Study.objects.get(sid=data["sid"])
         except ObjectDoesNotExist:
-            return JsonResponse({"success": "False"})
+            return JsonResponse({"success": "False","reason":"Instance not in database"})
 
         action = data.get("action",'index')
         update_instances[StudyDocument] = study
@@ -138,8 +138,6 @@ def update_index(request):
                 doc().update(thing=instances,action=action)
             except helpers.BulkIndexError:
                 pass
-
-
 
         return JsonResponse({"success":"True"})
 
