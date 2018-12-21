@@ -295,9 +295,17 @@ CHARACTERISTIC_DATA = [
         "abstinence",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts"],
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
+    CharacteristicType(
+        "consumption",
+        "study protocol",
+        CATEGORIAL_TYPE,
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee"],
+        NormalizableUnit({"-": None, "g/day": None, "mg/day": None, "cups/day": None}),
+    ),
+
 
     # -------------- Nutrition -----------------
 

@@ -136,6 +136,10 @@ UNITS = {
     "mU/min": None,
     "mU/min/kg": None,
     "mU/kg/min": None,
+
+    # misc
+    "cups/day": None,
+    "g/day": None,
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)
