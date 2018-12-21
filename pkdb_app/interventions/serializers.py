@@ -171,7 +171,11 @@ class InterventionExSerializer(ExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
+        if not isinstance(data,list):
+            raise serializers.ValidationError("interventions have to be a list")
+
         temp_interventions = self.split_entry(data)
+
         interventions = []
         for intervention in temp_interventions:
             interventions_from_file = self.entries_from_file(intervention)
