@@ -29,7 +29,6 @@ Fill in basic information for study, use the `PMID` for `sid` and `reference` fi
     "pkdb_version": 1.0,
     "creator": "mkoenig",
     "name": "Author2007",
-    "design": "",
     "reference": 123456789,
     "curators": [
         "mkoenig",
