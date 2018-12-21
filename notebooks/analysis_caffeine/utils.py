@@ -20,27 +20,9 @@ markers = {'control': 's',
 
           }
 
-def unstring(value):
-    if isinstance(value,str):
-        return eval(value)
-    else:
-        return value
-    
-def array_from_string(value):
-    try:
-        return np.array(unstring(value)).astype('float32')
-    except SyntaxError:
-        return np.fromstring(value.strip('[]') ,dtype=float, sep=" ")
-    
-    
-        
-        
-    
-category_filter = {
+category_filter_medication_or_oc = {
     'control':{
         ('smoking', 'choice'):"N",
-        #('oral contraceptives', 'choice'):'N',
-        #('medication', 'choice'):'N',
         (('oral contraceptives','choice'),('medication','choice')):('N','N'),
 
        'outlier':False
@@ -56,6 +38,36 @@ category_filter = {
     'outlier':{
         'outlier':True
     }}
+
+category_filter_oc = {
+    'control':{
+        ('smoking', 'choice'):"N",
+        ('oral contraceptives', 'choice'):'N',
+       'outlier':False
+    },
+    'smoking':{
+        ('smoking', 'choice'):"Y",
+        'outlier':False
+    }, 
+    'oc':{
+        ('oral contraceptives', 'choice'):'Y',
+        'outlier':False
+    },
+    'outlier':{
+        'outlier':True
+    }}
+
+def unstring(value):
+    if isinstance(value,str):
+        return eval(value)
+    else:
+        return value
+    
+def array_from_string(value):
+    try:
+        return np.array(unstring(value)).astype('float32')
+    except SyntaxError:
+        return np.fromstring(value.strip('[]') ,dtype=float, sep=" ")
 
 
 def convert_unit(df, unit_in, unit_out, factor=1.0, 
