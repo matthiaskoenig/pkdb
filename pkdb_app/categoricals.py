@@ -474,7 +474,8 @@ INTERVENTION_DATA = [
         DOSING,
         NUMERIC_TYPE,
         None,
-        NormalizableUnit({"g": None, "mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None, "pmol/kg/min": None}),
+        NormalizableUnit({"g": None, "mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None, "pmol/kg/min": None,
+                          "mg/day": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
@@ -488,9 +489,6 @@ INTERVENTION_DATA = [
     CHARACTERISTIC_DICT["circadian"],
 ]
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
-
-
-
 
 
 def validate_categorials(data, category_class):

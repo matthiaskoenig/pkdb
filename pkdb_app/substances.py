@@ -40,6 +40,7 @@ SUBSTANCES_DATA = [
     # caffeine interaction
     "cimetidine",
     "fluvoxamine",
+    "disulfiram",
     "naringenin",
     "grapefruit juice",
     "quinolone",
