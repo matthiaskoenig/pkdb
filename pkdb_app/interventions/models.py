@@ -517,7 +517,10 @@ class Timecourse(AbstractOutput):
         if interventions.all():
             return interventions
         else:
-            return self.raw._interventions
+            try:
+                return self.raw._interventions
+            except AttributeError:
+                return []
 
     @property
     def study(self):
