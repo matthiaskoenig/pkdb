@@ -12,34 +12,35 @@ ccolors = {'control': 'black',
            'smoking': 'blue',
            'oc': 'green',
            'outlier': 'red',
+           'rest':'brown'
           }
 markers = {'control': 's',
            'smoking': 'd',
            'oc': 'o',
             'outlier': 'x',
+           'rest':'x',
 
           }
 
-category_filter_medication_or_oc = {
+category_filter_soft = {
     'control':{
         ('smoking', 'choice'):"N",
-        (('oral contraceptives','choice'),('medication','choice')):('N','N'),
-
-       'outlier':False
+        ('oral contraceptives', 'choice'): "NOT_Y",
+        'outlier':False
     },
     'smoking':{
         ('smoking', 'choice'):"Y",
         'outlier':False
     }, 
     'oc':{
-        ('oral contraceptives', 'choice'):'Y',
+        ('oral contraceptives', 'choice'):"Y",
         'outlier':False
     },
     'outlier':{
         'outlier':True
     }}
 
-category_filter_oc = {
+category_filter_strict = {
     'control':{
         ('smoking', 'choice'):"N",
         ('oral contraceptives', 'choice'):'N',
@@ -47,10 +48,13 @@ category_filter_oc = {
     },
     'smoking':{
         ('smoking', 'choice'):"Y",
+        ('oral contraceptives', 'choice'):"N",
+
         'outlier':False
     }, 
     'oc':{
         ('oral contraceptives', 'choice'):'Y',
+        ('smoking', 'choice'):'N',
         'outlier':False
     },
     'outlier':{
@@ -116,14 +120,16 @@ def filter_out(data,unit_field,units):
 
 def filter_df(filter_dict, df):
     for filter_key, filter_value in filter_dict.items():
-        if isinstance(filter_value, tuple):
-            temp_df = []
-            for f_key, f_value in zip(filter_key,filter_value):
-                temp_df.append(df[df[f_key]==f_value])
-            df = pd.concat(temp_df)
-        else:    
-            df = df[df[filter_key]==filter_value]
-    return df
+        try:
+            notfiltering = "NOT_" in filter_value
+        except TypeError:
+            notfiltering = False
+
+        if notfiltering:
+            df = df[df[filter_key] != filter_value[4:]]
+        else:
+            df = df[df[filter_key] == filter_value]
+    return df.drop_duplicates()
 
 def group_idx(data):
     return data["subject_type"] == 'group'
