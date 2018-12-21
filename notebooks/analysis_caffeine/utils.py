@@ -39,7 +39,10 @@ def array_from_string(value):
 category_filter = {
     'control':{
         ('smoking', 'choice'):"N",
-        ('oral contraceptives', 'choice'):'N',
+        #('oral contraceptives', 'choice'):'N',
+        #('medication', 'choice'):'N',
+        (('oral contraceptives','choice'),('medication','choice')):('N','N'),
+
        'outlier':False
     },
     'smoking':{
@@ -101,7 +104,13 @@ def filter_out(data,unit_field,units):
 
 def filter_df(filter_dict, df):
     for filter_key, filter_value in filter_dict.items():
-        df = df[df[filter_key]==filter_value]
+        if isinstance(filter_value, tuple):
+            temp_df = []
+            for f_key, f_value in zip(filter_key,filter_value):
+                temp_df.append(df[df[f_key]==f_value])
+            df = pd.concat(temp_df)
+        else:    
+            df = df[df[filter_key]==filter_value]
     return df
 
 def group_idx(data):
