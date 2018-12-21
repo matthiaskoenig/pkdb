@@ -171,9 +171,6 @@ class InterventionExSerializer(ExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
-        if not isinstance(data,list):
-            raise serializers.ValidationError("interventions have to be a list")
-
         temp_interventions = self.split_entry(data)
 
         interventions = []
@@ -219,6 +216,8 @@ class InterventionSetSerializer(ExSerializer):
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
+        if not isinstance(data.get("interventions",[]), list):
+            raise serializers.ValidationError("interventions have to be a list")
         self.validate_wrong_keys(data)
 
         return data
