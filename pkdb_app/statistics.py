@@ -71,7 +71,8 @@ class StatisticsData(object):
         self.output_count = self.outputs.count()
         self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(final=True)
         self.timecourse_count = self.timecourses.count()
-        outputs_with_substance = Output.objects.filter(interventions__in=self.interventions)
+
+        outputs_with_substance = Output.objects.filter(raw___interventions__in=self.interventions)
         self.individual_count = Individual.objects.filter(output__in=outputs_with_substance).count()
         self.group_count = Group.objects.filter(output__in=outputs_with_substance).count()
 
