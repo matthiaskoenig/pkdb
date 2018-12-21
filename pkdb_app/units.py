@@ -45,7 +45,7 @@ UNITS = {
     "mmHg": None,
     "mmol": None,
     "µmol": None,
-    "nmol":None,
+    "nmol": None,
     "m^2": None,
 
     # reverse time units
@@ -171,7 +171,7 @@ class UnitConversion(object):
 
     def apply_conversion(self, value):
         """ Apply the unit conversion to a given unit. """
-        return np.multiply(value,self.multiplier)
+        return np.multiply(value, self.multiplier)
 
 
 # Supported unit conversions
