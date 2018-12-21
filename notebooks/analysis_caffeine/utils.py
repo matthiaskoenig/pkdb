@@ -7,59 +7,6 @@ import attr
 from pathlib import Path
 
 
-# Styles for plots
-ccolors = {'control': 'black',
-           'smoking': 'blue',
-           'oc': 'green',
-           'outlier': 'red',
-           'rest':'brown'
-          }
-markers = {'control': 's',
-           'smoking': 'd',
-           'oc': 'o',
-            'outlier': 'x',
-           'rest':'x',
-
-          }
-
-category_filter_soft = {
-    'control':{
-        ('smoking', 'choice'):"N",
-        ('oral contraceptives', 'choice'): "NOT_Y",
-        'outlier':False
-    },
-    'smoking':{
-        ('smoking', 'choice'):"Y",
-        'outlier':False
-    }, 
-    'oc':{
-        ('oral contraceptives', 'choice'):"Y",
-        'outlier':False
-    },
-    'outlier':{
-        'outlier':True
-    }}
-
-category_filter_strict = {
-    'control':{
-        ('smoking', 'choice'):"N",
-        ('oral contraceptives', 'choice'):'N',
-       'outlier':False
-    },
-    'smoking':{
-        ('smoking', 'choice'):"Y",
-        ('oral contraceptives', 'choice'):"N",
-
-        'outlier':False
-    }, 
-    'oc':{
-        ('oral contraceptives', 'choice'):'Y',
-        ('smoking', 'choice'):'N',
-        'outlier':False
-    },
-    'outlier':{
-        'outlier':True
-    }}
 
 def unstring(value):
     if isinstance(value,str):
