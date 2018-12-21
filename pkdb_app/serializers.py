@@ -448,7 +448,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 data,
                                 ])
                         if keys[0] == "interventions":
-                            set_keys(array_dict, unqiue_values[0].split(","), *keys[:-1])
+                            entry_value = [v.strip() for v in unqiue_values[0].split(",")]
+                            set_keys(array_dict, entry_value, *keys[:1])
+                            #array_dict[keys[0]] = [v.strip() for v in unqiue_values[0].split(",")]
                         else:
                             set_keys(array_dict, unqiue_values[0], *keys)
 
