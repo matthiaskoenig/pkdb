@@ -7,7 +7,10 @@ To update the database content execute the setup_database script.
 """
 
 SUBSTANCES_DATA = [
-    # acetaminophen
+    # indocyanogreen/icg
+    "indocyanogreen",
+
+    # acetaminophen/paracetamol
     "acetaminophen",
 
     # caffeine (CYP2A1)
