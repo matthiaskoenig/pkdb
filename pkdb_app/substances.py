@@ -66,6 +66,15 @@ SUBSTANCES_DATA = [
     "(Mor+M3G+M6G)/(Cod+C6G)",
     "morphine+M3G+M6G",
     "M+N+C-6-G",
+    "quinidine",
+    # medication
+    "salbutamol",
+    "beclometasone",
+    "enalapril",
+    "diltiazem",
+    "hydrochlorthiazide",
+    "amiloride",
+    "chlordiazepoxide"
     # chlorzoxazone (CYP2E1)
     "chlorzoxazone",
     "6-hydroxychlorzoxazone",
