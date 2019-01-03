@@ -447,7 +447,7 @@ CharacteristicType(
         "CYP2D6 genotype",
         GENETIC_VARIANTS,
         CATEGORIAL_TYPE,
-        ["*1/*1","*7/*41","*x/*4","*4/*4","*1x2/*1","*1/*41","*4/*41","*1/*4"],
+        ["*1/*1","*7/*41","*x/*4","*4/*4","*1x2/*1","*1/*41","*4/*41","*1/*4","*10/*10","*1/*10"],
         dimensionless_norm_unit,
     ),
     CharacteristicType(

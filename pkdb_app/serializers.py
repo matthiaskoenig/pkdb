@@ -165,6 +165,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             except AttributeError:
                 values = [value]
             for k, value in enumerate(values):
+
                 if isinstance(value, str):
                     values[k] = value.strip()
                     if field == "interventions":
@@ -174,6 +175,12 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         values[k] = None
                     elif values[k] == "[]":
                         values[k] = []
+
+                if field in  ["unit", "pktype"]:
+                    print(f"<{value}>")
+                    print(f"<{values[k]}>")
+
+
 
             # --- validation ---
             # names must be split in a split entry

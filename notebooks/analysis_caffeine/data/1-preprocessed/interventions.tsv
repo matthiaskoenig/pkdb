@@ -1,503 +1,525 @@
 study	pk	name	category	route	value	unit	substance_name	time_unit	time	form	application	choice	se	min	max
-Balogh1995	518	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Balogh1995	517	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Balogh1995	520	DA	dosing	oral	7.50e-02	mg	gestodene								
-Balogh1995	519	DA	dosing	oral	7.50e-02	mg	gestodene								
-Balogh1995	522	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
-Balogh1995	521	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
-Balogh1995	524	DEE2	dosing	oral	3.00e-02	mg	EE2								
-Balogh1995	523	DEE2	dosing	oral	3.00e-02	mg	EE2								
-test_study	2	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-test_study	1	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-test_study	4	DA	dosing	oral	7.50e-02	mg	gestodene								
-test_study	3	DA	dosing	oral	7.50e-02	mg	gestodene								
-test_study	6	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
-test_study	5	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
-test_study	8	DEE2	dosing	oral	3.00e-02	mg	EE2								
-test_study	7	DEE2	dosing	oral	3.00e-02	mg	EE2								
-Beach1986	532	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Beach1986	531	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Beach1986	534	Dds250	dosing	oral	2.50e+02	mg/day	disulfiram	h	0.00e+00		single dose				
-Beach1986	533	Dds250	dosing	oral	2.50e+02	mg/day	disulfiram	h	0.00e+00		single dose				
-Beach1986	536	Dds500	dosing	oral	5.00e+02	mg/day	disulfiram	h	0.00e+00		single dose				
-Beach1986	535	Dds500	dosing	oral	5.00e+02	mg/day	disulfiram	h	0.00e+00		single dose				
-Barnet1990	526	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
-Barnet1990	525	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
-Barnet1990	528	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
-Barnet1990	527	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
-Barnet1990	530	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
-Barnet1990	529	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
-Backman2008	514	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Backman2008	513	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Balogh1992	516	caf	dosing	oral	2.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Balogh1992	515	caf	dosing	oral	2.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Akinyinka2000	508	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
-Akinyinka2000	507	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
-Abernethy1985	506	D1	dosing	oral	1.62e+02	mg	caffeine	h	0.00e+00						
-Abernethy1985	505	D1	dosing	oral	1.62e+02	mg	caffeine	h	0.00e+00						
-Benowitz1995	540	Dcaf_2mg	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
-Benowitz1995	539	Dcaf_2mg	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
-Benowitz1995	542	Dcaf_4mg	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
-Benowitz1995	541	Dcaf_4mg	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
-Benowitz1995	544	Dpx_2mg	dosing	oral	2.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
-Benowitz1995	543	Dpx_2mg	dosing	oral	2.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
-Benowitz1995	546	Dpx_4mg	dosing	oral	4.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
-Benowitz1995	545	Dpx_4mg	dosing	oral	4.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
-Blanchard1983a	556	Dcaf_oral	dosing	oral	4.94e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		3.00e-02	4.84e+00	5.17e+00
-Blanchard1983a	555	Dcaf_oral	dosing	oral	4.94e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		3.00e-02	4.84e+00	5.17e+00
-Blanchard1983a	558	Dcaf_iv	dosing	iv	4.85e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		9.00e-02	4.64e+00	5.63e+00
-Blanchard1983a	557	Dcaf_iv	dosing	iv	4.85e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		9.00e-02	4.64e+00	5.63e+00
-Benowitz2003	548	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
-Benowitz2003	547	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
-Benowitz2003	550	Dchlo	dosing	oral	2.50e+02	mg	chlorzoxazone	h	0.00e+00						
-Benowitz2003	549	Dchlo	dosing	oral	2.50e+02	mg	chlorzoxazone	h	0.00e+00						
-Benowitz2003	552	Smoking	smoking									Y			
-Benowitz2003	551	Smoking	smoking									Y			
-Benowitz2003	554	CO	medication type									carbon monoxide			
-Benowitz2003	553	CO	medication type									carbon monoxide			
-Carbo1989	572	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
-Carbo1989	571	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
-Carbo1989	574	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
-Carbo1989	573	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
-Carbo1989	576	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
-Carbo1989	575	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
-Carrillo2000a	578	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Carrillo2000a	577	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Begas2007	538	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
-Begas2007	537	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
-Bonati1982	560	D1	dosing	oral	2.20e-01	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	559	D1	dosing	oral	2.20e-01	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	562	D2	dosing	oral	1.00e+00	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	561	D2	dosing	oral	1.00e+00	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	564	D3	dosing	oral	1.54e+00	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	563	D3	dosing	oral	1.54e+00	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	566	D4	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	565	D4	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	568	D5	dosing	oral	1.00e+01	mg/kg	caffeine	h	0.00e+00						
-Bonati1982	567	D5	dosing	oral	1.00e+01	mg/kg	caffeine	h	0.00e+00						
-Cheng1990	584	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
-Cheng1990	583	Dcaf_200	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00						
-Cheng1990	582	Dcaf_70	dosing	oral	7.00e+01	mg	caffeine	h	0.00e+00						
-Cheng1990	581	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
-Cheng1990	580	Dcaf_200	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00						
-Cheng1990	579	Dcaf_70	dosing	oral	7.00e+01	mg	caffeine	h	0.00e+00						
-Campbell1987a	570	Dcaf	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00						
-Campbell1987a	569	Dcaf	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00						
-Harder1988	622	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Harder1988	621	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Harder1988	630	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Harder1988	629	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Harder1988	628	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Harder1988	627	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Harder1988	626	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Harder1988	625	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Harder1988	624	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Harder1988	623	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Harder1988	638	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
-Harder1988	637	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
-Harder1988	636	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
-Harder1988	635	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
-Harder1988	634	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
-Harder1988	633	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
-Harder1988	632	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
-Harder1988	631	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
-Harder1988	646	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
-Harder1988	645	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
-Harder1988	644	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
-Harder1988	643	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
-Harder1988	642	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
-Harder1988	641	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
-Harder1988	640	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
-Harder1988	639	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
-Harder1988	654	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	653	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	652	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	651	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	650	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	649	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	648	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	647	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	662	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	661	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	660	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	659	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	658	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	657	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	656	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	655	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	670	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	669	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	668	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	667	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	666	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1988	665	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1988	664	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1988	663	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1988	678	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	677	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	676	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	675	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	674	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	673	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	672	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	671	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	686	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	685	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	684	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	683	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	682	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	681	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	680	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	679	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	694	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	693	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	692	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	691	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1988	690	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1988	689	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1988	688	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1988	687	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Fuhr1993a	600	Dcaf	dosing	oral	1.67e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Fuhr1993a	599	Dcaf	dosing	oral	1.67e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Fuhr1993a	602	Dgf	dosing	oral	1.43e+02	mg	grapefruit juice	h	0.00e+00	solution	single dose			1.26e+02	1.59e+02
-Fuhr1993a	601	Dgf	dosing	oral	1.43e+02	mg	grapefruit juice	h	0.00e+00	solution	single dose			1.26e+02	1.59e+02
-Ghassabian2009	608	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
-Ghassabian2009	607	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
-Ghassabian2009	610	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00						
-Ghassabian2009	609	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00						
-Ghassabian2009	612	Dlos	dosing	oral	2.50e+01	mg	losartan	h	0.00e+00						
-Ghassabian2009	611	Dlos	dosing	oral	2.50e+01	mg	losartan	h	0.00e+00						
-Ghassabian2009	614	Ddex	dosing	oral	1.00e+02	mg	dextromethorphan	h	0.00e+00						
-Ghassabian2009	613	Ddex	dosing	oral	1.00e+02	mg	dextromethorphan	h	0.00e+00						
-Ghassabian2009	616	Dmid	dosing	oral	2.00e+00	mg	midazolam	h	0.00e+00						
-Ghassabian2009	615	Dmid	dosing	oral	2.00e+00	mg	midazolam	h	0.00e+00						
-George1986	604	Dcaf	dosing	oral	1.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-George1986	603	Dcaf	dosing	oral	1.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-George1986	606	Dap	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
-George1986	605	Dap	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
-Culm-Merdek2005	586	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
-Culm-Merdek2005	585	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
-Culm-Merdek2005	594	Dflux_D	dosing	oral	1.00e+02	mg	fluvoxamine	h	8.00e+00						
-Culm-Merdek2005	593	Dflux_C	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.50e+00						
-Culm-Merdek2005	592	Dflux_B	dosing	oral	1.00e+02	mg	fluvoxamine	h	-1.80e+01						
-Culm-Merdek2005	591	Dflux_A	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.60e+01						
-Culm-Merdek2005	590	Dflux_D	dosing	oral	1.00e+02	mg	fluvoxamine	h	8.00e+00						
-Culm-Merdek2005	589	Dflux_C	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.50e+00						
-Culm-Merdek2005	588	Dflux_B	dosing	oral	1.00e+02	mg	fluvoxamine	h	-1.80e+01						
-Culm-Merdek2005	587	Dflux_A	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.60e+01						
-Granfors2005	618	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Granfors2005	617	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Faber2004	598	Dcaf	dosing	oral	1.48e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Faber2004	597	Dcaf	dosing	oral	1.48e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Haller2002	620	Dcaf	dosing	oral	1.75e+02	mg	caffeine	h	0.00e+00	capsule					
-Haller2002	619	Dcaf	dosing	oral	1.75e+02	mg	caffeine	h	0.00e+00	capsule					
-Desmond1980	596	D1	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
-Desmond1980	595	D1	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
-Harder1989	696	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Harder1989	695	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Harder1989	704	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Harder1989	703	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Harder1989	702	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Harder1989	701	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Harder1989	700	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Harder1989	699	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Harder1989	698	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Harder1989	697	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Harder1989	712	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
-Harder1989	711	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
-Harder1989	710	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
-Harder1989	709	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
-Harder1989	708	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
-Harder1989	707	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
-Harder1989	706	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
-Harder1989	705	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
-Harder1989	720	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
-Harder1989	719	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
-Harder1989	718	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
-Harder1989	717	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
-Harder1989	716	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
-Harder1989	715	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
-Harder1989	714	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
-Harder1989	713	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
-Harder1989	728	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	727	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	726	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	725	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	724	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	723	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	722	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	721	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	736	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	735	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	734	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	733	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	732	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	731	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	730	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	729	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	744	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	743	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	742	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	741	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	740	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
-Harder1989	739	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
-Harder1989	738	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
-Harder1989	737	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
-Harder1989	752	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	751	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	750	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	749	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	748	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	747	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	746	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	745	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	760	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	759	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	758	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	757	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	756	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	755	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	754	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	753	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	768	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	767	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	766	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	765	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Harder1989	764	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Harder1989	763	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Harder1989	762	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Harder1989	761	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Joeres1988	788	Dcaf	dosing	oral	3.66e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Joeres1988	787	Dcaf	dosing	oral	3.66e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Joeres1988	790	smoking abstinence	abstinence		3.00e+00	week						smoking			
-Joeres1988	789	smoking abstinence	abstinence		3.00e+00	week						smoking			
-Joeres1988	792	no smoking	smoking									N			
-Joeres1988	791	no smoking	smoking									N			
-Healy1991	778	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Healy1991	777	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Healy1991	780	Dlom	dosing	oral	4.00e+02	mg	lomefloxacin			capsule	multiple dose				
-Healy1991	779	Dlom	dosing	oral	4.00e+02	mg	lomefloxacin			capsule	multiple dose				
-Healy1989	770	D_CAF	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
-Healy1989	769	D_CAF	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
-Healy1989	776	D_CIP_C	dosing	oral	7.50e+02	mg	ciprofloxacin	h	4.80e+01	capsule					
-Healy1989	775	D_CIP_B	dosing	oral	7.50e+02	mg	ciprofloxacin	h	3.60e+01	capsule					
-Healy1989	774	D_CIP_A	dosing	oral	7.50e+02	mg	ciprofloxacin	h	2.40e+01	capsule					
-Healy1989	773	D_CIP_C	dosing	oral	7.50e+02	mg	ciprofloxacin	h	4.80e+01	capsule					
-Healy1989	772	D_CIP_B	dosing	oral	7.50e+02	mg	ciprofloxacin	h	3.60e+01	capsule					
-Healy1989	771	D_CIP_A	dosing	oral	7.50e+02	mg	ciprofloxacin	h	2.40e+01	capsule					
-Hetzler1990	782	Dcaf	dosing	iv	4.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-Hetzler1990	781	Dcaf	dosing	iv	4.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-Levy1983	800	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Levy1983	799	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Koch1999	798	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Koch1999	797	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Jeppesen1996	784	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00		single dose				
-Jeppesen1996	783	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00		single dose				
-Jeppesen1996	786	Dflu	dosing	oral	5.00e+01	mg	fluvoxamine				single dose				
-Jeppesen1996	785	Dflu	dosing	oral	5.00e+01	mg	fluvoxamine				single dose				
-Kaplan1997	794	D_CAF250	dosing	oral	2.50e+02	mg	caffeine	h		capsule					
-Kaplan1997	793	D_CAF250	dosing	oral	2.50e+02	mg	caffeine	h		capsule					
-Kaplan1997	796	D_CAF500	dosing	oral	5.00e+02	mg	caffeine	h		capsule					
-Kaplan1997	795	D_CAF500	dosing	oral	5.00e+02	mg	caffeine	h		capsule					
-Newton1981	824	Dcaf_750	dosing	oral	7.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	823	Dcaf_500	dosing	oral	5.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	822	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	821	Dcaf_100	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	820	Dcaf_50	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	819	Dcaf_750	dosing	oral	7.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	818	Dcaf_500	dosing	oral	5.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	817	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	816	Dcaf_100	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Newton1981	815	Dcaf_50	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	solution	single dose				
-Oh2012	834	Dmid	dosing	oral	1.00e+02	mg	midazolam	h	0.00e+00		single dose				
-Oh2012	833	Ddex	dosing	oral	2.00e+00	mg	dextromethorphan	h	0.00e+00		single dose				
-Oh2012	832	Dome	dosing	oral	2.00e+02	mg	omeprazole	h	0.00e+00		single dose				
-Oh2012	831	Dlos	dosing	oral	2.00e+00	mg	losartan	h	0.00e+00		single dose				
-Oh2012	830	Dcaf	dosing	oral	1.00e+01	mg	caffeine	h	0.00e+00		single dose				
-Oh2012	829	Dmid	dosing	oral	1.00e+02	mg	midazolam	h	0.00e+00		single dose				
-Oh2012	828	Ddex	dosing	oral	2.00e+00	mg	dextromethorphan	h	0.00e+00		single dose				
-Oh2012	827	Dome	dosing	oral	2.00e+02	mg	omeprazole	h	0.00e+00		single dose				
-Oh2012	826	Dlos	dosing	oral	2.00e+00	mg	losartan	h	0.00e+00		single dose				
-Oh2012	825	Dcaf	dosing	oral	1.00e+01	mg	caffeine	h	0.00e+00		single dose				
-May1982	808	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-May1982	807	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-May1982	810	Dcim	dosing	oral	3.00e+02	mg	cimetidine	h	0.00e+00	solution	multiple dose				
-May1982	809	Dcim	dosing	oral	3.00e+02	mg	cimetidine	h	0.00e+00	solution	multiple dose				
-Murphy1988	812	Dcaf	dosing	oral	1.11e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Murphy1988	811	Dcaf	dosing	oral	1.11e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Murphy1988	814	Dapy	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
-Murphy1988	813	Dapy	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
-Magnusson2008	802	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
-Magnusson2008	801	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
-Magnusson2008	804	Dmid	dosing	oral	2.50e+00	mg	midazolam	h	0.00e+00		single dose				
-Magnusson2008	803	Dmid	dosing	oral	2.50e+00	mg	midazolam	h	0.00e+00		single dose				
-Magnusson2008	806	Ddig	dosing	oral	1.30e-01	mg	digoxin	h	0.00e+00		single dose				
-Magnusson2008	805	Ddig	dosing	oral	1.30e-01	mg	digoxin	h	0.00e+00		single dose				
-Patwardhan1980	839	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
-Patwardhan1980	840	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
-Parsons1978	837	Dcaf	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-Parsons1978	838	Dcaf	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-Park2003	835	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-Park2003	836	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
-Perera2011	841	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Perera2011	842	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Stille1987	851	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Stille1987	852	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
-Stille1987	853	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Stille1987	854	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Stille1987	855	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Stille1987	856	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Stille1987	857	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
-Stille1987	858	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
-Stille1987	859	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
-Stille1987	860	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
-Stille1987	861	D_CIP_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Stille1987	862	D_CIP_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Stille1987	863	D_CIP_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Stille1987	864	D_CIP_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Stille1987	865	D_CIP_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
-Stille1987	866	D_CIP_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
-Stille1987	867	D_CIP_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
-Stille1987	868	D_CIP_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
-Stille1987	869	D_ENX_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Stille1987	870	D_ENX_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Stille1987	871	D_ENX_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Stille1987	872	D_ENX_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Stille1987	873	D_ENX_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
-Stille1987	874	D_ENX_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
-Stille1987	875	D_ENX_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
-Stille1987	876	D_ENX_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
-Turpault2009	879	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
-Turpault2009	880	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
-Turpault2009	881	Dwar	dosing	oral	1.00e+01	mg	warfarin	h	0.00e+00	tablet	single dose				
-Turpault2009	882	Dwar	dosing	oral	1.00e+01	mg	warfarin	h	0.00e+00	tablet	single dose				
-Turpault2009	883	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00	capsule	single dose				
-Turpault2009	884	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00	capsule	single dose				
-Turpault2009	885	Dmet	dosing	oral	1.00e+02	mg	metropolol	h	0.00e+00	tablet	single dose				
-Turpault2009	886	Dmet	dosing	oral	1.00e+02	mg	metropolol	h	0.00e+00	tablet	single dose				
-Turpault2009	887	Dmid	dosing	oral	3.00e-02	mg/kg	midazolam	h	0.00e+00		single dose				
-Turpault2009	888	Dmid	dosing	oral	3.00e-02	mg/kg	midazolam	h	0.00e+00		single dose				
-Chen1991	901	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Chen1991	902	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Chen1991	903	COD_M1	dosing	oral	3.00e+01	mg	codeine	h	4.80e+01	tablet					
-Chen1991	904	COD_M2	dosing	oral	3.00e+01	mg	codeine	h	-4.00e+01	tablet					
-Chen1991	905	COD_M3	dosing	oral	3.00e+01	mg	codeine	h	-3.20e+01	tablet					
-Chen1991	906	COD_M4	dosing	oral	3.00e+01	mg	codeine	h	-2.40e+01	tablet					
-Chen1991	907	COD_M5	dosing	oral	3.00e+01	mg	codeine	h	-1.60e+01	tablet					
-Chen1991	908	COD_M6	dosing	oral	3.00e+01	mg	codeine	h	-8.00e+00	tablet					
-Chen1991	909	COD_M7	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Chen1991	910	COD_M1	dosing	oral	3.00e+01	mg	codeine	h	4.80e+01	tablet					
-Chen1991	911	COD_M2	dosing	oral	3.00e+01	mg	codeine	h	-4.00e+01	tablet					
-Chen1991	912	COD_M3	dosing	oral	3.00e+01	mg	codeine	h	-3.20e+01	tablet					
-Chen1991	913	COD_M4	dosing	oral	3.00e+01	mg	codeine	h	-2.40e+01	tablet					
-Chen1991	914	COD_M5	dosing	oral	3.00e+01	mg	codeine	h	-1.60e+01	tablet					
-Chen1991	915	COD_M6	dosing	oral	3.00e+01	mg	codeine	h	-8.00e+00	tablet					
-Chen1991	916	COD_M7	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-ZylberKatz1984	889	Dcaf_350	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-ZylberKatz1984	890	Dcaf_310	dosing	oral	3.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-ZylberKatz1984	891	Dcaf_260	dosing	oral	2.60e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-ZylberKatz1984	892	Dcaf_350	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-ZylberKatz1984	893	Dcaf_310	dosing	oral	3.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-ZylberKatz1984	894	Dcaf_260	dosing	oral	2.60e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Ammon2002	895	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00	tablet					
-Ammon2002	896	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00	tablet					
-Ammon2002	897	DIC	dosing	oral	5.00e+01	mg	diclofenac	h	0.00e+00	capsule					
-Ammon2002	898	DIC	dosing	oral	5.00e+01	mg	diclofenac	h	0.00e+00	capsule					
-Ammon2002	899	Placebo	dosing	oral	0.00e+00	mg	diclofenac	h	0.00e+00	capsule					
-Ammon2002	900	Placebo	dosing	oral	0.00e+00	mg	diclofenac	h	0.00e+00	capsule					
-Spigset1999a	849	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Spigset1999a	850	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
-Renner1984	843	D1	dosing	iv	1.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Renner1984	844	D1	dosing	iv	1.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
-Test243	877	Dcaf	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	tablet	single dose				
-Test243	878	Dcaf	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	tablet	single dose				
-Seng2009	845	D_CAF3	dosing	oral	3.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
-Seng2009	846	D_CAF3	dosing	oral	3.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
-Seng2009	847	D_CAF5	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
-Seng2009	848	D_CAF5	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
-Molanaei2010	937	COD	dosing	oral	5.00e+01	mg	codeine	h	0.00e+00						
-Molanaei2010	938	COD	dosing	oral	5.00e+01	mg	codeine	h	0.00e+00						
-Molanaei2010	939	HD	medication type					h	2.40e+01			hemodialysis			
-Molanaei2010	940	HD	medication type					h	2.40e+01			hemodialysis			
-Loetsch2006	929	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Loetsch2006	930	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Loetsch2006	931	MOR	dosing	iv	3.00e+01	mg	morphine	h	0.00e+00						
-Loetsch2006	932	MOR	dosing	iv	3.00e+01	mg	morphine	h	0.00e+00						
-Lia2009	927	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Lia2009	928	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
-Lafolie1996	923	COD25	dosing	oral	2.50e+01	mg/kg	codeine	h	0.00e+00						
-Lafolie1996	924	COD25	dosing	oral	2.50e+01	mg/kg	codeine	h	0.00e+00						
-Lafolie1996	925	COD50	dosing	oral	5.00e+01	mg/kg	codeine	h	0.00e+00						
-Lafolie1996	926	COD50	dosing	oral	5.00e+01	mg/kg	codeine	h	0.00e+00						
-Mitchell1991	933	MOR	dosing	intramuscular	2.00e+01	mg	morphine	h	0.00e+00						
-Mitchell1991	934	MOR	dosing	intramuscular	2.00e+01	mg	morphine	h	0.00e+00						
-Kronstrand2001	921	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00						
-Kronstrand2001	922	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00						
-Kirchner2007	919	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
-Kirchner2007	920	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
-Mohammed1993	935	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
-Mohammed1993	936	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
-He2008	917	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
-He2008	918	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
-Degn2004	957	hypoclamp	metabolic challenge	iv				h	0.00e+00			hypoglycemic clamp			
-Degn2004	958	hypoclamp	metabolic challenge	iv				h	0.00e+00			hypoglycemic clamp			
-Degn2004	959	exenatide	dosing	iv	6.60e-02	pmol/kg/min	exenatide	h	0.00e+00	solution	continuous injection				
-Degn2004	960	exenatide	dosing	iv	6.60e-02	pmol/kg/min	exenatide	h	0.00e+00	solution	continuous injection				
-Calbet2002	949	Glucose	dosing	oral	1.50e+01	g	glucose	h	0.00e+00				0.00e+00		
-Calbet2002	950	Glucose	dosing	oral	1.50e+01	g	glucose	h	0.00e+00				0.00e+00		
-Calbet2002	951	PPH	metabolic challenge	oral				h	0.00e+00			protein solution			
-Calbet2002	952	PPH	metabolic challenge	oral				h	0.00e+00			protein solution			
-Calbet2002	953	WPH	metabolic challenge	oral				h	0.00e+00			protein solution			
-Calbet2002	954	WPH	metabolic challenge	oral				h	0.00e+00			protein solution			
-Calbet2002	955	MS	metabolic challenge	oral				h	0.00e+00			protein solution			
-Calbet2002	956	MS	metabolic challenge	oral				h	0.00e+00			protein solution			
-Bergman1991	945	glciv	dosing	iv	3.00e+02	mg/kg	glucose	h	0.00e+00	solution	single dose				
-Bergman1991	946	glciv	dosing	iv	3.00e+02	mg/kg	glucose	h	0.00e+00	solution	single dose				
-Felig1969	961	glciv	dosing	iv	5.00e-01	g/kg	glucose	h	0.00e+00	solution	single dose				
-Felig1969	962	glciv	dosing	iv	5.00e-01	g/kg	glucose	h	0.00e+00	solution	single dose				
-Ferrannini1979	963	glciv	dosing	iv	3.30e-01	g/kg	glucose	h	0.00e+00						
-Ferrannini1979	964	glciv	dosing	iv	3.30e-01	g/kg	glucose	h	0.00e+00						
-Shah1990	941	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
-Shah1990	942	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
-Butler1991	947	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
-Butler1991	948	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
-Basu2009	943	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
-Basu2009	944	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
-Israelian2006	975	hypoclamp	metabolic challenge									hypoglycemic clamp			
-Israelian2006	976	hypoclamp	metabolic challenge									hypoglycemic clamp			
-Israelian2006	977	Dins	dosing	iv	1.00e+00	mU/kg	insulin	h	0.00e+00	solution	continuous injection				
-Israelian2006	978	Dins	dosing	iv	1.00e+00	mU/kg	insulin	h	0.00e+00	solution	continuous injection				
-Knop2007	989	isoglc	metabolic challenge									isoglycemic glucose infusion			
-Knop2007	990	isoglc	metabolic challenge									isoglycemic glucose infusion			
-Knop2007	991	ogtt	dosing	oral	5.00e+01	g	glucose	h	0.00e+00	solution	single dose				
-Knop2007	992	ogtt	dosing	oral	5.00e+01	g	glucose	h	0.00e+00	solution	single dose				
-Hovorka2002	973	glciv	dosing	iv	3.00e-01	g/kg	glucose	min	1.20e+02	solution	single dose				
-Hovorka2002	974	glciv	dosing	iv	3.00e-01	g/kg	glucose	min	1.20e+02	solution	single dose				
-Jones1998	979	hypoglycemia	metabolic challenge					min	0.00e+00			hypoglycemic clamp			
-Jones1998	980	hypoglycemia	metabolic challenge					min	0.00e+00			hypoglycemic clamp			
-Jones1998	981	asleep	sleeping									asleep			
-Jones1998	982	asleep	sleeping									asleep			
-Jones1998	983	awake	sleeping									awake			
-Jones1998	984	awake	sleeping									awake			
-Jones1998	985	daytime	circadian									daytime			
-Jones1998	986	daytime	circadian									daytime			
-Jones1998	987	nighttime	circadian									nighttime			
-Jones1998	988	nighttime	circadian									nighttime			
-Mitrakou1991	993	hypoglycemic clamp	metabolic challenge	iv						solution		hypoglycemic clamp			
-Mitrakou1991	994	hypoglycemic clamp	metabolic challenge	iv						solution		hypoglycemic clamp			
-Mitrakou1991	995	euglycemic clamp	metabolic challenge	iv						solution		hyperinsulinemic euglycemic clamp			
-Mitrakou1991	996	euglycemic clamp	metabolic challenge	iv						solution		hyperinsulinemic euglycemic clamp			
-Ferrannini1988	965	Dglc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00						
-Ferrannini1988	966	Dglc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00						
-Firth1986	969	Dglc	dosing	oral	5.00e+01	g	glucose	h	0.00e+00						
-Firth1986	970	Dglc	dosing	oral	5.00e+01	g	glucose	h	0.00e+00						
-Fery1993	967	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
-Fery1993	968	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
-Henkel2005	971	LPG drink	metabolic challenge									lipid-glucose-protein drink			
-Henkel2005	972	LPG drink	metabolic challenge									lipid-glucose-protein drink			
-Mitrakou1992	997	glc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00	solution	single dose				
-Mitrakou1992	998	glc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00	solution	single dose				
-Thomaseth2008	999	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
-Thomaseth2008	1000	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
-Yang2015	1001	ogtt	dosing	oral	7.50e+01	g	glucose	h	0.00e+00		single dose				
-Yang2015	1002	ogtt	dosing	oral	7.50e+01	g	glucose	h	0.00e+00		single dose				
+Abernethy1985	2767	D1	dosing	oral	1.62e+02	mg	caffeine	h	0.00e+00						
+Abernethy1985	2768	D1	dosing	oral	1.62e+02	mg	caffeine	h	0.00e+00						
+Balogh1992	2777	caf	dosing	oral	2.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Balogh1992	2778	caf	dosing	oral	2.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Barnet1990	2787	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
+Barnet1990	2788	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
+Barnet1990	2789	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
+Barnet1990	2790	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
+Barnet1990	2791	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
+Barnet1990	2792	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
+Begas2007	2799	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
+Begas2007	2800	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
+Benowitz2003	2809	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
+Benowitz2003	2810	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
+Benowitz2003	2811	Dchlo	dosing	oral	2.50e+02	mg	chlorzoxazone	h	0.00e+00						
+Benowitz2003	2812	Dchlo	dosing	oral	2.50e+02	mg	chlorzoxazone	h	0.00e+00						
+Benowitz2003	2813	Smoking	smoking									Y			
+Benowitz2003	2814	Smoking	smoking									Y			
+Benowitz2003	2815	CO	medication type									carbon monoxide			
+Benowitz2003	2816	CO	medication type									carbon monoxide			
+Bonati1982	2821	D1	dosing	oral	2.20e-01	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2822	D1	dosing	oral	2.20e-01	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2823	D2	dosing	oral	1.00e+00	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2824	D2	dosing	oral	1.00e+00	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2825	D3	dosing	oral	1.54e+00	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2826	D3	dosing	oral	1.54e+00	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2827	D4	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2828	D4	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2829	D5	dosing	oral	1.00e+01	mg/kg	caffeine	h	0.00e+00						
+Bonati1982	2830	D5	dosing	oral	1.00e+01	mg/kg	caffeine	h	0.00e+00						
+Carbo1989	2833	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
+Carbo1989	2834	Dcaf	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00		single dose				
+Carbo1989	2835	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
+Carbo1989	2836	Dnfc	dosing	oral	8.00e+02	mg	norfloxacin								
+Carbo1989	2837	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
+Carbo1989	2838	Dppa	dosing	oral	8.00e+02	mg	pipemidic acid								
+Cheng1990	2841	Dcaf_70	dosing	oral	7.00e+01	mg	caffeine	h	0.00e+00						
+Cheng1990	2842	Dcaf_200	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00						
+Cheng1990	2843	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
+Cheng1990	2844	Dcaf_70	dosing	oral	7.00e+01	mg	caffeine	h	0.00e+00						
+Cheng1990	2845	Dcaf_200	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00						
+Cheng1990	2846	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
+Desmond1980	2857	D1	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
+Desmond1980	2858	D1	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
+Fuhr1993a	2861	Dcaf	dosing	oral	1.67e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Fuhr1993a	2862	Dcaf	dosing	oral	1.67e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Fuhr1993a	2863	Dgf	dosing	oral	1.43e+02	mg	grapefruit juice	h	0.00e+00	solution	single dose			1.26e+02	1.59e+02
+Fuhr1993a	2864	Dgf	dosing	oral	1.43e+02	mg	grapefruit juice	h	0.00e+00	solution	single dose			1.26e+02	1.59e+02
+Ghassabian2009	2869	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
+Ghassabian2009	2870	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
+Ghassabian2009	2871	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00						
+Ghassabian2009	2872	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00						
+Ghassabian2009	2873	Dlos	dosing	oral	2.50e+01	mg	losartan	h	0.00e+00						
+Ghassabian2009	2874	Dlos	dosing	oral	2.50e+01	mg	losartan	h	0.00e+00						
+Ghassabian2009	2875	Ddex	dosing	oral	1.00e+02	mg	dextromethorphan	h	0.00e+00						
+Ghassabian2009	2876	Ddex	dosing	oral	1.00e+02	mg	dextromethorphan	h	0.00e+00						
+Ghassabian2009	2877	Dmid	dosing	oral	2.00e+00	mg	midazolam	h	0.00e+00						
+Ghassabian2009	2878	Dmid	dosing	oral	2.00e+00	mg	midazolam	h	0.00e+00						
+Haller2002	2881	Dcaf	dosing	oral	1.75e+02	mg	caffeine	h	0.00e+00	capsule					
+Haller2002	2882	Dcaf	dosing	oral	1.75e+02	mg	caffeine	h	0.00e+00	capsule					
+Harder1988	2886	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Harder1988	2887	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Harder1988	2888	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Harder1988	2889	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Harder1988	2890	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Harder1988	2891	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Harder1988	2892	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Harder1988	2893	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
+Harder1988	2894	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
+Harder1988	2895	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
+Harder1988	2896	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
+Harder1988	2897	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
+Harder1988	2898	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
+Harder1988	2899	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
+Harder1988	2900	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
+Harder1988	2901	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
+Koch1999	3059	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Koch1999	3060	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Murphy1988	3073	Dcaf	dosing	oral	1.11e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Murphy1988	3074	Dcaf	dosing	oral	1.11e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Murphy1988	3075	Dapy	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
+Murphy1988	3076	Dapy	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
+Parsons1978	3099	Dcaf	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Parsons1978	3100	Dcaf	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Seng2009	3107	D_CAF3	dosing	oral	3.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
+Seng2009	3108	D_CAF3	dosing	oral	3.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
+Seng2009	3109	D_CAF5	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
+Seng2009	3110	D_CAF5	dosing	oral	5.00e+00	mg/kg	caffeine	h	0.00e+00	capsule					
+Turpault2009	3141	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
+Turpault2009	3142	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
+Turpault2009	3143	Dwar	dosing	oral	1.00e+01	mg	warfarin	h	0.00e+00	tablet	single dose				
+Turpault2009	3144	Dwar	dosing	oral	1.00e+01	mg	warfarin	h	0.00e+00	tablet	single dose				
+Turpault2009	3145	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00	capsule	single dose				
+Turpault2009	3146	Dome	dosing	oral	2.00e+01	mg	omeprazole	h	0.00e+00	capsule	single dose				
+Turpault2009	3147	Dmet	dosing	oral	1.00e+02	mg	metropolol	h	0.00e+00	tablet	single dose				
+Turpault2009	3148	Dmet	dosing	oral	1.00e+02	mg	metropolol	h	0.00e+00	tablet	single dose				
+Turpault2009	3149	Dmid	dosing	oral	3.00e-02	mg/kg	midazolam	h	0.00e+00		single dose				
+Turpault2009	3150	Dmid	dosing	oral	3.00e-02	mg/kg	midazolam	h	0.00e+00		single dose				
+He2008	3179	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
+He2008	3180	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
+Lia2009	3189	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Lia2009	3190	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Molanaei2010	3199	COD	dosing	oral	5.00e+01	mg	codeine	h	0.00e+00						
+Molanaei2010	3200	COD	dosing	oral	5.00e+01	mg	codeine	h	0.00e+00						
+Molanaei2010	3201	HD	medication type					h	2.40e+01			hemodialysis			
+Molanaei2010	3202	HD	medication type					h	2.40e+01			hemodialysis			
+Wu2014	3223	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Wu2014	3224	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Calbet2002	3231	Glucose	dosing	oral	1.50e+01	g	glucose	h	0.00e+00				0.00e+00		
+Calbet2002	3232	Glucose	dosing	oral	1.50e+01	g	glucose	h	0.00e+00				0.00e+00		
+Calbet2002	3233	PPH	metabolic challenge	oral				h	0.00e+00			protein solution			
+Calbet2002	3234	PPH	metabolic challenge	oral				h	0.00e+00			protein solution			
+Calbet2002	3235	WPH	metabolic challenge	oral				h	0.00e+00			protein solution			
+Calbet2002	3236	WPH	metabolic challenge	oral				h	0.00e+00			protein solution			
+Calbet2002	3237	MS	metabolic challenge	oral				h	0.00e+00			protein solution			
+Calbet2002	3238	MS	metabolic challenge	oral				h	0.00e+00			protein solution			
+Ferrannini1979	3245	glciv	dosing	iv	3.30e-01	g/kg	glucose	h	0.00e+00						
+Ferrannini1979	3246	glciv	dosing	iv	3.30e-01	g/kg	glucose	h	0.00e+00						
+Jones1998	3261	hypoglycemia	metabolic challenge					min	0.00e+00			hypoglycemic clamp			
+Jones1998	3262	hypoglycemia	metabolic challenge					min	0.00e+00			hypoglycemic clamp			
+Jones1998	3263	asleep	sleeping									asleep			
+Jones1998	3264	asleep	sleeping									asleep			
+Jones1998	3265	awake	sleeping									awake			
+Jones1998	3266	awake	sleeping									awake			
+Jones1998	3267	daytime	circadian									daytime			
+Jones1998	3268	daytime	circadian									daytime			
+Jones1998	3269	nighttime	circadian									nighttime			
+Jones1998	3270	nighttime	circadian									nighttime			
+McLean2002	3293	Dcaf	dosing	oral	6.00e+00	mg/kg	caffeine	h	0.00e+00		single dose				
+McLean2002	3294	Dcaf	dosing	oral	6.00e+00	mg/kg	caffeine	h	0.00e+00		single dose				
+Levy1983	3061	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Levy1983	3062	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3077	Dcaf_50	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3078	Dcaf_100	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3079	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3080	Dcaf_500	dosing	oral	5.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3081	Dcaf_750	dosing	oral	7.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3082	Dcaf_50	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3083	Dcaf_100	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3084	Dcaf_300	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3085	Dcaf_500	dosing	oral	5.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Newton1981	3086	Dcaf_750	dosing	oral	7.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Patwardhan1980	3101	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
+Patwardhan1980	3102	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
+Spigset1999a	3111	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Spigset1999a	3112	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+ZylberKatz1984	3151	Dcaf_350	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+ZylberKatz1984	3152	Dcaf_310	dosing	oral	3.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+ZylberKatz1984	3153	Dcaf_260	dosing	oral	2.60e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+ZylberKatz1984	3154	Dcaf_350	dosing	oral	3.50e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+ZylberKatz1984	3155	Dcaf_310	dosing	oral	3.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+ZylberKatz1984	3156	Dcaf_260	dosing	oral	2.60e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Kirchner2007	3181	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
+Kirchner2007	3182	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00						
+Loetsch2006	3191	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Loetsch2006	3192	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Loetsch2006	3193	MOR	dosing	iv	3.00e+01	mg	morphine	h	0.00e+00						
+Loetsch2006	3194	MOR	dosing	iv	3.00e+01	mg	morphine	h	0.00e+00						
+Shah1990	3203	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
+Shah1990	3204	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
+Basu2009	3225	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
+Basu2009	3226	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
+Degn2004	3239	hypoclamp	metabolic challenge	iv				h	0.00e+00			hypoglycemic clamp			
+Degn2004	3240	hypoclamp	metabolic challenge	iv				h	0.00e+00			hypoglycemic clamp			
+Degn2004	3241	exenatide	dosing	iv	6.60e-02	pmol/kg/min	exenatide	h	0.00e+00	solution	continuous injection				
+Degn2004	3242	exenatide	dosing	iv	6.60e-02	pmol/kg/min	exenatide	h	0.00e+00	solution	continuous injection				
+Ferrannini1988	3247	Dglc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00						
+Ferrannini1988	3248	Dglc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00						
+Knop2007	3271	isoglc	metabolic challenge									isoglycemic glucose infusion			
+Knop2007	3272	isoglc	metabolic challenge									isoglycemic glucose infusion			
+Knop2007	3273	ogtt	dosing	oral	5.00e+01	g	glucose	h	0.00e+00	solution	single dose				
+Knop2007	3274	ogtt	dosing	oral	5.00e+01	g	glucose	h	0.00e+00	solution	single dose				
+Magnusson2008	3063	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
+Magnusson2008	3064	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00		single dose				
+Magnusson2008	3065	Dmid	dosing	oral	2.50e+00	mg	midazolam	h	0.00e+00		single dose				
+Magnusson2008	3066	Dmid	dosing	oral	2.50e+00	mg	midazolam	h	0.00e+00		single dose				
+Magnusson2008	3067	Ddig	dosing	oral	1.30e-01	mg	digoxin	h	0.00e+00		single dose				
+Magnusson2008	3068	Ddig	dosing	oral	1.30e-01	mg	digoxin	h	0.00e+00		single dose				
+Oh2012	3087	Dcaf	dosing	oral	1.00e+01	mg	caffeine	h	0.00e+00		single dose				
+Oh2012	3088	Dlos	dosing	oral	2.00e+00	mg	losartan	h	0.00e+00		single dose				
+Oh2012	3089	Dome	dosing	oral	2.00e+02	mg	omeprazole	h	0.00e+00		single dose				
+Oh2012	3090	Ddex	dosing	oral	2.00e+00	mg	dextromethorphan	h	0.00e+00		single dose				
+Oh2012	3091	Dmid	dosing	oral	1.00e+02	mg	midazolam	h	0.00e+00		single dose				
+Oh2012	3092	Dcaf	dosing	oral	1.00e+01	mg	caffeine	h	0.00e+00		single dose				
+Oh2012	3093	Dlos	dosing	oral	2.00e+00	mg	losartan	h	0.00e+00		single dose				
+Oh2012	3094	Dome	dosing	oral	2.00e+02	mg	omeprazole	h	0.00e+00		single dose				
+Oh2012	3095	Ddex	dosing	oral	2.00e+00	mg	dextromethorphan	h	0.00e+00		single dose				
+Oh2012	3096	Dmid	dosing	oral	1.00e+02	mg	midazolam	h	0.00e+00		single dose				
+Perera2011	3103	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Perera2011	3104	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Stille1987	3113	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Stille1987	3114	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Stille1987	3115	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Stille1987	3116	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Stille1987	3117	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Stille1987	3118	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Stille1987	3119	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Stille1987	3120	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Stille1987	3121	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Stille1987	3122	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Stille1987	3123	D_CIP_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Stille1987	3124	D_CIP_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Stille1987	3125	D_CIP_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Stille1987	3126	D_CIP_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Stille1987	3127	D_CIP_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Stille1987	3128	D_CIP_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Stille1987	3129	D_CIP_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Stille1987	3130	D_CIP_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Stille1987	3131	D_ENX_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Stille1987	3132	D_ENX_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Stille1987	3133	D_ENX_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Stille1987	3134	D_ENX_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Stille1987	3135	D_ENX_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Stille1987	3136	D_ENX_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Stille1987	3137	D_ENX_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Stille1987	3138	D_ENX_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Ammon2002	3157	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00	tablet					
+Ammon2002	3158	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00	tablet					
+Ammon2002	3159	DIC	dosing	oral	5.00e+01	mg	diclofenac	h	0.00e+00	capsule					
+Ammon2002	3160	DIC	dosing	oral	5.00e+01	mg	diclofenac	h	0.00e+00	capsule					
+Ammon2002	3161	Placebo	dosing	oral	0.00e+00	mg	diclofenac	h	0.00e+00	capsule					
+Ammon2002	3162	Placebo	dosing	oral	0.00e+00	mg	diclofenac	h	0.00e+00	capsule					
+Kronstrand2001	3183	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00						
+Kronstrand2001	3184	COD	dosing	oral	1.00e+02	mg	codeine	h	0.00e+00						
+Mitchell1991	3195	MOR	dosing	intramuscular	2.00e+01	mg	morphine	h	0.00e+00						
+Mitchell1991	3196	MOR	dosing	intramuscular	2.00e+01	mg	morphine	h	0.00e+00						
+Somogyi1991	3205	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Somogyi1991	3206	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Somogyi1991	3207	ACE1	dosing	oral	3.00e+01	mg	acetaminophen	h	-4.80e+01	tablet					
+Somogyi1991	3208	ACE2	dosing	oral	3.00e+01	mg	acetaminophen	h	-4.00e+01	tablet					
+Somogyi1991	3209	ACE3	dosing	oral	3.00e+01	mg	acetaminophen	h	-3.20e+01	tablet					
+Somogyi1991	3210	ACE4	dosing	oral	3.00e+01	mg	acetaminophen	h	-2.40e+01	tablet					
+Somogyi1991	3211	ACE5	dosing	oral	3.00e+01	mg	acetaminophen	h	-1.60e+01	tablet					
+Somogyi1991	3212	ACE6	dosing	oral	3.00e+01	mg	acetaminophen	h	-8.00e+00	tablet					
+Somogyi1991	3213	ACE7	dosing	oral	3.00e+01	mg	acetaminophen	h	0.00e+00	tablet					
+Somogyi1991	3214	ACE1	dosing	oral	3.00e+01	mg	acetaminophen	h	-4.80e+01	tablet					
+Somogyi1991	3215	ACE2	dosing	oral	3.00e+01	mg	acetaminophen	h	-4.00e+01	tablet					
+Somogyi1991	3216	ACE3	dosing	oral	3.00e+01	mg	acetaminophen	h	-3.20e+01	tablet					
+Somogyi1991	3217	ACE4	dosing	oral	3.00e+01	mg	acetaminophen	h	-2.40e+01	tablet					
+Somogyi1991	3218	ACE5	dosing	oral	3.00e+01	mg	acetaminophen	h	-1.60e+01	tablet					
+Somogyi1991	3219	ACE6	dosing	oral	3.00e+01	mg	acetaminophen	h	-8.00e+00	tablet					
+Somogyi1991	3220	ACE7	dosing	oral	3.00e+01	mg	acetaminophen	h	0.00e+00	tablet					
+Bergman1991	3227	glciv	dosing	iv	3.00e+02	mg/kg	glucose	h	0.00e+00	solution	single dose				
+Bergman1991	3228	glciv	dosing	iv	3.00e+02	mg/kg	glucose	h	0.00e+00	solution	single dose				
+Felig1969	3243	glciv	dosing	iv	5.00e-01	g/kg	glucose	h	0.00e+00	solution	single dose				
+Felig1969	3244	glciv	dosing	iv	5.00e-01	g/kg	glucose	h	0.00e+00	solution	single dose				
+May1982	3069	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Fery1993	3249	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
+Fery1993	3250	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
+Mitrakou1991	3275	hypoglycemic clamp	metabolic challenge	iv						solution		hypoglycemic clamp			
+Mitrakou1991	3276	hypoglycemic clamp	metabolic challenge	iv						solution		hypoglycemic clamp			
+Mitrakou1991	3277	euglycemic clamp	metabolic challenge	iv						solution		hyperinsulinemic euglycemic clamp			
+Mitrakou1991	3278	euglycemic clamp	metabolic challenge	iv						solution		hyperinsulinemic euglycemic clamp			
+Firth1986	3251	Dglc	dosing	oral	5.00e+01	g	glucose	h	0.00e+00						
+Firth1986	3252	Dglc	dosing	oral	5.00e+01	g	glucose	h	0.00e+00						
+Mitrakou1992	3279	glc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00	solution	single dose				
+Mitrakou1992	3280	glc	dosing	oral	1.00e+00	g/kg	glucose	h	0.00e+00	solution	single dose				
+Akinyinka2000	2769	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
+Akinyinka2000	2770	Dcaf	dosing	oral	3.00e+02	mg	caffeine	h	0.00e+00						
+Balogh1995	2779	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Campbell1987a	2831	Dcaf	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00						
+Henkel2005	3253	LPG drink	metabolic challenge									lipid-glucose-protein drink			
+Henkel2005	3254	LPG drink	metabolic challenge									lipid-glucose-protein drink			
+Thomaseth2008	3281	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
+Thomaseth2008	3282	Dglc	dosing	oral	7.50e+01	g	glucose	h	0.00e+00						
+Balogh1995	2780	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Balogh1995	2781	DA	dosing	oral	7.50e-02	mg	gestodene								
+Balogh1995	2782	DA	dosing	oral	7.50e-02	mg	gestodene								
+Balogh1995	2783	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
+Balogh1995	2784	DB	dosing	oral	1.25e-01	mg	levonorgestrel								
+Balogh1995	2785	DEE2	dosing	oral	3.00e-02	mg	EE2								
+Backman2008	2775	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Backman2008	2776	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Balogh1995	2786	DEE2	dosing	oral	3.00e-02	mg	EE2								
+Beach1986	2793	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Beach1986	2794	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Beach1986	2795	Dds250	dosing	oral	2.50e+02	mg/day	disulfiram	h	0.00e+00		single dose				
+Beach1986	2796	Dds250	dosing	oral	2.50e+02	mg/day	disulfiram	h	0.00e+00		single dose				
+Beach1986	2797	Dds500	dosing	oral	5.00e+02	mg/day	disulfiram	h	0.00e+00		single dose				
+Beach1986	2798	Dds500	dosing	oral	5.00e+02	mg/day	disulfiram	h	0.00e+00		single dose				
+Benowitz1995	2801	Dcaf_2mg	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2802	Dcaf_2mg	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2803	Dcaf_4mg	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2804	Dcaf_4mg	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2805	Dpx_2mg	dosing	oral	2.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2806	Dpx_2mg	dosing	oral	2.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2807	Dpx_4mg	dosing	oral	4.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
+Benowitz1995	2808	Dpx_4mg	dosing	oral	4.00e+00	mg/kg	paraxanthine	h	0.00e+00	capsule	single dose				
+Blanchard1983a	2817	Dcaf_oral	dosing	oral	4.94e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		3.00e-02	4.84e+00	5.17e+00
+Blanchard1983a	2818	Dcaf_oral	dosing	oral	4.94e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		3.00e-02	4.84e+00	5.17e+00
+Blanchard1983a	2819	Dcaf_iv	dosing	iv	4.85e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		9.00e-02	4.64e+00	5.63e+00
+Blanchard1983a	2820	Dcaf_iv	dosing	iv	4.85e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose		9.00e-02	4.64e+00	5.63e+00
+Campbell1987a	2832	Dcaf	dosing	oral	4.00e+00	mg/kg	caffeine	h	0.00e+00						
+Carrillo2000a	2839	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Carrillo2000a	2840	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Culm-Merdek2005	2847	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
+Culm-Merdek2005	2848	Dcaf	dosing	oral	2.50e+02	mg	caffeine	h	0.00e+00						
+Culm-Merdek2005	2849	Dflux_A	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.60e+01						
+Culm-Merdek2005	2850	Dflux_B	dosing	oral	1.00e+02	mg	fluvoxamine	h	-1.80e+01						
+Culm-Merdek2005	2851	Dflux_C	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.50e+00						
+Culm-Merdek2005	2852	Dflux_D	dosing	oral	1.00e+02	mg	fluvoxamine	h	8.00e+00						
+Culm-Merdek2005	2853	Dflux_A	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.60e+01						
+Culm-Merdek2005	2854	Dflux_B	dosing	oral	1.00e+02	mg	fluvoxamine	h	-1.80e+01						
+Culm-Merdek2005	2855	Dflux_C	dosing	oral	1.00e+02	mg	fluvoxamine	h	-2.50e+00						
+Culm-Merdek2005	2856	Dflux_D	dosing	oral	1.00e+02	mg	fluvoxamine	h	8.00e+00						
+Hovorka2002	3255	glciv	dosing	iv	3.00e-01	g/kg	glucose	min	1.20e+02	solution	single dose				
+Hovorka2002	3256	glciv	dosing	iv	3.00e-01	g/kg	glucose	min	1.20e+02	solution	single dose				
+Yang2015	3283	ogtt	dosing	oral	7.50e+01	g	glucose	h	0.00e+00		single dose				
+Yang2015	3284	ogtt	dosing	oral	7.50e+01	g	glucose	h	0.00e+00		single dose				
+Faber2004	2859	Dcaf	dosing	oral	1.48e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Faber2004	2860	Dcaf	dosing	oral	1.48e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+George1986	2865	Dcaf	dosing	oral	1.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+George1986	2866	Dcaf	dosing	oral	1.10e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+George1986	2867	Dap	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
+George1986	2868	Dap	dosing	oral	1.00e+01	mg/kg	antipyrine	h	0.00e+00	solution	single dose				
+Granfors2005	2879	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Granfors2005	2880	Dcaf	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Harder1988	2883	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Harder1988	2884	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Harder1988	2885	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Harder1988	2902	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
+Harder1988	2903	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
+Harder1988	2904	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
+Harder1988	2905	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
+Harder1988	2906	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
+Harder1988	2907	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
+Harder1988	2908	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
+Harder1988	2909	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	2910	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	2911	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	2912	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	2913	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	2914	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	2915	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	2916	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	2917	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	2918	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	2919	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	2920	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	2921	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	2922	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	2923	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	2924	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	2925	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	2926	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	2927	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	2928	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	2929	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1988	2930	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1988	2931	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1988	2932	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1988	2933	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	2934	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	2935	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	2936	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	2937	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	2938	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	2939	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	2940	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	2941	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	2942	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	2943	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	2944	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	2945	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	2946	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	2947	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	2948	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	2949	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	2950	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	2951	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	2952	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1988	2953	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1988	2954	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1988	2955	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1988	2956	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	2957	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Harder1989	2958	D_CAF	dosing	oral	2.30e+02	mg	caffeine	h	0.00e+00						
+Harder1989	2959	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Harder1989	2960	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Harder1989	2961	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Harder1989	2962	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Harder1989	2963	D_OFL_A	dosing	oral	2.00e+02	mg	ofloxacin	h	0.00e+00						
+Harder1989	2964	D_OFL_B	dosing	oral	2.00e+02	mg	ofloxacin	h	2.40e+01						
+Harder1989	2965	D_OFL_C	dosing	oral	2.00e+02	mg	ofloxacin	h	4.80e+01						
+Harder1989	2966	D_OFL_D	dosing	oral	2.00e+02	mg	ofloxacin	h	7.20e+01						
+Harder1989	2967	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
+Harder1989	2968	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
+Harder1989	2969	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
+Harder1989	2970	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
+Harder1989	2971	D_NOR_A	dosing	oral	4.00e+02	mg	norfloxacin	h	0.00e+00						
+Harder1989	2972	D_NOR_B	dosing	oral	4.00e+02	mg	norfloxacin	h	2.40e+01						
+Harder1989	2973	D_NOR_C	dosing	oral	4.00e+02	mg	norfloxacin	h	4.80e+01						
+Harder1989	2974	D_NOR_D	dosing	oral	4.00e+02	mg	norfloxacin	h	7.20e+01						
+Harder1989	2975	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
+Harder1989	2976	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
+Harder1989	2977	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
+Harder1989	2978	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
+Harder1989	2979	D_PPA_A	dosing	oral	4.00e+02	mg	pipemidic acid	h	0.00e+00						
+Harder1989	2980	D_PPA_B	dosing	oral	4.00e+02	mg	pipemidic acid	h	2.40e+01						
+Harder1989	2981	D_PPA_C	dosing	oral	4.00e+02	mg	pipemidic acid	h	4.80e+01						
+Harder1989	2982	D_PPA_D	dosing	oral	4.00e+02	mg	pipemidic acid	h	7.20e+01						
+Harder1989	2983	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	2984	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	2985	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	2986	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	2987	D_CIP1_A	dosing	oral	1.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	2988	D_CIP1_B	dosing	oral	1.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	2989	D_CIP1_C	dosing	oral	1.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	2990	D_CIP1_D	dosing	oral	1.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	2991	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	2992	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	2993	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	2994	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	2995	D_CIP2_A	dosing	oral	2.50e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	2996	D_CIP2_B	dosing	oral	2.50e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	2997	D_CIP2_C	dosing	oral	2.50e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	2998	D_CIP2_D	dosing	oral	2.50e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	2999	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	3000	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	3001	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	3002	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	3003	D_CIP3_A	dosing	oral	5.00e+02	mg	ciprofloxacin	h	0.00e+00						
+Harder1989	3004	D_CIP3_B	dosing	oral	5.00e+02	mg	ciprofloxacin	h	2.40e+01						
+Harder1989	3005	D_CIP3_C	dosing	oral	5.00e+02	mg	ciprofloxacin	h	4.80e+01						
+Harder1989	3006	D_CIP3_D	dosing	oral	5.00e+02	mg	ciprofloxacin	h	7.20e+01						
+Harder1989	3007	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	3008	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	3009	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	3010	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	3011	D_ENX1_A	dosing	oral	1.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	3012	D_ENX1_B	dosing	oral	1.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	3013	D_ENX1_C	dosing	oral	1.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	3014	D_ENX1_D	dosing	oral	1.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	3015	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	3016	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	3017	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	3018	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	3019	D_ENX2_A	dosing	oral	2.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	3020	D_ENX2_B	dosing	oral	2.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	3021	D_ENX2_C	dosing	oral	2.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	3022	D_ENX2_D	dosing	oral	2.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	3023	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	3024	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	3025	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	3026	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Harder1989	3027	D_ENX3_A	dosing	oral	4.00e+02	mg	enoxacin	h	0.00e+00						
+Harder1989	3028	D_ENX3_B	dosing	oral	4.00e+02	mg	enoxacin	h	2.40e+01						
+Harder1989	3029	D_ENX3_C	dosing	oral	4.00e+02	mg	enoxacin	h	4.80e+01						
+Harder1989	3030	D_ENX3_D	dosing	oral	4.00e+02	mg	enoxacin	h	7.20e+01						
+Healy1989	3031	D_CAF	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
+Healy1989	3032	D_CAF	dosing	oral	1.00e+02	mg	caffeine	h	0.00e+00						
+Healy1989	3033	D_CIP_A	dosing	oral	7.50e+02	mg	ciprofloxacin	h	2.40e+01	capsule					
+Healy1989	3034	D_CIP_B	dosing	oral	7.50e+02	mg	ciprofloxacin	h	3.60e+01	capsule					
+Healy1989	3035	D_CIP_C	dosing	oral	7.50e+02	mg	ciprofloxacin	h	4.80e+01	capsule					
+Healy1989	3036	D_CIP_A	dosing	oral	7.50e+02	mg	ciprofloxacin	h	2.40e+01	capsule					
+Healy1989	3037	D_CIP_B	dosing	oral	7.50e+02	mg	ciprofloxacin	h	3.60e+01	capsule					
+Healy1989	3038	D_CIP_C	dosing	oral	7.50e+02	mg	ciprofloxacin	h	4.80e+01	capsule					
+Healy1991	3039	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Healy1991	3040	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Healy1991	3041	Dlom	dosing	oral	4.00e+02	mg	lomefloxacin			capsule	multiple dose				
+Healy1991	3042	Dlom	dosing	oral	4.00e+02	mg	lomefloxacin			capsule	multiple dose				
+Hetzler1990	3043	Dcaf	dosing	iv	4.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Hetzler1990	3044	Dcaf	dosing	iv	4.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Jeppesen1996	3045	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00		single dose				
+Jeppesen1996	3046	Dcaf	dosing	oral	2.00e+02	mg	caffeine	h	0.00e+00		single dose				
+Jeppesen1996	3047	Dflu	dosing	oral	5.00e+01	mg	fluvoxamine				single dose				
+Jeppesen1996	3048	Dflu	dosing	oral	5.00e+01	mg	fluvoxamine				single dose				
+Joeres1988	3049	Dcaf	dosing	oral	3.66e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Joeres1988	3050	Dcaf	dosing	oral	3.66e+02	mg	caffeine	h	0.00e+00	tablet	single dose				
+Joeres1988	3051	smoking abstinence	abstinence		3.00e+00	week						smoking			
+Lafolie1996	3185	COD25	dosing	oral	2.50e+01	mg/kg	codeine	h	0.00e+00						
+Joeres1988	3052	smoking abstinence	abstinence		3.00e+00	week						smoking			
+Joeres1988	3053	no smoking	smoking									N			
+Joeres1988	3054	no smoking	smoking									N			
+Kaplan1997	3055	D_CAF250	dosing	oral	2.50e+02	mg	caffeine	h		capsule					
+Kaplan1997	3056	D_CAF250	dosing	oral	2.50e+02	mg	caffeine	h		capsule					
+Kaplan1997	3057	D_CAF500	dosing	oral	5.00e+02	mg	caffeine	h		capsule					
+Kaplan1997	3058	D_CAF500	dosing	oral	5.00e+02	mg	caffeine	h		capsule					
+May1982	3070	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+May1982	3071	Dcim	dosing	oral	3.00e+02	mg	cimetidine	h	0.00e+00	solution	multiple dose				
+May1982	3072	Dcim	dosing	oral	3.00e+02	mg	cimetidine	h	0.00e+00	solution	multiple dose				
+Park2003	3097	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Park2003	3098	Dcaf	dosing	oral	2.00e+00	mg/kg	caffeine	h	0.00e+00	solution	single dose				
+Renner1984	3105	D1	dosing	iv	1.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Renner1984	3106	D1	dosing	iv	1.25e+02	mg	caffeine	h	0.00e+00	solution	single dose				
+Test243	3139	Dcaf	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	tablet	single dose				
+Test243	3140	Dcaf	dosing	oral	5.00e+01	mg	caffeine	h	0.00e+00	tablet	single dose				
+Chen1991	3163	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Chen1991	3164	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Chen1991	3165	COD_M1	dosing	oral	3.00e+01	mg	codeine	h	4.80e+01	tablet					
+Chen1991	3166	COD_M2	dosing	oral	3.00e+01	mg	codeine	h	-4.00e+01	tablet					
+Chen1991	3167	COD_M3	dosing	oral	3.00e+01	mg	codeine	h	-3.20e+01	tablet					
+Chen1991	3168	COD_M4	dosing	oral	3.00e+01	mg	codeine	h	-2.40e+01	tablet					
+Chen1991	3169	COD_M5	dosing	oral	3.00e+01	mg	codeine	h	-1.60e+01	tablet					
+Chen1991	3170	COD_M6	dosing	oral	3.00e+01	mg	codeine	h	-8.00e+00	tablet					
+Chen1991	3171	COD_M7	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Chen1991	3172	COD_M1	dosing	oral	3.00e+01	mg	codeine	h	4.80e+01	tablet					
+Chen1991	3173	COD_M2	dosing	oral	3.00e+01	mg	codeine	h	-4.00e+01	tablet					
+Chen1991	3174	COD_M3	dosing	oral	3.00e+01	mg	codeine	h	-3.20e+01	tablet					
+Chen1991	3175	COD_M4	dosing	oral	3.00e+01	mg	codeine	h	-2.40e+01	tablet					
+Chen1991	3176	COD_M5	dosing	oral	3.00e+01	mg	codeine	h	-1.60e+01	tablet					
+Chen1991	3177	COD_M6	dosing	oral	3.00e+01	mg	codeine	h	-8.00e+00	tablet					
+Chen1991	3178	COD_M7	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Lafolie1996	3186	COD25	dosing	oral	2.50e+01	mg/kg	codeine	h	0.00e+00						
+Lafolie1996	3187	COD50	dosing	oral	5.00e+01	mg/kg	codeine	h	0.00e+00						
+Lafolie1996	3188	COD50	dosing	oral	5.00e+01	mg/kg	codeine	h	0.00e+00						
+Mohammed1993	3197	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
+Mohammed1993	3198	COD	dosing	oral	6.00e+01	mg	codeine	h	0.00e+00						
+Wu2013	3221	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Wu2013	3222	COD	dosing	oral	3.00e+01	mg	codeine	h	0.00e+00	tablet					
+Butler1991	3229	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
+Butler1991	3230	mixed-meal	metabolic challenge	oral				h	0.00e+00			mixed-meal			
+Israelian2006	3257	hypoclamp	metabolic challenge									hypoglycemic clamp			
+Israelian2006	3258	hypoclamp	metabolic challenge									hypoglycemic clamp			
+Israelian2006	3259	Dins	dosing	iv	1.00e+00	mU/kg	insulin	h	0.00e+00	solution	continuous injection				
+Israelian2006	3260	Dins	dosing	iv	1.00e+00	mU/kg	insulin	h	0.00e+00	solution	continuous injection				
+Lelo1986a	3285	Dcaf	dosing	oral	2.70e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
+Lelo1986a	3286	Dcaf	dosing	oral	2.70e+02	mg	caffeine	h	0.00e+00	capsule	single dose				
+Lelo1986a	3287	Dpx	dosing	oral	2.50e+02	mg	paraxanthine	h	0.00e+00	capsule	single dose				
+Lelo1986a	3288	Dpx	dosing	oral	2.50e+02	mg	paraxanthine	h	0.00e+00	capsule	single dose				
+Lelo1986a	3289	Dtp	dosing	oral	2.50e+02	mg	theophylline	h	0.00e+00	tablet	single dose				
+Lelo1986a	3290	Dtp	dosing	oral	2.50e+02	mg	theophylline	h	0.00e+00	tablet	single dose				
+Lelo1986a	3291	Dtb	dosing	oral	2.50e+02	mg	theobromine	h	0.00e+00	capsule	single dose				
+Lelo1986a	3292	Dtb	dosing	oral	2.50e+02	mg	theobromine	h	0.00e+00	capsule	single dose				
