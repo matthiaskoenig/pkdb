@@ -61,6 +61,8 @@ SUBSTANCES_DATA = [
     "codeine/morphine",
     "morphine/codine",
     "(Mor+M3G+M6G)/(Cod+C6G)",
+    "morphine+M3G+M6G",
+    "M+N+C-6-G",
     # chlorzoxazone (CYP2E1)
     "chlorzoxazone",
     "6-hydroxychlorzoxazone",

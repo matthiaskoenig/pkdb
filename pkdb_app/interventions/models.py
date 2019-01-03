@@ -346,6 +346,7 @@ class Output(ValueableNotBlank, AbstractOutput):
         else:
             return self.raw._interventions
 
+
     def add_statistics(self):
         if self.group:
             if not self.sd:
