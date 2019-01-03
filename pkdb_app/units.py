@@ -90,7 +90,7 @@ UNITS = {
     "mg/l*h": None,
 
     "ng*h/ml": None,
-
+    "ng*min/ml": None,
     "µg*h/ml": None,  # -> mg*h/l
     "µg/ml*h": None,  # -> mg*h/l
     "mg*min/l": None,  # -> mg*h/l
@@ -199,7 +199,7 @@ UNIT_CONVERSIONS = [
     UnitConversion("mg/l*h", target="mg*h/l", multiplier=1.0),
 
     UnitConversion("µg*min/ml", target="mg*h/l", multiplier=1.0/60),
-
+    UnitConversion("ng*min/ml", target="mg*h/l", multiplier=1.0 /(60*1000.0)),
     UnitConversion("ng*h/ml", target="mg*h/l", multiplier=1000.0),
     UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0),
     UnitConversion("mg*min/l", target="mg*h/l", multiplier=1.0/60),

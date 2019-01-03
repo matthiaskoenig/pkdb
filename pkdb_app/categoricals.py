@@ -267,6 +267,7 @@ CHARACTERISTIC_DATA = [
             "diabetes melitus type 1",
             "end-stage renal disease",
             "chronic viral hepatitis",
+            "sickle cell"
         ],
         dimensionless_norm_unit,
     ),
@@ -282,7 +283,7 @@ CHARACTERISTIC_DATA = [
         "medication type",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "paracetamol","hemodialysis"],
+        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "hydrochlorthiazide","amiloride","chlordiazepoxide","paracetamol","salbutamol","diltiazem","hemodialysis","enalapril","beclometasone","spinal anaesthesia", "CCM"],
         dimensionless_norm_unit,
     ),
     CharacteristicType(
@@ -447,7 +448,23 @@ CharacteristicType(
         "CYP2D6 genotype",
         GENETIC_VARIANTS,
         CATEGORIAL_TYPE,
-        ["*1/*1","*7/*41","*x/*4","*4/*4","*1x2/*1","*1/*41","*4/*41","*1/*4","*10/*10","*1/*10"],
+        ["*1/*1",
+         "*7/*41",
+         "*x/*4",
+         "*4/*4",
+         "*1x2/*1",
+         "*1/*41",
+         "*4/*41",
+         "*1/*4",
+         "*10/*10",
+         "*1/*10",
+         "*other/*other",
+         "*other/*17",
+         "*other/*29",
+         "*other/*41",
+         "*17/*17",
+         "*29/*29"
+         ],
         dimensionless_norm_unit,
     ),
     CharacteristicType(
@@ -553,7 +570,7 @@ def validate_categorials(data, category_class):
 # ---------------------------------------------------
 # Output
 # ---------------------------------------------------
-OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine"]
+OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid"]
 
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
@@ -567,6 +584,7 @@ auc_norm_unit = NormalizableUnit(
         "mg/l*h": "mg*h/l",
         "µg*h/ml": "mg*h/l",
         "µg/ml*h": "mg*h/l",
+        "ng*min/ml": "mg*h/l",
         "mg*min/l": "mg*h/l",
         "mg/l*min": "mg*h/l",
         "ng*h/ml": "mg*h/l",
