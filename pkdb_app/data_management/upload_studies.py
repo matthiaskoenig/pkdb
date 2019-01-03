@@ -342,7 +342,9 @@ def upload_study_json(json_study_dict, api_url, auth_headers, client=None):
     logging.info(f"--- {study_outputset_upload_time} study outputset upload time in seconds ---")
 
     start_time = time.time()
-    response = sdb.requests_with_client(client, requests, f"{api_url}/update_index/", method="post",
+
+    if success:
+        response = sdb.requests_with_client(client, requests, f"{api_url}/update_index/", method="post",
                                         data={"sid": sid},
                                         headers=auth_headers)
     check_json_response(response)
