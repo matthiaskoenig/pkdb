@@ -225,6 +225,9 @@ CHARACTERISTIC_DATA = [
         # muscle mass
         "muscle weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
     ),
+    CharacteristicType(
+        "fat weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
+    ),
 
     # -------------- Patient status --------------
     CharacteristicType(
@@ -254,6 +257,7 @@ CHARACTERISTIC_DATA = [
             "plasmodium falciparum",
             "alcoholic liver cirrhosis",
             "cirrhotic liver disease",
+            "non-cirrhotic liver disease",
             "chronic viral hepatitis",
             "PBC",
             "miscellaneous liver disease",
