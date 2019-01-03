@@ -681,15 +681,24 @@ PK_DATA = [
     ),
     PharmacokineticsType("ratio", "Ratio between substances.", ratio_norm_unit),
     PharmacokineticsType(
-        "clearance", "Clearance of given substance.", clearance_norm_unit
-    ),
-    PharmacokineticsType(
-        "clearance_renal", "Renal clearance of given substance.", clearance_norm_unit
+        "clearance", "Total/apparent clearance of given substance. "
+                     "If the clearance is based on the unbound substance use clearance_unbount. "
+                     "If the clearance refers to renal clearance use clearance_renal.", clearance_norm_unit
     ),
     PharmacokineticsType(
         "clearance_unbound", "Clearance of unbound substance.", clearance_norm_unit
     ),
-    PharmacokineticsType("vd", "Volume of distribution.", vd_norm_unit),
+    PharmacokineticsType(
+        "clearance_renal", "Renal clearance of given substance.", clearance_norm_unit
+    ),
+
+    PharmacokineticsType(
+        "vd", "Volume of distribution. "
+              "If the volume of distribution is calculated with the unbound substance use vd_unbound.", vd_norm_unit
+    ),
+    PharmacokineticsType(
+        "vd_unbound", "Volume of distribution for unbound substance.", vd_norm_unit
+    ),
     PharmacokineticsType("thalf", "Half-life for given substance.", time_norm_unit),
     PharmacokineticsType(
         "tmax", "Time of maximum for given substance.", time_norm_unit
@@ -707,7 +716,10 @@ PK_DATA = [
         "fraction_absorbed", "Fraction absorbed of given substance.", ratio_norm_unit
     ),
     PharmacokineticsType(
-        "plasma_binding", "Fraction absorbed of given substance.", ratio_norm_unit
+        "plasma_binding", "Plasma binding of given substance (see also fraction unbound).", ratio_norm_unit
+    ),
+    PharmacokineticsType(
+        "fraction_unbound", "Unbound fraction of given substance (see also plasma_binding).", ratio_norm_unit
     ),
     PharmacokineticsType(
         "recovery", "Fraction recovered of given substance.", ratio_norm_unit
