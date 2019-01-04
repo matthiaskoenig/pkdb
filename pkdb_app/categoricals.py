@@ -570,7 +570,7 @@ def validate_categorials(data, category_class):
 # ---------------------------------------------------
 # Output
 # ---------------------------------------------------
-OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid"]
+OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid","saliva/plasma"]
 
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
@@ -595,6 +595,25 @@ auc_norm_unit = NormalizableUnit(
         "nmol*h/l": "µmol*h/l",
         "µg/ml*h/kg": "mg*h/l/kg",
         "µU/ml*min": None,
+    }
+)
+aumc_norm_unit = NormalizableUnit(
+    {
+        "mg*h^2/l": None,
+        "mg/l*h^2": "mg*h^2/l",
+        "µg*h^2/ml": "mg*h^2/l",
+        "µg/ml*h^2": "mg*h^2/l",
+        "ng*min^2/ml": "mg*h^2/l",
+        "mg*min^2/l": "mg*h^2/l",
+        "mg/l*min^2": "mg*h^2/l",
+        "ng*h^2/ml": "mg*h^2/l",
+        "µg*min^2/ml": "mg*h^2/l",
+        "µmol*h^2/l": None,
+        "µmol/l*h^2": "µmol*h^2/l",
+        "pmol/ml*h^2": None,
+        "nmol*h^2/l": "µmol*h^2/l",
+        "µg/ml*h^2/kg": "mg*h^2/l/kg",
+        "µU/ml*min^2": None,
     }
 )
 amount_norm_unit = NormalizableUnit({"mg": None, "µmol": None, "mmol": None})
@@ -670,6 +689,11 @@ PK_DATA = [
         "Area under the curve (AUC), until last time point. Time period is required for calculation.",
         auc_norm_unit,
     ),
+    PharmacokineticsType(
+        "aumc_inf",
+        "Area under first moment curve (AUMC), extrapolated until infinity.",
+        aumc_norm_unit,
+    ),
     PharmacokineticsType("amount", "Amount of given substance.", amount_norm_unit),
     PharmacokineticsType(
         "cum_amount",
@@ -679,6 +703,9 @@ PK_DATA = [
     PharmacokineticsType(
         "concentration", "Concentration of given substance.", concentration_norm_unit
     ),
+PharmacokineticsType(
+        "concentration_unbound", "Concentration of unbound substance.", concentration_norm_unit
+    ),
     PharmacokineticsType("ratio", "Ratio between substances.", ratio_norm_unit),
     PharmacokineticsType(
         "clearance", "Total/apparent clearance of given substance. "
@@ -687,6 +714,9 @@ PK_DATA = [
     ),
     PharmacokineticsType(
         "clearance_unbound", "Clearance of unbound substance.", clearance_norm_unit
+    ),
+    PharmacokineticsType(
+        "clearance_intrinsic", "Intrinsic clearance of substance.", clearance_norm_unit
     ),
     PharmacokineticsType(
         "clearance_renal", "Renal clearance of given substance.", clearance_norm_unit
@@ -702,6 +732,11 @@ PK_DATA = [
     PharmacokineticsType("thalf", "Half-life for given substance.", time_norm_unit),
     PharmacokineticsType(
         "tmax", "Time of maximum for given substance.", time_norm_unit
+    ),
+    PharmacokineticsType(
+        "mrt",
+        "Mean residence time (MRT). MRT = AUMC/AUC",
+        time_norm_unit,
     ),
     PharmacokineticsType(
         "cmax", "Maximum concentration for given substance.", concentration_norm_unit

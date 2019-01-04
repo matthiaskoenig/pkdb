@@ -451,7 +451,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         if len(unqiue_values) != 1:
                             raise serializers.ValidationError(
                                 [
-                                f"{values[1]} has to be a unique for one timecourse",
+                                f"{values[1]} has to be a unique for one timecourse. <{unqiue_values}>",
                                 data,
                                 ])
                         if keys[0] == "interventions":
