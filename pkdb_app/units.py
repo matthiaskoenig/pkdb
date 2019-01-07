@@ -106,6 +106,26 @@ UNITS = {
 
     "µU/ml*min": None,
 
+    #AUMC
+# AUC
+    "mg*h^2/l": None,
+    "mg/l*h^2": None,
+    "ng*h^2/ml": None,
+    "ng*min^2/ml": None,
+    "µg*h^2/ml": None,  # -> mg*h/l
+    "µg/ml*h^2": None,  # -> mg*h/l
+    "mg*min^2/l": None,  # -> mg*h/l
+    "mg/l*min^2": None,  # -> mg*h/l
+    "µg*min^2/ml": None,
+    "µmol*h^2/l": None,  # -> mg*h/l (with molar weight)
+    "µmol/l*h^2": None,  # -> mg*h/l (with molar weight)
+    "pmol*h^2/ml": None,
+    "pmol/ml*h^2": None,
+    "nmol*h^2/l": None,
+    "µg/ml*h^2/kg": None,  # -> mg*h/l/kg
+    "mg*h^2/l/kg": None,
+    "µU/ml*min^2": None,
+
 
     # Volume of distribution (vd)
     "l": None,
@@ -209,6 +229,23 @@ UNIT_CONVERSIONS = [
     UnitConversion("µmol/l*h", target="µmol*h/l", multiplier=1.0),
     UnitConversion("nmol/l*h", target="µmol*h/l", multiplier=1.0E-3),
     UnitConversion("nmol*h/l", target="µmol*h/l", multiplier=1.0E-3),
+
+    # AUMC
+    UnitConversion("µg*h^2/ml", target="mg*h^2/l", multiplier=1.0),
+    UnitConversion("mg/l*h^2", target="mg*h^2/l", multiplier=1.0),
+
+    UnitConversion("µg*min^2/ml", target="mg*h^2/l", multiplier=1.0/(60**2)),
+    UnitConversion("ng*min^2/ml", target="mg*h^2/l", multiplier=1.0 /((60**2)*1000.0)),
+    UnitConversion("ng*h^2/ml", target="mg*h^2/l", multiplier=1000.0),
+    UnitConversion("µg/ml*h^2", target="mg*h^2/l", multiplier=1.0),
+    UnitConversion("mg*min^2/l", target="mg*h^2/l", multiplier=1.0/(60**2)),
+    UnitConversion("mg/l*min^2", target="mg*h^2/l", multiplier=1.0/(60**2)),
+    UnitConversion("µg/ml*h^2/kg", target="mg*h^2/l/kg", multiplier=1.0),
+
+    UnitConversion("µmol/l*h^2", target="µmol*h^2/l", multiplier=1.0),
+    UnitConversion("nmol/l*h^2", target="µmol*h^2/l", multiplier=1.0E-3),
+    UnitConversion("nmol*h^2/l", target="µmol*h^2/l", multiplier=1.0E-3),
+
 
     # Vd
     UnitConversion("ml/kg", target="l/kg", multiplier=1.0E-3),
