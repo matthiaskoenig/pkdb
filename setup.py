@@ -67,7 +67,7 @@ setup(
 
         # Core
         "pytz==2018.4",
-        "Django==2.1.4",
+        "Django==2.1.5",
         "gunicorn==19.8.1",
         "newrelic==3.2.2.94",
 
