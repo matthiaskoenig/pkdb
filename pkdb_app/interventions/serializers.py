@@ -39,7 +39,6 @@ from pkdb_app.subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from pkdb_app.units import TIME_UNITS
 from pkdb_app.utils import list_of_pk
 
 INTERVENTION_FIELDS = [
@@ -113,10 +112,10 @@ class InterventionSerializer(ExSerializer):
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
         category = data.get("category")
-        if  any([category == MEDICATION,category == DOSING]):
+        if any([category == MEDICATION,category == DOSING]):
             self._validate_requried_key(data,"substance")
             self._validate_requried_key(data,"route")
-            self._validate_requried_key(data,"value")
+            #self._validate_requried_key(data,"value")
             self._validate_requried_key(data,"unit")
             #if category == DOSING:
             #    self._validate_requried_key(data,"time")
@@ -178,6 +177,7 @@ class InterventionExSerializer(ExSerializer):
         interventions = []
         for intervention in temp_interventions:
             interventions_from_file = self.entries_from_file(intervention)
+
             interventions.extend(interventions_from_file)
         # ----------------------------------
         # finished
