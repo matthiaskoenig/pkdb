@@ -491,7 +491,7 @@ CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DA
 # ---------------------------------------------------
 INTERVENTION_ROUTE = ["oral", "iv","intramuscular"]
 INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
-INTERVENTION_APPLICATION = ["single dose", "multiple dose", "continuous injection"]
+INTERVENTION_APPLICATION = ["single dose", "multiple dose", "continuous injection", "variable infusion", "constant infusion"]
 INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
 
 INTERVENTION_FORM = ["tablet", "capsule", "solution", NAN]
@@ -504,7 +504,7 @@ INTERVENTION_DATA = [
         NUMERIC_TYPE,
         None,
         NormalizableUnit({"g": None, "mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None, "pmol/kg": None, "pmol/kg/min": None,
-                          "mg/day": None, "mg/70kg":"mg/kg"}),
+                          "mg/day": None, "mg/70kg": "mg/kg", "nmol": None}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
