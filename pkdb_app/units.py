@@ -57,6 +57,7 @@ UNITS = {
     # misc units
     "g/kg": None,
     "mg/kg": None,
+    "pmol/kg": None,
     "mU/kg": None,
     "U/kg": None,
     "mg/day": None,
@@ -107,7 +108,7 @@ UNITS = {
     "µU/ml*min": None,
 
     #AUMC
-# AUC
+    # AUC
     "mg*h^2/l": None,
     "mg/l*h^2": None,
     "ng*h^2/ml": None,
