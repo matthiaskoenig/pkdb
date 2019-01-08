@@ -15,6 +15,7 @@ from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
+NA_VALUES = ["na","NA","nan","NAN"]
 
 
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
@@ -102,8 +103,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
         for k, v in data.items():
             if "_map" in k:
                 k = k[:-4]
-            if v is None:
-                continue
+            #if v is None:
+            #    continue
             transformed_data[k] = v
         return transformed_data
 
@@ -553,8 +554,8 @@ class ExSerializer(MappingSerializer):
                 raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
 
     def _validate_requried_key(self,attrs, key):
-        key_value = attrs.get(key)
-        if key_value is None:
+        key_value = attrs.get(key,"Empty")
+        if key_value == "Empty":
             raise serializers.ValidationError({key: f"{key} is required"})
 
     def _validate_disabled_data(self, data_dict, disabled):

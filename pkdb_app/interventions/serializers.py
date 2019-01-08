@@ -26,7 +26,7 @@ from pkdb_app.serializers import (
     ExSerializer,
     WrongKeyValidationSerializer,
     BaseOutputExSerializer,
-)
+    NA_VALUES)
 
 from pkdb_app.subjects.models import Group, DataFile, Individual
 from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
@@ -112,14 +112,17 @@ class InterventionSerializer(ExSerializer):
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
         category = data.get("category")
+
+        print(data)
         if any([category == MEDICATION,category == DOSING]):
             self._validate_requried_key(data,"substance")
             self._validate_requried_key(data,"route")
-            #self._validate_requried_key(data,"value")
+            self._validate_requried_key(data,"value")
             self._validate_requried_key(data,"unit")
             #if category == DOSING:
             #    self._validate_requried_key(data,"time")
             #    self._validate_requried_key(data,"time_unit")
+
 
 
 
@@ -173,11 +176,13 @@ class InterventionExSerializer(ExSerializer):
         if not isinstance(data, dict):
             raise serializers.ValidationError(f"each intervention has to be a dict and not <{data}>")
         temp_interventions = self.split_entry(data)
+        for key in VALUE_FIELDS_NO_UNIT:
+            if data.get(key) in NA_VALUES:
+                data[key] = None
 
         interventions = []
         for intervention in temp_interventions:
             interventions_from_file = self.entries_from_file(intervention)
-
             interventions.extend(interventions_from_file)
         # ----------------------------------
         # finished
@@ -187,6 +192,7 @@ class InterventionExSerializer(ExSerializer):
 
         data["interventions"] = interventions
         self.validate_wrong_keys(data)
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
