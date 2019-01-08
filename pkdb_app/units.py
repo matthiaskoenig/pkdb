@@ -57,6 +57,7 @@ UNITS = {
     # misc units
     "g/kg": None,
     "mg/kg": None,
+    "mg/70kg": None,
     "mU/kg": None,
     "U/kg": None,
     "mg/day": None,
@@ -86,6 +87,8 @@ UNITS = {
     "ng/g": None,  # per g plasma
 
     # AUC
+    "h*mg/l":None,
+    "h*µg/l": None,
     "mg*h/l": None,
     "mg/l*h": None,
 
@@ -160,6 +163,7 @@ UNITS = {
     # misc
     "cups/day": None,
     "g/day": None,
+
 }
 UNITS.update(TIME_UNITS)
 add_names(UNITS)
@@ -215,13 +219,21 @@ UNIT_CONVERSIONS = [
     UnitConversion("ng/l", target="µg/ml", multiplier=1.0),
 
     # AUC
+    UnitConversion("h*mg/l", target="mg*h/l", multiplier=1.0),
+    UnitConversion("µg*h/ml""h*µg/l", target="mg*h/l", multiplier=1.0),
+
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0),
+
     UnitConversion("mg/l*h", target="mg*h/l", multiplier=1.0),
 
     UnitConversion("µg*min/ml", target="mg*h/l", multiplier=1.0/60),
     UnitConversion("ng*min/ml", target="mg*h/l", multiplier=1.0 /(60*1000.0)),
     UnitConversion("ng*h/ml", target="mg*h/l", multiplier=1000.0),
     UnitConversion("µg/ml*h", target="mg*h/l", multiplier=1.0),
+
+    UnitConversion("h*µg/l", target="mg*h/l", multiplier=1.0E-3),
+    UnitConversion("µg*h/l", target="mg*h/l", multiplier=1.0E-3),
+
     UnitConversion("mg*min/l", target="mg*h/l", multiplier=1.0/60),
     UnitConversion("mg/l*min", target="mg*h/l", multiplier=1.0/60),
     UnitConversion("µg/ml*h/kg", target="mg*h/l/kg", multiplier=1.0),
@@ -267,6 +279,9 @@ UNIT_CONVERSIONS = [
 
     # rate
     UnitConversion("µmol/min/kg", target="µmol/kg/min", multiplier=1.0),
+
+    # misc
+    UnitConversion("mg/70kg", target="mg/kg", multiplier=70.0),
 
 ]
 UNIT_CONVERSIONS_DICT = {

@@ -509,10 +509,6 @@ class ExSerializer(MappingSerializer):
 
             if data["individual"]:
 
-                study_individuals = Individual.objects.filter(
-                    ex__individualset__study__sid=study_sid
-                )
-
                 try:
                     study_individuals = Individual.objects.filter(
                         ex__individualset__study__sid=study_sid

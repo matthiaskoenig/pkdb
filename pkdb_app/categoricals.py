@@ -200,7 +200,7 @@ CHARACTERISTIC_DATA = [
         "ethnicity",
         DEMOGRAPHICS,
         CATEGORIAL_TYPE,
-        [NAN, "african", "afroamerican", "asian", "caucasian", "korean"],
+        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic"],
         dimensionless_norm_unit,
     ),
     # -------------- Physiology --------------
@@ -504,7 +504,7 @@ INTERVENTION_DATA = [
         NUMERIC_TYPE,
         None,
         NormalizableUnit({"g": None, "mg": None, "mg/kg": None, "g/kg": None, "mU/kg": None, "pmol/kg/min": None,
-                          "mg/day": None}),
+                          "mg/day": None, "mg/70kg":"mg/kg"}),
     ),
     CharacteristicType(
         "smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, dimensionless_norm_unit
@@ -583,6 +583,7 @@ auc_norm_unit = NormalizableUnit(
         "mg*h/l": None,
         "mg/l*h": "mg*h/l",
         "µg*h/ml": "mg*h/l",
+        "h*µg/l":"mg*h/l",
         "µg/ml*h": "mg*h/l",
         "ng*min/ml": "mg*h/l",
         "mg*min/l": "mg*h/l",
