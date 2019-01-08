@@ -74,7 +74,7 @@ SUBSTANCES_DATA = [
     "diltiazem",
     "hydrochlorthiazide",
     "amiloride",
-    "chlordiazepoxide"
+    "chlordiazepoxide",
     # chlorzoxazone (CYP2E1)
     "chlorzoxazone",
     "6-hydroxychlorzoxazone",
