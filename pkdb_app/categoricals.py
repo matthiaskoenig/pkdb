@@ -200,7 +200,7 @@ CHARACTERISTIC_DATA = [
         "ethnicity",
         DEMOGRAPHICS,
         CATEGORIAL_TYPE,
-        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic"],
+        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese"],
         dimensionless_norm_unit,
     ),
     # -------------- Physiology --------------
