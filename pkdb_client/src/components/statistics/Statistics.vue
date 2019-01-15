@@ -4,8 +4,10 @@
             <v-toolbar-title>Statistics<br/></v-toolbar-title>
         </v-toolbar>
             <v-flex>
+                <vue-plotly :data="studies.data" :layout="studies.layout" :options="options" :autoResize="false"/>
                 <vue-plotly :data="interventions.data" :layout="interventions.layout" :options="options" :autoResize="false"/>
                 <vue-plotly :data="individuals.data" :layout="individuals.layout" :options="options" :autoResize="false"/>
+
             </v-flex>
     </v-card>
 </template>
@@ -69,6 +71,20 @@
                     },
                     data: [{
                         values: this.data.individual_count,
+                        labels: this.data.labels,
+                        type: 'pie'
+                    }]
+                };
+            },
+            studies() {
+                return {
+                    layout: {
+                        title: 'Studies',
+                        height: height,
+                        width: width
+                    },
+                    data: [{
+                        values: this.data.study_count,
                         labels: this.data.labels,
                         type: 'pie'
                     }]

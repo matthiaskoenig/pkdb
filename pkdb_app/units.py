@@ -90,12 +90,14 @@ UNITS = {
     # AUC
     "h*mg/l":None,
     "h*µg/l": None,
+    "h*µg/ml": None,
     "mg*h/l": None,
     "mg/l*h": None,
 
     "ng*h/ml": None,
     "ng*min/ml": None,
     "µg*h/ml": None,  # -> mg*h/l
+
     "µg/ml*h": None,  # -> mg*h/l
     "mg*min/l": None,  # -> mg*h/l
     "mg/l*min": None,  # -> mg*h/l
@@ -104,6 +106,7 @@ UNITS = {
     "µmol/l*h": None,  # -> mg*h/l (with molar weight)
     "pmol*h/ml": None,
     "pmol/ml*h": None,
+    "h*pmol/ml": None,
     "nmol*h/l": None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
@@ -221,7 +224,8 @@ UNIT_CONVERSIONS = [
 
     # AUC
     UnitConversion("h*mg/l", target="mg*h/l", multiplier=1.0),
-    UnitConversion("µg*h/ml""h*µg/l", target="mg*h/l", multiplier=1.0),
+
+    UnitConversion("h*µg/ml", target="mg*h/l", multiplier=1.0),
 
     UnitConversion("µg*h/ml", target="mg*h/l", multiplier=1.0),
 

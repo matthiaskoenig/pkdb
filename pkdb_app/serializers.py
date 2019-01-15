@@ -327,6 +327,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         if np.isnan(entry_value):
                             entry_value = None
 
+                    if isinstance(entry_value, str):
+                            entry_value = entry_value.strip()
+
                     if keys[0] == "interventions":
                         entry_value = [v.strip() for v in entry_value.split(",")]
                         set_keys(entry_dict, entry_value, *keys[:1])

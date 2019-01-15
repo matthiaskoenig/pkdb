@@ -65,8 +65,12 @@ SUBSTANCES_DATA = [
     "morphine/codine",
     "(Mor+M3G+M6G)/(Cod+C6G)",
     "morphine+M3G+M6G",
+    "morphine+normorphine+M3G+M6G+codeine+norcodeine+C3G+C6G",
     "M+N+C-6-G",
     "quinidine",
+    # debrisoquine
+    "debrisoquine",
+    "debrisoquine/4-hydroxydebrisoquine",
     # medication
     "salbutamol",
     "beclometasone",
@@ -128,7 +132,12 @@ SUBSTANCES_DATA = [
     "digoxin",
     "clozapine",
     "carbon monoxide",
-
+    #other
+    "hydrogen",
+    "sparteine",
+    "sparteine/(2-dehydrosparteine+5-dehydrosparteine)", # Metabolic Ratio of Sparteine
+    "sulfasalazine",
+    "sulfapyridine",
     # ----------------------
     # glucose metabolism
     # ----------------------

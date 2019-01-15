@@ -123,13 +123,6 @@ class InterventionSerializer(ExSerializer):
             #    self._validate_requried_key(data,"time")
             #    self._validate_requried_key(data,"time_unit")
 
-
-
-
-
-
-
-
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
 

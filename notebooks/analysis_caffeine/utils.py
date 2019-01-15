@@ -52,6 +52,12 @@ def caffeine_idx(data):
            & (data[ ('healthy', 'choice')] == 'Y') \
            & (data['tissue'] == 'plasma')
 
+def codeine_idx(data):
+    return (data.substance_name_intervention == 'codeine') \
+           & (data.substance_name == 'codeine') \
+           & (data['tissue'] == 'plasma')
+
+
 def pktype_data(data,pktype):
     return data[data.pktype==pktype]
     

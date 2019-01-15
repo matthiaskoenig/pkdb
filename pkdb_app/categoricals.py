@@ -200,7 +200,7 @@ CHARACTERISTIC_DATA = [
         "ethnicity",
         DEMOGRAPHICS,
         CATEGORIAL_TYPE,
-        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese"],
+        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese"],
         dimensionless_norm_unit,
     ),
     # -------------- Physiology --------------
@@ -300,14 +300,14 @@ CHARACTERISTIC_DATA = [
         "abstinence",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee"],
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
     CharacteristicType(
         "consumption",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee"],
+        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
         NormalizableUnit({"-": None, "g/day": None, "mg/day": None, "cups/day": None}),
     ),
 
@@ -452,6 +452,7 @@ CharacteristicType(
          "*7/*41",
          "*x/*4",
          "*4/*4",
+         "*3/*4",
          "*1x2/*1",
          "*1/*41",
          "*4/*41",
@@ -463,7 +464,8 @@ CharacteristicType(
          "*other/*29",
          "*other/*41",
          "*17/*17",
-         "*29/*29"
+         "*29/*29",
+         "*5/*5",
          ],
         dimensionless_norm_unit,
     ),
@@ -570,7 +572,7 @@ def validate_categorials(data, category_class):
 # ---------------------------------------------------
 # Output
 # ---------------------------------------------------
-OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid","saliva/plasma"]
+OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid","saliva/plasma","breath"]
 
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
@@ -583,6 +585,7 @@ auc_norm_unit = NormalizableUnit(
         "mg*h/l": None,
         "mg/l*h": "mg*h/l",
         "µg*h/ml": "mg*h/l",
+        "h*µg/ml":"mg*h/l",
         "h*µg/l":"mg*h/l",
         "µg/ml*h": "mg*h/l",
         "ng*min/ml": "mg*h/l",
@@ -593,6 +596,7 @@ auc_norm_unit = NormalizableUnit(
         "µmol*h/l": None,
         "µmol/l*h": "µmol*h/l",
         "pmol/ml*h": None,
+        "h*pmol/ml": None,
         "nmol*h/l": "µmol*h/l",
         "µg/ml*h/kg": "mg*h/l/kg",
         "µU/ml*min": None,
@@ -642,14 +646,21 @@ concentration_norm_unit = NormalizableUnit(
         "ng/g": None, # per g plasma
     }
 )
-ratio_norm_unit = NormalizableUnit(
-    {"-": None,
-     "%": "-",
-     "mega": None,
-     "kilo": None,
-     "milli": None,
-     "micro": None,
-     })
+norm_units =  {
+    "-": None,
+    "%": "-",
+    "mega": None,
+    "kilo": None,
+    "milli": None,
+    "micro": None,
+     }
+ratio_norm_unit = NormalizableUnit(norm_units)
+recovery_norm_unit = NormalizableUnit(
+    {
+        **norm_units,
+        "µmol": None,
+     }
+   )
 clearance_norm_unit = NormalizableUnit(
     {
         "ml/min": "l/h",
@@ -691,6 +702,11 @@ PK_DATA = [
         auc_norm_unit,
     ),
     PharmacokineticsType(
+        "auc_relative",
+        "Relative area under the curve (AUC), AUC of a substance relative to other measured metabolites",
+        ratio_norm_unit,
+    ),
+    PharmacokineticsType(
         "aumc_inf",
         "Area under first moment curve (AUMC), extrapolated until infinity.",
         aumc_norm_unit,
@@ -722,7 +738,6 @@ PharmacokineticsType(
     PharmacokineticsType(
         "clearance_renal", "Renal clearance of given substance.", clearance_norm_unit
     ),
-
     PharmacokineticsType(
         "vd", "Volume of distribution. "
               "If the volume of distribution is calculated with the unbound substance use vd_unbound.", vd_norm_unit
@@ -733,6 +748,9 @@ PharmacokineticsType(
     PharmacokineticsType("thalf", "Half-life for given substance.", time_norm_unit),
     PharmacokineticsType(
         "tmax", "Time of maximum for given substance.", time_norm_unit
+    ),
+    PharmacokineticsType(
+        "oro-cecal transit time", "The transit time was taken as the time when breath hydrogen excretionincreased to above twice the baseline value.", time_norm_unit
     ),
     PharmacokineticsType(
         "mrt",
@@ -758,7 +776,7 @@ PharmacokineticsType(
         "fraction_unbound", "Unbound fraction of given substance (see also plasma_binding).", ratio_norm_unit
     ),
     PharmacokineticsType(
-        "recovery", "Fraction recovered of given substance.", ratio_norm_unit
+        "recovery", "Fraction recovered of given substance.", recovery_norm_unit
     ),
     PharmacokineticsType(
         "egp", "endogenous glucose production (rate)", rate_norm_unit
