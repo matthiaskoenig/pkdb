@@ -108,6 +108,7 @@ UNITS = {
     "pmol/ml*h": None,
     "h*pmol/ml": None,
     "nmol*h/l": None,
+    "nmol/l*h":None,
     "µg/ml*h/kg": None,  # -> mg*h/l/kg
     "mg*h/l/kg": None,
 
@@ -145,6 +146,7 @@ UNITS = {
     "ml/h": None,  # -> ml/min
     "l/h": None,
     "l/h/kg": None,
+    "l/h*kg": None,
     "ml/h/kg": None,  # -> l/h/kg
     "ml/kg/min": None,
     "ml/min/kg": None,  # -> l/h/kg
@@ -269,6 +271,7 @@ UNIT_CONVERSIONS = [
 
     # clearance
     UnitConversion("ml/h/kg", target="l/h/kg", multiplier=1.0E-3),
+    UnitConversion("l/h*kg", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/kg/h", target="l/h/kg", multiplier=1.0E-3),
     UnitConversion("ml/min/kg", target="l/h/kg", multiplier=1.0E-3 * 60),
     UnitConversion("ml/kg/min", target="l/h/kg", multiplier=1.0E-3 * 60),

@@ -66,6 +66,7 @@ SUBSTANCES_DATA = [
     "(Mor+M3G+M6G)/(Cod+C6G)",
     "morphine+M3G+M6G",
     "morphine+normorphine+M3G+M6G+codeine+norcodeine+C3G+C6G",
+    "morphine+normorphine+M3G+M6G+codeine+norcodeine+C3G+NCG",
     "M+N+C-6-G",
     "quinidine",
     # debrisoquine

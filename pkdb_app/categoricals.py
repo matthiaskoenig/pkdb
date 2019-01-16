@@ -598,6 +598,7 @@ auc_norm_unit = NormalizableUnit(
         "pmol/ml*h": None,
         "h*pmol/ml": None,
         "nmol*h/l": "µmol*h/l",
+        "nmol/l*h": "µmol*h/l",
         "µg/ml*h/kg": "mg*h/l/kg",
         "µU/ml*min": None,
     }
@@ -667,6 +668,7 @@ clearance_norm_unit = NormalizableUnit(
         "ml/h": "l/h",  # -> ml/min
         "l/h": None,
         "l/h/kg": None,
+        "l/h*kg":"l/h/kg",
         "ml/h/kg": "l/h/kg",  # -> l/h/kg
         "ml/kg/min": None,
         "ml/min/kg": "l/h/kg",  # -> l/h/kg
@@ -731,6 +733,9 @@ PharmacokineticsType(
     ),
     PharmacokineticsType(
         "clearance_unbound", "Clearance of unbound substance.", clearance_norm_unit
+    ),
+    PharmacokineticsType(
+        "clearance_partial", "Partial clearance of substance. It can occure if several path are present. The pathway is encoded by the substance", clearance_norm_unit
     ),
     PharmacokineticsType(
         "clearance_intrinsic", "Intrinsic clearance of substance.", clearance_norm_unit
