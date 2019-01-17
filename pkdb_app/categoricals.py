@@ -688,6 +688,7 @@ rate_norm_unit = NormalizableUnit({
     "µmol/kg/min": None,
     "mU/min": None,
     "mg/min": None,
+    "µg/min": None,
     "mg/kg/min": None,
 })
 
@@ -797,6 +798,9 @@ PharmacokineticsType(
     ),
     PharmacokineticsType(
         "rate_secretion", "rate secretion (rate)", rate_norm_unit
+    ),
+PharmacokineticsType(
+        "rate_renal", "rate renal (rate)", rate_norm_unit
     ),
 
     PharmacokineticsType(

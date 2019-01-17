@@ -154,6 +154,7 @@ UNITS = {
 
     # rate
     "mg/min": None,
+    "µg/min": None,
     "mg/kg/min": None,
     "mg/min/kg": None,
     "µmol/min": None,
