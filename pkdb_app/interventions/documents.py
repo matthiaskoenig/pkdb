@@ -11,6 +11,13 @@ substance_index.settings(**elastic_settings)
 class SubstanceDocument(DocType):
     pk = fields.IntegerField()
     name = string_field('name')
+    studies = string_field('study_names', multi=True)
+    interventions = string_field('intervention_pks', multi=True)
+    outputs = string_field('output_pks', multi=True)
+    timecourses = string_field('timecourse_pks', multi=True)
+
+
+
     class Meta(object):
         model = Substance
         # Ignore auto updating of Elasticsearch when a model is saved
@@ -168,5 +175,3 @@ class TimecourseDocument(DocType):
             ignore_signals = True
             # Don't perform an index refresh after every update (overrides global setting):
             auto_refresh = False
-
-

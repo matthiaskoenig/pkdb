@@ -20,7 +20,7 @@ from .interventions.views import (
     SubstanceViewSet,
     InterventionOptionViewSet,
     OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet, ElasticInterventionViewSet,
-    ElasticOutputViewSet, ElasticTimecourseViewSet)
+    ElasticOutputViewSet, ElasticTimecourseViewSet, SubstanceStatisticsViewSet)
 from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
@@ -61,6 +61,7 @@ router.register(r"users", UserCreateViewSet)
 #substance
 router.register("substances", SubstanceViewSet, base_name="substances")
 router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
+router.register("substances_statistics", SubstanceStatisticsViewSet, base_name="substances_statistics")
 
 
 router.register("datafiles", DataFileViewSet, base_name="datafiles")

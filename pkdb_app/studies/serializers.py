@@ -321,7 +321,7 @@ class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
 class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
-        model = Reference
+        model = Study
         fields = ["pk","name"]#, 'url']
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
@@ -423,8 +423,3 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             return list(obj.keywords)
         else:
             return []
-
-
-
-
-

@@ -129,7 +129,6 @@ def update_index(request):
         update_instances[GroupDocument] = study.groups
         update_instances[IndividualDocument] = study.individuals
         update_instances[InterventionDocument] = study.interventions
-
         update_instances[OutputDocument] = study.outputs
         update_instances[TimecourseDocument] = study.timecourses
 
@@ -252,6 +251,3 @@ class ElasticReferenceViewSet(DocumentViewSet):
         "pdf":"pdf",
         "authors":"authors.last_name",
     }
-
-
-

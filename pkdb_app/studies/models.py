@@ -103,6 +103,12 @@ class Study(Sidable, models.Model):
     class Meta:
         verbose_name_plural = "studies"
 
+    def __unicode__(self):
+        return '%s' % (self.name)
+
+    def __str__(self):
+        return '%s' % (self.name)
+
     @property
     def individuals(self):
         try:

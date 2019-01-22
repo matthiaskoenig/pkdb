@@ -90,6 +90,18 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         substance, created = Substance.objects.update_or_create(**validated_data)
         return substance
 
+class SubstanceStatisticsSerializer(serializers.ModelSerializer):
+    """ Substance. """
+    studies = serializers.StringRelatedField(many=True, read_only=True)
+    interventions = serializers.PrimaryKeyRelatedField(many=True, source="interventions_final",read_only=True)
+    outputs = serializers.PrimaryKeyRelatedField(many=True, source="outputs_final", read_only=True)
+    timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_final",read_only=True)
+
+    class Meta:
+        model = Substance
+        fields = ["name","studies","outputs","interventions","timecourses"]
+
+
 # ----------------------------------
 # Interventions
 # ----------------------------------
@@ -553,6 +565,9 @@ class OutputSetSerializer(ExSerializer):
 ###############################################################################################
 
 
+
+
+
 class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
@@ -704,5 +719,3 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
             except TypeError:
                 pass
         return rep
-
-

@@ -12,7 +12,7 @@ from pkdb_app.interventions.documents import SubstanceDocument, InterventionDocu
 from pkdb_app.interventions.models import (
     Substance)
 from pkdb_app.interventions.serializers import (
-    SubstanceSerializer,InterventionElasticSerializer,
+    SubstanceSerializer, SubstanceStatisticsSerializer, InterventionElasticSerializer,
     OutputElasticSerializer, TimecourseElasticSerializer)
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 
@@ -30,6 +30,12 @@ class SubstanceViewSet(CreateListModelMixin,viewsets.ModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceSerializer
     permission_classes = (IsAdminUser,)
+
+class SubstanceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Substance.objects.all()
+    serializer_class = SubstanceStatisticsSerializer
+
+
 
 ###############################################################################################
 # Option Views
@@ -79,6 +85,8 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
 
     def list(self, request):
         return Response(self.get_options())
+
+
 
 ###############################################################################################
 # Elastic Views

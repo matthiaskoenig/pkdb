@@ -58,6 +58,21 @@ class Substance(models.Model):
     def __str__(self):
         return self.name
 
+
+    @property
+    def outputs_final(self):
+        return self.outputs.filter(final=True)
+
+    @property
+    def timecourses_final(self):
+        return self.timecourses.filter(final=True)
+
+    @property
+    def interventions_final(self):
+        return self.interventions.filter(final=True)
+
+
+
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
@@ -187,6 +202,7 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     raw = models.ForeignKey("Intervention", related_name="norm", on_delete=models.CASCADE, null=True)
     final = models.BooleanField(default=False)
+    substance = models.ForeignKey(Substance, related_name="interventions",null=True, on_delete=models.PROTECT)
 
 
     @property
@@ -268,7 +284,7 @@ class OutputSet(models.Model):
 
 class AbstractOutput(models.Model):
 
-    substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
+    substance = models.ForeignKey(Substance,null=True, on_delete=models.SET_NULL)
     tissue = models.CharField(
         max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
     )
@@ -330,7 +346,7 @@ class Output(ValueableNotBlank, AbstractOutput):
     _interventions = models.ManyToManyField(Intervention)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
+    substance = models.ForeignKey(Substance,related_name="outputs",on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
     raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
 
@@ -495,7 +511,7 @@ class Timecourse(AbstractOutput):
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    substance = models.ForeignKey(Substance,on_delete=models.PROTECT)
+    substance = models.ForeignKey(Substance,related_name="timecourses", on_delete=models.PROTECT)
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
 
     value = ArrayField(models.FloatField(null=True), null=True)
@@ -862,5 +878,3 @@ class Timecourse(AbstractOutput):
                         output_data[field] = None
 
             return output_data
-
-
