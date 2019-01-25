@@ -10,42 +10,15 @@ from distutils.util import strtobool
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ------------------------------------------------------------------------------------------------------------------
-import environ
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-# reading .env file
-environ.Env.read_env(env_file=join(BASE_DIR, '.env'))
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ['SECRET_KEY']
 
-# overwrite environment variables with local .env settings
-for key in [
-            "PKDB_SECRET_KEY",
-            "PKDB_API_BASE",
-            "PKDB_DEFAULT_PASSWORD",
-            "PKDB_POSTGRES_PASSWORD",
-            "PKDB_EMAIL_HOST_USER",
-            "PKDB_EMAIL_HOST_PASSWORD",
-            ]:
-    os.environ[key] = env(key)
-    # print(key, os.environ[key])
+# SECURITY WARNING: keep the secret key used in production secret!
+DEFAULT_PASSWORD = os.environ['DEFAULT_PASSWORD']
 
-
-# either 'Local' or 'Production'
-DJANGO_CONFIGURATION = os.getenv("PKDB_DJANGO_CONFIGURATION", "Local")
-SECRET_KEY = os.getenv("PKDB_SECRET_KEY")
-API_BASE = os.getenv("PKDB_API_BASE")
-DEFAULT_PASSWORD = os.getenv("PKDB_DEFAULT_PASSWORD")
-
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY could not be read, export the 'PKDB_SECRET_KEY' environment variable.")
-if not DEFAULT_PASSWORD:
-    raise ValueError("DEFAULT_PASSWORD could not be read, export the 'PKDB_DEFAULT_PASSWORD' environment variable.")
-if not API_BASE:
-    raise ValueError("API_BASE could not be read, export the 'PKDB_API_BASE' environment variable.")
-
+API_BASE = os.environ['API_BASE']
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
-
 AUTHENTICATION_BACKENDS = (
 
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -54,7 +27,6 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
 
 INSTALLED_APPS = (
     "django.contrib.admin",
@@ -284,29 +256,27 @@ SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
 }
 
+# Postgres
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ['DB_NAME'],
+        "USER": os.environ['DB_USER'],
+        "HOST": os.environ['DB_URL'],
+        "PASSWORD": os.environ['DB_PASSWORD'],
+        "PORT": os.environ['DB_PORT'],
+    }
+}
 
-# Set DEBUG to False as a default for safety
-# https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = strtobool(os.getenv("DJANGO_DEBUG", "no"))
-
-
+DJANGO_CONFIGURATION = os.environ['DJANGO_CONFIGURATION']
 # ------------------------------
 # LOCAL
 # ------------------------------
-if DJANGO_CONFIGURATION == 'Local':
+if DJANGO_CONFIGURATION == 'local':
     DEBUG = True
     LOGIN_URL = "http://172.30.10.11:8080/#/account"
     LOGIN_REDIRECT_URL = "http://172.30.10.11:8080/#/account"
     ACCOUNT_LOGOUT_REDIRECT_URL = "http://172.30.10.11:8080/#/account"
-
-    # Postgres
-    DATABASES = {
-        "default": dj_database_url.config(
-            # postgres://USER:PASSWORD@HOST:PORT/NAME
-            default=f"postgres://postgres:pass@postgres:5432/postgres",
-            conn_max_age=int(os.getenv("POSTGRES_CONN_MAX_AGE", 600)),
-        )
-    }
 
     # Mail
     EMAIL_HOST = "localhost"
@@ -323,7 +293,7 @@ if DJANGO_CONFIGURATION == 'Local':
 # -------------------------------------------------
 # Production
 # -------------------------------------------------
-elif DJANGO_CONFIGURATION == 'Production':
+elif DJANGO_CONFIGURATION == 'production':
     DEBUG = False
     LOGIN_URL = "/#/account"
     LOGIN_REDIRECT_URL = "/#/account"
@@ -331,18 +301,6 @@ elif DJANGO_CONFIGURATION == 'Production':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
-
-    # Postgres
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "pkdb",
-            "USER": "pkdb_user",
-            "HOST": "localhost",
-            "PASSWORD": POSTGRES_PASSWORD,
-            "PORT": 5432,
-        }
-    }
 
     # Mail
     # Mail is sent using the SMTP host and port specified in the EMAIL_HOST and EMAIL_PORT settings.
@@ -356,8 +314,8 @@ elif DJANGO_CONFIGURATION == 'Production':
 
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = os.getenv("PKDB_EMAIL_HOST_USER")
-    EMAIL_HOST_PASSWORD = os.getenv("PKDB_EMAIL_HOST_PASSWORD")
+    EMAIL_HOST_USER = EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = E
 
     if not EMAIL_HOST_USER:
         raise ValueError("EMAIL_HOST_USER could not be read, export the 'PKDB_EMAIL_HOST_USER' environment variable.")

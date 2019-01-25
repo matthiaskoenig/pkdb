@@ -7,10 +7,10 @@ check_timeout = os.getenv("POSTGRES_CHECK_TIMEOUT", 30)
 check_interval = os.getenv("POSTGRES_CHECK_INTERVAL", 1)
 interval_unit = "second" if check_interval == 1 else "seconds"
 config = {
-    "dbname": os.getenv("POSTGRES_DB", "postgres"),
-    "user": os.getenv("POSTGRES_USER", "postgres"),
-    "password": os.getenv("POSTGRES_PASSWORD", "pass"),
-    "host": os.getenv("DATABASE_URL", "postgres"),
+    "dbname": os.environ['DB_NAME'],
+    "user": os.environ['DB_USER'],
+    "password": os.environ['DB_PASSWORD'],
+    "host": os.environ['DB_URL'],
 }
 
 start_time = time()

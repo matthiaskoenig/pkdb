@@ -1,3 +1,6 @@
+#########################################################
+# PKDB
+#########################################################
 # docker-compose up
 # docker-compose -f docker-compose-production.yml up
 #
@@ -5,12 +8,7 @@
 #          /manage.py makemigrations &&
 #           ./manage.py migrate &&
 #           ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinpu
-#
-#
-#
-#
-#
-
+#########################################################
 version: '3'
 
 volumes:
@@ -31,9 +29,11 @@ services:
       - ./web:/code
       - django_app:/usr/src/app
       - django_static:/usr/src/app/static
-    env_file: .env
+    env_file: .env.local
     expose: 
       - "8000"
+    ports:
+      - "8000:8000"
     depends_on:
      - postgres
      - elasticsearch
@@ -57,12 +57,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql
-      # - postgres_data:/var/lib/postgresql/data/
-    environment:
-     POSTGRES_DB: postgres
-     POSTGRES_USER: postgres
-     POSTGRES_PASSWORD: password
+      - postgres_data:/var/lib/postgresql/data
 
   elasticsearch:
     restart: always
