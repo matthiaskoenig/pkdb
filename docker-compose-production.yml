@@ -1,4 +1,8 @@
-version: '3'
+# docker-compose up
+# docker-compose -f docker-compose-production.yml up
+
+
+version: '2'
 
 volumes:
   postgres_data:
@@ -18,29 +22,20 @@ services:
       PKDB_EMAIL_HOST_PASSWORD: ""
 
     volumes:
-      # - ./:/code
       - /usr/src/app
       - /usr/src/app/static
-    env_file: .env
+    env_file: ./web/.env
     expose: 
       - "8000"
-    # depends_on:
-    #  - postgres
-    #  - elasticsearch
-    
-    #command: >
-    #  bash -c "python wait_for_postgres.py &&
-    #           ./manage.py makemigrations &&
-    #           ./manage.py migrate &&
-    #           ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinput &&
-    #           ./manage.py runserver 0.0.0.0:8000"
+    ports: 
+      - "8000:8000"
     command: /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 2 -b :8000
-    
+
   nginx:
     restart: always
     build: ./nginx/
     ports:
-      - "80:80"
+      - "1234:80"
     volumes:
       - /www/static
     volumes_from:
@@ -48,27 +43,23 @@ services:
     links:
       - web:web
 
-  db:
+  postgres:
     restart: always
     image: postgres:10.5
     ports:
       - "5433:5432"
     volumes:
-      # - postgres_data:/var/lib/postgresql
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql
+      # - postgres_data:/var/lib/postgresql/data/
     environment:
      POSTGRES_DB: postgres
      POSTGRES_USER: postgres
      POSTGRES_PASSWORD: password
 
-  elastic:
+  elasticsearch:
     restart: always
     image: elasticsearch:6.4.2
     ports:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
-
-
-
-

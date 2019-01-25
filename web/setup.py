@@ -63,7 +63,7 @@ setup(
     zip_safe=False,
     # List run-time dependencies here.  These will be installed by pip when
     install_requires=[
-        "pip>=18.1",
+        "pip>=19.0.1",
 
         # Core
         "pytz==2018.4",
