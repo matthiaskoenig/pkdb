@@ -49,6 +49,16 @@ services:
     depends_on:
       - postgres
 
+  setup_db:
+    build: ./web
+    command: bash -c "/usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
+    env_file: .env.local
+    volumes:
+      - ./web:/usr/src/app
+      - django_app:/usr/src/app
+    depends_on:
+      - migration
+
   nginx:
     restart: always
     image: nginx:1.15
