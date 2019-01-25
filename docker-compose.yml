@@ -3,7 +3,7 @@
 #########################################################
 #   docker-compose up -d
 #########################################################
-version: '3'
+version: '2'
 
 volumes:
   postgres_data:
@@ -37,13 +37,16 @@ services:
 
   nginx:
     restart: always
-    build: ./nginx/
+    image: nginx:1.13
     ports:
-      - "1234:80"
+      - 1234:80
     volumes:
-      - /www/static
+    #  - /www/static
+      - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_app:/usr/src/app
       - django_static:/usr/src/app/static
+    depends_on:
+      - web
     links:
       - web:web
 
