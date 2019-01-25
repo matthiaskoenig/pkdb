@@ -3,7 +3,7 @@
 #########################################################
 #   docker-compose up -d
 #########################################################
-version: '2'
+version: '3'
 
 volumes:
   postgres_data:
@@ -13,6 +13,8 @@ volumes:
   django_app:
     driver: local
   django_static:
+    driver: local
+  vue_dist:
     driver: local
 
 services:
@@ -45,8 +47,10 @@ services:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_app:/usr/src/app
       - django_static:/usr/src/app/static
+      - vue_dist:/usr/share/nginx/html
     depends_on:
       - web
+      - frontend
     links:
       - web:web
 
@@ -70,6 +74,8 @@ services:
     restart: always
     build: ./frontend
     ports:
-      - 8080:8080
+      - "8080:8080"
+    volumes:
+      - vue_dist:/usr/share/nginx/html
     depends_on:
       - web

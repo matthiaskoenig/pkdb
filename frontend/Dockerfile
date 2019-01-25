@@ -4,10 +4,16 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+EXPOSE 8080
+CMD npm run serve
+
+
+# RUN npm run build
+# RUN mkdir -p /usr/share/nginx/html
+# COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 8080
-CMD ["nginx", "-g", "daemon off;"]
+#FROM nginx:stable-alpine as production-stage
+#COPY --from=build-stage /app/dist /usr/share/nginx/html
+#EXPOSE 8080
+#CMD ["nginx", "-g", "daemon off;"]

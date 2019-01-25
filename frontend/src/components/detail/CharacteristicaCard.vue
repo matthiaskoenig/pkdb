@@ -96,7 +96,6 @@
         margin-bottom: 20px;
         width: 110px;
         height: 85px;
-        // background-color: #0d47a1;
 
         border-style: none;
         border-width: thin;

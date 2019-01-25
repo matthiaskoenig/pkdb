@@ -102,6 +102,5 @@
 <style scoped>
     .study-info {
         padding-top: 10px;
-    / / height: 70 px;
     }
 </style>
