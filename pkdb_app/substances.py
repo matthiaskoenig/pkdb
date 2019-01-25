@@ -62,7 +62,7 @@ SUBSTANCES_DATA = [
     "norcodeine",
     "norcodeine-glucuronide",
     "codeine/morphine",
-    "morphine/codine",
+    "morphine/codeine",
     "(Mor+M3G+M6G)/(Cod+C6G)",
     "morphine+M3G+M6G",
     "morphine+normorphine+M3G+M6G+codeine+norcodeine+C3G+C6G",

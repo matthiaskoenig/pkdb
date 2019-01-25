@@ -117,6 +117,8 @@ class Study(Sidable, models.Model):
             return []
 
 
+
+
     @property
     def groups(self):
         try:
@@ -145,6 +147,27 @@ class Study(Sidable, models.Model):
             return self.outputset.timecourses.all()
         except AttributeError:
             return []
+
+    def get_substances(self):
+        #substances = self.substances.values_list("pk",flat=True)
+        substances = Substance.objects.none()
+
+        if self.interventions:
+            substances2 = self.interventions.filter(substance__isnull=False).values_list("substance",flat=True)
+            substances = substances.union(substances2)
+
+
+
+        if self.outputs:
+
+            substances2 = self.outputs.filter(substance__isnull=False).values_list("substance", flat=True)
+            substances = substances.union(substances2)
+
+        if self.timecourses:
+            substances2 = self.timecourses.filter(substance__isnull=False).values_list("substance", flat=True)
+            substances = substances.union(substances2).distinct()
+
+        return substances
 
     @property
     def substances_name(self):

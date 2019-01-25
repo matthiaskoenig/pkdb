@@ -281,12 +281,31 @@ class StudySerializer(SidSerializer):
 
 
         many_2_many_fields = ["curators","keywords","substances"]
+
+        # cumulated substances from interventions, outputs, timecourses
+
+        study_substances = set([substance.pk for substance in related["substances"]])
+        study_cumulated_substances = set(study.get_substances())
+        related["substances"] = study_cumulated_substances | study_substances
+
+
         for field in many_2_many_fields:
             if len(related[field]) > 0 :
                 related_m2m_field = getattr(study,field)
                 related_m2m_field.clear()
                 for instance in related[field]:
                     related_m2m_field.add(instance)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -306,6 +325,7 @@ class StudySerializer(SidSerializer):
             for file_pk in related["files"]:
                 study.files.add(file_pk)
             study.save()
+
 
         return study
 

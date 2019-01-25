@@ -91,6 +91,14 @@ STUDY_DESIGN_DATA = [
 ]
 STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
+# ---------------------------------------------------
+# Study licence
+# ---------------------------------------------------
+STUDY_LICENCE_DATA = [
+    "OPEN",  # (open reference)
+
+]
+STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
 # ---------------------------------------------------
 # Keywords
@@ -824,7 +832,7 @@ PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
 
 
 if __name__ == "__main__":
-    """ 
+    """
     Just run this module to have simple check if all units are working and definitions are correct.
     """
 

@@ -11,6 +11,8 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.apps import apps
+
 
 from ..subjects.models import Group, DataFile, Individual
 
@@ -70,6 +72,21 @@ class Substance(models.Model):
     @property
     def interventions_final(self):
         return self.interventions.filter(final=True)
+
+    #@property
+    #def all_studies(self):
+        #Study = apps.get_model('studies', 'Study')
+
+
+        #studies = [study for study in Study.objects.all() if self in study.all_substances.all()]
+
+        #Intervention.objects.
+        #studies = studies | Study.objects.filter(interventionset__intervention_exs__interventions__in = self.interventions)
+        #studies = studies | Study.objects.filter( reduce(lambda x, y: x | y, [Q(interventionset__interventions__contains=intervention) for intervention in #self.interventions.all()]))
+
+
+        #return studies
+        #return Study.objects.filter(all_substances__contains = self)
 
 
 
