@@ -18,11 +18,11 @@ volumes:
     driver: local
 
 services:
-  web:
+  backend:
     restart: always
-    build: ./web
+    build: ./backend
     volumes:
-      - ./web:/usr/src/app
+      - ./backend:/usr/src/app
       - django_app:/usr/src/app
       - django_static:/usr/src/app/static
     env_file: .env.local
@@ -38,11 +38,11 @@ services:
     command: bash -c "/usr/local/bin/python /usr/src/app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 4 -b :8000"
 
   migration:
-    build: ./web
+    build: ./backend
     command: bash -c "/usr/local/bin/python /usr/src/app/manage.py makemigrations & /usr/local/bin/python /usr/src/app/manage.py migrate"
     env_file: .env.local
     volumes:
-      - ./web:/usr/src/app
+      - ./backend:/usr/src/app
       - django_app:/usr/src/app
     links:
       - postgres:postgres
@@ -50,11 +50,11 @@ services:
       - postgres
 
   setup_db:
-    build: ./web
-    command: bash -c "/usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
+    build: ./backend
+    command: bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password $DEFAULT_PASSWORD --email koenigmx@hu-berlin.de --noinput && /usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
     env_file: .env.local
     volumes:
-      - ./web:/usr/src/app
+      - ./backend:/usr/src/app
       - django_app:/usr/src/app
     depends_on:
       - migration
@@ -71,10 +71,10 @@ services:
       - django_static:/usr/src/app/static
       - vue_dist:/usr/share/nginx/html
     depends_on:
-      - web
+      - backend
       - frontend
     links:
-      - web:web
+      - backend:backend
 
   postgres:
     restart: always
@@ -100,4 +100,4 @@ services:
     volumes:
       - vue_dist:/usr/share/nginx/html
     depends_on:
-      - web
+      - backend
