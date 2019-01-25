@@ -1,13 +1,12 @@
 #########################################################
 # PKDB
 #########################################################
-# docker-compose up
-# docker-compose -f docker-compose-production.yml up
+#   docker-compose up -d
 #
-# TODO: run the migrations:
-#          /manage.py makemigrations &&
-#           ./manage.py migrate &&
-#           ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinpu
+# When services are up database migration must be run
+#   docker-compose run web /usr/local/bin/python manage.py makemigrations
+#   docker-compose run web /usr/local/bin/python manage.py migrate
+#   docker-compose run web /usr/local/bin/python manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinput
 #########################################################
 version: '3'
 
@@ -32,8 +31,8 @@ services:
     env_file: .env.local
     expose: 
       - "8000"
-    ports:
-      - "8000:8000"
+    links:
+      - postgres:postgres
     depends_on:
      - postgres
      - elasticsearch
