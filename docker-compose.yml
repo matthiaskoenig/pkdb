@@ -33,7 +33,7 @@ services:
     depends_on:
      - postgres
      - elasticsearch
-    command: /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 2 -b :8000
+    command: bash -c "/usr/local/bin/python /usr/src/app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 4 -b :8000"
 
   nginx:
     restart: always
