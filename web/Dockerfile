@@ -5,9 +5,10 @@ ENV PYTHONUNBUFFERED 1
 COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
-# Adds our application code to the image
+# Adds application code to the image
 COPY . /usr/src/app
 WORKDIR /usr/src/app
+# install pkdb_app
 RUN pip install -e .
 
 EXPOSE 8000

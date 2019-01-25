@@ -37,9 +37,21 @@ services:
      - elasticsearch
     command: bash -c "/usr/local/bin/python /usr/src/app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 4 -b :8000"
 
+  migration:
+    build: ./web
+    command: bash -c "/usr/local/bin/python /usr/src/app/manage.py makemigrations & /usr/local/bin/python /usr/src/app/manage.py migrate"
+    env_file: .env.local
+    volumes:
+      - ./web:/usr/src/app
+      - django_app:/usr/src/app
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
+
   nginx:
     restart: always
-    image: nginx:1.13
+    image: nginx:1.15
     ports:
       - 1234:80
     volumes:
@@ -56,7 +68,7 @@ services:
 
   postgres:
     restart: always
-    image: postgres:10.5
+    image: postgres:11.1
     ports:
       - "5433:5432"
     volumes:
