@@ -65,3 +65,11 @@ services:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
+
+  frontend:
+    restart: always
+    build: ./frontend
+    ports:
+      - 8080:8080
+    depends_on:
+      - web
