@@ -20,7 +20,7 @@ services:
     restart: always
     build: ./web
     volumes:
-      - ./web:/code
+      - ./web:/usr/src/app
       - django_app:/usr/src/app
       - django_static:/usr/src/app/static
     env_file: .env.local

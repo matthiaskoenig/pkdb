@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 # Adds our application code to the image
 # COPY . code
-WORKDIR code
+WORKDIR /usr/src/app
 RUN pip install -e .
 
 EXPOSE 8000

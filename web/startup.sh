@@ -12,4 +12,4 @@ https://docs.docker.com/compose/startup-order/
 python ./manage.py collectstatic --noinput
 
 
-/usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000
+/usr/local/bin/gunicorn docker_django.wsgi:application -w 4 -b :8000

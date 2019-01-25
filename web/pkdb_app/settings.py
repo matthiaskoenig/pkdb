@@ -300,8 +300,6 @@ elif DJANGO_CONFIGURATION == 'production':
     ACCOUNT_LOGOUT_REDIRECT_URL = "/#/account"
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-    POSTGRES_PASSWORD = os.getenv("PKDB_POSTGRES_PASSWORD")
-
     # Mail
     # Mail is sent using the SMTP host and port specified in the EMAIL_HOST and EMAIL_PORT settings.
     # The EMAIL_HOST_USER and EMAIL_HOST_PASSWORD settings, if set, are used to authenticate to the SMTP server,
@@ -314,13 +312,13 @@ elif DJANGO_CONFIGURATION == 'production':
 
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = EMAIL_HOST_USER
-    EMAIL_HOST_PASSWORD = E
+    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 
     if not EMAIL_HOST_USER:
-        raise ValueError("EMAIL_HOST_USER could not be read, export the 'PKDB_EMAIL_HOST_USER' environment variable.")
+        raise ValueError("EMAIL_HOST_USER could not be read, export the 'EMAIL_HOST_USER' environment variable.")
     if not EMAIL_HOST_PASSWORD:
-        raise ValueError("EMAIL_HOST_PASSWORD could not be read, export the 'PKDB_EMAIL_HOST_PASSWORD' environment variable.")
+        raise ValueError("EMAIL_HOST_PASSWORD could not be read, export the 'EMAIL_HOST_PASSWORD' environment variable.")
 
     # Elastic Search
     ELASTICSEARCH_DSL = {
