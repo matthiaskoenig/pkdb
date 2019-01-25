@@ -18,15 +18,15 @@ services:
       PKDB_EMAIL_HOST_PASSWORD: ""
 
     volumes:
-      # - ./:/code
+      - ./:/code
       - /usr/src/app
       - /usr/src/app/static
     env_file: .env
     expose: 
       - "8000"
-    # depends_on:
-    #  - postgres
-    #  - elasticsearch
+    depends_on:
+     - postgres
+     - elasticsearch
     
     #command: >
     #  bash -c "python wait_for_postgres.py &&

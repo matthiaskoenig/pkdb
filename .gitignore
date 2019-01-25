@@ -33,6 +33,8 @@ sdist/
 var/
 wheels/
 *.egg-info/
+web/*.egg-info/
+
 .installed.cfg
 *.egg
 MANIFEST

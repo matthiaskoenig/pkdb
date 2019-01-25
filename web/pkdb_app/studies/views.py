@@ -12,7 +12,7 @@ from pkdb_app.interventions.documents import InterventionDocument, TimecourseDoc
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument
-from wait_for_postgres import pg_isready, config
+from pkdb_app.wait_for_postgres import pg_isready, config
 import psycopg2
 from .models import Reference, Study, Keyword
 from .serializers import (

@@ -1,6 +1,15 @@
 # docker-compose up
 # docker-compose -f docker-compose-production.yml up
-
+#
+# TODO: run the migrations:
+#          /manage.py makemigrations &&
+#           ./manage.py migrate &&
+#           ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinpu
+#
+#
+#
+#
+#
 
 version: '2'
 
@@ -22,6 +31,7 @@ services:
       PKDB_EMAIL_HOST_PASSWORD: ""
 
     volumes:
+      - ./web:/code
       - /usr/src/app
       - /usr/src/app/static
     env_file: ./web/.env
@@ -29,7 +39,12 @@ services:
       - "8000"
     ports: 
       - "8000:8000"
-    command: /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 2 -b :8000
+    depends_on:
+     - postgres
+     - elasticsearch
+    command: bash -c "python /code/pkdb_app/wait_for_postgres.py && /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 2 -b :8000"
+    # command: /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 2 -b :8000
+
 
   nginx:
     restart: always
