@@ -1,2 +1,0 @@
-# Docker
-Documentation of containerization

@@ -1,3 +1,14 @@
+#########################################################
+# PKDB
+#########################################################
+# docker-compose up
+# docker-compose -f docker-compose-production.yml up
+#
+# TODO: run the migrations:
+#          /manage.py makemigrations &&
+#           ./manage.py migrate &&
+#           ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinpu
+#########################################################
 version: '3'
 
 volumes:
@@ -5,70 +16,53 @@ volumes:
     driver: local
   elasticsearch_data:
     driver: local
+  django_app:
+    driver: local
+  django_static:
+    driver: local
 
 services:
   web:
     restart: always
     build: ./web
-    environment:
-      PKDB_SECRET_KEY: cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
-      PKDB_API_BASE: http://0.0.0.0:8000
-      PKDB_DEFAULT_PASSWORD: pkdb
-      PKDB_EMAIL_HOST_USER: ""
-      PKDB_EMAIL_HOST_PASSWORD: ""
-
     volumes:
-      - ./:/code
-      - /usr/src/app
-      - /usr/src/app/static
-    env_file: .env
+      - ./web:/code
+      - django_app:/usr/src/app
+      - django_static:/usr/src/app/static
+    env_file: .env.local
     expose: 
       - "8000"
+    ports:
+      - "8000:8000"
     depends_on:
      - postgres
      - elasticsearch
-    
-    #command: >
-    #  bash -c "python wait_for_postgres.py &&
-    #           ./manage.py makemigrations &&
-    #           ./manage.py migrate &&
-    #           ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinput &&
-    #           ./manage.py runserver 0.0.0.0:8000"
     command: /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 2 -b :8000
-    
+
   nginx:
     restart: always
     build: ./nginx/
     ports:
-      - "80:80"
+      - "1234:80"
     volumes:
       - /www/static
-    volumes_from:
-      - web
+      - django_app:/usr/src/app
+      - django_static:/usr/src/app/static
     links:
       - web:web
 
-  db:
+  postgres:
     restart: always
     image: postgres:10.5
     ports:
       - "5433:5432"
     volumes:
-      # - postgres_data:/var/lib/postgresql
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-     POSTGRES_DB: postgres
-     POSTGRES_USER: postgres
-     POSTGRES_PASSWORD: password
+      - postgres_data:/var/lib/postgresql/data
 
-  elastic:
+  elasticsearch:
     restart: always
     image: elasticsearch:6.4.2
     ports:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
-
-
-
-

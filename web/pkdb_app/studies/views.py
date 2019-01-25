@@ -12,8 +12,8 @@ from pkdb_app.interventions.documents import InterventionDocument, TimecourseDoc
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument
-from pkdb_app.wait_for_postgres import pg_isready, config
-import psycopg2
+
+
 from .models import Reference, Study, Keyword
 from .serializers import (
     ReferenceSerializer,
@@ -27,10 +27,12 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class KeywordViewSet(viewsets.ModelViewSet):
     queryset = Keyword.objects.all()
     serializer_class = KeywordSerializer
     permission_classes = (IsAdminUser,)
+
 
 ###################
 # References
@@ -49,9 +51,6 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (IsAdminUser,)
-
-
-
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -110,6 +109,7 @@ class ElasticKeywordViewSet(DocumentViewSet):
     serializer_class = KeywordSerializer
     lookup_field = 'id'
 
+
 @csrf_exempt
 def update_index(request):
     if request.method == 'POST':
@@ -117,11 +117,8 @@ def update_index(request):
         update_instances = {}
         try:
             study = Study.objects.get(sid=data["sid"])
-        except psycopg2.OperationalError:
-            pg_isready(**config)
-            study = Study.objects.get(sid=data["sid"])
         except ObjectDoesNotExist:
-            return JsonResponse({"success": "False","reason":"Instance not in database"})
+            return JsonResponse({"success": "False", "reason": "Instance not in database"})
 
         action = data.get("action",'index')
         update_instances[StudyDocument] = study
@@ -140,10 +137,6 @@ def update_index(request):
                 pass
 
         return JsonResponse({"success":"True"})
-
-
-
-
 
 
 class ElasticStudyViewSet(DocumentViewSet):
