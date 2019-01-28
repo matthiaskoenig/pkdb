@@ -1,7 +1,23 @@
 #########################################################
 # PKDB
 #########################################################
-#   docker-compose up -d
+# To start the container stack use
+#   set -a && source .env.local && docker-compose up --build
+# or
+#   set -a && source .env.local && docker-compose up
+# The containers should be rebuild from time to time via
+#   docker-compose up --build
+#
+# The running containers can be observed via
+#   watch docker container ls
+#
+# To get the logs of an individual container use
+#   docker container log <container_id>
+#
+# To rebuild volumes stop all containers and remove the
+# volume
+#   docker-compose down
+#   docker volume rm pkdb_postgres_data
 #########################################################
 version: '3'
 
@@ -23,7 +39,7 @@ services:
     build: ./backend
     volumes:
       - ./backend:/usr/src/app
-      - django_app:/usr/src/app
+      # - django_app:/usr/src/app
       - django_static:/usr/src/app/static
     env_file: .env.local
     expose: 
@@ -43,7 +59,7 @@ services:
     env_file: .env.local
     volumes:
       - ./backend:/usr/src/app
-      - django_app:/usr/src/app
+      # - django_app:/usr/src/app
     links:
       - postgres:postgres
     depends_on:
@@ -51,12 +67,13 @@ services:
 
   setup_db:
     build: ./backend
-    command: bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password $DEFAULT_PASSWORD --email koenigmx@hu-berlin.de --noinput && /usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
+    command: bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput && /usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
     env_file: .env.local
     volumes:
       - ./backend:/usr/src/app
-      - django_app:/usr/src/app
+      # - django_app:/usr/src/app
     depends_on:
+      - postgres
       - migration
 
   nginx:
