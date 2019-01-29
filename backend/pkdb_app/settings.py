@@ -100,12 +100,12 @@ MIDDLEWARE = (
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 )
 
-CORS_ORIGIN_WHITELIST = (
-    "0.0.0.0:8081",
-    "localhost:8081",
-    "0.0.0.0:8080",
-    "localhost:8080",
-)
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     "0.0.0.0:8080",
+#     "localhost:8080",
+#     "frontend:8080",
+# )
 INTERNAL_IPS = ("172.18.0.1",)
 
 ALLOWED_HOSTS = ["*"]
