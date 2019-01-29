@@ -59,8 +59,7 @@ docker container logs pkdb_backend_1
 ## Fill database
 The database can be filled via the `fill_database.sh` script.
 ```
-(pkdb) ./fill_database.sh
-set -a && source .env.local && ./fill_database.sh
+(pkdb) set -a && source .env.local && ./fill_database.sh
 docker-compose run --rm backend ./manage.py search_index --rebuild -f
 ```
 
