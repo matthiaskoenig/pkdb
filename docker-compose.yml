@@ -63,11 +63,14 @@ services:
     env_file: .env.local
     volumes:
       - ./backend:/usr/src/app
+      - django_static:/static
+      - django_media:/media
       # - django_app:/usr/src/app
     links:
       - postgres:postgres
     depends_on:
       - postgres
+      - backend
 
   setup_root:
     build: ./backend
@@ -76,23 +79,29 @@ services:
     volumes:
       - ./backend:/usr/src/app
       # - django_app:/usr/src/app
+      - django_static:/static
+      - django_media:/media
     depends_on:
       - postgres
+      - backend
       - migration
 
-  setup_db:
-    build: ./backend
-    command: bash -c "/usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
-    env_file: .env.local
-    volumes:
-      - ./backend:/usr/src/app
-      # - django_app:/usr/src/app
-    depends_on:
-      - postgres
-      - migration
-      - setup_root
-    links:
-      - backend:backend
+#  setup_db:
+#    build: ./backend
+#    command: bash -c "sleep 10 && /usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
+#    env_file: .env.local
+#    volumes:
+#      - ./backend:/usr/src/app
+#      # - django_app:/usr/src/app
+#      - django_static:/static
+#      - django_media:/media
+#    depends_on:
+#      - postgres
+#      - backend
+#      - migration
+#      - setup_root
+#    links:
+#      - backend:backend
 
   postgres:
     restart: always
