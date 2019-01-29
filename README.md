@@ -48,13 +48,25 @@ set -a && source .env.local && docker-compose up --build
 
 To see the running containers use
 ```
-watch docker containters ls
+watch docker container ls
 ```
 To get access to the container logs use `docker container logs`, e.g., to see the
 django backend logs use
 ```
 docker container logs pkdb_backend_1 
 ```
+
+## Python (Virtual Environment)
+Setting up a virtual environment to interact with the data base via python
+```
+cd backend
+mkvirtualenv pkdb --python=python3.6
+(pkdb) pip install -r requirements.txt
+(pkdb) pip install -e .
+```
+add your virtual environment to jupyter kernels:
+```
+(pkdb) ipython kernel install --user --name=pkdb
 
 ## Fill database
 The database can be filled via the `fill_database.sh` script.
@@ -82,17 +94,7 @@ or to run migrations
 docker-compose run --rm backend python manage.py makemigrations
 ```
 
-## Python (Virtual Environment)
-Setting up a virtual environment to interact with the data base via python
-```
-cd backend
-mkvirtualenv pkdb --python=python3.6
-(pkdb) pip install -r requirements.txt
-(pkdb) pip install -e .
-```
-add your virtual environment to jupyter kernels:
-```
-(pkdb) ipython kernel install --user --name=pkdb
+
 ``` 
 
 ## Vue Frontend 
@@ -125,7 +127,7 @@ http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 
 rebuild index:
 ```
-docker-compose run --rm web ./manage.py search_index --rebuild -f
+docker-compose run --rm backend ./manage.py search_index --rebuild -f
 ```
  
 ## Read 
