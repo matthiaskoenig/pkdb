@@ -15,9 +15,6 @@ __pycache__/
 # ----------------------------
 # Environments
 # ----------------------------
-.env
-pkdb_app/.env
-pkdb_client/.env
 
 # ----------------------------
 # Distribution / packaging
