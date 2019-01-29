@@ -421,7 +421,7 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
                                                 auth_headers=auth_headers, client=client)
     reference_upload_time = time.time() - start_time
     reference_upload_time = timedelta(seconds=reference_upload_time).total_seconds()
-    logging.info(f"--- {reference_upload_time} refencene upload time in seconds ---")
+    logging.info(f"--- {reference_upload_time} reference upload time in seconds ---")
 
     # upload study.json
     success_study, sid = upload_study_json(study_dict, api_url=api_url,
