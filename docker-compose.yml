@@ -1,63 +1,148 @@
-version: '2'
+#########################################################
+# PKDB
+#########################################################
+# To start the container stack use
+#   set -a && source .env.local && docker-compose up --build
+# or
+#   set -a && source .env.local && docker-compose up
+# The containers should be rebuild from time to time via
+#   docker-compose up --build
+#
+# The running containers can be observed via
+#   watch docker container ls
+#
+# To get the logs of an individual container use
+#   docker container log <container_id>
+#
+# To rebuild volumes stop all containers and remove the
+# volume
+#   docker-compose down
+#   docker volume rm pkdb_postgres_data
+#########################################################
+version: '3'
 
 volumes:
   postgres_data:
     driver: local
   elasticsearch_data:
     driver: local
+  django_app:
+    driver: local
+  django_static:
+    driver: local
+  django_media:
+    driver: local
+  vue_dist:
+    driver: local
 
 services:
+  backend:
+    restart: always
+    build: ./backend
+    volumes:
+      - ./backend:/usr/src/app
+      # - django_app:/usr/src/app
+      - django_static:/static
+      - django_media:/media
+    env_file: .env.local
+    expose: 
+      - "8000"
+    ports:
+      - "8000:8000"
+    links:
+      - postgres:postgres
+      - elasticsearch:elasticsearch
+    depends_on:
+     - postgres
+     - elasticsearch
+    command: bash -c "/usr/local/bin/python /usr/src/app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 4 -b :8000"
+
+  migration:
+    build: ./backend
+    command: bash -c "/usr/local/bin/python /usr/src/app/manage.py makemigrations & /usr/local/bin/python /usr/src/app/manage.py migrate"
+    env_file: .env.local
+    volumes:
+      - ./backend:/usr/src/app
+      - django_static:/static
+      - django_media:/media
+      # - django_app:/usr/src/app
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
+      - backend
+
+  setup_root:
+    build: ./backend
+    command: bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
+    env_file: .env.local
+    volumes:
+      - ./backend:/usr/src/app
+      # - django_app:/usr/src/app
+      - django_static:/static
+      - django_media:/media
+    depends_on:
+      - postgres
+      - backend
+      - migration
+
+#  setup_db:
+#    build: ./backend
+#    command: bash -c "sleep 10 && /usr/local/bin/python /usr/src/app/pkdb_app/data_management/setup_database.py"
+#    env_file: .env.local
+#    volumes:
+#      - ./backend:/usr/src/app
+#      # - django_app:/usr/src/app
+#      - django_static:/static
+#      - django_media:/media
+#    depends_on:
+#      - postgres
+#      - backend
+#      - migration
+#      - setup_root
+#    links:
+#      - backend:backend
+
   postgres:
-    image: postgres:10.5
-    container_name: postgres
+    restart: always
+    image: postgres:11.1
     ports:
       - "5433:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql
-    environment:
-     POSTGRES_DB: postgres
-     POSTGRES_USER: postgres
-     POSTGRES_PASSWORD: pass
+      - postgres_data:/var/lib/postgresql/data
 
   elasticsearch:
+    restart: always
     image: elasticsearch:6.4.2
-    container_name: elasticsearch
     ports:
       - "9200:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
-  web:
+  nginx:
     restart: always
-    environment:
-      PKDB_SECRET_KEY: cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
-      PKDB_API_BASE: http://0.0.0.0:8000
-      PKDB_DEFAULT_PASSWORD: pkdb
-      PKDB_EMAIL_HOST_USER: ""
-      PKDB_EMAIL_HOST_PASSWORD: ""
-    image: web
-    build: ./
-    command: >
-      bash -c "python wait_for_postgres.py &&
-               ./manage.py makemigrations &&
-               ./manage.py migrate &&
-               ./manage.py createsuperuser2 --username admin --password pkdb --email koenigmx@hu-berlin.de --noinput &&
-               ./manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - ./:/code
+    image: nginx:1.15
     ports:
-      - "8000:8000"
+      - 1234:80
+    volumes:
+    #  - /www/static
+      - ./nginx/config/conf.d:/etc/nginx/conf.d
+      - django_app:/usr/src/app
+      - django_static:/static
+      - django_media:/media
+      - vue_dist:/usr/share/nginx/html
     depends_on:
-      - postgres
-      - elasticsearch
+      - backend
+      - frontend
+    links:
+      - backend:backend
 
-
-
-#  documentation:
-#    restart: always
-#    build: ./
-#    command: "mkdocs serve"
-#    volumes:
-#      - ./:/code
-#    ports:
-#      - "8001:8001"
+  frontend:
+    restart: always
+    build: ./frontend
+    ports:
+      - "8080:8080"
+    volumes:
+      - vue_dist:/usr/share/nginx/html
+    depends_on:
+      - backend
