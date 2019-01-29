@@ -133,7 +133,7 @@ LOGIN_REDIRECT_URL = "/"
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 
-STATIC_ROOT = '/usr/src/app/static'
+STATIC_ROOT = '/static'
 # STATIC_ROOT = os.path.normpath(join(BASE_DIR, "static"))
 STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
 STATIC_URL = "/static/"
@@ -143,7 +143,7 @@ STATICFILES_FINDERS = (
 )
 
 # Media files
-MEDIA_ROOT = join(BASE_DIR, "media")
+MEDIA_ROOT = '/media/'  # join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 TEMPLATES = [

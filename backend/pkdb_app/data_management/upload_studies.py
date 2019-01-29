@@ -470,7 +470,7 @@ if __name__ == "__main__":
     # core database setup (user, substance, keyword data)
 
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    DATA_BASE_PATH = os.path.join(BASE_DIR, "..", "..", "pkdb_data")
+    DATA_BASE_PATH = os.path.join(BASE_DIR, "..", "..", "..", "pkdb_data")
     DATA_PATHS = [
          os.path.join(DATA_BASE_PATH, "caffeine"),
          os.path.join(DATA_BASE_PATH, "codeine"),

@@ -40,27 +40,28 @@ To build the dev server for local development:
 ```bash
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
-./docker_update.sh
+set -a && source .env.local && docker-compose up
 ```
 To update an existing version use
 ```bash
-./docker_update.sh
+set -a && source .env.local && docker-compose up --build
+
+To see the running containers use
 ```
-To start an existing version use
-```bash
-docker-compose up
+watch docker containters ls
+```
+To get access to the container logs use `docker container logs`, e.g., to see the
+django backend logs use
+```
+docker container logs pkdb_backend_1 
 ```
 
 ## Fill database
-The database can be filled via the `setup_database.py` and `upload_studies.py` scripts using curated data folders.
-The curated data is currently not made available, but only accessible via the REST API.
-
-First change in `/pkdb/pkdb_app/.env` the endpoints and passwords to the correct values by setting the environment
-variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
-
+The database can be filled via the `fill_database.sh` script.
 ```
 (pkdb) ./fill_database.sh
-docker-compose run --rm web ./manage.py search_index --rebuild -f
+set -a && source .env.local && ./fill_database.sh
+docker-compose run --rm backend ./manage.py search_index --rebuild -f
 ```
 
 ## Accessing backend
@@ -69,20 +70,17 @@ PKDB can than be accessed via the locally running server at
 
 To run commands inside the docker container use
 ```bash
-docker-compose run --rm web [command]
-```
-For instance create a superuser to login to the admin:
-```bash
-docker-compose run --rm web ./manage.py createsuperuser
+docker-compose run --rm backend [command]
 ```
 or to run migrations
 ```bash
-docker-compose run --rm web python manage.py makemigrations
+docker-compose run --rm backend python manage.py makemigrations
 ```
 
 ## Python (Virtual Environment)
 Setting up a virtual environment to interact with the data base via python
 ```
+cd backend
 mkvirtualenv pkdb --python=python3.6
 (pkdb) pip install -r requirements.txt
 (pkdb) pip install -e .
@@ -92,16 +90,18 @@ add your virtual environment to jupyter kernels:
 (pkdb) ipython kernel install --user --name=pkdb
 ``` 
 
-## Frontend 
+## Vue Frontend 
 Documentation of the `vue.js` frontend is available in
 ./pkdb_client/README.md
-
+The frontend is running on
+```
+localhost
 
 ## Elastic Search 
-Elastic Search engine is running on `0.0.0.0:9200` but is also reachable via django views.
+Elastic Search engine is running on `localhost:9200` but is also reachable via django views.
 General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
-query examples:
+Query examples:
 ```
 http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
 http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true

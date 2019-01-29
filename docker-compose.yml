@@ -30,6 +30,8 @@ volumes:
     driver: local
   django_static:
     driver: local
+  django_media:
+    driver: local
   vue_dist:
     driver: local
 
@@ -40,7 +42,8 @@ services:
     volumes:
       - ./backend:/usr/src/app
       # - django_app:/usr/src/app
-      - django_static:/usr/src/app/static
+      - django_static:/static
+      - django_media:/media
     env_file: .env.local
     expose: 
       - "8000"
@@ -116,7 +119,8 @@ services:
     #  - /www/static
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_app:/usr/src/app
-      - django_static:/usr/src/app/static
+      - django_static:/static
+      - django_media:/media
       - vue_dist:/usr/share/nginx/html
     depends_on:
       - backend
