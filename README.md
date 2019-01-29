@@ -65,7 +65,13 @@ docker-compose run --rm backend ./manage.py search_index --rebuild -f
 
 ## Accessing backend
 PKDB can than be accessed via the locally running server at  
-`http://localhost:8000/api/v1/`.  
+```
+http://localhost:8000/api/v1/
+```
+The API documentation is available via
+```
+http://localhost:1234/api
+```
 
 To run commands inside the docker container use
 ```bash
