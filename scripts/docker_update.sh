@@ -10,7 +10,7 @@ docker rm $(docker ps -a -q)
 
 sudo ./remove_migrations.sh
 docker-compose up --build
-docker-compose run --rm web ./manage.py search_index --create -f
+docker-compose run --rm backend ./manage.py search_index --create -f
 
 
 

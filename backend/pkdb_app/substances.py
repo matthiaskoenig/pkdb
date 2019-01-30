@@ -72,8 +72,9 @@ SUBSTANCES_DATA = [
     "codeine/C6G", #Glucuronidation
     "quinidine",
     # debrisoquine
-    "debrisoquine",
-    "debrisoquine/4-hydroxydebrisoquine",
+    "debrisoquine",  #CYP2D6 Phenotyping
+    "debrisoquine/4-hydroxydebrisoquine", #CYP2D6 Phenotyping
+    "mephenytoin", #CYP2D6 Phenotyping
     # medication
     "salbutamol",
     "beclometasone",
@@ -137,8 +138,8 @@ SUBSTANCES_DATA = [
     "carbon monoxide",
     #other
     "hydrogen",
-    "sparteine",
-    "sparteine/(2-dehydrosparteine+5-dehydrosparteine)", # Metabolic Ratio of Sparteine
+    "sparteine", #CYP2D6 Phenotyping
+    "sparteine/(2-dehydrosparteine+5-dehydrosparteine)", # Metabolic Ratio of Sparteine #CYP2D6 Phenotyping
     "sulfasalazine",
     "sulfapyridine",
     # ----------------------
@@ -165,7 +166,7 @@ SUBSTANCES_DATA = [
     'exenatide',  # GLP1 analoque
     'GIP',
     'GLP-1',
-    'insulin/glucose',
+    'insulin/glucose'
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t, t) for t in SUBSTANCES_DATA]
