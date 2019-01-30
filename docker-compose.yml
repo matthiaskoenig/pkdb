@@ -18,6 +18,10 @@
 # volume
 #   docker-compose down
 #   docker volume rm pkdb_postgres_data
+#
+# https://docs.docker.com/compose/django/
+
+
 #########################################################
 version: '3'
 
@@ -34,6 +38,9 @@ volumes:
     driver: local
   vue_dist:
     driver: local
+  node_modules:
+    driver: local
+    
 
 services:
   backend:
@@ -143,6 +150,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      - ./frontend:/app
+      - node_modules:/app/node_modules/
       - vue_dist:/usr/share/nginx/html
     depends_on:
       - backend

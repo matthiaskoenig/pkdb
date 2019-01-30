@@ -6,6 +6,7 @@ COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # Adds application code to the image
+RUN mkdir -p /usr/src/app
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 # install pkdb_app
