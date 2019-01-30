@@ -110,18 +110,15 @@ urlpatterns = [
 
     # admin
     path("admin/", admin.site.urls),
-
     # api
     path(r"api/v1/", include(router.urls)),
     path("api/v1/update_index/", update_index),
-
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
-
     # for debugging
-    url(r'atest/', views.test_500_view, name='test'),
-
+    # url(r'test/', views.test_500_view, name='test'),
+    # url(r'test/', views.test_view, name='test'),
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
     # re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),

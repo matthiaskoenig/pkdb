@@ -26,33 +26,29 @@
 version: '3'
 
 volumes:
-  postgres_data:
-    driver: local
-  elasticsearch_data:
-    driver: local
-  django_app:
-    driver: local
   django_static:
     driver: local
   django_media:
+    driver: local
+  postgres_data:
+    driver: local
+  elasticsearch_data:
     driver: local
   vue_dist:
     driver: local
   node_modules:
     driver: local
     
-
 services:
   backend:
     restart: always
     build: ./backend
     volumes:
-      - ./backend:/usr/src/app
-      # - django_app:/usr/src/app
+      - ./backend:/code
       - django_static:/static
       - django_media:/media
     env_file: .env.local
-    expose: 
+    expose:
       - "8000"
     ports:
       - "8000:8000"
@@ -62,17 +58,19 @@ services:
     depends_on:
      - postgres
      - elasticsearch
-    command: bash -c "/usr/local/bin/python /usr/src/app/manage.py collectstatic --noinput && /usr/local/bin/gunicorn pkdb_app.wsgi:application -w 4 -b :8000"
+    # command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 -b :8000"
+    # command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --config ./gunicorn.conf -w 1 -b :8000"
+    # command: bash -c "/usr/local/bin/gunicorn --config ./gunicorn.conf --bind 0.0.0.0:8000 pkdb_app.wsgi:application"
+    command: bash -c "/usr/local/bin/python manage.py runserver 0.0.0.0:8000"
 
   migration:
     build: ./backend
-    command: bash -c "/usr/local/bin/python /usr/src/app/manage.py makemigrations & /usr/local/bin/python /usr/src/app/manage.py migrate"
+    command: bash -c "/usr/local/bin/python manage.py makemigrations & /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
     env_file: .env.local
     volumes:
-      - ./backend:/usr/src/app
+      - ./backend:/code
       - django_static:/static
       - django_media:/media
-      # - django_app:/usr/src/app
     links:
       - postgres:postgres
     depends_on:
@@ -84,8 +82,7 @@ services:
     command: bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
     env_file: .env.local
     volumes:
-      - ./backend:/usr/src/app
-      # - django_app:/usr/src/app
+      - ./backend:/code
       - django_static:/static
       - django_media:/media
     depends_on:
@@ -126,23 +123,22 @@ services:
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
-  nginx:
-    restart: always
-    image: nginx:1.15
-    ports:
-      - 1234:80
-    volumes:
-    #  - /www/static
-      - ./nginx/config/conf.d:/etc/nginx/conf.d
-      - django_app:/usr/src/app
-      - django_static:/static
-      - django_media:/media
-      - vue_dist:/usr/share/nginx/html
-    depends_on:
-      - backend
-      - frontend
-    links:
-      - backend:backend
+#  nginx:
+#    restart: always
+#    image: nginx:1.15
+#    ports:
+#      - 1234:80
+#    volumes:
+#      - ./nginx/config/conf.d:/etc/nginx/conf.d
+#      - ./backend:/code
+#      - django_static:/static
+#      - django_media:/media
+#      - vue_dist:/usr/share/nginx/html
+#    depends_on:
+#      - backend
+#      - frontend
+#    links:
+#      - backend:backend
 
   frontend:
     restart: always

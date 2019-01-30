@@ -6,10 +6,10 @@ COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 # Adds application code to the image
-RUN mkdir -p /usr/src/app
-COPY . /usr/src/app
-WORKDIR /usr/src/app
+COPY . /code
+WORKDIR /code
 # install pkdb_app
 RUN pip install -e .
 
 EXPOSE 8000
+CMD newrelic-admin run-program gunicorn --bind 0.0.0.0:$PORT --access-logfile - pkdb_app.wsgi:application
