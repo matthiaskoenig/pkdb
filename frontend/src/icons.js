@@ -29,7 +29,9 @@ const icons_table = {
     substances: 'fas fa-tablets',
     characteristicas: 'fas fa-ticket-alt',
     characteristica: 'fas fa-ticket-alt',
-    curation: 'fas fa-book-reader'
+    curation: 'fas fa-book-reader',
+    previous:'fas fa-arrow-left',
+    next:'fas fa-arrow-right'
 };
 
 function lookup_icon(key){

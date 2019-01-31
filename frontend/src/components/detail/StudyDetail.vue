@@ -18,6 +18,8 @@
                         </v-list-tile>
                         </v-list>
                         <v-divider></v-divider>
+                        <v-btn icon :to="'/studies/' + previous_study" title="previous Study"><v-icon>{{ icon('previous') }}</v-icon></v-btn>
+                        <v-btn icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
 
                         <v-list dense>
                             <v-list-tile
@@ -121,6 +123,9 @@
         },
         mixins :[UrlMixin],
         props: {
+            study_pks:{
+                type:Array,
+            },
             study: {
                 type: Object,
             },
@@ -181,11 +186,43 @@
                     interventions: this.study.intervention_count,
                     outputs: this.study.output_count,
                     timecourses: this.study.timecourse_count,
+                    study_pks: this.study_pks
 
                 }
 
-            }
+            },
+            study_index(){
+                return this.study_pks.indexOf(this.study.sid)
+            },
 
+            next_study(){
+
+                var studies_number  = this.study_pks.length;
+
+
+                if (studies_number - 1 > this.study_index + 1)
+                {
+                    return this.study_pks[this.study_index + 1]
+                }
+                else
+                    {
+                    return this.study_pks[0]
+                    }
+                },
+            previous_study(){
+
+                var studies_number  = this.study_pks.length;
+
+
+                if (this.study_index - 1 > 0 )
+                {
+                    return this.study_pks[this.study_index - 1]
+                }
+                else
+                    {
+                    return this.study_pks[studies_number-1]
+                    }
+                }
         },
         methods:{
             icon: function (key) {

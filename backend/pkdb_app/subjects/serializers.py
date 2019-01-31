@@ -483,8 +483,12 @@ class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_characteristica_all_final(self, instance):
-        characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
-        return CharacteristicaElasticSerializer(characteristica, many=True, read_only=True).data
+        if instance.characteristica_all_final:
+            characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+            return CharacteristicaElasticSerializer(characteristica, many=True, read_only=True).data
+        else:
+            return []
+
 
 
 # Individual related Serializer

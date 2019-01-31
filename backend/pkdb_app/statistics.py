@@ -26,6 +26,11 @@ class Statistics(object):
         self.output_count = Output.objects.filter(final=True).count()
         self.timecourse_count = Timecourse.objects.filter(final=True).count()
 
+@api_view(['GET'])
+def study_pks_view(request):
+    if request.method == 'GET':
+        return Response(list(Study.objects.values_list("pk", flat=True)))
+
 
 class StatisticsViewSet(viewsets.ViewSet):
     """
