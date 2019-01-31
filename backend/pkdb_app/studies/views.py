@@ -70,16 +70,34 @@ class StudyViewSet(viewsets.ModelViewSet):
             if request.data["groupset"]:
                 groupset = request.data["groupset"]
                 if "groups" in groupset:
+
                     groups = groupset.get("groups", [])
-                    parents = set(
-                        [group.get("parent") for group in groups if group.get("parent")]
-                    )
-                    groups = set(
-                        [group.get("name") for group in groups if group.get("name")]
-                    )
+                    parents_name = set()
+                    groups_name = set()
+                    for group in groups:
+                        parent_name  = group.get("parent")
+                        if parent_name:
+                            parents_name.add(parent_name)
+                        group_name = group.get("name")
+                        if group_name:
+                            groups_name.add(group_name)
+                        if group_name == "all" and parent_name is not None:
+                            raise ValidationError({"groups": "parent is not allowed for group all"})
+
+                        elif group_name != "all" and parent_name is None:
+                            raise ValidationError({"groups":"parent is required for keyword in groups besides for the the <all> group"})
+
+
+
+
+
+                    if "all" not in groups_name:
+                        raise ValidationError({"group":"a group with the name all is required. This is the group "
+                                              "with common characteristica for all groups and individuals"})
+
 
                     # validate if groups are missing
-                    missing_groups = parents - groups
+                    missing_groups = parents_name - groups_name
                     if missing_groups:
                         if missing_groups is not None:
                             msg = {
