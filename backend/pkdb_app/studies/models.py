@@ -13,7 +13,8 @@ from pkdb_app.storage import OverwriteStorage
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable, CHAR_MAX_LENGTH_LONG
-from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_CHOICES
+from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES, \
+    STUDY_RATING_CHOICES
 from ..users.models import User
 
 
@@ -69,6 +70,11 @@ class Reference(models.Model):
         else:
             return ""
 
+class Rating(models.Model):
+    rating = models.IntegerField(choices=STUDY_RATING_CHOICES, default=0)
+    study = models.ForeignKey("Study", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
 class Study(Sidable, models.Model):
     """ Single clinical study.
@@ -76,9 +82,11 @@ class Study(Sidable, models.Model):
     Mainly reported as a single publication.
     """
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
+
     creator = models.ForeignKey(
         User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
     )
+
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     design = models.CharField(
         max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_DESIGN_CHOICES
@@ -86,7 +94,9 @@ class Study(Sidable, models.Model):
     reference = models.ForeignKey(
         Reference, on_delete=True, related_name="study", null=True
     )
-    curators = models.ManyToManyField(User, related_name="curator_of_studies")
+    #curators = models.ManyToManyField(User, related_name="curator_of_studies")
+    curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)
+
     substances = models.ManyToManyField(Substance, related_name="studies")
     keywords = models.ManyToManyField(Keyword, related_name="studies")
 
@@ -99,6 +109,7 @@ class Study(Sidable, models.Model):
     )
     outputset = models.OneToOneField(OutputSet,related_name="study", on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
+    licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
 
     class Meta:
         verbose_name_plural = "studies"
@@ -219,3 +230,5 @@ class Study(Sidable, models.Model):
         if self.outputset:
             return self.outputset.outputs.filter(final=True).count()
         return 0
+
+

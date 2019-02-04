@@ -95,10 +95,18 @@ STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 # Study licence
 # ---------------------------------------------------
 STUDY_LICENCE_DATA = [
-    "OPEN",  # (open reference)
+    "open",  # (open reference)
+    "close",
 
 ]
-STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
+
+
+STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
+
+STUDY_RATING_DATA = [0,1,2,3,4,5]
+
+
+STUDY_RATING_CHOICES = [(t, t) for t in STUDY_RATING_DATA]
 
 # ---------------------------------------------------
 # Keywords

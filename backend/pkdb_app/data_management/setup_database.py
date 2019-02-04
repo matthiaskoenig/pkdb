@@ -42,6 +42,7 @@ def get_authentication_headers(api_base=API_BASE, username="admin", password=DEF
     Returns admin authentification as default.
     """
     response = requests.post(f"{api_base}/api-token-auth/", json={"username": username, "password": password})
+    print(response.content)
     response.raise_for_status()
     token = response.json().get("token")
     return {'Authorization': f'token {token}'}

@@ -3,6 +3,7 @@ Studies serializers.
 """
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
+from django.core.exceptions import ObjectDoesNotExist
 
 from pkdb_app.comments.models import Description, Comment
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
@@ -10,13 +11,15 @@ from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializ
 from pkdb_app.subjects.models import GroupSet, IndividualSet
 from pkdb_app.users.serializers import UserElasticSerializer
 from pkdb_app.utils import update_or_create_multiple, create_multiple
+
+from ..categoricals import STUDY_RATING_DATA
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer,\
     InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
      GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
-from .models import Reference, Author, Study, Keyword
+from .models import Reference, Author, Study, Keyword, Rating
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
 
 
@@ -280,7 +283,7 @@ class StudySerializer(SidSerializer):
             study.save()
 
 
-        many_2_many_fields = ["curators","keywords","substances"]
+        many_2_many_fields = ["keywords","substances"]
 
         # cumulated substances from interventions, outputs, timecourses
 
@@ -296,18 +299,34 @@ class StudySerializer(SidSerializer):
                 for instance in related[field]:
                     related_m2m_field.add(instance)
 
+        if len(related["curators"]) > 0:
+            for curator_and_rating in related["curators"]:
+                if isinstance(curator_and_rating, tuple):
+                    if len(curator_and_rating) != 2:
+                        raise serializers.ValidationError(
+                            {
 
+                                "curator": " Each curator in the list of curator can be added eather via the curator "
+                                           "username or as a tuple with first position beeing the curator username "
+                                            " and the second posion the rating between (0-5)",
+                                "details": curator_and_rating,
 
+                            })
+                    curator = self.get_or_val_error(User, username=curator_and_rating[0])
 
+                    rating = curator_and_rating[1]
 
+                    if not rating in STUDY_RATING_DATA:
+                        raise serializers.ValidationError(
+                            {"rating": f" rating of curator has to be part of {STUDY_RATING_DATA}",
+                             "details":curator_and_rating})
 
+                else:
+                    curator = self.get_or_val_error(User, username=curator_and_rating)
 
+                    rating = 0
 
-
-
-
-
-
+                Rating.objects.create(user=curator, study=study, rating=rating)
 
         if related["descriptions"]:
             study.descriptions.all().delete()
