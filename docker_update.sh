@@ -3,6 +3,7 @@
 # Complete update
 ########################################################
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+sudo echo "Docker update"
 
 # shut down all containers (remove images and volumes)
 # remove images and volumes
@@ -12,18 +13,20 @@ docker-compose down --volumes --rmi local
 docker container rm -f pkdb_setup_root_1 pkdb_migration_1 pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 
 
 # make sure images are removed
+# FIXME: do via queries
 docker image rm -f pkdb_frontend:latest
 docker image rm -f pkdb_backend:latest
 docker image rm -f pkdb_migration:latest
 docker image rm -f pkdb_setup_root:latest
 
 # make sure volumes are removed
-docker volumes rm -f pkdb_django_media
-docker volumes rm -f pkdb_django_static
-docker volumes rm -f pkdb_elasticsearch_data
-docker volumes rm -f pkdb_node_modules
-docker volumes rm -f pkdb_postgres_data
-docker volumes rm -f pkdb_vue_dist
+# FIXME: do via queries
+docker volume rm -f pkdb_django_media
+docker volume rm -f pkdb_django_static
+docker volume rm -f pkdb_elasticsearch_data
+docker volume rm -f pkdb_node_modules
+docker volume rm -f pkdb_postgres_data
+docker volume rm -f pkdb_vue_dist
 
 # cleanup all dangling images, containers, volumes and networks
 docker system prune --force
@@ -41,4 +44,5 @@ sudo rm -rf static
 set -a && source .env.local && docker-compose up --build 
 
 # elasticsearch index
-docker-compose run --rm backend ./manage.py search_index --create -f
+# FIXME: not executed in non-detached mode
+# docker-compose run --rm backend ./manage.py search_index --create -f
