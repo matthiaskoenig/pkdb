@@ -33,8 +33,9 @@ docker system prune --force
 
 # remove migrations
 cd $DIR
-sudo find . -maxdepth 3 -path "*/migrations/*.py" -not -name "__init__.py" -delete
-sudo find . -maxdepth 3 -path "*/migrations/*.pyc" -delete
+sudo find . -maxdepth 5 -path "*/migrations/*.py" -not -name "__init__.py" -delete
+sudo find . -maxdepth 5 -path "*/migrations/*.pyc" -delete
+
 
 # remove media and static files
 sudo rm -rf media

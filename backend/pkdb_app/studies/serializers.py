@@ -98,6 +98,20 @@ class ReferenceSerializer(SidSerializer):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
+class CuratorRatingSerializer(serializers.ModelSerializer):
+
+    rating = serializers.IntegerField()
+    user = serializers.SlugRelatedField(
+        queryset=User.objects.all(),
+        slug_field="username"
+    )
+    study = serializers.PrimaryKeyRelatedField(
+        queryset=Study.objects.all()
+    )
+    class Meta:
+        model = Rating
+        fields = ("rating","user","study")
+
 
 class StudySerializer(SidSerializer):
     """ Study Serializer.
@@ -120,13 +134,15 @@ class StudySerializer(SidSerializer):
         queryset=Reference.objects.all(), required=False, allow_null=True
     )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
-    curators = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
-        slug_field="username",
-        many=True,
-        required=False,
-        allow_null=True,
-    )
+    curators = CuratorRatingSerializer(many=True, required=False,
+                                       allow_null=True)
+    #curators = serializers.SlugRelatedField(
+    #    queryset=User.objects.all(),
+    #    slug_field="username",
+    #    many=True,
+    #    required=False,
+    #    allow_null=True,
+    #)
     creator = serializers.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
@@ -205,6 +221,38 @@ class StudySerializer(SidSerializer):
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
+        ratings = []
+
+
+
+        for curator_and_rating in data["curators"]:
+            rating_dict = {}
+
+            if isinstance(curator_and_rating, list):
+                if len(curator_and_rating) != 2:
+                    raise serializers.ValidationError(
+                        {
+
+                            "curator": " Each curator in the list of curator can be added eather via the curator "
+                                       "username or as a tuple with first position beeing the curator username "
+                                        " and the second posion the rating between (0-5)",
+                            "details": curator_and_rating,
+
+                        })
+                rating_dict["user"] = curator_and_rating[0]
+                rating_dict["rating"] = curator_and_rating[1]
+
+            else:
+                rating_dict["user"] = curator_and_rating
+                rating_dict["rating"] = 0
+
+            ratings.append(rating_dict)
+
+            data["creators"] = ratings
+
+
+
+
 
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
@@ -291,7 +339,6 @@ class StudySerializer(SidSerializer):
         study_cumulated_substances = set(study.get_substances())
         related["substances"] = study_cumulated_substances | study_substances
 
-
         for field in many_2_many_fields:
             if len(related[field]) > 0 :
                 related_m2m_field = getattr(study,field)
@@ -299,34 +346,9 @@ class StudySerializer(SidSerializer):
                 for instance in related[field]:
                     related_m2m_field.add(instance)
 
-        if len(related["curators"]) > 0:
-            for curator_and_rating in related["curators"]:
-                if isinstance(curator_and_rating, tuple):
-                    if len(curator_and_rating) != 2:
-                        raise serializers.ValidationError(
-                            {
+        for creator in related["curators"]:
+            Rating.objects.create(creator)
 
-                                "curator": " Each curator in the list of curator can be added eather via the curator "
-                                           "username or as a tuple with first position beeing the curator username "
-                                            " and the second posion the rating between (0-5)",
-                                "details": curator_and_rating,
-
-                            })
-                    curator = self.get_or_val_error(User, username=curator_and_rating[0])
-
-                    rating = curator_and_rating[1]
-
-                    if not rating in STUDY_RATING_DATA:
-                        raise serializers.ValidationError(
-                            {"rating": f" rating of curator has to be part of {STUDY_RATING_DATA}",
-                             "details":curator_and_rating})
-
-                else:
-                    curator = self.get_or_val_error(User, username=curator_and_rating)
-
-                    rating = 0
-
-                Rating.objects.create(user=curator, study=study, rating=rating)
 
         if related["descriptions"]:
             study.descriptions.all().delete()
