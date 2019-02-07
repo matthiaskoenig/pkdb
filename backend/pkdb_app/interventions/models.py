@@ -16,7 +16,7 @@ from django.apps import apps
 
 from ..subjects.models import Group, DataFile, Individual
 
-from pkdb_app.interventions.managers import (
+from ..interventions.managers import (
     InterventionSetManager,
     OutputSetManager,
     OutputExManager,
@@ -24,7 +24,7 @@ from pkdb_app.interventions.managers import (
     InterventionExManager,
     OutputManager,
 )
-from pkdb_app.normalization import get_cv, get_se, get_sd
+from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Valueable,
     ValueableMap,
@@ -43,7 +43,7 @@ from ..categoricals import (
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
 
 from ..utils import CHAR_MAX_LENGTH
-from pkdb_app.analysis.pharmacokinetic import _auc, _aucinf, _kel, _vd, f_pk
+from ..analysis.pharmacokinetic import _auc, _aucinf, _kel, _vd, f_pk
 from ..substances import SUBSTANCES_DATA_CHOICES
 
 # -------------------------------------------------

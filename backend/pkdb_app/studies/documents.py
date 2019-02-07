@@ -135,7 +135,7 @@ class StudyDocument(DocType):
             'last_name': string_field("user.last_name"),
             'pk': string_field("user.pk"),
             'username': string_field("user.username"),
-            'rating': fields.IntegerField(attr='rating')
+            'rating': fields.FloatField(attr='rating')
 
         },
         multi=True

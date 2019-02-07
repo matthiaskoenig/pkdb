@@ -31,7 +31,9 @@ const icons_table = {
     characteristica: 'fas fa-ticket-alt',
     curation: 'fas fa-book-reader',
     previous:'fas fa-arrow-left',
-    next:'fas fa-arrow-right'
+    next:'fas fa-arrow-right',
+    star:'fas fa fa-star'
+
 };
 
 function lookup_icon(key){

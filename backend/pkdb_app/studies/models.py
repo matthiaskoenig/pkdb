@@ -3,18 +3,17 @@ Django model for Study.
 """
 from django.db import models
 
-from pkdb_app.interventions.models import (
+from ..interventions.models import (
     OutputSet,
     InterventionSet,
     DataFile,
     Substance,
 )
-from pkdb_app.storage import OverwriteStorage
-from pkdb_app.subjects.models import GroupSet, IndividualSet
+from ..storage import OverwriteStorage
+from ..subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable, CHAR_MAX_LENGTH_LONG
-from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES, \
-    STUDY_RATING_CHOICES
+from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES
 from ..users.models import User
 
 
@@ -71,9 +70,11 @@ class Reference(models.Model):
             return ""
 
 class Rating(models.Model):
-    rating = models.IntegerField(choices=STUDY_RATING_CHOICES, default=0)
+    rating = models.FloatField(default=0)
     study = models.ForeignKey("Study",related_name="ratings", on_delete=models.CASCADE)
     user = models.ForeignKey(User,related_name="ratings", on_delete=models.CASCADE)
+
+
 
 
 class Study(Sidable, models.Model):

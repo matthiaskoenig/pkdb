@@ -3,16 +3,14 @@ Studies serializers.
 """
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist
 
-from pkdb_app.comments.models import Description, Comment
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
+from ..comments.models import Description, Comment
+from ..comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
     DescriptionElasticSerializer
-from pkdb_app.subjects.models import GroupSet, IndividualSet
-from pkdb_app.users.serializers import UserElasticSerializer
-from pkdb_app.utils import update_or_create_multiple, create_multiple
+from ..subjects.models import GroupSet, IndividualSet
+from ..users.serializers import UserElasticSerializer
+from ..utils import update_or_create_multiple, create_multiple
 
-from ..categoricals import STUDY_RATING_DATA
 from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
 from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer,\
     InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
@@ -99,8 +97,8 @@ class ReferenceSerializer(SidSerializer):
         return super().to_internal_value(data)
 
 class CuratorRatingSerializer(serializers.ModelSerializer):
+    rating = serializers.FloatField(min_value=0, max_value=5)
 
-    rating = serializers.IntegerField()
     user = serializers.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username"
@@ -396,13 +394,14 @@ class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["pk","name"]#, 'url']
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
-    rating = serializers.IntegerField()
+    rating = serializers.FloatField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     username = serializers.CharField()
 
     class Meta:
         fields = ("id", "first_name", "last_name","username","rating")
+
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
