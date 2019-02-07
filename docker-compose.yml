@@ -65,7 +65,7 @@ services:
 
   migration:
     build: ./backend
-    command: bash -c "/usr/local/bin/python manage.py makemigrations & /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
+    command: bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
     env_file: .env.local
     volumes:
       - ./backend:/code
