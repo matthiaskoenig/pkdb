@@ -72,8 +72,8 @@ class Reference(models.Model):
 
 class Rating(models.Model):
     rating = models.IntegerField(choices=STUDY_RATING_CHOICES, default=0)
-    study = models.ForeignKey("Study", on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    study = models.ForeignKey("Study",related_name="ratings", on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name="ratings", on_delete=models.CASCADE)
 
 
 class Study(Sidable, models.Model):

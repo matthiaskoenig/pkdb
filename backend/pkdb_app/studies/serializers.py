@@ -105,12 +105,15 @@ class CuratorRatingSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(),
         slug_field="username"
     )
-    study = serializers.PrimaryKeyRelatedField(
+    study = serializers.PrimaryKeyRelatedField(required=False,
         queryset=Study.objects.all()
     )
     class Meta:
         model = Rating
         fields = ("rating","user","study")
+
+    def to_representation(self, instance):
+        return {"curator":instance.username}
 
 
 class StudySerializer(SidSerializer):
@@ -193,6 +196,7 @@ class StudySerializer(SidSerializer):
             "files",
             "comments",
         )
+        write_only_fields = ('curators',)
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
@@ -224,17 +228,15 @@ class StudySerializer(SidSerializer):
         ratings = []
 
 
-
-        for curator_and_rating in data["curators"]:
+        for curator_and_rating in data.get("curators",[]):
             rating_dict = {}
-
             if isinstance(curator_and_rating, list):
                 if len(curator_and_rating) != 2:
                     raise serializers.ValidationError(
                         {
 
-                            "curator": " Each curator in the list of curator can be added eather via the curator "
-                                       "username or as a tuple with first position beeing the curator username "
+                            "curator": " Each curator in the list of curator can be added either via the curator "
+                                       "username or as a list with first position beeing the curator username "
                                         " and the second posion the rating between (0-5)",
                             "details": curator_and_rating,
 
@@ -248,11 +250,7 @@ class StudySerializer(SidSerializer):
 
             ratings.append(rating_dict)
 
-            data["creators"] = ratings
-
-
-
-
+        data["curators"] = ratings
 
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
@@ -263,15 +261,24 @@ class StudySerializer(SidSerializer):
         :param instance:
         :return:
         """
+
         rep = super().to_representation(instance)
         current_site = f'http://{get_current_site(self.context["request"]).domain}'
-
         # replace file url
         if "files" in rep:
 
             rep["files"] = [
             current_site + file.file.url for file in instance.files.all()
             ]
+        curators = []
+        for user in instance.curators.all():
+            rating = instance.ratings.get(user=user)
+            curators.append({"rating":rating.rating,
+                             "first_name":user.first_name,
+                             "last_name":user.last_name,
+                             "pk":user.pk})
+
+        rep["curators"] = curators
 
         return rep
 
@@ -346,8 +353,11 @@ class StudySerializer(SidSerializer):
                 for instance in related[field]:
                     related_m2m_field.add(instance)
 
-        for creator in related["curators"]:
-            Rating.objects.create(creator)
+        if related["curators"]:
+            study.ratings.all().delete()
+            for curator in related["curators"]:
+                curator["study"] = study
+                Rating.objects.create(**curator)
 
 
         if related["descriptions"]:
@@ -385,6 +395,15 @@ class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = Study
         fields = ["pk","name"]#, 'url']
 
+class CuratorRatingElasticSerializer(serializers.Serializer):
+    rating = serializers.IntegerField()
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    username = serializers.CharField()
+
+    class Meta:
+        fields = ("id", "first_name", "last_name","username","rating")
+
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
     pdf = serializers.CharField(read_only=True)
@@ -413,7 +432,7 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["sid"]#, 'url']
 
 
-
+#class Rating
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -424,7 +443,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     name = serializers.CharField(read_only=True)
 
 
-    curators = UserElasticSerializer(many=True, read_only=True)
+    curators = CuratorRatingElasticSerializer(many=True, read_only=True)
     creator = UserElasticSerializer(read_only=True)
 
     substances = serializers.SerializerMethodField()
