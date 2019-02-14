@@ -11,7 +11,10 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
 
-from pkdb_app.comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
+from .comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
+
+from .views import serve_protected_document
+
 from .subjects.views import (
     DataFileViewSet,
     IndividualViewSet,
@@ -118,10 +121,12 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
+    url(r'^media/(?P<file>.*)$', serve_protected_document, name='serve_protected_document'),
+
     # for debugging
     # url(r'test/', views.test_500_view, name='test'),
     # url(r'test/', views.test_view, name='test'),
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
     # re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

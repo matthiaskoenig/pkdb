@@ -1,13 +1,15 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from pkdb_app.categoricals import validate_categorials, CHARACTERISTIC_DICT, NUMERIC_TYPE
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+from ..categoricals import validate_categorials, CHARACTERISTIC_DICT, NUMERIC_TYPE
+from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
-from pkdb_app.studies.models import Study
+from ..studies.models import Study
 from operator import itemgetter
+from django.shortcuts import get_object_or_404
+from ..utils import list_of_pk
 
-from pkdb_app.utils import list_of_pk
+from ..permissions import FilePermissions
 from .models import (
     Group,
     GroupSet,
@@ -412,6 +414,17 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_timecourses(self, obj):
         return list_of_pk("timecourses", obj)
+
+    def get_object(self):
+
+        obj = get_object_or_404(self.get_queryset())
+        self.check_object_permissions(self.request, obj)
+        print("here I am")
+        return obj
+
+
+
+
 
 
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):

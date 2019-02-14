@@ -94,9 +94,12 @@ STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 # ---------------------------------------------------
 # Study licence
 # ---------------------------------------------------
+OPEN = "open"
+CLOSED = "closed"
+
 STUDY_LICENCE_DATA = [
-    "open",  # (open reference)
-    "close",
+    OPEN,  # (open reference)
+    CLOSED,
 
 ]
 

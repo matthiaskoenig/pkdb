@@ -200,6 +200,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     def get_object(self):
         """Get object."""
         queryset = self.get_queryset()
+
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         if lookup_url_kwarg not in self.kwargs:
             raise AttributeError(
@@ -223,6 +224,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             count = queryset.count()
             if count == 1:
                 obj = queryset.execute().hits.hits[0]['_source']
+
                 return DictionaryProxy(obj)
 
             elif count > 1:

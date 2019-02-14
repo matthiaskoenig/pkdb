@@ -95,7 +95,6 @@ class Study(Sidable, models.Model):
     reference = models.ForeignKey(
         Reference, on_delete=True, related_name="study", null=True
     )
-    #curators = models.ManyToManyField(User, related_name="curator_of_studies")
     curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)
 
     substances = models.ManyToManyField(Substance, related_name="studies")

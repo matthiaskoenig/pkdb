@@ -120,6 +120,8 @@ class StudyDocument(DocType):
         }
     )
     name = string_field("name")
+    licence = string_field("licence")
+
     design = string_field("design")
 
     reference = ObjectField(properties={

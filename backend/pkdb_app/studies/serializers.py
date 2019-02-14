@@ -1,7 +1,6 @@
 """
 Studies serializers.
 """
-from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 
 from ..comments.models import Description, Comment
@@ -96,6 +95,8 @@ class ReferenceSerializer(SidSerializer):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
+
+
 class CuratorRatingSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(min_value=0, max_value=5)
 
@@ -187,6 +188,7 @@ class StudySerializer(SidSerializer):
             "descriptions",
             "keywords",
             "design",
+            "licence",
             "groupset",
             "individualset",
             "interventionset",
@@ -261,13 +263,11 @@ class StudySerializer(SidSerializer):
         """
 
         rep = super().to_representation(instance)
-        current_site = f'http://{get_current_site(self.context["request"]).domain}'
+        request = self.context.get('request')
         # replace file url
         if "files" in rep:
+            rep["files"] = [ request.build_absolute_uri(file.file.url) for file in instance.files.all() ]
 
-            rep["files"] = [
-            current_site + file.file.url for file in instance.files.all()
-            ]
         curators = []
         for user in instance.curators.all():
             rating = instance.ratings.get(user=user)
@@ -405,7 +405,7 @@ class CuratorRatingElasticSerializer(serializers.Serializer):
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
-    pdf = serializers.CharField(read_only=True)
+    pdf = serializers.SerializerMethodField()
     study = StudySmallElasticSerializer(many=True)
     class Meta:
         model = Reference
@@ -424,6 +424,35 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
             "pdf",
         )
 
+    def get_pdf(self, obj):
+
+        user = self.context["request"].user
+
+        if user.is_staff:
+            return obj.to_dict().get("pdf")
+        else:
+            return "permission denied"
+
+    def to_representation(self, instance):
+        """ Convert to JSON.
+
+        :param instance:
+        :return:
+        """
+
+        rep = super().to_representation(instance)
+        request = self.context.get("request")
+        # replace file url
+        rep["pdf"] = request.build_absolute_uri(instance.pdf)
+
+        return rep
+
+
+
+
+
+
+
 class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
@@ -440,6 +469,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     design = serializers.CharField(read_only=True)
     pkdb_version = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
+    licence = serializers.CharField(read_only=True)
 
 
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
@@ -448,7 +478,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     substances = serializers.SerializerMethodField()
     keywords = serializers.SerializerMethodField()
 
-    files = DataFileElasticSerializer(many=True, read_only=True)
+    files = serializers.SerializerMethodField()#DataFileElasticSerializer(many=True, read_only=True)
 
     comments = CommentElasticSerializer(many=True, read_only=True)
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -461,10 +491,12 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
+
         fields = [
             "pk",
             "sid",
             "name",
+            "licence",
             "comments",
             "descriptions",
             "reference",
@@ -502,3 +534,30 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             return list(obj.keywords)
         else:
             return []
+
+    def get_files(self, obj):
+        study_dict = obj.to_dict()
+        licence = study_dict.get("licence")
+
+        files_serializer = DataFileElasticSerializer(obj.files, many=True, read_only=True)
+        user = self.context["request"].user
+        curators_serializer = CuratorRatingElasticSerializer(obj.curators, many=True)
+        creator_serializer = UserElasticSerializer(obj.creator)
+        allowed_usernames = [curator["username"] for curator in curators_serializer.data]
+        allowed_usernames.append(creator_serializer.data["username"])
+
+        if licence == "open":
+            return files_serializer.data
+
+        if user.is_staff or user.username in allowed_usernames:
+            return files_serializer.data
+
+        else:
+            return ["permission denied"]
+
+
+
+
+
+
+
