@@ -419,7 +419,6 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
 
         obj = get_object_or_404(self.get_queryset())
         self.check_object_permissions(self.request, obj)
-        print("here I am")
         return obj
 
 

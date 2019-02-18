@@ -125,7 +125,6 @@ class InterventionSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         category = data.get("category")
 
-        print(data)
         if any([category == MEDICATION,category == DOSING]):
             self._validate_requried_key(data,"substance")
             self._validate_requried_key(data,"route")

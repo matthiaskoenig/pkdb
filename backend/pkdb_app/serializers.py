@@ -177,9 +177,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     elif values[k] == "[]":
                         values[k] = []
 
-                if field in  ["unit", "pktype"]:
-                    print(f"<{value}>")
-                    print(f"<{values[k]}>")
 
 
 
@@ -354,7 +351,18 @@ class MappingSerializer(WrongKeyValidationSerializer):
             df = self.df_from_file(source, format, subset)
 
 
+
             template = copy.deepcopy(template)
+
+            mappings = []
+            for key, value in template.items():
+                if isinstance(value,str):
+                    if "==" in value:
+                        mappings.append(value)
+
+            if len(mappings) == 0:
+                raise serializers.ValidationError({"source": "source is provided but the mapping operator == is not used in any field"})
+
             if data.get("groupby"):
                 groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
