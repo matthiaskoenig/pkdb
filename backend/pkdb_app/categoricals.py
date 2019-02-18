@@ -66,10 +66,9 @@ TIME_NORM_UNIT = "h"
 # ---------------------------------------------------
 # CharacteristicTypes
 # ---------------------------------------------------
-INCLUSION_CRITERIA = "inclusion"
-EXCLUSION_CRITERIA = "exclusion"
-GROUP_CRITERIA = "group"
-CHARACTERISTICA_TYPES = [INCLUSION_CRITERIA, EXCLUSION_CRITERIA, GROUP_CRITERIA]
+# EXCLUSION_CRITERIA = "exclusion"  # characteristica based on exclusion information
+DEFAULT_CRITERIA = "default"
+CHARACTERISTICA_TYPES = [DEFAULT_CRITERIA]
 CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
 
 # ---------------------------------------------------

@@ -13,7 +13,7 @@ from ..storage import OverwriteStorage
 from ..subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable, CHAR_MAX_LENGTH_LONG
-from ..categoricals import STUDY_DESIGN_CHOICES, CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES
+from ..categoricals import CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES
 from ..users.models import User
 
 
@@ -70,11 +70,13 @@ class Reference(models.Model):
             return ""
 
 class Rating(models.Model):
+    """ General rating model.
+
+    Used for quality of curation status.
+    """
     rating = models.FloatField(default=0)
     study = models.ForeignKey("Study",related_name="ratings", on_delete=models.CASCADE)
     user = models.ForeignKey(User,related_name="ratings", on_delete=models.CASCADE)
-
-
 
 
 class Study(Sidable, models.Model):
@@ -89,9 +91,6 @@ class Study(Sidable, models.Model):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    design = models.CharField(
-        max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_DESIGN_CHOICES
-    )
     reference = models.ForeignKey(
         Reference, on_delete=True, related_name="study", null=True
     )
@@ -127,16 +126,12 @@ class Study(Sidable, models.Model):
         except AttributeError:
             return []
 
-
-
-
     @property
     def groups(self):
         try:
             return self.groupset.groups.all()
         except AttributeError:
             return []
-
 
     @property
     def interventions(self):
@@ -167,10 +162,7 @@ class Study(Sidable, models.Model):
             substances2 = self.interventions.filter(substance__isnull=False).values_list("substance",flat=True)
             substances = substances.union(substances2)
 
-
-
         if self.outputs:
-
             substances2 = self.outputs.filter(substance__isnull=False).values_list("substance", flat=True)
             substances = substances.union(substances2)
 
@@ -187,7 +179,6 @@ class Study(Sidable, models.Model):
     @property
     def files_url(self):
         return [file.file.name for file in self.files.all()]
-
 
     @property
     def keywords_name(self):

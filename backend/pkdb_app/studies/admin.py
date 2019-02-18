@@ -18,5 +18,5 @@ class ReferenceAdmin(admin.ModelAdmin):
 
 @admin.register(Study)
 class StudyAdmin(admin.ModelAdmin):
-    fields = ('pk', 'pkdb_version', 'name', 'creator', 'design', 'reference',)
-    list_display = ('pk', 'pkdb_version', 'name', 'creator', 'design', 'reference',)
+    fields = ('pk', 'pkdb_version', 'name', 'creator','reference',)
+    list_display = ('pk', 'pkdb_version', 'name', 'creator', 'reference',)

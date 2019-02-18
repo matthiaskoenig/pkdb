@@ -23,9 +23,7 @@ from ..categoricals import (
     CHARACTERISTIC_DICT,
     CHARACTERISTIC_CHOICES,
     CHARACTERISTICA_CHOICES,
-    GROUP_CRITERIA,
-    INCLUSION_CRITERIA,
-    EXCLUSION_CRITERIA,
+    DEFAULT_CRITERIA
 )
 from ..utils import CHAR_MAX_LENGTH
 from .managers import (
@@ -341,20 +339,12 @@ class AbstractCharacteristica(models.Model):
     ctype = models.CharField(
         choices=CHARACTERISTICA_CHOICES,
         max_length=CHAR_MAX_LENGTH,
-        default=GROUP_CRITERIA,
+        default=DEFAULT_CRITERIA,
     )  # this is for exclusion and inclusion
     count = models.IntegerField(null=True)
 
     class Meta:
         abstract = True
-
-    @property
-    def is_inclusion(self):
-        return self.ctype == INCLUSION_CRITERIA
-
-    @property
-    def is_exclusion(self):
-        return self.ctype == EXCLUSION_CRITERIA
 
     @property
     def characteristic_data(self):

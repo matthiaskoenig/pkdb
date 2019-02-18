@@ -187,7 +187,6 @@ class StudySerializer(SidSerializer):
             "substances",
             "descriptions",
             "keywords",
-            "design",
             "licence",
             "groupset",
             "individualset",
@@ -466,7 +465,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     reference = ReferenceSmallElasticSerializer()
 
-    design = serializers.CharField(read_only=True)
     pkdb_version = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
     licence = serializers.CharField(read_only=True)
@@ -500,7 +498,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "comments",
             "descriptions",
             "reference",
-            "design",
             "pkdb_version",
             "curators",
             "creator",
