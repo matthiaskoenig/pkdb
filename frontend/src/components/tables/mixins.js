@@ -84,8 +84,10 @@ var searchTableMixin = {
         getData() {
             axios.get(this.url)
                 .then(res => {
+
                     this.entries = res.data.data.data;
                     this.count = res.data.data.count;
+
                 })
                 .catch(err => console.log(err.response.data))
                 .finally(() => this.loading = false);

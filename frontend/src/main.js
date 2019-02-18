@@ -58,6 +58,9 @@ import SubstanceChip from './components/detail/SubstanceChip';
 import FileChip from './components/detail/FileChip';
 
 import TextHighlight from 'vue-text-highlight';
+import axios from 'axios';
+
+
 
 Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
@@ -92,3 +95,18 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app');
+
+
+
+function execute() {
+    axios.interceptors.request.use(function(config) {
+        const token = store.state.token;
+        if (token) {
+          axios.defaults.headers.common['Authorization'] = 'Token ' + token
+        }
+        return config;
+    }, function(err) {
+        return Promise.reject(err);
+    });
+}
+execute()
