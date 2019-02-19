@@ -137,7 +137,7 @@ def upload_files(file_path, api_url, auth_headers, client=None):
         # exclude files
         def allowed_filename(fname):
             forbidden_suffix = (".log", ".xlsx#", ".idea")
-            forbidden_prefix = (".lock",)
+            forbidden_prefix = (".lock",".~lock")
             return fname.endswith(forbidden_suffix) & fname.startswith(forbidden_prefix)
 
         files = [file for file in files if not allowed_filename(file)]
