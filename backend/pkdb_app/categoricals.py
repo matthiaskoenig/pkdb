@@ -137,7 +137,7 @@ LIFESTYLE = "lifestyle"
 BIOCHEMICAL_DATA = "biochemical data"
 HEMATOLOGY_DATA = "hematology data"
 GENETIC_VARIANTS = "genetic variants"
-PHENOTYPE = "phenotype"
+CYP2D6_PHENOTYPE = "CYP2D6 phenotype"
 
 
 dimensionless_norm_unit = NormalizableUnit({"-": None})
@@ -453,7 +453,7 @@ CHARACTERISTIC_DATA = [
     ),
     CharacteristicType(
         "phenotype",
-        PHENOTYPE,
+        CYP2D6_PHENOTYPE,
         CATEGORIAL_TYPE,
         ["PM","IM","EM","UM"],
         dimensionless_norm_unit,
@@ -485,7 +485,7 @@ CharacteristicType(
     ),
     CharacteristicType(
         "metabolic ratio",
-         PHENOTYPE,
+         CYP2D6_PHENOTYPE,
          NUMERIC_TYPE,
         None,
         dimensionless_norm_unit,
