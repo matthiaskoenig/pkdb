@@ -8,7 +8,7 @@ import numpy as np
 import math
 import pandas as pd
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist,MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.apps import apps
@@ -365,10 +365,15 @@ class Output(ValueableNotBlank, AbstractOutput):
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     substance = models.ForeignKey(Substance,related_name="outputs",on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
-    raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
 
+    #normalization into standertized units and added statistic
+    raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
     final = models.BooleanField(default=False)
+
+    #calculated by timecourse data
+    calculated = models.BooleanField(default=False)
     timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
+
     objects = OutputManager()
 
     @property
@@ -588,6 +593,44 @@ class Timecourse(AbstractOutput):
                 )
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
+    """
+        def caluclate_pharmacokinetics(self):
+        if self.mean:
+            # clacualte mean, se ,sd, cv
+        elif self.median:
+            # clacualte median, se ,sd, cv
+        elif self.value:
+            # calculate value
+        else:
+            assert "mean, median or median have to be provided"
+
+        f_pk(
+                t=t,
+                c=c,
+                compound=substance,
+                dose=dose,
+                bodyweight=bodyweight,
+                t_unit="h",
+                c_unit="mg/L",
+                dose_unit="mg",
+                vd_unit="L",
+                bodyweight_unit="kg",
+        )
+
+        auc_end_unit = f"{self.time_unit}*{self.unit}"
+        auc_inf_unit = auc_end_unit
+        thalf_unit = self.time_unit
+        tmax_unit = self.time_unit
+        cmax_unit = self.self.unit
+        cmaxhalf_unit = self.unit
+        kel_unit = f"1/{self.time_unit}"
+
+        vd_unit =
+
+        auc_end = {"pktype":"aucend",
+                   "unit":auc_end_unit}
+
+    """
 
     @property
     def pk_data(self):
@@ -690,21 +733,96 @@ class Timecourse(AbstractOutput):
             return self.individual
 
     def get_bodyweight(self):
-        self.related_subject.characteristica.filter(category="weight")
+        weight_categories = self.related_subject.characteristica_all_final.filter(category="weight")
+        return weight_categories
+
+    def get_dosing(self):
+
+        try:
+            dosing_category = self.interventions.get(final=True,category="dosing")
+            return dosing_category
+
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            return None
+
+    def get_pharmacokinetic_variables(self):
+        pharmacokinetics_dict = {}
+
+        # substance
+        pharmacokinetics_dict["compound"] = self.substance.name
+
+        #todo: Unit volume of distribution unit
+        pharmacokinetics_dict["vd_unit"] = "todo"
+
+        # bodyweight
+        bodyweight = self.get_bodyweight().first()
+
+        if bodyweight:
+            pharmacokinetics_dict["bodyweight_unit"] = bodyweight.unit
+
+            if bodyweight.value:
+                pharmacokinetics_dict["bodyweight"] = bodyweight.value
+                pharmacokinetics_dict["bodyweight_type"] = "value"
+
+            elif bodyweight.mean:
+                pharmacokinetics_dict["bodyweight"] = bodyweight.mean
+                pharmacokinetics_dict["bodyweight_type"] = "mean"
+
+            elif bodyweight.median:
+                pharmacokinetics_dict["bodyweight"] = bodyweight.median
+                pharmacokinetics_dict["bodyweight_type"] = "median"
+
+
+
+
+        # time
+        pharmacokinetics_dict["t"] = pd.Series(self.time)
+        pharmacokinetics_dict["t_unit"] = self.time_unit
+
+        # concentration
+        pharmacokinetics_dict["c_unit"] = self.unit
+        if self.mean:
+            pharmacokinetics_dict["c"] = pd.Series(self.mean)
+            pharmacokinetics_dict["c_type"] = "mean"
+
+
+        elif self.median:
+            pharmacokinetics_dict["c"] = pd.Series(self.median)
+            pharmacokinetics_dict["c_type"] = "median"
+
+
+        elif self.value:
+            pharmacokinetics_dict["c"] = pd.Series(self.value)
+            pharmacokinetics_dict["c_type"] = "value"
+
+        # dosing
+        dosing = self.get_dosing()
+        if dosing:
+            pharmacokinetics_dict["dose"] = dosing.value
+            pharmacokinetics_dict["dose_unit"] = dosing.unit
+
+
+        return pharmacokinetics_dict
 
     def calculate_pharamcokinatics(self):
-        pk_data = self.get_pharamcokinetic_data()
+        pass
+
+
+        #pk_data = self.get_pharamcokinetic_data()
         #return f_pk(t=pk_data["t"],c=pk_data["c"],compound=self.substance.name,dose=)
 
     def get_pharamcokinetic_data(self):
         pk_data = {}
 
+        try:
+            pk_data["weight"] = self.related_subject.characteristica.get(category="weight").value
+
+        except ObjectDoesNotExist:
+            pk_data["weight"] = np.NaN
+
         if self.value:
             pk_data["c"] = self.value
-            try:
-                pk_data["weight"] = self.individual.characteristica.get(category="weight").value
-            except ObjectDoesNotExist:
-                pk_data["weight"] = np.NaN
+
 
         elif self.mean:
             pk_data["c"] = self.mean
@@ -716,6 +834,9 @@ class Timecourse(AbstractOutput):
 
             except ObjectDoesNotExist:
                 pk_data["weight"] = np.NaN
+        elif self.median:
+            pk_data["c"] = self.mean
+
         try:
             dosing = self.interventions.get(category="dosing")
             pk_data["dose"] = dosing.value
@@ -724,8 +845,9 @@ class Timecourse(AbstractOutput):
         except ObjectDoesNotExist:
             pk_data["dose"] = np.NaN
             pk_data["dosing_unit"] = np.NaN
-
             pk_data["t"] = self.time
+
+
 
     @property
     def calculate_auc_end(self):

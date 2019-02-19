@@ -6,7 +6,8 @@ from django.db import models
 from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from django.apps import apps
 import time
-
+import matplotlib.pyplot as plt
+from ..analysis.pharmacokinetic import f_pk, pk_figure , pk_report
 
 class InterventionSetManager(models.Manager):
     def create(self, *args, **kwargs):
@@ -120,8 +121,25 @@ class TimecourseExManager(models.Manager):
         timecourses_dj = create_multiple(timecourse_ex, timecourses, 'timecourses')
 
         Timecourse = type(timecourses_dj[0])
-        create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
         #Timecourse = apps.get_model('pkdb_app.interventions', ' Timecourse')
+
+        timecourses = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
+
+        for timecourse in timecourses:
+            if timecourse.pktype == "concentration" and timecourse.final:
+                variables = timecourse.get_pharmacokinetic_variables()
+                variables.pop("c_type", None)
+                variables.pop("bodyweight_type",None)
+
+                pk = f_pk(**variables)
+                info = pk_report(pk)
+                print(info)
+
+
+
+        #pharam_variables = [timecourse.get_pharmacokinetics_variables() for timecourse in timecourses if timecourse.pktype == "concentration"]
+        #from pprint import pprint
+        #pprint(pharam_variables)
 
         timecourse_ex.save()
 

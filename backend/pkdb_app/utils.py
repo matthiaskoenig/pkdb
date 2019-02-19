@@ -46,8 +46,8 @@ def ensure_dir(file_path):
 
 def update_or_create_multiple(parent, children, related_name):
     for child in children:
-        instance_cild = getattr(parent, related_name)
-        instance_cild.update_or_create(**child)
+        instance_child = getattr(parent, related_name)
+        instance_child.update_or_create(**child)
 
 
 def create_multiple(parent, children, related_name):

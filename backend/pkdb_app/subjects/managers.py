@@ -20,8 +20,8 @@ class GroupSetManager(models.Manager):
 
         create_multiple(groupset, descriptions, "descriptions")
         create_multiple(groupset, comments, "comments")
-        #create_multiple_bulk(groupset,"groupset", descriptions, Description)
-        #create_multiple_bulk(groupset,"groupset", comments, Comment)
+        #create_multiple_bulk(groupset, "groupset", descriptions, Description)
+        #create_multiple_bulk(groupset, "groupset", comments, Comment)
 
 
         study_group_exs = []
