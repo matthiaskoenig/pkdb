@@ -422,8 +422,13 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_requried_key(attrs,"interventions")
         self._validate_requried_key(attrs,"tissue")
         self._validate_requried_key(attrs,"time")
+        self._validate_time(attrs["time"])
 
         return super().validate(attrs)
+
+    def _validate_time(self,time):
+        if any(np.isnan(np.array(time))):
+            raise serializers.ValidationError({"time":"no timepoints are allowed to be nan", "detail":time})
 
 
 
