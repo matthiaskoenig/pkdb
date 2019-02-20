@@ -144,17 +144,21 @@ def pk_report(pk):
         "vd",
         "cl",
     ]:
+        pk_key = pd.to_numeric(pk[key])
         lines.append(
-            "\t{:<12}: {:>3.3f} [{}]".format(key, pk[key], pk["{}_unit".format(key)])
-        )
+                    "\t{:<12}: {:>3.3f} [{}]".format(key, pk_key, pk["{}_unit".format(key)])
+                    )
+
+
     lines.append("")
     for key in ["dose", "auc", "aucinf", "kel", "vd", "cl"]:
         key_bw = "{}/bw".format(key)
+        pk_key = pd.to_numeric(pk[key])
 
         lines.append(
             "\t{:<12}: {:>3.3f} [{}/{}]".format(
                 key_bw,
-                1.0 * pk[key] / pk["bodyweight"],
+                1.0 * pk_key / pd.to_numeric(pk["bodyweight"]),
                 pk["{}_unit".format(key)],
                 pk["bodyweight_unit"],
             )
