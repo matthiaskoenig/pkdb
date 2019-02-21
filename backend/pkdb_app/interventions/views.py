@@ -130,6 +130,8 @@ class ElasticOutputViewSet(DocumentViewSet):
     filter_fields = {'pk':'pk',
                      'study':'study.raw',
                      'final':'final',
+                     'calculated':'calculated',
+                     'unit':'unit',
                      'substance':'substance.name.raw',
                      'pktype':'pktype.raw',
                      'group_pk': {'field': 'group.pk',

@@ -684,7 +684,7 @@ clearance_norm_unit = NormalizableUnit(
         "l/h/kg": None,
         "l/h*kg":"l/h/kg",
         "ml/h/kg": "l/h/kg",  # -> l/h/kg
-        "ml/kg/min": None,
+        "ml/kg/min": "l/h/kg",
         "ml/min/kg": "l/h/kg",  # -> l/h/kg
         "ml/min/1.73m^2": None,
         "µmol/l*h": "µmol*h/l",

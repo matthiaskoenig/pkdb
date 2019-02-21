@@ -6,8 +6,10 @@ from django.db import models
 from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from django.apps import apps
 import time
-import matplotlib.pyplot as plt
-from ..analysis.pharmacokinetic import f_pk, pk_figure , pk_report
+import pandas as pd
+import numpy as np
+
+from ..analysis.pharmacokinetic import f_pk
 
 class InterventionSetManager(models.Manager):
     def create(self, *args, **kwargs):
@@ -119,27 +121,47 @@ class TimecourseExManager(models.Manager):
         create_multiple(timecourse_ex, comments, 'comments')
 
         timecourses_dj = create_multiple(timecourse_ex, timecourses, 'timecourses')
-
         Timecourse = type(timecourses_dj[0])
-        #Timecourse = apps.get_model('pkdb_app.interventions', ' Timecourse')
+
+        #Timecourse = apps.get_model('interventions', ' Timecourse')
+        Output = apps.get_model('interventions','Output')
 
         timecourses = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
 
         for timecourse in timecourses:
             if timecourse.pktype == "concentration" and timecourse.final:
                 variables = timecourse.get_pharmacokinetic_variables()
-                variables.pop("c_type", None)
-                variables.pop("bodyweight_type",None)
+                c_type = variables.pop("c_type", None)
+                _ = variables.pop("bodyweight_type", None)
 
                 pk = f_pk(**variables)
-                info = pk_report(pk)
-                print(info)
+                key_mapping = {"auc":"auc_end",
+                               "aucinf":"auc_inf",
+                               "cl":"clearance",
+                               "cmax":"cmax",
+                               "kel":"kel",
+                               "thalf":"thalf",
+                               "vd":"vd"}
+                outputs = []
+                for key in ["auc", "aucinf","cl","cmax","kel","thalf","vd"]: # missing "cmaxhalf "tmaxhalf",
 
+                    pk_unit = pk[f"{key}_unit"]
+                    if not np.isnan(pd.to_numeric(pk[key])) and "todo" not in pk_unit:
+                        output_dict = {}
+                        output_dict[c_type]  = pk[key]
+                        output_dict["unit"] = pk_unit
+                        output_dict["pktype"] = key_mapping[key]
+                        output_dict["calculated"] = True
+                        output_dict["tissue"] = timecourse.tissue
+                        output_dict["substance"] = timecourse.substance
+                        output_dict["group"] = timecourse.group
+                        output_dict["individual"] = timecourse.individual
+                        outputs.append(output_dict)
 
-
-        #pharam_variables = [timecourse.get_pharmacokinetics_variables() for timecourse in timecourses if timecourse.pktype == "concentration"]
-        #from pprint import pprint
-        #pprint(pharam_variables)
+                #OutputSerializer(data=outputs, many=True).is_valid()
+                #norm_outputs = [initialize_normed(output) for output in outputs]
+                outputs_dj = create_multiple_bulk(timecourse,"timecourse", outputs, Output)
+                create_multiple_bulk_normalized(outputs_dj, Output)
 
         timecourse_ex.save()
 

@@ -91,6 +91,8 @@ class OutputDocument(DocType):
         'pk': string_field('pk')}
         )
     final = fields.BooleanField()
+    calculated = fields.BooleanField()
+
     value = fields.FloatField('null_value')
     mean = fields.FloatField('null_mean')
     median = fields.FloatField('null_median')
@@ -160,9 +162,8 @@ class TimecourseDocument(DocType):
     tissue = string_field('tissue')
     pktype = string_field("pktype")
 
-    auc_end = fields.FloatField(attr='auc_end')
-
-    kel = fields.FloatField(attr='kel')
+    #auc_end = fields.FloatField(attr='auc_end')
+    #kel = fields.FloatField(attr='kel')
 
     class Meta(object):
             model = Timecourse

@@ -1,16 +1,30 @@
 """
 Serializers for interventions.
 """
-import pandas as pd
 from datetime import timedelta
-from decimal import Decimal
 import numpy as np
-from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
 import time
 
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
+
+
+from django.apps import apps
+
+#Substance = apps.get_model('interventions', 'Substance')
+#InterventionSet = apps.get_model('interventions', 'InterventionSet')
+#Intervention = apps.get_model('interventions', 'Intervention')
+#Output = apps.get_model('interventions', 'Output')
+#OutputSet = apps.get_model('interventions', 'OutputSet')
+#Timecourse = apps.get_model('interventions', 'Timecourse')
+#InterventionEx = apps.get_model('interventions', 'InterventionEx')
+#OutputEx = apps.get_model('interventions', 'OutputEx')
+#TimecourseEx = apps.get_model('interventions', 'TimecourseEx')
+
+
+
+
 from pkdb_app.interventions.models import (
     Substance,
     InterventionSet,
@@ -22,6 +36,7 @@ from pkdb_app.interventions.models import (
     OutputEx,
     TimecourseEx,
 )
+
 from pkdb_app.serializers import (
     ExSerializer,
     WrongKeyValidationSerializer,
@@ -666,7 +681,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "final","interventions"])
+                + ["group", "individual", "final","calculated","interventions"])
 
     def get_substance(self,obj):
         if obj.substance:
@@ -692,15 +707,13 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     interventions =  InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
 
-
-
     class Meta:
             model = Timecourse
             fields = (
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "final","interventions","figure","auc_end","kel"])
+                + ["group", "individual", "final","interventions","figure"])
 
     def get_substance(self,obj):
         if obj.substance:

@@ -266,12 +266,14 @@ class OutputSet(models.Model):
     @property
     def outputs(self):
         outputs = Output.objects.filter(ex__in=self.output_exs.all())
-        return outputs
+        outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
+        return outputs | outputs_timecourses
 
     @property
     def outputs_final(self):
         outputs = self.outputs.filter(final=True)
-        return outputs
+        outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
+        return outputs | outputs_timecourses
 
 
     @property
@@ -364,7 +366,7 @@ class Output(ValueableNotBlank, AbstractOutput):
     unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     substance = models.ForeignKey(Substance,related_name="outputs",on_delete=models.PROTECT)
-    ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE)
+    ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
     #normalization into standertized units and added statistic
     raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
@@ -381,6 +383,9 @@ class Output(ValueableNotBlank, AbstractOutput):
         interventions = self._interventions
         if interventions.all():
             return interventions
+
+        elif self.timecourse:
+            return self.timecourse.interventions
         else:
             return self.raw._interventions
 
@@ -403,7 +408,12 @@ class Output(ValueableNotBlank, AbstractOutput):
 
     @property
     def study(self):
-        return self.ex.outputset.study.name
+
+        try:
+            return self.ex.outputset.study.name
+
+        except AttributeError:
+            return self.timecourse.ex.outputset.study.name
 
     @property
     def pk_data(self):
@@ -593,44 +603,6 @@ class Timecourse(AbstractOutput):
                 )
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
-    """
-        def caluclate_pharmacokinetics(self):
-        if self.mean:
-            # clacualte mean, se ,sd, cv
-        elif self.median:
-            # clacualte median, se ,sd, cv
-        elif self.value:
-            # calculate value
-        else:
-            assert "mean, median or median have to be provided"
-
-        f_pk(
-                t=t,
-                c=c,
-                compound=substance,
-                dose=dose,
-                bodyweight=bodyweight,
-                t_unit="h",
-                c_unit="mg/L",
-                dose_unit="mg",
-                vd_unit="L",
-                bodyweight_unit="kg",
-        )
-
-        auc_end_unit = f"{self.time_unit}*{self.unit}"
-        auc_inf_unit = auc_end_unit
-        thalf_unit = self.time_unit
-        tmax_unit = self.time_unit
-        cmax_unit = self.self.unit
-        cmaxhalf_unit = self.unit
-        kel_unit = f"1/{self.time_unit}"
-
-        vd_unit =
-
-        auc_end = {"pktype":"aucend",
-                   "unit":auc_end_unit}
-
-    """
 
     @property
     def pk_data(self):
@@ -751,29 +723,9 @@ class Timecourse(AbstractOutput):
         # substance
         pharmacokinetics_dict["compound"] = self.substance.name
 
-        #todo: Unit volume of distribution unit
-        pharmacokinetics_dict["vd_unit"] = "todo"
 
         # bodyweight
         bodyweight = self.get_bodyweight().first()
-
-        if bodyweight:
-            pharmacokinetics_dict["bodyweight_unit"] = bodyweight.unit
-
-            if bodyweight.value:
-                pharmacokinetics_dict["bodyweight"] = bodyweight.value
-                pharmacokinetics_dict["bodyweight_type"] = "value"
-
-            elif bodyweight.mean:
-                pharmacokinetics_dict["bodyweight"] = bodyweight.mean
-                pharmacokinetics_dict["bodyweight_type"] = "mean"
-
-            elif bodyweight.median:
-                pharmacokinetics_dict["bodyweight"] = bodyweight.median
-                pharmacokinetics_dict["bodyweight_type"] = "median"
-
-
-
 
         # time
         pharmacokinetics_dict["t"] = pd.Series(self.time)
@@ -800,6 +752,34 @@ class Timecourse(AbstractOutput):
         if dosing:
             pharmacokinetics_dict["dose"] = dosing.value
             pharmacokinetics_dict["dose_unit"] = dosing.unit
+            pharmacokinetics_dict["vd_unit"] = f'{dosing.unit}/{pharmacokinetics_dict["c_unit"]}'
+
+
+        else:
+            # todo: Unit volume of distribution unit
+            pharmacokinetics_dict["vd_unit"] = "todo"
+
+
+
+        if bodyweight:
+            pharmacokinetics_dict["bodyweight_unit"] = bodyweight.unit
+
+            if bodyweight.value:
+                pharmacokinetics_dict["bodyweight"] = bodyweight.value
+                pharmacokinetics_dict["bodyweight_type"] = "value"
+
+            elif bodyweight.mean:
+                pharmacokinetics_dict["bodyweight"] = bodyweight.mean
+                pharmacokinetics_dict["bodyweight_type"] = "mean"
+
+            elif bodyweight.median:
+                pharmacokinetics_dict["bodyweight"] = bodyweight.median
+                pharmacokinetics_dict["bodyweight_type"] = "median"
+
+
+
+
+
 
 
         return pharmacokinetics_dict

@@ -220,6 +220,7 @@ class Study(Sidable, models.Model):
     def output_count(self):
         if self.outputset:
             return self.outputset.outputs.filter(final=True).count()
+
         return 0
 
 

@@ -54,7 +54,6 @@ def create_multiple(parent, children, related_name):
     instance_child = getattr(parent, related_name)
     return [instance_child.create(**child) for child in children]
 
-
 def create_multiple_bulk(parent,related_name_parent,children,class_child):
     return class_child.objects.bulk_create([class_child(**{related_name_parent:parent,**child}) for child in children])
 
