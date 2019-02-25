@@ -15,15 +15,57 @@ units on CharacteristicType is an ordered iteratable, with the first unit being 
 from collections import namedtuple
 
 
-from .units import NormalizableUnit
+from .units_old import NormalizableUnit
 from .substances.substances import SUBSTANCES_DATA
+from .units import ureg, NO_UNIT, ORGAN_WEIGHT_UNIT, height_units, weight_units, bmi_units, body_surface_area_units, \
+    waist_circumference_units, lean_body_mass_units, percent_fat_units, obesity_index_units, age_unit_units, \
+    blood_pressure_units, heart_rate_units, fasted_units, AMOUNT_PER_YEAR, abstinence_units, consumption_units
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
 
-CharacteristicType = namedtuple(
-    "CharacteristicType", ["key", "category", "dtype", "choices", "units"]
-)
+
+class CharacteristicType(object):
+    def __init__(self, key, category, dtype, choices, n_units):
+        self.key = key  # name of characteristica
+        self.category = category
+        self.dtype = dtype
+        self.choices = choices
+        self.n_units = n_units  # list of units to which are the normalized units. Important: Each should have a unique dimension.
+
+    @property
+    def n_units_p(self):
+        """
+
+        :return: list of norm units in the data format of pint
+        """
+        return [ureg(unit) for unit in self.n_units]
+
+    @property
+    def valid_dimensions(self):
+        return [unit.dimensionality for unit in self.n_units_p]
+
+    @property
+    def dimension_to_n_unit(self):
+        return {n_unit_p.dimensionality: n_unit_p for n_unit_p in self.n_units_p}
+
+    def validate_unit(self, unit):
+        return ureg(unit).dimensionality in self.valid_dimensions
+
+    def validate_choice(self, choice):
+        return choice in self.choices
+
+    def normalize(self, quantity, unit):
+        this_unit_p = ureg(unit)
+        unit_dim = unit.dimensionality
+        this_norm_unit_p = self.dimension_to_n_unit[unit_dim]
+        result = (quantity * this_unit_p).to(this_norm_unit_p)
+        return result
+
+
+
+
+
 PharmacokineticsType = namedtuple(
     "PharmacokineticsType", ["key", "description", "units"]
 )
@@ -122,129 +164,42 @@ LIFESTYLE = "lifestyle"
 BIOCHEMICAL_DATA = "biochemical data"
 HEMATOLOGY_DATA = "hematology data"
 GENETIC_VARIANTS = "genetic variants"
+STUDY_PROTOCOL = "study protocol"
 CYP2D6_PHENOTYPE = "CYP2D6 phenotype"
 
 
-dimensionless_norm_unit = NormalizableUnit({"-": None})
-organweight_norm_unit = NormalizableUnit({"kg": "g", "g": None})
-amountyear_unit = NormalizableUnit({"yr": None})
-amountperday_unit = NormalizableUnit({"1/day": None})
-
-
-# TODO: define the units for the characteristic types
 CHARACTERISTIC_DATA = [
     # -------------- Species --------------
-    CharacteristicType(
-        "species", SPECIES, CATEGORIAL_TYPE, ["homo sapiens"], dimensionless_norm_unit
-    ),
+    CharacteristicType("species",SPECIES,    CATEGORIAL_TYPE, ["homo sapiens"], [NO_UNIT]),
     # -------------- Anthropometry --------------
-    CharacteristicType(
-        "height",
-        ANTHROPOMETRY,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"cm": "m", "m": None}),
-    ),
-    CharacteristicType(
-        "weight", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg": None, "g": "kg"})
-    ),
-    CharacteristicType(
-        "bmi", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"kg/m^2": None})
-    ),
-    CharacteristicType(
-        "body surface area", ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"m^2": None})
-    ),
-    CharacteristicType(
-        "waist circumference",
-        ANTHROPOMETRY,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"cm": None}),
-    ),
-    CharacteristicType(
-        "lean body mass",  # fat free mass (FFM)
-        ANTHROPOMETRY,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"kg": None}),
-    ),
-    CharacteristicType(
-        "percent fat",  # percent body fat
-        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
-    ),
-    CharacteristicType(
-        "obesity index",  # percent of normal body weight
-        ANTHROPOMETRY, NUMERIC_TYPE, None, NormalizableUnit({"%": None})
-    ),
-    CharacteristicType(
-        "obese",
-        ANTHROPOMETRY,
-        BOOLEAN_TYPE,
-        BOOLEAN_CHOICES,
-        dimensionless_norm_unit,
-    ),
+    CharacteristicType("height",                ANTHROPOMETRY, NUMERIC_TYPE, None, height_units),
+    CharacteristicType("weight",                ANTHROPOMETRY, NUMERIC_TYPE, None, weight_units),
+    CharacteristicType("bmi",                   ANTHROPOMETRY, NUMERIC_TYPE, None, bmi_units),
+    CharacteristicType("body surface area",     ANTHROPOMETRY, NUMERIC_TYPE, None, body_surface_area_units),
+    CharacteristicType("waist circumference",   ANTHROPOMETRY, NUMERIC_TYPE, None, waist_circumference_units),
+    CharacteristicType("lean body mass",        ANTHROPOMETRY, NUMERIC_TYPE, None, lean_body_mass_units),  # fat free mass (FFM)
+    CharacteristicType("percent fat",           ANTHROPOMETRY, NUMERIC_TYPE, None, percent_fat_units),     # percent body fat
+    CharacteristicType("obesity index",         ANTHROPOMETRY, NUMERIC_TYPE, None, obesity_index_units),   # percent of normal body weight
+    CharacteristicType("obese",                 ANTHROPOMETRY, BOOLEAN_TYPE, BOOLEAN_CHOICES, []),
     # -------------- Demography --------------
-    CharacteristicType(
-        "age", DEMOGRAPHICS, NUMERIC_TYPE, None, NormalizableUnit({"yr": None})
-    ),
-    CharacteristicType(
-        "sex",
-        DEMOGRAPHICS,
-        CATEGORIAL_TYPE,
-        ["M", "F", MIX, NAN],
-        dimensionless_norm_unit,
-    ),
-    CharacteristicType(
-        "ethnicity",
-        DEMOGRAPHICS,
-        CATEGORIAL_TYPE,
+    CharacteristicType("age",       DEMOGRAPHICS, NUMERIC_TYPE,    None,                 age_unit_units),
+    CharacteristicType("sex",       DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], []),
+    CharacteristicType("ethnicity", DEMOGRAPHICS,   CATEGORIAL_TYPE,
         [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese"],
-        dimensionless_norm_unit,
-    ),
+        []),
     # -------------- Physiology --------------
-    CharacteristicType(
-        "blood pressure",
-        PHYSIOLOGY,
-        NUMERIC_TYPE,
-        None,
-        NormalizableUnit({"mmHg": None}),
-    ),
-    CharacteristicType(
-        "heart rate", PHYSIOLOGY, NUMERIC_TYPE, None, NormalizableUnit({"1/s": None})
-    ),
+    CharacteristicType("blood pressure", PHYSIOLOGY, NUMERIC_TYPE, None, blood_pressure_units),
+    CharacteristicType("heart rate",     PHYSIOLOGY, NUMERIC_TYPE, None, heart_rate_units),
     # -------------- Organ weights --------------
-    CharacteristicType(
-        "liver weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
-    ),
-    CharacteristicType(
-        "kidney weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
-    ),
-    CharacteristicType(
-        # muscle mass
-        "muscle weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
-    ),
-    CharacteristicType(
-        "fat weight", ANTHROPOMETRY, NUMERIC_TYPE, None, organweight_norm_unit
-    ),
+    CharacteristicType("liver weight", ANTHROPOMETRY, NUMERIC_TYPE, None, [ORGAN_WEIGHT_UNIT]),
+    CharacteristicType("kidney weight", ANTHROPOMETRY, NUMERIC_TYPE, None, [ORGAN_WEIGHT_UNIT]),
+    CharacteristicType("muscle weight", ANTHROPOMETRY, NUMERIC_TYPE, None, [ORGAN_WEIGHT_UNIT]), # muscle mass
+    CharacteristicType("fat weight", ANTHROPOMETRY, NUMERIC_TYPE, None, [ORGAN_WEIGHT_UNIT]),
 
     # -------------- Patient status --------------
-    CharacteristicType(
-        "overnight fast",
-        PATIENT_STATUS,
-        BOOLEAN_TYPE,
-        BOOLEAN_CHOICES,
-        dimensionless_norm_unit,
-    ),
-    CharacteristicType(
-        "fasted", PATIENT_STATUS, NUMERIC_TYPE, None, NormalizableUnit({"h": None})
-    ),
-    CharacteristicType(
-        "healthy",
-        PATIENT_STATUS,
-        BOOLEAN_TYPE,
-        BOOLEAN_CHOICES,
-        dimensionless_norm_unit,
-    ),
+    CharacteristicType("overnight fast",PATIENT_STATUS, BOOLEAN_TYPE,BOOLEAN_CHOICES,[]),
+    CharacteristicType("fasted",        PATIENT_STATUS, NUMERIC_TYPE, None, fasted_units ),
+    CharacteristicType("healthy",       PATIENT_STATUS, BOOLEAN_TYPE, BOOLEAN_CHOICES, [] ),
     CharacteristicType(
         "disease",
         PATIENT_STATUS,
@@ -267,46 +222,31 @@ CHARACTERISTIC_DATA = [
             "chronic viral hepatitis",
             "sickle cell"
         ],
-        dimensionless_norm_unit,
+        [],
     ),
-    CharacteristicType(
-        "disease duration", LIFESTYLE, NUMERIC_TYPE, None, amountyear_unit
-    ),
+    CharacteristicType("disease duration", LIFESTYLE, NUMERIC_TYPE, None, [AMOUNT_PER_YEAR]),
 
     # -------------- Medication --------------
-    CharacteristicType(
-        "medication", MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, dimensionless_norm_unit
+    CharacteristicType("medication", MEDICATION, BOOLEAN_TYPE, BOOLEAN_CHOICES, []),
+    CharacteristicType("medication type", MEDICATION, CATEGORIAL_TYPE,
+        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen",
+         "hydrochlorthiazide","amiloride","chlordiazepoxide","paracetamol","salbutamol","diltiazem","hemodialysis",
+         "enalapril","beclometasone","spinal anaesthesia", "CCM"],
+        [],
     ),
-    CharacteristicType(
-        "medication type",
-        MEDICATION,
-        CATEGORIAL_TYPE,
-        ["diet", "metformin", "insulin", "metformin+glipizide", "aspirin", "carbon monoxide", "clozapine", "ibuprofen", "hydrochlorthiazide","amiloride","chlordiazepoxide","paracetamol","salbutamol","diltiazem","hemodialysis","enalapril","beclometasone","spinal anaesthesia", "CCM"],
-        dimensionless_norm_unit,
-    ),
-    CharacteristicType(
-        "medication amount", MEDICATION, NUMERIC_TYPE, None, dimensionless_norm_unit
-    ),
-    CharacteristicType(
-        "oral contraceptives",
-        MEDICATION,
-        BOOLEAN_TYPE,
-        BOOLEAN_CHOICES,
-        dimensionless_norm_unit,
-    ),
-    CharacteristicType(
-        "abstinence",
-        "study protocol",
-        CATEGORIAL_TYPE,
-        [substance.name for substance in SUBSTANCES_DATA] + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
-        NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
+    CharacteristicType("medication amount", MEDICATION, NUMERIC_TYPE, None, []),
+    CharacteristicType("oral contraceptives",MEDICATION,BOOLEAN_TYPE,BOOLEAN_CHOICES, []),
+    CharacteristicType("abstinence",    STUDY_PROTOCOL,   CATEGORIAL_TYPE,
+        [substance.name for substance in SUBSTANCES_DATA] +
+                       ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
+                       abstinence_units,
     ),
     CharacteristicType(
         "consumption",
-        "study protocol",
+        STUDY_PROTOCOL,
         CATEGORIAL_TYPE,
         [substance.name for substance in SUBSTANCES_DATA] + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
-        NormalizableUnit({"-": None, "g/day": None, "mg/day": None, "cups/day": None}),
+        consumption_units,
     ),
 
 
@@ -325,7 +265,7 @@ CHARACTERISTIC_DATA = [
          "protein solution",
          "lipid-glucose-protein drink"
          ],
-        dimensionless_norm_unit,
+        [],
     ),
 
     # -------------- sleeping & circadian rhythm -----------------
@@ -337,7 +277,7 @@ CHARACTERISTIC_DATA = [
         ["asleep",
          "awake"
         ],
-        dimensionless_norm_unit,
+        [],
     ),
 
     CharacteristicType(
@@ -347,13 +287,13 @@ CHARACTERISTIC_DATA = [
         ["daytime",
          "nighttime"
         ],
-        dimensionless_norm_unit,
+        [],
     ),
 
 
     # -------------- Caffeine --------------
     CharacteristicType(
-        "caffeine", LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, dimensionless_norm_unit
+        "caffeine", LIFESTYLE, BOOLEAN_TYPE, BOOLEAN_CHOICES, []
     ),
     CharacteristicType(
         "caffeine amount",
@@ -387,7 +327,7 @@ CHARACTERISTIC_DATA = [
     ),
     CharacteristicType(
         "alcohol abstinence",
-        "study protocol",
+        STUDY_PROTOCOL,
         BOOLEAN_TYPE,
         BOOLEAN_CHOICES,
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
