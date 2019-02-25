@@ -6,26 +6,11 @@ import numpy as np
 from rest_framework import serializers
 import time
 
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
 
-from django.apps import apps
-
-#Substance = apps.get_model('interventions', 'Substance')
-#InterventionSet = apps.get_model('interventions', 'InterventionSet')
-#Intervention = apps.get_model('interventions', 'Intervention')
-#Output = apps.get_model('interventions', 'Output')
-#OutputSet = apps.get_model('interventions', 'OutputSet')
-#Timecourse = apps.get_model('interventions', 'Timecourse')
-#InterventionEx = apps.get_model('interventions', 'InterventionEx')
-#OutputEx = apps.get_model('interventions', 'OutputEx')
-#TimecourseEx = apps.get_model('interventions', 'TimecourseEx')
-
-
-
-
-from pkdb_app.interventions.models import (
+from ..interventions.models import (
     Substance,
     InterventionSet,
     Intervention,
@@ -37,16 +22,16 @@ from pkdb_app.interventions.models import (
     TimecourseEx,
 )
 
-from pkdb_app.serializers import (
+from ..serializers import (
     ExSerializer,
     WrongKeyValidationSerializer,
     BaseOutputExSerializer,
     NA_VALUES)
 
-from pkdb_app.subjects.models import Group, DataFile, Individual
-from pkdb_app.categoricals import validate_categorials, MEDICATION, DOSING
+from ..subjects.models import Group, DataFile, Individual
+from ..categoricals import validate_categorials, MEDICATION, DOSING
 
-from pkdb_app.subjects.serializers import (
+from ..subjects.serializers import (
     VALUE_MAP_FIELDS,
     VALUE_FIELDS,
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer, VALUE_FIELDS_NO_UNIT)
@@ -54,7 +39,7 @@ from pkdb_app.subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from pkdb_app.utils import list_of_pk
+from ..utils import list_of_pk
 
 INTERVENTION_FIELDS = [
     "name",
@@ -99,7 +84,7 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 
     class Meta:
         model = Substance
-        fields = ["name"]
+        fields = ["name" ,"chebi" ]#"description","mass","charge","formular","derived","parent"]
 
     def create(self, validated_data):
         substance, created = Substance.objects.update_or_create(**validated_data)

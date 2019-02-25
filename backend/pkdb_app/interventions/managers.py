@@ -3,12 +3,12 @@ the managers can be used to overwrite class methods of the models module.
 """
 from datetime import timedelta
 from django.db import models
-from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from django.apps import apps
 import time
 import pandas as pd
 import numpy as np
 
+from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from ..analysis.pharmacokinetic import f_pk
 
 class InterventionSetManager(models.Manager):

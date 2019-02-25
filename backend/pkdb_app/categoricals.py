@@ -15,8 +15,8 @@ units on CharacteristicType is an ordered iteratable, with the first unit being 
 from collections import namedtuple
 
 
-from pkdb_app.units import NormalizableUnit
-from pkdb_app.substances import SUBSTANCES_DATA
+from .units import NormalizableUnit
+from .substances.substances import SUBSTANCES_DATA
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -78,17 +78,6 @@ FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
 
 FORMAT_MAPPING = {"TSV": FileFormat("TSV", "\t"), "CSV": FileFormat("CSV", ",")}
 
-# ---------------------------------------------------
-# Study design
-# ---------------------------------------------------
-STUDY_DESIGN_DATA = [
-    "single group",  # (interventional study)
-    "parallel group",  # (interventional study)
-    "crossover",  # (interventional study)
-    "cohort",  # (oberservational study)
-    "case control",  # (oberservational study)
-]
-STUDY_DESIGN_CHOICES = [(t, t) for t in STUDY_DESIGN_DATA]
 
 # ---------------------------------------------------
 # Study licence
@@ -99,12 +88,9 @@ CLOSED = "closed"
 STUDY_LICENCE_DATA = [
     OPEN,  # (open reference)
     CLOSED,
-
 ]
 
-
 STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
-
 
 # ---------------------------------------------------
 # Keywords
@@ -118,7 +104,6 @@ KEYWORDS_DATA = [
     "diabetes",
     "oral glucose tolerance test",
     "intravenous glucose tolerance test"
-
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
@@ -141,7 +126,6 @@ CYP2D6_PHENOTYPE = "CYP2D6 phenotype"
 
 
 dimensionless_norm_unit = NormalizableUnit({"-": None})
-
 organweight_norm_unit = NormalizableUnit({"kg": "g", "g": None})
 amountyear_unit = NormalizableUnit({"yr": None})
 amountperday_unit = NormalizableUnit({"1/day": None})
@@ -314,14 +298,14 @@ CHARACTERISTIC_DATA = [
         "abstinence",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
+        [substance.name for substance in SUBSTANCES_DATA] + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
         NormalizableUnit({"-": None, "yr": None, "week": None, "day": None, "h": None}),
     ),
     CharacteristicType(
         "consumption",
         "study protocol",
         CATEGORIAL_TYPE,
-        SUBSTANCES_DATA + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
+        [substance.name for substance in SUBSTANCES_DATA] + ["alcohol", "smoking", "grapefruit juice", "medication", "drug", "kola nuts", "coffee","tee"],
         NormalizableUnit({"-": None, "g/day": None, "mg/day": None, "cups/day": None}),
     ),
 
@@ -813,7 +797,7 @@ PharmacokineticsType(
     PharmacokineticsType(
         "rate_secretion", "rate secretion (rate)", rate_norm_unit
     ),
-PharmacokineticsType(
+    PharmacokineticsType(
         "rate_renal", "rate renal (rate)", rate_norm_unit
     ),
 

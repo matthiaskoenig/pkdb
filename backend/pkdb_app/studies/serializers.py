@@ -251,7 +251,8 @@ class StudySerializer(SidSerializer):
 
         data["curators"] = ratings
 
-        self.validate_wrong_keys(data)
+        from pprint import pprint
+        pprint(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):

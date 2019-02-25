@@ -3,7 +3,6 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
-import copy
 import numpy as np
 import math
 import pandas as pd
@@ -11,7 +10,6 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist,MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.apps import apps
 
 
 from ..subjects.models import Group, DataFile, Individual
@@ -43,19 +41,40 @@ from ..categoricals import (
 from ..units import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
 
 from ..utils import CHAR_MAX_LENGTH
-from ..analysis.pharmacokinetic import _auc, _aucinf, _kel, _vd, f_pk
-from ..substances import SUBSTANCES_DATA_CHOICES
+from ..substances.substances import SUBSTANCES_DATA_CHOICES
 
 # -------------------------------------------------
 # Substance
 # -------------------------------------------------
 class Substance(models.Model):
-    """ Substances have to be in a different table, so that
-    than be uniquely defined.
+    """ Substances.
+
+    There could be three main classes of `substances`:
+    1. Substance with a chebi identifier
+    - this is a basic substance and can have a mass (or not)
+    2. Substance with no chebi identifier
+    - this is a basic substance and can have a mass (or not)
+    3. Derived substance (with no chebi identifier)
+    - this is a combination of basic substances (from class 1 or 2).
+    - this has no mass
+    - if all partial substances have mass this could be used for unit transformations ?!
 
     Has to be extended via ontology (Ontologable)
     """
+    # this cannot be null (for class 1 & 2), must be null for class 3
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES)
+    # can be null
+    chebi = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)
+    description = models.TextField(blank=True, null=True)
+    mass = models.FloatField(null=True)
+    charge = models.FloatField(null=True)
+    formula = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)# chemical formula
+
+    # derived substance model
+    derived = models.CharField(null = True, max_length=CHAR_MAX_LENGTH) # symbolic formula (based on labels), this is the label of the derived substance
+
+    derived_substances = models.ManyToManyField("Substance", related_name = "basic_substances")
+    # validation rule: check that all labels are in derived and not more(split on `+/()`)
 
     def __str__(self):
         return self.name
@@ -777,223 +796,5 @@ class Timecourse(AbstractOutput):
                 pharmacokinetics_dict["bodyweight_type"] = "median"
 
 
-
-
-
-
-
         return pharmacokinetics_dict
 
-    def calculate_pharamcokinatics(self):
-        pass
-
-
-        #pk_data = self.get_pharamcokinetic_data()
-        #return f_pk(t=pk_data["t"],c=pk_data["c"],compound=self.substance.name,dose=)
-
-    def get_pharamcokinetic_data(self):
-        pk_data = {}
-
-        try:
-            pk_data["weight"] = self.related_subject.characteristica.get(category="weight").value
-
-        except ObjectDoesNotExist:
-            pk_data["weight"] = np.NaN
-
-        if self.value:
-            pk_data["c"] = self.value
-
-
-        elif self.mean:
-            pk_data["c"] = self.mean
-
-            try:
-                weight = self.group.characteristica_all.get(category="weight")
-                pk_data["weight"] = weight.get("mean")
-                pk_data["bodyweight_unit"] = weight.unit
-
-            except ObjectDoesNotExist:
-                pk_data["weight"] = np.NaN
-        elif self.median:
-            pk_data["c"] = self.mean
-
-        try:
-            dosing = self.interventions.get(category="dosing")
-            pk_data["dose"] = dosing.value
-            pk_data["dosing_unit"] =  dosing.unit
-
-        except ObjectDoesNotExist:
-            pk_data["dose"] = np.NaN
-            pk_data["dosing_unit"] = np.NaN
-            pk_data["t"] = self.time
-
-
-
-    @property
-    def calculate_auc_end(self):
-        output_data = {}
-        output_data["substance"] = str(self.substance)
-        output_data["tissue"] = str(self.tissue)
-        output_data["pktype"] = "auc_end"
-        output_data["time"] = self.time[-1]
-        if self.value:
-            output_data["value"] = self.try_type_error(self.time,self.value,_auc)
-        if self.mean:
-            output_data["mean"] = self.try_type_error(self.time,self.mean,_auc)
-
-        if self.median:
-            output_data["median"] = self.try_type_error(self.time,self.median,_auc)
-
-        output_data["unit"] = f"({self.unit})*{self.time_unit}"
-
-
-
-        array_fields = [
-                "value",
-                "mean",
-                "median",
-                "min",
-                "max",
-                "sd",
-                "se",
-                "cv",
-                "time",
-            ]
-        for field in array_fields:
-            value = output_data.get(field, None)
-            if value:
-                if self._any_not_json(value):
-                    output_data[field] = None
-
-        return output_data
-
-    @property
-    def auc_end(self):
-        instance_calc_end = self.calculate_auc_end
-        for value in ['value','mean','median']:
-            if instance_calc_end.get(value):
-                return instance_calc_end[value]
-
-
-
-    @staticmethod
-    def try_type_error(time, array, method):
-        try:
-            value = method(np.array(time),np.array(array))
-
-        except TypeError:
-            value = None
-
-        return value
-
-    @property
-    def calculate_auc_inf(self):
-        output_data = {}
-        output_data["substance"] = str(self.substance)
-        output_data["tissue"] = str(self.tissue)
-        output_data["pktype"] = "auc_inf"
-        if self.value:
-            output_data["value"] = self.try_type_error(self.time, self.value, _aucinf)
-        if self.mean:
-            output_data["mean"] = self.try_type_error(self.time, self.mean, _aucinf)
-
-        if self.median:
-            output_data["median"] = self.try_type_error(self.time, self.median, _aucinf)
-
-        output_data["unit"] = f"({self.unit})*{self.time_unit}"
-
-
-
-        array_fields = [
-            "value",
-            "mean",
-            "median",
-            "min",
-            "max",
-            "sd",
-            "se",
-            "cv",
-            "time",
-        ]
-        for field in array_fields:
-            value = output_data.get(field, None)
-            if value:
-                if self._any_not_json(value):
-                    output_data[field] = None
-        return output_data
-
-
-    def calculate_kel(self):
-        output_data = {}
-        output_data["substance"] = str(self.substance)
-        output_data["tissue"] = str(self.tissue)
-        output_data["pktype"] = "kel"
-        if self.value:
-            output_data["value"] = self.try_type_error(self.time, self.value, _kel)
-        if self.mean:
-            output_data["mean"] = self.try_type_error(self.time, self.mean, _kel)
-
-        if self.median:
-            output_data["median"] = self.try_type_error(self.time, self.median, _kel)
-
-        output_data["unit"] = f"({self.unit})/{self.time_unit}"
-
-        array_fields = [
-            "value",
-            "mean",
-            "median",
-            "min",
-            "max",
-            "sd",
-            "se",
-            "cv",
-            "time",
-        ]
-        for field in array_fields:
-            value = output_data.get(field, None)
-            if value:
-                if self._any_not_json(value):
-                    output_data[field] = None
-
-        return output_data
-
-    @property
-    def kel(self):
-        instance_calc_kel = self.calculate_kel()
-        for value in ['value', 'mean', 'median']:
-            if instance_calc_kel.get(value):
-                return instance_calc_kel[value]
-
-    @property
-    def calculate_vd(self):
-            output_data = {}
-            output_data["substance"] = str(self.substance)
-            output_data["tissue"] = str(self.tissue)
-            output_data["pktype"] = "vd"
-            if self.value:
-                output_data["value"] = self.try_type_error(self.time, self.value, _vd)
-            if self.mean:
-                output_data["mean"] = self.try_type_error(self.time, self.mean, _vd)
-            if self.median:
-                output_data["median"] = self.try_type_error(self.time, self.median, _vd)
-
-            output_data["unit"] = f"({self.unit})/{self.time_unit}"
-
-            array_fields = [
-                "value",
-                "mean",
-                "median",
-                "min",
-                "max",
-                "sd",
-                "se",
-                "cv",
-                "time",
-            ]
-            for field in array_fields:
-                value = output_data.get(field, None)
-                if value:
-                    if self._any_not_json(value):
-                        output_data[field] = None
-
-            return output_data

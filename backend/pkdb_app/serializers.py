@@ -483,7 +483,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
     # ----------------------------------
 
     def to_internal_value(self, data):
-
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
 

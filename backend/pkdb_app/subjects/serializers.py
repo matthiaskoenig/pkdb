@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from rest_framework import serializers
-from ..categoricals import validate_categorials, CHARACTERISTIC_DICT, NUMERIC_TYPE
+from ..categoricals import validate_categorials
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..studies.models import Study
@@ -9,7 +9,6 @@ from operator import itemgetter
 from django.shortcuts import get_object_or_404
 from ..utils import list_of_pk
 
-from ..permissions import FilePermissions
 from .models import (
     Group,
     GroupSet,

@@ -3,6 +3,12 @@ Definition of units and handling of units conversion.
 """
 # TODO: lookup units package and proper units handling (units conversion, default units, ...)
 import numpy as np
+import pint
+from collections import namedtuple
+
+Unit = namedtuple("Unit", ["name","short_name", "unit"])
+ureg = pint.UnitRegistry()
+
 
 def add_names(d):
     """ If no value exists adds the key as value.
@@ -19,15 +25,41 @@ def add_names(d):
 # ----------------------------------------
 # Unit definitions
 # ----------------------------------------
+
 TIME_UNITS = {
-    "yr": "year",
-    "week": "week",
-    "day": "day",
-    "h": "hour",
-    "min": "minute",
-    "s": "second",
+
+    "yr": ureg("year"),
+    "week": ureg("week"),
+    "day":ureg("day"),
+    "h": ureg("hour"),
+    "min": ureg("minute"),
+    "s": ureg("second"),
+}
+
+NORM_UNITS = {
+    "-": ureg("dimensionless"),
+    "%":100*ureg("dimensionless"),
+    "mega": 1000 * ureg("dimensionless"),
+    "kilo": 1000 * ureg("dimensionless"),
+    "milli": 1E-3 * ureg("dimensionless"),
+    "micro": 1E-6 * ureg("dimensionless"),
+    "cm": ureg("cm"),
+    "kg":ureg("kg"),
+    "mg": ureg("mg"),
+    "g": ureg("g"),
+    "mmHg": ureg("mmHg"),
+    "mmol": ureg("mmol"),
+    "µmol": ureg("µmol"),
+    "nmol":ureg("nmol"),
+    "m^2":ureg("m^2"),
+    "1/week": ureg("m^2"),
+    "1/day": "1/day",
+    "1/h": ureg("1/h"),
+    "1/min": ureg("1/min"),
+    "1/s": ureg("1/s"),
 }
 add_names(TIME_UNITS)
+
 
 UNITS = {
     # base units
@@ -35,7 +67,7 @@ UNITS = {
     "%": "percent",
     "mega": None,
     "kilo": None,
-     "milli": None,
+    "milli": None,
      "micro": None,
     "cm": "centimeter",
     "m": "meter",
@@ -54,6 +86,7 @@ UNITS = {
     "1/h": None,
     "1/min": None,
     "1/s": None,
+
     # misc units
     "g/kg": None,
     "mg/kg": None,
@@ -63,7 +96,7 @@ UNITS = {
     "U/kg": None,
     "mg/day": None,
     "kg/m^2": None,
-    "IU/I": None,
+    "U/l": None,  # "ALT"
 
 
     # concentration

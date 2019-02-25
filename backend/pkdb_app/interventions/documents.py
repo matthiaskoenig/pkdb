@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from pkdb_app.documents import string_field, elastic_settings, ObjectField
-from pkdb_app.interventions.models import Substance, Intervention, Output, Timecourse
+from ..documents import string_field, elastic_settings, ObjectField
+from ..interventions.models import Substance, Intervention, Output, Timecourse
 
 
 
