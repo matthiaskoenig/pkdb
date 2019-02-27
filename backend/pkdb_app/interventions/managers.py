@@ -146,7 +146,7 @@ class TimecourseExManager(models.Manager):
                 for key in ["auc", "aucinf","cl","cmax","kel","thalf","vd"]: # missing "cmaxhalf "tmaxhalf",
 
                     pk_unit = pk[f"{key}_unit"]
-                    if not np.isnan(pd.to_numeric(pk[key])) and "todo" not in pk_unit:
+                    if not np.isnan(pd.to_numeric(pk[key])):
                         output_dict = {}
                         output_dict[c_type]  = pk[key]
                         output_dict["unit"] = pk_unit
@@ -156,10 +156,12 @@ class TimecourseExManager(models.Manager):
                         output_dict["substance"] = timecourse.substance
                         output_dict["group"] = timecourse.group
                         output_dict["individual"] = timecourse.individual
+                        if output_dict[c_type] == "auc_end":
+                            output_dict["time"] = max(timecourse.time)
+                            output_dict["time_unit"] = timecourse.time_unit
                         outputs.append(output_dict)
 
-                #OutputSerializer(data=outputs, many=True).is_valid()
-                #norm_outputs = [initialize_normed(output) for output in outputs]
+
                 outputs_dj = create_multiple_bulk(timecourse,"timecourse", outputs, Output)
                 create_multiple_bulk_normalized(outputs_dj, Output)
 

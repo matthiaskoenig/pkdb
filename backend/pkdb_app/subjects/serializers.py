@@ -106,7 +106,7 @@ class CharacteristicaSerializer(ExSerializer):
             validate_categorials(data=attr, category_class="characteristica")
         except ValueError as err:
             raise serializers.ValidationError(err)
-        #validate_categorials(attr, "characteristica")
+
         return super().validate(attr)
 
 

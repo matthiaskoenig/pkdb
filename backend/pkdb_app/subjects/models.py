@@ -5,20 +5,16 @@ group or individual).
 How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
-import copy
-import pandas as pd
-from django.db import models
 
-from pkdb_app.normalization import get_sd, get_se, get_cv
-from pkdb_app.storage import OverwriteStorage
-from pkdb_app.units import UNIT_CONVERSIONS_DICT
+from django.db import models
+from ..normalization import get_sd, get_se, get_cv
+from ..storage import OverwriteStorage
 from ..behaviours import (
     Valueable,
-    ValueableMap,
     Externable,
     ValueableMapNotBlank,
     ValueableNotBlank,
-)
+    Normalizable)
 from ..categoricals import (
     CHARACTERISTIC_DICT,
     CHARACTERISTIC_CHOICES,
@@ -64,12 +60,8 @@ class DataFile(models.Model):
         tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(final=True)
         return tc
 
-
-
-
     def __str__(self):
         return self.file.name
-
 
 # ----------------------------------
 # Group
@@ -331,6 +323,8 @@ class Individual(AbstractIndividual):
 # ----------------------------------
 # Characteristica
 # ----------------------------------
+
+
 class AbstractCharacteristica(models.Model):
     category = models.CharField(
         choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
@@ -347,7 +341,7 @@ class AbstractCharacteristica(models.Model):
         abstract = True
 
     @property
-    def characteristic_data(self):
+    def category_class_data(self):
         """ Returns the full information about the characteristic.
 
         :return:
@@ -356,7 +350,7 @@ class AbstractCharacteristica(models.Model):
 
     @property
     def choices(self):
-        return self.characteristic_data.choices
+        return self.category_class_data.choices
 
 
 class CharacteristicaEx(
@@ -394,7 +388,7 @@ class CharacteristicaEx(
     objects = CharacteristicaExManager()
 
 
-class Characteristica(Valueable, AbstractCharacteristica):
+class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     """ Characteristic. """
 
     group = models.ForeignKey(
@@ -435,35 +429,6 @@ class Characteristica(Valueable, AbstractCharacteristica):
         if self.individual:
             return self.individual.pk
 
-    @property
-    def norm_fields(self):
-        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                "sd": self.sd, "se": self.se}
-
-    @property
-    def norm_unit(self):
-        return self.characteristic_data.units.get(self.unit)
-
-    @property
-    def is_norm(self):
-        norm_unit = self.norm_unit
-        return norm_unit is None
-
-    @property
-    def is_convertible(self):
-        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-        return conversion is not None
-
-    def normalize(self):
-        if all([not self.is_norm, self.is_convertible]):
-            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-            self.unit = self.norm_unit
-
-            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            for key,value in self.norm_fields.items():
-                if not value is None:
-                        setattr(self,key,conversion.apply_conversion(value))
 
     def add_statistics(self):
             if not self.sd:

@@ -24,7 +24,6 @@ from django_elasticsearch_dsl_drf.filter_backends import (
 
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
-from pkdb_app.views import CreateListModelMixin
 
 
 class GroupViewSet(DocumentViewSet):

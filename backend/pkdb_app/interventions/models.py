@@ -11,7 +11,6 @@ from django.core.exceptions import ObjectDoesNotExist,MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
-
 from ..subjects.models import Group, DataFile, Individual
 
 from ..interventions.managers import (
@@ -30,6 +29,7 @@ from ..behaviours import (
     CHAR_MAX_LENGTH_LONG,
     ValueableNotBlank,
     ValueableMapNotBlank,
+    Normalizable
 )
 from ..categoricals import (
     INTERVENTION_CHOICES,
@@ -37,8 +37,7 @@ from ..categoricals import (
     INTERVENTION_FORM_CHOICES,
     INTERVENTION_APPLICATION_CHOICES,
     PK_DATA_CHOICES,
-    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT, TIME_NORM_UNIT)
-from ..units_old import UNITS_CHOICES, TIME_UNITS_CHOICES, UNIT_CONVERSIONS_DICT
+    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT, TIME_NORM_UNIT, DOSING_RESTRICTED)
 
 from ..utils import CHAR_MAX_LENGTH
 from ..substances.substances import SUBSTANCES_DATA_CHOICES
@@ -140,26 +139,18 @@ class AbstractIntervention(models.Model):
         choices=INTERVENTION_CHOICES, max_length=CHAR_MAX_LENGTH
     )
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
-    form = models.CharField(
-        max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES
-    )
-    application = models.CharField(
-        max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES
-    )
+    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
+    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
     time = models.FloatField(null=True)
-    time_unit = models.CharField(
-        max_length=CHAR_MAX_LENGTH, null=True, choices=TIME_UNITS_CHOICES
-    )
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True) #todo validate in serializer
     substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
-    route = models.CharField(
-        max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES
-    )
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES)
 
     class Meta:
         abstract = True
 
     @property
-    def intervention_data(self):
+    def category_class_data(self):
         """ Returns the full information about the characteristic.
 
         :return:
@@ -168,7 +159,7 @@ class AbstractIntervention(models.Model):
 
     @property
     def choices(self):
-        return self.intervention_data.choices
+        return self.category_class_data.choices
 
     def __str__(self):
         return self.name
@@ -221,7 +212,7 @@ class InterventionEx(
         unique_together = ("interventionset", "name", "name_map", "source")
 
 
-class Intervention(ValueableNotBlank, AbstractIntervention):
+class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
     """ A concrete step/thing which is done to the group.
 
          In case of dosing/medication the actual dosing is stored in the Valueable.
@@ -240,40 +231,9 @@ class Intervention(ValueableNotBlank, AbstractIntervention):
     final = models.BooleanField(default=False)
     substance = models.ForeignKey(Substance, related_name="interventions",null=True, on_delete=models.PROTECT)
 
-
-    @property
-    def norm_unit(self):
-        return self.intervention_data.units.get(self.unit)
-
     @property
     def study(self):
         return self.ex.interventionset.study.name
-
-    @property
-    def is_norm(self):
-        norm_unit = self.norm_unit
-        return norm_unit is None
-
-    @property
-    def is_convertible(self):
-        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-        return conversion is not None
-
-    @property
-    def norm_fields(self):
-        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                "sd": self.sd, "se": self.se}
-
-    def normalize(self):
-        if all([not self.is_norm, self.is_convertible]):
-            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-            self.unit = self.norm_unit
-
-            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            for key, value in self.norm_fields.items():
-                if not value is None:
-                        setattr(self, key, conversion.apply_conversion(value))
 
 
 # -------------------------------------------------
@@ -320,19 +280,15 @@ class OutputSet(models.Model):
             return 0
 
 
-class AbstractOutput(models.Model):
+class AbstractOutput(Normalizable):
 
     substance = models.ForeignKey(Substance,null=True, on_delete=models.SET_NULL)
     tissue = models.CharField(
         max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
     )
-    pktype = models.CharField(
-        max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES, null=True
-    )
+    pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES)
     time = models.FloatField(null=True)
-    time_unit = models.CharField(
-        max_length=CHAR_MAX_LENGTH, null=True, choices=TIME_UNITS_CHOICES
-    )
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True ) #todo: validate in serializer
 
     class Meta:
         abstract = True
@@ -382,7 +338,7 @@ class Output(ValueableNotBlank, AbstractOutput):
         Individual, null=True, blank=True, on_delete=models.SET_NULL
     )
     _interventions = models.ManyToManyField(Intervention)
-    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
+    unit = models.CharField(max_length=CHAR_MAX_LENGTH)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     substance = models.ForeignKey(Substance,related_name="outputs",on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
@@ -424,7 +380,6 @@ class Output(ValueableNotBlank, AbstractOutput):
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
 
-
     @property
     def study(self):
 
@@ -435,39 +390,8 @@ class Output(ValueableNotBlank, AbstractOutput):
             return self.timecourse.ex.outputset.study.name
 
     @property
-    def pk_data(self):
+    def category_class_data(self):
         return PK_DATA_DICT[self.pktype]
-
-    @property
-    def norm_unit(self):
-        return self.pk_data.units.get(self.unit)
-
-    @property
-    def is_norm(self):
-        norm_unit = self.norm_unit
-        return norm_unit is None
-
-    @property
-    def norm_fields(self):
-        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                "sd": self.sd, "se": self.se}
-
-    @property
-    def is_convertible(self):
-        conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-        return conversion is not None
-
-    def normalize(self):
-
-        if all([not self.is_norm, self.is_convertible]):
-            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-            self.unit = self.norm_unit
-            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-
-            for key,value in self.norm_fields.items():
-                if not value is None:
-                        setattr(self,key,conversion.apply_conversion(value))
 
 
     # for elastic search. NaNs are not allowed in elastic search
@@ -563,7 +487,7 @@ class Timecourse(AbstractOutput):
     )
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     substance = models.ForeignKey(Substance,related_name="timecourses", on_delete=models.PROTECT)
-    unit = models.CharField(choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH)
+    unit = models.CharField( max_length=CHAR_MAX_LENGTH)
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -624,56 +548,29 @@ class Timecourse(AbstractOutput):
                     self.cv = list(cv)
 
     @property
-    def pk_data(self):
+    def category_class_data(self):
         return PK_DATA_DICT[self.pktype]
 
-    @property
-    def norm_unit(self):
-        return self.pk_data.units.get(self.unit)
-
-    @property
-    def norm_time_unit(self):
-        return TIME_NORM_UNIT
-
-    @property
-    def is_norm(self):
-        return self.norm_unit is None
-
-
-    @staticmethod
-    def is_convertible(unit,norm_unit):
-        conversion_key = f"[{unit}] -> [{norm_unit}]"
-        conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-        return conversion is not None
-
-
-
-    @property
-    def norm_fields(self):
-        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
-                      "sd": self.sd, "se": self.se}
-
-
-
     def normalize(self):
-        if all([not self.is_norm, self.is_convertible(self.unit,self.norm_unit)]):
-            conversion_key = f"[{self.unit}] -> [{self.norm_unit}]"
-            self.unit = self.norm_unit
-            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
+
+
+
+        if not self.is_norm:
             for key, value in self.norm_fields.items():
                 if not value is None:
-                    setattr(self, key, list(conversion.apply_conversion(value)))
+                    list_norm_values = list(self.category_class_data.normalize(value, self.unit).magnitude)
+                    setattr(self, key, list_norm_values)
+            self.unit = self.category_class_data.norm_unit(self.unit).__str__()
 
-        #for time_unit
-        if self.is_convertible(self.time_unit, self.norm_time_unit):
-            conversion_key = f"[{self.time_unit}] -> [{self.norm_time_unit}]"
-            self.time_unit = self.norm_time_unit
-            conversion = UNIT_CONVERSIONS_DICT.get(conversion_key)
-            self.time = list(conversion.apply_conversion(self.time))
+        # for time_unit
+        if not self.time_unit == TIME_NORM_UNIT:
+            p_time_unit = self.category_class_data.p_unit(self.time_unit)
+            times = p_time_unit*self.time
+            norm_times = times.to(TIME_NORM_UNIT)
+            self.time = list(norm_times.m)
+            self.time_unit = TIME_NORM_UNIT
 
-
-        # for elastic search. NaNs are not allowed in elastic search
-
+    # for elastic search. NaNs are not allowed in elastic search
     @staticmethod
     def _any_not_json(value):
         return any([np.isnan(value), np.isinf(value), np.isneginf(value)])
@@ -742,7 +639,6 @@ class Timecourse(AbstractOutput):
         # substance
         pharmacokinetics_dict["compound"] = self.substance.name
 
-
         # bodyweight
         bodyweight = self.get_bodyweight().first()
 
@@ -750,8 +646,10 @@ class Timecourse(AbstractOutput):
         pharmacokinetics_dict["t"] = pd.Series(self.time)
         pharmacokinetics_dict["t_unit"] = self.time_unit
 
+
         # concentration
         pharmacokinetics_dict["c_unit"] = self.unit
+
         if self.mean:
             pharmacokinetics_dict["c"] = pd.Series(self.mean)
             pharmacokinetics_dict["c_type"] = "mean"
@@ -769,14 +667,15 @@ class Timecourse(AbstractOutput):
         # dosing
         dosing = self.get_dosing()
         if dosing:
-            pharmacokinetics_dict["dose"] = dosing.value
-            pharmacokinetics_dict["dose_unit"] = dosing.unit
-            pharmacokinetics_dict["vd_unit"] = f'{dosing.unit}/{pharmacokinetics_dict["c_unit"]}'
+            if DOSING_RESTRICTED.is_valid_unit(dosing.unit):
+                p_unit_dosing = self.category_class_data.p_unit(dosing.unit)
+                p_unit_concentration = self.category_class_data.p_unit(pharmacokinetics_dict["c_unit"])
+                vd_unit = p_unit_dosing/p_unit_concentration
+                pharmacokinetics_dict["vd_unit"] = str(vd_unit)
 
+                pharmacokinetics_dict["dose"] = dosing.value
+                pharmacokinetics_dict["dose_unit"] = dosing.unit
 
-        else:
-            # todo: Unit volume of distribution unit
-            pharmacokinetics_dict["vd_unit"] = "todo"
 
 
 

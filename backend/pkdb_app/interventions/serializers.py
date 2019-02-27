@@ -29,7 +29,7 @@ from ..serializers import (
     NA_VALUES)
 
 from ..subjects.models import Group, DataFile, Individual
-from ..categoricals import validate_categorials, MEDICATION, DOSING
+from ..categoricals import validate_categorials, MEDICATION, DOSING, validate_pktypes
 
 from ..subjects.serializers import (
     VALUE_MAP_FIELDS,
@@ -277,7 +277,12 @@ class OutputSerializer(ExSerializer):
     def validate(self, attrs):
         self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
-        self._validate_pktype(attrs)
+
+        try:
+            validate_pktypes(data=attrs)
+        except ValueError as err:
+            raise serializers.ValidationError(err)
+
         self._validate_time_unit(attrs)
         self._validate_requried_key(attrs,"substance")
         self._validate_requried_key(attrs,"tissue")
@@ -367,14 +372,6 @@ class OutputExSerializer(BaseOutputExSerializer):
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
-    def validate(self, attrs):
-        try:
-            validate_categorials(data=attrs, category_class="intervention")
-        except ValueError as err:
-            raise serializers.ValidationError(err)
-
-        return super().validate(attrs)
-
     def validate_figure(self, value):
         self._validate_figure(value)
         return value
@@ -416,13 +413,19 @@ class TimecourseSerializer(BaseOutputExSerializer):
     def validate(self, attrs):
         self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
-        self._validate_pktype(attrs)
-        self._validate_time_unit(attrs)
         self._validate_requried_key(attrs,"substance")
         self._validate_requried_key(attrs,"interventions")
         self._validate_requried_key(attrs,"tissue")
         self._validate_requried_key(attrs,"time")
+        self._validate_time_unit(attrs)
         self._validate_time(attrs["time"])
+
+
+
+        try:
+            validate_pktypes(data=attrs)
+        except ValueError as err:
+            raise serializers.ValidationError(err)
 
         return super().validate(attrs)
 

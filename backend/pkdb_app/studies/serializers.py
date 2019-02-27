@@ -250,9 +250,6 @@ class StudySerializer(SidSerializer):
             ratings.append(rating_dict)
 
         data["curators"] = ratings
-
-        from pprint import pprint
-        pprint(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):

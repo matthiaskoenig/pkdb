@@ -5,132 +5,113 @@ FIXME: add types, molecular weights and links to data bases
 
 To update the database content execute the setup_database script.
 """
-from collections import namedtuple
 
-Substance = namedtuple("Substance", ["sid","name","parents", "chebi", "derived"])
+class Substance(object):
+    def __init__(self, sid, name=None, parents=None, chebi=None, synonyms=None):
+        self.sid = sid
+        self._name = name
+        self.parents = parents
+        self.chebi = chebi
+        self.synonyms = synonyms
 
-#todo: remove chebi:None and find actual chebis and make sids
-basic_substance = {"parents": None, "derived": None, "chebi": None, "sid":None}
-derived_substance = {"chebi": None, "sid": None}
+    @property
+    def name(self):
+        if self._name:
+            return self._name
+        else:
+            return self.sid
+    @property
+    def stype(self):
+        if self.parents:
+            return "derived"
+        else:
+            return "basic"
+
 
 SUBSTANCES_DATA = [
 
     # indocyanogreen/icg
-    Substance(name="indocyanogreen", **basic_substance),
+    Substance(sid="icg", name="indocyanine green", chebi="CHEBI:31696"),
+
     # acetaminophen/paracetamol
-    Substance(name="acetaminophen", **basic_substance),
+    Substance(sid="apap",  name="acetaminophen", chebi="CHEBI:46195", synonyms=["paracetamol"]),
 
     # caffeine (CYP2A1)
-    Substance(name="caffeine", **basic_substance),
-    Substance(name="paraxanthine", **basic_substance),
-    Substance(name="theophylline", **basic_substance),
-    Substance(name="theobromine", **basic_substance),
-    Substance(name="AFMU", **basic_substance),
-    Substance(name="AAMU", **basic_substance),
-    Substance(name="1U", **basic_substance),
-    Substance(name="17X", **basic_substance),
-    Substance(name="17U", **basic_substance),
-    Substance(name="37X", **basic_substance),
-    Substance(name="1X", **basic_substance),
-    Substance(name="methylxanthine", **basic_substance),
-    Substance(name="theobromine", **basic_substance),
+    Substance(sid="caf", name="caffeine", chebi="CHEBI:27732", synonyms=["1,3,7-TMX"]),
+    Substance(sid="px", name="paraxanthine", chebi="CHEBI:25858", synonyms=["1,7-dimethylxanthine", "1,7-DMX", "17X"]),
+    Substance(sid="tp", name="theophylline", chebi="CHEBI:28177", synonyms=["1,3-dimethylxanthine", "1,3-DMX", "13X"]),
+    Substance(sid="tb", name="theobromine", chebi="CHEBI:28946", synonyms=["3,7-dimethylxanthine", "3,7-DMX", "37X"]),
+    Substance(sid="AFMU", name="AFMU", chebi="CHEBI:32643"),
+    Substance(sid="AAMU", name="AAMU", chebi="CHEBI:80473"),
+    Substance(sid="1U", name="1U", synonyms=["1-methyluric acid"]),
+    Substance(sid="17U", name="17U", chebi="CHEBI:68449", synonyms=["1,7-dimethyluric acid", "1,7 DMU"]),
+    Substance(sid="1X", name="1X", chebi="CHEBI:68444"),
+    Substance(sid="MX", name="methylxanthine"),
 
     # caffeine derived
-    Substance(name="caf/para", parents=["paraxanthine", "caffeine"], derived ="paraxanthine/caffeine",
-              **derived_substance),
-    Substance(name="para/caf", parents=["paraxanthine", "caffeine"], derived="caffeine/paraxanthine",
-              **derived_substance),
-
-    Substance(name="theobro/caf", parents=["theobromine", "caffeine"], derived="theobromine/caffeine",
-              **derived_substance),
-
-    Substance(name="theophy/caf", parents=["theophylline", "caffeine"], derived="theophylline/caffeine",
-              **derived_substance),
-
-    Substance(name="1X/caf", parents=["1X", "caffeine"], derived="1X/caffeine",
-              **derived_substance),
-
-    Substance(name="1X/para", parents=["1X", "paraxanthine"], derived="1X/paraxanthine",
-              **derived_substance),
-
-    Substance(name="1X/theophy", parents=["1X", "theophylline"], derived="1X/theophylline",
-              **derived_substance),
-
-    Substance(name="(AFMU+1U+1X)/17U", parents=["AFMU", "1U", "1X", "17U"], derived="(AFMU+1U+1X)/17U",
-              **derived_substance),
-
-    Substance(name="(AAMU+1U+1X)/17U", parents=["AAMU", "1U", "1X", "17U"], derived="(AAMU+1U+1X)/17U",
-              **derived_substance),
-
-    Substance(name="17U/17X", parents=["17U", "17X"], derived="17U/17X",**derived_substance),
-    Substance(name="1U/(1U+1X)", parents=["1U", "1X"], derived="1U/(1U+1X)", **derived_substance),
-    Substance(name="1U/1X", parents=["1U", "1X"], derived="1U/1X", **derived_substance),
-    Substance(name="AFMU/(AFMU+1U+1X)", parents=["AFMU", "1U", "1X"], derived="AFMU/(AFMU+1U+1X)", **derived_substance),
-    Substance(name="AAMU/(AAMU+1U+1X)", parents=["AAMU", "1U", "1X"], derived="AAMU/(AAMU+1U+1X)",
-              **derived_substance),
+    Substance(sid="caf/px", parents=["paraxanthine", "caffeine"]),
+    Substance(sid="px/caf", parents=["paraxanthine", "caffeine"]),
+    Substance(sid="tb/caf", parents=["theobromine", "caffeine"]),
+    Substance(sid="tp/caf", parents=["theophylline", "caffeine"]),
+    Substance(sid="1X/caf", parents=["1X", "caffeine"]),
+    Substance(sid="1X/px", parents=["1X", "paraxanthine"]),
+    Substance(sid="1X/tp", parents=["1X", "theophylline"]),
+    Substance(sid="(AFMU+1U+1X)/17U", parents=["AFMU", "1U", "1X", "17U"]),
+    Substance(sid="(AAMU+1U+1X)/17U", parents=["AAMU", "1U", "1X", "17U"]),
+    Substance(sid="17U/17X", parents=["17U", "17X"]),
+    Substance(sid="1U/(1U+1X)", parents=["1U", "1X"]),
+    Substance(sid="1U/1X", parents=["1U", "1X"]),
+    Substance(sid="AFMU/(AFMU+1U+1X)", parents=["AFMU", "1U", "1X"]),
+    Substance(sid="AAMU/(AAMU+1U+1X)", parents=["AAMU", "1U", "1X"]),
 
     # caffeine interaction
-    Substance(name="cimetidine", **basic_substance),
-    Substance(name="fluvoxamine", **basic_substance),
-    Substance(name="disulfiram", **basic_substance),
-    Substance(name="naringenin", **basic_substance),
-    Substance(name="grapefruit juice", **basic_substance),
-    Substance(name="naringenin", **basic_substance),
-    Substance(name="grapefruit juice", **basic_substance),
-    Substance(name="quinolone", **basic_substance),
-    Substance(name="pipemidic acid", **basic_substance),
-    Substance(name="norfloxacin", **basic_substance),
-    Substance(name="enoxacin", **basic_substance),
-    Substance(name="ciprofloxacin", **basic_substance),
-    Substance(name="ofloxacin", **basic_substance),
+    Substance(sid="cimetidine", chebi="CHEBI:3699"),
+    Substance(sid="fluvoxamine", chebi="CHEBI:5138"),
+    Substance(sid="disulfiram", chebi="CHEBI:4659"),
+    Substance(sid="naringenin", chebi="CHEBI:50202"),
+    Substance(sid="grapefruit juice"),
+    Substance(sid="quinolone", chebi="CHEBI:23765"),
+    Substance(sid="pipemidic acid", chebi="CHEBI:75250"),
+    Substance(sid="norfloxacin", chebi="CHEBI:100246"),
+    Substance(sid="enoxacin", chebi="CHEBI:157175"),
+    Substance(sid="ciprofloxacin", chebi="CHEBI:100241"),
+    Substance(sid="ofloxacin", chebi="CHEBI:7731"),
 
     # oral contraceptives
-    Substance(name="levonorgestrel", **basic_substance),
-    Substance(name="gestodene", **basic_substance),
-    Substance(name="EE2", **basic_substance),
+    Substance(sid="levonorgestrel", chebi="CHEBI:6443"),
+    Substance(sid="gestodene", chebi="CHEBI:135323"),
+    Substance(sid="EE2", name="ethinylestradiol"),
 
-    # codeine
-    Substance(name="codeine", **basic_substance),
-    Substance(name="codeine-6-glucuronide", **basic_substance),
-    Substance(name="norcodeine", **basic_substance),
-    Substance(name="norcodeine-glucuronide", **basic_substance),
-    Substance(name="norcodeine-conjugates", **basic_substance),
 
-    # morphine
-    Substance(name="morphine", **basic_substance),
-    Substance(name="morphine-3-glucuronide", **basic_substance),
-    Substance(name="morphine-6-glucuronide", **basic_substance),
-    Substance(name="normorphine", **basic_substance),
-    Substance(name="normorphine-glucuronide", **basic_substance),
+
+    # codeine/morphine
+    Substance(sid="cod",name="codeine", chebi="CHEBI:16714"),
+    Substance(sid="c6g",name="codeine-6-glucuronide",chebi="CHEBI:80580",),
+    Substance(sid="ncod",name="norcodeine", chebi="CHEBI:80579"),
+    Substance(sid="ncg",name="norcodeine-glucuronide"),
+    Substance(sid="ncc",name="norcodeine-conjugates"),
+    Substance(sid="mor",name="morphine",chebi="CHEBI:17303"),
+    Substance(sid="m3g",name="morphine-3-glucuronide", chebi="CHEBI:80631"),
+    Substance(sid="m6g",name="morphine-6-glucuronide",chebi="CHEBI:80581"),
+    Substance(sid="nmor",name="normorphine", chebi="CHEBI:7633"),
+    Substance(sid="nmg",name="normorphine-glucuronide"),
 
     # codeine/morphine derived
+    Substance(sid="cod/mor",parents=["codeine", "morphine"]),
+    Substance(sid="mor/cod",parents=["codeine", "morphine"]),
 
-    Substance(name="cod/mor",
-              parents=["codeine", "morphine"],
-              derived="codeine/morphine",
-              **derived_substance),
-    Substance(name="mor/cod",
-              parents=["codeine", "morphine"],
-              derived="morphine/codeine",
-              **derived_substance),
-
-    Substance(name="(mor+m3g+m6g)/(cod+c6g)",
+    Substance(sid="(mor+m3g+m6g)/(cod+c6g)",
               parents=["codeine",
                        "codeine-6-glucuronide",
                        "morphine",
                        "morphine-3-glucuronide",
                        "morphine-6-glucuronide"],
-              derived="(morphine + morphine-3-glucuronide + morphine-6-glucuronide)/(codeine + codeine-6-glucuronide)",
-              **derived_substance),
+        ),
 
-    Substance(name="mor+m3g+m6g",
-              parents=["morphine",
-                       "morphine-3-glucuronide",
-                       "morphine-6-glucuronide"],
-              derived="morphine + morphine-3-glucuronide + morphine-6-glucuronide",
-              **derived_substance),
+    Substance(sid="mor+m3g+m6g",parents=["morphine", "morphine-3-glucuronide","morphine-6-glucuronide"],
+        ),
 
-    Substance(name="mor+m3g+m6g+nmor+cod+ncod+c6g+ncg",
+    Substance(sid="mor+m3g+m6g+nmor+cod+ncod+c6g+ncg",
               parents=["morphine",
                        "morphine-3-glucuronide",
                        "morphine-6-glucuronide",
@@ -139,156 +120,144 @@ SUBSTANCES_DATA = [
                        "norcodeine",
                        "codeine-6-glucuronide",
                        "norcodeine-glucuronide"],
+        ),
 
-              derived="morphine + morphine-3-glucuronide + morphine-6-glucuronide + normorphine + "
-                      "codeine + norcodeine + codeine-6-glucuronide + norcodeine-glucuronide",
-              **derived_substance),
+    Substance(sid="mor+ncod+c6g", parents=["morphine", "norcodeine", "codeine-6-glucuronide"]),
 
-    Substance(name="mor+ncod+c6g",
-              parents=["morphine", "norcodeine", "codeine-6-glucuronide"],
-              derived="morphine + norcodeine + codeine-6-glucuronide",
-              **derived_substance),
-
-    Substance(name="cod/(mor+m3g+m6g+nmor)",
+    Substance(sid="cod/(mor+m3g+m6g+nmor)",
               parents=["morphine",
                        "morphine-3-glucuronide",
                        "morphine-6-glucuronide",
                        "normorphine",
                        "codeine"],
-              derived="codeine/(morphine + morphine-3-glucuronide + morphine-6-glucuronide + normorphine)",
-              **derived_substance),
+        ),
 
-    Substance(name="cod/(ncod+ncg+nmor)",  #N-demethylation
+    Substance(sid="cod/(ncod+ncg+nmor)",  #N-demethylation
               parents=["codeine", "norcodeine", "norcodeine-glucuronide", "normorphine"],
-              derived="codeine/(norcodeine + norcodeine-glucuronide + normorphine)",
-              **derived_substance),
+        ),
 
-    Substance(name="cod/c6g",  # N-demethylation
-              parents=["codeine", "codeine-6-glucuronide"],
-              derived="codeine/codeine-6-glucuronide",
-              **derived_substance),
+    Substance(sid="cod/c6g",  parents=["codeine", "codeine-6-glucuronide"]),# N-demethylation
 
     # CYP2D6 related
-    Substance(name="quinidine", **basic_substance),
+    Substance(sid = "qui", name="quinidine", chebi="CHEBI:28593"),
 
-    Substance(name="debrisoquine", **basic_substance), #CYP2D6 Phenotyping
-    Substance(name="4-hydroxydebrisoquine", **basic_substance), #CYP2D6 Phenotyping
-    Substance(name="deb/4hdeb",
-              parents=["debrisoquine", "4-hydroxydebrisoquine"],
-              derived="debrisoquine/4-hydroxydebrisoquine",
-              **derived_substance),
+    Substance(sid = "deb", name="debrisoquine"), #CYP2D6 Phenotyping
+    Substance(sid = "4hdeb", name="4-hydroxydebrisoquine",chebi="CHEBI:63800"), #CYP2D6 Phenotyping
+    Substance(sid="deb/4hdeb", parents=["debrisoquine", "4-hydroxydebrisoquine"]),
 
-    Substance(name="mephenytoin", **basic_substance),  # CYP2D6 Phenotyping
+    Substance(sid ="mep", name="mephenytoin",chebi="CHEBI:6757"),  # CYP2D6 Phenotyping
 
-    Substance(name="sparteine", **basic_substance),  # CYP2D6 Phenotyping
-    Substance(name="2-dehydrosparteine", **basic_substance),  # CYP2D6 Phenotyping
-    Substance(name="5-dehydrosparteine", **basic_substance),  # CYP2D6 Phenotyping
-    Substance(name="(spar/2hspar +5hspar)",  # Metabolic Ratio of Sparteine #CYP2D6 Phenotyping
-              parents=["sparteine", "2-dehydrosparteine"],
-              derived="sparteine/(2-dehydrosparteine + 5-dehydrosparteine)",
-              **derived_substance),
+    Substance(sid ="spar", name="sparteine", chebi="CHEBI:28827"),  # CYP2D6 Phenotyping
+    Substance(sid ="2hspar", name="2-dehydrosparteine",chebi="CHEBI:29130"),  # CYP2D6 Phenotyping
+    Substance(sid ="5hspar", name="5-dehydrosparteine"),  # CYP2D6 Phenotyping # Molecular Weight: 232.371 g/mol
+
+    # for phenotyping
+    Substance(sid="spar/(2hspar+5hspar)", parents=["sparteine", "2-dehydrosparteine","5-dehydrosparteine"],
+        ),
+
+
 
     # medication
-    Substance(name="salbutamol", **basic_substance),
-    Substance(name="beclometasone", **basic_substance),
-    Substance(name="enalapril", **basic_substance),
-    Substance(name="diltiazem", **basic_substance),
-    Substance(name="hydrochlorthiazide", **basic_substance),
-    Substance(name="amiloride", **basic_substance),
+    Substance(sid="salbutamol", chebi="	CHEBI:8746"),
+    Substance(sid="beclometasone",chebi="CHEBI:3001",),
+    Substance(sid="enalapril", chebi="CHEBI:4784"),
+    Substance(sid="diltiazem", chebi="CHEBI:101278"),
+    Substance(sid="hydrochlorothiazide",chebi="CHEBI:5778"),
+    Substance(sid="amiloride",chebi="CHEBI:2639"),
+
+
+
 
     # chlorzoxazone (CYP2E1)
-    Substance(name="chlordiazepoxide", **basic_substance),
-    Substance(name="6-hydroxychlorzoxazone", **basic_substance),
+    Substance(sid="chlordiazepoxide"),
+    Substance(sid="6-hydroxychlorzoxazone"),
 
     # misc
-    Substance(name="tizanidine", **basic_substance),
-    Substance(name="venlafaxine", **basic_substance),
-    Substance(name="lomefloxacin", **basic_substance),
-    Substance(name="ephedrine", **basic_substance),
-    Substance(name="pseudoephedrine", **basic_substance),
-    Substance(name="ibuprofen", **basic_substance),
-    Substance(name="aspirin", **basic_substance),
-    Substance(name="enoxacin", **basic_substance),
-    Substance(name="pipemidic acid", **basic_substance),
-    Substance(name="norfloxacin", **basic_substance),
-    Substance(name="ofloxacin", **basic_substance),
-    Substance(name="fluvoxamine", **basic_substance),
-    Substance(name="ethanol", **basic_substance),
-    Substance(name="chlorozoxazone", **basic_substance),
-    Substance(name="lomefloxacin", **basic_substance),
-    Substance(name="aminopyrine", **basic_substance),
-    Substance(name="antipyrine", **basic_substance),
-    Substance(name="bromsulpthalein", **basic_substance),
-    Substance(name="phenylalanine", **basic_substance),
-    Substance(name="indocyanine green", **basic_substance),
+    Substance(sid="tizanidine"),
+    Substance(sid="venlafaxine"),
+    Substance(sid="lomefloxacin"),
+    Substance(sid="ephedrine"),
+    Substance(sid="pseudoephedrine"),
+    Substance(sid="ibuprofen"),
+    Substance(sid="aspirin"),
+    Substance(sid="enoxacin"),
+    Substance(sid="pipemidic acid"),
+    Substance(sid="norfloxacin"),
+    Substance(sid="ofloxacin"),
+    Substance(sid="fluvoxamine"),
+    Substance(sid="ethanol"),
+    Substance(sid="chlorozoxazone"),
+    Substance(sid="lomefloxacin"),
+    Substance(sid="aminopyrine"),
+    Substance(sid="antipyrine"),
+    Substance(sid="bromsulpthalein"),
+    Substance(sid="phenylalanine"),
+    Substance(sid="indocyanine green"),
 
-    Substance(name="diclofenac", **basic_substance),
-    Substance(name="glycerol", **basic_substance),
-    Substance(name="FFA", **basic_substance),
-    Substance(name="carbamazepine", **basic_substance),
+    Substance(sid="diclofenac"),
+    Substance(sid="glycerol"),
+    Substance(sid="FFA"),
+    Substance(sid="carbamazepine"),
 
     # midazolam
-    Substance(name="metropolol", **basic_substance),
-    Substance(name="warfarin", **basic_substance),
-    Substance(name="midazolam", **basic_substance),
-    Substance(name="1-hydroxymidazolam", **basic_substance),
+    Substance(sid="metropolol"),
+    Substance(sid="warfarin"),
+    Substance(sid="midazolam"),
+    Substance(sid="1-hydroxymidazolam"),
 
     # losartan
-    Substance(name="losartan", **basic_substance),
-    Substance(name="exp3174", **basic_substance),
+    Substance(sid="losartan"),
+    Substance(sid="exp3174"),
 
     # omeprazole (CYP2C19)
-    Substance(name="omeprazole", **basic_substance),
-    Substance(name="5-hydroxyomeprazole", **basic_substance),
-    Substance(name="ome/5home",
+    Substance(sid="omeprazole"),
+    Substance(sid="5-hydroxyomeprazole"),
+    Substance(sid="ome/5home",
               parents=["omeprazole", "5-hydroxyomeprazole"],
-              derived="omeprazole/5-hydroxyomeprazole",
-              **derived_substance),
+        ),
 
     # dextromethorphan
-    Substance(name="dextromethorphan", **basic_substance),
-    Substance(name="dextrorphan", **basic_substance),
-    Substance(name="digoxin", **basic_substance),
-    Substance(name="clozapine", **basic_substance),
-    Substance(name="carbon monoxide", **basic_substance),
-    Substance(name="bromsulpthalein", **basic_substance),
-    Substance(name="bromsulpthalein", **basic_substance),
+    Substance(sid="dextromethorphan"),
+    Substance(sid="dextrorphan"),
+    Substance(sid="digoxin"),
+    Substance(sid="clozapine"),
+    Substance(sid="carbon monoxide"),
+    Substance(sid="bromsulpthalein"),
 
 
     #other
-    Substance(name="hydrogen", **basic_substance),
-    Substance(name="sulfasalazine", **basic_substance),
-    Substance(name="sulfapyridine", **basic_substance),
+    Substance(sid="hydrogen"),
+    Substance(sid="sulfasalazine"),
+    Substance(sid="sulfapyridine"),
 
 
     # ----------------------
     # glucose metabolism
     # ----------------------
-    Substance(name="glucose", **basic_substance),
-    Substance(name="lactate", **basic_substance),
-    Substance(name="[2-3H]glucose", **basic_substance),
-    Substance(name="[6-3H]glucose", **basic_substance),
-    Substance(name="[U-13C]glucose", **basic_substance),
-    Substance(name="[3-OMG]glucose", **basic_substance),
-    Substance(name="insulin", **basic_substance),
-    Substance(name="c-peptide", **basic_substance),
-    Substance(name="cortisol", **basic_substance),
-    Substance(name="epinephrine", **basic_substance),
-    Substance(name="norepinephrine", **basic_substance),
-    Substance(name="growth hormone", **basic_substance),
-    Substance(name="glucagon", **basic_substance),
-    Substance(name="TAA", **basic_substance),  # total amino acids
-    Substance(name="EAA", **basic_substance),  # essential amino acids
-    Substance(name="NEAA", **basic_substance),  # non-essential amino acids
-    Substance(name="BCAA", **basic_substance),  # branch-chained amino acids
-    Substance(name="exenatide", **basic_substance),  # GLP1 analoque
-    Substance(name="GIP", **basic_substance),
-    Substance(name="GLP-1", **basic_substance),
+    Substance(sid="glucose"),
+    Substance(sid="lactate"),
+    Substance(sid="[2-3H]glucose"),
+    Substance(sid="[6-3H]glucose"),
+    Substance(sid="[U-13C]glucose"),
+    Substance(sid="[3-OMG]glucose"),
+    Substance(sid="insulin"),
+    Substance(sid="c-peptide"),
+    Substance(sid="cortisol"),
+    Substance(sid="epinephrine"),
+    Substance(sid="norepinephrine"),
+    Substance(sid="growth hormone"),
+    Substance(sid="glucagon"),
+    Substance(sid="TAA"),  # total amino acids
+    Substance(sid="EAA"),  # essential amino acids
+    Substance(sid="NEAA"),  # non-essential amino acids
+    Substance(sid="BCAA"),  # branch-chained amino acids
+    Substance(sid="exenatide"),  # GLP1 analoque
+    Substance(sid="GIP"),
+    Substance(sid="GLP-1"),
 
-    Substance(name="ins/glu",
+    Substance(sid="ins/glu",
               parents=["insulin", "glucose"],
-              derived="insulin/glucose",
-              **derived_substance),
+        ),
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t.name, t.name) for t in SUBSTANCES_DATA]

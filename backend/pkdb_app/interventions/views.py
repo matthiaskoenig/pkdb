@@ -6,19 +6,18 @@ from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from pkdb_app.categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION, \
+from ..categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION, \
     OUTPUT_TISSUE_DATA, PK_DATA_DICT
-from pkdb_app.interventions.documents import SubstanceDocument, InterventionDocument, OutputDocument, TimecourseDocument
-from pkdb_app.interventions.models import (
+from ..interventions.documents import SubstanceDocument, InterventionDocument, OutputDocument, TimecourseDocument
+from ..interventions.models import (
     Substance)
-from pkdb_app.interventions.serializers import (
+from ..interventions.serializers import (
     SubstanceSerializer, SubstanceStatisticsSerializer, InterventionElasticSerializer,
     OutputElasticSerializer, TimecourseElasticSerializer)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 
-from pkdb_app.pagination import CustomPagination
-from pkdb_app.units import TIME_UNITS
-from pkdb_app.views import CreateListModelMixin
+from ..pagination import CustomPagination
+from ..views import CreateListModelMixin
 
 
 ###############################################################################################
@@ -52,7 +51,6 @@ class InterventionOptionViewSet(viewsets.ViewSet):
         options["route"] = INTERVENTION_ROUTE
         options["form"] = INTERVENTION_FORM
         options["application"] = INTERVENTION_APPLICATION
-        options["time_unit"] = TIME_UNITS
         return options
 
     def list(self, request):
@@ -66,7 +64,6 @@ class OutputOptionViewSet(viewsets.ViewSet):
         options["pktypes"] = {k:item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
         options["substances"] = reverse('substances_elastic-list')
         options["tissue"] = OUTPUT_TISSUE_DATA
-        options["time_unit"] = TIME_UNITS
         return options
 
     def list(self, request):
@@ -80,7 +77,6 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
             options["pktypes"] = {k: item._asdict() for k, item in sorted(PK_DATA_DICT.items())}
             options["substances"] = reverse('substances_elastic-list')
             options["tissue"] = OUTPUT_TISSUE_DATA
-            options["time_unit"] = TIME_UNITS
             return options
 
     def list(self, request):

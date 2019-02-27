@@ -4,12 +4,17 @@ import pint
 ureg = pint.UnitRegistry()
 # add units to pint registry
 ureg.define('cups = count')
+ureg.define('none = count')
+ureg.define('yr = year')
 ureg.define('percent = 0.01*count')
 ureg.define('U = 60*10**6*mol/second')
+ureg.define('IU = [activity_amount]')
+ureg.define('NO_UNIT = [no_unit]')
 
 
 # frequently used used unit definitions
-NO_UNIT ='dimensionless'
+DIMLESS = 'dimensionless'
+NOUNIT = 'NO_UNIT'
 ORGAN_WEIGHT_UNIT = 'g'
 AMOUNT_PER_YEAR ='1/yr'
 AMOUNT_PER_DAY = '1/day'
@@ -23,7 +28,8 @@ auc_units = [
     'mg*hr/l',     # auc of substance in mass
     'mg*hr/l/kg',  # auc of substance in mass per bodyweight
     'µmol*hr/l',   # auc of substance in mole
-    'µU/hr/l',     # auc of enzyme activity
+    #'µU/hr/l',     # auc of enzyme activity
+    'µIU*hr/l'     # auc of amount enzyme activity with new dimension [activity_amount]
 ]
 
 # auc dimensions to
@@ -31,15 +37,19 @@ aumc_units = [
    'mg*hr^2/l',  # area under the first moment curve of substance in mass
    'µmol*hr^2/l',# area under the first moment curve of substance in mole
    'mg*hr^2/l/kg', # area under the first moment curve per bodyweight
-   'µU/hr^2/l',  # area under the first moment curve of enzyme activity
+   #'µU/hr^2/l',  # area under the first moment curve of enzyme activity
 ]
 
-
+# amount of substance
+amount_units = [
+    'mg',
+    'µmol'
+]
 # concentration dimensions to units
 concentration_units = [
    'mg/l',   # concentration of substance in mass
    'µmol/l', # concentration of substance in mole
-   'µU/l',   # concentration of enzyme activity
+   'µIU/l',   # concentration of amount enzyme activity with new dimension [activity_amount]
    'ng/g',   #todo: check reason for this unit
 ]
 
@@ -58,12 +68,18 @@ clearance_units = [
    'ml/hr',              # clearance of substance in mass
    'l/hr/kg',            # clearance of substance in mass per bodyweight
    'µmol/l/hr',          # clearance of substance in mole
-   'ml/min/(1.73*m^2)',  # clearance of substance in mass per area #todo: I dont like the norm unit
+   'ml/min/(1.73*m^2)',  # clearance of substance in mass per body area #todo: I dont like the norm unit
+   'ml*g/IU/hr',
+   'ml*µg/ µmol /hr',
+
+    # amount enzyme activity with new dimension [activity_amount]
 ]
 # volume of distribution dimensions to units
 vd_units = [
    'l',
   'l/kg',
+  'l*mg/µIU',            # calculated: amount enzyme activity with new dimension [activity_amount]
+  'l*mg/mmol'            # calculated: and no information of mole
 ]
 
 # time dimensions to units
@@ -77,8 +93,8 @@ rate_units = [
    'mg/min',
    'µmol/min/kg',
    'µmol/min',
-   'µU/min',
-   'µU/min/kg',
+   #'µU/min',
+   #'µU/min/kg',
 ]
 
 
@@ -146,13 +162,17 @@ fasted_units = [
 
 # -------------- Medication --------------
 abstinence_units = [
-    NO_UNIT,
-    "day"
-],
+    NOUNIT,
+    "day",
+]
 
 consumption_units = [
     '1/day', # could be added rule to transform to mg could be added
     'mg/day',
+]
+
+disease_duration_units = [
+    'year'
 ]
 
 # -------------- Caffeine --------------
@@ -160,18 +180,18 @@ consumption_units = [
 caffeine_amount_units = ['mg/day',]
 # -------------- Alcohol --------------
 
-alcohol_abstinence_units = [NO_UNIT,'day']
+alcohol_abstinence_units = [DIMLESS, 'day']
 # -------------- Biochemical data --------------
-_ALT_abstinence_units = _AST_abstinence_units  = ['U/l']
-_albumin_abstinence_units = ['g/dl']
-_glucose_abstinence_units = ['g/dl']
-_insulin_abstinence_units = ['g/dl']
-_glucagon_abstinence_units = ['g/dl']
-_cholesterol_abstinence_units = ['mmol/l']
-_triglyceride_abstinence_units = ['mmol/l']
-_LDL_C_abstinence_units = ['mmol/l']
-_LDL_H_abstinence_units = ['mmol/l']
-_HbA1c_abstinence_units = ['percent']
+ALT_abstinence_units = AST_abstinence_units  = ['IU/l']
+albumin_abstinence_units = ['g/dl']
+glucose_abstinence_units = ['g/dl']
+insulin_abstinence_units = ['g/dl']
+glucagon_abstinence_units = ['g/dl']
+cholesterol_abstinence_units = ['mmol/l']
+triglyceride_abstinence_units = ['mmol/l']
+LDL_C_abstinence_units = ['mmol/l']
+LDL_H_abstinence_units = ['mmol/l']
+HbA1c_abstinence_units = ['percent']
 
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -179,7 +199,7 @@ _HbA1c_abstinence_units = ['percent']
 #-----------------------------------------------------------------------------------------------------------------------
 
 # -------------- Dosing --------------
-_dosing_units = [
+dosing_units = [
    'mg',
    'mg/kg',
    'pmol/kg',
@@ -188,3 +208,9 @@ _dosing_units = [
    'nmol',
 ]
 
+restricted_dosing_units = [
+   'mg',
+   'mg/kg',
+   'pmol/kg',
+   'nmol',
+]

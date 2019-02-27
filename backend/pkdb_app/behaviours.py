@@ -3,10 +3,7 @@ Reusable behavior for models.
 """
 
 from django.db import models
-
-from pkdb_app.utils import CHAR_MAX_LENGTH
-from .units_old import UNITS_CHOICES
-
+from .utils import CHAR_MAX_LENGTH
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
 
 
@@ -27,7 +24,6 @@ class Externable(models.Model):
     class Meta:
         abstract = True
 
-
 class Valueable(models.Model):
     """ Valuable.
 
@@ -42,9 +38,7 @@ class Valueable(models.Model):
     sd = models.FloatField(null=True, blank=True)
     se = models.FloatField(null=True, blank=True)
     cv = models.FloatField(null=True, blank=True)
-    unit = models.CharField(
-        choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True, blank=True
-    )
+    unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -64,9 +58,7 @@ class ValueableNotBlank(models.Model):
     sd = models.FloatField(null=True)
     se = models.FloatField(null=True)
     cv = models.FloatField(null=True)
-    unit = models.CharField(
-        choices=UNITS_CHOICES, max_length=CHAR_MAX_LENGTH, null=True
-    )
+    unit = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
 
     class Meta:
         abstract = True
@@ -107,6 +99,45 @@ class ValueableMapNotBlank(models.Model):
     cv_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+
+    class Meta:
+        abstract = True
+
+
+class Normalizable(models.Model):
+
+    @property
+    def norm_fields(self):
+        return {"value": self.value, "mean": self.mean, "median": self.median, "min": self.min, "max": self.max,
+                "sd": self.sd, "se": self.se}
+
+    @property
+    def norm_unit(self):
+        return self.category_class_data.units.get(self.unit)
+
+    @property
+    def is_norm(self):
+        if self.unit:
+            return self.category_class_data.is_norm_unit(self.unit)
+
+        else:
+            return True
+
+    def normalize(self):
+
+        print("*" * 100)
+        try:
+            print(self.pktype)
+        except:
+            pass
+        print(self.unit)
+        print("*" * 100)
+
+        if not self.is_norm:
+            for key, value in self.norm_fields.items():
+                if not value is None:
+                    setattr(self, key, self.category_class_data.normalize(value, self.unit).magnitude)
+            self.unit = str(self.category_class_data.norm_unit(self.unit))
 
     class Meta:
         abstract = True
