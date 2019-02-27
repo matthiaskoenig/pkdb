@@ -50,7 +50,6 @@ concentration_units = [
    'mg/l',   # concentration of substance in mass
    'µmol/l', # concentration of substance in mole
    'µIU/l',   # concentration of amount enzyme activity with new dimension [activity_amount]
-   'ng/g',   #todo: check reason for this unit
 ]
 
 # ratio dimensions to units
