@@ -1,0 +1,13 @@
+{
+    "sid": "17U",
+    "name": "17U",
+    "chebi": "CHEBI:68449",
+    "formula": "C7H8N4O3",
+    "charge": 0,
+    "mass": 196.1634,
+    "description": "An oxopurine that is 7,9-dihydro-1H-purine-2,6,8(3H)-trione substituted by methyl groups at N-1 and N-7. It is a metabolite of caffeine and is often found in human urine samples.",
+    "synonyms": [
+        "1,7-dimethyluric acid",
+        "1,7 DMU"
+    ]
+}

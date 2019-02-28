@@ -1,0 +1,8 @@
+{
+    "sid": "ome/5home",
+    "name": "ome/5home",
+    "parents": [
+        "omeprazole",
+        "5-hydroxyomeprazole"
+    ]
+}

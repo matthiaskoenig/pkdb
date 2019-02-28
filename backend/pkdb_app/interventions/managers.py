@@ -109,6 +109,16 @@ class OutputManager(models.Manager):
         output._interventions.add(*interventions)
         return output
 
+class SubstanceManager(models.Manager):
+    def update_or_create(self, *args, **kwargs):
+        parents = kwargs["defaults"].pop('parents', [])
+        synonyms = kwargs["defaults"].pop('synonyms', [])
+        substance, created = super().update_or_create(*args, **kwargs)
+        substance.parents.add(*parents)
+        substance.synonyms.add(*synonyms)
+        substance.save()
+        return substance
+
 class TimecourseExManager(models.Manager):
     def create(self, *args, **kwargs):
 
@@ -135,6 +145,7 @@ class TimecourseExManager(models.Manager):
                 _ = variables.pop("bodyweight_type", None)
 
                 pk = f_pk(**variables)
+
                 key_mapping = {"auc":"auc_end",
                                "aucinf":"auc_inf",
                                "cl":"clearance",

@@ -5,9 +5,13 @@ Creates basic users and information like substances and keywords.
 """
 import requests
 import logging
+import os
+
 from pkdb_app.settings import DEFAULT_PASSWORD, API_BASE
 from pkdb_app.categoricals import  KEYWORDS_DATA
-from pkdb_app.substances.substances import SUBSTANCES_DATA
+from pkdb_app.data_management.create_substance_jsons import  read_substances
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -82,13 +86,16 @@ def setup_database(api_url, auth_headers, client=None):
             logging.warning(f"user upload failed: {user} ")
             logging.warning(response.content)
 
-    substances_json = [{"name":substance.name} for substance in SUBSTANCES_DATA]
+    #substances_json = [{"name":substance.name} for substance in SUBSTANCES_DATA]
+    substance_json_dir = os.path.join(BASE_DIR,"substances/json/")
+    substances_json = read_substances(substance_json_dir)
+    for substance in substances_json:
 
-    response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
-                                        data=substances_json, headers=auth_headers)
-    if not response.status_code == 201:
-        logging.warning("substances upload failed")
-        logging.warning(response.content)
+        response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
+                                        data=[substance], headers=auth_headers)
+        if not response.status_code == 201:
+            logging.warning(f"substance: {substance} upload failed")
+            logging.warning(response.content)
 
     #for substance in SUBSTANCES_DATA:
     #

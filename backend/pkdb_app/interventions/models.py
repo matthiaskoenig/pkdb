@@ -20,7 +20,7 @@ from ..interventions.managers import (
     TimecourseExManager,
     InterventionExManager,
     OutputManager,
-)
+    SubstanceManager)
 from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Valueable,
@@ -29,8 +29,8 @@ from ..behaviours import (
     CHAR_MAX_LENGTH_LONG,
     ValueableNotBlank,
     ValueableMapNotBlank,
-    Normalizable
-)
+    Normalizable,
+    Sidable)
 from ..categoricals import (
     INTERVENTION_CHOICES,
     INTERVENTION_ROUTE_CHOICES,
@@ -45,7 +45,9 @@ from ..substances.substances import SUBSTANCES_DATA_CHOICES
 # -------------------------------------------------
 # Substance
 # -------------------------------------------------
-class Substance(models.Model):
+
+
+class Substance(Sidable, models.Model):
     """ Substances.
 
     There could be three main classes of `substances`:
@@ -69,15 +71,18 @@ class Substance(models.Model):
     charge = models.FloatField(null=True)
     formula = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)# chemical formula
 
-    # derived substance model
-    derived = models.CharField(null = True, max_length=CHAR_MAX_LENGTH) # symbolic formula (based on labels), this is the label of the derived substance
 
-    derived_substances = models.ManyToManyField("Substance", related_name = "basic_substances")
+    parents = models.ManyToManyField("Substance", related_name = "children")
     # validation rule: check that all labels are in derived and not more(split on `+/()`)
+
+    objects = SubstanceManager()
 
     def __str__(self):
         return self.name
 
+    @property
+    def derived(self):
+        return bool(self.parents)
 
     @property
     def outputs_final(self):
@@ -106,7 +111,9 @@ class Substance(models.Model):
         #return studies
         #return Study.objects.filter(all_substances__contains = self)
 
-
+class Synonym(models.Model):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    substance = models.ForeignKey(Substance, on_delete=True, related_name="synonyms")
 
 # -------------------------------------------------
 # Intervention
@@ -670,9 +677,8 @@ class Timecourse(AbstractOutput):
             if DOSING_RESTRICTED.is_valid_unit(dosing.unit):
                 p_unit_dosing = self.category_class_data.p_unit(dosing.unit)
                 p_unit_concentration = self.category_class_data.p_unit(pharmacokinetics_dict["c_unit"])
-                vd_unit = p_unit_dosing/p_unit_concentration
+                vd_unit = (p_unit_dosing)/(p_unit_concentration)
                 pharmacokinetics_dict["vd_unit"] = str(vd_unit)
-
                 pharmacokinetics_dict["dose"] = dosing.value
                 pharmacokinetics_dict["dose_unit"] = dosing.unit
 

@@ -1,0 +1,14 @@
+{
+    "sid": "px",
+    "name": "paraxanthine",
+    "chebi": "CHEBI:25858",
+    "formula": "C7H8N4O2",
+    "charge": 0,
+    "mass": 180.164,
+    "description": "A dimethylxanthine having the two methyl groups located at positions 1 and 7. It is a metabolite of caffeine and theobromine in animals.",
+    "synonyms": [
+        "1,7-dimethylxanthine",
+        "1,7-DMX",
+        "17X"
+    ]
+}

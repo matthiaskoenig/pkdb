@@ -1,0 +1,8 @@
+{
+    "sid": "cod/mor",
+    "name": "cod/mor",
+    "parents": [
+        "codeine",
+        "morphine"
+    ]
+}

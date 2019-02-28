@@ -91,18 +91,19 @@ class AbstractType(object):
     def validate_time_unit(self, unit):
         if not self.is_valid_time_unit(unit):
             msg = f"[{unit}] with dimension [{self.unit_dimension(unit)}] is not allowed for the time units. "
-            raise ValueError({"unit": msg})
+            raise ValueError({"time_unit": msg})
 
     def norm_unit(self, unit):
         try:
             return self.dimension_to_n_unit[str(self.unit_dimension(unit))]
         except KeyError:
-            raise ValueError(f"Dimension [{self.unit_dimension(unit)}] is not allowed.")
+            raise ValueError(f"Dimension [{self.unit_dimension(unit)}] is not allowed for pktype [{self.key}. Dimension was calculated from unit :[{unit}]")
 
     def unit_dimension(self, unit):
         return self.p_unit(unit).dimensionality
 
     def is_norm_unit(self,unit):
+        print(self.n_p_units)
         return ureg(unit) in self.n_p_units
 
     def normalize(self, magnitude, unit):
@@ -195,8 +196,9 @@ def validate_pktypes(data):
         unit = data.get("unit", None)
         model_pktype.validate_unit(unit)
 
-        unit = data.get("time_unit", None)
-        model_pktype.validate_time_unit(unit)
+        time_unit = data.get("time_unit", None)
+        if time_unit:
+            model_pktype.validate_time_unit(time_unit)
 
 
 

@@ -5,7 +5,7 @@ Reusable behavior for models.
 from django.db import models
 from .utils import CHAR_MAX_LENGTH
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
-
+from .units import ureg
 
 class Sidable(models.Model):
     """ Model has an sid. """
@@ -123,21 +123,47 @@ class Normalizable(models.Model):
         else:
             return True
 
+    @property
+    def is_removeable_substance_dimension(self):
+        is_substance = hasattr(self, "substance")
+        if is_substance:
+            if self.substance.mass is not None:
+                dimension_of_substance = self.category_class_data.p_unit(self.unit).dimensionality.get("substance")
+                is_substance_dimension = dimension_of_substance is not None
+                if is_substance_dimension:
+                    return (True, dimension_of_substance)
+        return (False, None)
+
+
     def normalize(self):
 
-        print("*" * 100)
-        try:
-            print(self.pktype)
-        except:
-            pass
-        print(self.unit)
-        print("*" * 100)
-
         if not self.is_norm:
+
+
             for key, value in self.norm_fields.items():
                 if not value is None:
                     setattr(self, key, self.category_class_data.normalize(value, self.unit).magnitude)
             self.unit = str(self.category_class_data.norm_unit(self.unit))
+
+    def no_substance_quantity(self):
+        is_removeable_substance, dimension = self.is_removeable_substance_dimension
+        if is_removeable_substance:
+            molar_weight = ureg("g/mol")*self.substance.mass
+            p_unit = self.category_class_data.p_unit(self.unit)
+            this_quantity = p_unit/molar_weight**dimension
+
+            return (this_quantity.magnitude, this_quantity.units)
+        else:
+            return (1,self.unit)
+
+
+
+
+
+
+
+
+
 
     class Meta:
         abstract = True

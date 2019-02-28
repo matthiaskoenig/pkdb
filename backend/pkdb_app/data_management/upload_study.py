@@ -5,7 +5,6 @@ Is used in watchdog.
 
 import argparse
 import logging
-from pkdb_app import logging_utils
 from pkdb_app.data_management.upload_studies import upload_study_from_dir
 from pkdb_app.data_management.setup_database import get_authentication_headers
 from pkdb_app.settings import API_URL

@@ -20,7 +20,7 @@ from ..interventions.models import (
     InterventionEx,
     OutputEx,
     TimecourseEx,
-)
+    Synonym)
 
 from ..serializers import (
     ExSerializer,
@@ -81,14 +81,20 @@ OUTPUT_MAP_FIELDS = [
 # ----------------------------------
 class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
+    parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.all(), required=False, allow_null=True)
+    synonyms = serializers.SerializerMethodField(allow_null=True, required=False)
 
     class Meta:
         model = Substance
-        fields = ["name" ,"chebi" ]#"description","mass","charge","formular","derived","parent"]
+        fields = ["sid","mass","charge", "formula", "name" ,"chebi", "description", "parents", "synonyms"]
+
+    def get_synonyms(self,obj):
+        return [Synonym.objects.create(name=synonym) for synonym in obj.synonyms]
 
     def create(self, validated_data):
-        substance, created = Substance.objects.update_or_create(**validated_data)
+        substance, created = Substance.objects.update_or_create(sid=validated_data.pop("sid"), defaults=validated_data)
         return substance
+
 
 class SubstanceStatisticsSerializer(serializers.ModelSerializer):
     """ Substance. """

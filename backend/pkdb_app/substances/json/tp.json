@@ -1,0 +1,14 @@
+{
+    "sid": "tp",
+    "name": "theophylline",
+    "chebi": "CHEBI:28177",
+    "formula": "C7H8N4O2",
+    "charge": 0,
+    "mass": 180.16418,
+    "description": "A dimethylxanthine having the two methyl groups located at positions 1 and 3. It is structurally similar to caffeine and is found in green and black tea.",
+    "synonyms": [
+        "1,3-dimethylxanthine",
+        "1,3-DMX",
+        "13X"
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "sid": "cod/(ncod+ncg+nmor)",
+    "name": "cod/(ncod+ncg+nmor)",
+    "parents": [
+        "codeine",
+        "norcodeine",
+        "norcodeine-glucuronide",
+        "normorphine"
+    ]
+}

@@ -30,6 +30,7 @@ class SubstanceViewSet(CreateListModelMixin,viewsets.ModelViewSet):
     serializer_class = SubstanceSerializer
     permission_classes = (IsAdminUser,)
 
+
 class SubstanceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceStatisticsSerializer

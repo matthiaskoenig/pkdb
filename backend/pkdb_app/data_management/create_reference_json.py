@@ -4,13 +4,11 @@ Creates reference.json from given PMID id.
 """
 import argparse
 import os
-import sys
 import xml.etree.ElementTree as ET
 from Bio import Entrez
 import json
 import requests
-
-from pkdb_app.data_management.utils import recursive_iter, set_keys
+from .utils import recursive_iter, set_keys
 
 # FIXME: get proper email
 ENTREZ_EMAIL = "janekg89@hotmail.de"

@@ -1,0 +1,9 @@
+{
+    "sid": "ncod",
+    "name": "norcodeine",
+    "chebi": "CHEBI:80579",
+    "formula": "C17H19NO3",
+    "charge": 0,
+    "mass": 285.338,
+    "description": "A morphinane-like compound that is the N-demethylated derivative of codeine."
+}

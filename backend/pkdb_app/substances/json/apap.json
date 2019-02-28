@@ -1,0 +1,12 @@
+{
+    "sid": "apap",
+    "name": "acetaminophen",
+    "chebi": "CHEBI:46195",
+    "formula": "C8H9NO2",
+    "charge": 0,
+    "mass": 151.1626,
+    "description": "A member of the class of phenols that is 4-aminophenol in which one of the hydrogens attached to the amino group has been replaced by an acetyl group.",
+    "synonyms": [
+        "paracetamol"
+    ]
+}
