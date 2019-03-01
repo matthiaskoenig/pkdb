@@ -42,6 +42,7 @@ CHARACTERISTISTA_MAP_FIELDS = ["count_map", "choice_map"]
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
+
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -110,13 +111,9 @@ class CharacteristicaSerializer(ExSerializer):
         return super().validate(attr)
 
 
-
-
 # ----------------------------------
 # Group
 # ----------------------------------
-
-
 class GroupSerializer(ExSerializer):
     characteristica = CharacteristicaSerializer(
         many=True, read_only=False, required=False
@@ -269,7 +266,6 @@ class IndividualSerializer(ExSerializer):
 
 
 class IndividualExSerializer(ExSerializer):
-
     characteristica_ex = CharacteristicaExSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -399,11 +395,11 @@ class CharacteristicaReadSerializer(ReadSerializer):
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
 
+
 ###############################################################################################
 # Elastic Search Serializer
 ###############################################################################################
 #maybe depreciated
-
 class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
     file = serializers.CharField()
     timecourses = serializers.SerializerMethodField()
@@ -422,7 +418,6 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
-
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -445,15 +440,14 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
         return rep
 
 
-class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(read_only=True,lookup_field="sid",view_name="studies_read-detail")
+class StudySmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Study
         fields = ["pk",'name']#,'url']
 
 
 # Group related Serializer
-class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     groups = serializers.SerializerMethodField()
@@ -466,14 +460,13 @@ class GroupSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
         return list_of_pk("groups", obj)
 
 
-class GroupSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+class GroupSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ["pk", 'name']  # , 'url']
+        fields = ["pk", 'name']
 
 
-class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
+class GroupElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     parent = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = serializers.SerializerMethodField()
@@ -497,13 +490,11 @@ class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
             return []
 
 
-
 # Individual related Serializer
-class IndividualSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+class IndividualSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Individual
-        fields = ["pk", 'name']  # , 'url']
+        fields = ["pk", 'name']
 
 class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -521,7 +512,6 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
-    #characteristica_all_normed = serializers.SerializerMethodField()
     characteristica_all_normed = CharacteristicaElasticSerializer(many=True, read_only=True)
     class Meta:
         model = Individual
