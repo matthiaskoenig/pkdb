@@ -68,6 +68,7 @@ coloredlogs>=10.0
 
 #units
 pint
+python-slugify
 
 # chebi
 libchebipy

@@ -39,7 +39,7 @@ from ..subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk
+from ..utils import list_of_pk, update_or_create_multiple
 
 INTERVENTION_FIELDS = [
     "name",
@@ -79,21 +79,47 @@ OUTPUT_MAP_FIELDS = [
 # ----------------------------------
 # Substance
 # ----------------------------------
+class SynonymSerializer(WrongKeyValidationSerializer):
+    class Meta:
+        model = Synonym
+        fields = ["name"]
+
+    def to_internal_value(self, data):
+        return {"name": data}
+
+
+
 class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
     parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.all(), required=False, allow_null=True)
-    synonyms = serializers.SerializerMethodField(allow_null=True, required=False)
-
+    synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     class Meta:
         model = Substance
-        fields = ["sid","mass","charge", "formula", "name" ,"chebi", "description", "parents", "synonyms"]
-
-    def get_synonyms(self,obj):
-        return [Synonym.objects.create(name=synonym) for synonym in obj.synonyms]
+        fields = ["sid","mass","charge", "formula", "name" ,"chebi", "description",  "synonyms", "parents", "url_slug"]
 
     def create(self, validated_data):
-        substance, created = Substance.objects.update_or_create(sid=validated_data.pop("sid"), defaults=validated_data)
+
+        synonyms_data = validated_data.pop("synonyms", [])
+        parents_data = validated_data.pop("parents", [])
+        substance =  Substance.objects.create(**validated_data)
+        update_or_create_multiple(substance, synonyms_data, "synonyms")
+        substance.parents.add(*parents_data)
+        substance.save()
         return substance
+
+    def update(self, instance, validated_data):
+        synonyms_data = validated_data.pop("synonyms", [])
+        parents_data = validated_data.pop("parents", [])
+        instance.parents.clear()
+        instance.synonyms.all().delete()
+        for name, value in validated_data.items():
+            setattr(instance, name, value)
+        update_or_create_multiple(instance, synonyms_data, "synonyms")
+        instance.parents.add(*parents_data)
+        instance.save()
+
+        return instance
+
 
 
 class SubstanceStatisticsSerializer(serializers.ModelSerializer):

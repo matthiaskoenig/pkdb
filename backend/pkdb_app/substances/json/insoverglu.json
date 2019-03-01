@@ -1,8 +1,0 @@
-{
-    "sid": "ins/glu",
-    "name": "ins/glu",
-    "parents": [
-        "insulin",
-        "glucose"
-    ]
-}

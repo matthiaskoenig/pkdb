@@ -58,7 +58,7 @@ SUBSTANCES_DATA = [
     Substance(sid="1X/tp", parents=["1X", "theophylline"]),
     Substance(sid="(AFMU+1U+1X)/17U", parents=["AFMU", "1U", "1X", "17U"]),
     Substance(sid="(AAMU+1U+1X)/17U", parents=["AAMU", "1U", "1X", "17U"]),
-    Substance(sid="17U/17X", parents=["17U", "17X"]),
+    Substance(sid="17U/px", parents=["17U", "paraxanthine"]),
     Substance(sid="1U/(1U+1X)", parents=["1U", "1X"]),
     Substance(sid="1U/1X", parents=["1U", "1X"]),
     Substance(sid="AFMU/(AFMU+1U+1X)", parents=["AFMU", "1U", "1X"]),

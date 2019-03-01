@@ -3,6 +3,7 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
+
 import numpy as np
 import math
 import pandas as pd
@@ -70,12 +71,15 @@ class Substance(Sidable, models.Model):
     mass = models.FloatField(null=True)
     charge = models.FloatField(null=True)
     formula = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)# chemical formula
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+
 
 
     parents = models.ManyToManyField("Substance", related_name = "children")
     # validation rule: check that all labels are in derived and not more(split on `+/()`)
 
     objects = SubstanceManager()
+
 
     def __str__(self):
         return self.name
@@ -113,7 +117,7 @@ class Substance(Sidable, models.Model):
 
 class Synonym(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    substance = models.ForeignKey(Substance, on_delete=True, related_name="synonyms")
+    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="synonyms")
 
 # -------------------------------------------------
 # Intervention

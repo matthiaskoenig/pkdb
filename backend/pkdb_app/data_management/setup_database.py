@@ -6,10 +6,11 @@ Creates basic users and information like substances and keywords.
 import requests
 import logging
 import os
+from urllib.parse import quote_plus
 
 from pkdb_app.settings import DEFAULT_PASSWORD, API_BASE
 from pkdb_app.categoricals import  KEYWORDS_DATA
-from pkdb_app.data_management.create_substance_jsons import  read_substances
+from pkdb_app.data_management.utils import _read_json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -87,15 +88,27 @@ def setup_database(api_url, auth_headers, client=None):
             logging.warning(response.content)
 
     #substances_json = [{"name":substance.name} for substance in SUBSTANCES_DATA]
-    substance_json_dir = os.path.join(BASE_DIR,"substances/json/")
-    substances_json = read_substances(substance_json_dir)
+    substance_json_dir = os.path.join(BASE_DIR,"substances/substances.json")
+    substances_json = _read_json(substance_json_dir)
     for substance in substances_json:
 
         response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
-                                        data=[substance], headers=auth_headers)
+                                        data=substance, headers=auth_headers)
         if not response.status_code == 201:
-            logging.warning(f"substance: {substance} upload failed")
-            logging.warning(response.content)
+            if response.content == b'{"sid":["substance with this sid already exists."],"url_slug":["substance with this url slug already exists."]}':
+
+                response = requests_with_client(client, requests, f"{api_url}/substances/{substance['url_slug']}/", method="patch",
+                                                data=substance, headers=auth_headers)
+                if not response.status_code == 200:
+                    logging.warning(f"substance: {substance} upload failed")
+                    logging.warning(response.content)
+
+            else:
+                logging.warning(f"substance: {substance} upload failed")
+                logging.warning(response.content)
+
+
+
 
     #for substance in SUBSTANCES_DATA:
     #

@@ -44,7 +44,6 @@ def save_json(d, file_path):
         os.makedirs(directory)
     with open(file_path, "w") as fp:
         json.dump(d, fp, indent=4)
-        print(f"Substance: {d['sid']}")
 
 
 def _read_json(path):

@@ -29,8 +29,7 @@ import time
 from pkdb_app.data_management import setup_database as sdb
 from pkdb_app.data_management.utils import recursive_iter, set_keys, _read_json
 from pkdb_app.data_management.create_reference_json import run as create_reference
-
-from backend.pkdb_app.data_management.utils import dict_raise_on_duplicates
+from pkdb_app.data_management.utils import dict_raise_on_duplicates
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -445,9 +444,9 @@ if __name__ == "__main__":
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     DATA_BASE_PATH = os.path.join(BASE_DIR, "..", "..", "..", "pkdb_data")
     DATA_PATHS = [
-         os.path.join(DATA_BASE_PATH, "caffeine"),
+         #os.path.join(DATA_BASE_PATH, "caffeine"),
          os.path.join(DATA_BASE_PATH, "codeine"),
-         os.path.join(DATA_BASE_PATH, "glucose_dose_response"),
+         #os.path.join(DATA_BASE_PATH, "glucose_dose_response"),
 
     ]
     DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]

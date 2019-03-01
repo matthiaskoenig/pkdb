@@ -1,9 +1,0 @@
-{
-    "sid": "spar/(2hspar+5hspar)",
-    "name": "spar/(2hspar+5hspar)",
-    "parents": [
-        "sparteine",
-        "2-dehydrosparteine",
-        "5-dehydrosparteine"
-    ]
-}

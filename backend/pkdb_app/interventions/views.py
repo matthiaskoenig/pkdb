@@ -4,6 +4,7 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
     OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.response import Response
 
 from ..categoricals import INTERVENTION_DICT, INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION, \
@@ -17,7 +18,6 @@ from ..interventions.serializers import (
 from rest_framework.permissions import IsAdminUser
 
 from ..pagination import CustomPagination
-from ..views import CreateListModelMixin
 
 
 ###############################################################################################
@@ -25,10 +25,13 @@ from ..views import CreateListModelMixin
 ###############################################################################################
 
 
-class SubstanceViewSet(CreateListModelMixin,viewsets.ModelViewSet):
+class SubstanceViewSet(viewsets.ModelViewSet):
     queryset = Substance.objects.all()
+    parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = SubstanceSerializer
     permission_classes = (IsAdminUser,)
+    lookup_field = "url_slug"
+
 
 
 class SubstanceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):

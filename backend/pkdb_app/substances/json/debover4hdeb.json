@@ -1,8 +1,0 @@
-{
-    "sid": "deb/4hdeb",
-    "name": "deb/4hdeb",
-    "parents": [
-        "debrisoquine",
-        "4-hydroxydebrisoquine"
-    ]
-}
