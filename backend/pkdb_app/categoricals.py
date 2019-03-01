@@ -442,10 +442,10 @@ CHARACTERISTIC_DATA = [
         "smoking amount (cigarettes)", LIFESTYLE, NUMERIC_TYPE, None, [AMOUNT_PER_DAY]
     ),
     CharacteristicType(
-        "smoking amount (packyears)", LIFESTYLE, NUMERIC_TYPE, None, [AMOUNT_PER_YEAR]
+        "smoking amount (packyears)", LIFESTYLE, NUMERIC_TYPE, None, ["yr"]
     ),
     CharacteristicType(
-        "smoking duration (years)", LIFESTYLE, NUMERIC_TYPE, None, [AMOUNT_PER_YEAR]
+        "smoking duration (years)", LIFESTYLE, NUMERIC_TYPE, None, ["yr"]
     ),
     # -------------- Alcohol --------------
     CharacteristicType(
