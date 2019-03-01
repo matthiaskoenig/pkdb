@@ -141,7 +141,7 @@ SUBSTANCES_DATA = [
     # CYP2D6 related
     Substance(sid = "qui", name="quinidine", chebi="CHEBI:28593"),
 
-    Substance(sid = "deb", name="debrisoquine"), #CYP2D6 Phenotyping
+    Substance(sid = "deb", name="debrisoquine", chebi="CHEBI:34665"), #CYP2D6 Phenotyping
     Substance(sid = "4hdeb", name="4-hydroxydebrisoquine",chebi="CHEBI:63800"), #CYP2D6 Phenotyping
     Substance(sid="deb/4hdeb", parents=["debrisoquine", "4-hydroxydebrisoquine"]),
 
@@ -149,7 +149,7 @@ SUBSTANCES_DATA = [
 
     Substance(sid ="spar", name="sparteine", chebi="CHEBI:28827"),  # CYP2D6 Phenotyping
     Substance(sid ="2hspar", name="2-dehydrosparteine",chebi="CHEBI:29130"),  # CYP2D6 Phenotyping
-    Substance(sid ="5hspar", name="5-dehydrosparteine"),  # CYP2D6 Phenotyping # Molecular Weight: 232.371 g/mol
+    Substance(sid ="5hspar", name="5-dehydrosparteine"),  # soon avialble, chebi="CHEBI:143195"),  # CYP2D6 Phenotyping # Molecular Weight: 232.371 g/mol
 
     # for phenotyping
     Substance(sid="spar/(2hspar+5hspar)", parents=["sparteine", "2-dehydrosparteine","5-dehydrosparteine"],

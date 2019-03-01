@@ -594,7 +594,12 @@
     {
         "sid": "deb",
         "url_slug": "deb",
-        "name": "debrisoquine"
+        "name": "debrisoquine",
+        "chebi": "CHEBI:34665",
+        "formula": "C10H13N3",
+        "charge": 0,
+        "mass": 175.23044,
+        "description": null
     },
     {
         "sid": "4hdeb",
