@@ -801,9 +801,9 @@
         "name": "ethanol"
     },
     {
-        "sid": "chlorozoxazone",
-        "url_slug": "chlorozoxazone",
-        "name": "chlorozoxazone"
+        "sid": "chlorzoxazone",
+        "url_slug": "chlorzoxazone",
+        "name": "chlorzoxazone"
     },
     {
         "sid": "lomefloxacin",
@@ -896,9 +896,9 @@
         "name": "5-hydroxyomeprazole"
     },
     {
-        "sid": "ome/5home",
-        "url_slug": "ome-over-5home",
-        "name": "ome/5home",
+        "sid": "5home/ome",
+        "url_slug": "5home-over-ome",
+        "name": "5home/ome",
         "parents": [
             "omeprazole",
             "5-hydroxyomeprazole"

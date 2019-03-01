@@ -186,7 +186,7 @@ SUBSTANCES_DATA = [
     Substance(sid="ofloxacin"),
     Substance(sid="fluvoxamine"),
     Substance(sid="ethanol"),
-    Substance(sid="chlorozoxazone"),
+    Substance(sid="chlorzoxazone"),
     Substance(sid="lomefloxacin"),
     Substance(sid="aminopyrine"),
     Substance(sid="antipyrine"),
@@ -212,9 +212,9 @@ SUBSTANCES_DATA = [
     # omeprazole (CYP2C19)
     Substance(sid="omeprazole"),
     Substance(sid="5-hydroxyomeprazole"),
-    Substance(sid="ome/5home",
+    Substance(sid="5home/ome",
               parents=["omeprazole", "5-hydroxyomeprazole"],
-        ),
+              ),
 
     # dextromethorphan
     Substance(sid="dextromethorphan"),
