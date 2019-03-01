@@ -545,7 +545,7 @@ class ExSerializer(MappingSerializer):
                         interventions.append(
                             Intervention.objects.get(
                                 Q(ex__interventionset__study__sid=study_sid)
-                                & Q(name=intervention, final=True)
+                                & Q(name=intervention, normed=True)
                             ).pk
                         )
                     except ObjectDoesNotExist:

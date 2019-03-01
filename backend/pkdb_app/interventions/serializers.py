@@ -125,9 +125,9 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 class SubstanceStatisticsSerializer(serializers.ModelSerializer):
     """ Substance. """
     studies = serializers.StringRelatedField(many=True, read_only=True)
-    interventions = serializers.PrimaryKeyRelatedField(many=True, source="interventions_final",read_only=True)
-    outputs = serializers.PrimaryKeyRelatedField(many=True, source="outputs_final", read_only=True)
-    timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_final",read_only=True)
+    interventions = serializers.PrimaryKeyRelatedField(many=True, source="interventions_normed",read_only=True)
+    outputs = serializers.PrimaryKeyRelatedField(many=True, source="outputs_normed", read_only=True)
+    timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_normed",read_only=True)
 
     class Meta:
         model = Substance
@@ -642,7 +642,7 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     cv = serializers.FloatField(allow_null=True)
     class Meta:
         model = Intervention
-        fields = ["pk","study", "final"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields = ["pk","study", "normed"] + VALUE_FIELDS + INTERVENTION_FIELDS
 
     def get_substance(self, obj):
         if obj.substance:
@@ -701,7 +701,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "final","calculated","interventions"])
+                + ["group", "individual", "normed","calculated","interventions"])
 
     def get_substance(self,obj):
         if obj.substance:
@@ -733,7 +733,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "final","interventions","figure"])
+                + ["group", "individual", "normed","interventions","figure"])
 
     def get_substance(self,obj):
         if obj.substance:

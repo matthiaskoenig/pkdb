@@ -397,7 +397,7 @@ class CharacteristicaReadSerializer(ReadSerializer):
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["final"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
 
 ###############################################################################################
 # Elastic Search Serializer
@@ -480,7 +480,7 @@ class GroupSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
 class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     parent = GroupSmallElasticSerializer(read_only=True)
-    characteristica_all_final = serializers.SerializerMethodField()
+    characteristica_all_normed = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
@@ -490,12 +490,12 @@ class GroupElasticSerializer(serializers.HyperlinkedModelSerializer):
             'count',
             'name',
             'study',
-            'characteristica_all_final',
+            'characteristica_all_normed',
         )
 
-    def get_characteristica_all_final(self, instance):
-        if instance.characteristica_all_final:
-            characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+    def get_characteristica_all_normed(self, instance):
+        if instance.characteristica_all_normed:
+            characteristica = sorted(instance.characteristica_all_normed, key=itemgetter('count'))
             return CharacteristicaElasticSerializer(characteristica, many=True, read_only=True).data
         else:
             return []
@@ -525,8 +525,8 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
-    #characteristica_all_final = serializers.SerializerMethodField()
-    characteristica_all_final = CharacteristicaElasticSerializer(many=True, read_only=True)
+    #characteristica_all_normed = serializers.SerializerMethodField()
+    characteristica_all_normed = CharacteristicaElasticSerializer(many=True, read_only=True)
     class Meta:
         model = Individual
         fields = (
@@ -534,10 +534,10 @@ class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
             'group',
             'name',
             'study',
-            'characteristica_all_final',
+            'characteristica_all_normed',
         )
 
-    def get_characteristica_all_final(self, instance):
-        characteristica = sorted(instance.characteristica_all_final, key=itemgetter('count'))
+    def get_characteristica_all_normed(self, instance):
+        characteristica = sorted(instance.characteristica_all_normed, key=itemgetter('count'))
         return CharacteristicaElasticSerializer(characteristica,many=True, read_only=True).data
 

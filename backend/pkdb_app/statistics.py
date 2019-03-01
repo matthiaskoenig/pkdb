@@ -22,9 +22,9 @@ class Statistics(object):
         self.reference_count = Reference.objects.count()
         self.group_count = Group.objects.count()
         self.individual_count = Individual.objects.count()
-        self.intervention_count = Intervention.objects.filter(final=True).count()
-        self.output_count = Output.objects.filter(final=True).count()
-        self.timecourse_count = Timecourse.objects.filter(final=True).count()
+        self.intervention_count = Intervention.objects.filter(normed=True).count()
+        self.output_count = Output.objects.filter(normed=True).count()
+        self.timecourse_count = Timecourse.objects.filter(normed=True).count()
 
 @api_view(['GET'])
 def study_pks_view(request):
@@ -70,11 +70,11 @@ class StatisticsData(object):
         self.studies = Study.objects.filter(substances__name__contains=substance)
         self.study_count = self.studies.count()
         self.reference_count = self.studies.values_list("reference").count()
-        self.interventions = Intervention.objects.filter(substance__name=substance).filter(final=True)
+        self.interventions = Intervention.objects.filter(substance__name=substance).filter(normed=True)
         self.intervention_count = self.interventions.count()
-        self.outputs = Output.objects.filter(substance__name=substance).filter(final=True)
+        self.outputs = Output.objects.filter(substance__name=substance).filter(normed=True)
         self.output_count = self.outputs.count()
-        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(final=True)
+        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(normed=True)
         self.timecourse_count = self.timecourses.count()
 
         outputs_with_substance = Output.objects.filter(raw___interventions__in=self.interventions)

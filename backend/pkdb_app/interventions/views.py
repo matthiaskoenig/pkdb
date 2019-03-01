@@ -129,7 +129,7 @@ class ElasticOutputViewSet(DocumentViewSet):
     search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk',
                      'study':'study.raw',
-                     'final':'final',
+                     'normed':'normed',
                      'calculated':'calculated',
                      'unit':'unit',
                      'substance':'substance.name.raw',
@@ -160,7 +160,7 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
     filter_fields = {'pk': 'pk',
-                     'final': 'final',
+                     'normed': 'normed',
                      'substance': 'substance.name.raw',
                      'pktype': 'pktype.raw',
                      'group_pk': {'field': 'group.pk',

@@ -39,9 +39,9 @@ class GroupViewSet(DocumentViewSet):
         'name',
         'study.name',
         'parent.name',
-        'characteristica_all_final.category',
-        'characteristica_all_final.choice',
-        'characteristica_all_final.ctype',
+        'characteristica_all_normed.category',
+        'characteristica_all_normed.choice',
+        'characteristica_all_normed.ctype',
 
     )
 
@@ -77,9 +77,9 @@ class IndividualViewSet(DocumentViewSet):
         'name',
         'study.name',
         'group.name',
-        'characteristica_all_final.category',
-        'characteristica_all_final.choice',
-        'characteristica_all_final.ctype',
+        'characteristica_all_normed.category',
+        'characteristica_all_normed.choice',
+        'characteristica_all_normed.ctype',
 
     )
 
@@ -130,7 +130,7 @@ class CharacteristicaViewSet(DocumentViewSet):
         'se':  'se',
         'sd':  'sd',
         'cv':'cv',
-        'final':'final',
+        'normed':'normed',
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',
         'individual_name': 'individual_name.raw',

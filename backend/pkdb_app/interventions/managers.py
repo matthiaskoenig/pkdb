@@ -139,7 +139,7 @@ class TimecourseExManager(models.Manager):
         timecourses = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
 
         for timecourse in timecourses:
-            if timecourse.pktype == "concentration" and timecourse.final:
+            if timecourse.pktype == "concentration" and timecourse.normed:
                 variables = timecourse.get_pharmacokinetic_variables()
                 c_type = variables.pop("c_type", None)
                 _ = variables.pop("bodyweight_type", None)

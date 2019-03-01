@@ -57,7 +57,7 @@ class DataFile(models.Model):
     @property
     def timecourses(self):
         Timecourse = apps.get_model('interventions', 'Timecourse')
-        tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(final=True)
+        tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(normed=True)
         return tc
 
     def __str__(self):
@@ -182,8 +182,8 @@ class Group(models.Model):
         return characteristica_all
 
     @property
-    def characteristica_all_final(self):
-        return self.characteristica_all.filter(final=True)
+    def characteristica_all_normed(self):
+        return self.characteristica_all.filter(normed=True)
 
 
 
@@ -280,19 +280,19 @@ class Individual(AbstractIndividual):
         return self.ex.figure
 
     @property
-    def characteristica_final(self):
-        return self.characteristica.filter(final=True)
+    def characteristica_normed(self):
+        return self.characteristica.filter(normed=True)
 
     @property
-    def group_characteristica_final(self):
-        return self.group.characteristica_all_final
+    def group_characteristica_normed(self):
+        return self.group.characteristica_all_normed
 
     @property
-    def characteristica_all_final(self):
-        characteristica_final = self.characteristica_final
-        this_categories = characteristica_final.values_list("category", flat=True)
+    def characteristica_all_normed(self):
+        characteristica_normed = self.characteristica_normed
+        this_categories = characteristica_normed.values_list("category", flat=True)
 
-        return (characteristica_final | self.group_characteristica_final.exclude(category__in=this_categories))
+        return (characteristica_normed | self.group_characteristica_normed.exclude(category__in=this_categories))
 
     @property
     def study(self):
@@ -313,11 +313,11 @@ class Individual(AbstractIndividual):
 
     @property
     def characteristica_categories(self):
-        return [characteristica.category for characteristica in self.characteristica_all_final.all()]
+        return [characteristica.category for characteristica in self.characteristica_all_normed.all()]
 
     @property
     def characteristica_choices(self):
-        return {characteristica.category: characteristica.choice for characteristica in self.characteristica_all_final.all()}
+        return {characteristica.category: characteristica.choice for characteristica in self.characteristica_all_normed.all()}
 
 
 # ----------------------------------
@@ -398,7 +398,7 @@ class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
         Individual, related_name="characteristica", null=True, on_delete=models.CASCADE
     )
     raw = models.ForeignKey("Characteristica", related_name="norm", on_delete=models.CASCADE, null=True)
-    final = models.BooleanField(default=False)
+    normed = models.BooleanField(default=False)
     count = models.IntegerField(default=1)
 
 

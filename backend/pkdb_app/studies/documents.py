@@ -169,7 +169,7 @@ class StudyDocument(DocType):
 
     groupset = common_setfields("groups")
     individualset = common_setfields("individuals")
-    interventionset = common_setfields("interventions", "interventions_final")
+    interventionset = common_setfields("interventions", "interventions_normed")
     outputset = ObjectField(
         properties={
             "descriptions": ObjectField(
@@ -180,14 +180,14 @@ class StudyDocument(DocType):
                 multi=True),
             # "count_outputs" : fields.FloatField(),
             "outputs": ObjectField(
-                attr="outputs_final",
+                attr="outputs_normed",
                 properties={
                     "pk": fields.FloatField(),
                 }
             ),
             # "count_timecourses": fields.FloatField(),
             "timecourses": ObjectField(
-                attr="timecourses_final",
+                attr="timecourses_normed",
                 properties={
                     "pk": fields.FloatField(),
                 }

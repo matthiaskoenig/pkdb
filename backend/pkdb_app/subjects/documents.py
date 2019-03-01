@@ -40,7 +40,7 @@ class IndividualDocument(DocType):
         'pk':fields.IntegerField('pk')
     })
 
-    characteristica_all_final = fields.ObjectField(
+    characteristica_all_normed = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
             'category': string_field('category'),
@@ -99,7 +99,7 @@ class GroupDocument(DocType):
         'pk': fields.IntegerField('pk')
     })
 
-    characteristica_all_final = fields.ObjectField(
+    characteristica_all_normed = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
             'category': string_field('category'),
@@ -142,7 +142,7 @@ characteristica_index.settings(
 class CharacteristicaDocument(DocType):
     """Characteristica elastic search document"""
     id = fields.IntegerField(attr='id')
-    final = fields.BooleanField()
+    normed = fields.BooleanField()
 
     group_name = fields.StringField(
         attr='group_name',

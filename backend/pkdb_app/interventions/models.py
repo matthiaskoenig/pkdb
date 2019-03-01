@@ -89,16 +89,16 @@ class Substance(Sidable, models.Model):
         return bool(self.parents)
 
     @property
-    def outputs_final(self):
-        return self.outputs.filter(final=True)
+    def outputs_normed(self):
+        return self.outputs.filter(normed=True)
 
     @property
-    def timecourses_final(self):
-        return self.timecourses.filter(final=True)
+    def timecourses_normed(self):
+        return self.timecourses.filter(normed=True)
 
     @property
-    def interventions_final(self):
-        return self.interventions.filter(final=True)
+    def interventions_normed(self):
+        return self.interventions.filter(normed=True)
 
     #@property
     #def all_studies(self):
@@ -132,9 +132,9 @@ class InterventionSet(models.Model):
         return interventions
 
     @property
-    def interventions_final(self):
+    def interventions_normed(self):
         """ all interventions """
-        interventions = self.interventions.filter(final=True)
+        interventions = self.interventions.filter(normed=True)
         return interventions
 
     @property
@@ -153,7 +153,7 @@ class AbstractIntervention(models.Model):
     form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
     application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
     time = models.FloatField(null=True)
-    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True) #todo validate in serializer
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
     route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES)
 
@@ -239,7 +239,7 @@ class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     raw = models.ForeignKey("Intervention", related_name="norm", on_delete=models.CASCADE, null=True)
-    final = models.BooleanField(default=False)
+    normed = models.BooleanField(default=False)
     substance = models.ForeignKey(Substance, related_name="interventions",null=True, on_delete=models.PROTECT)
 
     @property
@@ -260,8 +260,8 @@ class OutputSet(models.Model):
         return outputs | outputs_timecourses
 
     @property
-    def outputs_final(self):
-        outputs = self.outputs.filter(final=True)
+    def outputs_normed(self):
+        outputs = self.outputs.filter(normed=True)
         outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
         return outputs | outputs_timecourses
 
@@ -279,8 +279,8 @@ class OutputSet(models.Model):
         return timecourses
 
     @property
-    def timecourses_final(self):
-        timecourses = self.timecourses.filter(final=True)
+    def timecourses_normed(self):
+        timecourses = self.timecourses.filter(normed=True)
         return timecourses
 
     @property
@@ -356,7 +356,7 @@ class Output(ValueableNotBlank, AbstractOutput):
 
     #normalization into standertized units and added statistic
     raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
-    final = models.BooleanField(default=False)
+    normed = models.BooleanField(default=False)
 
     #calculated by timecourse data
     calculated = models.BooleanField(default=False)
@@ -511,7 +511,7 @@ class Timecourse(AbstractOutput):
     time = ArrayField(models.FloatField(null=True), null=True)
     raw = models.ForeignKey("Timecourse", related_name="norm", on_delete=models.CASCADE, null=True)
 
-    final = models.BooleanField(default=False)
+    normed = models.BooleanField(default=False)
     objects = OutputManager()
 
     @property
@@ -632,13 +632,13 @@ class Timecourse(AbstractOutput):
             return self.individual
 
     def get_bodyweight(self):
-        weight_categories = self.related_subject.characteristica_all_final.filter(category="weight")
+        weight_categories = self.related_subject.characteristica_all_normed.filter(category="weight")
         return weight_categories
 
     def get_dosing(self):
 
         try:
-            dosing_category = self.interventions.get(final=True,category="dosing")
+            dosing_category = self.interventions.get(normed=True,category="dosing")
             return dosing_category
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):

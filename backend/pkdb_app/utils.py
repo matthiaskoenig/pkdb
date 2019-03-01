@@ -64,7 +64,7 @@ def create_multiple_bulk_normalized(notnormalized_instances, model_class):
 def initialize_normed(notnorm_instance):
     norm = copy.copy(notnorm_instance)
     norm.pk = None
-    norm.final = True
+    norm.normed = True
     norm.normalize()
     norm.raw_id = notnorm_instance.pk
     try:

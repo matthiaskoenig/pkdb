@@ -201,7 +201,7 @@ class Study(Sidable, models.Model):
     @property
     def timecourse_count(self):
         if self.outputset:
-            return self.outputset.timecourses.filter(final=True).count()
+            return self.outputset.timecourses.filter(normed=True).count()
         return 0
 
     @property
@@ -213,13 +213,13 @@ class Study(Sidable, models.Model):
     @property
     def intervention_count(self):
         if self.interventionset:
-            return self.interventionset.interventions.filter(final=True).count()
+            return self.interventionset.interventions.filter(normed=True).count()
         return 0
 
     @property
     def output_count(self):
         if self.outputset:
-            return self.outputset.outputs.filter(final=True).count()
+            return self.outputset.outputs.filter(normed=True).count()
 
         return 0
 

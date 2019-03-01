@@ -9,7 +9,8 @@ substance_index.settings(**elastic_settings)
 
 @substance_index.doc_type
 class SubstanceDocument(DocType):
-    pk = fields.IntegerField()
+    sid = string_field('sid')
+    url_slug = string_field('url_slug')
     name = string_field('name')
 
 
@@ -42,7 +43,7 @@ class InterventionDocument(DocType):
     route = string_field('route')
     form = string_field('form')
     name = string_field('name')
-    final = fields.BooleanField()
+    normed = fields.BooleanField()
     value = fields.FloatField()
     mean = fields.FloatField()
     median = fields.FloatField()
@@ -90,7 +91,7 @@ class OutputDocument(DocType):
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )
-    final = fields.BooleanField()
+    normed = fields.BooleanField()
     calculated = fields.BooleanField()
 
     value = fields.FloatField('null_value')
@@ -144,7 +145,7 @@ class TimecourseDocument(DocType):
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )
-    final = fields.BooleanField()
+    normed = fields.BooleanField()
     value = fields.FloatField('null_value',multi=True)
     mean = fields.FloatField('null_mean', multi=True)
     median = fields.FloatField('null_median', multi=True)
