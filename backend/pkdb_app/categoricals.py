@@ -93,7 +93,7 @@ class AbstractType(object):
             msg = f"[{unit}] with dimension [{self.unit_dimension(unit)}] is not allowed for the time units. "
             raise ValueError({"time_unit": msg})
 
-    def norm_unit(self, unit):debug
+    def norm_unit(self, unit):
         try:
             return self.dimension_to_n_unit[str(self.unit_dimension(unit))]
         except KeyError:
