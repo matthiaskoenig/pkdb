@@ -150,28 +150,19 @@ class Normalizable(models.Model):
     def normalize(self):
 
         factor, unit = self.remove_substance_dimension()
-        if ureg(unit) != ureg(self.unit):
-            for key, value in self.norm_fields.items():
-                if not value is None:
-                    setattr(self, key, value*factor)
-            self.unit = unit
+        if unit and self.unit:
+
+            if ureg(unit) != ureg(self.unit):
+                for key, value in self.norm_fields.items():
+                    if not value is None:
+                        setattr(self, key, value*factor)
+                self.unit = unit
 
         if not self.is_norm:
-
             for key, value in self.norm_fields.items():
                 if not value is None:
                     setattr(self, key, self.category_class_data.normalize(value, self.unit).magnitude)
             self.unit = str(self.category_class_data.norm_unit(self.unit))
-
-
-
-
-
-
-
-
-
-
 
     class Meta:
         abstract = True

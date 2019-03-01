@@ -119,7 +119,6 @@ class ElasticInterventionViewSet(DocumentViewSet):
                        'value':'value'}
 
 
-
 class ElasticOutputViewSet(DocumentViewSet):
     document = OutputDocument
     serializer_class = OutputElasticSerializer

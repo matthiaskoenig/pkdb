@@ -50,13 +50,6 @@ class AbstractType(object):
     def valid_dimensions_str(self):
         return [str(unit.dimensionality) for unit in self.n_p_units]
 
-    @property
-    def is_unit_not_required(self):
-        unit_not_required = len(self.n_units) == 0
-        unit_not_required2 = NOUNIT in self.n_units
-
-        return unit_not_required or unit_not_required2
-
 
     @property
     def dimension_to_n_unit(self):
@@ -73,10 +66,19 @@ class AbstractType(object):
             raise ValueError(f"unit {unit} is not defined in unit registry or not allowed.")
 
     def is_valid_unit(self, unit):
-        if unit and self.valid_dimensions:
-            return any([self.p_unit(unit).check(dim) for dim  in self.valid_dimensions])
+        if len(self.n_units) != 0 :
+            if unit:
+                return any([self.p_unit(unit).check(dim) for dim in self.valid_dimensions])
+            else:
+                unit_not_required2 = NOUNIT in self.n_units
+                return unit_not_required2
+
         else:
-            return self.is_unit_not_required
+            if unit:
+                return False
+            else:
+                return True
+
 
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
