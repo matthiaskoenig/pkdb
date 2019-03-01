@@ -221,6 +221,11 @@ All available fields for intervention and interventionset are:
 ## 5. Curation of output/outputset
 
 
+## Units for curation
+Pint units:
+https://github.com/hgrecco/pint/blob/master/pint/default_en_0.6.txt
+
+
 ## Open issues
 - individual set
 - time course data

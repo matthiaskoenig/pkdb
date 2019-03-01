@@ -20,6 +20,7 @@ ORGAN_WEIGHT_UNIT = 'g'
 AMOUNT_PER_YEAR ='1/yr'
 AMOUNT_PER_DAY = '1/day'
 
+
 #-----------------------------------------------------------------------------------------------------------------------
 # Pktype: allowed dimensions and norm units
 #-----------------------------------------------------------------------------------------------------------------------
@@ -185,7 +186,7 @@ disease_duration_units = [
 caffeine_amount_units = ['mg/day',]
 # -------------- Alcohol --------------
 
-alcohol_abstinence_units = [DIMLESS, 'day']
+alcohol_abstinence_units = [NOUNIT, 'day']
 # -------------- Biochemical data --------------
 ALT_abstinence_units = AST_abstinence_units  = ['IU/l']
 albumin_abstinence_units = ['g/dl']
