@@ -173,6 +173,7 @@ abstinence_units = [
 ]
 
 consumption_units = [
+    NOUNIT,
     '1/day', # could be added rule to transform to mg could be added
     'mg/day',
 ]
