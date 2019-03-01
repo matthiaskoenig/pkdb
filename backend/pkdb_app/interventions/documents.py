@@ -23,10 +23,6 @@ class SubstanceDocument(DocType):
         'url_slug': string_field('url_slug')
     }, multi=True)
 
-
-
-
-
     class Meta(object):
         model = Substance
         # Ignore auto updating of Elasticsearch when a model is saved
@@ -56,6 +52,9 @@ class InterventionDocument(DocType):
     form = string_field('form')
     name = string_field('name')
     normed = fields.BooleanField()
+    raw = ObjectField(properties={
+        'pk': fields.IntegerField()}
+        )
     value = fields.FloatField()
     mean = fields.FloatField()
     median = fields.FloatField()
@@ -82,8 +81,6 @@ output_index.settings(**elastic_settings)
 class OutputDocument(DocType):
     pk = fields.IntegerField('pk')
     study = string_field('study')
-
-
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
         'name': string_field('name')})
@@ -105,6 +102,13 @@ class OutputDocument(DocType):
         )
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
+
+    raw = ObjectField(properties={
+        'pk': fields.IntegerField()}
+    )
+    timecourse = ObjectField(properties={
+        'pk': fields.IntegerField()}
+    )
 
     value = fields.FloatField('null_value')
     mean = fields.FloatField('null_mean')
@@ -157,7 +161,18 @@ class TimecourseDocument(DocType):
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )
+
     normed = fields.BooleanField()
+
+    raw = ObjectField(properties={
+        'pk': fields.IntegerField()}
+    )
+
+    pharmacokinetics = ObjectField(properties={
+        'pk': fields.IntegerField()},
+        multi=True
+    )
+
     value = fields.FloatField('null_value',multi=True)
     mean = fields.FloatField('null_mean', multi=True)
     median = fields.FloatField('null_median', multi=True)

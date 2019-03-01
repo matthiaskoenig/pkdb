@@ -142,7 +142,6 @@ characteristica_index.settings(
 class CharacteristicaDocument(DocType):
     """Characteristica elastic search document"""
     id = fields.IntegerField(attr='id')
-    normed = fields.BooleanField()
 
     group_name = fields.StringField(
         attr='group_name',
@@ -195,6 +194,11 @@ class CharacteristicaDocument(DocType):
     se = fields.FloatField(attr='se')
     sd = fields.FloatField(attr='sd')
     cv = fields.FloatField(attr='cv')
+
+    normed = fields.BooleanField()
+    raw = ObjectField(properties={
+        'pk': fields.IntegerField()}
+    )
 
 
     class Meta:

@@ -421,10 +421,6 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
         return obj
 
 
-
-
-
-
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     value = serializers.FloatField(allow_null=True)
@@ -437,7 +433,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
     cv = serializers.FloatField(allow_null=True)
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS + ["normed"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
