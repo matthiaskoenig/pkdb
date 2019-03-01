@@ -13,7 +13,8 @@ ureg.define('NO_UNIT = [no_unit]')
 
 
 # frequently used used unit definitions
-DIMLESS = 'dimensionless'
+DIMLESS = 'none'
+
 NOUNIT = 'NO_UNIT'
 ORGAN_WEIGHT_UNIT = 'g'
 AMOUNT_PER_YEAR ='1/yr'
@@ -54,7 +55,7 @@ concentration_units = [
 
 # ratio dimensions to units
 ratio_units = [
-   'dimensionless',  # all ratios are dimensionless
+   DIMLESS,  # all ratios are dimensionless
 ]
 
 # recovery dimensions to units
