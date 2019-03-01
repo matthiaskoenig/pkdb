@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 ########################################################
 # Complete update
+# set -a && source .env.local && ./docker_update.sh
 ########################################################
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 sudo echo "Docker update"

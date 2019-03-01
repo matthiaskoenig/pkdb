@@ -44,7 +44,8 @@ set -a && source .env.local && docker-compose up
 ```
 To update an existing version use
 ```bash
-set -a && source .env.local && docker-compose up --build
+set -a && source .env.local && ./docker_update.sh
+set -a && source .env.local && docker-compose up
 
 To see the running containers use
 ```

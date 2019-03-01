@@ -57,20 +57,18 @@ class AbstractType(object):
 
         return unit_not_required or unit_not_required2
 
-
     @property
     def dimension_to_n_unit(self):
             return {str(n_unit_p.dimensionality): n_unit_p for n_unit_p in self.n_p_units}
-
 
     def p_unit(self, unit):
         try:
             return ureg(unit)
         except (UndefinedUnitError, AttributeError):
             if unit == "%":
-                raise ValueError(f"unit: {unit} has to written as 'percent'")
+                raise ValueError(f"unit: [{unit}] has to written as 'percent'")
 
-            raise ValueError(f"unit {unit} is not defined in unit registry or not allowed.")
+            raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
     def is_valid_unit(self, unit):
         if unit and self.valid_dimensions:
