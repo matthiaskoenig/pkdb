@@ -1,5 +1,5 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from ..documents import string_field, elastic_settings, ObjectField
+from ..documents import string_field, elastic_settings, ObjectField, text_field
 from ..interventions.models import Substance, Intervention, Output, Timecourse
 
 
@@ -7,11 +7,23 @@ from ..interventions.models import Substance, Intervention, Output, Timecourse
 substance_index = Index("substances")
 substance_index.settings(**elastic_settings)
 
+
 @substance_index.doc_type
 class SubstanceDocument(DocType):
     sid = string_field('sid')
     url_slug = string_field('url_slug')
     name = string_field('name')
+    mass = fields.FloatField()
+    charge = fields.FloatField()
+    formula = string_field('formula')
+    derived = fields.BooleanField()
+    description = text_field('description')
+    parents = ObjectField(properties={
+        'sid': string_field('sid'),
+        'url_slug': string_field('url_slug')
+    }, multi=True)
+
+
 
 
 

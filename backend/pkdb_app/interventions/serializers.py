@@ -122,6 +122,7 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 
 
 
+
 class SubstanceStatisticsSerializer(serializers.ModelSerializer):
     """ Substance. """
     studies = serializers.StringRelatedField(many=True, read_only=True)
@@ -603,7 +604,17 @@ class OutputSetSerializer(ExSerializer):
 # Elastic Serializer
 ###############################################################################################
 
+class SubstanceSmallElasticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Substance
+        fields = ["sid", 'url_slug']
 
+class SubstanceElasticSerializer(serializers.HyperlinkedModelSerializer):
+    parents = SubstanceSmallElasticSerializer(many=True)
+
+    class Meta:
+        model = Substance
+        fields = ["sid", 'url_slug', "name", "mass","charge", "formula", "derived", "description","parents"]
 
 
 

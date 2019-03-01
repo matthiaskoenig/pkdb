@@ -65,7 +65,6 @@ class Substance(Sidable, models.Model):
     """
     # this cannot be null (for class 1 & 2), must be null for class 3
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES)
-    # can be null
     chebi = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)
     description = models.TextField(blank=True, null=True)
     mass = models.FloatField(null=True)
@@ -74,11 +73,10 @@ class Substance(Sidable, models.Model):
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
 
 
-
     parents = models.ManyToManyField("Substance", related_name = "children")
-    # validation rule: check that all labels are in derived and not more(split on `+/()`)
 
-    objects = SubstanceManager()
+
+    # validation rule: check that all labels are in derived and not more(split on `+/()`)
 
 
     def __str__(self):
@@ -100,20 +98,7 @@ class Substance(Sidable, models.Model):
     def interventions_normed(self):
         return self.interventions.filter(normed=True)
 
-    #@property
-    #def all_studies(self):
-        #Study = apps.get_model('studies', 'Study')
 
-
-        #studies = [study for study in Study.objects.all() if self in study.all_substances.all()]
-
-        #Intervention.objects.
-        #studies = studies | Study.objects.filter(interventionset__intervention_exs__interventions__in = self.interventions)
-        #studies = studies | Study.objects.filter( reduce(lambda x, y: x | y, [Q(interventionset__interventions__contains=intervention) for intervention in #self.interventions.all()]))
-
-
-        #return studies
-        #return Study.objects.filter(all_substances__contains = self)
 
 class Synonym(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)

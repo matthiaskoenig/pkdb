@@ -14,7 +14,7 @@ from ..interventions.models import (
     Substance)
 from ..interventions.serializers import (
     SubstanceSerializer, SubstanceStatisticsSerializer, InterventionElasticSerializer,
-    OutputElasticSerializer, TimecourseElasticSerializer)
+    OutputElasticSerializer, TimecourseElasticSerializer, SubstanceElasticSerializer)
 from rest_framework.permissions import IsAdminUser
 
 from ..pagination import CustomPagination
@@ -95,9 +95,9 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
 
 class ElasticSubstanceViewSet(DocumentViewSet):
     document = SubstanceDocument
-    serializer_class = SubstanceSerializer
+    serializer_class = SubstanceElasticSerializer
     pagination_class = CustomPagination
-    lookup_field = "id"
+    lookup_field = "url_slug"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('name',)
     filter_fields = {'name': 'name.raw',}
