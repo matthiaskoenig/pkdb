@@ -609,13 +609,13 @@ class SubstanceSmallElasticSerializer(serializers.ModelSerializer):
         model = Substance
         fields = ["sid", 'url_slug']
 
+
 class SubstanceElasticSerializer(serializers.HyperlinkedModelSerializer):
     parents = SubstanceSmallElasticSerializer(many=True)
 
     class Meta:
         model = Substance
         fields = ["sid", 'url_slug', "name", "mass","charge", "formula", "derived", "description","parents"]
-
 
 
 class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
@@ -670,8 +670,6 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
                 except (ValueError, TypeError):
                     pass
         return rep
-
-
 
 
 class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
@@ -729,7 +727,6 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 except (ValueError, TypeError):
                     pass
         return rep
-
 
 
 class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
