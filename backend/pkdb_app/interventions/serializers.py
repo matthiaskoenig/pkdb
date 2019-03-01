@@ -26,7 +26,7 @@ from ..serializers import (
     ExSerializer,
     WrongKeyValidationSerializer,
     BaseOutputExSerializer,
-    NA_VALUES)
+    NA_VALUES, PkSerializer)
 
 from ..subjects.models import Group, DataFile, Individual
 from ..categoricals import validate_categorials, MEDICATION, DOSING, validate_pktypes
@@ -651,9 +651,10 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
+    raw = PkSerializer()
     class Meta:
         model = Intervention
-        fields = ["pk","study", "normed"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS
 
     def get_substance(self, obj):
         if obj.substance:
@@ -704,13 +705,16 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
 
+    raw = PkSerializer()
+    timecourse = PkSerializer()
+
     class Meta:
             model = Output
             fields = (
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "normed","calculated","interventions"])
+                + ["group", "individual", "normed", "raw", "calculated", "timecourse", "interventions"])
 
     def get_substance(self,obj):
         if obj.substance:
@@ -733,6 +737,10 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
+
+    raw = PkSerializer()
+    pharmacokinetics = PkSerializer(many=True)
+
     substance = serializers.SerializerMethodField()
 
     class Meta:
@@ -741,7 +749,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                + ["group", "individual", "normed","interventions","figure"])
+                + ["group", "individual", "normed","raw","pharmacokinetics", "interventions","figure"])
 
     def get_substance(self,obj):
         if obj.substance:

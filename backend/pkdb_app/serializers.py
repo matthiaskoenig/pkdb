@@ -789,3 +789,8 @@ class ReadSerializer(serializers.HyperlinkedModelSerializer):
                 rep[key] = round(value,2)
         return rep
 
+class PkSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+
+    class Meta:
+        fields = ["pk",]
