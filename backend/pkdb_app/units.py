@@ -60,6 +60,7 @@ ratio_units = [
 # recovery dimensions to units
 recovery_units = ratio_units + [
    'µmol',
+    'mg'
 ]
 
 # clearance dimensions to units

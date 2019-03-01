@@ -127,34 +127,42 @@ class Normalizable(models.Model):
     def is_removeable_substance_dimension(self):
         is_substance = hasattr(self, "substance")
         if is_substance:
-            if self.substance.mass is not None:
-                dimension_of_substance = self.category_class_data.p_unit(self.unit).dimensionality.get("substance")
-                is_substance_dimension = dimension_of_substance is not None
-                if is_substance_dimension:
-                    return (True, dimension_of_substance)
+           if self.substance is not None:
+                if self.substance.mass is not None:
+                    dimension_of_substance = self.category_class_data.p_unit(self.unit).dimensionality.get('[substance]')
+                    is_substance_dimension = dimension_of_substance
+                    if is_substance_dimension != 0:
+                        return (True, dimension_of_substance)
         return (False, None)
+
+    def remove_substance_dimension(self):
+        is_removeable_substance, dimension = self.is_removeable_substance_dimension
+        if is_removeable_substance:
+            molar_weight = ureg("g/mol")*self.substance.mass
+            p_unit = self.category_class_data.p_unit(self.unit)
+            this_quantity = p_unit*molar_weight**dimension
+            return (this_quantity.magnitude, str(this_quantity.units))
+        else:
+            return (1,self.unit)
+
 
 
     def normalize(self):
 
-        if not self.is_norm:
+        factor, unit = self.remove_substance_dimension()
+        if ureg(unit) != ureg(self.unit):
+            for key, value in self.norm_fields.items():
+                if not value is None:
+                    setattr(self, key, value*factor)
+            self.unit = unit
 
+        if not self.is_norm:
 
             for key, value in self.norm_fields.items():
                 if not value is None:
                     setattr(self, key, self.category_class_data.normalize(value, self.unit).magnitude)
             self.unit = str(self.category_class_data.norm_unit(self.unit))
 
-    def no_substance_quantity(self):
-        is_removeable_substance, dimension = self.is_removeable_substance_dimension
-        if is_removeable_substance:
-            molar_weight = ureg("g/mol")*self.substance.mass
-            p_unit = self.category_class_data.p_unit(self.unit)
-            this_quantity = p_unit/molar_weight**dimension
-
-            return (this_quantity.magnitude, this_quantity.units)
-        else:
-            return (1,self.unit)
 
 
 
