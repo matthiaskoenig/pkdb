@@ -34,7 +34,11 @@ SUBSTANCES_DATA = [
     Substance(sid="icg", name="indocyanine green", chebi="CHEBI:31696"),
 
     # acetaminophen/paracetamol
-    Substance(sid="apap",  name="acetaminophen", chebi="CHEBI:46195", synonyms=["paracetamol"]),
+    Substance(sid="apap",  name="paracetamol", chebi="CHEBI:46195", synonyms=["acetaminophen"]),
+    Substance(sid="panadol extend",  name="panadol extend", synonyms=[]),
+    Substance(sid="apapglu",  name="paracetamol glucuronide", chebi="CHEBI:32636", synonyms=["acetaminophen O-β-D-glucosiduronic acid"]),
+    Substance(sid="apapsul",  name="paracetamol sulfate", chebi="CHEBI:32635", synonyms=["4-acetaminophen sulfate"]),
+    Substance(sid="apapcys",  name="paracetamol cysteine conjugate", chebi="CHEBI:133066", synonyms=["S-(5-acetamido-2-hydroxyphenyl)cysteine"]),
 
     # caffeine (CYP2A1)
     Substance(sid="caf", name="caffeine", chebi="CHEBI:27732", synonyms=["1,3,7-TMX"]),
@@ -82,23 +86,21 @@ SUBSTANCES_DATA = [
     Substance(sid="gestodene", chebi="CHEBI:135323"),
     Substance(sid="EE2", name="ethinylestradiol"),
 
-
-
     # codeine/morphine
-    Substance(sid="cod",name="codeine", chebi="CHEBI:16714"),
-    Substance(sid="c6g",name="codeine-6-glucuronide",chebi="CHEBI:80580",),
-    Substance(sid="ncod",name="norcodeine", chebi="CHEBI:80579"),
-    Substance(sid="ncg",name="norcodeine-glucuronide"),
-    Substance(sid="ncc",name="norcodeine-conjugates"),
-    Substance(sid="mor",name="morphine",chebi="CHEBI:17303"),
-    Substance(sid="m3g",name="morphine-3-glucuronide", chebi="CHEBI:80631"),
-    Substance(sid="m6g",name="morphine-6-glucuronide",chebi="CHEBI:80581"),
-    Substance(sid="nmor",name="normorphine", chebi="CHEBI:7633"),
-    Substance(sid="nmg",name="normorphine-glucuronide"),
+    Substance(sid="cod", name="codeine", chebi="CHEBI:16714"),
+    Substance(sid="c6g", name="codeine-6-glucuronide",chebi="CHEBI:80580",),
+    Substance(sid="ncod", name="norcodeine", chebi="CHEBI:80579"),
+    Substance(sid="ncg", name="norcodeine-glucuronide"),
+    Substance(sid="ncc", name="norcodeine-conjugates"),
+    Substance(sid="mor", name="morphine",chebi="CHEBI:17303"),
+    Substance(sid="m3g", name="morphine-3-glucuronide", chebi="CHEBI:80631"),
+    Substance(sid="m6g", name="morphine-6-glucuronide",chebi="CHEBI:80581"),
+    Substance(sid="nmor", name="normorphine", chebi="CHEBI:7633"),
+    Substance(sid="nmg", name="normorphine-glucuronide"),
 
     # codeine/morphine derived
-    Substance(sid="cod/mor",parents=["codeine", "morphine"]),
-    Substance(sid="mor/cod",parents=["codeine", "morphine"]),
+    Substance(sid="cod/mor", parents=["codeine", "morphine"]),
+    Substance(sid="mor/cod", parents=["codeine", "morphine"]),
 
     Substance(sid="(mor+m3g+m6g)/(cod+c6g)",
               parents=["codeine",
@@ -106,9 +108,9 @@ SUBSTANCES_DATA = [
                        "morphine",
                        "morphine-3-glucuronide",
                        "morphine-6-glucuronide"],
-        ),
-
-    Substance(sid="mor+m3g+m6g",parents=["morphine", "morphine-3-glucuronide","morphine-6-glucuronide"],
+              ),
+    Substance(sid="mor+m3g+m6g",
+              parents=["morphine", "morphine-3-glucuronide","morphine-6-glucuronide"],
         ),
 
     Substance(sid="mor+m3g+m6g+nmor+cod+ncod+c6g+ncg",
@@ -166,8 +168,6 @@ SUBSTANCES_DATA = [
     Substance(sid="amiloride",chebi="CHEBI:2639"),
 
 
-
-
     # chlorzoxazone (CYP2E1)
     Substance(sid="chlordiazepoxide"),
     Substance(sid="6-hydroxychlorzoxazone"),
@@ -192,7 +192,6 @@ SUBSTANCES_DATA = [
     Substance(sid="antipyrine"),
     Substance(sid="bromsulpthalein"),
     Substance(sid="phenylalanine"),
-    Substance(sid="indocyanine green"),
 
     Substance(sid="diclofenac"),
     Substance(sid="glycerol"),
@@ -225,7 +224,7 @@ SUBSTANCES_DATA = [
     Substance(sid="bromsulpthalein"),
 
 
-    #other
+    # other
     Substance(sid="hydrogen"),
     Substance(sid="sulfasalazine"),
     Substance(sid="sulfapyridine"),
@@ -254,10 +253,7 @@ SUBSTANCES_DATA = [
     Substance(sid="exenatide"),  # GLP1 analoque
     Substance(sid="GIP"),
     Substance(sid="GLP-1"),
-
-    Substance(sid="ins/glu",
-              parents=["insulin", "glucose"],
-        ),
+    Substance(sid="ins/glu", parents=["insulin", "glucose"]),
 ]
 
 SUBSTANCES_DATA_CHOICES = [(t.name, t.name) for t in SUBSTANCES_DATA]

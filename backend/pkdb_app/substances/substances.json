@@ -12,14 +12,58 @@
     {
         "sid": "apap",
         "url_slug": "apap",
-        "name": "acetaminophen",
+        "name": "paracetamol",
         "chebi": "CHEBI:46195",
         "formula": "C8H9NO2",
         "charge": 0,
         "mass": 151.1626,
         "description": "A member of the class of phenols that is 4-aminophenol in which one of the hydrogens attached to the amino group has been replaced by an acetyl group.",
         "synonyms": [
-            "paracetamol"
+            "acetaminophen"
+        ]
+    },
+    {
+        "sid": "panadol extend",
+        "url_slug": "panadol-extend",
+        "name": "panadol extend"
+    },
+    {
+        "sid": "apapglu",
+        "url_slug": "apapglu",
+        "name": "paracetamol glucuronide",
+        "chebi": "CHEBI:32636",
+        "formula": "C14H17NO8",
+        "charge": 0,
+        "mass": 327.28672,
+        "description": "A beta-D-glucosiduronic acid that is the O-glucuronide of paracetamol (acetaminophen).",
+        "synonyms": [
+            "acetaminophen O-\u03b2-D-glucosiduronic acid"
+        ]
+    },
+    {
+        "sid": "apapsul",
+        "url_slug": "apapsul",
+        "name": "paracetamol sulfate",
+        "chebi": "CHEBI:32635",
+        "formula": "C8H9NO5S",
+        "charge": 0,
+        "mass": 231.2268,
+        "description": "An aryl sulfate that is paracetamol in which the hydroxy group has been replaced by a sulfooxy group.",
+        "synonyms": [
+            "4-acetaminophen sulfate"
+        ]
+    },
+    {
+        "sid": "apapcys",
+        "url_slug": "apapcys",
+        "name": "paracetamol cysteine conjugate",
+        "chebi": "CHEBI:133066",
+        "formula": "C11H14N2O4S",
+        "charge": 0,
+        "mass": 270.306,
+        "description": "A cysteine derivative in which the thiol hydrogen of cysteine is replaced by a 5-acetamido-2-hydroxyphenyl group.",
+        "synonyms": [
+            "S-(5-acetamido-2-hydroxyphenyl)cysteine"
         ]
     },
     {
@@ -829,11 +873,6 @@
         "sid": "phenylalanine",
         "url_slug": "phenylalanine",
         "name": "phenylalanine"
-    },
-    {
-        "sid": "indocyanine green",
-        "url_slug": "indocyanine-green",
-        "name": "indocyanine green"
     },
     {
         "sid": "diclofenac",
