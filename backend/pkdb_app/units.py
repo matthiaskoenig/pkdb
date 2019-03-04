@@ -89,7 +89,8 @@ time_units = [
 
 # rate dimensions to units
 rate_units = [
-   'mg/kg/min',
+   #'mg/kg/min', # not shure if I need this
+   '1/min',
    'mg/min',
    'µmol/min/kg',
    'µmol/min',
