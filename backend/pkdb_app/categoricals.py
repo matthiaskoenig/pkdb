@@ -18,7 +18,7 @@ from .substances.substances import SUBSTANCES_DATA
 from .units import ureg, DIMLESS, ORGAN_WEIGHT_UNIT, height_units, weight_units, bmi_units, body_surface_area_units, \
     waist_circumference_units, lean_body_mass_units, percent_fat_units, obesity_index_units, age_unit_units, \
     blood_pressure_units, heart_rate_units, fasted_units, AMOUNT_PER_YEAR, abstinence_units, consumption_units, \
-    caffeine_amount_units, AMOUNT_PER_DAY, alcohol_abstinence_units, ALT_units, AST_abstinence_units, \
+    caffeine_amount_units, AMOUNT_PER_DAY, alcohol_abstinence_units, ALT_units, AST_units, \
     albumin_units, glucose_units, insulin_units, glucagon_units, \
     cholesterol_units, triglyceride_units, LDLC_units, LDLH_units, \
     HbA1c_units, dosing_units, auc_units, ratio_units, aumc_units, clearance_units, concentration_units, \
@@ -468,7 +468,7 @@ CHARACTERISTIC_DATA = [
         "ALT", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ALT_units
     ),
     CharacteristicType(
-        "AST", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, AST_abstinence_units
+        "AST", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, AST_units
     ),
     CharacteristicType(
         "albumin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, albumin_units,

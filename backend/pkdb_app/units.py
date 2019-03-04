@@ -99,8 +99,8 @@ rate_units = [
    'mg/min',
    'µmol/min/kg',
    'µmol/min',
-   #'µU/min',
-   #'µU/min/kg',
+   'µIU/min',
+   'µIU/min/kg',
 ]
 
 
