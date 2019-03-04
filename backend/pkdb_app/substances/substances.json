@@ -67,6 +67,16 @@
         ]
     },
     {
+        "sid": "propanolol",
+        "url_slug": "propanolol",
+        "name": "propanolol",
+        "chebi": "CHEBI:8499",
+        "formula": "C16H21NO2",
+        "charge": 0,
+        "mass": 259.34348,
+        "description": "A propanolamine that is propan-2-ol substituted by a propan-2-ylamino group at position 1 and a naphthalen-1-yloxy group at position 3."
+    },
+    {
         "sid": "caf",
         "url_slug": "caf",
         "name": "caffeine",
@@ -713,7 +723,7 @@
         "sid": "salbutamol",
         "url_slug": "salbutamol",
         "name": "salbutamol",
-        "chebi": "\tCHEBI:8746",
+        "chebi": "CHEBI:8746",
         "formula": "C13H21NO3",
         "charge": 0,
         "mass": 239.3107,
@@ -782,132 +792,267 @@
     {
         "sid": "tizanidine",
         "url_slug": "tizanidine",
-        "name": "tizanidine"
+        "name": "tizanidine",
+        "chebi": "CHEBI:63629",
+        "formula": "C9H8ClN5S",
+        "charge": 0,
+        "mass": 253.711,
+        "description": "2,1,3-Benzothiadiazole substituted at C-4 by a Delta(1)-imidazolin-2-ylamino group and at C-4 by a chloro group.  It is an agonist at alpha2-adrenergic receptor sites."
     },
     {
         "sid": "venlafaxine",
         "url_slug": "venlafaxine",
-        "name": "venlafaxine"
+        "name": "venlafaxine",
+        "chebi": "CHEBI:9943",
+        "formula": "C17H27NO2",
+        "charge": 0,
+        "mass": 277.40182,
+        "description": "A tertiary amino compound that is N,N-dimethylethanamine substituted at position 1 by a 1-hydroxycyclohexyl and 4-methoxyphenyl group."
     },
     {
         "sid": "lomefloxacin",
         "url_slug": "lomefloxacin",
-        "name": "lomefloxacin"
+        "name": "lomefloxacin",
+        "chebi": "CHEBI:116278",
+        "formula": "C17H19F2N3O3",
+        "charge": 0,
+        "mass": 351.3479,
+        "description": "A fluoroquinolone antibiotic, used (generally as the hydrochloride salt) to treat bacterial infections including bronchitis and urinary tract infections. It is also used to prevent urinary tract infections prior to surgery."
     },
     {
         "sid": "ephedrine",
         "url_slug": "ephedrine",
-        "name": "ephedrine"
+        "name": "ephedrine",
+        "chebi": "CHEBI:15407",
+        "formula": "C10H15NO",
+        "charge": 0,
+        "mass": 165.2322,
+        "description": "A  phenethylamine alkaloid that is 2-phenylethanamine substituted by a methyl group at the amino nitrogen and a methyl and a hydroxy group at position 2 and 1 respectively."
     },
     {
         "sid": "pseudoephedrine",
         "url_slug": "pseudoephedrine",
-        "name": "pseudoephedrine"
+        "name": "pseudoephedrine",
+        "chebi": "CHEBI:51209",
+        "formula": "C10H15NO",
+        "charge": 0,
+        "mass": 165.23224,
+        "description": "A member of the class of the class of phenylethanolamines that is (1S)-2-(methylamino)-1-phenylethan-1-ol in which the pro-S hydrogen at position 2 is replaced by a methyl group."
     },
     {
         "sid": "ibuprofen",
         "url_slug": "ibuprofen",
-        "name": "ibuprofen"
+        "name": "ibuprofen",
+        "chebi": "CHEBI:5855",
+        "formula": "C13H18O2",
+        "charge": 0,
+        "mass": 206.28082,
+        "description": "A monocarboxylic acid that is propionic acid in which one of the hydrogens at position 2 is substituted by a 4-(2-methylpropyl)phenyl group."
     },
     {
-        "sid": "aspirin",
-        "url_slug": "aspirin",
-        "name": "aspirin"
+        "sid": "acetylsalicylic acid",
+        "url_slug": "acetylsalicylic-acid",
+        "name": "acetylsalicylic acid",
+        "chebi": "CHEBI:15365",
+        "formula": "C9H8O4",
+        "charge": 0,
+        "mass": 180.1574,
+        "description": "A member of the class of benzoic acids that is salicylic acid in which the hydrogen that is attached to the phenolic hydroxy group has been replaced by an acetoxy group. A non-steroidal anti-inflammatory drug with cyclooxygenase inhibitor activity.",
+        "synonyms": [
+            "aspirin"
+        ]
     },
     {
         "sid": "enoxacin",
         "url_slug": "enoxacin",
-        "name": "enoxacin"
+        "name": "enoxacin",
+        "chebi": "CHEBI:157175",
+        "formula": "C15H17FN4O3",
+        "charge": 0,
+        "mass": 320.3189,
+        "description": "A 1,8-naphthyridine derivative that is 1,4-dihydro-1,8-naphthyridine with an ethyl group at the 1 position, a carboxy group at the 3-position, an oxo sustituent at the 4-position, a fluoro substituent at the 5-position and a piperazin-1-yl group at the 7 position. An antibacterial, it is used in the treatment of urinary-tract infections and gonorrhoea."
     },
     {
         "sid": "pipemidic acid",
         "url_slug": "pipemidic-acid",
-        "name": "pipemidic acid"
+        "name": "pipemidic acid",
+        "chebi": "CHEBI:75250",
+        "formula": "C14H17N5O3",
+        "charge": 0,
+        "mass": 303.3165,
+        "description": "A pyridopyrimidine that is 5-oxo-5,8-dihydropyrido[2,3-d]pyrimidine-6-carboxylic acid substituted at position 2 by a piperazin-1-yl group and at position 8 by an ethyl group. A synthetic broad-spectrum antibacterial, it is used for treatment of gastrointestinal, biliary, and urinary infections."
     },
     {
         "sid": "norfloxacin",
         "url_slug": "norfloxacin",
-        "name": "norfloxacin"
+        "name": "norfloxacin",
+        "chebi": "CHEBI:100246",
+        "formula": "C16H18FN3O3",
+        "charge": 0,
+        "mass": 319.3308,
+        "description": "A quinolinemonocarboxylic acid with broad-spectrum antibacterial activity against most gram-negative and gram-positive bacteria. Norfloxacin is bactericidal and its mode of action depends on blocking of bacterial DNA replication by binding itself to an enzyme called DNA gyrase."
     },
     {
         "sid": "ofloxacin",
         "url_slug": "ofloxacin",
-        "name": "ofloxacin"
+        "name": "ofloxacin",
+        "chebi": "CHEBI:7731",
+        "formula": "C18H20FN3O4",
+        "charge": 0,
+        "mass": 361.3675,
+        "description": "An oxazinoquinolone carrying carboxy, fluoro, methyl and 4-methylpiperazino substituents. A synthetic fluoroquinolone antibacterial agent, it inhibits the supercoiling activity of bacterial DNA gyrase, halting DNA replication."
     },
     {
         "sid": "fluvoxamine",
         "url_slug": "fluvoxamine",
-        "name": "fluvoxamine"
+        "name": "fluvoxamine",
+        "chebi": "CHEBI:5138",
+        "formula": "C15H21F3N2O2",
+        "charge": 0,
+        "mass": 318.33473,
+        "description": null
     },
     {
         "sid": "ethanol",
         "url_slug": "ethanol",
-        "name": "ethanol"
+        "name": "ethanol",
+        "chebi": "CHEBI:16236",
+        "formula": "C2H6O",
+        "charge": 0,
+        "mass": 46.06844,
+        "description": "A primary alcohol that is ethane in which one of the hydrogens is substituted by a hydroxy group."
     },
     {
         "sid": "chlorzoxazone",
         "url_slug": "chlorzoxazone",
-        "name": "chlorzoxazone"
+        "name": "chlorzoxazone",
+        "chebi": "CHEBI:3655",
+        "formula": "C7H4ClNO2",
+        "charge": 0,
+        "mass": 169.565,
+        "description": "A member of the class of  1,3-benzoxazoles that is 1,3-benzoxazol-2-ol in which the hydrogen atom at position 5 is substituted by chlorine. A centrally acting muscle relaxant with sedative properties, it is used for the symptomatic treatment of painful muscle spasm."
     },
     {
         "sid": "lomefloxacin",
         "url_slug": "lomefloxacin",
-        "name": "lomefloxacin"
+        "name": "lomefloxacin",
+        "chebi": "CHEBI:116278",
+        "formula": "C17H19F2N3O3",
+        "charge": 0,
+        "mass": 351.3479,
+        "description": "A fluoroquinolone antibiotic, used (generally as the hydrochloride salt) to treat bacterial infections including bronchitis and urinary tract infections. It is also used to prevent urinary tract infections prior to surgery."
     },
     {
         "sid": "aminopyrine",
         "url_slug": "aminopyrine",
-        "name": "aminopyrine"
+        "name": "aminopyrine",
+        "chebi": "CHEBI:160246",
+        "formula": "C13H17N3O",
+        "charge": 0,
+        "mass": 231.2936,
+        "description": "A  pyrazolone  that is 1,2-dihydro-3H-pyrazol-3-one substituted by a dimethylamino group at position 4, methyl groups at positions 1 and 5 and a phenyl group at position 2. It exhibits analgesic, anti-inflammatory, and antipyretic properties.",
+        "synonyms": [
+            "aminophenazone"
+        ]
     },
     {
         "sid": "antipyrine",
         "url_slug": "antipyrine",
-        "name": "antipyrine"
+        "name": "antipyrine",
+        "chebi": "CHEBI:31225",
+        "formula": "C11H12N2O",
+        "charge": 0,
+        "mass": 188.2258,
+        "description": "A  pyrazolone derivative that is 1,2-dihydropyrazol-3-one substituted with methyl groups at C-1 and C-5 and with a phenyl group at N-2."
     },
     {
-        "sid": "bromsulpthalein",
-        "url_slug": "bromsulpthalein",
-        "name": "bromsulpthalein"
+        "sid": "bsp",
+        "url_slug": "bsp",
+        "name": "bromsulpthalein",
+        "chebi": "CHEBI:63836",
+        "formula": "C20H10Br4O10S2",
+        "charge": 0,
+        "mass": 794.033,
+        "description": "An organosulfonic acid that consists of phthalide bearing four bromo substituents at positions 4, 5, 6 and 7 as well as two 4-hydroxy-3-sulfophenyl groups both located at position 1.",
+        "synonyms": [
+            "bromosulfophthalein"
+        ]
     },
     {
         "sid": "phenylalanine",
         "url_slug": "phenylalanine",
-        "name": "phenylalanine"
+        "name": "phenylalanine",
+        "chebi": "CHEBI:28044",
+        "formula": "C9H11NO2",
+        "charge": 0,
+        "mass": 165.18918,
+        "description": "An aromatic amino acid that is alanine in which one of the methyl hydrogens is substituted by a phenyl group."
     },
     {
         "sid": "diclofenac",
         "url_slug": "diclofenac",
-        "name": "diclofenac"
+        "name": "diclofenac",
+        "chebi": "CHEBI:47381",
+        "formula": "C14H11Cl2NO2",
+        "charge": 0,
+        "mass": 296.149,
+        "description": "A monocarboxylic acid consisting of phenylacetic acid having a (2,6-dichlorophenyl)amino group at the 2-position."
     },
     {
         "sid": "glycerol",
         "url_slug": "glycerol",
-        "name": "glycerol"
+        "name": "glycerol",
+        "chebi": "CHEBI:17754",
+        "formula": "C3H8O3",
+        "charge": 0,
+        "mass": 92.09382,
+        "description": "A triol with a structure of propane substituted at positions 1, 2 and 3 by hydroxy groups."
     },
     {
         "sid": "FFA",
         "url_slug": "ffa",
-        "name": "FFA"
+        "name": "FFA",
+        "synonyms": "free fatty acids"
     },
     {
         "sid": "carbamazepine",
         "url_slug": "carbamazepine",
-        "name": "carbamazepine"
+        "name": "carbamazepine",
+        "chebi": "CHEBI:3387",
+        "formula": "C15H12N2O",
+        "charge": 0,
+        "mass": 236.2686,
+        "description": "A dibenzoazepine that is 5H-dibenzo[b,f]azepine carrying a carbamoyl substituent at the azepine nitrogen, used as an anticonvulsant."
     },
     {
         "sid": "metropolol",
         "url_slug": "metropolol",
-        "name": "metropolol"
+        "name": "metropolol",
+        "chebi": "CHEBI:6904",
+        "formula": "C15H25NO3",
+        "charge": 0,
+        "mass": 267.36394,
+        "description": "A propanolamine that is 1-(propan-2-ylamino)propan-2-ol substituted by a  4-(2-methoxyethyl)phenoxy group at position 1."
     },
     {
         "sid": "warfarin",
         "url_slug": "warfarin",
-        "name": "warfarin"
+        "name": "warfarin",
+        "chebi": "CHEBI:10033",
+        "formula": null,
+        "charge": null,
+        "mass": null,
+        "description": "A racemate comprising equal amounts of (R)- and (S)-warfarin. Extensively used as both an anticoagulant drug and as a pesticide against rats and mice."
     },
     {
         "sid": "midazolam",
         "url_slug": "midazolam",
-        "name": "midazolam"
+        "name": "midazolam",
+        "chebi": "CHEBI:6931",
+        "formula": "C18H13ClFN3",
+        "charge": 0,
+        "mass": 325.768,
+        "description": "An imidazobenzodiazepine that is 4H-imidazo[1,5-a][1,4]benzodiazepine which is substituted by a methyl, 2-fluorophenyl and chloro groups at positions 1, 6 and 8, respectively."
     },
     {
         "sid": "1-hydroxymidazolam",
@@ -917,7 +1062,12 @@
     {
         "sid": "losartan",
         "url_slug": "losartan",
-        "name": "losartan"
+        "name": "losartan",
+        "chebi": "CHEBI:6541",
+        "formula": "C22H23ClN6O",
+        "charge": 0,
+        "mass": 422.911,
+        "description": "A biphenylyltetrazole where a 1,1'-biphenyl group is attached at the 5-position and has an additional trisubstituted imidazol-1-ylmethyl group at the 4'-position"
     },
     {
         "sid": "exp3174",
@@ -927,12 +1077,22 @@
     {
         "sid": "omeprazole",
         "url_slug": "omeprazole",
-        "name": "omeprazole"
+        "name": "omeprazole",
+        "chebi": "CHEBI:7772",
+        "formula": null,
+        "charge": null,
+        "mass": null,
+        "description": "A racemate comprising equimolar amounts of (R)- and (S)-omeprazole."
     },
     {
         "sid": "5-hydroxyomeprazole",
         "url_slug": "5-hydroxyomeprazole",
-        "name": "5-hydroxyomeprazole"
+        "name": "5-hydroxyomeprazole",
+        "chebi": "CHEBI:63840",
+        "formula": "C17H19N3O4S",
+        "charge": 0,
+        "mass": 361.415,
+        "description": "A sulfoxide that is omeprazole in which one of the methyl hydrogens at position 5 on the pyridine ring is substituted by a hydroxy group."
     },
     {
         "sid": "5home/ome",
@@ -946,57 +1106,102 @@
     {
         "sid": "dextromethorphan",
         "url_slug": "dextromethorphan",
-        "name": "dextromethorphan"
+        "name": "dextromethorphan",
+        "chebi": "CHEBI:4470",
+        "formula": "C18H25NO",
+        "charge": 0,
+        "mass": 271.39724,
+        "description": "An  organic heterotetracyclic compound that is morphinan substituted by a methoxy group at position 3 and a methyl group at position 7. It is used as an  antitussive drug for suppressing cough."
     },
     {
         "sid": "dextrorphan",
         "url_slug": "dextrorphan",
-        "name": "dextrorphan"
+        "name": "dextrorphan",
+        "chebi": "CHEBI:29133",
+        "formula": "C17H23NO",
+        "charge": 0,
+        "mass": 257.37066,
+        "description": null
     },
     {
         "sid": "digoxin",
         "url_slug": "digoxin",
-        "name": "digoxin"
+        "name": "digoxin",
+        "chebi": "CHEBI:4551",
+        "formula": "C41H64O14",
+        "charge": 0,
+        "mass": 780.9385,
+        "description": "A  cardenolide glycoside that is digitoxin beta-hydroxylated at C-12. A cardiac glycoside extracted from the foxglove plant, Digitalis lanata, it is used to control ventricular rate in atrial fibrillation and in the management of congestive heart failure with atrial fibrillation, but the margin between toxic and therapeutic doses is small."
     },
     {
         "sid": "clozapine",
         "url_slug": "clozapine",
-        "name": "clozapine"
+        "name": "clozapine",
+        "chebi": "CHEBI:3766",
+        "formula": "C18H19ClN4",
+        "charge": 0,
+        "mass": 326.824,
+        "description": "A benzodiazepine that is 5H-dibenzo[b,e][1,4]diazepine substituted by a chloro group at position 8 and a 4-methylpiperazin-1-yl group at position 11. It is a second generation antipsychotic used in the treatment of psychiatric disorders like  schizophrenia."
     },
     {
         "sid": "carbon monoxide",
         "url_slug": "carbon-monoxide",
-        "name": "carbon monoxide"
+        "name": "carbon monoxide",
+        "chebi": "CHEBI:17245",
+        "formula": "CO",
+        "charge": 0,
+        "mass": 28.0101,
+        "description": "A one-carbon compound in which the carbon is joined only to a single oxygen. It is a colourless, odourless, tasteless, toxic gas."
     },
     {
-        "sid": "bromsulpthalein",
-        "url_slug": "bromsulpthalein",
-        "name": "bromsulpthalein"
-    },
-    {
-        "sid": "hydrogen",
-        "url_slug": "hydrogen",
-        "name": "hydrogen"
+        "sid": "dihydrogen",
+        "url_slug": "dihydrogen",
+        "name": "dihydrogen",
+        "chebi": "CHEBI:18276",
+        "formula": "H2",
+        "charge": 0,
+        "mass": 2.01588,
+        "description": "An elemental molecule consisting of two hydrogens joined by a single bond."
     },
     {
         "sid": "sulfasalazine",
         "url_slug": "sulfasalazine",
-        "name": "sulfasalazine"
+        "name": "sulfasalazine",
+        "chebi": "CHEBI:9334",
+        "formula": "C18H14N4O5S",
+        "charge": 0,
+        "mass": 398.393,
+        "description": "An azobenzene consisting of diphenyldiazene having a carboxy substituent at the 4-position, a hydroxy substituent at the 3-position and a 2-pyridylaminosulphonyl substituent at the 4'-position."
     },
     {
         "sid": "sulfapyridine",
         "url_slug": "sulfapyridine",
-        "name": "sulfapyridine"
+        "name": "sulfapyridine",
+        "chebi": "CHEBI:132842",
+        "formula": "C11H11N3O2S",
+        "charge": 0,
+        "mass": 249.289,
+        "description": "A sulfonamide consisting of pyridine with a 4-aminobenzenesulfonamido group at the 2-position."
     },
     {
-        "sid": "glucose",
-        "url_slug": "glucose",
-        "name": "glucose"
+        "sid": "glc",
+        "url_slug": "glc",
+        "name": "glc",
+        "chebi": "CHEBI:17234",
+        "formula": "C6H12O6",
+        "charge": 0,
+        "mass": 180.15588,
+        "description": "An aldohexose used as a source of energy and metabolic intermediate."
     },
     {
-        "sid": "lactate",
-        "url_slug": "lactate",
-        "name": "lactate"
+        "sid": "lac",
+        "url_slug": "lac",
+        "name": "lac",
+        "chebi": "CHEBI:24996",
+        "formula": "C3H5O3",
+        "charge": -1,
+        "mass": 89.07,
+        "description": "A hydroxy monocarboxylic acid anion that is the conjugate base of lactic acid, arising from deprotonation of the carboxy group."
     },
     {
         "sid": "[2-3H]glucose",
@@ -1019,39 +1224,80 @@
         "name": "[3-OMG]glucose"
     },
     {
-        "sid": "insulin",
-        "url_slug": "insulin",
-        "name": "insulin"
+        "sid": "ins",
+        "url_slug": "ins",
+        "name": "insulin",
+        "chebi": "CHEBI:5931",
+        "formula": "C256H381N65O77S6",
+        "charge": 0,
+        "mass": 5793.544,
+        "description": "A peptide hormone produced in the pancreas and involved in regulating the metabolism of carbohydrates (particularly glucose) and fats. Commonly thought of as a protein, it consists of two petide chains, one containing 21 amino acid residues and the other containing 30; the chains are joined together by 2 disulfide bonds. Recombinant insulin is identical to human insulin, but is synthesised by inserting the human insulin gene into E. coli, which then produces insulin for human use. It is used in the treatment of type I and type II diabetes."
     },
     {
-        "sid": "c-peptide",
-        "url_slug": "c-peptide",
-        "name": "c-peptide"
+        "sid": "cpe",
+        "url_slug": "cpe",
+        "name": "c-peptide",
+        "chebi": "CHEBI:80332",
+        "formula": null,
+        "charge": null,
+        "mass": null,
+        "description": null
     },
     {
-        "sid": "cortisol",
-        "url_slug": "cortisol",
-        "name": "cortisol"
+        "sid": "cort",
+        "url_slug": "cort",
+        "name": "cortisol",
+        "chebi": "CHEBI:17650",
+        "formula": "C21H30O5",
+        "charge": 0,
+        "mass": 362.4599,
+        "description": "A 17alpha-hydroxy-C21-steroid that is pregn-4-ene substituted by oxo groups at positions 3 and 20 and hydroxy groups at positions 11, 17 and 21. Cortisol is a corticosteroid hormone or glucocorticoid produced by zona fasciculata of the adrenal cortex, which is a part of the adrenal gland. It is usually referred to as the \"stress hormone\" as it is involved in response to stress and anxiety, controlled by corticotropin-releasing hormone (CRH). It increases blood pressure and blood sugar, and reduces immune responses"
     },
     {
-        "sid": "epinephrine",
-        "url_slug": "epinephrine",
-        "name": "epinephrine"
+        "sid": "epi",
+        "url_slug": "epi",
+        "name": "epi",
+        "chebi": "CHEBI:33568",
+        "formula": "C9H13NO3",
+        "charge": 0,
+        "mass": 183.20446,
+        "description": "A catecholamine in which the aminoethyl side-chain is hydroxy-substituted at C-1 and methylated on nitrogen.",
+        "synonyms": [
+            "adrenaline"
+        ]
     },
     {
-        "sid": "norepinephrine",
-        "url_slug": "norepinephrine",
-        "name": "norepinephrine"
+        "sid": "norepi",
+        "url_slug": "norepi",
+        "name": "norepi",
+        "chebi": "CHEBI:33569",
+        "formula": "C8H11NO3",
+        "charge": 0,
+        "mass": 169.17788,
+        "description": "A catecholamine in which C-1 of the aminoethyl side-chain is hydroxy-substituted.",
+        "synonyms": [
+            "noradrenaline"
+        ]
     },
     {
-        "sid": "growth hormone",
-        "url_slug": "growth-hormone",
-        "name": "growth hormone"
+        "sid": "gh",
+        "url_slug": "gh",
+        "name": "growth hormone",
+        "chebi": "CHEBI:37845",
+        "formula": null,
+        "charge": null,
+        "mass": null,
+        "description": "A hormone that specifically regulates growth."
     },
     {
-        "sid": "glucagon",
-        "url_slug": "glucagon",
-        "name": "glucagon"
+        "sid": "glu",
+        "url_slug": "glu",
+        "name": "glucagon",
+        "chebi": "CHEBI:5391",
+        "formula": "C153H225N43O49S",
+        "charge": 0,
+        "mass": 3482.747,
+        "description": "A 29-amino acid peptide hormone consisting of His, Ser, Gln, Gly, Thr, Phe, Thr, Ser, Asp, Tyr, Ser, Lys, Tyr, Leu, Asp, Ser, Arg, Arg, Ala, Gln, Asp, Phe, Val, Gln, Trp, Leu, Met, Asn and Thr residues joined in sequence."
     },
     {
         "sid": "TAA",
@@ -1081,7 +1327,10 @@
     {
         "sid": "GIP",
         "url_slug": "gip",
-        "name": "GIP"
+        "name": "GIP",
+        "synonyms": [
+            "Glucose-dependent insulinotropic peptide"
+        ]
     },
     {
         "sid": "GLP-1",

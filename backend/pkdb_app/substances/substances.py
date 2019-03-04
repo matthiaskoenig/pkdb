@@ -42,6 +42,7 @@ SUBSTANCES_DATA = [
     Substance(sid="apapglu",  name="paracetamol glucuronide", chebi="CHEBI:32636", synonyms=["acetaminophen O-β-D-glucosiduronic acid"]),
     Substance(sid="apapsul",  name="paracetamol sulfate", chebi="CHEBI:32635", synonyms=["4-acetaminophen sulfate"]),
     Substance(sid="apapcys",  name="paracetamol cysteine", chebi="CHEBI:133066", synonyms=["S-(5-acetamido-2-hydroxyphenyl)cysteine"]),
+    Substance(sid="propanolol",  name="propanolol", chebi="CHEBI:8499"),
 
     # caffeine (CYP2A1)
     Substance(sid="caf", name="caffeine", chebi="CHEBI:27732", synonyms=["1,3,7-TMX"]),
@@ -144,31 +145,28 @@ SUBSTANCES_DATA = [
     Substance(sid="cod/c6g",  parents=["codeine", "codeine-6-glucuronide"]),# N-demethylation
 
     # CYP2D6 related
-    Substance(sid = "qui", name="quinidine", chebi="CHEBI:28593"),
+    Substance(sid="qui", name="quinidine", chebi="CHEBI:28593"),
 
-    Substance(sid = "deb", name="debrisoquine", chebi="CHEBI:34665"), #CYP2D6 Phenotyping
-    Substance(sid = "4hdeb", name="4-hydroxydebrisoquine",chebi="CHEBI:63800"), #CYP2D6 Phenotyping
+    Substance(sid="deb", name="debrisoquine", chebi="CHEBI:34665"), #CYP2D6 Phenotyping
+    Substance(sid="4hdeb", name="4-hydroxydebrisoquine",chebi="CHEBI:63800"), #CYP2D6 Phenotyping
     Substance(sid="deb/4hdeb", parents=["debrisoquine", "4-hydroxydebrisoquine"]),
 
-    Substance(sid ="mep", name="mephenytoin",chebi="CHEBI:6757"),  # CYP2D6 Phenotyping
+    Substance(sid="mep", name="mephenytoin",chebi="CHEBI:6757"),  # CYP2D6 Phenotyping
 
-    Substance(sid ="spar", name="sparteine", chebi="CHEBI:28827"),  # CYP2D6 Phenotyping
-    Substance(sid ="2hspar", name="2-dehydrosparteine",chebi="CHEBI:29130"),  # CYP2D6 Phenotyping
-    Substance(sid ="5hspar", name="5-dehydrosparteine"),  # soon avialble, chebi="CHEBI:143195"),  # CYP2D6 Phenotyping # Molecular Weight: 232.371 g/mol
+    Substance(sid="spar", name="sparteine", chebi="CHEBI:28827"),  # CYP2D6 Phenotyping
+    Substance(sid="2hspar", name="2-dehydrosparteine",chebi="CHEBI:29130"),  # CYP2D6 Phenotyping
+    Substance(sid="5hspar", name="5-dehydrosparteine"),  # soon avialble, chebi="CHEBI:143195"),  # CYP2D6 Phenotyping # Molecular Weight: 232.371 g/mol
 
     # for phenotyping
-    Substance(sid="spar/(2hspar+5hspar)", parents=["sparteine", "2-dehydrosparteine","5-dehydrosparteine"],
-        ),
-
-
+    Substance(sid="spar/(2hspar+5hspar)", parents=["sparteine", "2-dehydrosparteine","5-dehydrosparteine"]),
 
     # medication
-    Substance(sid="salbutamol", chebi="	CHEBI:8746"),
-    Substance(sid="beclometasone",chebi="CHEBI:3001",),
+    Substance(sid="salbutamol", chebi="CHEBI:8746"),
+    Substance(sid="beclometasone", chebi="CHEBI:3001",),
     Substance(sid="enalapril", chebi="CHEBI:4784"),
     Substance(sid="diltiazem", chebi="CHEBI:101278"),
-    Substance(sid="hydrochlorothiazide",chebi="CHEBI:5778"),
-    Substance(sid="amiloride",chebi="CHEBI:2639"),
+    Substance(sid="hydrochlorothiazide", chebi="CHEBI:5778"),
+    Substance(sid="amiloride", chebi="CHEBI:2639"),
 
 
     # chlorzoxazone (CYP2E1)
@@ -176,85 +174,83 @@ SUBSTANCES_DATA = [
     Substance(sid="6-hydroxychlorzoxazone"),
 
     # misc
-    Substance(sid="tizanidine"),
-    Substance(sid="venlafaxine"),
-    Substance(sid="lomefloxacin"),
-    Substance(sid="ephedrine"),
-    Substance(sid="pseudoephedrine"),
-    Substance(sid="ibuprofen"),
-    Substance(sid="aspirin"),
-    Substance(sid="enoxacin"),
-    Substance(sid="pipemidic acid"),
-    Substance(sid="norfloxacin"),
-    Substance(sid="ofloxacin"),
-    Substance(sid="fluvoxamine"),
-    Substance(sid="ethanol"),
-    Substance(sid="chlorzoxazone"),
-    Substance(sid="lomefloxacin"),
-    Substance(sid="aminopyrine"),
-    Substance(sid="antipyrine"),
-    Substance(sid="bromsulpthalein"),
-    Substance(sid="phenylalanine"),
+    Substance(sid="tizanidine", name="tizanidine", chebi="CHEBI:63629"),
+    Substance(sid="venlafaxine", name="venlafaxine", chebi="CHEBI:9943"),
+    Substance(sid="lomefloxacin", name="lomefloxacin", chebi="CHEBI:116278"),
+    Substance(sid="ephedrine", name="ephedrine", chebi="CHEBI:15407"),
+    Substance(sid="pseudoephedrine", name="pseudoephedrine", chebi="CHEBI:51209"),
+    Substance(sid="ibuprofen", name="ibuprofen", chebi="CHEBI:5855"),
+    Substance(sid="acetylsalicylic acid", name="acetylsalicylic acid", chebi="CHEBI:15365",
+              synonyms=["aspirin"]),
+    Substance(sid="enoxacin", name="enoxacin", chebi="CHEBI:157175"),
+    Substance(sid="pipemidic acid", name="pipemidic acid", chebi="CHEBI:75250"),
+    Substance(sid="norfloxacin", name="norfloxacin", chebi="CHEBI:100246"),
+    Substance(sid="ofloxacin", name="ofloxacin", chebi="CHEBI:7731"),
+    Substance(sid="fluvoxamine", name="fluvoxamine", chebi="CHEBI:5138"),
+    Substance(sid="ethanol", name="ethanol", chebi="CHEBI:16236"),
+    Substance(sid="chlorzoxazone", name="chlorzoxazone", chebi="CHEBI:3655"),
+    Substance(sid="lomefloxacin", name="lomefloxacin", chebi="CHEBI:116278"),
+    Substance(sid="aminopyrine", name="", chebi="CHEBI:160246", synonyms=["aminophenazone"]),
+    Substance(sid="antipyrine", name="antipyrine", chebi="CHEBI:31225"),
+    Substance(sid="bsp", name="bromsulpthalein", chebi="CHEBI:63836", synonyms=["bromosulfophthalein"]),
+    Substance(sid="phenylalanine", name="phenylalanine", chebi="CHEBI:28044"),
 
-    Substance(sid="diclofenac"),
-    Substance(sid="glycerol"),
-    Substance(sid="FFA"),
-    Substance(sid="carbamazepine"),
+    Substance(sid="diclofenac", name="diclofenac", chebi="CHEBI:47381"),
+    Substance(sid="glycerol", name="glycerol", chebi="CHEBI:17754"),
+    Substance(sid="FFA", name="FFA", synonyms="free fatty acids"),
+    Substance(sid="carbamazepine", name="carbamazepine", chebi="CHEBI:3387"),
 
     # midazolam
-    Substance(sid="metropolol"),
-    Substance(sid="warfarin"),
-    Substance(sid="midazolam"),
-    Substance(sid="1-hydroxymidazolam"),
+    Substance(sid="metropolol", name="metropolol", chebi="CHEBI:6904"),
+    Substance(sid="warfarin", name="warfarin", chebi="CHEBI:10033"),
+    Substance(sid="midazolam", name="midazolam", chebi="CHEBI:6931"),
+    Substance(sid="1-hydroxymidazolam", name="1-hydroxymidazolam"),
 
     # losartan
-    Substance(sid="losartan"),
+    Substance(sid="losartan", name="losartan", chebi="CHEBI:6541"),
     Substance(sid="exp3174"),
 
     # omeprazole (CYP2C19)
-    Substance(sid="omeprazole"),
-    Substance(sid="5-hydroxyomeprazole"),
+    Substance(sid="omeprazole", name="omeprazole", chebi="CHEBI:7772"),
+    Substance(sid="5-hydroxyomeprazole", name="5-hydroxyomeprazole", chebi="CHEBI:63840"),
     Substance(sid="5home/ome",
               parents=["omeprazole", "5-hydroxyomeprazole"],
               ),
 
     # dextromethorphan
-    Substance(sid="dextromethorphan"),
-    Substance(sid="dextrorphan"),
-    Substance(sid="digoxin"),
-    Substance(sid="clozapine"),
-    Substance(sid="carbon monoxide"),
-    Substance(sid="bromsulpthalein"),
-
+    Substance(sid="dextromethorphan", name="dextromethorphan", chebi="CHEBI:4470"),
+    Substance(sid="dextrorphan", name="dextrorphan", chebi="CHEBI:29133"),
+    Substance(sid="digoxin", name="digoxin", chebi="CHEBI:4551"),
+    Substance(sid="clozapine", name="clozapine", chebi="CHEBI:3766"),
+    Substance(sid="carbon monoxide", name="carbon monoxide", chebi="CHEBI:17245"),
 
     # other
-    Substance(sid="hydrogen"),
-    Substance(sid="sulfasalazine"),
-    Substance(sid="sulfapyridine"),
-
+    Substance(sid="dihydrogen", chebi="CHEBI:18276"),
+    Substance(sid="sulfasalazine", chebi="CHEBI:9334"),
+    Substance(sid="sulfapyridine", chebi="CHEBI:132842"),
 
     # ----------------------
     # glucose metabolism
     # ----------------------
-    Substance(sid="glucose"),
-    Substance(sid="lactate"),
+    Substance(sid="glc", chebi="CHEBI:17234"),
+    Substance(sid="lac", chebi="CHEBI:24996"),
     Substance(sid="[2-3H]glucose"),
     Substance(sid="[6-3H]glucose"),
     Substance(sid="[U-13C]glucose"),
     Substance(sid="[3-OMG]glucose"),
-    Substance(sid="insulin"),
-    Substance(sid="c-peptide"),
-    Substance(sid="cortisol"),
-    Substance(sid="epinephrine"),
-    Substance(sid="norepinephrine"),
-    Substance(sid="growth hormone"),
-    Substance(sid="glucagon"),
+    Substance(sid="ins", name="insulin", chebi="CHEBI:5931"),
+    Substance(sid="cpe", name="c-peptide", chebi="CHEBI:80332"),
+    Substance(sid="cort", name="cortisol", chebi="CHEBI:17650"),
+    Substance(sid="epi", chebi="CHEBI:33568", synonyms=["adrenaline"]),
+    Substance(sid="norepi", chebi="CHEBI:33569", synonyms=["noradrenaline"]),
+    Substance(sid="gh", name="growth hormone", chebi="CHEBI:37845"),
+    Substance(sid="glu", name="glucagon", chebi="CHEBI:5391"),
     Substance(sid="TAA"),  # total amino acids
     Substance(sid="EAA"),  # essential amino acids
     Substance(sid="NEAA"),  # non-essential amino acids
     Substance(sid="BCAA"),  # branch-chained amino acids
     Substance(sid="exenatide"),  # GLP1 analoque
-    Substance(sid="GIP"),
+    Substance(sid="GIP", synonyms=["Glucose-dependent insulinotropic peptide"]),
     Substance(sid="GLP-1"),
     Substance(sid="ins/glu", parents=["insulin", "glucose"]),
 ]
