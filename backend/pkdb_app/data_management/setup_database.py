@@ -91,6 +91,7 @@ def setup_database(api_url, auth_headers, client=None):
     substances_json = _read_json(substance_json_dir)
     for substance in substances_json:
 
+        # print(substance)
         response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
                                         data=substance, headers=auth_headers)
         if not response.status_code == 201:
