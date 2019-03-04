@@ -7,7 +7,8 @@ To update the database content execute the setup_database script.
 """
 
 class Substance(object):
-    def __init__(self, sid, name=None, parents=None, chebi=None, synonyms=None):
+    def __init__(self, sid, name=None, parents=None, chebi=None, synonyms=None,
+                 description=None):
         self.sid = sid
         self._name = name
         self.parents = parents
@@ -35,10 +36,12 @@ SUBSTANCES_DATA = [
 
     # acetaminophen/paracetamol
     Substance(sid="apap",  name="paracetamol", chebi="CHEBI:46195", synonyms=["acetaminophen"]),
-    Substance(sid="panadol extend",  name="panadol extend", synonyms=[]),
+    Substance(sid="panadol extend",  name="panadol extend", synonyms=[],
+              description="Panadol Extend (PEx) is an over-the-counter, modified-release formulation of paracetamol."
+                          "Each 665 mg tablet contains 69% slow-release and 31% immediate-release paracetamol."),
     Substance(sid="apapglu",  name="paracetamol glucuronide", chebi="CHEBI:32636", synonyms=["acetaminophen O-β-D-glucosiduronic acid"]),
     Substance(sid="apapsul",  name="paracetamol sulfate", chebi="CHEBI:32635", synonyms=["4-acetaminophen sulfate"]),
-    Substance(sid="apapcys",  name="paracetamol cysteine conjugate", chebi="CHEBI:133066", synonyms=["S-(5-acetamido-2-hydroxyphenyl)cysteine"]),
+    Substance(sid="apapcys",  name="paracetamol cysteine", chebi="CHEBI:133066", synonyms=["S-(5-acetamido-2-hydroxyphenyl)cysteine"]),
 
     # caffeine (CYP2A1)
     Substance(sid="caf", name="caffeine", chebi="CHEBI:27732", synonyms=["1,3,7-TMX"]),

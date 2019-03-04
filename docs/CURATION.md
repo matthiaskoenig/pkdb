@@ -175,15 +175,15 @@ to a given group, i.e., the `group` attribute must be set.
         "interventions": [
           {
             "name": "glciv",
-            "time": "0",
-            "time_unit": "h",
+            "substance": "glucose",
             "route": "iv",
             "form": "solution",
             "application": "single dose",
             "category": "dosing",
-            "substance": "glucose",
             "value": "0.5",
-            "unit": "g/kg"
+            "unit": "g/kg",
+            "time": "0",
+            "time_unit": "hr"
           }
         ]
     }
