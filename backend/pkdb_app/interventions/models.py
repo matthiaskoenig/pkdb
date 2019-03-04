@@ -64,13 +64,14 @@ class Substance(Sidable, models.Model):
     Has to be extended via ontology (Ontologable)
     """
     # this cannot be null (for class 1 & 2), must be null for class 3
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES)
-    chebi = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=SUBSTANCES_DATA_CHOICES, unique=True)
+    chebi = models.CharField(null=True, max_length=CHAR_MAX_LENGTH, unique=True)
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+
     description = models.TextField(blank=True, null=True)
     mass = models.FloatField(null=True)
     charge = models.FloatField(null=True)
-    formula = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)# chemical formula
-    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    formula = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)  # chemical formula
 
 
     parents = models.ManyToManyField("Substance", related_name = "children")
