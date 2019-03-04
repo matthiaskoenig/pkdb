@@ -611,10 +611,10 @@ PK_DATA = [
         "Area under first moment curve (AUMC), extrapolated until infinity.",
         aumc_units,
     ),
-    PharmacokineticsType("amount", "Amount of given substance.", amount_units),
+    PharmacokineticsType("amount", "Amount of substance.", amount_units),
     PharmacokineticsType(
         "cum_amount",
-        "Cummulative amount of given substance. Time period is required for calculation.",
+        "Cummulative amount of substance. Time period is required for calculation.",
         amount_units,
     ),
     PharmacokineticsType(
@@ -648,9 +648,9 @@ PharmacokineticsType(
     PharmacokineticsType(
         "vd_unbound", "Volume of distribution for unbound substance.", vd_units
     ),
-    PharmacokineticsType("thalf", "Half-life for given substance.", time_units),
+    PharmacokineticsType("thalf", "Elimination half-life for substance.", time_units),
     PharmacokineticsType(
-        "tmax", "Time of maximum for given substance.", time_units ),
+        "tmax", "Time of maximum for substance.", time_units ),
     PharmacokineticsType(
         "oro-cecal transit time", "The transit time was taken as the time when breath hydrogen excretionincreased to above twice the baseline value.", time_units),
     PharmacokineticsType(
@@ -668,7 +668,10 @@ PharmacokineticsType(
         "kabs", "Absorption rate for given substance.", rate_units
     ),
     PharmacokineticsType(
-        "fraction_absorbed", "Fraction absorbed of given substance.", ratio_units
+        "thalf_absorption", "Absorption half-life substance.", time_units
+    ),
+    PharmacokineticsType(
+        "fraction_absorbed", "Fraction absorbed of given substance (bioavailability).", ratio_units
     ),
     PharmacokineticsType(
         "plasma_binding", "Plasma binding of given substance (see also fraction unbound).", ratio_units
