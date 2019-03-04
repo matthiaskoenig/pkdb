@@ -190,11 +190,12 @@ caffeine_amount_units = ['mg/day',]
 alcohol_abstinence_units = [NOUNIT, 'day']
 
 # -------------- Biochemical data --------------
-ALT_units = AST_abstinence_units  = ['IU/l']
+ALT_units = ['IU/l']
+AST_units = ALT_units
 albumin_units = ['g/dl']
 glucose_units = ['g/dl']
 insulin_units = ['g/dl', 'IU/l']
-glucagon_units = ['g/dl']
+glucagon_units = insulin_units
 cholesterol_units = ['mmol/l']
 triglyceride_units = ['mmol/l']
 LDLC_units = ['mmol/l']
@@ -205,7 +206,6 @@ HbA1c_units = ['percent']
 #-----------------------------------------------------------------------------------------------------------------------
 # Intervention: allowed dimensions and norm units
 #-----------------------------------------------------------------------------------------------------------------------
-
 # -------------- Dosing --------------
 dosing_units = [
    'mg',
