@@ -60,8 +60,8 @@ recovery_units = ratio_units + [
 
 # clearance dimensions to units
 clearance_units = [
-   'ml/hr',              # clearance of substance in mass
-   'l/hr/kg',            # clearance of substance in mass per bodyweight
+   'l/hr',              # clearance of substance in mass
+   'l/hr/kg',           # clearance of substance in mass per bodyweight
    'µmol/l/hr',          # clearance of substance in mole
    'ml/min/(1.73*m^2)',  # clearance of substance in mass per body area #todo: I dont like the norm unit
    'ml*g/IU/hr',
@@ -204,7 +204,6 @@ dosing_units = [
     'g',
     'g/hr',
     'g/kg',
-
     'mol',
     'mol/kg',
     'mol/kg/hr',
