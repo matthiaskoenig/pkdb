@@ -1,4 +1,3 @@
-from collections import namedtuple
 import pint
 
 ureg = pint.UnitRegistry()
@@ -67,7 +66,8 @@ clearance_units = [
    'ml/min/(1.73*m^2)',  # clearance of substance in mass per body area #todo: I dont like the norm unit
    'ml*g/IU/hr',
    'ml*µg/ µmol /hr',   # calculated: clearance no mol information on substance; dosing dimension [mass]
-   'ml/µmol/hr'         # calculated: clearance no mol information on substance; dosing dimension [mass/kg]
+   'ml/µmol/hr',         # calculated: clearance no mol information on substance; dosing dimension [mass/kg]
+   'ml*g /IU/hr/kg'
 
     # amount enzyme activity with new dimension [activity_amount]
 ]
@@ -77,8 +77,8 @@ vd_units = [
   'l/kg',
   'l*mg/µIU',            # calculated: amount enzyme activity with new dimension [activity_amount]
   'l*mg/mmol',          # calculated: and no information of mole
-  "l/mmol"        # calculated: no mol information on substance; dosing dimension [mass/kg]
-
+  "l/mmol",       # calculated: no mol information on substance; dosing dimension [mass/kg]
+  "l/IU",
 
 ]
 
