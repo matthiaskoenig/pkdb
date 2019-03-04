@@ -21,10 +21,9 @@ AMOUNT_PER_YEAR ='1/yr'
 AMOUNT_PER_DAY = '1/day'
 
 
-#-----------------------------------------------------------------------------------------------------------------------
-# Pktype: allowed dimensions and norm units
-#-----------------------------------------------------------------------------------------------------------------------
-
+# ------------------------------------------------------------------------------
+# Pktype
+# ------------------------------------------------------------------------------
 # auc dimensions to
 auc_units = [
     'mg*hr/l',     # auc of substance in mass
@@ -104,10 +103,10 @@ rate_units = [
 ]
 
 
+# ------------------------------------------------------------------------------
+# Characteristica
+# ------------------------------------------------------------------------------
 
-#-----------------------------------------------------------------------------------------------------------------------
-# Characteristica: allowed dimensions and norm units
-#-----------------------------------------------------------------------------------------------------------------------
 # -------------- Species --------------
 # species: no unit
 
@@ -174,7 +173,7 @@ abstinence_units = [
 
 consumption_units = [
     NOUNIT,
-    '1/day', # could be added rule to transform to mg could be added
+    '1/day',  # could be added rule to transform to mg could be added
     'mg/day',
 ]
 
@@ -183,42 +182,42 @@ disease_duration_units = [
 ]
 
 # -------------- Caffeine --------------
+caffeine_amount_units = ['mg/day']
 
-caffeine_amount_units = ['mg/day',]
 # -------------- Alcohol --------------
-
 alcohol_abstinence_units = [NOUNIT, 'day']
+
 
 # -------------- Biochemical data --------------
 ALT_units = ['IU/l']
 AST_units = ALT_units
-albumin_units = ['g/dl']
-glucose_units = ['g/dl']
-insulin_units = ['g/dl', 'IU/l']
+albumin_units = ['g/l']
+glucose_units = ['g/l', 'mol/l']
+insulin_units = ['g/l', 'mol/l', 'IU/l']
 glucagon_units = insulin_units
-cholesterol_units = ['mmol/l']
-triglyceride_units = ['mmol/l']
-LDLC_units = ['mmol/l']
-LDLH_units = ['mmol/l']
+cholesterol_units = ['mol/l']
+triglyceride_units = ['mol/l']
+LDLC_units = ['mol/l']
+LDLH_units = ['mol/l']
 HbA1c_units = ['percent']
 
 
-#-----------------------------------------------------------------------------------------------------------------------
-# Intervention: allowed dimensions and norm units
-#-----------------------------------------------------------------------------------------------------------------------
-# -------------- Dosing --------------
+# ------------------------------------------------------------------------------
+# Intervention
+# ------------------------------------------------------------------------------
 dosing_units = [
-   'mg',
-   'mg/kg',
-   'pmol/kg',
-   'pmol/kg/min',
-   'mg/day',
-   'nmol',
+    'g',
+    'g/hr',
+    'g/kg',
+
+    'mol',
+    'mol/kg',
+    'mol/kg/hr',
 ]
 
 restricted_dosing_units = [
-   'mg',
-   'mg/kg',
-   'pmol/kg',
-   'nmol',
+    'g',
+    'g/kg',
+    'mol',
+    'mol/kg',
 ]
