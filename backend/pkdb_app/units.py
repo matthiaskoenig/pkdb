@@ -188,17 +188,18 @@ caffeine_amount_units = ['mg/day',]
 # -------------- Alcohol --------------
 
 alcohol_abstinence_units = [NOUNIT, 'day']
+
 # -------------- Biochemical data --------------
-ALT_abstinence_units = AST_abstinence_units  = ['IU/l']
-albumin_abstinence_units = ['g/dl']
-glucose_abstinence_units = ['g/dl']
-insulin_abstinence_units = ['g/dl']
-glucagon_abstinence_units = ['g/dl']
-cholesterol_abstinence_units = ['mmol/l']
-triglyceride_abstinence_units = ['mmol/l']
-LDL_C_abstinence_units = ['mmol/l']
-LDL_H_abstinence_units = ['mmol/l']
-HbA1c_abstinence_units = ['percent']
+ALT_units = AST_abstinence_units  = ['IU/l']
+albumin_units = ['g/dl']
+glucose_units = ['g/dl']
+insulin_units = ['g/dl', 'IU/l']
+glucagon_units = ['g/dl']
+cholesterol_units = ['mmol/l']
+triglyceride_units = ['mmol/l']
+LDLC_units = ['mmol/l']
+LDLH_units = ['mmol/l']
+HbA1c_units = ['percent']
 
 
 #-----------------------------------------------------------------------------------------------------------------------

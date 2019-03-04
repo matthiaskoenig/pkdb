@@ -18,10 +18,10 @@ from .substances.substances import SUBSTANCES_DATA
 from .units import ureg, DIMLESS, ORGAN_WEIGHT_UNIT, height_units, weight_units, bmi_units, body_surface_area_units, \
     waist_circumference_units, lean_body_mass_units, percent_fat_units, obesity_index_units, age_unit_units, \
     blood_pressure_units, heart_rate_units, fasted_units, AMOUNT_PER_YEAR, abstinence_units, consumption_units, \
-    caffeine_amount_units, AMOUNT_PER_DAY, alcohol_abstinence_units, ALT_abstinence_units, AST_abstinence_units, \
-    albumin_abstinence_units, glucose_abstinence_units, insulin_abstinence_units, glucagon_abstinence_units, \
-    cholesterol_abstinence_units, triglyceride_abstinence_units, LDL_C_abstinence_units, LDL_H_abstinence_units, \
-    HbA1c_abstinence_units, dosing_units, auc_units, ratio_units, aumc_units, clearance_units, concentration_units, \
+    caffeine_amount_units, AMOUNT_PER_DAY, alcohol_abstinence_units, ALT_units, AST_abstinence_units, \
+    albumin_units, glucose_units, insulin_units, glucagon_units, \
+    cholesterol_units, triglyceride_units, LDLC_units, LDLH_units, \
+    HbA1c_units, dosing_units, auc_units, ratio_units, aumc_units, clearance_units, concentration_units, \
     amount_units, vd_units, time_units, recovery_units, rate_units, disease_duration_units, restricted_dosing_units, \
     NOUNIT
 
@@ -465,37 +465,37 @@ CHARACTERISTIC_DATA = [
     ),
     # -------------- Biochemical data --------------
     CharacteristicType(
-        "ALT", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ALT_abstinence_units
+        "ALT", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, ALT_units
     ),
     CharacteristicType(
         "AST", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, AST_abstinence_units
     ),
     CharacteristicType(
-        "albumin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, albumin_abstinence_units,
+        "albumin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, albumin_units,
     ),
     CharacteristicType(
-        "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, glucose_abstinence_units,
+        "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, glucose_units,
     ),
     CharacteristicType(
-        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, insulin_abstinence_units,
+        "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, insulin_units,
     ),
     CharacteristicType(
-        "glucagon", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, glucagon_abstinence_units,
+        "glucagon", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, glucagon_units,
     ),
     CharacteristicType(
-        "cholesterol", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, cholesterol_abstinence_units,
+        "cholesterol", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, cholesterol_units,
     ),
     CharacteristicType(
-        "triglyceride", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, triglyceride_abstinence_units,
+        "triglyceride", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, triglyceride_units,
     ),
     CharacteristicType(
-        "LDL-C", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, LDL_C_abstinence_units,
+        "LDL-C", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, LDLC_units,
     ),
     CharacteristicType(
-        "LDL-H", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, LDL_H_abstinence_units,
+        "LDL-H", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, LDLH_units,
     ),
     CharacteristicType(
-        "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, HbA1c_abstinence_units,
+        "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, HbA1c_units,
     ),
 
     # --------------Genetic variants --------------
