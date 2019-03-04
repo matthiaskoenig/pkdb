@@ -109,11 +109,12 @@ class ElasticInterventionViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('name','category','substance.name',"form","application",'route','time_unit')
-    filter_fields = {'name': 'name.raw','pk':'pk'}
+    search_fields = ('name','category','substance.name',"form","application",'route','time_unit','normed')
+    filter_fields = {'name': 'name.raw','pk':'pk','normed':'normed',}
     ordering_fields = {'name': 'name.raw',
                        'category':'category.raw',
                        'choice':'choice.raw',
+                       'normed':'normed',
                        'application':'application.raw',
                        'substance':'substance.name',
                        'value':'value'}
