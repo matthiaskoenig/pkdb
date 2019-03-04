@@ -6,7 +6,6 @@ Creates basic users and information like substances and keywords.
 import requests
 import logging
 import os
-from urllib.parse import quote_plus
 
 from pkdb_app.settings import DEFAULT_PASSWORD, API_BASE
 from pkdb_app.categoricals import  KEYWORDS_DATA
@@ -95,17 +94,23 @@ def setup_database(api_url, auth_headers, client=None):
         response = requests_with_client(client, requests, f"{api_url}/substances/", method="post",
                                         data=substance, headers=auth_headers)
         if not response.status_code == 201:
-            if response.content == b'{"sid":["substance with this sid already exists."],"url_slug":["substance with this url slug already exists."]}':
 
-                response = requests_with_client(client, requests, f"{api_url}/substances/{substance['url_slug']}/", method="patch",
-                                                data=substance, headers=auth_headers)
-                if not response.status_code == 200:
-                    logging.warning(f"substance: {substance} upload failed")
-                    logging.warning(response.content)
+            if response.json():
 
-            else:
-                logging.warning(f"substance: {substance} upload failed")
-                logging.warning(response.content)
+
+                if response.json().get("url_slug") == ["substance with this url slug already exists."]:
+
+                    response = requests_with_client(client, requests, f"{api_url}/substances/{substance['url_slug']}/", method="patch",
+                                                    data=substance, headers=auth_headers)
+                    if not response.status_code == 200:
+                        logging.warning(f"substance: {substance} upload failed")
+                        logging.warning(response.content)
+
+                    else:
+                        continue
+
+            logging.warning(f"substance: {substance} upload failed")
+            logging.warning(response.content)
 
     for keyword in KEYWORDS_DATA:
         response = requests_with_client(client, requests, f"{api_url}/keywords/", method="post",
