@@ -67,6 +67,11 @@
         ]
     },
     {
+        "sid": "apapmer",
+        "url_slug": "apapmer",
+        "name": "paracetamol mercapturate"
+    },
+    {
         "sid": "propanolol",
         "url_slug": "propanolol",
         "name": "propanolol",
@@ -1012,7 +1017,9 @@
         "sid": "FFA",
         "url_slug": "ffa",
         "name": "FFA",
-        "synonyms": "free fatty acids"
+        "synonyms": [
+            "free fatty acids"
+        ]
     },
     {
         "sid": "carbamazepine",

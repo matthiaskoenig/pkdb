@@ -42,6 +42,9 @@ SUBSTANCES_DATA = [
     Substance(sid="apapglu",  name="paracetamol glucuronide", chebi="CHEBI:32636", synonyms=["acetaminophen O-β-D-glucosiduronic acid"]),
     Substance(sid="apapsul",  name="paracetamol sulfate", chebi="CHEBI:32635", synonyms=["4-acetaminophen sulfate"]),
     Substance(sid="apapcys",  name="paracetamol cysteine", chebi="CHEBI:133066", synonyms=["S-(5-acetamido-2-hydroxyphenyl)cysteine"]),
+
+    # https://pubchem.ncbi.nlm.nih.gov/compound/83967#section=Top, https://pubchem.ncbi.nlm.nih.gov/compound/171471#section=Top
+    Substance(sid="apapmer",  name="paracetamol mercapturate", synonyms=[]),
     Substance(sid="propanolol",  name="propanolol", chebi="CHEBI:8499"),
 
     # caffeine (CYP2A1)
