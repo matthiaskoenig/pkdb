@@ -98,7 +98,6 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         fields = ["sid","mass","charge", "formula", "name" ,"chebi", "description",  "synonyms", "parents", "url_slug"]
 
     def create(self, validated_data):
-
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
         substance =  Substance.objects.create(**validated_data)
