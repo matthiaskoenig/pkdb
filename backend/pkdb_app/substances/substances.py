@@ -197,7 +197,7 @@ SUBSTANCES_DATA = [
 
     Substance(sid="diclofenac", name="diclofenac", chebi="CHEBI:47381"),
     Substance(sid="glycerol", name="glycerol", chebi="CHEBI:17754"),
-    Substance(sid="FFA", name="FFA", synonyms="free fatty acids"),
+    Substance(sid="FFA", name="FFA", synonyms=["free fatty acids"]),
     Substance(sid="carbamazepine", name="carbamazepine", chebi="CHEBI:3387"),
 
     # midazolam
