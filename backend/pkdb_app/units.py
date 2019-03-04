@@ -14,43 +14,38 @@ ureg.define('NO_UNIT = [no_unit]')
 
 # frequently used used unit definitions
 DIMLESS = 'none'
-
 NOUNIT = 'NO_UNIT'
 ORGAN_WEIGHT_UNIT = 'g'
-AMOUNT_PER_YEAR ='1/yr'
+AMOUNT_PER_YEAR = '1/yr'
 AMOUNT_PER_DAY = '1/day'
 
 
 # ------------------------------------------------------------------------------
 # Pktype
 # ------------------------------------------------------------------------------
-# auc dimensions to
 auc_units = [
-    'mg*hr/l',     # auc of substance in mass
-    'mg*hr/l/kg',  # auc of substance in mass per bodyweight
-    'µmol*hr/l',   # auc of substance in mole
-    #'µU/hr/l',     # auc of enzyme activity
-    'µIU*hr/l'     # auc of amount enzyme activity with new dimension [activity_amount]
+    'g/l*hr',     # auc of concentration [g/l]
+    'g/l/kg*hr',  # auc of concentration [g/l] per bodyweight
+    'mol/l*hr',   # auc of concentration [mole]
+    'IU/l*hr'     # auc of amount enzyme activity [activity_amount]
 ]
 
-# auc dimensions to
+# FIXME: what is this exactly?
 aumc_units = [
-   'mg*hr^2/l',  # area under the first moment curve of substance in mass
-   'µmol*hr^2/l',# area under the first moment curve of substance in mole
-   'mg*hr^2/l/kg', # area under the first moment curve per bodyweight
-   #'µU/hr^2/l',  # area under the first moment curve of enzyme activity
+   'g*hr^2/l',  # area under the first moment curve of substance in mass
+   'mol*hr^2/l',  # area under the first moment curve of substance in mole
+   'g*hr^2/l/kg',  # area under the first moment curve per bodyweight
 ]
 
-# amount of substance
 amount_units = [
-    'mg',
-    'µmol'
+    'g',
+    'mol'
 ]
-# concentration dimensions to units
+
 concentration_units = [
-   'mg/l',   # concentration of substance in mass
-   'µmol/l', # concentration of substance in mole
-   'µIU/l',   # concentration of amount enzyme activity with new dimension [activity_amount]
+   'g/l',
+   'mol/l',
+   'IU/l',  # concentration of amount enzyme activity [activity_amount]
 ]
 
 # ratio dimensions to units
@@ -60,8 +55,8 @@ ratio_units = [
 
 # recovery dimensions to units
 recovery_units = ratio_units + [
-   'µmol',
-    'mg'
+    'mol',
+    'g'
 ]
 
 # clearance dimensions to units
