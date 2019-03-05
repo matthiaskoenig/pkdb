@@ -189,6 +189,7 @@ ALT_units = ['IU/l']
 AST_units = ALT_units
 albumin_units = ['g/l']
 glucose_units = ['g/l', 'mol/l']
+fructosamine_units = ['g/l', 'mol/l']
 insulin_units = ['g/l', 'mol/l', 'IU/l']
 glucagon_units = insulin_units
 cholesterol_units = ['mol/l']
@@ -196,6 +197,7 @@ triglyceride_units = ['mol/l']
 LDLC_units = ['mol/l']
 LDLH_units = ['mol/l']
 HbA1c_units = ['percent']
+creatinine_clearance_units = ["ml/min", "ml/min/(1.73*m^2)"]
 
 
 # ------------------------------------------------------------------------------

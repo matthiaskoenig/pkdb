@@ -19,8 +19,8 @@ from .units import ureg, DIMLESS, ORGAN_WEIGHT_UNIT, height_units, weight_units,
     waist_circumference_units, lean_body_mass_units, percent_fat_units, obesity_index_units, age_unit_units, \
     blood_pressure_units, heart_rate_units, fasted_units, AMOUNT_PER_YEAR, abstinence_units, consumption_units, \
     caffeine_amount_units, AMOUNT_PER_DAY, alcohol_abstinence_units, ALT_units, AST_units, \
-    albumin_units, glucose_units, insulin_units, glucagon_units, \
-    cholesterol_units, triglyceride_units, LDLC_units, LDLH_units, \
+    albumin_units, glucose_units, insulin_units, glucagon_units, fructosamine_units, \
+    cholesterol_units, triglyceride_units, LDLC_units, LDLH_units, creatinine_clearance_units, \
     HbA1c_units, dosing_units, auc_units, ratio_units, aumc_units, clearance_units, concentration_units, \
     amount_units, vd_units, time_units, recovery_units, rate_units, disease_duration_units, restricted_dosing_units, \
     NOUNIT
@@ -133,9 +133,6 @@ class CharacteristicType(AbstractType):
             else:
                 msg = f"for category: <{self.category}> no choices are allowed. If you are trying to insert a numerical value, use keword value, mean or median"
                 raise ValueError({"choice": msg})
-
-
-
 
 
 class PharmacokineticsType(AbstractType):
@@ -477,6 +474,9 @@ CHARACTERISTIC_DATA = [
         "glucose", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, glucose_units,
     ),
     CharacteristicType(
+        "fructosamine", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, fructosamine_units,
+    ),
+    CharacteristicType(
         "insulin", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, insulin_units,
     ),
     CharacteristicType(
@@ -496,6 +496,10 @@ CHARACTERISTIC_DATA = [
     ),
     CharacteristicType(
         "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, HbA1c_units,
+    ),
+
+    CharacteristicType(
+        "creatinine_clearance", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, creatinine_clearance_units,
     ),
 
     # --------------Genetic variants --------------
