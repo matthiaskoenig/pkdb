@@ -235,8 +235,8 @@ SUBSTANCES_DATA = [
     # ----------------------
     # glucose metabolism
     # ----------------------
-    Substance(sid="glc", chebi="CHEBI:17234"),
-    Substance(sid="lac", chebi="CHEBI:24996"),
+    Substance(sid="glc", name="glucose", chebi="CHEBI:17234"),
+    Substance(sid="lac", name="lactate", chebi="CHEBI:24996"),
     Substance(sid="[2-3H]glucose"),
     Substance(sid="[6-3H]glucose"),
     Substance(sid="[U-13C]glucose"),
@@ -244,8 +244,8 @@ SUBSTANCES_DATA = [
     Substance(sid="ins", name="insulin", chebi="CHEBI:5931"),
     Substance(sid="cpe", name="c-peptide", chebi="CHEBI:80332"),
     Substance(sid="cort", name="cortisol", chebi="CHEBI:17650"),
-    Substance(sid="epi", chebi="CHEBI:33568", synonyms=["adrenaline"]),
-    Substance(sid="norepi", chebi="CHEBI:33569", synonyms=["noradrenaline"]),
+    Substance(sid="epi", name="epinephrine", chebi="CHEBI:33568", synonyms=["adrenaline"]),
+    Substance(sid="norepi",name="norepinephrine", chebi="CHEBI:33569", synonyms=["noradrenaline"]),
     Substance(sid="gh", name="growth hormone", chebi="CHEBI:37845"),
     Substance(sid="glu", name="glucagon", chebi="CHEBI:5391"),
     Substance(sid="TAA"),  # total amino acids

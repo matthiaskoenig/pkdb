@@ -224,3 +224,11 @@ class Study(Sidable, models.Model):
         return 0
 
 
+    @property
+    def output_calculated_count(self):
+        if self.outputset:
+            return self.outputset.outputs.filter(normed=True, calculated=True).count()
+
+        return 0
+
+

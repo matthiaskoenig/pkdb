@@ -1193,7 +1193,7 @@
     {
         "sid": "glc",
         "url_slug": "glc",
-        "name": "glc",
+        "name": "glucose",
         "chebi": "CHEBI:17234",
         "formula": "C6H12O6",
         "charge": 0,
@@ -1203,7 +1203,7 @@
     {
         "sid": "lac",
         "url_slug": "lac",
-        "name": "lac",
+        "name": "lactate",
         "chebi": "CHEBI:24996",
         "formula": "C3H5O3",
         "charge": -1,
@@ -1263,7 +1263,7 @@
     {
         "sid": "epi",
         "url_slug": "epi",
-        "name": "epi",
+        "name": "epinephrine",
         "chebi": "CHEBI:33568",
         "formula": "C9H13NO3",
         "charge": 0,
@@ -1276,7 +1276,7 @@
     {
         "sid": "norepi",
         "url_slug": "norepi",
-        "name": "norepi",
+        "name": "norepinephrine",
         "chebi": "CHEBI:33569",
         "formula": "C8H11NO3",
         "charge": 0,

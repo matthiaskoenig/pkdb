@@ -446,8 +446,8 @@ if __name__ == "__main__":
     DATA_PATHS = [
          #os.path.join(DATA_BASE_PATH, "caffeine"),
          #os.path.join(DATA_BASE_PATH, "codeine"),
-         #os.path.join(DATA_BASE_PATH, "glucose"),
-         os.path.join(DATA_BASE_PATH, "acetaminophen"),
+         os.path.join(DATA_BASE_PATH, "glucose"),
+         #os.path.join(DATA_BASE_PATH, "acetaminophen"),
     ]
     DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]
     for data_dir in DATA_PATHS:

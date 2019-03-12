@@ -211,6 +211,7 @@ class StudyDocument(DocType):
     individual_count = fields.IntegerField()
     intervention_count = fields.IntegerField()
     output_count = fields.IntegerField()
+    output_calculated_count = fields.IntegerField()
     timecourse_count = fields.IntegerField()
 
     class Meta(object):

@@ -24,6 +24,7 @@ class Statistics(object):
         self.individual_count = Individual.objects.count()
         self.intervention_count = Intervention.objects.filter(normed=True).count()
         self.output_count = Output.objects.filter(normed=True).count()
+        self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
 
 @api_view(['GET'])
@@ -57,6 +58,7 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "individual_count",
                 "intervention_count",
                 "output_count",
+                "output_calculated_count",
                 "timecourse_count",
             ]
         }

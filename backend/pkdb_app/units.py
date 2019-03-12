@@ -210,6 +210,7 @@ dosing_units = [
     'mol',
     'mol/kg',
     'mol/kg/hr',
+    'mIU/kg',
 ]
 
 restricted_dosing_units = [

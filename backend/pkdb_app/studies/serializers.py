@@ -480,7 +480,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     groupset = GroupSetElasticSmallSerializer(read_only=True)
     individualset = IndividualSetElasticSmallSerializer(read_only=True)
-    interventionset = InterventionSetElasticSmallSerializer(read_only =True)
+    interventionset = InterventionSetElasticSmallSerializer(read_only=True)
     outputset = OutputSetElasticSmallSerializer(read_only=True)
 
 
@@ -510,6 +510,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "individual_count",
             "intervention_count",
             "output_count",
+            "output_calculated_count",
             "timecourse_count"
             ]
 
