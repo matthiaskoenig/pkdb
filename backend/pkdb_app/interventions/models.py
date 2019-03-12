@@ -1,4 +1,3 @@
-
 """
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
@@ -8,10 +7,11 @@ import numpy as np
 import math
 import pandas as pd
 
-from django.core.exceptions import ObjectDoesNotExist,MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..subjects.models import Group, DataFile, Individual
 
 from ..interventions.managers import (
@@ -20,28 +20,30 @@ from ..interventions.managers import (
     OutputExManager,
     TimecourseExManager,
     InterventionExManager,
-    OutputManager,
-    SubstanceManager)
+    OutputManager
+)
 from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Valueable,
     ValueableMap,
     Externable,
-    CHAR_MAX_LENGTH_LONG,
     ValueableNotBlank,
     ValueableMapNotBlank,
     Normalizable,
-    Sidable)
+    Sidable
+)
 from ..categoricals import (
     INTERVENTION_CHOICES,
     INTERVENTION_ROUTE_CHOICES,
     INTERVENTION_FORM_CHOICES,
     INTERVENTION_APPLICATION_CHOICES,
     PK_DATA_CHOICES,
-    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT, TIME_NORM_UNIT, DOSING_RESTRICTED)
+    OUTPUT_TISSUE_DATA_CHOICES, PK_DATA_DICT, INTERVENTION_DICT, TIME_NORM_UNIT, DOSING_RESTRICTED
+)
 
-from ..utils import CHAR_MAX_LENGTH
+
 from ..substances.substances import SUBSTANCES_DATA_CHOICES
+
 
 # -------------------------------------------------
 # Substance
@@ -71,14 +73,11 @@ class Substance(Sidable, models.Model):
     description = models.TextField(blank=True, null=True)
     mass = models.FloatField(null=True)
     charge = models.FloatField(null=True)
-    formula = models.CharField(null= True, max_length=CHAR_MAX_LENGTH)  # chemical formula
+    formula = models.CharField(null=True, max_length=CHAR_MAX_LENGTH)  # chemical formula
 
-
-    parents = models.ManyToManyField("Substance", related_name = "children")
-
+    parents = models.ManyToManyField("Substance", related_name="children")
 
     # validation rule: check that all labels are in derived and not more(split on `+/()`)
-
 
     def __str__(self):
         return self.name
@@ -100,10 +99,10 @@ class Substance(Sidable, models.Model):
         return self.interventions.filter(normed=True)
 
 
-
 class Synonym(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="synonyms")
+
 
 # -------------------------------------------------
 # Intervention
@@ -226,7 +225,7 @@ class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     raw = models.ForeignKey("Intervention", related_name="norm", on_delete=models.CASCADE, null=True)
     normed = models.BooleanField(default=False)
-    substance = models.ForeignKey(Substance, related_name="interventions",null=True, on_delete=models.PROTECT)
+    substance = models.ForeignKey(Substance, related_name="interventions", null=True, on_delete=models.PROTECT)
 
     @property
     def study(self):
@@ -250,7 +249,6 @@ class OutputSet(models.Model):
         outputs = self.outputs.filter(normed=True)
         outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
         return outputs | outputs_timecourses
-
 
     @property
     def count_outputs(self):
@@ -278,21 +276,19 @@ class OutputSet(models.Model):
 
 
 class AbstractOutput(Normalizable):
-
-    substance = models.ForeignKey(Substance,null=True, on_delete=models.SET_NULL)
+    substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
     tissue = models.CharField(
         max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
     )
     pktype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=PK_DATA_CHOICES)
     time = models.FloatField(null=True)
-    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True ) #todo: validate in serializer
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # todo: validate in serializer
 
     class Meta:
         abstract = True
 
 
 class AbstractOutputMap(models.Model):
-
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -304,7 +300,6 @@ class AbstractOutputMap(models.Model):
 
 
 class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
-
     source = models.ForeignKey(
         DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
     )
@@ -327,7 +322,6 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
 
 
 class Output(ValueableNotBlank, AbstractOutput):
-
     """ Storage of data sets. """
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
@@ -337,16 +331,16 @@ class Output(ValueableNotBlank, AbstractOutput):
     _interventions = models.ManyToManyField(Intervention)
     unit = models.CharField(max_length=CHAR_MAX_LENGTH)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    substance = models.ForeignKey(Substance,related_name="outputs",on_delete=models.PROTECT)
+    substance = models.ForeignKey(Substance, related_name="outputs", on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
-    #normalization into standertized units and added statistic
-    raw = models.ForeignKey("Output",related_name="norm",on_delete=models.CASCADE,null=True)
+    # normalization into standertized units and added statistic
+    raw = models.ForeignKey("Output", related_name="norm", on_delete=models.CASCADE, null=True)
     normed = models.BooleanField(default=False)
 
-    #calculated by timecourse data
+    # calculated by timecourse data
     calculated = models.BooleanField(default=False)
-    timecourse = models.ForeignKey("Timecourse",on_delete=models.CASCADE,related_name="pharmacokinetics", null=True)
+    timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="pharmacokinetics", null=True)
 
     objects = OutputManager()
 
@@ -360,7 +354,6 @@ class Output(ValueableNotBlank, AbstractOutput):
             return self.timecourse.interventions
         else:
             return self.raw._interventions
-
 
     def add_statistics(self):
         if self.group:
@@ -390,12 +383,11 @@ class Output(ValueableNotBlank, AbstractOutput):
     def category_class_data(self):
         return PK_DATA_DICT[self.pktype]
 
-
     # for elastic search. NaNs are not allowed in elastic search
 
-    def null_attr(self,attr):
-        value = getattr(self,attr)
-        if value not in ['nan','NA','NAN','na',np.NaN, None] and not math.isnan(value):
+    def null_attr(self, attr):
+        value = getattr(self, attr)
+        if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):
             return value
 
     def null_value(self):
@@ -483,8 +475,8 @@ class Timecourse(AbstractOutput):
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    substance = models.ForeignKey(Substance,related_name="timecourses", on_delete=models.PROTECT)
-    unit = models.CharField( max_length=CHAR_MAX_LENGTH)
+    substance = models.ForeignKey(Substance, related_name="timecourses", on_delete=models.PROTECT)
+    unit = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -517,13 +509,13 @@ class Timecourse(AbstractOutput):
 
     @property
     def figure(self):
-
         try:
             return self.ex.figure.file.url
-        except:
+        except AttributeError:
             return None
 
-    def add_statistics(self):
+    def add_error_measures(self):
+        """ Calculates additional error measures."""
         if self.group:
             if not self.sd:
                 sd = get_sd(
@@ -549,12 +541,10 @@ class Timecourse(AbstractOutput):
         return PK_DATA_DICT[self.pktype]
 
     def normalize(self):
-
-
-
+        """Normalizes timecourse."""
         if not self.is_norm:
             for key, value in self.norm_fields.items():
-                if not value is None:
+                if value is not None:
                     list_norm_values = list(self.category_class_data.normalize(value, self.unit).magnitude)
                     setattr(self, key, list_norm_values)
             self.unit = self.category_class_data.norm_unit(self.unit).__str__()
@@ -562,7 +552,7 @@ class Timecourse(AbstractOutput):
         # for time_unit
         if not self.time_unit == TIME_NORM_UNIT:
             p_time_unit = self.category_class_data.p_unit(self.time_unit)
-            times = p_time_unit*self.time
+            times = p_time_unit * self.time
             norm_times = times.to(TIME_NORM_UNIT)
             self.time = list(norm_times.m)
             self.time_unit = TIME_NORM_UNIT
@@ -575,9 +565,8 @@ class Timecourse(AbstractOutput):
     def null_attr(self, attr):
         value_list = getattr(self, attr)
         if value_list:
-            value_list_none = [ None if self._any_not_json(value) else value for value in value_list ]
+            value_list_none = [None if self._any_not_json(value) else value for value in value_list]
             return value_list_none
-
 
     def null_value(self):
         return self.null_attr('value')
@@ -609,7 +598,7 @@ class Timecourse(AbstractOutput):
     def null_time(self):
         return self.null_attr('time')
 
-###############################################################################
+    ###############################################################################
     @property
     def related_subject(self):
         if self.group:
@@ -624,72 +613,73 @@ class Timecourse(AbstractOutput):
     def get_dosing(self):
 
         try:
-            dosing_category = self.interventions.get(normed=True,category="dosing")
+            dosing_category = self.interventions.get(normed=True, category="dosing")
             return dosing_category
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
 
     def get_pharmacokinetic_variables(self):
-        pharmacokinetics_dict = {}
+        """Get data for pharmacokinetics calculation
+
+        :return: dict of data for calculation of pharmacokinetics
+        """
+        # TODO: This should be refactored in the pharmacokinetics module
+        pk_dict = {}
 
         # substance
-        pharmacokinetics_dict["compound"] = self.substance.name
+        pk_dict["compound"] = self.substance.name
 
         # bodyweight
         bodyweight = self.get_bodyweight().first()
 
         # time
-        pharmacokinetics_dict["t"] = pd.Series(self.time)
-        pharmacokinetics_dict["t_unit"] = self.time_unit
+        pk_dict["t"] = pd.Series(self.time)
+        pk_dict["t_unit"] = self.time_unit
 
 
         # concentration
-        pharmacokinetics_dict["c_unit"] = self.unit
+        # FIXME: the timecourse data must be filtered based on the dosing times
+        #   (or alternatively this should be handled in the pk calculation)
+        pk_dict["c_unit"] = self.unit
 
         if self.mean:
-            pharmacokinetics_dict["c"] = pd.Series(self.mean)
-            pharmacokinetics_dict["c_type"] = "mean"
-
+            pk_dict["c"] = pd.Series(self.mean)
+            pk_dict["c_type"] = "mean"
 
         elif self.median:
-            pharmacokinetics_dict["c"] = pd.Series(self.median)
-            pharmacokinetics_dict["c_type"] = "median"
-
+            pk_dict["c"] = pd.Series(self.median)
+            pk_dict["c_type"] = "median"
 
         elif self.value:
-            pharmacokinetics_dict["c"] = pd.Series(self.value)
-            pharmacokinetics_dict["c_type"] = "value"
+            pk_dict["c"] = pd.Series(self.value)
+            pk_dict["c_type"] = "value"
 
         # dosing
         dosing = self.get_dosing()
         if dosing:
             if DOSING_RESTRICTED.is_valid_unit(dosing.unit):
                 p_unit_dosing = self.category_class_data.p_unit(dosing.unit)
-                p_unit_concentration = self.category_class_data.p_unit(pharmacokinetics_dict["c_unit"])
-                vd_unit = (p_unit_dosing)/(p_unit_concentration)
-                pharmacokinetics_dict["vd_unit"] = str(vd_unit)
-                pharmacokinetics_dict["dose"] = dosing.value
-                pharmacokinetics_dict["dose_unit"] = dosing.unit
+                p_unit_concentration = self.category_class_data.p_unit(pk_dict["c_unit"])
+                vd_unit = p_unit_dosing / p_unit_concentration
+                pk_dict["vd_unit"] = str(vd_unit)
+                pk_dict["dose"] = dosing.value
+                pk_dict["dose_unit"] = dosing.unit
 
-
-
-
+        # bodyweight dependent values
         if bodyweight:
-            pharmacokinetics_dict["bodyweight_unit"] = bodyweight.unit
+            pk_dict["bodyweight_unit"] = bodyweight.unit
 
             if bodyweight.value:
-                pharmacokinetics_dict["bodyweight"] = bodyweight.value
-                pharmacokinetics_dict["bodyweight_type"] = "value"
+                pk_dict["bodyweight"] = bodyweight.value
+                pk_dict["bodyweight_type"] = "value"
 
             elif bodyweight.mean:
-                pharmacokinetics_dict["bodyweight"] = bodyweight.mean
-                pharmacokinetics_dict["bodyweight_type"] = "mean"
+                pk_dict["bodyweight"] = bodyweight.mean
+                pk_dict["bodyweight_type"] = "mean"
 
             elif bodyweight.median:
-                pharmacokinetics_dict["bodyweight"] = bodyweight.median
-                pharmacokinetics_dict["bodyweight_type"] = "median"
+                pk_dict["bodyweight"] = bodyweight.median
+                pk_dict["bodyweight_type"] = "median"
 
-
-        return pharmacokinetics_dict
-
+        return pk_dict

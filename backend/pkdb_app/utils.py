@@ -1,11 +1,11 @@
 """
 Generic utility functions.
 """
-
 import os
 import copy
 
 CHAR_MAX_LENGTH = 200
+CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
 
 
 def create_if_exists(src, src_key, dest, dest_key):
@@ -81,7 +81,7 @@ def initialize_normed(notnorm_instance):
 
     #interventions have no add statistics because they should have no mean,median,sd,se,cv ...
     try:
-        norm.add_statistics()
+        norm.add_error_measures()
     except AttributeError:
         pass
     return norm

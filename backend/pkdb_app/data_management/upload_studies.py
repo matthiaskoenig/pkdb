@@ -25,6 +25,8 @@ import requests
 import logging
 from collections import namedtuple
 from datetime import timedelta
+from pprint import pformat
+
 import time
 from pkdb_app.data_management import setup_database as sdb
 from pkdb_app.data_management.utils import recursive_iter, set_keys, _read_json
@@ -405,7 +407,7 @@ def upload_study_from_dir(study_dir, api_url, auth_headers, client=None):
         logging.info(f"--- upload successful ( http://localhost:8080/#/studies/{sid} ) ---")
 
 
-    return {}
+    return success_ref and success_study
 
 
 def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=None):
@@ -422,6 +424,8 @@ def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=No
         logging.info(data_dir)
         logging.info("*" * 80)
 
+    failed_uploades = []
+
     for study_path in get_study_paths(data_dir):
 
         study_folder_path = os.path.dirname(study_path)
@@ -429,8 +433,12 @@ def upload_studies_from_data_dir(data_dir, api_url, auth_headers=None, client=No
         logging.info("-" * 80)
         logging.info(f"Uploading [{study_name}] --> {api_url}")
 
-        upload_study_from_dir(study_folder_path, api_url=api_url,
+        upload_succes = upload_study_from_dir(study_folder_path, api_url=api_url,
                               auth_headers=auth_headers, client=client)
+        if not upload_succes:
+            failed_uploades.append(study_name)
+
+    return failed_uploades
 
 
 if __name__ == "__main__":
@@ -445,12 +453,17 @@ if __name__ == "__main__":
     DATA_BASE_PATH = os.path.join(BASE_DIR, "..", "..", "..", "pkdb_data")
     DATA_PATHS = [
          #os.path.join(DATA_BASE_PATH, "caffeine"),
-         #os.path.join(DATA_BASE_PATH, "codeine"),
-         os.path.join(DATA_BASE_PATH, "glucose"),
+         os.path.join(DATA_BASE_PATH, "codeine"),
+         #os.path.join(DATA_BASE_PATH, "glucose"),
          #os.path.join(DATA_BASE_PATH, "acetaminophen"),
     ]
     DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]
+    failed_study_uploads = {}
     for data_dir in DATA_PATHS:
-
-        upload_studies_from_data_dir(data_dir=data_dir, api_url=API_URL,
+        failed_uploads = upload_studies_from_data_dir(data_dir=data_dir, api_url=API_URL,
                                      auth_headers=authentication_header)
+        failed_study_uploads[data_dir] = failed_uploads
+
+
+    logging.info("Studies which failed to upload:")
+    logging.info(pformat(failed_study_uploads))

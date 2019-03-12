@@ -335,11 +335,11 @@ class StudySerializer(SidSerializer):
 
         many_2_many_fields = ["keywords","substances"]
 
-        # cumulated substances from interventions, outputs, timecourses
+        if related["substances"]:
+            study_substances = set([substance.pk for substance in related["substances"]])
+            study_cumulated_substances = study.get_substances()
+            related["substances"] = study_cumulated_substances | study_substances
 
-        study_substances = set([substance.pk for substance in related["substances"]])
-        study_cumulated_substances = set(study.get_substances())
-        related["substances"] = study_cumulated_substances | study_substances
 
         for field in many_2_many_fields:
             if len(related[field]) > 0 :

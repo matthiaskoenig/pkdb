@@ -571,6 +571,8 @@ INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
 INTERVENTION_DATA = [
     CharacteristicType("dosing",DOSING,NUMERIC_TYPE,None, dosing_units),
+    CharacteristicType("qualitative_dosing", DOSING, NUMERIC_TYPE, None, dosing_units), # dosing with missing value or time
+
     CharacteristicType("smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, [DIMLESS]),
 
     CHARACTERISTIC_DICT["medication type"],

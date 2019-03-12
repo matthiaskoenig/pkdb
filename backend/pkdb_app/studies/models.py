@@ -11,16 +11,14 @@ from ..interventions.models import (
 )
 from ..storage import OverwriteStorage
 from ..subjects.models import GroupSet, IndividualSet
-from ..utils import CHAR_MAX_LENGTH
-from ..behaviours import Sidable, CHAR_MAX_LENGTH_LONG
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from ..behaviours import Sidable
 from ..categoricals import CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES
 from ..users.models import User
 
 
 class Keyword(models.Model):
-    """
-    This class describes the keywords / tags of a study.
-    """
+    """This class describes the keywords / tags of a study."""
     name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=KEYWORDS_DATA_CHOICES)
 
 
@@ -69,14 +67,15 @@ class Reference(models.Model):
         else:
             return ""
 
+
 class Rating(models.Model):
     """ General rating model.
 
     Used for quality of curation status.
     """
     rating = models.FloatField(default=0)
-    study = models.ForeignKey("Study",related_name="ratings", on_delete=models.CASCADE)
-    user = models.ForeignKey(User,related_name="ratings", on_delete=models.CASCADE)
+    study = models.ForeignKey("Study", related_name="ratings", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="ratings", on_delete=models.CASCADE)
 
 
 class Study(Sidable, models.Model):
@@ -114,10 +113,10 @@ class Study(Sidable, models.Model):
         verbose_name_plural = "studies"
 
     def __unicode__(self):
-        return '%s' % (self.name)
+        return '%s' % self.name
 
     def __str__(self):
-        return '%s' % (self.name)
+        return '%s' % self.name
 
     @property
     def individuals(self):
@@ -155,22 +154,38 @@ class Study(Sidable, models.Model):
             return []
 
     def get_substances(self):
-        #substances = self.substances.values_list("pk",flat=True)
-        substances = Substance.objects.none()
+        """Get all substances for given study.
+        Substances are collected from
+        - interventions
+        - outputs
+        - timecourses
+
+        """
+
+        all_substances = []
+        basic_substances = []
 
         if self.interventions:
-            substances2 = self.interventions.filter(substance__isnull=False).values_list("substance",flat=True)
-            substances = substances.union(substances2)
+            all_substances.extend(list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
 
         if self.outputs:
-            substances2 = self.outputs.filter(substance__isnull=False).values_list("substance", flat=True)
-            substances = substances.union(substances2)
+            all_substances.extend(list(self.outputs.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
 
         if self.timecourses:
-            substances2 = self.timecourses.filter(substance__isnull=False).values_list("substance", flat=True)
-            substances = substances.union(substances2).distinct()
+            all_substances.extend(list(self.timecourses.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
 
-        return substances
+        substances_dj = Substance.objects.filter(pk__in=set(all_substances))
+
+        basic_substances_dj = substances_dj.filter(parents__isnull=True)
+        if basic_substances_dj:
+            basic_substances.extend(list(basic_substances_dj.values_list("pk", flat=True)))
+
+        substances_derived_dj = substances_dj.filter(parents__isnull=False)
+        if substances_derived_dj:
+            basic_substances.extend(list(substances_derived_dj.values_list("parents__pk",flat=True)))
+
+        return set(basic_substances)
+
 
     @property
     def substances_name(self):
