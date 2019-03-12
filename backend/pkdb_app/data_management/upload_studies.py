@@ -464,6 +464,6 @@ if __name__ == "__main__":
                                      auth_headers=authentication_header)
         failed_study_uploads[data_dir] = failed_uploads
 
-
-    logging.info("Studies which failed to upload:")
-    logging.info(pformat(failed_study_uploads))
+    logging.info("-" * 80)
+    logging.warning("Studies which failed to upload:")
+    logging.warning(pformat(failed_study_uploads))
