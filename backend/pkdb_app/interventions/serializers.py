@@ -164,6 +164,7 @@ class InterventionSerializer(ExSerializer):
             self._validate_requried_key(data,"unit")
 
             if category == DOSING:
+                self._validate_requried_key(data, "form")
                 self._validate_requried_key(data, "application")
                 self._validate_requried_key(data,"time")
                 self._validate_requried_key(data,"time_unit")
