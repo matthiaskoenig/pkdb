@@ -207,10 +207,13 @@ dosing_units = [
     'g',
     'g/hr',
     'g/kg',
+    'g/kg/hr',
     'mol',
     'mol/kg',
     'mol/kg/hr',
-    'mIU/kg',
+    'IU',
+    'IU/kg',
+    'IU/kg/hr',
 ]
 
 restricted_dosing_units = [

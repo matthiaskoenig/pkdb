@@ -556,7 +556,6 @@ INTERVENTION_ROUTE = [
 ]
 INTERVENTION_APPLICATION = [
     "constant infusion",
-    # "continuous injection",  # deprecated, replace with constant infusion
     "multiple dose",
     "single dose",
     "variable infusion",
