@@ -28,6 +28,7 @@ from .units import ureg, DIMLESS, ORGAN_WEIGHT_UNIT, height_units, weight_units,
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
 
+
 class AbstractType(object):
     def __init__(self, key, n_units):
         self.key = key  # name
@@ -77,7 +78,6 @@ class AbstractType(object):
             else:
                 return True
 
-
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
             msg = f"[{unit}] with dimension [{self.unit_dimension(unit)}] is not allowed. " \
@@ -86,7 +86,6 @@ class AbstractType(object):
 
     def is_valid_time_unit(self, time_unit):
         return self.p_unit(time_unit).dimensionality == '[time]'
-
 
     def validate_time_unit(self, unit):
         if not self.is_valid_time_unit(unit):
@@ -123,8 +122,7 @@ class CharacteristicType(AbstractType):
     def is_valid_choice(self, choice):
         return choice in self.choices
 
-
-    def validate_choice(self,choice):
+    def validate_choice(self, choice):
         if choice:
             if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
                 if not self.is_valid_choice:
@@ -157,7 +155,6 @@ def validate_categorials(data, category_class):
         else:
             raise ValueError(f"category_class not supported: {category_class}")
 
-
         # check that allowed category
         if category not in allowed_category_dict:
             msg = f"category <{category}> is not supported for {category_class}"
@@ -166,7 +163,7 @@ def validate_categorials(data, category_class):
         # get the allowed definition
         model_categorical = allowed_category_dict[category]
 
-        #validate_choice
+        # validate_choice
         choice = data.get("choice", None)
         model_categorical.validate_choice(choice)
 
@@ -174,8 +171,8 @@ def validate_categorials(data, category_class):
         unit = data.get("unit", None)
         model_categorical.validate_unit(unit)
 
-
     return data
+
 
 def validate_pktypes(data):
     pktype = data.get("pktype", None)
@@ -195,9 +192,6 @@ def validate_pktypes(data):
         time_unit = data.get("time_unit", None)
         if time_unit:
             model_pktype.validate_time_unit(time_unit)
-
-
-
 
 
 def create_choices(collection):
@@ -226,7 +220,7 @@ def dict_and_choices(data):
 BOOLEAN_TYPE = "boolean"
 NUMERIC_TYPE = "numeric"
 CATEGORIAL_TYPE = "categorial"
-STRING_TYPE = "string"  # can be a free string, no limitations compared to categorial
+STRING_TYPE = "string"
 YES = "Y"
 NO = "N"
 MIX = "Mixed"
@@ -237,7 +231,6 @@ TIME_NORM_UNIT = "hr"
 # ---------------------------------------------------
 # CharacteristicTypes
 # ---------------------------------------------------
-# EXCLUSION_CRITERIA = "exclusion"  # characteristica based on exclusion information
 DEFAULT_CRITERIA = "default"
 CHARACTERISTICA_TYPES = [DEFAULT_CRITERIA]
 CHARACTERISTICA_CHOICES = [(t, t) for t in CHARACTERISTICA_TYPES]
@@ -267,14 +260,14 @@ STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
 # Keywords
 # ---------------------------------------------------
 KEYWORDS_DATA = [
-    "glycolysis",
+    "diabetes",
     "gluconeogenesis",
-    "oxidative phosphorylation",
+    "glycolysis",
     "hypoglycemia",
     "insulin secretion",
-    "diabetes",
-    "oral glucose tolerance test",
     "intravenous glucose tolerance test"
+    "oral glucose tolerance test",
+    "oxidative phosphorylation",
 ]
 KEYWORDS_DATA_CHOICES = [(t, t) for t in KEYWORDS_DATA]
 
@@ -299,7 +292,7 @@ CYP2D6_PHENOTYPE = "CYP2D6 phenotype"
 
 CHARACTERISTIC_DATA = [
     # -------------- Species --------------
-    CharacteristicType("species",SPECIES,    CATEGORIAL_TYPE, ["homo sapiens"], []),
+    CharacteristicType("species", SPECIES,    CATEGORIAL_TYPE, ["homo sapiens"], []),
     # -------------- Anthropometry --------------
     CharacteristicType("height",                ANTHROPOMETRY, NUMERIC_TYPE, None, height_units),
     CharacteristicType("weight",                ANTHROPOMETRY, NUMERIC_TYPE, None, weight_units),
@@ -402,9 +395,7 @@ CHARACTERISTIC_DATA = [
         "sleeping",
         LIFESTYLE,
         CATEGORIAL_TYPE,
-        ["asleep",
-         "awake"
-        ],
+        ["asleep", "awake"],
         [],
     ),
 
@@ -412,12 +403,9 @@ CHARACTERISTIC_DATA = [
         "circadian",
         LIFESTYLE,
         CATEGORIAL_TYPE,
-        ["daytime",
-         "nighttime"
-        ],
+        ["daytime", "nighttime"],
         [],
     ),
-
 
     # -------------- Caffeine --------------
     CharacteristicType(
@@ -497,7 +485,6 @@ CHARACTERISTIC_DATA = [
     CharacteristicType(
         "HbA1c", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, HbA1c_units,
     ),
-
     CharacteristicType(
         "creatinine_clearance", BIOCHEMICAL_DATA, NUMERIC_TYPE, None, creatinine_clearance_units,
     ),
@@ -613,7 +600,7 @@ OUTPUT_TISSUE_DATA = [
     "serum",
     "spinal fluid",
     "urine",
-    "saliva/plasma",
+    "saliva/plasma",  # this is not a good solution
     "breath"
 ]
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
@@ -631,12 +618,14 @@ PK_DATA = [
     ),
     PharmacokineticsType(
         "auc_end",
-        "Area under the curve (AUC), until last time point. Time period is required for calculation.",
+        "Area under the curve (AUC), until last time point. "
+        "Time period is required for calculation.",
         auc_units,
     ),
     PharmacokineticsType(
         "auc_relative",
-        "Relative area under the curve (AUC), AUC of a substance relative to other measured metabolites",
+        "Relative area under the curve (AUC), AUC of a substance relative "
+        "to other measured metabolites",
         ratio_units,
     ),
     PharmacokineticsType(
@@ -644,29 +633,39 @@ PK_DATA = [
         "Area under first moment curve (AUMC), extrapolated until infinity.",
         aumc_units,
     ),
-    PharmacokineticsType("amount", "Amount of substance.", amount_units),
+    PharmacokineticsType(
+        "amount", "Amount of substance.", amount_units
+    ),
     PharmacokineticsType(
         "cum_amount",
-        "Cummulative amount of substance. Time period is required for calculation.",
+        "Cumulative amount of substance. Time period is required for "
+        "calculation.",
         amount_units,
     ),
     PharmacokineticsType(
-        "concentration", "Concentration of given substance.", concentration_units
+        "concentration",
+        "Concentration of substance.", concentration_units
     ),
-PharmacokineticsType(
-        "concentration_unbound", "Concentration of unbound substance.", concentration_units
+    PharmacokineticsType(
+        "concentration_unbound",
+        "Concentration of unbound substance.", concentration_units
     ),
-    PharmacokineticsType("ratio", "Ratio between substances.", ratio_units),
+    PharmacokineticsType(
+        "ratio", "Ratio between substances.", ratio_units
+    ),
     PharmacokineticsType(
         "clearance", "Total/apparent clearance of given substance. "
-                     "If the clearance is based on the unbound substance use clearance_unbount. "
-                     "If the clearance refers to renal clearance use clearance_renal.", clearance_units
+                     "If the clearance is based on the unbound substance use "
+                     "clearance_unbound. If the clearance refers to renal "
+                     "clearance use clearance_renal.", clearance_units
     ),
     PharmacokineticsType(
         "clearance_unbound", "Clearance of unbound substance.", clearance_units
     ),
     PharmacokineticsType(
-        "clearance_partial", "Partial clearance of substance. It can occure if several path are present. The pathway is encoded by the substance", clearance_units
+        "clearance_partial", "Partial clearance of substance. It can occure if "
+                             "several path are present. The pathway is encoded "
+                             "by the substance", clearance_units
     ),
     PharmacokineticsType(
         "clearance_intrinsic", "Intrinsic clearance of substance.", clearance_units
@@ -676,23 +675,29 @@ PharmacokineticsType(
     ),
     PharmacokineticsType(
         "vd", "Volume of distribution. "
-              "If the volume of distribution is calculated with the unbound substance use vd_unbound.", vd_units
+        "If the volume of distribution is calculated with the unbound "
+              "substance use vd_unbound.", vd_units
     ),
     PharmacokineticsType(
         "vd_unbound", "Volume of distribution for unbound substance.", vd_units
     ),
-    PharmacokineticsType("thalf", "Elimination half-life for substance.", time_units),
     PharmacokineticsType(
-        "tmax", "Time of maximum for substance.", time_units ),
+        "thalf", "Elimination half-life for substance.", time_units
+    ),
     PharmacokineticsType(
-        "oro-cecal transit time", "The transit time was taken as the time when breath hydrogen excretionincreased to above twice the baseline value.", time_units),
+        "tmax", "Time of maximum for substance.", time_units),
+    PharmacokineticsType(
+        "oro-cecal transit time",
+        "The transit time was taken as the time when breath hydrogen "
+        "excretion increased to above twice the baseline value.", time_units),
     PharmacokineticsType(
         "mrt",
         "Mean residence time (MRT). MRT = AUMC/AUC",
         time_units,
     ),
     PharmacokineticsType(
-        "cmax", "Maximum concentration for given substance.", concentration_units
+        "cmax", "Maximum concentration for given substance.",
+        concentration_units
     ),
     PharmacokineticsType(
         "kel", "Elimination rate for given substance.", rate_units
@@ -704,13 +709,18 @@ PharmacokineticsType(
         "thalf_absorption", "Absorption half-life substance.", time_units
     ),
     PharmacokineticsType(
-        "fraction_absorbed", "Fraction absorbed of given substance (bioavailability).", ratio_units
+        "fraction_absorbed",
+        "Fraction absorbed of given substance (bioavailability).", ratio_units
     ),
     PharmacokineticsType(
-        "plasma_binding", "Plasma binding of given substance (see also fraction unbound).", ratio_units
+        "plasma_binding",
+        "Plasma binding of given substance (see also fraction unbound).",
+        ratio_units
     ),
     PharmacokineticsType(
-        "fraction_unbound", "Unbound fraction of given substance (see also plasma_binding).", ratio_units
+        "fraction_unbound",
+        "Unbound fraction of given substance (see also plasma_binding).",
+        ratio_units
     ),
     PharmacokineticsType(
         "recovery", "Fraction recovered of given substance.", recovery_units
@@ -733,36 +743,28 @@ PharmacokineticsType(
     PharmacokineticsType(
         "rate_renal", "rate renal (rate)", rate_units
     ),
-
     PharmacokineticsType(
         "Matsuda index", "Matsuda index", [DIMLESS]
     ),
     PharmacokineticsType(
-        "QUICKI", "quantitative insulin sensitivity check index",[DIMLESS]
+        "QUICKI", "quantitative insulin sensitivity check index", [DIMLESS]
     ),
     PharmacokineticsType(
-        "HOMA-IR", "homeostatic model assessment for insulin resistance",[DIMLESS]
+        "HOMA-IR",
+        "homeostatic model assessment for insulin resistance", [DIMLESS]
     ),
     PharmacokineticsType(
-        "Insulinogenic index", "Insulinogenic index",[DIMLESS]
+        "Insulinogenic index", "Insulinogenic index", [DIMLESS]
     ),
     PharmacokineticsType(
-        "Oral disposition index", "Oral disposition index",[DIMLESS]
+        "Oral disposition index", "Oral disposition index", [DIMLESS]
     ),
 ]
 PK_DATA_DICT, PK_DATA_CHOICES = dict_and_choices(PK_DATA)
 
 
-DOSING_RESTRICTED = PharmacokineticsType("restricted dosing", "subset of dosing which can be used to calculate pharmacokinetics parameter",restricted_dosing_units)
-
-if __name__ == "__main__":
-    """
-    Just run this module to have simple check if all units are working and definitions are correct.
-    """
-    #todo implement new simple check
-
-
-
-
-
-
+DOSING_RESTRICTED = PharmacokineticsType(
+    "restricted dosing",
+    "subset of dosing which can be used to calculate pharmacokinetics "
+    "parameter", restricted_dosing_units
+)
