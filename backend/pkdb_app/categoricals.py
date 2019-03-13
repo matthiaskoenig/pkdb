@@ -561,20 +561,39 @@ CHARACTERISTIC_DICT, CHARACTERISTIC_CHOICES = dict_and_choices(CHARACTERISTIC_DA
 # ---------------------------------------------------
 # Interventions
 # ---------------------------------------------------
-INTERVENTION_ROUTE = ["oral", "iv","intramuscular"]
-INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
-INTERVENTION_APPLICATION = ["single dose", "multiple dose", "continuous injection", "variable infusion", "constant infusion"]
+INTERVENTION_ROUTE = [
+    "iv",  # intravenous
+    "intramuscular",
+    "oral",
+    "rectal",
+]
+INTERVENTION_APPLICATION = [
+    "constant infusion",
+    # "continuous injection",  # deprecated, replace with constant infusion
+    "multiple dose",
+    "single dose",
+    "variable infusion",
+]
+INTERVENTION_FORM = [
+    "capsule",
+    "tablet",
+    "solution",
+    NAN
+]
 INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
-
-INTERVENTION_FORM = ["tablet", "capsule", "solution", NAN]
+INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
+
 INTERVENTION_DATA = [
-    CharacteristicType("dosing", DOSING, NUMERIC_TYPE, None, dosing_units),
-    CharacteristicType("qualitative_dosing", DOSING, NUMERIC_TYPE, None, dosing_units + [NOUNIT]),  # dosing with missing value or time
+    CharacteristicType("dosing", DOSING, NUMERIC_TYPE,
+                       None, dosing_units),
 
-    CharacteristicType("smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, [DIMLESS]),
+    CharacteristicType("qualitative_dosing", DOSING, NUMERIC_TYPE,
+                       None, dosing_units + [NOUNIT]),  # dosing with missing value or time
 
+    CharacteristicType("smoking cessation", LIFESTYLE, NUMERIC_TYPE,
+                       None, [DIMLESS]),
     CHARACTERISTIC_DICT["medication type"],
     CHARACTERISTIC_DICT["metabolic challenge"],
     CHARACTERISTIC_DICT["abstinence"],
@@ -588,8 +607,15 @@ INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 # ---------------------------------------------------
 # Output
 # ---------------------------------------------------
-OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid",
-                      "saliva/plasma", "breath"]
+OUTPUT_TISSUE_DATA = [
+    "plasma",
+    "saliva",
+    "serum",
+    "spinal fluid",
+    "urine",
+    "saliva/plasma",
+    "breath"
+]
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
 
