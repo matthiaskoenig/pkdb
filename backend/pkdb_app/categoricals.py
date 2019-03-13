@@ -564,7 +564,7 @@ INTERVENTION_FORM = [
     "capsule",
     "tablet",
     "solution",
-    NAN
+    "no info",
 ]
 INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
 INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
