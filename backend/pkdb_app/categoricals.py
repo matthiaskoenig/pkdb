@@ -570,8 +570,8 @@ INTERVENTION_FORM = ["tablet", "capsule", "solution", NAN]
 INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
 
 INTERVENTION_DATA = [
-    CharacteristicType("dosing",DOSING,NUMERIC_TYPE,None, dosing_units),
-    CharacteristicType("qualitative_dosing", DOSING, NUMERIC_TYPE, None, dosing_units), # dosing with missing value or time
+    CharacteristicType("dosing", DOSING, NUMERIC_TYPE, None, dosing_units),
+    CharacteristicType("qualitative_dosing", DOSING, NUMERIC_TYPE, None, dosing_units + [NOUNIT]),  # dosing with missing value or time
 
     CharacteristicType("smoking cessation", LIFESTYLE, NUMERIC_TYPE, None, [DIMLESS]),
 
@@ -588,7 +588,8 @@ INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 # ---------------------------------------------------
 # Output
 # ---------------------------------------------------
-OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid","saliva/plasma","breath"]
+OUTPUT_TISSUE_DATA = ["saliva", "plasma", "serum", "urine", "spinal fluid",
+                      "saliva/plasma", "breath"]
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
 
