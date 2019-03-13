@@ -162,10 +162,15 @@ class InterventionSerializer(ExSerializer):
             self._validate_requried_key(data,"route")
             self._validate_requried_key(data,"value")
             self._validate_requried_key(data,"unit")
+
             if category == DOSING:
                 self._validate_requried_key(data, "application")
                 self._validate_requried_key(data,"time")
                 self._validate_requried_key(data,"time_unit")
+                application = data["application"]
+                allowed_applications = ["constant infusion","single dose"]
+                if not application in allowed_applications:
+                    raise serializers.ValidationError(f"Allowed applications for category <{DOSING}> are <{allowed_applications}>.You might want to select the category: qualitative dosing. With no requirements.")
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
