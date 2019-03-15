@@ -94,12 +94,17 @@ SUBSTANCES_DATA = [
     Substance(sid="EE2", name="ethinylestradiol"),
 
     # codeine/morphine
+    Substance(sid="cod-p", name="codeine phosphate"),
+    Substance(sid="cod-s", name="codeine sulphate"),
     Substance(sid="cod", name="codeine", chebi="CHEBI:16714"),
     Substance(sid="c6g", name="codeine-6-glucuronide",chebi="CHEBI:80580",),
     Substance(sid="ncod", name="norcodeine", chebi="CHEBI:80579"),
     Substance(sid="ncg", name="norcodeine-glucuronide"),
     Substance(sid="ncc", name="norcodeine-conjugates"),
     Substance(sid="mor", name="morphine",chebi="CHEBI:17303"),
+    Substance(sid="mor-p", name="morphine phosphate"),
+    Substance(sid="mor-s", name="morphine sulfate", chebi="CHEBI:7003"),
+
     Substance(sid="m3g", name="morphine-3-glucuronide", chebi="CHEBI:80631"),
     Substance(sid="m6g", name="morphine-6-glucuronide",chebi="CHEBI:80581"),
     Substance(sid="nmor", name="normorphine", chebi="CHEBI:7633"),

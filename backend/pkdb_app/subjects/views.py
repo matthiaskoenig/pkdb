@@ -147,6 +147,17 @@ class DataFileViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
+    def create(self, request, *args, **kwargs):
+        try:
+            DataFile.objects.filter(file=f"data/{request.data['file'].name}").delete()
+
+        #same_files = DataFile.objects.filter(file = request.data["file"].name)
+        except DataFile.DoesNotExist:
+            pass
+
+        return super().create(request, *args, **kwargs)
+
+
 
 
 

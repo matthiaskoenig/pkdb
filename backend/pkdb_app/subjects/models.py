@@ -33,7 +33,8 @@ from .managers import (
 )
 
 from django.apps import apps
-
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -63,6 +64,9 @@ class DataFile(models.Model):
     def __str__(self):
         return self.file.name
 
+@receiver(post_delete, sender=DataFile)
+def submission_delete(sender, instance, **kwargs):
+    instance.file.delete(False)
 # ----------------------------------
 # Group
 # ----------------------------------

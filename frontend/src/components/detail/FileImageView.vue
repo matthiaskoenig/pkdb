@@ -18,15 +18,16 @@
 
                 <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
 
-                <v-img :src="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
+                <v-img :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
             </v-card>
             <v-divider></v-divider>
                 <!-- Timecourse plots -->
             <v-card flat>
-                <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
+               <!--  <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
                     <span slot-scope="timecourses">
                         <timecourses-plot :timecourses="timecourses.data.data.data"/>
                     </span>
+                    -->
                 </get-data>
             </v-card>
 

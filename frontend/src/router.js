@@ -29,7 +29,6 @@ import About from './components/About';
 /* Account */
 import Account from './components/auth/Account';
 
-
 Vue.use(Router);
 
 export default new Router({

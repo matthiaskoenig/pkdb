@@ -27,10 +27,21 @@
                 </div>
                 <div>
                     <span class="attr">Files</span><br />
-                    <span v-for="file in study.files">
-                        <file-chip v-if="!is_image(file.file)" :file="file.file" />
+
+
+                </div>
+                <div v-if="study.files.includes('permission denied')">
+                    Permission denied
+                </div>
+
+                <div v-else>
+                      <span v-if="file" v-for="file in study.files">
+                        <div v-if="file.file">
+                            <file-chip v-if="!is_image(file.file)" :file="file.file" />
+                        </div>
                     </span>
                 </div>
+
             </v-card>
 
             </v-flex>
@@ -43,7 +54,12 @@
                 <Annotations :item="study"/>
             </v-flex>
             <v-flex xs5>
-                <file-image-view v-if="study.files" :files="study.files"/>
+                <div v-if="study.files.includes('permission denied')">
+                    Permission denied
+                </div>
+                <div v-else>
+                    <file-image-view v-if="study.files" :files="study.files"/>
+                </div>
             </v-flex>
 
             <v-flex xs12>
@@ -59,6 +75,7 @@
     import ReferenceDetail from "./ReferenceDetail"
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
+    import axios from 'axios';
 
     export default {
         name: "StudyInfo",
@@ -75,17 +92,19 @@
         mixins: [UrlMixin],
 
         computed: {
-            images() {
+            images_url() {
                 var list = [];
                 for (var k = 0; k < this.study.files.length; k++) {
                     var item = this.study.files[k];
-                    console.log(item);
                     if (item.name.endsWith("png")) {
                         list.push(item)
                     }
                 }
                 return list;
-            }
+            },
+
+
+
         },
         methods: {
             icon: function (key) {

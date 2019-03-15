@@ -459,6 +459,16 @@
         "name": "ethinylestradiol"
     },
     {
+        "sid": "cod-p",
+        "url_slug": "cod-p",
+        "name": "codeine phosphate"
+    },
+    {
+        "sid": "cod-s",
+        "url_slug": "cod-s",
+        "name": "codeine sulphate"
+    },
+    {
         "sid": "cod",
         "url_slug": "cod",
         "name": "codeine",
@@ -507,6 +517,21 @@
         "charge": 0,
         "mass": 285.3377,
         "description": "A morphinane alkaloid that is a highly potent opiate analgesic psychoactive drug. Morphine acts directly on the central nervous system (CNS) to relieve pain but has a high potential for addiction, with tolerance and both physical and psychological dependence developing rapidly. Morphine is the most abundant opiate found in Papaver somniferum (the opium poppy)."
+    },
+    {
+        "sid": "mor-p",
+        "url_slug": "mor-p",
+        "name": "morphine phosphate"
+    },
+    {
+        "sid": "mor-s",
+        "url_slug": "mor-s",
+        "name": "morphine sulfate",
+        "chebi": "CHEBI:7003",
+        "formula": "C34H38N2O6.H2O4S",
+        "charge": 0,
+        "mass": 668.75488,
+        "description": null
     },
     {
         "sid": "m3g",

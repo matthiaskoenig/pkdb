@@ -17,6 +17,7 @@
     "@statnett/vue-plotly": "^0.2.0",
     "axios": "^0.18.0",
     "vue": "^2.5.17",
+    "vue-auth-image": "0.0.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-text-highlight": "^1.1.2",

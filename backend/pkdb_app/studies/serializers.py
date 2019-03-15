@@ -366,8 +366,7 @@ class StudySerializer(SidSerializer):
         study.save()
 
         if related["files"]:
-            study.files.all().delete()
-
+            study.files.clear()
             for file_pk in related["files"]:
                 study.files.add(file_pk)
             study.save()

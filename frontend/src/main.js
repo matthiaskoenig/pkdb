@@ -59,8 +59,9 @@ import FileChip from './components/detail/FileChip';
 
 import TextHighlight from 'vue-text-highlight';
 import axios from 'axios';
-
-
+import VueAuthImage from 'vue-auth-image';
+// register vue-auth-image directive
+Vue.use(VueAuthImage);
 
 Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
@@ -109,4 +110,4 @@ function execute() {
         return Promise.reject(err);
     });
 }
-execute()
+execute();

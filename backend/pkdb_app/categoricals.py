@@ -287,7 +287,7 @@ BIOCHEMICAL_DATA = "biochemical data"
 HEMATOLOGY_DATA = "hematology data"
 GENETIC_VARIANTS = "genetic variants"
 STUDY_PROTOCOL = "study protocol"
-CYP2D6_PHENOTYPE = "CYP2D6 phenotype"
+PHENOTYPE = "phenotype"
 
 
 CHARACTERISTIC_DATA = [
@@ -498,8 +498,8 @@ CHARACTERISTIC_DATA = [
         [],
     ),
     CharacteristicType(
-        "phenotype",
-        CYP2D6_PHENOTYPE,
+        "CYP2D6 phenotype",
+        PHENOTYPE,
         CATEGORIAL_TYPE,
         ["PM","IM","EM","UM"],
         [],
@@ -531,7 +531,7 @@ CHARACTERISTIC_DATA = [
     ),
     CharacteristicType(
         "metabolic ratio",
-         CYP2D6_PHENOTYPE,
+         PHENOTYPE,
          NUMERIC_TYPE,
         None,
         [DIMLESS],

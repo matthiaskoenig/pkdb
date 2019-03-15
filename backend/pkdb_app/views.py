@@ -61,6 +61,8 @@ def serve_protected_document(request, file):
     path, file_name = os.path.split(file)
     user = request.user
 
+
+
     try:
         ref = Reference.objects.get(pdf=file)
         if user.is_staff:
@@ -73,7 +75,7 @@ def serve_protected_document(request, file):
             return HttpResponseForbidden()
 
 
-    except ObjectDoesNotExist:
+    except Reference.DoesNotExist:
         datafile = get_object_or_404(DataFile, file=file)
         study = datafile.study_set.all()[0]
         is_curator = user in study.curators.all()
