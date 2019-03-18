@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersist from 'vuex-persist';
 
 Vue.use(Vuex);
-Vue.config.devtools = true
+Vue.config.devtools = true;
 
 
 /** --------------------------------------------------------------
@@ -17,11 +18,27 @@ if (!backend_domain){
 }
 console.log('PKDB backend: ' + backend_domain);
 
+const vuexLocalStorage = new VuexPersist({
+    key: 'vuex', // The key to store the state on in the storage provider.
+    storage: window.localStorage, // or window.sessionStorage or localForage
+    // Function that passes the state and returns the state with only the objects you want to store.
+    // reducer: state => state,
+    // Function that passes a mutation and lets you decide if it should update the state in localStorage.
+    // filter: mutation => (true)
+    reducer: state => ({
+        token: state.token,
+        user: state.user,
+
+        // keepThisModuleToo: state.keepThisModuleToo
+        // getRidOfThisModule: state.getRidOfThisModule (No one likes it.)
+    })
+})
 
 /** --------------------------------------------------------------
  *  Vuex store
  *  -------------------------------------------------------------- */
 export default new Vuex.Store({
+    plugins: [vuexLocalStorage.plugin],
     state: {
         django_domain: backend_domain,
 

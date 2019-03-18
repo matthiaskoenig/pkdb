@@ -99,15 +99,13 @@ new Vue({
 
 
 
-function execute() {
-    axios.interceptors.request.use(function(config) {
+
+axios.interceptors.request.use(function(config) {
         const token = store.state.token;
         if (token) {
-          axios.defaults.headers.common['Authorization'] = 'Token ' + token
+          axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token')
         }
         return config;
     }, function(err) {
         return Promise.reject(err);
     });
-}
-execute();

@@ -265,7 +265,7 @@ KEYWORDS_DATA = [
     "glycolysis",
     "hypoglycemia",
     "insulin secretion",
-    "intravenous glucose tolerance test"
+    "intravenous glucose tolerance test",
     "oral glucose tolerance test",
     "oxidative phosphorylation",
 ]

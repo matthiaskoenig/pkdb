@@ -463,7 +463,7 @@ class GroupSetElasticSmallSerializer(serializers.ModelSerializer):
 class GroupSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ["pk", 'name']
+        fields = ["pk", 'name', "count"]
 
 
 class GroupElasticSerializer(serializers.ModelSerializer):

@@ -22,7 +22,8 @@
     "vue-router": "^3.0.1",
     "vue-text-highlight": "^1.1.2",
     "vuetify": "^1.2.0",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-persist": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.4",

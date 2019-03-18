@@ -1,10 +1,10 @@
 <template>
     <div class="study-info">
         <v-layout wrap>
-            <v-flex xs2>
+            <v-flex md2>
 
             <v-card flat>
-                <div>
+                <div >
                     <span class="attr">Creator</span><br />
                     <user-avatar :user="study.creator"/>
                 </div>
@@ -45,7 +45,7 @@
             </v-card>
 
             </v-flex>
-            <v-flex xs5>
+            <v-flex md5>
                 <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
                     <template slot-scope="reference">
                         <reference-detail :reference="reference.data" :resource_url="reference_url(study.reference.sid)"/>
@@ -53,7 +53,7 @@
                 </get-data>
                 <Annotations :item="study"/>
             </v-flex>
-            <v-flex xs5>
+            <v-flex md5>
                 <div v-if="study.files.includes('permission denied')">
                     Permission denied
                 </div>
@@ -62,7 +62,7 @@
                 </div>
             </v-flex>
 
-            <v-flex xs12>
+            <v-flex md12>
 
             </v-flex>
 

@@ -452,10 +452,10 @@ if __name__ == "__main__":
     DATA_BASE_PATH = os.path.join(BASE_DIR, "..", "..", "..", "pkdb_data")
     DATA_PATHS = [
 
-         os.path.join(DATA_BASE_PATH, "codeine"),
+         #os.path.join(DATA_BASE_PATH, "codeine"),
          os.path.join(DATA_BASE_PATH, "glucose"),
-         os.path.join(DATA_BASE_PATH, "acetaminophen"),
-         os.path.join(DATA_BASE_PATH, "caffeine"),
+         #os.path.join(DATA_BASE_PATH, "acetaminophen"),
+         #os.path.join(DATA_BASE_PATH, "caffeine"),
     ]
     DATA_PATHS = [os.path.abspath(p) for p in DATA_PATHS]
     failed_study_uploads = {}

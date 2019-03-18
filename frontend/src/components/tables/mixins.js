@@ -82,7 +82,12 @@ var searchTableMixin = {
         },
 
         getData() {
-            axios.get(this.url)
+            if (localStorage.getItem('token'))
+            { var headers = {Authorization :  'Token ' + localStorage.getItem('token')}}
+            else {
+                headers = {}
+            }
+            axios.get(this.url,{ headers: headers})
                 .then(res => {
 
                     this.entries = res.data.data.data;

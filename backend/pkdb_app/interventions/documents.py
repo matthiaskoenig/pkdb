@@ -88,6 +88,7 @@ class OutputDocument(DocType):
     study = string_field('study')
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
+        'count': fields.IntegerField(),
         'name': string_field('name')})
 
     individual = ObjectField(properties={
@@ -149,7 +150,9 @@ class TimecourseDocument(DocType):
 
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
-        'name': string_field('name')})
+        'name': string_field('name'),
+        'count': fields.IntegerField()
+    })
 
     individual = ObjectField(properties={
         'pk': fields.IntegerField(),

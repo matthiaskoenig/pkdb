@@ -18,7 +18,7 @@
 
                 <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
 
-                <v-img :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"></v-img>
+                <v-img :src="backend+item.file" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img> <!-->
             </v-card>
             <v-divider></v-divider>
                 <!-- Timecourse plots -->

@@ -148,6 +148,7 @@ class DataFileViewSet(viewsets.ModelViewSet):
 
 
     def create(self, request, *args, **kwargs):
+
         try:
             DataFile.objects.filter(file=f"data/{request.data['file'].name}").delete()
 

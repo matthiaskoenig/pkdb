@@ -4,7 +4,7 @@
           <v-avatar>
             <img :src="src">
           </v-avatar>
-             <div v-if="comment"><text-highlight :queries="search.split(/[ ,]+/)"> {{comment}} </text-highlight></div> <span v-else><text-highlight :queries="search.split(/[ ,]+/)"> {{ username }} </text-highlight> </span>
+             <div v-if="comment"><text-highlight :queries="search.split(/[ ,]+/)"> {{comment}} </text-highlight></div> <span v-else><text-highlight :queries="search.split(/[ ,]+/)"> {{ initials }} </text-highlight> </span>
              <v-rating v-if="user.rating != null" v-model="user.rating" :title="user.rating" dense half-increments value small readonly/>
         </v-chip>
 

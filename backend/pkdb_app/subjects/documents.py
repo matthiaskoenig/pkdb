@@ -86,6 +86,7 @@ class GroupDocument(DocType):
     parent = ObjectField(properties={
         'name': string_field('name'),
         'pk': fields.IntegerField('pk'),
+        'count': fields.IntegerField('count')
     })
 
 

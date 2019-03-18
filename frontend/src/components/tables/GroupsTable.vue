@@ -21,6 +21,10 @@
                     <group-chip :group="table.item" :search="search"/>
                 </td>
                 <td>
+                    <group-chip v-if="table.item.parent" :group="table.item.parent" :search="search"/>
+
+                </td>
+                <td>
                     <v-layout wrap>
                         <span v-for="item in table.item.characteristica_all_normed" :key="item.pk">
                             <characteristica-card :data="item"
@@ -57,6 +61,7 @@
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Name', value: 'name'},
+                    {text: 'Parent', value: 'parent'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }
