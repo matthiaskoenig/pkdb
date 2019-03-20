@@ -208,9 +208,12 @@ dosing_units = [
     'g/hr',
     'g/kg',
     'g/kg/hr',
+
     'mol',
+    'mol/hr',
     'mol/kg',
     'mol/kg/hr',
+
     'IU',
     'IU/kg',
     'IU/kg/hr',

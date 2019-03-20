@@ -2,10 +2,11 @@
 Collection of resources and information on how to curate data and information
 from manuscripts for the PKDB.
 
-A single study is hereby stored in one folder which can be uploaded and iteratively curated using the `watch_study` script
+A single study is stored in one folder which can be uploaded and iteratively curated using the `watch_study` script
 ```
 cd pkdb
-(pkdb) python pkdb_app/data_management/watch_study.py -s $STUDYFOLDER
+(pkdb) set -a && source .env.local
+(pkdb) python backend/pkdb_app/data_management/watch_study.py -s $STUDYFOLDER
 ```
 
 ## 1. PDF, Reference, Figures & Tables
@@ -13,15 +14,17 @@ For upload a certain folder structure and organisation is expected of the `$STUD
 - folder name is `STUDYNAME`, e.g., Albert1974
 - folder contains the pdf as `STUDYNAME.pdf`, e.g., Albert1974.pdf
 - folder contains study information as `study.json`
-- folder contains reference information as `reference.json`
 - folder contains additional files associated with study, i.e.,
-    - tables, named `STUDYNAME_Tab[0-9]*.png`, e.g., Albert1974_Tab1.png
-    - figures, named `STUDYNAME_Fig[0-9]*.png`, e.g., Albert1974_Fig2.png
+    - tables, named `STUDYNAME_Tab[1-9]*.png`, e.g., Albert1974_Tab1.png
+    - figures, named `STUDYNAME_Fig[1-9]*.png`, e.g., Albert1974_Fig2.png
     - excel file, named `STUDYNAME.xlsx`, e.g., Albert1974.xlsx
-    - data files, named `STUDYNAME_Tab[0-9]*.csv` or `STUDYNAME_Fig[0-9]*.csv`
+    - data files, named `STUDYNAME_Tab[1-9]*.csv` or `STUDYNAME_Fig[1-9]*.csv`
+
 
 ## 2. Initial study information (`study.json`)
-Fill in basic information for study, use the `PMID` for `sid` and `reference` field, use StudyName for `name` field.
+For modifying the json best use Atom with pretty-json and settings `Notify on Parse Error` and `Prettify on Save JSON`.
+
+Fill in basic information for study, use the `PMID` for `sid` and `reference` field, use StudyName for `name` field and `creator` and `curator` fields.
  
 ```json
 {
@@ -61,14 +64,15 @@ Fill in basic information for study, use the `PMID` for `sid` and `reference` fi
     }
 }
 ```
-* The `creator` and `curators` should map to existing data base users (but is no requirement for now).
-* The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually. This will be documented later on.
+* The `creator` and `curators` should map to existing data base users.
+* The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually.
 * Substances which are used in the study and are of interest should be mentioned in the `substances` list.
-* Keywords relevant for the study should be mentioned in the `keywords` list. 
+* `keywords` and `substances` relevant for the study should be mentioned in the `keywords` list. `keywords` are documented in `pkdb_app/categorials`, `substances` are documented in `pkdb_app/substances/substances.py`
 
 
 ## 3. Curation of groups/groupset and individuals/individualset
 The next step is curating the groups used in the study. The information is stored in the `groupset` of the following form.
+Retrieve group information from the publication. The top group containing all subjects must be called `all`.
 ```json
 {
   "groupset": {
@@ -98,40 +102,7 @@ The next step is curating the groups used in the study. The information is store
             "category": "fasted",
             "min": "10",
             "max": "14",
-            "unit": "h"
-          }
-        ]
-      },
-      {
-        "count": 10,
-        "name": "nonobese",
-        "parent": "all",
-        "characteristica": [
-          {
-            "category": "sex",
-            "count": "5 || 5",
-            "choice": "M || F"
-          },
-          {
-            "category": "age",
-            "mean": "31",
-            "min": "17",
-            "max": "45",
-            "unit": "yr"
-          },
-          {
-            "category": "weight",
-            "mean": "78.5",
-            "min": "67",
-            "max": "112",
-            "unit": "kg"
-          },
-          {
-            "category": "obesity index",
-            "mean": "104",
-            "min": "92",
-            "max": "114",
-            "unit": "%"
+            "unit": "hr"
           }
         ]
       }
@@ -140,18 +111,17 @@ The next step is curating the groups used in the study. The information is store
 }
 ```
 * The groups are defined via `characteristica`, shared characteristica of groups can be defined via parent groups.
-* The possible values of categorial are accessible via the curation web interface and in `categorials.py`.
+* The possible values of categorial are accessible via `pkdb_app/categorials.py`.
 * The group names have to be unique within the groupset and should be descriptive, e.g., smoker, nonsmoker, contraceptive.
+* All groups require a `name`, all groups with exception of `all` require `parent` field.
+    "parent": "string",
 
 All available fields for characteristica on group are:
 ```json
 {
-    "count": "int",
-    "name": "string",
-    "parent": "string",
     "category": "categorial",
     "choice": "categorial|string",
-    "value": "double",
+    "count": "int",
     "mean": "double",
     "median": "double",
     "min": "double",
@@ -162,10 +132,9 @@ All available fields for characteristica on group are:
     "unit": "categorial"
 }
 ```
-* Inclusion and exclusion criteria for study can be defined via the `ctype` on groupset or group with values in {`exclusion`, `inclusion`}
 
 Individuals are curated like groups with the exception that individuals must belong
-to a given group, i.e., the `group` attribute must be set.
+to a given group, i.e., the `group` attribute must be set. Individuals are most often defined via excel spreadsheets.
 
 ## 4. Curation of interventions/interventionset
 ```json
@@ -219,6 +188,31 @@ All available fields for intervention and interventionset are:
 * TODO: document after next iteration
 
 ## 5. Curation of output/outputset
+Data from Figures should be digized using plot digitizer. See guidelines in
+
+- Use Excel (LibreOffice/OpenOffice) spreadsheets to store data, with all digitized data is stored in excel spreadsheets
+- change language settings to use US numbers and formats, i.e. ‘.’ separator). Always use points (‘.’) as number separator, never comma (‘,’), i.e. 1.234 instead of 1,234.
+- PlotDigitizer to digitize figures (https://sourceforge.net/projects/plotdigitizer/)
+
+```json
+
+{
+        "source": "Akinyinka2000_Tab3.csv",
+        "format": "TSV",
+        "subset": "substance==paraxanthine",
+        "figure": "Akinyinka2000_Tab3.png",
+        "group": "healthy subjects",
+        "interventions": [
+            "Dcaf"
+        ],
+        "substance": "paraxanthine",
+        "tissue": "col==tissue",
+        "pktype": "cmax || tmax || auc_inf || thalf",
+        "mean": "col==cmax || col==tmax || col==aucinf || col==thalf",
+        "sd": "col==cmax_sd || col==tmax_sd || col==aucinf_sd || col==thalf_sd",
+        "unit": "\u00b5g/ml || hr || \u00b5g*hr/ml || hr"
+    }
+```
 
 
 ## Units for curation

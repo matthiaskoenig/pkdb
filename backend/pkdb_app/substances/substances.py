@@ -33,6 +33,7 @@ SUBSTANCES_DATA = [
 
     # indocyanogreen/icg
     Substance(sid="icg", name="indocyanine green", chebi="CHEBI:31696"),
+    Substance(sid="ergotamine", name="ergotamine", chebi="CHEBI:64318"),
 
     # acetaminophen/paracetamol
     Substance(sid="apap",  name="paracetamol", chebi="CHEBI:46195", synonyms=["acetaminophen"]),

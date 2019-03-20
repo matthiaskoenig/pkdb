@@ -10,6 +10,16 @@
         "description": null
     },
     {
+        "sid": "ergotamine",
+        "url_slug": "ergotamine",
+        "name": "ergotamine",
+        "chebi": "CHEBI:64318",
+        "formula": "C33H35N5O5",
+        "charge": 0,
+        "mass": 581.6615,
+        "description": "A peptide ergot alkaloid that is dihydroergotamine in which a double bond replaces the single bond between positions 9 and 10."
+    },
+    {
         "sid": "apap",
         "url_slug": "apap",
         "name": "paracetamol",

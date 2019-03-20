@@ -304,7 +304,7 @@ CHARACTERISTIC_DATA = [
     CharacteristicType("obesity index",         ANTHROPOMETRY, NUMERIC_TYPE, None, obesity_index_units),   # percent of normal body weight
     CharacteristicType("obese",                 ANTHROPOMETRY, BOOLEAN_TYPE, BOOLEAN_CHOICES, []),
     # -------------- Demography --------------
-    CharacteristicType("age",       DEMOGRAPHICS, NUMERIC_TYPE,    None,                 age_unit_units),
+    CharacteristicType("age",       DEMOGRAPHICS, NUMERIC_TYPE,    None, age_unit_units),
     CharacteristicType("sex",       DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], []),
     CharacteristicType("ethnicity", DEMOGRAPHICS,   CATEGORIAL_TYPE,
         [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese"],
@@ -377,7 +377,8 @@ CHARACTERISTIC_DATA = [
         "metabolic challenge",
         MEDICATION,
         CATEGORIAL_TYPE,
-        ["mixed-meal",
+        [
+         "mixed-meal",
          "oral glucose tolerance test",
          "intravenous glucose tolerance test",
          "hypoglycemic clamp",
@@ -387,6 +388,14 @@ CHARACTERISTIC_DATA = [
          "lipid-glucose-protein drink"
          ],
         [],
+    ),
+
+    # -------------- sleeping & circadian rhythm -----------------
+
+    CharacteristicType(
+        "exercise",
+        LIFESTYLE,
+        BOOLEAN_TYPE, BOOLEAN_CHOICES, []
     ),
 
     # -------------- sleeping & circadian rhythm -----------------
@@ -587,6 +596,7 @@ INTERVENTION_DATA = [
     CHARACTERISTIC_DICT["oral contraceptives"],
     CHARACTERISTIC_DICT["sleeping"],
     CHARACTERISTIC_DICT["circadian"],
+    CHARACTERISTIC_DICT["exercise"]
 ]
 INTERVENTION_DICT, INTERVENTION_CHOICES = dict_and_choices(INTERVENTION_DATA)
 
@@ -610,6 +620,11 @@ OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 # ---------------------------------------------------
 
 PK_DATA = [
+    PharmacokineticsType(
+        "hbf",
+        "Hepatic blood flow.",
+        ['l/min'],
+    ),
     PharmacokineticsType(
         "auc_inf",
         "Area under the curve (AUC), extrapolated until infinity.",

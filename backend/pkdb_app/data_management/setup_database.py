@@ -37,7 +37,13 @@ USERS = [
         "email": "test@test.com",
         "password": DEFAULT_PASSWORD,
     },
-
+    {
+        "username": "jbrandhorst",
+        "first_name": "Janosch",
+        "last_name": "Brandhorst",
+        "email": "jbrandhorst1@googlemail.com",
+        "password": DEFAULT_PASSWORD,
+    },
 ]
 
 
