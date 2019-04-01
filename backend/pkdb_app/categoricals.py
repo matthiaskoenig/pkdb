@@ -125,7 +125,7 @@ class CharacteristicType(AbstractType):
     def validate_choice(self, choice):
         if choice:
             if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
-                if not self.is_valid_choice:
+                if not self.is_valid_choice(choice):
                     msg = f"{choice} is not part of {self.choices} for {self.key}"
                     raise ValueError({"choice": msg})
             else:
