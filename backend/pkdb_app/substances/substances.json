@@ -735,6 +735,11 @@
         "description": null
     },
     {
+        "sid": "spar-s",
+        "url_slug": "spar-s",
+        "name": "sparteine sulfate"
+    },
+    {
         "sid": "2hspar",
         "url_slug": "2hspar",
         "name": "2-dehydrosparteine",
@@ -755,6 +760,25 @@
         "name": "spar/(2hspar+5hspar)",
         "parents": [
             "sparteine",
+            "2-dehydrosparteine",
+            "5-dehydrosparteine"
+        ]
+    },
+    {
+        "sid": "spar+2hspar+5hspar",
+        "url_slug": "spar-plus-2hspar-plus-5hspar",
+        "name": "spar+2hspar+5hspar",
+        "parents": [
+            "sparteine",
+            "2-dehydrosparteine",
+            "5-dehydrosparteine"
+        ]
+    },
+    {
+        "sid": "2hspar+5hspar",
+        "url_slug": "2hspar-plus-5hspar",
+        "name": "2hspar+5hspar",
+        "parents": [
             "2-dehydrosparteine",
             "5-dehydrosparteine"
         ]

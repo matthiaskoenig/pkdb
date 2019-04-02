@@ -307,7 +307,7 @@ CHARACTERISTIC_DATA = [
     CharacteristicType("age",       DEMOGRAPHICS, NUMERIC_TYPE,    None, age_unit_units),
     CharacteristicType("sex",       DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], []),
     CharacteristicType("ethnicity", DEMOGRAPHICS,   CATEGORIAL_TYPE,
-        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese"],
+        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese","amerindian"],
         []),
     # -------------- Physiology --------------
     CharacteristicType("blood pressure", PHYSIOLOGY, NUMERIC_TYPE, None, blood_pressure_units),
