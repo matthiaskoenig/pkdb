@@ -631,9 +631,6 @@ class ExSerializer(MappingSerializer):
                 {key: f"{key} is required", "detail": data}
             )
 
-
-
-
     def _validate_time_unit(self, data):
         time = data.get("time")
         if time:
@@ -674,14 +671,7 @@ class ExSerializer(MappingSerializer):
 
         return data
 
-    # def _add_statistic_arrays(self,data,count):
-    #    se = data.get("se")
-    #    sd = data.get("sd")
-    #    cv = data.get("cv")
-    #    mean = data.get("mean")
-    #   temp_data = {"se": se, "sd": sd, "cv": cv, "mean": mean, "count": count}
-    #    temp_data = pd.to_numeric(pd.DataFrame(temp_data))
-    #    for da
+
 
     @staticmethod
     def ex_mapping():

@@ -127,11 +127,12 @@ class SubstanceStatisticsSerializer(serializers.ModelSerializer):
     studies = serializers.StringRelatedField(many=True, read_only=True)
     interventions = serializers.PrimaryKeyRelatedField(many=True, source="interventions_normed",read_only=True)
     outputs = serializers.PrimaryKeyRelatedField(many=True, source="outputs_normed", read_only=True)
+    outputs_calculated = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_normed",read_only=True)
 
     class Meta:
         model = Substance
-        fields = ["name","studies","outputs","interventions","timecourses"]
+        fields = ["name","studies","outputs","outputs_calculated","interventions","timecourses"]
 
 
 # ----------------------------------

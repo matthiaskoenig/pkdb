@@ -2,6 +2,8 @@
 Reusable behavior for models.
 """
 from django.db import models
+from pkdb_app.normalization import get_sd, get_se, get_cv
+
 from .utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
 from .units import ureg
 
@@ -141,6 +143,8 @@ class Normalizable(models.Model):
         else:
             return (1, self.unit)
 
+
+
     def normalize(self):
         """ Normalizes the units.
 
@@ -150,6 +154,7 @@ class Normalizable(models.Model):
 
         :return:
         """
+
         factor, unit = self.remove_substance_dimension()
 
         # remove substance unit
