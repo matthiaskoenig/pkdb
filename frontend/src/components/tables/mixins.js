@@ -41,6 +41,12 @@ var searchTableMixin = {
                 this.getData();
             },
             deep: true
+        },
+        url: {
+            handler () {
+                this.getData();
+            },
+            deep: true
         }
     },
     computed: {
@@ -54,7 +60,7 @@ var searchTableMixin = {
             return this.$store.state.endpoints.api  + '/' + this.otype + '_elastic/?format=json'
         },
         url() {
-            let url = this.resource_url
+            var url = this.resource_url
                 + '&page='+ this.pagination.page
                 + '&page_size='+ this.pagination.rowsPerPage
                 + '&ordering='+ this.descending+ this.pagination.sortBy;
