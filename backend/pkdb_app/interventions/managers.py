@@ -147,15 +147,21 @@ class TimecourseExManager(models.Manager):
                 _ = variables.pop("bodyweight_type", None)
                 pk = f_pk(**variables)
 
+                from pprint import pprint
+                pprint(variables)
+                pprint(pk)
+
                 key_mapping = {"auc":"auc_end",
                                "aucinf":"auc_inf",
                                "cl":"clearance",
                                "cmax":"cmax",
                                "kel":"kel",
                                "thalf":"thalf",
-                               "vd":"vd"}
+                               "tmax": "tmax",
+                               "vd":"vd",
+                               }
                 outputs = []
-                for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd"]:
+                for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd","tmax"]:
                     pk_unit = pk[f"{key}_unit"]
                     if not np.isnan(pd.to_numeric(pk[key])):
                         output_dict = {}
