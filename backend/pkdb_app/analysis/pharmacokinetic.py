@@ -368,8 +368,10 @@ def _regression(t, c):
     # TODO: check for distribution and elimination part of curve.
     max_index = np.argmax(c)
     # linear regression
-    x = t[max_index:]
-    y = np.log(c[max_index:])
+    #x = t[max_index:]
+    #y = np.log(c[max_index:])
+    x = t[-4:]
+    y = np.log(c[-4:])
     if max_index == (len(c) - 1):
         return [np.nan] * 6
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)

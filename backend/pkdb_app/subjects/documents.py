@@ -28,6 +28,7 @@ class IndividualDocument(DocType):
     group = ObjectField(properties={
         'name': string_field('name'),
         'pk':fields.IntegerField('pk'),
+        'count': fields.IntegerField('count')
     })
 
     study = ObjectField(properties={

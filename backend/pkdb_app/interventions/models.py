@@ -91,6 +91,10 @@ class Substance(Sidable, models.Model):
         return self.outputs.filter(normed=True)
 
     @property
+    def outputs_calculated(self):
+        return self.outputs.filter(normed=True, calculated=True)
+
+    @property
     def timecourses_normed(self):
         return self.timecourses.filter(normed=True)
 
@@ -355,20 +359,7 @@ class Output(ValueableNotBlank, AbstractOutput):
         else:
             return self.raw._interventions
 
-    def add_statistics(self):
-        if self.group:
-            if not self.sd:
-                self.sd = get_sd(
-                    se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
-                )
-            if not self.se:
-                self.se = get_se(
-                    sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
-                )
-            if not self.cv:
-                self.cv = get_cv(
-                    se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
-                )
+
 
     @property
     def study(self):
@@ -419,6 +410,21 @@ class Output(ValueableNotBlank, AbstractOutput):
 
     def null_time(self):
         return self.null_attr('time')
+
+    def add_error_measures(self):
+        if self.group:
+            if not self.sd:
+                self.sd = get_sd(
+                    se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
+                )
+            if not self.se:
+                self.se = get_se(
+                    sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
+                )
+            if not self.cv:
+                self.cv = get_cv(
+                    se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
+                )
 
 
 class TimecourseEx(
@@ -542,6 +548,7 @@ class Timecourse(AbstractOutput):
 
     def normalize(self):
         """Normalizes timecourse."""
+
         if not self.is_norm:
             for key, value in self.norm_fields.items():
                 if value is not None:

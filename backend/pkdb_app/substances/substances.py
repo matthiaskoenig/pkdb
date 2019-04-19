@@ -163,11 +163,15 @@ SUBSTANCES_DATA = [
     Substance(sid="mep", name="mephenytoin",chebi="CHEBI:6757"),  # CYP2D6 Phenotyping
 
     Substance(sid="spar", name="sparteine", chebi="CHEBI:28827"),  # CYP2D6 Phenotyping
+    Substance(sid="spar-s", name="sparteine sulfate"),  # CYP2D6 Phenotyping
+
     Substance(sid="2hspar", name="2-dehydrosparteine",chebi="CHEBI:29130"),  # CYP2D6 Phenotyping
     Substance(sid="5hspar", name="5-dehydrosparteine"),  # soon avialble, chebi="CHEBI:143195"),  # CYP2D6 Phenotyping # Molecular Weight: 232.371 g/mol
 
     # for phenotyping
     Substance(sid="spar/(2hspar+5hspar)", parents=["sparteine", "2-dehydrosparteine","5-dehydrosparteine"]),
+    Substance(sid="spar+2hspar+5hspar", parents=["sparteine", "2-dehydrosparteine", "5-dehydrosparteine"]),
+    Substance(sid="2hspar+5hspar", parents=["2-dehydrosparteine", "5-dehydrosparteine"]),
 
     # medication
     Substance(sid="salbutamol", chebi="CHEBI:8746"),

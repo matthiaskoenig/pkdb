@@ -125,7 +125,7 @@ class CharacteristicType(AbstractType):
     def validate_choice(self, choice):
         if choice:
             if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
-                if not self.is_valid_choice:
+                if not self.is_valid_choice(choice):
                     msg = f"{choice} is not part of {self.choices} for {self.key}"
                     raise ValueError({"choice": msg})
             else:
@@ -307,7 +307,7 @@ CHARACTERISTIC_DATA = [
     CharacteristicType("age",       DEMOGRAPHICS, NUMERIC_TYPE,    None, age_unit_units),
     CharacteristicType("sex",       DEMOGRAPHICS, CATEGORIAL_TYPE, ["M", "F", MIX, NAN], []),
     CharacteristicType("ethnicity", DEMOGRAPHICS,   CATEGORIAL_TYPE,
-        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese"],
+        [NAN, "african", "afroamerican", "asian", "caucasian", "korean","hispanic", "japanese","chinese","amerindian"],
         []),
     # -------------- Physiology --------------
     CharacteristicType("blood pressure", PHYSIOLOGY, NUMERIC_TYPE, None, blood_pressure_units),
