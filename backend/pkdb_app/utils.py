@@ -7,6 +7,21 @@ import copy
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
 
+def create_choices(collection):
+    """ Creates choices from given list of items.
+    In case of dictionaries the keys are used to create choices.
+    :param collection: iterable collection from which choices are created.
+    :return: list of choice tuples
+    """
+    choices = []
+    for item in collection:
+        key = item
+        if not isinstance(item, str):
+            # get_key interface must be provided by item
+            key = item.key
+        choices.append((key, key))
+    return choices
+
 
 def create_if_exists(src, src_key, dest, dest_key):
     if src_key in src.keys():

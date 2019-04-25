@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from pkdb_app.categorials.models import validate_categorials
 from rest_framework import serializers
-from ..categoricals import validate_categorials
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..studies.models import Study

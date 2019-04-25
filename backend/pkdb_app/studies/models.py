@@ -2,9 +2,9 @@
 Django model for Study.
 """
 from django.db import models
+from pkdb_app.outputs.models import OutputSet
 
 from ..interventions.models import (
-    OutputSet,
     InterventionSet,
     DataFile,
     Substance,
@@ -13,13 +13,30 @@ from ..storage import OverwriteStorage
 from ..subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..behaviours import Sidable
-from ..categoricals import CURRENT_VERSION, KEYWORDS_DATA_CHOICES, STUDY_LICENCE_CHOICES
 from ..users.models import User
 
+CURRENT_VERSION = [1.0]
+VERSIONS = [1.0]
+
+# ---------------------------------------------------
+# Study licence
+# ---------------------------------------------------
+OPEN = "open"
+CLOSED = "closed"
+
+STUDY_LICENCE_DATA = [
+    OPEN,  # (open reference)
+    CLOSED,
+]
+
+STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
+# ---------------------------------------------------
+#
+# ---------------------------------------------------
 
 class Keyword(models.Model):
     """This class describes the keywords / tags of a study."""
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, choices=KEYWORDS_DATA_CHOICES)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
 
 class Author(models.Model):

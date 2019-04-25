@@ -1,15 +1,14 @@
+from pkdb_app.categorials.models import CharacteristicType
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from pkdb_app.categoricals import CHARACTERISTIC_DICT, CHARACTERISTICA_TYPES
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.subjects.models import (
     DataFile,
 )
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    DataFileElasticSerializer,
     IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
@@ -167,8 +166,7 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["categories"] = {k: item._asdict() for k, item in sorted(CHARACTERISTIC_DICT.items())}
-        options["ctypes"] = CHARACTERISTICA_TYPES
+        options["categories"] = {k.key: k._asdict() for k in CharacteristicType.objects.all()}
         return options
 
     def list(self, request):

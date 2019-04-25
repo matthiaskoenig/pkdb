@@ -1,6 +1,8 @@
 """
 Studies serializers.
 """
+from pkdb_app.outputs.models import OutputSet
+from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
 from rest_framework import serializers
 
 from ..comments.models import Description, Comment
@@ -10,9 +12,8 @@ from ..subjects.models import GroupSet, IndividualSet
 from ..users.serializers import UserElasticSerializer
 from ..utils import update_or_create_multiple, create_multiple
 
-from ..interventions.models import Substance, DataFile, InterventionSet, OutputSet
-from ..interventions.serializers import InterventionSetSerializer, OutputSetSerializer,\
-    InterventionSetElasticSmallSerializer, OutputSetElasticSmallSerializer
+from ..interventions.models import Substance, DataFile, InterventionSet
+from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
      GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User

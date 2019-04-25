@@ -1,11 +1,12 @@
 """
 Django URLs
 """
-from django.conf import settings
 from django.urls import path, include
 from django.conf.urls import url
-from django.conf.urls.static import static
 from django.contrib import admin
+from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
+    TimecourseOptionViewSet
+from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 
 from rest_framework.routers import DefaultRouter
@@ -19,11 +20,7 @@ from .subjects.views import (
     DataFileViewSet,
     IndividualViewSet,
     CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
-from .interventions.views import (
-    SubstanceViewSet,
-    InterventionOptionViewSet,
-    OutputOptionViewSet, TimecourseOptionViewSet, ElasticSubstanceViewSet, ElasticInterventionViewSet,
-    ElasticOutputViewSet, ElasticTimecourseViewSet, SubstanceStatisticsViewSet)
+from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
 from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
@@ -31,7 +28,6 @@ from .studies.views import (
     ElasticReferenceViewSet, ElasticStudyViewSet, KeywordViewSet, ElasticKeywordViewSet, update_index)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
-from . import views
 
 
 router = DefaultRouter()
