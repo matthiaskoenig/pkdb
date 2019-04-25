@@ -23,15 +23,18 @@ class SynonymSerializer(WrongKeyValidationSerializer):
     def to_internal_value(self, data):
         return {"name": data}
 
+    def to_representation(self, instance):
+        return instance.name
+
 
 
 class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
-    parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.all(), required=False, allow_null=True)
+    parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.order_by('name'), required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     class Meta:
         model = Substance
-        fields = ["sid","mass","charge", "formula", "name" ,"chebi", "description",  "synonyms", "parents", "url_slug"]
+        fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms"]
 
     def create(self, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])

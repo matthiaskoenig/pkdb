@@ -2,7 +2,6 @@
 Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
-
 from django.db import models
 from pkdb_app.categorials.models import InterventionType
 from pkdb_app.substances.models import Substance

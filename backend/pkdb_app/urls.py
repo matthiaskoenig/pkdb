@@ -4,6 +4,7 @@ Django URLs
 from django.urls import path, include
 from django.conf.urls import url
 from django.contrib import admin
+from pkdb_app.categorials.views import PharmacokineticTypeViewSet, CharacteristicTypeViewSet, InterventionTypeViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
     TimecourseOptionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
@@ -51,6 +52,9 @@ router.register("keywords", KeywordViewSet, base_name="keywords")
 router.register("keywords_elastic", ElasticKeywordViewSet, base_name="keywords_elastic")
 
 
+router.register("pharmacokinetic_types", PharmacokineticTypeViewSet, base_name="pharmacokinetic_types")
+router.register("characteristica_types", CharacteristicTypeViewSet, base_name="characteristica_types")
+router.register("intervention_types", InterventionTypeViewSet, base_name="intervention_types")
 
 
 # user

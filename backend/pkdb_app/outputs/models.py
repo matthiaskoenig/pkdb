@@ -93,7 +93,7 @@ class AbstractOutput(Normalizable):
     tissue = models.CharField(
         max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
     )
-    pktype = models.ForeignKey(PharmacokineticType, models.CASCADE)
+    pktype = models.ForeignKey(PharmacokineticType, on_delete=models.CASCADE)
 
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # todo: validate in serializer

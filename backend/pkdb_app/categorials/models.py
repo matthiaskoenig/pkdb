@@ -1,11 +1,17 @@
-from django.db import models
-from pint import UndefinedUnitError
-from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices
+"""
+Model for the categorical information.
+
+FIXME: Some duplication to pkdb_data/categorials
+"""
 import pint
+from pint import UndefinedUnitError
+
+from django.db import models
+from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices
+
+ureg = pint.UnitRegistry()
 
 # Units
-ureg = pint.UnitRegistry()
-# add units to pint registry
 ureg.define('cups = count')
 ureg.define('none = count')
 ureg.define('yr = year')
@@ -14,18 +20,14 @@ ureg.define('U = 60*10**6*mol/second')
 ureg.define('IU = [activity_amount]')
 ureg.define('NO_UNIT = [no_unit]')
 
-NOUNIT = 'NO_UNIT'
+NO_UNIT = 'NO_UNIT'
 
 
 NUMERIC_TYPE = "numeric"
 CATEGORIAL_TYPE = "categorial"
 BOOLEAN_TYPE = "boolean"
 
-DTYPE_CHOICES = create_choices([NUMERIC_TYPE,CATEGORIAL_TYPE,BOOLEAN_TYPE])
-
-
-
-
+DTYPE_CHOICES = create_choices([NUMERIC_TYPE,CATEGORIAL_TYPE, BOOLEAN_TYPE])
 
 
 class Unit(models.Model):
@@ -36,32 +38,30 @@ class Unit(models.Model):
     def p_unit(self):
         return ureg(self.name).u
 
+
 class Choice(models.Model):
     """Choice Model"""
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
 
 class AbstractType(models.Model):
     key = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    units = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name="types")
+    units = models.ManyToManyField(Unit, related_name="types")
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
 
     @property
     def n_p_units(self):
         """
-
-        :return: list of norm units in the data format of pint
-
+        :return: list of normalized units in the data format of pint
         """
         return [unit.p_unit for unit in self.units.objects.all()]
 
     @property
     def n_units(self):
         """
-
-        :return: list of norm units in the data format of pint
-
+        :return: list of normalized units in the data format of pint
         """
-        return self.units.objects.values_list("name",flat=True)
+        return self.units.objects.values_list("name", flat=True)
 
     @property
     def valid_dimensions(self):
@@ -89,7 +89,7 @@ class AbstractType(models.Model):
             if unit:
                 return any([self.p_unit(unit).check(dim) for dim in self.valid_dimensions])
             else:
-                unit_not_required2 = NOUNIT in self.n_units
+                unit_not_required2 = NO_UNIT in self.n_units
                 return unit_not_required2
 
         else:
@@ -137,7 +137,6 @@ class AbstractType(models.Model):
 class CharacteristicChoiceType(AbstractType):
     category = models.CharField(max_length=CHAR_MAX_LENGTH)
     dtype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=DTYPE_CHOICES)
-    choices = models.ForeignKey(Choice,on_delete=models.CASCADE)
 
     def is_valid_choice(self, choice):
         return choice in self.choices.objects.values_list("name",flat=True)
@@ -161,7 +160,8 @@ class CharacteristicChoiceType(AbstractType):
                     msg = f"{choice} is not part of {self.choices} for {self.key}"
                     raise ValueError({"choice": msg})
             else:
-                msg = f"for category: <{self.category}> no choices are allowed. If you are trying to insert a numerical value, use keword value, mean or median"
+                msg = f"for category: <{self.category}> no choices are allowed. " \
+                      f"If you are trying to insert a numerical value, use keyword value, mean or median"
                 raise ValueError({"choice": msg})
 
     class Meta:
@@ -169,19 +169,20 @@ class CharacteristicChoiceType(AbstractType):
 
 
 class CharacteristicType(CharacteristicChoiceType):
-
-    units = models.ManyToManyField(Unit,  related_name="characteristic_types")
+    units = models.ManyToManyField(Unit, related_name="characteristic_types")
+    choices = models.ManyToManyField(Choice, related_name="characteristic_types")
 
 
 class InterventionType(CharacteristicChoiceType):
     units = models.ManyToManyField(Unit, related_name="intervention_types")
+    choices = models.ManyToManyField(Choice, related_name="intervention_types")
+
 
 
 class PharmacokineticType(AbstractType):
-    units = models.ForeignKey(Unit, on_delete=models.CASCADE, related_name="pharmacokinetic_types")
+    units = models.ManyToManyField(Unit, related_name="pharmacokinetic_types")
 
     description = models.TextField(blank=True, null=True)
-
 
     def _asdict(self):
         return {
@@ -189,7 +190,6 @@ class PharmacokineticType(AbstractType):
             "description": self.description,
             "units": self.n_units,
             "valid unit dimensions":self.valid_dimensions}
-
 
 
 def validate_categorials(data, category_class):
@@ -236,11 +236,9 @@ def validate_pktypes(data):
         # check that allowed pktypes
         try:
             model_pktype = PharmacokineticType.objects.get(key=pktype)
-
         except PharmacokineticType.DoesNotExist:
             msg = f"pktype <{pktype}> is not supported for pktype"
             raise ValueError({"pktype": msg})
-
 
         # check unit
         unit = data.get("unit", None)
