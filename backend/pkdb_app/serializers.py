@@ -6,9 +6,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from rest_framework.settings import api_settings
-from pkdb_app.categoricals import FORMAT_MAPPING, PK_DATA_DICT
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
@@ -18,6 +17,16 @@ ITEM_MAPPER = "=="
 NA_VALUES = ["na","NA","nan","NAN"]
 
 
+# ---------------------------------------------------
+# File formats
+# ---------------------------------------------------
+FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
+
+FORMAT_MAPPING = {"TSV": FileFormat("TSV", "\t"), "CSV": FileFormat("CSV", ",")}
+
+# ---------------------------------------------------
+#
+# ---------------------------------------------------
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
     # ----------------------------------

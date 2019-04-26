@@ -1,8 +1,7 @@
-pip>=19.0.2
-
+pip>=19.1
 # Core
 pytz==2018.4
-Django==2.1.7
+Django==2.2
 gunicorn==19.8.1
 newrelic==3.2.2.94
 
@@ -68,9 +67,9 @@ coloredlogs>=10.0
 
 #units
 pint
-python-slugify
+#python-slugify
 
 # chebi
-libchebipy
+#libchebipy
 
 

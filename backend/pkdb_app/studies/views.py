@@ -3,12 +3,13 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
     FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from elasticsearch import helpers
-from pkdb_app.interventions.documents import InterventionDocument, TimecourseDocument, OutputDocument
+from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument

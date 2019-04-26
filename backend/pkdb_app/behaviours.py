@@ -2,10 +2,8 @@
 Reusable behavior for models.
 """
 from django.db import models
-from pkdb_app.normalization import get_sd, get_se, get_cv
-
 from .utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
-from .units import ureg
+from .categorials.models import ureg
 
 
 class Sidable(models.Model):
@@ -14,7 +12,6 @@ class Sidable(models.Model):
 
     class Meta:
         abstract = True
-
 
 class Externable(models.Model):
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -96,6 +93,20 @@ class ValueableMapNotBlank(models.Model):
 
 
 class Normalizable(models.Model):
+
+
+    @property
+    def category_class_data(self):
+        """ Returns the full information about the category.
+
+        :return:
+        """
+        return self.category
+
+    @property
+    def choices(self):
+        return self.category.choices_list()
+
 
     @property
     def norm_fields(self):

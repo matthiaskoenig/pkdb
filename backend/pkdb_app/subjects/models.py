@@ -7,6 +7,8 @@ From the data structure this has to be handled very similar.
 """
 
 from django.db import models
+from pkdb_app.categorials.models import CharacteristicType
+
 from ..normalization import get_sd, get_se, get_cv
 from ..storage import OverwriteStorage
 from ..behaviours import (
@@ -15,12 +17,7 @@ from ..behaviours import (
     ValueableMapNotBlank,
     ValueableNotBlank,
     Normalizable)
-from ..categoricals import (
-    CHARACTERISTIC_DICT,
-    CHARACTERISTIC_CHOICES,
-    CHARACTERISTICA_CHOICES,
-    DEFAULT_CRITERIA
-)
+
 from ..utils import CHAR_MAX_LENGTH
 from .managers import (
     GroupExManager,
@@ -57,7 +54,7 @@ class DataFile(models.Model):
 
     @property
     def timecourses(self):
-        Timecourse = apps.get_model('interventions', 'Timecourse')
+        Timecourse = apps.get_model('outputs', 'Timecourse')
         tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(normed=True)
         return tc
 
@@ -330,31 +327,11 @@ class Individual(AbstractIndividual):
 
 
 class AbstractCharacteristica(models.Model):
-    category = models.CharField(
-        choices=CHARACTERISTIC_CHOICES, max_length=CHAR_MAX_LENGTH)
-
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
-    ctype = models.CharField(
-        choices=CHARACTERISTICA_CHOICES,
-        max_length=CHAR_MAX_LENGTH,
-        default=DEFAULT_CRITERIA,
-    )  # this is for exclusion and inclusion
     count = models.IntegerField(null=True)
 
     class Meta:
         abstract = True
-
-    @property
-    def category_class_data(self):
-        """ Returns the full information about the characteristic.
-
-        :return:
-        """
-        return CHARACTERISTIC_DICT[self.category]
-
-    @property
-    def choices(self):
-        return self.category_class_data.choices
 
 
 class CharacteristicaEx(
@@ -376,7 +353,7 @@ class CharacteristicaEx(
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-
+    category = models.CharField(max_length=CHAR_MAX_LENGTH)
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
@@ -394,6 +371,7 @@ class CharacteristicaEx(
 
 class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     """ Characteristic. """
+    category = models.ForeignKey(CharacteristicType, on_delete=models.CASCADE)
 
     group = models.ForeignKey(
         Group, related_name="characteristica", null=True, on_delete=models.CASCADE
@@ -405,6 +383,10 @@ class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     normed = models.BooleanField(default=False)
     count = models.IntegerField(default=1)
 
+    @property
+    def category_key(self):
+
+        return self.category.key
 
     @property
     def all_group_pks(self):

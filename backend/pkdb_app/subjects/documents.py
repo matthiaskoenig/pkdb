@@ -44,9 +44,8 @@ class IndividualDocument(DocType):
     characteristica_all_normed = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
-            'category': string_field('category'),
+            'category': string_field('category_key'),
             'choice': string_field('choice'),
-            'ctype' : string_field('ctype'),
             'value' : fields.FloatField('value'),
             'mean' : fields.FloatField(),
             'median' : fields.FloatField(),
@@ -104,9 +103,8 @@ class GroupDocument(DocType):
     characteristica_all_normed = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
-            'category': string_field('category'),
+            'category': string_field('category_key'),
             'choice': string_field('choice'),
-            'ctype': string_field('ctype'),
             'value': fields.FloatField('value'),
             'mean': fields.FloatField(),
             'median': fields.FloatField(),
@@ -164,6 +162,7 @@ class CharacteristicaDocument(DocType):
     individual_pk = fields.IntegerField(attr='individual_id')
 
     category = fields.StringField(
+        attr='category_key',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }
@@ -175,11 +174,7 @@ class CharacteristicaDocument(DocType):
 
         }
     )
-    ctype = fields.StringField(
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
+
     unit = fields.StringField(
         fields={
             'raw': fields.StringField(analyzer='keyword'),

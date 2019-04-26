@@ -1,11 +1,12 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
     ObjectField
-from pkdb_app.interventions.models import Substance, InterventionSet, OutputSet, Timecourse, Intervention, Output
+from pkdb_app.interventions.models import Substance,  Intervention
+from pkdb_app.outputs.models import Timecourse, Output
 from pkdb_app.studies.models import Reference, Study, Keyword
 
 # Elastic Reference
-from pkdb_app.subjects.models import GroupSet, IndividualSet, Group, Individual
+from pkdb_app.subjects.models import  Group, Individual
 
 reference_index = Index("references")
 reference_index.settings(**elastic_settings)
