@@ -3,7 +3,7 @@ Serializers for interventions.
 """
 from datetime import timedelta
 import numpy as np
-from pkdb_app.categorials.models import validate_pktypes
+from pkdb_app.categorials.models import validate_pktypes, PharmacokineticType
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
 import time
@@ -54,6 +54,8 @@ OUTPUT_MAP_FIELDS = [
 
 
 class OutputSerializer(ExSerializer):
+    pktype = serializers.SlugRelatedField(slug_field="key", queryset=PharmacokineticType.objects.all())
+
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -195,6 +197,8 @@ class OutputExSerializer(BaseOutputExSerializer):
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
+    pktype = serializers.SlugRelatedField(slug_field="key", queryset=PharmacokineticType.objects.all())
+
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )

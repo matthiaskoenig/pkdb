@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from pkdb_app.categorials.models import validate_categorials
+from pkdb_app.categorials.models import validate_categorials, CharacteristicType
 from rest_framework import serializers
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
@@ -37,7 +37,7 @@ VALUE_MAP_FIELDS = [
     "cv_map",
     "unit_map",
 ]
-CHARACTERISTISTA_FIELDS = ["count", "category", "choice", "ctype"]
+CHARACTERISTISTA_FIELDS = ["count", "category", "choice"]
 CHARACTERISTISTA_MAP_FIELDS = ["count_map", "choice_map"]
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
@@ -78,9 +78,6 @@ class CharacteristicaExSerializer(MappingSerializer):
             + ["comments"]
         )
 
-    def validate(self, attrs):
-        self.validate_wrong_keys(attrs)
-        return super().validate(attrs)
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
@@ -90,6 +87,7 @@ class CharacteristicaExSerializer(MappingSerializer):
 
 class CharacteristicaSerializer(ExSerializer):
     count = serializers.IntegerField(required=False)
+    category = serializers.SlugRelatedField(slug_field="key", queryset=CharacteristicType.objects.all())
 
     class Meta:
         model = Characteristica
@@ -98,13 +96,14 @@ class CharacteristicaSerializer(ExSerializer):
     def to_internal_value(self, data):
         data.pop("comments", None)
         self._is_required(data,"category")
+        data.get("category")
         self.validate_wrong_keys(data)
-        return super(WrongKeyValidationSerializer,self).to_internal_value(data)
+        return super(serializers.ModelSerializer,self).to_internal_value(data)
 
     def validate(self, attr):
         try:
             # perform via dedicated function on categorials
-            validate_categorials(data=attr, category_class="characteristica")
+            validate_categorials(data=attr)
         except ValueError as err:
             raise serializers.ValidationError(err)
 

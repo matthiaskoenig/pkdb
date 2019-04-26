@@ -56,7 +56,7 @@ class OutputDocument(DocType):
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
     tissue = string_field('tissue')
-    pktype = string_field("pktype")
+    pktype = string_field("pktype_key")
 
     class Meta(object):
             model = Output
@@ -124,7 +124,7 @@ class TimecourseDocument(DocType):
 
     time = fields.FloatField('null_time',multi=True)
     tissue = string_field('tissue')
-    pktype = string_field("pktype")
+    pktype = string_field("pktype_key")
 
     #auc_end = fields.FloatField(attr='auc_end')
     #kel = fields.FloatField(attr='kel')

@@ -60,7 +60,7 @@ class OutputExManager(models.Manager):
 
         outputs_dj = create_multiple(output_ex, outputs, 'outputs')
 
-        Output = apps.get_model('interventions', 'Output')
+        Output = apps.get_model('outputs', 'Output')
         create_multiple_bulk_normalized(outputs_dj,Output)
         output_ex.save()
 
@@ -89,7 +89,7 @@ class TimecourseExManager(models.Manager):
         timecourses_dj = create_multiple(timecourse_ex, timecourses, 'timecourses')
         Timecourse = type(timecourses_dj[0])
 
-        Output = apps.get_model('interventions','Output')
+        Output = apps.get_model('outputs','Output')
 
         timecourses = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
 

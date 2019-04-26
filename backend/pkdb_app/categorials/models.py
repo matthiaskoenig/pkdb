@@ -54,14 +54,14 @@ class AbstractType(models.Model):
         """
         :return: list of normalized units in the data format of pint
         """
-        return [unit.p_unit for unit in self.units.objects.all()]
+        return [unit.p_unit for unit in self.units.all()]
 
     @property
     def n_units(self):
         """
         :return: list of normalized units in the data format of pint
         """
-        return self.units.objects.values_list("name", flat=True)
+        return self.units.values_list("name", flat=True)
 
     @property
     def valid_dimensions(self):
@@ -139,17 +139,17 @@ class CharacteristicChoiceType(AbstractType):
     dtype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=DTYPE_CHOICES)
 
     def is_valid_choice(self, choice):
-        return choice in self.choices.objects.values_list("name",flat=True)
+        return choice in self.choices.values_list("name",flat=True)
 
     def choices_list(self):
-        return self.choices.objects.values_list("name",flat=True)
+        return self.choices.values_list("name",flat=True)
 
     def _asdict(self):
         return {
             "key":self.key,
             "category": self.category,
             "dtype":self.dtype,
-            "choices": self.choices_list,
+            "choices": self.choices_list(),
             "units": self.n_units,
             "valid unit dimensions": self.valid_dimensions}
 
@@ -192,39 +192,21 @@ class PharmacokineticType(AbstractType):
             "valid unit dimensions":self.valid_dimensions}
 
 
-def validate_categorials(data, category_class):
+def validate_categorials(data):
     """ Function which validates given categorial data against categorial defintion and allowed values.
     :param data:
     :param model_name:
     :return:
     """
     category = data.get("category", None)
-    if category:
-        if category_class == "characteristica":
-            allowed_categories = CharacteristicType
-        elif category_class == "intervention":
-            allowed_categories = InterventionType
-        else:
-            raise ValueError(f"category_class not supported: {category_class}")
 
-        # check that allowed category
-        try:
-            model_categorical = allowed_categories.objects.get(key=category)
+    # validate_choice
+    choice = data.get("choice", None)
+    category.validate_choice(choice)
 
-        except allowed_categories.DoesNotExist:
-            msg = f"category <{category}> is not supported for {category_class}"
-            raise ValueError({"category": msg})
-
-        # get the allowed definition
-        model_categorical = allowed_categories.objects.get(key=category)
-
-        # validate_choice
-        choice = data.get("choice", None)
-        model_categorical.validate_choice(choice)
-
-        # validate unit
-        unit = data.get("unit", None)
-        model_categorical.validate_unit(unit)
+    # validate unit
+    unit = data.get("unit", None)
+    category.validate_unit(unit)
 
     return data
 
@@ -233,17 +215,10 @@ def validate_pktypes(data):
     pktype = data.get("pktype", None)
 
     if pktype:
-        # check that allowed pktypes
-        try:
-            model_pktype = PharmacokineticType.objects.get(key=pktype)
-        except PharmacokineticType.DoesNotExist:
-            msg = f"pktype <{pktype}> is not supported for pktype"
-            raise ValueError({"pktype": msg})
-
         # check unit
         unit = data.get("unit", None)
-        model_pktype.validate_unit(unit)
+        pktype.validate_unit(unit)
 
         time_unit = data.get("time_unit", None)
         if time_unit:
-            model_pktype.validate_time_unit(time_unit)
+            pktype.validate_time_unit(time_unit)

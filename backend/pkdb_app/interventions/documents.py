@@ -10,7 +10,15 @@ intervention_index.settings(**elastic_settings)
 @intervention_index.doc_type
 class InterventionDocument(DocType):
     pk = fields.IntegerField()
-    category =  string_field('category')
+    #category =  string_field('category_key')
+
+    category = fields.StringField(
+        attr='category_key',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+
     choice = string_field('choice')
     application = string_field('application')
     time_unit = string_field('time_unit')

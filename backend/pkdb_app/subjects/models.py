@@ -17,12 +17,7 @@ from ..behaviours import (
     ValueableMapNotBlank,
     ValueableNotBlank,
     Normalizable)
-#from pkdb_app.categorials.categoricals import (
-#    CHARACTERISTIC_DICT,
-#    CHARACTERISTIC_CHOICES,
-#    CHARACTERISTICA_CHOICES,
-#    DEFAULT_CRITERIA
-#)
+
 from ..utils import CHAR_MAX_LENGTH
 from .managers import (
     GroupExManager,
@@ -59,7 +54,7 @@ class DataFile(models.Model):
 
     @property
     def timecourses(self):
-        Timecourse = apps.get_model('interventions', 'Timecourse')
+        Timecourse = apps.get_model('outputs', 'Timecourse')
         tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(normed=True)
         return tc
 
@@ -332,7 +327,6 @@ class Individual(AbstractIndividual):
 
 
 class AbstractCharacteristica(models.Model):
-    category = models.ForeignKey(CharacteristicType, on_delete=models.CASCADE)
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
     count = models.IntegerField(null=True)
 
@@ -359,7 +353,7 @@ class CharacteristicaEx(
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-
+    category = models.CharField(max_length=CHAR_MAX_LENGTH)
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
@@ -377,6 +371,7 @@ class CharacteristicaEx(
 
 class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     """ Characteristic. """
+    category = models.ForeignKey(CharacteristicType, on_delete=models.CASCADE)
 
     group = models.ForeignKey(
         Group, related_name="characteristica", null=True, on_delete=models.CASCADE
@@ -388,6 +383,10 @@ class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     normed = models.BooleanField(default=False)
     count = models.IntegerField(default=1)
 
+    @property
+    def category_key(self):
+
+        return self.category.key
 
     @property
     def all_group_pks(self):

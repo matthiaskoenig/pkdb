@@ -93,7 +93,6 @@ class AbstractOutput(Normalizable):
     tissue = models.CharField(
         max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
     )
-    pktype = models.ForeignKey(PharmacokineticType, on_delete=models.CASCADE)
 
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # todo: validate in serializer
@@ -131,12 +130,14 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    pktype = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = OutputExManager()
 
 
 class Output(ValueableNotBlank, AbstractOutput,Normalizable):
     """ Storage of data sets. """
+    pktype = models.ForeignKey(PharmacokineticType, on_delete=models.CASCADE)
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(
@@ -159,12 +160,17 @@ class Output(ValueableNotBlank, AbstractOutput,Normalizable):
     objects = OutputManager()
 
     @property
+    def pktype_key(self):
+
+        return self.pktype.key
+
+    @property
     def category_class_data(self):
         """ Returns the full information about the category.
 
         :return:
         """
-        return self.pktype._asdict()
+        return self.pktype
 
     @property
     def interventions(self):
@@ -261,6 +267,7 @@ class TimecourseEx(
     cv
     time
     """
+    pktype = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     source = models.ForeignKey(
         DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
@@ -288,7 +295,7 @@ class Timecourse(AbstractOutput):
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
-
+    pktype = models.ForeignKey(PharmacokineticType, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention)
@@ -312,6 +319,19 @@ class Timecourse(AbstractOutput):
 
     normed = models.BooleanField(default=False)
     objects = OutputManager()
+
+    @property
+    def pktype_key(self):
+
+        return self.pktype.key
+
+    @property
+    def category_class_data(self):
+        """ Returns the full information about the category.
+
+        :return:
+        """
+        return self.pktype
 
     @property
     def interventions(self):

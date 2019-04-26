@@ -19,7 +19,7 @@ from ..serializers import (
     NA_VALUES, PkSerializer)
 
 from ..subjects.models import  DataFile
-#from pkdb_app.categorials.models import validate_categorials, MEDICATION, DOSING
+from pkdb_app.categorials.models import validate_categorials, InterventionType
 
 from ..subjects.serializers import (
     VALUE_MAP_FIELDS,
@@ -34,6 +34,10 @@ from ..subjects.serializers import (
 # Serializer FIELDS
 # ----------------------------------
 from ..utils import list_of_pk
+
+MEDICATION = "medication"
+DOSING = "dosing"
+
 
 INTERVENTION_FIELDS = [
     "name",
@@ -73,6 +77,8 @@ OUTPUT_MAP_FIELDS = [
 # Interventions
 # ----------------------------------
 class InterventionSerializer(ExSerializer):
+    category = serializers.SlugRelatedField(slug_field="key", queryset=InterventionType.objects.all())
+
     substance = serializers.SlugRelatedField(
         slug_field="name",
         queryset=Substance.objects.all(),
@@ -80,6 +86,7 @@ class InterventionSerializer(ExSerializer):
         required=False,
         allow_null=True,
     )
+
 
     class Meta:
         model = Intervention
@@ -109,6 +116,15 @@ class InterventionSerializer(ExSerializer):
                     raise serializers.ValidationError(f"Allowed applications for category <{DOSING}> are <{allowed_applications}>.You might want to select the category: qualitative dosing. With no requirements.")
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
+    def validate(self, attrs):
+        try:
+            # perform via dedicated function on categorials
+            validate_categorials(data=attrs)
+        except ValueError as err:
+            raise serializers.ValidationError(err)
+
+        return super().validate(attrs)
 
 
 class InterventionExSerializer(ExSerializer):
@@ -172,15 +188,6 @@ class InterventionExSerializer(ExSerializer):
         self.validate_wrong_keys(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
-
-    def validate(self, attrs):
-        try:
-            # perform via dedicated function on categorials
-            validate_categorials(data=attrs, category_class="intervention")
-        except ValueError as err:
-            raise serializers.ValidationError(err)
-
-        return super().validate(attrs)
 
 
 class InterventionSetSerializer(ExSerializer):

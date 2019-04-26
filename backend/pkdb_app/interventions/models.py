@@ -70,7 +70,6 @@ class InterventionSet(models.Model):
 
 class AbstractIntervention(models.Model):
 
-    category = models.ForeignKey(InterventionType,on_delete=models.CASCADE)
 
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
     form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
@@ -127,7 +126,7 @@ class InterventionEx(
     )
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-
+    category = models.CharField(max_length=CHAR_MAX_LENGTH)
     objects = InterventionExManager()
 
     class Meta:
@@ -140,7 +139,7 @@ class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
          In case of dosing/medication the actual dosing is stored in the Valueable.
          In case of a step without dosing, e.g., lifestyle intervention only the category is used.
       """
-
+    category = models.ForeignKey(InterventionType,on_delete=models.CASCADE)
     ex = models.ForeignKey(
         InterventionEx,
         related_name="interventions",
@@ -156,3 +155,7 @@ class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
     @property
     def study(self):
         return self.ex.interventionset.study.name
+
+    @property
+    def category_key(self):
+        return self.category.key
