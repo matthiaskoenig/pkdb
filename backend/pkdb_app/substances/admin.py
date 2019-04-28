@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from pkdb_app.interventions.models import Substance
+from .models import Substance
 
 
 @admin.register(Substance)

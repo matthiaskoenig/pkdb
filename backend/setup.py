@@ -61,13 +61,14 @@ setup(
     },
     include_package_data=True,
     zip_safe=False,
+
     # List run-time dependencies here.  These will be installed by pip when
     install_requires=[
-        "pip>=19.0.2",
+        "pip>=19.1",
 
         # Core
         "pytz==2018.4",
-        "Django==2.1.7",
+        "Django==2.2",
         "gunicorn==19.8.1",
         "newrelic==3.2.2.94",
 

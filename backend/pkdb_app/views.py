@@ -4,10 +4,8 @@ Views
 import os
 from django.http import HttpResponse, FileResponse,HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
-from django.core.exceptions import ObjectDoesNotExist
 
-from .categoricals import OPEN
-from .studies.models import Reference
+from .studies.models import Reference, OPEN
 from .subjects.models import DataFile
 
 
@@ -31,7 +29,6 @@ from rest_framework.renderers import CoreJSONRenderer
 from rest_framework.schemas import SchemaGenerator
 from rest_framework.authentication import (
     SessionAuthentication,
-    TokenAuthentication,
     BasicAuthentication,
 )
 from rest_framework.permissions import AllowAny
