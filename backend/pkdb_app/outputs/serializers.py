@@ -414,6 +414,8 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
+    pktype = serializers.CharField()
+
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -456,7 +458,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
-
+    pktype = serializers.CharField()
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)
 

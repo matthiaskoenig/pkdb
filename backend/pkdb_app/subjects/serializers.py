@@ -425,6 +425,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
+    category = serializers.CharField()
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS + ["normed"]
