@@ -4,8 +4,9 @@ WORKDIR /app
 COPY package*.json /app/
 RUN npm install
 COPY . /app/
-
 RUN npm run build
+
+# production stage
+FROM alpine:3.9 as production-stage
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-

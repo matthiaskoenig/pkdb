@@ -85,7 +85,7 @@ services:
 
   nginx:
     restart: always
-    image: nginx:1.15
+    image: nginx:latest
     ports:
       - 80:80
     volumes:
@@ -95,15 +95,15 @@ services:
       - vue_dist:/usr/share/nginx/html
     depends_on:
       - backend
-      # - frontend
+      - frontend
     links:
       - backend:backend
+      - frontend:frontend
 
   frontend:
-    restart: always
     build:
       context: ./frontend
-      dockerfile: ./frontend/Dockerfile-deploy
+      dockerfile: Dockerfile-deploy
     ports:
       - "8080:8080"
     volumes:
