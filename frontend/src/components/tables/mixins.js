@@ -42,7 +42,7 @@ var searchTableMixin = {
             },
             deep: true
         },
-        url: {
+        uurl: {
             handler () {
                 this.getData();
             },
@@ -68,7 +68,7 @@ var searchTableMixin = {
                 url += '&search='+ this.search
             }
             if(this.ids.length > 0){
-                url += '&ids=' + this.ids.join("__")
+                url = '&ids=' + this.ids.join("__")
             }
             return url
         },

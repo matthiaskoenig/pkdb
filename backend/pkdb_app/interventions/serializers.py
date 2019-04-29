@@ -244,7 +244,7 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
     substance = serializers.SerializerMethodField()
-
+    category = serializers.CharField()
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
