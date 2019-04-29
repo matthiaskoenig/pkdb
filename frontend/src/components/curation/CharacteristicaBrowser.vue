@@ -65,7 +65,7 @@
         }),
         computed: {
             items () {
-                return Object.keys(this.options['categories'])
+                return Object.keys(this.options['categories']).sort()
 
             },
 
@@ -80,9 +80,6 @@
                 this.class_category = data['category'];
                 this.dtype = data['dtype'];
                 this.units = data['units'];
-                if (this.units){
-                    this.units = Object.keys(this.units)
-                }
                 var choices = data['choices'];
                 if (choices){
                     return choices.sort()

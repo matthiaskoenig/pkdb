@@ -53,11 +53,6 @@
             CharacteristicaCard,
             GroupChip
         },
-        props: {
-            ids: {
-                type: Array,
-            }
-        },
         mixins: [searchTableMixin,UrlMixin],
         data () {
             return {
