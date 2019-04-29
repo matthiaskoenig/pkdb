@@ -44,3 +44,6 @@ sudo rm -rf static
 
 # start containers
 set -a && source .env && docker-compose -f docker-compose-deploy.yml up --detach
+
+# TODO: make sure admin users are created
+# TODO: make sure initial reindexing is done

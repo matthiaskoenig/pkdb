@@ -119,7 +119,10 @@ WSGI_APPLICATION = "pkdb_app.wsgi.application"
 # Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-ADMINS = (("mkoenig", "konigmatt@googlemail.com"),("janekg89", "janekg89@hotmail.de"),)
+ADMINS = (
+    ("mkoenig", "konigmatt@googlemail.com"),
+    ("janekg89", "janekg89@hotmail.de"),
+)
 
 # General
 APPEND_SLASH = False
@@ -314,9 +317,7 @@ elif DJANGO_CONFIGURATION == 'production':
     SERVER_EMAIL = "mail@pk-db.com"
     DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
-    # EMAIL_PORT = 25
-
-    EMAIL_PORT = 587
+    EMAIL_PORT = 25
     EMAIL_USE_TLS = True
     EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
     EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
