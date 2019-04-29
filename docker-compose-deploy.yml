@@ -1,29 +1,7 @@
 #########################################################
 # PK-DB docker deploy
 #########################################################
-# To start the container stack use
-#   set -a && source .env.local && docker-compose up --build
-# or
-#   set -a && source .env.local && docker-compose up
-# The containers should be rebuild from time to time via
-#   docker-compose up --build
-#
-# The running containers can be observed via
-#   watch docker container ls
-#
-# To get the logs of an individual container use
-#   docker container log <container_id>
-#
-# To rebuild volumes stop all containers and remove the
-# volume
-#   docker-compose down
-#   docker volume rm pkdb_postgres_data
-#
-# https://docs.docker.com/compose/django/
-
 # FIXME: add wait_for_it script
-
-set -a && source .env && docker-compose --f docker-compose-deploy.yml up
 #########################################################
 version: '3'
 
