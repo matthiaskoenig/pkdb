@@ -22,6 +22,8 @@
 # https://docs.docker.com/compose/django/
 
 # FIXME: add wait_for_it script
+
+set -a && source .env && docker-compose --f docker-compose-deploy.yml up
 #########################################################
 version: '3'
 
@@ -103,22 +105,22 @@ services:
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
-#  nginx:
-#    restart: always
-#    image: nginx:1.15
-#    ports:
-#      - 1234:80
-#    volumes:
-#      - ./nginx/config/conf.d:/etc/nginx/conf.d
-#      - ./backend:/code
-#      - django_static:/static
-#      - django_media:/media
-#      - vue_dist:/usr/share/nginx/html
-#    depends_on:
-#      - backend
-#      - frontend
-#    links:
-#      - backend:backend
+  nginx:
+    restart: always
+    image: nginx:1.15
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/config/conf.d:/etc/nginx/conf.d
+      - ./backend:/code
+      - django_static:/static
+      - django_media:/media
+      - vue_dist:/usr/share/nginx/html
+    depends_on:
+      - backend
+      - frontend
+    links:
+      - backend:backend
 
 #  frontend:
 #    restart: always
