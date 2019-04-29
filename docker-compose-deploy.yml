@@ -96,18 +96,18 @@ services:
       - vue_dist:/usr/share/nginx/html
     depends_on:
       - backend
-      - frontend
+      # - frontend
     links:
       - backend:backend
 
-  frontend:
-    restart: always
-    build: ./frontend
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./frontend:/app
-      - node_modules:/app/node_modules/
-      - vue_dist:/usr/share/nginx/html
-    depends_on:
-      - backend
+#  frontend:
+#    restart: always
+#    build: ./frontend
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./frontend:/app
+#      - node_modules:/app/node_modules/
+#      - vue_dist:/usr/share/nginx/html
+#    depends_on:
+#      - backend
