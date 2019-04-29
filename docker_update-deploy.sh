@@ -43,4 +43,4 @@ sudo rm -rf media
 sudo rm -rf static
 
 # start containers
-set -a && source .env.local && docker-compose -f docker-compose-deploy.yml up --detach
+set -a && source .env && docker-compose -f docker-compose-deploy.yml up --detach
