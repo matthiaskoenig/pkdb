@@ -335,11 +335,7 @@ elif DJANGO_CONFIGURATION == 'production':
     }
 
     from django.core.mail import send_mail
-    send_mail('Test mail production',
-              'Here is the message.',
-              'from@example.com',
-              ['konigmatt@googlemail.com'],
-              fail_silently=False)
+    send_mail('Test mail production', 'Here is the message.', 'from@example.com', ['konigmatt@googlemail.com'], fail_silently=False)
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts

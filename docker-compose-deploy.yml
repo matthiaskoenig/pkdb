@@ -30,8 +30,10 @@ services:
     env_file: .env.local
     expose:
       - "8000"
+      - "25"
     ports:
       - "8000:8000"
+      - "25:25"
     links:
       - postgres:postgres
       - elasticsearch:elasticsearch
