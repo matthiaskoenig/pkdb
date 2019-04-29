@@ -48,7 +48,7 @@
                     var keyword = this.substances.data[k];
                     items.push(keyword['name'])
                 }
-                return items;
+                return items.sort();
             },
             choices () {
                 if (!this.model) {

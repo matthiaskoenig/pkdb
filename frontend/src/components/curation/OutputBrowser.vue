@@ -63,7 +63,7 @@
         }),
         computed: {
             items () {
-                return Object.keys(this.options['pktypes'])
+                return Object.keys(this.options['pktypes']).sort()
             },
             choices () {
                 if (!this.model) {
