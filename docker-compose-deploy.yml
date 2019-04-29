@@ -101,12 +101,12 @@ services:
 
   frontend:
     restart: always
-    build: ./frontend/Dockerfile-deploy
+    build:
+      context: ./frontend
+      dockerfile: ./frontend/Dockerfile-deploy
     ports:
       - "8080:8080"
     volumes:
       - ./frontend:/app
       - node_modules:/app/node_modules/
       - vue_dist:/usr/share/nginx/html
-    depends_on:
-      - backend
