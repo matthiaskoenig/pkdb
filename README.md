@@ -19,11 +19,11 @@ Database and web interface for storing (pharmaco-)kinetics information including
 <img src="./docs/images/data_extraction.png" width="600"/>
 Figure 1: Overview over data extraction and curation work flow.
 
-# Installation
+https://docs.google.com/document/d/1UvfgZCYk0Gs9sJV7fZe80Na8RY2C8MgYqsExkDyYp1U/edit# Installation
 The database with backend and frontend is available as docker container for local installation.
 
 ## Requirements
-- [Docker](https://docs.docker.com/docker-for-mac/install/)
+- [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - Python3.6
 
 ## Build docker container
