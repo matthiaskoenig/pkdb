@@ -5,7 +5,7 @@
 # Execute via setting environment variables
 #     set -a && source .env
 #     set -a && source .env.local (develop)
-#     ./docker-purge-deploy.sh
+#     ./docker-purge.sh
 # -----------------------------------------------------------------------------
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
