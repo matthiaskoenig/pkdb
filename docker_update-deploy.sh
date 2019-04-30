@@ -8,7 +8,7 @@ sudo echo "Docker update"
 
 # shut down all containers (remove images and volumes)
 # remove images and volumes
-docker-compose down --volumes --rmi local
+docker-compose -f docker-compose-deploy.yml down --volumes --rmi local
 
 # make sure containers are removed (if not running)
 docker container rm -f pkdb_setup_root_1 pkdb_migration_1 pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 
