@@ -3,8 +3,6 @@
 """
 sbmlutils pip package
 """
-from __future__ import absolute_import, print_function
-
 import io
 import re
 import os
@@ -21,6 +19,11 @@ def read(*names, **kwargs):
         encoding=kwargs.get('encoding', 'utf8')
     ).read()
 
+
+# parse requirements.txt
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+    required = [item for item in required if item and not item.startswith("#")]
 
 # version from file
 verstrline = read('pkdb_app/_version.py')
@@ -48,6 +51,7 @@ setup(
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Programming Language :: Cython',
         'Programming Language :: Python :: Implementation :: CPython',
         'Topic :: Scientific/Engineering',
@@ -55,68 +59,11 @@ setup(
     ],
     keywords='pharmacokinetics data',
     packages=find_packages(),
-    # package_dir={'': ''},
     package_data={
       '': ['requirements.txt'],
     },
     include_package_data=True,
     zip_safe=False,
-
-    # List run-time dependencies here.  These will be installed by pip when
-    install_requires=[
-        "pip>=19.1",
-
-        # Core
-        "pytz==2018.4",
-        "Django==2.2",
-        "gunicorn==19.8.1",
-        "newrelic==3.2.2.94",
-
-        # For the persistence stores
-        "psycopg2-binary==2.7.4",
-        "dj-database-url==0.5.0",
-
-        # Model Tools
-        "django-model-utils==3.1.2",
-        "django_unique_upload==0.2.1",
-        "django-environ>=0.4.5",
-        "django-allauth>=0.37.1",
-        "django-bootstrap3>=11.0.0",
-
-        # Rest API
-        "djangorestframework==3.8.2",
-        "Markdown==2.6.11",
-        "django-filter==2.0",
-        "django-rest-swagger>=2.2.0",
-        "django-cors-headers==2.4.0",
-        "coreapi>=2.3.3",
-
-        # Developer Tools
-        "ipdb==0.11",
-        "ipython==6.4.0",
-        "mkdocs==0.17.4",
-        "flake8==3.5.0",
-
-        # Testing
-        "mock==2.0.0",
-        "factory-boy==2.11.1",
-        "django-nose==1.4.5",
-        "nose-progressive==1.5.1",
-        "coverage==4.5.1",
-        "pytest-django",
-        "json-logging",
-
-        # Static and Media Storage
-        "django-storages==1.6.6",
-        "boto3==1.7.39",
-
-        "ipykernel>=5.0.0",
-        "pandas>=0.23.4",
-        "numpy>=1.15.4",
-        "scipy>=1.1.0",
-        "matplotlib>=3.0.2",
-
-        "django-extra-fields>=1.0.0",
-    ],
+    install_requires=required,
     extras_require={},
     **setup_kwargs)
