@@ -105,6 +105,7 @@ setup(
         "coverage==4.5.1",
         "pytest-django",
         "json-logging",
+
         # Static and Media Storage
         "django-storages==1.6.6",
         "boto3==1.7.39",
