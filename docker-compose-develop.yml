@@ -1,28 +1,13 @@
-#########################################################
-# PKDB
-#########################################################
-# To start the container stack use
-#   set -a && source .env.local && docker-compose up --build
-# or
-#   set -a && source .env.local && docker-compose up
-# The containers should be rebuild from time to time via
-#   docker-compose up --build
-#
-# The running containers can be observed via
-#   watch docker container ls
-#
-# To get the logs of an individual container use
-#   docker container log <container_id>
-#
-# To rebuild volumes stop all containers and remove the
-# volume
-#   docker-compose down
-#   docker volume rm pkdb_postgres_data
-#
-# https://docs.docker.com/compose/django/
-
-# FIXME: add wait_for_it script
-#########################################################
+# -----------------------------------------------------------------------------
+# DOCKER COMPOSE DEVELOPMENT
+# -----------------------------------------------------------------------------
+# set environment variables on server:
+#     set -a && source .env.local
+# setup or purge
+#     ./docker-purge.sh
+# update
+#     ./docker-update.sh
+# -----------------------------------------------------------------------------
 version: '3'
 
 volumes:
@@ -40,6 +25,23 @@ volumes:
     driver: local
     
 services:
+
+  postgres:
+    restart: always
+    image: postgres:11.1
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  elasticsearch:
+    restart: always
+    image: elasticsearch:6.4.2
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
   backend:
     restart: always
     build: ./backend
@@ -59,49 +61,6 @@ services:
      - postgres
      - elasticsearch
     command: bash -c "/usr/local/bin/python manage.py runserver 0.0.0.0:8000"
-
-  migration:
-    build: ./backend
-    command: bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
-    env_file: .env.local
-    volumes:
-      - ./backend:/code
-      - django_static:/static
-      - django_media:/media
-    links:
-      - postgres:postgres
-    depends_on:
-      - postgres
-      - backend
-
-  setup_root:
-    build: ./backend
-    command: bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
-    env_file: .env.local
-    volumes:
-      - ./backend:/code
-      - django_static:/static
-      - django_media:/media
-    depends_on:
-      - postgres
-      - backend
-      - migration
-
-  postgres:
-    restart: always
-    image: postgres:11.1
-    ports:
-      - "5433:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  elasticsearch:
-    restart: always
-    image: elasticsearch:6.4.2
-    ports:
-      - "9200:9200"
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
 
   frontend:
     restart: always

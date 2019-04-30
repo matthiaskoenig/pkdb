@@ -1,6 +1,7 @@
-##################################
-# Backup of FluTypeDB
+# -----------------------------------------------------------------------------
+# PK-DB database backup
 #
+# TODO: update for docker
 # TODO: compress backup
 # TODO: run via cron job
 # TODO: differential backup
@@ -8,7 +9,8 @@
 #
 # usage:
 #	./db_backup.sh
-##################################
+# -----------------------------------------------------------------------------
+
 echo "-------------------------------"
 echo "PKDB database backup"
 echo "-------------------------------"
@@ -20,7 +22,7 @@ sudo mkdir -p $DIR
 sudo chown -R mkoenig:mkoenig $DIR
 echo "Backup to" $DIR
 
-# backup media
+# backup media & static files
 sudo cp -R /var/git/pkdb/media $DIR
 sudo cp -R /var/git/pkdb/static $DIR
 
