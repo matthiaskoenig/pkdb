@@ -31,7 +31,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
         return instance.name
 
 
-class BaseSerializer(serializers.ModelSerializer):
+class BaseSerializer(WrongKeyValidationSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -40,12 +40,11 @@ class BaseSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
-        data["creator"] = self.context['request'].user
+        data["creator"] = self.context['request'].user.id
         data["units"] = [{"name":unit} for unit in data.get("units",[])]
-        if data.get("choices"):
+        if data.get("choices",[]):
             data["choices"] = [{"name":choice} for choice in data.get("choices",[])]
-        else:
-            data["choices"] = []
+
         return super().to_internal_value(data)
 
     def create(self, validated_data):
@@ -111,6 +110,8 @@ class PharmacokineticTypeSerializer(BaseSerializer):
 
 
 
+
+
 # ----------------------------------
 # Keyword
 # ----------------------------------
@@ -129,7 +130,7 @@ class KeywordSerializer(WrongKeyValidationSerializer):
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
-        data["creator"] = self.context['request'].user
+        data["creator"] = self.context['request'].user.id
         return super().to_internal_value(data)
 
     def to_representation(self, instance):

@@ -45,7 +45,6 @@ django-nose==1.4.5
 nose-progressive==1.5.1
 coverage==4.5.1
 pytest-django>=3.4.4
-json-logging
 
 
 # Static and Media Storage

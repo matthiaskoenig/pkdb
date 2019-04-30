@@ -105,7 +105,6 @@ setup(
         "coverage==4.5.1",
         "pytest-django",
         "json-logging",
-"
         # Static and Media Storage
         "django-storages==1.6.6",
         "boto3==1.7.39",
@@ -115,7 +114,6 @@ setup(
         "numpy>=1.15.4",
         "scipy>=1.1.0",
         "matplotlib>=3.0.2",
-
         "django-extra-fields>=1.0.0",
     ],
     extras_require={},

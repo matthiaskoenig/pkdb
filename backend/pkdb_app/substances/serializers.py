@@ -38,16 +38,19 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms","creator"]
 
     def to_internal_value(self, data):
-        data["creator"] = self.context['request'].user
-        return data
+        data["creator"] = self.context['request'].user.id
+        return super().to_internal_value(data)
 
 
     def create(self, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
-        substance =  Substance.objects.create(**validated_data)
+        #creator_data = validated_data.pop("creator")
+        substance = Substance.objects.create(**validated_data)
         update_or_create_multiple(substance, synonyms_data, "synonyms")
         substance.parents.add(*parents_data)
+        #substance.creator = creator_data
+
         substance.save()
         return substance
 
