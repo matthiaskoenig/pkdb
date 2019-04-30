@@ -1,8 +1,18 @@
-#########################################################
+# -----------------------------------------------------------------------------
 # PK-DB docker deploy
-#########################################################
-# FIXME: add wait_for_it script
-#########################################################
+# -----------------------------------------------------------------------------
+# set environment variables on server:
+#     cp /var/git/pkdb/.env.local /var/git/pkdb/.env
+#
+# rebuild containers:
+#     docker-compose -f docker-compose-deploy.yml up --detach
+#
+# start containers:
+#     docker-compose -f docker-compose-deploy.yml up --detach
+#
+# FIXME: remove migrations and setup root from docker
+# FIXME: handle initial indices better
+# -----------------------------------------------------------------------------
 version: '3'
 
 volumes:
@@ -89,7 +99,7 @@ services:
     restart: always
     image: nginx:latest
     ports:
-      - 80:80
+      - 1234:80
     volumes:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_static:/static
@@ -100,7 +110,6 @@ services:
       - frontend
     links:
       - backend:backend
-      - frontend:frontend
 
   frontend:
     build:
