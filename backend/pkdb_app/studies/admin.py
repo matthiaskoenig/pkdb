@@ -1,5 +1,6 @@
 from django.contrib import admin
-from pkdb_app.studies.models import Study, Keyword, Reference
+from pkdb_app.studies.models import Study, Reference
+from pkdb_app.categorials.models import Keyword
 
 
 @admin.register(Keyword)

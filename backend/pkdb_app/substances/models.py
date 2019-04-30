@@ -3,6 +3,8 @@ Describe Substances
 """
 
 from django.db import models
+from pkdb_app.users.models import User
+
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
 
@@ -37,6 +39,8 @@ class Substance(Sidable, models.Model):
     formula = models.CharField(null=True, max_length=CHAR_MAX_LENGTH)  # chemical formula
 
     parents = models.ManyToManyField("Substance", related_name="children")
+    creator = models.ForeignKey(User, related_name="substances", on_delete=models.CASCADE)
+
 
     # validation rule: check that all labels are in derived and not more(split on `+/()`)
 
@@ -62,6 +66,10 @@ class Substance(Sidable, models.Model):
     @property
     def interventions_normed(self):
         return self.interventions.filter(normed=True)
+
+    @property
+    def creator_username(self):
+        return self.creator.username
 
 
 class SubstanceSynonym(models.Model):

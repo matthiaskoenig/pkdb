@@ -11,28 +11,22 @@ from django.http import JsonResponse
 from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.studies.documents import ReferenceDocument, StudyDocument, KeywordDocument
+from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument
 
 
-from .models import Reference, Study, Keyword
+from .models import Reference, Study
 from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer, KeywordSerializer)
+    StudyElasticSerializer)
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from django.core.exceptions import ObjectDoesNotExist
-
-
-class KeywordViewSet(viewsets.ModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordSerializer
-    permission_classes = (IsAdminUser,)
 
 
 ###################
@@ -122,11 +116,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
-class ElasticKeywordViewSet(DocumentViewSet):
-    document = KeywordDocument
-    pagination_class = CustomPagination
-    serializer_class = KeywordSerializer
-    lookup_field = 'id'
 
 
 @csrf_exempt

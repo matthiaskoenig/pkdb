@@ -7,7 +7,8 @@ Serializers for interventions.
 # ----------------------------------
 # Interventions
 # ----------------------------------
-from pkdb_app.categorials.models import Unit, Choice, CharacteristicType, InterventionType, PharmacokineticType
+from pkdb_app.categorials.models import Unit, Choice, CharacteristicType, InterventionType, PharmacokineticType, Keyword
+from pkdb_app.serializers import WrongKeyValidationSerializer
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework import serializers
 
@@ -29,9 +30,17 @@ class ChoiceSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return instance.name
 
+
 class BaseSerializer(serializers.ModelSerializer):
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["creator"] = instance.creator.username
+        return data
+
     def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        data["creator"] = self.context['request'].user
         data["units"] = [{"name":unit} for unit in data.get("units",[])]
         if data.get("choices"):
             data["choices"] = [{"name":choice} for choice in data.get("choices",[])]
@@ -79,11 +88,9 @@ class CharacteristicTypeSerializer(BaseSerializer):
     choices = ChoiceSerializer(many=True)
     units = UnitSerializer(many=True)
 
-
     class Meta:
         model = CharacteristicType
-        fields = ["key","units","category","dtype","choices","url_slug"]
-
+        fields = ["key","units","category","dtype","choices","url_slug","creator"]
 
 
 class InterventionTypeSerializer(BaseSerializer):
@@ -92,7 +99,7 @@ class InterventionTypeSerializer(BaseSerializer):
 
     class Meta:
         model = InterventionType
-        fields = ["key","units","category","dtype","choices","url_slug"]
+        fields = ["key","units","category","dtype","choices","url_slug","creator"]
 
 
 class PharmacokineticTypeSerializer(BaseSerializer):
@@ -100,15 +107,38 @@ class PharmacokineticTypeSerializer(BaseSerializer):
 
     class Meta:
         model = PharmacokineticType
-        fields = ["key","units","description","url_slug"]
+        fields = ["key","units","description","url_slug","creator"]
 
 
 
+# ----------------------------------
+# Keyword
+# ----------------------------------
+
+
+class KeywordSerializer(WrongKeyValidationSerializer):
+    """ Keyword. """
+
+    class Meta:
+        model = Keyword
+        fields = ["name","creator"]
+
+    def create(self, validated_data):
+        keyword, created = Keyword.objects.update_or_create(**validated_data)
+        return keyword
+
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        data["creator"] = self.context['request'].user
+        return super().to_internal_value(data)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["creator"] = instance.creator.username
+        return data
 
 
 ###############################################################################################
 # Elastic Serializer
 ###############################################################################################
-
-
 

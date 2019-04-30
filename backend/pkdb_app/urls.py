@@ -4,7 +4,8 @@ Django URLs
 from django.urls import path, include
 from django.conf.urls import url
 from django.contrib import admin
-from pkdb_app.categorials.views import PharmacokineticTypeViewSet, CharacteristicTypeViewSet, InterventionTypeViewSet
+from pkdb_app.categorials.views import PharmacokineticTypeViewSet, CharacteristicTypeViewSet, InterventionTypeViewSet, \
+    KeywordViewSet, ElasticKeywordViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
     TimecourseOptionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
@@ -26,7 +27,7 @@ from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-    ElasticReferenceViewSet, ElasticStudyViewSet, KeywordViewSet, ElasticKeywordViewSet, update_index)
+    ElasticReferenceViewSet, ElasticStudyViewSet, update_index)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
 

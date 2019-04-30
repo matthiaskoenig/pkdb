@@ -3,7 +3,8 @@ from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settin
     ObjectField
 from pkdb_app.interventions.models import Substance,  Intervention
 from pkdb_app.outputs.models import Timecourse, Output
-from pkdb_app.studies.models import Reference, Study, Keyword
+from pkdb_app.studies.models import Reference, Study
+from pkdb_app.categorials.models import Keyword
 
 # Elastic Reference
 from pkdb_app.subjects.models import  Group, Individual
@@ -240,19 +241,3 @@ class StudyDocument(DocType):
 
     # Elastic Study
 
-
-keyword_index = Index("keywords")
-keyword_index.settings(**elastic_settings)
-
-
-@keyword_index.doc_type
-class KeywordDocument(DocType):
-    name = string_field(attr="name")
-
-    class Meta(object):
-        model = Keyword
-        # Ignore auto updating of Elasticsearch when a model is saved
-        # or deleted:
-        ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
-        auto_refresh = False

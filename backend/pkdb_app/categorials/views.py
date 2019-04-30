@@ -1,6 +1,9 @@
-from pkdb_app.categorials.models import InterventionType, CharacteristicType, PharmacokineticType
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from pkdb_app.categorials.documents import KeywordDocument
+from pkdb_app.categorials.models import InterventionType, CharacteristicType, PharmacokineticType, Keyword
 from pkdb_app.categorials.serializers import InterventionTypeSerializer, CharacteristicTypeSerializer, \
-    PharmacokineticTypeSerializer
+    PharmacokineticTypeSerializer, KeywordSerializer
+from pkdb_app.pagination import CustomPagination
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
@@ -25,3 +28,16 @@ class PharmacokineticTypeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminUser,)
     lookup_field = "url_slug"
 
+
+class KeywordViewSet(viewsets.ModelViewSet):
+    queryset = Keyword.objects.all()
+    serializer_class = KeywordSerializer
+    permission_classes = (IsAdminUser,)
+
+
+# Elastic Views
+class ElasticKeywordViewSet(DocumentViewSet):
+    document = KeywordDocument
+    pagination_class = CustomPagination
+    serializer_class = KeywordSerializer
+    lookup_field = 'id'

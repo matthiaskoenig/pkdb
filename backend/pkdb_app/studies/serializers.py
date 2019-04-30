@@ -17,28 +17,9 @@ from ..interventions.serializers import InterventionSetSerializer, InterventionS
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
      GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
-from .models import Reference, Author, Study, Keyword, Rating
+from .models import Reference, Author, Study, Rating
+from pkdb_app.categorials.models import Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
-
-
-# ----------------------------------
-# Keyword
-# ----------------------------------
-class KeywordSerializer(WrongKeyValidationSerializer):
-    """ Keyword. """
-
-    class Meta:
-        model = Keyword
-        fields = ["name"]
-
-    def create(self, validated_data):
-        keyword, created = Keyword.objects.update_or_create(**validated_data)
-        return keyword
-
-    def to_internal_value(self, data):
-        self.validate_wrong_keys(data)
-        return super().to_internal_value(data)
-
 
 # ----------------------------------
 # Study / Reference
@@ -443,11 +424,6 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
         rep["pdf"] = request.build_absolute_uri(instance.pdf)
 
         return rep
-
-
-
-
-
 
 
 class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):

@@ -8,6 +8,8 @@ substance_index.settings(**elastic_settings)
 class SubstanceDocument(DocType):
     sid = string_field('sid')
     url_slug = string_field('url_slug')
+    creator = string_field('creator_username')
+
     name = string_field('name')
     mass = fields.FloatField()
     charge = fields.FloatField()

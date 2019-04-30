@@ -2,13 +2,10 @@
 Django model for Study.
 """
 from django.db import models
-from pkdb_app.outputs.models import OutputSet
+from ..categorials.models import Keyword
+from ..outputs.models import OutputSet
 
-from ..interventions.models import (
-    InterventionSet,
-    DataFile,
-    Substance,
-)
+from ..interventions.models import InterventionSet, DataFile, Substance
 from ..storage import OverwriteStorage
 from ..subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
@@ -33,10 +30,6 @@ STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
 # ---------------------------------------------------
 #
 # ---------------------------------------------------
-
-class Keyword(models.Model):
-    """This class describes the keywords / tags of a study."""
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
 
 class Author(models.Model):

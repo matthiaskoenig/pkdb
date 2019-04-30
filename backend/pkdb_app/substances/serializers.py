@@ -32,9 +32,15 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
     parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.order_by('name'), required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
+
     class Meta:
         model = Substance
-        fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms"]
+        fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms","creator"]
+
+    def to_internal_value(self, data):
+        data["creator"] = self.context['request'].user
+        return data
+
 
     def create(self, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])
@@ -66,6 +72,7 @@ class SubstanceStatisticsSerializer(serializers.ModelSerializer):
     outputs = serializers.PrimaryKeyRelatedField(many=True, source="outputs_normed", read_only=True)
     outputs_calculated = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_normed",read_only=True)
+
 
     class Meta:
         model = Substance

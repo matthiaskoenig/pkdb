@@ -7,6 +7,7 @@ import pint
 from pint import UndefinedUnitError
 
 from django.db import models
+from pkdb_app.users.models import User
 from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices
 
 ureg = pint.UnitRegistry()
@@ -169,19 +170,21 @@ class CharacteristicChoiceType(AbstractType):
 
 
 class CharacteristicType(CharacteristicChoiceType):
+    creator = models.ForeignKey(User, related_name="characteristic_types", on_delete=models.CASCADE)
     units = models.ManyToManyField(Unit, related_name="characteristic_types")
     choices = models.ManyToManyField(Choice, related_name="characteristic_types")
 
 
 class InterventionType(CharacteristicChoiceType):
+    creator = models.ForeignKey(User, related_name="intervention_types", on_delete=models.CASCADE)
     units = models.ManyToManyField(Unit, related_name="intervention_types")
     choices = models.ManyToManyField(Choice, related_name="intervention_types")
 
 
 
 class PharmacokineticType(AbstractType):
+    creator = models.ForeignKey(User, related_name="pharmacokinetic_types", on_delete=models.CASCADE)
     units = models.ManyToManyField(Unit, related_name="pharmacokinetic_types")
-
     description = models.TextField(blank=True, null=True)
 
     def _asdict(self):
@@ -190,6 +193,7 @@ class PharmacokineticType(AbstractType):
             "description": self.description,
             "units": self.n_units,
             "valid unit dimensions":self.valid_dimensions}
+
 
 
 def validate_categorials(data):
@@ -222,3 +226,9 @@ def validate_pktypes(data):
         time_unit = data.get("time_unit", None)
         if time_unit:
             pktype.validate_time_unit(time_unit)
+
+
+class Keyword(models.Model):
+    """This class describes the keywords / tags of a study."""
+    creator = models.ForeignKey(User, related_name="keywords", on_delete=models.CASCADE)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
