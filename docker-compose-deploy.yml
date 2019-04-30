@@ -97,14 +97,14 @@ services:
 
   nginx:
     restart: always
-    image: nginx:latest
+    image: nginx:1.15.12
     ports:
-      - 1234:80
+      - 9999:80
     volumes:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_static:/static
       - django_media:/media
-      - vue_dist:/usr/share/nginx/html
+      - vue_dist:/vue
     depends_on:
       - backend
       - frontend
@@ -119,4 +119,4 @@ services:
     volumes:
       - ./frontend:/app
       - node_modules:/app/node_modules/
-      - vue_dist:/usr/share/nginx/html
+      - vue_dist:/vue
