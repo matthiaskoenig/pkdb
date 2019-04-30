@@ -41,15 +41,17 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         data["creator"] = self.context['request'].user.id
         return super().to_internal_value(data)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["creator"] = instance.creator.username
+        return data
 
     def create(self, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
-        #creator_data = validated_data.pop("creator")
         substance = Substance.objects.create(**validated_data)
         update_or_create_multiple(substance, synonyms_data, "synonyms")
         substance.parents.add(*parents_data)
-        #substance.creator = creator_data
 
         substance.save()
         return substance

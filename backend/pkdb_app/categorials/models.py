@@ -231,4 +231,4 @@ def validate_pktypes(data):
 class Keyword(models.Model):
     """This class describes the keywords / tags of a study."""
     creator = models.ForeignKey(User, related_name="keywords", on_delete=models.CASCADE)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)

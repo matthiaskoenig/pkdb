@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from pkdb_app.users.permissions import IsAdminOrCreator
 from rest_framework import viewsets
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from .documents import SubstanceDocument
@@ -18,7 +19,7 @@ class SubstanceViewSet(viewsets.ModelViewSet):
     queryset = Substance.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = SubstanceSerializer
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
 
 class SubstanceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):

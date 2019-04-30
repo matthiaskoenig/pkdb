@@ -4,6 +4,7 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
+from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
@@ -45,7 +46,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
     filter_fields = ("sid",)
     # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminOrCreatorOrCurator,)
 
 
 class StudyViewSet(viewsets.ModelViewSet):
@@ -57,7 +58,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("sid",)
     search_fields = filter_fields
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminOrCreatorOrCurator,)
 
     @staticmethod
     def group_validation(request):

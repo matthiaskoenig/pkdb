@@ -45,6 +45,9 @@ class BaseSerializer(WrongKeyValidationSerializer):
         if data.get("choices",[]):
             data["choices"] = [{"name":choice} for choice in data.get("choices",[])]
 
+        if self.Meta.model != PharmacokineticType:
+            data["choices"] = []
+
         return super().to_internal_value(data)
 
     def create(self, validated_data):
