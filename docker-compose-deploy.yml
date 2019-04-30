@@ -94,7 +94,7 @@ services:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_static:/static
       - django_media:/media
-      - vue_dist:/usr/share/nginx/html
+      - vue_dist:/usr/share/nginx/vuehtml
     depends_on:
       - backend
       - frontend
@@ -106,9 +106,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile-deploy
-    ports:
-      - "8080:8080"
     volumes:
       - ./frontend:/app
       - node_modules:/app/node_modules/
-      - vue_dist:/usr/share/nginx/html
+      - vue_dist:/usr/share/nginx/vuehtml
