@@ -109,19 +109,13 @@ setup(
         "django-storages==1.6.6",
         "boto3==1.7.39",
 
-        "biopython>=1.72",
         "ipykernel>=5.0.0",
         "pandas>=0.23.4",
         "numpy>=1.15.4",
         "scipy>=1.1.0",
         "matplotlib>=3.0.2",
 
-        "jsonschema>=2.6.0",
         "django-extra-fields>=1.0.0",
-        "PyPDF2>=1.26.0",
-        "watchdog>=0.9.0",
-        "requests>=2.19.1",
-        "coloredlogs>=10.0",
     ],
     extras_require={},
     **setup_kwargs)

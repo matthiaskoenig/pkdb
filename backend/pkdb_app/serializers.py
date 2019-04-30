@@ -419,6 +419,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     raise serializers.ValidationError({"groupby":"groupby has to be a string"})
                 groupby = [v.strip() for v in groupby.split("&")]
                 array_dicts = []
+                try:
+                    df[groupby]
+                except KeyError:
+                    raise serializers.ValidationError({"groupby":f"keys <{groupby}> used for groupby are missing in source file <{DataFile.objects.get(pk=source).file.name}>. To group by more then one column you can use the & operator e.g. 'col1 & col2 & col3'"})
 
                 for group_name, group_df in df.groupby(groupby):
                     array_dict = copy.deepcopy(template)
