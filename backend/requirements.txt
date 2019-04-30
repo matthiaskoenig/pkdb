@@ -1,19 +1,20 @@
 pip>=19.1
-# Core
+
+# core
 pytz==2018.4
 Django==2.2
 gunicorn==19.8.1
 newrelic==3.2.2.94
 
-# For the persistence stores
+# persistance stores
 psycopg2-binary==2.7.4
 dj-database-url==0.5.0
 
 # Model Tools
 django-model-utils==3.1.2
 django_unique_upload==0.2.1
+django-environ>=0.4.5
 django-allauth>=0.37.1
-django-bootstrap3>=11.0.0
 django-bootstrap3>=11.0.0
 
 # Rest API
@@ -25,30 +26,14 @@ django-cors-headers==2.4.0
 coreapi>=2.3.3
 
 # Elastic Search
-# >=6.0,<7.0 see https://github.com/sabricot/django-elasticsearch-dsl/issues/115
+# >=6.0<7.0 see https://github.com/sabricot/django-elasticsearch-dsl/issues/115
 elasticsearch-dsl==6.1.0
 django-elasticsearch-dsl>=0.5.1
 django-elasticsearch-dsl-drf>=0.16.3
 
-
-# Developer Tools
-ipdb==0.11
-ipython==6.4.0
-mkdocs==0.17.4
-flake8==3.5.0
-
-
-# Testing
-mock==2.0.0
-factory-boy==2.11.1
-django-nose==1.4.5
-nose-progressive==1.5.1
-coverage==4.5.1
-pytest-django>=3.4.4
-
-
 # Static and Media Storage
 django-storages==1.6.6
+django-extra-fields>=1.0.0
 boto3==1.7.39
 
 ipykernel>=5.0.0
@@ -57,12 +42,21 @@ numpy>=1.15.4
 scipy>=1.1.0
 matplotlib>=3.0.2
 
-django-extra-fields>=1.0.0
-
-#units
+# units
 pint
 json-logging
 
+# Developer Tools
+ipdb==0.11
+ipython==6.4.0
+mkdocs==0.17.4
+flake8==3.5.0
 
-
-
+# Testing
+mock==2.0.0
+factory-boy==2.11.1
+django-nose==1.4.5
+nose-progressive==1.5.1
+coverage==4.5.1
+pytest-django>=3.4.4
+json-logging

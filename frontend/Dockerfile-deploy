@@ -10,3 +10,6 @@ RUN npm run build
 FROM alpine:3.9 as production-stage
 RUN mkdir -p /usr/share/nginx/html
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+RUN chmod -R 755 /usr/share/nginx/html
+
+CMD ["tail", "-f", "/dev/null"]
