@@ -9,6 +9,8 @@
 # -----------------------------------------------------------------------------
 : "${PKDB_DOCKER_COMPOSE_YAML:?The PKDB environment variable must be exported.}"
 
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
 echo "-------------------------------"
 echo "Backup PKDB docker volumes"
 echo "-------------------------------"
@@ -22,27 +24,18 @@ echo "Backup to" $BACKUP_DIR
 
 
 echo *** backup django volumes***
-# django_media
-#docker run -it --rm -v pkdb_django_media:/volume -v /tmp:/backup pkdb_backend \
-#    tar -cvzf $BACKUP_DIR/django_media.tar.gz -C /volume ./
-
-docker run --rm --volumes-from pkdb_django_media -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/django_media.tar.gz /
-
-# django_static
-#docker run -it --rm -v pkdb_django_static:/volume -v /tmp:/backup pkdb_backend \
-#    tar -cvzf $BACKUP_DIR/django_static.tar.gz -C /volume ./
-
-
-# elasticsearch_data
-
-# postgres_data
-
-# vue_dist
+cd $BACKUP_DIR
+docker run --rm --volumes-from pkdb_backend_1 -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/django_media.tar.gz /media
+docker run --rm --volumes-from pkdb_backend_1 -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/django_static.tar.gz /static
+docker run --rm --volumes-from pkdb_postgres_1 -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/postgres_data.tar.gz /var/lib/postgresql/data
+docker run --rm --volumes-from pkdb_elasticsearch_1 -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/elasticsearch_data.tar.gz /usr/share/elasticsearch/data
+docker run --rm --volumes-from pkdb_frontend_1 -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/vue_dist.tar.gz /vue
 
 
 echo "----------------------------"
 echo "Dump PKDB database"
 echo "----------------------------"
-# FIXME:
 # sudo -u postgres pg_dump pkdb > $DIR/pkdb_dump.psql
+docker exec -u $PKDB_DB_USER pkdb_postgres1 pg_dump -Fc $PKDB_DB_NAME > db.dump
 
+cd $DIR
