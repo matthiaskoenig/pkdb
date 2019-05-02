@@ -86,8 +86,8 @@ class BaseSerializer(WrongKeyValidationSerializer):
 
 
 class CharacteristicTypeSerializer(BaseSerializer):
-    choices = ChoiceSerializer(many=True)
-    units = UnitSerializer(many=True)
+    choices = ChoiceSerializer(many=True, allow_null=True)
+    units = UnitSerializer(many=True, allow_null=True)
 
     class Meta:
         model = CharacteristicType
@@ -102,7 +102,7 @@ class CharacteristicTypeSerializer(BaseSerializer):
 
 class InterventionTypeSerializer(BaseSerializer):
     choices = ChoiceSerializer(many=True, allow_null=True)
-    units = UnitSerializer(many=True)
+    units = UnitSerializer(many=True,allow_null=True)
 
     class Meta:
         model = InterventionType
@@ -117,7 +117,7 @@ class InterventionTypeSerializer(BaseSerializer):
 
 
 class PharmacokineticTypeSerializer(BaseSerializer):
-    units = UnitSerializer(many=True)
+    units = UnitSerializer(many=True,allow_null=True)
 
     class Meta:
         model = PharmacokineticType

@@ -172,7 +172,7 @@ class CharacteristicChoiceType(AbstractType):
 class CharacteristicType(CharacteristicChoiceType):
     creator = models.ForeignKey(User, related_name="characteristic_types", on_delete=models.CASCADE)
     units = models.ManyToManyField(Unit, related_name="characteristic_types")
-    choices = models.ManyToManyField(Choice, related_name="characteristic_types")
+    choices = models.ManyToManyField(Choice, related_name="characteristic_types" )
 
 
 class InterventionType(CharacteristicChoiceType):
