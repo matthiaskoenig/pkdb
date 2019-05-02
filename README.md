@@ -26,64 +26,58 @@ The database with backend and frontend is available as docker container for loca
 - [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - Python3.6
 
-## Build docker container
-System settings for elasticsearch:
+## Setup development server
+For elasticsearch to work the following system settings are required
 ```
 sudo sysctl -w vm.max_map_count=262144
 ```
-To set the value permanently change the value in 
+To set `vm.max_map_count` persistently change the value in 
 ```
 /etc/sysctl.conf
 ```
 
-To build the dev server for local development:
+To setup the development server for local development (backend & frontend):
 ```bash
+# clone or pull the latest code
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
-set -a && source .env.local && docker-compose up
+git pull
+
+# set environment variables
+set -a && source .env.local
+ 
+# create/rebuild all docker containers
+./docker-purge.sh
 ```
+This setups a clean database and clean volumes.
+
+## Update development server
 To update an existing version use
 ```bash
-set -a && source .env.local && ./docker_update.sh
-set -a && source .env.local && docker-compose -f docker-compose-deploy.yml up
+set -a && source .env.local
+./docker-update.sh
+```
 
-To see the running containers use
+The database index can be rebuild via
+```bash
+./elastic-rebuild-index.sh
+```
+
+## Interact with containers
+To check the running containers use
 ```
 watch docker container ls
 ```
-To get access to the container logs use `docker container logs`, e.g., to see the
+
+To get an interactive container mode use
+```
+./docker-interactive.sh
+```
+
+To get access to individual container logs use `docker container logs`, e.g., to see the
 django backend logs use
 ```
 docker container logs pkdb_backend_1 
-```
-
-## Python (Virtual Environment)
-Setting up a virtual environment to interact with the data base via python
-```
-cd backend
-mkvirtualenv pkdb --python=python3.6
-(pkdb) pip install -r requirements.txt
-(pkdb) pip install -e .
-```
-add your virtual environment to jupyter kernels:
-```
-(pkdb) ipython kernel install --user --name=pkdb
-
-## Fill database
-The database can be filled via the `fill_database.sh` script.
-```
-(pkdb) set -a && source .env.local && ./fill_database.sh
-docker-compose run --rm backend ./manage.py search_index --rebuild -f
-```
-
-## Accessing backend
-PKDB can than be accessed via the locally running server at  
-```
-http://localhost:8000/api/v1/
-```
-The API documentation is available via
-```
-http://localhost:1234/api
 ```
 
 To run commands inside the docker container use
@@ -95,17 +89,13 @@ or to run migrations
 docker-compose run --rm backend python manage.py makemigrations
 ```
 
-
-``` 
-
-## Vue Frontend 
-Documentation of the `vue.js` frontend is available in
-./pkdb_client/README.md
-The frontend is running on
+## REST services
+PKDB provides a REST API which allows simple interaction with the database.
+An overview over the REST endpoints is available from
 ```
-localhost
+http://localhost:8000/api/v1/
+```
 
-## Elastic Search 
 Elastic Search engine is running on `localhost:9200` but is also reachable via django views.
 General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
@@ -121,15 +111,29 @@ http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
 http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
 ```
 
-Suggest example:
+Suggestion example:
 ```
 http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
-rebuild index:
+## Fill database (TODO)
+
+Setting up a virtual environment to interact with the data base via python
 ```
-docker-compose run --rm backend ./manage.py search_index --rebuild -f
+# FIXME: update with latest version and package
+mkvirtualenv pkdb --python=python3.6
+(pkdb_data) pip install pkdb_data
 ```
+add your virtual environment to jupyter kernels:
+```
+(pkdb) ipython kernel install --user --name=pkdb_data
+```
+
+The database can be filled via ...
+```
+# FIXME: update description
+```
+
  
 ## Read 
-&copy; 2017-2018 Jan Grzegorzewski & Matthias König.
+&copy; 2017-2019 Jan Grzegorzewski & Matthias König.

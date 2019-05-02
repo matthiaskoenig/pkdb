@@ -11,12 +11,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ------------------------------------------------------------------------------------------------------------------
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ['PKDB_SECRET_KEY']
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DEFAULT_PASSWORD = os.environ['DEFAULT_PASSWORD']
+DEFAULT_PASSWORD = os.environ['PKDB_DEFAULT_PASSWORD']
 
-API_BASE = os.environ['API_BASE']
+API_BASE = os.environ['PKDB_API_BASE']
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
 AUTHENTICATION_BACKENDS = (
@@ -269,23 +269,23 @@ SWAGGER_SETTINGS = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ['DB_NAME'],
-        "USER": os.environ['DB_USER'],
-        "HOST": os.environ['DB_SERVICE'],
-        "PASSWORD": os.environ['DB_PASSWORD'],
-        "PORT": os.environ['DB_PORT'],
+        "NAME": os.environ['PKDB_DB_NAME'],
+        "USER": os.environ['PKDB_DB_USER'],
+        "HOST": os.environ['PKDB_DB_SERVICE'],
+        "PASSWORD": os.environ['PKDB_DB_PASSWORD'],
+        "PORT": os.environ['PKDB_DB_PORT'],
     }
 }
 
-DJANGO_CONFIGURATION = os.environ['DJANGO_CONFIGURATION']
+DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
 # ------------------------------
 # LOCAL
 # ------------------------------
 if DJANGO_CONFIGURATION == 'local':
     DEBUG = True
-    LOGIN_URL = "http://172.30.10.11:8080/#/account"
-    LOGIN_REDIRECT_URL = "http://172.30.10.11:8080/#/account"
-    ACCOUNT_LOGOUT_REDIRECT_URL = "http://172.30.10.11:8080/#/account"
+    LOGIN_URL = API_BASE + "/#/account"
+    LOGIN_REDIRECT_URL = API_BASE + "/#/account"
+    ACCOUNT_LOGOUT_REDIRECT_URL = API_BASE + "/#/account"
 
     # Mail
     EMAIL_HOST = "localhost"
@@ -321,13 +321,15 @@ elif DJANGO_CONFIGURATION == 'production':
     # EMAIL_USE_TLS = True
     EMAIL_USE_TLS = False
     EMAIL_PORT = 25
-    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+    EMAIL_HOST_USER = os.environ['PKDB_EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = os.environ['PKDB_EMAIL_HOST_PASSWORD']
 
     if not EMAIL_HOST_USER:
-        raise ValueError("EMAIL_HOST_USER could not be read, export the 'EMAIL_HOST_USER' environment variable.")
+        raise ValueError("PKDB_EMAIL_HOST_USER could not be read, export the "
+                         "'PKDB_EMAIL_HOST_USER' environment variable.")
     if not EMAIL_HOST_PASSWORD:
-        raise ValueError("EMAIL_HOST_PASSWORD could not be read, export the 'EMAIL_HOST_PASSWORD' environment variable.")
+        raise ValueError("PKDB_EMAIL_HOST_PASSWORD could not be read, export the "
+                         "'PKDB_EMAIL_HOST_PASSWORD' environment variable.")
 
     # Elastic Search
     ELASTICSEARCH_DSL = {
@@ -336,8 +338,10 @@ elif DJANGO_CONFIGURATION == 'production':
         },
     }
 
-    from django.core.mail import send_mail
-    send_mail('Test mail production', 'Here is the message.', 'from@example.com', ['konigmatt@googlemail.com'], fail_silently=False)
+    # FIXME: remove after email testing
+    # from django.core.mail import send_mail
+    # send_mail('Test mail production', 'Here is the message.',
+    # 'from@example.com', ['konigmatt@googlemail.com'], fail_silently=False)
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts

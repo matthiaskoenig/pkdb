@@ -6,21 +6,20 @@ services:
 python:
   - "3.6"
 env:
-  DJANGO_CONFIGURATION=local
-  API_BASE=http://0.0.0.0:8000
-  # API_BASE=http://localhost:8000
-  SECRET_KEY=cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
-  DEFAULT_PASSWORD=pkdb
+  PKDB_DJANGO_CONFIGURATION=local
+  PKDB_API_BASE=http://0.0.0.0:8000
+  PKDB_SECRET_KEY=cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
+  PKDB_DEFAULT_PASSWORD=pkdb
 
-  DB_NAME=postgres
-  DB_PASSWORD=postgres
-  DB_SERVICE=postgres
-  DB_USER=postgres
-  DB_URL=localhost
-  DB_PORT=5432
+  PKDB_DB_NAME=postgres
+  PKDB_DB_PASSWORD=postgres
+  PKDB_DB_SERVICE=postgres
+  PKDB_DB_USER=postgres
+  PKDB_DB_URL=localhost
+  PKDB_DB_PORT=5432
 
-  EMAIL_HOST_USER=
-  EMAIL_HOST_PASSWORD=
+  PKDB_EMAIL_HOST_USER=
+  PKDB_EMAIL_HOST_PASSWORD=
 
 before_script:
   - docker-compose build

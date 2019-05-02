@@ -19,7 +19,7 @@ then
 fi
 
 # shut down all containers (remove images and volumes)
-docker-compose -f $DOCKER_COMPOSE_YAML down --volumes --rmi local
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML down --volumes --rmi local
 
 # make sure containers are removed (if not running)
 docker container rm -f pkdb_setup_root_1 pkdb_migration_1 pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 pkdb_nginx_1
@@ -51,16 +51,16 @@ sudo rm -rf media
 sudo rm -rf static
 
 # build and start containers
-docker-compose -f $DOCKER_COMPOSE_YAML up --detach
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 
 echo "***Make migrations & collect static ***"
-docker-compose -f $DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
 
 echo "*** Setup admin user ***"
-docker-compose -f $DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${PKDB_DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
 
 echo ""*** Build elasticsearch index ***"
-docker-compose -f $DOCKER_COMPOSE_YAML run --rm backend ./manage.py search_index --rebuild -f
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py search_index --rebuild -f
 
 echo ""*** Running containers ***"
 docker container ls
