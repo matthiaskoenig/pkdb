@@ -7,6 +7,7 @@
 # usage:
 #	./backup-deploy.sh
 # -----------------------------------------------------------------------------
+: "${PKDB_DOCKER_COMPOSE_YAML:?The PKDB environment variable must be exported.}"
 
 echo "-------------------------------"
 echo "Backup PKDB docker volumes"
