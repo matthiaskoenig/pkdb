@@ -23,12 +23,14 @@ echo "Backup to" $BACKUP_DIR
 
 echo *** backup django volumes***
 # django_media
-docker run -it --rm -v pkdb_django_media:/volume -v /tmp:/backup pkdb_backend \
-    tar -cvzf $BACKUP_DIR/django_media.tar.gz -C /volume ./
+#docker run -it --rm -v pkdb_django_media:/volume -v /tmp:/backup pkdb_backend \
+#    tar -cvzf $BACKUP_DIR/django_media.tar.gz -C /volume ./
+
+docker run --rm --volumes-from pkdb_django_media -v $BACKUP_DIR:/backup ubuntu tar cvzf /backup/django_media.tar.gz /
 
 # django_static
-docker run -it --rm -v pkdb_django_static:/volume -v /tmp:/backup pkdb_backend \
-    tar -cvzf $BACKUP_DIR/django_static.tar.gz -C /volume ./
+#docker run -it --rm -v pkdb_django_static:/volume -v /tmp:/backup pkdb_backend \
+#    tar -cvzf $BACKUP_DIR/django_static.tar.gz -C /volume ./
 
 
 # elasticsearch_data
