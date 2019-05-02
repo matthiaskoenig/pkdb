@@ -18,6 +18,7 @@ class UnitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unit
         fields = ["name"]
+
     def to_representation(self, instance):
         return instance.name
 
@@ -42,11 +43,6 @@ class BaseSerializer(WrongKeyValidationSerializer):
         self.validate_wrong_keys(data)
         data["creator"] = self.context['request'].user.id
         data["units"] = [{"name":unit} for unit in data.get("units",[])]
-        if data.get("choices",[]):
-            data["choices"] = [{"name":choice} for choice in data.get("choices",[])]
-
-        if self.Meta.model != PharmacokineticType:
-            data["choices"] = []
 
         return super().to_internal_value(data)
 
@@ -66,8 +62,10 @@ class BaseSerializer(WrongKeyValidationSerializer):
         return instance
 
     def update(self, instance, validated_data):
+        print(validated_data)
         units_data = validated_data.pop("units", [])
         choices_data = validated_data.pop("choices", [])
+
 
         for name, value in validated_data.items():
             setattr(instance, name, value)
@@ -77,9 +75,10 @@ class BaseSerializer(WrongKeyValidationSerializer):
             instance.choices.clear()
 
         update_or_create_multiple(instance, units_data, "units")
+
         if choices_data:
+            print(choices_data)
             update_or_create_multiple(instance, choices_data, "choices")
-            instance.save()
 
         instance.save()
         return instance
@@ -94,6 +93,12 @@ class CharacteristicTypeSerializer(BaseSerializer):
         model = CharacteristicType
         fields = ["key","units","category","dtype","choices","url_slug","creator"]
 
+    def to_internal_value(self, data):
+        data["choices"] = data.get("choices", [])
+
+        if data["choices"]:
+            data["choices"] = [{"name": choice} for choice in data["choices"]]
+        return super().to_internal_value(data)
 
 class InterventionTypeSerializer(BaseSerializer):
     choices = ChoiceSerializer(many=True, allow_null=True)
@@ -102,6 +107,13 @@ class InterventionTypeSerializer(BaseSerializer):
     class Meta:
         model = InterventionType
         fields = ["key","units","category","dtype","choices","url_slug","creator"]
+
+    def to_internal_value(self, data):
+        data["choices"] = data.get("choices", [])
+
+        if data["choices"]:
+            data["choices"] = [{"name": choice} for choice in data["choices"]]
+        return super().to_internal_value(data)
 
 
 class PharmacokineticTypeSerializer(BaseSerializer):

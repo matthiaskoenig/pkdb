@@ -11,7 +11,4 @@ FROM alpine:3.9 as production-stage
 RUN mkdir -p /vue
 COPY --from=build-stage /app/dist /vue
 
-# RUN chown -R "$USER":www-data /usr/share/nginx/html
-# RUN chmod -R 755 /usr/share/nginx/html
-
 CMD ["tail", "-f", "/dev/null"]

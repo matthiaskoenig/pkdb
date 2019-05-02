@@ -45,6 +45,11 @@ class IsAdminOrCreatorOrCurator(permissions.BasePermission):
             allowed_user = (user == obj.creator) or (user in obj.curators.all())
         except AttributeError:
             # for reference model
-            allowed_user = (user == obj.study.first().creator) or (user in obj.study.first().curators.all())
+            if obj.study.first():
+                allowed_user = (user == obj.study.first().creator) or (user in obj.study.first().curators.all())
+            else:
+                allowed_user = True
+
+
 
         return user.is_staff or allowed_user
