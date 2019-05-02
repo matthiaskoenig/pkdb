@@ -16,6 +16,7 @@ __pycache__/
 # Environments
 # ----------------------------
 .env
+frontend/.env.production
 
 # ----------------------------
 # Distribution / packaging

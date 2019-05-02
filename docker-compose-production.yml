@@ -77,7 +77,7 @@ services:
     restart: always
     image: nginx:1.16.0
     ports:
-      - 9999:80
+      - 80:80
     volumes:
       - ./nginx/config/conf.d:/etc/nginx/conf.d
       - django_static:/static
