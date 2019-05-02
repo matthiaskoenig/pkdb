@@ -1,9 +1,7 @@
 # -----------------------------------------------------------------------------
 # PK-DB backup
 # -----------------------------------------------------------------------------
-# TODO: compress backup
 # TODO: run via cron job
-# TODO: differential backup
 # TODO: check that backup can be restored
 #
 # usage:
@@ -24,11 +22,14 @@ echo "Backup to" $BACKUP_DIR
 
 echo *** backup django volumes***
 # django_media
-docker run -it --rm -v pkdb_django_media:/volume -v /tmp:/backup pkdb_backup \
+docker run -it --rm -v pkdb_django_media:/volume -v /tmp:/backup pkdb_backend \
     tar -cvzf $BACKUP_DIR/django_media.tar.gz -C /volume ./
 
 # django_static
-# FIXME:
+docker run -it --rm -v pkdb_django_static:/volume -v /tmp:/backup pkdb_backend \
+    tar -cvzf $BACKUP_DIR/django_static.tar.gz -C /volume ./
+
+
 # elasticsearch_data
 
 # postgres_data
