@@ -54,6 +54,8 @@ This setups a clean database and clean volumes.
 ## Update development server
 To update an existing version use
 ```bash
+cd pkdb
+git pull
 set -a && source .env.local
 ./docker-update.sh
 ```

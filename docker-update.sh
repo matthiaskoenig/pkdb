@@ -29,5 +29,5 @@ docker system prune --force
 # build and start containers
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --build --detach
 
-echo ""*** Running containers ***"
+echo "*** Running containers ***"
 docker container ls
