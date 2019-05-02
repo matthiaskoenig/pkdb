@@ -10,12 +10,12 @@ Vue.config.devtools = true;
  *  Domain
  *  -------------------------------------------------------------- */
 //  read from .env.template file
-var backend_domain = process.env.API_BASE;
+var backend_domain = process.env.VUE_APP_API_BASE;
 
 
 if (!backend_domain){
     // running in develop, no environment variable set
-    console.warn('No PKDB backend set via environment variable: API_BASE');
+    console.warn('No PKDB backend set via environment variable: VUE_APP_API_BASE');
     backend_domain = 'http://0.0.0.0:8000';
 }
 console.log('PKDB backend: ' + backend_domain);
