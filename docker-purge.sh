@@ -59,8 +59,8 @@ docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local
 echo "*** Setup admin user ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${PKDB_DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
 
-echo ""*** Build elasticsearch index ***"
+echo "*** Build elasticsearch index ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py search_index --rebuild -f
 
-echo ""*** Running containers ***"
+echo "*** Running containers ***"
 docker container ls
