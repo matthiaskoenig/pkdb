@@ -27,7 +27,7 @@ volumes:
 services:
   postgres:
     restart: always
-    image: postgres:11.th
+    image: postgres:11.2
     ports:
       - "5433:5432"
     volumes:
