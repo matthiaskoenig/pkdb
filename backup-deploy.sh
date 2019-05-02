@@ -16,8 +16,8 @@ cd /var/git/pkdb
 
 # create directory for backup
 BACKUP_DIR=/var/backups/pkdb/$(date '+%F')
-sudo mkdir -p $DIR
-sudo chown -R mkoenig:mkoenig $DIR
+sudo mkdir -p $BACKUP_DIR
+sudo chown -R mkoenig:mkoenig $BACKUP_DIR
 echo "Backup to" $BACKUP_DIR
 
 
