@@ -1,8 +1,10 @@
 # -----------------------------------------------------------------------------
 # PK-DB backup
 # -----------------------------------------------------------------------------
-# TODO: run via cron job
-# TODO: check that backup can be restored
+# TODO: check that backup can be restored (restore script)
+#
+#  crontab -e
+#    55 23 * * * /var/git/pkdb/backup.sh
 #
 # usage:
 #	./backup-deploy.sh
