@@ -29,3 +29,6 @@ npm run lint
 ```
 npm run test:unit
 ```
+
+To update the dependencies use:
+

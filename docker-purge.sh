@@ -8,8 +8,9 @@
 #     ./docker-purge.sh
 # -----------------------------------------------------------------------------
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+: "${PKDB_DOCKER_COMPOSE_YAML:?The PKDB environment variable must be exported.}"
 
-sudo echo "Purging database and all docker containers, volumes, images ($DOCKER_COMPOSE_YAML)?"
+sudo echo "Purging database and all docker containers, volumes, images ($PKDB_DOCKER_COMPOSE_YAML)?"
 
 read -p "Are you sure [y/N]? " -n 1 -r
 echo    # (optional) move to a new line
