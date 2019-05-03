@@ -158,3 +158,10 @@ class KeywordSerializer(WrongKeyValidationSerializer):
 # Elastic Serializer
 ###############################################################################################
 
+class KeywordElasticSerializer(serializers.ModelSerializer):
+    """ Keyword. """
+
+    class Meta:
+        model = Keyword
+        fields = ["name"]
+

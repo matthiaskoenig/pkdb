@@ -120,7 +120,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 
 @csrf_exempt
-def update_index(request):
+def update_index_study(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
         update_instances = {}

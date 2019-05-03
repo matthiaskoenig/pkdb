@@ -65,10 +65,10 @@
                 return this.$store.state.endpoints.api + '/output_options/';
             },
             substances_url() {
-                return this.$store.state.endpoints.api + '/substances_elastic/';
+                return this.$store.state.endpoints.api + '/substances_elastic/?page_size=1000';
             },
             keywords_url() {
-                return this.$store.state.endpoints.api + '/keywords_elastic/';
+                return this.$store.state.endpoints.api + '/keywords_elastic/?page_size=1000';
             },
 
         }

@@ -30,7 +30,7 @@
         name: "KeywordBrowser",
         props: {
             keywords: {
-                type: Array,
+                type: Object,
                 required: true
             },
             title: {
