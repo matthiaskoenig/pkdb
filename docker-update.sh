@@ -32,7 +32,7 @@ docker image rm -f pkdb_elasticsearch:latest
 docker system prune --force
 
 # build and start containers
-docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --build --force-recreate --detach --no-cache
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --build --force-recreate --detach
 
 echo "*** Running containers ***"
 docker container ls
