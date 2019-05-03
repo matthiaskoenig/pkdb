@@ -1,7 +1,0 @@
-pandas
-seaborn
-ipykernel
-requests
-xlrd
-jupyterlab
-attrs

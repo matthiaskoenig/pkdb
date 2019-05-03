@@ -1,6 +1,6 @@
-# pkdb
+# PKDB Frontend (`vue.js`)
 
-## Project setup
+### Project setup
 ```
 npm install
 ```
@@ -30,5 +30,4 @@ npm run lint
 npm run test:unit
 ```
 
-To update the dependencies use:
-
+&copy; 2017-2019 Jan Grzegorzewski & Matthias König.

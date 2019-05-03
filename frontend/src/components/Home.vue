@@ -22,14 +22,12 @@
 <script>
     import CountTable from './statistics/CountTable'
     import AboutInformation from './AboutInformation'
-    import NavigationTest from './NavigationTest'
 
     export default {
         name: 'Home',
         components: {
             CountTable,
             AboutInformation,
-            // NavigationTest
         }
     }
 </script>
