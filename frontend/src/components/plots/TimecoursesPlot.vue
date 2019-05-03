@@ -5,7 +5,6 @@
 </template>
 
 <script>
-    import {clean} from "@/utils"
     import VuePlotly from '@statnett/vue-plotly'
 
     export default {
