@@ -57,6 +57,7 @@ sudo rm -rf media
 sudo rm -rf static
 
 # build and start containers
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML build --no-cache
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 
 echo "***Make migrations & collect static ***"
