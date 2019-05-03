@@ -23,7 +23,7 @@ fi
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML down --volumes --rmi local
 
 # make sure containers are removed (if not running)
-docker container rm -f pkdb_setup_root_1 pkdb_migration_1 pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 pkdb_nginx_1
+docker container rm -f pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 pkdb_nginx_1
 
 # make sure images are removed
 docker image rm -f pkdb_frontend:latest
