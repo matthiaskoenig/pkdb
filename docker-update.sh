@@ -38,7 +38,7 @@ docker system prune --force
 
 # build and start containers
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML build --no-cache
-docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 
 echo "*** Running containers ***"
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 docker container ls

@@ -58,7 +58,6 @@ sudo rm -rf static
 
 # build and start containers
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML build --no-cache
-docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 
 echo "***Make migrations & collect static ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
@@ -70,4 +69,5 @@ echo "*** Build elasticsearch index ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py search_index --rebuild -f
 
 echo "*** Running containers ***"
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 docker container ls
