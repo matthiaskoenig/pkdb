@@ -56,6 +56,8 @@
                     return img_dir + 'grzegorzewski_128.png';
                 } else if (this.initials === 'KG'){
                     return img_dir + 'kgreen_128.png';
+                } else if (this.initials === 'DE'){
+                    return img_dir + 'dimitra_128.png';
                 }
                 return null;
             },
