@@ -1,0 +1,75 @@
+# -----------------------------------------------------------------------------
+# DOCKER COMPOSE DEVELOPMENT
+# -----------------------------------------------------------------------------
+# set environment variables on server:
+#     set -a && source .env.local
+# setup or purge
+#     ./docker-purge.sh
+# update
+#     ./docker-update.sh
+# -----------------------------------------------------------------------------
+version: '3'
+
+volumes:
+  django_static:
+    driver: local
+  django_media:
+    driver: local
+  postgres_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  vue_dist:
+    driver: local
+  node_modules:
+    driver: local
+    
+services:
+
+  postgres:
+    restart: always
+    image: postgres:11.2
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  elasticsearch:
+    restart: always
+    image: elasticsearch:6.7.1
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  backend:
+    restart: always
+    build: ./backend
+    volumes:
+      - ./backend:/code
+      - django_static:/static
+      - django_media:/media
+    env_file: .env.local
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    links:
+      - postgres:postgres
+      - elasticsearch:elasticsearch
+    depends_on:
+     - postgres
+     - elasticsearch
+    command: bash -c "/usr/local/bin/python manage.py runserver 0.0.0.0:8000"
+
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-develop
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend:/app
+      - node_modules:/app/node_modules/
+      - vue_dist:/usr/share/nginx/html

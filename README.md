@@ -19,80 +19,89 @@ Database and web interface for storing (pharmaco-)kinetics information including
 <img src="./docs/images/data_extraction.png" width="600"/>
 Figure 1: Overview over data extraction and curation work flow.
 
-# Installation
+https://docs.google.com/document/d/1UvfgZCYk0Gs9sJV7fZe80Na8RY2C8MgYqsExkDyYp1U/edit# Installation
 The database with backend and frontend is available as docker container for local installation.
 
 ## Requirements
-- [Docker](https://docs.docker.com/docker-for-mac/install/)
+- [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - Python3.6
 
-## Build docker container
-To build the dev server for local development:
-```bash
+## Setup development server
+For elasticsearch to work the following system settings are required
+```
 sudo sysctl -w vm.max_map_count=262144
-git clone https://github.com/matthiaskoenig/pkdb.git
-cd pkdb
-docker-compose up --build
 ```
-To update an existing version use
-```bash
-docker-compose down
-./remove_migrations.sh
-docker-compose up --build
+To set `vm.max_map_count` persistently change the value in 
 ```
-To run an existing version use
-```bash
-docker-compose up
+/etc/sysctl.conf
 ```
 
-PKDB can than be accessed via the locally running server at  
-http://localhost:8000/api/v1/  
+To setup the development server for local development (backend & frontend):
+```bash
+# clone or pull the latest code
+git clone https://github.com/matthiaskoenig/pkdb.git
+cd pkdb
+git pull
+
+# set environment variables
+set -a && source .env.local
+ 
+# create/rebuild all docker containers
+./docker-purge.sh
+```
+This setups a clean database and clean volumes.
+
+## Update development server
+To update an existing version use
+```bash
+cd pkdb
+git pull
+set -a && source .env.local
+./docker-update.sh
+```
+
+The database index can be rebuild via
+```bash
+./elastic-rebuild-index.sh
+```
+
+## Interact with containers
+To check the running containers use
+```
+watch docker container ls
+```
+
+To get an interactive container mode use
+```
+./docker-interactive.sh
+```
+
+To get access to individual container logs use `docker container logs`, e.g., to see the
+django backend logs use
+```
+docker container logs pkdb_backend_1 
+```
 
 To run commands inside the docker container use
 ```bash
-docker-compose run --rm web [command]
-```
-For instance create a superuser to login to the admin:
-```bash
-docker-compose run --rm web ./manage.py createsuperuser
+docker-compose run --rm backend [command]
 ```
 or to run migrations
 ```bash
-docker-compose run --rm web python manage.py makemigrations
+docker-compose run --rm backend python manage.py makemigrations
 ```
 
-## Python (Virtual Environment)
-Setting up a virtual environment to interact with the data base via python
+## REST services
+PKDB provides a REST API which allows simple interaction with the database.
+An overview over the REST endpoints is available from
 ```
-mkvirtualenv pkdb --python=python3.6
-(pkdb) pip install -r requirements.txt
-(pkdb) pip install -e .
+http://localhost:8000/api/v1/
 ```
-add your virtual environment to jupyter kernels:
-```
-(pkdb) ipython kernel install --user --name=pkdb
-``` 
 
-## Frontend 
-Documentation of the `vue.js` frontend is available in
-./pkdb_client/README.md
-
-## Fill database
-The database can be filled via the `setup_database.py` and `upload_studies.py` scripts using curated data folders.
-The curated data is currently not made available, but only accessible via the REST API.
-
-First change in `/pkdb/pkdb_app/.env` the endpoints and passwords to the correct values by setting the environment
-variables `PKDB_API_BASE` and `PKDB_DEFAULT_PASSWORD`.
-
-```
-(pkdb) python setup_database.py
-(pkdb) python upload_studies.py
-```
-## Elastic Search 
-Elastic Search engine is running on `0.0.0.0:9200` but is also reachable via django views.
+Elastic Search engine is running on `localhost:9200` but is also reachable via django views.
 General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
-query examples:
+Query examples:
 ```
 http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
 http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
@@ -104,15 +113,13 @@ http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
 http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
 ```
 
-Suggest example:
+Suggestion example:
 ```
 http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
-rebuild index:
-```
-docker-compose run --rm web ./manage.py search_index --rebuild -f
-```
+## Fill database
+Database is filled using `pkdb_data` repository at https://github.com/matthiaskoenig/pkdb_data
  
 ## Read 
-&copy; 2017-2018 Jan Grzegorzewski & Matthias König.
+&copy; 2017-2019 Jan Grzegorzewski & Matthias König.
