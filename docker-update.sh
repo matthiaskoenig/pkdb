@@ -36,7 +36,8 @@ docker volume rm -f pkdb_vue_dist
 docker system prune --force
 
 # build and start containers
-docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --build --force-recreate --detach
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML build --no-cache
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 
 echo "*** Running containers ***"
 docker container ls
