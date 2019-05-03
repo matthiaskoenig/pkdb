@@ -29,7 +29,12 @@
                     <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
                 <td>
-                    <span v-for="(f, index2) in table.item.files" :key="index2"><file-chip :file="f.file" :search="search"/></span>
+                    <count-chip :count=table.item.group_count icon="group"></count-chip>
+                    <count-chip :count=table.item.individual_count icon="individual"></count-chip>
+                    <count-chip :count=table.item.intervention_count icon="intervention"></count-chip>
+                    <count-chip :count=table.item.output_count icon="output"></count-chip>
+                    <count-chip :count=table.item.timecourse_count icon="timecourse"></count-chip>
+
                 </td>
                 <td>
                     <annotations :item="table.item"></annotations>
@@ -45,13 +50,17 @@
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import GroupChip from "../detail/GroupChip";
+    import CountChip from "../detail/CountChip";
 
     export default {
         name: "StudiesTable",
         components: {
+            GroupChip,
             NoData,
             TableToolbar,
             CharacteristicaCard,
+            CountChip
         },
         mixins: [searchTableMixin],
         data () {
@@ -64,7 +73,7 @@
                     {text: 'Creator', value: 'creator'},
                     {text: 'Curators', value: 'curators',sortable: false},
                     {text: 'Substances', value: 'substances',sortable: false},
-                    {text: 'Files', value: 'files',sortable: false},
+                    {text: 'Counts', value: 'counts',sortable: false},
                     {text: 'Annotations', value: 'Annotations'},
                 ],
             }
