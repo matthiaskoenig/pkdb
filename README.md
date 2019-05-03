@@ -118,24 +118,8 @@ Suggestion example:
 http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
-## Fill database (TODO)
-
-Setting up a virtual environment to interact with the data base via python
-```
-# FIXME: update with latest version and package
-mkvirtualenv pkdb --python=python3.6
-(pkdb_data) pip install pkdb_data
-```
-add your virtual environment to jupyter kernels:
-```
-(pkdb) ipython kernel install --user --name=pkdb_data
-```
-
-The database can be filled via ...
-```
-# FIXME: update description
-```
-
+## Fill database
+Database is filled using `pkdb_data` repository at https://github.com/matthiaskoenig/pkdb_data
  
 ## Read 
 &copy; 2017-2019 Jan Grzegorzewski & Matthias König.
