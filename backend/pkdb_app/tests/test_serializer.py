@@ -69,7 +69,7 @@ class AuthenticationAPITestCase(APITestCase):
 
             assert s_instance.is_valid()
             s_instance.create(s_instance.validated_data)
-            assert len(CharacteristicType.objects.all()) == 3
+        assert len(CharacteristicType.objects.all()) == 3, CharacteristicType.objects.all()
 
 
 
