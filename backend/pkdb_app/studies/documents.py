@@ -89,7 +89,8 @@ def common_setfields(model, attr=None):
 
 @study_index.doc_type
 class StudyDocument(DocType):
-    pk = fields.IntegerField(attr='pk')
+    #id = fields.StringField(attr='sid')
+    pk = fields.StringField(attr='sid')
     sid = string_field(attr='sid')
     pkdb_version = fields.IntegerField(attr='pkdb_version')
 
