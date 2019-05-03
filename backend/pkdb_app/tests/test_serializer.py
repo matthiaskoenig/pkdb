@@ -1,10 +1,22 @@
-from unittest import TestCase
 
+from django.test import RequestFactory
+from pkdb_app.categorials.models import CharacteristicType
 from pkdb_app.categorials.serializers import CharacteristicTypeSerializer
+from pkdb_app.users.models import User
+from rest_framework.test import APITestCase
 
 
-class AuthenticationAPITestCase(TestCase):
+class AuthenticationAPITestCase(APITestCase):
     def setUp(self):
+        self.password = "pkdb"
+        self.factory = RequestFactory()
+        self.request = self.factory.get('/api/v1/')
+        self.user = User.objects.create_superuser(username="admin", password=self.password, email="")
+
+        self.request.user = self.user
+
+
+
         self.intervention_attributes = {
 
 
@@ -51,9 +63,14 @@ class AuthenticationAPITestCase(TestCase):
 
 
 
-    def CharacteristicTypeSerializerTest(self):
-        s_instance = CharacteristicTypeSerializer(data = self.characteristica_types[0])
-        assert s_instance.is_valid()
+    def test_characteristic_type_serializer(self):
+        for instance in self.characteristica_types:
+            s_instance = CharacteristicTypeSerializer(data = instance, context={'request':self.request})
+
+            assert s_instance.is_valid()
+            s_instance.create(s_instance.validated_data)
+            assert len(CharacteristicType.objects.all()) == 3
+
 
 
 

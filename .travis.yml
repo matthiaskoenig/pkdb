@@ -29,7 +29,7 @@ before_script:
   - ./docker-purge.sh
 
 script:
-  -docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py test pkdb_app.tests"
+  - docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py test pkdb_app.tests"
 
 notifications:
   email: false
