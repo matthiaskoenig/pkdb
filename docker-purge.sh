@@ -23,13 +23,18 @@ sudo echo "Purging database and all docker containers, volumes, images ($PKDB_DO
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML down --volumes --rmi local
 
 # make sure containers are removed (if not running)
-docker container rm -f pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 pkdb_nginx_1
+docker container rm -f pkdb_frontend_1
+docker container rm -f pkdb_backend_1
+docker container rm -f pkdb_postgres_1
+docker container rm -f pkdb_elasticsearch_1
+docker container rm -f pkdb_nginx_1
 
 # make sure images are removed
 docker image rm -f pkdb_frontend:latest
 docker image rm -f pkdb_backend:latest
-docker image rm -f pkdb_migration:latest
-docker image rm -f pkdb_setup_root:latest
+docker image rm -f pkdb_postgres:latest
+docker image rm -f pkdb_elasticsearch:latest
+docker image rm -f pkdb_nginx:latest
 
 # make sure volumes are removed
 docker volume rm -f pkdb_django_media

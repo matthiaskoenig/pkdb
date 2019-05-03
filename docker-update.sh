@@ -20,13 +20,17 @@ docker container rm -f pkdb_frontend_1
 docker container rm -f pkdb_backend_1
 docker container rm -f pkdb_postgres_1
 docker container rm -f pkdb_elasticsearch_1
+docker container rm -f pkdb_nginx_1
 
 # make sure images are removed
 docker image rm -f pkdb_frontend:latest
 docker image rm -f pkdb_backend:latest
 docker image rm -f pkdb_postgres:latest
 docker image rm -f pkdb_elasticsearch:latest
-docker image rm -f pkdb_elasticsearch:latest
+docker image rm -f pkdb_nginx:latest
+
+# remove frontend volume
+docker volume rm -f pkdb_vue_dist
 
 # cleanup all dangling images, containers, volumes and networks
 docker system prune --force
