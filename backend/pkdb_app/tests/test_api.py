@@ -29,8 +29,8 @@ class AuthenticationAPITestCase(APITestCase):
         self.client = APIClient()
         self.api = reverse('user-list')
         self.password = "test"
-    def test_api_token_auth(self):
 
+    def test_api_token_auth(self):
         response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
         assert json.loads(response.content) == {"non_field_errors":["Unable to log in with provided credentials."]} , json.loads(response.content)
 
@@ -42,7 +42,7 @@ class AuthenticationAPITestCase(APITestCase):
         assert response.status_code == 200, response.status_code
         assert "token" in json.loads(response.content) ,json.loads(response.content)
 
-
+'''
 class UploadStudy(APITestCase):
 
     def setUp(self):
@@ -459,3 +459,4 @@ def get_or_assert(queryset, **kwargs):
     except ObjectDoesNotExist:
         assert False , f"DoesNotExist with kwargs: {kwargs} "
 
+'''
