@@ -75,9 +75,6 @@
 
                 this.description = data['description'];
                 this.units = data['units'];
-                if (this.units){
-                    this.units = Object.keys(this.units)
-                }
                 return []
             },
         },

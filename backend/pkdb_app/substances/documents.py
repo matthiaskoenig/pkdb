@@ -25,9 +25,7 @@ class SubstanceDocument(DocType):
         model = Substance
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
-        ignore_signals = True
+        ignore_signals = False
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
 
-intervention_index = Index("interventions")
-intervention_index.settings(**elastic_settings)

@@ -30,7 +30,7 @@
         name: "SubstanceBrowser",
         props: {
             substances: {
-                type: Array,
+                type: Object,
                 required: true
             },
             title: {

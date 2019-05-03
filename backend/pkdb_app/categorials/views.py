@@ -2,7 +2,7 @@ from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.categorials.documents import KeywordDocument
 from pkdb_app.categorials.models import InterventionType, CharacteristicType, PharmacokineticType, Keyword
 from pkdb_app.categorials.serializers import InterventionTypeSerializer, CharacteristicTypeSerializer, \
-    PharmacokineticTypeSerializer, KeywordSerializer
+    PharmacokineticTypeSerializer, KeywordSerializer, KeywordElasticSerializer
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.users.permissions import IsAdminOrCreator
 from rest_framework import viewsets
@@ -40,5 +40,5 @@ class KeywordViewSet(viewsets.ModelViewSet):
 class ElasticKeywordViewSet(DocumentViewSet):
     document = KeywordDocument
     pagination_class = CustomPagination
-    serializer_class = KeywordSerializer
+    serializer_class = KeywordElasticSerializer
     lookup_field = 'id'

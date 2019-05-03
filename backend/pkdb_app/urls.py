@@ -27,7 +27,7 @@ from .users.views import UserViewSet, UserCreateViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-    ElasticReferenceViewSet, ElasticStudyViewSet, update_index)
+    ElasticReferenceViewSet, ElasticStudyViewSet, update_index_study)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
 
@@ -118,7 +118,7 @@ urlpatterns = [
     # api
     path(r"api/v1/", include(router.urls)),
     path("api/v1/study_pks/", study_pks_view),
-    path("api/v1/update_index/", update_index),
+    path("api/v1/update_index/", update_index_study),
     path('api-token-auth/', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
