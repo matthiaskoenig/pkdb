@@ -101,9 +101,8 @@ class AbstractType(models.Model):
 
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
-            msg = f"[{unit}] with dimension [{self.unit_dimension(unit)}] is not allowed. " \
-                  f"For units in the category [{self.key}]"
-            raise ValueError({"unit": msg,"allowed dimensions":self.valid_dimensions_str, "norm_units":self.n_units})
+            msg = f"For category `{self.key}` the unit [{unit}] with dimension {self.unit_dimension(unit)} is not allowed."
+            raise ValueError({"unit": msg, "Only units with the following dimensions are allowed:": self.valid_dimensions_str, "Units are allowed which can be converted to the following normalized units:": self.n_units})
 
     def is_valid_time_unit(self, time_unit):
         return self.p_unit(time_unit).dimensionality == '[time]'
