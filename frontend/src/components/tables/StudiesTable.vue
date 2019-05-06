@@ -17,6 +17,9 @@
                     <export-format-button :resource_url="api + '/studies/'+ table.item.sid +'/?format=json'"/>
                 </td>
                 <td>
+                    <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.sid }}</text-highlight>
+                </td>
+                <td>
                     <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
                 </td>
                 <td>
@@ -65,6 +68,7 @@
                 otype_single: "study",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
+                    {text: 'Id', value: 'id'},
                     {text: 'Name', value: 'name'},
                     {text: 'Substances', value: 'substances',sortable: false},
                     {text: 'Counts', value: 'counts',sortable: false},
