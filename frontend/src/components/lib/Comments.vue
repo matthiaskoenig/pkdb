@@ -3,7 +3,6 @@
         <span v-for="comment in comments">
             <user-avatar :user="comment.user" :comment="comment.text"/>
         </span>
-
     </div>
 </template>
 

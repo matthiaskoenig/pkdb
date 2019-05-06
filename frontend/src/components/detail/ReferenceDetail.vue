@@ -1,19 +1,7 @@
 <template>
     <div id="reference-detail">
-        <!-- <heading-toolbar :title="reference.name" :icon="icon('reference')" :resource_url="resource_url"/>-->
-
-        <v-toolbar color="secondary" dark>
-            <v-layout>
-                <v-flex xs1>
-                    <v-icon>{{ icon('reference') }}</v-icon>
-                </v-flex>
-                <v-flex xs11>
-                    {{ reference.title }}
-                </v-flex>
-            </v-layout>
-        </v-toolbar>
-
         <v-card max-width="1000" flat>
+            <v-icon>{{ icon('reference') }}</v-icon>&nbsp;<strong>{{ reference.title }}</strong><br />
             <span v-for="(author, index) in reference.authors" :key="index">
                 {{ author.first_name }} {{ author.last_name }},
             </span><br />

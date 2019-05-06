@@ -116,7 +116,6 @@
                 axios.get(url)
                     .then(response => {
                         this.data = response.data;
-                        console.log(this.data)
                     })
                     .catch((error)=>{
                         this.data = null;
