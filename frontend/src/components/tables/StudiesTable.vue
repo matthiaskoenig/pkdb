@@ -12,7 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/studies/'+ table.item.sid" :title="'Study: '+table.item.pk" :icon="icon('study')"/>
-                    <LinkButton :to="'/references/'+ table.item.reference.sid" :title="'Reference: '+table.item.reference.sid" :icon="icon('reference')"/>
+                    <LinkButton v-if="table.item.reference" :to="'/references/'+ table.item.reference.sid" :title="'Reference: '+table.item.reference.sid" :icon="icon('reference')"/>
                     <JsonButton :resource_url="api + '/studies_elastic/'+ table.item.sid +'/?format=json'"/>
                     <export-format-button :resource_url="api + '/studies/'+ table.item.sid +'/?format=json'"/>
                 </td>
