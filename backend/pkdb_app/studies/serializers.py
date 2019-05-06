@@ -448,6 +448,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     pkdb_version = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
     licence = serializers.CharField(read_only=True)
+    access = serializers.CharField(read_only=True)
 
 
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
@@ -476,6 +477,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "sid",
             "name",
             "licence",
+            "access",
             "comments",
             "descriptions",
             "reference",

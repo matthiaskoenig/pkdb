@@ -4,7 +4,8 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
-from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator
+from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
@@ -59,7 +60,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     filter_fields = ("sid",)
     search_fields = filter_fields
     lookup_field = "sid"
-    permission_classes = (IsAdminOrCreatorOrCurator,)
+    permission_classes = (StudyPermission,)
 
     @staticmethod
     def group_validation(request):
@@ -159,6 +160,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    permission_classes = (StudyPermission,)
     search_fields = (
                      'pk_version',
                      'creator.first_name',
@@ -229,6 +231,35 @@ class ElasticStudyViewSet(DocumentViewSet):
                 )
 
             raise Http404("No result matches the given query.")
+
+    def get_queryset(self):
+
+        qs = super().get_queryset()
+        #return qs
+        group = user_group(self.request)
+        print("*"*100)
+        print(group)
+        print("*"*100)
+
+        if group in ["admin","reviewer"]:
+            return qs
+
+        elif group == "basic":
+
+            #todo:hier weiter machen
+            return qs.filter(access=True).filter(creator=self.request.user).filter(curators__in=[self.request.user]).filter(collaborators__in=[self.request.user])
+
+        elif group =="anonymous":
+            qs = qs.filter(
+                'term',
+                **{"access": PUBLIC}
+            )
+            return qs
+
+
+
+
+
     
 
 
@@ -238,6 +269,7 @@ class ElasticReferenceViewSet(DocumentViewSet):
     document = ReferenceDocument
     lookup_field = "id"
     pagination_class = CustomPagination
+    permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')

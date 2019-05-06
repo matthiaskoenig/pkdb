@@ -2,6 +2,9 @@
 Django model for Study.
 """
 from django.db import models
+from pkdb_app.users.models import PUBLIC, PRIVATE
+from pkdb_app.users.permissions import study_permissions
+
 from ..categorials.models import Keyword
 from ..outputs.models import OutputSet
 
@@ -28,10 +31,9 @@ STUDY_LICENCE_DATA = [
 
 STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
 
-
 STUDY_ACCESS_DATA = [
-    "public",
-    "private"
+    PUBLIC,
+    PRIVATE
 ]
 STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
 
@@ -268,5 +270,8 @@ class Study(Sidable, models.Model):
             return self.outputset.outputs.filter(normed=True, calculated=True).count()
 
         return 0
+
+    def permitted_study(self,request):
+        return study_permissions(self,request)
 
 
