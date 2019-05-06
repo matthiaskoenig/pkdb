@@ -58,8 +58,6 @@
         },
         data: () => ({
             model: null,
-            description: null,
-            units: null
         }),
         computed: {
             items () {
@@ -67,16 +65,26 @@
             },
             choices () {
                 if (!this.model) {
-                    this.description = null;
-                    this.units = null;
                     return []
                 }
-                var data = this.options['pktypes'][this.model];
-
-                this.description = data['description'];
-                this.units = data['units'];
+                // FIXME: there seems to be a bug here
                 return []
             },
+            description () {
+              if (!this.model) {
+                return null;
+              }
+              const data = this.options['pktypes'][this.model];
+              return data['description'];
+            },
+            units () {
+              if (!this.model) {
+                return null;
+              }
+              const data = this.options['pktypes'][this.model];
+              return data['units'];
+            }
+
         },
     }
 </script>

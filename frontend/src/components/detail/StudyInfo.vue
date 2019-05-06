@@ -16,19 +16,18 @@
 
                 <div v-if="study.substances && study.substances.length>0">
                     <span class="attr">Substances</span><br />
-                    <span v-for="s in study.substances">
+
+                    <span v-for="s in study.substances" v-bind:key="s">
                         <substance-chip :title="s"/>
                     </span>
                         <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
                 </div>
                 <div v-if="study.keywords && study.keywords.length>0">
                     <span class="attr">Keywords</span><br />
-                    <span v-for="keyword in study.keywords">{{keyword}}<br /></span>
+                    <span v-for="keyword in study.keywords" :key="keyword">{{keyword}}<br /></span>
                 </div>
                 <div>
                     <span class="attr">Files</span><br />
-
-
                 </div>
                 <div v-if="study.files.includes('permission denied')">
                     Permission denied
