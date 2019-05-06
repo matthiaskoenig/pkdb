@@ -2,7 +2,7 @@
 <span>
     <v-tabs
             v-model="active"
-            color="sedondary"
+            color="#999999"
             dark
             slider-color="yellow">
         <v-tab
