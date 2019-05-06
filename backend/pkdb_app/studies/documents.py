@@ -16,7 +16,7 @@ reference_index.settings(**elastic_settings)
 @reference_index.doc_type
 class ReferenceDocument(DocType):
     pk = fields.IntegerField(attr='pk')
-    sid = string_field(attr='sid')
+    sid = fields.IntegerField(attr='sid')
     pmid = string_field(attr='pmid')
     study = ObjectField(properties={
         "pk": fields.IntegerField(),

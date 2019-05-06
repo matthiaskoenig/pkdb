@@ -231,6 +231,7 @@ class ElasticStudyViewSet(DocumentViewSet):
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document = ReferenceDocument
+    lookup_field = "id"
     pagination_class = CustomPagination
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
