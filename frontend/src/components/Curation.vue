@@ -2,8 +2,8 @@
     <div id="about">
         <h1>Curation of pharmacokinetics data for PK-DB</h1>
         <p>
-        A detailed guideline for curation of studies is provided at
-        <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md</a>.
+        A detailed guideline for curation of studies is provided in
+        <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
         </p>
         <h2>Choices for groups and individuals</h2>
         <v-layout row wrap>

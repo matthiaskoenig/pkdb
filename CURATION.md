@@ -1,12 +1,24 @@
-# Curation information
-Collection of resources and information on how to curate data and information
-from manuscripts for the PKDB.
+# Curation of pharmacokinetics studies for PK-DB
+This document provides resources and information on how to curate data and information
+from pharmacokinetics studies for the PK-DB database.
 
-A single study is stored in one folder which can be uploaded and iteratively curated using the `watch_study` script
+Available choices for important fields are available from the database  
+https://develop.pk-db.com/#/curation
+
+
+## Interactive curation
+All information of a single study is stored in one folder. The complete information can be uploaded 
+and iteratively curated using the provided `watch_study` script. The script uploads 
+the latest data on file changes therefore allowing rapid iteration of curation and 
+validation. Information on how to setup the `watch_study` script is provided
+in https://github.com/matthiaskoenig/pkdb_data
+
 ```
-cd pkdb
-(pkdb) set -a && source .env.local
-(pkdb) python backend/pkdb_app/data_management/watch_study.py -s $STUDYFOLDER
+# export environment variables for backend
+(pkdb_data) set -a && source .env.local
+
+# run the watch script
+(pkdb_data) watch_study -s $STUDYFOLDER
 ```
 
 ## 1. PDF, Reference, Figures & Tables
@@ -162,7 +174,7 @@ All available fields for intervention and interventionset are:
 ```json
 {
  
-    "name": "string",  // not on groupset, only on group
+    "name": "string",
     "category": "categorial",
     
     "substance": "categorial (substance)",
@@ -172,7 +184,6 @@ All available fields for intervention and interventionset are:
     "time": "double||double||double ...",
     "time_unit": "categorial",
      
-    // valueable field
     "choice": "categorial|string",
     "value": "double",
     "mean": "double",
@@ -225,7 +236,7 @@ https://github.com/hgrecco/pint/blob/master/pint/default_en_0.6.txt
 - time course data
 - column data
 
-## FAQ
+## Frequently asked questions (FAQ)
 # How to encode multiple substances which are given (e.g., caffeine and acetaminophen are given)?
 - encode as individual interventions of caffeine and acetaminophen, i.e., single interventions 
 with the respective doses. In the outputs a list of intervention is provided, i.e., in this example the interventions for caffeine and acetaminophen
