@@ -130,15 +130,20 @@ def update_index_study(request):
 
         action = data.get("action",'index')
         update_instances[StudyDocument] = study
-        update_instances[ReferenceDocument] = study.reference
+        if study.reference:
+            update_instances[ReferenceDocument] = study.reference
+
         update_instances[GroupDocument] = study.groups
         update_instances[IndividualDocument] = study.individuals
         update_instances[InterventionDocument] = study.interventions
         update_instances[OutputDocument] = study.outputs
         update_instances[TimecourseDocument] = study.timecourses
 
+        print(study)
+
 
         for doc, instances in update_instances.items():
+
             try:
                 doc().update(thing=instances,action=action)
             except helpers.BulkIndexError:

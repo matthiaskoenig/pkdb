@@ -120,13 +120,14 @@ class StudySerializer(SidSerializer):
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
     curators = CuratorRatingSerializer(many=True, required=False,
                                        allow_null=True)
-    #curators = serializers.SlugRelatedField(
-    #    queryset=User.objects.all(),
-    #    slug_field="username",
-    #    many=True,
-    #    required=False,
-    #    allow_null=True,
-    #)
+    collaborators = serializers.SlugRelatedField(
+        queryset=User.objects.all(),
+        slug_field="username",
+        many=True,
+        required=False,
+        allow_null=True,
+    )
+
     creator = serializers.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
@@ -166,10 +167,12 @@ class StudySerializer(SidSerializer):
             "reference",
             "creator",
             "curators",
+            "collaborators",
             "substances",
             "descriptions",
             "keywords",
             "licence",
+            "access",
             "groupset",
             "individualset",
             "interventionset",
@@ -177,13 +180,12 @@ class StudySerializer(SidSerializer):
             "files",
             "comments",
         )
-        write_only_fields = ('curators',)
+        write_only_fields = ('curators','collaborators')
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
         instance, _ = Study.objects.update_or_create(
             sid=validated_data["sid"],
-            reference=related["reference"],
             defaults=validated_data,
         )
         instance = self.create_relations(instance, related)
@@ -208,7 +210,7 @@ class StudySerializer(SidSerializer):
             data["creator"] = self.get_or_val_error(User, username=creator)
         ratings = []
 
-
+        # curators to internal
         for curator_and_rating in data.get("curators",[]):
             rating_dict = {}
             if isinstance(curator_and_rating, list):
@@ -232,6 +234,8 @@ class StudySerializer(SidSerializer):
             ratings.append(rating_dict)
 
         data["curators"] = ratings
+
+
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
@@ -279,13 +283,14 @@ class StudySerializer(SidSerializer):
         :return:
         """
         related_foreinkeys = self.related_sets().copy()
-        related_foreinkeys["reference"] = Reference
+
         related_many2many = {
             "substances": Substance,
             "keywords": Keyword,
             "descriptions": Description,
             "comments": Comment,
             "curators": User,
+            "collaborators":User,
             "files": DataFile,
         }
         related_foreinkeys_dict = {
@@ -336,9 +341,13 @@ class StudySerializer(SidSerializer):
                 curator["study"] = study
                 Rating.objects.create(**curator)
 
+        if related["collaborators"]:
+            study.collaborators.clear()
+            study.collaborators.add(*related["collaborators"])
 
         if related["descriptions"]:
             study.descriptions.all().delete()
+
             create_multiple(study, related["descriptions"], "descriptions")
 
         if related["comments"]:
@@ -446,6 +455,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
     creator = UserElasticSerializer(read_only=True)
+    collaborators = UserElasticSerializer(many=True, read_only=True)
 
     substances = serializers.SerializerMethodField()
     keywords = serializers.SerializerMethodField()
@@ -474,6 +484,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "reference",
             "pkdb_version",
             "curators",
+            "collaborators",
             "creator",
             "substances",
             "keywords",

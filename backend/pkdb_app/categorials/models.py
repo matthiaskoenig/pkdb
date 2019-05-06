@@ -158,7 +158,7 @@ class CharacteristicChoiceType(AbstractType):
         if choice:
             if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
                 if not self.is_valid_choice(choice):
-                    msg = f"{choice} is not part of {self.choices} for {self.key}"
+                    msg = f"{choice} is not part of {list(self.choices_list())} for {self.key}"
                     raise ValueError({"choice": msg})
             else:
                 msg = f"for category: <{self.category}> no choices are allowed. " \

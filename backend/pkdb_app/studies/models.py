@@ -27,6 +27,14 @@ STUDY_LICENCE_DATA = [
 ]
 
 STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
+
+
+STUDY_ACCESS_DATA = [
+    "public",
+    "private"
+]
+STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
+
 # ---------------------------------------------------
 #
 # ---------------------------------------------------
@@ -93,6 +101,7 @@ class Study(Sidable, models.Model):
 
     Mainly reported as a single publication.
     """
+
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
 
@@ -102,9 +111,10 @@ class Study(Sidable, models.Model):
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     reference = models.ForeignKey(
-        Reference, on_delete=True, related_name="study", null=True
+        Reference, on_delete=models.CASCADE, related_name="study", null=True
     )
     curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)
+    collaborators = models.ManyToManyField(User,related_name="collaborator_of_studies")
 
     substances = models.ManyToManyField(Substance, related_name="studies")
     keywords = models.ManyToManyField(Keyword, related_name="studies")
@@ -118,7 +128,9 @@ class Study(Sidable, models.Model):
     )
     outputset = models.OneToOneField(OutputSet,related_name="study", on_delete=models.SET_NULL, null=True)
     files = models.ManyToManyField(DataFile)
+
     licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
+    access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
 
     class Meta:
         verbose_name_plural = "studies"

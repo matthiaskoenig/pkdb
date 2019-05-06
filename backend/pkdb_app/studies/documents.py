@@ -22,7 +22,6 @@ class ReferenceDocument(DocType):
         "pk": fields.IntegerField(),
         "name": string_field('name'),
     })
-
     name = string_field("name")
     doi = string_field("doi")
     title = string_field("title")
@@ -118,12 +117,13 @@ class StudyDocument(DocType):
         properties={
             'first_name': string_field("first_name"),
             'last_name': string_field("last_name"),
-            'pk': string_field("last_name"),
+            'pk': string_field("pk"),
             'username': string_field("username"),
         }
     )
     name = string_field("name")
     licence = string_field("licence")
+    access = string_field("access")
 
 
     reference = ObjectField(properties={
@@ -140,6 +140,17 @@ class StudyDocument(DocType):
             'pk': string_field("user.pk"),
             'username': string_field("user.username"),
             'rating': fields.FloatField(attr='rating')
+
+        },
+        multi=True
+    )
+    collaborators = fields.ObjectField(
+        attr="collaborators",
+        properties={
+            'first_name': string_field("first_name"),
+            'last_name': string_field("last_name"),
+            'pk': string_field("pk"),
+            'username': string_field("username")
 
         },
         multi=True
