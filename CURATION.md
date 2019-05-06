@@ -69,6 +69,8 @@ contains all the relevant information
     "creator": "mkoenig",
     "name": "Author2007",
     "reference": 123456789,
+    "license": "open || closed",
+    "access": "public || private",
     "curators": [
         "mkoenig",
         "janekg"

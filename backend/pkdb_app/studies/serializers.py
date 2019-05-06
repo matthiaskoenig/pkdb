@@ -78,7 +78,6 @@ class ReferenceSerializer(SidSerializer):
         return super().to_internal_value(data)
 
 
-
 class CuratorRatingSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(min_value=0, max_value=5)
 
@@ -217,7 +216,6 @@ class StudySerializer(SidSerializer):
                 if len(curator_and_rating) != 2:
                     raise serializers.ValidationError(
                         {
-
                             "curator": " Each curator in the list of curator can be added either via the curator "
                                        "username or as a list with first position beeing the curator username "
                                         " and the second posion the rating between (0-5)",
@@ -234,7 +232,6 @@ class StudySerializer(SidSerializer):
             ratings.append(rating_dict)
 
         data["curators"] = ratings
-
 
         return super().to_internal_value(data)
 

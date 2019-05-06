@@ -2,8 +2,6 @@
 Serializers for interventions.
 """
 
-
-
 # ----------------------------------
 # Interventions
 # ----------------------------------
