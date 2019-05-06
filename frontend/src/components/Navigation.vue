@@ -24,7 +24,9 @@
         </v-btn>
         <v-btn icon to="/curation" title="Curation information"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
+        <!--
         <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
+        -->
         <v-btn icon :href="admin_url" title="Django admin interface">
             <v-icon>{{ icon('admin') }}</v-icon>
         </v-btn>

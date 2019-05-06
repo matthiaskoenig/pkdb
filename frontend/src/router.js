@@ -75,11 +75,6 @@ export default new Router({
           component: References
       },
       {
-          path: '/about',
-          name: 'About',
-          component: About
-      },
-      {
           path: '/curation',
           name: 'Curation',
           component: Curation
