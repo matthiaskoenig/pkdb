@@ -1,5 +1,6 @@
 <template>
-    <div class="characteristica_card">
+
+    <div :class="card_class">
 
         <v-badge right color="black" left>
             <span slot="badge">{{ count }}</span>
@@ -18,6 +19,7 @@
             </span>
         </v-badge>
     </div>
+
 
 </template>
 
@@ -77,6 +79,16 @@
                     }
                 }
                 return value;
+            },
+
+            card_class() {
+                if (this.value){
+                    return "characteristica_card_wide"
+                }
+                else {
+                    return "characteristica_card"
+                }
+
             }
         },
         methods: {
@@ -95,9 +107,22 @@
     .characteristica_card {
         padding-top: 25px;
         padding-right: 10px;
-        padding-left: 30px;
+        padding-left: 10px;
         margin-bottom: 20px;
         width: 110px;
+        height: 85px;
+
+        border-style: none;
+        border-width: thin;
+        border-color: gray;
+    }
+
+    .characteristica_card_wide {
+        padding-top: 25px;
+        padding-right: 10px;
+        padding-left: 10px;
+        margin-bottom: 20px;
+        width: 250px;
         height: 85px;
 
         border-style: none;
