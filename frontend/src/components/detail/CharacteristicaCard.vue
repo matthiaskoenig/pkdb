@@ -1,5 +1,6 @@
 <template>
-    <div class="characteristica_card">
+
+    <div :class="card_class">
 
         <v-badge right color="black" left>
             <span slot="badge">{{ count }}</span>
@@ -12,9 +13,13 @@
                 <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon color="primary">fa fa-male</v-icon></span>
                 {{ data.choice }}
             </span>
-            <span v-if="value"><strong>{{ value }}</strong></span>&nbsp;<span v-if="error">{{ error }}</span><span v-if="data.unit"> [<strong>{{ data.unit }}</strong>]</span>
+            <span v-if="value">
+                <strong>{{ value }}<span v-if="data.unit"> [{{ data.unit }}]</span></strong><br />
+                <span v-if="error">{{ error }}</span>
+            </span>
         </v-badge>
     </div>
+
 
 </template>
 
@@ -74,6 +79,16 @@
                     }
                 }
                 return value;
+            },
+
+            card_class() {
+                if (this.value){
+                    return "characteristica_card_wide"
+                }
+                else {
+                    return "characteristica_card"
+                }
+
             }
         },
         methods: {
@@ -92,9 +107,22 @@
     .characteristica_card {
         padding-top: 25px;
         padding-right: 10px;
-        padding-left: 30px;
+        padding-left: 10px;
         margin-bottom: 20px;
         width: 110px;
+        height: 85px;
+
+        border-style: none;
+        border-width: thin;
+        border-color: gray;
+    }
+
+    .characteristica_card_wide {
+        padding-top: 25px;
+        padding-right: 10px;
+        padding-left: 10px;
+        margin-bottom: 20px;
+        width: 250px;
         height: 85px;
 
         border-style: none;
