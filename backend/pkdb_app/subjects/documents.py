@@ -34,7 +34,7 @@ class IndividualDocument(DocType):
     study = ObjectField(properties={
         'name': string_field('name'),
         'pk':fields.IntegerField('pk'),
-        'sid': fields.IntegerField('sid')
+        'sid': fields.StringField('sid')
 
     })
     ex = ObjectField(properties={
@@ -93,7 +93,7 @@ class GroupDocument(DocType):
     study = ObjectField(properties={
         'name': string_field('name'),
         'pk': fields.IntegerField('pk'),
-        'sid': fields.IntegerField('sid')
+        'sid': fields.StringField('sid')
 
     })
     ex = ObjectField(properties={

@@ -58,6 +58,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("sid",)
     search_fields = filter_fields
+    lookup_field = "sid"
     permission_classes = (IsAdminOrCreatorOrCurator,)
 
     @staticmethod
@@ -149,10 +150,11 @@ def update_index_study(request):
 
 
 class ElasticStudyViewSet(DocumentViewSet):
+    document_uid_field = "pk"
+    lookup_field = "pk"
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
-    lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = (
                      'pk_version',
@@ -172,7 +174,7 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'files'
                      )
 
-    filter_fields = {'name': 'name.raw'}
+    filter_fields = {'sid':'sid.raw','name': 'name.raw'}
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
@@ -187,11 +189,10 @@ class ElasticStudyViewSet(DocumentViewSet):
         #"curators": "curators.last_name",
 
     }
-
+   
     def get_object(self):
         """Get object."""
         queryset = self.get_queryset()
-
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         if lookup_url_kwarg not in self.kwargs:
             raise AttributeError(
@@ -208,7 +209,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             return DictionaryProxy(obj.to_dict())
         else:
             queryset = queryset.filter(
-                'term',
+                'match',
                 **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
             )
 
@@ -225,13 +226,15 @@ class ElasticStudyViewSet(DocumentViewSet):
                 )
 
             raise Http404("No result matches the given query.")
+    
+
+
 
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document = ReferenceDocument
     pagination_class = CustomPagination
     serializer_class = ReferenceElasticSerializer
-    lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
     #multi_match_search_fields = {f:f for f in search_fields}

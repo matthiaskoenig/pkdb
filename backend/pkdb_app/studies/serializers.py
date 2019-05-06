@@ -436,7 +436,7 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
 #class Rating
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
-
+    pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
 
     pkdb_version = serializers.CharField(read_only=True)

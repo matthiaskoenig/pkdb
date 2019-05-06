@@ -93,6 +93,7 @@ class Study(Sidable, models.Model):
 
     Mainly reported as a single publication.
     """
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
 
     creator = models.ForeignKey(

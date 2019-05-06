@@ -4,7 +4,7 @@ from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settin
 from pkdb_app.interventions.models import Substance,  Intervention
 from pkdb_app.outputs.models import Timecourse, Output
 from pkdb_app.studies.models import Reference, Study
-from pkdb_app.categorials.models import Keyword
+from pkdb_app.categorials.models import Keyword, Unit
 
 # Elastic Reference
 from pkdb_app.subjects.models import  Group, Individual
@@ -89,7 +89,7 @@ def common_setfields(model, attr=None):
 
 @study_index.doc_type
 class StudyDocument(DocType):
-    #id = fields.StringField(attr='sid')
+    id = fields.StringField(attr='sid')
     pk = fields.StringField(attr='sid')
     sid = string_field(attr='sid')
     pkdb_version = fields.IntegerField(attr='pkdb_version')
