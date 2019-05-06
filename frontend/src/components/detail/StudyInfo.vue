@@ -4,6 +4,7 @@
             <v-flex md2>
 
             <v-card flat>
+                <!--
                 <div>
                     <span class="attr">Counts</span><br />
                         <count-chip :count=study.group_count icon="group"></count-chip>
@@ -12,6 +13,7 @@
                         <count-chip :count=study.output_count icon="output"></count-chip>
                         <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
                 </div>
+                -->
                 <div v-if="study.substances && study.substances.length>0">
                     <span class="attr">Substances</span><br />
 
@@ -126,6 +128,6 @@
 
 <style scoped>
     .study-info {
-        padding-top: 10px;
+        padding-top: 50px;
     }
 </style>

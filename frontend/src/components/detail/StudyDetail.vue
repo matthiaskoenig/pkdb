@@ -1,50 +1,73 @@
 <template>
     <div id="study-detail">
+        <div class="fixed-nav-bar2">
+
+            <Heading :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
+            <a href="#general">
+                <v-chip color="w" disable=false>
+                    <v-icon small title="General study information">{{icon("about")}}</v-icon>
+                </v-chip>
+            </a>
+            <a href="#groups">
+                <count-chip :count=study.group_count icon="group"></count-chip>
+            </a>
+            <a href="#individuals">
+                <count-chip :count=study.individual_count icon="individual"></count-chip>
+            </a>
+            <a href="#interventions">
+                <count-chip :count=study.intervention_count icon="intervention"></count-chip>
+            </a>
+            <a href="#outputs">
+                <count-chip :count=study.output_count icon="output"></count-chip>
+            </a>
+            <a href="#timecourses">
+                <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
+            </a>
+
+        </div>
+        <div>
+            <v-layout row wrap>
+
+                <!-- previous & next study
+                <v-btn color="white" icon :to="'/studies/' + previous_study" title="previous Study"><v-icon>{{ icon('previous') }}</v-icon></v-btn>
+                <v-btn color="white" icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
+                -->
 
 
-                <v-layout row wrap>
-                    <!-- previous & next study
+                <!-- General Overview -->
+                <v-flex id="general" xs12 v-show="visible.general">
+                    <v-card>
+                    <study-info :study="study"/>
+                </v-card>
+                </v-flex>
+                <!-- Groups -->
+                <v-flex id="groups" xs12 v-show="visible.groups">
+                    <annotations  v-if="study.groupset" :item="study.groupset"/>
+                    <groups-table v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
+                </v-flex>
 
-                    <v-btn color="white" icon :to="'/studies/' + previous_study" title="previous Study"><v-icon>{{ icon('previous') }}</v-icon></v-btn>
-                    <v-btn color="white" icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
-                    -->
+                <!-- Individuals -->
+                <v-flex id="individuals" xs12 v-show="visible.individuals">
+                    <annotations   v-if="study.individualset" :item="study.individualset"/>
+                    <individuals-table v-if="counts['individuals']>0" :ids="study.individualset.individuals" :autofocus="false"/>
+                </v-flex>
 
-                    <!-- General Overview -->
-                    <v-flex xs12 v-show="visible.general">
-                        <v-card>
-                            <heading-toolbar :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
-                            <study-info :study="study"/>
-                        </v-card>
-                    </v-flex>
+                <!-- Interventions -->
+                <v-flex id="interventions" xs12 v-show="visible.interventions">
+                    <annotations v-if="study.interventionset" :item="study.interventionset"/>
+                    <interventions-table v-if="counts['interventions']>0" :ids="study.interventionset.interventions" :autofocus="false"/>
+                </v-flex>
 
-                    <!-- Groups -->
-                    <v-flex xs12 v-show="visible.groups">
-                        <annotations  v-if="study.groupset" :item="study.groupset"/>
-                        <groups-table v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
-                    </v-flex>
+                <!-- Outputs -->
+                <v-flex xs12 v-show="visible.outputs || visible.timecourses">
+                    <annotations  v-if="study.outputset" :item="study.outputset"/>
+                    <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
+                    <br />
+                    <timecourses-table  v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 
-                    <!-- Individuals -->
-                    <v-flex xs12 v-show="visible.individuals">
-                        <annotations   v-if="study.individualset" :item="study.individualset"/>
-                        <individuals-table v-if="counts['individuals']>0" :ids="study.individualset.individuals" :autofocus="false"/>
-                    </v-flex>
-
-                    <!-- Interventions -->
-                    <v-flex xs12 v-show="visible.interventions">
-                        <annotations v-if="study.interventionset" :item="study.interventionset"/>
-                        <interventions-table v-if="counts['interventions']>0" :ids="study.interventionset.interventions" :autofocus="false"/>
-                    </v-flex>
-
-                    <!-- Outputs -->
-                    <v-flex xs12 v-show="visible.outputs || visible.timecourses">
-                        <annotations  v-if="study.outputset" :item="study.outputset"/>
-                        <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
-                        <br />
-                        <timecourses-table  v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
-
-                    </v-flex>
-                </v-layout>
-
+                </v-flex>
+            </v-layout>
+        </div>
     </div>
 </template>
 
@@ -59,6 +82,7 @@
     import OutputsTable from "../tables/OutputsTable";
     import TimecoursesTable from "../tables/TimecoursesTable";
     import GroupsTable from "../tables/GroupsTable";
+    import CountChip from "../detail/CountChip";
 
 
     export default {
@@ -70,6 +94,7 @@
             InterventionsTable: InterventionsTable,
             OutputsTable: OutputsTable,
             TimecoursesTable: TimecoursesTable,
+            CountChip: CountChip
 
         },
         mixins :[UrlMixin],
@@ -93,39 +118,7 @@
                     interventions: true,
                     outputs: true,
                     timecourses: true,
-                },
-                navigation : [
-                    {
-                        id: 'general',
-                        icon: 'about',
-                        title: 'Overview'
-                    },
-                    {
-                        id: 'groups',
-                        icon: 'groups',
-                        title: 'Groups'
-                    },
-                    {
-                        id: 'individuals',
-                        icon: 'individuals',
-                        title: 'Individuals'
-                    },
-                    {
-                        id: 'interventions',
-                        icon: 'interventions',
-                        title: 'Interventions'
-                    },
-                    {
-                        id: 'outputs',
-                        icon: 'outputs',
-                        title: 'Outputs'
-                    },
-                    {
-                        id: 'timecourses',
-                        icon: 'timecourses',
-                        title: 'Timecourses'
-                    },
-                ]
+                }
             }
         },
         computed: {
@@ -138,7 +131,6 @@
                     outputs: this.study.output_count,
                     timecourses: this.study.timecourse_count,
                     study_pks: this.study_pks
-
                 }
 
             },
@@ -147,10 +139,7 @@
             },
 
             next_study(){
-
                 var studies_number  = this.study_pks.length;
-
-
                 if (studies_number - 1 > this.study_index + 1)
                 {
                     return this.study_pks[this.study_index + 1]
@@ -163,8 +152,6 @@
             previous_study(){
 
                 var studies_number  = this.study_pks.length;
-
-
                 if (this.study_index - 1 > 0 )
                 {
                     return this.study_pks[this.study_index - 1]
@@ -209,13 +196,16 @@
 </script>
 
 <style scoped>
-    .study-navigation {
-        height: 100%; /* 100% Full-height */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Stay on top */
-        top: 50px; /* Stay at the top */
+    .fixed-nav-bar2 {
+        position: fixed;
+        top: 50;
         left: 0;
-        #background-color: #111; /* Black*/
-        overflow-x: hidden; /* Disable horizontal scroll */
+        z-index: 9999;
+        width: 100%;
+        height: 50px;
+        background-color: #00a087;
+    }
+    .content {
+
     }
 </style>
