@@ -161,8 +161,8 @@ class CharacteristicChoiceType(AbstractType):
                     msg = f"The choice `{choice}` is not a valid choice for category `{self.key}`. Allowed choices are: `{self.choices}`."
                     raise ValueError({"choice": msg})
             else:
-                msg = f"for category: <{self.category}> no choices are allowed. " \
-                      f"If you are trying to insert a numerical value, use keyword value, mean or median"
+                msg = f"The field `choice` is not allowed for category `{self.category}`." \
+                      f"For numerical values the fields `value`, `mean` or `median` are used."
                 raise ValueError({"choice": msg})
 
     class Meta:
