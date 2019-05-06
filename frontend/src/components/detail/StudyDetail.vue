@@ -1,59 +1,13 @@
 <template>
     <div id="study-detail">
-        <v-layout wrap>
-            <!-- Side menu for navigation. -->
-            <v-flex xs4 md2 class="study-navigation">
-                <v-card class="d-inline-block elevation-12">
-                    <v-navigation-drawer
-                            floating
-                            permanent
-                            stateless
-                            value="true"
-                    >
-                        <v-list>
-                        <v-list-tile>
-                            <v-list-tile-content>
-                                <heading :title="study.name" :icon="icon('study')" :resource_url="resource_url"/>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        </v-list>
-                        <v-divider></v-divider>
-                        <v-btn icon :to="'/studies/' + previous_study" title="previous Study"><v-icon>{{ icon('previous') }}</v-icon></v-btn>
-                        <v-btn icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
 
-                        <v-list dense>
-                            <v-list-tile
-                                    v-for="item in navigation"
-                                    :key="item.title"
-                                    @click="toggleVisibility(item.id)"
-                            >
-                                <v-list-tile-action>
-                                    <span v-if="visible[item.id]" :title="'Hide ' + item.title">
-                                        <v-icon color="primary" >{{ icon(item.icon) }}</v-icon>
-                                    </span>
-                                    <span v-else :title="'Hide ' + item.title">
-                                        <v-icon>{{ icon(item.icon) }}</v-icon>
-                                    </span>
-                                </v-list-tile-action>
-
-                                <v-list-tile-content>
-                                    <v-list-tile-title v-if="item.id == 'general'">{{ item.title }}</v-list-tile-title>
-                                    <v-list-tile-title v-else>
-                                        {{ item.title }} ({{counts[item.id]}})
-                                    </v-list-tile-title>
-                                </v-list-tile-content>
-
-                            </v-list-tile>
-                        </v-list>
-                    </v-navigation-drawer>
-                </v-card>
-            </v-flex>
-
-
-            <v-flex class="study-content" xs8 offset-xs4 md10 offset-md2>
-                <!-- Study content -->
 
                 <v-layout row wrap>
+                    <!-- previous & next study
+
+                    <v-btn color="white" icon :to="'/studies/' + previous_study" title="previous Study"><v-icon>{{ icon('previous') }}</v-icon></v-btn>
+                    <v-btn color="white" icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
+                    -->
 
                     <!-- General Overview -->
                     <v-flex xs12 v-show="visible.general">
@@ -91,9 +45,6 @@
                     </v-flex>
                 </v-layout>
 
-
-            </v-flex>
-        </v-layout>
     </div>
 </template>
 
