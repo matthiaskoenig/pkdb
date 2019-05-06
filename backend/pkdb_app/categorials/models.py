@@ -143,7 +143,7 @@ class CharacteristicChoiceType(AbstractType):
         return choice in self.choices.values_list("name",flat=True)
 
     def choices_list(self):
-        return self.choices.values_list("name",flat=True)
+        return self.choices.values_list("name", flat=True)
 
     def _asdict(self):
         return {
@@ -158,7 +158,7 @@ class CharacteristicChoiceType(AbstractType):
         if choice:
             if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
                 if not self.is_valid_choice(choice):
-                    msg = f"{choice} is not part of {self.choices} for {self.key}"
+                    msg = f"The choice `{choice}` is not a valid choice for category `{self.key}`. Allowed choices are: `{self.choices}`."
                     raise ValueError({"choice": msg})
             else:
                 msg = f"for category: <{self.category}> no choices are allowed. " \
