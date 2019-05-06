@@ -75,7 +75,6 @@
     import ReferenceDetail from "./ReferenceDetail"
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
-    import axios from 'axios';
 
     export default {
         name: "StudyInfo",
@@ -102,9 +101,6 @@
                 }
                 return list;
             },
-
-
-
         },
         methods: {
             icon: function (key) {

@@ -1,7 +1,7 @@
 <template>
     <v-dialog class="detail-dialog">
         <v-btn slot="activator" fab small :title="group.name">
-            <v-icon>{{ icon('group') }}</v-icon></a>
+            <v-icon>{{ icon('group') }}</v-icon>
         </v-btn>
         <group-detail :group="group"/>
     </v-dialog>

@@ -17,14 +17,12 @@
         <v-btn icon to="/timecourses" title="Timecourses"><v-icon>{{ icon('timecourses') }}</v-icon></v-btn>
         <v-btn icon to="/references" title="References"><v-icon>{{ icon('references') }}</v-icon></v-btn>
 
-        <!--
         <v-spacer></v-spacer>
-        <v-btn icon to="/curation" title="Curate data"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
-        -->
-        <v-spacer></v-spacer>
+
         <v-btn icon to="/account" title="User account settings">
             <v-icon>{{ icon('account') }}</v-icon>
         </v-btn>
+        <v-btn icon to="/curation" title="Curation information"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
         <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
         <v-btn icon :href="admin_url" title="Django admin interface">
