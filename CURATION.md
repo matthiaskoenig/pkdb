@@ -1,4 +1,5 @@
 # Curation of pharmacokinetics studies for PK-DB
+
 This document provides resources and information on how to curate data and information
 from pharmacokinetics studies for the PK-DB database.
 
@@ -11,8 +12,8 @@ https://github.com/matthiaskoenig/pkdb/issues
 with the label `data curation`.
 
 
-
 ## Interactive curation
+
 All information of a single study is stored in one folder. The complete information can be uploaded 
 and iteratively curated using the provided `watch_study` script. The script uploads 
 the latest data on file changes therefore allowing rapid iteration of curation and 
@@ -31,21 +32,35 @@ workon pkdb_data
 ```
 
 ## 1. PDF, Reference, Figures & Tables
-For upload a certain folder structure and organisation is expected of the `$STUDYFOLDER`:
-- folder name is `STUDYNAME`, e.g., Albert1974
-- folder contains the pdf as `STUDYNAME.pdf`, e.g., Albert1974.pdf
-- folder contains study information as `study.json`
+
+For upload a certain folder structure and organisation is expected of the `$STUDYFOLDER`.
+The first step is to create the folder and the basic files in the folder 
+
+- folder name is `STUDYNAME`, e.g., `Albert1974`
+- folder contains the pdf as `STUDYNAME.pdf`, e.g., `Albert1974.pdf`
 - folder contains additional files associated with study, i.e.,
-    - tables, named `STUDYNAME_Tab[1-9]*.png`, e.g., Albert1974_Tab1.png
-    - figures, named `STUDYNAME_Fig[1-9]*.png`, e.g., Albert1974_Fig2.png
-    - excel file, named `STUDYNAME.xlsx`, e.g., Albert1974.xlsx
-    - data files, named `STUDYNAME_Tab[1-9]*.csv` or `STUDYNAME_Fig[1-9]*.csv`
+    - tables, named `STUDYNAME_Tab[1-9]*.png`, e.g., `Albert1974_Tab1.png`
+    - figures, named `STUDYNAME_Fig[1-9]*.png`, e.g., `Albert1974_Fig2.png`
+    - excel file, named `STUDYNAME.xlsx`, e.g., `Albert1974.xlsx`
+
+In addition the folder can contain data files, 
+named `STUDYNAME_Tab[1-9]*.tsv` or `STUDYNAME_Fig[1-9]*.tsv`
+    The information is the excel file is the primary data source, i.e., the `*.tsv`
+information is redundant and not guaranteed to be maintained.
+
+Information about the study is stored in the `study.json` which we will create 
+in the following steps. Information about the reference for the study is stored
+in the `reference.json` (this file is created automatically and should not be altered).
 
 
 ## 2. Initial study information (`study.json`)
-For modifying the json best use Atom with pretty-json and settings `Notify on Parse Error` and `Prettify on Save JSON`.
 
-Fill in basic information for study, use the `PMID` for `sid` and `reference` field, use StudyName for `name` field and `creator` and `curator` fields.
+For modifying JSON files best use the `Atom` editor with the plugin `pretty-json` and activate the following 
+settings `Notify on Parse Error` and `Prettify on Save JSON`.
+
+If a `study.json` is already existing we will modify it in the following, if not 
+now is the time to create a new `study.json` in the `$STUDYFOLDER`. The following template JSON
+contains all the relevant information  
  
 ```json
 {
@@ -85,14 +100,20 @@ Fill in basic information for study, use the `PMID` for `sid` and `reference` fi
     }
 }
 ```
-* The `creator` and `curators` should map to existing data base users.
-* The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually.
-* Substances which are used in the study and are of interest should be mentioned in the `substances` list.
-* `keywords` and `substances` relevant for the study should be mentioned in the `keywords` list. `keywords` are documented in `pkdb_app/categorials`, `substances` are documented in `pkdb_app/substances/substances.py`
+* Fill in basic information for study, i.e., the `name` field with the `$STUDYNAME`, the `creator` and `curator` fields with existing users 
+(creator is a single user, whereas curators is a list of users), 
+the `sid` and `reference` field with the `PubmedId` of the study.  
+* Substances which are used in the study should be listed in the `substances`. Substances must be existing substances which can be looked up at https://develop.pk-db.com/#/curation
+* `keywords` relevant for the study should be mentioned in the `keywords` list. Keywords must be existing keywords which can be looked up at https://develop.pk-db.com/#/curation
+* The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually (please ask what to do in such a case).
 
+After this initial information is created in the `study_json` we can start running the `watch_study` script.
+```
+(pkdb_data) watch_study -s $STUDYFOLDER
+```
 
-## 3. Curation of groups/groupset and individuals/individualset
-The next step is curating the groups used in the study. The information is stored in the `groupset` of the following form.
+## 3. Curation of groups and individuals
+The next step is the curation of groups used in the study. The information is stored in the `groupset` of the following form.
 Retrieve group information from the publication. The top group containing all subjects must be called `all`.
 ```json
 {
