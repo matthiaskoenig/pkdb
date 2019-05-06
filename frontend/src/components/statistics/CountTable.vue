@@ -3,9 +3,19 @@
         <v-toolbar color="secondary" dark dense>
             <v-toolbar-title>Pharmacokinetics Database (PK-DB)</v-toolbar-title>
         </v-toolbar>
+        <v-container fluid>
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <p>
+                        PK-DB is a database for pharmacokinetics data. Main aim is the standardized storage of all
+                        relevant information for pharmacokinetics studies, including information about the studied
+                        groups, individuals, interventions and outputs.
+                    </p>
+                </v-flex>
+            </v-layout>
+        </v-container>
         <v-data-table :headers="headers" :items="items" hide-actions class="elevation-1">
             <template slot="items" slot-scope="table">
-
                 <td xs2>
                     <link-button :to="table.item.to" :title="table.item.name" :icon="table.item.icon"/>
                 </td>

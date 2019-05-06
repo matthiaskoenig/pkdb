@@ -24,7 +24,6 @@ import Reference from './components/Reference';
 
 /* About */
 import Curation from './components/Curation';
-import About from './components/About';
 
 /* Account */
 import Account from './components/auth/Account';
