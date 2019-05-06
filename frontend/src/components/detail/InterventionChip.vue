@@ -1,8 +1,8 @@
 <template>
     <v-dialog class="detail-dialog text-xs-center">
         <span slot="activator">
-            <v-chip v-if="intervention" color="blue" title="Intervention Details">
-                <v-icon small>{{ icon('intervention') }}</v-icon>&nbsp;
+            <v-chip v-if="intervention" color="#2b83ba" title="Intervention Details">
+                <v-icon small color="black">{{ icon('intervention') }}</v-icon>&nbsp;
                 <text-highlight :queries="search.split(/[ ,]+/)">{{ intervention.name }}</text-highlight>
             </v-chip>
         </span>
