@@ -1,6 +1,6 @@
 <template>
     <span class="link-button">
-        <v-btn color="primary" fab small flat dark :to="to" :title="title" :disabled="to ? false : true">
+        <v-btn fab small flat dark color="black" :to="to" :title="title" :disabled="to ? false : true">
             <v-icon>{{ icon }}</v-icon>
         </v-btn>
     </span>

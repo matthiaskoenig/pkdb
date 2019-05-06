@@ -20,12 +20,6 @@
                     <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
                 </td>
                 <td>
-                    <UserAvatar :user="table.item.creator" :search="search"/>
-                </td>
-                <td>
-                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c" :search="search"/></span>
-                </td>
-                <td>
                     <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
                 <td>
@@ -34,10 +28,12 @@
                     <count-chip :count=table.item.intervention_count icon="intervention"></count-chip>
                     <count-chip :count=table.item.output_count icon="output"></count-chip>
                     <count-chip :count=table.item.timecourse_count icon="timecourse"></count-chip>
-
                 </td>
                 <td>
-                    <annotations :item="table.item"></annotations>
+                    <UserAvatar :user="table.item.creator" :search="search"/>
+                </td>
+                <td>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c" :search="search"/></span>
                 </td>
             </template>
             <no-data/>
@@ -70,11 +66,10 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Creator', value: 'creator'},
-                    {text: 'Curators', value: 'curators',sortable: false},
                     {text: 'Substances', value: 'substances',sortable: false},
                     {text: 'Counts', value: 'counts',sortable: false},
-                    {text: 'Annotations', value: 'Annotations'},
+                    {text: 'Creator', value: 'creator'},
+                    {text: 'Curators', value: 'curators',sortable: false},
                 ],
             }
         },
