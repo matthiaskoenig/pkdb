@@ -66,15 +66,16 @@ contains all the relevant information
 {
     "sid": 123456789,
     "pkdb_version": 1.0,
-    "creator": "mkoenig",
     "name": "Author2007",
     "reference": 123456789,
-    "license": "open || closed",
+    "licence": "open || closed",
     "access": "public || private",
+    "creator": "mkoenig",
     "curators": [
         "mkoenig",
         "janekg"
     ],
+    "collaborators": [],
     "substances": [],
     "keywords": [],
     "descriptions": [],
@@ -102,7 +103,7 @@ contains all the relevant information
     }
 }
 ```
-* Fill in basic information for study, i.e., the `name` field with the `$STUDYNAME`, the `creator` and `curator` fields with existing users 
+* Fill in basic information for study, i.e., the `name` field with the `$STUDYNAME`, the `creator` and `curator` and `collaborator` fields with existing users 
 (creator is a single user, whereas curators is a list of users), 
 the `sid` and `reference` field with the `PubmedId` of the study.  
 * Substances which are used in the study should be listed in the `substances`. Substances must be existing substances which can be looked up at https://develop.pk-db.com/#/curation
@@ -113,6 +114,12 @@ After this initial information is created in the `study_json` we can start runni
 ```
 (pkdb_data) watch_study -s $STUDYFOLDER
 ```
+
+### Comments and descriptions
+The study and all sets allow to store additional annotions either in the form of `descriptions` or `comments`. 
+Descriptions are quotations from the publication to substantiate and support the curated data.
+`comments` provide the possibility to store information from individual curators. Examples of comments are stating incorrect units, missing data or strange conversions of data. 
+
 
 ## 3. Curation of groups
 The next step is the curation of the `group` information, i.e., which groups where studied. The information is stored in the `groupset` of the following form.
