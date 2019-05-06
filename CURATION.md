@@ -2,8 +2,14 @@
 This document provides resources and information on how to curate data and information
 from pharmacokinetics studies for the PK-DB database.
 
-Available choices for important fields are available from the database  
+Available choices for important fields are available from the PK-DB frontend  
 https://develop.pk-db.com/#/curation
+
+If things are unclear during curation or you find incorrect or missing information in 
+this document please open an issue at  
+https://github.com/matthiaskoenig/pkdb/issues  
+with the label `data curation`.
+
 
 
 ## Interactive curation
@@ -14,6 +20,9 @@ validation. Information on how to setup the `watch_study` script is provided
 in https://github.com/matthiaskoenig/pkdb_data
 
 ```
+# activate virtualenv with watch_study script
+workon pkdb_data
+
 # export environment variables for backend
 (pkdb_data) set -a && source .env.local
 
