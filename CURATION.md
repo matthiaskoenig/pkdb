@@ -112,15 +112,18 @@ After this initial information is created in the `study_json` we can start runni
 (pkdb_data) watch_study -s $STUDYFOLDER
 ```
 
-## 3. Curation of groups and individuals
-The next step is the curation of groups used in the study. The information is stored in the `groupset` of the following form.
-Retrieve group information from the publication. The top group containing all subjects must be called `all`.
+## 3. Curation of groups
+The next step is the curation of the `group` information, i.e., which groups where studied. The information is stored in the `groupset` of the following form.
+Retrieve group information from the publication and copy it in the description of the groupset. The top group containing all subjects must be called `all`.
+
+The main steps for defining groups is to set the `name` and `count` of the group (with `name` being `all` for the top-level group, or an arbitrary descriptive name
+otherwise; the `count` is the number of subjects in the group. In addition to this core information a group is characterized by `characteristica`.
+An overview over the available `characteristica` and possible choices is available from https://develop.pk-db.com/#/curation
 ```json
 {
   "groupset": {
     "description": [
-      "This is a first description.",
-      "This is a second description."
+      "The subjects were six healthy volunteers, three males and three females, aged 21.0 ± 0.9 years (range 20 to 22 years) and weighing 63 ± 11 kg (range 50 to 76 kg). All were nonsmokers. Subjects abstained from all methylxanthine containing foods and beverages during the entire period of the study. Compliance with this requirement was assessed by questioning at each presentation for blood sampling or urine delivery."
     ],
     "comments": [],
     "groups": [
