@@ -95,7 +95,7 @@ MIDDLEWARE = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
-INTERNAL_IPS = (,)
+INTERNAL_IPS = ("0.0.0.0",)
 
 ALLOWED_HOSTS = ["*"]
 ROOT_URLCONF = "pkdb_app.urls"
