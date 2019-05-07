@@ -52,7 +52,7 @@
                     <warning-chip title="no files or no permission"></warning-chip>
                 </div>
                 <div v-else>
-                    <file-image-view v-if="study.files" :files="study.files"/>
+                    <file-image-view v-if="images.length != 0" :files="images"/>
                 </div>
             </v-flex>
 
@@ -89,16 +89,21 @@
         mixins: [UrlMixin],
 
         computed: {
-            images_url() {
+            images() {
                 var list = [];
                 for (var k = 0; k < this.study.files.length; k++) {
                     var item = this.study.files[k];
-                    if (item.name.endsWith("png")) {
+
+                    if (this.is_image(item.file)) {
                         list.push(item)
                     }
                 }
                 return list;
             },
+            image_files(){
+
+            }
+
         },
         methods: {
             icon: function (key) {
