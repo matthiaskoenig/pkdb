@@ -1,7 +1,7 @@
 <template>
     <div id="comments" v-if="comments && comments.length>0">
         <span v-for="comment in comments">
-            <user-avatar :user="comment.user" :comment="comment.text"/>
+            <user-avatar :user="comment.user"/>{{comment.text}}<br />
         </span>
     </div>
 </template>
