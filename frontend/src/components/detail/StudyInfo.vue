@@ -54,8 +54,8 @@
                 <Annotations :item="study"/>
             </v-flex>
             <v-flex md5>
-                <div v-if="study.files.includes('permission denied')">
-                    Permission denied
+                <div v-if="study.files.length == 0">
+                    <warning-chip title="no files or no permission"></warning-chip>
                 </div>
                 <div v-else>
                     <file-image-view v-if="study.files" :files="study.files"/>
@@ -76,10 +76,12 @@
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
     import CountChip from "../detail/CountChip";
+    import WarningChip from "./WarningChip";
 
     export default {
         name: "StudyInfo",
         components: {
+            WarningChip,
             ReferenceDetail: ReferenceDetail,
             FileImageView: FileImageView,
             CountChip: CountChip

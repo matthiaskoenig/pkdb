@@ -32,7 +32,9 @@ const icons_table = {
     curation: 'fas fa-book-reader',
     previous:'fas fa-arrow-left',
     next:'fas fa-arrow-right',
-    star:'fas fa fa-star'
+    star:'fas fa fa-star',
+    warning:'fas fa-exclamation-triangle'
+
 
 };
 

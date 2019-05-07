@@ -539,7 +539,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             return files_serializer.data
 
         else:
-            return ["permission denied"]
+            return []
 
 
 
