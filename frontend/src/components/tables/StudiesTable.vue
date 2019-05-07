@@ -36,7 +36,7 @@
                     <UserAvatar :user="table.item.creator" :search="search"/>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-avatar :user="c" :search="search"/></span>
+                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-rating :user="c" :search="search"/></span>
                 </td>
             </template>
             <no-data/>

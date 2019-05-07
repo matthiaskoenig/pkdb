@@ -2,7 +2,7 @@
     <div id="study-detail">
         <div class="fixed-nav-bar2">
 
-            <Heading :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
+            <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
             <a href="#general">
                 <v-chip color="w" disable=false>
                     <v-icon small title="General study information">{{icon("about")}}</v-icon>
