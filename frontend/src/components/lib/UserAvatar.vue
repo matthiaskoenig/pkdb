@@ -1,6 +1,6 @@
 <template>
     <span id="user-avatar">
-          <v-avatar :title="username" :size="32">
+          <v-avatar :title="fullname" :size="32">
             <img :src="src">
           </v-avatar>
     </span>
@@ -14,30 +14,55 @@
             search: {type:String, default:""},
             user: {
                 type: Object,
-                required: true,
+                required: false,
             },
-            comment: String,
-
+            username: {
+                type: String,
+                required: false,
+            }
         },
         computed: {
-            username() {
-                return this.user.first_name + ' ' + this.user.last_name;
+            fullname() {
+                if (this.user){
+                    return this.user.first_name + ' ' + this.user.last_name;
+                } else {
+                    return this.username
+                }
             },
             initials() {
-                return this.user.first_name[0] + this.user.last_name[0];
+                if (this.user){
+                    return this.user.first_name[0] + this.user.last_name[0];
+                } else {
+                    return this.username
+                }
             },
             src() {
                 var img_dir = '/assets/images/avatars/';
-                if (this.initials === 'MK'){
-                    return img_dir + 'koenig_128.png';
-                } else if (this.initials === 'JG'){
-                    return img_dir + 'grzegorzewski_128.png';
-                } else if (this.initials === 'KG'){
-                    return img_dir + 'kgreen_128.png';
-                } else if (this.initials === 'DE'){
-                    return img_dir + 'dimitra_128.png';
+                var image = 'anonymous_128.png';
+
+                // FIXME: this is all hardcoded for now
+                if (this.user){
+                    if (this.initials === 'MK'){
+                        image = 'koenig_128.png';
+                    } else if (this.initials === 'JG'){
+                        image = 'grzegorzewski_128.png';
+                    } else if (this.initials === 'KG'){
+                        image = 'kgreen_128.png';
+                    } else if (this.initials === 'DE'){
+                        image = 'dimitra_128.png';
+                    }
+                } else {
+                    if (this.username === 'mkoenig'){
+                        image = 'koenig_128.png';
+                    } else if (this.username === 'janekg'){
+                        image = 'grzegorzewski_128.png';
+                    } else if (this.username === 'kgreen'){
+                        image = 'kgreen_128.png';
+                    } else if (this.username === 'dimitra'){
+                        image = 'dimitra_128.png';
+                    }
                 }
-                return img_dir + 'anonymous_128.png';
+                return img_dir + image
             },
         }
     }

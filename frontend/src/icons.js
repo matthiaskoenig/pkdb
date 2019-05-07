@@ -23,8 +23,12 @@ const icons_table = {
     admin: 'fas fa-cogs',
     account: 'fas fa-user-circle',
     github: 'fab fa-github',
-    files: 'fas fa-file-medical',
-    file: 'fas fa-file-medical',
+    files: 'fas fa-file',
+    file: 'fas fa-file',
+    file_excel: 'fas fa-file-excel',
+    file_image: 'fas fa-file-image',
+    file_csv: 'fas fa-file-csv',
+    file_pdf: 'fas fa-file-pdf',
     substance: 'fas fa-tablets',
     substances: 'fas fa-tablets',
     characteristicas: 'fas fa-ticket-alt',
@@ -36,9 +40,6 @@ const icons_table = {
     warning:'fas fa-exclamation-triangle',
     private:'fas fa-lock',
     public:'fas fa-lock-open',
-
-
-
 };
 
 function lookup_icon(key){

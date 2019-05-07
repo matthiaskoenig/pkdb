@@ -3,31 +3,17 @@
 
         <a :href="backend+file" :title="backend+file">
             <v-chip>
-                <v-icon small>{{ icon('file') }}</v-icon>
+                <v-icon v-if="filetype(file)=='image'" small>{{ icon('file_image') }}</v-icon>
+                <v-icon v-if="filetype(file)=='data'" small>{{ icon('file_csv') }}</v-icon>
+                <v-icon v-if="filetype(file)=='spreadsheet'" small>{{ icon('file_excel') }}</v-icon>
+                <v-icon v-if="filetype(file)=='pdf'" small>{{ icon('file_pdf') }}</v-icon>
+                <v-icon v-if="filetype(file)=='other'" small>{{ icon('file') }}</v-icon>
+                &nbsp;
                 <span v-show="showText">
                     <text-highlight :queries="search.split(/[ ,]+/)">&nbsp;{{name(file)}}</text-highlight>
                 </span>
             </v-chip>
         </a>
-
-        <!--
-        <span v-if="!is_image(file)">
-
-        <span v-else>
-            <v-dialog scrollable>
-
-
-            <v-btn slot="activator" fab dark small flat color="black"
-                   :disabled="resource_url ? false : true" title="PDF">
-                <v-icon dark>fas fa-file</v-icon>
-            </v-btn>
-                <v-card style="height: 800px;">
-                    <embed :src="resource_url"  height="100%" width="100%"/>
-                </v-card>
-            </v-dialog>
-        </span>
-        </span>
-        -->
     </span>
 </template>
 
@@ -52,15 +38,34 @@
             name(url) {
                 return url.substr(url.lastIndexOf('/') + 1);
             },
-            is_image(file){
-                return (file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg"));
-            },
-            is_data(file){
-                return (file.endsWith(".csv") || file.endsWith(".tsv") || file.endsWith(".jpeg"));
-            },
-            is_spreadsheet(file){
-                return (file.endsWith(".xlsx"));
+            filetype(file){
+                if (file.endsWith(".png")){
+                    return "image"
+                }
+                if (file.endsWith(".jpg")){
+                    return "image"
+                }
+                if (file.endsWith(".jpeg")){
+                    return "image"
+                }
+                if (file.endsWith(".csv")){
+                    return "data"
+                }
+                if (file.endsWith(".tsv")){
+                    return "data"
+                }
+                if (file.endsWith(".ods")){
+                    return "spreadsheet"
+                }
+                if (file.endsWith(".xlsx")){
+                    return "spreadsheet"
+                }
+                if (file.endsWith(".pdf")){
+                    return "pdf"
+                }
+                return "other"
             }
+
         },
         computed: {
             backend() {

@@ -18,10 +18,17 @@
         <v-btn icon to="/references" title="References"><v-icon>{{ icon('references') }}</v-icon></v-btn>
 
         <v-spacer></v-spacer>
-
-        <v-btn icon to="/account" title="User account settings">
+        <!--user -->
+        <router-link v-if="this.$store.state.username" tag="a" to="/account">
+            <v-chip>
+            <user-avatar :username="this.$store.state.username"></user-avatar>
+                {{this.$store.state.username}}
+            </v-chip>
+        </router-link>
+        <v-btn  v-if="!this.$store.state.username" icon to="/account" title="User account settings">
             <v-icon>{{ icon('account') }}</v-icon>
         </v-btn>
+
         <v-btn icon to="/curation" title="Curation information"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
         <!--
