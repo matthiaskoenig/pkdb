@@ -12,7 +12,7 @@ env:
   PKDB_API_BASE="http://0.0.0.0:8000"
 
   PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
-  PKDB_DEFAULT_PASSWORD="pkdb"
+  PKDB_ADMIN_PASSWORD="pkdb"
 
   PKDB_DB_NAME=postgres
   PKDB_DB_PASSWORD=postgres
