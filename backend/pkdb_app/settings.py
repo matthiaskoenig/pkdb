@@ -13,9 +13,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['PKDB_SECRET_KEY']
 
-# SECURITY WARNING: keep the secret key used in production secret!
-DEFAULT_PASSWORD = os.environ['PKDB_DEFAULT_PASSWORD']
-
 API_BASE = os.environ['PKDB_API_BASE']
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------

@@ -8,19 +8,19 @@
                     <v-icon small title="General study information">{{icon("about")}}</v-icon>
                 </v-chip>
             </a>
-            <a href="#groups">
+            <a href="#groups_anchor">
                 <count-chip :count=study.group_count icon="group"></count-chip>
             </a>
-            <a href="#individuals">
+            <a href="#individuals_anchor">
                 <count-chip :count=study.individual_count icon="individual"></count-chip>
             </a>
-            <a href="#interventions">
+            <a href="#interventions_anchor">
                 <count-chip :count=study.intervention_count icon="intervention"></count-chip>
             </a>
-            <a href="#outputs">
+            <a href="#outputs_anchor">
                 <count-chip :count=study.output_count icon="output"></count-chip>
             </a>
-            <a href="#timecourses">
+            <a href="#timecourses_anchor">
                 <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
             </a>
 
@@ -40,29 +40,36 @@
                     <study-info :study="study"/>
                 </v-card>
                 </v-flex>
+
                 <!-- Groups -->
-                <v-flex id="groups" xs12 v-show="visible.groups">
+                <a class="anchor" id="groups_anchor"></a>
+                <v-flex xs12 v-show="visible.groups">
                     <annotations  v-if="study.groupset" :item="study.groupset"/>
                     <groups-table v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Individuals -->
-                <v-flex id="individuals" xs12 v-show="visible.individuals">
+                <a class="anchor" id="individuals_anchor"></a>
+                <v-flex xs12 v-show="visible.individuals">
                     <annotations   v-if="study.individualset" :item="study.individualset"/>
                     <individuals-table v-if="counts['individuals']>0" :ids="study.individualset.individuals" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Interventions -->
-                <v-flex id="interventions" xs12 v-show="visible.interventions">
+                <a class="anchor" id="interventions_anchor"></a>
+                <v-flex xs12 v-show="visible.interventions">
                     <annotations v-if="study.interventionset" :item="study.interventionset"/>
                     <interventions-table v-if="counts['interventions']>0" :ids="study.interventionset.interventions" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Outputs -->
+
                 <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                     <annotations  v-if="study.outputset" :item="study.outputset"/>
+                    <a class="anchor" id="outputs_anchor"></a>
                     <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
                     <br />
+                    <a class="anchor" id="timecourses_anchor"></a>
                     <timecourses-table  v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 
                 </v-flex>
@@ -198,14 +205,17 @@
 <style scoped>
     .fixed-nav-bar2 {
         position: fixed;
-        top: 50;
+        top: 50px;
         left: 0;
         z-index: 9999;
         width: 100%;
         height: 50px;
         background-color: #00a087;
     }
-    .content {
-
+    a.anchor {
+        //display: block;
+        //position: relative;
+        top: 0px;
+        visibility: hidden;
     }
 </style>
