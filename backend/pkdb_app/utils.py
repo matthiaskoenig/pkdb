@@ -66,6 +66,7 @@ def update_or_create_multiple(parent, children, related_name):
 
 
 def create_multiple(parent, children, related_name):
+
     instance_child = getattr(parent, related_name)
     return [instance_child.create(**child) for child in children]
 

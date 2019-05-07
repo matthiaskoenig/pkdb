@@ -115,6 +115,7 @@ class InterventionSerializer(ExSerializer):
                 if not application in allowed_applications:
                     raise serializers.ValidationError(f"Allowed applications for category <{DOSING}> are <{allowed_applications}>.You might want to select the category: qualitative dosing. With no requirements.")
 
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):

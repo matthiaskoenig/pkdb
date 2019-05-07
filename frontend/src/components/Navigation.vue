@@ -7,7 +7,7 @@
         <v-btn icon to="/" title="Home">
             <v-icon>{{ icon('home') }}</v-icon>
         </v-btn>
-        <v-spacer></v-spacer>
+        <!--<v-spacer></v-spacer>-->
 
         <v-btn icon to="/studies" title="Studies"><v-icon>{{ icon('studies') }}</v-icon></v-btn>
         <v-btn icon to="/groups" title="Groups"><v-icon>{{ icon('groups') }}</v-icon></v-btn>
@@ -19,21 +19,19 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon to="/curation" title="Curate data"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
-
-        <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
-        <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository">
-            <v-icon>{{ icon('github')}}</v-icon>
+        <v-btn icon to="/account" title="User account settings">
+            <v-icon>{{ icon('account') }}</v-icon>
         </v-btn>
+        <v-btn icon to="/curation" title="Curation information"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
+        <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
+        <!--
+        <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
+        -->
         <v-btn icon :href="admin_url" title="Django admin interface">
             <v-icon>{{ icon('admin') }}</v-icon>
         </v-btn>
-        <v-btn icon to="/account" title="User account settings">
-            <v-icon>{{ icon('account') }}</v-icon>
+        <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository">
+            <v-icon>{{ icon('github')}}</v-icon>
         </v-btn>
     </v-toolbar>
 </template>

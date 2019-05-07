@@ -101,9 +101,8 @@ class AbstractType(models.Model):
 
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
-            msg = f"[{unit}] with dimension [{self.unit_dimension(unit)}] is not allowed. " \
-                  f"For units in the category [{self.key}]"
-            raise ValueError({"unit": msg,"allowed dimensions":self.valid_dimensions_str, "norm_units":self.n_units})
+            msg = f"For category `{self.key}` the unit [{unit}] with dimension {self.unit_dimension(unit)} is not allowed."
+            raise ValueError({"unit": msg, "Only units with the following dimensions are allowed:": self.valid_dimensions_str, "Units are allowed which can be converted to the following normalized units:": self.n_units})
 
     def is_valid_time_unit(self, time_unit):
         return self.p_unit(time_unit).dimensionality == '[time]'
@@ -143,7 +142,7 @@ class CharacteristicChoiceType(AbstractType):
         return choice in self.choices.values_list("name",flat=True)
 
     def choices_list(self):
-        return self.choices.values_list("name",flat=True)
+        return self.choices.values_list("name", flat=True)
 
     def _asdict(self):
         return {
@@ -158,11 +157,11 @@ class CharacteristicChoiceType(AbstractType):
         if choice:
             if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
                 if not self.is_valid_choice(choice):
-                    msg = f"{choice} is not part of {self.choices} for {self.key}"
+                    msg = f"The choice `{choice}` is not a valid choice for category `{self.key}`. Allowed choices are: `{list(self.choices_list())}`."
                     raise ValueError({"choice": msg})
             else:
-                msg = f"for category: <{self.category}> no choices are allowed. " \
-                      f"If you are trying to insert a numerical value, use keyword value, mean or median"
+                msg = f"The field `choice` is not allowed for category `{self.category}`." \
+                      f"For numerical values the fields `value`, `mean` or `median` are used."
                 raise ValueError({"choice": msg})
 
     class Meta:

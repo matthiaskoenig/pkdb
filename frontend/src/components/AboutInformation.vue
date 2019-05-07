@@ -1,27 +1,23 @@
 <template>
     <v-card id="about-information">
         <v-toolbar color="secondary" dark dense>
-            <v-toolbar-title>About</v-toolbar-title>
+            <v-toolbar-title>About PK-DB</v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex xs12>
-
-                    <h1>Pharmacokinetics database (PK-DB)</h1>
+                    <strong>Version</strong>: {{ version }}<br />
                     <p>
-                        <strong>Version</strong>: {{ version }}
+                        <span v-for="item in contact_items">
+                            <a :href="item.to" :title="item.title"><v-icon color="black" small>{{ item.icon }}</v-icon></a>&nbsp;<a :href="item.to" :title="item.title">{{ item.title }}</a><br/>
+                        </span>
                     </p>
                     <p>
-                        Data base for the standardized storage of clinical and experimental data sets from
-                        pharmacokinetics studies.
+                        <strong>Citation</strong>:&nbsp;<a href="https://doi.org/10.5281/zenodo.1406979"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg" alt="DOI"></a>
                     </p>
 
+                    <h2>Curation workflow</h2>
                     <p>
-                        <v-img src="/assets/images/workflow.png" max-width="600"/>
-                    </p>
-
-                    <p>
-                        <strong>Overview of data data curation workflow</strong><br/>
                         A) Literature research is performed for substances in liver function tests. Study data for
                         the integration
                         of datasets with computational models is extracted. This includes information about study
@@ -36,24 +32,19 @@
                         corresponding
                         metadata are made accessible under FAIR principles.
                     </p>
-                    <h2>Contact</h2>
-                    <span v-for="item in contact_items">
-                        <v-btn color="primary" fab small dark flat :title="item.name" :to="item.to"><v-icon>{{ item.icon }}</v-icon></v-btn>
-                        <a :href="item.to" :title="item.title">{{ item.title }}</a>
-                    </span>
-
-                    <h2>Citation</h2>
                     <p>
-                    <a href="https://doi.org/10.5281/zenodo.1406979"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg" alt="DOI"></a>
+                        <v-img src="/assets/images/workflow.png" max-width="600"/>
                     </p>
+
 
                     <h2>Funding</h2>
                     <p>
-                    This project is supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054).
+                        This project is supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054).
                         <br /><br/>
                         <a href="https://www.bmbf.de/" target="_blank"><img src="/assets/images/bmbf.png" height="75"></img></a>&nbsp;
                         <a href="http://www.lisym.org" target="_blank"><img src="/assets/images/lisym.png" height="50"></img></a>
                     </p>
+
 
                 </v-flex>
             </v-layout>

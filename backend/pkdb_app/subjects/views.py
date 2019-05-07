@@ -64,6 +64,7 @@ class GroupViewSet(DocumentViewSet):
 
 
 class IndividualViewSet(DocumentViewSet):
+
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'

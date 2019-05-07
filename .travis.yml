@@ -6,10 +6,13 @@ services:
 python:
   - "3.6"
 env:
+  PKDB_DOCKER_COMPOSE_YAML=docker-compose-develop.yml
   PKDB_DJANGO_CONFIGURATION=local
-  PKDB_API_BASE=http://0.0.0.0:8000
-  PKDB_SECRET_KEY=cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag
-  PKDB_DEFAULT_PASSWORD=pkdb
+
+  PKDB_API_BASE="http://0.0.0.0:8000"
+
+  PKDB_SECRET_KEY="cgasj6yjpkagcgasj6yjpkagcgasj6yjpkag"
+  PKDB_DEFAULT_PASSWORD="pkdb"
 
   PKDB_DB_NAME=postgres
   PKDB_DB_PASSWORD=postgres
@@ -21,12 +24,12 @@ env:
   PKDB_EMAIL_HOST_USER=
   PKDB_EMAIL_HOST_PASSWORD=
 
-before_script:
-  - docker-compose build
 
+before_script:
+  - ./docker-purge.sh
 
 script:
-  - docker-compose run --rm backend bash -c "./manage.py test"
+  - docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py test pkdb_app.tests"
 
 notifications:
   email: false

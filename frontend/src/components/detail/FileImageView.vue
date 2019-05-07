@@ -2,7 +2,7 @@
 <span>
     <v-tabs
             v-model="active"
-            color="sedondary"
+            color="#999999"
             dark
             slider-color="yellow">
         <v-tab
@@ -15,22 +15,20 @@
         </v-tab>
         <v-tab-item v-for="item in images" :key="item.name">
             <v-card flat>
-
                 <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
-
-                <v-img :src="backend+item.file" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img> <!-->
+                <v-img :src="backend+item.file" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
             </v-card>
+
+            <!-- Timecourse plots
             <v-divider></v-divider>
-                <!-- Timecourse plots -->
             <v-card flat>
-               <!--  <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
+               <get-data v-if="item.timecourses.length > 0" :resource_url="timecourses_url(item.timecourses)">
                     <span slot-scope="timecourses">
                         <timecourses-plot :timecourses="timecourses.data.data.data"/>
                     </span>
-                    -->
                 </get-data>
             </v-card>
-
+            -->
         </v-tab-item>
     </v-tabs>
 

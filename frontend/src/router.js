@@ -24,7 +24,6 @@ import Reference from './components/Reference';
 
 /* About */
 import Curation from './components/Curation';
-import About from './components/About';
 
 /* Account */
 import Account from './components/auth/Account';
@@ -73,11 +72,6 @@ export default new Router({
           path: '/references',
           name: 'References',
           component: References
-      },
-      {
-          path: '/about',
-          name: 'About',
-          component: About
       },
       {
           path: '/curation',

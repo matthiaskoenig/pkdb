@@ -23,7 +23,7 @@ from .subjects.views import (
     IndividualViewSet,
     CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
-from .users.views import UserViewSet, UserCreateViewSet
+from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
@@ -61,6 +61,8 @@ router.register("intervention_types", InterventionTypeViewSet, base_name="interv
 # user
 router.register(r"users", UserViewSet, base_name="users")
 router.register(r"users", UserCreateViewSet)
+
+router.register(r"user_groups", UserGroupViewSet, base_name="user_groups")
 
 #substance
 router.register("substances", SubstanceViewSet, base_name="substances")

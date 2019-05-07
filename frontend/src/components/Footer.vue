@@ -1,6 +1,6 @@
 <template>
     <div id="footer">
-        <span class="small">&copy; 2017-2018 PK-DB &nbsp;&nbsp;
+        <span>&copy; 2017-2019 Pharmacokinetics Database PK-DB &nbsp;&nbsp;
             Website: <a :href="web" target="_blank">{{web}}</a> &nbsp;&nbsp;
             Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a> &nbsp;&nbsp;
         </span>
@@ -19,7 +19,4 @@
     }
 </script>
 <style>
-    #footer {
-        margin-top: 25px;
-    }
 </style>

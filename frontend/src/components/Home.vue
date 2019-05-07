@@ -7,14 +7,6 @@
             <v-flex xs6>
                 <about-information />
             </v-flex>
-
-            <!--
-            <v-flex xs12>
-
-                Navigation Test
-                <navigation-test :drawer="true"/>
-            </v-flex>
-            -->
         </v-layout>
     </div>
 </template>

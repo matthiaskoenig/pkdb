@@ -1,38 +1,49 @@
 <template>
     <div id="about">
-        <v-layout wrap>
-            <v-flex xs3>
+        <h1>Curation of pharmacokinetics data for PK-DB</h1>
+        <p>
+        A detailed guideline for curation of studies is provided in
+        <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
+        </p>
+        <h2>Choices for groups and individuals</h2>
+        <v-layout row wrap>
+            <v-flex xs4>
                 <get-data :resource_url="characteristica_options_url">
                   <template slot-scope="characteristica">
                       <characteristica-browser :options="characteristica.data" title="Characteristica"/>
                   </template>
                 </get-data>
             </v-flex>
-            <v-flex xs3>
-                <get-data :resource_url="intervention_options_url">
-                    <template slot-scope="intervention">
-                        <characteristica-browser :options="intervention.data" title="Interventions"/>
+
+            <v-flex xs4>
+                <get-data :resource_url="keywords_url">
+                    <template slot-scope="keywords">
+                        <keyword-browser :keywords="keywords.data.data" title="Keywords"/>
                     </template>
                 </get-data>
             </v-flex>
-            <v-flex xs3>
-                <get-data :resource_url="output_options_url">
-                    <template slot-scope="output">
-                        <output-browser :options="output.data" title="PK types"/>
-                    </template>
-                </get-data>
-            </v-flex>
-            <v-flex xs3>
+        </v-layout>
+
+        <h2>Choices for interventions and outputs</h2>
+        <v-layout row wrap>
+            <v-flex xs4>
                 <get-data :resource_url="substances_url">
                     <template slot-scope="substances">
                         <substance-browser :substances="substances.data.data" title="Substances"/>
                     </template>
                 </get-data>
             </v-flex>
-            <v-flex xs3>
-                <get-data :resource_url="keywords_url">
-                    <template slot-scope="keywords">
-                        <keyword-browser :keywords="keywords.data.data" title="Keywords"/>
+            <v-flex xs4>
+                <get-data :resource_url="intervention_options_url">
+                    <template slot-scope="intervention">
+                        <characteristica-browser :options="intervention.data" title="Interventions"/>
+                    </template>
+                </get-data>
+            </v-flex>
+            <v-flex xs4>
+                <get-data :resource_url="output_options_url">
+                    <template slot-scope="output">
+                        <output-browser :options="output.data" title="PK types"/>
                     </template>
                 </get-data>
             </v-flex>

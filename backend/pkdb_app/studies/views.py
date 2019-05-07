@@ -4,7 +4,8 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
-from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator
+from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
@@ -58,7 +59,8 @@ class StudyViewSet(viewsets.ModelViewSet):
     )
     filter_fields = ("sid",)
     search_fields = filter_fields
-    permission_classes = (IsAdminOrCreatorOrCurator,)
+    lookup_field = "sid"
+    permission_classes = (StudyPermission,)
 
     @staticmethod
     def group_validation(request):
@@ -83,13 +85,11 @@ class StudyViewSet(viewsets.ModelViewSet):
                         elif group_name != "all" and parent_name is None:
                             raise ValidationError({"groups":"parent is required for keyword in groups besides for the the <all> group"})
 
-
-
-
-
                     if "all" not in groups_name:
-                        raise ValidationError({"group":"a group with the name all is required. This is the group "
-                                              "with common characteristica for all groups and individuals"})
+                        raise ValidationError(
+                            {"group": "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
+                                      "The `all` group is the group of all subjects which was studied and defines common "
+                                      "characteristica for all groups and individuals. Create the `all` group or rename group to `all`."})
 
 
                     # validate if groups are missing
@@ -131,15 +131,20 @@ def update_index_study(request):
 
         action = data.get("action",'index')
         update_instances[StudyDocument] = study
-        update_instances[ReferenceDocument] = study.reference
+        if study.reference:
+            update_instances[ReferenceDocument] = study.reference
+
         update_instances[GroupDocument] = study.groups
         update_instances[IndividualDocument] = study.individuals
         update_instances[InterventionDocument] = study.interventions
         update_instances[OutputDocument] = study.outputs
         update_instances[TimecourseDocument] = study.timecourses
 
+        print(study)
+
 
         for doc, instances in update_instances.items():
+
             try:
                 doc().update(thing=instances,action=action)
             except helpers.BulkIndexError:
@@ -149,11 +154,13 @@ def update_index_study(request):
 
 
 class ElasticStudyViewSet(DocumentViewSet):
+    document_uid_field = "pk"
+    lookup_field = "pk"
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
-    lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    permission_classes = (StudyPermission,)
     search_fields = (
                      'pk_version',
                      'creator.first_name',
@@ -172,7 +179,7 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'files'
                      )
 
-    filter_fields = {'name': 'name.raw'}
+    filter_fields = {'sid':'sid.raw','name': 'name.raw'}
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
@@ -187,11 +194,10 @@ class ElasticStudyViewSet(DocumentViewSet):
         #"curators": "curators.last_name",
 
     }
-
+   
     def get_object(self):
         """Get object."""
         queryset = self.get_queryset()
-
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         if lookup_url_kwarg not in self.kwargs:
             raise AttributeError(
@@ -208,7 +214,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             return DictionaryProxy(obj.to_dict())
         else:
             queryset = queryset.filter(
-                'term',
+                'match',
                 **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
             )
 
@@ -226,12 +232,45 @@ class ElasticStudyViewSet(DocumentViewSet):
 
             raise Http404("No result matches the given query.")
 
+    def get_queryset(self):
+
+        qs = super().get_queryset()
+        #return qs
+        group = user_group(self.request)
+        print("*"*100)
+        print(group)
+        print("*"*100)
+
+        if group in ["admin","reviewer"]:
+            return qs
+
+        elif group == "basic":
+
+            #todo:hier weiter machen
+            return qs.filter(access=True).filter(creator=self.request.user).filter(curators__in=[self.request.user]).filter(collaborators__in=[self.request.user])
+
+        elif group =="anonymous":
+            qs = qs.filter(
+                'term',
+                **{"access": PUBLIC}
+            )
+            return qs
+
+
+
+
+
+    
+
+
+
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document = ReferenceDocument
-    pagination_class = CustomPagination
-    serializer_class = ReferenceElasticSerializer
     lookup_field = "id"
+    pagination_class = CustomPagination
+    permission_classes = (IsAdminOrCreatorOrCurator,)
+    serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
     #multi_match_search_fields = {f:f for f in search_fields}

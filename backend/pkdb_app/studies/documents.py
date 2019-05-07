@@ -4,7 +4,7 @@ from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settin
 from pkdb_app.interventions.models import Substance,  Intervention
 from pkdb_app.outputs.models import Timecourse, Output
 from pkdb_app.studies.models import Reference, Study
-from pkdb_app.categorials.models import Keyword
+from pkdb_app.categorials.models import Keyword, Unit
 
 # Elastic Reference
 from pkdb_app.subjects.models import  Group, Individual
@@ -16,13 +16,12 @@ reference_index.settings(**elastic_settings)
 @reference_index.doc_type
 class ReferenceDocument(DocType):
     pk = fields.IntegerField(attr='pk')
-    sid = string_field(attr='sid')
+    sid = fields.IntegerField(attr='sid')
     pmid = string_field(attr='pmid')
     study = ObjectField(properties={
         "pk": fields.IntegerField(),
         "name": string_field('name'),
     })
-
     name = string_field("name")
     doi = string_field("doi")
     title = string_field("title")
@@ -89,7 +88,8 @@ def common_setfields(model, attr=None):
 
 @study_index.doc_type
 class StudyDocument(DocType):
-    pk = fields.IntegerField(attr='pk')
+    id = fields.StringField(attr='sid')
+    pk = fields.StringField(attr='sid')
     sid = string_field(attr='sid')
     pkdb_version = fields.IntegerField(attr='pkdb_version')
 
@@ -117,12 +117,13 @@ class StudyDocument(DocType):
         properties={
             'first_name': string_field("first_name"),
             'last_name': string_field("last_name"),
-            'pk': string_field("last_name"),
+            'pk': string_field("pk"),
             'username': string_field("username"),
         }
     )
     name = string_field("name")
     licence = string_field("licence")
+    access = string_field("access")
 
 
     reference = ObjectField(properties={
@@ -139,6 +140,17 @@ class StudyDocument(DocType):
             'pk': string_field("user.pk"),
             'username': string_field("user.username"),
             'rating': fields.FloatField(attr='rating')
+
+        },
+        multi=True
+    )
+    collaborators = fields.ObjectField(
+        attr="collaborators",
+        properties={
+            'first_name': string_field("first_name"),
+            'last_name': string_field("last_name"),
+            'pk': string_field("pk"),
+            'username': string_field("username")
 
         },
         multi=True

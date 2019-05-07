@@ -4,6 +4,24 @@
             <v-flex md2>
 
             <v-card flat>
+                <!--
+                <div>
+                    <span class="attr">Counts</span><br />
+                        <count-chip :count=study.group_count icon="group"></count-chip>
+                        <count-chip :count=study.individual_count icon="individual"></count-chip>
+                        <count-chip :count=study.intervention_count icon="intervention"></count-chip>
+                        <count-chip :count=study.output_count icon="output"></count-chip>
+                        <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
+                </div>
+                -->
+                <div v-if="study.substances && study.substances.length>0">
+                    <span class="attr">Substances</span><br />
+
+                    <span v-for="s in study.substances" v-bind:key="s">
+                        <substance-chip :title="s"/>
+                    </span>
+                    <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
+                </div>
                 <div >
                     <span class="attr">Creator</span><br />
                     <user-avatar :user="study.creator"/>
@@ -14,21 +32,13 @@
                     <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
                 </div>
 
-                <div v-if="study.substances && study.substances.length>0">
-                    <span class="attr">Substances</span><br />
-                    <span v-for="s in study.substances">
-                        <substance-chip :title="s"/>
-                    </span>
-                        <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
-                </div>
+
                 <div v-if="study.keywords && study.keywords.length>0">
                     <span class="attr">Keywords</span><br />
-                    <span v-for="keyword in study.keywords">{{keyword}}<br /></span>
+                    <span v-for="keyword in study.keywords" :key="keyword">{{keyword}}<br /></span>
                 </div>
                 <div>
                     <span class="attr">Files</span><br />
-
-
                 </div>
                 <div v-if="study.files.includes('permission denied')">
                     Permission denied
@@ -75,13 +85,14 @@
     import ReferenceDetail from "./ReferenceDetail"
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
-    import axios from 'axios';
+    import CountChip from "../detail/CountChip";
 
     export default {
         name: "StudyInfo",
         components: {
             ReferenceDetail: ReferenceDetail,
-            FileImageView: FileImageView
+            FileImageView: FileImageView,
+            CountChip: CountChip
         },
         props: {
             study: {
@@ -102,9 +113,6 @@
                 }
                 return list;
             },
-
-
-
         },
         methods: {
             icon: function (key) {
@@ -120,6 +128,6 @@
 
 <style scoped>
     .study-info {
-        padding-top: 10px;
+        padding-top: 50px;
     }
 </style>

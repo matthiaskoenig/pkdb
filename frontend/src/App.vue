@@ -3,18 +3,18 @@
         <v-app class="app">
             <v-container fluid grid-list-xl>
                 <v-layout row>
-                    <v-flex lg12 style="padding-top: 0; padding-bottom: 0;">
+                    <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
                         <navigation></navigation>
                     </v-flex>
                 </v-layout>
-                <v-layout row style="padding-top: 55px;">
-                    <v-flex lg12>
+                <v-layout row style="padding-top: 20px;">
+                    <v-flex xs12>
                         <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
                     </v-flex>
                 </v-layout>
                 <v-layout row>
-                    <v-flex lg12>
-                    <footer></footer>
+                    <v-flex xs12>
+                        <footer></footer>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -81,6 +81,4 @@
     .detail-dialog {
         width: 200px;
     }
-
-
 </style>

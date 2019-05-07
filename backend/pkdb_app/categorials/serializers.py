@@ -2,8 +2,6 @@
 Serializers for interventions.
 """
 
-
-
 # ----------------------------------
 # Interventions
 # ----------------------------------
@@ -62,7 +60,6 @@ class BaseSerializer(WrongKeyValidationSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        print(validated_data)
         units_data = validated_data.pop("units", [])
         choices_data = validated_data.pop("choices", [])
 
@@ -77,7 +74,6 @@ class BaseSerializer(WrongKeyValidationSerializer):
         update_or_create_multiple(instance, units_data, "units")
 
         if choices_data:
-            print(choices_data)
             update_or_create_multiple(instance, choices_data, "choices")
 
         instance.save()

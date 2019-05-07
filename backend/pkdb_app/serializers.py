@@ -40,7 +40,7 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         payload_keys = data.keys()
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
-                msg = {payload_key: f"<{payload_key}> is a wrong key"}
+                msg = {payload_key: f"`{payload_key}` is a wrong field, allowed fields are {serializer_fields}"}
                 raise serializers.ValidationError(msg)
 
     def get_or_val_error(self, model, *args, **kwargs):

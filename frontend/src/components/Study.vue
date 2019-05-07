@@ -23,11 +23,20 @@
         },
 
         computed: {
+            study_id()
+            {
+            var path = this.$route.path;
+            var tokens = path.split('/');
+            var entry_id = tokens[tokens.length-1];
+
+                return entry_id}
+            ,
             resource_url() {
-                var path = this.$route.path;
-                var tokens = path.split('/');
-                var entry_id = tokens[tokens.length-1];
-                return this.$store.state.endpoints.api + '/studies_elastic/'+ entry_id +'/?format=json';
+                //var path = this.$route.path;
+                // var tokens = path.split('/');
+                //console.log(tokens);
+                //var entry_id = tokens[tokens.length-1];
+                return this.$store.state.endpoints.api + '/studies_elastic/'+ this.study_id +'/?format=json';
             },
             study_pks_url(){
                 return this.$store.state.endpoints.api + '/study_pks/?format=json'

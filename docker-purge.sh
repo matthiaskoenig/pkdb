@@ -11,25 +11,30 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 : "${PKDB_DOCKER_COMPOSE_YAML:?The PKDB environment variable must be exported.}"
 
 sudo echo "Purging database and all docker containers, volumes, images ($PKDB_DOCKER_COMPOSE_YAML)?"
-
-read -p "Are you sure [y/N]? " -n 1 -r
-echo    # (optional) move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    exit 1
-fi
+#FIXME: add argument to skip question
+#read -p "Are you sure [y/N]? " -n 1 -r
+#echo    # (optional) move to a new line
+#if [[ ! $REPLY =~ ^[Yy]$ ]]
+#then
+#    exit 1
+#fi
 
 # shut down all containers (remove images and volumes)
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML down --volumes --rmi local
 
 # make sure containers are removed (if not running)
-docker container rm -f pkdb_setup_root_1 pkdb_migration_1 pkdb_frontend_1 pkdb_backend_1 pkdb_postgres_1 pkdb_elasticsearch_1 pkdb_nginx_1
+docker container rm -f pkdb_frontend_1
+docker container rm -f pkdb_backend_1
+docker container rm -f pkdb_postgres_1
+docker container rm -f pkdb_elasticsearch_1
+docker container rm -f pkdb_nginx_1
 
 # make sure images are removed
 docker image rm -f pkdb_frontend:latest
 docker image rm -f pkdb_backend:latest
-docker image rm -f pkdb_migration:latest
-docker image rm -f pkdb_setup_root:latest
+docker image rm -f pkdb_postgres:latest
+docker image rm -f pkdb_elasticsearch:latest
+docker image rm -f pkdb_nginx:latest
 
 # make sure volumes are removed
 docker volume rm -f pkdb_django_media
@@ -52,7 +57,7 @@ sudo rm -rf media
 sudo rm -rf static
 
 # build and start containers
-docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML build --no-cache
 
 echo "***Make migrations & collect static ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
@@ -64,4 +69,5 @@ echo "*** Build elasticsearch index ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py search_index --rebuild -f
 
 echo "*** Running containers ***"
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML up --detach
 docker container ls
