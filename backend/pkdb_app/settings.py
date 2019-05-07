@@ -41,7 +41,6 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
-    #'allauth.socialaccount.providers.google',
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
@@ -81,11 +80,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['email'],
         'METHOD': 'oauth2',
     },
-    # 'google':
-    #     { 'SCOPE': ['profile', 'email'],
-    #       'AUTH_PARAMS': {'access_type': 'online'}
-    #     },
-
 }
 
 # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -101,12 +95,7 @@ MIDDLEWARE = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     "0.0.0.0:8080",
-#     "localhost:8080",
-#     "frontend:8080",
-# )
-INTERNAL_IPS = ("172.18.0.1",)
+INTERNAL_IPS = (,)
 
 ALLOWED_HOSTS = ["*"]
 ROOT_URLCONF = "pkdb_app.urls"
@@ -135,11 +124,9 @@ LOGIN_REDIRECT_URL = "/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-
-STATIC_ROOT = '/static'
-# STATIC_ROOT = os.path.normpath(join(BASE_DIR, "static"))
-STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
+STATIC_ROOT = "/static"
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -168,7 +155,6 @@ TEMPLATES = [
 
 # Custom user app
 AUTH_USER_MODEL = "users.User"
-
 
 # Password Validation
 # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
