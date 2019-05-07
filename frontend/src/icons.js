@@ -33,7 +33,10 @@ const icons_table = {
     previous:'fas fa-arrow-left',
     next:'fas fa-arrow-right',
     star:'fas fa fa-star',
-    warning:'fas fa-exclamation-triangle'
+    warning:'fas fa-exclamation-triangle',
+    private:'fas fa-lock',
+    public:'fas fa-lock-open',
+
 
 
 };
