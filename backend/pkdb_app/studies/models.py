@@ -56,8 +56,8 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # optional
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True)  # optional
     title = models.TextField()
@@ -70,9 +70,10 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def id(self):
-        return self.pk
+    #@property
+    #def id(self):
+    #    return self.pk
+
     @property
     def study_pk(self):
         if self.study.first():

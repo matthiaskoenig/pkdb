@@ -197,7 +197,7 @@ class OutputExSerializer(BaseOutputExSerializer):
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
-    pktype = serializers.SlugRelatedField(slug_field="key", queryset=PharmacokineticType.objects.all())
+    pktype = serializers.SlugRelatedField(slug_field="key", queryset=PharmacokineticType.objects.all(),required=True)
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True

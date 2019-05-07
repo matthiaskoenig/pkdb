@@ -40,7 +40,7 @@ class AuthorSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
 
-class ReferenceSerializer(SidSerializer):
+class ReferenceSerializer(WrongKeyValidationSerializer):
     authors = AuthorSerializer(many=True, read_only=False)
 
     class Meta:
@@ -59,7 +59,11 @@ class ReferenceSerializer(SidSerializer):
         )
 
     def create(self, validated_data):
+        #return super().create(validated_data)
+
         authors_data = validated_data.pop("authors", [])
+
+
         reference = Reference.objects.create(**validated_data)
         update_or_create_multiple(reference, authors_data, "authors")
         reference.save()
@@ -113,7 +117,7 @@ class StudySerializer(SidSerializer):
 
     """
 
-    reference = serializers.PrimaryKeyRelatedField(
+    reference = serializers.SlugRelatedField(slug_field="sid",
         queryset=Reference.objects.all(), required=False, allow_null=True
     )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
@@ -375,7 +379,7 @@ class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
         model = Study
-        fields = ["pk","name"]#, 'url']
+        fields = ["pk","sid","name"]#, 'url']
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
     rating = serializers.FloatField()

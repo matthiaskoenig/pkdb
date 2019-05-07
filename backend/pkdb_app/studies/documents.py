@@ -16,10 +16,11 @@ reference_index.settings(**elastic_settings)
 @reference_index.doc_type
 class ReferenceDocument(DocType):
     pk = fields.IntegerField(attr='pk')
-    sid = fields.IntegerField(attr='sid')
+    sid = string_field(attr='sid')
     pmid = string_field(attr='pmid')
     study = ObjectField(properties={
         "pk": fields.IntegerField(),
+        "sid": string_field('sid'),
         "name": string_field('name'),
     })
     name = string_field("name")
@@ -127,9 +128,9 @@ class StudyDocument(DocType):
 
 
     reference = ObjectField(properties={
-        'sid': fields.IntegerField(attr='sid'),
+        'sid': string_field(attr='sid'),
         'pk': fields.IntegerField(attr='pk'),
-        'name': string_field("name")
+        'name': string_field(attr="name")
     })
 
     curators = fields.ObjectField(
