@@ -81,8 +81,12 @@ def user_group(request):
     return user_group
 
 def get_study_permission(user,obj):
-    allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
-    allow_user_get =(user in obj.collaborators.all()) or  (obj.access == PUBLIC) or allowed_user_modify
+    try:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators)
+        allow_user_get =(user in obj.collaborators) or  (obj.access == PUBLIC) or allowed_user_modify
+    except TypeError:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
+        allow_user_get = (user in obj.collaborators.all()) or (obj.access == PUBLIC) or allowed_user_modify
 
     return {
         "admin": True,
@@ -102,7 +106,10 @@ def anonymous_permissions(request,obj):
 def basic_permission(request, obj):
 
     user = request.user
-    allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
+    try:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators)
+    except TypeError:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
 
     if is_allowed_method(request):
         return get_study_permission(user, obj)
