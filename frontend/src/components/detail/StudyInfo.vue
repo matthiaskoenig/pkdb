@@ -21,20 +21,14 @@
                     <span class="attr">Curators</span><br />
                     <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
                 </div>
-
-
+                
                 <div v-if="study.keywords && study.keywords.length>0">
                     <span class="attr">Keywords</span><br />
                     <span v-for="keyword in study.keywords" :key="keyword">{{keyword}}<br /></span>
                 </div>
-                <div>
-                    <span class="attr">Files</span><br />
-                </div>
-                <div v-if="study.files.includes('permission denied')">
-                    Permission denied
-                </div>
 
-                <div v-else>
+                <div v-if="study.files && study.files.length>0">
+                    <span class="attr">Files</span><br />
                       <span v-if="file" v-for="file in study.files">
                         <div v-if="file.file">
                             <file-chip v-if="!is_image(file.file)" :file="file.file" />
