@@ -19,7 +19,7 @@
 
                 <div>
                     <span class="attr">Curators</span><br />
-                    <user-avatar v-for="c in study.curators" :key="c.pk" :user="c"/>
+                    <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
                 </div>
 
 

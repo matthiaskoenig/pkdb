@@ -48,6 +48,8 @@ import Descriptions from './components/lib/Descriptions';
 import Annotations from './components/lib/Annotations';
 
 import UserAvatar from './components/lib/UserAvatar';
+import UserRating from './components/lib/UserRating';
+
 import Heading from './components/lib/Heading';
 import HeadingToolbar from './components/lib/HeadingToolbar';
 
@@ -74,6 +76,8 @@ Vue.component('Annotations', Annotations);
 
 
 Vue.component('UserAvatar', UserAvatar);
+Vue.component('UserRating', UserRating);
+
 Vue.component('Heading', Heading);
 Vue.component('HeadingToolbar', HeadingToolbar);
 
