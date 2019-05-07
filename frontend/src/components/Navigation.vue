@@ -20,7 +20,7 @@
         <v-spacer></v-spacer>
         <!--user -->
         <router-link v-if="this.$store.state.username" tag="a" to="/account">
-            <v-chip>
+            <v-chip flat>
             <user-avatar :username="this.$store.state.username"></user-avatar>
                 {{this.$store.state.username}}
             </v-chip>
