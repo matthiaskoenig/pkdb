@@ -21,7 +21,7 @@
                     <span class="attr">Curators</span><br />
                     <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
                 </div>
-                
+
                 <div v-if="study.keywords && study.keywords.length>0">
                     <span class="attr">Keywords</span><br />
                     <span v-for="keyword in study.keywords" :key="keyword">{{keyword}}<br /></span>
