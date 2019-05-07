@@ -14,7 +14,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.3.1",
     "@fortawesome/free-solid-svg-icons": "^5.3.1",
     "@fortawesome/vue-fontawesome": "^0.1.1",
-    "@statnett/vue-plotly": "^0.2.0",
+    "@statnett/vue-plotly": "^0.3.2",
     "axios": "^0.18.0",
     "vue": "^2.5.17",
     "vue-auth-image": "0.0.2",
