@@ -146,8 +146,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         # validation (either 1 or max length)
         n_set = set(n_values)
-        if len(n_set) not in [1, 2]:
-            serializers.ValidationError(
+
+        if len(n_set) == 0:
+            raise serializers.ValidationError(
+                f"Empty characteristica are not allowed", entry
+            )
+
+        elif len(n_set) not in [1, 2]:
+            raise serializers.ValidationError(
                 f"Fields have different length, check || separators", entry
             )
 
