@@ -7,7 +7,6 @@ from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from elasticsearch import helpers
@@ -29,6 +28,8 @@ from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from django.core.exceptions import ObjectDoesNotExist
+
+from elasticsearch_dsl.query import Q
 
 
 ###################
@@ -233,34 +234,42 @@ class ElasticStudyViewSet(DocumentViewSet):
             raise Http404("No result matches the given query.")
 
     def get_queryset(self):
-
-        qs = super().get_queryset()
+        search = self.search#.query()
+        #qs = super().get_queryset()
         #return qs
         group = user_group(self.request)
-        print("*"*100)
-        print(group)
-        print("*"*100)
 
         if group in ["admin","reviewer"]:
-            return qs
+            return search.query()
 
         elif group == "basic":
+            qs = search.query(
+                Q('match', access__raw=PUBLIC) |
+                Q('match', creator__username__raw=self.request.user.username) |
+                Q('match', curators__username__raw=self.request.user.username) |
+                Q('match', collaborators__username__raw=self.request.user.username)
 
-            #todo:hier weiter machen
-            return qs.filter(access=True).filter(creator=self.request.user).filter(curators__in=[self.request.user]).filter(collaborators__in=[self.request.user])
-
-        elif group =="anonymous":
-            qs = qs.filter(
-                'term',
-                **{"access": PUBLIC}
             )
+            #)
+            #qs = qs.filter(
+            #    'term',
+             #   **{"access": PUBLIC, "creator":self.request.user}
+            #)
             return qs
 
 
 
+            #return qs.filter(access=True).filter(creator=self.request.user).filter(curators__in=[self.request.user]).filter(collaborators__in=[self.request.user])
 
+        elif group == "anonymous":
 
-    
+            qs = search.query(
+                'match',
+                **{"access__raw": PUBLIC}
+            )
+
+            return qs
+
 
 
 
