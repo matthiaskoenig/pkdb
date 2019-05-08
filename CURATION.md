@@ -109,7 +109,8 @@ the `sid` and `reference` field with the `PubmedId` of the study.
 * Substances which are used in the study should be listed in the `substances`. Substances must be existing substances which can be looked up at https://develop.pk-db.com/#/curation
 * `keywords` relevant for the study should be mentioned in the `keywords` list. Keywords must be existing keywords which can be looked up at https://develop.pk-db.com/#/curation
 * The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually (please ask what to do in such a case).
-
+* The `access` field provides information on who can see the study. `public` provides access to everyone, `private` only to the `creator`, `curators` and `collaborators`.
+* The `licence` field provides information on the licence of the publication. This is either `open` in case of Open Access publications or `closed` otherwise. Images and the PDF are only shown publicly if the publication is Open Access.
 After this initial information is created in the `study_json` we can start running the `watch_study` script.
 ```
 (pkdb_data) watch_study -s $STUDYFOLDER
