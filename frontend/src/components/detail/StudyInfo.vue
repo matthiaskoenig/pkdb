@@ -30,7 +30,7 @@
 
                 <div v-if="study.files && study.files.length>0">
                     <span class="attr">Files</span><br />
-                      <span v-if="file" v-for="file in study.files">
+                      <span v-if="file" v-for="file in study.files.sort()">
                         <div v-if="file.file">
                             <file-chip v-if="!is_image(file.file)" :file="file.file" />
                         </div>
