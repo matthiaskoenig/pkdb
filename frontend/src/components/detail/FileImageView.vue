@@ -17,12 +17,11 @@
             <v-card flat>
                 <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
                 <get-file :resource_url="backend+item.file">
-                    <div slot-scope="file">
-                        <v-img :src="'data:image/png;base64,'+file.data"  max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
-                    </div>
+                    <template slot-scope="data">
+                        <v-img :src="data.data"  max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
+                    </template>
                 </get-file>
-                <!--<v-img :src="backend+item.file+'?Authorization = Token ' +token" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
-                -->
+
             </v-card>
 
             <!-- Timecourse plots
