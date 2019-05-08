@@ -30,16 +30,16 @@
                     <count-chip :count=table.item.timecourse_count icon="timecourse"></count-chip>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
+                    <span v-for="(c, index2) in table.item.substances.sort()" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
                 <td>
-                    <span v-for="(keyword, index2) in table.item.keywords" :key="index2"><keyword-chip :keyword="keyword"/></span>
+                    <span v-for="(keyword, index2) in table.item.keywords.sort()" :key="index2"><keyword-chip :keyword="keyword"/></span>
                 </td>
                 <td>
                     <UserAvatar :user="table.item.creator" :search="search"/>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.curators" :key="index2"><user-rating :user="c" :search="search"/></span>
+                    <span v-for="(c, index2) in table.item.curators.sort()" :key="index2"><user-rating :user="c" :search="search"/></span>
                 </td>
             </template>
             <no-data/>

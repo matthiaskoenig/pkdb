@@ -6,14 +6,14 @@
             <v-card flat>
                 <div v-if="study.substances && study.substances.length>0">
                     <span class="attr">Substances</span><br />
-                    <span v-for="s in study.substances" v-bind:key="s">
+                    <span v-for="s in study.substances.sort()" v-bind:key="s">
                         <substance-chip :title="s"/>
                     </span>
                 </div>
 
                 <div v-if="study.keywords && study.keywords.length>0">
                     <span class="attr">Keywords</span><br />
-                    <span v-for="keyword in study.keywords" :key="keyword">
+                    <span v-for="keyword in study.keywords.sort()" :key="keyword">
                         <keyword-chip :keyword="keyword"/><br />
                     </span>
                 </div>
@@ -25,7 +25,7 @@
 
                 <div>
                     <span class="attr">Curators</span><br />
-                    <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
+                    <user-rating v-for="c in study.curators.sort()" :key="c.pk" :user="c"/>
                 </div>
 
                 <div v-if="study.files && study.files.length>0">
