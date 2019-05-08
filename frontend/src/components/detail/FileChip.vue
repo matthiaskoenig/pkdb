@@ -2,7 +2,7 @@
     <span id="file-chip" class="text-xs-center" @mouseover="showText=true" @mouseleave="showText=true">
 
         <a :href="backend+file" :title="backend+file">
-            <v-chip dark>
+            <v-chip>
                 <v-icon color="orange" v-if="filetype(file)=='image'" small>{{ icon('file_image') }}</v-icon>
                 <v-icon color="blue" v-if="filetype(file)=='data'" small>{{ icon('file') }}</v-icon>
                 <v-icon color="green" v-if="filetype(file)=='spreadsheet'" small>{{ icon('file_excel') }}</v-icon>

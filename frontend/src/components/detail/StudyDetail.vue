@@ -28,7 +28,7 @@
                     </a>
 
                 </div>
-                <div  class="fixed-nav-bar3">
+                <div class="fixed-nav-bar3">
                     <v-chip color="w" >
                         <v-icon small :title="'Study is '+ study.access + ' accessible'">{{icon(study.access)}}</v-icon>
                     </v-chip>
