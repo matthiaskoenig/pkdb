@@ -6,13 +6,19 @@
             <v-card flat>
                 <div v-if="study.substances && study.substances.length>0">
                     <span class="attr">Substances</span><br />
-
                     <span v-for="s in study.substances" v-bind:key="s">
                         <substance-chip :title="s"/>
                     </span>
-                    <!-- <v-icon>{{ icon('substance') }}</v-icon>&nbsp;{{c.name}}<br /></span>-->
                 </div>
-                <div >
+
+                <div v-if="study.keywords && study.keywords.length>0">
+                    <span class="attr">Keywords</span><br />
+                    <span v-for="keyword in study.keywords" :key="keyword">
+                        <keyword-chip :keyword="keyword"/><br />
+                    </span>
+                </div>
+
+                <div>
                     <span class="attr">Creator</span><br />
                     <user-avatar :user="study.creator"/>
                 </div>
@@ -20,11 +26,6 @@
                 <div>
                     <span class="attr">Curators</span><br />
                     <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
-                </div>
-
-                <div v-if="study.keywords && study.keywords.length>0">
-                    <span class="attr">Keywords</span><br />
-                    <span v-for="keyword in study.keywords" :key="keyword">{{keyword}}<br /></span>
                 </div>
 
                 <div v-if="study.files && study.files.length>0">
@@ -35,7 +36,6 @@
                         </div>
                     </span>
                 </div>
-
             </v-card>
 
             </v-flex>

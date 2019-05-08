@@ -56,8 +56,11 @@ import HeadingToolbar from './components/lib/HeadingToolbar';
 import GetData from './components/api/GetData';
 import GetPaginatedData from './components/api/GetPaginatedData';
 
+// chips
 import SubstanceChip from './components/detail/SubstanceChip';
 import FileChip from './components/detail/FileChip';
+import KeywordChip from './components/detail/KeywordChip';
+import InterventionChip from './components/detail/InterventionChip';
 
 import TextHighlight from 'vue-text-highlight';
 import axios from 'axios';
@@ -86,6 +89,8 @@ Vue.component('GetPaginatedData', GetPaginatedData);
 
 Vue.component('SubstanceChip', SubstanceChip);
 Vue.component('FileChip', FileChip);
+Vue.component('KeywordChip', KeywordChip);
+Vue.component('InterventionChip', InterventionChip);
 
 Vue.component('text-highlight', TextHighlight);
 

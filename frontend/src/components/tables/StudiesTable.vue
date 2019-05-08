@@ -23,14 +23,17 @@
                     <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
                 </td>
                 <td>
-                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
-                </td>
-                <td>
                     <count-chip :count=table.item.group_count icon="group"></count-chip>
                     <count-chip :count=table.item.individual_count icon="individual"></count-chip>
                     <count-chip :count=table.item.intervention_count icon="intervention"></count-chip>
                     <count-chip :count=table.item.output_count icon="output"></count-chip>
                     <count-chip :count=table.item.timecourse_count icon="timecourse"></count-chip>
+                </td>
+                <td>
+                    <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
+                </td>
+                <td>
+                    <span v-for="(keyword, index2) in table.item.keywords" :key="index2"><keyword-chip :keyword="keyword"/></span>
                 </td>
                 <td>
                     <UserAvatar :user="table.item.creator" :search="search"/>
@@ -67,13 +70,14 @@
                 otype: "studies",
                 otype_single: "study",
                 headers: [
-                    {text: '', value: 'buttons',sortable: false},
+                    {text: '', value: 'buttons', sortable: false},
                     {text: 'Id', value: 'id'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Substances', value: 'substances',sortable: false},
-                    {text: 'Counts', value: 'counts',sortable: false},
+                    {text: 'Counts', value: 'counts', sortable: false},
+                    {text: 'Substances', value: 'substances', sortable: false},
+                    {text: 'Keywords', value: 'keywords', sortable: false},
                     {text: 'Creator', value: 'creator'},
-                    {text: 'Curators', value: 'curators',sortable: false},
+                    {text: 'Curators', value: 'curators', sortable: false},
                 ],
             }
         },
