@@ -20,6 +20,32 @@ the latest data on file changes therefore allowing rapid iteration of curation a
 validation. Information on how to setup the `watch_study` script is provided
 in https://github.com/matthiaskoenig/pkdb_data
 
+As initial setup create a virtual environment with `pkdb_data` installed.
+```
+git clone https://github.com/matthiaskoenig/pkdb_data.git
+cd pkdb_data
+mkvirtualenv pkdb_data --python=python3.6
+pip install -e .
+```
+Next step is to export your credentials via environment variables.
+Create a `.env` file with the following content
+```
+API_BASE=https://develop.pk-db.com
+USER=PKDB_USERNAME
+PASSWORD=PKDB_PASSWORD
+```
+And export the variables via
+```
+set -a && source .env
+```
+To check the environment variables use
+```
+echo $API_BASE
+echo $USER
+echo $PASSWORD
+```
+
+To watch a given study use 
 ```
 # activate virtualenv with watch_study script
 workon pkdb_data
@@ -111,6 +137,7 @@ the `sid` and `reference` field with the `PubmedId` of the study.
 * The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually (please ask what to do in such a case).
 * The `access` field provides information on who can see the study. `public` provides access to everyone, `private` only to the `creator`, `curators` and `collaborators`.
 * The `licence` field provides information on the licence of the publication. This is either `open` in case of Open Access publications or `closed` otherwise. Images and the PDF are only shown publicly if the publication is Open Access.
+
 After this initial information is created in the `study_json` we can start running the `watch_study` script.
 ```
 (pkdb_data) watch_study -s $STUDYFOLDER
