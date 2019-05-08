@@ -40,7 +40,10 @@ const icons_table = {
     warning:'fas fa-exclamation-triangle',
     private:'fas fa-lock',
     public:'fas fa-lock-open',
+    closed:'fab fa-creative-commons-pd',
+    open:'fab fa-creative-commons-pd-alt'
 };
+
 
 function lookup_icon(key){
     return icons_table[key]

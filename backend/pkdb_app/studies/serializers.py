@@ -3,6 +3,7 @@ Studies serializers.
 """
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
+from pkdb_app.users.permissions import get_study_permission
 from rest_framework import serializers
 
 from ..comments.models import Description, Comment
@@ -523,19 +524,16 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_files(self, obj):
         study_dict = obj.to_dict()
-        licence = study_dict.get("licence")
 
         files_serializer = DataFileElasticSerializer(obj.files, many=True, read_only=True)
-        user = self.context["request"].user
-        curators_serializer = CuratorRatingElasticSerializer(obj.curators, many=True)
-        creator_serializer = UserElasticSerializer(obj.creator)
-        allowed_usernames = [curator["username"] for curator in curators_serializer.data]
-        allowed_usernames.append(creator_serializer.data["username"])
 
-        if licence == "open":
-            return files_serializer.data
+        licence = study_dict.get("licence")
+        print(files_serializer.data)
 
-        if user.is_staff or user.username in allowed_usernames:
+        if licence == "open" or get_study_permission(self.context["request"].user,obj):
+            print("*" * 100)
+            print("Here I am")
+            print("*" * 100)
             return files_serializer.data
 
         else:

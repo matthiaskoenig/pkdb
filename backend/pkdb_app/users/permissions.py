@@ -1,3 +1,4 @@
+from pkdb_app.studies.models import OPEN
 from pkdb_app.users.models import PUBLIC
 from rest_framework import permissions
 
@@ -53,7 +54,11 @@ class IsAdminOrCreatorOrCurator(permissions.BasePermission):
 
 class StudyPermission(permissions.BasePermission):
 
+
     def has_object_permission(self, request, view, obj):
+        if hasattr(obj,"study"):
+            obj = obj.study.first()
+
         return study_permissions(request,obj)
 
 
@@ -64,15 +69,15 @@ def study_permissions(request, obj):
                          "anonymous": anonymous_permissions(request, obj)}
 
 
-    return study_permissions[user_group(request)]
+    return study_permissions[user_group(request.user)]
 
-def user_group(request):
+def user_group(user):
 
     try:
-        user_group = request.user.groups.first().name
+        user_group = user.groups.first().name
     except AttributeError:
 
-        if request.user.is_superuser:
+        if user.is_superuser:
             user_group = "admin"
 
         else:
@@ -88,13 +93,31 @@ def get_study_permission(user,obj):
         allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
         allow_user_get = (user in obj.collaborators.all()) or (obj.access == PUBLIC) or allowed_user_modify
 
-    return {
+    permission_dict =  {
         "admin": True,
         "anonymous":(obj.access == PUBLIC),
         "reviewer": True,
         "basic": allow_user_get
      }
+    return permission_dict[user_group(user)]
 
+
+def get_study_file_permission(user,obj):
+    try:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators)
+        allow_user_get =(user in obj.collaborators) or (obj.licence == OPEN) or allowed_user_modify
+    except TypeError:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
+        allow_user_get = (user in obj.collaborators.all()) or (obj.licence == OPEN) or allowed_user_modify
+
+    permission_dict =  {
+        "admin": True,
+        "anonymous":(obj.licence == OPEN),
+        "reviewer": True,
+        "basic": allow_user_get
+     }
+
+    return permission_dict[user_group(user)]
 
 
 def anonymous_permissions(request,obj):

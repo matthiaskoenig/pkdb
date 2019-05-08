@@ -1,5 +1,5 @@
 from pkdb_app.categorials.models import CharacteristicType
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from pkdb_app.users.permissions import StudyPermission
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -144,7 +144,7 @@ class DataFileViewSet(viewsets.ModelViewSet):
 
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (StudyPermission,)
 
 
     def create(self, request, *args, **kwargs):

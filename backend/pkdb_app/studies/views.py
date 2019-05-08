@@ -237,7 +237,7 @@ class ElasticStudyViewSet(DocumentViewSet):
         search = self.search#.query()
         #qs = super().get_queryset()
         #return qs
-        group = user_group(self.request)
+        group = user_group(self.request.user)
 
         if group in ["admin","reviewer"]:
             return search.query()

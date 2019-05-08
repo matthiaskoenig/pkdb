@@ -16,7 +16,13 @@
         <v-tab-item v-for="item in files" :key="item.name">
             <v-card flat>
                 <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
-                <v-img :src="backend+item.file" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
+                <get-file :resource_url="backend+item.file">
+                    <div slot-scope="file">
+                        <v-img :src="'data:image/png;base64,'+file.data"  max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
+                    </div>
+                </get-file>
+                <!--<v-img :src="backend+item.file+'?Authorization = Token ' +token" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
+                -->
             </v-card>
 
             <!-- Timecourse plots
@@ -41,11 +47,13 @@
      */
     import {lookup_icon} from "@/icons"
     import {UrlMixin} from "../tables/mixins";
+    import GetFile from "../api/GetFile";
+
     import TimecoursesPlot from "../plots/TimecoursesPlot";
 
     export default {
         name: "FileImageView",
-        components: {TimecoursesPlot},
+        components: {TimecoursesPlot,GetFile},
         props: {
             files: {
                 type: Array,
@@ -73,9 +81,18 @@
                 return list.sort(function(a, b){
                     return a.name.localeCompare(b.name)
                 });
-            }
+
+            },
+            token(){
+            return localStorage.getItem('token')
+        }
         },
         methods: {
+            file_data: function (data){
+                var base64 = require('base-64');
+                return base64.encode(data)
+            },
+
 
             id_from_name: function (name) {
                 let tokens = name.split("_");

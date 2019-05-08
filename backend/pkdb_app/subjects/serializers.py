@@ -409,11 +409,12 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
     def get_timecourses(self, obj):
         return list_of_pk("timecourses", obj)
 
-    def get_object(self):
-
-        obj = get_object_or_404(self.get_queryset())
-        self.check_object_permissions(self.request, obj)
-        return obj
+    #def get_object(self):
+    #    obj = get_object_or_404(self.get_queryset())
+    #
+    #    return obj
+    #    self.check_object_permissions(self.request, obj)
+    #    return obj
 
 
 class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):

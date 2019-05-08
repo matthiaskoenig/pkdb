@@ -3,7 +3,6 @@ Django model for Study.
 """
 from django.db import models
 from pkdb_app.users.models import PUBLIC, PRIVATE
-from pkdb_app.users.permissions import study_permissions
 
 from ..categorials.models import Keyword
 from ..outputs.models import OutputSet
@@ -272,7 +271,5 @@ class Study(Sidable, models.Model):
 
         return 0
 
-    def permitted_study(self,request):
-        return study_permissions(self,request)
 
 

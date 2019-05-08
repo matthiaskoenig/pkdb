@@ -11,7 +11,8 @@ import './assets/pkdb.css';
 import './stylus/main.styl'
 
 Vue.use(VueResource);
-
+import VueAuthImage from 'vue-auth-image';
+Vue.use(VueAuthImage);
 /** --------------------------------------------------------------
  *  FontAwesome
  *  -------------------------------------------------------------- */
@@ -64,9 +65,6 @@ import InterventionChip from './components/detail/InterventionChip';
 
 import TextHighlight from 'vue-text-highlight';
 import axios from 'axios';
-import VueAuthImage from 'vue-auth-image';
-// register vue-auth-image directive
-Vue.use(VueAuthImage);
 
 Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
