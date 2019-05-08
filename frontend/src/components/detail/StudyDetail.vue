@@ -5,10 +5,8 @@
             <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
 
             <v-chip color="w">
-                <v-icon small :title="'Study is '+ study.access">{{icon(study.access)}}</v-icon>&nbsp;
-                {{ count }}
+                <v-icon small :title="'Study is '+ study.access + ' accessible'">{{icon(study.access)}}</v-icon>&nbsp;
             </v-chip>
-
             <a href="#general">
                 <v-chip color="w" disable=false>
                     <v-icon small title="General study information">{{icon("about")}}</v-icon>
