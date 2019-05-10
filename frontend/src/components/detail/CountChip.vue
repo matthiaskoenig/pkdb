@@ -27,6 +27,7 @@
                 return lookup_icon(this.icon)
             },
         }
+
     }
 </script>
 

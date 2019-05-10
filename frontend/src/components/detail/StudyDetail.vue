@@ -45,13 +45,15 @@
                 <v-btn color="white" icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
                 -->
 
-
-                <!-- General Overview -->
+                 <!-- General Overview -->
                 <v-flex id="general" xs12 v-show="visible.general">
                     <v-card>
                     <study-info :study="study"/>
                 </v-card>
                 </v-flex>
+
+
+
 
                 <!-- Groups -->
                 <a class="anchor" id="groups_anchor"></a>
@@ -87,6 +89,7 @@
                 </v-flex>
             </v-layout>
         </div>
+
     </div>
 </template>
 
@@ -239,4 +242,4 @@
         top: 0px;
         visibility: hidden;
     }
-</style>https://vuetifyjs.com/en/components/api-explorer
+</style>

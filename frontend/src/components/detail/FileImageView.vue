@@ -20,6 +20,7 @@
                     <template slot-scope="data">
                         <v-img :src="data.data"  max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
                     </template>
+
                 </get-file>
 
             </v-card>
@@ -81,16 +82,9 @@
                     return a.name.localeCompare(b.name)
                 });
 
-            },
-            token(){
-            return localStorage.getItem('token')
-        }
+            }
         },
         methods: {
-            file_data: function (data){
-                var base64 = require('base-64');
-                return base64.encode(data)
-            },
 
 
             id_from_name: function (name) {

@@ -1,22 +1,32 @@
 <template>
     <div class="study-info">
         <v-layout wrap>
-            <v-flex md2>
-
+        <v-flex md2>
             <v-card flat>
-                <div v-if="study.substances && study.substances.length>0">
+
+                <div v-if="study.substances">
                     <span class="attr">Substances</span><br />
-                    <span v-for="s in study.substances.sort()" v-bind:key="s">
+
+                    <span v-for="s in study.substances" v-bind:key="s">
+                        <span> > hallo</span>
                         <substance-chip :title="s"/>
+
+
                     </span>
+
+
                 </div>
 
-                <div v-if="study.keywords && study.keywords.length>0">
+
+                <div v-if="study.keywords">
                     <span class="attr">Keywords</span><br />
-                    <span v-for="keyword in study.keywords.sort()" :key="keyword">
+                    <span v-for="keyword in study.keywords" :key="keyword">
                         <keyword-chip :keyword="keyword"/><br />
                     </span>
+
                 </div>
+
+
 
                 <div>
                     <span class="attr">Creator</span><br />
@@ -25,20 +35,27 @@
 
                 <div>
                     <span class="attr">Curators</span><br />
-                    <user-rating v-for="c in study.curators.sort()" :key="c.pk" :user="c"/>
+                    <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
                 </div>
 
-                <div v-if="study.files && study.files.length>0">
+
+
+
+
+                 <div v-if="images.length > 0">
                     <span class="attr">Files</span><br />
-                      <span v-if="file" v-for="file in study.files">
-                        <div v-if="file.file">
-                            <file-chip v-if="!is_image(file.file)" :file="file.file" />
-                        </div>
+                      <span v-if="file" v-for="file in images">
+
+                            <file-chip :file="file.file" />
                     </span>
                 </div>
+
+
             </v-card>
 
+
             </v-flex>
+
             <v-flex md5>
                 <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
                     <template slot-scope="reference">
@@ -56,9 +73,7 @@
                 </div>
             </v-flex>
 
-            <v-flex md12>
 
-            </v-flex>
 
         </v-layout>
     </div>
