@@ -8,7 +8,6 @@
                     <span class="attr">Substances</span><br />
 
                     <span v-for="s in study.substances" v-bind:key="s">
-                        <span> > hallo</span>
                         <substance-chip :title="s"/>
 
 

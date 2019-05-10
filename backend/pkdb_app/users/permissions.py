@@ -57,7 +57,8 @@ class StudyPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if hasattr(obj,"study"):
-            obj = obj.study.first()
+            if obj.study:
+                obj = obj.study.first()
 
         return study_permissions(request,obj)
 
