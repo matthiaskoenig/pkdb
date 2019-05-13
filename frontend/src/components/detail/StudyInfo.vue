@@ -38,13 +38,9 @@
                 </div>
 
 
-
-
-
-                 <div v-if="images.length > 0">
+                 <div v-if="study.files.length > 0">
                     <span class="attr">Files</span><br />
-                      <span v-if="file" v-for="file in images">
-
+                      <span v-for="file in study.files" :key="file.pk">
                             <file-chip :file="file.file" />
                     </span>
                 </div>
