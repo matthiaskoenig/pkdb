@@ -11,7 +11,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
     DescriptionElasticSerializer
 from ..subjects.models import GroupSet, IndividualSet
 from ..users.serializers import UserElasticSerializer
-from ..utils import update_or_create_multiple, create_multiple
+from ..utils import update_or_create_multiple, create_multiple, list_duplicates
 
 from ..interventions.models import Substance, DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
@@ -221,7 +221,7 @@ class StudySerializer(SidSerializer):
                 if len(curator_and_rating) != 2:
                     raise serializers.ValidationError(
                         {
-                            "curator": " Each curator in the list of curator can be added either via the curator "
+                            "curators": " Each curator in the list of curator can be added either via the curator "
                                        "username or as a list with first position beeing the curator username "
                                         " and the second posion the rating between (0-5)",
                             "details": curator_and_rating,
@@ -237,6 +237,27 @@ class StudySerializer(SidSerializer):
             ratings.append(rating_dict)
 
         data["curators"] = ratings
+        for item in ["collaborators","curators","substances","keywords"]:
+
+            if item in ["curators"]:
+                related_unique_field = "user"
+                unique_values = [instance.get(related_unique_field) for instance in data.get(item, [])]
+
+            else:
+                unique_values =  data.get(item, [])
+
+
+            duplicates = list_duplicates(unique_values)
+            if duplicates:
+                raise serializers.ValidationError(
+                    {"curators": f"Duplicated {item} <{duplicates}> are not allowed."})
+
+
+
+        curator_usernames = [curator.get("user") for curator in data["curators"]]
+        duplicated_curators = list_duplicates(curator_usernames)
+        if duplicated_curators:
+            raise serializers.ValidationError({"curators": f"Duplicated {item} <{duplicated_curators}> are not allowed."})
 
         return super().to_internal_value(data)
 
