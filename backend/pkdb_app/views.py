@@ -57,21 +57,16 @@ class CreateListModelMixin(object):
 
 #@authentication_classes((TokenAuthentication,SessionAuthentication))
 def serve_protected_document(request, file):
-    print("I have permission")
-
     try:
         user,_ = TokenAuthentication().authenticate(request=request)
     except TypeError:
         user = request.user
 
-    print(request.META)
-
-
     path, file_name = os.path.split(file)
 
     try:
         ref = Reference.objects.get(pdf=file)
-        if user.is_staff:
+        if get_study_file_permission(user,ref.study):
             # Split the elements of the path
             response = FileResponse(ref.pdf, )
             response["Content-Disposition"] = "attachment; filename=" + file_name

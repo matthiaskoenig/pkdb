@@ -1,4 +1,6 @@
-from pkdb_app.studies.models import OPEN
+from django_elasticsearch_dsl_drf.utils import DictionaryProxy
+from elasticsearch_dsl import AttrDict
+from pkdb_app.studies.models import OPEN, Study
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.serializers import UserSerializer
 from rest_framework import permissions
@@ -59,7 +61,7 @@ class StudyPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if hasattr(obj,"study"):
             if obj.study:
-                obj = obj.study.first()
+                obj = obj.study
 
         return study_permissions(request,obj)
 
@@ -105,28 +107,32 @@ def get_study_permission(user,obj):
 
 
 def get_study_file_permission(user,obj):
-    try:
+    if isinstance(obj, AttrDict) or isinstance(obj, DictionaryProxy):
         username = user.username
         curator_usernames = [curator["username"] for curator in obj.curators]
         collaborators_usernames = [collaborator["username"] for collaborator in obj.collaborators]
-
         allowed_user_modify = (username == obj.creator["username"]) or (user in curator_usernames)
-        allow_user_get =(user in collaborators_usernames) or (obj.licence == OPEN) or allowed_user_modify
+        allow_user_get = (user in collaborators_usernames) or (obj.licence == OPEN) or allowed_user_modify
 
-
-        print(user)
-        print(allow_user_get)
-    except TypeError:
+    elif isinstance(obj, Study):
         allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
         allow_user_get = (user in obj.collaborators.all()) or (obj.licence == OPEN) or allowed_user_modify
 
+
+
+    print(allowed_user_modify)
+    print(allow_user_get)
+
+
+
+
     permission_dict =  {
         "admin": True,
-        "anonymous":(obj.licence == OPEN),
+        "anonymous":obj.licence == OPEN,
         "reviewer": True,
         "basic": allow_user_get
      }
-
+    print(permission_dict[user_group(user)])
     return permission_dict[user_group(user)]
 
 

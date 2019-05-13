@@ -15,7 +15,6 @@
         </v-tab>
         <v-tab-item v-for="item in files" :key="item.name">
             <v-card flat>
-                <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
                 <get-file :resource_url="backend+item.file">
                     <template slot-scope="data">
                         <v-img :src="data.data"  max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>

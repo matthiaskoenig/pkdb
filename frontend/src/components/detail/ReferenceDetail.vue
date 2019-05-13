@@ -9,17 +9,22 @@
             <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" target="_blank">PMID:{{reference.pmid }}</a><br/>
             <br />
             {{reference.abstract}}<br/>
+
+            <file-chip v-if="reference.pdf" :file="reference.pdf"></file-chip>
+            <warning-chip v-else title="no pdf or no permission"></warning-chip>
+
         </v-card>
     </div>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+    import WarningChip from "./WarningChip";
 
 
     export default {
         name: "ReferenceDetail",
-        components: {},
+        components: {WarningChip},
         props: {
             reference: {
                 type: Object,

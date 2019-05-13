@@ -1,6 +1,7 @@
 """
 Studies serializers.
 """
+from elasticsearch_dsl import AttrDict
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
 from pkdb_app.users.permissions import get_study_file_permission
@@ -284,6 +285,8 @@ class StudySerializer(SidSerializer):
         rep = super().to_representation(instance)
         request = self.context.get('request')
         # replace file url
+
+        #todo: This is not working correctly
         if "files" in rep:
             rep["files"] = [ request.build_absolute_uri(file.file.url) for file in instance.files.all() ]
 
@@ -410,12 +413,6 @@ class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = Author
         fields = ("pk", "first_name", "last_name")
 
-class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
-    class Meta:
-        model = Study
-        fields = ["pk","sid","name"]#, 'url']
-
 class CuratorRatingElasticSerializer(serializers.Serializer):
     rating = serializers.FloatField()
     first_name = serializers.CharField()
@@ -424,6 +421,19 @@ class CuratorRatingElasticSerializer(serializers.Serializer):
 
     class Meta:
         fields = ("id", "first_name", "last_name","username","rating")
+
+class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+
+    licence = serializers.CharField(read_only=True)
+    curators = CuratorRatingElasticSerializer(many=True, read_only=True)
+    creator = UserElasticSerializer(read_only=True)
+    collaborators = UserElasticSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Study
+        fields = ["pk","sid","name","licence","curators","collaborators","creator"]
+
+
 
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
@@ -448,13 +458,15 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_pdf(self, obj):
-        #todo update
         user = self.context["request"].user
 
-        if user.is_staff:
+
+        if get_study_file_permission(user,AttrDict(obj.study)):
             return obj.to_dict().get("pdf")
         else:
-            return "permission denied"
+            return None
+
+
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -466,7 +478,8 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
         rep = super().to_representation(instance)
         request = self.context.get("request")
         # replace file url
-        rep["pdf"] = request.build_absolute_uri(instance.pdf)
+        if rep["pdf"]:
+            rep["pdf"] = request.build_absolute_uri(instance.pdf)
 
         return rep
 
@@ -557,13 +570,9 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             return []
 
     def get_files(self, obj):
-        study_dict = obj.to_dict()
 
-        files_serializer = DataFileElasticSerializer(obj.files, many=True, read_only=True)
-
-        licence = study_dict.get("licence")
-
-        if licence == "open" or get_study_file_permission(self.context["request"].user,obj):
+        if get_study_file_permission(self.context["request"].user,obj):
+            files_serializer = DataFileElasticSerializer(obj.files, many=True, read_only=True)
             return files_serializer.data
 
         else:

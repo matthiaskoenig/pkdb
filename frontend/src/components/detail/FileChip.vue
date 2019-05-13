@@ -1,7 +1,7 @@
 <template>
     <span id="file-chip" class="text-xs-center" @mouseover="showText=true" @mouseleave="showText=true">
 
-        <a :href="backend+file" :title="backend+file">
+        <a  @click.prevent="downloadItem(file_url)" :href="file_url" :title="file_url">
             <v-chip>
                 <v-icon color="orange" v-if="filetype(file)=='image'" small>{{ icon('file_image') }}</v-icon>
                 <v-icon color="blue" v-if="filetype(file)=='data'" small>{{ icon('file') }}</v-icon>
@@ -19,6 +19,7 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import axios from 'axios'
 
     export default {
         name: "FileChip",
@@ -32,6 +33,27 @@
             }
         },
         methods: {
+            downloadItem(url){
+                if (localStorage.getItem('token'))
+                { var headers = {Authorization :  'Token ' + localStorage.getItem('token')}}
+                else {
+                    headers = {}
+                }
+                axios.get(url,{ headers: headers, responseType: 'arraybuffer'})
+                    .then(response => {
+                        let url = window.URL.createObjectURL(new Blob([response.data]));
+                        let link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', this.name(url)); //or any other extension
+                        document.body.appendChild(link);
+                        link.click()
+
+                    })
+                    .catch((error)=>{
+                        console.error(this.url);
+                        console.error(error);
+                    })
+            },
             icon(key) {
                 return lookup_icon(key)
             },
@@ -70,6 +92,16 @@
         computed: {
             backend() {
                 return this.$store.state.django_domain;
+            },
+            file_url() {
+                if (this.file.startsWith(this.backend)){
+                    return this.file
+
+                }
+                else{
+                    return this.backend+this.file
+                }
+
             },
 
         },

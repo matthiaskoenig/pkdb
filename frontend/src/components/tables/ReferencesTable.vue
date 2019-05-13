@@ -12,8 +12,10 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <link-button :to="'/references/'+ table.item.sid" :title="'Reference: '+table.item.name" :icon="icon('reference')"/>
-                    <link-button v-for="s in table.item.study" :to="'/studies/'+ s.sid" :title="'Study: '+s.name" :icon="icon('study')"/>
-                    <!-- <file-button :resource_url='backend+table.item.pdf' :title="table.item.pdf"/>-->
+                    <link-button v-if="table.item.study" :to="'/studies/'+ table.item.study.sid" :title="'Study: '+table.item.study.name" :icon="icon('study')"/>
+                    <!--
+                    <file-button v-if="table.item.pdf" :resource_url='backend+table.item.pdf' :title="table.item.pdf"/>
+                    -->
                     <json-button :resource_url="api + '/references_elastic/'+ table.item.sid +'/'"/>
 
                 </td>

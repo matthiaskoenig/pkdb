@@ -22,6 +22,39 @@ class ReferenceDocument(DocType):
         "pk": fields.IntegerField(),
         "sid": string_field('sid'),
         "name": string_field('name'),
+        "licence": string_field("licence"),
+        "creator": fields.ObjectField(
+        properties={
+            'first_name': string_field("first_name"),
+            'last_name': string_field("last_name"),
+            'pk': string_field("pk"),
+            'username': string_field("username"),
+        }
+    ),
+        "curators": fields.ObjectField(
+            attr="ratings",
+            properties={
+                'first_name': string_field("user.first_name"),
+                'last_name': string_field("user.last_name"),
+                'pk': string_field("user.pk"),
+                'username': string_field("user.username"),
+                'rating': fields.FloatField(attr='rating')
+
+            },
+            multi=True)
+        ,
+        "collaborators": fields.ObjectField(
+            attr="collaborators",
+            properties={
+                'first_name': string_field("first_name"),
+                'last_name': string_field("last_name"),
+                'pk': string_field("pk"),
+                'username': string_field("username")
+
+            },
+            multi=True
+        )
+
     })
     name = string_field("name")
     doi = string_field("doi")
