@@ -98,8 +98,7 @@ contains all the relevant information
     "access": "public || private",
     "creator": "mkoenig",
     "curators": [
-        "mkoenig",
-        "janekg"
+        ["mkoenig", 0.5]
     ],
     "collaborators": [],
     "substances": [],
@@ -136,6 +135,7 @@ the `sid` and `reference` field with the `PubmedId` of the study.
 * `keywords` relevant for the study should be mentioned in the `keywords` list. Keywords must be existing keywords which can be looked up at https://develop.pk-db.com/#/curation
 * The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually (please ask what to do in such a case).
 * The `access` field provides information on who can see the study. `public` provides access to everyone, `private` only to the `creator`, `curators` and `collaborators`.
+* The `curators` is a list which consists of either curator names (e.g. `mkoenig`) or a curator name with a curation score between 0.0 and 5.0 (e.g. `[mkoenig, 3.5]`)
 * The `licence` field provides information on the licence of the publication. This is either `open` in case of Open Access publications or `closed` otherwise. Images and the PDF are only shown publicly if the publication is Open Access.
 
 After this initial information is created in the `study_json` we can start running the `watch_study` script.
