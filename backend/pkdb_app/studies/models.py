@@ -75,15 +75,15 @@ class Reference(models.Model):
 
     @property
     def study_pk(self):
-        if self.study.first():
-            return self.study.first().pk
+        if self.study:
+            return self.study.pk
         else:
             return ""
 
     @property
     def study_name(self):
-        if self.study.first():
-            return self.study.first().name
+        if self.study:
+            return self.study.name
         else:
             return ""
 
@@ -112,7 +112,7 @@ class Study(Sidable, models.Model):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    reference = models.ForeignKey(
+    reference = models.OneToOneField(
         Reference, on_delete=models.CASCADE, related_name="study", null=True
     )
     curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)

@@ -45,10 +45,10 @@ class IsAdminOrCreatorOrCurator(permissions.BasePermission):
             return True
 
         # for reference model
-        if obj.study.first():
-            allowed_user = (request.user == obj.study.first().creator) or (request.user in obj.study.first().curators.all())
+        if hasattr(obj,"study"):
+            allowed_user = (request.user == obj.study.creator) or (request.user in obj.study.curators.all())
         else:
-            allowed_user = True
+            allowed_user = False
 
 
         return request.user.is_staff or allowed_user

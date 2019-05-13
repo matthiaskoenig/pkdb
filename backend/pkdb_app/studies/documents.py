@@ -246,7 +246,8 @@ class StudyDocument(DocType):
         if isinstance(related_instance, Substance):
             return related_instance.studies.all()
         elif isinstance(related_instance, Reference):
-            return related_instance.study.all()
+            if hasattr(related_instance,"study"):
+                return related_instance.study
         elif isinstance(related_instance, Keyword):
             return related_instance.studies.all()
         elif isinstance(related_instance, Individual):

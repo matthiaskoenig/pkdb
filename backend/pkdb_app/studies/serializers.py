@@ -119,7 +119,7 @@ class StudySerializer(SidSerializer):
     """
 
     reference = serializers.SlugRelatedField(slug_field="sid",
-        queryset=Reference.objects.all(), required=False, allow_null=True
+        queryset=Reference.objects.all(), required=True, allow_null=False
     )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
     curators = CuratorRatingSerializer(many=True, required=False,
@@ -259,7 +259,20 @@ class StudySerializer(SidSerializer):
         if duplicated_curators:
             raise serializers.ValidationError({"curators": f"Duplicated {item} <{duplicated_curators}> are not allowed."})
 
+        if data["reference"]:
+            reference = Reference.objects.get(sid=data["reference"])
+            if reference.study:
+                raise serializers.ValidationError(
+                        {
+                            "reference":
+                                f"References are required to be unqiue on every study. "
+                                f"This Reference already exist in study <{reference.study.name}>.",
+                            "details": data["reference"]
+                        }
+                    )
+
         return super().to_internal_value(data)
+
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -416,7 +429,7 @@ class CuratorRatingElasticSerializer(serializers.Serializer):
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
     pdf = serializers.SerializerMethodField()
-    study = StudySmallElasticSerializer(many=True)
+    study = StudySmallElasticSerializer()
     class Meta:
         model = Reference
         fields = (
@@ -435,7 +448,7 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
         )
 
     def get_pdf(self, obj):
-
+        #todo update
         user = self.context["request"].user
 
         if user.is_staff:
