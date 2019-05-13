@@ -41,16 +41,16 @@
                 }
                 axios.get(url,{ headers: headers, responseType: 'arraybuffer'})
                     .then(response => {
-                        let url = window.URL.createObjectURL(new Blob([response.data]));
+                        let url_data = window.URL.createObjectURL(new Blob([response.data]));
                         let link = document.createElement('a');
-                        link.href = url;
+                        link.href = url_data;
                         link.setAttribute('download', this.name(url)); //or any other extension
                         document.body.appendChild(link);
                         link.click()
 
                     })
                     .catch((error)=>{
-                        console.error(this.url);
+                        console.error(url);
                         console.error(error);
                     })
             },
