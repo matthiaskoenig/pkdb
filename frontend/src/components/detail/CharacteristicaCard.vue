@@ -13,9 +13,12 @@
                 <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon color="primary">fa fa-male</v-icon></span>
                 {{ data.choice }}
             </span>
-            <span v-if="value">
+            <span v-if="value || error">
                 <strong>{{ value }}<span v-if="data.unit"> [{{ data.unit }}]</span></strong><br />
                 <span v-if="error">{{ error }}</span>
+            </span>
+            <span v-else-if="!value & !error & !data.choice">
+                <v-icon small title='missing information for chararcterica'>{{icon("na")}}</v-icon>&nbsp;
             </span>
         </v-badge>
     </div>

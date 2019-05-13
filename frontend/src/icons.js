@@ -41,7 +41,8 @@ const icons_table = {
     private:'fas fa-lock',
     public:'fas fa-lock-open',
     closed:'fab fa-creative-commons-pd',
-    open:'fab fa-creative-commons-pd-alt'
+    open:'fab fa-creative-commons-pd-alt',
+    na:'fas fa-ban'
 };
 
 

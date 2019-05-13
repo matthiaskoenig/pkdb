@@ -3,7 +3,7 @@ Studies serializers.
 """
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
-from pkdb_app.users.permissions import get_study_permission
+from pkdb_app.users.permissions import get_study_file_permission
 from rest_framework import serializers
 
 from ..comments.models import Description, Comment
@@ -528,12 +528,8 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
         files_serializer = DataFileElasticSerializer(obj.files, many=True, read_only=True)
 
         licence = study_dict.get("licence")
-        print(files_serializer.data)
 
-        if licence == "open" or get_study_permission(self.context["request"].user,obj):
-            print("*" * 100)
-            print("Here I am")
-            print("*" * 100)
+        if licence == "open" or get_study_file_permission(self.context["request"].user,obj):
             return files_serializer.data
 
         else:

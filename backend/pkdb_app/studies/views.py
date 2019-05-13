@@ -243,6 +243,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             return search.query()
 
         elif group == "basic":
+
             qs = search.query(
                 Q('match', access__raw=PUBLIC) |
                 Q('match', creator__username__raw=self.request.user.username) |

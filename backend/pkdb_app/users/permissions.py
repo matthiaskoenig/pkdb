@@ -1,5 +1,6 @@
 from pkdb_app.studies.models import OPEN
 from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.serializers import UserSerializer
 from rest_framework import permissions
 
 def is_allowed_method(request):
@@ -105,8 +106,16 @@ def get_study_permission(user,obj):
 
 def get_study_file_permission(user,obj):
     try:
-        allowed_user_modify = (user == obj.creator) or (user in obj.curators)
-        allow_user_get =(user in obj.collaborators) or (obj.licence == OPEN) or allowed_user_modify
+        username = user.username
+        curator_usernames = [curator["username"] for curator in obj.curators]
+        collaborators_usernames = [collaborator["username"] for collaborator in obj.collaborators]
+
+        allowed_user_modify = (username == obj.creator["username"]) or (user in curator_usernames)
+        allow_user_get =(user in collaborators_usernames) or (obj.licence == OPEN) or allowed_user_modify
+
+
+        print(user)
+        print(allow_user_get)
     except TypeError:
         allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
         allow_user_get = (user in obj.collaborators.all()) or (obj.licence == OPEN) or allowed_user_modify

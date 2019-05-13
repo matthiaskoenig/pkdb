@@ -166,7 +166,6 @@ class Group(models.Model):
     def figure(self):
         return self.ex.figure
 
-
     @property
     def parents(self):
         parents = []
@@ -177,7 +176,8 @@ class Group(models.Model):
     @property
     def characteristica_all(self):
         characteristica_all = self.characteristica.all()
-        this_categories = characteristica_all.values_list("category", flat=True)
+        additive_characteristica = ["disease","abstinence"]
+        this_categories = characteristica_all.exclude(category__key__in=additive_characteristica).values_list("category", flat=True)
         if self.parent:
             characteristica_all = characteristica_all | self.parent.characteristica_all.exclude(category__in=this_categories)
         return characteristica_all
