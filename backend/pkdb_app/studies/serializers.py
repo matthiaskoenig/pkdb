@@ -260,9 +260,9 @@ class StudySerializer(SidSerializer):
         if duplicated_curators:
             raise serializers.ValidationError({"curators": f"Duplicated {item} <{duplicated_curators}> are not allowed."})
 
-        if data["reference"]:
+        if data.get("reference"):
             reference = Reference.objects.get(sid=data["reference"])
-            if reference.study:
+            if hasattr(reference,"study"):
                 raise serializers.ValidationError(
                         {
                             "reference":
