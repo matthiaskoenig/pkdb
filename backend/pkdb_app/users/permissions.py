@@ -118,21 +118,12 @@ def get_study_file_permission(user,obj):
         allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
         allow_user_get = (user in obj.collaborators.all()) or (obj.licence == OPEN) or allowed_user_modify
 
-
-
-    print(allowed_user_modify)
-    print(allow_user_get)
-
-
-
-
     permission_dict =  {
         "admin": True,
         "anonymous":obj.licence == OPEN,
         "reviewer": True,
         "basic": allow_user_get
      }
-    print(permission_dict[user_group(user)])
     return permission_dict[user_group(user)]
 
 
