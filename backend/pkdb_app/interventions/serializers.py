@@ -1,8 +1,9 @@
 """
 Serializers for interventions.
 """
-
+import itertools
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
@@ -33,7 +34,7 @@ from ..subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk
+from ..utils import list_of_pk, list_duplicates
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -76,6 +77,8 @@ OUTPUT_MAP_FIELDS = [
 # ----------------------------------
 # Interventions
 # ----------------------------------
+
+
 class InterventionSerializer(ExSerializer):
     category = serializers.SlugRelatedField(slug_field="key", queryset=InterventionType.objects.all())
 
@@ -85,12 +88,14 @@ class InterventionSerializer(ExSerializer):
         read_only=False,
         required=False,
         allow_null=True,
+
     )
 
 
     class Meta:
         model = Intervention
         fields = VALUE_FIELDS + INTERVENTION_FIELDS
+
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -119,6 +124,7 @@ class InterventionSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
+
         try:
             # perform via dedicated function on categorials
             validate_categorials(data=attrs)
@@ -213,6 +219,21 @@ class InterventionSetSerializer(ExSerializer):
         self.validate_wrong_keys(data)
 
         return data
+    def validate(self, attrs):
+        intervention_exs = attrs.get("intervention_exs")
+        all_interventions = list(itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
+        all_intervention_names = [intervention["name"] for intervention in all_interventions]
+
+        duplicated_intervention_names = list_duplicates(all_intervention_names)
+        if duplicated_intervention_names:
+
+            raise serializers.ValidationError(
+                {
+                    "intervention_set":"Itervention names are required to be unique within a study.",
+                    "duplicated intervention names":duplicated_intervention_names
+                })
+
+        return super().validate(attrs)
 
 
 
