@@ -106,6 +106,8 @@ class OutputSerializer(ExSerializer):
         self._validate_requried_key(attrs,"substance")
         self._validate_requried_key(attrs,"tissue")
         self._validate_requried_key(attrs,"interventions")
+        self._validate_requried_key(attrs,"pktype")
+
 
         return super().validate(attrs)
 
@@ -238,6 +240,8 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_requried_key(attrs,"interventions")
         self._validate_requried_key(attrs,"tissue")
         self._validate_requried_key(attrs,"time")
+        self._validate_requried_key(attrs,"pktype")
+
         self._validate_time_unit(attrs)
         self._validate_time(attrs["time"])
 
