@@ -205,16 +205,16 @@ class StudySerializer(SidSerializer):
         for name, value in validated_data.items():
             setattr(instance, name, value)
         instance.save()
-
         instance = self.create_relations(instance, related)
         return instance
 
     def to_internal_value(self, data):
+
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
-        ratings = []
 
+        ratings = []
         # curators to internal
         for curator_and_rating in data.get("curators",[]):
             rating_dict = {}
@@ -336,9 +336,7 @@ class StudySerializer(SidSerializer):
         related_foreinkeys_dict = {
             name: validated_data.pop(name, None) for name in related_foreinkeys.keys()
         }
-        related_many2many_dict = {
-            name: validated_data.pop(name, []) for name in related_many2many.keys()
-        }
+        related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if name in validated_data}
         related = {**related_foreinkeys_dict, **related_many2many_dict}
         return related
 
@@ -362,46 +360,49 @@ class StudySerializer(SidSerializer):
 
         many_2_many_fields = ["keywords","substances"]
 
-        if related["substances"]:
-            study_substances = set([substance.pk for substance in related["substances"]])
-            study_cumulated_substances = study.get_substances()
-            related["substances"] = study_cumulated_substances | study_substances
+        if "substance" in related:
+                study_substances = set([substance.pk for substance in related["substances"]])
+                study_cumulated_substances = study.get_substances()
+                related["substances"] = study_cumulated_substances | study_substances
 
 
         for field in many_2_many_fields:
-            if len(related[field]) > 0 :
-                related_m2m_field = getattr(study,field)
+            if field in related:
+                related_m2m_field = getattr(study, field)
                 related_m2m_field.clear()
-                for instance in related[field]:
-                    related_m2m_field.add(instance)
+                if len(related[field]) > 0 :
+                    for instance in related[field]:
+                        related_m2m_field.add(instance)
 
-        if related["curators"]:
+        if "curators" in related:
             study.ratings.all().delete()
-            for curator in related["curators"]:
-                curator["study"] = study
-                Rating.objects.create(**curator)
+            if related["curators"]:
+                for curator in related["curators"]:
+                    curator["study"] = study
+                    Rating.objects.create(**curator)
 
-        if related["collaborators"]:
+        if "collaborators" in related:
             study.collaborators.clear()
-            study.collaborators.add(*related["collaborators"])
-
-        if related["descriptions"]:
+            if related["collaborators"]:
+                study.collaborators.add(*related["collaborators"])
+        if "descriptions" in related:
             study.descriptions.all().delete()
+            if related["descriptions"]:
+                create_multiple(study, related["descriptions"], "descriptions")
 
-            create_multiple(study, related["descriptions"], "descriptions")
-
-        if related["comments"]:
+        if "comments" in related:
             study.comments.all().delete()
-            create_multiple(study, related["comments"], "comments")
+            if related["comments"]:
+                create_multiple(study, related["comments"], "comments")
 
         study.save()
 
-        if related["files"]:
+        if "files" in related:
             study.files.clear()
-            for file_pk in related["files"]:
-                study.files.add(file_pk)
-            study.save()
-
+            if related["files"]:
+                for file_pk in related["files"]:
+                    study.files.add(file_pk)
+                study.save()
 
         return study
 
