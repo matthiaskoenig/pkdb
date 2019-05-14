@@ -4,14 +4,24 @@
             <v-flex md2>
                 <v-card flat>
 
-                    <div v-if="study.substances">
+                    <div>
+                        <span class="attr">Access</span><br />
+                        <v-chip :color="study.access =='public' ? 'green' : 'red'">
+                            <v-icon small :title="'Study has '+ study.access + ' access'">{{icon(study.access)}}</v-icon>
+                        </v-chip>
+                        <v-chip :color="study.licence =='open' ? 'green' : 'red'" >
+                            <v-icon small :title="'Publication is '+ study.licence + ' access'">{{icon(study.licence)}}</v-icon>
+                        </v-chip>
+                    </div>
+
+                    <div v-if="study.substances && study.substances.length!=0">
                         <span class="attr">Substances</span><br />
                         <span v-for="s in study.substances" v-bind:key="s">
                             <substance-chip :title="s"/>
                         </span>
                     </div>
 
-                    <div v-if="study.keywords">
+                    <div v-if="study.keywords && study.keywords.length!=0">
                         <span class="attr">Keywords</span><br />
                         <span v-for="keyword in study.keywords" :key="keyword">
                             <keyword-chip :keyword="keyword"/><br />

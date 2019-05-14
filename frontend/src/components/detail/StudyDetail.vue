@@ -28,15 +28,6 @@
             </a>
         </div>
 
-        <div class="fixed-nav-bar3">
-            <v-chip color="w" >
-                <v-icon small :title="'Study is '+ study.access + ' accessible'">{{icon(study.access)}}</v-icon>
-            </v-chip>
-            <v-chip color="w" >
-                <v-icon small :title="'Study licence is '+ study.licence">{{icon(study.licence)}}</v-icon>
-            </v-chip>
-        </div>
-
         <!-- study content -->
         <div>
             <v-layout row wrap>
@@ -223,16 +214,7 @@
         top: 50px;
         left: 0;
         z-index: 9999;
-        width: 80%;
-        height: 50px;
-        background-color: #00a087;
-    }
-    .fixed-nav-bar3 {
-        position: fixed;
-        top: 50px;
-        right: 0;
-        z-index: 9999;
-        width: 20%;
+        width: 100%;
         height: 50px;
         background-color: #00a087;
     }
