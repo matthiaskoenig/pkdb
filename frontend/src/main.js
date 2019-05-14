@@ -62,10 +62,12 @@ import SubstanceChip from './components/detail/SubstanceChip';
 import FileChip from './components/detail/FileChip';
 import KeywordChip from './components/detail/KeywordChip';
 import InterventionChip from './components/detail/InterventionChip';
+import Footer from './components/Footer';
 
 import TextHighlight from 'vue-text-highlight';
 import axios from 'axios';
 
+Vue.component('Footer', Footer);
 Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
