@@ -24,8 +24,8 @@
 
         computed: {
             study_id(){
-                var path = this.$route.path;
-                var tokens = path.split('/');
+                let path = this.$route.path;
+                let tokens = path.split('/');
                 return tokens[tokens.length-1];
             },
             resource_url() {
