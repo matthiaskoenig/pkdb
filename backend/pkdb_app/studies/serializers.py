@@ -214,30 +214,34 @@ class StudySerializer(SidSerializer):
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
 
-        ratings = []
         # curators to internal
-        for curator_and_rating in data.get("curators",[]):
-            rating_dict = {}
-            if isinstance(curator_and_rating, list):
-                if len(curator_and_rating) != 2:
-                    raise serializers.ValidationError(
-                        {
-                            "curators": " Each curator in the list of curator can be added either via the curator "
-                                       "username or as a list with first position beeing the curator username "
-                                        " and the second posion the rating between (0-5)",
-                            "details": curator_and_rating,
+        if "curators" in data:
+            ratings = []
+            for curator_and_rating in data.get("curators",[]):
+                rating_dict = {}
+                if isinstance(curator_and_rating, list):
+                    if len(curator_and_rating) != 2:
+                        raise serializers.ValidationError(
+                            {
+                                "curators": " Each curator in the list of curator can be added either via the curator "
+                                           "username or as a list with first position beeing the curator username "
+                                            " and the second posion the rating between (0-5)",
+                                "details": curator_and_rating,
 
-                        })
-                rating_dict["user"] = curator_and_rating[0]
-                rating_dict["rating"] = curator_and_rating[1]
+                            })
+                    rating_dict["user"] = curator_and_rating[0]
+                    rating_dict["rating"] = curator_and_rating[1]
 
-            else:
-                rating_dict["user"] = curator_and_rating
-                rating_dict["rating"] = 0
+                else:
+                    rating_dict["user"] = curator_and_rating
+                    rating_dict["rating"] = 0
 
-            ratings.append(rating_dict)
+                ratings.append(rating_dict)
+            data["curators"] = ratings
 
-        data["curators"] = ratings
+
+        # check for duplicates
+        #######################################
         for item in ["collaborators","curators","substances","keywords"]:
 
             if item in ["curators"]:
@@ -247,18 +251,12 @@ class StudySerializer(SidSerializer):
             else:
                 unique_values =  data.get(item, [])
 
-
             duplicates = list_duplicates(unique_values)
             if duplicates:
                 raise serializers.ValidationError(
-                    {"curators": f"Duplicated {item} <{duplicates}> are not allowed."})
+                    {item: f"Duplicated {item} <{duplicates}> are not allowed."})
 
-
-
-        curator_usernames = [curator.get("user") for curator in data["curators"]]
-        duplicated_curators = list_duplicates(curator_usernames)
-        if duplicated_curators:
-            raise serializers.ValidationError({"curators": f"Duplicated {item} <{duplicated_curators}> are not allowed."})
+        #######################################################################
 
         if data.get("reference"):
             reference = Reference.objects.get(sid=data["reference"])
@@ -376,6 +374,7 @@ class StudySerializer(SidSerializer):
 
         if "curators" in related:
             study.ratings.all().delete()
+            print(related["curators"])
             if related["curators"]:
                 for curator in related["curators"]:
                     curator["study"] = study
