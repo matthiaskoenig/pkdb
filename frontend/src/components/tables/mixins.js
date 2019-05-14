@@ -95,7 +95,6 @@ var searchTableMixin = {
             }
             axios.get(this.url,{ headers: headers})
                 .then(res => {
-                    console.log("getting data");
                     this.entries = res.data.data.data;
                     this.count = res.data.data.count;
 
