@@ -1,42 +1,43 @@
 <template>
     <div id="study-detail">
-                <div class="fixed-nav-bar2">
 
+        <!-- navigation bar -->
+        <div class="fixed-nav-bar2">
+            <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
 
-                    <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
+            <a href="#general">
+                <v-chip color="w" disable=false>
+                    <v-icon small title="General study information">{{icon("about")}}</v-icon>
+                </v-chip>
+            </a>
+            <!-- FIXME: anchors not working within vue router ! -->
+            <a href="#groups_anchor">
+                <count-chip :count=study.group_count icon="group"></count-chip>
+            </a>
+            <a href="#individuals_anchor">
+                <count-chip :count=study.individual_count icon="individual"></count-chip>
+            </a>
+            <a href="#interventions_anchor">
+                <count-chip :count=study.intervention_count icon="intervention"></count-chip>
+            </a>
+            <a href="#outputs_anchor">
+                <count-chip :count=study.output_count icon="output"></count-chip>
+            </a>
+            <a href="#timecourses_anchor">
+                <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
+            </a>
+        </div>
 
+        <div class="fixed-nav-bar3">
+            <v-chip color="w" >
+                <v-icon small :title="'Study is '+ study.access + ' accessible'">{{icon(study.access)}}</v-icon>
+            </v-chip>
+            <v-chip color="w" >
+                <v-icon small :title="'Study licence is '+ study.licence">{{icon(study.licence)}}</v-icon>
+            </v-chip>
+        </div>
 
-                    <a href="#general">
-                        <v-chip color="w" disable=false>
-                            <v-icon small title="General study information">{{icon("about")}}</v-icon>
-                        </v-chip>
-                    </a>
-                    <a href="#groups_anchor">
-                        <count-chip :count=study.group_count icon="group"></count-chip>
-                    </a>
-                    <a href="#individuals_anchor">
-                        <count-chip :count=study.individual_count icon="individual"></count-chip>
-                    </a>
-                    <a href="#interventions_anchor">
-                        <count-chip :count=study.intervention_count icon="intervention"></count-chip>
-                    </a>
-                    <a href="#outputs_anchor">
-                        <count-chip :count=study.output_count icon="output"></count-chip>
-                    </a>
-                    <a href="#timecourses_anchor">
-                        <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
-                    </a>
-
-                </div>
-                <div class="fixed-nav-bar3">
-                    <v-chip color="w" >
-                        <v-icon small :title="'Study is '+ study.access + ' accessible'">{{icon(study.access)}}</v-icon>
-                    </v-chip>
-                    <v-chip color="w" >
-                        <v-icon small :title="'Study licence is '+ study.licence">{{icon(study.licence)}}</v-icon>
-                    </v-chip>
-                </div>
-
+        <!-- study content -->
         <div>
             <v-layout row wrap>
 
@@ -48,12 +49,9 @@
                  <!-- General Overview -->
                 <v-flex id="general" xs12 v-show="visible.general">
                     <v-card>
-                    <study-info :study="study"/>
-                </v-card>
+                        <study-info :study="study"/>
+                    </v-card>
                 </v-flex>
-
-
-
 
                 <!-- Groups -->
                 <a class="anchor" id="groups_anchor"></a>
@@ -122,7 +120,7 @@
         mixins :[UrlMixin],
         props: {
             study_pks:{
-                type:Array,
+                type: Array,
             },
             study: {
                 type: Object,
@@ -156,6 +154,7 @@
                 }
 
             },
+            /* FIXME: This will not work, don't do this in javascript, get next and previous in the backend
             study_index(){
                 return this.study_pks.indexOf(this.study.sid)
             },
@@ -183,6 +182,7 @@
                     return this.study_pks[studies_number-1]
                     }
                 }
+             */
         },
         methods:{
             icon: function (key) {

@@ -1,54 +1,41 @@
 <template>
     <div class="study-info">
         <v-layout wrap>
-        <v-flex md2>
-            <v-card flat>
+            <v-flex md2>
+                <v-card flat>
 
-                <div v-if="study.substances">
-                    <span class="attr">Substances</span><br />
+                    <div v-if="study.substances">
+                        <span class="attr">Substances</span><br />
+                        <span v-for="s in study.substances" v-bind:key="s">
+                            <substance-chip :title="s"/>
+                        </span>
+                    </div>
 
-                    <span v-for="s in study.substances" v-bind:key="s">
-                        <substance-chip :title="s"/>
+                    <div v-if="study.keywords">
+                        <span class="attr">Keywords</span><br />
+                        <span v-for="keyword in study.keywords" :key="keyword">
+                            <keyword-chip :keyword="keyword"/><br />
+                        </span>
+                    </div>
 
+                    <div>
+                        <span class="attr">Creator</span><br />
+                        <user-avatar :user="study.creator"/>
+                    </div>
 
-                    </span>
+                    <div>
+                        <span class="attr">Curators</span><br />
+                        <user-rating v-for="curator in study.curators" :key="curator.pk" :user="curator"/>
+                    </div>
 
+                     <div v-if="study.files.length > 0">
+                        <span class="attr">Files</span><br />
+                          <span v-for="file in study.files" :key="file.pk">
+                                <file-chip :file="file.file" />
+                        </span>
+                    </div>
 
-                </div>
-
-
-                <div v-if="study.keywords">
-                    <span class="attr">Keywords</span><br />
-                    <span v-for="keyword in study.keywords" :key="keyword">
-                        <keyword-chip :keyword="keyword"/><br />
-                    </span>
-
-                </div>
-
-
-
-                <div>
-                    <span class="attr">Creator</span><br />
-                    <user-avatar :user="study.creator"/>
-                </div>
-
-                <div>
-                    <span class="attr">Curators</span><br />
-                    <user-rating v-for="c in study.curators" :key="c.pk" :user="c"/>
-                </div>
-
-
-                 <div v-if="study.files.length > 0">
-                    <span class="attr">Files</span><br />
-                      <span v-for="file in study.files" :key="file.pk">
-                            <file-chip :file="file.file" />
-                    </span>
-                </div>
-
-
-            </v-card>
-
-
+                </v-card>
             </v-flex>
 
             <v-flex md5>
@@ -59,16 +46,15 @@
                 </get-data>
                 <Annotations :item="study"/>
             </v-flex>
+
             <v-flex md5>
                 <div v-if="study.files.length == 0">
-                    <warning-chip title="no files or no permission"></warning-chip>
+                    <warning-chip title="No files or no permission"></warning-chip>
                 </div>
                 <div v-else>
                     <file-image-view v-if="images.length != 0" :files="images"/>
                 </div>
             </v-flex>
-
-
 
         </v-layout>
     </div>
@@ -100,20 +86,16 @@
 
         computed: {
             images() {
-                var list = [];
-                for (var k = 0; k < this.study.files.length; k++) {
-                    var item = this.study.files[k];
+                let list = [];
+                for (let k = 0; k < this.study.files.length; k++) {
+                    let item = this.study.files[k];
 
                     if (this.is_image(item.file)) {
                         list.push(item)
                     }
                 }
                 return list;
-            },
-            image_files(){
-
             }
-
         },
         methods: {
             icon: function (key) {

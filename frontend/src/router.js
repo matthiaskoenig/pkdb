@@ -22,7 +22,10 @@ import Output from './components/Output';
 import Timecourse from './components/Timecourse';
 import Reference from './components/Reference';
 
-/* About */
+/* 404 */
+import Page404 from './components/Page404';
+
+/* Curation */
 import Curation from './components/Curation';
 
 /* Account */
@@ -83,7 +86,6 @@ export default new Router({
           name: 'Account',
           component: Account
       },
-
       {
           path:"/studies/:id",
           name:"Study",
@@ -125,6 +127,14 @@ export default new Router({
           name: "Reference",
           component: Reference,
           props: true
+      },
+      {
+          path: '/404',
+          component: Page404
+      },
+      {
+          path: '*',
+          redirect: '/404'
       },
   ],
     scrollBehavior (to, from, savedPosition) {
