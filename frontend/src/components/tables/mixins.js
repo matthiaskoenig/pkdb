@@ -95,12 +95,19 @@ var searchTableMixin = {
             }
             axios.get(this.url,{ headers: headers})
                 .then(res => {
-
+                    console.log("getting data");
                     this.entries = res.data.data.data;
                     this.count = res.data.data.count;
 
                 })
-                .catch(err => console.log(err.response.data))
+                .catch(err => {
+                    console.log(err.response.data);
+                    // FIXME: this should work? but never called
+                    console.log("404 error occured !!!");
+                    if (err.response.status === 404) {
+                        this.$router.push({name: '404'})
+                    }
+                })
                 .finally(() => this.loading = false);
         },
 

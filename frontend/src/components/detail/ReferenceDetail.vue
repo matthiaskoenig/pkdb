@@ -11,7 +11,7 @@
             {{reference.abstract}}<br/>
 
             <file-chip v-if="reference.pdf" :file="reference.pdf"></file-chip>
-            <warning-chip v-else title="no pdf or no permission"></warning-chip>
+            <warning-chip v-else title="No PDF or no permission"></warning-chip>
 
         </v-card>
     </div>
