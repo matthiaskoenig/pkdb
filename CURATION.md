@@ -149,7 +149,8 @@ Descriptions are quotations from the publication to substantiate and support the
 `comments` provide the possibility to store information from individual curators. Examples of comments are stating incorrect units, missing data or strange conversions of data. 
 
 
-## 3. Curation of groups
+## 3. Curation of groups and individuals
+### groups
 The next step is the curation of the `group` information, i.e., which groups where studied. The information is stored in the `groupset` of the following form.
 Retrieve group information from the publication and copy it in the description of the groupset. The top group containing all subjects must be called `all`.
 
@@ -214,9 +215,39 @@ All available fields for characteristica on group are:
     "unit": "categorial"
 }
 ```
+### individuals
+Individuals are curated very similar to groups with the exception that individuals must belong
+to a given group, i.e., the `group` attribute must be set. Individuals are most often defined based on spreadsheet mappings.
+See for instance below individuals which are defined via a table.
 
-Individuals are curated like groups with the exception that individuals must belong
-to a given group, i.e., the `group` attribute must be set. Individuals are most often defined via excel spreadsheets.
+```json
+"individuals": [
+      {
+        "name": "col==subject",
+        "group": "col==group",
+        "source": "Akinyinka2000_Tab1.csv",
+        "format": "TSV",
+        "figure": "Akinyinka2000_Tab1.png",
+        "characteristica": [
+          {
+            "category": "age",
+            "value": "col==age",
+            "unit": "yr"
+          },
+          {
+            "category": "weight",
+            "value": "col==weight",
+            "unit": "kg"
+          },
+          {
+            "category": "sex",
+            "choice": "col==sex"
+          }
+        ]
+      }
+    ]
+```
+
 
 ## 4. Curation of interventions/interventionset
 ```json
