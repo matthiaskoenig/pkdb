@@ -45,6 +45,7 @@ OUTPUT_TISSUE_DATA = [
     "bile duct"
 ]
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
+
 # -------------------------------------------------
 # OUTPUTS
 # -------------------------------------------------
