@@ -6,10 +6,10 @@
 
                     <div>
                         <span class="attr">Access</span><br />
-                        <v-chip :color="study.access =='public' ? 'green' : 'red'">
+                        <v-chip disabled=true :color="study.access =='public' ? 'green' : 'red'">
                             <v-icon small :title="'Study has '+ study.access + ' access'">{{icon(study.access)}}</v-icon>
                         </v-chip>
-                        <v-chip :color="study.licence =='open' ? 'green' : 'red'" >
+                        <v-chip disabled=true :color="study.licence =='open' ? 'green' : 'red'" >
                             <v-icon small :title="'Publication is '+ study.licence + ' access'">{{icon(study.licence)}}</v-icon>
                         </v-chip>
                     </div>

@@ -1,6 +1,6 @@
 <template>
     <span id="user-avatar">
-          <v-avatar :title="fullname" :size="32">
+          <v-avatar  :title="fullname" :size="32">
             <img :src="src">
           </v-avatar>
     </span>
