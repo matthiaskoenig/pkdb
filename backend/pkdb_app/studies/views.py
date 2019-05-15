@@ -114,37 +114,57 @@ class StudyViewSet(viewsets.ModelViewSet):
         self.group_validation(request)
         return super().create(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        related_elastic = related_elastic_dict(instance)
+        delete_elastic_study(related_elastic)
+
+        return super().destroy(request)
+
 
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
+
+def delete_elastic_study(related_elastic):
+    for doc, instances in related_elastic.items():
+
+        try:
+            doc().update(thing=instances, action="delete")
+        except helpers.BulkIndexError:
+            pass
+
+
+def related_elastic_dict(study):
+    related_elastic_dict = {}
+    related_elastic_dict[StudyDocument] = study
+    if study.reference:
+        related_elastic_dict[ReferenceDocument] = study.reference
+
+    related_elastic_dict[GroupDocument] = study.groups
+    related_elastic_dict[IndividualDocument] = study.individuals
+    related_elastic_dict[InterventionDocument] = study.interventions
+    related_elastic_dict[OutputDocument] = study.outputs
+    related_elastic_dict[TimecourseDocument] = study.timecourses
+    return related_elastic_dict
+
+
 
 
 @csrf_exempt
 def update_index_study(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        update_instances = {}
         try:
             study = Study.objects.get(sid=data["sid"])
         except ObjectDoesNotExist:
             return JsonResponse({"success": "False", "reason": "Instance not in database"})
 
         action = data.get("action",'index')
-        update_instances[StudyDocument] = study
-        if study.reference:
-            update_instances[ReferenceDocument] = study.reference
 
-        update_instances[GroupDocument] = study.groups
-        update_instances[IndividualDocument] = study.individuals
-        update_instances[InterventionDocument] = study.interventions
-        update_instances[OutputDocument] = study.outputs
-        update_instances[TimecourseDocument] = study.timecourses
+        related_elastic = related_elastic_dict(study)
 
-        print(study)
-
-
-        for doc, instances in update_instances.items():
+        for doc, instances in related_elastic.items():
 
             try:
                 doc().update(thing=instances,action=action)

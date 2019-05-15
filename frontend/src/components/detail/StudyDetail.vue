@@ -5,25 +5,26 @@
         <div class="fixed-nav-bar2">
             <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
 
-            <a href="#general">
+            <a @click="scrollMeTo('general')">
                 <v-chip color="w" disable=false>
                     <v-icon small title="General study information">{{icon("about")}}</v-icon>
                 </v-chip>
             </a>
+
             <!-- FIXME: anchors not working within vue router ! -->
-            <a href="#groups_anchor">
+            <a @click="scrollMeTo('groups')">
                 <count-chip :count=study.group_count icon="group"></count-chip>
             </a>
-            <a href="#individuals_anchor">
+            <a @click="scrollMeTo('individuals')">
                 <count-chip :count=study.individual_count icon="individual"></count-chip>
             </a>
-            <a href="#interventions_anchor">
+            <a @click="scrollMeTo('interventions')">
                 <count-chip :count=study.intervention_count icon="intervention"></count-chip>
             </a>
-            <a href="#outputs_anchor">
+            <a @click="scrollMeTo('outputs')">
                 <count-chip :count=study.output_count icon="output"></count-chip>
             </a>
-            <a href="#timecourses_anchor">
+            <a @click="scrollMeTo('timecourses')">
                 <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
             </a>
         </div>
@@ -38,29 +39,27 @@
                 -->
 
                  <!-- General Overview -->
-                <v-flex id="general" xs12 v-show="visible.general">
+                <v-flex ref="genereal" id="general" xs12 v-show="visible.general">
                     <v-card>
                         <study-info :study="study"/>
                     </v-card>
                 </v-flex>
 
                 <!-- Groups -->
-                <a class="anchor" id="groups_anchor"></a>
-                <v-flex xs12 v-show="visible.groups">
+                <v-flex ref="groups" xs12 v-show="visible.groups">
                     <annotations  v-if="study.groupset" :item="study.groupset"/>
-                    <groups-table v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
+                    <groups-table  v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Individuals -->
-                <a class="anchor" id="individuals_anchor"></a>
-                <v-flex xs12 v-show="visible.individuals">
+                <v-flex  ref="individuals" xs12 v-show="visible.individuals">
                     <annotations   v-if="study.individualset" :item="study.individualset"/>
                     <individuals-table v-if="counts['individuals']>0" :ids="study.individualset.individuals" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Interventions -->
-                <a class="anchor" id="interventions_anchor"></a>
-                <v-flex xs12 v-show="visible.interventions">
+
+                <v-flex  ref="interventions" xs12 v-show="visible.interventions">
                     <annotations v-if="study.interventionset" :item="study.interventionset"/>
                     <interventions-table v-if="counts['interventions']>0" :ids="study.interventionset.interventions" :autofocus="false"/>
                 </v-flex>
@@ -69,11 +68,12 @@
 
                 <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                     <annotations  v-if="study.outputset" :item="study.outputset"/>
-                    <a class="anchor" id="outputs_anchor"></a>
+
+                    <span ref="outputs"></span>
                     <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
                     <br />
-                    <a class="anchor" id="timecourses_anchor"></a>
-                    <timecourses-table  v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
+                    <span ref="timecourses"></span>
+                    <timecourses-table ref="timecourses" v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 
                 </v-flex>
             </v-layout>
@@ -176,6 +176,12 @@
              */
         },
         methods:{
+            scrollMeTo(refName) {
+                var element = this.$refs[refName];
+                var top = element.offsetTop;
+
+                window.scrollTo(0, top);
+            },
             icon: function (key) {
                 return lookup_icon(key)
             },

@@ -197,6 +197,8 @@ class StudySerializer(SidSerializer):
         instance.save()
         return instance
 
+
+
     def update(self, instance, validated_data):
 
         # remove nested relations (handled via own serializers)
@@ -374,7 +376,6 @@ class StudySerializer(SidSerializer):
 
         if "curators" in related:
             study.ratings.all().delete()
-            print(related["curators"])
             if related["curators"]:
                 for curator in related["curators"]:
                     curator["study"] = study
