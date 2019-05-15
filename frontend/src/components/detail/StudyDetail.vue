@@ -11,22 +11,31 @@
                 </v-chip>
             </a>
 
-            <!-- FIXME: anchors not working within vue router ! -->
-            <a @click="scrollMeTo('groups')">
-                <count-chip :count=study.group_count icon="group"></count-chip>
+            <a @click="scrollMeTo('groups')" v-if="study.group_count">
+                <count-chip :count="study.group_count" icon="group"></count-chip>
             </a>
-            <a @click="scrollMeTo('individuals')">
-                <count-chip :count=study.individual_count icon="individual"></count-chip>
+            <count-chip v-else disabled=true :count="study.group_count" icon="group"></count-chip>
+
+            <a @click="scrollMeTo('individuals')" v-if="study.individual_count">
+                <count-chip :count="study.individual_count" icon="individual"></count-chip>
             </a>
-            <a @click="scrollMeTo('interventions')">
-                <count-chip :count=study.intervention_count icon="intervention"></count-chip>
+            <count-chip v-else disabled=true :count="study.individual_count" icon="individual"></count-chip>
+
+            <a @click="scrollMeTo('interventions')" v-if="study.intervention_count">
+                <count-chip :count="study.intervention_count" icon="intervention"></count-chip>
             </a>
-            <a @click="scrollMeTo('outputs')">
-                <count-chip :count=study.output_count icon="output"></count-chip>
+            <count-chip  v-else disabled=true :count="study.intervention_count" icon="intervention"></count-chip>
+
+            <a @click="scrollMeTo('outputs')" v-if="study.output_count">
+                <count-chip :count="study.output_count" icon="output"></count-chip>
             </a>
-            <a @click="scrollMeTo('timecourses')">
-                <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
+            <count-chip v-else disabled=true :count="study.output_count" icon="output"></count-chip>
+
+            <a @click="scrollMeTo('timecourses')"  v-if="study.timecourse_count">
+                <count-chip :count="study.timecourse_count" icon="timecourse"></count-chip>
             </a>
+            <count-chip v-else disabled=true :count="study.timecourse_count" icon="timecourse"></count-chip>
+
         </div>
 
         <!-- study content -->
@@ -39,7 +48,8 @@
                 -->
 
                  <!-- General Overview -->
-                <v-flex ref="genereal" id="general" xs12 v-show="visible.general">
+
+                <v-flex ref="general" xs12 v-show="visible.general">
                     <v-card>
                         <study-info :study="study"/>
                     </v-card>
@@ -73,7 +83,7 @@
                     <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
                     <br />
                     <span ref="timecourses"></span>
-                    <timecourses-table ref="timecourses" v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
+                    <timecourses-table v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 
                 </v-flex>
             </v-layout>
@@ -178,7 +188,7 @@
         methods:{
             scrollMeTo(refName) {
                 var element = this.$refs[refName];
-                var top = element.offsetTop;
+                var top = element.offsetTop - 100;
 
                 window.scrollTo(0, top);
             },
@@ -224,10 +234,5 @@
         height: 50px;
         background-color: #00a087;
     }
-    a.anchor {
-        //display: block;
-        //position: relative;
-        top: 0px;
-        visibility: hidden;
-    }
+
 </style>
