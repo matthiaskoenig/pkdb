@@ -57,6 +57,9 @@ workon pkdb_data
 (pkdb_data) watch_study -s $STUDYFOLDER
 ```
 
+Here the example output for the successfully uploaded study `Renner2007`. On file changes the study will be reuploaded
+![Interactive curation with watch_study](./docs/curation/watch_study.png "Interactive curation with watch_study")
+
 ## 1. PDF, Reference, Figures & Tables
 
 For upload a certain folder structure and organisation is expected of the `$STUDYFOLDER`.
@@ -65,8 +68,8 @@ The first step is to create the folder and the basic files in the folder
 - folder name is `STUDYNAME`, e.g., `Albert1974`
 - folder contains the pdf as `STUDYNAME.pdf`, e.g., `Albert1974.pdf`
 - folder contains additional files associated with study, i.e.,
-    - tables, named `STUDYNAME_Tab[1-9]*.png`, e.g., `Albert1974_Tab1.png`
-    - figures, named `STUDYNAME_Fig[1-9]*.png`, e.g., `Albert1974_Fig2.png`
+    - tables, named `STUDYNAME_Tab[1-9]*.png`, e.g., `Albert1974_Tab2.png`
+    - figures, named `STUDYNAME_Fig[1-9]*.png`, e.g., `Albert1974_Fig1.png`
     - excel file, named `STUDYNAME.xlsx`, e.g., `Albert1974.xlsx`
 
 In addition the folder can contain data files, 
@@ -78,6 +81,7 @@ Information about the study is stored in the `study.json` which we will create
 in the following steps. Information about the reference for the study is stored
 in the `reference.json` (this file is created automatically and should not be altered).
 
+![Overview study files](./docs/curation/curation_files.png "Overview study files")
 
 ## 2. Initial study information (`study.json`)
 
@@ -299,12 +303,39 @@ All available fields for intervention and interventionset are:
 ```
 * TODO: document after next iteration
 
-## 5. Curation of output/outputset
-Data from Figures should be digized using plot digitizer. See guidelines in
+## 5. Curation of outputs and time courses
+The actual data in publication is available either from tables, figures or stated with the text.
+All information should be curated by the means of excel spreadsheets, i.e., data must be digitized and transferred from the
+PDF in a spreadsheet.
 
-- Use Excel (LibreOffice/OpenOffice) spreadsheets to store data, with all digitized data is stored in excel spreadsheets
+- Use Excel (LibreOffice/OpenOffice) spreadsheets to store digitized data
 - change language settings to use US numbers and formats, i.e. ‘.’ separator). Always use points (‘.’) as number separator, never comma (‘,’), i.e. 1.234 instead of 1,234.
-- PlotDigitizer to digitize figures (https://sourceforge.net/projects/plotdigitizer/)
+
+For all figures and tables from which data is extracted individual images (`png`) must be stored in the study folder, i.e.,
+- tables, named `STUDYNAME_Tab[1-9]*.png`, e.g., `Albert1974_Tab2.png`
+- figures, named `STUDYNAME_Fig[1-9]*.png`, e.g., `Albert1974_Fig1.png`
+Use the screenshot functionality in the PDF viewer and save with image program like `gimp` after removing unnecessary borders of images.
+
+![Overview study files](./docs/curation/curation_files.png "Overview study files")
+
+### Figures
+- Use PlotDigitizer to digitize figures (https://sourceforge.net/projects/plotdigitizer/)
+- Open the image to digitize (`STUDYNAME_Fig[1-9]*.png`)
+- Use the Zoom function to increase the image if necessary (easier to click on data points)
+- First axes have to be calibrated (make sure to set logarithmical axes where necessary); calibration should be done very carfully because it will have a systematic effect (bias) on all digitized data points.
+- Digitize one curve at a time
+- Digitize mean and error separately (the actual error can than be calculated in excel as `abs(mean-error)`)
+- In case of time courses adapt the time points to the actual times reported in the publication
+
+![Figure digitization](./docs/curation/figure_digitization.png "Figure digitization (axes have been calibrated and first mean curve digitized)")
+
+Some tips for digitizion of figures:
+- Check that axes are do not have any breaks or different scales (sometimes an axis is continued or not scaled equally). This will create problems in the digitization.
+- use the same axes calibration for all curves in a figure, i.e., always finish all data from a single figure panel completely in one go (otherwise different bias for the different curves)
+- The left lower corner is not always `(0,0)`, use the minimal x-tick an y-tick with available numerical values
+- set the number of digits to a reasonable value (2-3 digits)
+
+### Tables
 
 ```json
 
@@ -328,17 +359,15 @@ Data from Figures should be digized using plot digitizer. See guidelines in
 
 
 ## Units for curation
-Pint units:
-https://github.com/hgrecco/pint/blob/master/pint/default_en_0.6.txt
+Units are crucial information to make sense out of the data set. So many `characteristica`, `interventions` and `outputs/timecourses`
+require to provide unit information. 
+We are using a pints unit model. If units are missing or incorrect the `watch_study` script will report the
+respective issues.
 
 
-## Open issues
-- individual set
-- time course data
-- column data
 
-## Frequently asked questions (FAQ)
-# How to encode multiple substances which are given (e.g., caffeine and acetaminophen are given)?
+# Frequently asked questions (FAQ)
+## How to encode multiple substances which are given (e.g., caffeine and acetaminophen are given)?
 - encode as individual interventions of caffeine and acetaminophen, i.e., single interventions 
 with the respective doses. In the outputs a list of intervention is provided, i.e., in this example the interventions for caffeine and acetaminophen
 

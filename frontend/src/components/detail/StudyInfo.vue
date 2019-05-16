@@ -104,6 +104,8 @@
                         list.push(item)
                     }
                 }
+                // FIXME: sort by filename
+
                 return list;
             }
         },
