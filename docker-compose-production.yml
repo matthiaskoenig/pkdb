@@ -54,7 +54,7 @@ services:
       - "25"
     ports:
       - "8123:8000"
-      - "25:25"
+      - "1025:25"
     links:
       - postgres:postgres
       - elasticsearch:elasticsearch
