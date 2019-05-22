@@ -53,7 +53,7 @@ services:
       - "8000"
       - "25"
     ports:
-      - "8123:8000"
+      - "8000:8000"
       - "1025:25"
     links:
       - postgres:postgres

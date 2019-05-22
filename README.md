@@ -102,19 +102,19 @@ available from https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/bas
 
 Query examples:
 ```
-http://localhost:8123/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
-http://localhost:8123/api/v1/characteristica_elastic/?group_pk=5&final=true
-http://localhost:8123/api/v1/characteristica_elastic/?search=group_name:female&final=true
-http://localhost:8123/api/v1/substances_elastic/?search:name=cod
-http://localhost:8123/api/v1/substances_elastic/?search=cod 
-http://localhost:8123/api/v1/substances_elastic/?ids=1__2__3 
-http://localhost:8123/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
-http://localhost:8123/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
+http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
+http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
+http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
+http://localhost:8000/api/v1/substances_elastic/?search:name=cod
+http://localhost:8000/api/v1/substances_elastic/?search=cod 
+http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
+http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
+http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
 ```
 
 Suggestion example:
 ```
-http://localhost:8123/api/v1/substances_elastic/suggest/?search:name=cod
+http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
 ## Fill database
