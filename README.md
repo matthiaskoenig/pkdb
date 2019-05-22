@@ -95,27 +95,26 @@ docker-compose run --rm backend python manage.py makemigrations
 PKDB provides a REST API which allows simple interaction with the database.
 An overview over the REST endpoints is available from
 ```
-http://localhost:8000/api/v1/
+http://localhost:8123/api/v1/
 ```
-
-Elastic Search engine is running on `localhost:9200` but is also reachable via django views.
-General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
+The REST API supports elastisearch queries, with examples 
+available from https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
 Query examples:
 ```
-http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
-http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
-http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
-http://localhost:8000/api/v1/substances_elastic/?search:name=cod
-http://localhost:8000/api/v1/substances_elastic/?search=cod 
-http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
-http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
-http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
+http://localhost:8123/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
+http://localhost:8123/api/v1/characteristica_elastic/?group_pk=5&final=true
+http://localhost:8123/api/v1/characteristica_elastic/?search=group_name:female&final=true
+http://localhost:8123/api/v1/substances_elastic/?search:name=cod
+http://localhost:8123/api/v1/substances_elastic/?search=cod 
+http://localhost:8123/api/v1/substances_elastic/?ids=1__2__3 
+http://localhost:8123/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
+http://localhost:8123/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
 ```
 
 Suggestion example:
 ```
-http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
+http://localhost:8123/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
 ## Fill database
