@@ -3,7 +3,7 @@ Serializers for interventions.
 """
 from datetime import timedelta
 import numpy as np
-from pkdb_app.categorials.models import validate_pktypes, PharmacokineticType
+from pkdb_app.categorials.models import validate_measurement_type, MeasurementType
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
 import time
@@ -39,9 +39,9 @@ from ..utils import list_of_pk
 
 
 
-OUTPUT_FIELDS = ["pktype", "tissue", "substance", "time", "time_unit"]
+OUTPUT_FIELDS = ["measurement_type", "tissue", "substance", "time", "time_unit"]
 OUTPUT_MAP_FIELDS = [
-    "pktype_map",
+    "measurement_type_map",
     "tissue_map",
     "substance_map",
     "time_map",
@@ -54,7 +54,7 @@ OUTPUT_MAP_FIELDS = [
 
 
 class OutputSerializer(ExSerializer):
-    pktype = serializers.SlugRelatedField(slug_field="key", queryset=PharmacokineticType.objects.all())
+    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
@@ -98,7 +98,7 @@ class OutputSerializer(ExSerializer):
         self._validate_individual_output(attrs)
 
         try:
-            validate_pktypes(data=attrs)
+            validate_measurement_type(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -106,7 +106,7 @@ class OutputSerializer(ExSerializer):
         self._validate_requried_key(attrs,"substance")
         self._validate_requried_key(attrs,"tissue")
         self._validate_requried_key(attrs,"interventions")
-        self._validate_requried_key(attrs,"pktype")
+        self._validate_requried_key(attrs,"measurement_type")
 
 
         return super().validate(attrs)
@@ -199,7 +199,7 @@ class OutputExSerializer(BaseOutputExSerializer):
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
-    pktype = serializers.SlugRelatedField(slug_field="key", queryset=PharmacokineticType.objects.all(),required=True)
+    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all(),required=True)
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
@@ -240,15 +240,14 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_requried_key(attrs,"interventions")
         self._validate_requried_key(attrs,"tissue")
         self._validate_requried_key(attrs,"time")
-        self._validate_requried_key(attrs,"pktype")
+        self._validate_requried_key(attrs,"measurement_type")
 
         self._validate_time_unit(attrs)
         self._validate_time(attrs["time"])
 
 
-
         try:
-            validate_pktypes(data=attrs)
+            validate_measurement_type(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -379,13 +378,8 @@ class OutputSetSerializer(ExSerializer):
         return attrs
 
     def to_internal_value(self, data):
-
-        start_time = time.time()
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
-        outputset_upload_time = time.time() - start_time
-        outputset_upload_time = timedelta(seconds=outputset_upload_time).total_seconds()
-
         return data
 
     def validate(self, attrs):
@@ -418,7 +412,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.SerializerMethodField()
-    pktype = serializers.CharField()
+    measurement_type = serializers.CharField()
 
 
     value = serializers.FloatField(allow_null=True)
@@ -462,7 +456,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
-    pktype = serializers.CharField()
+    measurement_type = serializers.CharField()
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)
 

@@ -1,5 +1,5 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from ..documents import string_field, elastic_settings, ObjectField, text_field
+from ..documents import string_field, elastic_settings, ObjectField
 from .models import Output, Timecourse
 
 output_index = Index("outputs")
@@ -56,7 +56,7 @@ class OutputDocument(DocType):
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
     tissue = string_field('tissue')
-    pktype = string_field("pktype_key")
+    measurement_type = string_field("measurement_type_name")
 
     class Meta(object):
             model = Output
@@ -124,7 +124,7 @@ class TimecourseDocument(DocType):
 
     time = fields.FloatField('null_time',multi=True)
     tissue = string_field('tissue')
-    pktype = string_field("pktype_key")
+    measurement_type = string_field("measurement_type_name")
 
     #auc_end = fields.FloatField(attr='auc_end')
     #kel = fields.FloatField(attr='kel')

@@ -3,14 +3,13 @@ Serializers for interventions.
 """
 import itertools
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
+from ..substances.models import Substance
 
 from ..interventions.models import (
-    Substance,
     InterventionSet,
     Intervention,
     InterventionEx)
@@ -20,7 +19,7 @@ from ..serializers import (
     NA_VALUES, PkSerializer)
 
 from ..subjects.models import  DataFile
-from pkdb_app.categorials.models import validate_categorials, InterventionType
+from pkdb_app.categorials.models import validate_measurement_type, MeasurementType
 
 from ..subjects.serializers import (
     VALUE_MAP_FIELDS,
@@ -42,7 +41,7 @@ DOSING = "dosing"
 
 INTERVENTION_FIELDS = [
     "name",
-    "category",
+    "measurement_type",
     "route",
     "form",
     "application",
@@ -79,8 +78,9 @@ OUTPUT_MAP_FIELDS = [
 # ----------------------------------
 
 
+
 class InterventionSerializer(ExSerializer):
-    category = serializers.SlugRelatedField(slug_field="key", queryset=InterventionType.objects.all())
+    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
 
     substance = serializers.SlugRelatedField(
         slug_field="name",
@@ -102,15 +102,15 @@ class InterventionSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
-        category = data.get("category")
+        measurement_type = data.get("measurement_type")
 
-        if any([category == MEDICATION,category == DOSING]):
+        if any([measurement_type == MEDICATION,measurement_type == DOSING]):
             self._validate_requried_key(data,"substance")
             self._validate_requried_key(data,"route")
             self._validate_requried_key(data,"value")
             self._validate_requried_key(data,"unit")
 
-            if category == DOSING:
+            if measurement_type == DOSING:
                 self._validate_requried_key(data, "form")
                 self._validate_requried_key(data, "application")
                 self._validate_requried_key(data,"time")
@@ -118,7 +118,7 @@ class InterventionSerializer(ExSerializer):
                 application = data["application"]
                 allowed_applications = ["constant infusion","single dose"]
                 if not application in allowed_applications:
-                    raise serializers.ValidationError(f"Allowed applications for category <{DOSING}> are <{allowed_applications}>.You might want to select the category: qualitative dosing. With no requirements.")
+                    raise serializers.ValidationError(f"Allowed applications for measurement_type <{DOSING}> are <{allowed_applications}>.You might want to select the measurement_type: qualitative dosing. With no requirements.")
 
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -127,7 +127,7 @@ class InterventionSerializer(ExSerializer):
 
         try:
             # perform via dedicated function on categorials
-            validate_categorials(data=attrs)
+            validate_measurement_type(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -266,7 +266,7 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
     substance = serializers.SerializerMethodField()
-    category = serializers.CharField()
+    measurement_type = serializers.CharField()
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)

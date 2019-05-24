@@ -4,7 +4,6 @@ Describe Substances
 
 from django.db import models
 from pkdb_app.users.models import User
-
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
 
@@ -73,7 +72,7 @@ class Substance(Sidable, models.Model):
 
 
 class SubstanceSynonym(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="synonyms")
 
 

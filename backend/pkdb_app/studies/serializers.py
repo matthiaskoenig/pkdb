@@ -14,7 +14,9 @@ from ..subjects.models import GroupSet, IndividualSet
 from ..users.serializers import UserElasticSerializer
 from ..utils import update_or_create_multiple, create_multiple, list_duplicates
 
-from ..interventions.models import Substance, DataFile, InterventionSet
+from ..interventions.models import DataFile, InterventionSet
+from ..substances.models import Substance
+
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
      GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer

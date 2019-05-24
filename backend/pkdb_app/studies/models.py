@@ -7,7 +7,9 @@ from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..categorials.models import Keyword
 from ..outputs.models import OutputSet
 
-from ..interventions.models import InterventionSet, DataFile, Substance
+from ..interventions.models import InterventionSet, DataFile
+from ..substances.models import Substance
+
 from ..storage import OverwriteStorage
 from ..subjects.models import GroupSet, IndividualSet
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
@@ -69,9 +71,7 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
-    #@property
-    #def id(self):
-    #    return self.pk
+
 
     @property
     def study_pk(self):

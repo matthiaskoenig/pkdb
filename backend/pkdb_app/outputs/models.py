@@ -9,11 +9,10 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from pkdb_app.categorials.models import PharmacokineticType, InterventionType
+from pkdb_app.categorials.models import MeasurementType
 from pkdb_app.interventions.models import Intervention
-from pkdb_app.substances.models import Substance
 
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, create_choices
+from ..utils import CHAR_MAX_LENGTH, create_choices
 from pkdb_app.subjects.models import Group, DataFile, Individual
 
 from .managers import (
@@ -24,13 +23,10 @@ from .managers import (
 )
 from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
-    Valueable,
-    ValueableMap,
-    Externable,
-    ValueableNotBlank,
-    ValueableMapNotBlank,
-    Normalizable,
-)
+    Externable)
+
+from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable, ValueableMapNotBlank, \
+    ValueableNotBlank, MeasurementTypeable
 
 TIME_NORM_UNIT = "hr"
 
@@ -89,23 +85,16 @@ class OutputSet(models.Model):
             return 0
 
 
-class AbstractOutput(Normalizable):
-    substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
-    tissue = models.CharField(
-        max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True
-    )
-
+class AbstractOutput(models.Model):
+    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True)
     time = models.FloatField(null=True)
-    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # todo: validate in serializer
-
+    time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     class Meta:
         abstract = True
 
 
 class AbstractOutputMap(models.Model):
-    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    pktype_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
@@ -113,7 +102,11 @@ class AbstractOutputMap(models.Model):
         abstract = True
 
 
-class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, ValueableMap):
+class OutputEx(Externable,
+               AbstractOutput,
+               AbstractOutputMap,
+               ExMeasurementTypeable
+               ):
     source = models.ForeignKey(
         DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
     )
@@ -123,7 +116,6 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
-
     group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
     interventions = models.ManyToManyField(Intervention)
@@ -131,47 +123,23 @@ class OutputEx(Externable, AbstractOutput, AbstractOutputMap, Valueable, Valueab
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    pktype = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = OutputExManager()
 
 
-class Output(ValueableNotBlank, AbstractOutput,Normalizable):
+class Output(AbstractOutput,Normalizable):
     """ Storage of data sets. """
-    pktype = models.ForeignKey(PharmacokineticType, on_delete=models.CASCADE)
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    individual = models.ForeignKey(
-        Individual, null=True, blank=True, on_delete=models.SET_NULL
-    )
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
     _interventions = models.ManyToManyField(Intervention)
-    unit = models.CharField(max_length=CHAR_MAX_LENGTH)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    substance = models.ForeignKey(Substance, related_name="outputs", on_delete=models.PROTECT)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
-
-    # normalization into standertized units and added statistic
-    raw = models.ForeignKey("Output", related_name="norm", on_delete=models.CASCADE, null=True)
-    normed = models.BooleanField(default=False)
 
     # calculated by timecourse data
     calculated = models.BooleanField(default=False)
     timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="pharmacokinetics", null=True)
-
     objects = OutputManager()
-
-    @property
-    def pktype_key(self):
-
-        return self.pktype.key
-
-    @property
-    def category_class_data(self):
-        """ Returns the full information about the category.
-
-        :return:
-        """
-        return self.pktype
 
     @property
     def interventions(self):
@@ -183,7 +151,6 @@ class Output(ValueableNotBlank, AbstractOutput,Normalizable):
             return self.timecourse.interventions
         else:
             return self.raw._interventions
-
 
 
     @property
@@ -253,8 +220,7 @@ class TimecourseEx(
     Externable,
     AbstractOutput,
     AbstractOutputMap,
-    ValueableNotBlank,
-    ValueableMapNotBlank,
+    ExMeasurementTypeable
 ):
     """
     Don't split the mappings to csv for
@@ -268,8 +234,6 @@ class TimecourseEx(
     cv
     time
     """
-    pktype = models.CharField(max_length=CHAR_MAX_LENGTH)
-
     source = models.ForeignKey(
         DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
     )
@@ -291,12 +255,11 @@ class TimecourseEx(
     objects = TimecourseExManager()
 
 
-class Timecourse(AbstractOutput):
+class Timecourse(AbstractOutput, Normalizable):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
     """
-    pktype = models.ForeignKey(PharmacokineticType, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention)
@@ -304,8 +267,6 @@ class Timecourse(AbstractOutput):
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    substance = models.ForeignKey(Substance, related_name="timecourses", on_delete=models.PROTECT)
-    unit = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -316,23 +277,7 @@ class Timecourse(AbstractOutput):
     se = ArrayField(models.FloatField(null=True), null=True)
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
-    raw = models.ForeignKey("Timecourse", related_name="norm", on_delete=models.CASCADE, null=True)
-
-    normed = models.BooleanField(default=False)
     objects = OutputManager()
-
-    @property
-    def pktype_key(self):
-
-        return self.pktype.key
-
-    @property
-    def category_class_data(self):
-        """ Returns the full information about the category.
-
-        :return:
-        """
-        return self.pktype
 
     @property
     def interventions(self):
@@ -384,13 +329,13 @@ class Timecourse(AbstractOutput):
         if not self.is_norm:
             for key, value in self.norm_fields.items():
                 if value is not None:
-                    list_norm_values = list(self.pktype.normalize(value, self.unit).magnitude)
+                    list_norm_values = list(self.measurement_type.normalize(value, self.unit).magnitude)
                     setattr(self, key, list_norm_values)
-            self.unit = self.pktype.norm_unit(self.unit).__str__()
+            self.unit = self.measurement_type.norm_unit(self.unit).__str__()
 
         # for time_unit
         if not self.time_unit == TIME_NORM_UNIT:
-            p_time_unit = self.pktype.p_unit(self.time_unit)
+            p_time_unit = self.measurement_type.p_unit(self.time_unit)
             times = p_time_unit * self.time
             norm_times = times.to(TIME_NORM_UNIT)
             self.time = list(norm_times.m)
@@ -446,14 +391,14 @@ class Timecourse(AbstractOutput):
             return self.individual
 
     def get_bodyweight(self):
-        weight_categories = self.related_subject.characteristica_all_normed.filter(category="weight")
-        return weight_categories
+        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(measurement_type="weight")
+        return weight_measurememnt_type
 
     def get_dosing(self):
 
         try:
-            dosing_category = self.interventions.get(normed=True, category="dosing")
-            return dosing_category
+            dosing_measurement_type = self.interventions.get(normed=True, measurement_type="dosing")
+            return dosing_measurement_type
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
@@ -497,9 +442,9 @@ class Timecourse(AbstractOutput):
         # dosing
         dosing = self.get_dosing()
         if dosing:
-            if InterventionType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
-                p_unit_dosing = self.category_class_data.p_unit(dosing.unit)
-                p_unit_concentration = self.category_class_data.p_unit(pk_dict["c_unit"])
+            if MeasurementType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
+                p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
+                p_unit_concentration = self.measurement_type.p_unit(pk_dict["c_unit"])
                 vd_unit = p_unit_dosing / p_unit_concentration
                 pk_dict["vd_unit"] = str(vd_unit)
                 pk_dict["dose"] = dosing.value

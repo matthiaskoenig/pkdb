@@ -50,7 +50,7 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
         substance = Substance.objects.create(**validated_data)
-        update_or_create_multiple(substance, synonyms_data, "synonyms")
+        update_or_create_multiple(substance, synonyms_data, "synonyms", lookup_field="name")
         substance.parents.add(*parents_data)
 
         substance.save()

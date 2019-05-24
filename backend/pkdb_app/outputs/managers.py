@@ -95,7 +95,7 @@ class TimecourseExManager(models.Manager):
 
         # calculate pharmacokinetics data from normalized timecourses
         for timecourse in timecourses:
-            if timecourse.pktype == "concentration" and timecourse.normed:
+            if timecourse.measurement_type == "concentration" and timecourse.normed:
                 variables = timecourse.get_pharmacokinetic_variables()
                 c_type = variables.pop("c_type", None)
                 _ = variables.pop("bodyweight_type", None)
@@ -118,7 +118,7 @@ class TimecourseExManager(models.Manager):
                         output_dict = {}
                         output_dict[c_type]  = pk[key]
                         output_dict["unit"] = pk_unit
-                        output_dict["pktype"] = key_mapping[key]
+                        output_dict["measurement_type"] = key_mapping[key]
                         output_dict["calculated"] = True
                         output_dict["tissue"] = timecourse.tissue
                         output_dict["substance"] = timecourse.substance

@@ -10,10 +10,10 @@ intervention_index.settings(**elastic_settings)
 @intervention_index.doc_type
 class InterventionDocument(DocType):
     pk = fields.IntegerField()
-    #category =  string_field('category_key')
+    #category =  string_field('measurement_type_name')
 
     category = fields.StringField(
-        attr='category_key',
+        attr='measurement_type_name',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }

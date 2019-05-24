@@ -1,12 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from pkdb_app.categorials.models import validate_categorials, CharacteristicType
+from pkdb_app.categorials.models import validate_measurement_type, MeasurementType
 from rest_framework import serializers
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..studies.models import Study
 from operator import itemgetter
-from django.shortcuts import get_object_or_404
 from ..utils import list_of_pk
 
 from .models import (
@@ -37,7 +36,7 @@ VALUE_MAP_FIELDS = [
     "cv_map",
     "unit_map",
 ]
-CHARACTERISTISTA_FIELDS = ["count", "category", "choice"]
+CHARACTERISTISTA_FIELDS = ["count", "measurement_type", "choice"]
 CHARACTERISTISTA_MAP_FIELDS = ["count_map", "choice_map"]
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
@@ -87,7 +86,7 @@ class CharacteristicaExSerializer(MappingSerializer):
 
 class CharacteristicaSerializer(ExSerializer):
     count = serializers.IntegerField(required=False)
-    category = serializers.SlugRelatedField(slug_field="key", queryset=CharacteristicType.objects.all())
+    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
 
     class Meta:
         model = Characteristica
@@ -95,15 +94,15 @@ class CharacteristicaSerializer(ExSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
-        self._is_required(data,"category")
-        data.get("category")
+        self._is_required(data,"measurement_type")
+        data.get("measurement_type")
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 
     def validate(self, attr):
         try:
             # perform via dedicated function on categorials
-            validate_categorials(data=attr)
+            validate_measurement_type(data=attr)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -426,7 +425,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    category = serializers.CharField()
+    measurement_type = serializers.CharField()
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS + ["normed"]
