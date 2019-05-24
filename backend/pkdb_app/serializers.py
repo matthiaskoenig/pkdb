@@ -520,6 +520,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
+
+
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
 
@@ -583,8 +585,7 @@ class ExSerializer(MappingSerializer):
                 raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
 
     def _validate_requried_key(self,attrs, key):
-        key_value = attrs.get(key,"Empty")
-        if key_value == "Empty":
+        if key not in attrs:
             raise serializers.ValidationError({key: f"{key} is required"})
 
     def _validate_disabled_data(self, data_dict, disabled):
@@ -740,26 +741,6 @@ class ExSerializer(MappingSerializer):
         representation = super().to_representation(instance)
         # change keys
         return self.retransform_ex_fields(representation)
-
-
-class BaseOutputExSerializer(ExSerializer):
-    def to_representation(self, instance):
-
-        rep = super().to_representation(instance)
-
-        if "group" in rep:
-            if rep["group"]:
-                if instance.group:
-                    rep["group"] = instance.group.name
-                if instance.group_map:
-                    rep["group"] = instance.group_map
-
-        if "interventions" in rep:
-            rep["interventions"] = [
-                intervention.name for intervention in instance.interventions.all()
-            ]
-
-        return rep
 
 
 class SidSerializer(WrongKeyValidationSerializer):

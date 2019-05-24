@@ -127,7 +127,7 @@ class MeasurementType(models.Model):
             if unit:
                 return any([self.p_unit(unit).check(dim) for dim in self.valid_dimensions])
             else:
-                unit_not_required2 = NO_UNIT in self.n_units
+                unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
                 return unit_not_required2
 
         else:
@@ -188,7 +188,7 @@ class MeasurementType(models.Model):
 
     def validate_choice(self, choice):
         if choice:
-            if (self.dtype == CATEGORIAL_TYPE) or (self.dtype == BOOLEAN_TYPE):
+            if self.dtype in [CATEGORIAL_TYPE,BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`." \
                           f"Allowed choices are: `{list(self.choices_list())}`."
@@ -198,25 +198,13 @@ class MeasurementType(models.Model):
                       f"For numerical values the fields `value`, `mean` or `median` are used."
                 raise ValueError({"choice": msg})
 
-class MeasurementEX(models.Model):
-    #all map
+    def validate_complete(self, data):
+        # check unit
+        self.validate_unit(data.get("unit",None))
 
-    pass
+        choice = data.get("choice", None)
+        self.validate_choice(choice)
 
-class Measurement(models.Model):
-    #value, mean, median, min, max, sd, se, cv, unit
-    #choice
-
-    #time
-    #time unit
-
-    # raw  -> norm
-    # normed
-
-
-
-    measurement_type = models.ForeignKey(MeasurementType,related_name="measurements", on_delete=models.CASCADE)
-
-#class Characteristica(models.Model):
-    #comments
-    #count
+        time_unit = data.get("time_unit", None)
+        if time_unit:
+            self.validate_time_unit(time_unit)

@@ -2,12 +2,16 @@
 Serializers for interventions.
 """
 import itertools
+
+from pkdb_app.categorials.behaviours import  VALUE_FIELDS, VALUE_FIELDS_NO_UNIT, \
+    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
 
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
-from ..substances.models import Substance
 
 from ..interventions.models import (
     InterventionSet,
@@ -19,12 +23,8 @@ from ..serializers import (
     NA_VALUES, PkSerializer)
 
 from ..subjects.models import  DataFile
-from pkdb_app.categorials.models import validate_measurement_type, MeasurementType
 
-from ..subjects.serializers import (
-    VALUE_MAP_FIELDS,
-    VALUE_FIELDS,
-    EXTERN_FILE_FIELDS, VALUE_FIELDS_NO_UNIT)
+
 
 
 
@@ -41,60 +41,29 @@ DOSING = "dosing"
 
 INTERVENTION_FIELDS = [
     "name",
-    "measurement_type",
     "route",
     "form",
     "application",
     "time",
     "time_unit",
-    "substance",
     "route",
-    "choice",
-]
-INTERVENTION_MAP_FIELDS = [
-    "name_map",
-    "route_map",
-    "form_map",
-    "application_map",
-    "time_map",
-    "time_unit_map",
-    "unit_map",
-    "substance_map",
-    "route_map",
-    "choice_map",
 ]
 
-OUTPUT_FIELDS = ["pktype", "tissue", "substance", "time", "time_unit"]
-OUTPUT_MAP_FIELDS = [
-    "pktype_map",
-    "tissue_map",
-    "substance_map",
-    "time_map",
-    "time_unit_map",
-]
+INTERVENTION_MAP_FIELDS = map_field(INTERVENTION_FIELDS)
 
+OUTPUT_FIELDS = [ "tissue", "time", "time_unit"]
+
+OUTPUT_MAP_FIELDS =  map_field(OUTPUT_FIELDS)
 # ----------------------------------
 # Interventions
 # ----------------------------------
 
 
 
-class InterventionSerializer(ExSerializer):
-    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
-
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-
-    )
-
-
+class InterventionSerializer(MeasurementTypeableSerializer):
     class Meta:
         model = Intervention
-        fields = VALUE_FIELDS + INTERVENTION_FIELDS
+        fields =  INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_internal_value(self, data):
@@ -124,24 +93,16 @@ class InterventionSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
-
         try:
             # perform via dedicated function on categorials
-            validate_measurement_type(data=attrs)
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
 
 
-class InterventionExSerializer(ExSerializer):
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
+class InterventionExSerializer(EXMeasurementTypeableSerializer):
 
     ######
     source = serializers.PrimaryKeyRelatedField(
@@ -163,10 +124,9 @@ class InterventionExSerializer(ExSerializer):
         model = InterventionEx
         fields = (
             EXTERN_FILE_FIELDS
-            + VALUE_MAP_FIELDS
-            + VALUE_FIELDS
             + INTERVENTION_FIELDS
             + INTERVENTION_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
             + ["interventions", "comments"]
         )
 

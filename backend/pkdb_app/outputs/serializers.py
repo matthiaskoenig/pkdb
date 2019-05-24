@@ -1,12 +1,12 @@
 """
 Serializers for interventions.
 """
-from datetime import timedelta
 import numpy as np
-from pkdb_app.categorials.models import validate_measurement_type, MeasurementType
+from pkdb_app.categorials.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
+    VALUE_FIELDS_NO_UNIT
+from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
-import time
 
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
@@ -24,13 +24,10 @@ from .models import (
     TimecourseEx)
 
 from ..serializers import (
-    ExSerializer,
-    BaseOutputExSerializer, PkSerializer)
+    ExSerializer,PkSerializer)
 
 from ..subjects.serializers import (
-    VALUE_MAP_FIELDS,
-    VALUE_FIELDS,
-    EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer, VALUE_FIELDS_NO_UNIT)
+    EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
 
 # ----------------------------------
 # Serializer FIELDS
@@ -53,8 +50,7 @@ OUTPUT_MAP_FIELDS = [
 # ----------------------------------
 
 
-class OutputSerializer(ExSerializer):
-    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
+class OutputSerializer(MeasurementTypeableSerializer):
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
@@ -72,16 +68,11 @@ class OutputSerializer(ExSerializer):
         required=False,
         allow_null=True,
     )
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
-        read_only=False,
-        required=True,
-    )
+
 
     class Meta:
         model = Output
-        fields = OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -98,7 +89,8 @@ class OutputSerializer(ExSerializer):
         self._validate_individual_output(attrs)
 
         try:
-            validate_measurement_type(data=attrs)
+            # perform via dedicated function on categorials
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -110,6 +102,26 @@ class OutputSerializer(ExSerializer):
 
 
         return super().validate(attrs)
+
+
+class BaseOutputExSerializer(ExSerializer):
+    def to_representation(self, instance):
+
+        rep = super().to_representation(instance)
+
+        if "group" in rep:
+            if rep["group"]:
+                if instance.group:
+                    rep["group"] = instance.group.name
+                if instance.group_map:
+                    rep["group"] = instance.group_map
+
+        if "interventions" in rep:
+            rep["interventions"] = [
+                intervention.name for intervention in instance.interventions.all()
+            ]
+
+        return rep
 
 
 class OutputExSerializer(BaseOutputExSerializer):
@@ -159,8 +171,7 @@ class OutputExSerializer(BaseOutputExSerializer):
             EXTERN_FILE_FIELDS
             + OUTPUT_FIELDS
             + OUTPUT_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
             + ["group", "individual", "interventions"]
             + [
                 "group_map",
@@ -199,7 +210,6 @@ class OutputExSerializer(BaseOutputExSerializer):
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
-    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all(),required=True)
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
@@ -216,16 +226,11 @@ class TimecourseSerializer(BaseOutputExSerializer):
         read_only=False,
         required=False,
     )
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
-        read_only=False,
-        required=True,
-    )
+
 
     class Meta:
         model = Timecourse
-        fields = OUTPUT_FIELDS + VALUE_FIELDS + ["group", "individual", "interventions"]
+        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -245,13 +250,11 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_time_unit(attrs)
         self._validate_time(attrs["time"])
 
-
         try:
-            validate_measurement_type(data=attrs)
+            # perform via dedicated function on categorials
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
-
-        return super().validate(attrs)
 
     def _validate_time(self,time):
         if any(np.isnan(np.array(time))):
@@ -306,8 +309,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
             EXTERN_FILE_FIELDS
             + OUTPUT_FIELDS
             + OUTPUT_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
             + ["group", "individual", "interventions"]
             + ["group_map", "individual_map", "interventions_map"]
             + ["timecourses", "comments"]

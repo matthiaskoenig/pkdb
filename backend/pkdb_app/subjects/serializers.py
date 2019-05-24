@@ -1,6 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from pkdb_app.categorials.models import validate_measurement_type, MeasurementType
+from pkdb_app.categorials.behaviours import VALUE_FIELDS, map_field, VALUE_FIELDS_NO_UNIT, \
+    MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.categorials.models import  MeasurementType
+from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
@@ -21,26 +24,15 @@ from .models import (
 )
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer, ReadSerializer
 
-EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
-VALUE_FIELDS_NO_UNIT = ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
-VALUE_FIELDS = VALUE_FIELDS_NO_UNIT +  ["unit"]
+CHARACTERISTISTA_FIELDS = ["count"]
+CHARACTERISTISTA_MAP_FIELDS = map_field(CHARACTERISTISTA_FIELDS)
+SUBJECT_FIELDS = ["name", "count"]
+SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
-VALUE_MAP_FIELDS = [
-    "value_map",
-    "mean_map",
-    "median_map",
-    "min_map",
-    "max_map",
-    "sd_map",
-    "se_map",
-    "cv_map",
-    "unit_map",
-]
-CHARACTERISTISTA_FIELDS = ["count", "measurement_type", "choice"]
-CHARACTERISTISTA_MAP_FIELDS = ["count_map", "choice_map"]
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
+EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
 
 # ----------------------------------
 # DataFile
@@ -60,7 +52,7 @@ class DataFileSerializer(WrongKeyValidationSerializer):
 # ----------------------------------
 # Characteristica
 # ----------------------------------
-class CharacteristicaExSerializer(MappingSerializer):
+class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
     count = serializers.IntegerField(required=False)
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -72,8 +64,7 @@ class CharacteristicaExSerializer(MappingSerializer):
         fields = (
             CHARACTERISTISTA_FIELDS
             + CHARACTERISTISTA_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
             + ["comments"]
         )
 
@@ -84,13 +75,13 @@ class CharacteristicaExSerializer(MappingSerializer):
         return data
 
 
-class CharacteristicaSerializer(ExSerializer):
+class CharacteristicaSerializer(MeasurementTypeableSerializer):
     count = serializers.IntegerField(required=False)
     measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
 
     class Meta:
         model = Characteristica
-        fields = CHARACTERISTISTA_FIELDS + VALUE_FIELDS
+        fields = CHARACTERISTISTA_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -99,14 +90,14 @@ class CharacteristicaSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 
-    def validate(self, attr):
+    def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            validate_measurement_type(data=attr)
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
-        return super().validate(attr)
+        return super().validate(attrs)
 
 
 # ----------------------------------
