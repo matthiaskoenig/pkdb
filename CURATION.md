@@ -338,7 +338,6 @@ Some tips for digitizion of figures:
 ### Tables
 
 ```json
-
 {
         "source": "Akinyinka2000_Tab3.csv",
         "format": "TSV",
@@ -355,6 +354,29 @@ Some tips for digitizion of figures:
         "sd": "col==cmax_sd || col==tmax_sd || col==aucinf_sd || col==thalf_sd",
         "unit": "\u00b5g/ml || hr || \u00b5g*hr/ml || hr"
     }
+```
+
+```json
+{
+    "timecourses": [
+      {
+        "group": "all",
+        "groupby": "intervention",
+        "interventions": "col==intervention",
+        "source": "Albert1974_Fig1.tsv",
+        "format": "TSV",
+        "figure": "Albert1974_Fig1.png",
+        "substance": "paracetamol",
+        "tissue": "plasma",
+        "pktype": "concentration",
+        "time": "col==time_min",
+        "time_unit": "min",
+        "mean": "col==apap",
+        "cv": "col==apap_cv",
+        "unit": "µg/ml"
+      }
+    ]
+}
 ```
 
 

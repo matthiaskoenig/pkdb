@@ -95,12 +95,17 @@ docker-compose run --rm backend python manage.py makemigrations
 PKDB provides a REST API which allows simple interaction with the database.
 An overview over the REST endpoints is available from
 ```
-http://localhost:8000/api/v1/
+http://localhost:8123/api/v1/
 ```
+<<<<<<< HEAD
 
 Elastic Search engine is running on `
 ` but is also reachable via django views.
 General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
+=======
+The REST API supports elastisearch queries, with examples 
+available from https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
+>>>>>>> develop
 
 Query examples:
 ```
