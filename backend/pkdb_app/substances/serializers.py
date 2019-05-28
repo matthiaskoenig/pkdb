@@ -63,7 +63,7 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         instance.synonyms.all().delete()
         for name, value in validated_data.items():
             setattr(instance, name, value)
-        update_or_create_multiple(instance, synonyms_data, "synonyms")
+        update_or_create_multiple(instance, synonyms_data, "synonyms", lookup_field="name")
         instance.parents.add(*parents_data)
         instance.save()
 

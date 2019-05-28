@@ -22,7 +22,7 @@ class OutputOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["measurememnt_types"] = {k.key: k._asdict() for k in MeasurementType.objects.all()}
+        options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         options["substances"] = reverse('substances_elastic-list')
         options["tissue"] = OUTPUT_TISSUE_DATA
         return options
@@ -35,7 +35,7 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
             options = {}
-            options["measurememnt_types"] = {k.key: k._asdict() for k in MeasurementType.objects.all()}
+            options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
             options["substances"] = reverse('substances_elastic-list')
             options["tissue"] = OUTPUT_TISSUE_DATA
             return options
