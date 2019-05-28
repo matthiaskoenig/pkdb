@@ -11,7 +11,7 @@ from ..storage import OverwriteStorage
 from ..behaviours import (
     Externable)
 
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable, ValueableMapNotBlank, ValueableNotBlank
+from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 from ..utils import CHAR_MAX_LENGTH
 from .managers import (

@@ -190,7 +190,6 @@ class MeasurementType(models.Model):
 
     def validate_choice(self, choice):
         if choice:
-            print(self.dtype)
             if self.dtype in [CATEGORIAL_TYPE,BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`." \

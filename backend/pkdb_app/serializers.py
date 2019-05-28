@@ -61,10 +61,7 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
-        print(100 * "+")
 
-        print(data)
-        print(100 * "+")
         return super().to_internal_value(data)
 
     def validate(self, attrs):

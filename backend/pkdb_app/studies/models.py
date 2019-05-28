@@ -190,6 +190,8 @@ class Study(Sidable, models.Model):
         all_substances = []
         basic_substances = []
 
+        # todo: add characteristica substance
+
         if self.interventions:
             all_substances.extend(list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
 

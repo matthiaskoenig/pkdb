@@ -9,7 +9,7 @@ from ..subjects.models import DataFile
 
 from ..interventions.managers import InterventionSetManager,InterventionExManager
 from ..behaviours import Externable
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable, ValueableMapNotBlank, ValueableNotBlank
+from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 # -------------------------------------------------
 # Intervention

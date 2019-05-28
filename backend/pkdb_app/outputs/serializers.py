@@ -3,7 +3,7 @@ Serializers for interventions.
 """
 import numpy as np
 from pkdb_app.categorials.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
-    VALUE_FIELDS_NO_UNIT
+    VALUE_FIELDS_NO_UNIT, map_field
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
@@ -37,14 +37,9 @@ from ..utils import list_of_pk
 
 
 
-OUTPUT_FIELDS = ["measurement_type", "tissue", "substance", "time", "time_unit"]
-OUTPUT_MAP_FIELDS = [
-    "measurement_type_map",
-    "tissue_map",
-    "substance_map",
-    "time_map",
-    "time_unit_map",
-]
+OUTPUT_FIELDS = ["tissue",  "time", "time_unit"]
+
+OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 
 # ----------------------------------
 # Outputs
@@ -138,13 +133,6 @@ class OutputExSerializer(BaseOutputExSerializer):
     interventions = serializers.PrimaryKeyRelatedField(
         queryset=Intervention.objects.all(),
         many=True,
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
         read_only=False,
         required=False,
         allow_null=True,
@@ -271,6 +259,8 @@ class TimecourseSerializer(BaseOutputExSerializer):
         except ValueError as err:
             raise serializers.ValidationError(err)
 
+        return super().validate(attrs)
+
     def _validate_time(self,time):
         if any(np.isnan(np.array(time))):
             raise serializers.ValidationError({"time":"no timepoints are allowed to be nan", "detail":time})
@@ -291,13 +281,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     interventions = serializers.PrimaryKeyRelatedField(
         queryset=Intervention.objects.all(),
         many=True,
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
         read_only=False,
         required=False,
         allow_null=True,
@@ -346,8 +329,13 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         data = self.transform_map_fields(data)
 
         data["timecourses"] = timecourses
+
+
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
+        print("*" * 200)
+        print(data)
+        print("*" * 200)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_figure(self, value):
