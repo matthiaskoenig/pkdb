@@ -98,7 +98,8 @@ An overview over the REST endpoints is available from
 http://localhost:8000/api/v1/
 ```
 
-Elastic Search engine is running on `localhost:9200` but is also reachable via django views.
+Elastic Search engine is running on `
+` but is also reachable via django views.
 General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
 Query examples:

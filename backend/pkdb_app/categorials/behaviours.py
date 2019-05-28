@@ -59,7 +59,8 @@ class ExMeasurementTypeable(ValueableNotBlank,ValueableMapNotBlank):
 
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
+    #substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
+    substance = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
 

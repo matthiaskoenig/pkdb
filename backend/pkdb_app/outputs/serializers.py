@@ -8,6 +8,7 @@ from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
 
+from pkdb_app.categorials.models import MeasurementType
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
@@ -225,6 +226,20 @@ class TimecourseSerializer(BaseOutputExSerializer):
         many=True,
         read_only=False,
         required=False,
+    )
+    substance = serializers.SlugRelatedField(
+        slug_field="name",
+        queryset=Substance.objects.all(),
+        read_only=False,
+        required=False,
+        allow_null=True,
+    )
+
+    measurement_type = serializers.SlugRelatedField(
+        slug_field="name",
+        queryset=MeasurementType.objects.all(),
+        read_only=False,
+        required=False
     )
 
 

@@ -13,16 +13,17 @@ from rest_framework import serializers
 
 
 class EXMeasurementTypeableSerializer(ExSerializer):
+    pass
+
+class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     substance = serializers.SlugRelatedField(
         slug_field="name",
         queryset=Substance.objects.all(),
         read_only=False,
         required=False,
         allow_null=True,
-
     )
 
-class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     measurement_type = serializers.SlugRelatedField(
         slug_field="name",
         queryset=MeasurementType.objects.all())

@@ -127,7 +127,9 @@ class MeasurementType(models.Model):
             if unit:
                 return any([self.p_unit(unit).check(dim) for dim in self.valid_dimensions])
             else:
-                unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
+                #unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
+                #return unit_not_required2
+                unit_not_required2 = NO_UNIT in self.n_units
                 return unit_not_required2
 
         else:
@@ -138,7 +140,7 @@ class MeasurementType(models.Model):
 
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
-            msg = f"For category `{self.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} is not allowed."
+            msg = f"For measurement type `{self.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} is not allowed."
             raise ValueError(
                 {"unit": msg, "Only units with the following dimensions are allowed:": self.valid_dimensions_str,
                  "Units are allowed which can be converted to the following normalized units:": self.n_units})
@@ -188,6 +190,7 @@ class MeasurementType(models.Model):
 
     def validate_choice(self, choice):
         if choice:
+            print(self.dtype)
             if self.dtype in [CATEGORIAL_TYPE,BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`." \
