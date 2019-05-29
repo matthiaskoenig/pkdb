@@ -261,7 +261,7 @@ class StudyDocument(DocType):
 
     class Meta(object):
         model = Study
-        related_models = [ Reference, Individual, Group, Intervention, Timecourse, Output]
+        related_models = [Reference, Individual, Group, Intervention, Timecourse, Output]
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
         ignore_signals = True

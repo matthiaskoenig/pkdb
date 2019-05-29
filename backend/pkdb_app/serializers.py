@@ -160,6 +160,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return max(n_values)
 
+    @staticmethod
+    def interventions_from_string(value):
+        return [v.strip() for v in value.split(",")]
+
     def split_entry(self, entry):
         """ Splits entry fields based on separator.
 
@@ -186,7 +190,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if isinstance(value, str):
                     values[k] = value.strip()
                     if field == "interventions":
-                        values[k] = [v.strip() for v in value.split(",")]
+                        values[k] = self.interventions_from_string(value)
 
                     if values[k] in ["NA", "NAN", "na", "nan"]:
                         values[k] = None
@@ -344,7 +348,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             entry_value = entry_value.strip()
 
                     if keys[0] == "interventions":
-                        entry_value = [v.strip() for v in entry_value.split(",")]
+                        entry_value = self.interventions_from_string(keys[0])
                         set_keys(entry_dict, entry_value, *keys[:1])
                     else:
                         set_keys(entry_dict, entry_value, *keys)
@@ -487,7 +491,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 data,
                                 ])
                         if keys[0] == "interventions":
-                            entry_value = [v.strip() for v in unqiue_values[0].split(",")]
+                            entry_value = self.interventions_from_string(keys[0])
                             set_keys(array_dict, entry_value, *keys[:1])
                             #array_dict[keys[0]] = [v.strip() for v in unqiue_values[0].split(",")]
                         else:
@@ -562,6 +566,8 @@ class ExSerializer(MappingSerializer):
 
             if data["interventions"]:
                 interventions = []
+                if isinstance(data["interventions"],str):
+                    data["interventions"] = self.interventions_from_string(data["interventions"])
 
                 for intervention in data["interventions"]:
                     try:

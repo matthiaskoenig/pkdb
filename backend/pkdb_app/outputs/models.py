@@ -116,6 +116,9 @@ class OutputEx(Externable,
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
+
+    #todo: make this charfields
+
     group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
     interventions = models.ManyToManyField(Intervention)
