@@ -2,8 +2,8 @@ import copy
 import numpy as np
 import numbers
 import pandas as pd
-from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
+from pkdb_app.categorials.behaviours import map_field
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict, namedtuple
@@ -12,6 +12,7 @@ from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
+
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
 NA_VALUES = ["na","NA","nan","NAN"]
@@ -441,7 +442,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                     array_dicts.append(array_dict)
 
-
             else:
                 array_dict = copy.deepcopy(template)
                 self.dict_from_array(array_dict, df, data, source)
@@ -514,14 +514,12 @@ class MappingSerializer(WrongKeyValidationSerializer):
         rep = super().to_representation(instance)
         rep = self.retransform_map_fields(rep)
 
+        request = self.context.get('request')
 
         # url representation of file
         for file in ["source", "figure"]:
             if file in rep:
-                current_site = (
-                    f'http://{get_current_site(self.context["request"]).domain}'
-                )
-                rep[file] = current_site + getattr(instance, file).file.url
+                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
         return rep
 
 
@@ -610,16 +608,7 @@ class ExSerializer(MappingSerializer):
 
     def _validate_individual_characteristica(self, data_dict):
         disabled = ["sd", "se", "min", "max", "cv", "mean", "median"]
-        disabled += [
-            "sd_map",
-            "se_map",
-            "min_map",
-            "max_map",
-            "cv_map",
-            "mean_map",
-            "median_map",
-        ]
-
+        disabled += map_field(disabled)
         self._validate_disabled_data(data_dict, disabled)
 
     def _validate_individual_output(self, data):

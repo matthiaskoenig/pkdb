@@ -20,7 +20,7 @@ from .views import serve_protected_document
 from .subjects.views import (
     DataFileViewSet,
     IndividualViewSet,
-    CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
+    CharacteristicaElasticViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
 from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet
 from .studies.views import (
@@ -85,7 +85,7 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 
 router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
 router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
-router.register("characteristica_elastic", CharacteristicaViewSet, base_name="characteristica_elastic")
+router.register("characteristica_elastic", CharacteristicaElasticViewSet, base_name="characteristica_elastic")
 router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
 router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
 router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")

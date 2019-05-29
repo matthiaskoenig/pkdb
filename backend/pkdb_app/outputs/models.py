@@ -36,7 +36,6 @@ OUTPUT_TISSUE_DATA = [
     "serum",
     "spinal fluid",
     "urine",
-    "saliva/plasma",  # this is not a good solution
     "breath",
     "bile duct"
 ]
@@ -163,7 +162,13 @@ class Output(AbstractOutput,Normalizable):
             return self.ex.outputset.study.name
 
         except AttributeError:
-            return self.timecourse.ex.outputset.study.name
+            try:
+                return self.timecourse.ex.outputset.study.name
+
+            except AttributeError:
+                return None
+
+
 
 
     # for elastic search. NaNs are not allowed in elastic search

@@ -161,7 +161,7 @@ class CharacteristicaDocument(DocType):
     )
     individual_pk = fields.IntegerField(attr='individual_id')
 
-    measurement_type_name = fields.StringField(
+    measurement_type = fields.StringField(
         attr='measurement_type_name',
         fields={
             'raw': fields.StringField(analyzer='keyword'),

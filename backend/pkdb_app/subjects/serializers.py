@@ -391,8 +391,8 @@ class IndividualSetSerializer(ExSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class CharacteristicaReadSerializer(ReadSerializer):
-
+class CharacteristicaElasticBigSerializer(ReadSerializer):
+    measurement_type = serializers.CharField()
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + MEASUREMENTTYPE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
@@ -402,7 +402,7 @@ class CharacteristicaReadSerializer(ReadSerializer):
 # Elastic Search Serializer
 ###############################################################################################
 #maybe depreciated
-class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
+class DataFileElasticSerializer(serializers.ModelSerializer):
     file = serializers.CharField()
     timecourses = serializers.SerializerMethodField()
     class Meta:
@@ -412,15 +412,8 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
     def get_timecourses(self, obj):
         return list_of_pk("timecourses", obj)
 
-    #def get_object(self):
-    #    obj = get_object_or_404(self.get_queryset())
-    #
-    #    return obj
-    #    self.check_object_permissions(self.request, obj)
-    #    return obj
 
-
-class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
+class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -430,6 +423,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
     measurement_type = serializers.CharField()
+
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"]
@@ -441,6 +435,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
                     rep[field] = '{:.2e}'.format(rep[field])
                 except (ValueError, TypeError):
                     pass
+
         return rep
 
 
@@ -513,7 +508,7 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
         return list_of_pk("individuals", obj)
 
 
-class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
+class IndividualElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = CharacteristicaElasticSerializer(many=True, read_only=True)

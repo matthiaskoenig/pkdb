@@ -9,7 +9,8 @@ from pkdb_app.subjects.models import (
 )
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
+    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaElasticBigSerializer,
+    CharacteristicaElasticSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 ############################################################
@@ -99,10 +100,10 @@ class IndividualViewSet(DocumentViewSet):
     }
 
 
-class CharacteristicaViewSet(DocumentViewSet):
+class CharacteristicaElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     document = CharacteristicaDocument
-    serializer_class = CharacteristicaReadSerializer
+    serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
 
