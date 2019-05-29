@@ -4,7 +4,7 @@ Django URLs
 from django.urls import path, include
 from django.conf.urls import url
 from django.contrib import admin
-from pkdb_app.categorials.views import MeasurementTypeViewSet, KeywordViewSet, ElasticKeywordViewSet
+from pkdb_app.categorials.views import MeasurementTypeViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
     TimecourseOptionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
@@ -48,8 +48,6 @@ router.register("references", ReferencesViewSet, base_name="references")
 
 # elastic search format
 router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
-router.register("keywords", KeywordViewSet, base_name="keywords")
-router.register("keywords_elastic", ElasticKeywordViewSet, base_name="keywords_elastic")
 
 
 router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")

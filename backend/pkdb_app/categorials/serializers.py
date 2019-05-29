@@ -5,7 +5,7 @@ Serializers for interventions.
 # ----------------------------------
 # Interventions
 # ----------------------------------
-from pkdb_app.categorials.models import Unit, Choice,Keyword, MeasurementType, Annotation, XRef
+from pkdb_app.categorials.models import Unit, Choice, MeasurementType, Annotation, XRef
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.substances.models import Substance
 from pkdb_app.utils import update_or_create_multiple
@@ -13,7 +13,10 @@ from rest_framework import serializers
 
 
 class EXMeasurementTypeableSerializer(ExSerializer):
-    pass
+    measurement_type = serializers.CharField(allow_blank=False)
+    measurement_type_map = serializers.CharField(allow_blank=False)
+
+
 
 class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     substance = serializers.SlugRelatedField(
@@ -27,6 +30,10 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     measurement_type = serializers.SlugRelatedField(
         slug_field="name",
         queryset=MeasurementType.objects.all())
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        return rep
 
 
 class NameFieldSerializer(serializers.ModelSerializer):
@@ -120,41 +127,3 @@ class MeasurementTypeSerializer(BaseSerializer):
     class Meta:
         model = MeasurementType
         fields = ["name", "url_slug", "dtype", "creator", "description", "units", "xrefs", "annotations", "choices"]
-
-
-# ----------------------------------
-# Keyword
-# ----------------------------------
-class KeywordSerializer(WrongKeyValidationSerializer):
-    """ Keyword. """
-
-    class Meta:
-        model = Keyword
-        fields = ["name","creator"]
-
-    def create(self, validated_data):
-        keyword, created = Keyword.objects.update_or_create(**validated_data)
-        return keyword
-
-    def to_internal_value(self, data):
-        self.validate_wrong_keys(data)
-        data["creator"] = self.context['request'].user.id
-        return super().to_internal_value(data)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["creator"] = instance.creator.username
-        return data
-
-
-###############################################################################################
-# Elastic Serializer
-###############################################################################################
-
-class KeywordElasticSerializer(serializers.ModelSerializer):
-    """ Keyword. """
-
-    class Meta:
-        model = Keyword
-        fields = ["name"]
-

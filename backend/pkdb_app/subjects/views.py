@@ -165,7 +165,7 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["measurement_types"] = {k.key: k._asdict() for k in MeasurementType.objects.all()}
+        options["measurement_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         return options
 
     def list(self, request):

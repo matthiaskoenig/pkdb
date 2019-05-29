@@ -104,7 +104,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             else:
                 transformed_data[key] = data.get(key)
-
         return transformed_data
 
     @staticmethod
@@ -112,6 +111,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         transformed_data = {}
         for k, v in data.items():
             if "_map" in k:
+
                 k = k[:-4]
             #if v is None:
             #    continue
@@ -507,7 +507,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-        rep = self.retransform_map_fields(super().to_representation(instance))
+        rep = super().to_representation(instance)
+        rep = self.retransform_map_fields(rep)
+
 
         # url representation of file
         for file in ["source", "figure"]:
@@ -516,7 +518,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     f'http://{get_current_site(self.context["request"]).domain}'
                 )
                 rep[file] = current_site + getattr(instance, file).file.url
-
         return rep
 
 
@@ -740,6 +741,7 @@ class ExSerializer(MappingSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+
         # change keys
         return self.retransform_ex_fields(representation)
 

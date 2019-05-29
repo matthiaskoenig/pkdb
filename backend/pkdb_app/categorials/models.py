@@ -14,6 +14,7 @@ ureg = pint.UnitRegistry()
 
 # Units
 ureg.define('cups = count')
+ureg.define('beverages = count')
 ureg.define('none = count')
 ureg.define('yr = year')
 ureg.define('percent = 0.01*count')
@@ -45,11 +46,6 @@ def validate_measurement_type(data):
     if time_unit:
         measurement_type.validate_time_unit(time_unit)
 
-
-class Keyword(models.Model):
-    """This class describes the keywords / tags of a study."""
-    creator = models.ForeignKey(User, related_name="keywords", on_delete=models.CASCADE)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
 
 class Unit(models.Model):
     """Units Model"""
@@ -84,6 +80,12 @@ class MeasurementType(models.Model):
     description = models.TextField(blank=True, null=True)
     xrefs = models.ManyToManyField(XRef)
     annotations = models.ManyToManyField(Annotation)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
 
 
     @property

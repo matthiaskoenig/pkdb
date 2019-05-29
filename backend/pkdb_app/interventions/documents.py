@@ -12,7 +12,7 @@ class InterventionDocument(DocType):
     pk = fields.IntegerField()
     #category =  string_field('measurement_type_name')
 
-    category = fields.StringField(
+    measurement_type = fields.StringField(
         attr='measurement_type_name',
         fields={
             'raw': fields.StringField(analyzer='keyword'),

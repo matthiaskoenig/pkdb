@@ -43,7 +43,6 @@ class OutputSetManager(models.Manager):
 
         outputset_upload_time = time.time() - start_time
         outputset_upload_time = timedelta(seconds=outputset_upload_time).total_seconds()
-        print(f"--- {outputset_upload_time} outputset create time in seconds ---")
         return outputset
 
 

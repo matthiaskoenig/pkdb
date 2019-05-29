@@ -47,7 +47,6 @@ OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 
 
 class OutputSerializer(MeasurementTypeableSerializer):
-
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -116,6 +115,8 @@ class BaseOutputExSerializer(ExSerializer):
             rep["interventions"] = [
                 intervention.name for intervention in instance.interventions.all()
             ]
+
+
 
         return rep
 
@@ -333,9 +334,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
 
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
-        print("*" * 200)
-        print(data)
-        print("*" * 200)
+
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_figure(self, value):
@@ -438,6 +437,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 ["pk","study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
+                + MEASUREMENTTYPE_FIELDS
                 + ["group", "individual", "normed", "raw", "calculated", "timecourse", "interventions"])
 
     def get_substance(self,obj):
@@ -471,6 +471,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
             model = Timecourse
             fields = (
                 ["pk","study"]
+                + MEASUREMENTTYPE_FIELDS
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
                 + ["group", "individual", "normed","raw","pharmacokinetics", "interventions","figure"])

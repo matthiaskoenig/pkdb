@@ -25,7 +25,7 @@ class InterventionOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["measurement_type"] = {k.key: k._asdict() for k in MeasurementType.objects.all()}
+        options["measurement_type"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         options["substances"] = reverse('substances_elastic-list')
         options["route"] = INTERVENTION_ROUTE
         options["form"] = INTERVENTION_FORM

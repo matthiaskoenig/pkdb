@@ -1,12 +1,10 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
     ObjectField
-from pkdb_app.interventions.models import  Intervention
-from ..substances.models import Substance
+from pkdb_app.interventions.models import Intervention
 
 from pkdb_app.outputs.models import Timecourse, Output
 from pkdb_app.studies.models import Reference, Study
-from pkdb_app.categorials.models import Keyword
 # Elastic Reference
 from pkdb_app.subjects.models import  Group, Individual
 
@@ -96,7 +94,6 @@ def common_setfields(model, attr=None):
                     'pk': fields.IntegerField()
                 },
                 multi=True),
-            # "count" : fields.FloatField(),
 
             model: ObjectField(
                 attr=attr,
@@ -190,8 +187,7 @@ class StudyDocument(DocType):
         },
         multi=True
     )
-    substances = string_field(attr="substances_name", multi=True)
-    keywords = string_field(attr="keywords_name", multi=True)
+    substances = string_field(attr="get_substances", multi=True)
     files = ObjectField(
         properties={
             'pk': fields.IntegerField(),
@@ -265,7 +261,7 @@ class StudyDocument(DocType):
 
     class Meta(object):
         model = Study
-        related_models = [Substance, Reference, Keyword, Individual, Group, Intervention, Timecourse, Output]
+        related_models = [ Reference, Individual, Group, Intervention, Timecourse, Output]
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
         ignore_signals = True
@@ -277,13 +273,10 @@ class StudyDocument(DocType):
         The related_models option should be used with caution because it can lead in the index
         to the updating of a lot of items.
         """
-        if isinstance(related_instance, Substance):
-            return related_instance.studies.all()
-        elif isinstance(related_instance, Reference):
+
+        if isinstance(related_instance, Reference):
             if hasattr(related_instance,"study"):
                 return related_instance.study
-        elif isinstance(related_instance, Keyword):
-            return related_instance.studies.all()
         elif isinstance(related_instance, Individual):
             return related_instance.study
 

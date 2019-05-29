@@ -4,7 +4,6 @@ Django model for Study.
 from django.db import models
 from pkdb_app.users.models import PUBLIC, PRIVATE
 
-from ..categorials.models import Keyword
 from ..outputs.models import OutputSet
 
 from ..interventions.models import InterventionSet, DataFile
@@ -118,8 +117,6 @@ class Study(Sidable, models.Model):
     curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)
     collaborators = models.ManyToManyField(User,related_name="collaborator_of_studies")
 
-    substances = models.ManyToManyField(Substance, related_name="studies")
-    keywords = models.ManyToManyField(Keyword, related_name="studies")
 
     groupset = models.OneToOneField(GroupSet,related_name="study", on_delete=models.SET_NULL, null=True)
     interventionset = models.OneToOneField(
@@ -178,6 +175,7 @@ class Study(Sidable, models.Model):
         except AttributeError:
             return []
 
+    @property
     def get_substances(self):
         """Get all substances for given study.
         Substances are collected from
@@ -190,7 +188,6 @@ class Study(Sidable, models.Model):
         all_substances = []
         basic_substances = []
 
-        # todo: add characteristica substance
 
         if self.interventions:
             all_substances.extend(list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
@@ -211,20 +208,14 @@ class Study(Sidable, models.Model):
         if substances_derived_dj:
             basic_substances.extend(list(substances_derived_dj.values_list("parents__pk",flat=True)))
 
-        return set(basic_substances)
+        return list(set(basic_substances))
 
-
-    @property
-    def substances_name(self):
-        return [substance.name for substance in self.substances.all()]
 
     @property
     def files_url(self):
         return [file.file.name for file in self.files.all()]
 
-    @property
-    def keywords_name(self):
-        return [keyword.name for keyword in self.keywords.all()]
+
 
     @property
     def reference_name(self):

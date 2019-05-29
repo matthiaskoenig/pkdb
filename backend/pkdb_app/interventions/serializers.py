@@ -92,6 +92,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
@@ -238,7 +239,7 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     raw = PkSerializer()
     class Meta:
         model = Intervention
-        fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def get_substance(self, obj):
         if obj.substance:

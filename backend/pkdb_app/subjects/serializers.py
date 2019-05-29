@@ -74,10 +74,14 @@ class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
         self.validate_wrong_keys(data)
         return data
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+
+        return rep
+
 
 class CharacteristicaSerializer(MeasurementTypeableSerializer):
     count = serializers.IntegerField(required=False)
-    measurement_type = serializers.SlugRelatedField(slug_field="name", queryset=MeasurementType.objects.all())
 
     class Meta:
         model = Characteristica
@@ -98,6 +102,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
+
 
 
 # ----------------------------------
@@ -124,6 +129,11 @@ class GroupSerializer(ExSerializer):
             self._validate_disabled_data(characteristica_single, disabled)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
+    def to_representation(self, instance):
+
+        rep = super().to_representation(instance)
+        return rep
 
 
 class GroupExSerializer(ExSerializer):
@@ -178,6 +188,7 @@ class GroupExSerializer(ExSerializer):
         data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
+
         data["groups"] = groups
 
         # ----------------------------------
@@ -187,6 +198,9 @@ class GroupExSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        return rep
 
 class GroupSetSerializer(ExSerializer):
     descriptions = DescriptionSerializer(
@@ -345,7 +359,6 @@ class IndividualExSerializer(ExSerializer):
     def to_representation(self, instance):
 
         rep = super().to_representation(instance)
-
         if "group" in rep:
             if rep["group"]:
                 if instance.group:
@@ -382,7 +395,7 @@ class CharacteristicaReadSerializer(ReadSerializer):
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + MEASUREMENTTYPE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
 
 
 ###############################################################################################
@@ -419,7 +432,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
     measurement_type = serializers.CharField()
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS + ["normed"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

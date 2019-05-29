@@ -54,8 +54,8 @@ class ValueableNotBlank(models.Model):
 
 
 class ExMeasurementTypeable(ValueableNotBlank,ValueableMapNotBlank):
-    measurement_type = models.CharField(max_length=CHAR_MAX_LENGTH)
-    measurement_type_map = models.CharField(max_length=CHAR_MAX_LENGTH)
+    measurement_type = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    measurement_type_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
