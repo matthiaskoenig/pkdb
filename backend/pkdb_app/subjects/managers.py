@@ -88,6 +88,7 @@ class GroupManager(models.Manager):
             characteristica_single["count"] = characteristica_single.get( "count", group.count)
             characteristica_updated.append(characteristica_single)
 
+
         not_norm_group = create_multiple_bulk(group, "group", characteristica_updated, Characteristica)
         create_multiple_bulk_normalized(not_norm_group, Characteristica)
 

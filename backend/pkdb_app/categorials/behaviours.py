@@ -86,6 +86,11 @@ class MeasurementTypeable(ValueableNotBlank):
         return self.measurement_type.name
 
     @property
+    def substance_name(self):
+        if self.substance:
+            return self.substance.name
+
+    @property
     def choices(self):
         return self.measurement_type.choices_list()
 

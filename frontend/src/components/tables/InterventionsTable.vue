@@ -18,23 +18,13 @@
                     <intervention-chip :intervention="table.item" :search="search"/>
                 </td>
                 <td>
-                    <text-highlight :queries="[search]"> {{table.item.category }}</text-highlight>
-                </td>
-                <td>
-                    <text-highlight :queries="[search]"> {{table.item.choice }}</text-highlight>
-                </td>
-                <td>
                     <text-highlight :queries="[search]"> {{table.item.application }}</text-highlight><br />
                     <text-highlight :queries="[search]">{{table.item.time}}</text-highlight>
                         <span v-if="table.item.time_unit"> [<text-highlight :queries="[search]">{{table.item.time_unit }}</text-highlight>]</span><br />
                     <text-highlight :queries="[search]">{{ table.item.route }}</text-highlight><br />
                     <text-highlight :queries="[search]">{{table.item.form}}</text-highlight>
                 </td>
-                <td>
-                    <span v-if="table.item.substance && Object.keys(table.item.substance).length>0">
-                        <substance-chip :title="table.item.substance.name" :search="search"/>
-                    </span>
-                </td>
+
                 <td><characteristica-card :data="table.item" /></td>
             </template>
 
@@ -68,11 +58,8 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Category', value: 'category'},
-                    {text: 'Choice', value: 'choice'},
                     {text: 'Application', value: 'application'},
-                    {text: 'Substance', value: 'substance'},
-                    {text: 'Value', value: 'value'},
+                    {text: 'Measurement', value: 'value'},
                 ],
             }
         },

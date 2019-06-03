@@ -7,6 +7,7 @@ import pint
 from pint import UndefinedUnitError
 
 from django.db import models
+from pkdb_app.categorials.managers import ChoiceManager
 from pkdb_app.users.models import User
 from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices
 
@@ -33,6 +34,7 @@ DTYPE_CHOICES = create_choices([NUMERIC_TYPE,CATEGORIAL_TYPE, BOOLEAN_TYPE,NUMER
 
 
 ANNOTATION_RELATION_CHOICES = create_choices(["is"])
+ANNOTATION_COLLECTION_CHOICES = create_choices(["cmo","doid"])
 
 
 def validate_measurement_type(data):
@@ -55,15 +57,18 @@ class Unit(models.Model):
     def p_unit(self):
         return ureg(self.name).u
 
+class Annotation(models.Model):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    relation = models.CharField(max_length=CHAR_MAX_LENGTH, choices=ANNOTATION_RELATION_CHOICES)
+    collection = models.CharField(max_length=CHAR_MAX_LENGTH, choices=ANNOTATION_COLLECTION_CHOICES)
+
 
 class Choice(models.Model):
     """Choice Model"""
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    annotations = models.ManyToManyField(Annotation)
 
-
-class Annotation(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    relation = models.CharField(max_length=CHAR_MAX_LENGTH, choices=ANNOTATION_RELATION_CHOICES)
+    objects = ChoiceManager()
 
 
 class XRef(models.Model):
@@ -181,14 +186,22 @@ class MeasurementType(models.Model):
     def choices_list(self):
         return self.choices.values_list("name", flat=True)
 
+    def annotations_strings(self):
+        return [f"relation <{annotation.relation}>:, {annotation.name}"for annotation in self.annotations.all()]
+
     def _asdict(self):
         return {
             "name":self.name,
+            "description":self.description,
+            "annotations":self.annotations_strings(),
             "url_slug":self.url_slug,
             "dtype":self.dtype,
             "choices": self.choices_list(),
             "units": self.n_units,
-            "valid unit dimensions": self.valid_dimensions}
+            "valid unit dimensions": self.valid_dimensions,
+            "creator": self.creator.username,
+        }
+
 
     def validate_choice(self, choice):
         if choice:
@@ -212,3 +225,11 @@ class MeasurementType(models.Model):
         time_unit = data.get("time_unit", None)
         if time_unit:
             self.validate_time_unit(time_unit)
+
+    @property
+    def creator_username(self):
+        """
+        :return: list of normalized units in the data format of pint
+        """
+        return self.creator.username
+

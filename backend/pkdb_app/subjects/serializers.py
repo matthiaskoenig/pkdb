@@ -393,6 +393,8 @@ class IndividualSetSerializer(ExSerializer):
 ###############################################################################################
 class CharacteristicaElasticBigSerializer(ReadSerializer):
     measurement_type = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
+
     class Meta:
         model = Characteristica
         fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + MEASUREMENTTYPE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
@@ -423,6 +425,8 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
     measurement_type = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
+
 
     class Meta:
         model = Characteristica

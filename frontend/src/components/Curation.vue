@@ -5,8 +5,11 @@
         A detailed guideline for curation of studies is provided in
         <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
         </p>
-        <h2>Choices for groups and individuals</h2>
+        <measurements-table/>
+
+        <!--
         <v-layout row wrap>
+
             <v-flex xs4>
                 <get-data :resource_url="characteristica_options_url">
                   <template slot-scope="characteristica">
@@ -42,6 +45,7 @@
                 </get-data>
             </v-flex>
         </v-layout>
+        -->
     </div>
 </template>
 
@@ -49,15 +53,15 @@
     import CharacteristicaBrowser from "./curation/CharacteristicaBrowser"
     import OutputBrowser from "./curation/OutputBrowser"
     import SubstanceBrowser from "./curation/SubstanceBrowser"
-    import KeywordBrowser from "./curation/KeywordBrowser"
+    import MeasurementsTable from "./curation/MeasurementTypesTable";
 
     export default {
         name: "Curation",
         components: {
+            MeasurementsTable,
             CharacteristicaBrowser,
             OutputBrowser,
             SubstanceBrowser,
-            KeywordBrowser
         },
         computed: {
             characteristica_options_url() {

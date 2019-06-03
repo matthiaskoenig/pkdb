@@ -226,7 +226,7 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
-    substance = serializers.SerializerMethodField()
+    substance = serializers.CharField(allow_null=True)
     measurement_type = serializers.CharField()
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -241,12 +241,6 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
         model = Intervention
         fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
-    def get_substance(self, obj):
-        if obj.substance:
-            try:
-                return obj.substance.to_dict()
-            except AttributeError:
-                return obj.substance
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

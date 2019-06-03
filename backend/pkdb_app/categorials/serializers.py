@@ -51,19 +51,20 @@ class UnitSerializer(NameFieldSerializer):
 
 
 
-class ChoiceSerializer(NameFieldSerializer):
-    class Meta:
-        model = Choice
-        fields = ["name"]
+
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     class Meta:
         model = Annotation
-        fields = ["name","relation"]
+        fields = ["name","relation","collection"]
 
-
+class ChoiceSerializer(serializers.ModelSerializer):
+    annotations = AnnotationSerializer(many=True, allow_null=True)
+    class Meta:
+        model = Choice
+        fields = ["name", "annotations"]
 
 
 class XRefSerializer(NameFieldSerializer):
@@ -95,7 +96,7 @@ class BaseSerializer(WrongKeyValidationSerializer):
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         data["creator"] = self.context['request'].user.id
-        for field in ["units","xrefs","choices"]:
+        for field in ["units","xrefs"]:
             data[field] = [{"name":value} for value in data.get(field,[])]
 
 
@@ -121,9 +122,19 @@ class BaseSerializer(WrongKeyValidationSerializer):
 class MeasurementTypeSerializer(BaseSerializer):
     choices = ChoiceSerializer(many=True, allow_null=True)
     units = UnitSerializer(many=True, allow_null=True)
-    xrefs = XRefSerializer(many=True, allow_null=True)
+    #xrefs = XRefSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
 
     class Meta:
         model = MeasurementType
-        fields = ["name", "url_slug", "dtype", "creator", "description", "units", "xrefs", "annotations", "choices"]
+        fields = ["name", "url_slug", "dtype", "creator", "description", "units", "annotations", "choices"]
+
+class MeasurementTypeElasticSerializer(serializers.ModelSerializer):
+    units = UnitSerializer(many=True, allow_null=True)
+    annotations = AnnotationSerializer(many=True,allow_null=True)
+    choices = ChoiceSerializer(many=True, allow_null=True)
+
+    class Meta:
+        model = MeasurementType
+        fields = ["name", "url_slug", "dtype", "description","units", "annotations", "choices"]
+

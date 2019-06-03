@@ -32,9 +32,7 @@
                 <td>
                     <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
                 </td>
-                <td>
-                    <span v-for="(keyword, index2) in table.item.keywords" :key="index2"><keyword-chip :keyword="keyword"/></span>
-                </td>
+
                 <td>
                     <UserAvatar :user="table.item.creator" :search="search"/>
                 </td>
@@ -75,7 +73,6 @@
                     {text: 'Name', value: 'name'},
                     {text: 'Counts', value: 'counts', sortable: false},
                     {text: 'Substances', value: 'substances', sortable: false},
-                    {text: 'Keywords', value: 'keywords', sortable: false},
                     {text: 'Creator', value: 'creator'},
                     {text: 'Curators', value: 'curators', sortable: false},
                 ],

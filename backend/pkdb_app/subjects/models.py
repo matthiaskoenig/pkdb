@@ -388,22 +388,3 @@ class Characteristica(Normalizable, AbstractCharacteristica):
     def individual_pk(self):
         if self.individual:
             return self.individual.pk
-
-    """
-    
-   
-    def add_statistics(self):
-            if not self.sd:
-                self.sd = get_sd(
-                    se=self.se, count=self.count, mean=self.mean, cv=self.cv
-                )
-            if not self.se:
-                self.se = get_se(
-                    sd=self.sd, count=self.count, mean=self.mean, cv=self.cv
-                )
-            if not self.cv:
-                self.cv = get_cv(
-                    se=self.se, count=self.count, mean=self.mean, sd=self.sd
-                )
-
-    """

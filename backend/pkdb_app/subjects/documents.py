@@ -45,6 +45,7 @@ class IndividualDocument(DocType):
         properties={
             'pk': fields.IntegerField(),
             'measurement_type':string_field('measurement_type_name'),
+            'substance': string_field('substance_name'),
             'choice': string_field('choice'),
             'value' : fields.FloatField('value'),
             'mean' : fields.FloatField(),
@@ -104,6 +105,7 @@ class GroupDocument(DocType):
         properties={
             'pk': fields.IntegerField(),
             'measurement_type':string_field('measurement_type_name'),
+            'substance': string_field('substance_name'),
             'choice': string_field('choice'),
             'value': fields.FloatField('value'),
             'mean': fields.FloatField(),
@@ -179,6 +181,13 @@ class CharacteristicaDocument(DocType):
         fields={
             'raw': fields.StringField(analyzer='keyword'),
 
+        }
+    )
+
+    substance = fields.StringField(
+        attr='substance_name',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
         }
     )
 

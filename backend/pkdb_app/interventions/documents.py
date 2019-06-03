@@ -23,9 +23,7 @@ class InterventionDocument(DocType):
     application = string_field('application')
     time_unit = string_field('time_unit')
     time = fields.FloatField()
-    substance = ObjectField(properties={
-        'name': string_field('name')}
-        )
+    substance= string_field('substance_name')
     study = string_field('study')
     route = string_field('route')
     form = string_field('form')
