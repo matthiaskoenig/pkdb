@@ -50,6 +50,10 @@
                         image = 'kgreen_128.png';
                     } else if (this.initials === 'DE'){
                         image = 'dimitra_128.png';
+                    } else if (this.initials === 'DM'){
+                        image = 'deepa_128.png';
+                    } else if (this.initials === 'JB'){
+                        image = 'brandhorst_128.png';
                     }
                 } else {
                     if (this.username === 'mkoenig'){
@@ -60,6 +64,10 @@
                         image = 'kgreen_128.png';
                     } else if (this.username === 'dimitra'){
                         image = 'dimitra_128.png';
+                    } else if (this.username === 'jbrandhorst'){
+                        image = 'jbrandhorst_128.png';
+                    } else if (this.username === 'deepa'){
+                        image = 'deepa_128.png';
                     }
                 }
                 return img_dir + image
