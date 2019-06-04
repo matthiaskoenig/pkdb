@@ -55,6 +55,6 @@ class MeasurementTypeDocument(DocType):
         model = MeasurementType
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
-        ignore_signals = True
+        ignore_signals = False
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
