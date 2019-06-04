@@ -21,6 +21,18 @@ class MeasurementTypeElasticViewSet(DocumentViewSet):
     serializer_class = MeasurementTypeElasticSerializer
     lookup_field = 'url_slug'
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ("name", "url_slug", "dtype", "description", "units", "annotations.name", "choices.name", "choices.annotations.name")
+    search_fields = ("name",
+                     "url_slug",
+                     "dtype",
+                     "description",
+                     "units",
+                     "annotations.name",
+                     "annotations.description",
+                     "annotations.label",
+                     "choices.name",
+                     "choices.annotations.name",
+                     "choices.annotations.description",
+                     "choices.annotations.label"
+                     )
     filter_fields = {'name': 'name.raw'}
     ordering_fields ={'name': 'name.raw',"dtype":"dtype.raw"}

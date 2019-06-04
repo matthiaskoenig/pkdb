@@ -3,6 +3,7 @@ Describe Substances
 """
 
 from django.db import models
+from pkdb_app.categorials.models import Annotation
 from pkdb_app.users.models import User
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
@@ -39,6 +40,8 @@ class Substance(Sidable, models.Model):
 
     parents = models.ManyToManyField("Substance", related_name="children")
     creator = models.ForeignKey(User, related_name="substances", on_delete=models.CASCADE)
+
+    annotations = models.ManyToManyField(Annotation)
 
 
     # validation rule: check that all labels are in derived and not more(split on `+/()`)

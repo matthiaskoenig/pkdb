@@ -27,10 +27,11 @@ class MeasurementTypeDocument(DocType):
                 attr="annotations",
                 multi=True,
                 properties={
-                    "name":string_field("name"),
+                    "term":string_field("term"),
                     "relation":string_field("relation"),
-                    "collection": string_field("collection")
-
+                    "collection": string_field("collection"),
+                    "description": string_field("collection"),
+                    "label": string_field("collection")
                 }
                 )
         }
@@ -39,10 +40,11 @@ class MeasurementTypeDocument(DocType):
         attr="annotations",
         multi=True,
         properties={
-            "name": string_field("name"),
-            "relation": string_field("relation"),
-            "collection": string_field("collection")
-
+            "term":string_field("term"),
+            "relation":string_field("relation"),
+            "collection": string_field("collection"),
+            "description": string_field("collection"),
+            "label": string_field("collection")
         }
     )
     creator = string_field("creator_username")

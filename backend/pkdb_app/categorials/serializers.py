@@ -5,7 +5,7 @@ Serializers for interventions.
 # ----------------------------------
 # Interventions
 # ----------------------------------
-from pkdb_app.categorials.models import Unit, Choice, MeasurementType, Annotation, XRef
+from pkdb_app.categorials.models import Unit, Choice, MeasurementType, Annotation
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.substances.models import Substance
 from pkdb_app.utils import update_or_create_multiple
@@ -50,15 +50,14 @@ class UnitSerializer(NameFieldSerializer):
         fields = ["name"]
 
 
-
-
-
-
 class AnnotationSerializer(serializers.ModelSerializer):
-    name = serializers.CharField()
+    term = serializers.CharField()
+    description = serializers.CharField(allow_null=True)
+    label = serializers.CharField(allow_null=True)
+
     class Meta:
         model = Annotation
-        fields = ["name","relation","collection"]
+        fields = ["term","relation","collection","description","label"]
 
 class ChoiceSerializer(serializers.ModelSerializer):
     annotations = AnnotationSerializer(many=True, allow_null=True)
@@ -67,26 +66,23 @@ class ChoiceSerializer(serializers.ModelSerializer):
         fields = ["name", "annotations"]
 
 
-class XRefSerializer(NameFieldSerializer):
-    class Meta:
-        model = XRef
-        fields = ["name"]
 
 
 class BaseSerializer(WrongKeyValidationSerializer):
 
     def pop_related(self,data):
-        related_instances = ["units","choices","annotations","xrefs"]
+        related_instances = ["units","choices","annotations"]
         return {related:data.pop(related,[]) for related in related_instances}
 
 
     def update_or_create_related(self,instance, related_dict):
+        lookup_fields = {"units":"name","choices":"name","annotations":"term"}
 
         for related,related_data in related_dict.items():
             if hasattr(instance, related):
                 related_instance = getattr(instance,related)
                 related_instance.clear()
-            update_or_create_multiple(instance, related_data, related, lookup_field="name")
+            update_or_create_multiple(instance, related_data, related, lookup_field=lookup_fields[related])
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -96,7 +92,7 @@ class BaseSerializer(WrongKeyValidationSerializer):
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         data["creator"] = self.context['request'].user.id
-        for field in ["units","xrefs"]:
+        for field in ["units"]:
             data[field] = [{"name":value} for value in data.get(field,[])]
 
 
@@ -122,7 +118,6 @@ class BaseSerializer(WrongKeyValidationSerializer):
 class MeasurementTypeSerializer(BaseSerializer):
     choices = ChoiceSerializer(many=True, allow_null=True)
     units = UnitSerializer(many=True, allow_null=True)
-    #xrefs = XRefSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
 
     class Meta:

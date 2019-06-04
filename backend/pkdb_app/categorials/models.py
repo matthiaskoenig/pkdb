@@ -33,9 +33,6 @@ NUMERIC_CATEGORIAL_TYPE = "numeric_categorial"
 DTYPE_CHOICES = create_choices([NUMERIC_TYPE,CATEGORIAL_TYPE, BOOLEAN_TYPE,NUMERIC_CATEGORIAL_TYPE])
 
 
-ANNOTATION_RELATION_CHOICES = create_choices(["is"])
-ANNOTATION_COLLECTION_CHOICES = create_choices(["cmo","doid"])
-
 
 def validate_measurement_type(data):
     measurement_type = data.get("measurement_type", None)
@@ -58,9 +55,13 @@ class Unit(models.Model):
         return ureg(self.name).u
 
 class Annotation(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    relation = models.CharField(max_length=CHAR_MAX_LENGTH, choices=ANNOTATION_RELATION_CHOICES)
-    collection = models.CharField(max_length=CHAR_MAX_LENGTH, choices=ANNOTATION_COLLECTION_CHOICES)
+    term = models.CharField(max_length=CHAR_MAX_LENGTH)
+    relation = models.CharField(max_length=CHAR_MAX_LENGTH,)
+    collection = models.CharField(max_length=CHAR_MAX_LENGTH)
+    description = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
+
 
 
 class Choice(models.Model):
@@ -71,8 +72,6 @@ class Choice(models.Model):
     objects = ChoiceManager()
 
 
-class XRef(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
 
 
 class MeasurementType(models.Model):
@@ -83,7 +82,6 @@ class MeasurementType(models.Model):
     creator = models.ForeignKey(User, related_name="measurement_types", on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice, related_name="measurement_types")
     description = models.TextField(blank=True, null=True)
-    xrefs = models.ManyToManyField(XRef)
     annotations = models.ManyToManyField(Annotation)
 
     def __str__(self):
