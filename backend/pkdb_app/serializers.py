@@ -349,7 +349,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             entry_value = entry_value.strip()
 
                     if keys[0] == "interventions":
-                        entry_value = self.interventions_from_string(keys[0])
+                        entry_value = self.interventions_from_string(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
                     else:
                         set_keys(entry_dict, entry_value, *keys)
@@ -491,7 +491,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 data,
                                 ])
                         if keys[0] == "interventions":
-                            entry_value = self.interventions_from_string(keys[0])
+                            entry_value = self.interventions_from_string(unqiue_values[0])
                             set_keys(array_dict, entry_value, *keys[:1])
                             #array_dict[keys[0]] = [v.strip() for v in unqiue_values[0].split(",")]
                         else:
@@ -576,7 +576,7 @@ class ExSerializer(MappingSerializer):
                             ).pk
                         )
                     except ObjectDoesNotExist:
-                        msg = f"intervention: {intervention} in study: {study_sid} does not exist"
+                        msg = f"intervention: <{intervention}> in study: <{study_sid}> does not exist"
                         raise serializers.ValidationError(msg)
                 data["interventions"] = interventions
         return data

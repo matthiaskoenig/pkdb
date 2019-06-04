@@ -182,10 +182,12 @@ class OutputExSerializer(BaseOutputExSerializer):
         for output in temp_outputs:
             outputs_from_file = self.entries_from_file(output)
             outputs.extend(outputs_from_file)
+
         # ----------------------------------
         # finished
         # ----------------------------------
         data = self.transform_map_fields(data)
+
         data["outputs"] = outputs
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)

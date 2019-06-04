@@ -349,26 +349,6 @@ class StudySerializer(SidSerializer):
                 setattr(study, name, instance)
             study.save()
 
-
-        #many_2_many_fields = ["substances"]
-
-        #if "substances" in related:
-        #    print(related)
-        #    print("Here I am")
-        #    study_substances = set([substance.pk for substance in related["substances"]])
-        #    study_cumulated_substances = study.get_substances()
-        #    related["substances"] = study_cumulated_substances | study_substances
-        #    print(related)
-
-
-        #for field in many_2_many_fields:
-        #    if field in related:
-        #        related_m2m_field = getattr(study, field)
-        #        related_m2m_field.clear()
-        #        if len(related[field]) > 0 :
-        #            for instance in related[field]:
-        #                related_m2m_field.add(instance)
-
         if "curators" in related:
             study.ratings.all().delete()
             if related["curators"]:
