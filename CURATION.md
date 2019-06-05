@@ -105,8 +105,6 @@ contains all the relevant information
         ["mkoenig", 0.5]
     ],
     "collaborators": [],
-    "substances": [],
-    "keywords": [],
     "descriptions": [],
     "comments": [],
     "groupset": {
@@ -135,8 +133,6 @@ contains all the relevant information
 * Fill in basic information for study, i.e., the `name` field with the `$STUDYNAME`, the `creator` and `curator` and `collaborator` fields with existing users 
 (creator is a single user, whereas curators is a list of users), 
 the `sid` and `reference` field with the `PubmedId` of the study.  
-* Substances which are used in the study should be listed in the `substances`. Substances must be existing substances which can be looked up at https://develop.pk-db.com/#/curation
-* `keywords` relevant for the study should be mentioned in the `keywords` list. Keywords must be existing keywords which can be looked up at https://develop.pk-db.com/#/curation
 * The `reference` field is optional. If no pubmed entry exist for publication a `reference.json` should be build manually (please ask what to do in such a case).
 * The `access` field provides information on who can see the study. `public` provides access to everyone, `private` only to the `creator`, `curators` and `collaborators`.
 * The `curators` is a list which consists of either curator names (e.g. `mkoenig`) or a curator name with a curation score between 0.0 and 5.0 (e.g. `[mkoenig, 3.5]`)
@@ -174,19 +170,19 @@ An overview over the available `characteristica` and possible choices is availab
         "name": "all",
         "characteristica": [
           {
-            "category": "species",
+            "measurement_type": "species",
             "choice": "homo sapiens"
           },
           {
-            "category": "healthy",
+            "measurement_type": "healthy",
             "choice": "Y"
           },
           {
-            "category": "overnight fast",
+            "measurement_type": "overnight fast",
             "choice": "Y"
           },
           {
-            "category": "fasted",
+            "measurement_type": "fasted",
             "min": "10",
             "max": "14",
             "unit": "hr"
@@ -206,7 +202,7 @@ An overview over the available `characteristica` and possible choices is availab
 All available fields for characteristica on group are:
 ```json
 {
-    "category": "categorial",
+    "measurement_type": "categorial",
     "choice": "categorial|string",
     "count": "int",
     "mean": "double",
@@ -234,17 +230,17 @@ See for instance below individuals which are defined via a table.
         "figure": "Akinyinka2000_Tab1.png",
         "characteristica": [
           {
-            "category": "age",
+            "measurement_type": "age",
             "value": "col==age",
             "unit": "yr"
           },
           {
-            "category": "weight",
+            "measurement_type": "weight",
             "value": "col==weight",
             "unit": "kg"
           },
           {
-            "category": "sex",
+            "measurement_type": "sex",
             "choice": "col==sex"
           }
         ]
@@ -349,7 +345,7 @@ Some tips for digitizion of figures:
         ],
         "substance": "paraxanthine",
         "tissue": "col==tissue",
-        "pktype": "cmax || tmax || auc_inf || thalf",
+        "measurement_type": "cmax || tmax || auc_inf || thalf",
         "mean": "col==cmax || col==tmax || col==aucinf || col==thalf",
         "sd": "col==cmax_sd || col==tmax_sd || col==aucinf_sd || col==thalf_sd",
         "unit": "\u00b5g/ml || hr || \u00b5g*hr/ml || hr"
@@ -368,7 +364,7 @@ Some tips for digitizion of figures:
         "figure": "Albert1974_Fig1.png",
         "substance": "paracetamol",
         "tissue": "plasma",
-        "pktype": "concentration",
+        "measurement_type": "concentration",
         "time": "col==time_min",
         "time_unit": "min",
         "mean": "col==apap",

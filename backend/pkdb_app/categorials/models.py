@@ -57,11 +57,9 @@ class Unit(models.Model):
 class Annotation(models.Model):
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
     relation = models.CharField(max_length=CHAR_MAX_LENGTH,)
-    collection = models.CharField(max_length=CHAR_MAX_LENGTH)
+    collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     description = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-
-
 
 
 class Choice(models.Model):
@@ -70,8 +68,6 @@ class Choice(models.Model):
     annotations = models.ManyToManyField(Annotation)
 
     objects = ChoiceManager()
-
-
 
 
 class MeasurementType(models.Model):
@@ -205,12 +201,13 @@ class MeasurementType(models.Model):
         if choice:
             if self.dtype in [CATEGORIAL_TYPE,BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE]:
                 if not self.is_valid_choice(choice):
-                    msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`." \
+                    msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`. " \
                           f"Allowed choices are: `{list(self.choices_list())}`."
                     raise ValueError({"choice": msg})
             else:
-                msg = f"The field `choice` is not allowed for measurement type `{self.name}`." \
-                      f"For numerical values the fields `value`, `mean` or `median` are used."
+                msg = f"The field `choice` is not allowed for measurement type `{self.name}`. " \
+                      f"For numerical values the fields `value`, `mean` or `median` are used. " \
+                      f"For encoding substances use the `substance` field."
                 raise ValueError({"choice": msg})
 
     def validate_complete(self, data):
