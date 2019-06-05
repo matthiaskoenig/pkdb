@@ -28,9 +28,10 @@ class OutputDocument(DocType):
         'name': string_field('name')
     }, multi=True)
 
-    substance = ObjectField(properties={
-        'name': string_field('name')}
-        )
+    substance = string_field("substance_name")
+
+    choice = string_field("choice")
+
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )
@@ -91,9 +92,8 @@ class TimecourseDocument(DocType):
         'name': string_field('name')
     }, multi=True)
 
-    substance = ObjectField(properties={
-        'name': string_field('name')}
-        )
+    substance = string_field("substance_name")
+
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )

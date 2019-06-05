@@ -287,6 +287,8 @@ class Timecourse(AbstractOutput, Normalizable):
     time = ArrayField(models.FloatField(null=True), null=True)
     objects = OutputManager()
 
+
+
     @property
     def interventions(self):
         interventions = self._interventions

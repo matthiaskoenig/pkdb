@@ -74,9 +74,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
-
-
-
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -417,9 +414,8 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
-    substance = serializers.SerializerMethodField()
+    substance = serializers.CharField()
     measurement_type = serializers.CharField()
-
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -442,12 +438,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 + MEASUREMENTTYPE_FIELDS
                 + ["group", "individual", "normed", "raw", "calculated", "timecourse", "interventions"])
 
-    def get_substance(self,obj):
-        if obj.substance:
-            try:
-                return obj.substance.to_dict()
-            except AttributeError:
-                return obj.substance
+
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -467,7 +458,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)
 
-    substance = serializers.SerializerMethodField()
+    substance = serializers.CharField()
 
     class Meta:
             model = Timecourse
@@ -478,12 +469,6 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 + VALUE_FIELDS
                 + ["group", "individual", "normed","raw","pharmacokinetics", "interventions","figure"])
 
-    def get_substance(self,obj):
-        if obj.substance:
-            try:
-                return obj.substance.to_dict()
-            except AttributeError:
-                return obj.substance
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
