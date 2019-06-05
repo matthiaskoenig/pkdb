@@ -1,7 +1,7 @@
 """
 Serializers for substances.
 """
-
+from pkdb_app.categorials.serializers import AnnotationSerializer
 from rest_framework import serializers
 
 
@@ -32,10 +32,12 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
     parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.order_by('name'), required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
+    annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
+
 
     class Meta:
         model = Substance
-        fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms","creator"]
+        fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms","creator", "annotations"]
 
     def to_internal_value(self, data):
         data["creator"] = self.context['request'].user.id
@@ -49,8 +51,12 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
     def create(self, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
+        annotations_data = validated_data.pop("annotations", [])
+
         substance = Substance.objects.create(**validated_data)
-        update_or_create_multiple(substance, synonyms_data, "synonyms")
+        update_or_create_multiple(substance, synonyms_data, "synonyms", lookup_field="name")
+        update_or_create_multiple(substance, annotations_data, "annotations", lookup_field="term")
+
         substance.parents.add(*parents_data)
 
         substance.save()
@@ -59,11 +65,17 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
     def update(self, instance, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
+        annotations_data = validated_data.pop("annotations", [])
+
         instance.parents.clear()
         instance.synonyms.all().delete()
+        instance.annotations.clear()
+
         for name, value in validated_data.items():
             setattr(instance, name, value)
-        update_or_create_multiple(instance, synonyms_data, "synonyms")
+        update_or_create_multiple(instance, synonyms_data, "synonyms", lookup_field="name")
+        update_or_create_multiple(instance, annotations_data, "annotations", lookup_field="term")
+
         instance.parents.add(*parents_data)
         instance.save()
 

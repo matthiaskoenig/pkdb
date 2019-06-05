@@ -21,22 +21,26 @@
     </v-card-text>
 
     <v-divider></v-divider>
-      <v-card-text v-if="class_category">
-          <strong>Class:</strong> {{ class_category }}<br />
+      <v-card-text v-if="name">
+          <!-- <strong>Name:</strong> {{ name }}<br /> -->
           <strong>Data type:</strong> {{ dtype }}<br />
           <strong>Units:</strong> {{ units }}
+
       </v-card-text>
 
     <v-expand-transition color="blue lighten-1">
 
       <v-list v-if="choices.length">
-          <v-card-text>Choices</v-card-text>
+          <v-card-text><strong> Choices: </strong></v-card-text>
         <v-list-tile v-for="(field, i) in choices" :key="i">
           <v-list-tile-content>
             <v-list-tile-title v-text="field"></v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+
+
+
     </v-expand-transition>
   </v-card>
         <!--{{ options }}-->
@@ -59,25 +63,26 @@
         },
         data: () => ({
             model: null,
-            class_category: null,
+            name: null,
             dtype: null,
-            units: null
+            units: null,
+            substances: null,
         }),
         computed: {
             items () {
-                return Object.keys(this.options['categories']).sort()
+                return Object.keys(this.options['measurement_types']).sort()
 
             },
 
             choices () {
                 if (!this.model) {
-                    this.class_category = null;
+                    this.name = null;
                     this.dtype = null;
                     this.units = null;
                     return []
                 }
-                var data = this.options['categories'][this.model];
-                this.class_category = data['category'];
+                var data = this.options['measurement_types'][this.model];
+                this.name = data['name'];
                 this.dtype = data['dtype'];
                 this.units = data['units'];
                 var choices = data['choices'];

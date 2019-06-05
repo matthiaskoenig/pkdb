@@ -2,8 +2,8 @@ import copy
 import numpy as np
 import numbers
 import pandas as pd
-from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
+from pkdb_app.categorials.behaviours import map_field
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict, namedtuple
@@ -12,6 +12,7 @@ from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
+
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
 NA_VALUES = ["na","NA","nan","NAN"]
@@ -61,6 +62,7 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
+
         return super().to_internal_value(data)
 
     def validate(self, attrs):
@@ -103,7 +105,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             else:
                 transformed_data[key] = data.get(key)
-
         return transformed_data
 
     @staticmethod
@@ -111,6 +112,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         transformed_data = {}
         for k, v in data.items():
             if "_map" in k:
+
                 k = k[:-4]
             #if v is None:
             #    continue
@@ -159,6 +161,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return max(n_values)
 
+    @staticmethod
+    def interventions_from_string(value):
+        return [v.strip() for v in value.split(",")]
+
     def split_entry(self, entry):
         """ Splits entry fields based on separator.
 
@@ -185,7 +191,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if isinstance(value, str):
                     values[k] = value.strip()
                     if field == "interventions":
-                        values[k] = [v.strip() for v in value.split(",")]
+                        values[k] = self.interventions_from_string(value)
 
                     if values[k] in ["NA", "NAN", "na", "nan"]:
                         values[k] = None
@@ -343,7 +349,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             entry_value = entry_value.strip()
 
                     if keys[0] == "interventions":
-                        entry_value = [v.strip() for v in entry_value.split(",")]
+                        entry_value = self.interventions_from_string(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
                     else:
                         set_keys(entry_dict, entry_value, *keys)
@@ -436,7 +442,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                     array_dicts.append(array_dict)
 
-
             else:
                 array_dict = copy.deepcopy(template)
                 self.dict_from_array(array_dict, df, data, source)
@@ -477,7 +482,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         )
                     #to get rid of dict
 
-                    if keys[0] in ["individual", "group","interventions","substance","tissue","time_unit","unit","pktype"]:
+                    if keys[0] in ["individual", "group","interventions","substance","tissue","time_unit","unit","measurement_type"]:
                         unqiue_values = value_array.unique()
                         if len(unqiue_values) != 1:
                             raise serializers.ValidationError(
@@ -486,7 +491,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                                 data,
                                 ])
                         if keys[0] == "interventions":
-                            entry_value = [v.strip() for v in unqiue_values[0].split(",")]
+                            entry_value = self.interventions_from_string(unqiue_values[0])
                             set_keys(array_dict, entry_value, *keys[:1])
                             #array_dict[keys[0]] = [v.strip() for v in unqiue_values[0].split(",")]
                         else:
@@ -506,20 +511,21 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-        rep = self.retransform_map_fields(super().to_representation(instance))
+        rep = super().to_representation(instance)
+        rep = self.retransform_map_fields(rep)
+
+        request = self.context.get('request')
 
         # url representation of file
         for file in ["source", "figure"]:
             if file in rep:
-                current_site = (
-                    f'http://{get_current_site(self.context["request"]).domain}'
-                )
-                rep[file] = current_site + getattr(instance, file).file.url
-
+                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
         return rep
 
 
 class ExSerializer(MappingSerializer):
+
+
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
 
@@ -558,6 +564,8 @@ class ExSerializer(MappingSerializer):
 
             if data["interventions"]:
                 interventions = []
+                if isinstance(data["interventions"],str):
+                    data["interventions"] = self.interventions_from_string(data["interventions"])
 
                 for intervention in data["interventions"]:
                     try:
@@ -568,7 +576,7 @@ class ExSerializer(MappingSerializer):
                             ).pk
                         )
                     except ObjectDoesNotExist:
-                        msg = f"intervention: {intervention} in study: {study_sid} does not exist"
+                        msg = f"intervention: <{intervention}> in study: <{study_sid}> does not exist"
                         raise serializers.ValidationError(msg)
                 data["interventions"] = interventions
         return data
@@ -583,8 +591,7 @@ class ExSerializer(MappingSerializer):
                 raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
 
     def _validate_requried_key(self,attrs, key):
-        key_value = attrs.get(key,"Empty")
-        if key_value == "Empty":
+        if key not in attrs:
             raise serializers.ValidationError({key: f"{key} is required"})
 
     def _validate_disabled_data(self, data_dict, disabled):
@@ -601,16 +608,7 @@ class ExSerializer(MappingSerializer):
 
     def _validate_individual_characteristica(self, data_dict):
         disabled = ["sd", "se", "min", "max", "cv", "mean", "median"]
-        disabled += [
-            "sd_map",
-            "se_map",
-            "min_map",
-            "max_map",
-            "cv_map",
-            "mean_map",
-            "median_map",
-        ]
-
+        disabled += map_field(disabled)
         self._validate_disabled_data(data_dict, disabled)
 
     def _validate_individual_output(self, data):
@@ -738,28 +736,9 @@ class ExSerializer(MappingSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+
         # change keys
         return self.retransform_ex_fields(representation)
-
-
-class BaseOutputExSerializer(ExSerializer):
-    def to_representation(self, instance):
-
-        rep = super().to_representation(instance)
-
-        if "group" in rep:
-            if rep["group"]:
-                if instance.group:
-                    rep["group"] = instance.group.name
-                if instance.group_map:
-                    rep["group"] = instance.group_map
-
-        if "interventions" in rep:
-            rep["interventions"] = [
-                intervention.name for intervention in instance.interventions.all()
-            ]
-
-        return rep
 
 
 class SidSerializer(WrongKeyValidationSerializer):

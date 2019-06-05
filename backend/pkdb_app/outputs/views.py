@@ -3,7 +3,7 @@ from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from pkdb_app.categorials.models import PharmacokineticType
+from pkdb_app.categorials.models import  MeasurementType
 from pkdb_app.outputs.models import OUTPUT_TISSUE_DATA
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -22,7 +22,7 @@ class OutputOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["pktypes"] = {k.key: k._asdict() for k in PharmacokineticType.objects.all()}
+        options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         options["substances"] = reverse('substances_elastic-list')
         options["tissue"] = OUTPUT_TISSUE_DATA
         return options
@@ -35,7 +35,7 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
             options = {}
-            options["pktypes"] = {k.key: k._asdict() for k in PharmacokineticType.objects.all()}
+            options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
             options["substances"] = reverse('substances_elastic-list')
             options["tissue"] = OUTPUT_TISSUE_DATA
             return options
@@ -55,14 +55,14 @@ class ElasticOutputViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('pktype','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
+    search_fields = ('measurement_type','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk',
                      'study':'study.raw',
                      'normed':'normed',
                      'calculated':'calculated',
                      'unit':'unit',
                      'substance':'substance.name.raw',
-                     'pktype':'pktype.raw',
+                     'measurement_type':'measurement_type.raw',
                      'group_pk': {'field': 'group.pk',
                                     'lookups': [
                                         LOOKUP_QUERY_IN,
@@ -73,7 +73,7 @@ class ElasticOutputViewSet(DocumentViewSet):
                                       LOOKUP_QUERY_IN,
                                   ],
                                   }}
-    ordering_fields = {'pktype':'pktype.raw',
+    ordering_fields = {'measurement_type':'measurement_type.raw',
                        'tissue':'tissue.raw',
                        'substance':'substance.name',
                        'group': 'group.name',
@@ -87,11 +87,11 @@ class ElasticTimecourseViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('pktype','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
+    search_fields = ('measurement_type','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
     filter_fields = {'pk': 'pk',
                      'normed': 'normed',
                      'substance': 'substance.name.raw',
-                     'pktype': 'pktype.raw',
+                     'measurement_type': 'measurement_type.raw',
                      'group_pk': {'field': 'group.pk',
                                   'lookups': [
                                       LOOKUP_QUERY_IN,
@@ -102,7 +102,7 @@ class ElasticTimecourseViewSet(DocumentViewSet):
                                            LOOKUP_QUERY_IN,
                                        ],
                                        }}
-    ordering_fields = {'pktype':'pktype.raw',
+    ordering_fields = {'measurement_type':'measurement_type.raw',
                        'tissue':'tissue.raw',
                        'group':'group.name',
                        'individual': 'individual.name',

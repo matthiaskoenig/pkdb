@@ -2,15 +2,18 @@
 Serializers for interventions.
 """
 import itertools
+
+from pkdb_app.categorials.behaviours import  VALUE_FIELDS, VALUE_FIELDS_NO_UNIT, \
+    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
 
 from ..interventions.models import (
-    Substance,
     InterventionSet,
     Intervention,
     InterventionEx)
@@ -20,12 +23,8 @@ from ..serializers import (
     NA_VALUES, PkSerializer)
 
 from ..subjects.models import  DataFile
-from pkdb_app.categorials.models import validate_categorials, InterventionType
 
-from ..subjects.serializers import (
-    VALUE_MAP_FIELDS,
-    VALUE_FIELDS,
-    EXTERN_FILE_FIELDS, VALUE_FIELDS_NO_UNIT)
+
 
 
 
@@ -42,59 +41,29 @@ DOSING = "dosing"
 
 INTERVENTION_FIELDS = [
     "name",
-    "category",
     "route",
     "form",
     "application",
     "time",
     "time_unit",
-    "substance",
     "route",
-    "choice",
-]
-INTERVENTION_MAP_FIELDS = [
-    "name_map",
-    "route_map",
-    "form_map",
-    "application_map",
-    "time_map",
-    "time_unit_map",
-    "unit_map",
-    "substance_map",
-    "route_map",
-    "choice_map",
 ]
 
-OUTPUT_FIELDS = ["pktype", "tissue", "substance", "time", "time_unit"]
-OUTPUT_MAP_FIELDS = [
-    "pktype_map",
-    "tissue_map",
-    "substance_map",
-    "time_map",
-    "time_unit_map",
-]
+INTERVENTION_MAP_FIELDS = map_field(INTERVENTION_FIELDS)
 
+OUTPUT_FIELDS = [ "tissue", "time", "time_unit"]
+
+OUTPUT_MAP_FIELDS =  map_field(OUTPUT_FIELDS)
 # ----------------------------------
 # Interventions
 # ----------------------------------
 
 
-class InterventionSerializer(ExSerializer):
-    category = serializers.SlugRelatedField(slug_field="key", queryset=InterventionType.objects.all())
 
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-
-    )
-
-
+class InterventionSerializer(MeasurementTypeableSerializer):
     class Meta:
         model = Intervention
-        fields = VALUE_FIELDS + INTERVENTION_FIELDS
+        fields =  INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_internal_value(self, data):
@@ -102,15 +71,15 @@ class InterventionSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
-        category = data.get("category")
+        measurement_type = data.get("measurement_type")
 
-        if any([category == MEDICATION,category == DOSING]):
+        if any([measurement_type == MEDICATION,measurement_type == DOSING]):
             self._validate_requried_key(data,"substance")
             self._validate_requried_key(data,"route")
             self._validate_requried_key(data,"value")
             self._validate_requried_key(data,"unit")
 
-            if category == DOSING:
+            if measurement_type == DOSING:
                 self._validate_requried_key(data, "form")
                 self._validate_requried_key(data, "application")
                 self._validate_requried_key(data,"time")
@@ -118,30 +87,23 @@ class InterventionSerializer(ExSerializer):
                 application = data["application"]
                 allowed_applications = ["constant infusion","single dose"]
                 if not application in allowed_applications:
-                    raise serializers.ValidationError(f"Allowed applications for category <{DOSING}> are <{allowed_applications}>.You might want to select the category: qualitative dosing. With no requirements.")
+                    raise serializers.ValidationError(f"Allowed applications for measurement_type <{DOSING}> are <{allowed_applications}>.You might want to select the measurement_type: qualitative dosing. With no requirements.")
 
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
-    def validate(self, attrs):
 
+    def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            validate_categorials(data=attrs)
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
 
 
-class InterventionExSerializer(ExSerializer):
-    substance = serializers.SlugRelatedField(
-        slug_field="name",
-        queryset=Substance.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
+class InterventionExSerializer(EXMeasurementTypeableSerializer):
 
     ######
     source = serializers.PrimaryKeyRelatedField(
@@ -163,10 +125,9 @@ class InterventionExSerializer(ExSerializer):
         model = InterventionEx
         fields = (
             EXTERN_FILE_FIELDS
-            + VALUE_MAP_FIELDS
-            + VALUE_FIELDS
             + INTERVENTION_FIELDS
             + INTERVENTION_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
             + ["interventions", "comments"]
         )
 
@@ -265,8 +226,8 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
-    substance = serializers.SerializerMethodField()
-    category = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
+    measurement_type = serializers.CharField()
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -278,14 +239,8 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     raw = PkSerializer()
     class Meta:
         model = Intervention
-        fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS
+        fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
-    def get_substance(self, obj):
-        if obj.substance:
-            try:
-                return obj.substance.to_dict()
-            except AttributeError:
-                return obj.substance
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

@@ -1,17 +1,58 @@
-from django_elasticsearch_dsl import DocType, Index
-
-from pkdb_app.documents import elastic_settings, string_field
-from pkdb_app.categorials.models import Keyword
-keyword_index = Index("keywords")
-keyword_index.settings(**elastic_settings)
+from django_elasticsearch_dsl import DocType, Index, fields
+from ..documents import string_field, elastic_settings, ObjectField
+from .models import MeasurementType
 
 
-@keyword_index.doc_type
-class KeywordDocument(DocType):
-    name = string_field(attr="name")
+
+measurement_type_index = Index("measurement_types")
+measurement_type_index.settings(**elastic_settings)
+
+@measurement_type_index.doc_type
+class MeasurementTypeDocument(DocType):
+    pk = fields.IntegerField()
+    name = string_field('name')
+    url_slug = string_field('url_slug')
+    dtype = string_field('dtype')
+
+    units = interventions = ObjectField(properties={
+        'name': string_field('name')
+        }, multi=True)
+
+    choices = ObjectField(
+        attr="choices",
+        multi=True,
+        properties={
+            "name":string_field("name"),
+            "annotations":ObjectField(
+                attr="annotations",
+                multi=True,
+                properties={
+                    "term":string_field("term"),
+                    "relation":string_field("relation"),
+                    "collection": string_field("collection"),
+                    "description": string_field("collection"),
+                    "label": string_field("collection")
+                }
+                )
+        }
+    )
+    annotations = ObjectField(
+        attr="annotations",
+        multi=True,
+        properties={
+            "term":string_field("term"),
+            "relation":string_field("relation"),
+            "collection": string_field("collection"),
+            "description": string_field("collection"),
+            "label": string_field("collection")
+        }
+    )
+    creator = string_field("creator_username")
+    description = string_field('description')
+
 
     class Meta(object):
-        model = Keyword
+        model = MeasurementType
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
         ignore_signals = False

@@ -1,12 +1,14 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from pkdb_app.categorials.models import validate_categorials, CharacteristicType
+from pkdb_app.categorials.behaviours import VALUE_FIELDS, map_field, VALUE_FIELDS_NO_UNIT, \
+    MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.categorials.models import  MeasurementType
+from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..studies.models import Study
 from operator import itemgetter
-from django.shortcuts import get_object_or_404
 from ..utils import list_of_pk
 
 from .models import (
@@ -22,26 +24,15 @@ from .models import (
 )
 from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer, ReadSerializer
 
-EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
-VALUE_FIELDS_NO_UNIT = ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
-VALUE_FIELDS = VALUE_FIELDS_NO_UNIT +  ["unit"]
+CHARACTERISTISTA_FIELDS = ["count"]
+CHARACTERISTISTA_MAP_FIELDS = map_field(CHARACTERISTISTA_FIELDS)
+SUBJECT_FIELDS = ["name", "count"]
+SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
-VALUE_MAP_FIELDS = [
-    "value_map",
-    "mean_map",
-    "median_map",
-    "min_map",
-    "max_map",
-    "sd_map",
-    "se_map",
-    "cv_map",
-    "unit_map",
-]
-CHARACTERISTISTA_FIELDS = ["count", "category", "choice"]
-CHARACTERISTISTA_MAP_FIELDS = ["count_map", "choice_map"]
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
+EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
 
 # ----------------------------------
 # DataFile
@@ -61,7 +52,7 @@ class DataFileSerializer(WrongKeyValidationSerializer):
 # ----------------------------------
 # Characteristica
 # ----------------------------------
-class CharacteristicaExSerializer(MappingSerializer):
+class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
     count = serializers.IntegerField(required=False)
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -73,8 +64,7 @@ class CharacteristicaExSerializer(MappingSerializer):
         fields = (
             CHARACTERISTISTA_FIELDS
             + CHARACTERISTISTA_MAP_FIELDS
-            + VALUE_FIELDS
-            + VALUE_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
             + ["comments"]
         )
 
@@ -84,30 +74,35 @@ class CharacteristicaExSerializer(MappingSerializer):
         self.validate_wrong_keys(data)
         return data
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
 
-class CharacteristicaSerializer(ExSerializer):
+        return rep
+
+
+class CharacteristicaSerializer(MeasurementTypeableSerializer):
     count = serializers.IntegerField(required=False)
-    category = serializers.SlugRelatedField(slug_field="key", queryset=CharacteristicType.objects.all())
 
     class Meta:
         model = Characteristica
-        fields = CHARACTERISTISTA_FIELDS + VALUE_FIELDS
+        fields = CHARACTERISTISTA_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_internal_value(self, data):
         data.pop("comments", None)
-        self._is_required(data,"category")
-        data.get("category")
+        self._is_required(data,"measurement_type")
+        data.get("measurement_type")
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 
-    def validate(self, attr):
+    def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            validate_categorials(data=attr)
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
-        return super().validate(attr)
+        return super().validate(attrs)
+
 
 
 # ----------------------------------
@@ -134,6 +129,11 @@ class GroupSerializer(ExSerializer):
             self._validate_disabled_data(characteristica_single, disabled)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
+    def to_representation(self, instance):
+
+        rep = super().to_representation(instance)
+        return rep
 
 
 class GroupExSerializer(ExSerializer):
@@ -188,6 +188,7 @@ class GroupExSerializer(ExSerializer):
         data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
+
         data["groups"] = groups
 
         # ----------------------------------
@@ -197,6 +198,9 @@ class GroupExSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        return rep
 
 class GroupSetSerializer(ExSerializer):
     descriptions = DescriptionSerializer(
@@ -355,7 +359,6 @@ class IndividualExSerializer(ExSerializer):
     def to_representation(self, instance):
 
         rep = super().to_representation(instance)
-
         if "group" in rep:
             if rep["group"]:
                 if instance.group:
@@ -388,18 +391,20 @@ class IndividualSetSerializer(ExSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class CharacteristicaReadSerializer(ReadSerializer):
+class CharacteristicaElasticBigSerializer(ReadSerializer):
+    measurement_type = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + VALUE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + MEASUREMENTTYPE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
 
 
 ###############################################################################################
 # Elastic Search Serializer
 ###############################################################################################
 #maybe depreciated
-class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
+class DataFileElasticSerializer(serializers.ModelSerializer):
     file = serializers.CharField()
     timecourses = serializers.SerializerMethodField()
     class Meta:
@@ -409,15 +414,8 @@ class DataFileElasticSerializer(serializers.HyperlinkedModelSerializer):
     def get_timecourses(self, obj):
         return list_of_pk("timecourses", obj)
 
-    #def get_object(self):
-    #    obj = get_object_or_404(self.get_queryset())
-    #
-    #    return obj
-    #    self.check_object_permissions(self.request, obj)
-    #    return obj
 
-
-class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
+class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -426,10 +424,13 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    category = serializers.CharField()
+    measurement_type = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
+
+
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + VALUE_FIELDS + ["normed"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -438,6 +439,7 @@ class CharacteristicaElasticSerializer(serializers.HyperlinkedModelSerializer):
                     rep[field] = '{:.2e}'.format(rep[field])
                 except (ValueError, TypeError):
                     pass
+
         return rep
 
 
@@ -510,7 +512,7 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
         return list_of_pk("individuals", obj)
 
 
-class IndividualElasticSerializer(serializers.HyperlinkedModelSerializer):
+class IndividualElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = CharacteristicaElasticSerializer(many=True, read_only=True)

@@ -3,15 +3,13 @@ Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
 from django.db import models
-from pkdb_app.categorials.models import InterventionType
-from pkdb_app.substances.models import Substance
 
 from ..utils import CHAR_MAX_LENGTH, create_choices
 from ..subjects.models import DataFile
 
 from ..interventions.managers import InterventionSetManager,InterventionExManager
-from ..behaviours import Externable, ValueableNotBlank, ValueableMapNotBlank, Normalizable
-
+from ..behaviours import Externable
+from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 # -------------------------------------------------
 # Intervention
@@ -72,12 +70,10 @@ class InterventionSet(models.Model):
 class AbstractIntervention(models.Model):
 
 
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
     form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
     application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    substance = models.ForeignKey(Substance, null=True, on_delete=models.SET_NULL)
     route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES)
 
     class Meta:
@@ -88,12 +84,10 @@ class AbstractIntervention(models.Model):
 
 
 class AbstractInterventionMap(models.Model):
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     form_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     application_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     route_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     class Meta:
@@ -102,10 +96,10 @@ class AbstractInterventionMap(models.Model):
 
 class InterventionEx(
     Externable,
-    ValueableNotBlank,
-    ValueableMapNotBlank,
     AbstractIntervention,
     AbstractInterventionMap,
+    ExMeasurementTypeable
+
 ):
     """ Intervention (external curated layer)."""
 
@@ -127,20 +121,18 @@ class InterventionEx(
     )
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    category = models.CharField(max_length=CHAR_MAX_LENGTH)
     objects = InterventionExManager()
 
     class Meta:
         unique_together = ("interventionset", "name", "name_map", "source")
 
 
-class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
+class Intervention(Normalizable, AbstractIntervention):
     """ A concrete step/thing which is done to the group.
 
          In case of dosing/medication the actual dosing is stored in the Valueable.
-         In case of a step without dosing, e.g., lifestyle intervention only the category is used.
+         In case of a step without dosing, e.g., lifestyle intervention only the measurement_type is used.
       """
-    category = models.ForeignKey(InterventionType,on_delete=models.CASCADE)
     ex = models.ForeignKey(
         InterventionEx,
         related_name="interventions",
@@ -149,14 +141,9 @@ class Intervention(Normalizable, ValueableNotBlank, AbstractIntervention):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    raw = models.ForeignKey("Intervention", related_name="norm", on_delete=models.CASCADE, null=True)
-    normed = models.BooleanField(default=False)
-    substance = models.ForeignKey(Substance, related_name="interventions", null=True, on_delete=models.PROTECT)
 
     @property
     def study(self):
         return self.ex.interventionset.study.name
 
-    @property
-    def category_key(self):
-        return self.category.key
+

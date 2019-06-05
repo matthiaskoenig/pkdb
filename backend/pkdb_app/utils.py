@@ -67,10 +67,36 @@ def ensure_dir(file_path):
         os.makedirs(directory)
 
 
-def update_or_create_multiple(parent, children, related_name):
+def update_or_create_multiple(parent, children, related_name, lookup_field = None):
     for child in children:
+        lookup_dict = {}
         instance_child = getattr(parent, related_name)
-        instance_child.update_or_create(**child)
+
+        if lookup_field:
+            lookup_dict[lookup_field] = child.pop(lookup_field, None)
+        else:
+            lookup_dict = child
+
+        #instance_child.update_or_create(**lookup_dict, defaults=child)
+
+        try:
+            obj = instance_child.get(**lookup_dict)
+            for key, value in child.items():
+                setattr(obj, key, value)
+            obj.save()
+
+
+
+        except instance_child.model.DoesNotExist:
+            instance_dict = {**lookup_dict,**child}
+            instance_child.create(**instance_dict)
+
+
+
+
+
+
+
 
 
 def create_multiple(parent, children, related_name):

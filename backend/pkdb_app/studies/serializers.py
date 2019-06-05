@@ -14,13 +14,13 @@ from ..subjects.models import GroupSet, IndividualSet
 from ..users.serializers import UserElasticSerializer
 from ..utils import update_or_create_multiple, create_multiple, list_duplicates
 
-from ..interventions.models import Substance, DataFile, InterventionSet
+from ..interventions.models import DataFile, InterventionSet
+
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
      GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Rating
-from pkdb_app.categorials.models import Keyword
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
 
 # ----------------------------------
@@ -139,12 +139,8 @@ class StudySerializer(SidSerializer):
         required=False,
         allow_null=True,
     )
-    substances = serializers.SlugRelatedField(
-        queryset=Substance.objects.all(), slug_field="name", required=True, many=True
-    )
-    keywords = serializers.SlugRelatedField(
-        queryset=Keyword.objects.all(), slug_field="name", required=True, many=True
-    )
+
+
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -173,9 +169,7 @@ class StudySerializer(SidSerializer):
             "creator",
             "curators",
             "collaborators",
-            "substances",
             "descriptions",
-            "keywords",
             "licence",
             "access",
             "groupset",
@@ -244,7 +238,7 @@ class StudySerializer(SidSerializer):
 
         # check for duplicates
         #######################################
-        for item in ["collaborators","curators","substances","keywords"]:
+        for item in ["collaborators","curators","substances"]:
 
             if item in ["curators"]:
                 related_unique_field = "user"
@@ -325,8 +319,6 @@ class StudySerializer(SidSerializer):
         related_foreinkeys = self.related_sets().copy()
 
         related_many2many = {
-            "substances": Substance,
-            "keywords": Keyword,
             "descriptions": Description,
             "comments": Comment,
             "curators": User,
@@ -357,23 +349,6 @@ class StudySerializer(SidSerializer):
                 setattr(study, name, instance)
             study.save()
 
-
-        many_2_many_fields = ["keywords","substances"]
-
-        if "substance" in related:
-                study_substances = set([substance.pk for substance in related["substances"]])
-                study_cumulated_substances = study.get_substances()
-                related["substances"] = study_cumulated_substances | study_substances
-
-
-        for field in many_2_many_fields:
-            if field in related:
-                related_m2m_field = getattr(study, field)
-                related_m2m_field.clear()
-                if len(related[field]) > 0 :
-                    for instance in related[field]:
-                        related_m2m_field.add(instance)
-
         if "curators" in related:
             study.ratings.all().delete()
             if related["curators"]:
@@ -385,6 +360,7 @@ class StudySerializer(SidSerializer):
             study.collaborators.clear()
             if related["collaborators"]:
                 study.collaborators.add(*related["collaborators"])
+
         if "descriptions" in related:
             study.descriptions.all().delete()
             if related["descriptions"]:
@@ -510,7 +486,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     collaborators = UserElasticSerializer(many=True, read_only=True)
 
     substances = serializers.SerializerMethodField()
-    keywords = serializers.SerializerMethodField()
 
     files = serializers.SerializerMethodField()#DataFileElasticSerializer(many=True, read_only=True)
 
@@ -540,7 +515,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "collaborators",
             "creator",
             "substances",
-            "keywords",
             "files",
             "groupset",
             "individualset",
@@ -556,7 +530,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
         read_only_fields = fields
 
-
     def get_substances(self, obj):
         """Get substances."""
         if obj.substances:
@@ -564,12 +537,7 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
         else:
             return []
 
-    def get_keywords(self, obj):
-        """Get substances."""
-        if obj.keywords:
-            return list(obj.keywords)
-        else:
-            return []
+
 
     def get_files(self, obj):
 

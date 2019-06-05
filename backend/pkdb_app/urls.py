@@ -4,8 +4,7 @@ Django URLs
 from django.urls import path, include
 from django.conf.urls import url
 from django.contrib import admin
-from pkdb_app.categorials.views import PharmacokineticTypeViewSet, CharacteristicTypeViewSet, InterventionTypeViewSet, \
-    KeywordViewSet, ElasticKeywordViewSet
+from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
     TimecourseOptionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
@@ -21,7 +20,7 @@ from .views import serve_protected_document
 from .subjects.views import (
     DataFileViewSet,
     IndividualViewSet,
-    CharacteristicaViewSet, CharacteristicaOptionViewSet, GroupViewSet)
+    CharacteristicaElasticViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
 from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet
 from .studies.views import (
@@ -49,13 +48,11 @@ router.register("references", ReferencesViewSet, base_name="references")
 
 # elastic search format
 router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
-router.register("keywords", KeywordViewSet, base_name="keywords")
-router.register("keywords_elastic", ElasticKeywordViewSet, base_name="keywords_elastic")
 
 
-router.register("pharmacokinetic_types", PharmacokineticTypeViewSet, base_name="pharmacokinetic_types")
-router.register("characteristica_types", CharacteristicTypeViewSet, base_name="characteristica_types")
-router.register("intervention_types", InterventionTypeViewSet, base_name="intervention_types")
+router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")
+router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, base_name="measurement_types_elastic")
+
 
 
 # user
@@ -89,7 +86,7 @@ router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_
 
 router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
 router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
-router.register("characteristica_elastic", CharacteristicaViewSet, base_name="characteristica_elastic")
+router.register("characteristica_elastic", CharacteristicaElasticViewSet, base_name="characteristica_elastic")
 router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
 router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
 router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")

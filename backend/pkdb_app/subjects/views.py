@@ -1,4 +1,4 @@
-from pkdb_app.categorials.models import CharacteristicType
+from pkdb_app.categorials.models import MeasurementType
 from pkdb_app.users.permissions import StudyPermission
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -9,7 +9,8 @@ from pkdb_app.subjects.models import (
 )
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
+    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaElasticBigSerializer,
+    CharacteristicaElasticSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 ############################################################
@@ -38,7 +39,7 @@ class GroupViewSet(DocumentViewSet):
         'name',
         'study.name',
         'parent.name',
-        'characteristica_all_normed.category',
+        'characteristica_all_normed.measurement_type',
         'characteristica_all_normed.choice',
         'characteristica_all_normed.ctype',
 
@@ -77,9 +78,8 @@ class IndividualViewSet(DocumentViewSet):
         'name',
         'study.name',
         'group.name',
-        'characteristica_all_normed.category',
+        'characteristica_all_normed.measurement_type.name',
         'characteristica_all_normed.choice',
-        'characteristica_all_normed.ctype',
 
     )
 
@@ -89,7 +89,6 @@ class IndividualViewSet(DocumentViewSet):
         'name': 'name.raw',
         'group': 'group.name.raw',
         'study': 'study.name.raw',
-        'ctype':'ctype.raw'
     }
 
     # Define ordering fields
@@ -101,10 +100,10 @@ class IndividualViewSet(DocumentViewSet):
     }
 
 
-class CharacteristicaViewSet(DocumentViewSet):
+class CharacteristicaElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     document = CharacteristicaDocument
-    serializer_class = CharacteristicaReadSerializer
+    serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
 
@@ -167,7 +166,7 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["categories"] = {k.key: k._asdict() for k in CharacteristicType.objects.all()}
+        options["measurement_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         return options
 
     def list(self, request):

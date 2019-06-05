@@ -196,7 +196,6 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'design',
                      'reference',
                      'substances',
-                     'keywords',
                      'files'
                      )
 
@@ -209,7 +208,6 @@ class ElasticStudyViewSet(DocumentViewSet):
         "design": "design.raw",
         "refernce": "refernce",
         "substance": "substance.raw",
-        #"keywords": "keywords.raw",
         #"files":"files",
         "creator":"creator.last_name",
         #"curators": "curators.last_name",

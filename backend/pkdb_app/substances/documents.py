@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from ..documents import string_field, elastic_settings, ObjectField, text_field
-from ..interventions.models import Substance
+from .models import Substance
 substance_index = Index("substances")
 substance_index.settings(**elastic_settings)
 
