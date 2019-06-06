@@ -67,13 +67,14 @@ def ensure_dir(file_path):
         os.makedirs(directory)
 
 
-def update_or_create_multiple(parent, children, related_name, lookup_field = None):
+def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
     for child in children:
         lookup_dict = {}
         instance_child = getattr(parent, related_name)
 
-        if lookup_field:
-            lookup_dict[lookup_field] = child.pop(lookup_field, None)
+        if lookup_fields:
+            for lookup_field in lookup_fields:
+                lookup_dict[lookup_field] = child.pop(lookup_field, None)
         else:
             lookup_dict = child
 
@@ -82,7 +83,11 @@ def update_or_create_multiple(parent, children, related_name, lookup_field = Non
         try:
             obj = instance_child.get(**lookup_dict)
             for key, value in child.items():
-                setattr(obj, key, value)
+                if key == "annotations":
+                    update_or_create_multiple(obj,value,key,lookup_fields=["term","relation"])
+                else:
+                    setattr(obj, key, value)
+
             obj.save()
 
 
