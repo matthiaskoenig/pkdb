@@ -53,7 +53,7 @@
                     } else if (this.initials === 'DM'){
                         image = 'deepa_128.png';
                     } else if (this.initials === 'JB'){
-                        image = 'brandhorst_128.png';
+                        image = 'jbrandhorst_128.png';
                     }
                 } else {
                     if (this.username === 'mkoenig'){
