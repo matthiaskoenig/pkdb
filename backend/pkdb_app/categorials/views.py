@@ -30,6 +30,7 @@ class MeasurementTypeElasticViewSet(DocumentViewSet):
                      "annotations.description",
                      "annotations.label",
                      "choices.name",
+                     "choices.description",
                      "choices.annotations.name",
                      "choices.annotations.description",
                      "choices.annotations.label"

@@ -66,6 +66,8 @@ class Choice(models.Model):
     """Choice Model"""
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     annotations = models.ManyToManyField(Annotation)
+    description = models.TextField(blank=True, null=True)
+
 
     objects = ChoiceManager()
 

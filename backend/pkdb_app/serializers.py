@@ -389,10 +389,22 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if not isinstance(groupby, str):
                     raise serializers.ValidationError({"groupby": "groupby has to be a string"})
                 groupby = [v.strip() for v in groupby.split("&")]
-                for group_name, group_df in df.groupby(groupby):
-                    for entry in group_df.itertuples():
-                        entry_dict = self.make_entry(entry, template, data, source)
-                        entries.append(entry_dict)
+
+                try:
+                    for group_name, group_df in df.groupby(groupby):
+                        for entry in group_df.itertuples():
+                            entry_dict = self.make_entry(entry, template, data, source)
+                            entries.append(entry_dict)
+
+                except KeyError:
+
+                    raise serializers.ValidationError(
+
+                        [
+                            f"Some keys in groupby <{groupby}> are missing in file <{DataFile.objects.get(pk=source).file}> ",
+                            data
+                        ]
+                    )
             else:
                 for entry in df.itertuples():
                     entry_dict = self.make_entry(entry, template, data,source)

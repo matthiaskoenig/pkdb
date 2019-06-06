@@ -63,7 +63,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
     annotations = AnnotationSerializer(many=True, allow_null=True)
     class Meta:
         model = Choice
-        fields = ["name", "annotations"]
+        fields = ["name", "annotations","description"]
 
 
 
@@ -76,13 +76,15 @@ class BaseSerializer(WrongKeyValidationSerializer):
 
 
     def update_or_create_related(self,instance, related_dict):
-        lookup_fields = {"units":"name","choices":"name","annotations":"term"}
+        lookup_fields = {"units":["name"],"choices":["name"],"annotations":["term","relation"]}
 
         for related,related_data in related_dict.items():
             if hasattr(instance, related):
                 related_instance = getattr(instance,related)
                 related_instance.clear()
-            update_or_create_multiple(instance, related_data, related, lookup_field=lookup_fields[related])
+
+
+            update_or_create_multiple(instance, related_data, related, lookup_fields=lookup_fields[related])
 
     def to_representation(self, instance):
         data = super().to_representation(instance)

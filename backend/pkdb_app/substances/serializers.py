@@ -54,8 +54,8 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
         annotations_data = validated_data.pop("annotations", [])
 
         substance = Substance.objects.create(**validated_data)
-        update_or_create_multiple(substance, synonyms_data, "synonyms", lookup_field="name")
-        update_or_create_multiple(substance, annotations_data, "annotations", lookup_field="term")
+        update_or_create_multiple(substance, synonyms_data, "synonyms", lookup_fields=["name"])
+        update_or_create_multiple(substance, annotations_data, "annotations", lookup_fields=["term","relation"])
 
         substance.parents.add(*parents_data)
 
@@ -73,8 +73,8 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 
         for name, value in validated_data.items():
             setattr(instance, name, value)
-        update_or_create_multiple(instance, synonyms_data, "synonyms", lookup_field="name")
-        update_or_create_multiple(instance, annotations_data, "annotations", lookup_field="term")
+        update_or_create_multiple(instance, synonyms_data, "synonyms", lookup_fields=["name"])
+        update_or_create_multiple(instance, annotations_data, "annotations", lookup_fields=["term"])
 
         instance.parents.add(*parents_data)
         instance.save()
