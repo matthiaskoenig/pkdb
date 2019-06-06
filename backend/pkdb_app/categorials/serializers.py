@@ -63,7 +63,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
     annotations = AnnotationSerializer(many=True, allow_null=True)
     class Meta:
         model = Choice
-        fields = ["name", "annotations"]
+        fields = ["name", "annotations","description"]
 
 
 
