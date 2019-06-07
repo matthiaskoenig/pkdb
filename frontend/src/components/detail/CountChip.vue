@@ -1,6 +1,6 @@
 <template>
     <span class="text-xs-center">
-        <v-chip color="w" :disabled="disabled">
+        <v-chip color="w" :disabled=disabled>
             <v-icon small :title="'Number of '+icon+'s'">{{icon_object}}</v-icon>&nbsp;
             {{ count }}
         </v-chip>

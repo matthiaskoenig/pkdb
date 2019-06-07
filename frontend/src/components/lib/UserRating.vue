@@ -1,6 +1,6 @@
 <template>
     <span id="user-rating">
-         <v-chip disabled=true>
+         <v-chip :disabled='true'>
           <user-avatar :user="user"/>
              <v-rating v-if="user.rating != null" v-model="user.rating" :title="'Curation score: '+ user.rating" dense half-increments value small readonly/>
         </v-chip>

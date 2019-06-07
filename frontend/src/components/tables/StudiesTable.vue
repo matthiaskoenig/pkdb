@@ -23,11 +23,11 @@
                     <text-highlight :queries="search.split(/[ ,]+/)"> {{ table.item.name }}</text-highlight>
                 </td>
                 <td>
-                    <count-chip disabled=true :count=table.item.group_count icon="group"></count-chip>
-                    <count-chip disabled=true :count=table.item.individual_count icon="individual"></count-chip>
-                    <count-chip disabled=true :count=table.item.intervention_count icon="intervention"></count-chip>
-                    <count-chip disabled=true :count=table.item.output_count icon="output"></count-chip>
-                    <count-chip disabled=true :count=table.item.timecourse_count icon="timecourse"></count-chip>
+                    <count-chip :disabled="true" :count=table.item.group_count icon="group"></count-chip>
+                    <count-chip :disabled="true" :count=table.item.individual_count icon="individual"></count-chip>
+                    <count-chip :disabled="true" :count=table.item.intervention_count icon="intervention"></count-chip>
+                    <count-chip :disabled="true" :count=table.item.output_count icon="output"></count-chip>
+                    <count-chip :disabled="true" :count=table.item.timecourse_count icon="timecourse"></count-chip>
                 </td>
                 <td>
                     <span v-for="(c, index2) in table.item.substances" :key="index2"><substance-chip :title="c" :search="search"/></span>
