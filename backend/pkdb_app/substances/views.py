@@ -36,6 +36,12 @@ class ElasticSubstanceViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     lookup_field = "url_slug"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('name',)
+    search_fields = ('name',
+                     'description',
+                     'formula',
+                     'parents.sid',
+                     "annotations.name",
+                     "annotations.description",
+                     "annotations.label",)
     filter_fields = {'name': 'name.raw',}
-    ordering_fields = {'name': 'name.raw',}
+    ordering_fields = {'name': 'name.raw','formula':'formula.raw','derived':"derived.raw"}

@@ -108,7 +108,8 @@ class SubstanceSmallElasticSerializer(serializers.ModelSerializer):
 
 class SubstanceElasticSerializer(serializers.HyperlinkedModelSerializer):
     parents = SubstanceSmallElasticSerializer(many=True)
+    annotations = AnnotationSerializer(many=True,allow_null=True)
 
     class Meta:
         model = Substance
-        fields = ["sid", 'url_slug', "name", "mass","charge", "formula", "derived", "description","parents"]
+        fields = ["sid", 'url_slug', "name", "mass","charge", "formula", "derived", "description","parents", "annotations"]
