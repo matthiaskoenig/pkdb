@@ -215,7 +215,9 @@ class Study(Sidable, models.Model):
     def files_url(self):
         return [file.file.name for file in self.files.all()]
 
-
+    @property
+    def files_ordered(self):
+        return self.files.objects.order_by('name')
 
     @property
     def reference_name(self):

@@ -189,6 +189,7 @@ class StudyDocument(DocType):
     )
     substances = string_field(attr="get_substances", multi=True)
     files = ObjectField(
+        attr="files_ordered",
         properties={
             'pk': fields.IntegerField(),
             'file': fields.StringField(
