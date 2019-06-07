@@ -33,6 +33,12 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
     # ----------------------------------
     # helper
     # ----------------------------------
+    @staticmethod
+    def retransform_map_string(k):
+        if "_map" in k:
+            k = k[:-4]
+        return k
+
     def validate_wrong_keys(self, data):
         """
         validate that all keys correspond to a model field.
@@ -41,7 +47,8 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         payload_keys = data.keys()
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
-                msg = {payload_key: f"`{payload_key}` is a wrong field, allowed fields are {serializer_fields}"}
+                payload_key = self.retransform_map_string(payload_key)
+                msg = {payload_key: f"`{payload_key}` is a wrong field, allowed fields are {[f for f in serializer_fields if not 'map' in f]}"}
                 raise serializers.ValidationError(msg)
 
     def get_or_val_error(self, model, *args, **kwargs):
@@ -107,13 +114,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 transformed_data[key] = data.get(key)
         return transformed_data
 
-    @staticmethod
-    def retransform_map_fields(data):
+    def retransform_map_fields(self,data):
         transformed_data = {}
         for k, v in data.items():
-            if "_map" in k:
-
-                k = k[:-4]
+            k = self.retransform_map_string(k)
             #if v is None:
             #    continue
             transformed_data[k] = v
