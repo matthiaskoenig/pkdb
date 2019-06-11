@@ -216,10 +216,8 @@ class Study(Sidable, models.Model):
         return [file.file.name for file in self.files.all()]
 
     @property
-    def blabla(self):
-        return "hallo"
-        #if self.files:
-        #    return self.files.all().order_by("file.name")
+    def files_ordered(self):
+        return self.files.all().order_by("file")
 
     @property
     def reference_name(self):
