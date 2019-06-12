@@ -22,14 +22,13 @@ from .subjects.views import (
     IndividualViewSet,
     CharacteristicaElasticViewSet, CharacteristicaOptionViewSet, GroupViewSet)
 from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
-from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet
+from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet, update_index_study)
 
 from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
-
 
 router = DefaultRouter()
 ###############################################################################################
@@ -110,7 +109,8 @@ schema_view = get_swagger_view(title="PKDB API")
 
 urlpatterns = [
     # authentication
-    url(r'^accounts/', include('allauth.urls')),
+    #(r'^accounts_old/', include('allauth.urls')),
+    url(r'^accounts/', include('rest_email_auth.urls')),
 
     # admin
     path("admin/", admin.site.urls),
@@ -118,7 +118,9 @@ urlpatterns = [
     path(r"api/v1/", include(router.urls)),
     path("api/v1/study_pks/", study_pks_view),
     path("api/v1/update_index/", update_index_study),
-    path('api-token-auth/', obtain_auth_token),
+    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
+    path('verify/?P<key>[-\w]+)', obtain_auth_token),
+    path('reset/?P<key>[-\w]+)', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     url(r"api", schema_view, name="api"),
     url(r'^media/(?P<file>.*)$', serve_protected_document, name='serve_protected_document'),

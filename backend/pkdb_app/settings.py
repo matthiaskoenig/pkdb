@@ -16,14 +16,39 @@ SECRET_KEY = os.environ['PKDB_SECRET_KEY']
 API_BASE = os.environ['PKDB_API_BASE']
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
+#AUTHENTICATION_BACKENDS = (
+#
+#    # Needed to login by username in Django admin, regardless of `allauth`
+##    'rest_email_auth.authentication.VerifiedEmailBackend',
+#    'django.contrib.auth.backends.ModelBackend',
+#
+#    # `allauth` specific authentication methods, such as login by e-mail
+#    'allauth.account.auth_backends.AuthenticationBackend',
+#)
+
+#AUTHENTICATION_BACKENDS = [
+#'rest_email_auth.authentication.VerifiedEmailBackend',
+#'django.contrib.auth.backends.ModelBackend',
+#]
+
 AUTHENTICATION_BACKENDS = (
-
-    # Needed to login by username in Django admin, regardless of `allauth`
+    # default
     'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by e-mail
+    # email login
+    #'allauth.account.auth_backends.AuthenticationBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    'rest_email_auth.authentication.VerifiedEmailBackend',
+
 )
+
+# The minimal settings dict required for the app
+REST_EMAIL_AUTH = {
+    'EMAIL_VERIFICATION_URL': API_BASE+'/verify/{key}',
+    'PASSWORD_RESET_URL': API_BASE+'/reset/{key}',
+    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
+    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
+}
+
 
 INSTALLED_APPS = (
     "django.contrib.admin",
@@ -35,16 +60,16 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
 
     # Authentication
-    'bootstrap3',  # optional module for making bootstrap forms easier
-
+    'rest_email_auth',
+    "rest_framework.authtoken",  # token authentication
+    #'rest_auth',
+    #'rest_auth.registration',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
+
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
-    "rest_framework.authtoken",  # token authentication
     "django_filters",  # for filtering rest endpoints
     "rest_framework_swagger",
     "corsheaders",
@@ -66,21 +91,15 @@ INSTALLED_APPS = (
     "pkdb_app.outputs",
     "pkdb_app.comments",
 )
-
+# django-allauth settings
 SITE_ID = 1
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_MIN_LENGTH = 3
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-
-SOCIALACCOUNT_PROVIDERS = {
-    'github': {
-        'SCOPE': ['email'],
-        'METHOD': 'oauth2',
-    },
-}
 
 # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
 MIDDLEWARE = (
@@ -227,7 +246,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    #"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",

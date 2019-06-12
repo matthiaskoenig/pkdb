@@ -1,39 +1,33 @@
 <template>
     <div>
-        <span v-if="user">
-            <v-btn color="primary"  v-on:click="logout">Logout</v-btn>
-             <p>
-            <span v-if="user">
-            User: {{ user }}<br />
-            Token: {{ token }}<br />
-            </span>
-        </p>
-        <!--
-        <a :href="domain+'/accounts/password/change/'+user">change password</a>
-        <a :href="domain+'/accounts/password/reset/'+user">reset password</a>
-        -->
-        </span>
-        <span v-else>
-                <v-toolbar color="secondary" dark>
+        <v-toolbar color="secondary" dark>
 
-                    <v-toolbar-title>Login </v-toolbar-title>
-                    <v-spacer></v-spacer>
-                </v-toolbar>
+        <v-toolbar-title>Registreation </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-tooltip bottom>
+            <v-btn
+                    icon
+                    large
+                    :href="source"
+                    target="_blank"
+                    slot="activator"
+            >
+            </v-btn>
+        </v-tooltip>
+    </v-toolbar>
         <v-card-text>
             <v-form>
                 <v-text-field prepend-icon="fas fa-user-circle"  :rules="nameRules" v-model="username" name="username" label="Login" type="text"></v-text-field>
+                <v-text-field prepend-icon="fas fa-envelope" :rules="emailRules" v-model="email" name="email" label="Email" type="text"></v-text-field>
                 <v-text-field prepend-icon='fas fa-lock' v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+                <v-text-field prepend-icon='fas fa-lock' v-model="confirm_password" name="confirm_password" label=" confirm Password" id="confirm_password" type="password"></v-text-field>
+
             </v-form>
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary"  v-on:click="login">Login</v-btn>
+            <v-btn color="primary">Login</v-btn>
         </v-card-actions>
-        </span>
-
-        <span v-if="warnings">Warnings: {{ warnings }}</span>
-
-
     </div>
 
     <!--
@@ -61,20 +55,28 @@
     import axios from 'axios'
 
     export default {
-        name: "UserLogin",
+        name: "Registration",
         data: () => ({
             valid: true,
             username: '',
             nameRules: [
                 v => !!v || 'Username is required',
             ],
-            passwordRules: [
-                v => !!v || 'Password is required',
+            email: '',
+            emailRules: [
+                v => !!v || 'E-mail is required',
                 v => /.+@.+/.test(v) || 'E-mail must be valid'
             ],
+            passwordRules: [
+                v => !!v || 'Password is required',
+            ],
+            confirmPasswordRules: [
+                v => !!v || 'Confirm password is required',
+                v => v = v === this.password || 'Confirm password does not match',
 
+            ],
             password:'',
-            warnings:'',
+            confirm_password:''
         }),
 
         computed: {
@@ -96,7 +98,7 @@
 
                 // window.alert("login id: " + this.username + "\n" + "password: " + this.password);
                 const payload = {"username": this.username, "password": this.password};
-                console.log(payload);
+                // console.log(payload);
 
                 axios.post(this.$store.state.endpoints.obtainAuthToken, payload)
                     .then((response)=>{

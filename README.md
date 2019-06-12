@@ -90,7 +90,21 @@ or to run migrations
 ```bash
 docker-compose run --rm backend python manage.py makemigrations
 ```
+## Authentication data dump
+```bash
 
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  dumpdata auth  --indent 2 > ./backend/pkdb_app/fixtures/auth.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  dumpdata users  --indent 2 > ./backend/pkdb_app/fixtures/users.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  dumpdata rest_email_auth  --indent 2 > ./backend/pkdb_app/fixtures/rest_email_auth.json
+```
+
+## authentication data load
+```bash
+
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata auth pkdb_app/fixtures/auth.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata users pkdb_app/fixtures/users.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata rest_email_auth pkdb_app/fixtures/rest_email_auth.json
+```
 ## REST services
 PKDB provides a REST API which allows simple interaction with the database.
 An overview over the REST endpoints is available from
