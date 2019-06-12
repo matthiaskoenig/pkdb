@@ -20,11 +20,13 @@ from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 # Choices for intervention routes, application and form.
 #
 
+# FIXME: some duplication with pkdb_data
 INTERVENTION_ROUTE = [
     "iv",  # intravenous
     "intramuscular",
     "oral",
     "rectal",
+    "inhalation"
 ]
 INTERVENTION_APPLICATION = [
     "constant infusion",
