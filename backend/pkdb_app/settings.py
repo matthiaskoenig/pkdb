@@ -14,6 +14,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['PKDB_SECRET_KEY']
 
 API_BASE = os.environ['PKDB_API_BASE']
+FRONTEND_BASE = os.environ['FRONTEND_BASE']
+
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
 #AUTHENTICATION_BACKENDS = (
@@ -43,8 +45,8 @@ AUTHENTICATION_BACKENDS = (
 
 # The minimal settings dict required for the app
 REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': API_BASE+'/verify/{key}',
-    'PASSWORD_RESET_URL': API_BASE+'/reset/{key}',
+    'EMAIL_VERIFICATION_URL': FRONTEND_BASE+'/#/verification/{key}',
+    'PASSWORD_RESET_URL': API_BASE+'acounts/reset-password/{key}',
     'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
     'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
 }

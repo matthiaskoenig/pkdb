@@ -33,6 +33,8 @@
                 <router-link   v-on:click.native="close" to="/registration" >
                    register
                 </router-link>
+
+
             </v-spacer>
             <v-spacer> </v-spacer>
             <v-btn color="primary"  v-on:click="login">Login</v-btn>
@@ -122,7 +124,7 @@
 
             login: function(){
                 // reset store
-                this.logout();
+                this.$store.dispatch('logout');
                 // reset warnings
                 this.warnings = null;
 
@@ -136,6 +138,7 @@
                             username: this.username,
                             token: response.data.token
                         });
+
                         this.close()
                     })
                     .catch((error)=>{
