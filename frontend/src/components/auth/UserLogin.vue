@@ -1,11 +1,14 @@
 <template>
-    <div>
+    <v-card>
         <span v-if="user">
             <v-btn color="primary"  v-on:click="logout">Logout</v-btn>
              <p>
             <span v-if="user">
             User: {{ user }}<br />
             Token: {{ token }}<br />
+                <v-spacer> </v-spacer>
+
+                 <a> change password </a>
             </span>
         </p>
         <!--
@@ -14,47 +17,31 @@
         -->
         </span>
         <span v-else>
-                <v-toolbar color="secondary" dark>
 
-                    <v-toolbar-title>Login </v-toolbar-title>
-                    <v-spacer></v-spacer>
-                </v-toolbar>
         <v-card-text>
             <v-form>
-                <v-text-field prepend-icon="fas fa-user-circle"  :rules="nameRules" v-model="username" name="username" label="Login" type="text"></v-text-field>
-                <v-text-field prepend-icon='fas fa-lock' v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+
+                <v-alert v-for="general_warning in general_warnings" :value="general_warnings" type="error">
+                    {{general_warning}}
+                </v-alert>
+                <v-text-field prepend-icon="fas fa-user-circle" :error="user_warnings" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
+                <v-text-field prepend-icon='fas fa-lock' :error="password_warnings" :error-messages="password_warnings" v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
             </v-form>
         </v-card-text>
         <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer>
+                <router-link   v-on:click.native="close" to="/registration" >
+                   register
+                </router-link>
+            </v-spacer>
+            <v-spacer> </v-spacer>
             <v-btn color="primary"  v-on:click="login">Login</v-btn>
+
         </v-card-actions>
         </span>
 
-        <span v-if="warnings">Warnings: {{ warnings }}</span>
+    </v-card>
 
-
-    </div>
-
-    <!--
-    <span id="user-login">
-        <div v-if="user">
-            <button v-on:click="logout">Logout</button>
-        </div>
-        <div v-else>
-            <input type="text" placeholder="username" v-model="username">
-            <input type="password" placeholder="password" v-model="password">
-            <button v-on:click="login">Login</button>
-        </div>
-        <p>
-            <span v-if="user">
-            User: {{ user }}<br />
-            Token: {{ token }}<br />
-            </span>
-            <span v-if="warnings">Warnings: {{ warnings }}</span>
-        </p>
-    </span>
-    -->
 </template>
 
 <script>
@@ -65,18 +52,14 @@
         data: () => ({
             valid: true,
             username: '',
-            nameRules: [
-                v => !!v || 'Username is required',
-            ],
-            passwordRules: [
-                v => !!v || 'Password is required',
-                v => /.+@.+/.test(v) || 'E-mail must be valid'
-            ],
-
             password:'',
-            warnings:'',
+            warnings:''
         }),
-
+        props: {
+            showUserDialog: {
+                default:false
+            }
+        },
         computed: {
             token() {
                 return this.$store.state.token;
@@ -84,11 +67,60 @@
             user() {
                 return this.$store.state.username;
             },
+            general_warnings(){
+                if (this.warnings){
+
+                    if ("non_field_errors" in this.warnings){
+                        return this.warnings["non_field_errors"]
+                    }
+                    else {
+                        return null
+                    }
+                }
+                else{
+                    return null
+                }
+
+
+            },
+            user_warnings(){
+                if (this.warnings){
+
+                    if ("username" in this.warnings){
+                        return this.warnings["username"]
+                    }
+                    else {
+                        return null
+                    }
+                }
+                else{
+                    return null
+                }
+
+            },
+            password_warnings(){
+                if (this.warnings){
+
+                    if ("password" in this.warnings){
+                        return this.warnings["password"]
+                    }
+                    else {
+                        return null
+                    }
+                }
+                else{
+                    return null
+                }
+
+            }
+
         },
         methods: {
-            login: function(){
-                //FIXME: login in django
+            close() {
+                this.$emit('update:dialog', false)
+            },
 
+            login: function(){
                 // reset store
                 this.logout();
                 // reset warnings
@@ -103,7 +135,8 @@
                         this.$store.dispatch('login', {
                             username: this.username,
                             token: response.data.token
-                        })
+                        });
+                        this.close()
                     })
                     .catch((error)=>{
                         this.warnings = error.response.data;
@@ -113,9 +146,8 @@
             },
 
             logout: function(){
-                //FIXME: logout in django
-                // window.alert("logout id: " + this.username);
-                this.$store.dispatch('logout')
+                this.$store.dispatch('logout');
+                this.close()
             }
         }
     }

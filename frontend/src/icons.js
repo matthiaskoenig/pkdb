@@ -42,7 +42,8 @@ const icons_table = {
     public:'fas fa-lock-open',
     closed:'fab fa-creative-commons-pd',
     open:'fab fa-creative-commons-pd-alt',
-    na:'fas fa-ban'
+    na:'fas fa-ban',
+    success:'fas fa-check-circle'
 };
 
 

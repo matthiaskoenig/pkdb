@@ -45,7 +45,11 @@ export default new Vuex.Store({
 
         endpoints: {
             api: backend_domain + '/api/v1',
-            obtainAuthToken: backend_domain + '/api-token-auth/'
+            obtainAuthToken: backend_domain + '/api-token-auth/',
+            register: backend_domain + '/accounts/register/',
+            verify: backend_domain + '/accounts/verify-email/',
+
+
         },
 
         username: localStorage.getItem('username'),

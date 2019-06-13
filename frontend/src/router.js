@@ -30,6 +30,9 @@ import Curation from './components/Curation';
 
 /* Account */
 import Account from './components/auth/Account';
+import Registration from './components/auth/Registration';
+import Verification from './components/auth/Verification';
+
 
 Vue.use(Router);
 
@@ -85,6 +88,18 @@ export default new Router({
           path: '/account',
           name: 'Account',
           component: Account
+      },
+      {
+          path: '/verification/:id',
+          name: 'Verification',
+          component: Verification,
+          props: true
+
+      },
+      {
+          path: '/registration',
+          name: 'Registration',
+          component: Registration
       },
       {
           path:"/studies/:id",

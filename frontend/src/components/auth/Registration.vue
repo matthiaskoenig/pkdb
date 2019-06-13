@@ -2,53 +2,28 @@
     <div>
         <v-toolbar color="secondary" dark>
 
-        <v-toolbar-title>Registreation </v-toolbar-title>
+        <v-toolbar-title>Registration </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-tooltip bottom>
-            <v-btn
-                    icon
-                    large
-                    :href="source"
-                    target="_blank"
-                    slot="activator"
-            >
-            </v-btn>
-        </v-tooltip>
     </v-toolbar>
         <v-card-text>
             <v-form>
-                <v-text-field prepend-icon="fas fa-user-circle"  :rules="nameRules" v-model="username" name="username" label="Login" type="text"></v-text-field>
-                <v-text-field prepend-icon="fas fa-envelope" :rules="emailRules" v-model="email" name="email" label="Email" type="text"></v-text-field>
-                <v-text-field prepend-icon='fas fa-lock' v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
-                <v-text-field prepend-icon='fas fa-lock' v-model="confirm_password" name="confirm_password" label=" confirm Password" id="confirm_password" type="password"></v-text-field>
+                <v-text-field prepend-icon="fas fa-user-circle"  :error="user_warnings.length" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
+                <v-text-field prepend-icon="fas fa-envelope"  :error="email_warnings.length" :error-messages="email_warnings" v-model="email" name="email" label="Email" type="text"></v-text-field>
+                <v-text-field prepend-icon='fas fa-lock' :error="password_warnings.length" :error-messages="password_warnings"  v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+                <v-text-field prepend-icon='fas fa-lock' :error="confirm_password_warnings.length !== 0" :error-messages="confirm_password_warnings" v-model="confirm_password" name="confirm_password" label=" Confirmation Password" id="confirm_password" type="password"></v-text-field>
 
             </v-form>
         </v-card-text>
         <v-card-actions>
+            <v-alert :value="success"  type="success" >
+                {{registration_message}}
+            </v-alert>
             <v-spacer></v-spacer>
-            <v-btn color="primary">Login</v-btn>
+            <v-btn color="primary" v-on:click="login" >register</v-btn>
         </v-card-actions>
     </div>
 
-    <!--
-    <span id="user-login">
-        <div v-if="user">
-            <button v-on:click="logout">Logout</button>
-        </div>
-        <div v-else>
-            <input type="text" placeholder="username" v-model="username">
-            <input type="password" placeholder="password" v-model="password">
-            <button v-on:click="login">Login</button>
-        </div>
-        <p>
-            <span v-if="user">
-            User: {{ user }}<br />
-            Token: {{ token }}<br />
-            </span>
-            <span v-if="warnings">Warnings: {{ warnings }}</span>
-        </p>
-    </span>
-    -->
+
 </template>
 
 <script>
@@ -57,29 +32,53 @@
     export default {
         name: "Registration",
         data: () => ({
-            valid: true,
             username: '',
-            nameRules: [
-                v => !!v || 'Username is required',
-            ],
             email: '',
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+/.test(v) || 'E-mail must be valid'
-            ],
-            passwordRules: [
-                v => !!v || 'Password is required',
-            ],
-            confirmPasswordRules: [
-                v => !!v || 'Confirm password is required',
-                v => v = v === this.password || 'Confirm password does not match',
-
-            ],
             password:'',
-            confirm_password:''
+            confirm_password:'',
+            warnings:{},
+            registration_message:"Thank You for the registration. Check your mails for the verification link.",
+            success:false,
+
         }),
 
         computed: {
+
+            user_warnings(){
+
+                    if ("username" in this.warnings){
+                        return this.warnings["username"]
+                    }
+                    else {
+                        return []
+                    }
+            },
+            password_warnings(){
+                    if ("password" in this.warnings){
+                        return this.warnings["password"]
+                    }
+                    else {
+                        return []
+                    }
+            },
+            confirm_password_warnings(){
+                var confirm_password_warnings = [];
+                if (this.confirm_password!==this.password ){
+                    confirm_password_warnings.push('confirm password does not match')
+                }
+                confirm_password_warnings = confirm_password_warnings.concat(this.password_warnings);
+                return confirm_password_warnings
+            },
+            email_warnings(){
+
+
+                    if ("email" in this.warnings){
+                        return this.warnings["email"]
+                    }
+                    else {
+                        return []
+                    }
+            },
             token() {
                 return this.$store.state.token;
             },
@@ -89,37 +88,28 @@
         },
         methods: {
             login: function(){
-                //FIXME: login in django
+                    // reset store
+                    // reset warnings
+                    this.warnings = {};
+                    this.success = false;
 
-                // reset store
-                this.logout();
-                // reset warnings
-                this.warnings = null;
+                const payload = {"username": this.username, "password": this.password, "email":this.email};
 
-                // window.alert("login id: " + this.username + "\n" + "password: " + this.password);
-                const payload = {"username": this.username, "password": this.password};
-                // console.log(payload);
+                    axios.post(this.$store.state.endpoints.register, payload)
+                        .then((response)=>{
+                            console.log(response);
+                            this.success = true
 
-                axios.post(this.$store.state.endpoints.obtainAuthToken, payload)
-                    .then((response)=>{
-                        this.$store.dispatch('login', {
-                            username: this.username,
-                            token: response.data.token
                         })
-                    })
-                    .catch((error)=>{
-                        this.warnings = error.response.data;
-
-                        console.log(error);
-                    })
-            },
-
-            logout: function(){
-                //FIXME: logout in django
-                // window.alert("logout id: " + this.username);
-                this.$store.dispatch('logout')
+                        .catch((error)=>{
+                            this.warnings = error.response.data;
+                            this.success = false
+                        })
+                }
             }
-        }
+
+
+
     }
 </script>
 
