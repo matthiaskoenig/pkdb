@@ -10,7 +10,6 @@
                 <v-text-field prepend-icon="fas fa-user-circle"  :error="user_warnings.length" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
                 <v-text-field prepend-icon="fas fa-envelope"  :error="email_warnings.length" :error-messages="email_warnings" v-model="email" name="email" label="Email" type="text"></v-text-field>
                 <v-text-field prepend-icon='fas fa-lock' :error="password_warnings.length" :error-messages="password_warnings"  v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
-                <v-text-field prepend-icon='fas fa-lock' :error="confirm_password_warnings.length !== 0" :error-messages="confirm_password_warnings" v-model="confirm_password" name="confirm_password" label=" Confirmation Password" id="confirm_password" type="password"></v-text-field>
 
             </v-form>
         </v-card-text>
@@ -35,7 +34,6 @@
             username: '',
             email: '',
             password:'',
-            confirm_password:'',
             warnings:{},
             registration_message:"Thank You for the registration. Check your mails for the verification link.",
             success:false,
@@ -61,16 +59,7 @@
                         return []
                     }
             },
-            confirm_password_warnings(){
-                var confirm_password_warnings = [];
-                if (this.confirm_password!==this.password ){
-                    confirm_password_warnings.push('confirm password does not match')
-                }
-                confirm_password_warnings = confirm_password_warnings.concat(this.password_warnings);
-                return confirm_password_warnings
-            },
             email_warnings(){
-
 
                     if ("email" in this.warnings){
                         return this.warnings["email"]
