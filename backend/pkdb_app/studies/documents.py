@@ -262,23 +262,12 @@ class StudyDocument(DocType):
 
     class Meta(object):
         model = Study
-        related_models = [Reference, Individual, Group, Intervention, Timecourse, Output]
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
         ignore_signals = True
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
 
-    def get_instances_from_related(self, related_instance):
-        """If related_models is set, define how to retrieve the  instance(s) from the related model.
-        The related_models option should be used with caution because it can lead in the index
-        to the updating of a lot of items.
-        """
-
-        if isinstance(related_instance, Reference):
-            if hasattr(related_instance,"study"):
-                return related_instance.study
 
 
-    # Elastic Study
 
