@@ -9,7 +9,7 @@ From the data structure this has to be handled very similar.
 from django.db import models
 from ..storage import OverwriteStorage
 from ..behaviours import (
-    Externable)
+    Externable, Accessible)
 
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
@@ -122,7 +122,7 @@ class GroupEx(Externable, AbstractGroup):
         unique_together = ("groupset", "name", "name_map", "source")
 
 
-class Group(models.Model):
+class Group(Accessible):
     """ Group. """
 
     ex = models.ForeignKey(
@@ -137,13 +137,6 @@ class Group(models.Model):
     # class Meta:
     # todo: in validator unique_together = ('ex__groupset', 'name')
 
-    @property
-    def study_name(self):
-        return self.ex.groupset.study.name
-
-    @property
-    def study_pk(self):
-        return self.ex.groupset.study.pk
 
     @property
     def study(self):
@@ -239,7 +232,7 @@ class IndividualEx(Externable, AbstractIndividual):
         return self.study.groupset.group_exs
 
 
-class Individual(AbstractIndividual):
+class Individual(AbstractIndividual, Accessible):
     """ Single individual in data base.
 
     This does not contain any mappings are splits any more.
@@ -279,16 +272,7 @@ class Individual(AbstractIndividual):
 
     @property
     def study(self):
-        if hasattr(self.ex.individualset,"study"):
-            return self.ex.individualset.study
-
-    @property
-    def study_pk(self):
-        return self.ex.individualset.study.pk
-
-    @property
-    def study_name(self):
-        return self.ex.individualset.study.name
+        return self.ex.individualset.study
 
     @property
     def group_indexing(self):
@@ -350,7 +334,7 @@ class CharacteristicaEx(
     objects = CharacteristicaExManager()
 
 
-class Characteristica(Normalizable, AbstractCharacteristica):
+class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
     """ Characteristic. """
 
     group = models.ForeignKey(
@@ -361,6 +345,12 @@ class Characteristica(Normalizable, AbstractCharacteristica):
     )
     count = models.IntegerField(default=1)
 
+    @property
+    def study(self):
+        if self.group:
+            return self.group.study
+        else:
+            return self.individual.study
 
     @property
     def all_group_pks(self):

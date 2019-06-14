@@ -1,3 +1,4 @@
+
 from pkdb_app.categorials.models import MeasurementType
 from pkdb_app.users.permissions import StudyPermission
 from rest_framework import viewsets
@@ -22,11 +23,13 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     CompoundSearchFilterBackend,
     IdsFilterBackend, )
 
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+
+from pkdb_app.documents import AccessView
 
 
 
-class GroupViewSet(DocumentViewSet):
+
+class GroupViewSet(AccessView):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
@@ -64,7 +67,7 @@ class GroupViewSet(DocumentViewSet):
     }
 
 
-class IndividualViewSet(DocumentViewSet):
+class IndividualViewSet(AccessView):
 
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
@@ -100,7 +103,8 @@ class IndividualViewSet(DocumentViewSet):
     }
 
 
-class CharacteristicaElasticViewSet(DocumentViewSet):
+
+class CharacteristicaElasticViewSet(AccessView):
     pagination_class = CustomPagination
     document = CharacteristicaDocument
     serializer_class = CharacteristicaElasticBigSerializer

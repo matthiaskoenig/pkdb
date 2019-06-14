@@ -206,11 +206,9 @@ class ElasticStudyViewSet(DocumentViewSet):
         "pk_version":'pk_version',
         "name":"name",
         "design": "design.raw",
-        "refernce": "refernce",
+        "reference": "reference.raw",
         "substance": "substance.raw",
-        #"files":"files",
         "creator":"creator.last_name",
-        #"curators": "curators.last_name",
 
     }
    
@@ -252,9 +250,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             raise Http404("No result matches the given query.")
 
     def get_queryset(self):
-        search = self.search#.query()
-        #qs = super().get_queryset()
-        #return qs
+        search = self.search
         group = user_group(self.request.user)
 
         if group in ["admin","reviewer"]:
@@ -269,16 +265,8 @@ class ElasticStudyViewSet(DocumentViewSet):
                 Q('match', collaborators__username__raw=self.request.user.username)
 
             )
-            #)
-            #qs = qs.filter(
-            #    'term',
-             #   **{"access": PUBLIC, "creator":self.request.user}
-            #)
+
             return qs
-
-
-
-            #return qs.filter(access=True).filter(creator=self.request.user).filter(curators__in=[self.request.user]).filter(collaborators__in=[self.request.user])
 
         elif group == "anonymous":
 
@@ -302,12 +290,8 @@ class ElasticReferenceViewSet(DocumentViewSet):
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
-    #multi_match_search_fields = {f:f for f in search_fields}
-    #multi_match_options = {
-    #    'type': 'filter'
-    #}
+
     filter_fields = {'name': 'name.raw',}
-    #filter_fields = {f:f for f in search_fields}
     ordering_fields = {
         'sid': 'sid',
         "pk":'pk',

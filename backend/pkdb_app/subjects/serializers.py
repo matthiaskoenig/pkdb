@@ -5,6 +5,8 @@ from pkdb_app.categorials.behaviours import VALUE_FIELDS, map_field, VALUE_FIELD
 from pkdb_app.categorials.models import  MeasurementType
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
+
+from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..studies.models import Study
@@ -426,11 +428,12 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     cv = serializers.FloatField(allow_null=True)
     measurement_type = serializers.CharField()
     substance = serializers.CharField(allow_null=True)
+    allowed_users = UserElasticSerializer(many=True, read_only=True)
 
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"] + ["access","allowed_users"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -473,6 +476,7 @@ class GroupElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     parent = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = serializers.SerializerMethodField()
+    allowed_users = UserElasticSerializer(many=True, read_only=True)
 
     class Meta:
         model = Group
@@ -483,6 +487,8 @@ class GroupElasticSerializer(serializers.ModelSerializer):
             'name',
             'study',
             'characteristica_all_normed',
+            "access",
+            "allowed_users"
         )
 
     def get_characteristica_all_normed(self, instance):
@@ -516,6 +522,8 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = CharacteristicaElasticSerializer(many=True, read_only=True)
+    allowed_users = UserElasticSerializer(many=True, read_only=True)
+
     class Meta:
         model = Individual
         fields = (
@@ -524,6 +532,8 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
             'name',
             'study',
             'characteristica_all_normed',
+            "access",
+            "allowed_users"
         )
 
     def get_characteristica_all_normed(self, instance):

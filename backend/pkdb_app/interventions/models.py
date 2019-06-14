@@ -8,7 +8,9 @@ from ..utils import CHAR_MAX_LENGTH, create_choices
 from ..subjects.models import DataFile
 
 from ..interventions.managers import InterventionSetManager,InterventionExManager
-from ..behaviours import Externable
+from ..behaviours import Externable, Accessible
+
+from pkdb_app.users.models import User
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 # -------------------------------------------------
@@ -129,7 +131,7 @@ class InterventionEx(
         unique_together = ("interventionset", "name", "name_map", "source")
 
 
-class Intervention(Normalizable, AbstractIntervention):
+class Intervention(Accessible, Normalizable, AbstractIntervention):
     """ A concrete step/thing which is done to the group.
 
          In case of dosing/medication the actual dosing is stored in the Valueable.
@@ -144,8 +146,13 @@ class Intervention(Normalizable, AbstractIntervention):
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
+
+    @property
+    def study_name(self):
+        return self.study.name
+
     @property
     def study(self):
-        return self.ex.interventionset.study.name
+        return self.ex.interventionset.study
 
 

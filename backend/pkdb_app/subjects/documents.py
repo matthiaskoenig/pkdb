@@ -61,6 +61,18 @@ class IndividualDocument(DocType):
         },
         multi = True)
 
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
+
     class Meta:
         model=Individual
         # Ignore auto updating of Elasticsearch when a model is saved
@@ -120,6 +132,18 @@ class GroupDocument(DocType):
 
         },
         multi=True)
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
 
     class Meta:
@@ -204,6 +228,18 @@ class CharacteristicaDocument(DocType):
     normed = fields.BooleanField()
     raw = ObjectField(properties={
         'pk': fields.IntegerField()}
+    )
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
     )
 
 

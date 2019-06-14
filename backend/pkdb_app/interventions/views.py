@@ -7,6 +7,7 @@ from pkdb_app.interventions.models import INTERVENTION_ROUTE, INTERVENTION_FORM,
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+from pkdb_app.documents import AccessView
 from ..interventions.documents import InterventionDocument
 
 from ..interventions.serializers import InterventionElasticSerializer
@@ -42,7 +43,7 @@ class InterventionOptionViewSet(viewsets.ViewSet):
 
 
 
-class ElasticInterventionViewSet(DocumentViewSet):
+class ElasticInterventionViewSet(AccessView):
     document = InterventionDocument
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination

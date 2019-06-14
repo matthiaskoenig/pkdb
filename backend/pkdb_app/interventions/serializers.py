@@ -9,6 +9,7 @@ from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMe
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
 
+from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
@@ -226,6 +227,7 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
+    allowed_users = UserElasticSerializer(many=True, read_only=True)
     substance = serializers.CharField(allow_null=True)
     measurement_type = serializers.CharField()
     value = serializers.FloatField(allow_null=True)
@@ -239,7 +241,7 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     raw = PkSerializer()
     class Meta:
         model = Intervention
-        fields = ["pk","study", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = ["pk","study", "access","allowed_users", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_representation(self, instance):

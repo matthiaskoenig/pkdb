@@ -9,6 +9,8 @@ from pkdb_app.interventions.serializers import InterventionSmallElasticSerialize
 from rest_framework import serializers
 
 from pkdb_app.categorials.models import MeasurementType
+
+from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
@@ -63,6 +65,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         required=False,
         allow_null=True,
     )
+
 
 
     class Meta:
@@ -428,6 +431,8 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     raw = PkSerializer()
     timecourse = PkSerializer()
+    allowed_users = UserElasticSerializer(many=True, read_only=True)
+
 
     class Meta:
             model = Output
@@ -436,6 +441,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
                 + MEASUREMENTTYPE_FIELDS
+                + ["access", "allowed_users"]
                 + ["group", "individual", "normed", "raw", "calculated", "timecourse", "interventions"])
 
 
@@ -457,8 +463,9 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     measurement_type = serializers.CharField()
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)
-
     substance = serializers.CharField()
+
+    allowed_users = UserElasticSerializer(many=True, read_only=True)
 
     class Meta:
             model = Timecourse
@@ -467,6 +474,7 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
                 + MEASUREMENTTYPE_FIELDS
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
+                +["access","allowed_users"]
                 + ["group", "individual", "normed","raw","pharmacokinetics", "interventions","figure"])
 
 

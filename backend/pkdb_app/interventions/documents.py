@@ -24,7 +24,7 @@ class InterventionDocument(DocType):
     time_unit = string_field('time_unit')
     time = fields.FloatField()
     substance= string_field('substance_name')
-    study = string_field('study')
+    study = string_field('study_name')
     route = string_field('route')
     form = string_field('form')
     name = string_field('name')
@@ -41,6 +41,18 @@ class InterventionDocument(DocType):
     sd = fields.FloatField()
     cv = fields.FloatField()
     unit = string_field('unit')
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            #'first_name': string_field("first_name"),
+            #'last_name': string_field("last_name"),
+            #'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
     class Meta(object):
         model = Intervention

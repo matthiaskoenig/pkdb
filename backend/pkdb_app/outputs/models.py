@@ -23,7 +23,7 @@ from .managers import (
 )
 from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
-    Externable)
+    Externable, Accessible)
 
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable, ValueableMapNotBlank, \
     ValueableNotBlank, MeasurementTypeable
@@ -129,7 +129,8 @@ class OutputEx(Externable,
     objects = OutputExManager()
 
 
-class Output(AbstractOutput,Normalizable):
+
+class Output(AbstractOutput,Normalizable, Accessible):
     """ Storage of data sets. """
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
@@ -159,11 +160,11 @@ class Output(AbstractOutput,Normalizable):
     def study(self):
 
         try:
-            return self.ex.outputset.study.name
+            return self.ex.outputset.study
 
         except AttributeError:
             try:
-                return self.timecourse.ex.outputset.study.name
+                return self.timecourse.ex.outputset.study
 
             except AttributeError:
                 return None
@@ -263,7 +264,7 @@ class TimecourseEx(
     objects = TimecourseExManager()
 
 
-class Timecourse(AbstractOutput, Normalizable):
+class Timecourse(AbstractOutput, Normalizable,Accessible):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
@@ -302,7 +303,8 @@ class Timecourse(AbstractOutput, Normalizable):
 
     @property
     def study(self):
-        return self.ex.outputset.study.name
+        return self.ex.outputset.study
+
 
     @property
     def figure(self):

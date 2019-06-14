@@ -13,7 +13,7 @@ output_index.settings(**output_settings)
 @output_index.doc_type
 class OutputDocument(DocType):
     pk = fields.IntegerField('pk')
-    study = string_field('study')
+    study = string_field('study_name')
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
         'count': fields.IntegerField(),
@@ -59,6 +59,18 @@ class OutputDocument(DocType):
     tissue = string_field('tissue')
     measurement_type = string_field("measurement_type_name")
 
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
+
     class Meta(object):
             model = Output
             # Ignore auto updating of Elasticsearch when a model is saved
@@ -74,7 +86,7 @@ timecourses_index.settings(**elastic_settings)
 
 @timecourses_index.doc_type
 class TimecourseDocument(DocType):
-    study = string_field('study')
+    study = string_field('study_name')
     pk = fields.IntegerField('pk')
 
     group = ObjectField(properties={
@@ -126,8 +138,17 @@ class TimecourseDocument(DocType):
     tissue = string_field('tissue')
     measurement_type = string_field("measurement_type_name")
 
-    #auc_end = fields.FloatField(attr='auc_end')
-    #kel = fields.FloatField(attr='kel')
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
     class Meta(object):
             model = Timecourse

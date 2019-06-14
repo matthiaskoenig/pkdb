@@ -278,8 +278,7 @@ class StudyDocument(DocType):
         if isinstance(related_instance, Reference):
             if hasattr(related_instance,"study"):
                 return related_instance.study
-        elif isinstance(related_instance, Individual):
-            return related_instance.study
+
 
     # Elastic Study
 

@@ -8,6 +8,7 @@ from pkdb_app.outputs.models import OUTPUT_TISSUE_DATA
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+from pkdb_app.documents import AccessView
 from .documents import OutputDocument, TimecourseDocument
 from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer)
 from ..pagination import CustomPagination
@@ -49,7 +50,7 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
 # Elastic Views
 ###############################################################################################
 
-class ElasticOutputViewSet(DocumentViewSet):
+class ElasticOutputViewSet(AccessView):
     document = OutputDocument
     serializer_class = OutputElasticSerializer
     pagination_class = CustomPagination
@@ -81,7 +82,7 @@ class ElasticOutputViewSet(DocumentViewSet):
                        'value':'value',
                        }
 
-class ElasticTimecourseViewSet(DocumentViewSet):
+class ElasticTimecourseViewSet(AccessView):
     document = TimecourseDocument
     serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination

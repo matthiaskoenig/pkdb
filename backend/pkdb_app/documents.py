@@ -1,6 +1,9 @@
 from django_elasticsearch_dsl import  fields, DEDField, Object, collections
-from elasticsearch_dsl import analyzer, token_filter
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from elasticsearch_dsl import analyzer, token_filter, Q
 
+from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.permissions import user_group
 
 elastic_settings = {'number_of_shards':1,
             'number_of_replicas':1,}
@@ -88,3 +91,38 @@ class ObjectField(DEDField, Object):
             ]
 
         return self._get_inner_field_data(objs, field_value_to_ignore)
+
+
+class AccessView(DocumentViewSet):
+    def get_queryset(self):
+        search = self.search  # .query()
+        # qs = super().get_queryset()
+        # return qs
+        group = user_group(self.request.user)
+
+        if group in ["admin", "reviewer"]:
+            return search.query()
+
+        elif group == "basic":
+
+            qs = search.query(
+                Q('match', access__raw=PUBLIC) |
+                Q('match', allowed_users__raw=self.request.user.username)
+                )
+
+            # )
+            # qs = qs.filter(
+            #    'term',
+            #   **{"access": PUBLIC, "creator":self.request.user}
+            # )
+            return qs
+
+        elif group == "anonymous":
+
+            qs = search.query(
+                'match',
+                **{"access__raw": PUBLIC}
+            )
+
+            return qs
+
