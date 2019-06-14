@@ -128,7 +128,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 def delete_elastic_study(related_elastic):
     for doc, instances in related_elastic.items():
-
         try:
             doc().update(thing=instances, action="delete")
         except helpers.BulkIndexError:
