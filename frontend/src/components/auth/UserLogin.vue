@@ -7,8 +7,9 @@
             User: {{ user }}<br />
             Token: {{ token }}<br />
                 <v-spacer> </v-spacer>
-
-                 <a> change password </a>
+                <router-link   v-on:click.native="close" to="/request-password-reset" >
+                   request password reset
+                </router-link>
             </span>
         </p>
         <!--
@@ -24,14 +25,18 @@
                 <v-alert v-for="general_warning in general_warnings" :value="general_warnings" type="error">
                     {{general_warning}}
                 </v-alert>
-                <v-text-field prepend-icon="fas fa-user-circle" :error="user_warnings" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
-                <v-text-field prepend-icon='fas fa-lock' :error="password_warnings" :error-messages="password_warnings" v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+                <v-text-field v-on:keyup.enter="login" prepend-icon="fas fa-user-circle" :error="user_warnings" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
+                <v-text-field v-on:keyup.enter="login" prepend-icon='fas fa-lock' :error="password_warnings" :error-messages="password_warnings" v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
             </v-form>
         </v-card-text>
         <v-card-actions>
             <v-spacer>
                 <router-link   v-on:click.native="close" to="/registration" >
                    register
+                </router-link>
+                <v-spacer> </v-spacer>
+                 <router-link   v-on:click.native="close" to="/request-password-reset" >
+                   forgot password
                 </router-link>
 
 
@@ -136,8 +141,9 @@
                     .then((response)=>{
                         this.$store.dispatch('login', {
                             username: this.username,
-                            token: response.data.token
-                        });
+                            token: response.data.token,
+
+                    });
 
                         this.close()
                     })

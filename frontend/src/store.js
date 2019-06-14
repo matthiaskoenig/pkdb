@@ -48,6 +48,10 @@ export default new Vuex.Store({
             obtainAuthToken: backend_domain + '/api-token-auth/',
             register: backend_domain + '/accounts/register/',
             verify: backend_domain + '/accounts/verify-email/',
+            request_password_reset: backend_domain + '/accounts/request-password-reset/',
+            password_reset: backend_domain + '/accounts/reset-password/',
+
+
 
 
         },

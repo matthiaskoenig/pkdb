@@ -46,7 +46,7 @@ AUTHENTICATION_BACKENDS = (
 # The minimal settings dict required for the app
 REST_EMAIL_AUTH = {
     'EMAIL_VERIFICATION_URL': FRONTEND_BASE+'/#/verification/{key}',
-    'PASSWORD_RESET_URL': API_BASE+'/acounts/reset-password/{key}',
+    'PASSWORD_RESET_URL': FRONTEND_BASE+'/#/reset-password/{key}',
     'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
     'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
 }

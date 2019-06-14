@@ -68,6 +68,7 @@ class UserRegistrationSerializer(RegistrationSerializer):
               A new user created from the provided data.
           """
         email = validated_data.pop("email")
+
         password = validated_data.pop("password")
 
         # We don't save the user instance yet in case the provided email

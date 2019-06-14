@@ -32,6 +32,8 @@ import Curation from './components/Curation';
 import Account from './components/auth/Account';
 import Registration from './components/auth/Registration';
 import Verification from './components/auth/Verification';
+import RequestPasswordReset from './components/auth/RequestPasswordReset';
+import PasswordReset from './components/auth/PasswordReset';
 
 
 Vue.use(Router);
@@ -100,6 +102,16 @@ export default new Router({
           path: '/registration',
           name: 'Registration',
           component: Registration
+      },
+      {
+          path: '/request-password-reset',
+          name: 'RequestPasswordReset',
+          component: RequestPasswordReset
+      },
+      {
+          path: '/reset-password/:id',
+          name: 'PasswordReset',
+          component: PasswordReset,
       },
       {
           path:"/studies/:id",

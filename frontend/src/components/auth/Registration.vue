@@ -7,9 +7,9 @@
     </v-toolbar>
         <v-card-text>
             <v-form>
-                <v-text-field prepend-icon="fas fa-user-circle"  :error="user_warnings.length" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
-                <v-text-field prepend-icon="fas fa-envelope"  :error="email_warnings.length" :error-messages="email_warnings" v-model="email" name="email" label="Email" type="text"></v-text-field>
-                <v-text-field prepend-icon='fas fa-lock' :error="password_warnings.length" :error-messages="password_warnings"  v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
+                <v-text-field v-on:keyup.enter="register" prepend-icon="fas fa-user-circle"  :error="user_warnings.length" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
+                <v-text-field  v-on:keyup.enter="register" prepend-icon="fas fa-envelope"  :error="email_warnings.length" :error-messages="email_warnings" v-model="email" name="email" label="Email" type="text"></v-text-field>
+                <v-text-field  v-on:keyup.enter="register" prepend-icon='fas fa-lock' :error="password_warnings.length" :error-messages="password_warnings"  v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
 
             </v-form>
         </v-card-text>
@@ -18,7 +18,7 @@
                 {{registration_message}}
             </v-alert>
             <v-spacer></v-spacer>
-            <v-btn color="primary" v-on:click="login" >register</v-btn>
+            <v-btn color="primary" v-on:click="register" >register</v-btn>
         </v-card-actions>
     </div>
 
@@ -76,7 +76,7 @@
             },
         },
         methods: {
-            login: function(){
+            register: function(){
                     // reset store
                     // reset warnings
                     this.warnings = {};
