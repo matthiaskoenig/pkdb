@@ -124,6 +124,7 @@ class MeasurementType(models.Model):
 
             raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
+
     def is_valid_unit(self, unit):
 
         if len(self.n_units) != 0:
@@ -183,7 +184,7 @@ class MeasurementType(models.Model):
         return self.choices.values_list("name", flat=True)
 
     def annotations_strings(self):
-        return [f"relation <{annotation.relation}>:, {annotation.name}"for annotation in self.annotations.all()]
+        return [f"relation <{annotation.relation}>:, {annotation.term}"for annotation in self.annotations.all()]
 
     def _asdict(self):
         return {
@@ -211,6 +212,9 @@ class MeasurementType(models.Model):
                       f"For numerical values the fields `value`, `mean` or `median` are used. " \
                       f"For encoding substances use the `substance` field."
                 raise ValueError({"choice": msg})
+        elif self.choices.exists():
+            msg = f"{choice}. A choice is required for `{self.name}`. Allowed choices are: `{list(self.choices_list())}`."
+            raise ValueError({"choice":msg})
 
     def validate_complete(self, data):
         # check unit

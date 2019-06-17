@@ -13,8 +13,7 @@ from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from pkdb_app.subjects.documents import GroupDocument, IndividualDocument
-
+from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, CharacteristicaDocument
 
 from .models import Reference, Study
 from .serializers import (
@@ -142,6 +141,7 @@ def related_elastic_dict(study):
 
     related_elastic_dict[GroupDocument] = study.groups
     related_elastic_dict[IndividualDocument] = study.individuals
+    related_elastic_dict[CharacteristicaDocument] = study.characteristica
     related_elastic_dict[InterventionDocument] = study.interventions
     related_elastic_dict[OutputDocument] = study.outputs
     related_elastic_dict[TimecourseDocument] = study.timecourses

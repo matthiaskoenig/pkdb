@@ -4,13 +4,13 @@ Django model for Study.
 from django.db import models
 from pkdb_app.users.models import PUBLIC, PRIVATE
 
-from ..outputs.models import OutputSet
+from ..outputs.models import OutputSet, Output, Timecourse
 
-from ..interventions.models import InterventionSet, DataFile
+from ..interventions.models import InterventionSet, DataFile, Intervention
 from ..substances.models import Substance
 
 from ..storage import OverwriteStorage
-from ..subjects.models import GroupSet, IndividualSet
+from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..behaviours import Sidable
 from ..users.models import User
@@ -140,40 +140,53 @@ class Study(Sidable, models.Model):
     def __str__(self):
         return '%s' % self.name
 
+
     @property
     def individuals(self):
         try:
             return self.individualset.individuals.all()
         except AttributeError:
-            return []
+            return Individual.objects.none()
 
     @property
     def groups(self):
         try:
             return self.groupset.groups.all()
         except AttributeError:
-            return []
+            return Group.objects.none()
+
+    @property
+    def characteristica(self):
+        empty_characteristica = Characteristica.objects.none()
+        for group in self.groups.all():
+            empty_characteristica = empty_characteristica.union(group.characteristica.all())
+        for individual in self.individuals.all():
+            empty_characteristica = empty_characteristica.union(individual.characteristica.all())
+
+        return empty_characteristica
+
 
     @property
     def interventions(self):
         try:
             return self.interventionset.interventions.all()
         except AttributeError:
-            return []
+            return Intervention.objects.none()
+
 
     @property
     def outputs(self):
         try:
             return self.outputset.outputs.all()
         except AttributeError:
-            return []
+            return Output.objects.none()
 
     @property
     def timecourses(self):
         try:
             return self.outputset.timecourses.all()
         except AttributeError:
-            return []
+            return Timecourse.objects.none()
 
     @property
     def get_substances(self):

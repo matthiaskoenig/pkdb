@@ -95,6 +95,8 @@ class MeasurementTypeable(ValueableNotBlank):
         return self.measurement_type.choices_list()
 
 
+
+
 class Normalizable(MeasurementTypeable):
     raw = models.ForeignKey("self", related_name="norm", on_delete=models.CASCADE, null=True)
     normed = models.BooleanField(default=False)

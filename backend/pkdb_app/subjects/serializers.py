@@ -252,6 +252,7 @@ class IndividualSerializer(ExSerializer):
             raise serializers.ValidationError(msg)
         return group
 
+
     def to_internal_value(self, data):
         data.pop("comments", None)
         study_sid = self.context["request"].path.split("/")[-2]
@@ -268,6 +269,7 @@ class IndividualSerializer(ExSerializer):
 
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
 
 
 class IndividualExSerializer(ExSerializer):
@@ -351,6 +353,7 @@ class IndividualExSerializer(ExSerializer):
             data["group"] = self.group_to_internal_value(data.get("group"), study_sid)
 
         self.validate_wrong_keys(data)
+
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
     def validate_characteristica_ex(self, attrs):
