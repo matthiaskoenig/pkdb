@@ -1,5 +1,3 @@
-
-
 <template>
     <v-card>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
@@ -13,34 +11,29 @@
         >
             <template slot="items" slot-scope="table">
                 <td>
-                    <JsonButton :resource_url="api + '/substances_elastic/'+ table.item.url_slug+ '/?format=json' "/>
+                    <JsonButton :resource_url="api + '/substances/'+ table.item.url_slug+ '/?format=json' "/>
                 </td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.sid}} </text-highlight> </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.name}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.dtype}} </text-highlight> </td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.mass}} </text-highlight> </td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.charge}}  </text-highlight> </td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.formula}} </text-highlight> </td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.derived}} </text-highlight> </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.description}} </text-highlight> </td>
                 <td>
+
                     <ul>
-                        <v-chip v-for="unit in table.item.units">
-                            {{unit}}
-                        </v-chip>
+                        <substance-chip v-for="parent in table.item.parents" :title="parent.sid"/>
                     </ul>
 
                 </td>
-                <td>
-                    <ul>
-                        <v-chip v-for="choice in table.item.choices">
-                            {{choice}}
-                        </v-chip>
 
-                    </ul>
-                </td>
                 <td>
 
                     <ul>
                         <v-chip v-for="annotation in table.item.annotations">
                             {{annotation.collection}}:<b>{{annotation.term}}</b>  |  {{annotation.relation}}
                         </v-chip>
-
                     </ul>
 
                 </td>
@@ -57,7 +50,7 @@
     import NoData from '../tables/NoData';
 
     export default {
-        name: "MeasurementTypesTable",
+        name: "SubstancesTable",
         components: {
             NoData,
             TableToolbar,
@@ -65,15 +58,18 @@
         mixins: [searchTableMixin, UrlMixin],
         data () {
             return {
-                otype: "measurement_types",
-                otype_single: "measurement_type",
+                otype: "substances",
+                otype_single: "substances",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
+                    {text: 'Sid', value: 'sid'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Data Type', value: 'dtype'},
+                    {text: 'Mass', value: 'mass'},
+                    {text: 'Charge', value: 'charge'},
+                    {text: 'Formula', value: 'formula'},
+                    {text: 'Derived', value: 'derived'},
                     {text: 'Description', value: 'description'},
-                    {text: 'Units', value: 'units'},
-                    {text: 'Choices', value: 'choices'},
+                    {text: 'Parents', value: 'parents',sortable: false},
                     {text: 'Annotations', value: 'annotations',sortable: false},
 
                 ]
@@ -84,3 +80,5 @@
 </script>
 
 <style scoped></style>
+
+

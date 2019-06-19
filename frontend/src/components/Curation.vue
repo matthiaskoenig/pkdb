@@ -5,7 +5,8 @@
         A detailed guideline for curation of studies is provided in
         <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
         </p>
-        <measurements-table/>
+        <measurement-types-table/>
+        <substances-table/>
 
         <!--
         <v-layout row wrap>
@@ -52,16 +53,16 @@
 <script>
     import CharacteristicaBrowser from "./curation/CharacteristicaBrowser"
     import OutputBrowser from "./curation/OutputBrowser"
-    import SubstanceBrowser from "./curation/SubstanceBrowser"
-    import MeasurementsTable from "./curation/MeasurementTypesTable";
+    import SubstancesTable from "./curation/SubstancesTable"
+    import MeasurementTypesTable from "./curation/MeasurementTypesTable";
 
     export default {
         name: "Curation",
         components: {
-            MeasurementsTable,
+            MeasurementTypesTable,
             CharacteristicaBrowser,
             OutputBrowser,
-            SubstanceBrowser,
+            SubstancesTable,
         },
         computed: {
             characteristica_options_url() {

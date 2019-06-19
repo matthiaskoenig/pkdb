@@ -116,7 +116,6 @@ class OutputEx(Externable,
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
 
-    #todo: make this charfields
 
     group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
@@ -133,8 +132,8 @@ class OutputEx(Externable,
 class Output(AbstractOutput,Normalizable, Accessible):
     """ Storage of data sets. """
 
-    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.SET_NULL)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention)
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
@@ -167,6 +166,12 @@ class Output(AbstractOutput,Normalizable, Accessible):
                 return self.timecourse.ex.outputset.study
 
             except AttributeError:
+                print("*"*100)
+                print(self.group)
+                print(self.individual)
+                print(self.calculated)
+                print("*"*100)
+
                 return None
 
 
@@ -299,7 +304,7 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
             try:
                 return self.raw._interventions
             except AttributeError:
-                return []
+                return Intervention.objects.none()
 
     @property
     def study(self):
@@ -403,13 +408,13 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
             return self.individual
 
     def get_bodyweight(self):
-        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(measurement_type="weight")
+        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(measurement_type__name="weight")
         return weight_measurememnt_type
 
     def get_dosing(self):
 
         try:
-            dosing_measurement_type = self.interventions.get(normed=True, measurement_type="dosing")
+            dosing_measurement_type = self.interventions.get(normed=True, measurement_type__name="dosing")
             return dosing_measurement_type
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
@@ -453,6 +458,15 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
 
         # dosing
         dosing = self.get_dosing()
+
+        restricted_dosing_units = [
+            'g',
+            'g/kg',
+            'mol',
+            'mol/kg',
+        ]
+        MeasurementType()
+
         if dosing:
             if MeasurementType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
                 p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
@@ -473,6 +487,7 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
             elif bodyweight.mean:
                 pk_dict["bodyweight"] = bodyweight.mean
                 pk_dict["bodyweight_type"] = "mean"
+
 
             elif bodyweight.median:
                 pk_dict["bodyweight"] = bodyweight.median

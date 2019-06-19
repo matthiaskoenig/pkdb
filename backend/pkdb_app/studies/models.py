@@ -215,11 +215,11 @@ class Study(Sidable, models.Model):
 
         basic_substances_dj = substances_dj.filter(parents__isnull=True)
         if basic_substances_dj:
-            basic_substances.extend(list(basic_substances_dj.values_list("pk", flat=True)))
+            basic_substances.extend(list(basic_substances_dj.values_list("name", flat=True)))
 
         substances_derived_dj = substances_dj.filter(parents__isnull=False)
         if substances_derived_dj:
-            basic_substances.extend(list(substances_derived_dj.values_list("parents__pk",flat=True)))
+            basic_substances.extend(list(substances_derived_dj.values_list("parents__name",flat=True)))
 
         return list(set(basic_substances))
 

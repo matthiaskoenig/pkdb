@@ -8,6 +8,7 @@ import time
 import pandas as pd
 import numpy as np
 
+from pkdb_app.categorials.models import MeasurementType
 from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from ..analysis.pharmacokinetic import f_pk
 
@@ -41,8 +42,6 @@ class OutputSetManager(models.Manager):
 
         outputset.save()
 
-        outputset_upload_time = time.time() - start_time
-        outputset_upload_time = timedelta(seconds=outputset_upload_time).total_seconds()
         return outputset
 
 
@@ -94,28 +93,28 @@ class TimecourseExManager(models.Manager):
 
         # calculate pharmacokinetics data from normalized timecourses
         for timecourse in timecourses:
-            if timecourse.measurement_type == "concentration" and timecourse.normed:
+            if timecourse.measurement_type.name == "concentration" and timecourse.normed:
                 variables = timecourse.get_pharmacokinetic_variables()
                 c_type = variables.pop("c_type", None)
                 _ = variables.pop("bodyweight_type", None)
                 pk = f_pk(**variables)
 
 
-                key_mapping = {"auc":"auc_end",
-                               "aucinf":"auc_inf",
-                               "cl":"clearance",
-                               "cmax":"cmax",
-                               "kel":"kel",
-                               "thalf":"thalf",
-                               "tmax": "tmax",
-                               "vd":"vd",
+                key_mapping = {"auc": MeasurementType.objects.get(name="auc_end"),
+                               "aucinf":MeasurementType.objects.get(name="auc_inf"),
+                               "cl":MeasurementType.objects.get(name="clearance"),
+                               "cmax":MeasurementType.objects.get(name="cmax"),
+                               "kel":MeasurementType.objects.get(name="kel"),
+                               "thalf":MeasurementType.objects.get(name="thalf"),
+                               "tmax": MeasurementType.objects.get(name="tmax"),
+                               "vd":MeasurementType.objects.get(name="vd"),
                                }
                 outputs = []
                 for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd","tmax"]:
                     pk_unit = pk[f"{key}_unit"]
-                    if not np.isnan(pd.to_numeric(pk[key])):
+                    if not np.isnan(pk[key]):
                         output_dict = {}
-                        output_dict[c_type]  = pk[key]
+                        output_dict[c_type] = pk[key]
                         output_dict["unit"] = pk_unit
                         output_dict["measurement_type"] = key_mapping[key]
                         output_dict["calculated"] = True
@@ -123,7 +122,7 @@ class TimecourseExManager(models.Manager):
                         output_dict["substance"] = timecourse.substance
                         output_dict["group"] = timecourse.group
                         output_dict["individual"] = timecourse.individual
-                        if output_dict[c_type] == "auc_end":
+                        if output_dict["measurement_type"].name == "auc_end":
                             output_dict["time"] = max(timecourse.time)
                             output_dict["time_unit"] = timecourse.time_unit
                         outputs.append(output_dict)

@@ -181,7 +181,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     serializer_class = StudyElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     permission_classes = (StudyPermission,)
-    search_fields = (
+    search_fields = ('sid',
                      'pk_version',
                      'creator.first_name',
                      'creator.last_name',
@@ -198,7 +198,7 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'files'
                      )
 
-    filter_fields = {'sid':'sid.raw','name': 'name.raw'}
+    filter_fields = {'sid':'sid.raw','name': 'name.raw', "substances": "substances"}
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
@@ -206,7 +206,6 @@ class ElasticStudyViewSet(DocumentViewSet):
         "name":"name",
         "design": "design.raw",
         "reference": "reference.raw",
-        "substance": "substance.raw",
         "creator":"creator.last_name",
 
     }

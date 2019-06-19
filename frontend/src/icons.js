@@ -43,7 +43,8 @@ const icons_table = {
     closed:'fab fa-creative-commons-pd',
     open:'fab fa-creative-commons-pd-alt',
     na:'fas fa-ban',
-    success:'fas fa-check-circle'
+    success:'fas fa-check-circle',
+    measurement_types:'fas fa-user-tag'
 };
 
 

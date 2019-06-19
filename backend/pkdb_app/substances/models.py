@@ -1,7 +1,7 @@
 """
 Describe Substances
 """
-
+from django.apps import apps
 from django.db import models
 from pkdb_app.categorials.models import Annotation
 from pkdb_app.users.models import User
@@ -51,23 +51,23 @@ class Substance(Sidable, models.Model):
 
     @property
     def derived(self):
-        return bool(self.parents)
+        return self.parents.exists()
 
     @property
     def outputs_normed(self):
-        return self.outputs.filter(normed=True)
+        return self.output_set.filter(normed=True)
 
     @property
     def outputs_calculated(self):
-        return self.outputs.filter(normed=True, calculated=True)
+        return self.output_set.filter(normed=True, calculated=True)
 
     @property
     def timecourses_normed(self):
-        return self.timecourses.filter(normed=True)
+        return self.timecourse_set.filter(normed=True)
 
     @property
     def interventions_normed(self):
-        return self.interventions.filter(normed=True)
+        return self.intervention_set.filter(normed=True)
 
     @property
     def creator_username(self):
