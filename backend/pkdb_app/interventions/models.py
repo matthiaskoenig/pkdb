@@ -111,13 +111,13 @@ class InterventionEx(
         DataFile,
         related_name="s_intervention_exs",
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
     )
     figure = models.ForeignKey(
         DataFile,
         related_name="f_intervention_exs",
         null=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
     )
 
     interventionset = models.ForeignKey(

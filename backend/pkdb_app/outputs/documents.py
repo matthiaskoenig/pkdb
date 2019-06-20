@@ -6,7 +6,7 @@ output_index = Index("outputs")
 output_settings = {
     'number_of_shards':5,
     'number_of_replicas':1,
-    'max_result_window':20000}
+    'max_result_window':40000}
 
 output_index.settings(**output_settings)
 

@@ -9,6 +9,7 @@ import numpy as np
 from scipy import stats
 from matplotlib import pyplot as plt
 import warnings
+import functools
 
 # TODO: add estimation of confidence intervals (use also the errorbars on the curves)
 # Currently only simple calculation of pharmacokinetic parameters
@@ -248,9 +249,8 @@ def _aucinf(t, c, slope=None, intercept=None):
 
     if (slope is None) or (intercept is None):
         [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
-
     auc = _auc(t, c)
-    auc_d = -c[-1] / slope * np.exp(-slope * t[-1])
+    auc_d = -(np.exp(intercept) / slope) * np.exp(slope * t[-1])
 
     return auc + auc_d
 
@@ -263,7 +263,7 @@ def _max(t, c):
 
     :return: tuple (tmax, cmax)
     """
-    idx = np.argmax(c)
+    idx = np.nanargmax(c)
     return t[idx], c[idx]
 
 
@@ -357,7 +357,6 @@ def _vd(t, c, dose, intercept=None):
     if intercept is None:
         [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
     return dose / np.exp(intercept)
-
 
 def _regression(t, c):
     """ Linear regression on the log timecourse after maximal value.

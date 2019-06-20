@@ -43,9 +43,6 @@
                     </text-highlight>
                 </td>
                 <td>
-                    <substance-chip :title="table.item.substance.name" :search="search"/>
-                </td>
-                <td>
                     {{table.item.time}}
                     <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span>
                 </td>
@@ -93,7 +90,6 @@
                     {text: 'Individual', value: 'individual'},
                     {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
-                    {text: 'Substance', value: 'substance'},
                     {text: 'Time', value: 'time'},
                     {text: 'Value', value: 'value'},
                 ]

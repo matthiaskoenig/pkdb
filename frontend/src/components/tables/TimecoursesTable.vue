@@ -43,7 +43,7 @@
                     </text-highlight>
                 </td>
                 <td>
-                    <substance-chip :title="table.item.substance.name" :search="search"/>
+                    <substance-chip :title="table.item.substance" :search="search"/>
                 </td>
                 <td>
                     <timecourse-plot :timecourse="table.item"/>

@@ -56,13 +56,13 @@ class ElasticOutputViewSet(AccessView):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('measurement_type','substance.name','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
+    search_fields = ('study','measurement_type','substance','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
     filter_fields = {'pk':'pk',
                      'study':'study.raw',
                      'normed':'normed',
                      'calculated':'calculated',
                      'unit':'unit',
-                     'substance':'substance.name.raw',
+                     'substance':'substance',
                      'measurement_type':'measurement_type.raw',
                      'group_pk': {'field': 'group.pk',
                                     'lookups': [
@@ -76,7 +76,7 @@ class ElasticOutputViewSet(AccessView):
                                   }}
     ordering_fields = {'measurement_type':'measurement_type.raw',
                        'tissue':'tissue.raw',
-                       'substance':'substance.name',
+                       'substance':'substance',
                        'group': 'group.name',
                        'individual': 'individual.name',
                        'value':'value',
@@ -88,10 +88,11 @@ class ElasticTimecourseViewSet(AccessView):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
-    search_fields = ('measurement_type','substance.name',"tissue",'time_unit','group.name', 'individual.name','name','interventions.name')
+    search_fields = ('study','measurement_type','substance',"tissue",'time_unit','group.name', 'individual.name','interventions.name')
     filter_fields = {'pk': 'pk',
                      'normed': 'normed',
-                     'substance': 'substance.name.raw',
+                     'study': 'study.raw',
+                     'substance': 'substance',
                      'measurement_type': 'measurement_type.raw',
                      'group_pk': {'field': 'group.pk',
                                   'lookups': [
@@ -107,7 +108,6 @@ class ElasticTimecourseViewSet(AccessView):
                        'tissue':'tissue.raw',
                        'group':'group.name',
                        'individual': 'individual.name',
-                       'substance':'substance.name',
-                       'auc_end':'auc_end'
+                       'substance':'substance',
 
                        }

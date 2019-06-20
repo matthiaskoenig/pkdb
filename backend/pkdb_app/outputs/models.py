@@ -107,18 +107,18 @@ class OutputEx(Externable,
                ExMeasurementTypeable
                ):
     source = models.ForeignKey(
-        DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="s_output_exs", null=True, on_delete=models.CASCADE
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_output_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="f_output_exs", null=True, on_delete=models.CASCADE
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
 
 
-    group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
-    individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
 
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -249,17 +249,17 @@ class TimecourseEx(
     time
     """
     source = models.ForeignKey(
-        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.CASCADE
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.CASCADE
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True
     )
 
-    group = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
-    individual = models.ForeignKey(Individual, null=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
 
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
