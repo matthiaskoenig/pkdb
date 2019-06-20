@@ -160,7 +160,7 @@ An overview over the available `characteristica` and possible choices is availab
 ```json
 {
   "groupset": {
-    "description": [
+    "descriptions": [
       "The subjects were six healthy volunteers, three males and three females, aged 21.0 ± 0.9 years (range 20 to 22 years) and weighing 63 ± 11 kg (range 50 to 76 kg). All were nonsmokers. Subjects abstained from all methylxanthine containing foods and beverages during the entire period of the study. Compliance with this requirement was assessed by questioning at each presentation for blood sampling or urine delivery."
     ],
     "comments": [],
