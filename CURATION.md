@@ -261,7 +261,7 @@ See for instance below individuals which are defined via a table.
             "route": "iv",
             "form": "solution",
             "application": "single dose",
-            "category": "dosing",
+            "measurement_type": "dosing",
             "value": "0.5",
             "unit": "g/kg",
             "time": "0",
@@ -276,7 +276,7 @@ All available fields for intervention and interventionset are:
 {
  
     "name": "string",
-    "category": "categorial",
+    "measurement_type": "categorial",
     
     "substance": "categorial (substance)",
     "route": "categorial {oral, iv}",
