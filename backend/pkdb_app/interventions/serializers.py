@@ -22,7 +22,6 @@ from ..interventions.models import (
 from ..serializers import (
     ExSerializer,
     NA_VALUES, PkSerializer)
-
 from ..subjects.models import  DataFile
 
 
@@ -34,7 +33,7 @@ from ..subjects.models import  DataFile
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates
+from ..utils import list_of_pk, list_duplicates, _validate_requried_key
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -72,19 +71,21 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+
+        _validate_requried_key(data, "measurement_type")
         measurement_type = data.get("measurement_type")
 
         if any([measurement_type == MEDICATION,measurement_type == DOSING]):
-            self._validate_requried_key(data,"substance")
-            self._validate_requried_key(data,"route")
-            self._validate_requried_key(data,"value")
-            self._validate_requried_key(data,"unit")
+            _validate_requried_key(data,"substance")
+            _validate_requried_key(data,"route")
+            _validate_requried_key(data,"value")
+            _validate_requried_key(data,"unit")
 
             if measurement_type == DOSING:
-                self._validate_requried_key(data, "form")
-                self._validate_requried_key(data, "application")
-                self._validate_requried_key(data,"time")
-                self._validate_requried_key(data,"time_unit")
+                _validate_requried_key(data, "form")
+                _validate_requried_key(data, "application")
+                _validate_requried_key(data,"time")
+                _validate_requried_key(data,"time_unit")
                 application = data["application"]
                 allowed_applications = ["constant infusion","single dose"]
                 if not application in allowed_applications:

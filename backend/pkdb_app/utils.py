@@ -3,6 +3,7 @@ Generic utility functions.
 """
 import os
 import copy
+from rest_framework import serializers
 
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
@@ -164,3 +165,12 @@ def set_keys(d, value, *keys):
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
+
+
+def _validate_requried_key(attrs, key, details=None):
+
+    if key not in attrs:
+        error_json = {key: f"{key} is required."}
+        if details:
+            error_json["details"] = details
+        raise serializers.ValidationError(error_json)

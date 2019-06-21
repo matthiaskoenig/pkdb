@@ -250,7 +250,10 @@ def _aucinf(t, c, slope=None, intercept=None):
     if (slope is None) or (intercept is None):
         [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
     auc = _auc(t, c)
-    auc_d = -(np.exp(intercept) / slope) * np.exp(slope * t[-1])
+
+    #auc_d = -(np.exp(intercept) / slope) * np.exp(slope * t[-1])
+    #should be equivalent to the result above
+    auc_d = c[-1]/(-slope)
 
     return auc + auc_d
 

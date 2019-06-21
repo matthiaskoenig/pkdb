@@ -27,7 +27,7 @@ from .models import (
     TimecourseEx)
 
 from ..serializers import (
-    ExSerializer,PkSerializer)
+    ExSerializer, PkSerializer)
 
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
@@ -35,7 +35,7 @@ from ..subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk
+from ..utils import list_of_pk, _validate_requried_key
 
 
 
@@ -83,17 +83,18 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
 
+        _validate_requried_key(attrs,"measurement_type")
+        _validate_requried_key(attrs, "substance")
+        _validate_requried_key(attrs, "tissue")
+        _validate_requried_key(attrs, "interventions")
+
         try:
             # perform via dedicated function on categorials
             attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
-        self._validate_time_unit(attrs)
-        self._validate_requried_key(attrs,"substance")
-        self._validate_requried_key(attrs,"tissue")
-        self._validate_requried_key(attrs,"interventions")
-        self._validate_requried_key(attrs,"measurement_type")
+
 
 
         return super().validate(attrs)
@@ -247,11 +248,11 @@ class TimecourseSerializer(BaseOutputExSerializer):
     def validate(self, attrs):
         self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
-        self._validate_requried_key(attrs,"substance")
-        self._validate_requried_key(attrs,"interventions")
-        self._validate_requried_key(attrs,"tissue")
-        self._validate_requried_key(attrs,"time")
-        self._validate_requried_key(attrs,"measurement_type")
+        _validate_requried_key(attrs,"substance")
+        _validate_requried_key(attrs,"interventions")
+        _validate_requried_key(attrs,"tissue")
+        _validate_requried_key(attrs,"time")
+        _validate_requried_key(attrs,"measurement_type")
 
         self._validate_time_unit(attrs)
         self._validate_time(attrs["time"])
