@@ -606,9 +606,6 @@ class ExSerializer(MappingSerializer):
             if not any([datafile.file.name.endswith(ending)for ending in allowed_endings]):
                 raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
 
-    def _validate_requried_key(self,attrs, key):
-        if key not in attrs:
-            raise serializers.ValidationError({key: f"{key} is required"})
 
     def _validate_disabled_data(self, data_dict, disabled):
         disabled = set(disabled)
@@ -798,3 +795,6 @@ class PkSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["pk",]
+
+
+

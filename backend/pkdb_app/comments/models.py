@@ -66,6 +66,8 @@ class Comment(models.Model):
         Study, related_name="comments", null=True, on_delete=models.CASCADE
     )
 
+    class Meta:
+        ordering = ['pk']
 
 
 
@@ -91,4 +93,7 @@ class Description(models.Model):
     study = models.ForeignKey(
         Study, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
+
+    class Meta:
+        ordering = ['pk']
 

@@ -166,12 +166,6 @@ class Output(AbstractOutput,Normalizable, Accessible):
                 return self.timecourse.ex.outputset.study
 
             except AttributeError:
-                print("*"*100)
-                print(self.group)
-                print(self.individual)
-                print(self.calculated)
-                print("*"*100)
-
                 return None
 
 
