@@ -276,7 +276,7 @@ All available fields for intervention and interventionset are:
 {
  
     "name": "string",
-    "category": "categorial",
+    "measurement_type": "categorial",
     
     "substance": "categorial (substance)",
     "route": "categorial {oral, iv}",

@@ -9,7 +9,7 @@ from pint import UndefinedUnitError
 from django.db import models
 from pkdb_app.categorials.managers import ChoiceManager
 from pkdb_app.users.models import User
-from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices
+from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key
 
 ureg = pint.UnitRegistry()
 
@@ -218,6 +218,7 @@ class MeasurementType(models.Model):
 
     def validate_complete(self, data):
         # check unit
+
         self.validate_unit(data.get("unit",None))
 
         choice = data.get("choice", None)
@@ -226,6 +227,13 @@ class MeasurementType(models.Model):
         time_unit = data.get("time_unit", None)
         if time_unit:
             self.validate_time_unit(time_unit)
+
+        cumulative_measurement_types = ["cumulative amount","cumulative metabolic ratio"]
+        if self.name in cumulative_measurement_types:
+            details = f"for measurement type `{self.name}`"
+            _validate_requried_key(data,"time", details=details)
+            _validate_requried_key(data,"time_unit", details=details)
+
 
     @property
     def creator_username(self):

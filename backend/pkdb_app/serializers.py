@@ -167,7 +167,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
     @staticmethod
     def interventions_from_string(value):
-        return [v.strip() for v in value.split(",")]
+        if value:
+            return [v.strip() for v in value.split(",")]
+        else:
+            return value
+
 
     def split_entry(self, entry):
         """ Splits entry fields based on separator.
@@ -355,6 +359,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if keys[0] == "interventions":
                         entry_value = self.interventions_from_string(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
+
                     else:
                         set_keys(entry_dict, entry_value, *keys)
         return entry_dict
@@ -606,9 +611,6 @@ class ExSerializer(MappingSerializer):
             if not any([datafile.file.name.endswith(ending)for ending in allowed_endings]):
                 raise serializers.ValidationError({"figure":f"{datafile.file.name} has to end with {allowed_endings}"})
 
-    def _validate_requried_key(self,attrs, key):
-        if key not in attrs:
-            raise serializers.ValidationError({key: f"{key} is required"})
 
     def _validate_disabled_data(self, data_dict, disabled):
         disabled = set(disabled)
@@ -798,3 +800,6 @@ class PkSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["pk",]
+
+
+

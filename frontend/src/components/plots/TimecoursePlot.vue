@@ -84,7 +84,7 @@
                     },
                 };
                 var yaxis = {
-                    title: this.timecourse.substance.name + " [" + this.timecourse.unit+ "]",
+                    title: this.timecourse.substance + " [" + this.timecourse.unit+ "]",
                     titlefont: {
                         size: 10,
                         color: 'black'

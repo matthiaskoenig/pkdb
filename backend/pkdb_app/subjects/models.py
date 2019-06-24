@@ -58,6 +58,9 @@ class DataFile(models.Model):
 # ----------------------------------
 # Group
 # ----------------------------------
+
+
+
 class GroupSet(models.Model):
     objects = GroupSetManager()
 
@@ -93,16 +96,16 @@ class GroupEx(Externable, AbstractGroup):
     """
 
     source = models.ForeignKey(
-        DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="s_group_exs", null=True, on_delete=models.CASCADE
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_group_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="f_group_exs", null=True, on_delete=models.CASCADE
     )
     groupset = models.ForeignKey(
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
     )
 
-    parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.SET_NULL)
+    parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     count = models.IntegerField()
@@ -206,9 +209,9 @@ class IndividualEx(Externable, AbstractIndividual):
     Individuals are defined via their characteristics, analogue to groups.
     """
 
-    source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
+    source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.CASCADE)
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.CASCADE)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)

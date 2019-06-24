@@ -42,7 +42,8 @@ class GroupViewSet(AccessView):
         'name',
         'study.name',
         'parent.name',
-        'characteristica_all_normed.measurement_type',
+        'characteristica_all_normed.measurement_type.',
+        'characteristica_all_normed.substance',
         'characteristica_all_normed.choice',
         'characteristica_all_normed.ctype',
 

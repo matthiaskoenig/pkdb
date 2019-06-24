@@ -14,7 +14,7 @@
                     <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon(otype)"/>
                     <JsonButton :resource_url="api + '/outputs_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }} </text-highlight> </td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.measurement_type }} </text-highlight> </td>
                 <td>
                     <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
                         <span slot-scope="data">
@@ -43,13 +43,16 @@
                     </text-highlight>
                 </td>
                 <td>
-                    <substance-chip :title="table.item.substance.name" :search="search"/>
-                </td>
-                <td>
                     {{table.item.time}}
                     <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span>
                 </td>
                 <td><characteristica-card :data="table.item"/></td>
+                <td>
+                    <v-chip disabled=true color='green' v-if="table.item.calculated" >
+                        <v-icon small :title="'is calculated from timecourse with pk:' + table.item.timecourse.pk">{{icon("success")}}</v-icon>
+                    </v-chip>
+                </td>
+
             </template>
             <no-data/>
         </v-data-table>
@@ -88,14 +91,15 @@
                 otype_single: "output",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Type', value: 'pktype'},
+                    {text: 'Measurement Type', value: 'measurement_type'},
                     {text: 'Group', value: 'group'},
                     {text: 'Individual', value: 'individual'},
                     {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
-                    {text: 'Substance', value: 'substance'},
                     {text: 'Time', value: 'time'},
                     {text: 'Value', value: 'value'},
+                    {text: 'Calculated', value: 'calculated'},
+
                 ]
             }
         },

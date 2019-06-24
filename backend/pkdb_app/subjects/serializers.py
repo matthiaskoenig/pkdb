@@ -92,7 +92,6 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
     def to_internal_value(self, data):
         data.pop("comments", None)
         self._is_required(data,"measurement_type")
-        data.get("measurement_type")
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer,self).to_internal_value(data)
 

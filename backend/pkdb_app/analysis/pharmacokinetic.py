@@ -9,6 +9,7 @@ import numpy as np
 from scipy import stats
 from matplotlib import pyplot as plt
 import warnings
+import functools
 
 # TODO: add estimation of confidence intervals (use also the errorbars on the curves)
 # Currently only simple calculation of pharmacokinetic parameters
@@ -248,9 +249,11 @@ def _aucinf(t, c, slope=None, intercept=None):
 
     if (slope is None) or (intercept is None):
         [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
-
     auc = _auc(t, c)
-    auc_d = -c[-1] / slope * np.exp(-slope * t[-1])
+
+    #auc_d = -(np.exp(intercept) / slope) * np.exp(slope * t[-1])
+    #should be equivalent to the result above
+    auc_d = c[-1]/(-slope)
 
     return auc + auc_d
 
@@ -263,7 +266,7 @@ def _max(t, c):
 
     :return: tuple (tmax, cmax)
     """
-    idx = np.argmax(c)
+    idx = np.nanargmax(c)
     return t[idx], c[idx]
 
 
@@ -313,6 +316,19 @@ def _kel(t, c, slope=None):
         [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
     return -slope
 
+def _kel_cv(t, c, std_err=None,slope=None):
+
+    if std_err is None or slope is None:
+        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
+    return std_err/slope
+
+def _thalf_cv(t, c, slope=None, std_err=None ):
+
+    kel = _kel(t, c, slope=slope)
+
+    return np.log(2) / _kel_cv(t, c, slope=slope, std_err=std_err)
+
+
 
 def _thalf(t, c, slope=None):
     """ Calculates the half-life using the elimination constant.
@@ -329,7 +345,6 @@ def _thalf(t, c, slope=None):
     """
     kel = _kel(t, c, slope=slope)
     return np.log(2) / kel
-
 
 def _vd(t, c, dose, intercept=None):
     """
@@ -357,7 +372,6 @@ def _vd(t, c, dose, intercept=None):
     if intercept is None:
         [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
     return dose / np.exp(intercept)
-
 
 def _regression(t, c):
     """ Linear regression on the log timecourse after maximal value.

@@ -219,6 +219,7 @@ class StudyDocument(DocType):
     outputset = ObjectField(
         properties={
             "descriptions": ObjectField(
+
                 properties={
                     'text': text_field("text"),
                     'pk': fields.IntegerField()

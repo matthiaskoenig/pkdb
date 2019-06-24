@@ -131,5 +131,4 @@ class TimecourseExManager(models.Manager):
                 create_multiple_bulk_normalized(outputs_dj, Output)
 
         timecourse_ex.save()
-
         return timecourse_ex
