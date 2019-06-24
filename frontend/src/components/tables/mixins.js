@@ -65,7 +65,7 @@ var searchTableMixin = {
                 + '&page_size='+ this.pagination.rowsPerPage
                 + '&ordering='+ this.descending+ this.pagination.sortBy;
             if(this.search){
-                url += '&search='+ this.search
+                url += '&search_multi_match='+ this.search
             }
             if(this.ids.length > 0){
                 url += '&ids=' + this.ids.join("__")

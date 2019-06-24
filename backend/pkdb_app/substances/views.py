@@ -1,5 +1,5 @@
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.users.permissions import IsAdminOrCreator
 from rest_framework import viewsets
@@ -35,13 +35,19 @@ class ElasticSubstanceViewSet(DocumentViewSet):
     serializer_class = SubstanceElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "url_slug"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend,
+]
     search_fields = ('name',
                      'description',
                      'formula',
                      'parents.sid',
-                     "annotations.name",
-                     "annotations.description",
-                     "annotations.label",)
+                     'annotations.name',
+                     'annotations.description',
+                     'annotations.label',)
+
+    multi_match_search_fields = {field:{"boost":1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'name': 'name.raw',}
     ordering_fields = {'name': 'name.raw','formula':'formula.raw','derived':"derived.raw"}

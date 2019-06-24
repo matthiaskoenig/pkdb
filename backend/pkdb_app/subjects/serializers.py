@@ -475,7 +475,7 @@ class GroupSmallElasticSerializer(serializers.ModelSerializer):
 
 
 class GroupElasticSerializer(serializers.ModelSerializer):
-    study = StudySmallElasticSerializer(read_only=True)
+    #study = StudySmallElasticSerializer(read_only=True)
     parent = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = serializers.SerializerMethodField()
     allowed_users = UserElasticSerializer(many=True, read_only=True)
@@ -521,7 +521,7 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 
 
 class IndividualElasticSerializer(serializers.ModelSerializer):
-    study = StudySmallElasticSerializer(read_only=True)
+    #study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = CharacteristicaElasticSerializer(many=True, read_only=True)
     allowed_users = UserElasticSerializer(many=True, read_only=True)

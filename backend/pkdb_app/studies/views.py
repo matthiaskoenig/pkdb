@@ -1,6 +1,6 @@
 from django.http import Http404
 from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
-    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend
+    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
@@ -182,10 +182,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
-    multi_match_options = {
-        "operator": "and",
-    }
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     permission_classes = (StudyPermission,)
     search_fields = ('sid',
                      'pk_version',
@@ -203,6 +200,10 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'substances',
                      'files'
                      )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
 
     filter_fields = {'sid':'sid.raw','name': 'name.raw', "substances": "substances"}
     ordering_fields = {
@@ -292,9 +293,12 @@ class ElasticReferenceViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
-
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'name': 'name.raw',}
     ordering_fields = {
         'sid': 'sid',

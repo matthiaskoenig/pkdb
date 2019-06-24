@@ -21,7 +21,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     CompoundSearchFilterBackend,
-    IdsFilterBackend, )
+    IdsFilterBackend, MultiMatchSearchFilterBackend)
 
 
 from pkdb_app.documents import AccessView
@@ -33,7 +33,7 @@ class GroupViewSet(AccessView):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -48,6 +48,10 @@ class GroupViewSet(AccessView):
         'characteristica_all_normed.ctype',
 
     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
 
     # Filter fields
     filter_fields = {
@@ -73,7 +77,7 @@ class IndividualViewSet(AccessView):
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -86,6 +90,10 @@ class IndividualViewSet(AccessView):
         'characteristica_all_normed.choice',
 
     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
 
     # Filter fields
     filter_fields = {
@@ -110,12 +118,16 @@ class CharacteristicaElasticViewSet(AccessView):
     document = CharacteristicaDocument
     serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
 
     search_fields = (
         'choice',
         'group_name',
     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     ordering_fields = {
         'choice': 'choice.raw',
         "count": 'count',

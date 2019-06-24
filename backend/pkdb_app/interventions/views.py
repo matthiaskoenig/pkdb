@@ -1,6 +1,6 @@
 from django.urls import reverse
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.categorials.models import MeasurementType
 from pkdb_app.interventions.models import INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION
@@ -48,8 +48,12 @@ class ElasticInterventionViewSet(AccessView):
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     search_fields = ('name','measurement_type','substance.name',"form","application",'route','time_unit','normed')
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'name': 'name.raw','pk':'pk','normed':'normed',}
     ordering_fields = {'name': 'name.raw',
                        'measurement_type':'measurement_type.raw',

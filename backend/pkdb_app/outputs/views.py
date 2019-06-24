@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.categorials.models import  MeasurementType
 from pkdb_app.outputs.models import OUTPUT_TISSUE_DATA
@@ -55,8 +55,12 @@ class ElasticOutputViewSet(AccessView):
     serializer_class = OutputElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     search_fields = ('study','measurement_type','substance','group.name', 'individual.name', "tissue",'time_unit','interventions.name')
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'pk':'pk',
                      'study':'study.raw',
                      'normed':'normed',
@@ -87,8 +91,12 @@ class ElasticTimecourseViewSet(AccessView):
     serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     search_fields = ('study','measurement_type','substance',"tissue",'time_unit','group.name', 'individual.name','interventions.name')
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'pk': 'pk',
                      'normed': 'normed',
                      'study': 'study.raw',

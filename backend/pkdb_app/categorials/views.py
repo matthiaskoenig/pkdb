@@ -1,5 +1,5 @@
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
-    OrderingFilterBackend, CompoundSearchFilterBackend
+    OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.categorials.documents import MeasurementTypeDocument
 from pkdb_app.categorials.models import MeasurementType
@@ -20,7 +20,7 @@ class MeasurementTypeElasticViewSet(DocumentViewSet):
     document = MeasurementTypeDocument
     serializer_class = MeasurementTypeElasticSerializer
     lookup_field = 'url_slug'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     search_fields = ("name",
                      "url_slug",
                      "dtype",
@@ -35,5 +35,9 @@ class MeasurementTypeElasticViewSet(DocumentViewSet):
                      "choices.annotations.description",
                      "choices.annotations.label"
                      )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'name': 'name.raw'}
     ordering_fields ={'name': 'name.raw',"dtype":"dtype.raw"}
