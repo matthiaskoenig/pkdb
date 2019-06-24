@@ -164,10 +164,8 @@ def update_index_study(request):
 
         for doc, instances in related_elastic.items():
             study_related_instances = doc().search().filter("match",study=study.name)
-            study_related_instances.delete()
-
-
-
+            if study_related_instances.count() > 0:
+                study_related_instances.delete()
 
             try:
                 action = data.get("action", 'index')
