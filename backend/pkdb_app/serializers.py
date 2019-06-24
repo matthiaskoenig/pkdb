@@ -167,7 +167,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
     @staticmethod
     def interventions_from_string(value):
-        return [v.strip() for v in value.split(",")]
+        if value:
+            return [v.strip() for v in value.split(",")]
+        else:
+            return value
+
 
     def split_entry(self, entry):
         """ Splits entry fields based on separator.
@@ -355,6 +359,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if keys[0] == "interventions":
                         entry_value = self.interventions_from_string(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
+
                     else:
                         set_keys(entry_dict, entry_value, *keys)
         return entry_dict
