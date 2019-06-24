@@ -182,6 +182,9 @@ class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
+    multi_match_options = {
+        "operator": "and",
+    }
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
     permission_classes = (StudyPermission,)
     search_fields = ('sid',

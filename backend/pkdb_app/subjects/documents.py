@@ -31,12 +31,8 @@ class IndividualDocument(DocType):
         'count': fields.IntegerField('count')
     })
 
-    study = ObjectField(properties={
-        'name': string_field('name'),
-        'pk':fields.IntegerField('pk'),
-        'sid': fields.StringField('sid')
+    study = string_field('study_name')
 
-    })
     ex = ObjectField(properties={
         'pk':fields.IntegerField('pk')
     })
@@ -103,12 +99,8 @@ class GroupDocument(DocType):
     })
 
 
-    study = ObjectField(properties={
-        'name': string_field('name'),
-        'pk': fields.IntegerField('pk'),
-        'sid': fields.StringField('sid')
+    study = string_field('study_name')
 
-    })
     ex = ObjectField(properties={
         'pk': fields.IntegerField('pk')
     })

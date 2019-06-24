@@ -40,7 +40,7 @@ class GroupViewSet(AccessView):
     # Define search fields
     search_fields = (
         'name',
-        'study.name',
+        'study',
         'parent.name',
         'characteristica_all_normed.measurement_type.',
         'characteristica_all_normed.substance',
@@ -54,7 +54,7 @@ class GroupViewSet(AccessView):
         'id': 'id',
         'name': 'name.raw',
         'parent': 'group.name.raw',
-        'study': 'study.name.raw',
+        'study': 'study.raw',
         'ctype':'ctype.raw'
 
     }
