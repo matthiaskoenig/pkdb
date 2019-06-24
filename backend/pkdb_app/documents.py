@@ -14,6 +14,11 @@ edge_ngram_filter =  token_filter(
             type="edge_ngram",
             min_gram=1, max_gram=20)
 
+ngram_filter =  token_filter(
+            'ngram_filter',
+            type="ngram",
+            min_gram=1, max_gram=20)
+
 
 autocomplete_search = analyzer(
     'autocomplete_search',
@@ -24,7 +29,7 @@ autocomplete_search = analyzer(
 
 autocomplete = analyzer('autocomplete',
     tokenizer="standard",
-    filter=[ "lowercase",edge_ngram_filter],
+    filter=[ "lowercase",ngram_filter],
     char_filter=["html_strip"],
     chars=["letter"],
     token_chars=["letter"])

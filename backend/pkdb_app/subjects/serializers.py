@@ -1,8 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from pkdb_app.categorials.behaviours import VALUE_FIELDS, map_field, VALUE_FIELDS_NO_UNIT, \
+from pkdb_app.categorials.behaviours import  map_field, VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.categorials.models import  MeasurementType
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
 
@@ -24,7 +23,7 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
 )
-from ..serializers import WrongKeyValidationSerializer, MappingSerializer, ExSerializer, ReadSerializer
+from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
 
 CHARACTERISTISTA_FIELDS = ["count"]
 CHARACTERISTISTA_MAP_FIELDS = map_field(CHARACTERISTISTA_FIELDS)
@@ -103,7 +102,6 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
-
 
 
 # ----------------------------------
