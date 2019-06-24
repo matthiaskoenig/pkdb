@@ -18,10 +18,23 @@
         <v-btn icon to="/references" title="References"><v-icon>{{ icon('references') }}</v-icon></v-btn>
 
         <v-spacer></v-spacer>
+        <!--user -->
+        <v-chip v-if="this.$store.state.username" flat>
+            <user-avatar :username="this.$store.state.username"></user-avatar>
+            {{this.$store.state.username}}
+        </v-chip>
 
-        <v-btn icon to="/account" title="User account settings">
-            <v-icon>{{ icon('account') }}</v-icon>
-        </v-btn>
+
+        <v-dialog v-model="showUserDialog">
+            <template v-slot:activator="{on}">
+                    <v-btn icon v-on="on">
+                        <v-icon>{{ icon('account') }}</v-icon>
+                    </v-btn>
+            </template>
+            <user-login :dialog.sync="showUserDialog" ></user-login>
+        </v-dialog>
+
+
         <v-btn icon to="/curation" title="Curation information"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
         <!--
@@ -38,12 +51,16 @@
 
 <script>
     import {lookup_icon} from "@/icons"
+    import  UserLogin from "./auth/UserLogin"
+
     export default {
         name: 'Navigation',
         data(){
-            return {}
+            return {
+                showUserDialog : false,
+            }
         },
-        components: {
+        components: {UserLogin,
 
         },
         computed: {

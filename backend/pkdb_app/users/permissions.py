@@ -1,4 +1,8 @@
+from django_elasticsearch_dsl_drf.utils import DictionaryProxy
+from elasticsearch_dsl import AttrDict
+from pkdb_app.studies.models import OPEN, Study
 from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.serializers import UserSerializer
 from rest_framework import permissions
 
 def is_allowed_method(request):
@@ -43,17 +47,22 @@ class IsAdminOrCreatorOrCurator(permissions.BasePermission):
             return True
 
         # for reference model
-        if obj.study.first():
-            allowed_user = (request.user == obj.study.first().creator) or (request.user in obj.study.first().curators.all())
+        if hasattr(obj,"study"):
+            allowed_user = (request.user == obj.study.creator) or (request.user in obj.study.curators.all())
         else:
-            allowed_user = True
+            allowed_user = False
 
 
         return request.user.is_staff or allowed_user
 
 class StudyPermission(permissions.BasePermission):
 
+
     def has_object_permission(self, request, view, obj):
+        if hasattr(obj,"study"):
+            if obj.study:
+                obj = obj.study
+
         return study_permissions(request,obj)
 
 
@@ -64,15 +73,15 @@ def study_permissions(request, obj):
                          "anonymous": anonymous_permissions(request, obj)}
 
 
-    return study_permissions[user_group(request)]
+    return study_permissions[user_group(request.user)]
 
-def user_group(request):
+def user_group(user):
 
     try:
-        user_group = request.user.groups.first().name
+        user_group = user.groups.first().name
     except AttributeError:
 
-        if request.user.is_superuser:
+        if user.is_superuser:
             user_group = "admin"
 
         else:
@@ -81,16 +90,41 @@ def user_group(request):
     return user_group
 
 def get_study_permission(user,obj):
-    allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
-    allow_user_get =(user in obj.collaborators.all()) or  (obj.access == PUBLIC) or allowed_user_modify
+    try:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators)
+        allow_user_get =(user in obj.collaborators) or  (obj.access == PUBLIC) or allowed_user_modify
+    except TypeError:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
+        allow_user_get = (user in obj.collaborators.all()) or (obj.access == PUBLIC) or allowed_user_modify
 
-    return {
+    permission_dict =  {
         "admin": True,
         "anonymous":(obj.access == PUBLIC),
         "reviewer": True,
         "basic": allow_user_get
      }
+    return permission_dict[user_group(user)]
 
+
+def get_study_file_permission(user,obj):
+    if isinstance(obj, AttrDict) or isinstance(obj, DictionaryProxy):
+        username = user.username
+        curator_usernames = [curator["username"] for curator in obj.curators]
+        collaborators_usernames = [collaborator["username"] for collaborator in obj.collaborators]
+        allowed_user_modify = (username == obj.creator["username"]) or (user in curator_usernames)
+        allow_user_get = (user in collaborators_usernames) or (obj.licence == OPEN) or allowed_user_modify
+
+    elif isinstance(obj, Study):
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
+        allow_user_get = (user in obj.collaborators.all()) or (obj.licence == OPEN) or allowed_user_modify
+
+    permission_dict =  {
+        "admin": True,
+        "anonymous":obj.licence == OPEN,
+        "reviewer": True,
+        "basic": allow_user_get
+     }
+    return permission_dict[user_group(user)]
 
 
 def anonymous_permissions(request,obj):
@@ -102,7 +136,10 @@ def anonymous_permissions(request,obj):
 def basic_permission(request, obj):
 
     user = request.user
-    allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
+    try:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators)
+    except TypeError:
+        allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
 
     if is_allowed_method(request):
         return get_study_permission(user, obj)

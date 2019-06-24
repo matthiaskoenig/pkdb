@@ -1,7 +1,15 @@
 <template>
     <div id="comments" v-if="comments && comments.length>0">
+
         <span v-for="comment in comments">
-            <user-avatar :user="comment.user" :comment="comment.text"/>
+            <v-layout row wrap>
+                <v-flex xs1>
+                    <user-avatar :user="comment.user"/>
+                </v-flex>
+                <v-flex xs11>
+                    {{comment.text}}
+                </v-flex>
+            </v-layout>
         </span>
     </div>
 </template>

@@ -1,44 +1,43 @@
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
+    OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from pkdb_app.categorials.documents import KeywordDocument
-from pkdb_app.categorials.models import InterventionType, CharacteristicType, PharmacokineticType, Keyword
-from pkdb_app.categorials.serializers import InterventionTypeSerializer, CharacteristicTypeSerializer, \
-    PharmacokineticTypeSerializer, KeywordSerializer, KeywordElasticSerializer
+from pkdb_app.categorials.documents import MeasurementTypeDocument
+from pkdb_app.categorials.models import MeasurementType
+from pkdb_app.categorials.serializers import MeasurementTypeSerializer, MeasurementTypeElasticSerializer
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.users.permissions import IsAdminOrCreator
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
 
 
-class InterventionTypeViewSet(viewsets.ModelViewSet):
-    queryset = InterventionType.objects.all()
-    serializer_class = InterventionTypeSerializer
+class MeasurementTypeViewSet(viewsets.ModelViewSet):
+    queryset = MeasurementType.objects.all()
+    serializer_class = MeasurementTypeSerializer
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
 
-
-class CharacteristicTypeViewSet(viewsets.ModelViewSet):
-    queryset = CharacteristicType.objects.all()
-    serializer_class = CharacteristicTypeSerializer
-    permission_classes = (IsAdminOrCreator,)
-    lookup_field = "url_slug"
-
-
-class PharmacokineticTypeViewSet(viewsets.ModelViewSet):
-    queryset = PharmacokineticType.objects.all()
-    serializer_class = PharmacokineticTypeSerializer
-    permission_classes = (IsAdminOrCreator,)
-    lookup_field = "url_slug"
-
-
-class KeywordViewSet(viewsets.ModelViewSet):
-    queryset = Keyword.objects.all()
-    serializer_class = KeywordSerializer
-    permission_classes = (IsAdminOrCreator,)
-
-
-# Elastic Views
-class ElasticKeywordViewSet(DocumentViewSet):
-    document = KeywordDocument
+class MeasurementTypeElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
-    serializer_class = KeywordElasticSerializer
-    lookup_field = 'id'
+    document = MeasurementTypeDocument
+    serializer_class = MeasurementTypeElasticSerializer
+    lookup_field = 'url_slug'
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
+    search_fields = ("name",
+                     "url_slug",
+                     "dtype",
+                     "description",
+                     "units",
+                     "annotations.name",
+                     "annotations.description",
+                     "annotations.label",
+                     "choices.name",
+                     "choices.description",
+                     "choices.annotations.name",
+                     "choices.annotations.description",
+                     "choices.annotations.label"
+                     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
+    filter_fields = {'name': 'name.raw'}
+    ordering_fields ={'name': 'name.raw',"dtype":"dtype.raw"}

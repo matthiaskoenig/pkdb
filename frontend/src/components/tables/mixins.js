@@ -65,7 +65,7 @@ var searchTableMixin = {
                 + '&page_size='+ this.pagination.rowsPerPage
                 + '&ordering='+ this.descending+ this.pagination.sortBy;
             if(this.search){
-                url += '&search='+ this.search
+                url += '&search_multi_match='+ this.search
             }
             if(this.ids.length > 0){
                 url += '&ids=' + this.ids.join("__")
@@ -95,12 +95,13 @@ var searchTableMixin = {
             }
             axios.get(this.url,{ headers: headers})
                 .then(res => {
-
                     this.entries = res.data.data.data;
                     this.count = res.data.data.count;
 
                 })
-                .catch(err => console.log(err.response.data))
+                .catch(err => {
+                    console.log(err.response.data);
+                })
                 .finally(() => this.loading = false);
         },
 

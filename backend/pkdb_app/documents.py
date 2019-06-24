@@ -1,6 +1,9 @@
 from django_elasticsearch_dsl import  fields, DEDField, Object, collections
-from elasticsearch_dsl import analyzer, token_filter
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from elasticsearch_dsl import analyzer, token_filter, Q
 
+from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.permissions import user_group
 
 elastic_settings = {'number_of_shards':1,
             'number_of_replicas':1,}
@@ -9,6 +12,11 @@ elastic_settings = {'number_of_shards':1,
 edge_ngram_filter =  token_filter(
             'edge_ngram_filter',
             type="edge_ngram",
+            min_gram=1, max_gram=20)
+
+ngram_filter =  token_filter(
+            'ngram_filter',
+            type="ngram",
             min_gram=1, max_gram=20)
 
 
@@ -21,7 +29,7 @@ autocomplete_search = analyzer(
 
 autocomplete = analyzer('autocomplete',
     tokenizer="standard",
-    filter=[ "lowercase",edge_ngram_filter],
+    filter=[ "lowercase",ngram_filter],
     char_filter=["html_strip"],
     chars=["letter"],
     token_chars=["letter"])
@@ -88,3 +96,40 @@ class ObjectField(DEDField, Object):
             ]
 
         return self._get_inner_field_data(objs, field_value_to_ignore)
+
+
+class AccessView(DocumentViewSet):
+
+
+    def get_queryset(self):
+        search = self.search  # .query()
+        # qs = super().get_queryset()
+        # return qs
+        group = user_group(self.request.user)
+
+        if group in ["admin", "reviewer"]:
+            return search.query()
+
+        elif group == "basic":
+
+            qs = search.query(
+                Q('match', access__raw=PUBLIC) |
+                Q('match', allowed_users__raw=self.request.user.username)
+                )
+
+            # )
+            # qs = qs.filter(
+            #    'term',
+            #   **{"access": PUBLIC, "creator":self.request.user}
+            # )
+            return qs
+
+        elif group == "anonymous":
+
+            qs = search.query(
+                'match',
+                **{"access__raw": PUBLIC}
+            )
+
+            return qs
+

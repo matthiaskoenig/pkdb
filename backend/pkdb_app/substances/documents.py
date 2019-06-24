@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import DocType, Index, fields
 from ..documents import string_field, elastic_settings, ObjectField, text_field
-from ..interventions.models import Substance
+from .models import Substance
 substance_index = Index("substances")
 substance_index.settings(**elastic_settings)
 
@@ -20,6 +20,17 @@ class SubstanceDocument(DocType):
         'sid': string_field('sid'),
         'url_slug': string_field('url_slug')
     }, multi=True)
+    annotations = ObjectField(
+        attr="annotations",
+        multi=True,
+        properties={
+            "term": string_field("term"),
+            "relation": string_field("relation"),
+            "collection": string_field("collection"),
+            "description": string_field("description"),
+            "label": string_field("label")
+        }
+    )
 
     class Meta(object):
         model = Substance

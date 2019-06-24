@@ -3,9 +3,18 @@ Generic utility functions.
 """
 import os
 import copy
+from rest_framework import serializers
 
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
+
+def list_duplicates(seq):
+  seen = set()
+  seen_add = seen.add
+  # adds all elements it doesn't know yet to seen and all other to seen_twice
+  seen_twice = set(x for x in seq if x in seen or seen_add(x))
+  # turn the set into a list (as requested)
+  return list( seen_twice )
 
 def create_choices(collection):
     """ Creates choices from given list of items.
@@ -59,10 +68,41 @@ def ensure_dir(file_path):
         os.makedirs(directory)
 
 
-def update_or_create_multiple(parent, children, related_name):
+def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
     for child in children:
+        lookup_dict = {}
         instance_child = getattr(parent, related_name)
-        instance_child.update_or_create(**child)
+
+        if lookup_fields:
+            for lookup_field in lookup_fields:
+                lookup_dict[lookup_field] = child.pop(lookup_field, None)
+        else:
+            lookup_dict = child
+
+        #instance_child.update_or_create(**lookup_dict, defaults=child)
+
+        try:
+            obj = instance_child.get(**lookup_dict)
+            for key, value in child.items():
+                if key == "annotations":
+                    update_or_create_multiple(obj,value,key,lookup_fields=["term","relation"])
+                else:
+                    setattr(obj, key, value)
+
+            obj.save()
+
+
+
+        except instance_child.model.DoesNotExist:
+            instance_dict = {**lookup_dict,**child}
+            instance_child.create(**instance_dict)
+
+
+
+
+
+
+
 
 
 def create_multiple(parent, children, related_name):
@@ -125,3 +165,12 @@ def set_keys(d, value, *keys):
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
+
+
+def _validate_requried_key(attrs, key, details=None):
+
+    if key not in attrs:
+        error_json = {key: f"{key} is required."}
+        if details:
+            error_json["details"] = details
+        raise serializers.ValidationError(error_json)

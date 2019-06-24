@@ -1,14 +1,5 @@
 from django.contrib import admin
 from pkdb_app.studies.models import Study, Reference
-from pkdb_app.categorials.models import Keyword
-
-
-@admin.register(Keyword)
-class KeywordAdmin(admin.ModelAdmin):
-    fields = ('pk', 'name',)
-    list_display = ('pk', 'name',)
-    # list_filter = ('name',)
-    search_fields = ('name',)
 
 
 @admin.register(Reference)

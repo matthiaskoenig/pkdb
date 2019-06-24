@@ -1,19 +1,19 @@
 from django_elasticsearch_dsl import DocType, Index, fields
-from ..documents import string_field, elastic_settings, ObjectField, text_field
+from ..documents import string_field, elastic_settings, ObjectField
 from .models import Output, Timecourse
 
 output_index = Index("outputs")
 output_settings = {
     'number_of_shards':5,
     'number_of_replicas':1,
-    'max_result_window':20000}
+    'max_result_window':40000}
 
 output_index.settings(**output_settings)
 
 @output_index.doc_type
 class OutputDocument(DocType):
     pk = fields.IntegerField('pk')
-    study = string_field('study')
+    study = string_field('study_name')
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
         'count': fields.IntegerField(),
@@ -28,9 +28,10 @@ class OutputDocument(DocType):
         'name': string_field('name')
     }, multi=True)
 
-    substance = ObjectField(properties={
-        'name': string_field('name')}
-        )
+    substance = string_field("substance_name")
+
+    choice = string_field("choice")
+
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )
@@ -56,7 +57,19 @@ class OutputDocument(DocType):
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
     tissue = string_field('tissue')
-    pktype = string_field("pktype_key")
+    measurement_type = string_field("measurement_type_name")
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
     class Meta(object):
             model = Output
@@ -73,7 +86,7 @@ timecourses_index.settings(**elastic_settings)
 
 @timecourses_index.doc_type
 class TimecourseDocument(DocType):
-    study = string_field('study')
+    study = string_field('study_name')
     pk = fields.IntegerField('pk')
 
     group = ObjectField(properties={
@@ -91,9 +104,8 @@ class TimecourseDocument(DocType):
         'name': string_field('name')
     }, multi=True)
 
-    substance = ObjectField(properties={
-        'name': string_field('name')}
-        )
+    substance = string_field("substance_name")
+
     ex = ObjectField(properties={
         'pk': string_field('pk')}
         )
@@ -124,10 +136,19 @@ class TimecourseDocument(DocType):
 
     time = fields.FloatField('null_time',multi=True)
     tissue = string_field('tissue')
-    pktype = string_field("pktype_key")
+    measurement_type = string_field("measurement_type_name")
 
-    #auc_end = fields.FloatField(attr='auc_end')
-    #kel = fields.FloatField(attr='kel')
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
     class Meta(object):
             model = Timecourse

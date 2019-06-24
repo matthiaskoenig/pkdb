@@ -13,20 +13,44 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['PKDB_SECRET_KEY']
 
-# SECURITY WARNING: keep the secret key used in production secret!
-DEFAULT_PASSWORD = os.environ['PKDB_DEFAULT_PASSWORD']
-
 API_BASE = os.environ['PKDB_API_BASE']
+FRONTEND_BASE = os.environ['FRONTEND_BASE']
+
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
+#AUTHENTICATION_BACKENDS = (
+#
+#    # Needed to login by username in Django admin, regardless of `allauth`
+##    'rest_email_auth.authentication.VerifiedEmailBackend',
+#    'django.contrib.auth.backends.ModelBackend',
+#
+#    # `allauth` specific authentication methods, such as login by e-mail
+#    'allauth.account.auth_backends.AuthenticationBackend',
+#)
+
+#AUTHENTICATION_BACKENDS = [
+#'rest_email_auth.authentication.VerifiedEmailBackend',
+#'django.contrib.auth.backends.ModelBackend',
+#]
+
 AUTHENTICATION_BACKENDS = (
-
-    # Needed to login by username in Django admin, regardless of `allauth`
+    # default
     'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by e-mail
+    # email login
+    #'allauth.account.auth_backends.AuthenticationBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    'rest_email_auth.authentication.VerifiedEmailBackend',
+
 )
+
+# The minimal settings dict required for the app
+REST_EMAIL_AUTH = {
+    'EMAIL_VERIFICATION_URL': FRONTEND_BASE+'/#/verification/{key}',
+    'PASSWORD_RESET_URL': FRONTEND_BASE+'/#/reset-password/{key}',
+    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
+    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
+}
+
 
 INSTALLED_APPS = (
     "django.contrib.admin",
@@ -38,17 +62,16 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
 
     # Authentication
-    'bootstrap3',  # optional module for making bootstrap forms easier
-
+    'rest_email_auth',
+    "rest_framework.authtoken",  # token authentication
+    #'rest_auth',
+    #'rest_auth.registration',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.github',
-    #'allauth.socialaccount.providers.google',
+
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
-    "rest_framework.authtoken",  # token authentication
     "django_filters",  # for filtering rest endpoints
     "rest_framework_swagger",
     "corsheaders",
@@ -70,26 +93,15 @@ INSTALLED_APPS = (
     "pkdb_app.outputs",
     "pkdb_app.comments",
 )
-
+# django-allauth settings
 SITE_ID = 1
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_MIN_LENGTH = 3
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-
-SOCIALACCOUNT_PROVIDERS = {
-    'github': {
-        'SCOPE': ['email'],
-        'METHOD': 'oauth2',
-    },
-    # 'google':
-    #     { 'SCOPE': ['profile', 'email'],
-    #       'AUTH_PARAMS': {'access_type': 'online'}
-    #     },
-
-}
 
 # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
 MIDDLEWARE = (
@@ -104,12 +116,7 @@ MIDDLEWARE = (
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     "0.0.0.0:8080",
-#     "localhost:8080",
-#     "frontend:8080",
-# )
-INTERNAL_IPS = ("172.18.0.1",)
+INTERNAL_IPS = ()
 
 ALLOWED_HOSTS = ["*"]
 ROOT_URLCONF = "pkdb_app.urls"
@@ -138,11 +145,9 @@ LOGIN_REDIRECT_URL = "/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-
-STATIC_ROOT = '/static'
-# STATIC_ROOT = os.path.normpath(join(BASE_DIR, "static"))
-STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
+STATIC_ROOT = "/static"
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -171,7 +176,6 @@ TEMPLATES = [
 
 # Custom user app
 AUTH_USER_MODEL = "users.User"
-
 
 # Password Validation
 # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
@@ -244,7 +248,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    #"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",

@@ -22,11 +22,19 @@ import Output from './components/Output';
 import Timecourse from './components/Timecourse';
 import Reference from './components/Reference';
 
-/* About */
+/* 404 */
+import Page404 from './components/Page404';
+
+/* Curation */
 import Curation from './components/Curation';
 
 /* Account */
 import Account from './components/auth/Account';
+import Registration from './components/auth/Registration';
+import Verification from './components/auth/Verification';
+import RequestPasswordReset from './components/auth/RequestPasswordReset';
+import PasswordReset from './components/auth/PasswordReset';
+
 
 Vue.use(Router);
 
@@ -83,7 +91,28 @@ export default new Router({
           name: 'Account',
           component: Account
       },
+      {
+          path: '/verification/:id',
+          name: 'Verification',
+          component: Verification,
+          props: true
 
+      },
+      {
+          path: '/registration',
+          name: 'Registration',
+          component: Registration
+      },
+      {
+          path: '/request-password-reset',
+          name: 'RequestPasswordReset',
+          component: RequestPasswordReset
+      },
+      {
+          path: '/reset-password/:id',
+          name: 'PasswordReset',
+          component: PasswordReset,
+      },
       {
           path:"/studies/:id",
           name:"Study",
@@ -125,6 +154,15 @@ export default new Router({
           name: "Reference",
           component: Reference,
           props: true
+      },
+      {
+          path: '/404',
+          name: '404',
+          component: Page404
+      },
+      {
+          path: '*',
+          redirect: '/404'
       },
   ],
     scrollBehavior (to, from, savedPosition) {

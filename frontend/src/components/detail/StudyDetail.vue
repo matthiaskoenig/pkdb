@@ -1,30 +1,44 @@
 <template>
     <div id="study-detail">
-        <div class="fixed-nav-bar2">
 
-            <Heading :title="'Study: '+study.name" :icon="icon('study')" :resource_url="resource_url"/>
-            <a href="#general">
+        <!-- navigation bar -->
+        <div class="fixed-nav-bar2">
+            <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
+
+            <a @click="scrollMeTo('general')">
                 <v-chip color="w" disable=false>
                     <v-icon small title="General study information">{{icon("about")}}</v-icon>
                 </v-chip>
             </a>
-            <a href="#groups">
-                <count-chip :count=study.group_count icon="group"></count-chip>
+
+            <a @click="scrollMeTo('groups')" v-if="study.group_count">
+                <count-chip :count="study.group_count" icon="group"></count-chip>
             </a>
-            <a href="#individuals">
-                <count-chip :count=study.individual_count icon="individual"></count-chip>
+            <count-chip v-else disabled=true :count="study.group_count" icon="group"></count-chip>
+
+            <a @click="scrollMeTo('individuals')" v-if="study.individual_count">
+                <count-chip :count="study.individual_count" icon="individual"></count-chip>
             </a>
-            <a href="#interventions">
-                <count-chip :count=study.intervention_count icon="intervention"></count-chip>
+            <count-chip v-else disabled=true :count="study.individual_count" icon="individual"></count-chip>
+
+            <a @click="scrollMeTo('interventions')" v-if="study.intervention_count">
+                <count-chip :count="study.intervention_count" icon="intervention"></count-chip>
             </a>
-            <a href="#outputs">
-                <count-chip :count=study.output_count icon="output"></count-chip>
+            <count-chip  v-else disabled=true :count="study.intervention_count" icon="intervention"></count-chip>
+
+            <a @click="scrollMeTo('outputs')" v-if="study.output_count">
+                <count-chip :count="study.output_count" icon="output"></count-chip>
             </a>
-            <a href="#timecourses">
-                <count-chip :count=study.timecourse_count icon="timecourse"></count-chip>
+            <count-chip v-else disabled=true :count="study.output_count" icon="output"></count-chip>
+
+            <a @click="scrollMeTo('timecourses')"  v-if="study.timecourse_count">
+                <count-chip :count="study.timecourse_count" icon="timecourse"></count-chip>
             </a>
+            <count-chip v-else disabled=true :count="study.timecourse_count" icon="timecourse"></count-chip>
 
         </div>
+
+        <!-- study content -->
         <div>
             <v-layout row wrap>
 
@@ -33,41 +47,48 @@
                 <v-btn color="white" icon :to="'/studies/'+ next_study" title="next Study"><v-icon>{{ icon('next') }}</v-icon></v-btn>
                 -->
 
+                 <!-- General Overview -->
 
-                <!-- General Overview -->
-                <v-flex id="general" xs12 v-show="visible.general">
+                <v-flex ref="general" xs12 v-show="visible.general">
                     <v-card>
-                    <study-info :study="study"/>
-                </v-card>
+                        <study-info :study="study"/>
+                    </v-card>
                 </v-flex>
+
                 <!-- Groups -->
-                <v-flex id="groups" xs12 v-show="visible.groups">
+                <v-flex ref="groups" xs12 v-show="visible.groups">
                     <annotations  v-if="study.groupset" :item="study.groupset"/>
-                    <groups-table v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
+                    <groups-table  v-if="counts['groups']>0" :ids="study.groupset.groups" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Individuals -->
-                <v-flex id="individuals" xs12 v-show="visible.individuals">
+                <v-flex  ref="individuals" xs12 v-show="visible.individuals">
                     <annotations   v-if="study.individualset" :item="study.individualset"/>
                     <individuals-table v-if="counts['individuals']>0" :ids="study.individualset.individuals" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Interventions -->
-                <v-flex id="interventions" xs12 v-show="visible.interventions">
+
+                <v-flex  ref="interventions" xs12 v-show="visible.interventions">
                     <annotations v-if="study.interventionset" :item="study.interventionset"/>
                     <interventions-table v-if="counts['interventions']>0" :ids="study.interventionset.interventions" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Outputs -->
+
                 <v-flex xs12 v-show="visible.outputs || visible.timecourses">
                     <annotations  v-if="study.outputset" :item="study.outputset"/>
+
+                    <span ref="outputs"></span>
                     <outputs-table v-if="counts['outputs']>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
                     <br />
-                    <timecourses-table  v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
+                    <span ref="timecourses"></span>
+                    <timecourses-table v-if="counts['timecourses']>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
 
                 </v-flex>
             </v-layout>
         </div>
+
     </div>
 </template>
 
@@ -100,7 +121,7 @@
         mixins :[UrlMixin],
         props: {
             study_pks:{
-                type:Array,
+                type: Array,
             },
             study: {
                 type: Object,
@@ -134,6 +155,7 @@
                 }
 
             },
+            /* FIXME: This will not work, don't do this in javascript, get next and previous in the backend
             study_index(){
                 return this.study_pks.indexOf(this.study.sid)
             },
@@ -161,8 +183,15 @@
                     return this.study_pks[studies_number-1]
                     }
                 }
+             */
         },
         methods:{
+            scrollMeTo(refName) {
+                var element = this.$refs[refName];
+                var top = element.offsetTop - 100;
+
+                window.scrollTo(0, top);
+            },
             icon: function (key) {
                 return lookup_icon(key)
             },
@@ -198,14 +227,12 @@
 <style scoped>
     .fixed-nav-bar2 {
         position: fixed;
-        top: 50;
+        top: 50px;
         left: 0;
         z-index: 9999;
         width: 100%;
         height: 50px;
         background-color: #00a087;
     }
-    .content {
 
-    }
 </style>

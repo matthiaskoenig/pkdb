@@ -31,12 +31,8 @@ class IndividualDocument(DocType):
         'count': fields.IntegerField('count')
     })
 
-    study = ObjectField(properties={
-        'name': string_field('name'),
-        'pk':fields.IntegerField('pk'),
-        'sid': fields.StringField('sid')
+    study = string_field('study_name')
 
-    })
     ex = ObjectField(properties={
         'pk':fields.IntegerField('pk')
     })
@@ -44,7 +40,8 @@ class IndividualDocument(DocType):
     characteristica_all_normed = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
-            'category': string_field('category_key'),
+            'measurement_type':string_field('measurement_type_name'),
+            'substance': string_field('substance_name'),
             'choice': string_field('choice'),
             'value' : fields.FloatField('value'),
             'mean' : fields.FloatField(),
@@ -59,6 +56,18 @@ class IndividualDocument(DocType):
 
         },
         multi = True)
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
     class Meta:
         model=Individual
@@ -90,12 +99,8 @@ class GroupDocument(DocType):
     })
 
 
-    study = ObjectField(properties={
-        'name': string_field('name'),
-        'pk': fields.IntegerField('pk'),
-        'sid': fields.StringField('sid')
+    study = string_field('study_name')
 
-    })
     ex = ObjectField(properties={
         'pk': fields.IntegerField('pk')
     })
@@ -103,7 +108,8 @@ class GroupDocument(DocType):
     characteristica_all_normed = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
-            'category': string_field('category_key'),
+            'measurement_type':string_field('measurement_type_name'),
+            'substance': string_field('substance_name'),
             'choice': string_field('choice'),
             'value': fields.FloatField('value'),
             'mean': fields.FloatField(),
@@ -118,6 +124,18 @@ class GroupDocument(DocType):
 
         },
         multi=True)
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
 
     class Meta:
@@ -161,8 +179,8 @@ class CharacteristicaDocument(DocType):
     )
     individual_pk = fields.IntegerField(attr='individual_id')
 
-    category = fields.StringField(
-        attr='category_key',
+    measurement_type = fields.StringField(
+        attr='measurement_type_name',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }
@@ -182,6 +200,13 @@ class CharacteristicaDocument(DocType):
         }
     )
 
+    substance = fields.StringField(
+        attr='substance_name',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+
     count = fields.IntegerField()
     value = fields.FloatField(attr='value')
     mean = fields.FloatField(attr='mean')
@@ -195,6 +220,18 @@ class CharacteristicaDocument(DocType):
     normed = fields.BooleanField()
     raw = ObjectField(properties={
         'pk': fields.IntegerField()}
+    )
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            # 'first_name': string_field("first_name"),
+            # 'last_name': string_field("last_name"),
+            # 'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
     )
 
 

@@ -7,16 +7,11 @@ From the data structure this has to be handled very similar.
 """
 
 from django.db import models
-from pkdb_app.categorials.models import CharacteristicType
-
-from ..normalization import get_sd, get_se, get_cv
 from ..storage import OverwriteStorage
 from ..behaviours import (
-    Valueable,
-    Externable,
-    ValueableMapNotBlank,
-    ValueableNotBlank,
-    Normalizable)
+    Externable, Accessible)
+
+from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 from ..utils import CHAR_MAX_LENGTH
 from .managers import (
@@ -30,8 +25,7 @@ from .managers import (
 )
 
 from django.apps import apps
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
+
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -61,12 +55,12 @@ class DataFile(models.Model):
     def __str__(self):
         return self.file.name
 
-@receiver(post_delete, sender=DataFile)
-def submission_delete(sender, instance, **kwargs):
-    instance.file.delete(False)
 # ----------------------------------
 # Group
 # ----------------------------------
+
+
+
 class GroupSet(models.Model):
     objects = GroupSetManager()
 
@@ -102,16 +96,16 @@ class GroupEx(Externable, AbstractGroup):
     """
 
     source = models.ForeignKey(
-        DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="s_group_exs", null=True, on_delete=models.CASCADE
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_group_exs", null=True, on_delete=models.SET_NULL
+        DataFile, related_name="f_group_exs", null=True, on_delete=models.CASCADE
     )
     groupset = models.ForeignKey(
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
     )
 
-    parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.SET_NULL)
+    parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     count = models.IntegerField()
@@ -131,7 +125,7 @@ class GroupEx(Externable, AbstractGroup):
         unique_together = ("groupset", "name", "name_map", "source")
 
 
-class Group(models.Model):
+class Group(Accessible):
     """ Group. """
 
     ex = models.ForeignKey(
@@ -146,13 +140,6 @@ class Group(models.Model):
     # class Meta:
     # todo: in validator unique_together = ('ex__groupset', 'name')
 
-    @property
-    def study_name(self):
-        return self.ex.groupset.study.name
-
-    @property
-    def study_pk(self):
-        return self.ex.groupset.study.pk
 
     @property
     def study(self):
@@ -166,7 +153,6 @@ class Group(models.Model):
     def figure(self):
         return self.ex.figure
 
-
     @property
     def parents(self):
         parents = []
@@ -177,9 +163,10 @@ class Group(models.Model):
     @property
     def characteristica_all(self):
         characteristica_all = self.characteristica.all()
-        this_categories = characteristica_all.values_list("category", flat=True)
+        additive_characteristica = ["disease","abstinence"]
+        this_measurements = characteristica_all.exclude(measurement_type__name__in=additive_characteristica).values_list("measurement_type", flat=True)
         if self.parent:
-            characteristica_all = characteristica_all | self.parent.characteristica_all.exclude(category__in=this_categories)
+            characteristica_all = characteristica_all | self.parent.characteristica_all.exclude(measurement_type__in=this_measurements)
         return characteristica_all
 
     @property
@@ -222,20 +209,11 @@ class IndividualEx(Externable, AbstractIndividual):
     Individuals are defined via their characteristics, analogue to groups.
     """
 
-    source = models.ForeignKey(
-        DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL
-    )
+    source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.CASCADE)
     format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    figure = models.ForeignKey(
-        DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL
-    )
-
-    individualset = models.ForeignKey(
-        IndividualSet, on_delete=models.CASCADE, related_name="individual_exs"
-    )
-    group = models.ForeignKey(
-        Group, on_delete=models.CASCADE, related_name="individual_exs", null=True
-    )
+    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.CASCADE)
+    individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -257,7 +235,7 @@ class IndividualEx(Externable, AbstractIndividual):
         return self.study.groupset.group_exs
 
 
-class Individual(AbstractIndividual):
+class Individual(AbstractIndividual, Accessible):
     """ Single individual in data base.
 
     This does not contain any mappings are splits any more.
@@ -291,34 +269,25 @@ class Individual(AbstractIndividual):
     @property
     def characteristica_all_normed(self):
         characteristica_normed = self.characteristica_normed
-        this_categories = characteristica_normed.values_list("category", flat=True)
+        this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
 
-        return (characteristica_normed | self.group_characteristica_normed.exclude(category__in=this_categories))
+        return (characteristica_normed | self.group_characteristica_normed.exclude(measurement_type__in=this_measurements))
 
     @property
     def study(self):
-        if hasattr(self.ex.individualset,"study"):
-            return self.ex.individualset.study
-
-    @property
-    def study_pk(self):
-        return self.ex.individualset.study.pk
-
-    @property
-    def study_name(self):
-        return self.ex.individualset.study.name
+        return self.ex.individualset.study
 
     @property
     def group_indexing(self):
         return self.group.name
 
     @property
-    def characteristica_categories(self):
-        return [characteristica.category for characteristica in self.characteristica_all_normed.all()]
+    def characteristica_measurements(self):
+        return [characteristica.measurement_type for characteristica in self.characteristica_all_normed.all()]
 
     @property
     def characteristica_choices(self):
-        return {characteristica.category: characteristica.choice for characteristica in self.characteristica_all_normed.all()}
+        return {characteristica.measurement_type: characteristica.choice for characteristica in self.characteristica_all_normed.all()}
 
 
 # ----------------------------------
@@ -327,7 +296,7 @@ class Individual(AbstractIndividual):
 
 
 class AbstractCharacteristica(models.Model):
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH * 3, null=True)
+
     count = models.IntegerField(null=True)
 
     class Meta:
@@ -335,8 +304,8 @@ class AbstractCharacteristica(models.Model):
 
 
 class CharacteristicaEx(
-    AbstractCharacteristica, ValueableMapNotBlank, ValueableNotBlank
-):
+    ExMeasurementTypeable,
+    AbstractCharacteristica):
     """ Characteristica  (external curated layer).
 
         Characteristics are used to store information about a group of subjects.
@@ -353,9 +322,8 @@ class CharacteristicaEx(
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-    category = models.CharField(max_length=CHAR_MAX_LENGTH)
+
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     group_ex = models.ForeignKey(
         GroupEx, related_name="characteristica_ex", null=True, on_delete=models.CASCADE
@@ -369,9 +337,8 @@ class CharacteristicaEx(
     objects = CharacteristicaExManager()
 
 
-class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
+class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
     """ Characteristic. """
-    category = models.ForeignKey(CharacteristicType, on_delete=models.CASCADE)
 
     group = models.ForeignKey(
         Group, related_name="characteristica", null=True, on_delete=models.CASCADE
@@ -379,14 +346,14 @@ class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     individual = models.ForeignKey(
         Individual, related_name="characteristica", null=True, on_delete=models.CASCADE
     )
-    raw = models.ForeignKey("Characteristica", related_name="norm", on_delete=models.CASCADE, null=True)
-    normed = models.BooleanField(default=False)
     count = models.IntegerField(default=1)
 
     @property
-    def category_key(self):
-
-        return self.category.key
+    def study(self):
+        if self.group:
+            return self.group.study
+        else:
+            return self.individual.study
 
     @property
     def all_group_pks(self):
@@ -414,19 +381,3 @@ class Characteristica(Normalizable, Valueable, AbstractCharacteristica):
     def individual_pk(self):
         if self.individual:
             return self.individual.pk
-
-
-    def add_statistics(self):
-            if not self.sd:
-                self.sd = get_sd(
-                    se=self.se, count=self.count, mean=self.mean, cv=self.cv
-                )
-            if not self.se:
-                self.se = get_se(
-                    sd=self.sd, count=self.count, mean=self.mean, cv=self.cv
-                )
-            if not self.cv:
-                self.cv = get_cv(
-                    se=self.se, count=self.count, mean=self.mean, sd=self.sd
-                )
-

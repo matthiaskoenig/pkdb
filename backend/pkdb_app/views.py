@@ -4,8 +4,10 @@ Views
 import os
 from django.http import HttpResponse, FileResponse,HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
+from pkdb_app.users.permissions import get_study_file_permission, user_group
+from rest_framework.authtoken.models import Token
 
-from .studies.models import Reference, OPEN
+from .studies.models import Reference
 from .subjects.models import DataFile
 
 
@@ -30,7 +32,7 @@ from rest_framework.schemas import SchemaGenerator
 from rest_framework.authentication import (
     SessionAuthentication,
     BasicAuthentication,
-)
+    TokenAuthentication)
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -53,16 +55,18 @@ class CreateListModelMixin(object):
         #    new_kwargs['data'] = kwargs["data"].get("files")
         #    return super(CreateListModelMixin, self).get_serializer(*args, **new_kwargs)
 
-
+#@authentication_classes((TokenAuthentication,SessionAuthentication))
 def serve_protected_document(request, file):
+    try:
+        user,_ = TokenAuthentication().authenticate(request=request)
+    except TypeError:
+        user = request.user
+
     path, file_name = os.path.split(file)
-    user = request.user
-
-
 
     try:
         ref = Reference.objects.get(pdf=file)
-        if user.is_staff:
+        if get_study_file_permission(user,ref.study):
             # Split the elements of the path
             response = FileResponse(ref.pdf, )
             response["Content-Disposition"] = "attachment; filename=" + file_name
@@ -73,18 +77,14 @@ def serve_protected_document(request, file):
 
 
     except Reference.DoesNotExist:
+
         datafile = get_object_or_404(DataFile, file=file)
         study = datafile.study_set.all()[0]
-        is_curator = user in study.curators.all()
-        is_creator = user == study.creator
-        is_open = study.licence == OPEN
-
-        requirements = [is_curator,is_creator,is_open,user.is_staff ]
-
-        if any(requirements):
+        if get_study_file_permission(user,study):
             # Split the elements of the path
             response = FileResponse(datafile.file,)
             response["Content-Disposition"] = "attachment; filename=" + file_name
+
 
             return response
 

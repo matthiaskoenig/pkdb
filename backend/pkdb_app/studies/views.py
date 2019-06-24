@@ -1,21 +1,19 @@
 from django.http import Http404
 from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
-    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend
+    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAdminUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from pkdb_app.subjects.documents import GroupDocument, IndividualDocument
-
+from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, CharacteristicaDocument
 
 from .models import Reference, Study
 from .serializers import (
@@ -29,6 +27,8 @@ from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from django.core.exceptions import ObjectDoesNotExist
+
+from elasticsearch_dsl.query import Q
 
 
 ###################
@@ -113,39 +113,62 @@ class StudyViewSet(viewsets.ModelViewSet):
         self.group_validation(request)
         return super().create(request, *args, **kwargs)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        related_elastic = related_elastic_dict(instance)
+        delete_elastic_study(related_elastic)
+
+        return super().destroy(request)
+
 
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
+
+def delete_elastic_study(related_elastic):
+    for doc, instances in related_elastic.items():
+        try:
+            doc().update(thing=instances, action="delete")
+        except helpers.BulkIndexError:
+            pass
+
+
+def related_elastic_dict(study):
+    related_elastic_dict = {}
+    related_elastic_dict[StudyDocument] = study
+    if study.reference:
+        related_elastic_dict[ReferenceDocument] = study.reference
+
+    related_elastic_dict[GroupDocument] = study.groups
+    related_elastic_dict[IndividualDocument] = study.individuals
+    related_elastic_dict[CharacteristicaDocument] = study.characteristica
+    related_elastic_dict[InterventionDocument] = study.interventions
+    related_elastic_dict[OutputDocument] = study.outputs
+    related_elastic_dict[TimecourseDocument] = study.timecourses
+    return related_elastic_dict
+
+
 
 
 @csrf_exempt
 def update_index_study(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        update_instances = {}
         try:
             study = Study.objects.get(sid=data["sid"])
         except ObjectDoesNotExist:
             return JsonResponse({"success": "False", "reason": "Instance not in database"})
 
-        action = data.get("action",'index')
-        update_instances[StudyDocument] = study
-        if study.reference:
-            update_instances[ReferenceDocument] = study.reference
 
-        update_instances[GroupDocument] = study.groups
-        update_instances[IndividualDocument] = study.individuals
-        update_instances[InterventionDocument] = study.interventions
-        update_instances[OutputDocument] = study.outputs
-        update_instances[TimecourseDocument] = study.timecourses
+        related_elastic = related_elastic_dict(study)
 
-        print(study)
-
-
-        for doc, instances in update_instances.items():
+        for doc, instances in related_elastic.items():
+            study_related_instances = doc().search().filter("match",study=study.name)
+            if study_related_instances.count() > 0:
+                study_related_instances.delete()
 
             try:
+                action = data.get("action", 'index')
                 doc().update(thing=instances,action=action)
             except helpers.BulkIndexError:
                 pass
@@ -154,14 +177,14 @@ def update_index_study(request):
 
 
 class ElasticStudyViewSet(DocumentViewSet):
-    document_uid_field = "pk"
-    lookup_field = "pk"
+    document_uid_field = "sid__raw"
+    lookup_field = "sid"
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     permission_classes = (StudyPermission,)
-    search_fields = (
+    search_fields = ('sid',
                      'pk_version',
                      'creator.first_name',
                      'creator.last_name',
@@ -175,23 +198,22 @@ class ElasticStudyViewSet(DocumentViewSet):
                      'design',
                      'reference',
                      'substances',
-                     'keywords',
                      'files'
                      )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
 
-    filter_fields = {'sid':'sid.raw','name': 'name.raw'}
+    filter_fields = {'sid':'sid.raw','name': 'name.raw', "substances": "substances"}
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
         "pk_version":'pk_version',
         "name":"name",
         "design": "design.raw",
-        "refernce": "refernce",
-        "substance": "substance.raw",
-        #"keywords": "keywords.raw",
-        #"files":"files",
+        "reference": "reference.raw",
         "creator":"creator.last_name",
-        #"curators": "curators.last_name",
 
     }
    
@@ -233,52 +255,51 @@ class ElasticStudyViewSet(DocumentViewSet):
             raise Http404("No result matches the given query.")
 
     def get_queryset(self):
-
-        qs = super().get_queryset()
-        #return qs
-        group = user_group(self.request)
-        print("*"*100)
-        print(group)
-        print("*"*100)
+        search = self.search
+        group = user_group(self.request.user)
 
         if group in ["admin","reviewer"]:
-            return qs
+            return search.query()
 
         elif group == "basic":
 
-            #todo:hier weiter machen
-            return qs.filter(access=True).filter(creator=self.request.user).filter(curators__in=[self.request.user]).filter(collaborators__in=[self.request.user])
+            qs = search.query(
+                Q('match', access__raw=PUBLIC) |
+                Q('match', creator__username__raw=self.request.user.username) |
+                Q('match', curators__username__raw=self.request.user.username) |
+                Q('match', collaborators__username__raw=self.request.user.username)
 
-        elif group =="anonymous":
-            qs = qs.filter(
-                'term',
-                **{"access": PUBLIC}
             )
+
             return qs
 
+        elif group == "anonymous":
 
+            qs = search.query(
+                'match',
+                **{"access__raw": PUBLIC}
+            )
 
+            return qs
 
-
-    
 
 
 
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
+    document_uid_field = "sid__raw"
+    lookup_field = "sid"
     document = ReferenceDocument
-    lookup_field = "id"
     pagination_class = CustomPagination
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
-    #multi_match_search_fields = {f:f for f in search_fields}
-    #multi_match_options = {
-    #    'type': 'filter'
-    #}
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     filter_fields = {'name': 'name.raw',}
-    #filter_fields = {f:f for f in search_fields}
     ordering_fields = {
         'sid': 'sid',
         "pk":'pk',
@@ -294,3 +315,40 @@ class ElasticReferenceViewSet(DocumentViewSet):
         "pdf":"pdf",
         "authors":"authors.last_name",
     }
+
+    def get_object(self):
+        """Get object."""
+        queryset = self.get_queryset()
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        if lookup_url_kwarg not in self.kwargs:
+            raise AttributeError(
+                "Expected view %s to be called with a URL keyword argument "
+                "named '%s'. Fix your URL conf, or set the `.lookup_field` "
+                "attribute on the view correctly." % (
+                    self.__class__.__name__,
+                    lookup_url_kwarg
+                )
+            )
+
+        if lookup_url_kwarg == 'id':
+            obj = self.document.get(id=self.kwargs[lookup_url_kwarg])
+            return DictionaryProxy(obj.to_dict())
+        else:
+            queryset = queryset.filter(
+                'match',
+                **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
+            )
+
+            count = queryset.count()
+            if count == 1:
+                obj = queryset.execute().hits.hits[0]['_source']
+
+                return DictionaryProxy(obj)
+
+            elif count > 1:
+                raise Http404(
+                    "Multiple results matches the given query. "
+                    "Expected a single result."
+                )
+
+            raise Http404("No result matches the given query.")

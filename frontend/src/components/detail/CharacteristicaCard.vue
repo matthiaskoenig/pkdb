@@ -4,7 +4,7 @@
 
         <v-badge right color="black" left>
             <span slot="badge">{{ count }}</span>
-            <span class="attr attr-characteristica">{{ data.category }}</span><br />
+            <span class="attr attr-characteristica">{{ data.measurement_type }}</span><br />
 
             <span v-if="data.choice">
                 <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
@@ -13,9 +13,15 @@
                 <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon color="primary">fa fa-male</v-icon></span>
                 {{ data.choice }}
             </span>
-            <span v-if="value">
+            <span v-if="data.substance">
+                <substance-chip :title="data.substance"></substance-chip>
+            </span>
+            <span v-if="value || error">
                 <strong>{{ value }}<span v-if="data.unit"> [{{ data.unit }}]</span></strong><br />
                 <span v-if="error">{{ error }}</span>
+            </span>
+            <span v-else-if="!value & !error & !data.choice & !data.substance">
+                <v-icon small title='missing information for chararcterica'>{{icon("na")}}</v-icon>&nbsp;
             </span>
         </v-badge>
     </div>

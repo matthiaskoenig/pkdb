@@ -38,7 +38,7 @@ services:
     restart: always
     image: elasticsearch:6.7.1
     ports:
-      - "9200:9200"
+      - "9123:9200"
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 

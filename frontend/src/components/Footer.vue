@@ -1,15 +1,22 @@
+
+
+
 <template>
-    <div id="footer">
+
+    <v-footer id="footer">
         <span>&copy; 2017-2019 Pharmacokinetics Database PK-DB &nbsp;&nbsp;
             Website: <a :href="web" target="_blank">{{web}}</a> &nbsp;&nbsp;
             Email: <a :href="'mailto:'+email" target="_blank">{{email}}</a> &nbsp;&nbsp;
         </span>
-    </div>
+    </v-footer>
 </template>
+
+
 
 <script>
     export default {
         name: 'Footer',
+
         data() {
             return {
                 email: 'koenigmx@hu-berlin.de',
@@ -18,5 +25,5 @@
         }
     }
 </script>
-<style>
+<style scoped>
 </style>

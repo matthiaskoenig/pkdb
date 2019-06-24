@@ -1,5 +1,6 @@
-from pkdb_app.categorials.models import CharacteristicType
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from pkdb_app.categorials.models import MeasurementType
+from pkdb_app.users.permissions import StudyPermission
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -9,7 +10,8 @@ from pkdb_app.subjects.models import (
 )
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaReadSerializer)
+    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaElasticBigSerializer,
+    CharacteristicaElasticSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 ############################################################
@@ -19,37 +21,44 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     CompoundSearchFilterBackend,
-    IdsFilterBackend, )
-
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+    IdsFilterBackend, MultiMatchSearchFilterBackend)
 
 
+from pkdb_app.documents import AccessView
 
-class GroupViewSet(DocumentViewSet):
+
+
+
+class GroupViewSet(AccessView):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
 
 
     # Define search fields
     search_fields = (
         'name',
-        'study.name',
+        'study',
         'parent.name',
-        'characteristica_all_normed.category',
+        'characteristica_all_normed.measurement_type.',
+        'characteristica_all_normed.substance',
         'characteristica_all_normed.choice',
         'characteristica_all_normed.ctype',
 
     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
 
     # Filter fields
     filter_fields = {
         'id': 'id',
         'name': 'name.raw',
         'parent': 'group.name.raw',
-        'study': 'study.name.raw',
+        'study': 'study.raw',
         'ctype':'ctype.raw'
 
     }
@@ -63,12 +72,12 @@ class GroupViewSet(DocumentViewSet):
     }
 
 
-class IndividualViewSet(DocumentViewSet):
+class IndividualViewSet(AccessView):
 
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
 
 
@@ -77,11 +86,14 @@ class IndividualViewSet(DocumentViewSet):
         'name',
         'study.name',
         'group.name',
-        'characteristica_all_normed.category',
+        'characteristica_all_normed.measurement_type.name',
         'characteristica_all_normed.choice',
-        'characteristica_all_normed.ctype',
 
     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
 
     # Filter fields
     filter_fields = {
@@ -89,7 +101,6 @@ class IndividualViewSet(DocumentViewSet):
         'name': 'name.raw',
         'group': 'group.name.raw',
         'study': 'study.name.raw',
-        'ctype':'ctype.raw'
     }
 
     # Define ordering fields
@@ -101,17 +112,22 @@ class IndividualViewSet(DocumentViewSet):
     }
 
 
-class CharacteristicaViewSet(DocumentViewSet):
+
+class CharacteristicaElasticViewSet(AccessView):
     pagination_class = CustomPagination
     document = CharacteristicaDocument
-    serializer_class = CharacteristicaReadSerializer
+    serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,CompoundSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
 
     search_fields = (
         'choice',
         'group_name',
     )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
     ordering_fields = {
         'choice': 'choice.raw',
         "count": 'count',
@@ -144,7 +160,7 @@ class DataFileViewSet(viewsets.ModelViewSet):
 
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (StudyPermission,)
 
 
     def create(self, request, *args, **kwargs):
@@ -167,7 +183,7 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
     @staticmethod
     def get_options():
         options = {}
-        options["categories"] = {k.key: k._asdict() for k in CharacteristicType.objects.all()}
+        options["measurement_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         return options
 
     def list(self, request):

@@ -5,8 +5,12 @@
         A detailed guideline for curation of studies is provided in
         <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
         </p>
-        <h2>Choices for groups and individuals</h2>
+        <measurement-types-table/>
+        <substances-table/>
+
+        <!--
         <v-layout row wrap>
+
             <v-flex xs4>
                 <get-data :resource_url="characteristica_options_url">
                   <template slot-scope="characteristica">
@@ -15,13 +19,7 @@
                 </get-data>
             </v-flex>
 
-            <v-flex xs4>
-                <get-data :resource_url="keywords_url">
-                    <template slot-scope="keywords">
-                        <keyword-browser :keywords="keywords.data.data" title="Keywords"/>
-                    </template>
-                </get-data>
-            </v-flex>
+
         </v-layout>
 
         <h2>Choices for interventions and outputs</h2>
@@ -48,22 +46,23 @@
                 </get-data>
             </v-flex>
         </v-layout>
+        -->
     </div>
 </template>
 
 <script>
     import CharacteristicaBrowser from "./curation/CharacteristicaBrowser"
     import OutputBrowser from "./curation/OutputBrowser"
-    import SubstanceBrowser from "./curation/SubstanceBrowser"
-    import KeywordBrowser from "./curation/KeywordBrowser"
+    import SubstancesTable from "./curation/SubstancesTable"
+    import MeasurementTypesTable from "./curation/MeasurementTypesTable";
 
     export default {
         name: "Curation",
         components: {
+            MeasurementTypesTable,
             CharacteristicaBrowser,
             OutputBrowser,
-            SubstanceBrowser,
-            KeywordBrowser
+            SubstancesTable,
         },
         computed: {
             characteristica_options_url() {
@@ -77,10 +76,7 @@
             },
             substances_url() {
                 return this.$store.state.endpoints.api + '/substances_elastic/?page_size=1000';
-            },
-            keywords_url() {
-                return this.$store.state.endpoints.api + '/keywords_elastic/?page_size=1000';
-            },
+            }
 
         }
     }

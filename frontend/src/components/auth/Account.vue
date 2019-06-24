@@ -1,26 +1,20 @@
 <template>
-    <span>
-        <h1>User Account</h1>
-        <h2>Vue login</h2>
-        <div id="login-example">
-            <user-login></user-login>
+        <div id="app">
+          <v-app id="inspire">
+            <v-content>
+              <v-container fluid fill-height>
+                <v-layout align-center justify-center>
+                  <v-flex xs12 sm8 md4>
+                    <v-card class="elevation-12">
+                            <user-login></user-login>
+                    </v-card>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-content>
+          </v-app>
         </div>
 
-        <h2>Django endpoints</h2>
-        <ul>
-            <span v-if="user">
-            <li><a :href="domain+'/accounts/password/change/'+user">change password</a></li>
-            <li><a :href="domain+'/accounts/password/reset/'+user">reset password</a></li>
-            </span>
-            <span v-else>
-                <li><a :href="domain+'/accounts/signup/'">signup</a></li>
-                <!-- not needed for anything
-                <li><a :href="domain+'/accounts/login/'">login</a></li>
-                <li><a :href="domain+'/accounts/logout/'">logout</a></li>
-                -->
-            </span>
-        </ul>
-    </span>
 </template>
 
 <script>

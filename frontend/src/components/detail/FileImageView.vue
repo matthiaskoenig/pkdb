@@ -6,17 +6,22 @@
             dark
             slider-color="yellow">
         <v-tab
-                v-for="(item, i) in images"
+                v-for="(item, i) in files"
                 :key="i"
                 ripple
         >
             {{ id_from_name(item.name) }}
 
         </v-tab>
-        <v-tab-item v-for="item in images" :key="item.name">
+        <v-tab-item v-for="item in files" :key="item.name">
             <v-card flat>
-                <v-btn flat small><a :href="backend+item.file" target="blank">{{ item.name }}</a></v-btn>
-                <v-img :src="backend+item.file" :v-auth-img="backend+item.file" max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
+                <get-file :resource_url="backend+item.file">
+                    <template slot-scope="data">
+                        <v-img :src="data.data"  max-height="500" max-width="500" :alt="item.name" :contain="true" @click="next"> </v-img>
+                    </template>
+
+                </get-file>
+
             </v-card>
 
             <!-- Timecourse plots
@@ -41,11 +46,13 @@
      */
     import {lookup_icon} from "@/icons"
     import {UrlMixin} from "../tables/mixins";
+    import GetFile from "../api/GetFile";
+
     import TimecoursesPlot from "../plots/TimecoursesPlot";
 
     export default {
         name: "FileImageView",
-        components: {TimecoursesPlot},
+        components: {TimecoursesPlot,GetFile},
         props: {
             files: {
                 type: Array,
@@ -73,9 +80,11 @@
                 return list.sort(function(a, b){
                     return a.name.localeCompare(b.name)
                 });
+
             }
         },
         methods: {
+
 
             id_from_name: function (name) {
                 let tokens = name.split("_");

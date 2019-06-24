@@ -8,7 +8,7 @@
 #     ./docker-purge.sh
 # -----------------------------------------------------------------------------
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-: "${PKDB_DOCKER_COMPOSE_YAML:?The PKDB environment variable must be exported.}"
+: "${PKDB_DOCKER_COMPOSE_YAML:?The PKDB environment variable must be exported: set -a && source .env.local}"
 
 sudo echo "Purging database and all docker containers, volumes, images ($PKDB_DOCKER_COMPOSE_YAML)?"
 #FIXME: add argument to skip question
@@ -63,7 +63,7 @@ echo "***Make migrations & collect static ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py makemigrations && /usr/local/bin/python manage.py migrate && /usr/local/bin/python manage.py collectstatic --noinput "
 
 echo "*** Setup admin user ***"
-docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${PKDB_DEFAULT_PASSWORD} --email koenigmx@hu-berlin.de --noinput"
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend bash -c "/usr/local/bin/python manage.py createsuperuser2 --username admin --password ${PKDB_ADMIN_PASSWORD} --email konigmatt@googlemail.com --noinput"
 
 echo "*** Build elasticsearch index ***"
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py search_index --rebuild -f

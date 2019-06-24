@@ -15,8 +15,7 @@ var backend_domain = process.env.VUE_APP_API_BASE;
 
 if (!backend_domain){
     // running in develop, no environment variable set
-    console.warn('No PKDB backend set via environment variable: VUE_APP_API_BASE');
-    backend_domain = 'http://0.0.0.0:8000';
+    console.error('No PKDB backend set via environment variable: VUE_APP_API_BASE');
 }
 console.log('PKDB backend: ' + backend_domain);
 
@@ -46,7 +45,15 @@ export default new Vuex.Store({
 
         endpoints: {
             api: backend_domain + '/api/v1',
-            obtainAuthToken: backend_domain + '/api-token-auth/'
+            obtainAuthToken: backend_domain + '/api-token-auth/',
+            register: backend_domain + '/accounts/register/',
+            verify: backend_domain + '/accounts/verify-email/',
+            request_password_reset: backend_domain + '/accounts/request-password-reset/',
+            password_reset: backend_domain + '/accounts/reset-password/',
+
+
+
+
         },
 
         username: localStorage.getItem('username'),

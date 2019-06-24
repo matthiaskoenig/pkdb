@@ -90,16 +90,30 @@ or to run migrations
 ```bash
 docker-compose run --rm backend python manage.py makemigrations
 ```
+## Authentication data dump
+```bash
 
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  dumpdata auth  --indent 2 > ./backend/pkdb_app/fixtures/auth.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  dumpdata users  --indent 2 > ./backend/pkdb_app/fixtures/users.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  dumpdata rest_email_auth  --indent 2 > ./backend/pkdb_app/fixtures/rest_email_auth.json
+```
+
+## authentication data load
+```bash
+
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata auth pkdb_app/fixtures/auth.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata users pkdb_app/fixtures/users.json
+docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata rest_email_auth pkdb_app/fixtures/rest_email_auth.json
+```
 ## REST services
 PKDB provides a REST API which allows simple interaction with the database.
 An overview over the REST endpoints is available from
 ```
-http://localhost:8000/api/v1/
+http://localhost:8123/api/v1/
 ```
 
-Elastic Search engine is running on `localhost:9200` but is also reachable via django views.
-General examples can be found here: https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
+The REST API supports elastisearch queries, with examples 
+available from https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
 
 Query examples:
 ```
@@ -120,6 +134,5 @@ http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 
 ## Fill database
 Database is filled using `pkdb_data` repository at https://github.com/matthiaskoenig/pkdb_data
- 
-## Read 
+
 &copy; 2017-2019 Jan Grzegorzewski & Matthias König.

@@ -3,14 +3,14 @@ Django model for Study.
 """
 from django.db import models
 from pkdb_app.users.models import PUBLIC, PRIVATE
-from pkdb_app.users.permissions import study_permissions
 
-from ..categorials.models import Keyword
-from ..outputs.models import OutputSet
+from ..outputs.models import OutputSet, Output, Timecourse
 
-from ..interventions.models import InterventionSet, DataFile, Substance
+from ..interventions.models import InterventionSet, DataFile, Intervention
+from ..substances.models import Substance
+
 from ..storage import OverwriteStorage
-from ..subjects.models import GroupSet, IndividualSet
+from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..behaviours import Sidable
 from ..users.models import User
@@ -56,8 +56,8 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # optional
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, primary_key=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True)  # optional
     title = models.TextField()
@@ -70,20 +70,19 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
-    @property
-    def id(self):
-        return self.pk
+
+
     @property
     def study_pk(self):
-        if self.study.first():
-            return self.study.first().pk
+        if self.study:
+            return self.study.pk
         else:
             return ""
 
     @property
     def study_name(self):
-        if self.study.first():
-            return self.study.first().name
+        if self.study:
+            return self.study.name
         else:
             return ""
 
@@ -112,14 +111,12 @@ class Study(Sidable, models.Model):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    reference = models.ForeignKey(
+    reference = models.OneToOneField(
         Reference, on_delete=models.CASCADE, related_name="study", null=True
     )
     curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)
     collaborators = models.ManyToManyField(User,related_name="collaborator_of_studies")
 
-    substances = models.ManyToManyField(Substance, related_name="studies")
-    keywords = models.ManyToManyField(Keyword, related_name="studies")
 
     groupset = models.OneToOneField(GroupSet,related_name="study", on_delete=models.SET_NULL, null=True)
     interventionset = models.OneToOneField(
@@ -143,41 +140,55 @@ class Study(Sidable, models.Model):
     def __str__(self):
         return '%s' % self.name
 
+
     @property
     def individuals(self):
         try:
             return self.individualset.individuals.all()
         except AttributeError:
-            return []
+            return Individual.objects.none()
 
     @property
     def groups(self):
         try:
             return self.groupset.groups.all()
         except AttributeError:
-            return []
+            return Group.objects.none()
+
+    @property
+    def characteristica(self):
+        empty_characteristica = Characteristica.objects.none()
+        for group in self.groups.all():
+            empty_characteristica = empty_characteristica.union(group.characteristica.all())
+        for individual in self.individuals.all():
+            empty_characteristica = empty_characteristica.union(individual.characteristica.all())
+
+        return empty_characteristica
+
 
     @property
     def interventions(self):
         try:
             return self.interventionset.interventions.all()
         except AttributeError:
-            return []
+            return Intervention.objects.none()
+
 
     @property
     def outputs(self):
         try:
             return self.outputset.outputs.all()
         except AttributeError:
-            return []
+            return Output.objects.none()
 
     @property
     def timecourses(self):
         try:
             return self.outputset.timecourses.all()
         except AttributeError:
-            return []
+            return Timecourse.objects.none()
 
+    @property
     def get_substances(self):
         """Get all substances for given study.
         Substances are collected from
@@ -189,6 +200,7 @@ class Study(Sidable, models.Model):
 
         all_substances = []
         basic_substances = []
+
 
         if self.interventions:
             all_substances.extend(list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
@@ -203,26 +215,22 @@ class Study(Sidable, models.Model):
 
         basic_substances_dj = substances_dj.filter(parents__isnull=True)
         if basic_substances_dj:
-            basic_substances.extend(list(basic_substances_dj.values_list("pk", flat=True)))
+            basic_substances.extend(list(basic_substances_dj.values_list("name", flat=True)))
 
         substances_derived_dj = substances_dj.filter(parents__isnull=False)
         if substances_derived_dj:
-            basic_substances.extend(list(substances_derived_dj.values_list("parents__pk",flat=True)))
+            basic_substances.extend(list(substances_derived_dj.values_list("parents__name",flat=True)))
 
-        return set(basic_substances)
+        return list(set(basic_substances))
 
-
-    @property
-    def substances_name(self):
-        return [substance.name for substance in self.substances.all()]
 
     @property
     def files_url(self):
         return [file.file.name for file in self.files.all()]
 
     @property
-    def keywords_name(self):
-        return [keyword.name for keyword in self.keywords.all()]
+    def files_ordered(self):
+        return self.files.all().order_by("file")
 
     @property
     def reference_name(self):
@@ -271,7 +279,5 @@ class Study(Sidable, models.Model):
 
         return 0
 
-    def permitted_study(self,request):
-        return study_permissions(self,request)
 
 

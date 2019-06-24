@@ -1,38 +1,25 @@
 <template>
     <span id="file-chip" class="text-xs-center" @mouseover="showText=true" @mouseleave="showText=true">
 
-        <a :href="backend+file" :title="backend+file">
+        <a  @click.prevent="downloadItem(file_url)" :href="file_url" :title="file_url">
             <v-chip>
-                <v-icon small>{{ icon('file') }}</v-icon>
+                <v-icon color="orange" v-if="filetype(file)=='image'" small>{{ icon('file_image') }}</v-icon>
+                <v-icon color="blue" v-if="filetype(file)=='data'" small>{{ icon('file') }}</v-icon>
+                <v-icon color="green" v-if="filetype(file)=='spreadsheet'" small>{{ icon('file_excel') }}</v-icon>
+                <v-icon color="red" v-if="filetype(file)=='pdf'" small>{{ icon('file_pdf') }}</v-icon>
+                <v-icon color="white" v-if="filetype(file)=='other'" small>{{ icon('file') }}</v-icon>
+                &nbsp;
                 <span v-show="showText">
                     <text-highlight :queries="search.split(/[ ,]+/)">&nbsp;{{name(file)}}</text-highlight>
                 </span>
             </v-chip>
         </a>
-
-        <!--
-        <span v-if="!is_image(file)">
-
-        <span v-else>
-            <v-dialog scrollable>
-
-
-            <v-btn slot="activator" fab dark small flat color="black"
-                   :disabled="resource_url ? false : true" title="PDF">
-                <v-icon dark>fas fa-file</v-icon>
-            </v-btn>
-                <v-card style="height: 800px;">
-                    <embed :src="resource_url"  height="100%" width="100%"/>
-                </v-card>
-            </v-dialog>
-        </span>
-        </span>
-        -->
     </span>
 </template>
 
 <script>
     import {lookup_icon} from "@/icons"
+    import axios from 'axios'
 
     export default {
         name: "FileChip",
@@ -46,25 +33,75 @@
             }
         },
         methods: {
+            downloadItem(url){
+                if (localStorage.getItem('token'))
+                { var headers = {Authorization :  'Token ' + localStorage.getItem('token')}}
+                else {
+                    headers = {}
+                }
+                axios.get(url,{ headers: headers, responseType: 'arraybuffer'})
+                    .then(response => {
+                        let url_data = window.URL.createObjectURL(new Blob([response.data]));
+                        let link = document.createElement('a');
+                        link.href = url_data;
+                        link.setAttribute('download', this.name(url)); //or any other extension
+                        document.body.appendChild(link);
+                        link.click()
+
+                    })
+                    .catch((error)=>{
+                        console.error(url);
+                        console.error(error);
+                    })
+            },
             icon(key) {
                 return lookup_icon(key)
             },
             name(url) {
                 return url.substr(url.lastIndexOf('/') + 1);
             },
-            is_image(file){
-                return (file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg"));
-            },
-            is_data(file){
-                return (file.endsWith(".csv") || file.endsWith(".tsv") || file.endsWith(".jpeg"));
-            },
-            is_spreadsheet(file){
-                return (file.endsWith(".xlsx"));
+            filetype(file){
+                if (file.endsWith(".png")){
+                    return "image"
+                }
+                if (file.endsWith(".jpg")){
+                    return "image"
+                }
+                if (file.endsWith(".jpeg")){
+                    return "image"
+                }
+                if (file.endsWith(".csv")){
+                    return "data"
+                }
+                if (file.endsWith(".tsv")){
+                    return "data"
+                }
+                if (file.endsWith(".ods")){
+                    return "spreadsheet"
+                }
+                if (file.endsWith(".xlsx")){
+                    return "spreadsheet"
+                }
+                if (file.endsWith(".pdf")){
+                    return "pdf"
+                }
+                return "other"
             }
+
         },
         computed: {
             backend() {
                 return this.$store.state.django_domain;
+            },
+            file_url() {
+                if (this.file.startsWith(this.backend)){
+                    return this.file
+
+                }
+                else{
+                    return this.backend+this.file
+                }
+
             },
 
         },

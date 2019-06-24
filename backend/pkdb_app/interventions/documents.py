@@ -10,10 +10,10 @@ intervention_index.settings(**elastic_settings)
 @intervention_index.doc_type
 class InterventionDocument(DocType):
     pk = fields.IntegerField()
-    #category =  string_field('category_key')
+    #category =  string_field('measurement_type_name')
 
-    category = fields.StringField(
-        attr='category_key',
+    measurement_type = fields.StringField(
+        attr='measurement_type_name',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }
@@ -23,10 +23,8 @@ class InterventionDocument(DocType):
     application = string_field('application')
     time_unit = string_field('time_unit')
     time = fields.FloatField()
-    substance = ObjectField(properties={
-        'name': string_field('name')}
-        )
-    study = string_field('study')
+    substance= string_field('substance_name')
+    study = string_field('study_name')
     route = string_field('route')
     form = string_field('form')
     name = string_field('name')
@@ -43,6 +41,18 @@ class InterventionDocument(DocType):
     sd = fields.FloatField()
     cv = fields.FloatField()
     unit = string_field('unit')
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            #'first_name': string_field("first_name"),
+            #'last_name': string_field("last_name"),
+            #'pk': string_field("pk"),
+            'username': string_field("username")
+        },
+        multi=True
+    )
 
     class Meta(object):
         model = Intervention

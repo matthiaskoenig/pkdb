@@ -10,19 +10,21 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
-    "@fortawesome/fontawesome-svg-core": "^1.2.4",
-    "@fortawesome/free-brands-svg-icons": "^5.3.1",
-    "@fortawesome/free-solid-svg-icons": "^5.3.1",
-    "@fortawesome/vue-fontawesome": "^0.1.1",
-    "@statnett/vue-plotly": "^0.2.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.18",
+    "@fortawesome/free-brands-svg-icons": "^5.8.2",
+    "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
+    "@statnett/vue-plotly": "^0.3.2",
     "axios": "^0.18.0",
-    "vue": "^2.5.17",
+    "base-64": "^0.1.0",
+    "vue": "^2.6.10",
     "vue-auth-image": "0.0.2",
+    "vue-plotly": "^1.0.0",
     "vue-resource": "^1.5.1",
-    "vue-router": "^3.0.1",
-    "vue-text-highlight": "^1.1.2",
-    "vuetify": "^1.2.0",
-    "vuex": "^3.0.1",
+    "vue-router": "^3.0.6",
+    "vue-text-highlight": "^1.1.3",
+    "vuetify": "^1.5.14",
+    "vuex": "^3.1.0",
     "vuex-persist": "^2.0.0"
   },
   "devDependencies": {
@@ -39,6 +41,6 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-vuetify": "^0.2.1",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.6.10"
   }
 }

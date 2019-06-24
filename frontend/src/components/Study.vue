@@ -23,19 +23,12 @@
         },
 
         computed: {
-            study_id()
-            {
-            var path = this.$route.path;
-            var tokens = path.split('/');
-            var entry_id = tokens[tokens.length-1];
-
-                return entry_id}
-            ,
+            study_id(){
+                let path = this.$route.path;
+                let tokens = path.split('/');
+                return tokens[tokens.length-1];
+            },
             resource_url() {
-                //var path = this.$route.path;
-                // var tokens = path.split('/');
-                //console.log(tokens);
-                //var entry_id = tokens[tokens.length-1];
                 return this.$store.state.endpoints.api + '/studies_elastic/'+ this.study_id +'/?format=json';
             },
             study_pks_url(){

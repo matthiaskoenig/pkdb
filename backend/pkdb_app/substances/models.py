@@ -1,10 +1,10 @@
 """
 Describe Substances
 """
-
+from django.apps import apps
 from django.db import models
+from pkdb_app.categorials.models import Annotation
 from pkdb_app.users.models import User
-
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
 
@@ -41,6 +41,8 @@ class Substance(Sidable, models.Model):
     parents = models.ManyToManyField("Substance", related_name="children")
     creator = models.ForeignKey(User, related_name="substances", on_delete=models.CASCADE)
 
+    annotations = models.ManyToManyField(Annotation)
+
 
     # validation rule: check that all labels are in derived and not more(split on `+/()`)
 
@@ -49,23 +51,23 @@ class Substance(Sidable, models.Model):
 
     @property
     def derived(self):
-        return bool(self.parents)
+        return self.parents.exists()
 
     @property
     def outputs_normed(self):
-        return self.outputs.filter(normed=True)
+        return self.output_set.filter(normed=True)
 
     @property
     def outputs_calculated(self):
-        return self.outputs.filter(normed=True, calculated=True)
+        return self.output_set.filter(normed=True, calculated=True)
 
     @property
     def timecourses_normed(self):
-        return self.timecourses.filter(normed=True)
+        return self.timecourse_set.filter(normed=True)
 
     @property
     def interventions_normed(self):
-        return self.interventions.filter(normed=True)
+        return self.intervention_set.filter(normed=True)
 
     @property
     def creator_username(self):
@@ -73,7 +75,7 @@ class Substance(Sidable, models.Model):
 
 
 class SubstanceSynonym(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="synonyms")
 
 
