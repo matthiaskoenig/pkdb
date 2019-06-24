@@ -5,6 +5,7 @@ FIXME: Some duplication to pkdb_data/categorials
 """
 import pint
 from pint import UndefinedUnitError
+from numbers import Number
 
 from django.db import models
 from pkdb_app.categorials.managers import ChoiceManager
@@ -31,7 +32,7 @@ CATEGORIAL_TYPE = "categorial"
 BOOLEAN_TYPE = "boolean"
 NUMERIC_CATEGORIAL_TYPE = "numeric_categorial"
 DTYPE_CHOICES = create_choices([NUMERIC_TYPE,CATEGORIAL_TYPE, BOOLEAN_TYPE,NUMERIC_CATEGORIAL_TYPE])
-
+CAN_NEGATIVE_MEASUREMENT_TYPE = []
 
 
 def validate_measurement_type(data):
@@ -162,7 +163,7 @@ class MeasurementType(models.Model):
             return self.dimension_to_n_unit[str(self.unit_dimension(unit))]
         except KeyError:
             raise ValueError(
-                f"Dimension [{self.unit_dimension(unit)}] is not allowed for pktype [{self.name}]."
+                f"Dimension [{self.unit_dimension(unit)}] is not allowed for measurement type [{self.name}]."
                 f" Dimension was calculated from unit :[{unit}]")
 
     def unit_dimension(self, unit):
@@ -216,10 +217,39 @@ class MeasurementType(models.Model):
             msg = f"{choice}. A choice is required for `{self.name}`. Allowed choices are: `{list(self.choices_list())}`."
             raise ValueError({"choice":msg})
 
+    @property
+    def numeric_fields(self):
+        return ["value", "mean", "median", "min", "max","sd", "se", "cv"]
+    @property
+    def can_be_negative(self):
+        return self.name in CAN_NEGATIVE_MEASUREMENT_TYPE
+
+    def validate_numeric(self, data):
+        if self.dtype in [NUMERIC_CATEGORIAL_TYPE, NUMERIC_TYPE]:
+            for field in self.numeric_fields:
+                value = data.get(field)
+                if not self.can_be_negative:
+
+                    if isinstance(value, Number):
+                        rule = value < 0
+                    #for timecourses
+
+                    elif isinstance(value,list):
+                        rule = any(v < 0 for v in value)
+
+                    else:
+                        rule = False
+
+                    if rule:
+                            raise ValueError({field: f"Numeric values need to be postive for all measurement types but"
+                                      f" <{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail":data})
+
     def validate_complete(self, data):
         # check unit
 
+
         self.validate_unit(data.get("unit",None))
+        self.validate_numeric(data)
 
         choice = data.get("choice", None)
         self.validate_choice(choice)
