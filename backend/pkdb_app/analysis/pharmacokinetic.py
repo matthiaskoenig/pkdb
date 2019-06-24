@@ -316,6 +316,19 @@ def _kel(t, c, slope=None):
         [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
     return -slope
 
+def _kel_cv(t, c, std_err=None,slope=None):
+
+    if std_err is None or slope is None:
+        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
+    return std_err/slope
+
+def _thalf_cv(t, c, slope=None, std_err=None ):
+
+    kel = _kel(t, c, slope=slope)
+
+    return np.log(2) / _kel_cv(t, c, slope=slope, std_err=std_err)
+
+
 
 def _thalf(t, c, slope=None):
     """ Calculates the half-life using the elimination constant.
@@ -332,7 +345,6 @@ def _thalf(t, c, slope=None):
     """
     kel = _kel(t, c, slope=slope)
     return np.log(2) / kel
-
 
 def _vd(t, c, dose, intercept=None):
     """

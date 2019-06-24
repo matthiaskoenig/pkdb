@@ -18,7 +18,11 @@
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.mass}} </text-highlight> </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.charge}}  </text-highlight> </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.formula}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.derived}} </text-highlight> </td>
+                <td>
+                    <v-chip disabled=true color='green' v-if="table.item.derived" >
+                        <v-icon small title="derived from parents">{{icon("success")}}</v-icon>
+                    </v-chip>
+                </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.description}} </text-highlight> </td>
                 <td>
 
