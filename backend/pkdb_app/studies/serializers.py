@@ -258,11 +258,14 @@ class StudySerializer(SidSerializer):
             reference = Reference.objects.get(sid=data["reference"])
             if hasattr(reference,"study"):
                 if str(reference.study.sid) != str(data.get("sid")):
+
                     raise serializers.ValidationError(
                             {
                                 "reference":
                                     f"References are required to be unqiue on every study. "
-                                    f"This Reference already exist in study <{reference.study.name}>.",
+                                    f"This Reference already exist in study with sid: <{reference.study.sid} and "
+                                    f"name: <{reference.study.name}>. If you changed the sid of the study "
+                                    f"you might want to run `delete_study -s {reference.study.sid}`. ",
                                 "details": data["reference"],
                             }
                         )
