@@ -1,27 +1,26 @@
 <template>
     <v-card>
         <span v-if="user">
-            <v-btn color="primary"  v-on:click="logout">Logout</v-btn>
-             <p>
-            <span v-if="user">
-            User: {{ user }}<br />
-            Token: {{ token }}<br />
+            <v-card-text>
+            <v-form>
+                <v-text-field readonly prepend-icon="fas fa-user-circle" v-model="user" name="username" label="Username" type="text" :value="user"></v-text-field>
+            </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="primary"  v-on:click="logout">Logout</v-btn>
+
                 <v-spacer> </v-spacer>
+                <v-btn flat>
                 <router-link   v-on:click.native="close" to="/request-password-reset" >
-                   request password reset
+                   password reset
                 </router-link>
-            </span>
-        </p>
-        <!--
-        <a :href="domain+'/accounts/password/change/'+user">change password</a>
-        <a :href="domain+'/accounts/password/reset/'+user">reset password</a>
-        -->
+                </v-btn>
+            </v-card-actions>
         </span>
         <span v-else>
 
         <v-card-text>
             <v-form>
-
                 <v-alert v-for="general_warning in general_warnings" :value="general_warnings" type="error">
                     {{general_warning}}
                 </v-alert>
@@ -30,19 +29,15 @@
             </v-form>
         </v-card-text>
         <v-card-actions>
-            <v-spacer>
-                <router-link   v-on:click.native="close" to="/registration" >
+            <v-btn color="primary" v-on:click="login">Login</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn flat><router-link v-on:click.native="close" to="/registration" >
                    register
-                </router-link>
-                <v-spacer> </v-spacer>
-                 <router-link   v-on:click.native="close" to="/request-password-reset" >
+                </router-link></v-btn>
+
+                 <v-btn flat><router-link v-on:click.native="close" to="/request-password-reset" >
                    forgot password
-                </router-link>
-
-
-            </v-spacer>
-            <v-spacer> </v-spacer>
-            <v-btn color="primary"  v-on:click="login">Login</v-btn>
+                </router-link></v-btn>
 
         </v-card-actions>
         </span>
@@ -63,9 +58,6 @@
             warnings:''
         }),
         props: {
-            showUserDialog: {
-                default:false
-            }
         },
         computed: {
             token() {
@@ -143,10 +135,11 @@
                         this.$store.dispatch('login', {
                             username: this.username,
                             token: response.data.token,
-
                     });
 
                         this.close()
+                        // do a refresh
+                        this.$router.go()
                     })
                     .catch((error)=>{
                         this.warnings = error.response.data;
@@ -158,6 +151,8 @@
             logout: function(){
                 this.$store.dispatch('logout');
                 this.close()
+                // do a refresh
+                this.$router.go()
             }
         }
     }

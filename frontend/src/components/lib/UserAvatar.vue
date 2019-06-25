@@ -42,6 +42,7 @@
 
                 // FIXME: this is all hardcoded for now
                 if (this.user){
+                    image = 'user_128.png';
                     if (this.initials === 'MK'){
                         image = 'koenig_128.png';
                     } else if (this.initials === 'JG'){
@@ -55,7 +56,8 @@
                     } else if (this.initials === 'JB'){
                         image = 'jbrandhorst_128.png';
                     }
-                } else {
+                } else if (this.username) {
+                    image = 'user_128.png';
                     if (this.username === 'mkoenig'){
                         image = 'koenig_128.png';
                     } else if (this.username === 'janekg'){
