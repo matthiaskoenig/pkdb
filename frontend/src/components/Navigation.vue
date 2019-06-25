@@ -25,7 +25,7 @@
         </v-chip>
 
 
-        <v-dialog v-model="showUserDialog">
+        <v-dialog v-model="showUserDialog" max-width="500">
             <template v-slot:activator="{on}">
                     <v-btn icon v-on="on">
                         <v-icon>{{ icon('account') }}</v-icon>
