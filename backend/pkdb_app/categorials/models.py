@@ -241,8 +241,10 @@ class MeasurementType(models.Model):
                         rule = False
 
                     if rule:
-                            raise ValueError({field: f"Numeric values need to be postive for all measurement types but"
-                                      f" <{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail":data})
+                            raise ValueError(
+                                {field: f"Numeric values need to be positive (>=0) "
+                                        f"for all measurement types except "
+                                        f"<{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail":data})
 
     def validate_complete(self, data):
         # check unit
