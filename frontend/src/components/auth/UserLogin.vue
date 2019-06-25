@@ -94,6 +94,7 @@
                 if (this.warnings){
 
                     if ("username" in this.warnings){
+                        console.log(this.warnings);
                         return this.warnings["username"]
                     }
                     else {

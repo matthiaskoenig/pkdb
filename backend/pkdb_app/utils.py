@@ -118,6 +118,7 @@ def create_multiple_bulk_normalized(notnormalized_instances, model_class):
         return model_class.objects.bulk_create([initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
 
 def initialize_normed(notnorm_instance):
+
     norm = copy.copy(notnorm_instance)
     norm.pk = None
     norm.normed = True

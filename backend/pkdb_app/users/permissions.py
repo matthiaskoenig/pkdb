@@ -107,6 +107,7 @@ def get_study_permission(user,obj):
 
 
 def get_study_file_permission(user,obj):
+    allow_user_get = False
     if isinstance(obj, AttrDict) or isinstance(obj, DictionaryProxy):
         username = user.username
         curator_usernames = [curator["username"] for curator in obj.curators]

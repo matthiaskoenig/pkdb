@@ -440,8 +440,6 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_pdf(self, obj):
         user = self.context["request"].user
-
-
         if get_study_file_permission(user,AttrDict(obj.study)):
             return obj.to_dict().get("pdf")
         else:
