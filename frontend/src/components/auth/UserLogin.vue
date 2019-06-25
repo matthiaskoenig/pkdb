@@ -58,9 +58,6 @@
             warnings:''
         }),
         props: {
-            showUserDialog: {
-                default:false
-            }
         },
         computed: {
             token() {

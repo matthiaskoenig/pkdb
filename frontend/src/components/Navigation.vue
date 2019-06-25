@@ -1,14 +1,7 @@
 <template>
     <v-toolbar id="navigation" class="fixed-nav-bar" flat dense>
-        <!--
-        <v-toolbar-side-icon></v-toolbar-side-icon>
-        <v-toolbar-title class="white--text">PK-DB</v-toolbar-title>
-        -->
-        <v-btn icon to="/" title="Home">
-            <v-icon>{{ icon('home') }}</v-icon>
-        </v-btn>
-        <!--<v-spacer></v-spacer>-->
 
+        <v-btn icon to="/" title="Home"><v-icon>{{ icon('home') }}</v-icon></v-btn>
         <v-btn icon to="/studies" title="Studies"><v-icon>{{ icon('studies') }}</v-icon></v-btn>
         <v-btn icon to="/groups" title="Groups"><v-icon>{{ icon('groups') }}</v-icon></v-btn>
         <v-btn icon to="/individuals" title="Individuals"><v-icon>{{ icon('individuals') }}</v-icon></v-btn>
@@ -18,28 +11,22 @@
         <v-btn icon to="/references" title="References"><v-icon>{{ icon('references') }}</v-icon></v-btn>
 
         <v-spacer></v-spacer>
-        <!--user -->
-        <v-chip v-if="this.$store.state.username" flat>
-            <user-avatar :username="this.$store.state.username"></user-avatar>
-            {{this.$store.state.username}}
+
+        <!-- account -->
+        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true">
+            <user-avatar :username="username"></user-avatar>
+            {{ username }}
         </v-chip>
-
-
-        <v-dialog v-model="showUserDialog" max-width="500">
-            <template v-slot:activator="{on}">
-                    <v-btn icon v-on="on">
-                        <v-icon>{{ icon('account') }}</v-icon>
-                    </v-btn>
-            </template>
-            <user-login :dialog.sync="showUserDialog" ></user-login>
+        <v-btn v-if="username==null" icon title="Login" @click.stop="dialog=true">
+            <v-icon>{{ icon('account') }}</v-icon>
+        </v-btn>
+        <v-dialog v-model="dialog" max-width="500">
+            <user-login></user-login>
         </v-dialog>
 
-
+        <!-- links -->
         <v-btn icon to="/curation" title="Curation information"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API"><v-icon>{{ icon('api') }}</v-icon></v-btn>
-        <!--
-        <v-btn icon to="/about" title="About PK-DB"><v-icon>{{ icon('about') }}</v-icon></v-btn>
-        -->
         <v-btn icon :href="admin_url" title="Django admin interface">
             <v-icon>{{ icon('admin') }}</v-icon>
         </v-btn>
@@ -55,14 +42,12 @@
 
     export default {
         name: 'Navigation',
-        data(){
-            return {
-                showUserDialog : false,
-            }
+        components: {
+            UserLogin,
         },
-        components: {UserLogin,
-
-        },
+        data: () => ({
+            dialog: false
+        }),
         computed: {
             // vuex store
             admin_url() {
@@ -72,6 +57,9 @@
 
                 return this.$store.state.endpoints.api;
             },
+            username(){
+                return this.$store.state.username
+            }
         },
         methods: {
             icon: function (key) {
