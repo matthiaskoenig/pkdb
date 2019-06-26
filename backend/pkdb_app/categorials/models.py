@@ -5,13 +5,14 @@ FIXME: Some duplication to pkdb_data/categorials
 """
 import pint
 from pint import UndefinedUnitError
+import numpy as np
+
 from numbers import Number
 
 from django.db import models
 from pkdb_app.categorials.managers import ChoiceManager
 from pkdb_app.users.models import User
 from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key
-
 ureg = pint.UnitRegistry()
 
 # Units

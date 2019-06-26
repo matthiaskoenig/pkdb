@@ -49,7 +49,7 @@ class ElasticInterventionViewSet(AccessView):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
-    search_fields = ('name','measurement_type','substance.name',"form","application",'route','time_unit','normed')
+    search_fields = ('name','study','access','measurement_type','substance',"form","application",'route','time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -60,5 +60,5 @@ class ElasticInterventionViewSet(AccessView):
                        'choice':'choice.raw',
                        'normed':'normed',
                        'application':'application.raw',
-                       'substance':'substance.name',
+                       'substance':'substance.raw',
                        'value':'value'}

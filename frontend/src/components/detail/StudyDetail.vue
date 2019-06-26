@@ -6,7 +6,7 @@
             <Heading :title="study.sid + ' (' + study.name + ')'" :icon="icon('study')" :resource_url="resource_url"/>
 
             <a @click="scrollMeTo('general')">
-                <v-chip color="w" disable=false>
+                <v-chip color="w" :disable="false">
                     <v-icon small title="General study information">{{icon("about")}}</v-icon>
                 </v-chip>
             </a>
@@ -14,27 +14,27 @@
             <a @click="scrollMeTo('groups')" v-if="study.group_count">
                 <count-chip :count="study.group_count" icon="group"></count-chip>
             </a>
-            <count-chip v-else disabled=true :count="study.group_count" icon="group"></count-chip>
+            <count-chip v-else :disabled="true" :count="study.group_count" icon="group"></count-chip>
 
             <a @click="scrollMeTo('individuals')" v-if="study.individual_count">
                 <count-chip :count="study.individual_count" icon="individual"></count-chip>
             </a>
-            <count-chip v-else disabled=true :count="study.individual_count" icon="individual"></count-chip>
+            <count-chip v-else :disabled="true" :count="study.individual_count" icon="individual"></count-chip>
 
             <a @click="scrollMeTo('interventions')" v-if="study.intervention_count">
                 <count-chip :count="study.intervention_count" icon="intervention"></count-chip>
             </a>
-            <count-chip  v-else disabled=true :count="study.intervention_count" icon="intervention"></count-chip>
+            <count-chip  v-else :disabled="true" :count="study.intervention_count" icon="intervention"></count-chip>
 
             <a @click="scrollMeTo('outputs')" v-if="study.output_count">
                 <count-chip :count="study.output_count" icon="output"></count-chip>
             </a>
-            <count-chip v-else disabled=true :count="study.output_count" icon="output"></count-chip>
+            <count-chip v-else :disabled="true" :count="study.output_count" icon="output"></count-chip>
 
             <a @click="scrollMeTo('timecourses')"  v-if="study.timecourse_count">
                 <count-chip :count="study.timecourse_count" icon="timecourse"></count-chip>
             </a>
-            <count-chip v-else disabled=true :count="study.timecourse_count" icon="timecourse"></count-chip>
+            <count-chip v-else :disabled="true" :count="study.timecourse_count" icon="timecourse"></count-chip>
 
         </div>
 

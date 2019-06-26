@@ -137,7 +137,7 @@
                             token: response.data.token,
                     });
 
-                        this.close()
+                        this.close();
                         // do a refresh
                         this.$router.go()
                     })
@@ -150,7 +150,7 @@
 
             logout: function(){
                 this.$store.dispatch('logout');
-                this.close()
+                 this.close();
                 // do a refresh
                 this.$router.go()
             }

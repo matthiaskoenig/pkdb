@@ -337,13 +337,15 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
     def normalize(self):
         '''Normalizes timecourse.'''
 
+
         factor, unit = self.remove_substance_dimension()
 
         if unit:
             if ureg(unit) != ureg(self.unit):
                 for key, value in self.norm_fields.items():
                     if value is not None:
-                        list_norm_values = list(self.measurement_type.normalize(value, self.unit).magnitude)
+
+                        list_norm_values = list(factor*np.array(value))
                         setattr(self, key, list_norm_values)
                 self.unit = unit
 

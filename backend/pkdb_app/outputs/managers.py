@@ -110,6 +110,7 @@ class TimecourseExManager(models.Manager):
                                "vd":MeasurementType.objects.get(name="vd"),
                                }
                 outputs = []
+
                 for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd","tmax"]:
                     pk_unit = pk[f"{key}_unit"]
                     if not np.isnan(pk[key]):
