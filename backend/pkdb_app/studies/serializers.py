@@ -374,14 +374,16 @@ class StudySerializer(SidSerializer):
             if related["comments"]:
                 create_multiple(study, related["comments"], "comments")
 
-        study.save()
 
         if "files" in related:
+            print(related["files"])
+
             study.files.clear()
             if related["files"]:
                 for file_pk in related["files"]:
                     study.files.add(file_pk)
-                study.save()
+
+        study.save()
 
         return study
 

@@ -14,7 +14,7 @@
                     <LinkButton :to="'/timecourses/'+ table.item.pk" :title="'Timecourse: '+table.item.pk" :icon="icon('output')"/>
                     <JsonButton :resource_url="api + '/timecourses_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.pktype }}</text-highlight></td>
+                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.measurement_type }}</text-highlight></td>
                 <td>
                     <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
                         <span slot-scope="data">
@@ -88,7 +88,7 @@
                 otype_single: "timecourse",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Type', value: 'type'},
+                    {text: 'Measurement Type', value: 'measurement_type'},
                     {text: 'Group', value: 'group'},
                     {text: 'Individual', value: 'individual'},
                     {text: 'Interventions', value: 'interventions', sortable: false},
