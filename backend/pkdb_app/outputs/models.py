@@ -486,6 +486,10 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
                 vd_unit = p_unit_dosing / p_unit_concentration
                 pk_dict["vd_unit"] = str(vd_unit)
                 pk_dict["dose"] = dosing.value
+                if dosing.time:
+                    pk_dict["intervention_time"] = (ureg(dosing.time_unit)*dosing.time).to(self.time_unit).magnitude
+
+
                 pk_dict["dose_unit"] = dosing.unit
 
         # bodyweight dependent values

@@ -26,6 +26,7 @@ def f_pk(
     dose_unit="mg",
     vd_unit="L",
     bodyweight_unit="kg",
+    intervention_time = 0,
 ):
     """ Calculates all the pk parameters from given time course.
 
@@ -57,6 +58,9 @@ def f_pk(
     assert isinstance(t, np.ndarray)
     assert isinstance(c, np.ndarray)
     assert t.size == c.size
+
+    # caculate all results relative to the intervention time
+    t = t + intervention_time
 
     # calculate pk
     auc = _auc(t, c)

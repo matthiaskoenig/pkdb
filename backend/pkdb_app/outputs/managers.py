@@ -5,7 +5,6 @@ from datetime import timedelta
 from django.db import models
 from django.apps import apps
 import time
-import pandas as pd
 import numpy as np
 
 from pkdb_app.categorials.models import MeasurementType
