@@ -174,8 +174,8 @@ class Normalizable(MeasurementTypeable):
                         setattr(self, key, value*factor)
                 self.unit = unit
 
-            else:
-                self.unit = str(ureg(self.unit).u)
+            #else:
+            #    self.unit = str(ureg(self.unit).u)
 
         # normalization
         if not self.is_norm:

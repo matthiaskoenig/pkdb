@@ -261,8 +261,8 @@ class MeasurementType(models.Model):
         if time_unit:
             self.validate_time_unit(time_unit)
 
-        cumulative_measurement_types = ["cumulative amount","cumulative metabolic ratio"]
-        if self.name in cumulative_measurement_types:
+        time_requried_measurement_types = ["cumulative amount","cumulative metabolic ratio","recovery"]
+        if self.name in time_requried_measurement_types:
             details = f"for measurement type `{self.name}`"
             _validate_requried_key(data,"time", details=details)
             _validate_requried_key(data,"time_unit", details=details)
