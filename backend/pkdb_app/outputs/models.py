@@ -9,7 +9,7 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from pkdb_app.categorials.models import MeasurementType
+from pkdb_app.categorials.models import MeasurementType, ureg
 from pkdb_app.interventions.models import Intervention
 
 from ..utils import CHAR_MAX_LENGTH, create_choices
@@ -56,8 +56,7 @@ class OutputSet(models.Model):
     @property
     def outputs_normed(self):
         outputs = self.outputs.filter(normed=True)
-        outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
-        return outputs | outputs_timecourses
+        return outputs
 
     @property
     def count_outputs(self):
@@ -334,8 +333,26 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
 
+
     def normalize(self):
-        """Normalizes timecourse."""
+        '''Normalizes timecourse.'''
+
+
+        factor, unit = self.remove_substance_dimension()
+
+        if unit:
+            if ureg(unit) != ureg(self.unit):
+                for key, value in self.norm_fields.items():
+                    if value is not None:
+
+                        list_norm_values = list(factor*np.array(value))
+                        setattr(self, key, list_norm_values)
+                self.unit = unit
+
+            else:
+                self.unit = str(ureg(self.unit).u)
+
+
 
         if not self.is_norm:
             for key, value in self.norm_fields.items():
@@ -351,6 +368,7 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
             norm_times = times.to(TIME_NORM_UNIT)
             self.time = list(norm_times.m)
             self.time_unit = TIME_NORM_UNIT
+
 
     # for elastic search. NaNs are not allowed in elastic search
     @staticmethod
@@ -468,6 +486,10 @@ class Timecourse(AbstractOutput, Normalizable,Accessible):
                 vd_unit = p_unit_dosing / p_unit_concentration
                 pk_dict["vd_unit"] = str(vd_unit)
                 pk_dict["dose"] = dosing.value
+                if dosing.time:
+                    pk_dict["intervention_time"] = (ureg(dosing.time_unit)*dosing.time).to(self.time_unit).magnitude
+
+
                 pk_dict["dose_unit"] = dosing.unit
 
         # bodyweight dependent values

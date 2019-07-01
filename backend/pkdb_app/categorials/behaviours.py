@@ -166,6 +166,7 @@ class Normalizable(MeasurementTypeable):
         factor, unit = self.remove_substance_dimension()
 
         # remove substance unit
+
         if unit and self.unit:
             if ureg(unit) != ureg(self.unit):
                 for key, value in self.norm_fields.items():
@@ -173,15 +174,13 @@ class Normalizable(MeasurementTypeable):
                         setattr(self, key, value*factor)
                 self.unit = unit
 
-            else:
-                self.unit = str(ureg(self.unit).u)
+            #else:
+            #    self.unit = str(ureg(self.unit).u)
 
         # normalization
         if not self.is_norm:
             for key, value in self.norm_fields.items():
                 if not value is None:
                     setattr(self, key, self.measurement_type.normalize(value, self.unit).magnitude)
+
             self.unit = str(self.measurement_type.norm_unit(self.unit))
-
-
-

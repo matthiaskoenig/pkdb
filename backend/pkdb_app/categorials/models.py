@@ -5,13 +5,14 @@ FIXME: Some duplication to pkdb_data/categorials
 """
 import pint
 from pint import UndefinedUnitError
+import numpy as np
+
 from numbers import Number
 
 from django.db import models
 from pkdb_app.categorials.managers import ChoiceManager
 from pkdb_app.users.models import User
 from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key
-
 ureg = pint.UnitRegistry()
 
 # Units
@@ -241,8 +242,10 @@ class MeasurementType(models.Model):
                         rule = False
 
                     if rule:
-                            raise ValueError({field: f"Numeric values need to be postive for all measurement types but"
-                                      f" <{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail":data})
+                            raise ValueError(
+                                {field: f"Numeric values need to be positive (>=0) "
+                                        f"for all measurement types except "
+                                        f"<{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail":data})
 
     def validate_complete(self, data):
         # check unit
@@ -258,8 +261,8 @@ class MeasurementType(models.Model):
         if time_unit:
             self.validate_time_unit(time_unit)
 
-        cumulative_measurement_types = ["cumulative amount","cumulative metabolic ratio"]
-        if self.name in cumulative_measurement_types:
+        time_requried_measurement_types = ["cumulative amount","cumulative metabolic ratio","recovery"]
+        if self.name in time_requried_measurement_types:
             details = f"for measurement type `{self.name}`"
             _validate_requried_key(data,"time", details=details)
             _validate_requried_key(data,"time_unit", details=details)

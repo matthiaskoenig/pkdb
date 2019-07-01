@@ -5,7 +5,6 @@ from datetime import timedelta
 from django.db import models
 from django.apps import apps
 import time
-import pandas as pd
 import numpy as np
 
 from pkdb_app.categorials.models import MeasurementType
@@ -110,6 +109,7 @@ class TimecourseExManager(models.Manager):
                                "vd":MeasurementType.objects.get(name="vd"),
                                }
                 outputs = []
+
                 for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd","tmax"]:
                     pk_unit = pk[f"{key}_unit"]
                     if not np.isnan(pk[key]):

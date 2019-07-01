@@ -288,10 +288,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if source.isnumeric():
                 pass
             else:
+                print("here I am")
+                print(type(source))
+
                 raise serializers.ValidationError(
                     {"source": f"<{str(source)}> is not existing", "detail": type(source)})
+
         else:
-            raise serializers.ValidationError({"source":f"<{str(source)}> is not existing","detail":type(source)})
+            raise serializers.ValidationError(
+                {"source":f"<{str(source)}> is not existing","detail":type(source)})
         src = DataFile.objects.get(pk=source)
         try:
             df = pd.read_csv(

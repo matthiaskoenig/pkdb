@@ -19,7 +19,7 @@
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.charge}}  </text-highlight> </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.formula}} </text-highlight> </td>
                 <td>
-                    <v-chip disabled=true color='green' v-if="table.item.derived" >
+                    <v-chip :disabled="true" color='green' v-if="table.item.derived" >
                         <v-icon small title="derived from parents">{{icon("success")}}</v-icon>
                     </v-chip>
                 </td>

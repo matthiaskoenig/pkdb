@@ -57,6 +57,7 @@ var searchTableMixin = {
             return this.$store.state.endpoints.api;
         },
         resource_url() {
+
             return this.$store.state.endpoints.api  + '/' + this.otype + '_elastic/?format=json'
         },
         url() {
@@ -66,6 +67,9 @@ var searchTableMixin = {
                 + '&ordering='+ this.descending+ this.pagination.sortBy;
             if(this.search){
                 url += '&search_multi_match='+ this.search
+            }
+            if(["outputs","timecourses","interventions"].includes(this.otype)){
+                url += '&normed=true'
             }
             if(this.ids.length > 0){
                 url += '&ids=' + this.ids.join("__")

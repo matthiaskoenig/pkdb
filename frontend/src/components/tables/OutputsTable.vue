@@ -48,7 +48,7 @@
                 </td>
                 <td><characteristica-card :data="table.item"/></td>
                 <td>
-                    <v-chip disabled=true color='green' v-if="table.item.calculated" >
+                    <v-chip :disabled="true" color='green' v-if="table.item.calculated" >
                         <v-icon small :title="'is calculated from timecourse with pk:' + table.item.timecourse.pk">{{icon("success")}}</v-icon>
                     </v-chip>
                 </td>
