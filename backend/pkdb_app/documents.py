@@ -45,6 +45,7 @@ def string_field(attr,**kwargs):
         fields={'raw': fields.KeywordField()},
         **kwargs
         )
+
 def text_field(attr):
     return fields.TextField(
         attr=attr,
