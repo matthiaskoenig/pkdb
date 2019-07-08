@@ -37,11 +37,8 @@ STUDY_ACCESS_DATA = [
 ]
 STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
 
-# ---------------------------------------------------
-#
-# ---------------------------------------------------
 
-
+# ---------------------------------------------------
 class Author(models.Model):
     """ Author in reference. """
     first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
@@ -70,8 +67,6 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
-
-
     @property
     def study_pk(self):
         if self.study:
@@ -88,9 +83,9 @@ class Reference(models.Model):
 
 
 class Rating(models.Model):
-    """ General rating model.
+    """ Rating.
 
-    Used for quality of curation status.
+    Used to encode quality of curation status.
     """
     rating = models.FloatField(default=0)
     study = models.ForeignKey("Study", related_name="ratings", on_delete=models.CASCADE)
@@ -98,38 +93,41 @@ class Rating(models.Model):
 
 
 class Study(Sidable, models.Model):
-    """ Single clinical study.
+    """ A study containing PKDB information.
 
     Mainly reported as a single publication.
     """
-
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
-
-    creator = models.ForeignKey(
-        User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
-    )
-
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
+
     reference = models.OneToOneField(
         Reference, on_delete=models.CASCADE, related_name="study", null=True
     )
-    curators = models.ManyToManyField(User,related_name="curator_of_studies", through=Rating)
-    collaborators = models.ManyToManyField(User,related_name="collaborator_of_studies")
-
-
-    groupset = models.OneToOneField(GroupSet,related_name="study", on_delete=models.SET_NULL, null=True)
+    licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
+    creator = models.ForeignKey(
+        User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
+    )
+    curators = models.ManyToManyField(
+        User, related_name="curator_of_studies", through=Rating
+    )
+    collaborators = models.ManyToManyField(
+        User, related_name="collaborator_of_studies"
+    )
+    groupset = models.OneToOneField(
+        GroupSet, related_name="study", on_delete=models.SET_NULL, null=True
+    )
     interventionset = models.OneToOneField(
-        InterventionSet, related_name="study",on_delete=models.SET_NULL, null=True
+        InterventionSet, related_name="study", on_delete=models.SET_NULL, null=True
     )
     individualset = models.OneToOneField(
-        IndividualSet,related_name="study", on_delete=models.SET_NULL, null=True
+        IndividualSet, related_name="study", on_delete=models.SET_NULL, null=True
     )
-    outputset = models.OneToOneField(OutputSet,related_name="study", on_delete=models.SET_NULL, null=True)
+    outputset = models.OneToOneField(
+        OutputSet, related_name="study", on_delete=models.SET_NULL, null=True
+    )
     files = models.ManyToManyField(DataFile)
-
-    licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
-    access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
 
     class Meta:
         verbose_name_plural = "studies"
@@ -139,7 +137,6 @@ class Study(Sidable, models.Model):
 
     def __str__(self):
         return '%s' % self.name
-
 
     @property
     def individuals(self):
@@ -165,14 +162,12 @@ class Study(Sidable, models.Model):
 
         return empty_characteristica
 
-
     @property
     def interventions(self):
         try:
             return self.interventionset.interventions.all()
         except AttributeError:
             return Intervention.objects.none()
-
 
     @property
     def outputs(self):
@@ -190,26 +185,27 @@ class Study(Sidable, models.Model):
 
     @property
     def get_substances(self):
-        """Get all substances for given study.
-        Substances are collected from
-        - interventions
-        - outputs
-        - timecourses
+        """ Get all substances for given study.
 
+        Substances are collected from interventions, outputs, timecourses.
         """
-
         all_substances = []
         basic_substances = []
 
-
         if self.interventions:
-            all_substances.extend(list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
+            all_substances.extend(
+                list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True))
+            )
 
         if self.outputs:
-            all_substances.extend(list(self.outputs.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
+            all_substances.extend(
+                list(self.outputs.filter(substance__isnull=False).values_list("substance__pk", flat=True))
+            )
 
         if self.timecourses:
-            all_substances.extend(list(self.timecourses.filter(substance__isnull=False).values_list("substance__pk", flat=True)))
+            all_substances.extend(
+                list(self.timecourses.filter(substance__isnull=False).values_list("substance__pk", flat=True))
+            )
 
         substances_dj = Substance.objects.filter(pk__in=set(all_substances))
 
@@ -219,10 +215,11 @@ class Study(Sidable, models.Model):
 
         substances_derived_dj = substances_dj.filter(parents__isnull=False)
         if substances_derived_dj:
-            basic_substances.extend(list(substances_derived_dj.values_list("parents__name",flat=True)))
+            basic_substances.extend(
+                list(substances_derived_dj.values_list("parents__name", flat=True))
+            )
 
         return list(set(basic_substances))
-
 
     @property
     def files_url(self):
@@ -271,13 +268,8 @@ class Study(Sidable, models.Model):
 
         return 0
 
-
     @property
     def output_calculated_count(self):
         if self.outputset:
             return self.outputset.outputs.filter(normed=True, calculated=True).count()
-
         return 0
-
-
-

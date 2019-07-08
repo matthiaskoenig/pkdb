@@ -396,6 +396,7 @@ class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = Author
         fields = ("pk", "first_name", "last_name")
 
+
 class CuratorRatingElasticSerializer(serializers.Serializer):
     rating = serializers.FloatField()
     first_name = serializers.CharField()
@@ -472,8 +473,6 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["sid"]#, 'url']
 
 
-#class Rating
-
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
@@ -498,8 +497,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     individualset = IndividualSetElasticSmallSerializer(read_only=True)
     interventionset = InterventionSetElasticSmallSerializer(read_only=True)
     outputset = OutputSetElasticSmallSerializer(read_only=True)
-
-
 
     class Meta:
         model = Study
@@ -541,7 +538,6 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             return []
 
 
-
     def get_files(self, obj):
 
         if get_study_file_permission(self.context["request"].user,obj):
@@ -550,10 +546,3 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
 
         else:
             return []
-
-
-
-
-
-
-

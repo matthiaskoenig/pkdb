@@ -157,12 +157,13 @@ class StudyDocument(DocType):
     licence = string_field("licence")
     access = string_field("access")
 
-
-    reference = ObjectField(properties={
-        'sid': string_field(attr='sid'),
-        'pk': fields.IntegerField(attr='pk'),
-        'name': string_field(attr="name")
-    })
+    reference = ObjectField(
+        properties={
+            'sid': string_field(attr='sid'),
+            'pk': fields.IntegerField(attr='pk'),
+            'name': string_field(attr="name")
+        }
+    )
 
     curators = fields.ObjectField(
         attr="ratings",
@@ -172,7 +173,6 @@ class StudyDocument(DocType):
             'pk': string_field("user.pk"),
             'username': string_field("user.username"),
             'rating': fields.FloatField(attr='rating')
-
         },
         multi=True
     )
@@ -216,6 +216,7 @@ class StudyDocument(DocType):
     groupset = common_setfields("groups")
     individualset = common_setfields("individuals")
     interventionset = common_setfields("interventions", "interventions_normed")
+
     outputset = ObjectField(
         properties={
             "descriptions": ObjectField(
@@ -268,7 +269,3 @@ class StudyDocument(DocType):
         ignore_signals = True
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
-
-
-
-

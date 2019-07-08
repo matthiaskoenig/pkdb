@@ -5,19 +5,22 @@ from elasticsearch_dsl import analyzer, token_filter, Q
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import user_group
 
-elastic_settings = {'number_of_shards':1,
-            'number_of_replicas':1,}
+elastic_settings = {
+    'number_of_shards': 1,
+    'number_of_replicas': 1,
+}
 
+edge_ngram_filter = token_filter(
+    'edge_ngram_filter',
+    type="edge_ngram",
+    min_gram=1, max_gram=20
+)
 
-edge_ngram_filter =  token_filter(
-            'edge_ngram_filter',
-            type="edge_ngram",
-            min_gram=1, max_gram=20)
-
-ngram_filter =  token_filter(
-            'ngram_filter',
-            type="ngram",
-            min_gram=1, max_gram=20)
+ngram_filter = token_filter(
+    'ngram_filter',
+    type="ngram",
+    min_gram=1, max_gram=20
+)
 
 
 autocomplete_search = analyzer(
@@ -26,16 +29,17 @@ autocomplete_search = analyzer(
     filter=["lowercase"],
 )
 
-
-autocomplete = analyzer('autocomplete',
+autocomplete = analyzer(
+    'autocomplete',
     tokenizer="standard",
-    filter=[ "lowercase",ngram_filter],
+    filter=["lowercase", ngram_filter],
     char_filter=["html_strip"],
     chars=["letter"],
-    token_chars=["letter"])
+    token_chars=["letter"]
+)
 
 
-def string_field(attr,**kwargs):
+def string_field(attr, **kwargs):
     return fields.StringField(
 
         attr=attr,
@@ -44,7 +48,8 @@ def string_field(attr,**kwargs):
         search_analyzer=autocomplete_search,
         fields={'raw': fields.KeywordField()},
         **kwargs
-        )
+    )
+
 
 def text_field(attr):
     return fields.TextField(
@@ -55,7 +60,14 @@ def text_field(attr):
         fields={'raw': fields.KeywordField()}
         )
 
+
 class ObjectField(DEDField, Object):
+    """
+    FIXME: DOCUMENT ME
+    What is this for? I assume to solve some issue with nested ObjectFields.
+    This looks copy-pasted from some solution. Please provide short description
+    and link to solution.
+    """
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):
         data = {}
         if hasattr(self, 'properties'):
@@ -100,7 +112,6 @@ class ObjectField(DEDField, Object):
 
 
 class AccessView(DocumentViewSet):
-
 
     def get_queryset(self):
         search = self.search  # .query()
