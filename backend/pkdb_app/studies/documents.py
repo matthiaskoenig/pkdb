@@ -1,86 +1,11 @@
-from django_elasticsearch_dsl import DocType, Index, fields
+from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl.documents import Document
+from django_elasticsearch_dsl.registries import registry
+
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
     ObjectField
-from pkdb_app.interventions.models import Intervention
 
-from pkdb_app.outputs.models import Timecourse, Output
 from pkdb_app.studies.models import Reference, Study
-# Elastic Reference
-from pkdb_app.subjects.models import  Group, Individual
-
-reference_index = Index("references")
-reference_index.settings(**elastic_settings)
-
-
-@reference_index.doc_type
-class ReferenceDocument(DocType):
-    pk = fields.IntegerField(attr='pk')
-    sid = string_field(attr='sid')
-    pmid = string_field(attr='pmid')
-    study = ObjectField(properties={
-        "pk": fields.IntegerField(),
-        "sid": string_field('sid'),
-        "name": string_field('name'),
-        "licence": string_field("licence"),
-        "creator": fields.ObjectField(
-        properties={
-            'first_name': string_field("first_name"),
-            'last_name': string_field("last_name"),
-            'pk': string_field("pk"),
-            'username': string_field("username"),
-        }
-    ),
-        "curators": fields.ObjectField(
-            attr="ratings",
-            properties={
-                'first_name': string_field("user.first_name"),
-                'last_name': string_field("user.last_name"),
-                'pk': string_field("user.pk"),
-                'username': string_field("user.username"),
-                'rating': fields.FloatField(attr='rating')
-
-            },
-            multi=True)
-        ,
-        "collaborators": fields.ObjectField(
-            attr="collaborators",
-            properties={
-                'first_name': string_field("first_name"),
-                'last_name': string_field("last_name"),
-                'pk': string_field("pk"),
-                'username': string_field("username")
-
-            },
-            multi=True
-        )
-
-    })
-    name = string_field("name")
-    doi = string_field("doi")
-    title = string_field("title")
-    abstract = text_field("abstract")
-    journal = text_field("journal")
-    date = fields.DateField()
-    pdf = fields.FileField(fielddata=True)
-
-    authors = ObjectField(properties={
-        'first_name': string_field("first_name"),
-        'last_name': string_field("last_name"),
-        'pk': fields.IntegerField(),
-    })
-
-    class Meta(object):
-        model = Reference
-        # Ignore auto updating of Elasticsearch when a model is saved
-        # or deleted:
-        ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
-        auto_refresh = False
-
-
-# Elastic Study
-study_index = Index("studies")
-study_index.settings(**elastic_settings)
 
 
 def common_setfields(model, attr=None):
@@ -113,25 +38,99 @@ def common_setfields(model, attr=None):
                         }
                     )
                 },
-                multi=True)
+                multi=True
+            )
         }
     )
 
 
-@study_index.doc_type
+# ------------------------------------
+# Elastic Reference Document
+# ------------------------------------
+@registry.register_document
+class ReferenceDocument(DocType):
+    pk = fields.IntegerField(attr='pk')
+    sid = string_field(attr='sid')
+    pmid = string_field(attr='pmid')
+    study = ObjectField(properties={
+        "pk": fields.IntegerField(),
+        "sid": string_field('sid'),
+        "name": string_field('name'),
+        "licence": string_field("licence"),
+        "creator": fields.ObjectField(
+            properties={
+                'first_name': string_field("first_name"),
+                'last_name': string_field("last_name"),
+                'pk': string_field("pk"),
+                'username': string_field("username"),
+            }
+        ),
+        "curators": fields.ObjectField(
+            attr="ratings",
+            properties={
+                'first_name': string_field("user.first_name"),
+                'last_name': string_field("user.last_name"),
+                'pk': string_field("user.pk"),
+                'username': string_field("user.username"),
+                'rating': fields.FloatField(attr='rating')
+
+            },
+            multi=True
+        ),
+        "collaborators": fields.ObjectField(
+            attr="collaborators",
+            properties={
+                'first_name': string_field("first_name"),
+                'last_name': string_field("last_name"),
+                'pk': string_field("pk"),
+                'username': string_field("username")
+
+            },
+            multi=True
+        )
+    })
+    name = string_field("name")
+    doi = string_field("doi")
+    title = string_field("title")
+    abstract = text_field("abstract")
+    journal = text_field("journal")
+    date = fields.DateField()
+    pdf = fields.FileField(fielddata=True)
+
+    authors = ObjectField(properties={
+        'first_name': string_field("first_name"),
+        'last_name': string_field("last_name"),
+        'pk': fields.IntegerField(),
+    })
+
+    class Django:
+        model = Reference
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted
+        ignore_signals = True
+        # Don't perform an index refresh after every update (overrides global setting):
+        auto_refresh = False
+
+    class Index:
+        name = 'references'
+        settings = elastic_settings
+
+
+# ------------------------------------
+# Elastic Study Document
+# ------------------------------------
+@registry.register_document
 class StudyDocument(DocType):
     id = fields.StringField(attr='sid')
     pk = fields.StringField(attr='sid')
     sid = string_field(attr='sid')
     pkdb_version = fields.IntegerField(attr='pkdb_version')
-
     descriptions = ObjectField(
         properties={
             'text': text_field("text"),
             'pk': fields.IntegerField()
         },
-        multi=True)
-
+        multi=True
+    )
     comments = fields.ObjectField(
         properties={
             'text': text_field("text"),
@@ -144,7 +143,8 @@ class StudyDocument(DocType):
                 }
             )
         },
-        multi=True)
+        multi=True
+    )
     creator = fields.ObjectField(
         properties={
             'first_name': string_field("first_name"),
@@ -156,7 +156,6 @@ class StudyDocument(DocType):
     name = string_field("name")
     licence = string_field("licence")
     access = string_field("access")
-
     reference = ObjectField(
         properties={
             'sid': string_field(attr='sid'),
@@ -164,7 +163,6 @@ class StudyDocument(DocType):
             'name': string_field(attr="name")
         }
     )
-
     curators = fields.ObjectField(
         attr="ratings",
         properties={
@@ -197,18 +195,24 @@ class StudyDocument(DocType):
                 fielddata=True,
                 analyzer=autocomplete,
                 search_analyzer=autocomplete_search,
-                fields={'raw': fields.KeywordField(), }
+                fields={
+                    'raw': fields.KeywordField(),
+                }
             ),
             'name': fields.StringField(
                 fielddata=True,
                 analyzer=autocomplete,
                 search_analyzer=autocomplete_search,
-                fields={'raw': fields.KeywordField(), }
+                fields={
+                    'raw': fields.KeywordField(),
+                }
             ),
             'timecourses': ObjectField(
                 properties={
                     'pk': fields.IntegerField(multi=True),
-                }, multi=True)
+                },
+                multi=True
+            )
         },
         multi=True
     )
@@ -220,12 +224,12 @@ class StudyDocument(DocType):
     outputset = ObjectField(
         properties={
             "descriptions": ObjectField(
-
                 properties={
                     'text': text_field("text"),
                     'pk': fields.IntegerField()
                 },
-                multi=True),
+                multi=True
+            ),
             # "count_outputs" : fields.FloatField(),
             "outputs": ObjectField(
                 attr="outputs_normed",
@@ -252,7 +256,8 @@ class StudyDocument(DocType):
                         }
                     )
                 },
-                multi=True)
+                multi=True
+            )
         }
     )
     group_count = fields.IntegerField()
@@ -262,10 +267,13 @@ class StudyDocument(DocType):
     output_calculated_count = fields.IntegerField()
     timecourse_count = fields.IntegerField()
 
-    class Meta(object):
+    class Django:
         model = Study
-        # Ignore auto updating of Elasticsearch when a model is saved
-        # or deleted:
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
+
+    class Index:
+        name = 'studies'
+        settings = elastic_settings

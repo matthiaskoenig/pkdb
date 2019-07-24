@@ -31,49 +31,32 @@ from .studies.views import (
 from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
 
 router = DefaultRouter()
-###############################################################################################
-# Comments and Descriptions URLs
-###############################################################################################
-# elastic search format
-router.register(r"comments_elastic", ElasticCommentViewSet, base_name="comments_elastic")
-router.register(r"descriptions_elastic", ElasticDescriptionViewSet, base_name="descriptions_elastic")
-
 
 ###############################################################################################
-# Studies and References URLs
+# URLs
 ###############################################################################################
-#external format / import
+
+router.register("comments_elastic", ElasticCommentViewSet, base_name="comments_elastic")
+router.register("descriptions_elastic", ElasticDescriptionViewSet, base_name="descriptions_elastic")
+
 router.register("references", ReferencesViewSet, base_name="references")
-
-# elastic search format
 router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
-
 
 router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")
 router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, base_name="measurement_types_elastic")
 
+router.register("users", UserViewSet, base_name="users")
+router.register("users", UserCreateViewSet)
+router.register("user_groups", UserGroupViewSet, base_name="user_groups")
 
-
-# user
-router.register(r"users", UserViewSet, base_name="users")
-router.register(r"users", UserCreateViewSet)
-
-router.register(r"user_groups", UserGroupViewSet, base_name="user_groups")
-
-#substance
 router.register("substances", SubstanceViewSet, base_name="substances")
 router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
 router.register("substances_statistics", SubstanceStatisticsViewSet, base_name="substances_statistics")
 
-
 router.register("datafiles", DataFileViewSet, base_name="datafiles")
-
-
-
 
 router.register("studies", StudyViewSet, base_name="studies")
 router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elastic")
-
 
 router.register("statistics", StatisticsViewSet, base_name="statistics")
 router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_data")
