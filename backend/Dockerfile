@@ -10,7 +10,6 @@ RUN pip install -r requirements.txt
 COPY . /code
 WORKDIR /code
 
-# install pkdb_app
 RUN pip install -e .
 
 EXPOSE 8000

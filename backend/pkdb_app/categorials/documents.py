@@ -1,13 +1,13 @@
-from django_elasticsearch_dsl import DocType, Index, fields
+from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField
 from .models import MeasurementType
 
 
-
-measurement_type_index = Index("measurement_types")
-measurement_type_index.settings(**elastic_settings)
-
-@measurement_type_index.doc_type
+# ------------------------------------
+# Elastic Measurement Document
+# ------------------------------------
+@registry.register_document
 class MeasurementTypeDocument(DocType):
     pk = fields.IntegerField()
     name = string_field('name')
@@ -22,14 +22,14 @@ class MeasurementTypeDocument(DocType):
         attr="choices",
         multi=True,
         properties={
-            "name":string_field("name"),
+            "name": string_field("name"),
             "description": string_field('description'),
-            "annotations":ObjectField(
+            "annotations": ObjectField(
                 attr="annotations",
                 multi=True,
                 properties={
-                    "term":string_field("term"),
-                    "relation":string_field("relation"),
+                    "term": string_field("term"),
+                    "relation": string_field("relation"),
                     "collection": string_field("collection"),
                     "description": string_field("description"),
                     "label": string_field("label")
@@ -41,8 +41,8 @@ class MeasurementTypeDocument(DocType):
         attr="annotations",
         multi=True,
         properties={
-            "term":string_field("term"),
-            "relation":string_field("relation"),
+            "term": string_field("term"),
+            "relation": string_field("relation"),
             "collection": string_field("collection"),
             "description": string_field("description"),
             "label": string_field("label")
@@ -51,11 +51,13 @@ class MeasurementTypeDocument(DocType):
     creator = string_field("creator_username")
     description = string_field('description')
 
-
-    class Meta(object):
+    class Django:
         model = MeasurementType
-        # Ignore auto updating of Elasticsearch when a model is saved
-        # or deleted:
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = False
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
+
+    class Index:
+        name = 'measurement_types'
+        settings = elastic_settings

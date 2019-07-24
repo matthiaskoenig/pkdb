@@ -1,10 +1,12 @@
-from django_elasticsearch_dsl import DocType, Index, fields
+from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField, text_field
 from .models import Substance
-substance_index = Index("substances")
-substance_index.settings(**elastic_settings)
 
-@substance_index.doc_type
+# ------------------------------------
+# Elastic Substance Document
+# ------------------------------------
+@registry.register_document
 class SubstanceDocument(DocType):
     sid = string_field('sid')
     url_slug = string_field('url_slug')
@@ -32,7 +34,7 @@ class SubstanceDocument(DocType):
         }
     )
 
-    class Meta(object):
+    class Django:
         model = Substance
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
@@ -40,3 +42,6 @@ class SubstanceDocument(DocType):
         # Don't perform an index refresh after every update (overrides global setting):
         auto_refresh = False
 
+    class Index:
+        name = "substances"
+        settings = elastic_settings
