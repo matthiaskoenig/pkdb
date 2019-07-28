@@ -1,5 +1,5 @@
 from elasticsearch_dsl import analyzer
-from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from pkdb_app.subjects.models import Individual, Characteristica, Group
 from pkdb_app.interventions.documents import string_field, ObjectField
@@ -13,28 +13,7 @@ html_strip = analyzer(
     char_filter=["html_strip"]
 )
 
-# ------------------------------------
-# Elastic Individual Document
-# ------------------------------------
-@registry.register_document
-class IndividualDocument(DocType):
-    """Individual elastic search document"""
-    pk = fields.IntegerField(attr='pk')
-    name = string_field('name')
-    group = ObjectField(
-        properties={
-            'name': string_field('name'),
-            'pk': fields.IntegerField('pk'),
-            'count': fields.IntegerField('count')
-        }
-    )
-    study = string_field('study_name')
-    ex = ObjectField(
-        properties={
-            'pk': fields.IntegerField('pk')
-        }
-    )
-    characteristica_all_normed = fields.ObjectField(
+characteristica_object_field = fields.ObjectField(
         properties={
             'pk': fields.IntegerField(),
             'measurement_type': string_field('measurement_type_name'),
@@ -53,6 +32,30 @@ class IndividualDocument(DocType):
         },
         multi=True
     )
+
+
+# ------------------------------------
+# Elastic Individual Document
+# ------------------------------------
+@registry.register_document
+class IndividualDocument(Document):
+    """Individual elastic search document"""
+    pk = fields.IntegerField(attr='pk')
+    name = string_field('name')
+    group = ObjectField(
+        properties={
+            'name': string_field('name'),
+            'pk': fields.IntegerField('pk'),
+            'count': fields.IntegerField('count')
+        }
+    )
+    study = string_field('study_name')
+    ex = ObjectField(
+        properties={
+            'pk': fields.IntegerField('pk')
+        }
+    )
+    characteristica_all_normed = characteristica_object_field
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
@@ -66,7 +69,7 @@ class IndividualDocument(DocType):
         model = Individual
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:
@@ -78,7 +81,7 @@ class IndividualDocument(DocType):
 # Elastic Group Document
 # ------------------------------------
 @registry.register_document
-class GroupDocument(DocType):
+class GroupDocument(Document):
     """ Elastic Group Document """
     pk = fields.IntegerField(attr='pk')
     name = string_field('name')
@@ -92,32 +95,11 @@ class GroupDocument(DocType):
     ex = ObjectField(properties={
         'pk': fields.IntegerField('pk')
     })
-    characteristica_all_normed = fields.ObjectField(
-        properties={
-            'pk': fields.IntegerField(),
-            'measurement_type':string_field('measurement_type_name'),
-            'substance': string_field('substance_name'),
-            'choice': string_field('choice'),
-            'value': fields.FloatField('value'),
-            'mean': fields.FloatField(),
-            'median': fields.FloatField(),
-            'min': fields.FloatField(),
-            'max': fields.FloatField(),
-            'se': fields.FloatField(),
-            'sd': fields.FloatField(),
-            'cv': fields.FloatField(),
-            'unit': string_field('unit'),
-            'count': fields.IntegerField('count'),
-
-        },
-        multi=True)
+    characteristica_all_normed = characteristica_object_field
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
         properties={
-            # 'first_name': string_field("first_name"),
-            # 'last_name': string_field("last_name"),
-            # 'pk': string_field("pk"),
             'username': string_field("username")
         },
         multi=True
@@ -128,7 +110,7 @@ class GroupDocument(DocType):
         # Ignore auto updating of Elasticsearch when a model is saved
         # or deleted:
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:
@@ -140,7 +122,7 @@ class GroupDocument(DocType):
 # Elastic Characteristica Document
 # ------------------------------------
 @registry.register_document
-class CharacteristicaDocument(DocType):
+class CharacteristicaDocument(Document):
     """ Characteristica elastic search document. """
     id = fields.IntegerField(attr='id')
     group_name = fields.StringField(
@@ -206,7 +188,7 @@ class CharacteristicaDocument(DocType):
         model = Characteristica
         # Ignore auto updating of Elasticsearch when a model is saved/deleted:
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:

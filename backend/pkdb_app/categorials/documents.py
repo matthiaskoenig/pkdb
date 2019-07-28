@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField
 from .models import MeasurementType
@@ -8,7 +8,7 @@ from .models import MeasurementType
 # Elastic Measurement Document
 # ------------------------------------
 @registry.register_document
-class MeasurementTypeDocument(DocType):
+class MeasurementTypeDocument(Document):
     pk = fields.IntegerField()
     name = string_field('name')
     url_slug = string_field('url_slug')
@@ -55,7 +55,7 @@ class MeasurementTypeDocument(DocType):
         model = MeasurementType
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = False
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:

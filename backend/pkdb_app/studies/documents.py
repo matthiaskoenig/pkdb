@@ -1,5 +1,4 @@
-from django_elasticsearch_dsl import DocType, fields
-from django_elasticsearch_dsl.documents import Document
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
@@ -48,7 +47,7 @@ def common_setfields(model, attr=None):
 # Elastic Reference Document
 # ------------------------------------
 @registry.register_document
-class ReferenceDocument(DocType):
+class ReferenceDocument(Document):
     pk = fields.IntegerField(attr='pk')
     sid = string_field(attr='sid')
     pmid = string_field(attr='pmid')
@@ -119,7 +118,7 @@ class ReferenceDocument(DocType):
 # Elastic Study Document
 # ------------------------------------
 @registry.register_document
-class StudyDocument(DocType):
+class StudyDocument(Document):
     id = fields.StringField(attr='sid')
     pk = fields.StringField(attr='sid')
     sid = string_field(attr='sid')

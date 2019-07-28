@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField
 from ..interventions.models import Intervention
@@ -7,7 +7,7 @@ from ..interventions.models import Intervention
 # Elastic Intervention Document
 # ------------------------------------
 @registry.register_document
-class InterventionDocument(DocType):
+class InterventionDocument(Document):
     pk = fields.IntegerField()
     measurement_type = fields.StringField(
         attr='measurement_type_name',
@@ -50,7 +50,7 @@ class InterventionDocument(DocType):
         model = Intervention
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:

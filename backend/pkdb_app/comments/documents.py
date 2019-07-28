@@ -1,14 +1,15 @@
-from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
-from pkdb_app.documents import elastic_settings, string_field, ObjectField, text_field
+from pkdb_app.documents import elastic_settings, string_field, ObjectField, \
+    text_field
 from pkdb_app.comments.models import Comment, Description
 
 # ------------------------------------
 # Elastic Comment Document
 # ------------------------------------
 @registry.register_document
-class CommentDocument(DocType):
+class CommentDocument(Document):
     pk = fields.IntegerField(attr='pk')
     user = ObjectField(
         properties={
@@ -22,7 +23,7 @@ class CommentDocument(DocType):
         model = Comment
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:
@@ -34,7 +35,7 @@ class CommentDocument(DocType):
 # Elastic Description Document
 # ------------------------------------
 @registry.register_document
-class DescriptionDocument(DocType):
+class DescriptionDocument(Document):
     pk = fields.IntegerField(attr='pk')
     text = text_field('text')
 
@@ -42,7 +43,7 @@ class DescriptionDocument(DocType):
         model = Description
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:

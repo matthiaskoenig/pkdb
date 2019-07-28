@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import DocType, fields
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField
 from .models import Output, Timecourse
@@ -7,7 +7,7 @@ from .models import Output, Timecourse
 # Elastic Output Document
 # ------------------------------------
 @registry.register_document
-class OutputDocument(DocType):
+class OutputDocument(Document):
     pk = fields.IntegerField('pk')
     study = string_field('study_name')
     group = ObjectField(properties={
@@ -60,7 +60,7 @@ class OutputDocument(DocType):
         model = Output
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:
@@ -76,7 +76,7 @@ class OutputDocument(DocType):
 # Elastic Timecourse Document
 # ------------------------------------
 @registry.register_document
-class TimecourseDocument(DocType):
+class TimecourseDocument(Document):
     study = string_field('study_name')
     pk = fields.IntegerField('pk')
     group = ObjectField(properties={
@@ -132,7 +132,7 @@ class TimecourseDocument(DocType):
         model = Timecourse
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
         ignore_signals = True
-        # Don't perform an index refresh after every update (overrides global setting):
+        # Don't perform an index refresh after every update
         auto_refresh = False
 
     class Index:
