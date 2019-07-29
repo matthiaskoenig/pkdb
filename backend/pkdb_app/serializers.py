@@ -645,7 +645,9 @@ class ExSerializer(MappingSerializer):
     def validate_group_individual_output(self, output):
         is_group = output.get("group") or output.get("group_map")
         is_individual = output.get("individual") or output.get("individual_map")
-
+        print("*" * 100)
+        print(is_group,is_individual)
+        print("*" * 100)
         if is_individual and is_group:
             raise serializers.ValidationError(
                 {
@@ -653,6 +655,8 @@ class ExSerializer(MappingSerializer):
                     f"The group of an individual is set on the individualset"
                 }
             )
+
+
         elif not (is_individual or is_group):
             raise serializers.ValidationError(
                 {
