@@ -376,7 +376,6 @@ class StudySerializer(SidSerializer):
 
 
         if "files" in related:
-            print(related["files"])
 
             study.files.clear()
             if related["files"]:
