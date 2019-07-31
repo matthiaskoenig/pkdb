@@ -249,12 +249,15 @@ class IndividualSerializer(ExSerializer):
             raise serializers.ValidationError(msg)
         return group
 
-
     def to_internal_value(self, data):
+        self._is_required(data,"group")
         data.pop("comments", None)
         study_sid = self.context["request"].path.split("/")[-2]
         if "group" in data:
             data["group"] = self.group_to_internal_value(data["group"], study_sid)
+
+
+
 
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
@@ -321,6 +324,8 @@ class IndividualExSerializer(ExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
+
+
 
         temp_individuals = self.split_entry(data)
         individuals = []

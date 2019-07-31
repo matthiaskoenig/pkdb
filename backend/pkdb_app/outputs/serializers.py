@@ -80,8 +80,9 @@ class OutputSerializer(MeasurementTypeableSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
-        self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
+        self._validate_group_output(attrs)
+        self.validate_group_individual_output(attrs)
 
         _validate_requried_key(attrs,"measurement_type")
         _validate_requried_key(attrs, "substance")
@@ -246,8 +247,10 @@ class TimecourseSerializer(BaseOutputExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
-        self._validate_group_output(attrs)
         self._validate_individual_output(attrs)
+        self._validate_group_output(attrs)
+        self.validate_group_individual_output(attrs)
+
         _validate_requried_key(attrs,"substance")
         _validate_requried_key(attrs,"interventions")
         _validate_requried_key(attrs,"tissue")
@@ -368,29 +371,12 @@ class OutputSetSerializer(ExSerializer):
         model = OutputSet
         fields = ["descriptions", "timecourse_exs", "output_exs", "comments"]
 
-    def validate_output_exs(self, attrs):
-        for output in attrs:
-            self.validate_group_individual_output(output)
-            self._validate_individual_output(output)
-            self._validate_group_output(output)
-
-        return attrs
-
-    def validate_timcourse_exs(self, attrs):
-        for timecourse in attrs:
-            self.validate_group_individual_output(timecourse)
-            self._validate_individual_output(timecourse)
-            self._validate_group_output(timecourse)
-
-        return attrs
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
-    def validate(self, attrs):
-        return super().validate(attrs)
 
 
 ###############################################################################################

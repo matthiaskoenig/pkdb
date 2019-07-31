@@ -3,6 +3,7 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
     FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
@@ -31,11 +32,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from elasticsearch_dsl.query import Q
 
 
-###################
-# References
-###################
 class ReferencesViewSet(viewsets.ModelViewSet):
-    """Post/Update references"""
+    """ ReferenceViewSet """
     queryset = Reference.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ReferenceSerializer
@@ -51,6 +49,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
 
 class StudyViewSet(viewsets.ModelViewSet):
+    """ StudyViewSet """
     queryset = Study.objects.all()
     serializer_class = StudySerializer
     filter_backends = (
@@ -64,42 +63,42 @@ class StudyViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def group_validation(request):
-        if "groupset" in request.data:
-            if request.data["groupset"]:
-                groupset = request.data["groupset"]
-                if "groups" in groupset:
+        if "groupset" in request.data and request.data["groupset"]:
+            groupset = request.data["groupset"]
+            if "groups" in groupset:
+                groups = groupset.get("groups", [])
+                parents_name = set()
+                groups_name = set()
+                for group in groups:
+                    parent_name  = group.get("parent")
+                    if parent_name:
+                        parents_name.add(parent_name)
+                    group_name = group.get("name")
+                    if group_name:
+                        groups_name.add(group_name)
+                    if group_name == "all" and parent_name is not None:
+                        raise ValidationError({"groups": "parent is not allowed for group all"})
 
-                    groups = groupset.get("groups", [])
-                    parents_name = set()
-                    groups_name = set()
-                    for group in groups:
-                        parent_name  = group.get("parent")
-                        if parent_name:
-                            parents_name.add(parent_name)
-                        group_name = group.get("name")
-                        if group_name:
-                            groups_name.add(group_name)
-                        if group_name == "all" and parent_name is not None:
-                            raise ValidationError({"groups": "parent is not allowed for group all"})
+                    elif group_name != "all" and parent_name is None:
+                        raise ValidationError({"groups":"parent is required for keyword in groups besides for the the <all> group"})
 
-                        elif group_name != "all" and parent_name is None:
-                            raise ValidationError({"groups":"parent is required for keyword in groups besides for the the <all> group"})
-
-                    if "all" not in groups_name:
-                        raise ValidationError(
-                            {"group": "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
-                                      "The `all` group is the group of all subjects which was studied and defines common "
-                                      "characteristica for all groups and individuals. Create the `all` group or rename group to `all`."})
+                if "all" not in groups_name:
+                    raise ValidationError(
+                        {"group":
+                             "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
+                             "The `all` group is the group of all subjects which was studied and defines common "
+                             "characteristica for all groups and individuals. Create the `all` group or rename group to `all`."
+                        }
+                    )
 
 
-                    # validate if groups are missing
-                    missing_groups = parents_name - groups_name
-                    if missing_groups:
-                        if missing_groups is not None:
-                            msg = {
-                                "groups": f"<{missing_groups}> have been used but not defined"
-                            }
-                            raise ValidationError(msg)
+                # validate if groups are missing
+                missing_groups = parents_name - groups_name
+                if missing_groups:
+                    msg = {
+                        "groups": f"The groups <{missing_groups}> have been used but not defined."
+                    }
+                    raise ValidationError(msg)
 
     def partial_update(self, request, *args, **kwargs):
         self.group_validation(request)
@@ -125,31 +124,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 # Elastic ViewSets
 ###############################################################################################
 
-def delete_elastic_study(related_elastic):
-    for doc, instances in related_elastic.items():
-        try:
-            doc().update(thing=instances, action="delete")
-        except helpers.BulkIndexError:
-            pass
-
-
-def related_elastic_dict(study):
-    related_elastic_dict = {}
-    related_elastic_dict[StudyDocument] = study
-    if study.reference:
-        related_elastic_dict[ReferenceDocument] = study.reference
-
-    related_elastic_dict[GroupDocument] = study.groups
-    related_elastic_dict[IndividualDocument] = study.individuals
-    related_elastic_dict[CharacteristicaDocument] = study.characteristica
-    related_elastic_dict[InterventionDocument] = study.interventions
-    related_elastic_dict[OutputDocument] = study.outputs
-    related_elastic_dict[TimecourseDocument] = study.timecourses
-    return related_elastic_dict
-
-
-
-
 @csrf_exempt
 def update_index_study(request):
     if request.method == 'POST':
@@ -159,21 +133,43 @@ def update_index_study(request):
         except ObjectDoesNotExist:
             return JsonResponse({"success": "False", "reason": "Instance not in database"})
 
-
         related_elastic = related_elastic_dict(study)
-
         for doc, instances in related_elastic.items():
-            #study_related_instances = doc().search().filter("term",study=study.name)
-            #if study_related_instances.count() > 0:
-            #    study_related_instances.delete()
-
             try:
-                action = data.get("action", 'index')
-                doc().update(thing=instances,action=action)
+                action = data.get('action', 'index')
+                doc().update(thing=instances, action=action)
             except helpers.BulkIndexError:
                 pass
 
-        return JsonResponse({"success":"True"})
+        return JsonResponse({"success": "True"})
+
+
+def delete_elastic_study(related_elastic):
+    for doc, instances in related_elastic.items():
+        try:
+            doc().update(thing=instances, action="delete")
+        except helpers.BulkIndexError:
+            pass
+
+
+def related_elastic_dict(study):
+    """ Dictionary of elastic documents for given study.
+
+    :param study:
+    :return:
+    """
+    docs_dict = {
+        StudyDocument: study,
+        GroupDocument: study.groups,
+        IndividualDocument: study.individuals,
+        CharacteristicaDocument: study.characteristica,
+        InterventionDocument: study.interventions,
+        OutputDocument: study.outputs,
+        TimecourseDocument: study.timecourses
+    }
+    if study.reference:
+        docs_dict[ReferenceDocument] = study.reference
+    return docs_dict
 
 
 class ElasticStudyViewSet(DocumentViewSet):
@@ -184,22 +180,23 @@ class ElasticStudyViewSet(DocumentViewSet):
     serializer_class = StudyElasticSerializer
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
     permission_classes = (StudyPermission,)
-    search_fields = ('sid',
-                     'pk_version',
-                     'creator.first_name',
-                     'creator.last_name',
-                     'creator.user',
+    search_fields = (
+        'sid',
+        'pk_version',
+        'creator.first_name',
+        'creator.last_name',
+        'creator.user',
 
-                     'curators.first_name',
-                     'curators.last_name',
-                     'curators.user',
+        'curators.first_name',
+        'curators.last_name',
+        'curators.user',
 
-                     'name',
-                     'design',
-                     'reference',
-                     'substances',
-                     'files'
-                     )
+        'name',
+        'design',
+        'reference',
+        'substances',
+        'files',
+    )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -283,8 +280,6 @@ class ElasticStudyViewSet(DocumentViewSet):
             return qs
 
 
-
-
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document_uid_field = "sid__raw"
@@ -302,18 +297,18 @@ class ElasticReferenceViewSet(DocumentViewSet):
     filter_fields = {'name': 'name.raw',}
     ordering_fields = {
         'sid': 'sid',
-        "pk":'pk',
-        "study_name":"study_name",
-        "study_pk":"study_pk",
-        "pmid":"pmid",
-        "name":"name",
-        "doi":"doi",
-        "title":"title.raw",
-        "abstract":"abstract.raw",
-        "journal":"journal.raw",
-        "date":"date",
-        "pdf":"pdf",
-        "authors":"authors.last_name",
+        "pk": 'pk',
+        "study_name": "study_name",
+        "study_pk": "study_pk",
+        "pmid": "pmid",
+        "name": "name",
+        "doi": "doi",
+        "title": "title.raw",
+        "abstract": "abstract.raw",
+        "journal": "journal.raw",
+        "date": "date",
+        "pdf": "pdf",
+        "authors": "authors.last_name",
     }
 
     def get_object(self):
