@@ -17,13 +17,13 @@ and
 * [Docker](https://github.com/matthiaskoenig/pkdb#docker)
 
 ## Overview
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 [PK-DB](https://pk-db.com) is a database and web interface for pharmacokinetics data and information from clinical trials 
 as well as pre-clinical research. PK-DB allows to curate pharmacokinetics data integrated with the 
 corresponding meta-information 
 - characteristics of studied patient collectives and individuals (age, bodyweight, smoking status, ...) 
 - applied interventions (e.g., dosing, substance, route of application)
-- measured pharmacokinetics time courses and pharmacokinetics parameters (e.g., clearance, half-life, area under the curve). 
+- measured pharmacokinetics time courses and pharmacokinetics parameters (e.g., clearance, half-life, ...). 
 
 Important features are 
 - the representation of experimental errors and variation
@@ -31,28 +31,29 @@ Important features are
 - annotation of information to biological ontologies
 - calculation of pharmacokinetics information from time courses (apparent clearance, half-life, area under the curve (AUC), ...)
 - a workflow for collaborative data curation
-- strong validation rules on data, and simple access via a REST API.
+- strong validation rules on data, and simple access via a REST API
 
 PK-DB is available at https://pk-db.com 
 
 ## License
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
+PK-DB code and documentation is licensed as
 * Source Code: [LGPLv3](http://opensource.org/licenses/LGPL-3.0)
 * Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 
 ## Funding
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)  
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 Jan Grzegorzewski and Matthias König are supported by the Federal Ministry of Education and Research (BMBF, Germany)
 within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
 
 ## How to cite
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 If you use PK-DB or data from PK-DB cite 
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 
 ## Installation
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 PK-DB is deployed via `docker` and `docker-compose`. 
 
 ### Requirements
@@ -108,7 +109,7 @@ If you are interested in curating data or contributing data please contact us at
 
 
 ## REST API
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 PKDB provides a REST API which allows simple interaction with the database and easy access of data.
 An overview over the REST endpoints is provided at [`http://localhost:8000/api/v1/`](http://localhost:8000/api/v1/).
 
@@ -133,7 +134,7 @@ http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 ```
 
 ## Docker
-[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 In the following typical examples to interact with the PK-DB docker containers are provided.
 
 ### Check running containers
