@@ -28,7 +28,7 @@ Important features are
 - the representation of experimental errors and variation
 - the representation and normalisation of units
 - annotation of information to biological ontologies
-- calculation of pharmacokinetics information from time courses (apparent clearance, half-life, area under the curve (AUC), ...)
+- calculation of pharmacokinetics information from time courses (apparent clearance, half-life, ...)
 - a workflow for collaborative data curation
 - strong validation rules on data, and simple access via a REST API
 
