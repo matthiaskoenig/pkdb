@@ -1,6 +1,5 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 [![License (LGPL version 3)](https://img.shields.io/badge/license-LGPLv3.0-blue.svg?style=flat-square)](http://opensource.org/licenses/LGPL-3.0)
-[![Build Status](https://travis-ci.org/matthiaskoenig/pkdb.svg?branch=develop)](https://travis-ci.org/matthiaskoenig/pkdb)
 
 <b><a href="https://orcid.org/0000-0002-4588-4925" title="0000-0002-4588-4925"><img src="./docs/images/orcid.png" height="15"/></a> Jan Grzegorzewski</b>
 and
@@ -14,7 +13,7 @@ and
 * [Funding](https://github.com/matthiaskoenig/pkdb#funding)
 * [Installation](https://github.com/matthiaskoenig/pkdb#installation)
 * [REST API](https://github.com/matthiaskoenig/pkdb#rest-api)
-* [Docker](https://github.com/matthiaskoenig/pkdb#docker)
+* [Docker interaction](https://github.com/matthiaskoenig/pkdb#docker-interaction)
 
 ## Overview
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
@@ -44,7 +43,7 @@ PK-DB code and documentation is licensed as
 ## Funding
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 Jan Grzegorzewski and Matthias König are supported by the Federal Ministry of Education and Research (BMBF, Germany)
-within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
+within the research network Systems Medicine of the Liver ([LiSyM](http://www.lisym.org/), grant number 031L0054).
 
 ## How to cite
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
@@ -58,7 +57,7 @@ PK-DB is deployed via `docker` and `docker-compose`.
 
 ### Requirements
 To setup the development server 
-the following minimal requirements must be installed
+the following minimal requirements must be fulfilled
 - `docker`
 - `docker-compose`
 - `Python3.6`
@@ -72,7 +71,7 @@ To set `vm.max_map_count` persistently change the value in
 /etc/sysctl.conf
 ```
 ### Start development server
-To start the local development server use
+To start the local development server
 ```bash
 # clone or pull the latest code
 git clone https://github.com/matthiaskoenig/pkdb.git
@@ -85,10 +84,12 @@ set -a && source .env.local
 # create/rebuild all docker containers
 ./docker-purge.sh
 ```
-This setups a clean database and clean volumes and starts the containers for `pkdb_backend`, `pkdb_frontend`, `elasticsearch` and `postgres`
+This setups a clean database and clean volumes and starts the containers for `pkdb_backend`, `pkdb_frontend`, `elasticsearch` and `postgres`.
+You can check that all the containers are running via
 ```bash
 docker container ls
 ```
+which lists the current containers
 ```
 CONTAINER ID        IMAGE                 COMMAND                  CREATED             STATUS              PORTS                              NAMES
 bc7f9204468f        pkdb_backend          "bash -c '/usr/local…"   27 hours ago        Up 18 hours         0.0.0.0:8000->8000/tcp             pkdb_backend_1
@@ -96,7 +97,7 @@ bc7f9204468f        pkdb_backend          "bash -c '/usr/local…"   27 hours ag
 7730c6fe2210        elasticsearch:6.8.1   "/usr/local/bin/dock…"   27 hours ago        Up 18 hours         9300/tcp, 0.0.0.0:9123->9200/tcp   pkdb_elasticsearch_1
 e880fbb0f349        postgres:11.4         "docker-entrypoint.s…"   27 hours ago        Up 18 hours         0.0.0.0:5433->5432/tcp             pkdb_postgres_1
 ```
-PK-DB can now be accessed via a web browser with
+The locally running develop version of PK-DB can now be accessed via the web browser from
 - frontend: http://localhost:8080
 - backend: http://localhost:8000
 
@@ -115,25 +116,21 @@ An overview over the REST endpoints is provided at [`http://localhost:8000/api/v
 
 ### Query examples
 The REST API supports elastisearch queries, with syntax examples  
-available from https://django-elasticsearch-dsl-drf.readthedocs.io/en/0.16.2/basic_usage_examples.html
-```
-http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
-http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
-http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
-http://localhost:8000/api/v1/substances_elastic/?search:name=cod
-http://localhost:8000/api/v1/substances_elastic/?search=cod 
-http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
-http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
-http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
-```
+available [here](https://django-elasticsearch-dsl-drf.readthedocs.io/en/latest/basic_usage_examples.html)
+* http://localhost:8000/api/v1/comments_elastic/?user_lastname=K%C3%B6nig
+* http://localhost:8000/api/v1/characteristica_elastic/?group_pk=5&final=true
+* http://localhost:8000/api/v1/characteristica_elastic/?search=group_name:female&final=true
+* http://localhost:8000/api/v1/substances_elastic/?search:name=cod
+* http://localhost:8000/api/v1/substances_elastic/?search=cod 
+* http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3 
+* http://localhost:8000/api/v1/substances_elastic/?ids=1__2__3&ordering=-name
+* http://localhost:8000/api/v1/substances_elastic/?name=caffeine&name=acetaminophen
 
 ### Suggestion example
 In addition suggestion queries are possible
-```
-http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
-```
+* http://localhost:8000/api/v1/substances_elastic/suggest/?search:name=cod
 
-## Docker
+## Docker interaction
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 In the following typical examples to interact with the PK-DB docker containers are provided.
 
@@ -149,7 +146,7 @@ watch docker container ls
 ```
 
 ### Container logs
-To get access to individual container logs use `docker container logs <container>`, e.g., to see the
+To get access to individual container logs use `docker container logs <container>`. For instance to check the
 django backend logs use
 ```bash
 docker container logs pkdb_backend_1 
@@ -166,7 +163,7 @@ docker-compose run --rm backend python manage.py makemigrations
 ```
 
 ### Authentication data
-The following code examples show how to dump and restore the authentication data.
+The following examples show how to dump and restore the authentication data.
 
 Dump authentication data
 ```bash
