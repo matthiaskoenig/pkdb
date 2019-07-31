@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
-[![Build Status](https://travis-ci.org/matthiaskoenig/pkdb.svg?branch=develop)](https://travis-ci.org/matthiaskoenig/pkdb)
 [![License (LGPL version 3)](https://img.shields.io/badge/license-LGPLv3.0-blue.svg?style=flat-square)](http://opensource.org/licenses/LGPL-3.0)
+[![Build Status](https://travis-ci.org/matthiaskoenig/pkdb.svg?branch=develop)](https://travis-ci.org/matthiaskoenig/pkdb)
 
 <b><a href="https://orcid.org/0000-0002-4588-4925" title="0000-0002-4588-4925"><img src="./docs/images/orcid.png" height="15"/></a> Jan Grzegorzewski</b>
 and
@@ -8,17 +8,20 @@ and
 
 # PK-DB - a pharmacokinetics database
 
-* [Overview](https://github.com/matthiaskoenig/annotatedb#overview)
-* [Installation](https://github.com/matthiaskoenig/annotatedb#installation)
-* [REST API](https://github.com/matthiaskoenig/annotatedb#rest-api)
-* [Docker](https://github.com/matthiaskoenig/annotatedb#docker)
+* [Overview](https://github.com/matthiaskoenig/pkdb#overview)
+* [How to cite](https://github.com/matthiaskoenig/pkdb#how-to-cite)
+* [License](https://github.com/matthiaskoenig/pkdb#license)
+* [Funding](https://github.com/matthiaskoenig/pkdb#funding)
+* [Installation](https://github.com/matthiaskoenig/pkdb#installation)
+* [REST API](https://github.com/matthiaskoenig/pkdb#rest-api)
+* [Docker](https://github.com/matthiaskoenig/pkdb#docker)
 
 ## Overview
 [[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
-PK-DB is a database and web interface for pharmacokinetics data and information from clinical trials 
+[PK-DB](https://pk-db.com) is a database and web interface for pharmacokinetics data and information from clinical trials 
 as well as pre-clinical research. PK-DB allows to curate pharmacokinetics data integrated with the 
 corresponding meta-information 
-- characteristics of studied patient collectives and individuals (e.g., age, bodyweight, smoking status) 
+- characteristics of studied patient collectives and individuals (age, bodyweight, smoking status, ...) 
 - applied interventions (e.g., dosing, substance, route of application)
 - measured pharmacokinetics time courses and pharmacokinetics parameters (e.g., clearance, half-life, area under the curve). 
 
@@ -26,20 +29,27 @@ Important features are
 - the representation of experimental errors and variation
 - the representation and normalisation of units
 - annotation of information to biological ontologies
-- calculation of pharmacokinetics information from time courses (e.g., apparent clearance, half-life, area under the curve (AUC))
+- calculation of pharmacokinetics information from time courses (apparent clearance, half-life, area under the curve (AUC), ...)
 - a workflow for collaborative data curation
 - strong validation rules on data, and simple access via a REST API.
 
-<img src="./docs/images/data_extraction.png" width="500"/>
-Figure 1: Overview over data extraction and curation work flow.
+PK-DB is available at https://pk-db.com 
 
-**License**
+## License
+[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
 * Source Code: [LGPLv3](http://opensource.org/licenses/LGPL-3.0)
 * Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 
-**Funding**  
+## Funding
+[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)  
 Jan Grzegorzewski and Matthias König are supported by the Federal Ministry of Education and Research (BMBF, Germany)
 within the research network Systems Medicine of the Liver (**LiSyM**, grant number 031L0054).
+
+## How to cite
+[[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
+If you use PK-DB or data from PK-DB cite 
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 
 ## Installation
 [[^]](https://github.com/matthiaskoenig/pkdb#pkdb---a-pharmacokinetics-database)
