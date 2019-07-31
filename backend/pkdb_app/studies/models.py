@@ -273,3 +273,5 @@ class Study(Sidable, models.Model):
         if self.outputset:
             return self.outputset.outputs.filter(normed=True, calculated=True).count()
         return 0
+
+

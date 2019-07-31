@@ -12,6 +12,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework.schemas import get_schema_view
 
 from .comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
 
@@ -28,7 +29,7 @@ from .studies.views import (
     StudyViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet, update_index_study)
 
-from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
+from .statistics import StatisticsViewSet, study_pks_view
 
 router = DefaultRouter()
 
@@ -59,7 +60,6 @@ router.register("studies", StudyViewSet, base_name="studies")
 router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elastic")
 
 router.register("statistics", StatisticsViewSet, base_name="statistics")
-router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_data")
 
 
 ###############################################################################################
@@ -88,6 +88,7 @@ router.register(
 )
 
 schema_view = get_swagger_view(title="PKDB API")
+#schema_view = get_schema_view(title="PKDB API")
 
 
 urlpatterns = [
