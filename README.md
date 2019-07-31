@@ -32,7 +32,7 @@ Important features are
 - a workflow for collaborative data curation
 - strong validation rules on data, and simple access via a REST API
 
-PK-DB is available at https://pk-db.com 
+PK-DB is available at https://pk-db.com
 
 ## License
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
