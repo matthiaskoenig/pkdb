@@ -283,6 +283,7 @@ DATABASES = {
 }
 
 DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
+print(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
 # ------------------------------
 # LOCAL
 # ------------------------------
