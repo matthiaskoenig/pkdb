@@ -1,8 +1,10 @@
 """
 Shared django settings.
 """
+import logging
 import os
 from os.path import join
+
 
 import dj_database_url
 from distutils.util import strtobool
@@ -283,7 +285,7 @@ DATABASES = {
 }
 
 DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
-print(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
+logging.info(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
 # ------------------------------
 # LOCAL
 # ------------------------------
