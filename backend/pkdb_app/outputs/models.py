@@ -262,7 +262,7 @@ class TimecourseEx(
     objects = TimecourseExManager()
 
 
-class Timecourse(AbstractOutput, Normalizable,Accessible):
+class Timecourse(AbstractOutput, Normalizable, Accessible):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
