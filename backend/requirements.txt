@@ -2,7 +2,7 @@ pip>=19.2.1
 
 # core
 pytz==2018.4 #old
-Django==2.2.3
+Django==2.2.4
 gunicorn>=19.9.0
 newrelic>=3.2.2.94
 
