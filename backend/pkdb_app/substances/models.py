@@ -1,16 +1,11 @@
 """
 Describe Substances
 """
-from django.apps import apps
 from django.db import models
 from pkdb_app.categorials.models import Annotation
 from pkdb_app.users.models import User
 from ..utils import CHAR_MAX_LENGTH
 from ..behaviours import Sidable
-
-# -------------------------------------------------
-# Substance
-# -------------------------------------------------
 
 
 class Substance(Sidable, models.Model):
@@ -43,9 +38,7 @@ class Substance(Sidable, models.Model):
 
     annotations = models.ManyToManyField(Annotation)
 
-
     # validation rule: check that all labels are in derived and not more(split on `+/()`)
-
     def __str__(self):
         return self.name
 
@@ -77,5 +70,3 @@ class Substance(Sidable, models.Model):
 class SubstanceSynonym(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="synonyms")
-
-

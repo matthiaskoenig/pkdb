@@ -38,6 +38,7 @@ OUTPUT_TISSUE_DATA = [
     "urine",
     "breath",
     "bile duct"
+    "stomach"
 ]
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
