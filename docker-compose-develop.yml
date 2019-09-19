@@ -70,7 +70,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile-develop
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - ./frontend:/app
       - node_modules:/app/node_modules/
