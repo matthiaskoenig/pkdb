@@ -140,8 +140,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
         """ Splits the data to get number of entries. """
 
         n_values = []
+
         for field, value in entry.items():
             n = 1
+
             try:
                 values = value.split(ITEM_SEPARATOR)
                 n = len(values)

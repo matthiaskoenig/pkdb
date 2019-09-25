@@ -139,6 +139,7 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
         # ----------------------------------
         if not isinstance(data, dict):
             raise serializers.ValidationError(f"each intervention has to be a dict and not <{data}>")
+
         temp_interventions = self.split_entry(data)
         for key in VALUE_FIELDS_NO_UNIT:
             if data.get(key) in NA_VALUES:
