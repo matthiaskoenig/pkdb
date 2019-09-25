@@ -27,8 +27,12 @@ cd pkdb_data
 mkvirtualenv pkdb_data --python=python3.6
 pip install -e .
 ```
-Next step is to export your credentials via environment variables.
-Create a `.env` file with the following content
+Next step is to export your credentials via environment variables. 
+Therefore, create a `.env` file by coping `env.template`.
+```
+cp .env.template .env
+```
+and update the the `USER` and `PASSWORD` in the `.env`. 
 ```
 API_BASE=https://develop.pk-db.com
 USER=PKDB_USERNAME

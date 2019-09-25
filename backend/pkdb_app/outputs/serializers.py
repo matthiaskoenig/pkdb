@@ -324,6 +324,8 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
+        if not isinstance(data, dict):
+            raise serializers.ValidationError(f"each timecourse has to be a dict and not <{data}>")
         temp_timecourses = self.split_entry(data)
         timecourses = []
 
