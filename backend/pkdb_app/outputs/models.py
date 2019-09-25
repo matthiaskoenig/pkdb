@@ -37,9 +37,16 @@ OUTPUT_TISSUE_DATA = [
     "spinal fluid",
     "urine",
     "breath",
-    "bile duct"
+    "bile duct",
+    "stomach",
+    "muscle",
+    "pancreas",
+    "liver",
+    "adipose",
+    "kidney",
 ]
 OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
+
 
 # -------------------------------------------------
 # OUTPUTS
@@ -115,7 +122,6 @@ class OutputEx(Externable,
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
 
-
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
@@ -125,7 +131,6 @@ class OutputEx(Externable,
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = OutputExManager()
-
 
 
 class Output(AbstractOutput,Normalizable, Accessible):

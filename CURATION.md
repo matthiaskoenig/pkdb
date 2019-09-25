@@ -51,7 +51,7 @@ To watch a given study use
 workon pkdb_data
 
 # export environment variables for backend
-(pkdb_data) set -a && source .env.local
+(pkdb_data) set -a && source .env
 
 # run the watch script
 (pkdb_data) watch_study -s $STUDYFOLDER
