@@ -7,22 +7,14 @@ from django.db import models
 from ..utils import CHAR_MAX_LENGTH, create_choices
 from ..subjects.models import DataFile
 
-from ..interventions.managers import InterventionSetManager,InterventionExManager
+from ..interventions.managers import InterventionSetManager, InterventionExManager
 from ..behaviours import Externable, Accessible
 
-from pkdb_app.users.models import User
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
-
-
-#
-# Choices for intervention routes, application and form.
-#
-
-# FIXME: some duplication with pkdb_data
 INTERVENTION_ROUTE = [
     "iv",  # intravenous
     "intramuscular",
@@ -40,6 +32,7 @@ INTERVENTION_FORM = [
     "capsule",
     "tablet",
     "solution",
+    "suppository",
     "no info",
 ]
 
@@ -72,13 +65,14 @@ class InterventionSet(models.Model):
 
 
 class AbstractIntervention(models.Model):
-
-
-    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
-    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
+    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
+                            choices=INTERVENTION_FORM_CHOICES)
+    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
+                                   choices=INTERVENTION_APPLICATION_CHOICES)
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES)
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
+                             choices=INTERVENTION_ROUTE_CHOICES)
 
     class Meta:
         abstract = True
@@ -103,7 +97,6 @@ class InterventionEx(
     AbstractIntervention,
     AbstractInterventionMap,
     ExMeasurementTypeable
-
 ):
     """ Intervention (external curated layer)."""
 
@@ -134,9 +127,10 @@ class InterventionEx(
 class Intervention(Accessible, Normalizable, AbstractIntervention):
     """ A concrete step/thing which is done to the group.
 
-         In case of dosing/medication the actual dosing is stored in the Valueable.
-         In case of a step without dosing, e.g., lifestyle intervention only the measurement_type is used.
-      """
+    In case of dosing/medication the actual dosing is stored in the Valueable.
+    In case of a step without dosing, e.g., lifestyle intervention only the
+    measurement_type is used.
+    """
     ex = models.ForeignKey(
         InterventionEx,
         related_name="interventions",
@@ -146,7 +140,6 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
-
     @property
     def study_name(self):
         return self.study.name
@@ -154,5 +147,3 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     @property
     def study(self):
         return self.ex.interventionset.study
-
-
