@@ -102,8 +102,8 @@ contains all the relevant information
     "pkdb_version": 1.0,
     "name": "Author2007",
     "reference": 123456789,
-    "licence": "open || closed",
-    "access": "public || private",
+    "licence": "closed",
+    "access": "private",
     "creator": "mkoenig",
     "curators": [
         ["mkoenig", 0.5]

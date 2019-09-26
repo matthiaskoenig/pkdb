@@ -35,6 +35,7 @@ OUTPUT_TISSUE_DATA = [
     "saliva",
     "serum",
     "spinal fluid",
+    "cerebrospinal fluid",
     "urine",
     "breath",
     "bile duct",
