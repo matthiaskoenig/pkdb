@@ -34,6 +34,7 @@ class GroupSetManager(models.Manager):
             # create single group_ex
             group_ex["study"] = study
             group_ex["group_exs"] = study_group_exs
+
             study_group_ex = groupset.group_exs.create(**group_ex)
 
             study_group_exs.append(study_group_ex)

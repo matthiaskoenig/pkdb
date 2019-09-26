@@ -108,7 +108,7 @@ class GroupEx(Externable, AbstractGroup):
     parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    count = models.IntegerField()
+    count = models.IntegerField(null=True)
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = GroupExManager()
