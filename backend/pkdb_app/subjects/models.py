@@ -210,7 +210,6 @@ class IndividualEx(Externable, AbstractIndividual):
     """
 
     source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.CASCADE)
-    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.CASCADE)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)

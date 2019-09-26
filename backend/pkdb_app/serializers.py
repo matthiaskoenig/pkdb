@@ -1,4 +1,5 @@
 import copy
+from pathlib import Path
 import numpy as np
 import numbers
 import pandas as pd
@@ -21,9 +22,6 @@ NA_VALUES = ["na","NA","nan","NAN"]
 # ---------------------------------------------------
 # File formats
 # ---------------------------------------------------
-FileFormat = namedtuple("FileFormat", ["name", "delimiter"])
-
-FORMAT_MAPPING = {"TSV": FileFormat("TSV", "\t"), "CSV": FileFormat("CSV", ",")}
 
 # ---------------------------------------------------
 #
@@ -279,9 +277,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 
-    def df_from_file(self, source, format, subset):
-        delimiter = FORMAT_MAPPING[format].delimiter
-
+    def df_from_file(self, source, subset):
 
         if isinstance(source,int):
             pass
@@ -299,10 +295,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 {"source":f"<{str(source)}> is not existing","detail":type(source)})
         src = DataFile.objects.get(pk=source)
+
+        if Path(src.file.name).suffix != ".tsv":
+            raise serializers.ValidationError(
+                {"source": f"<{Path(src.file.name).name}> has to be a tsv file with the suffix: <.tsv>"})
         try:
             df = pd.read_csv(
                 src.file,
-                delimiter=delimiter,
+                delimiter="\t",
                 keep_default_na=False,
                 na_values=["NA", "NAN", "na", "nan"],
             )
@@ -315,7 +315,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 {
                     "source": "cannot read csv",
-                    "detail": {"source": source, "format": format, "subset": subset},
+                    "detail": {"source": source, "subset": subset},
                 }
             )
         if subset:
@@ -377,14 +377,12 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # get data
         template.pop("source", None)
         template.pop("figure", None)
-        format = template.pop("format", None)
         subset = template.pop("subset", None)
 
         if source:
 
-            if format is None:
-                raise serializers.ValidationError({"format": "format is missing!"})
-            df = self.df_from_file(source, format, subset)
+
+            df = self.df_from_file(source, subset)
 
 
 
@@ -444,12 +442,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
             # get data
             template.pop("source")
             template.pop("figure", None)
-            format = template.pop("format", None)
-            if format is None:
-                raise serializers.ValidationError({"format": "format is missing!"})
             subset = template.pop("subset", None)
             # read dataframe subset
-            df = self.df_from_file(source, format, subset)
+            df = self.df_from_file(source, subset)
             template = copy.deepcopy(template)
 
             if data.get("groupby"):
