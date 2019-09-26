@@ -222,7 +222,7 @@ All available fields for characteristica on group are:
 ### individuals
 Individuals are curated very similar to groups with the exception that individuals must belong
 to a given group, i.e., the `group` attribute must be set. Individuals are most often defined based on spreadsheet mappings.
-See for instance below individuals which are defined via a table.
+See for instance below individuals which are defined via a table. 
 
 ```json
 "individuals": [
@@ -251,7 +251,7 @@ See for instance below individuals which are defined via a table.
       }
     ]
 ```
-
+Even if individuals have no information on the characteristica, a table with individual names have to be created for later reference.
 
 ## 4. Curation of interventions/interventionset
 ```json
@@ -284,7 +284,7 @@ All available fields for intervention and interventionset are:
     
     "substance": "categorial (substance)",
     "route": "categorial {oral, iv}",
-    "application": "categorial {'single dose', 'multiple doses', 'continuous injection'}",
+    "application": "categorial {'single dose', 'multiple dose', 'continuous injection'}",
     "form": "categorial {'tablete', 'capsule', ...}",
     "time": "double||double||double ...",
     "time_unit": "categorial",
@@ -320,6 +320,8 @@ Use the screenshot functionality in the PDF viewer and save with image program l
 
 ### Figures
 - Use PlotDigitizer to digitize figures (https://sourceforge.net/projects/plotdigitizer/)
+    - download programm 
+    - run plotdigitizer with java
 - Open the image to digitize (`STUDYNAME_Fig[1-9]*.png`)
 - Use the Zoom function to increase the image if necessary (easier to click on data points)
 - First axes have to be calibrated (make sure to set logarithmical axes where necessary); calibration should be done very carfully because it will have a systematic effect (bias) on all digitized data points.
