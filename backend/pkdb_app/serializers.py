@@ -541,7 +541,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # url representation of file
         for file in ["source", "figure"]:
             if file in rep:
-                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
+                if "||" not  in rep[file]:
+                    rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
+
+
+
         return rep
 
 

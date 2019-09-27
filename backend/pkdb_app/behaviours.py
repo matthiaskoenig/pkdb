@@ -18,6 +18,8 @@ class Externable(models.Model):
     #format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     subset_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    source_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    figure_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     class Meta:
         abstract = True

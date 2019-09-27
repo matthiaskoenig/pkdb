@@ -33,7 +33,7 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
-EXTERN_FILE_FIELDS = ["source", "subset_map","groupby", "figure"]
+EXTERN_FILE_FIELDS = ["source", "subset_map","groupby", "figure", "source_map", "figure_map"]
 
 # ----------------------------------
 # DataFile

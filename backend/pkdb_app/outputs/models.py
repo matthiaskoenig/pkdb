@@ -131,6 +131,7 @@ class OutputEx(Externable,
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
+
     objects = OutputExManager()
 
 
