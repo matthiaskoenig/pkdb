@@ -39,6 +39,7 @@ OUTPUT_TISSUE_DATA = [
     "urine",
     "breath",
     "bile duct",
+    "blood",
     "stomach",
     "muscle",
     "pancreas",
