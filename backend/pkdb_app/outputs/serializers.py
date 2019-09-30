@@ -2,6 +2,8 @@
 Serializers for interventions.
 """
 import numpy as np
+
+from pkdb_app import utils
 from pkdb_app.categorials.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
     VALUE_FIELDS_NO_UNIT, map_field
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
@@ -220,7 +222,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         read_only=False,
         required=False,
     )
-    substance = serializers.SlugRelatedField(
+    substance = utils.SlugRelatedField(
         slug_field="name",
         queryset=Substance.objects.all(),
         read_only=False,
@@ -228,7 +230,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         allow_null=True,
     )
 
-    measurement_type = serializers.SlugRelatedField(
+    measurement_type = utils.SlugRelatedField(
         slug_field="name",
         queryset=MeasurementType.objects.all(),
         read_only=False,

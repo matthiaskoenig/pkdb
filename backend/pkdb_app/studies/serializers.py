@@ -2,6 +2,8 @@
 Studies serializers.
 """
 from elasticsearch_dsl import AttrDict
+
+from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
 from pkdb_app.users.permissions import get_study_file_permission
@@ -87,7 +89,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
 class CuratorRatingSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(min_value=0, max_value=5)
 
-    user = serializers.SlugRelatedField(
+    user = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username"
     )
@@ -119,13 +121,13 @@ class StudySerializer(SidSerializer):
 
     """
 
-    reference = serializers.SlugRelatedField(slug_field="sid",
+    reference = utils.SlugRelatedField(slug_field="sid",
         queryset=Reference.objects.all(), required=True, allow_null=False
     )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
     curators = CuratorRatingSerializer(many=True, required=False,
                                        allow_null=True)
-    collaborators = serializers.SlugRelatedField(
+    collaborators = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
         many=True,
@@ -133,7 +135,7 @@ class StudySerializer(SidSerializer):
         allow_null=True,
     )
 
-    creator = serializers.SlugRelatedField(
+    creator = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
         required=False,

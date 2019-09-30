@@ -3,11 +3,13 @@ from pathlib import Path
 import numpy as np
 import numbers
 import pandas as pd
+
 from django.db.models import Q
+
 from pkdb_app.categorials.behaviours import map_field
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 from rest_framework.settings import api_settings
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
@@ -58,7 +60,7 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         if not instance:
             raise serializers.ValidationError(
                 {
-                    api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist",
+                    api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist.",
                     "detail": {**kwargs},
                 }
             )
@@ -492,8 +494,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                     try:
                         value_array = df[values[1]]
-
-
 
                     except KeyError:
                         raise serializers.ValidationError(

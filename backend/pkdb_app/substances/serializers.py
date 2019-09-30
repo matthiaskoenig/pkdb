@@ -1,6 +1,7 @@
 """
 Serializers for substances.
 """
+from pkdb_app import utils
 from pkdb_app.categorials.serializers import AnnotationSerializer
 from rest_framework import serializers
 
@@ -30,7 +31,7 @@ class SynonymSerializer(WrongKeyValidationSerializer):
 
 class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
-    parents = serializers.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.order_by('name'), required=False, allow_null=True)
+    parents = utils.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.order_by('name'), required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
 

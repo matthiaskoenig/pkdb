@@ -5,6 +5,7 @@ Serializers for interventions.
 # ----------------------------------
 # Interventions
 # ----------------------------------
+from pkdb_app import utils
 from pkdb_app.categorials.models import Unit, Choice, MeasurementType, Annotation
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.substances.models import Substance
@@ -19,7 +20,7 @@ class EXMeasurementTypeableSerializer(ExSerializer):
 
 
 class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
-    substance = serializers.SlugRelatedField(
+    substance = utils.SlugRelatedField(
         slug_field="name",
         queryset=Substance.objects.all(),
         read_only=False,
@@ -27,7 +28,7 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
         allow_null=True,
     )
 
-    measurement_type = serializers.SlugRelatedField(
+    measurement_type = utils.SlugRelatedField(
         slug_field="name",
         queryset=MeasurementType.objects.all())
 
