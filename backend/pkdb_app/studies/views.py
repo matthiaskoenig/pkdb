@@ -85,8 +85,16 @@ class StudyViewSet(viewsets.ModelViewSet):
             groupset = request.data["groupset"]
             if "groups" in groupset:
                 groups = groupset.get("groups", [])
+                if not isinstance(groups,list):
+                    raise ValidationError(
+                        {"groups": f"groups must be a list and not a {type(groups)}","detail":groups})
+
                 parents_name = set()
                 groups_name = set()
+                print("*" * 100)
+                print(groups)
+                print("*" * 100)
+
                 for group in groups:
                     parent_name  = group.get("parent")
                     if parent_name:
