@@ -4,7 +4,7 @@ group or individual).
 """
 from django.db import models
 
-from ..utils import CHAR_MAX_LENGTH, create_choices
+from ..utils import CHAR_MAX_LENGTH, create_choices, CHAR_MAX_LENGTH_LONG
 from ..subjects.models import DataFile
 
 from ..interventions.managers import InterventionSetManager, InterventionExManager
@@ -82,11 +82,11 @@ class AbstractIntervention(models.Model):
 
 
 class AbstractInterventionMap(models.Model):
-    form_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    application_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    route_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    form_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    application_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    route_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True
@@ -117,7 +117,7 @@ class InterventionEx(
         InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE
     )
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     objects = InterventionExManager()
 
     class Meta:

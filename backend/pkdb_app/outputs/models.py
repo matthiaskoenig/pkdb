@@ -12,7 +12,7 @@ from django.contrib.postgres.fields import ArrayField
 from pkdb_app.categorials.models import MeasurementType, ureg
 from pkdb_app.interventions.models import Intervention
 
-from ..utils import CHAR_MAX_LENGTH, create_choices
+from ..utils import CHAR_MAX_LENGTH, create_choices, CHAR_MAX_LENGTH_LONG
 from pkdb_app.subjects.models import Group, DataFile, Individual
 
 from .managers import (
@@ -100,9 +100,9 @@ class AbstractOutput(models.Model):
 
 
 class AbstractOutputMap(models.Model):
-    tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True
@@ -127,9 +127,9 @@ class OutputEx(Externable,
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
 
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
 
     objects = OutputExManager()
@@ -262,9 +262,9 @@ class TimecourseEx(
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention)
 
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     objects = TimecourseExManager()
 
