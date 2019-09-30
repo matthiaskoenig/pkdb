@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from pkdb_app.categorials.behaviours import  map_field, VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
@@ -33,7 +33,7 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
-EXTERN_FILE_FIELDS = ["source", "subset_map","groupby", "figure"]
+EXTERN_FILE_FIELDS = ["source", "subset_map","groupby", "figure", "source_map", "figure_map"]
 
 # ----------------------------------
 # DataFile
@@ -241,6 +241,13 @@ class IndividualSerializer(ExSerializer):
                 group = Group.objects.get(
                     Q(ex__groupset__study__sid=study_sid) & Q(name=group)
                 ).pk
+            except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
+                if err == ObjectDoesNotExist:
+                    msg = f'group: {group} in study: {study_sid} does not exist'
+                else:
+                    msg = f'group: {group} in study: {study_sid} has been defined multiple times.'
+
+                raise serializers.ValidationError(msg)
             except ObjectDoesNotExist:
                 msg = f"group: {group} in study: {study_sid} does not exist"
                 raise serializers.ValidationError(msg)

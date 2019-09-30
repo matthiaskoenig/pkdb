@@ -541,7 +541,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # url representation of file
         for file in ["source", "figure"]:
             if file in rep:
-                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
+                if not "||" in str(rep[file]):
+                    rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
+
         return rep
 
 
@@ -559,9 +561,16 @@ class ExSerializer(MappingSerializer):
                         Q(ex__groupset__study__sid=study_sid)
                         & Q(name=data.get("group"))
                     ).pk
-                except ObjectDoesNotExist:
-                    msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
+
+                except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
+                    if err == ObjectDoesNotExist:
+                        msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
+                    else:
+                        msg = f'group: {data.get("group")} in study: {study_sid} has been defined multiple times.'
+
                     raise serializers.ValidationError(msg)
+
+
 
         if "individual" in data:
 
