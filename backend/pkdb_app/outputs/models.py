@@ -12,7 +12,7 @@ from django.contrib.postgres.fields import ArrayField
 from pkdb_app.categorials.models import MeasurementType, ureg, Tissue
 from pkdb_app.interventions.models import Intervention
 
-from ..utils import CHAR_MAX_LENGTH, create_choices, CHAR_MAX_LENGTH_LONG
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from pkdb_app.subjects.models import Group, DataFile, Individual
 
 from .managers import (
@@ -28,25 +28,6 @@ from ..behaviours import (
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 TIME_NORM_UNIT = "hr"
-
-OUTPUT_TISSUE_DATA = [
-    "plasma",
-    "saliva",
-    "serum",
-    "spinal fluid",
-    "cerebrospinal fluid",
-    "urine",
-    "breath",
-    "bile duct",
-    "blood",
-    "stomach",
-    "muscle",
-    "pancreas",
-    "liver",
-    "adipose",
-    "kidney",
-]
-OUTPUT_TISSUE_DATA_CHOICES = create_choices(OUTPUT_TISSUE_DATA)
 
 
 # -------------------------------------------------

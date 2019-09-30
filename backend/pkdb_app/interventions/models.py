@@ -5,7 +5,7 @@ group or individual).
 from django.db import models
 
 from pkdb_app.categorials.models import Application, Form, Route
-from ..utils import CHAR_MAX_LENGTH, create_choices, CHAR_MAX_LENGTH_LONG
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..subjects.models import DataFile
 
 from ..interventions.managers import InterventionSetManager, InterventionExManager
@@ -16,31 +16,6 @@ from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
-INTERVENTION_ROUTE = [
-    "iv",  # intravenous
-    "intramuscular",
-    "oral",
-    "rectal",
-    "inhalation"
-]
-INTERVENTION_APPLICATION = [
-    "constant infusion",
-    "multiple dose",
-    "single dose",
-    "variable infusion",
-]
-INTERVENTION_FORM = [
-    "capsule",
-    "tablet",
-    "solution",
-    "suppository",
-    "no info",
-]
-
-INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
-INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
-INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
-
 
 class InterventionSet(models.Model):
     objects = InterventionSetManager()

@@ -1,10 +1,8 @@
 from django.urls import reverse
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from pkdb_app.categorials.models import  MeasurementType
-from pkdb_app.outputs.models import OUTPUT_TISSUE_DATA
+from pkdb_app.categorials.models import MeasurementType, Tissue
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -25,7 +23,8 @@ class OutputOptionViewSet(viewsets.ViewSet):
         options = {}
         options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         options["substances"] = reverse('substances_elastic-list')
-        options["tissue"] = OUTPUT_TISSUE_DATA
+        options["tissue"] =  [k.name for k in Tissue.objects.all()]
+
         return options
 
     def list(self, request):
@@ -38,7 +37,7 @@ class TimecourseOptionViewSet(viewsets.ViewSet):
             options = {}
             options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
             options["substances"] = reverse('substances_elastic-list')
-            options["tissue"] = OUTPUT_TISSUE_DATA
+            options["tissue"] = [k.name for k in Tissue.objects.all()]
             return options
 
     def list(self, request):
