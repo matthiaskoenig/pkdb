@@ -4,7 +4,8 @@ Django URLs
 from django.urls import path, include
 from django.conf.urls import url
 from django.contrib import admin
-from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet
+from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet, TissueViewSet, \
+    ApplicationViewSet, FormViewSet, RouteViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
     TimecourseOptionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
@@ -45,6 +46,11 @@ router.register("references_elastic", ElasticReferenceViewSet, base_name="refere
 
 router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")
 router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, base_name="measurement_types_elastic")
+
+router.register("tissues", TissueViewSet, base_name="tissues")
+router.register("applications", ApplicationViewSet, base_name="applications")
+router.register("forms", FormViewSet, base_name="forms")
+router.register("routes", RouteViewSet, base_name="routes")
 
 router.register("users", UserViewSet, base_name="users")
 router.register("users", UserCreateViewSet)

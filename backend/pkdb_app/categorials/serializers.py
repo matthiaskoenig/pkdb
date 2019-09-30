@@ -6,7 +6,7 @@ Serializers for interventions.
 # Interventions
 # ----------------------------------
 from pkdb_app import utils
-from pkdb_app.categorials.models import Unit, Choice, MeasurementType, Annotation
+from pkdb_app.categorials.models import Unit, Choice, MeasurementType, Annotation, Tissue, Form, Application, Route
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.substances.models import Substance
 from pkdb_app.utils import update_or_create_multiple
@@ -50,6 +50,36 @@ class UnitSerializer(NameFieldSerializer):
         model = Unit
         fields = ["name"]
 
+
+class BaseCategorySerializer(WrongKeyValidationSerializer):
+    def to_internal_value(self, data):
+        self.validate_wrong_keys(data)
+        data["creator"] = self.context['request'].user.id
+        return super().to_internal_value(data)
+
+
+class TissueSerializer(BaseCategorySerializer):
+    class Meta:
+        model = Tissue
+        fields = ["name","creator","url_slug", "description"]
+
+
+class FormSerializer(BaseCategorySerializer):
+    class Meta:
+        model = Form
+        fields = ["name","creator","url_slug", "description"]
+
+
+class ApplicationSerializer(BaseCategorySerializer):
+    class Meta:
+        model = Application
+        fields = ["name","creator","url_slug", "description"]
+
+
+class RouteSerializer(BaseCategorySerializer):
+    class Meta:
+        model = Route
+        fields = ["name","creator","url_slug", "description"]
 
 class AnnotationSerializer(serializers.ModelSerializer):
     term = serializers.CharField()

@@ -10,7 +10,7 @@ from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
 
-from pkdb_app.categorials.models import MeasurementType
+from pkdb_app.categorials.models import MeasurementType, Tissue
 
 from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
@@ -66,6 +66,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
         read_only=False,
         required=False,
         allow_null=True,
+    )
+    tissue = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=Tissue.objects.all(),
+        read_only=False,
+        required=False
     )
 
 
@@ -233,6 +239,12 @@ class TimecourseSerializer(BaseOutputExSerializer):
     measurement_type = utils.SlugRelatedField(
         slug_field="name",
         queryset=MeasurementType.objects.all(),
+        read_only=False,
+        required=False
+    )
+    tissue = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=Tissue.objects.all(),
         read_only=False,
         required=False
     )
@@ -410,6 +422,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.CharField()
     measurement_type = serializers.CharField()
+    tissue = serializers.CharField()
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -452,6 +465,8 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
     measurement_type = serializers.CharField()
+    tissue = serializers.CharField()
+
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)
     substance = serializers.CharField()

@@ -9,7 +9,7 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from pkdb_app.categorials.models import MeasurementType, ureg
+from pkdb_app.categorials.models import MeasurementType, ureg, Tissue
 from pkdb_app.interventions.models import Intervention
 
 from ..utils import CHAR_MAX_LENGTH, create_choices, CHAR_MAX_LENGTH_LONG
@@ -25,8 +25,7 @@ from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Externable, Accessible)
 
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable, ValueableMapNotBlank, \
-    ValueableNotBlank, MeasurementTypeable
+from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 TIME_NORM_UNIT = "hr"
 
@@ -93,7 +92,6 @@ class OutputSet(models.Model):
 
 
 class AbstractOutput(models.Model):
-    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES, null=True)
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     class Meta:
@@ -132,6 +130,9 @@ class OutputEx(Externable,
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
+    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
+
+
 
     objects = OutputExManager()
 
@@ -142,13 +143,19 @@ class Output(AbstractOutput,Normalizable, Accessible):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention)
-    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
+
+    tissue = models.ForeignKey(Tissue,related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
+
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
     # calculated by timecourse data
     calculated = models.BooleanField(default=False)
     timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="pharmacokinetics", null=True)
     objects = OutputManager()
+
+    @property
+    def tissue_name(self):
+        return self.tissue.name
 
     @property
     def interventions(self):
@@ -267,6 +274,8 @@ class TimecourseEx(
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
+    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
+
     objects = TimecourseExManager()
 
 
@@ -281,7 +290,9 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     ex = models.ForeignKey(
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
-    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
+    #tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
+    tissue = models.ForeignKey(Tissue,related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
+
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -294,7 +305,9 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     time = ArrayField(models.FloatField(null=True), null=True)
     objects = OutputManager()
 
-
+    @property
+    def tissue_name(self):
+        return self.tissue.name
 
     @property
     def interventions(self):

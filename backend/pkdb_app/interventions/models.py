@@ -4,6 +4,7 @@ group or individual).
 """
 from django.db import models
 
+from pkdb_app.categorials.models import Application, Form, Route
 from ..utils import CHAR_MAX_LENGTH, create_choices, CHAR_MAX_LENGTH_LONG
 from ..subjects.models import DataFile
 
@@ -65,14 +66,8 @@ class InterventionSet(models.Model):
 
 
 class AbstractIntervention(models.Model):
-    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                            choices=INTERVENTION_FORM_CHOICES)
-    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                                   choices=INTERVENTION_APPLICATION_CHOICES)
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True,
-                             choices=INTERVENTION_ROUTE_CHOICES)
 
     class Meta:
         abstract = True
@@ -116,6 +111,11 @@ class InterventionEx(
     interventionset = models.ForeignKey(
         InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE
     )
+
+    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     objects = InterventionExManager()
@@ -139,6 +139,22 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True)
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
+
+    @property
+    def route_name(self):
+        return self.study.name
+
+    @property
+    def application_name(self):
+        return self.study.name
+
+    @property
+    def form_name(self):
+        return self.study.name
 
     @property
     def study_name(self):

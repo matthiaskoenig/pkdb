@@ -12,7 +12,8 @@ from numbers import Number
 from django.db import models
 from pkdb_app.categorials.managers import ChoiceManager
 from pkdb_app.users.models import User
-from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key
+from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key, CHAR_MAX_LENGTH_LONG
+
 ureg = pint.UnitRegistry()
 
 # Units
@@ -56,6 +57,7 @@ class Unit(models.Model):
     def p_unit(self):
         return ureg(self.name).u
 
+
 class Annotation(models.Model):
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
     relation = models.CharField(max_length=CHAR_MAX_LENGTH,)
@@ -69,9 +71,35 @@ class Choice(models.Model):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     annotations = models.ManyToManyField(Annotation)
     description = models.TextField(blank=True, null=True)
-
-
     objects = ChoiceManager()
+
+
+class Tissue(models.Model):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    creator = models.ForeignKey(User, related_name="tissues", on_delete=models.CASCADE)
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+
+class Route(models.Model):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    creator = models.ForeignKey(User, related_name="routes", on_delete=models.CASCADE)
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+
+class Application(models.Model):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    creator = models.ForeignKey(User, related_name="applications", on_delete=models.CASCADE)
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    description = models.TextField(blank=True, null=True)
+
+
+class Form(models.Model):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    creator = models.ForeignKey(User, related_name="forms", on_delete=models.CASCADE)
+    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    description = models.TextField(blank=True, null=True)
 
 
 class MeasurementType(models.Model):
