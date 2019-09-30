@@ -91,9 +91,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 
                 parents_name = set()
                 groups_name = set()
-                print("*" * 100)
-                print(groups)
-                print("*" * 100)
 
                 for group in groups:
                     parent_name  = group.get("parent")
