@@ -222,16 +222,18 @@ All available fields for characteristica on group are:
 ### individuals
 Individuals are curated very similar to groups with the exception that individuals must belong
 to a given group, i.e., the `group` attribute must be set. Individuals are most often defined based on spreadsheet mappings.
-See for instance below individuals which are defined via a table. 
+See for instance below individuals which are defined via a table.
+
+Information in the excel sheets can be referred to via using the `source` attribute stating the respective sheet (e.g. `Tab1` or `Fig2`).
+The columns can then be matched via using the `col==col_header` syntax. In the example below for all the individuals the `name`, `group`, `age`, `weight` and `sex` are defined in the sheet `Tab1`.
 
 ```json
 "individuals": [
       {
+        "source": "Tab1",
+        "figure": "Tab1",
         "name": "col==subject",
-        "group": "col==group",
-        "source": "Akinyinka2000_Tab1.csv",
-        "format": "TSV",
-        "figure": "Akinyinka2000_Tab1.png",
+        "group": "col==group",        
         "characteristica": [
           {
             "measurement_type": "age",
@@ -305,10 +307,10 @@ All available fields for intervention and interventionset are:
 
 ## 5. Curation of outputs and time courses
 The actual data in publication is available either from tables, figures or stated with the text.
-All information should be curated by the means of excel spreadsheets, i.e., data must be digitized and transferred from the
-PDF in a spreadsheet.
+The information is curated either as excel spreadsheets (preferred method) or can be directly stored in the `study.json` (legacy method). The actual data is hereby digitized and stored in the spreadsheets.
 
 - Use Excel (LibreOffice/OpenOffice) spreadsheets to store digitized data
+- store as `.xlsx` format (not `.ods`)
 - change language settings to use US numbers and formats, i.e. ‘.’ separator). Always use points (‘.’) as number separator, never comma (‘,’), i.e. 1.234 instead of 1,234.
 
 For all figures and tables from which data is extracted individual images (`png`) must be stored in the study folder, i.e.,
@@ -320,7 +322,7 @@ Use the screenshot functionality in the PDF viewer and save with image program l
 
 ### Figures
 - Use PlotDigitizer to digitize figures (https://sourceforge.net/projects/plotdigitizer/)
-    - download programm 
+    - download program 
     - run plotdigitizer with java
 - Open the image to digitize (`STUDYNAME_Fig[1-9]*.png`)
 - Use the Zoom function to increase the image if necessary (easier to click on data points)
@@ -338,13 +340,15 @@ Some tips for digitizion of figures:
 - set the number of digits to a reasonable value (2-3 digits)
 
 ### Tables
+For tables the data is copied in spreadsheets.
+
+### Encoding outputs and time courses
 
 ```json
 {
-        "source": "Akinyinka2000_Tab3.csv",
-        "format": "TSV",
-        "subset": "substance==paraxanthine",
-        "figure": "Akinyinka2000_Tab3.png",
+        "source": "Tab3",
+        "figure": "Tab3",
+        "subset": "substance==paraxanthine",        
         "group": "healthy subjects",
         "interventions": [
             "Dcaf"
@@ -362,12 +366,11 @@ Some tips for digitizion of figures:
 {
     "timecourses": [
       {
-        "group": "all",
+        "source": "Fig1",
+        "figure": "Fig1",
         "groupby": "intervention",
+        "group": "all",
         "interventions": "col==intervention",
-        "source": "Albert1974_Fig1.tsv",
-        "format": "TSV",
-        "figure": "Albert1974_Fig1.png",
         "substance": "paracetamol",
         "tissue": "plasma",
         "measurement_type": "concentration",
