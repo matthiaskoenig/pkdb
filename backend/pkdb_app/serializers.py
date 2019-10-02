@@ -736,6 +736,7 @@ class ExSerializer(MappingSerializer):
     def rev_ex_mapping(cls):
         return dict((v, k) for k, v in cls.ex_mapping().items())
 
+
     @classmethod
     def transform_ex_fields(cls, data):
         transform_data = {}
@@ -760,6 +761,7 @@ class ExSerializer(MappingSerializer):
 
     def to_internal_value(self, data):
         # change keys
+        validate_dict(data)
         data = self.transform_ex_fields(data)
         return super().to_internal_value(data)
 
@@ -814,3 +816,6 @@ class PkSerializer(serializers.Serializer):
 
 
 
+def validate_dict(dic):
+    if not isinstance(dic, dict):
+        raise serializers.ValidationError({"error":"data has to be a dictonary","detail": dic})

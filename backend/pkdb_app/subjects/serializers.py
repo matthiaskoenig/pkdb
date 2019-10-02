@@ -23,7 +23,7 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
 )
-from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
+from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer, validate_dict
 
 CHARACTERISTISTA_FIELDS = ["count"]
 CHARACTERISTISTA_MAP_FIELDS = map_field(CHARACTERISTISTA_FIELDS)
