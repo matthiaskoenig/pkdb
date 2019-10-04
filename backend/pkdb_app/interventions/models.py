@@ -121,15 +121,15 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
 
     @property
     def route_name(self):
-        return self.study.name
+        return self.route.name
 
     @property
     def application_name(self):
-        return self.study.name
+        return self.application.name
 
     @property
     def form_name(self):
-        return self.study.name
+        return self.form.name
 
     @property
     def study_name(self):
