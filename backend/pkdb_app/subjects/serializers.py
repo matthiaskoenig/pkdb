@@ -10,7 +10,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..studies.models import Study
 from operator import itemgetter
-from ..utils import list_of_pk
+from ..utils import list_of_pk, _validate_requried_key
 
 from .models import (
     Group,
@@ -122,6 +122,8 @@ class GroupSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+        _validate_requried_key(data,"count")
+
 
         for characteristica_single in data.get("characteristica",[]):
             disabled = ["value"]

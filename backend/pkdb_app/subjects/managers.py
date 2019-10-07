@@ -13,15 +13,10 @@ class GroupSetManager(models.Manager):
 
         descriptions = kwargs.pop("descriptions", [])
         comments = kwargs.pop("comments", [])
-        #Comment = apps.get_model('comments', 'Comment')
-        #Description = apps.get_model('comments', 'Description')
-
         groupset = super().create(*args, **kwargs)
-
         create_multiple(groupset, descriptions, "descriptions")
         create_multiple(groupset, comments, "comments")
-        #create_multiple_bulk(groupset, "groupset", descriptions, Description)
-        #create_multiple_bulk(groupset, "groupset", comments, Comment)
+
 
 
         study_group_exs = []
