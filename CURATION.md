@@ -259,7 +259,7 @@ Even if individuals have no information on the characteristica, a table with ind
 ```json
 {
     "interventionset": {
-        "description": "All patients and volunteers fasted overnight and, at 0800 hours, were given orally 300 mg caffeine dissolved in 150 ml water; food intake was allowed 3 h after administration of caffeine.",
+        "descriptions": [],
         "interventions": [
           {
             "name": "glciv",

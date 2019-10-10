@@ -39,8 +39,8 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
             if payload_key not in serializer_fields:
                 payload_key = self.retransform_map_string(payload_key)
                 msg = {
-                    payload_key: f"`{payload_key}` is a wrong field, "
-                                 f"allowed fields are {[f for f in serializer_fields if not 'map' in f]}"}
+                    payload_key: f"'{payload_key}' is an incorrect field, "
+                                 f"supported fields are {sorted([f for f in serializer_fields if not 'map' in f])}"}
                 raise serializers.ValidationError(msg)
 
     def get_or_val_error(self, model, *args, **kwargs):
@@ -341,7 +341,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                         raise serializers.ValidationError(
                             [
-                                f"key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
+                                f"header key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
                                 data
                             ]
                         )
@@ -491,7 +491,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     except KeyError:
                         raise serializers.ValidationError(
                             [
-                                f"key <{values[1]}> is missing in file "
+                                f"header key <{values[1]}> is missing in file "
                                 f"<{DataFile.objects.get(pk=source).file}>",
                                 data,
                             ]
