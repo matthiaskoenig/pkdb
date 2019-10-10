@@ -2,8 +2,9 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
     OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from pkdb_app.categorials.documents import MeasurementTypeDocument
-from pkdb_app.categorials.models import MeasurementType
-from pkdb_app.categorials.serializers import MeasurementTypeSerializer, MeasurementTypeElasticSerializer
+from pkdb_app.categorials.models import MeasurementType, Tissue, Application, Route, Form
+from pkdb_app.categorials.serializers import MeasurementTypeSerializer, MeasurementTypeElasticSerializer, \
+    TissueSerializer, ApplicationSerializer, RouteSerializer, FormSerializer
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.users.permissions import IsAdminOrCreator
 from rest_framework import viewsets
@@ -12,6 +13,33 @@ from rest_framework import viewsets
 class MeasurementTypeViewSet(viewsets.ModelViewSet):
     queryset = MeasurementType.objects.all()
     serializer_class = MeasurementTypeSerializer
+    permission_classes = (IsAdminOrCreator,)
+    lookup_field = "url_slug"
+
+
+class TissueViewSet(viewsets.ModelViewSet):
+    queryset = Tissue.objects.all()
+    serializer_class = TissueSerializer
+    permission_classes = (IsAdminOrCreator,)
+    lookup_field = "url_slug"
+
+
+class ApplicationViewSet(viewsets.ModelViewSet):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
+    permission_classes = (IsAdminOrCreator,)
+    lookup_field = "url_slug"
+
+
+class RouteViewSet(viewsets.ModelViewSet):
+    queryset = Route.objects.all()
+    serializer_class = RouteSerializer
+    permission_classes = (IsAdminOrCreator,)
+    lookup_field = "url_slug"
+
+class FormViewSet(viewsets.ModelViewSet):
+    queryset = Form.objects.all()
+    serializer_class = FormSerializer
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
 

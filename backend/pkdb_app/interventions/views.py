@@ -1,9 +1,7 @@
 from django.urls import reverse
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from pkdb_app.categorials.models import MeasurementType
-from pkdb_app.interventions.models import INTERVENTION_ROUTE, INTERVENTION_FORM, INTERVENTION_APPLICATION
+from pkdb_app.categorials.models import MeasurementType, Route, Form, Application
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -28,9 +26,9 @@ class InterventionOptionViewSet(viewsets.ViewSet):
         options = {}
         options["measurement_type"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
         options["substances"] = reverse('substances_elastic-list')
-        options["route"] = INTERVENTION_ROUTE
-        options["form"] = INTERVENTION_FORM
-        options["application"] = INTERVENTION_APPLICATION
+        options["route"] = [k.name for k in Route.objects.all()]
+        options["form"] = [k.name for k in Form.objects.all()]
+        options["application"] = [k.name for k in Application.objects.all()]
         return options
 
     def list(self, request):
@@ -49,7 +47,7 @@ class ElasticInterventionViewSet(AccessView):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
-    search_fields = ('name','study','access','measurement_type','substance',"form","application",'route','time_unit')
+    search_fields = ('name','study','access','measurement_type','substance',"form","tissue","application",'route','time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'

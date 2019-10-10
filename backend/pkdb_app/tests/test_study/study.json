@@ -145,14 +145,12 @@
       {
         "name": "col==subject",
         "group": "col==group",
-        "source": "test_study_TabA.csv",
-        "format": "TSV"
+        "source": "test_study_TabA.csv"
       },
       {
         "name": "col==subject",
         "group": "col==fake_group",
         "source": "test_study_Tab3.csv",
-        "format": "TSV",
         "figure": "test_study_Tab3.png",
         "characteristica": [
           {
@@ -244,7 +242,6 @@
       {
         "source": "test_study_Tab1.csv",
         "subset": "intgroup==NO_OC || intgroup==A || intgroup==B",
-        "format": "TSV",
         "figure": "test_study_Tab1.png",
         "individual": "col==subject",
         "interventions": "Dcaf,DB || Dcaf || Dcaf",
@@ -256,7 +253,6 @@
       },
       {
         "source": "test_study_Tab2.csv",
-        "format": "TSV",
         "subset": "intgroup==NO_OC",
         "figure": "test_study_Tab2.png",
         "group": "col==group",
@@ -272,7 +268,6 @@
       },
       {
         "source": "test_study_Tab2.csv",
-        "format": "TSV",
         "subset": "intgroup==A",
         "figure": "test_study_Tab2.png",
         "group": "col==group",
@@ -288,7 +283,6 @@
       },
       {
         "source": "test_study_Tab2.csv",
-        "format": "TSV",
         "subset": "intgroup==B",
         "figure": "test_study_Tab2.png",
         "group": "col==group",
@@ -308,7 +302,6 @@
         "groupby": "subject",
         "interventions": "col==interventions",
         "source": "test_study_Fig3.csv",
-        "format": "TSV",
         "figure": "test_study_Fig3.png",
         "substance": "caffeine || paraxanthine || paraxanthine/caffeine",
         "tissue": "plasma",
@@ -327,7 +320,7 @@
           "Dcaf"
         ],
         "source": "test_study_Fig3.csv",
-        "format": "TSV",
+
         "figure": "test_study_Fig3.png",
         "substance": "caffeine || paraxanthine || paraxanthine/caffeine",
         "tissue": "plasma",

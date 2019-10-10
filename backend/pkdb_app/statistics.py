@@ -48,7 +48,6 @@ class StatisticsSerializer(serializers.BaseSerializer):
     """ Serializer for database statistics. """
 
     def to_representation(self, instance):
-        from django.db.models import Count
         return {
             key: getattr(instance, key)
             for key in [
@@ -65,42 +64,3 @@ class StatisticsSerializer(serializers.BaseSerializer):
         }
 
 
-class StatisticsData(object):
-    """ More complex statistics data for plots and overviews. """
-
-    def __init__(self, substance):
-        self.version = __version__
-        self.studies = Study.objects.filter(substances__name__contains=substance)
-        self.study_count = self.studies.count()
-        self.reference_count = self.studies.values_list("reference").count()
-        self.interventions = Intervention.objects.filter(substance__name=substance).filter(normed=True)
-        self.intervention_count = self.interventions.count()
-        self.outputs = Output.objects.filter(substance__name=substance).filter(normed=True)
-        self.output_count = self.outputs.count()
-        self.timecourses = Timecourse.objects.filter(substance__name=substance).filter(normed=True)
-        self.timecourse_count = self.timecourses.count()
-
-        outputs_with_substance = Output.objects.filter(raw___interventions__in=self.interventions)
-        self.individual_count = Individual.objects.filter(output__in=outputs_with_substance).count()
-        self.group_count = Group.objects.filter(output__in=outputs_with_substance).count()
-
-
-class StatisticsDataViewSet(viewsets.ViewSet):
-    """
-    Get database statistics including version.
-    """
-    def list(self, request):
-        # substances = ["caffeine", "codeine"]
-        data = {}
-        substances = Intervention.objects.values_list("substance__name", flat=True).distinct()
-        substances = [x for x in substances if x is not None]
-
-        for substance in substances:
-
-            instance = StatisticsData(substance=substance)
-            serializer = StatisticsSerializer(instance)
-
-            data[substance] = serializer.data
-        data = pd.DataFrame(data).T.to_dict("list")
-        data["labels"] = substances
-        return Response(data)

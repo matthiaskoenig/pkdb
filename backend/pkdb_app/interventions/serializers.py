@@ -3,8 +3,10 @@ Serializers for interventions.
 """
 import itertools
 
+from pkdb_app import utils
 from pkdb_app.categorials.behaviours import  VALUE_FIELDS, VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.categorials.models import Tissue, Route, Application, Form
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
@@ -61,9 +63,24 @@ OUTPUT_MAP_FIELDS =  map_field(OUTPUT_FIELDS)
 
 
 class InterventionSerializer(MeasurementTypeableSerializer):
+    route = utils.SlugRelatedField(
+        slug_field="name",
+        required=False,
+        queryset=Route.objects.all())
+
+    application = utils.SlugRelatedField(
+        slug_field="name",
+        required=False,
+        queryset=Application.objects.all())
+
+    form = utils.SlugRelatedField(
+        slug_field="name",
+        required=False,
+        queryset=Form.objects.all())
+
     class Meta:
         model = Intervention
-        fields =  INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_internal_value(self, data):
@@ -139,6 +156,7 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
         # ----------------------------------
         if not isinstance(data, dict):
             raise serializers.ValidationError(f"each intervention has to be a dict and not <{data}>")
+
         temp_interventions = self.split_entry(data)
         for key in VALUE_FIELDS_NO_UNIT:
             if data.get(key) in NA_VALUES:
@@ -231,6 +249,10 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     allowed_users = UserElasticSerializer(many=True, read_only=True)
     substance = serializers.CharField(allow_null=True)
     measurement_type = serializers.CharField()
+    route = serializers.CharField()
+    application = serializers.CharField()
+    form = serializers.CharField()
+
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)

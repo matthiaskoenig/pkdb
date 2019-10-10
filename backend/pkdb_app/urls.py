@@ -4,7 +4,8 @@ Django URLs
 from django.urls import path, include
 from django.conf.urls import url
 from django.contrib import admin
-from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet
+from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet, TissueViewSet, \
+    ApplicationViewSet, FormViewSet, RouteViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
     TimecourseOptionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
@@ -12,6 +13,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from rest_framework.routers import DefaultRouter
 from rest_framework_swagger.views import get_swagger_view
+from rest_framework.schemas import get_schema_view
 
 from .comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
 
@@ -28,7 +30,7 @@ from .studies.views import (
     StudyViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet, update_index_study)
 
-from .statistics import StatisticsViewSet, StatisticsDataViewSet, study_pks_view
+from .statistics import StatisticsViewSet, study_pks_view
 
 router = DefaultRouter()
 
@@ -45,6 +47,11 @@ router.register("references_elastic", ElasticReferenceViewSet, base_name="refere
 router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")
 router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, base_name="measurement_types_elastic")
 
+router.register("tissues", TissueViewSet, base_name="tissues")
+router.register("applications", ApplicationViewSet, base_name="applications")
+router.register("forms", FormViewSet, base_name="forms")
+router.register("routes", RouteViewSet, base_name="routes")
+
 router.register("users", UserViewSet, base_name="users")
 router.register("users", UserCreateViewSet)
 router.register("user_groups", UserGroupViewSet, base_name="user_groups")
@@ -59,7 +66,6 @@ router.register("studies", StudyViewSet, base_name="studies")
 router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elastic")
 
 router.register("statistics", StatisticsViewSet, base_name="statistics")
-router.register("statistics_data", StatisticsDataViewSet, base_name="statistics_data")
 
 
 ###############################################################################################
@@ -88,6 +94,7 @@ router.register(
 )
 
 schema_view = get_swagger_view(title="PKDB API")
+#schema_view = get_schema_view(title="PKDB API")
 
 
 urlpatterns = [

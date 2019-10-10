@@ -15,14 +15,33 @@ class InterventionDocument(Document):
             'raw': fields.StringField(analyzer='keyword'),
         }
     )
+
+    form = fields.StringField(
+        attr='form_name',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    route = fields.StringField(
+        attr='route_name',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    application = fields.StringField(
+        attr='application_name',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
     choice = string_field('choice')
-    application = string_field('application')
+    #application = string_field('application')
     time_unit = string_field('time_unit')
     time = fields.FloatField()
     substance = string_field('substance_name')
     study = string_field('study_name')
-    route = string_field('route')
-    form = string_field('form')
+    #route = string_field('route')
+    #form = string_field('form')
     name = string_field('name')
     normed = fields.BooleanField()
     raw = ObjectField(properties={

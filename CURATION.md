@@ -27,8 +27,12 @@ cd pkdb_data
 mkvirtualenv pkdb_data --python=python3.6
 pip install -e .
 ```
-Next step is to export your credentials via environment variables.
-Create a `.env` file with the following content
+Next step is to export your credentials via environment variables. 
+Therefore, create a `.env` file by coping `env.template`.
+```
+cp .env.template .env
+```
+and update the the `USER` and `PASSWORD` in the `.env`. 
 ```
 API_BASE=https://develop.pk-db.com
 USER=PKDB_USERNAME
@@ -51,7 +55,7 @@ To watch a given study use
 workon pkdb_data
 
 # export environment variables for backend
-(pkdb_data) set -a && source .env.local
+(pkdb_data) set -a && source .env
 
 # run the watch script
 (pkdb_data) watch_study -s $STUDYFOLDER
@@ -98,8 +102,8 @@ contains all the relevant information
     "pkdb_version": 1.0,
     "name": "Author2007",
     "reference": 123456789,
-    "licence": "open || closed",
-    "access": "public || private",
+    "licence": "closed",
+    "access": "private",
     "creator": "mkoenig",
     "curators": [
         ["mkoenig", 0.5]
@@ -220,14 +224,16 @@ Individuals are curated very similar to groups with the exception that individua
 to a given group, i.e., the `group` attribute must be set. Individuals are most often defined based on spreadsheet mappings.
 See for instance below individuals which are defined via a table.
 
+Information in the excel sheets can be referred to via using the `source` attribute stating the respective sheet (e.g. `Tab1` or `Fig2`).
+The columns can then be matched via using the `col==col_header` syntax. In the example below for all the individuals the `name`, `group`, `age`, `weight` and `sex` are defined in the sheet `Tab1`.
+
 ```json
 "individuals": [
       {
+        "source": "Tab1",
+        "figure": "Tab1",
         "name": "col==subject",
-        "group": "col==group",
-        "source": "Akinyinka2000_Tab1.csv",
-        "format": "TSV",
-        "figure": "Akinyinka2000_Tab1.png",
+        "group": "col==group",        
         "characteristica": [
           {
             "measurement_type": "age",
@@ -247,13 +253,13 @@ See for instance below individuals which are defined via a table.
       }
     ]
 ```
-
+Even if individuals have no information on the characteristica, a table with individual names have to be created for later reference.
 
 ## 4. Curation of interventions/interventionset
 ```json
 {
     "interventionset": {
-        "description": "All patients and volunteers fasted overnight and, at 0800 hours, were given orally 300 mg caffeine dissolved in 150 ml water; food intake was allowed 3 h after administration of caffeine.",
+        "descriptions": [],
         "interventions": [
           {
             "name": "glciv",
@@ -280,7 +286,7 @@ All available fields for intervention and interventionset are:
     
     "substance": "categorial (substance)",
     "route": "categorial {oral, iv}",
-    "application": "categorial {'single dose', 'multiple doses', 'continuous injection'}",
+    "application": "categorial {'single dose', 'multiple dose', 'continuous injection'}",
     "form": "categorial {'tablete', 'capsule', ...}",
     "time": "double||double||double ...",
     "time_unit": "categorial",
@@ -301,10 +307,10 @@ All available fields for intervention and interventionset are:
 
 ## 5. Curation of outputs and time courses
 The actual data in publication is available either from tables, figures or stated with the text.
-All information should be curated by the means of excel spreadsheets, i.e., data must be digitized and transferred from the
-PDF in a spreadsheet.
+The information is curated either as excel spreadsheets (preferred method) or can be directly stored in the `study.json` (legacy method). The actual data is hereby digitized and stored in the spreadsheets.
 
 - Use Excel (LibreOffice/OpenOffice) spreadsheets to store digitized data
+- store as `.xlsx` format (not `.ods`)
 - change language settings to use US numbers and formats, i.e. ‘.’ separator). Always use points (‘.’) as number separator, never comma (‘,’), i.e. 1.234 instead of 1,234.
 
 For all figures and tables from which data is extracted individual images (`png`) must be stored in the study folder, i.e.,
@@ -316,6 +322,8 @@ Use the screenshot functionality in the PDF viewer and save with image program l
 
 ### Figures
 - Use PlotDigitizer to digitize figures (https://sourceforge.net/projects/plotdigitizer/)
+    - download program 
+    - run plotdigitizer with java
 - Open the image to digitize (`STUDYNAME_Fig[1-9]*.png`)
 - Use the Zoom function to increase the image if necessary (easier to click on data points)
 - First axes have to be calibrated (make sure to set logarithmical axes where necessary); calibration should be done very carfully because it will have a systematic effect (bias) on all digitized data points.
@@ -332,13 +340,15 @@ Some tips for digitizion of figures:
 - set the number of digits to a reasonable value (2-3 digits)
 
 ### Tables
+For tables the data is copied in spreadsheets.
+
+### Encoding outputs and time courses
 
 ```json
 {
-        "source": "Akinyinka2000_Tab3.csv",
-        "format": "TSV",
-        "subset": "substance==paraxanthine",
-        "figure": "Akinyinka2000_Tab3.png",
+        "source": "Tab3",
+        "figure": "Tab3",
+        "subset": "substance==paraxanthine",        
         "group": "healthy subjects",
         "interventions": [
             "Dcaf"
@@ -356,12 +366,11 @@ Some tips for digitizion of figures:
 {
     "timecourses": [
       {
-        "group": "all",
+        "source": "Fig1",
+        "figure": "Fig1",
         "groupby": "intervention",
+        "group": "all",
         "interventions": "col==intervention",
-        "source": "Albert1974_Fig1.tsv",
-        "format": "TSV",
-        "figure": "Albert1974_Fig1.png",
         "substance": "paracetamol",
         "tissue": "plasma",
         "measurement_type": "concentration",

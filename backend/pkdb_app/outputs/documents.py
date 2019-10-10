@@ -45,7 +45,7 @@ class OutputDocument(Document):
     unit = string_field('unit')
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
-    tissue = string_field('tissue')
+    tissue = string_field('tissue_name')
     measurement_type = string_field("measurement_type_name")
     access = string_field('access')
     allowed_users = fields.ObjectField(
@@ -117,7 +117,7 @@ class TimecourseDocument(Document):
     time_unit = string_field('time_unit')
     figure = string_field('figure')
     time = fields.FloatField('null_time', multi=True)
-    tissue = string_field('tissue')
+    tissue = string_field('tissue_name')
     measurement_type = string_field("measurement_type_name")
     access = string_field('access')
     allowed_users = fields.ObjectField(

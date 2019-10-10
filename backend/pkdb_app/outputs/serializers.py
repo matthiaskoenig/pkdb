@@ -2,13 +2,15 @@
 Serializers for interventions.
 """
 import numpy as np
+
+from pkdb_app import utils
 from pkdb_app.categorials.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
     VALUE_FIELDS_NO_UNIT, map_field
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
 
-from pkdb_app.categorials.models import MeasurementType
+from pkdb_app.categorials.models import MeasurementType, Tissue
 
 from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
@@ -64,6 +66,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
         read_only=False,
         required=False,
         allow_null=True,
+    )
+    tissue = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=Tissue.objects.all(),
+        read_only=False,
+        required=False
     )
 
 
@@ -220,7 +228,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
         read_only=False,
         required=False,
     )
-    substance = serializers.SlugRelatedField(
+    substance = utils.SlugRelatedField(
         slug_field="name",
         queryset=Substance.objects.all(),
         read_only=False,
@@ -228,9 +236,15 @@ class TimecourseSerializer(BaseOutputExSerializer):
         allow_null=True,
     )
 
-    measurement_type = serializers.SlugRelatedField(
+    measurement_type = utils.SlugRelatedField(
         slug_field="name",
         queryset=MeasurementType.objects.all(),
+        read_only=False,
+        required=False
+    )
+    tissue = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=Tissue.objects.all(),
         read_only=False,
         required=False
     )
@@ -324,6 +338,8 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # decompress external format
         # ----------------------------------
+        if not isinstance(data, dict):
+            raise serializers.ValidationError(f"each timecourse has to be a dict and not <{data}>")
         temp_timecourses = self.split_entry(data)
         timecourses = []
 
@@ -406,6 +422,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     interventions = InterventionSmallElasticSerializer(many=True)
     substance = serializers.CharField()
     measurement_type = serializers.CharField()
+    tissue = serializers.CharField()
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -448,6 +465,8 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
     measurement_type = serializers.CharField()
+    tissue = serializers.CharField()
+
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)
     substance = serializers.CharField()

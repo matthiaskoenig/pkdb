@@ -1,4 +1,4 @@
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from pkdb_app.categorials.behaviours import  map_field, VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
@@ -10,7 +10,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..studies.models import Study
 from operator import itemgetter
-from ..utils import list_of_pk
+from ..utils import list_of_pk, _validate_requried_key
 
 from .models import (
     Group,
@@ -23,7 +23,7 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
 )
-from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
+from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer, validate_dict
 
 CHARACTERISTISTA_FIELDS = ["count"]
 CHARACTERISTISTA_MAP_FIELDS = map_field(CHARACTERISTISTA_FIELDS)
@@ -33,7 +33,7 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 GROUP_FIELDS = ["name", "count"]
 GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
-EXTERN_FILE_FIELDS = ["source", "format", "subset_map","groupby", "figure"]
+EXTERN_FILE_FIELDS = ["source", "subset_map","groupby", "figure", "source_map", "figure_map"]
 
 # ----------------------------------
 # DataFile
@@ -122,6 +122,8 @@ class GroupSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
+        _validate_requried_key(data,"count")
+
 
         for characteristica_single in data.get("characteristica",[]):
             disabled = ["value"]
@@ -241,6 +243,13 @@ class IndividualSerializer(ExSerializer):
                 group = Group.objects.get(
                     Q(ex__groupset__study__sid=study_sid) & Q(name=group)
                 ).pk
+            except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
+                if err == ObjectDoesNotExist:
+                    msg = f'group: {group} in study: {study_sid} does not exist'
+                else:
+                    msg = f'group: {group} in study: {study_sid} has been defined multiple times.'
+
+                raise serializers.ValidationError(msg)
             except ObjectDoesNotExist:
                 msg = f"group: {group} in study: {study_sid} does not exist"
                 raise serializers.ValidationError(msg)

@@ -4,49 +4,18 @@ group or individual).
 """
 from django.db import models
 
-from ..utils import CHAR_MAX_LENGTH, create_choices
+from pkdb_app.categorials.models import Application, Form, Route
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..subjects.models import DataFile
 
-from ..interventions.managers import InterventionSetManager,InterventionExManager
+from ..interventions.managers import InterventionSetManager, InterventionExManager
 from ..behaviours import Externable, Accessible
 
-from pkdb_app.users.models import User
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
-
-
-#
-# Choices for intervention routes, application and form.
-#
-
-# FIXME: some duplication with pkdb_data
-INTERVENTION_ROUTE = [
-    "iv",  # intravenous
-    "intramuscular",
-    "oral",
-    "rectal",
-    "inhalation"
-]
-INTERVENTION_APPLICATION = [
-    "constant infusion",
-    "multiple dose",
-    "single dose",
-    "variable infusion",
-]
-INTERVENTION_FORM = [
-    "capsule",
-    "tablet",
-    "solution",
-    "no info",
-]
-
-INTERVENTION_APPLICATION_CHOICES = create_choices(INTERVENTION_APPLICATION)
-INTERVENTION_ROUTE_CHOICES = create_choices(INTERVENTION_ROUTE)
-INTERVENTION_FORM_CHOICES = create_choices(INTERVENTION_FORM)
-
 
 class InterventionSet(models.Model):
     objects = InterventionSetManager()
@@ -72,13 +41,8 @@ class InterventionSet(models.Model):
 
 
 class AbstractIntervention(models.Model):
-
-
-    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_FORM_CHOICES)
-    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_APPLICATION_CHOICES)
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=INTERVENTION_ROUTE_CHOICES)
 
     class Meta:
         abstract = True
@@ -88,11 +52,11 @@ class AbstractIntervention(models.Model):
 
 
 class AbstractInterventionMap(models.Model):
-    form_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    application_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    time_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    route_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    form_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    application_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    route_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True
@@ -103,7 +67,6 @@ class InterventionEx(
     AbstractIntervention,
     AbstractInterventionMap,
     ExMeasurementTypeable
-
 ):
     """ Intervention (external curated layer)."""
 
@@ -123,8 +86,13 @@ class InterventionEx(
     interventionset = models.ForeignKey(
         InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE
     )
+
+    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     objects = InterventionExManager()
 
     class Meta:
@@ -134,9 +102,10 @@ class InterventionEx(
 class Intervention(Accessible, Normalizable, AbstractIntervention):
     """ A concrete step/thing which is done to the group.
 
-         In case of dosing/medication the actual dosing is stored in the Valueable.
-         In case of a step without dosing, e.g., lifestyle intervention only the measurement_type is used.
-      """
+    In case of dosing/medication the actual dosing is stored in the Valueable.
+    In case of a step without dosing, e.g., lifestyle intervention only the
+    measurement_type is used.
+    """
     ex = models.ForeignKey(
         InterventionEx,
         related_name="interventions",
@@ -146,6 +115,30 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True)
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
+
+    @property
+    def route_name(self):
+        if self.route:
+            return self.route.name
+        else:
+            return None
+
+    @property
+    def application_name(self):
+        if self.application:
+            return self.application.name
+        else:
+            return None
+
+    @property
+    def form_name(self):
+        if self.form:
+            return self.form.name
+        else:
+            return None
 
     @property
     def study_name(self):
@@ -154,5 +147,3 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     @property
     def study(self):
         return self.ex.interventionset.study
-
-

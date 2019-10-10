@@ -28,6 +28,7 @@ from rest_framework import filters
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q as DQ
 
 from elasticsearch_dsl.query import Q
 
@@ -61,14 +62,36 @@ class StudyViewSet(viewsets.ModelViewSet):
     lookup_field = "sid"
     permission_classes = (StudyPermission,)
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        group = user_group(self.request.user)
+        if group in ["admin","reviewer"]:
+            return queryset
+
+        elif group == "basic":
+
+            return queryset.filter(DQ(access=PUBLIC) |
+                                   DQ(creator=self.request.user) |
+                                   DQ(collaborators=self.request.user) |
+                                   DQ(curators=self.request.user)).distinct()
+
+        elif group == "anonymous":
+            return queryset.filter(access=PUBLIC)
+
+
     @staticmethod
     def group_validation(request):
         if "groupset" in request.data and request.data["groupset"]:
             groupset = request.data["groupset"]
             if "groups" in groupset:
                 groups = groupset.get("groups", [])
+                if not isinstance(groups,list):
+                    raise ValidationError(
+                        {"groups": f"groups must be a list and not a {type(groups)}","detail":groups})
+
                 parents_name = set()
                 groups_name = set()
+
                 for group in groups:
                     parent_name  = group.get("parent")
                     if parent_name:
@@ -278,6 +301,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             )
 
             return qs
+
 
 
 class ElasticReferenceViewSet(DocumentViewSet):

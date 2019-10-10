@@ -4,9 +4,17 @@ Generic utility functions.
 import os
 import copy
 from rest_framework import serializers
+from django.utils.translation import gettext_lazy as _
 
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
+
+
+class SlugRelatedField(serializers.SlugRelatedField):
+    default_error_messages = {
+        'does_not_exist': _('Object with {slug_name}=<{value}> does not exist.'),
+        'invalid': _('Invalid value.'),
+    }
 
 def list_duplicates(seq):
   seen = set()

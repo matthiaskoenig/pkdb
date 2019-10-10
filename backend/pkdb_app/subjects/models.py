@@ -13,7 +13,7 @@ from ..behaviours import (
 
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
-from ..utils import CHAR_MAX_LENGTH
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from .managers import (
     GroupExManager,
     GroupSetManager,
@@ -107,9 +107,9 @@ class GroupEx(Externable, AbstractGroup):
 
     parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    count = models.IntegerField()
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    count = models.IntegerField(null=True)
+    count_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     objects = GroupExManager()
 
@@ -210,13 +210,12 @@ class IndividualEx(Externable, AbstractIndividual):
     """
 
     source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.CASCADE)
-    format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.CASCADE)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     objects = IndividualExManager()
 
@@ -323,7 +322,7 @@ class CharacteristicaEx(
     This stores the raw information. Derived values can be calculated.
     """
 
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    count_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     group_ex = models.ForeignKey(
         GroupEx, related_name="characteristica_ex", null=True, on_delete=models.CASCADE
