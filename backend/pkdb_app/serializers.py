@@ -161,7 +161,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
     @staticmethod
     def interventions_from_string(value):
         if value:
-            return [v.strip() for v in value.split(",")]
+            return [v.strip() for v in str(value).split(",")]
         else:
             return value
 
