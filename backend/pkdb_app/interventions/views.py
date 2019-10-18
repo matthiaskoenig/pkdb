@@ -1,3 +1,4 @@
+import pandas as pd
 from django.urls import reverse
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
@@ -52,7 +53,31 @@ class ElasticInterventionViewSet(AccessView):
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw','pk':'pk','normed':'normed',}
+    filter_fields = {
+        'pk': 'pk',
+        'study_sid': 'study_sid',
+        'study_name': 'study_name.raw',
+        'normed':'normed',
+        'raw_pk': 'raw_pk',
+        'name': 'name',
+        'measurement_type': 'measurement_type',
+        'choice': 'choice',
+        'substance': 'substance',
+        'route': 'route',
+        'form': 'form',
+        'application': 'application',
+        'time_unit': 'time_unit',
+        'unit': 'unit',
+        'time': 'time',
+        'value': 'value',
+        'mean': 'mean',
+        'median': 'median',
+        'min': 'min',
+        'max': 'max',
+        'se': 'se',
+        'sd': 'sd',
+        'cv': 'cv',
+    }
     ordering_fields = {'name': 'name.raw',
                        'measurement_type':'measurement_type.raw',
                        'choice':'choice.raw',

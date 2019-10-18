@@ -246,13 +246,11 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
-    allowed_users = UserElasticSerializer(many=True, read_only=True)
     substance = serializers.CharField(allow_null=True)
     measurement_type = serializers.CharField()
     route = serializers.CharField()
     application = serializers.CharField()
     form = serializers.CharField()
-
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -261,10 +259,10 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    raw = PkSerializer()
+
     class Meta:
         model = Intervention
-        fields = ["pk","study", "access","allowed_users", "normed", "raw"] + VALUE_FIELDS + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = ["study_sid","study_name", "pk","raw_pk", "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_representation(self, instance):

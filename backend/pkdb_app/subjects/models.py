@@ -26,6 +26,9 @@ from .managers import (
 
 from django.apps import apps
 
+SUBJECT_TYPE_GROUP = "group"
+SUBJECT_TYPE_INDIVIDUAL = "individual"
+
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -135,6 +138,7 @@ class Group(Accessible):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()
     parent = models.ForeignKey("Group", null=True, on_delete=models.CASCADE)
+    characteristica_all_normed = models.ManyToManyField("Characteristica",related_name="groups", through="GroupCharacteristica")
     objects = GroupManager()
 
     # class Meta:
@@ -161,17 +165,17 @@ class Group(Accessible):
         return parents
 
     @property
-    def characteristica_all(self):
+    def _characteristica_all(self):
         characteristica_all = self.characteristica.all()
         additive_characteristica = ["disease","abstinence"]
         this_measurements = characteristica_all.exclude(measurement_type__name__in=additive_characteristica).values_list("measurement_type", flat=True)
         if self.parent:
-            characteristica_all = characteristica_all | self.parent.characteristica_all.exclude(measurement_type__in=this_measurements)
+            characteristica_all = characteristica_all | self.parent._characteristica_all.exclude(measurement_type__in=this_measurements)
         return characteristica_all
 
     @property
-    def characteristica_all_normed(self):
-        return self.characteristica_all.filter(normed=True)
+    def _characteristica_all_normed(self):
+        return self._characteristica_all.filter(normed=True)
 
 
 
@@ -217,6 +221,7 @@ class IndividualEx(Externable, AbstractIndividual):
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
+
     objects = IndividualExManager()
 
     class Meta:
@@ -247,6 +252,7 @@ class Individual(AbstractIndividual, Accessible):
         Group, on_delete=models.CASCADE, related_name="individuals"
     )
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    characteristica_all_normed = models.ManyToManyField("Characteristica",related_name="individuals", through="IndividualCharacteristica")
     objects = IndividualManager()
 
     @property
@@ -258,19 +264,17 @@ class Individual(AbstractIndividual, Accessible):
         return self.ex.figure
 
     @property
-    def characteristica_normed(self):
+    def _characteristica_normed(self):
         return self.characteristica.filter(normed=True)
 
-    @property
-    def group_characteristica_normed(self):
-        return self.group.characteristica_all_normed
 
     @property
-    def characteristica_all_normed(self):
-        characteristica_normed = self.characteristica_normed
+    def _characteristica_all_normed(self):
+        characteristica_normed = self._characteristica_normed
+
+        # charcteristica from related groups with the same measurement type as these used in the individual are excluded.
         this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
-
-        return (characteristica_normed | self.group_characteristica_normed.exclude(measurement_type__in=this_measurements))
+        return (characteristica_normed | self.group.characteristica_all_normed.exclude(measurement_type__in=this_measurements))
 
     @property
     def study(self):
@@ -292,7 +296,6 @@ class Individual(AbstractIndividual, Accessible):
 # ----------------------------------
 # Characteristica
 # ----------------------------------
-
 
 class AbstractCharacteristica(models.Model):
 
@@ -335,7 +338,6 @@ class CharacteristicaEx(
     )
     objects = CharacteristicaExManager()
 
-
 class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
     """ Characteristic. """
 
@@ -348,11 +350,24 @@ class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
     count = models.IntegerField(default=1)
 
     @property
+    def raw_pk(self):
+        if self.raw:
+            return self.raw.pk
+        else:
+            return None
+
+    @property
     def study(self):
         if self.group:
             return self.group.study
         else:
             return self.individual.study
+
+    def study_name(self):
+        return self.study.name
+
+    def study_sid(self):
+        return self.study.sid
 
     @property
     def all_group_pks(self):
@@ -360,6 +375,13 @@ class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
         if self.group:
             parents = [self.group.pk] + self.group.parents
         return parents
+
+    @property
+    def subject_type(self):
+        if self.group:
+            return SUBJECT_TYPE_GROUP
+        else:
+            return SUBJECT_TYPE_INDIVIDUAL
 
     @property
     def group_name(self):
@@ -372,6 +394,17 @@ class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
             return self.group.pk
 
     @property
+    def group_count(self):
+        if self.group:
+            return self.group.count
+
+    @property
+    def group_parent_pk(self):
+        if self.group:
+            if self.group.parent:
+                return self.group.parent.pk
+
+    @property
     def individual_name(self):
         if self.individual:
             return self.individual.name
@@ -380,3 +413,139 @@ class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
     def individual_pk(self):
         if self.individual:
             return self.individual.pk
+
+    @property
+    def individual_group_pk(self):
+        if self.individual:
+            return self.individual.group.pk
+
+
+class SubjectCharacteristica(Accessible,models.Model):
+    class Meta:
+        abstract = True
+
+    @property
+    def characteristica_pk(self):
+        return self.characteristica.pk
+
+
+    @property
+    def raw_pk(self):
+        return self.characteristica.raw_pk
+
+    @property
+    def normed(self):
+        return self.characteristica.normed
+
+    @property
+    def count(self):
+        return self.characteristica.count
+
+    @property
+    def measurement_type(self):
+        return self.characteristica.measurement_type.name
+
+
+
+    @property
+    def choice(self):
+        return self.characteristica.choice
+
+    @property
+    def substance(self):
+        return self.characteristica.substance.name
+
+    @property
+    def unit(self):
+        return self.characteristica.unit
+
+    @property
+    def value(self):
+        return self.characteristica.value
+
+    @property
+    def mean(self):
+        return self.characteristica.mean
+
+    @property
+    def median(self):
+        return self.characteristica.median
+
+    @property
+    def min(self):
+        return self.characteristica.min
+
+    @property
+    def max(self):
+        return self.characteristica.max
+
+    @property
+    def sd(self):
+        return self.characteristica.sd
+
+    @property
+    def se(self):
+        return self.characteristica.se
+
+    @property
+    def cv(self):
+        return self.characteristica.cv
+
+
+
+class GroupCharacteristica(SubjectCharacteristica):
+    characteristica = models.ForeignKey(Characteristica, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+
+    class Meta:
+        unique_together = ("characteristica", "group")
+
+    @property
+    def study(self):
+        return self.group.study
+
+    @property
+    def group_pk(self):
+        return self.group.pk
+
+    @property
+    def group_parent_pk(self):
+        if self.group.parent:
+            return self.group.parent.pk
+
+    @property
+    def group_name(self):
+        return self.group.name
+
+    @property
+    def group_count(self):
+        return self.group.count
+
+
+
+
+class IndividualCharacteristica(SubjectCharacteristica):
+    characteristica = models.ForeignKey(Characteristica, on_delete=models.CASCADE)
+    individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("characteristica", "individual")
+
+    @property
+    def study(self):
+        return self.individual.study
+
+    @property
+    def individual_pk(self):
+        return self.individual.pk
+
+    @property
+    def individual_name(self):
+        return self.individual.pk
+
+    @property
+    def individual_group_pk(self):
+        return self.individual.group.pk
+
+

@@ -123,7 +123,7 @@ class Output(AbstractOutput,Normalizable, Accessible):
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
-    _interventions = models.ManyToManyField(Intervention)
+    _interventions = models.ManyToManyField(Intervention, through="OutputIntervention")
 
     tissue = models.ForeignKey(Tissue,related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
 
@@ -267,7 +267,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     """
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
-    _interventions = models.ManyToManyField(Intervention)
+    _interventions = models.ManyToManyField(Intervention, through="TimecourseIntervention")
     ex = models.ForeignKey(
         TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
     )
@@ -512,3 +512,220 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                 pk_dict["bodyweight_type"] = "median"
 
         return pk_dict
+
+
+class OutputIntervention(Accessible, models.Model):
+    output = models.ForeignKey(Output, on_delete=models.CASCADE)
+    intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
+    #intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
+    #timecourse = models.ForeignKey(Timecourse, on_delete=models.CASCADE)
+    #timecourse_ex = models.ForeignKey(TimecourseEx, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("output", "intervention")
+
+    @property
+    def study(self):
+        return self.intervention.study
+
+    @property
+    def intervention_pk(self):
+        return self.intervention.pk
+
+    @property
+    def intervention_name(self):
+        return self.intervention.name
+
+    @property
+    def output_pk(self):
+        return self.output.pk
+
+    @property
+    def group_name(self):
+        if self.output.group:
+            return self.output.group.name
+
+    @property
+    def group_pk(self):
+        if self.output.group:
+            return self.output.group.pk
+
+    @property
+    def individual_pk(self):
+        if self.output.individual:
+            return self.output.individual.pk
+
+    @property
+    def individual_name(self):
+        if self.output.individual:
+            return self.output.individual.name
+
+    @property
+    def value(self):
+        return self.output.value
+
+    @property
+    def mean(self):
+        return self.output.mean
+
+    @property
+    def median(self):
+        return self.output.median
+
+    @property
+    def min(self):
+        return self.output.min
+
+    @property
+    def max(self):
+        return self.output.max
+
+    @property
+    def sd(self):
+        return self.output.sd
+
+    @property
+    def se(self):
+        return self.output.se
+
+    @property
+    def cv(self):
+        return self.output.cv
+
+    @property
+    def unit(self):
+        return self.output.unit
+
+    @property
+    def time(self):
+        return self.output.time
+
+    @property
+    def time_unit(self):
+        return self.output.time_unit
+
+    @property
+    def tissue(self):
+        if self.output.tissue:
+            return self.output.tissue.name
+
+    @property
+    def measurement_type(self):
+        return self.output.measurement_type.name
+
+    @property
+    def choice(self):
+        return self.output.choice
+
+    @property
+    def substance(self):
+        if self.output.substance:
+            return self.output.substance.name
+
+
+class TimecourseIntervention(Accessible,models.Model):
+    timecourse = models.ForeignKey(Timecourse, on_delete=models.CASCADE)
+    intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("timecourse", "intervention")
+
+    @property
+    def study(self):
+        return self.intervention.study
+
+
+    @property
+    def intervention_pk(self):
+        return self.intervention.pk
+
+    @property
+    def intervention_name(self):
+        return self.intervention.name
+
+    @property
+    def individual_pk(self):
+        if self.timecourse.individual:
+            return self.timecourse.individual.pk
+
+    @property
+    def individual_name(self):
+        if self.timecourse.individual:
+            return self.timecourse.individual.name
+
+
+    @property
+    def group_name(self):
+        if self.timecourse.group:
+            return self.timecourse.group.name
+
+    @property
+    def group_pk(self):
+        if self.timecourse.group:
+            return self.timecourse.group.pk
+
+    @property
+    def timecourse_pk(self):
+        return self.timecourse.pk
+
+    @property
+    def value(self):
+        return self.timecourse.value
+
+    @property
+    def mean(self):
+        return self.timecourse.mean
+
+    @property
+    def median(self):
+        return self.timecourse.median
+
+    @property
+    def min(self):
+        return self.timecourse.min
+
+    @property
+    def max(self):
+        return self.timecourse.max
+
+    @property
+    def sd(self):
+        return self.timecourse.sd
+
+    @property
+    def se(self):
+        return self.timecourse.se
+
+    @property
+    def cv(self):
+        return self.timecourse.cv
+
+    @property
+    def unit(self):
+        return self.timecourse.unit
+
+    @property
+    def time(self):
+        return self.timecourse.time
+
+    @property
+    def time_unit(self):
+        return self.timecourse.time_unit
+
+    @property
+    def tissue(self):
+        if self.timecourse.tissue:
+            return self.timecourse.tissue.name
+
+    @property
+    def measurement_type(self):
+        return self.timecourse.measurement_type.name
+
+    @property
+    def choice(self):
+        return self.timecourse.choice
+
+    @property
+    def substance(self):
+        if self.timecourse.substance:
+            return self.timecourse.substance.name

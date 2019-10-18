@@ -22,7 +22,7 @@ from .models import (
     Individual,
     CharacteristicaEx,
     GroupEx,
-)
+    GroupCharacteristica, IndividualCharacteristica)
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer, validate_dict
 
 CHARACTERISTISTA_FIELDS = ["count"]
@@ -410,11 +410,11 @@ class IndividualSetSerializer(ExSerializer):
 class CharacteristicaElasticBigSerializer(ReadSerializer):
     measurement_type = serializers.CharField()
     substance = serializers.CharField(allow_null=True)
+    pk = serializers.IntegerField(source="id")
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS +  ["normed"] + MEASUREMENTTYPE_FIELDS + ["group_pk","group_name"] +["individual_pk","individual_name", "all_group_pks"]
-
+        fields = ["pk","raw_pk","normed","study_sid","study_name","subject_type"] + CHARACTERISTISTA_FIELDS + MEASUREMENTTYPE_FIELDS + ["group_pk","group_name","group_count","group_parent_pk"] +["individual_pk","individual_name","individual_group_pk"]
 
 ###############################################################################################
 # Elastic Search Serializer
@@ -442,12 +442,11 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     cv = serializers.FloatField(allow_null=True)
     measurement_type = serializers.CharField()
     substance = serializers.CharField(allow_null=True)
-    allowed_users = UserElasticSerializer(many=True, read_only=True)
 
 
     class Meta:
         model = Characteristica
-        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"] + ["access","allowed_users"]
+        fields = ["pk"] + CHARACTERISTISTA_FIELDS  + MEASUREMENTTYPE_FIELDS + ["normed"]# + ["access","allowed_users"]
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -554,3 +553,13 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
         characteristica = sorted(instance.characteristica_all_normed, key=itemgetter('count'))
         return CharacteristicaElasticSerializer(characteristica,many=True, read_only=True).data
 
+
+class GroupCharacteristicaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupCharacteristica
+        fields = ["study_sid","study_name","group_pk","group_name","group_count","group_parent_pk","characteristica_pk", "count"] + MEASUREMENTTYPE_FIELDS
+
+class IndividualCharacteristicaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IndividualCharacteristica
+        fields = ["study_sid" ,"study_name", "individual_pk","individual_name", "individual_group_pk","characteristica_pk","count"] + MEASUREMENTTYPE_FIELDS

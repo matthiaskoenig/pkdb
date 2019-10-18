@@ -1,3 +1,4 @@
+from elasticsearch_dsl import Q
 
 from pkdb_app.categorials.models import MeasurementType
 from pkdb_app.users.permissions import StudyPermission
@@ -7,11 +8,11 @@ from rest_framework.response import Response
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.subjects.models import (
     DataFile,
-)
+    SUBJECT_TYPE_GROUP, SUBJECT_TYPE_INDIVIDUAL, GroupCharacteristica, IndividualCharacteristica)
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
     IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaElasticBigSerializer,
-    CharacteristicaElasticSerializer)
+    CharacteristicaElasticSerializer, GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer)
 
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
 ############################################################
@@ -122,7 +123,6 @@ class CharacteristicaElasticViewSet(AccessView):
 
     search_fields = (
         'choice',
-        'group_name',
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
@@ -134,10 +134,7 @@ class CharacteristicaElasticViewSet(AccessView):
     }
 
     filter_fields = {
-        'all_group_pks': {
-            'field': 'all_group_pks',
-        },
-        'id': 'id',
+        'pk': 'pk',
         'value': 'value',
         'mean': 'mean',
         'median': 'median',
@@ -149,9 +146,78 @@ class CharacteristicaElasticViewSet(AccessView):
         'normed':'normed',
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',
+
         'individual_name': 'individual_name.raw',
         'individual_pk': 'individual_pk',
+        'study_sid': 'study_sid',
+
     }
+class GroupCharacteristicaViewSet(viewsets.ModelViewSet):
+    queryset = GroupCharacteristica.objects.all().select_related('group', 'characteristica','group__ex__groupset__study',)
+    serializer_class = GroupCharacteristicaSerializer
+    model = GroupCharacteristica
+
+ #   filter_fields = {
+ #       'characteristica_pk': 'characteristica_pk',
+ #       'group_pk': 'group_pk',
+ #   }
+
+    '''        'raw_pk':'raw_pk',
+    'normed': 'normed',
+    'study_sid': 'study_sid',
+    'study_name': 'study_name',
+    'name': 'name',
+    'count':'count',
+    'measurement_type':'measurement_type',
+    'choice': 'choice',
+    'substance': 'substance',
+    'value': 'value',
+    'mean': 'mean',
+    'median': 'median',
+    'min': 'min',
+    'max': 'max',
+    'se': 'se',
+    'sd': 'sd',
+    'cv': 'cv',
+    'group_pk': 'group_pk',
+    'group_name': 'group_name',
+    'group_count': 'group_count',
+    'group_parent_pk': 'group_parent_pk',
+    }
+    
+    '''
+
+class IndividualCharacteristicaViewSet(viewsets.ModelViewSet):
+    queryset = IndividualCharacteristica.objects.all().select_related('individual', 'characteristica','individual__ex__individualset__study',)
+    serializer_class = IndividualCharacteristicaSerializer
+    model = IndividualCharacteristica
+#
+#    filter_fields = {
+#        'characteristica_pk': 'characteristica_pk',
+#        'individual_pk': 'individual_pk',
+#    }
+    """"
+        'raw_pk':'raw_pk',
+        'normed': 'normed',
+        'study_sid': 'study_sid',
+        'study_name': 'study_name',
+        'name': 'name',
+        'count':'count',
+        'measurement_type':'measurement_type',
+        'choice': 'choice',
+        'substance': 'substance',
+        'value': 'value',
+        'mean': 'mean',
+        'median': 'median',
+        'min': 'min',
+        'max': 'max',
+        'se': 'se',
+        'sd': 'sd',
+        'cv': 'cv',
+        'individual_name': 'individual_name',
+        'individual_group_pk': 'individual_group_pk',
+    }
+    """
 
 ############################################################
 #Views queried not from elastic search

@@ -35,6 +35,12 @@ class GroupSetManager(models.Manager):
             study_group_exs.append(study_group_ex)
 
         groupset.save()
+
+        # add characteristica from parents to the all_characteristica_normed if each group
+        for group in groupset.groups:
+            group.characteristica_all_normed.add(*group._characteristica_all_normed)
+
+
         return groupset
 
 
@@ -124,6 +130,10 @@ class IndividualSetManager(models.Manager):
         create_multiple_bulk(individualset,"individualset", descriptions, Description)
         create_multiple_bulk(individualset,"individualset", comments, Comment)
         individualset.save()
+
+        # add characteristica from parents to the all_characteristica_normed if each individual
+        for individual in individualset.individuals:
+            individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
         return individualset
 
 

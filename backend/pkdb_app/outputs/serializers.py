@@ -26,7 +26,7 @@ from .models import (
     OutputSet,
     Timecourse,
     OutputEx,
-    TimecourseEx)
+    TimecourseEx, OutputIntervention, TimecourseIntervention)
 
 from ..serializers import (
     ExSerializer, PkSerializer)
@@ -415,6 +415,42 @@ class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
     def get_timecourses(self,obj):
         return list_of_pk("timecourses",obj)
 
+class OutputInterventionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OutputIntervention
+        fields = ["study_sid","study_name","output_pk","intervention_pk","group_pk","individual_pk"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT:
+                try:
+                    rep[field] = '{:.2e}'.format(rep[field])
+                except (ValueError, TypeError):
+                    pass
+        return rep
+
+class TimecourseInterventionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimecourseIntervention
+        fields = ["study_sid","study_name","timecourse_pk","intervention_pk","group_pk","individual_pk"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT + ['time']:
+            try:
+                result = []
+                for x in rep[field]:
+                    try:
+                        result.append('{:.2e}'.format(x))
+                    except (ValueError, TypeError):
+                        result.append(x)
+                rep[field] = result
+            except TypeError:
+                pass
+        return rep
+
+
 
 class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
@@ -460,12 +496,50 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
         return rep
 
 
+class OutputAnalysisSerializer(serializers.Serializer):
+    pk = serializers.IntegerField(allow_null=True)
+    intervention_pk = serializers.IntegerField(allow_null=True)
+    individual_pk = serializers.IntegerField(allow_null=True)
+    group_pk = serializers.IntegerField(allow_null=True)
+    timecourse_pk = serializers.IntegerField(allow_null=True)
+
+    study =  serializers.CharField(allow_null=True)
+    tissue = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
+    measurement_type = serializers.CharField()
+    unit = serializers.CharField(allow_null=True)
+    time_unit = serializers.CharField(allow_null=True)
+    choice = serializers.CharField(allow_null=True)
+
+    time = serializers.FloatField(allow_null=True)
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
+
+
+    class Meta:
+        fields = (
+                ["pk", "study"]
+                + OUTPUT_FIELDS
+                + VALUE_FIELDS
+                + MEASUREMENTTYPE_FIELDS
+                + ["group_pk", "individual_pk", "normed", "calculated", "timecourse_pk", "intervention_pk"])
+
+
+
+
 class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
     individual =  IndividualSmallElasticSerializer()
     interventions =  InterventionSmallElasticSerializer(many=True)
     measurement_type = serializers.CharField()
     tissue = serializers.CharField()
+
 
     raw = PkSerializer()
     pharmacokinetics = PkSerializer(many=True)

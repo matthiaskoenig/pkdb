@@ -7,10 +7,14 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from pkdb_app.documents import AccessView
+from pkdb_app.outputs.models import Output, OutputIntervention, TimecourseIntervention
 from .documents import OutputDocument, TimecourseDocument
-from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer)
+from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputAnalysisSerializer,
+                          OutputSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
 from ..pagination import CustomPagination
-
+import pandas as pd
+import numpy as np
+import math
 ###############################################################################################
 # Option Views
 ###############################################################################################
@@ -62,9 +66,13 @@ class ElasticOutputViewSet(AccessView):
     }
     filter_fields = {'pk':'pk',
                      'study':'study.raw',
+                     'tissue':"tissue.raw",
+                     'time':'time.raw',
+                     'choice': 'choice.raw',
                      'normed':'normed',
                      'calculated':'calculated',
                      'unit':'unit',
+                     'access':'access',
                      'substance':'substance',
                      'measurement_type':'measurement_type.raw',
                      'group_pk': {'field': 'group.pk',
@@ -72,11 +80,21 @@ class ElasticOutputViewSet(AccessView):
                                         LOOKUP_QUERY_IN,
                                     ],
                                 },
-                     'individual_pk': {'field': 'individual.pk',
+                     'timecourse_pk': {'field': 'timecourse.pk',
                                   'lookups': [
                                       LOOKUP_QUERY_IN,
                                   ],
+                                  },
+                     'individual_pk': {'field': 'individual.pk',
+                                  'lookups': [
+                                      LOOKUP_QUERY_IN,
+                                  ]},
+                     'interventions_pk': {'field': 'interventions.pk',
+                                                         'lookups': [
+                                                             LOOKUP_QUERY_IN,
+                                                         ],
                                   }}
+
     ordering_fields = {'measurement_type':'measurement_type.raw',
                        'tissue':'tissue.raw',
                        'substance':'substance',
@@ -84,6 +102,66 @@ class ElasticOutputViewSet(AccessView):
                        'individual': 'individual.name',
                        'value':'value',
                        }
+
+class OutputInterventionViewSet(viewsets.ModelViewSet):
+    queryset = OutputIntervention.objects.all().select_related('intervention', 'output','intervention__ex__interventionset__study',)
+    serializer_class = OutputInterventionSerializer
+    model = OutputIntervention
+
+class TimecourseInterventionViewSet(viewsets.ModelViewSet):
+    queryset = TimecourseIntervention.objects.all().select_related('intervention', 'timecourse','intervention__ex__interventionset__study',)
+    serializer_class = TimecourseInterventionSerializer
+    model = TimecourseIntervention
+
+class OutputAnalysisViewSet(ElasticOutputViewSet):
+    #pagination_class = None
+    #paginator = None
+    #PAGE_SIZE = 10000
+
+    #def paginate_queryset(self, queryset):
+    #       return None
+
+    def list(self, request, *args, **kwargs):
+        results = super().list(request, *args, **kwargs)
+
+        df = pd.DataFrame(results.data["data"]["data"])
+        #df = pd.DataFrame(results.data)
+        #print(len(df))
+
+        lst_col = "interventions"
+        df = pd.DataFrame({col: np.repeat(df[col].values, df[lst_col].str.len())
+                             for col in df.columns.difference([lst_col])}).assign(
+            **{lst_col: np.concatenate(df[lst_col].values)})[df.columns.tolist()]
+
+        df["intervention_pk"] = df["interventions"].apply(lambda intervention: intervention.get("pk",None))
+
+        def get_pk(data):
+            if isinstance(data,dict):
+               return data.get("pk",None)
+
+
+        df["group_pk"] = df["group"].apply(get_pk)
+        df["individual_pk"] = df["individual"].apply(get_pk)
+        df["timecourse_pk"] = df["timecourse"].apply(get_pk)
+        df["individual_pk"] = df["individual"].apply(get_pk)
+
+        df = df.where(df.notnull(), None)
+
+        del df["raw"]
+        del df["timecourse"]
+        del df["interventions"]
+        del df["individual"]
+        del df["group"]
+        del df["allowed_users"]
+
+
+        results.data["data"]["data"] = df.to_dict('records')
+        del results.data["data"]["count"]
+        #results.data = df.to_dict('records')
+        return results
+
+
+
 
 class ElasticTimecourseViewSet(AccessView):
     document = TimecourseDocument
@@ -116,5 +194,4 @@ class ElasticTimecourseViewSet(AccessView):
                        'group':'group.name',
                        'individual': 'individual.name',
                        'substance':'substance',
-
                        }

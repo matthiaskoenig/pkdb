@@ -46,7 +46,7 @@ class Accessible(models.Model):
         return self.study.name
 
     @property
-    def study_pk(self):
-        return self.study.pk
+    def study_sid(self):
+        return self.study.sid
 
 

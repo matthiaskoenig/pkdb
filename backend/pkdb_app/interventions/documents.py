@@ -35,18 +35,15 @@ class InterventionDocument(Document):
         }
     )
     choice = string_field('choice')
-    #application = string_field('application')
     time_unit = string_field('time_unit')
     time = fields.FloatField()
     substance = string_field('substance_name')
-    study = string_field('study_name')
-    #route = string_field('route')
-    #form = string_field('form')
+    study_name = string_field('study_name')
+    study_sid = string_field('study_sid')
+
     name = string_field('name')
     normed = fields.BooleanField()
-    raw = ObjectField(properties={
-        'pk': fields.IntegerField()
-    })
+    raw_pk = string_field('raw_pk')
     value = fields.FloatField()
     mean = fields.FloatField()
     median = fields.FloatField()
@@ -75,3 +72,8 @@ class InterventionDocument(Document):
     class Index:
         name = 'interventions'
         settings = elastic_settings
+
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(InterventionDocument, self).get_queryset().select_related(
+            'ex__interventionset__study')

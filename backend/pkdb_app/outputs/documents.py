@@ -68,8 +68,9 @@ class OutputDocument(Document):
         settings = {
             'number_of_shards': 5,
             'number_of_replicas': 1,
-            'max_result_window': 40000
+            'max_result_window': 100000
         }
+
 
 
 # ------------------------------------
