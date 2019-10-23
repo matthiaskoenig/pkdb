@@ -1,7 +1,8 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField
-from .models import Output, Timecourse
+from .models import Output, Timecourse, TimecourseIntervention, OutputIntervention
+
 
 # ------------------------------------
 # Elastic Output Document
@@ -139,3 +140,129 @@ class TimecourseDocument(Document):
     class Index:
         name = 'timecourses'
         settings = elastic_settings
+
+
+
+@registry.register_document
+class TimecourseInterventionDocument(Document):
+    study_sid = string_field('study_sid')
+    study_name = string_field('study_name')
+
+    timecourse_pk = fields.IntegerField('timecourse_pk')
+    intervention_pk = fields.IntegerField('intervention_pk')
+    group_pk = fields.IntegerField('group_pk')
+    individual_pk = fields.IntegerField('individual_pk')
+
+
+    tissue = string_field('tissue')
+    time = fields.FloatField('time', multi=True)
+    time_unit = string_field('time_unit')
+    unit = string_field('unit')
+    choice = string_field('choice')
+
+
+    # output fields
+    value = fields.FloatField('value', multi=True)
+    mean = fields.FloatField('mean', multi=True)
+    median = fields.FloatField('median', multi=True)
+    min = fields.FloatField('min', multi=True)
+    max = fields.FloatField('max', multi=True)
+    se = fields.FloatField('se', multi=True)
+    sd = fields.FloatField('sd', multi=True)
+    cv = fields.FloatField('cv', multi=True)
+
+    measurement_type = string_field("measurement_type")
+    substance = string_field("substance")
+    normed = fields.BooleanField()
+
+    # for permissions
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            'username': string_field("username")
+        },
+        multi=True
+    )
+
+    class Django:
+        model = TimecourseIntervention
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted
+        ignore_signals = True
+        # Don't perform an index refresh after every update
+        auto_refresh = False
+
+    class Index:
+        name = 'timecourses_interventions'
+        settings = {
+            'number_of_shards': 1,
+            'number_of_replicas': 1,
+        }
+
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(TimecourseInterventionDocument, self).get_queryset().select_related(
+            'intervention','timecourse')
+
+
+
+@registry.register_document
+class OutputInterventionDocument(Document):
+    study_sid = string_field('study_sid')
+    study_name = string_field('study_name')
+    output_pk = fields.IntegerField('output_pk')
+    intervention_pk = fields.IntegerField('intervention_pk')
+    group_pk = fields.IntegerField('group_pk')
+    individual_pk = fields.IntegerField('individual_pk')
+
+    measurement_type = string_field("measurement_type")
+    substance = string_field("substance")
+    normed = fields.BooleanField()
+    calculated = fields.BooleanField()
+    tissue = string_field('tissue')
+    time = fields.FloatField('time')
+    time_unit = string_field('time_unit')
+    unit = string_field('unit')
+    choice = string_field('choice')
+
+    # output fields
+    value = fields.FloatField('value')
+    mean = fields.FloatField('mean')
+    median = fields.FloatField('median')
+    min = fields.FloatField('min')
+    max = fields.FloatField('max')
+    se = fields.FloatField('se')
+    sd = fields.FloatField('sd')
+    cv = fields.FloatField('cv')
+
+
+    # for permissions
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            'username': string_field("username")
+        },
+        multi=True
+    )
+
+    class Django:
+        model = OutputIntervention
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted
+        ignore_signals = True
+        # Don't perform an index refresh after every update
+        auto_refresh = False
+
+    class Index:
+        name = 'outputs_interventions'
+        settings = {
+            'number_of_shards': 5,
+            'number_of_replicas': 1,
+            'max_result_window': 100000
+        }
+
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(OutputInterventionDocument, self).get_queryset().select_related(
+            'intervention','output')
+

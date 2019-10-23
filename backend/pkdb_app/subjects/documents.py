@@ -1,7 +1,7 @@
 from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from pkdb_app.subjects.models import Individual, Characteristica, Group, GroupCharacteristica
+from pkdb_app.subjects.models import Individual, Characteristica, Group, GroupCharacteristica, IndividualCharacteristica
 from pkdb_app.interventions.documents import string_field, ObjectField
 from ..documents import elastic_settings
 
@@ -222,14 +222,12 @@ class CharacteristicaDocument(Document):
 # ------------------------------------
 
 
-
 @registry.register_document
 class GroupCharacteristicaDocument(Document):
     """ Characteristica elastic search document. """
-    id = fields.IntegerField(attr='pk')
-    raw_pk = string_field('raw_pk')
-    study_name = string_field('study_name')
     study_sid = string_field('study_sid')
+    study_name = string_field('study_name')
+
 
     # group related
     group_pk = fields.IntegerField(attr='group_pk')
@@ -249,7 +247,7 @@ class GroupCharacteristicaDocument(Document):
     count = fields.IntegerField()
 
     measurement_type = fields.StringField(
-        attr='measurement_type_name',
+        attr='measurement_type',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }
@@ -265,7 +263,7 @@ class GroupCharacteristicaDocument(Document):
         }
     )
     substance = fields.StringField(
-        attr='substance_name',
+        attr='substance',
         fields={
             'raw': fields.StringField(analyzer='keyword'),
         }
@@ -278,8 +276,6 @@ class GroupCharacteristicaDocument(Document):
     se = fields.FloatField(attr='se')
     sd = fields.FloatField(attr='sd')
     cv = fields.FloatField(attr='cv')
-
-    normed = fields.BooleanField()
 
     access = string_field('access')
     allowed_users = fields.ObjectField(
@@ -306,3 +302,83 @@ class GroupCharacteristicaDocument(Document):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(GroupCharacteristicaDocument, self).get_queryset().select_related(
             'group','characteristica')
+
+@registry.register_document
+class IndividualCharacteristicaDocument(Document):
+    """ Characteristica elastic search document. """
+    study_sid = string_field('study_sid')
+    study_name = string_field('study_name')
+
+
+    # individual related
+    individual_pk = fields.IntegerField(attr='individual_pk')
+    individual_name = fields.StringField(
+        attr='individual_name',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    individual_group_pk = fields.IntegerField(
+        attr='individual_group_pk',
+    )
+    characteristica_pk = fields.IntegerField(
+        attr='characteristica_pk',
+    )
+    count = fields.IntegerField()
+
+    measurement_type = fields.StringField(
+        attr='measurement_type',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    choice = fields.StringField(
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    unit = fields.StringField(
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    substance = fields.StringField(
+        attr='substance',
+        fields={
+            'raw': fields.StringField(analyzer='keyword'),
+        }
+    )
+    value = fields.FloatField(attr='value')
+    mean = fields.FloatField(attr='mean')
+    median = fields.FloatField(attr='median')
+    min = fields.FloatField(attr='min')
+    max = fields.FloatField(attr='max')
+    se = fields.FloatField(attr='se')
+    sd = fields.FloatField(attr='sd')
+    cv = fields.FloatField(attr='cv')
+
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            'username': string_field("username")
+        },
+        multi=True
+    )
+
+    class Django:
+        model = IndividualCharacteristica
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted:
+        ignore_signals = True
+        # Don't perform an index refresh after every update
+        auto_refresh = False
+
+    class Index:
+        name = "individual_characteristica"
+        settings = {**elastic_settings, 'max_result_window': 50000}
+
+
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(IndividualCharacteristicaDocument, self).get_queryset().select_related(
+            'individual','characteristica')

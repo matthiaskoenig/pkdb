@@ -132,6 +132,7 @@ def initialize_normed(notnorm_instance):
     norm.normed = True
     norm.normalize()
     norm.raw_id = notnorm_instance.pk
+
     try:
         norm.individual_id = notnorm_instance.individual.pk
 

@@ -149,6 +149,7 @@ class Group(Accessible):
     def study(self):
         return self.ex.groupset.study
 
+
     @property
     def source(self):
         return self.ex.source
@@ -420,7 +421,8 @@ class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
             return self.individual.group.pk
 
 
-class SubjectCharacteristica(Accessible,models.Model):
+class SubjectCharacteristica(models.Model):
+
     class Meta:
         abstract = True
 
@@ -446,14 +448,14 @@ class SubjectCharacteristica(Accessible,models.Model):
         return self.characteristica.measurement_type.name
 
 
-
     @property
     def choice(self):
         return self.characteristica.choice
 
     @property
     def substance(self):
-        return self.characteristica.substance.name
+        if self.characteristica.substance:
+            return self.characteristica.substance.name
 
     @property
     def unit(self):
@@ -493,7 +495,7 @@ class SubjectCharacteristica(Accessible,models.Model):
 
 
 
-class GroupCharacteristica(SubjectCharacteristica):
+class GroupCharacteristica(Accessible,SubjectCharacteristica):
     characteristica = models.ForeignKey(Characteristica, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 
@@ -525,7 +527,9 @@ class GroupCharacteristica(SubjectCharacteristica):
 
 
 
-class IndividualCharacteristica(SubjectCharacteristica):
+
+
+class IndividualCharacteristica(Accessible,SubjectCharacteristica):
     characteristica = models.ForeignKey(Characteristica, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
 
@@ -542,7 +546,7 @@ class IndividualCharacteristica(SubjectCharacteristica):
 
     @property
     def individual_name(self):
-        return self.individual.pk
+        return self.individual.name
 
     @property
     def individual_group_pk(self):

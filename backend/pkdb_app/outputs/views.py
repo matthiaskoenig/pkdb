@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from pkdb_app.documents import AccessView
 from pkdb_app.outputs.models import Output, OutputIntervention, TimecourseIntervention
-from .documents import OutputDocument, TimecourseDocument
+from .documents import OutputDocument, TimecourseDocument, OutputInterventionDocument, TimecourseInterventionDocument
 from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputAnalysisSerializer,
                           OutputSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
 from ..pagination import CustomPagination
@@ -64,36 +64,39 @@ class ElasticOutputViewSet(AccessView):
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'pk':'pk',
-                     'study':'study.raw',
-                     'tissue':"tissue.raw",
-                     'time':'time.raw',
-                     'choice': 'choice.raw',
-                     'normed':'normed',
-                     'calculated':'calculated',
-                     'unit':'unit',
-                     'access':'access',
-                     'substance':'substance',
-                     'measurement_type':'measurement_type.raw',
-                     'group_pk': {'field': 'group.pk',
-                                    'lookups': [
-                                        LOOKUP_QUERY_IN,
-                                    ],
-                                },
-                     'timecourse_pk': {'field': 'timecourse.pk',
-                                  'lookups': [
-                                      LOOKUP_QUERY_IN,
-                                  ],
-                                  },
-                     'individual_pk': {'field': 'individual.pk',
-                                  'lookups': [
-                                      LOOKUP_QUERY_IN,
-                                  ]},
-                     'interventions_pk': {'field': 'interventions.pk',
-                                                         'lookups': [
-                                                             LOOKUP_QUERY_IN,
-                                                         ],
-                                  }}
+    filter_fields = {
+
+        'study_name': 'study_name.raw',
+        'study_sid': 'study_sid.raw',
+
+        'group_pk': {'field': 'group.pk',
+                     'lookups': [
+                         LOOKUP_QUERY_IN,
+                     ],
+                     },
+        'timecourse_pk': {'field': 'timecourse.pk',
+                          'lookups': [
+                              LOOKUP_QUERY_IN,
+                          ],
+                          },
+        'individual_pk': {'field': 'individual.pk',
+                          'lookups': [
+                              LOOKUP_QUERY_IN,
+                          ]},
+        'interventions_pk': {'field': 'interventions.pk',
+                             'lookups': [
+                                 LOOKUP_QUERY_IN,
+                             ],
+                             },
+        'tissue':"tissue.raw",
+        'time':'time.raw',
+        'choice': 'choice.raw',
+        'normed':'normed',
+        'calculated':'calculated',
+        'unit':'unit.raw',
+        'substance':'substance.raw',
+        'measurement_type':'measurement_type.raw',
+        }
 
     ordering_fields = {'measurement_type':'measurement_type.raw',
                        'tissue':'tissue.raw',
@@ -103,15 +106,112 @@ class ElasticOutputViewSet(AccessView):
                        'value':'value',
                        }
 
-class OutputInterventionViewSet(viewsets.ModelViewSet):
-    queryset = OutputIntervention.objects.all().select_related('intervention', 'output','intervention__ex__interventionset__study',)
+class OutputInterventionViewSet(AccessView):
+    document = OutputInterventionDocument
     serializer_class = OutputInterventionSerializer
-    model = OutputIntervention
+    pagination_class = CustomPagination
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    search_fields = ('study', 'measurement_type', 'substance', 'group_name', 'individual_name', "tissue", 'time_unit',
+                     'intervention')
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
+    filter_fields = {
+        'study_name': 'study_name.raw',
+        'study_sid': 'study_sid.raw',
+        'output_pk': {'field': 'output_pk',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                      ],
+                      },
+        'intervention_pk': {'field': 'intervention_pk',
+                             'lookups': [
+                                 LOOKUP_QUERY_IN,
+                             ],
+                             },
+        'group_pk': {'field': 'group_pk',
+                     'lookups': [
+                         LOOKUP_QUERY_IN,
+                     ],
+                     },
 
-class TimecourseInterventionViewSet(viewsets.ModelViewSet):
-    queryset = TimecourseIntervention.objects.all().select_related('intervention', 'timecourse','intervention__ex__interventionset__study',)
+        'individual_pk': {'field': 'individual_pk',
+                          'lookups': [
+                              LOOKUP_QUERY_IN,
+                          ]},
+        'normed': 'normed',
+        'calculated': 'calculated',
+        'tissue': "tissue.raw",
+        'time': 'time.raw',
+        'time_unit': 'time_unit.raw',
+        'measurement_type': 'measurement_type.raw',
+        'substance': 'substance.raw',
+
+        'choice': 'choice.raw',
+        'unit': 'unit.raw',
+
+
+        }
+    ordering_fields = {'measurement_type': 'measurement_type.raw',
+                       'tissue': 'tissue.raw',
+                       'substance': 'substance.raw',
+                       'group_name': 'group_name.raw',
+                       'individual_name': 'individual_name.raw',
+                       'value': 'value',
+                       }
+
+
+class TimecourseInterventionViewSet(AccessView):
+
+    document = TimecourseInterventionDocument
     serializer_class = TimecourseInterventionSerializer
-    model = TimecourseIntervention
+    pagination_class = CustomPagination
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    search_fields = ('study', 'measurement_type', 'substance', 'group_name', 'individual_name', "tissue", 'time_unit',
+                     'intervention')
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
+    filter_fields = {
+                     'study_name': 'study_name.raw',
+                     'study_sid': 'study_sid.raw',
+
+                     'tissue': "tissue.raw",
+                     'time': 'time.raw',
+                     'choice': 'choice.raw',
+                     'normed': 'normed',
+                     'unit': 'unit',
+                     'substance': 'substance',
+                     'measurement_type': 'measurement_type.raw',
+                     'group_pk': {'field': 'group_pk',
+                                  'lookups': [
+                                      LOOKUP_QUERY_IN,
+                                  ],
+                                  },
+                     'timecourse_pk': {'field': 'timecourse_pk',
+                                   'lookups': [
+                                       LOOKUP_QUERY_IN,
+                                   ],
+                                   },
+                     'individual_pk': {'field': 'individual_pk',
+                                       'lookups': [
+                                           LOOKUP_QUERY_IN,
+                                       ]},
+                     'intervention_pk': {'field': 'intervention_pk',
+                                          'lookups': [
+                                              LOOKUP_QUERY_IN,
+                                          ],
+                                          }}
+    ordering_fields = {'measurement_type': 'measurement_type.raw',
+                       'tissue': 'tissue.raw',
+                       'substance': 'substance.raw',
+                       'group_name': 'group_name.raw',
+                       'individual_name': 'individual_name.raw',
+                       }
 
 class OutputAnalysisViewSet(ElasticOutputViewSet):
     #pagination_class = None

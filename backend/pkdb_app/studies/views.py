@@ -4,7 +4,10 @@ from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBac
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 
-from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument
+from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument, TimecourseInterventionDocument, \
+    OutputInterventionDocument
+from pkdb_app.outputs.models import TimecourseIntervention, OutputIntervention
+from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.exceptions import ValidationError
@@ -14,7 +17,8 @@ from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, CharacteristicaDocument
+from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, CharacteristicaDocument, \
+    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 
 from .models import Reference, Study
 from .serializers import (
@@ -175,20 +179,30 @@ def delete_elastic_study(related_elastic):
             pass
 
 
+
 def related_elastic_dict(study):
     """ Dictionary of elastic documents for given study.
 
     :param study:
     :return:
     """
+    interventions = study.interventions.all()
+    groups = study.groups.all()
+    individuals = study.individuals.all()
+
     docs_dict = {
         StudyDocument: study,
-        GroupDocument: study.groups,
-        IndividualDocument: study.individuals,
+        GroupDocument: groups,
+        IndividualDocument: individuals,
         CharacteristicaDocument: study.characteristica,
-        InterventionDocument: study.interventions,
+        GroupCharacteristicaDocument: GroupCharacteristica.objects.filter(group__in=groups),
+        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.filter(individual__in=individuals),
+        InterventionDocument: interventions,
         OutputDocument: study.outputs,
-        TimecourseDocument: study.timecourses
+        TimecourseDocument: study.timecourses,
+        TimecourseInterventionDocument: TimecourseIntervention.objects.filter(intervention__in=interventions),
+        OutputInterventionDocument: OutputIntervention.objects.filter(intervention__in=interventions),
+
     }
     if study.reference:
         docs_dict[ReferenceDocument] = study.reference

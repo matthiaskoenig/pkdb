@@ -4,7 +4,7 @@ Django model for Study.
 from django.db import models
 from pkdb_app.users.models import PUBLIC, PRIVATE
 
-from ..outputs.models import OutputSet, Output, Timecourse
+from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
 
 from ..interventions.models import InterventionSet, DataFile, Intervention
 from ..substances.models import Substance
@@ -177,11 +177,25 @@ class Study(Sidable, models.Model):
             return Output.objects.none()
 
     @property
+    def outputs_interventions(self):
+        try:
+            return self.outputs.outputs_interventions.all()
+        except AttributeError:
+            return OutputIntervention.objects.none()
+
+    @property
     def timecourses(self):
         try:
             return self.outputset.timecourses.all()
         except AttributeError:
             return Timecourse.objects.none()
+
+    @property
+    def timecourses_interventions(self):
+        try:
+            return self.outputset.timecourses_interventions.all()
+        except AttributeError:
+            return TimecourseIntervention.objects.none()
 
     @property
     def get_substances(self):
@@ -273,5 +287,16 @@ class Study(Sidable, models.Model):
         if self.outputset:
             return self.outputset.outputs.filter(normed=True, calculated=True).count()
         return 0
+
+    def delete(self, *args, **kwargs):
+        if self.outputset:
+            self.outputset.delete()
+        if self.interventionset:
+            self.interventionset.delete()
+        if self.individualset:
+            self.individualset.delete()
+        if self.groupset:
+            self.groupset.delete()
+        super().delete(*args, **kwargs)
 
 

@@ -42,6 +42,8 @@ class OutputSet(models.Model):
         outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
         return outputs | outputs_timecourses
 
+
+
     @property
     def outputs_normed(self):
         outputs = self.outputs.filter(normed=True)
@@ -268,11 +270,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention, through="TimecourseIntervention")
-    ex = models.ForeignKey(
-        TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
-    )
-    #tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    tissue = models.ForeignKey(Tissue,related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
+    ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
+    tissue = models.ForeignKey(Tissue, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
 
 
     value = ArrayField(models.FloatField(null=True), null=True)
@@ -517,9 +516,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
 class OutputIntervention(Accessible, models.Model):
     output = models.ForeignKey(Output, on_delete=models.CASCADE)
     intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
-    #intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
-    #timecourse = models.ForeignKey(Timecourse, on_delete=models.CASCADE)
-    #timecourse_ex = models.ForeignKey(TimecourseEx, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ("output", "intervention")
@@ -562,35 +558,35 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def value(self):
-        return self.output.value
+        return self.output.null_value
 
     @property
     def mean(self):
-        return self.output.mean
+        return self.output.null_mean
 
     @property
     def median(self):
-        return self.output.median
+        return self.output.null_median
 
     @property
     def min(self):
-        return self.output.min
+        return self.output.null_min
 
     @property
     def max(self):
-        return self.output.max
+        return self.output.null_max
 
     @property
     def sd(self):
-        return self.output.sd
+        return self.output.null_sd
 
     @property
     def se(self):
-        return self.output.se
+        return self.output.null_se
 
     @property
     def cv(self):
-        return self.output.cv
+        return self.output.null_cv
 
     @property
     def unit(self):
@@ -598,7 +594,7 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def time(self):
-        return self.output.time
+        return self.output.null_time
 
     @property
     def time_unit(self):
@@ -621,6 +617,14 @@ class OutputIntervention(Accessible, models.Model):
     def substance(self):
         if self.output.substance:
             return self.output.substance.name
+
+    @property
+    def normed(self):
+        return self.output.normed
+
+    @property
+    def calculated(self):
+        return self.output.calculated
 
 
 class TimecourseIntervention(Accessible,models.Model):
@@ -670,35 +674,35 @@ class TimecourseIntervention(Accessible,models.Model):
 
     @property
     def value(self):
-        return self.timecourse.value
+        return self.timecourse.null_value
 
     @property
     def mean(self):
-        return self.timecourse.mean
+        return self.timecourse.null_mean
 
     @property
     def median(self):
-        return self.timecourse.median
+        return self.timecourse.null_median
 
     @property
     def min(self):
-        return self.timecourse.min
+        return self.timecourse.null_min
 
     @property
     def max(self):
-        return self.timecourse.max
+        return self.timecourse.null_max
 
     @property
     def sd(self):
-        return self.timecourse.sd
+        return self.timecourse.null_sd
 
     @property
     def se(self):
-        return self.timecourse.se
+        return self.timecourse.null_se
 
     @property
     def cv(self):
-        return self.timecourse.cv
+        return self.timecourse.null_cv
 
     @property
     def unit(self):
@@ -706,7 +710,7 @@ class TimecourseIntervention(Accessible,models.Model):
 
     @property
     def time(self):
-        return self.timecourse.time
+        return self.timecourse.null_time
 
     @property
     def time_unit(self):
@@ -729,3 +733,7 @@ class TimecourseIntervention(Accessible,models.Model):
     def substance(self):
         if self.timecourse.substance:
             return self.timecourse.substance.name
+
+    @property
+    def normed(self):
+        return self.timecourse.normed

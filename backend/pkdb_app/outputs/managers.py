@@ -56,10 +56,10 @@ class OutputExManager(models.Manager):
         create_multiple(output_ex, comments, 'comments')
 
         outputs_dj = create_multiple(output_ex, outputs, 'outputs')
-
         Output = apps.get_model('outputs', 'Output')
-        create_multiple_bulk_normalized(outputs_dj,Output)
-        output_ex.save()
+        outputs_normed = create_multiple_bulk_normalized(outputs_dj,Output)
+        for output in outputs_normed:
+            output._interventions.add(*output.interventions.all())
 
         return output_ex
 
@@ -88,10 +88,14 @@ class TimecourseExManager(models.Manager):
 
         Output = apps.get_model('outputs','Output')
 
-        timecourses = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
+        timecourses_normed = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
+
+        for timecourse in timecourses_normed:
+            timecourse._interventions.add(*timecourse.interventions.all())
+
 
         # calculate pharmacokinetics data from normalized timecourses
-        for timecourse in timecourses:
+        for timecourse in timecourses_normed:
             if timecourse.measurement_type.name == "concentration" and timecourse.normed:
                 variables = timecourse.get_pharmacokinetic_variables()
                 c_type = variables.pop("c_type", None)
@@ -128,7 +132,9 @@ class TimecourseExManager(models.Manager):
                         outputs.append(output_dict)
 
                 outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
-                create_multiple_bulk_normalized(outputs_dj, Output)
+                outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
+                for output in outputs_normed:
+                    output._interventions.add(*output.interventions.all())
 
         timecourse_ex.save()
         return timecourse_ex

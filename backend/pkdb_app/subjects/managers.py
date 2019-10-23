@@ -133,6 +133,7 @@ class IndividualSetManager(models.Manager):
 
         # add characteristica from parents to the all_characteristica_normed if each individual
         for individual in individualset.individuals:
+            #print(individual._characteristica_all_normed.all())
             individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
         return individualset
 

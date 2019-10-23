@@ -14,7 +14,8 @@ from pkdb_app.subjects.serializers import (
     IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaElasticBigSerializer,
     CharacteristicaElasticSerializer, GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer)
 
-from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument
+from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument, \
+    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 ############################################################
 #Elastic Search Views
 ###########################################################
@@ -57,6 +58,7 @@ class GroupViewSet(AccessView):
     # Filter fields
     filter_fields = {
         'id': 'id',
+        'pk': 'pk',
         'name': 'name.raw',
         'parent': 'group.name.raw',
         'study': 'study.raw',
@@ -98,10 +100,12 @@ class IndividualViewSet(AccessView):
 
     # Filter fields
     filter_fields = {
+        'pk': 'pk',
         'id': 'id',
         'name': 'name.raw',
-        'group': 'group.name.raw',
-        'study': 'study.name.raw',
+        'group_name': 'group.name.raw',
+        'study': 'study.raw',
+
     }
 
     # Define ordering fields
@@ -116,7 +120,7 @@ class IndividualViewSet(AccessView):
 
 class CharacteristicaElasticViewSet(AccessView):
     pagination_class = CustomPagination
-    document = CharacteristicaDocument
+    document = GroupCharacteristica
     serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
@@ -152,60 +156,34 @@ class CharacteristicaElasticViewSet(AccessView):
         'study_sid': 'study_sid',
 
     }
-class GroupCharacteristicaViewSet(viewsets.ModelViewSet):
-    queryset = GroupCharacteristica.objects.all().select_related('group', 'characteristica','group__ex__groupset__study',)
+class GroupCharacteristicaViewSet(AccessView):
+    document = GroupCharacteristicaDocument
     serializer_class = GroupCharacteristicaSerializer
-    model = GroupCharacteristica
+    pagination_class = CustomPagination
+    lookup_field = 'id'
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
 
- #   filter_fields = {
- #       'characteristica_pk': 'characteristica_pk',
- #       'group_pk': 'group_pk',
- #   }
-
-    '''        'raw_pk':'raw_pk',
-    'normed': 'normed',
-    'study_sid': 'study_sid',
-    'study_name': 'study_name',
-    'name': 'name',
-    'count':'count',
-    'measurement_type':'measurement_type',
-    'choice': 'choice',
-    'substance': 'substance',
-    'value': 'value',
-    'mean': 'mean',
-    'median': 'median',
-    'min': 'min',
-    'max': 'max',
-    'se': 'se',
-    'sd': 'sd',
-    'cv': 'cv',
-    'group_pk': 'group_pk',
-    'group_name': 'group_name',
-    'group_count': 'group_count',
-    'group_parent_pk': 'group_parent_pk',
+    search_fields = (
+        'choice',
+    )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
     }
-    
-    '''
 
-class IndividualCharacteristicaViewSet(viewsets.ModelViewSet):
-    queryset = IndividualCharacteristica.objects.all().select_related('individual', 'characteristica','individual__ex__individualset__study',)
-    serializer_class = IndividualCharacteristicaSerializer
-    model = IndividualCharacteristica
-#
-#    filter_fields = {
-#        'characteristica_pk': 'characteristica_pk',
-#        'individual_pk': 'individual_pk',
-#    }
-    """"
-        'raw_pk':'raw_pk',
-        'normed': 'normed',
-        'study_sid': 'study_sid',
-        'study_name': 'study_name',
-        'name': 'name',
-        'count':'count',
-        'measurement_type':'measurement_type',
-        'choice': 'choice',
-        'substance': 'substance',
+
+    filter_fields = {
+        'study_sid': 'study_sid.raw',
+        'study_name': 'study_name.raw',
+        'group_pk': 'group_pk',
+        'group_name': 'group_name',
+        'group_count': 'group_count',
+        'group_parent_pk': 'group_parent_pk',
+        'characteristica_pk': 'characteristica_pk',
+        'count': 'count',
+        'measurement_type': 'measurement_type.raw',
+        'choice': 'choice.raw',
+        'substance': 'substance.raw',
         'value': 'value',
         'mean': 'mean',
         'median': 'median',
@@ -214,10 +192,58 @@ class IndividualCharacteristicaViewSet(viewsets.ModelViewSet):
         'se': 'se',
         'sd': 'sd',
         'cv': 'cv',
+        'unit':'unit.raw',
+        }
+    ordering_fields = {
+        'choice': 'choice.raw',
+        "count": 'count',
+    }
+    
+
+
+class IndividualCharacteristicaViewSet(AccessView):
+    document = IndividualCharacteristicaDocument
+    serializer_class = IndividualCharacteristicaSerializer
+    pagination_class = CustomPagination
+    lookup_field = 'id'
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+
+    search_fields = (
+        'choice',
+    )
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {
+        'operator': 'and'
+    }
+
+    filter_fields = {
+        'study_sid': 'study_sid.raw',
+        'study_name': 'study_name.raw',
+
+        'individual_pk': 'individual_pk',
         'individual_name': 'individual_name',
         'individual_group_pk': 'individual_group_pk',
+
+        'characteristica_pk': 'characteristica_pk',
+        'count': 'count',
+        'measurement_type': 'measurement_type.raw',
+        'choice': 'choice.raw',
+        'substance': 'substance.raw',
+        'value': 'value',
+        'mean': 'mean',
+        'median': 'median',
+        'min': 'min',
+        'max': 'max',
+        'se': 'se',
+        'sd': 'sd',
+        'cv': 'cv',
+        'unit': 'unit.raw',
     }
-    """
+    ordering_fields = {
+        'choice': 'choice.raw',
+        "count": 'count',
+    }
+
 
 ############################################################
 #Views queried not from elastic search

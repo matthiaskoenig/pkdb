@@ -407,18 +407,18 @@ class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["pk","descriptions", "outputs","timecourses","comments"]
+        fields = ["pk","descriptions", "outputs", "timecourses", "comments"]
 
     def get_outputs(self,obj):
         return list_of_pk("outputs",obj)
 
     def get_timecourses(self,obj):
-        return list_of_pk("timecourses",obj)
+        return list_of_pk("timecourses", obj)
 
 class OutputInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = OutputIntervention
-        fields = ["study_sid","study_name","output_pk","intervention_pk","group_pk","individual_pk"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = ["study_sid", "study_name",  "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed", "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_representation(self, instance):
@@ -433,7 +433,7 @@ class OutputInterventionSerializer(serializers.ModelSerializer):
 class TimecourseInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimecourseIntervention
-        fields = ["study_sid","study_name","timecourse_pk","intervention_pk","group_pk","individual_pk"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = ["study_sid", "study_name", "timecourse_pk", "intervention_pk", "group_pk", "individual_pk", "normed"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
