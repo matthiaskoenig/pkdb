@@ -55,6 +55,8 @@
                         image = 'deepa_128.png';
                     } else if (this.initials === 'JB'){
                         image = 'jbrandhorst_128.png';
+                    } else if (this.initials === 'YD'){
+                        image = 'yduport_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -70,6 +72,8 @@
                         image = 'jbrandhorst_128.png';
                     } else if (this.username === 'deepa'){
                         image = 'deepa_128.png';
+                    } else if (this.username === 'yduport'){
+                        image = 'yduport_128.png';
                     }
                 }
                 return img_dir + image
