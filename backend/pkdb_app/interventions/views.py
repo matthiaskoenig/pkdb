@@ -55,7 +55,7 @@ class ElasticInterventionViewSet(AccessView):
     }
     filter_fields = {
         'pk': 'pk',
-        'study_sid': 'study_sid',
+        'study_sid': 'study_sid.raw',
         'study_name': 'study_name.raw',
         'normed':'normed',
         'raw_pk': 'raw_pk',
