@@ -29,6 +29,8 @@ from django.apps import apps
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
 
+ADDITIVE_CHARACTERISTICA = ["disease", "abstinence"]
+
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -167,12 +169,11 @@ class Group(Accessible):
 
     @property
     def _characteristica_all(self):
-        characteristica_all = self.characteristica.all()
-        additive_characteristica = ["disease","abstinence"]
-        this_measurements = characteristica_all.exclude(measurement_type__name__in=additive_characteristica).values_list("measurement_type", flat=True)
+        _characteristica_all = self.characteristica.all()
+        this_measurements = _characteristica_all.exclude(measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         if self.parent:
-            characteristica_all = characteristica_all | self.parent._characteristica_all.exclude(measurement_type__in=this_measurements)
-        return characteristica_all
+            _characteristica_all = _characteristica_all | self.parent._characteristica_all.exclude(measurement_type__in=this_measurements)
+        return _characteristica_all
 
     @property
     def _characteristica_all_normed(self):
@@ -271,11 +272,18 @@ class Individual(AbstractIndividual, Accessible):
 
     @property
     def _characteristica_all_normed(self):
-        characteristica_normed = self._characteristica_normed
+        _characteristica_normed = self._characteristica_normed
 
         # charcteristica from related groups with the same measurement type as these used in the individual are excluded.
-        this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
-        return (characteristica_normed | self.group.characteristica_all_normed.exclude(measurement_type__in=this_measurements))
+        #this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
+        this_measurements = _characteristica_normed.exclude(measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+        print("*"*100)
+        print(this_measurements.all())
+        print(len(self.group._characteristica_all_normed))
+        print(len(self.group._characteristica_all_normed.exclude(measurement_type__in=this_measurements)))
+        print("*"*100)
+
+        return (_characteristica_normed | self.group._characteristica_all_normed.exclude(measurement_type__in=this_measurements))
 
     @property
     def study(self):
