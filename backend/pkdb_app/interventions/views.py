@@ -1,5 +1,6 @@
 import pandas as pd
 from django.urls import reverse
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from pkdb_app.categorials.models import MeasurementType, Route, Form, Application
@@ -54,9 +55,28 @@ class ElasticInterventionViewSet(AccessView):
         'operator': 'and'
     }
     filter_fields = {
-        'pk': 'pk',
-        'study_sid': 'study_sid.raw',
-        'study_name': 'study_name.raw',
+
+        'study_sid': {'field': 'study_sid.raw',
+               'lookups': [
+                   LOOKUP_QUERY_IN,
+                   LOOKUP_QUERY_EXCLUDE,
+
+               ],
+               },
+        'study_name': {'field': 'study_name.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+
+                      ],
+                      },
+        'pk': {'field': 'pk',
+               'lookups': [
+                   LOOKUP_QUERY_IN,
+                   LOOKUP_QUERY_EXCLUDE,
+
+               ],
+               },
         'normed':'normed',
         'raw_pk': 'raw_pk',
         'name': 'name.raw',

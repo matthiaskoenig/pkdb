@@ -1,5 +1,5 @@
 from django.urls import reverse
-from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from pkdb_app.categorials.models import MeasurementType, Tissue
@@ -119,27 +119,43 @@ class OutputInterventionViewSet(AccessView):
         'operator': 'and'
     }
     filter_fields = {
-        'study_name': 'study_name.raw',
-        'study_sid': 'study_sid.raw',
+         'study_sid': {'field': 'study_sid.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+
+                      ],
+                      },
+        'study_name': {'field': 'study_name.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+
+                      ],
+                      },
         'output_pk': {'field': 'output_pk',
                       'lookups': [
                           LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
                       ],
                       },
         'intervention_pk': {'field': 'intervention_pk',
                              'lookups': [
                                  LOOKUP_QUERY_IN,
+                                 LOOKUP_QUERY_EXCLUDE,
                              ],
                              },
         'group_pk': {'field': 'group_pk',
                      'lookups': [
                          LOOKUP_QUERY_IN,
+                         LOOKUP_QUERY_EXCLUDE,
                      ],
                      },
 
         'individual_pk': {'field': 'individual_pk',
                           'lookups': [
                               LOOKUP_QUERY_IN,
+                              LOOKUP_QUERY_EXCLUDE,
                           ]},
         'normed': 'normed',
         'calculated': 'calculated',
@@ -148,7 +164,6 @@ class OutputInterventionViewSet(AccessView):
         'time_unit': 'time_unit.raw',
         'measurement_type': 'measurement_type.raw',
         'substance': 'substance.raw',
-
         'choice': 'choice.raw',
         'unit': 'unit.raw',
 
@@ -177,90 +192,57 @@ class TimecourseInterventionViewSet(AccessView):
         'operator': 'and'
     }
     filter_fields = {
-                     'study_name': 'study_name.raw',
-                     'study_sid': 'study_sid.raw',
+        'study_sid': {'field': 'study_sid.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+                      ],
+                      },
+        'study_name': {'field': 'study_name.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+                      ],
+                      },
+        'tissue': "tissue.raw",
+        'time': 'time.raw',
+        'time_unit': 'time_unit.raw',
+        'choice': 'choice.raw',
+        'normed': 'normed',
+        'unit': 'unit.raw',
+        'substance': 'substance.raw',
+        'measurement_type': 'measurement_type.raw',
+        'group_pk': {'field': 'group_pk',
+                  'lookups': [
+                      LOOKUP_QUERY_IN,
+                      LOOKUP_QUERY_EXCLUDE,
+                  ],
+                  },
+        'timecourse_pk': {'field': 'timecourse_pk',
+                   'lookups': [
+                       LOOKUP_QUERY_IN,
+                       LOOKUP_QUERY_EXCLUDE,
 
-                     'tissue': "tissue.raw",
-                     'time': 'time.raw',
-                     'choice': 'choice.raw',
-                     'normed': 'normed',
-                     'unit': 'unit',
-                     'substance': 'substance',
-                     'measurement_type': 'measurement_type.raw',
-                     'group_pk': {'field': 'group_pk',
-                                  'lookups': [
-                                      LOOKUP_QUERY_IN,
-                                  ],
-                                  },
-                     'timecourse_pk': {'field': 'timecourse_pk',
-                                   'lookups': [
-                                       LOOKUP_QUERY_IN,
-                                   ],
-                                   },
-                     'individual_pk': {'field': 'individual_pk',
-                                       'lookups': [
-                                           LOOKUP_QUERY_IN,
-                                       ]},
-                     'intervention_pk': {'field': 'intervention_pk',
-                                          'lookups': [
-                                              LOOKUP_QUERY_IN,
-                                          ],
-                                          }}
+                   ],
+                   },
+        'individual_pk': {'field': 'individual_pk',
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
+
+                       ]},
+        'intervention_pk': {'field': 'intervention_pk',
+                          'lookups': [
+                              LOOKUP_QUERY_IN,
+                              LOOKUP_QUERY_EXCLUDE,
+                          ],
+                          }}
     ordering_fields = {'measurement_type': 'measurement_type.raw',
                        'tissue': 'tissue.raw',
                        'substance': 'substance.raw',
                        'group_name': 'group_name.raw',
                        'individual_name': 'individual_name.raw',
                        }
-
-class OutputAnalysisViewSet(ElasticOutputViewSet):
-    #pagination_class = None
-    #paginator = None
-    #PAGE_SIZE = 10000
-
-    #def paginate_queryset(self, queryset):
-    #       return None
-
-    def list(self, request, *args, **kwargs):
-        results = super().list(request, *args, **kwargs)
-
-        df = pd.DataFrame(results.data["data"]["data"])
-        #df = pd.DataFrame(results.data)
-        #print(len(df))
-
-        lst_col = "interventions"
-        df = pd.DataFrame({col: np.repeat(df[col].values, df[lst_col].str.len())
-                             for col in df.columns.difference([lst_col])}).assign(
-            **{lst_col: np.concatenate(df[lst_col].values)})[df.columns.tolist()]
-
-        df["intervention_pk"] = df["interventions"].apply(lambda intervention: intervention.get("pk",None))
-
-        def get_pk(data):
-            if isinstance(data,dict):
-               return data.get("pk",None)
-
-
-        df["group_pk"] = df["group"].apply(get_pk)
-        df["individual_pk"] = df["individual"].apply(get_pk)
-        df["timecourse_pk"] = df["timecourse"].apply(get_pk)
-        df["individual_pk"] = df["individual"].apply(get_pk)
-
-        df = df.where(df.notnull(), None)
-
-        del df["raw"]
-        del df["timecourse"]
-        del df["interventions"]
-        del df["individual"]
-        del df["group"]
-        del df["allowed_users"]
-
-
-        results.data["data"]["data"] = df.to_dict('records')
-        del results.data["data"]["count"]
-        #results.data = df.to_dict('records')
-        return results
-
-
 
 
 class ElasticTimecourseViewSet(AccessView):

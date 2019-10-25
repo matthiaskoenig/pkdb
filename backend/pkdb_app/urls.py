@@ -7,7 +7,7 @@ from django.contrib import admin
 from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet, TissueViewSet, \
     ApplicationViewSet, FormViewSet, RouteViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
-    TimecourseOptionViewSet, OutputAnalysisViewSet, OutputInterventionViewSet, \
+    TimecourseOptionViewSet, OutputInterventionViewSet, \
     TimecourseInterventionViewSet
 from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
 from rest_framework.authtoken.views import obtain_auth_token
@@ -84,7 +84,6 @@ router.register("characteristica_individuals", IndividualCharacteristicaViewSet,
 router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
 router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
 router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")
-#router.register("outputs_analysis", OutputAnalysisViewSet, base_name="outputs_analysis")
 router.register("output_intervention", OutputInterventionViewSet, base_name="output_intervention")
 router.register("timecourse_intervention", TimecourseInterventionViewSet, base_name="timecourse_intervention")
 

@@ -1,3 +1,4 @@
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from elasticsearch_dsl import Q
 
 from pkdb_app.categorials.models import MeasurementType
@@ -173,13 +174,52 @@ class GroupCharacteristicaViewSet(AccessView):
 
 
     filter_fields = {
-        'study_sid': 'study_sid.raw',
-        'study_name': 'study_name.raw',
-        'group_pk': 'group_pk',
-        'group_name': 'group_name',
+
+        'study_sid': {'field': 'study_sid.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+
+                      ],
+                      },
+        'study_name': {'field': 'study_name.raw',
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
+
+                       ],
+                       },
+        'group_name': {'field': 'group_name',
+               'lookups': [
+                   LOOKUP_QUERY_IN,
+                   LOOKUP_QUERY_EXCLUDE,
+
+               ],
+               },
+
+        'group_pk': {'field': 'group_pk',
+                     'lookups': [
+                         LOOKUP_QUERY_IN,
+                         LOOKUP_QUERY_EXCLUDE,
+
+                     ],
+                     },
+        'group_parent_pk': {'field': 'group_parent_pk',
+                     'lookups': [
+                         LOOKUP_QUERY_IN,
+                         LOOKUP_QUERY_EXCLUDE,
+
+                     ],
+                     },
+        'characteristica_pk': {'field': 'characteristica_pk',
+                            'lookups': [
+                                LOOKUP_QUERY_IN,
+                                LOOKUP_QUERY_EXCLUDE,
+
+                            ],
+                            },
+
         'group_count': 'group_count',
-        'group_parent_pk': 'group_parent_pk',
-        'characteristica_pk': 'characteristica_pk',
         'count': 'count',
         'measurement_type': 'measurement_type.raw',
         'choice': 'choice.raw',
@@ -217,14 +257,49 @@ class IndividualCharacteristicaViewSet(AccessView):
     }
 
     filter_fields = {
-        'study_sid': 'study_sid.raw',
-        'study_name': 'study_name.raw',
+        'study_sid': {
+            'field': 'study_sid.raw',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        'study_name': {
+            'field': 'study_name.raw',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
 
-        'individual_pk': 'individual_pk',
-        'individual_name': 'individual_name',
-        'individual_group_pk': 'individual_group_pk',
-
-        'characteristica_pk': 'characteristica_pk',
+            ],
+        },
+        'individual_name': {
+            'field': 'individual_name',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        'individual_pk': {
+            'field': 'individual_pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        'individual_group_pk': {
+            'field': 'individual_group_pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        'characteristica_pk': {
+            'field': 'characteristica_pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
         'count': 'count',
         'measurement_type': 'measurement_type.raw',
         'choice': 'choice.raw',
