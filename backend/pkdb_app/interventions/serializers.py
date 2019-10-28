@@ -246,6 +246,7 @@ class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer)
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
+    intervention_pk = serializers.IntegerField(source="pk")
     substance = serializers.CharField(allow_null=True)
     measurement_type = serializers.CharField()
     route = serializers.CharField()
@@ -262,7 +263,7 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Intervention
-        fields = ["study_sid","study_name", "pk","raw_pk", "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = ["study_sid","study_name", "intervention_pk","raw_pk", "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
     def to_representation(self, instance):
