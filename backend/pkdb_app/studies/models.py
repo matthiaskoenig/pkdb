@@ -289,6 +289,7 @@ class Study(Sidable, models.Model):
         return 0
 
     def delete(self, *args, **kwargs):
+        print("here I am")
         if self.outputset:
             self.outputset.delete()
         if self.interventionset:
@@ -297,6 +298,8 @@ class Study(Sidable, models.Model):
             self.individualset.delete()
         if self.groupset:
             self.groupset.delete()
+        if self.reference:
+            self.reference.delete()
         super().delete(*args, **kwargs)
 
 

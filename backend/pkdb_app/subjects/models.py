@@ -60,6 +60,7 @@ class DataFile(models.Model):
     def __str__(self):
         return self.file.name
 
+
 # ----------------------------------
 # Group
 # ----------------------------------
@@ -101,10 +102,10 @@ class GroupEx(Externable, AbstractGroup):
     """
 
     source = models.ForeignKey(
-        DataFile, related_name="s_group_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_group_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="f_group_exs", null=True, on_delete=models.SET_NULL
     )
     groupset = models.ForeignKey(
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
@@ -215,8 +216,8 @@ class IndividualEx(Externable, AbstractIndividual):
     Individuals are defined via their characteristics, analogue to groups.
     """
 
-    source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.CASCADE)
-    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.CASCADE)
+    source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
+    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)

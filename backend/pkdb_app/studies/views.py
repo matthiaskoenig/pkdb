@@ -140,11 +140,14 @@ class StudyViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
+
+        # if get object does not find  an object it stops here
+
         instance = self.get_object()
+
         related_elastic = related_elastic_dict(instance)
         delete_elastic_study(related_elastic)
-
-        return super().destroy(request)
+        return super().destroy(request,*args, **kwargs)
 
 
 ###############################################################################################
@@ -153,6 +156,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 @csrf_exempt
 def update_index_study(request):
+
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
@@ -189,7 +193,8 @@ def related_elastic_dict(study):
     interventions = study.interventions.all()
     groups = study.groups.all()
     individuals = study.individuals.all()
-
+    outputs = study.outputs.all()
+    timecourses = study.timecourses.all()
     docs_dict = {
         StudyDocument: study,
         GroupDocument: groups,
@@ -197,11 +202,12 @@ def related_elastic_dict(study):
         CharacteristicaDocument: study.characteristica,
         GroupCharacteristicaDocument: GroupCharacteristica.objects.filter(group__in=groups),
         IndividualCharacteristicaDocument: IndividualCharacteristica.objects.filter(individual__in=individuals),
+        TimecourseInterventionDocument: TimecourseIntervention.objects.filter(timecourse__in=timecourses),
+        OutputInterventionDocument: OutputIntervention.objects.filter(output__in=outputs),
         InterventionDocument: interventions,
         OutputDocument: study.outputs,
         TimecourseDocument: study.timecourses,
-        TimecourseInterventionDocument: TimecourseIntervention.objects.filter(intervention__in=interventions),
-        OutputInterventionDocument: OutputIntervention.objects.filter(intervention__in=interventions),
+
 
     }
     if study.reference:

@@ -8,3 +8,4 @@ class OverwriteStorage(FileSystemStorage):
             os.remove(self.path(name))
         return name
 
+

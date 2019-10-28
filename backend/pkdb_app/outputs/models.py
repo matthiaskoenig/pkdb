@@ -96,10 +96,10 @@ class OutputEx(Externable,
                ExMeasurementTypeable
                ):
     source = models.ForeignKey(
-        DataFile, related_name="s_output_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_output_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="f_output_exs", null=True, on_delete=models.SET_NULL
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
@@ -240,10 +240,10 @@ class TimecourseEx(
     time
     """
     source = models.ForeignKey(
-        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.SET_NULL
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True
