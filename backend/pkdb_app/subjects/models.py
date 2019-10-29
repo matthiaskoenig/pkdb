@@ -181,7 +181,6 @@ class Group(Accessible):
         return self._characteristica_all.filter(normed=True)
 
 
-
 # ----------------------------------
 # Individual
 # ----------------------------------

@@ -235,7 +235,6 @@ class ElasticStudyViewSet(DocumentViewSet):
         'curators.user',
 
         'name',
-        'design',
         'reference',
         'substances',
         'files',
@@ -245,16 +244,15 @@ class ElasticStudyViewSet(DocumentViewSet):
         'operator': 'and'
     }
 
-    filter_fields = {'sid':'sid.raw','name': 'name.raw', "substances": "substances"}
+    filter_fields = {
+        'sid':'sid.raw',
+        'name': 'name.raw',
+        'licence': 'licence.raw',
+        'access': 'access.raw',
+        'substances': 'substances.raw',
+    }
     ordering_fields = {
         'sid': 'sid',
-        "pk": 'pk',
-        "pk_version":'pk_version',
-        "name":"name",
-        "design": "design.raw",
-        "reference": "reference.raw",
-        "creator":"creator.last_name",
-
     }
    
     def get_object(self):
