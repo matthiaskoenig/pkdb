@@ -82,6 +82,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions", None)
+
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
@@ -159,6 +161,9 @@ class OutputExSerializer(BaseOutputExSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
 
     # internal data
     outputs = OutputSerializer(
@@ -179,6 +184,8 @@ class OutputExSerializer(BaseOutputExSerializer):
                 "interventions_map",
                 "outputs",
                 "comments",
+                "descriptions"
+
             ]
         )
 
@@ -256,6 +263,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions",None)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -316,6 +324,9 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
 
     # internal data
     timecourses = TimecourseSerializer(
@@ -331,7 +342,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
             + EX_MEASUREMENTTYPE_FIELDS
             + ["group", "individual", "interventions"]
             + ["group_map", "individual_map", "interventions_map"]
-            + ["timecourses", "comments"]
+            + ["timecourses", "comments","descriptions"]
         )
 
     def to_internal_value(self, data):

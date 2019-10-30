@@ -51,6 +51,7 @@ class GroupExManager(models.Manager):
         study = kwargs.pop("study")
         group_exs = kwargs.pop("group_exs")
         comments = kwargs.pop("comments", [])
+        descriptions = kwargs.pop("descriptions", [])
 
         group_ex = super().create(*args, **kwargs)
         for characteristica_ex_single in characteristica_ex:
@@ -65,6 +66,7 @@ class GroupExManager(models.Manager):
             group_ex.groups.create(**group)
 
         create_multiple(group_ex, comments, "comments")
+        create_multiple(group_ex, descriptions, "descriptions")
 
         group_ex.save()
         return group_ex
@@ -103,9 +105,13 @@ class GroupManager(models.Manager):
 class CharacteristicaExManager(models.Manager):
     def create(self, *args, **kwargs):
         comments = kwargs.pop("comments", [])
+        descriptions = kwargs.pop("descriptions", [])
+
         instance = super().create(*args, **kwargs)
 
         create_multiple(instance, comments, "comments")
+        create_multiple(instance, descriptions, "descriptions")
+
         instance.save()
         return instance
 
@@ -144,16 +150,20 @@ class IndividualExManager(models.Manager):
         characteristica_ex = kwargs.pop("characteristica_ex", [])
         individuals = kwargs.pop("individuals", [])
         comments = kwargs.pop("comments", [])
+        descriptions = kwargs.pop("descriptions", [])
 
-        Comment = apps.get_model('comments','Comment')
+        comment_model = apps.get_model('comments','Comment')
+        description_model = apps.get_model('comments','Description')
 
         individual_ex = super().create(*args, **kwargs)
 
         create_multiple(individual_ex, characteristica_ex, "characteristica_ex")
         create_multiple(individual_ex, individuals, "individuals")
-        #create_multiple(individual_ex, comments, "comments")
 
-        create_multiple_bulk(individual_ex,"ex", comments, Comment)
+        #create_multiple(individual_ex, comments, "comments")
+        create_multiple_bulk(individual_ex,"ex", comments, comment_model)
+        create_multiple_bulk(individual_ex,"ex", descriptions, description_model)
+
 
         individual_ex.save()
         return individual_ex

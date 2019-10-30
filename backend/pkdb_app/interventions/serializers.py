@@ -4,14 +4,13 @@ Serializers for interventions.
 import itertools
 
 from pkdb_app import utils
-from pkdb_app.categorials.behaviours import  VALUE_FIELDS, VALUE_FIELDS_NO_UNIT, \
+from pkdb_app.categorials.behaviours import   VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
 from pkdb_app.categorials.models import Tissue, Route, Application, Form
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
 
-from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 
@@ -85,6 +84,8 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions", None)
+
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
@@ -134,7 +135,9 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
     # internal data
     interventions = InterventionSerializer(
         many=True, write_only=True, required=False, allow_null=True
@@ -147,7 +150,7 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
             + INTERVENTION_FIELDS
             + INTERVENTION_MAP_FIELDS
             + EX_MEASUREMENTTYPE_FIELDS
-            + ["interventions", "comments"]
+            + ["interventions", "comments","descriptions"]
         )
 
     def to_internal_value(self, data):

@@ -59,9 +59,6 @@ class Comment(models.Model):
         InterventionSet, related_name="comments", null=True, on_delete=models.CASCADE
     )
 
-    reference = models.ForeignKey(
-        Reference, related_name="comments", null=True, on_delete=models.CASCADE
-    )
     study = models.ForeignKey(
         Study, related_name="comments", null=True, on_delete=models.CASCADE
     )
@@ -70,11 +67,8 @@ class Comment(models.Model):
         ordering = ['pk']
 
 
-
-
 class Description(models.Model):
     text = models.TextField(blank=True, null=True)
-
     groupset = models.ForeignKey(
         GroupSet, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
@@ -92,6 +86,30 @@ class Description(models.Model):
     )
     study = models.ForeignKey(
         Study, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    individual_ex = models.ForeignKey(
+        IndividualEx, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    group_ex = models.ForeignKey(
+        GroupEx, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    characteristica_ex = models.ForeignKey(
+        CharacteristicaEx, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    output_ex = models.ForeignKey(
+        OutputEx, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    timecourse_ex = models.ForeignKey(
+        TimecourseEx, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    intervention_ex = models.ForeignKey(
+        InterventionEx, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
 
     class Meta:

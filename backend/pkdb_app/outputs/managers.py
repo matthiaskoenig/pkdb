@@ -49,11 +49,15 @@ class OutputExManager(models.Manager):
         outputs = kwargs.pop('outputs', [])
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
+        descriptions = kwargs.pop('descriptions', [])
+
 
         output_ex = super().create(*args, **kwargs)
 
         output_ex.interventions.add(*interventions)
         create_multiple(output_ex, comments, 'comments')
+        create_multiple(output_ex, descriptions, 'descriptions')
+
 
         outputs_dj = create_multiple(output_ex, outputs, 'outputs')
         Output = apps.get_model('outputs', 'Output')
@@ -78,10 +82,13 @@ class TimecourseExManager(models.Manager):
         timecourses = kwargs.pop('timecourses', [])
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
+        descriptions = kwargs.pop('descriptions', [])
+
 
         timecourse_ex = super().create(*args, **kwargs)
         timecourse_ex.interventions.add(*interventions)
         create_multiple(timecourse_ex, comments, 'comments')
+        create_multiple(timecourse_ex, descriptions, 'descriptions')
 
         timecourses_dj = create_multiple(timecourse_ex, timecourses, 'timecourses')
         Timecourse = type(timecourses_dj[0])

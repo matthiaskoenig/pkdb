@@ -60,6 +60,9 @@ class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
 
 
     class Meta:
@@ -68,7 +71,7 @@ class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
             CHARACTERISTISTA_FIELDS
             + CHARACTERISTISTA_MAP_FIELDS
             + EX_MEASUREMENTTYPE_FIELDS
-            + ["comments"]
+            + ["comments","descriptions"]
         )
 
 
@@ -92,6 +95,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions", None)
         self._is_required(data,"measurement_type")
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer,self).to_internal_value(data)
@@ -121,6 +125,7 @@ class GroupSerializer(ExSerializer):
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions", None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data)
@@ -165,7 +170,9 @@ class GroupExSerializer(ExSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
     # internal data
     groups = GroupSerializer(
         many=True, write_only=True, required=False, allow_null=True
@@ -177,7 +184,7 @@ class GroupExSerializer(ExSerializer):
             EXTERN_FILE_FIELDS
             + GROUP_FIELDS
             + GROUP_MAP_FIELDS
-            + ["parent_ex", "characteristica_ex", "groups", "comments"]
+            + ["parent_ex", "characteristica_ex", "groups", "comments", "descriptions"]
         )
 
     def to_internal_value(self, data):
@@ -275,6 +282,7 @@ class IndividualSerializer(ExSerializer):
     def to_internal_value(self, data):
         self._is_required(data,"group")
         data.pop("comments", None)
+        data.pop("descriptions", None)
         study_sid = self.context["request"].path.split("/")[-2]
         if "group" in data:
             data["group"] = self.group_to_internal_value(data["group"], study_sid)
@@ -312,6 +320,9 @@ class IndividualExSerializer(ExSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
 
     # internal data
     individuals = IndividualSerializer(
@@ -328,6 +339,7 @@ class IndividualExSerializer(ExSerializer):
             "characteristica_ex",
             "individuals",
             "comments",
+            "descriptions"
         ]
 
     @staticmethod

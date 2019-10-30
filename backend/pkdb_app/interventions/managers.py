@@ -30,9 +30,11 @@ class InterventionExManager(models.Manager):
 
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
+        descriptions = kwargs.pop('descriptions', [])
 
         intervention_ex = super().create(*args, **kwargs)
 
+        create_multiple(intervention_ex, descriptions, 'descriptions')
         create_multiple(intervention_ex, comments, 'comments')
         Intervention = apps.get_model('interventions', 'Intervention')
         not_norm_interventions = create_multiple_bulk(intervention_ex, "ex", interventions, Intervention)
