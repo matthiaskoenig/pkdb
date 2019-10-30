@@ -107,14 +107,16 @@ class StudyViewSet(viewsets.ModelViewSet):
                         raise ValidationError({"groups": "parent is not allowed for group all"})
 
                     elif group_name != "all" and parent_name is None:
-                        raise ValidationError({"groups":"parent is required for keyword in groups besides for the the <all> group"})
+                        raise ValidationError({"groups":"parent is required for keyword in groups besides for the  <all> group"})
 
                 if "all" not in groups_name:
                     raise ValidationError(
                         {"group":
                              "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
                              "The `all` group is the group of all subjects which was studied and defines common "
-                             "characteristica for all groups and individuals. Create the `all` group or rename group to `all`."
+                             "characteristica for all groups and individuals. Species information are requirement "
+                             "on the all group. Create the `all` group or rename group to `all`. "
+
                         }
                     )
 

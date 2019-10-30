@@ -99,7 +99,7 @@ class Study(Sidable, models.Model):
     """
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     pkdb_version = models.IntegerField(default=CURRENT_VERSION)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
 
     reference = models.OneToOneField(

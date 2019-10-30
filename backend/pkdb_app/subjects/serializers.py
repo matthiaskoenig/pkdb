@@ -35,6 +35,8 @@ GROUP_MAP_FIELDS = ["name_map", "count_map"]
 
 EXTERN_FILE_FIELDS = ["source", "subset_map","groupby", "figure", "source_map", "figure_map"]
 
+
+#todo: move datafile from subjects module
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -124,12 +126,24 @@ class GroupSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         _validate_requried_key(data,"count")
 
-
         for characteristica_single in data.get("characteristica",[]):
             disabled = ["value"]
             self._validate_disabled_data(characteristica_single, disabled)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
+    def validate(self, attrs):
+        """ validates species information on group with name all
+        :param attrs:
+        :return:
+        """
+        if attrs.get("name") == "all":
+            is_species = [characteristica_single.get("measurement_type").name == "species" for characteristica_single in attrs.get("characteristica", [])]
+            if not any(is_species):
+                raise serializers.ValidationError(
+                    {"characteristica": "A characteristica with `'measurement_type' = 'species'` is required on the `all` group.",
+                     "details":attrs})
+        return super().validate(attrs)
 
     def to_representation(self, instance):
 
