@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-function id_from_url(url){
+function id_from_url(url) {
     var characteristic_id = url.match(/_read\/(\d+)/);
     return characteristic_id[1];
 }
@@ -12,27 +12,33 @@ function clean(obj) {
         }
     }
 }
+
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
-function  fetch_data(url){
+
+function fetch_data(url) {
     axios.get(url)
         .then(response => {
             return response.data
         })
-        .catch((error)=>{
+        .catch((error) => {
             console.error(error);
         })
 }
 
-export {id_from_url, clean, isEmpty,fetch_data};
+export {id_from_url, clean, isEmpty, fetch_data};
 
 
 // vue paginator
 const merge_objects = (obj1, obj2) => {
     let obj3 = {};
-    for (let attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-    for (let attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+    for (let attrname in obj1) {
+        obj3[attrname] = obj1[attrname];
+    }
+    for (let attrname in obj2) {
+        obj3[attrname] = obj2[attrname];
+    }
     return obj3;
 };
 
@@ -48,5 +54,5 @@ const getNestedValue = (obj, path) => {
 };
 
 
-export const utils = { merge_objects, getNestedValue };
+export const utils = {merge_objects, getNestedValue};
 

@@ -5,7 +5,6 @@ from pkdb_app.subjects.models import Individual, Characteristica, Group, GroupCh
 from pkdb_app.interventions.documents import string_field, ObjectField
 from ..documents import elastic_settings
 
-
 html_strip = analyzer(
     'html_strip',
     tokenizer="standard",
@@ -14,24 +13,24 @@ html_strip = analyzer(
 )
 
 characteristica_object_field = fields.ObjectField(
-        properties={
-            'pk': fields.IntegerField(),
-            'measurement_type': string_field('measurement_type_name'),
-            'substance': string_field('substance_name'),
-            'choice': string_field('choice'),
-            'value': fields.FloatField('value'),
-            'mean': fields.FloatField(),
-            'median': fields.FloatField(),
-            'min': fields.FloatField(),
-            'max': fields.FloatField(),
-            'se': fields.FloatField(),
-            'sd': fields.FloatField(),
-            'cv': fields.FloatField(),
-            'unit': string_field('unit'),
-            'count': fields.IntegerField('count'),
-        },
-        multi=True
-    )
+    properties={
+        'pk': fields.IntegerField(),
+        'measurement_type': string_field('measurement_type_name'),
+        'substance': string_field('substance_name'),
+        'choice': string_field('choice'),
+        'value': fields.FloatField('value'),
+        'mean': fields.FloatField(),
+        'median': fields.FloatField(),
+        'min': fields.FloatField(),
+        'max': fields.FloatField(),
+        'se': fields.FloatField(),
+        'sd': fields.FloatField(),
+        'cv': fields.FloatField(),
+        'unit': string_field('unit'),
+        'count': fields.IntegerField('count'),
+    },
+    multi=True
+)
 
 
 # ------------------------------------
@@ -120,7 +119,7 @@ class GroupDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(GroupDocument, self).get_queryset().select_related(
-            'ex__groupset__study','parent').prefetch_related("characteristica")
+            'ex__groupset__study', 'parent').prefetch_related("characteristica")
 
 
 # ------------------------------------
@@ -148,7 +147,7 @@ class CharacteristicaDocument(Document):
     group_parent_pk = fields.IntegerField(
         attr='group_parent_pk',
     )
-    #individual_related
+    # individual_related
     individual_name = fields.StringField(
         attr='individual_name',
         fields={
@@ -213,11 +212,12 @@ class CharacteristicaDocument(Document):
         name = "characteristica"
         settings = {**elastic_settings, 'max_result_window': 50000}
 
-
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(CharacteristicaDocument, self).get_queryset().select_related(
-            'group','individual')
+            'group', 'individual')
+
+
 # Elastic Characteristica Document
 # ------------------------------------
 
@@ -227,7 +227,6 @@ class GroupCharacteristicaDocument(Document):
     """ Characteristica elastic search document. """
     study_sid = string_field('study_sid')
     study_name = string_field('study_name')
-
 
     # group related
     group_pk = fields.IntegerField(attr='group_pk')
@@ -297,18 +296,17 @@ class GroupCharacteristicaDocument(Document):
         name = "group_characteristica"
         settings = {**elastic_settings, 'max_result_window': 50000}
 
-
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(GroupCharacteristicaDocument, self).get_queryset().select_related(
-            'group','characteristica')
+            'group', 'characteristica')
+
 
 @registry.register_document
 class IndividualCharacteristicaDocument(Document):
     """ Characteristica elastic search document. """
     study_sid = string_field('study_sid')
     study_name = string_field('study_name')
-
 
     # individual related
     individual_pk = fields.IntegerField(attr='individual_pk')
@@ -377,8 +375,7 @@ class IndividualCharacteristicaDocument(Document):
         name = "individual_characteristica"
         settings = {**elastic_settings, 'max_result_window': 50000}
 
-
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(IndividualCharacteristicaDocument, self).get_queryset().select_related(
-            'individual','characteristica')
+            'individual', 'characteristica')

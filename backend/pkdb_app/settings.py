@@ -5,7 +5,6 @@ import logging
 import os
 from os.path import join
 
-
 import dj_database_url
 from distutils.util import strtobool
 
@@ -20,7 +19,7 @@ FRONTEND_BASE = os.environ['FRONTEND_BASE']
 
 API_URL = API_BASE + "/api/v1"
 # ------------------------------------------------------------------------------------------------------------------
-#AUTHENTICATION_BACKENDS = (
+# AUTHENTICATION_BACKENDS = (
 #
 #    # Needed to login by username in Django admin, regardless of `allauth`
 ##    'rest_email_auth.authentication.VerifiedEmailBackend',
@@ -28,18 +27,18 @@ API_URL = API_BASE + "/api/v1"
 #
 #    # `allauth` specific authentication methods, such as login by e-mail
 #    'allauth.account.auth_backends.AuthenticationBackend',
-#)
+# )
 
-#AUTHENTICATION_BACKENDS = [
-#'rest_email_auth.authentication.VerifiedEmailBackend',
-#'django.contrib.auth.backends.ModelBackend',
-#]
+# AUTHENTICATION_BACKENDS = [
+# 'rest_email_auth.authentication.VerifiedEmailBackend',
+# 'django.contrib.auth.backends.ModelBackend',
+# ]
 
 AUTHENTICATION_BACKENDS = (
     # default
     'django.contrib.auth.backends.ModelBackend',
     # email login
-    #'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
     'rest_email_auth.authentication.VerifiedEmailBackend',
 
@@ -47,12 +46,11 @@ AUTHENTICATION_BACKENDS = (
 
 # The minimal settings dict required for the app
 REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': FRONTEND_BASE+'/#/verification/{key}',
-    'PASSWORD_RESET_URL': FRONTEND_BASE+'/#/reset-password/{key}',
+    'EMAIL_VERIFICATION_URL': FRONTEND_BASE + '/#/verification/{key}',
+    'PASSWORD_RESET_URL': FRONTEND_BASE + '/#/reset-password/{key}',
     'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
     'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
 }
-
 
 INSTALLED_APPS = (
     "django.contrib.admin",
@@ -66,11 +64,10 @@ INSTALLED_APPS = (
     # Authentication
     'rest_email_auth',
     "rest_framework.authtoken",  # token authentication
-    #'rest_auth',
-    #'rest_auth.registration',
+    # 'rest_auth',
+    # 'rest_auth.registration',
     'allauth',
     'allauth.account',
-
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
@@ -78,7 +75,7 @@ INSTALLED_APPS = (
     "rest_framework_swagger",
     "corsheaders",
 
-    #Elastic Search
+    # Elastic Search
     # Django Elasticsearch integration
     'django_elasticsearch_dsl',
 
@@ -103,7 +100,6 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_MIN_LENGTH = 3
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
-
 
 # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
 MIDDLEWARE = (
@@ -239,7 +235,7 @@ LOGGING = {
 
 # Django Rest Framework
 REST_FRAMEWORK = {
-    #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     "DEFAULT_PAGINATION_CLASS": "pkdb_app.pagination.CustomPagination",
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 20)),
@@ -251,7 +247,7 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.JSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
-    #"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
+    # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",

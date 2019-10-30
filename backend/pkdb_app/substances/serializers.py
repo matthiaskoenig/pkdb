@@ -5,8 +5,7 @@ from pkdb_app import utils
 from pkdb_app.categorials.serializers import AnnotationSerializer
 from rest_framework import serializers
 
-
-from pkdb_app.substances.models import Substance,SubstanceSynonym
+from pkdb_app.substances.models import Substance, SubstanceSynonym
 from pkdb_app.serializers import WrongKeyValidationSerializer
 
 # ----------------------------------
@@ -28,17 +27,17 @@ class SynonymSerializer(WrongKeyValidationSerializer):
         return instance.name
 
 
-
 class SubstanceSerializer(WrongKeyValidationSerializer):
     """ Substance. """
-    parents = utils.SlugRelatedField(many=True, slug_field="name",queryset=Substance.objects.order_by('name'), required=False, allow_null=True)
+    parents = utils.SlugRelatedField(many=True, slug_field="name", queryset=Substance.objects.order_by('name'),
+                                     required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
 
-
     class Meta:
         model = Substance
-        fields = ["sid","url_slug", "name" ,"parents","chebi","formula","charge", "mass",  "description",  "synonyms","creator", "annotations"]
+        fields = ["sid", "url_slug", "name", "parents", "chebi", "formula", "charge", "mass", "description", "synonyms",
+                  "creator", "annotations"]
 
     def to_internal_value(self, data):
         data["creator"] = self.context['request'].user.id
@@ -56,7 +55,7 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 
         substance = Substance.objects.create(**validated_data)
         update_or_create_multiple(substance, synonyms_data, "synonyms", lookup_fields=["name"])
-        update_or_create_multiple(substance, annotations_data, "annotations", lookup_fields=["term","relation"])
+        update_or_create_multiple(substance, annotations_data, "annotations", lookup_fields=["term", "relation"])
 
         substance.parents.add(*parents_data)
 
@@ -85,16 +84,15 @@ class SubstanceSerializer(WrongKeyValidationSerializer):
 
 class SubstanceStatisticsSerializer(serializers.ModelSerializer):
     """ Substance. """
-    #studies = serializers.StringRelatedField(many=True, read_only=True)
-    interventions = serializers.PrimaryKeyRelatedField(many=True, source="interventions_normed",read_only=True)
+    # studies = serializers.StringRelatedField(many=True, read_only=True)
+    interventions = serializers.PrimaryKeyRelatedField(many=True, source="interventions_normed", read_only=True)
     outputs = serializers.PrimaryKeyRelatedField(many=True, source="outputs_normed", read_only=True)
     outputs_calculated = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_normed",read_only=True)
-
+    timecourses = serializers.PrimaryKeyRelatedField(many=True, source="timecourses_normed", read_only=True)
 
     class Meta:
         model = Substance
-        fields = ["name","outputs","outputs_calculated","interventions","timecourses"]
+        fields = ["name", "outputs", "outputs_calculated", "interventions", "timecourses"]
 
 
 ###############################################################################################
@@ -109,8 +107,9 @@ class SubstanceSmallElasticSerializer(serializers.ModelSerializer):
 
 class SubstanceElasticSerializer(serializers.HyperlinkedModelSerializer):
     parents = SubstanceSmallElasticSerializer(many=True)
-    annotations = AnnotationSerializer(many=True,allow_null=True)
+    annotations = AnnotationSerializer(many=True, allow_null=True)
 
     class Meta:
         model = Substance
-        fields = ["sid", 'url_slug', "name", "mass","charge", "formula", "derived", "description","parents", "annotations"]
+        fields = ["sid", 'url_slug', "name", "mass", "charge", "formula", "derived", "description", "parents",
+                  "annotations"]

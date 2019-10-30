@@ -68,7 +68,6 @@ router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elast
 
 router.register("statistics", StatisticsViewSet, base_name="statistics")
 
-
 ###############################################################################################
 # Read URLs
 ###############################################################################################
@@ -78,16 +77,14 @@ router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
 router.register("characteristica_elastic", CharacteristicaElasticViewSet, base_name="characteristica_elastic")
 
 router.register("characteristica_groups", GroupCharacteristicaViewSet, base_name="characteristica_groups")
-router.register("characteristica_individuals", IndividualCharacteristicaViewSet, base_name="characteristica_individuals")
-
+router.register("characteristica_individuals", IndividualCharacteristicaViewSet,
+                base_name="characteristica_individuals")
 
 router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
 router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
 router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")
 router.register("output_intervention", OutputInterventionViewSet, base_name="output_intervention")
 router.register("timecourse_intervention", TimecourseInterventionViewSet, base_name="timecourse_intervention")
-
-
 
 # Options
 router.register(
@@ -105,10 +102,9 @@ router.register(
 
 schema_view = get_swagger_view(title="PKDB API")
 
-
 urlpatterns = [
     # authentication
-    #(r'^accounts_old/', include('allauth.urls')),
+    # (r'^accounts_old/', include('allauth.urls')),
     url(r'^accounts/', include('rest_email_auth.urls')),
 
     # admin
@@ -130,4 +126,4 @@ urlpatterns = [
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
     # re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
-] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]  # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

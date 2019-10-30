@@ -13,7 +13,7 @@ Vue.config.devtools = true;
 var backend_domain = process.env.VUE_APP_API_BASE;
 
 
-if (!backend_domain){
+if (!backend_domain) {
     // running in develop, no environment variable set
     console.error('No PKDB backend set via environment variable: VUE_APP_API_BASE');
 }
@@ -57,30 +57,30 @@ export default new Vuex.Store({
 
     },
     mutations: {
-        setToken(state, token){
+        setToken(state, token) {
             localStorage.setItem('token', token);
             state.token = token;
         },
-        clearToken(state){
+        clearToken(state) {
             localStorage.removeItem('token');
             state.token = null;
         },
-        setUsername(state, username){
+        setUsername(state, username) {
             localStorage.setItem('username', username);
             state.username = username;
         },
-        clearUsername(state){
+        clearUsername(state) {
             localStorage.removeItem('username');
             state.username = null;
         },
     },
-    actions:{
-        login(context, payload){
+    actions: {
+        login(context, payload) {
             // const payload = {username: username, token: token}
             this.commit('setToken', payload.token);
             this.commit('setUsername', payload.username);
         },
-        logout(context){
+        logout(context) {
             this.commit('clearToken');
             this.commit('clearUsername');
         },

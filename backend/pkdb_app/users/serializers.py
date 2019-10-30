@@ -8,6 +8,7 @@ from .models import User
 from django.contrib.auth.models import Group
 from rest_email_auth import models, signals
 
+
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SlugRelatedField(
         queryset=Group.objects.all(),
@@ -15,28 +16,31 @@ class UserSerializer(serializers.ModelSerializer):
         required=True,
         many=True
     )
+
     class Meta:
         model = User
-        fields = ("id", "username", "first_name", "last_name","groups")
+        fields = ("id", "username", "first_name", "last_name", "groups")
         read_only_fields = ("username",)
 
 
 class UserGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ["name","permissions"]
+        fields = ["name", "permissions"]
+
 
 class AuthTokenSerializerCostum(AuthTokenSerializer):
     def validate(self, attrs):
         result = super().validate(attrs)
 
         user = VerifiedEmailBackend().authenticate(request=self.context.get('request'),
-                             password=attrs["password"], email=result["user"].email)
+                                                   password=attrs["password"], email=result["user"].email)
         if not user:
             msg = 'User is not verified. Check your mail for the verification key.'
             raise serializers.ValidationError(msg, code='authorization')
 
         return result
+
 
 class UserRegistrationSerializer(RegistrationSerializer):
     class Meta(object):
@@ -134,13 +138,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
             instance.save()
         return instance
 
-    def create_verified_email(self,user):
+    def create_verified_email(self, user):
         email_dict = {"email": user.email, "is_primary": True, "is_verified": True, "user": user}
         email = models.EmailAddress.objects.create(**email_dict)
         return email
-
-
-
 
     class Meta:
         model = User
@@ -166,5 +167,5 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "first_name", "last_name","username")
+        fields = ("id", "first_name", "last_name", "username")
         read_only_fields = ("username",)

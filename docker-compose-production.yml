@@ -23,7 +23,7 @@ volumes:
     driver: local
   node_modules:
     driver: local
-    
+
 services:
   postgres:
     restart: always
@@ -61,8 +61,8 @@ services:
       - postgres:postgres
       - elasticsearch:elasticsearch
     depends_on:
-     - postgres
-     - elasticsearch
+      - postgres
+      - elasticsearch
     command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 --timeout 120 --bind 0.0.0.0:8000"
 
   frontend:

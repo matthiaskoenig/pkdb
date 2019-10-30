@@ -18,7 +18,6 @@ class EXMeasurementTypeableSerializer(ExSerializer):
     measurement_type_map = serializers.CharField(allow_blank=False)
 
 
-
 class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     substance = utils.SlugRelatedField(
         slug_field="name",
@@ -61,25 +60,26 @@ class BaseCategorySerializer(WrongKeyValidationSerializer):
 class TissueSerializer(BaseCategorySerializer):
     class Meta:
         model = Tissue
-        fields = ["name","creator","url_slug", "description"]
+        fields = ["name", "creator", "url_slug", "description"]
 
 
 class FormSerializer(BaseCategorySerializer):
     class Meta:
         model = Form
-        fields = ["name","creator","url_slug", "description"]
+        fields = ["name", "creator", "url_slug", "description"]
 
 
 class ApplicationSerializer(BaseCategorySerializer):
     class Meta:
         model = Application
-        fields = ["name","creator","url_slug", "description"]
+        fields = ["name", "creator", "url_slug", "description"]
 
 
 class RouteSerializer(BaseCategorySerializer):
     class Meta:
         model = Route
-        fields = ["name","creator","url_slug", "description"]
+        fields = ["name", "creator", "url_slug", "description"]
+
 
 class AnnotationSerializer(serializers.ModelSerializer):
     term = serializers.CharField()
@@ -88,32 +88,30 @@ class AnnotationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Annotation
-        fields = ["term","relation","collection","description","label"]
+        fields = ["term", "relation", "collection", "description", "label"]
+
 
 class ChoiceSerializer(serializers.ModelSerializer):
     annotations = AnnotationSerializer(many=True, allow_null=True)
+
     class Meta:
         model = Choice
-        fields = ["name", "annotations","description"]
-
-
+        fields = ["name", "annotations", "description"]
 
 
 class BaseSerializer(WrongKeyValidationSerializer):
 
-    def pop_related(self,data):
-        related_instances = ["units","choices","annotations"]
-        return {related:data.pop(related,[]) for related in related_instances}
+    def pop_related(self, data):
+        related_instances = ["units", "choices", "annotations"]
+        return {related: data.pop(related, []) for related in related_instances}
 
+    def update_or_create_related(self, instance, related_dict):
+        lookup_fields = {"units": ["name"], "choices": ["name"], "annotations": ["term", "relation"]}
 
-    def update_or_create_related(self,instance, related_dict):
-        lookup_fields = {"units":["name"],"choices":["name"],"annotations":["term","relation"]}
-
-        for related,related_data in related_dict.items():
+        for related, related_data in related_dict.items():
             if hasattr(instance, related):
-                related_instance = getattr(instance,related)
+                related_instance = getattr(instance, related)
                 related_instance.clear()
-
 
             update_or_create_multiple(instance, related_data, related, lookup_fields=lookup_fields[related])
 
@@ -126,15 +124,14 @@ class BaseSerializer(WrongKeyValidationSerializer):
         self.validate_wrong_keys(data)
         data["creator"] = self.context['request'].user.id
         for field in ["units"]:
-            data[field] = [{"name":value} for value in data.get(field,[])]
-
+            data[field] = [{"name": value} for value in data.get(field, [])]
 
         return super().to_internal_value(data)
 
     def create(self, validated_data):
         related_dict = self.pop_related(validated_data)
         instance = self.Meta.model.objects.create(**validated_data)
-        self.update_or_create_related(instance,related_dict)
+        self.update_or_create_related(instance, related_dict)
         instance.save()
 
         return instance
@@ -143,7 +140,7 @@ class BaseSerializer(WrongKeyValidationSerializer):
         related_dict = self.pop_related(validated_data)
         for name, value in validated_data.items():
             setattr(instance, name, value)
-        self.update_or_create_related(instance,related_dict)
+        self.update_or_create_related(instance, related_dict)
         instance.save()
         return instance
 
@@ -157,12 +154,12 @@ class MeasurementTypeSerializer(BaseSerializer):
         model = MeasurementType
         fields = ["name", "url_slug", "dtype", "creator", "description", "units", "annotations", "choices"]
 
+
 class MeasurementTypeElasticSerializer(serializers.ModelSerializer):
     units = UnitSerializer(many=True, allow_null=True)
-    annotations = AnnotationSerializer(many=True,allow_null=True)
+    annotations = AnnotationSerializer(many=True, allow_null=True)
     choices = ChoiceSerializer(many=True, allow_null=True)
 
     class Meta:
         model = MeasurementType
-        fields = ["name", "url_slug", "dtype", "description","units", "annotations", "choices"]
-
+        fields = ["name", "url_slug", "dtype", "description", "units", "annotations", "choices"]

@@ -31,8 +31,6 @@ def example1():
             t = data.time
             c = data.caf
 
-
-
             pk = pharmacokinetic.f_pk(
                 t=t,
                 c=c,
@@ -84,8 +82,6 @@ def example2():
             c = data.caf
         elif substance == "paraxanthine":
             c = data.px
-
-
 
         pk = pharmacokinetic.f_pk(
             t=t,

@@ -8,7 +8,6 @@ from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_
 
 class InterventionSetManager(models.Manager):
     def create(self, *args, **kwargs):
-
         intervention_exs = kwargs.pop('intervention_exs', [])
         descriptions = kwargs.pop('descriptions', [])
         comments = kwargs.pop('comments', [])
@@ -27,7 +26,6 @@ class InterventionSetManager(models.Manager):
 
 class InterventionExManager(models.Manager):
     def create(self, *args, **kwargs):
-
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
         descriptions = kwargs.pop('descriptions', [])

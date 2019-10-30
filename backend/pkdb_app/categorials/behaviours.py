@@ -3,18 +3,17 @@ from pkdb_app.substances.models import Substance
 from django.db import models
 from pkdb_app.utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
 
+
 def map_field(fields):
-    return  [f"{field}_map" for field in fields]
+    return [f"{field}_map" for field in fields]
+
 
 VALUE_FIELDS_NO_UNIT = ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
-VALUE_FIELDS = VALUE_FIELDS_NO_UNIT +  ["unit"]
+VALUE_FIELDS = VALUE_FIELDS_NO_UNIT + ["unit"]
 VALUE_MAP_FIELDS = map_field(VALUE_FIELDS)
 
-
-MEASUREMENTTYPE_FIELDS = ["measurement_type", "choice","substance"] +VALUE_FIELDS
-EX_MEASUREMENTTYPE_FIELDS =MEASUREMENTTYPE_FIELDS + map_field(MEASUREMENTTYPE_FIELDS)
-
-
+MEASUREMENTTYPE_FIELDS = ["measurement_type", "choice", "substance"] + VALUE_FIELDS
+EX_MEASUREMENTTYPE_FIELDS = MEASUREMENTTYPE_FIELDS + map_field(MEASUREMENTTYPE_FIELDS)
 
 
 class ValueableMapNotBlank(models.Model):
@@ -29,7 +28,6 @@ class ValueableMapNotBlank(models.Model):
     cv_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-
     class Meta:
         abstract = True
 
@@ -39,38 +37,35 @@ class ValueableNotBlank(models.Model):
 
     Adds fields to store values with their statistics.
     """
-    value  = models.FloatField(null=True)
-    mean  = models.FloatField(null=True)
-    median  = models.FloatField(null=True)
-    min  = models.FloatField(null=True)
-    max  = models.FloatField(null=True)
-    sd  = models.FloatField(null=True)
-    se  = models.FloatField(null=True)
-    cv  = models.FloatField(null=True)
-    unit  = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    value = models.FloatField(null=True)
+    mean = models.FloatField(null=True)
+    median = models.FloatField(null=True)
+    min = models.FloatField(null=True)
+    max = models.FloatField(null=True)
+    sd = models.FloatField(null=True)
+    se = models.FloatField(null=True)
+    cv = models.FloatField(null=True)
+    unit = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True
 
 
-class ExMeasurementTypeable(ValueableNotBlank,ValueableMapNotBlank):
+class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
     measurement_type = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     measurement_type_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    #substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
+    # substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
     substance = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
 
     class Meta:
         abstract = True
 
 
-
 class MeasurementTypeable(ValueableNotBlank):
-
     measurement_type = models.ForeignKey(MeasurementType, on_delete=models.CASCADE)
     substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
     choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
@@ -95,15 +90,12 @@ class MeasurementTypeable(ValueableNotBlank):
         return self.measurement_type.choices_list()
 
 
-
-
 class Normalizable(MeasurementTypeable):
     raw = models.ForeignKey("self", related_name="norm", on_delete=models.CASCADE, null=True)
     normed = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
-
 
     @property
     def norm_fields(self):
@@ -144,14 +136,12 @@ class Normalizable(MeasurementTypeable):
         """
         is_removeable_substance, dimension = self.is_removeable_substance_dimension
         if is_removeable_substance:
-            molar_weight = ureg("g/mol")*self.substance.mass
+            molar_weight = ureg("g/mol") * self.substance.mass
             p_unit = self.measurement_type.p_unit(self.unit)
-            this_quantity = p_unit*molar_weight**dimension
+            this_quantity = p_unit * molar_weight ** dimension
             return (this_quantity.magnitude, str(this_quantity.units))
         else:
             return (1, self.unit)
-
-
 
     def normalize(self):
         """ Normalizes the units.
@@ -171,10 +161,10 @@ class Normalizable(MeasurementTypeable):
             if ureg(unit) != ureg(self.unit):
                 for key, value in self.norm_fields.items():
                     if value is not None:
-                        setattr(self, key, value*factor)
+                        setattr(self, key, value * factor)
                 self.unit = unit
 
-            #else:
+            # else:
             #    self.unit = str(ureg(self.unit).u)
 
         # normalization

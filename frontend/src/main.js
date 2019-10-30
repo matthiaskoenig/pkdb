@@ -12,19 +12,50 @@ import './stylus/main.styl'
 
 Vue.use(VueResource);
 import VueAuthImage from 'vue-auth-image';
+
 Vue.use(VueAuthImage);
 /** --------------------------------------------------------------
  *  FontAwesome
  *  -------------------------------------------------------------- */
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from '@fortawesome/vue-fontawesome';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText} from '@fortawesome/vue-fontawesome';
 
-import { faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical,
-    faFileMedicalAlt, faShareSquare, faChartLine, faChartBar, faInfoCircle, faCode, faLaptopCode, faTablet, faTablets,
-    faCube, faCubes, faUserCog, faUserEdit, faEnvelope, faTicketAlt, faCheckCircle, faTimesCircle, faBookReader, faTrashAlt,
-    faCommentAlt, faAlignLeft, faFileExcel, faFileCsv, faFilePdf
+import {
+    faCoffee,
+    faFileAlt,
+    faUser,
+    faUsers,
+    faFemale,
+    faMale,
+    faCapsules,
+    faProcedures,
+    faFileMedical,
+    faFileMedicalAlt,
+    faShareSquare,
+    faChartLine,
+    faChartBar,
+    faInfoCircle,
+    faCode,
+    faLaptopCode,
+    faTablet,
+    faTablets,
+    faCube,
+    faCubes,
+    faUserCog,
+    faUserEdit,
+    faEnvelope,
+    faTicketAlt,
+    faCheckCircle,
+    faTimesCircle,
+    faBookReader,
+    faTrashAlt,
+    faCommentAlt,
+    faAlignLeft,
+    faFileExcel,
+    faFileCsv,
+    faFilePdf
 } from '@fortawesome/free-solid-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import {faGithub} from '@fortawesome/free-brands-svg-icons';
 
 library.add(faCoffee, faFileAlt, faUser, faUsers, faFemale, faMale, faCapsules, faProcedures, faFileMedical, faFileMedicalAlt,
     faShareSquare, faChartLine, faChartBar, faInfoCircle, faGithub, faCode, faLaptopCode, faTablet, faTablets, faCube, faCubes,
@@ -101,20 +132,18 @@ Vue.config.productionTip = false;
 
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app');
 
 
-
-
-axios.interceptors.request.use(function(config) {
-        const token = store.state.token;
-        if (token) {
-          axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token')
-        }
-        return config;
-    }, function(err) {
-        return Promise.reject(err);
-    });
+axios.interceptors.request.use(function (config) {
+    const token = store.state.token;
+    if (token) {
+        axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token')
+    }
+    return config;
+}, function (err) {
+    return Promise.reject(err);
+});

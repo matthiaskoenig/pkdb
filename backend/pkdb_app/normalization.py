@@ -26,7 +26,6 @@ def get_sd(se, count, cv, mean):
 
 
 def get_se(sd, count, cv, mean):
-
     if isinstance(sd, list):
         sd = list(map(float, sd))
     if isinstance(mean, list):
@@ -42,7 +41,6 @@ def get_se(sd, count, cv, mean):
 
     if is_sd and is_count:
 
-
         se = np.true_divide(sd, np.sqrt(count))
     elif is_count and is_mean and is_cv:
         se = np.true_divide((np.multiply(cv, mean)), np.sqrt(count))
@@ -50,7 +48,6 @@ def get_se(sd, count, cv, mean):
 
 
 def get_cv(sd, count, se, mean):
-
     if isinstance(sd, list):
         sd = list(map(float, sd))
     if isinstance(mean, list):
@@ -63,8 +60,6 @@ def get_cv(sd, count, se, mean):
     is_count = count is not None
     is_mean = mean is not None
     is_se = se is not None
-
-
 
     if is_sd and is_mean:
         cv = np.true_divide(sd, mean)

@@ -69,7 +69,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         group = user_group(self.request.user)
-        if group in ["admin","reviewer"]:
+        if group in ["admin", "reviewer"]:
             return queryset
 
         elif group == "basic":
@@ -82,22 +82,21 @@ class StudyViewSet(viewsets.ModelViewSet):
         elif group == "anonymous":
             return queryset.filter(access=PUBLIC)
 
-
     @staticmethod
     def group_validation(request):
         if "groupset" in request.data and request.data["groupset"]:
             groupset = request.data["groupset"]
             if "groups" in groupset:
                 groups = groupset.get("groups", [])
-                if not isinstance(groups,list):
+                if not isinstance(groups, list):
                     raise ValidationError(
-                        {"groups": f"groups must be a list and not a {type(groups)}","detail":groups})
+                        {"groups": f"groups must be a list and not a {type(groups)}", "detail": groups})
 
                 parents_name = set()
                 groups_name = set()
 
                 for group in groups:
-                    parent_name  = group.get("parent")
+                    parent_name = group.get("parent")
                     if parent_name:
                         parents_name.add(parent_name)
                     group_name = group.get("name")
@@ -107,7 +106,8 @@ class StudyViewSet(viewsets.ModelViewSet):
                         raise ValidationError({"groups": "parent is not allowed for group all"})
 
                     elif group_name != "all" and parent_name is None:
-                        raise ValidationError({"groups":"parent is required for keyword in groups besides for the  <all> group"})
+                        raise ValidationError(
+                            {"groups": "parent is required for keyword in groups besides for the  <all> group"})
 
                 if "all" not in groups_name:
                     raise ValidationError(
@@ -117,9 +117,8 @@ class StudyViewSet(viewsets.ModelViewSet):
                              "characteristica for all groups and individuals. Species information are requirement "
                              "on the all group. Create the `all` group or rename group to `all`. "
 
-                        }
+                         }
                     )
-
 
                 # validate if groups are missing
                 missing_groups = parents_name - groups_name
@@ -149,7 +148,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 
         related_elastic = related_elastic_dict(instance)
         delete_elastic_study(related_elastic)
-        return super().destroy(request,*args, **kwargs)
+        return super().destroy(request, *args, **kwargs)
 
 
 ###############################################################################################
@@ -158,7 +157,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 
 @csrf_exempt
 def update_index_study(request):
-
     if request.method == 'POST':
         data = JSONParser().parse(request)
         try:
@@ -185,7 +183,6 @@ def delete_elastic_study(related_elastic):
             pass
 
 
-
 def related_elastic_dict(study):
     """ Dictionary of elastic documents for given study.
 
@@ -210,7 +207,6 @@ def related_elastic_dict(study):
         OutputDocument: study.outputs,
         TimecourseDocument: study.timecourses,
 
-
     }
     if study.reference:
         docs_dict[ReferenceDocument] = study.reference
@@ -223,7 +219,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     document = StudyDocument
     pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     permission_classes = (StudyPermission,)
     search_fields = (
         'sid',
@@ -247,7 +243,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     }
 
     filter_fields = {
-        'sid':'sid.raw',
+        'sid': 'sid.raw',
         'name': 'name.raw',
         'licence': 'licence.raw',
         'access': 'access.raw',
@@ -256,7 +252,7 @@ class ElasticStudyViewSet(DocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
     }
-   
+
     def get_object(self):
         """Get object."""
         queryset = self.get_queryset()
@@ -298,7 +294,7 @@ class ElasticStudyViewSet(DocumentViewSet):
         search = self.search
         group = user_group(self.request.user)
 
-        if group in ["admin","reviewer"]:
+        if group in ["admin", "reviewer"]:
             return search.query()
 
         elif group == "basic":
@@ -323,7 +319,6 @@ class ElasticStudyViewSet(DocumentViewSet):
             return qs
 
 
-
 class ElasticReferenceViewSet(DocumentViewSet):
     """Read/query/search references. """
     document_uid_field = "sid__raw"
@@ -333,12 +328,12 @@ class ElasticReferenceViewSet(DocumentViewSet):
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('sid','study_name','study_pk','pmid','title','abstract','name','journal')
+    search_fields = ('sid', 'study_name', 'study_pk', 'pmid', 'title', 'abstract', 'name', 'journal')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw',}
+    filter_fields = {'name': 'name.raw', }
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',

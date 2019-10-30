@@ -21,7 +21,6 @@ class UserViewSet(
 
 
 class UserGroupViewSet(viewsets.ModelViewSet):
-
     queryset = Group.objects.all()
     serializer_class = UserGroupSerializer
     permission_classes = (IsAdminUser,)
@@ -36,10 +35,9 @@ class UserCreateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewse
     serializer_class = CreateUserSerializer
     permission_classes = (IsAdminUser,)
 
-    #def create(self, request, *args, **kwargs):
+    # def create(self, request, *args, **kwargs):
     #    return super().create(request, *args, **kwargs)
 
 
 class ObtainAuthTokenCustom(ObtainAuthToken):
     serializer_class = AuthTokenSerializerCostum
-

@@ -18,7 +18,7 @@ from pkdb_app.subjects.serializers import (
 from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 ############################################################
-#Elastic Search Views
+# Elastic Search Views
 ###########################################################
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
@@ -26,19 +26,15 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     CompoundSearchFilterBackend,
     IdsFilterBackend, MultiMatchSearchFilterBackend)
 
-
 from pkdb_app.documents import AccessView
-
-
 
 
 class GroupViewSet(AccessView):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
-
 
     # Define search fields
     search_fields = (
@@ -63,27 +59,25 @@ class GroupViewSet(AccessView):
         'name': 'name.raw',
         'parent': 'group.name.raw',
         'study': 'study.raw',
-        'ctype':'ctype.raw'
+        'ctype': 'ctype.raw'
 
     }
 
     # Define ordering fields
     ordering_fields = {
-        'id':'id',
+        'id': 'id',
         'study': 'study.raw',
-        #'group': 'group.raw',
+        # 'group': 'group.raw',
         'name': 'name.raw',
     }
 
 
 class IndividualViewSet(AccessView):
-
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
-
 
     # Define search fields
     search_fields = (
@@ -111,12 +105,11 @@ class IndividualViewSet(AccessView):
 
     # Define ordering fields
     ordering_fields = {
-        'id':'id',
+        'id': 'id',
         'study': 'study.raw',
         'group': 'group.raw',
         'name': 'name.raw',
     }
-
 
 
 class CharacteristicaElasticViewSet(AccessView):
@@ -124,7 +117,7 @@ class CharacteristicaElasticViewSet(AccessView):
     document = GroupCharacteristica
     serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
 
     search_fields = (
         'choice',
@@ -144,11 +137,11 @@ class CharacteristicaElasticViewSet(AccessView):
         'mean': 'mean',
         'median': 'median',
         'min': 'min',
-        'max':'max',
-        'se':  'se',
-        'sd':  'sd',
-        'cv':'cv',
-        'normed':'normed',
+        'max': 'max',
+        'se': 'se',
+        'sd': 'sd',
+        'cv': 'cv',
+        'normed': 'normed',
         'group_name': 'group_name.raw',
         'group_pk': 'group_pk',
 
@@ -157,6 +150,8 @@ class CharacteristicaElasticViewSet(AccessView):
         'study_sid': 'study_sid',
 
     }
+
+
 class GroupCharacteristicaViewSet(AccessView):
     document = GroupCharacteristicaDocument
     serializer_class = GroupCharacteristicaSerializer
@@ -171,7 +166,6 @@ class GroupCharacteristicaViewSet(AccessView):
     multi_match_options = {
         'operator': 'and'
     }
-
 
     filter_fields = {
 
@@ -190,12 +184,12 @@ class GroupCharacteristicaViewSet(AccessView):
                        ],
                        },
         'group_name': {'field': 'group_name',
-               'lookups': [
-                   LOOKUP_QUERY_IN,
-                   LOOKUP_QUERY_EXCLUDE,
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
 
-               ],
-               },
+                       ],
+                       },
 
         'group_pk': {'field': 'group_pk',
                      'lookups': [
@@ -205,19 +199,19 @@ class GroupCharacteristicaViewSet(AccessView):
                      ],
                      },
         'group_parent_pk': {'field': 'group_parent_pk',
-                     'lookups': [
-                         LOOKUP_QUERY_IN,
-                         LOOKUP_QUERY_EXCLUDE,
-
-                     ],
-                     },
-        'characteristica_pk': {'field': 'characteristica_pk',
                             'lookups': [
                                 LOOKUP_QUERY_IN,
                                 LOOKUP_QUERY_EXCLUDE,
 
                             ],
                             },
+        'characteristica_pk': {'field': 'characteristica_pk',
+                               'lookups': [
+                                   LOOKUP_QUERY_IN,
+                                   LOOKUP_QUERY_EXCLUDE,
+
+                               ],
+                               },
 
         'group_count': 'group_count',
         'count': 'count',
@@ -232,13 +226,12 @@ class GroupCharacteristicaViewSet(AccessView):
         'se': 'se',
         'sd': 'sd',
         'cv': 'cv',
-        'unit':'unit.raw',
-        }
+        'unit': 'unit.raw',
+    }
     ordering_fields = {
         'choice': 'choice.raw',
         "count": 'count',
     }
-    
 
 
 class IndividualCharacteristicaViewSet(AccessView):
@@ -321,28 +314,23 @@ class IndividualCharacteristicaViewSet(AccessView):
 
 
 ############################################################
-#Views queried not from elastic search
+# Views queried not from elastic search
 ###########################################################
 class DataFileViewSet(viewsets.ModelViewSet):
-
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
     permission_classes = (StudyPermission,)
-
 
     def create(self, request, *args, **kwargs):
 
         try:
             DataFile.objects.filter(file=f"data/{request.data['file'].name}").delete()
 
-        #same_files = DataFile.objects.filter(file = request.data["file"].name)
+        # same_files = DataFile.objects.filter(file = request.data["file"].name)
         except DataFile.DoesNotExist:
             pass
 
         return super().create(request, *args, **kwargs)
-
-
-
 
 
 class CharacteristicaOptionViewSet(viewsets.ViewSet):
@@ -355,5 +343,3 @@ class CharacteristicaOptionViewSet(viewsets.ViewSet):
 
     def list(self, request):
         return Response(self.get_options())
-
-

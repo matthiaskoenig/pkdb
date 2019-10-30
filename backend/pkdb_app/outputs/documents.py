@@ -26,7 +26,7 @@ class OutputDocument(Document):
     choice = string_field("choice")
     ex = ObjectField(properties={
         'pk': string_field('pk')}
-        )
+    )
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
     raw = ObjectField(properties={
@@ -73,7 +73,6 @@ class OutputDocument(Document):
         }
 
 
-
 # ------------------------------------
 # Elastic Timecourse Document
 # ------------------------------------
@@ -107,7 +106,7 @@ class TimecourseDocument(Document):
         'pk': fields.IntegerField()},
         multi=True
     )
-    value = fields.FloatField('null_value',multi=True)
+    value = fields.FloatField('null_value', multi=True)
     mean = fields.FloatField('null_mean', multi=True)
     median = fields.FloatField('null_median', multi=True)
     min = fields.FloatField('null_min', multi=True)
@@ -142,7 +141,6 @@ class TimecourseDocument(Document):
         settings = elastic_settings
 
 
-
 @registry.register_document
 class TimecourseInterventionDocument(Document):
     study_sid = string_field('study_sid')
@@ -153,13 +151,11 @@ class TimecourseInterventionDocument(Document):
     group_pk = fields.IntegerField('group_pk')
     individual_pk = fields.IntegerField('individual_pk')
 
-
     tissue = string_field('tissue')
     time = fields.FloatField('time', multi=True)
     time_unit = string_field('time_unit')
     unit = string_field('unit')
     choice = string_field('choice')
-
 
     # output fields
     value = fields.FloatField('value', multi=True)
@@ -202,8 +198,7 @@ class TimecourseInterventionDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(TimecourseInterventionDocument, self).get_queryset().select_related(
-            'intervention','timecourse')
-
+            'intervention', 'timecourse')
 
 
 @registry.register_document
@@ -235,7 +230,6 @@ class OutputInterventionDocument(Document):
     sd = fields.FloatField('sd')
     cv = fields.FloatField('cv')
 
-
     # for permissions
     access = string_field('access')
     allowed_users = fields.ObjectField(
@@ -264,5 +258,4 @@ class OutputInterventionDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(OutputInterventionDocument, self).get_queryset().select_related(
-            'intervention','output')
-
+            'intervention', 'output')

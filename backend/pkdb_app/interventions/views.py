@@ -14,7 +14,6 @@ from ..interventions.serializers import InterventionElasticSerializer
 from ..pagination import CustomPagination
 
 
-
 ###############################################################################################
 # Option Views
 ###############################################################################################
@@ -41,14 +40,14 @@ class InterventionOptionViewSet(viewsets.ViewSet):
 ###############################################################################################
 
 
-
 class ElasticInterventionViewSet(AccessView):
     document = InterventionDocument
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
-    search_fields = ('name','study','access','measurement_type','substance',"form","tissue","application",'route','time_unit')
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    search_fields = (
+    'name', 'study', 'access', 'measurement_type', 'substance', "form", "tissue", "application", 'route', 'time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -56,19 +55,19 @@ class ElasticInterventionViewSet(AccessView):
     filter_fields = {
 
         'study_sid': {'field': 'study_sid.raw',
-               'lookups': [
-                   LOOKUP_QUERY_IN,
-                   LOOKUP_QUERY_EXCLUDE,
-
-               ],
-               },
-        'study_name': {'field': 'study_name.raw',
                       'lookups': [
                           LOOKUP_QUERY_IN,
                           LOOKUP_QUERY_EXCLUDE,
 
                       ],
                       },
+        'study_name': {'field': 'study_name.raw',
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
+
+                       ],
+                       },
         'pk': {'field': 'pk',
                'lookups': [
                    LOOKUP_QUERY_IN,
@@ -76,7 +75,7 @@ class ElasticInterventionViewSet(AccessView):
 
                ],
                },
-        'normed':'normed',
+        'normed': 'normed',
         'raw_pk': 'raw_pk',
         'name': 'name.raw',
         'measurement_type': 'measurement_type.raw',
@@ -98,9 +97,9 @@ class ElasticInterventionViewSet(AccessView):
         'cv': 'cv',
     }
     ordering_fields = {'name': 'name.raw',
-                       'measurement_type':'measurement_type.raw',
-                       'choice':'choice.raw',
-                       'normed':'normed',
-                       'application':'application.raw',
-                       'substance':'substance.raw',
-                       'value':'value'}
+                       'measurement_type': 'measurement_type.raw',
+                       'choice': 'choice.raw',
+                       'normed': 'normed',
+                       'application': 'application.raw',
+                       'substance': 'substance.raw',
+                       'value': 'value'}

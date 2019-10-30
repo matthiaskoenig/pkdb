@@ -23,7 +23,7 @@ volumes:
     driver: local
   node_modules:
     driver: local
-    
+
 services:
 
   postgres:
@@ -60,8 +60,8 @@ services:
       - postgres:postgres
       - elasticsearch:elasticsearch
     depends_on:
-     - postgres
-     - elasticsearch
+      - postgres
+      - elasticsearch
     command: bash -c "/usr/local/bin/python manage.py runserver 0.0.0.0:8000"
 
   frontend:

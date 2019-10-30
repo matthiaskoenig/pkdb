@@ -31,6 +31,7 @@ SUBJECT_TYPE_INDIVIDUAL = "individual"
 
 ADDITIVE_CHARACTERISTICA = ["disease", "abstinence"]
 
+
 # ----------------------------------
 # DataFile
 # ----------------------------------
@@ -66,7 +67,6 @@ class DataFile(models.Model):
 # ----------------------------------
 
 
-
 class GroupSet(models.Model):
     objects = GroupSetManager()
 
@@ -74,7 +74,6 @@ class GroupSet(models.Model):
     def groups(self):
         groups = Group.objects.filter(ex__in=self.group_exs.all())
         return groups
-
 
     @property
     def count(self):
@@ -141,17 +140,16 @@ class Group(Accessible):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()
     parent = models.ForeignKey("Group", null=True, on_delete=models.CASCADE)
-    characteristica_all_normed = models.ManyToManyField("Characteristica",related_name="groups", through="GroupCharacteristica")
+    characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="groups",
+                                                        through="GroupCharacteristica")
     objects = GroupManager()
 
     # class Meta:
     # todo: in validator unique_together = ('ex__groupset', 'name')
 
-
     @property
     def study(self):
         return self.ex.groupset.study
-
 
     @property
     def source(self):
@@ -171,9 +169,11 @@ class Group(Accessible):
     @property
     def _characteristica_all(self):
         _characteristica_all = self.characteristica.all()
-        this_measurements = _characteristica_all.exclude(measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+        this_measurements = _characteristica_all.exclude(
+            measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         if self.parent:
-            _characteristica_all = _characteristica_all | self.parent._characteristica_all.exclude(measurement_type__in=this_measurements)
+            _characteristica_all = _characteristica_all | self.parent._characteristica_all.exclude(
+                measurement_type__in=this_measurements)
         return _characteristica_all
 
     @property
@@ -191,7 +191,6 @@ class IndividualSet(models.Model):
     def individuals(self):
         individuals = Individual.objects.filter(ex__in=self.individual_exs.all())
         return individuals
-
 
     @property
     def count(self):
@@ -215,14 +214,13 @@ class IndividualEx(Externable, AbstractIndividual):
     Individuals are defined via their characteristics, analogue to groups.
     """
 
-    source = models.ForeignKey( DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
+    source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)
     group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
 
     objects = IndividualExManager()
 
@@ -254,7 +252,8 @@ class Individual(AbstractIndividual, Accessible):
         Group, on_delete=models.CASCADE, related_name="individuals"
     )
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    characteristica_all_normed = models.ManyToManyField("Characteristica",related_name="individuals", through="IndividualCharacteristica")
+    characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="individuals",
+                                                        through="IndividualCharacteristica")
     objects = IndividualManager()
 
     @property
@@ -269,15 +268,16 @@ class Individual(AbstractIndividual, Accessible):
     def _characteristica_normed(self):
         return self.characteristica.filter(normed=True)
 
-
     @property
     def _characteristica_all_normed(self):
         _characteristica_normed = self._characteristica_normed
 
         # charcteristica from related groups with the same measurement type as these used in the individual are excluded.
-        #this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
-        this_measurements = _characteristica_normed.exclude(measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
-        return (_characteristica_normed | self.group._characteristica_all_normed.exclude(measurement_type__in=this_measurements))
+        # this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
+        this_measurements = _characteristica_normed.exclude(
+            measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+        return (_characteristica_normed | self.group._characteristica_all_normed.exclude(
+            measurement_type__in=this_measurements))
 
     @property
     def study(self):
@@ -293,7 +293,8 @@ class Individual(AbstractIndividual, Accessible):
 
     @property
     def characteristica_choices(self):
-        return {characteristica.measurement_type: characteristica.choice for characteristica in self.characteristica_all_normed.all()}
+        return {characteristica.measurement_type: characteristica.choice for characteristica in
+                self.characteristica_all_normed.all()}
 
 
 # ----------------------------------
@@ -301,7 +302,6 @@ class Individual(AbstractIndividual, Accessible):
 # ----------------------------------
 
 class AbstractCharacteristica(models.Model):
-
     count = models.IntegerField(null=True)
 
     class Meta:
@@ -340,6 +340,7 @@ class CharacteristicaEx(
         on_delete=models.CASCADE,
     )
     objects = CharacteristicaExManager()
+
 
 class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
     """ Characteristic. """
@@ -424,14 +425,12 @@ class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
 
 
 class SubjectCharacteristica(models.Model):
-
     class Meta:
         abstract = True
 
     @property
     def characteristica_pk(self):
         return self.characteristica.pk
-
 
     @property
     def raw_pk(self):
@@ -448,7 +447,6 @@ class SubjectCharacteristica(models.Model):
     @property
     def measurement_type(self):
         return self.characteristica.measurement_type.name
-
 
     @property
     def choice(self):
@@ -496,11 +494,9 @@ class SubjectCharacteristica(models.Model):
         return self.characteristica.cv
 
 
-
-class GroupCharacteristica(Accessible,SubjectCharacteristica):
+class GroupCharacteristica(Accessible, SubjectCharacteristica):
     characteristica = models.ForeignKey(Characteristica, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-
 
     class Meta:
         unique_together = ("characteristica", "group")
@@ -527,11 +523,7 @@ class GroupCharacteristica(Accessible,SubjectCharacteristica):
         return self.group.count
 
 
-
-
-
-
-class IndividualCharacteristica(Accessible,SubjectCharacteristica):
+class IndividualCharacteristica(Accessible, SubjectCharacteristica):
     characteristica = models.ForeignKey(Characteristica, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, on_delete=models.CASCADE)
 
@@ -553,5 +545,3 @@ class IndividualCharacteristica(Accessible,SubjectCharacteristica):
     @property
     def individual_group_pk(self):
         return self.individual.group.pk
-
-

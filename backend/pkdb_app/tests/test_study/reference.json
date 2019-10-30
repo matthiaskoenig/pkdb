@@ -1,36 +1,36 @@
 {
-    "pmid": 7589032,
-    "name": "Balogh1995",
-    "sid": 7589032,
-    "date": "1995-11-28",
-    "journal": "European journal of clinical pharmacology",
-    "title": "Influence of ethinylestradiol-containing combination oral contraceptives with gestodene or levonorgestrel on caffeine elimination.",
-    "abstract": "In a controlled clinical trial, the elimination of caffeine was examined in 20 healthy women prior to and during one cycle of treatment with either of two oral contraceptive formulations, one containing 0.075 mg gestodene and 0.03 mg ethinylestradiol and one containing 0.125 mg levonorgestrel and 0.03 mg ethinylestradiol. In addition, caffeine clearance was determined 1 month after the last intake of the oral contraceptives. Compared with pretreatment values, the clearance of caffeine was reduced by about 54% and 55% after one treatment cycle with gestodene- and the levonorgestrel-containing oral contraceptive, respectively. Other pharmacokinetic parameters of caffeine, such as tmax and Cmax, were not affected. Clearance values returned to pretreatment values 1 month after the last administration of the oral contraceptives. There was no difference in the reduction of caffeine clearance between contraceptive formulations. A small, but significant difference in the AUC(0-24 h) values of ethinylestradiol was noted between both preparations. There was no correlation between the AUC(model) values of caffeine and the AUC(0-24 h) values of ethinylestradiol. In the present study, a somewhat more pronounced effect on the elimination of caffeine was observed than in previous investigations, where several contraceptive steroids were administered only for a period of 2 weeks.",
-    "authors": [
-        {
-            "first_name": "A",
-            "last_name": "Balogh"
-        },
-        {
-            "first_name": "G",
-            "last_name": "Klinger"
-        },
-        {
-            "first_name": "L",
-            "last_name": "Henschel"
-        },
-        {
-            "first_name": "A",
-            "last_name": "B\u00f6rner"
-        },
-        {
-            "first_name": "R",
-            "last_name": "Vollanth"
-        },
-        {
-            "first_name": "W",
-            "last_name": "Kuhnz"
-        }
-    ],
-    "doi": null
+  "pmid": 7589032,
+  "name": "Balogh1995",
+  "sid": 7589032,
+  "date": "1995-11-28",
+  "journal": "European journal of clinical pharmacology",
+  "title": "Influence of ethinylestradiol-containing combination oral contraceptives with gestodene or levonorgestrel on caffeine elimination.",
+  "abstract": "In a controlled clinical trial, the elimination of caffeine was examined in 20 healthy women prior to and during one cycle of treatment with either of two oral contraceptive formulations, one containing 0.075 mg gestodene and 0.03 mg ethinylestradiol and one containing 0.125 mg levonorgestrel and 0.03 mg ethinylestradiol. In addition, caffeine clearance was determined 1 month after the last intake of the oral contraceptives. Compared with pretreatment values, the clearance of caffeine was reduced by about 54% and 55% after one treatment cycle with gestodene- and the levonorgestrel-containing oral contraceptive, respectively. Other pharmacokinetic parameters of caffeine, such as tmax and Cmax, were not affected. Clearance values returned to pretreatment values 1 month after the last administration of the oral contraceptives. There was no difference in the reduction of caffeine clearance between contraceptive formulations. A small, but significant difference in the AUC(0-24 h) values of ethinylestradiol was noted between both preparations. There was no correlation between the AUC(model) values of caffeine and the AUC(0-24 h) values of ethinylestradiol. In the present study, a somewhat more pronounced effect on the elimination of caffeine was observed than in previous investigations, where several contraceptive steroids were administered only for a period of 2 weeks.",
+  "authors": [
+    {
+      "first_name": "A",
+      "last_name": "Balogh"
+    },
+    {
+      "first_name": "G",
+      "last_name": "Klinger"
+    },
+    {
+      "first_name": "L",
+      "last_name": "Henschel"
+    },
+    {
+      "first_name": "A",
+      "last_name": "B\u00f6rner"
+    },
+    {
+      "first_name": "R",
+      "last_name": "Vollanth"
+    },
+    {
+      "first_name": "W",
+      "last_name": "Kuhnz"
+    }
+  ],
+  "doi": null
 }

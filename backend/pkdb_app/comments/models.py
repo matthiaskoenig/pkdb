@@ -18,7 +18,6 @@ from pkdb_app.users.models import User
 
 
 class Comment(models.Model):
-
     text = models.TextField(null=True)
     user = models.ForeignKey(
         User, related_name="comments", null=True, on_delete=models.CASCADE
@@ -114,4 +113,3 @@ class Description(models.Model):
 
     class Meta:
         ordering = ['pk']
-

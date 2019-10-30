@@ -34,21 +34,21 @@ const icons_table = {
     characteristicas: 'fas fa-ticket-alt',
     characteristica: 'fas fa-ticket-alt',
     curation: 'fas fa-book-reader',
-    previous:'fas fa-arrow-left',
-    next:'fas fa-arrow-right',
-    star:'fas fa fa-star',
-    warning:'fas fa-exclamation-triangle',
-    private:'fas fa-lock',
-    public:'fas fa-lock-open',
-    closed:'fab fa-creative-commons-pd',
-    open:'fab fa-creative-commons-pd-alt',
-    na:'fas fa-ban',
-    success:'fas fa-check-circle',
-    measurement_types:'fas fa-user-tag'
+    previous: 'fas fa-arrow-left',
+    next: 'fas fa-arrow-right',
+    star: 'fas fa fa-star',
+    warning: 'fas fa-exclamation-triangle',
+    private: 'fas fa-lock',
+    public: 'fas fa-lock-open',
+    closed: 'fab fa-creative-commons-pd',
+    open: 'fab fa-creative-commons-pd-alt',
+    na: 'fas fa-ban',
+    success: 'fas fa-check-circle',
+    measurement_types: 'fas fa-user-tag'
 };
 
 
-function lookup_icon(key){
+function lookup_icon(key) {
     return icons_table[key]
 }
 

@@ -68,7 +68,7 @@ setup(
     keywords='pharmacokinetics data',
     packages=find_packages(),
     package_data={
-      '': ['requirements.txt'],
+        '': ['requirements.txt'],
     },
     include_package_data=True,
     zip_safe=False,

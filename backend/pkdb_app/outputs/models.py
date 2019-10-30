@@ -42,8 +42,6 @@ class OutputSet(models.Model):
         outputs_timecourses = Output.objects.filter(timecourse__in=self.timecourses.all())
         return outputs | outputs_timecourses
 
-
-
     @property
     def outputs_normed(self):
         outputs = self.outputs.filter(normed=True)
@@ -77,6 +75,7 @@ class OutputSet(models.Model):
 class AbstractOutput(models.Model):
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
     class Meta:
         abstract = True
 
@@ -113,21 +112,19 @@ class OutputEx(Externable,
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
-
-
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = OutputExManager()
 
 
-class Output(AbstractOutput,Normalizable, Accessible):
+class Output(AbstractOutput, Normalizable, Accessible):
     """ Storage of data sets. """
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention, through="OutputIntervention")
 
-    tissue = models.ForeignKey(Tissue,related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
+    tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
@@ -151,7 +148,6 @@ class Output(AbstractOutput,Normalizable, Accessible):
         else:
             return self.raw._interventions
 
-
     @property
     def study(self):
 
@@ -164,9 +160,6 @@ class Output(AbstractOutput,Normalizable, Accessible):
 
             except AttributeError:
                 return None
-
-
-
 
     # for elastic search. NaNs are not allowed in elastic search
 
@@ -257,7 +250,7 @@ class TimecourseEx(
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = TimecourseExManager()
 
@@ -272,7 +265,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     _interventions = models.ManyToManyField(Intervention, through="TimecourseIntervention")
     ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
     tissue = models.ForeignKey(Tissue, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
-
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -304,7 +296,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     def study(self):
         return self.ex.outputset.study
 
-
     @property
     def figure(self):
         try:
@@ -334,10 +325,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
 
-
     def normalize(self):
         '''Normalizes timecourse.'''
-
 
         factor, unit = self.remove_substance_dimension()
 
@@ -345,15 +334,12 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             if ureg(unit) != ureg(self.unit):
                 for key, value in self.norm_fields.items():
                     if value is not None:
-
-                        list_norm_values = list(factor*np.array(value))
+                        list_norm_values = list(factor * np.array(value))
                         setattr(self, key, list_norm_values)
                 self.unit = unit
 
             else:
                 self.unit = str(ureg(self.unit).u)
-
-
 
         if not self.is_norm:
             for key, value in self.norm_fields.items():
@@ -369,7 +355,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             norm_times = times.to(TIME_NORM_UNIT)
             self.time = list(norm_times.m)
             self.time_unit = TIME_NORM_UNIT
-
 
     # for elastic search. NaNs are not allowed in elastic search
     @staticmethod
@@ -421,7 +406,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             return self.individual
 
     def get_bodyweight(self):
-        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(measurement_type__name="weight")
+        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(
+            measurement_type__name="weight")
         return weight_measurememnt_type
 
     def get_dosing(self):
@@ -450,7 +436,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         # time
         pk_dict["t"] = pd.Series(self.time)
         pk_dict["t_unit"] = self.time_unit
-
 
         # concentration
         # FIXME: the timecourse data must be filtered based on the dosing times
@@ -488,8 +473,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                 pk_dict["vd_unit"] = str(vd_unit)
                 pk_dict["dose"] = dosing.value
                 if dosing.time:
-                    pk_dict["intervention_time"] = (ureg(dosing.time_unit)*dosing.time).to(self.time_unit).magnitude
-
+                    pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(self.time_unit).magnitude
 
                 pk_dict["dose_unit"] = dosing.unit
 
@@ -627,7 +611,7 @@ class OutputIntervention(Accessible, models.Model):
         return self.output.calculated
 
 
-class TimecourseIntervention(Accessible,models.Model):
+class TimecourseIntervention(Accessible, models.Model):
     timecourse = models.ForeignKey(Timecourse, on_delete=models.CASCADE)
     intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
 
@@ -637,7 +621,6 @@ class TimecourseIntervention(Accessible,models.Model):
     @property
     def study(self):
         return self.intervention.study
-
 
     @property
     def intervention_pk(self):
@@ -656,7 +639,6 @@ class TimecourseIntervention(Accessible,models.Model):
     def individual_name(self):
         if self.timecourse.individual:
             return self.timecourse.individual.name
-
 
     @property
     def group_name(self):

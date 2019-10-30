@@ -3,6 +3,7 @@ from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField
 from ..interventions.models import Intervention
 
+
 # ------------------------------------
 # Elastic Intervention Document
 # ------------------------------------
