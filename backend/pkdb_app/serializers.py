@@ -548,14 +548,14 @@ class ExSerializer(MappingSerializer):
                         Q(ex__groupset__study__sid=study_sid)
                         & Q(name=data.get("group"))
                     ).pk
-
-                except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
-                    if err == ObjectDoesNotExist:
-                        msg = f'group <{data.get("group")}> does not exist, check groups.'
-                    else:
-                        msg = f'group <{data.get("group")}> is defined multiple times.'
-
-                    raise serializers.ValidationError(msg)
+                except ObjectDoesNotExist:
+                        raise serializers.ValidationError(
+                            f'group <{data.get("group")}> does not exist, check groups.'
+                        )
+                except MultipleObjectsReturned:
+                        raise serializers.ValidationError(
+                            f'group <{data.get("group")}> is defined multiple times.'
+                        )
 
         if "individual" in data:
             if data["individual"]:
@@ -568,14 +568,17 @@ class ExSerializer(MappingSerializer):
                     ).pk
 
                 except ObjectDoesNotExist:
-                    msg = f'individual: individual <{data.get("individual")}> does not exist, check individuals.'
-                    raise serializers.ValidationError(msg)
+                    raise serializers.ValidationError(
+                        f'individual: individual <{data.get("individual")}> does '
+                        f'not exist, check individuals.'
+                    )
                 except MultipleObjectsReturned:
-                    msg = f'individual: individual <{data.get("individual")}> is defined multiple times'
-                    raise serializers.ValidationError(msg)
+                    raise serializers.ValidationError(
+                        f'individual: individual <{data.get("individual")}> is '
+                        f'defined multiple times'
+                    )
 
         if "interventions" in data:
-
             if data["interventions"]:
                 interventions = []
                 if isinstance(data["interventions"], str):
@@ -590,8 +593,9 @@ class ExSerializer(MappingSerializer):
                             ).pk
                         )
                     except ObjectDoesNotExist:
-                        msg = f"intervention <{intervention}> does not exist, check interventions."
-                        raise serializers.ValidationError(msg)
+                        raise serializers.ValidationError(
+                            f"intervention <{intervention}> does not exist, check interventions."
+                        )
                 data["interventions"] = interventions
         return data
 
