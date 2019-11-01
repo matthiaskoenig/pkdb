@@ -14,7 +14,6 @@ class Command(createsuperuser.Command):
             help='Specifies the password for the superuser.',
         )
 
-
     def handle(self, *args, **options):
         password = options.get('password')
         username = options.get('username')
@@ -37,8 +36,5 @@ class Command(createsuperuser.Command):
                 user = self.UserModel._default_manager.db_manager(database).get(username=username)
                 user.set_password(password)
                 user.save()
-                email_dict = {"email": email, "is_primary": True, "is_verified": True, "user":user}
+                email_dict = {"email": email, "is_primary": True, "is_verified": True, "user": user}
                 email = EmailAddress.objects.create(**email_dict)
-
-
-

@@ -6,10 +6,11 @@ from rest_framework import viewsets
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from .documents import SubstanceDocument
 from .models import Substance
-from .serializers import SubstanceSerializer, SubstanceStatisticsSerializer,  SubstanceElasticSerializer
+from .serializers import SubstanceSerializer, SubstanceStatisticsSerializer, SubstanceElasticSerializer
 from rest_framework.permissions import IsAdminUser
 
 from ..pagination import CustomPagination
+
 
 ###############################################################################################
 # Upload/External Views
@@ -22,9 +23,11 @@ class SubstanceViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
 
+
 class SubstanceStatisticsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Substance.objects.all()
     serializer_class = SubstanceStatisticsSerializer
+
 
 ###############################################################################################
 # Elastic Views
@@ -35,8 +38,8 @@ class ElasticSubstanceViewSet(DocumentViewSet):
     serializer_class = SubstanceElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "url_slug"
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend,
-]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend,
+                       ]
     search_fields = ('name',
                      'description',
                      'formula',
@@ -45,9 +48,9 @@ class ElasticSubstanceViewSet(DocumentViewSet):
                      'annotations.description',
                      'annotations.label',)
 
-    multi_match_search_fields = {field:{"boost":1} for field in search_fields}
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw',}
-    ordering_fields = {'name': 'name.raw','formula':'formula.raw','derived':"derived.raw"}
+    filter_fields = {'name': 'name.raw', }
+    ordering_fields = {'name': 'name.raw', 'formula': 'formula.raw', 'derived': "derived.raw"}

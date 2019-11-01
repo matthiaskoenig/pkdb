@@ -20,10 +20,11 @@ from ..interventions.models import DataFile, InterventionSet
 
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
-     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
+    GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Rating
 from ..serializers import WrongKeyValidationSerializer, SidSerializer
+
 
 # ----------------------------------
 # Study / Reference
@@ -63,10 +64,9 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         )
 
     def create(self, validated_data):
-        #return super().create(validated_data)
+        # return super().create(validated_data)
 
         authors_data = validated_data.pop("authors", [])
-
 
         reference = Reference.objects.create(**validated_data)
         update_or_create_multiple(reference, authors_data, "authors")
@@ -94,14 +94,15 @@ class CuratorRatingSerializer(serializers.ModelSerializer):
         slug_field="username"
     )
     study = serializers.PrimaryKeyRelatedField(required=False,
-        queryset=Study.objects.all()
-    )
+                                               queryset=Study.objects.all()
+                                               )
+
     class Meta:
         model = Rating
-        fields = ("rating","user","study")
+        fields = ("rating", "user", "study")
 
     def to_representation(self, instance):
-        return {"curator":instance.username}
+        return {"curator": instance.username}
 
 
 class StudySerializer(SidSerializer):
@@ -122,8 +123,8 @@ class StudySerializer(SidSerializer):
     """
 
     reference = utils.SlugRelatedField(slug_field="sid",
-        queryset=Reference.objects.all(), required=True, allow_null=False
-    )
+                                       queryset=Reference.objects.all(), required=True, allow_null=False
+                                       )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
     curators = CuratorRatingSerializer(many=True, required=False,
                                        allow_null=True)
@@ -141,7 +142,6 @@ class StudySerializer(SidSerializer):
         required=False,
         allow_null=True,
     )
-
 
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -181,7 +181,7 @@ class StudySerializer(SidSerializer):
             "files",
             "comments",
         )
-        write_only_fields = ('curators','collaborators')
+        write_only_fields = ('curators', 'collaborators')
 
     def create(self, validated_data):
         related = self.pop_relations(validated_data)
@@ -192,8 +192,6 @@ class StudySerializer(SidSerializer):
         instance = self.create_relations(instance, related)
         instance.save()
         return instance
-
-
 
     def update(self, instance, validated_data):
 
@@ -215,14 +213,14 @@ class StudySerializer(SidSerializer):
         # curators to internal
         if "curators" in data:
             ratings = []
-            for curator_and_rating in data.get("curators",[]):
+            for curator_and_rating in data.get("curators", []):
                 rating_dict = {}
                 if isinstance(curator_and_rating, list):
                     if len(curator_and_rating) != 2:
                         raise serializers.ValidationError(
                             {
                                 "curators": " Each curator in the list of curator can be added either via the curator "
-                                           "username or as a list with first position beeing the curator username "
+                                            "username or as a list with first position beeing the curator username "
                                             " and the second posion the rating between (0-5)",
                                 "details": curator_and_rating,
 
@@ -237,17 +235,16 @@ class StudySerializer(SidSerializer):
                 ratings.append(rating_dict)
             data["curators"] = ratings
 
-
         # check for duplicates
         #######################################
-        for item in ["collaborators","curators","substances"]:
+        for item in ["collaborators", "curators", "substances"]:
 
             if item in ["curators"]:
                 related_unique_field = "user"
                 unique_values = [instance.get(related_unique_field) for instance in data.get(item, [])]
 
             else:
-                unique_values =  data.get(item, [])
+                unique_values = data.get(item, [])
 
             duplicates = list_duplicates(unique_values)
             if duplicates:
@@ -258,22 +255,20 @@ class StudySerializer(SidSerializer):
 
         if data.get("reference"):
             reference = Reference.objects.get(sid=data["reference"])
-            if hasattr(reference,"study"):
+            if hasattr(reference, "study"):
                 if str(reference.study.sid) != str(data.get("sid")):
-
                     raise serializers.ValidationError(
-                            {
-                                "reference":
-                                    f"References are required to be unqiue on every study. "
-                                    f"This Reference already exist in study with sid: <{reference.study.sid} and "
-                                    f"name: <{reference.study.name}>. If you changed the sid of the study "
-                                    f"you might want to run `delete_study -s {reference.study.sid}`. ",
-                                "details": data["reference"],
-                            }
-                        )
+                        {
+                            "reference":
+                                f"References are required to be unqiue on every study. "
+                                f"This Reference already exist in study with sid: <{reference.study.sid} and "
+                                f"name: <{reference.study.name}>. If you changed the sid of the study "
+                                f"you might want to run `delete_study -s {reference.study.sid}`. ",
+                            "details": data["reference"],
+                        }
+                    )
 
         return super().to_internal_value(data)
-
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -286,17 +281,17 @@ class StudySerializer(SidSerializer):
         request = self.context.get('request')
         # replace file url
 
-        #todo: This is not working correctly
+        # todo: This is not working correctly
         if "files" in rep:
-            rep["files"] = [ request.build_absolute_uri(file.file.url) for file in instance.files.all() ]
+            rep["files"] = [request.build_absolute_uri(file.file.url) for file in instance.files.all()]
 
         curators = []
         for user in instance.curators.all():
             rating = instance.ratings.get(user=user)
-            curators.append({"rating":rating.rating,
-                             "first_name":user.first_name,
-                             "last_name":user.last_name,
-                             "pk":user.pk})
+            curators.append({"rating": rating.rating,
+                             "first_name": user.first_name,
+                             "last_name": user.last_name,
+                             "pk": user.pk})
 
         rep["curators"] = curators
 
@@ -327,13 +322,14 @@ class StudySerializer(SidSerializer):
             "descriptions": Description,
             "comments": Comment,
             "curators": User,
-            "collaborators":User,
+            "collaborators": User,
             "files": DataFile,
         }
         related_foreinkeys_dict = {
             name: validated_data.pop(name, None) for name in related_foreinkeys.keys()
         }
-        related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if name in validated_data}
+        related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if
+                                  name in validated_data}
         related = {**related_foreinkeys_dict, **related_many2many_dict}
         return related
 
@@ -376,7 +372,6 @@ class StudySerializer(SidSerializer):
             if related["comments"]:
                 create_multiple(study, related["comments"], "comments")
 
-
         if "files" in related:
 
             study.files.clear()
@@ -405,10 +400,10 @@ class CuratorRatingElasticSerializer(serializers.Serializer):
     username = serializers.CharField()
 
     class Meta:
-        fields = ("id", "first_name", "last_name","username","rating")
+        fields = ("id", "first_name", "last_name", "username", "rating")
+
 
 class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-
     licence = serializers.CharField(read_only=True)
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
     creator = UserElasticSerializer(read_only=True)
@@ -416,15 +411,14 @@ class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Study
-        fields = ["pk","sid","name","licence","curators","collaborators","creator"]
-
-
+        fields = ["pk", "sid", "name", "licence", "curators", "collaborators", "creator"]
 
 
 class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorElasticSerializer(many=True, read_only=True)
     pdf = serializers.SerializerMethodField()
     study = StudySmallElasticSerializer()
+
     class Meta:
         model = Reference
         fields = (
@@ -444,12 +438,10 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_pdf(self, obj):
         user = self.context["request"].user
-        if get_study_file_permission(user,AttrDict(obj.study)):
+        if get_study_file_permission(user, AttrDict(obj.study)):
             return obj.to_dict().get("pdf")
         else:
             return None
-
-
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -468,11 +460,9 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    #url = serializers.HyperlinkedIdentityField(read_only=True, lookup_field="id",view_name="references_elastic-detail")
     class Meta:
         model = Reference
-        fields = ["sid"]#, 'url']
-
+        fields = ["sid"]  # , 'url']
 
 class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     pk = serializers.CharField()
@@ -483,14 +473,13 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
     licence = serializers.CharField(read_only=True)
     access = serializers.CharField(read_only=True)
 
-
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
     creator = UserElasticSerializer(read_only=True)
     collaborators = UserElasticSerializer(many=True, read_only=True)
 
     substances = serializers.SerializerMethodField()
 
-    files = serializers.SerializerMethodField()#DataFileElasticSerializer(many=True, read_only=True)
+    files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, read_only=True)
 
     comments = CommentElasticSerializer(many=True, read_only=True)
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -527,21 +516,21 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "output_count",
             "output_calculated_count",
             "timecourse_count"
-            ]
+        ]
 
         read_only_fields = fields
 
-    def get_substances(self, obj):
+    @staticmethod
+    def get_substances(obj):
         """Get substances."""
         if obj.substances:
             return list(obj.substances)
         else:
             return []
 
-
     def get_files(self, obj):
 
-        if get_study_file_permission(self.context["request"].user,obj):
+        if get_study_file_permission(self.context["request"].user, obj):
             files_serializer = DataFileElasticSerializer(obj.files, many=True, read_only=True)
             return files_serializer.data
 

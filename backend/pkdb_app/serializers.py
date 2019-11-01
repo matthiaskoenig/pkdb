@@ -107,7 +107,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 transformed_data[key] = data.get(key)
         return transformed_data
 
-    def retransform_map_fields(self,data):
+    def retransform_map_fields(self, data):
         transformed_data = {}
         for k, v in data.items():
             k = self.retransform_map_string(k)
@@ -161,7 +161,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
     @staticmethod
     def interventions_from_string(value):
         if value:
-            return [v.strip() for v in value.split(",")]
+            return [v.strip() for v in str(value).split(",")]
         else:
             return value
 
@@ -276,7 +276,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     {
                         "source": f"<{str(source)}> does not exist",
                         "detail": type(source)
-                     })
+                    })
         else:
             raise serializers.ValidationError(
                 {
@@ -341,7 +341,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                         raise serializers.ValidationError(
                             [
-                                f"header key <{values[1]}> is missing in file <{DataFile.objects.get(pk=source).file}> ",
+                                f"header key <{values[1]}> dose not exist in <{DataFile.objects.get(pk=source).file}>.",
                                 data
                             ]
                         )
@@ -350,7 +350,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                             entry_value = None
 
                     if isinstance(entry_value, str):
-                            entry_value = entry_value.strip()
+                        entry_value = entry_value.strip()
 
                     if keys[0] == "interventions":
                         entry_value = self.interventions_from_string(entry_value)
@@ -375,7 +375,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             mappings = []
             for key, value in template.items():
-                if isinstance(value,str):
+                if isinstance(value, str):
                     if "==" in value:
                         mappings.append(value)
 
@@ -406,7 +406,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     )
             else:
                 for entry in df.itertuples():
-                    entry_dict = self.make_entry(entry, template, data,source)
+                    entry_dict = self.make_entry(entry, template, data, source)
                     entries.append(entry_dict)
 
         else:
@@ -463,7 +463,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             else:
                 array_dict = copy.deepcopy(template)
                 self.dict_from_array(array_dict, df, data, source)
-                array_dicts =[array_dict]
+                array_dicts = [array_dict]
 
         else:
             raise serializers.ValidationError(
@@ -548,14 +548,14 @@ class ExSerializer(MappingSerializer):
                         Q(ex__groupset__study__sid=study_sid)
                         & Q(name=data.get("group"))
                     ).pk
-
-                except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
-                    if err == ObjectDoesNotExist:
-                        msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
-                    else:
-                        msg = f'group: {data.get("group")} in study: {study_sid} has been defined multiple times.'
-
-                    raise serializers.ValidationError(msg)
+                except ObjectDoesNotExist:
+                        raise serializers.ValidationError(
+                            f'group <{data.get("group")}> does not exist, check groups.'
+                        )
+                except MultipleObjectsReturned:
+                        raise serializers.ValidationError(
+                            f'group <{data.get("group")}> is defined multiple times.'
+                        )
 
         if "individual" in data:
             if data["individual"]:
@@ -568,17 +568,20 @@ class ExSerializer(MappingSerializer):
                     ).pk
 
                 except ObjectDoesNotExist:
-                    msg = f'individual: individual <{data.get("individual")}>  in study: <{study_sid}> does not exist'
-                    raise serializers.ValidationError(msg)
+                    raise serializers.ValidationError(
+                        f'individual: individual <{data.get("individual")}> does '
+                        f'not exist, check individuals.'
+                    )
                 except MultipleObjectsReturned:
-                    msg = f'individual: Multiple individuals with the name <{data.get("individual")}>  have been declared on study.'
-                    raise serializers.ValidationError(msg)
+                    raise serializers.ValidationError(
+                        f'individual: individual <{data.get("individual")}> is '
+                        f'defined multiple times'
+                    )
 
         if "interventions" in data:
-
             if data["interventions"]:
                 interventions = []
-                if isinstance(data["interventions"],str):
+                if isinstance(data["interventions"], str):
                     data["interventions"] = self.interventions_from_string(data["interventions"])
 
                 for intervention in data["interventions"]:
@@ -590,8 +593,9 @@ class ExSerializer(MappingSerializer):
                             ).pk
                         )
                     except ObjectDoesNotExist:
-                        msg = f"intervention: <{intervention}> in study: <{study_sid}> does not exist"
-                        raise serializers.ValidationError(msg)
+                        raise serializers.ValidationError(
+                            f"intervention <{intervention}> does not exist, check interventions."
+                        )
                 data["interventions"] = interventions
         return data
 
@@ -641,7 +645,7 @@ class ExSerializer(MappingSerializer):
             raise serializers.ValidationError(
                 {
                     api_settings.NON_FIELD_ERRORS_KEY: f"Either group or individual allowed on output, remove group from output. "
-                    f"The group of an individual is set on the individualset"
+                                                       f"The group of an individual is set on the individualset"
                 }
             )
 
@@ -789,7 +793,7 @@ class ReadSerializer(serializers.HyperlinkedModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        for key,value in rep.items():
+        for key, value in rep.items():
             if isinstance(value, float):
                 rep[key] = round(value, 2)
         return rep

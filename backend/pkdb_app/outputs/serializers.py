@@ -20,13 +20,12 @@ from ..interventions.models import Intervention
 from ..substances.models import Substance
 from ..subjects.models import Group, DataFile, Individual
 
-
 from .models import (
     Output,
     OutputSet,
     Timecourse,
     OutputEx,
-    TimecourseEx)
+    TimecourseEx, OutputIntervention, TimecourseIntervention)
 
 from ..serializers import (
     ExSerializer, PkSerializer)
@@ -39,11 +38,10 @@ from ..subjects.serializers import (
 # ----------------------------------
 from ..utils import list_of_pk, _validate_requried_key
 
-
-
-OUTPUT_FIELDS = ["tissue",  "time", "time_unit"]
+OUTPUT_FIELDS = ["tissue", "time", "time_unit"]
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
+
 
 # ----------------------------------
 # Outputs
@@ -74,14 +72,14 @@ class OutputSerializer(MeasurementTypeableSerializer):
         required=False
     )
 
-
-
     class Meta:
         model = Output
         fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions", None)
+
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
@@ -92,7 +90,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self._validate_group_output(attrs)
         self.validate_group_individual_output(attrs)
 
-        _validate_requried_key(attrs,"measurement_type")
+        _validate_requried_key(attrs, "measurement_type")
         _validate_requried_key(attrs, "substance")
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
@@ -102,9 +100,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
             attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
-
-
-
 
         return super().validate(attrs)
 
@@ -125,8 +120,6 @@ class BaseOutputExSerializer(ExSerializer):
             rep["interventions"] = [
                 intervention.name for intervention in instance.interventions.all()
             ]
-
-
 
         return rep
 
@@ -159,6 +152,9 @@ class OutputExSerializer(BaseOutputExSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
 
     # internal data
     outputs = OutputSerializer(
@@ -168,18 +164,20 @@ class OutputExSerializer(BaseOutputExSerializer):
     class Meta:
         model = OutputEx
         fields = (
-            EXTERN_FILE_FIELDS
-            + OUTPUT_FIELDS
-            + OUTPUT_MAP_FIELDS
-            + EX_MEASUREMENTTYPE_FIELDS
-            + ["group", "individual", "interventions"]
-            + [
-                "group_map",
-                "individual_map",
-                "interventions_map",
-                "outputs",
-                "comments",
-            ]
+                EXTERN_FILE_FIELDS
+                + OUTPUT_FIELDS
+                + OUTPUT_MAP_FIELDS
+                + EX_MEASUREMENTTYPE_FIELDS
+                + ["group", "individual", "interventions"]
+                + [
+                    "group_map",
+                    "individual_map",
+                    "interventions_map",
+                    "outputs",
+                    "comments",
+                    "descriptions"
+
+                ]
         )
 
     def to_internal_value(self, data):
@@ -202,8 +200,6 @@ class OutputExSerializer(BaseOutputExSerializer):
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
 
-
-
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_figure(self, value):
@@ -212,7 +208,6 @@ class OutputExSerializer(BaseOutputExSerializer):
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
-
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -249,13 +244,13 @@ class TimecourseSerializer(BaseOutputExSerializer):
         required=False
     )
 
-
     class Meta:
         model = Timecourse
         fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
+        data.pop("descriptions", None)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -265,11 +260,11 @@ class TimecourseSerializer(BaseOutputExSerializer):
         self._validate_group_output(attrs)
         self.validate_group_individual_output(attrs)
 
-        _validate_requried_key(attrs,"substance")
-        _validate_requried_key(attrs,"interventions")
-        _validate_requried_key(attrs,"tissue")
-        _validate_requried_key(attrs,"time")
-        _validate_requried_key(attrs,"measurement_type")
+        _validate_requried_key(attrs, "substance")
+        _validate_requried_key(attrs, "interventions")
+        _validate_requried_key(attrs, "tissue")
+        _validate_requried_key(attrs, "time")
+        _validate_requried_key(attrs, "measurement_type")
 
         self._validate_time_unit(attrs)
         self._validate_time(attrs["time"])
@@ -282,11 +277,9 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
         return super().validate(attrs)
 
-    def _validate_time(self,time):
+    def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
-            raise serializers.ValidationError({"time":"no timepoints are allowed to be nan", "detail":time})
-
-
+            raise serializers.ValidationError({"time": "no timepoints are allowed to be nan", "detail": time})
 
 
 class TimecourseExSerializer(BaseOutputExSerializer):
@@ -316,6 +309,9 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
+    descriptions = DescriptionSerializer(
+        many=True, read_only=False, required=False, allow_null=True
+    )
 
     # internal data
     timecourses = TimecourseSerializer(
@@ -325,13 +321,13 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     class Meta:
         model = TimecourseEx
         fields = (
-            EXTERN_FILE_FIELDS
-            + OUTPUT_FIELDS
-            + OUTPUT_MAP_FIELDS
-            + EX_MEASUREMENTTYPE_FIELDS
-            + ["group", "individual", "interventions"]
-            + ["group_map", "individual_map", "interventions_map"]
-            + ["timecourses", "comments"]
+                EXTERN_FILE_FIELDS
+                + OUTPUT_FIELDS
+                + OUTPUT_MAP_FIELDS
+                + EX_MEASUREMENTTYPE_FIELDS
+                + ["group", "individual", "interventions"]
+                + ["group_map", "individual_map", "interventions_map"]
+                + ["timecourses", "comments", "descriptions"]
         )
 
     def to_internal_value(self, data):
@@ -353,7 +349,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
 
         data["timecourses"] = timecourses
 
-
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
 
@@ -362,7 +357,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     def validate_figure(self, value):
         self._validate_figure(value)
         return value
-
 
 
 class OutputSetSerializer(ExSerializer):
@@ -387,12 +381,10 @@ class OutputSetSerializer(ExSerializer):
         model = OutputSet
         fields = ["descriptions", "timecourse_exs", "output_exs", "comments"]
 
-
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
-
 
 
 ###############################################################################################
@@ -407,13 +399,51 @@ class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["pk","descriptions", "outputs","timecourses","comments"]
+        fields = ["pk", "descriptions", "outputs", "timecourses", "comments"]
 
-    def get_outputs(self,obj):
-        return list_of_pk("outputs",obj)
+    def get_outputs(self, obj):
+        return list_of_pk("outputs", obj)
 
-    def get_timecourses(self,obj):
-        return list_of_pk("timecourses",obj)
+    def get_timecourses(self, obj):
+        return list_of_pk("timecourses", obj)
+
+
+class OutputInterventionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OutputIntervention
+        fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
+                  "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT:
+            try:
+                rep[field] = '{:.2e}'.format(rep[field])
+            except (ValueError, TypeError):
+                pass
+        return rep
+
+
+class TimecourseInterventionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimecourseIntervention
+        fields = ["study_sid", "study_name", "timecourse_pk", "intervention_pk", "group_pk", "individual_pk",
+                  "normed"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT + ['time']:
+            try:
+                result = []
+                for x in rep[field]:
+                    try:
+                        result.append('{:.2e}'.format(x))
+                    except (ValueError, TypeError):
+                        result.append(x)
+                rep[field] = result
+            except TypeError:
+                pass
+        return rep
 
 
 class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
@@ -437,33 +467,64 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
     timecourse = PkSerializer()
     allowed_users = UserElasticSerializer(many=True, read_only=True)
 
-
     class Meta:
-            model = Output
-            fields = (
-                ["pk","study"]
+        model = Output
+        fields = (
+                ["pk", "study"]
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
                 + MEASUREMENTTYPE_FIELDS
                 + ["access", "allowed_users"]
                 + ["group", "individual", "normed", "raw", "calculated", "timecourse", "interventions"])
 
-
-
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         for field in VALUE_FIELDS_NO_UNIT:
-                try:
-                    rep[field] = '{:.2e}'.format(rep[field])
-                except (ValueError, TypeError):
-                    pass
+            try:
+                rep[field] = '{:.2e}'.format(rep[field])
+            except (ValueError, TypeError):
+                pass
         return rep
+
+
+class OutputAnalysisSerializer(serializers.Serializer):
+    pk = serializers.IntegerField(allow_null=True)
+    intervention_pk = serializers.IntegerField(allow_null=True)
+    individual_pk = serializers.IntegerField(allow_null=True)
+    group_pk = serializers.IntegerField(allow_null=True)
+    timecourse_pk = serializers.IntegerField(allow_null=True)
+
+    study = serializers.CharField(allow_null=True)
+    tissue = serializers.CharField()
+    substance = serializers.CharField(allow_null=True)
+    measurement_type = serializers.CharField()
+    unit = serializers.CharField(allow_null=True)
+    time_unit = serializers.CharField(allow_null=True)
+    choice = serializers.CharField(allow_null=True)
+
+    time = serializers.FloatField(allow_null=True)
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
+
+    class Meta:
+        fields = (
+                ["pk", "study"]
+                + OUTPUT_FIELDS
+                + VALUE_FIELDS
+                + MEASUREMENTTYPE_FIELDS
+                + ["group_pk", "individual_pk", "normed", "calculated", "timecourse_pk", "intervention_pk"])
 
 
 class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     group = GroupSmallElasticSerializer()
-    individual =  IndividualSmallElasticSerializer()
-    interventions =  InterventionSmallElasticSerializer(many=True)
+    individual = IndividualSmallElasticSerializer()
+    interventions = InterventionSmallElasticSerializer(many=True)
     measurement_type = serializers.CharField()
     tissue = serializers.CharField()
 
@@ -474,15 +535,14 @@ class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
     allowed_users = UserElasticSerializer(many=True, read_only=True)
 
     class Meta:
-            model = Timecourse
-            fields = (
-                ["pk","study"]
+        model = Timecourse
+        fields = (
+                ["pk", "study"]
                 + MEASUREMENTTYPE_FIELDS
                 + OUTPUT_FIELDS
                 + VALUE_FIELDS
-                +["access","allowed_users"]
-                + ["group", "individual", "normed","raw","pharmacokinetics", "interventions","figure"])
-
+                + ["access", "allowed_users"]
+                + ["group", "individual", "normed", "raw", "pharmacokinetics", "interventions", "figure"])
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

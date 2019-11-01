@@ -11,22 +11,23 @@ from matplotlib import pyplot as plt
 import warnings
 import functools
 
+
 # TODO: add estimation of confidence intervals (use also the errorbars on the curves)
 # Currently only simple calculation of pharmacokinetic parameters
 
 
 def f_pk(
-    t,
-    c,
-    compound,
-    dose=np.nan,
-    bodyweight=np.nan,
-    t_unit="h",
-    c_unit="mg/L",
-    dose_unit="mg",
-    vd_unit="L",
-    bodyweight_unit="kg",
-    intervention_time = 0,
+        t,
+        c,
+        compound,
+        dose=np.nan,
+        bodyweight=np.nan,
+        t_unit="h",
+        c_unit="mg/L",
+        dose_unit="mg",
+        vd_unit="L",
+        bodyweight_unit="kg",
+        intervention_time=0,
 ):
     """ Calculates all the pk parameters from given time course.
 
@@ -151,9 +152,8 @@ def pk_report(pk):
     ]:
         pk_key = pd.to_numeric(pk[key])
         lines.append(
-                    "\t{:<12}: {:>3.3f} [{}]".format(key, pk_key, pk["{}_unit".format(key)])
-                    )
-
+            "\t{:<12}: {:>3.3f} [{}]".format(key, pk_key, pk["{}_unit".format(key)])
+        )
 
     lines.append("")
     for key in ["dose", "auc", "aucinf", "kel", "vd", "cl"]:
@@ -199,8 +199,8 @@ def pk_figure(t, c, pk):
     ax1.plot(t[: max_idx + 1], c[: max_idx + 1], "o", color="darkgray", **kwargs)
     if max_idx < c.size - 1:
         ax1.plot(
-            t[max_idx + 1 :],
-            c[max_idx + 1 :],
+            t[max_idx + 1:],
+            c[max_idx + 1:],
             "s",
             color="black",
             linewidth=2,
@@ -217,8 +217,8 @@ def pk_figure(t, c, pk):
     ax2.plot(t[1:], np.log(c[1:]), "--", color="black", label="__nolabel__", **kwargs)
 
     ax2.plot(
-        t[1 : max_idx + 1],
-        np.log(c[1 : max_idx + 1]),
+        t[1: max_idx + 1],
+        np.log(c[1: max_idx + 1]),
         "o",
         color="darkgray",
         label="log(substance)",
@@ -226,8 +226,8 @@ def pk_figure(t, c, pk):
     )
     if max_idx < c.size - 1:
         ax2.plot(
-            t[max_idx + 1 :],
-            np.log(c[max_idx + 1 :]),
+            t[max_idx + 1:],
+            np.log(c[max_idx + 1:]),
             "s",
             color="black",
             linewidth=2,
@@ -255,9 +255,9 @@ def _aucinf(t, c, slope=None, intercept=None):
         [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
     auc = _auc(t, c)
 
-    #auc_d = -(np.exp(intercept) / slope) * np.exp(slope * t[-1])
-    #should be equivalent to the result above
-    auc_d = c[-1]/(-slope)
+    # auc_d = -(np.exp(intercept) / slope) * np.exp(slope * t[-1])
+    # should be equivalent to the result above
+    auc_d = c[-1] / (-slope)
 
     return auc + auc_d
 
@@ -317,21 +317,20 @@ def _kel(t, c, slope=None):
     line (on a logarithmic y scale).
     """
     if slope is None:
-        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
+        [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
     return -slope
 
-def _kel_cv(t, c, std_err=None,slope=None):
 
+def _kel_cv(t, c, std_err=None, slope=None):
     if std_err is None or slope is None:
-        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
-    return std_err/slope
+        [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
+    return std_err / slope
 
-def _thalf_cv(t, c, slope=None, std_err=None ):
 
+def _thalf_cv(t, c, slope=None, std_err=None):
     kel = _kel(t, c, slope=slope)
 
     return np.log(2) / _kel_cv(t, c, slope=slope, std_err=std_err)
-
 
 
 def _thalf(t, c, slope=None):
@@ -349,6 +348,7 @@ def _thalf(t, c, slope=None):
     """
     kel = _kel(t, c, slope=slope)
     return np.log(2) / kel
+
 
 def _vd(t, c, dose, intercept=None):
     """
@@ -374,8 +374,9 @@ def _vd(t, c, dose, intercept=None):
     determined from Vd; only that it goes somewhere.
     """
     if intercept is None:
-        [slope, intercept, r_value, p_value, std_err,max_index] = _regression(t, c)
+        [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
     return dose / np.exp(intercept)
+
 
 def _regression(t, c):
     """ Linear regression on the log timecourse after maximal value.
@@ -391,8 +392,8 @@ def _regression(t, c):
         return [np.nan] * 6
 
     # linear regression start regression on datapoint after maximum
-    x = t[max_index+1:]
-    y = np.log(c[max_index+1:])
+    x = t[max_index + 1:]
+    y = np.log(c[max_index + 1:])
     # x = t[-4:]
     # y = np.log(c[-4:])
 

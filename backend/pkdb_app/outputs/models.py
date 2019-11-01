@@ -75,6 +75,7 @@ class OutputSet(models.Model):
 class AbstractOutput(models.Model):
     time = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
     class Meta:
         abstract = True
 
@@ -94,10 +95,10 @@ class OutputEx(Externable,
                ExMeasurementTypeable
                ):
     source = models.ForeignKey(
-        DataFile, related_name="s_output_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_output_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="f_output_exs", null=True, on_delete=models.SET_NULL
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
@@ -111,21 +112,19 @@ class OutputEx(Externable,
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
-
-
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = OutputExManager()
 
 
-class Output(AbstractOutput,Normalizable, Accessible):
+class Output(AbstractOutput, Normalizable, Accessible):
     """ Storage of data sets. """
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
-    _interventions = models.ManyToManyField(Intervention)
+    _interventions = models.ManyToManyField(Intervention, through="OutputIntervention")
 
-    tissue = models.ForeignKey(Tissue,related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
+    tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
@@ -149,7 +148,6 @@ class Output(AbstractOutput,Normalizable, Accessible):
         else:
             return self.raw._interventions
 
-
     @property
     def study(self):
 
@@ -162,9 +160,6 @@ class Output(AbstractOutput,Normalizable, Accessible):
 
             except AttributeError:
                 return None
-
-
-
 
     # for elastic search. NaNs are not allowed in elastic search
 
@@ -238,10 +233,10 @@ class TimecourseEx(
     time
     """
     source = models.ForeignKey(
-        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
     )
     figure = models.ForeignKey(
-        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.CASCADE
+        DataFile, related_name="f_timecourse_exs", null=True, on_delete=models.SET_NULL
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True
@@ -255,7 +250,7 @@ class TimecourseEx(
     individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    tissue = models.CharField( max_length=CHAR_MAX_LENGTH, null=True)
+    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     objects = TimecourseExManager()
 
@@ -267,13 +262,9 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     """
     group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
-    _interventions = models.ManyToManyField(Intervention)
-    ex = models.ForeignKey(
-        TimecourseEx, related_name="timecourses", on_delete=models.CASCADE
-    )
-    #tissue = models.CharField(max_length=CHAR_MAX_LENGTH, choices=OUTPUT_TISSUE_DATA_CHOICES)
-    tissue = models.ForeignKey(Tissue,related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
-
+    _interventions = models.ManyToManyField(Intervention, through="TimecourseIntervention")
+    ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
+    tissue = models.ForeignKey(Tissue, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -305,7 +296,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     def study(self):
         return self.ex.outputset.study
 
-
     @property
     def figure(self):
         try:
@@ -335,10 +325,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                 if isinstance(cv, np.ndarray):
                     self.cv = list(cv)
 
-
     def normalize(self):
         '''Normalizes timecourse.'''
-
 
         factor, unit = self.remove_substance_dimension()
 
@@ -346,15 +334,12 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             if ureg(unit) != ureg(self.unit):
                 for key, value in self.norm_fields.items():
                     if value is not None:
-
-                        list_norm_values = list(factor*np.array(value))
+                        list_norm_values = list(factor * np.array(value))
                         setattr(self, key, list_norm_values)
                 self.unit = unit
 
             else:
                 self.unit = str(ureg(self.unit).u)
-
-
 
         if not self.is_norm:
             for key, value in self.norm_fields.items():
@@ -370,7 +355,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             norm_times = times.to(TIME_NORM_UNIT)
             self.time = list(norm_times.m)
             self.time_unit = TIME_NORM_UNIT
-
 
     # for elastic search. NaNs are not allowed in elastic search
     @staticmethod
@@ -422,7 +406,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             return self.individual
 
     def get_bodyweight(self):
-        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(measurement_type__name="weight")
+        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(
+            measurement_type__name="weight")
         return weight_measurememnt_type
 
     def get_dosing(self):
@@ -451,7 +436,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         # time
         pk_dict["t"] = pd.Series(self.time)
         pk_dict["t_unit"] = self.time_unit
-
 
         # concentration
         # FIXME: the timecourse data must be filtered based on the dosing times
@@ -489,8 +473,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                 pk_dict["vd_unit"] = str(vd_unit)
                 pk_dict["dose"] = dosing.value
                 if dosing.time:
-                    pk_dict["intervention_time"] = (ureg(dosing.time_unit)*dosing.time).to(self.time_unit).magnitude
-
+                    pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(self.time_unit).magnitude
 
                 pk_dict["dose_unit"] = dosing.unit
 
@@ -512,3 +495,227 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                 pk_dict["bodyweight_type"] = "median"
 
         return pk_dict
+
+
+class OutputIntervention(Accessible, models.Model):
+    output = models.ForeignKey(Output, on_delete=models.CASCADE)
+    intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("output", "intervention")
+
+    @property
+    def study(self):
+        return self.intervention.study
+
+    @property
+    def intervention_pk(self):
+        return self.intervention.pk
+
+    @property
+    def intervention_name(self):
+        return self.intervention.name
+
+    @property
+    def output_pk(self):
+        return self.output.pk
+
+    @property
+    def group_name(self):
+        if self.output.group:
+            return self.output.group.name
+
+    @property
+    def group_pk(self):
+        if self.output.group:
+            return self.output.group.pk
+
+    @property
+    def individual_pk(self):
+        if self.output.individual:
+            return self.output.individual.pk
+
+    @property
+    def individual_name(self):
+        if self.output.individual:
+            return self.output.individual.name
+
+    @property
+    def value(self):
+        return self.output.null_value
+
+    @property
+    def mean(self):
+        return self.output.null_mean
+
+    @property
+    def median(self):
+        return self.output.null_median
+
+    @property
+    def min(self):
+        return self.output.null_min
+
+    @property
+    def max(self):
+        return self.output.null_max
+
+    @property
+    def sd(self):
+        return self.output.null_sd
+
+    @property
+    def se(self):
+        return self.output.null_se
+
+    @property
+    def cv(self):
+        return self.output.null_cv
+
+    @property
+    def unit(self):
+        return self.output.unit
+
+    @property
+    def time(self):
+        return self.output.null_time
+
+    @property
+    def time_unit(self):
+        return self.output.time_unit
+
+    @property
+    def tissue(self):
+        if self.output.tissue:
+            return self.output.tissue.name
+
+    @property
+    def measurement_type(self):
+        return self.output.measurement_type.name
+
+    @property
+    def choice(self):
+        return self.output.choice
+
+    @property
+    def substance(self):
+        if self.output.substance:
+            return self.output.substance.name
+
+    @property
+    def normed(self):
+        return self.output.normed
+
+    @property
+    def calculated(self):
+        return self.output.calculated
+
+
+class TimecourseIntervention(Accessible, models.Model):
+    timecourse = models.ForeignKey(Timecourse, on_delete=models.CASCADE)
+    intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("timecourse", "intervention")
+
+    @property
+    def study(self):
+        return self.intervention.study
+
+    @property
+    def intervention_pk(self):
+        return self.intervention.pk
+
+    @property
+    def intervention_name(self):
+        return self.intervention.name
+
+    @property
+    def individual_pk(self):
+        if self.timecourse.individual:
+            return self.timecourse.individual.pk
+
+    @property
+    def individual_name(self):
+        if self.timecourse.individual:
+            return self.timecourse.individual.name
+
+    @property
+    def group_name(self):
+        if self.timecourse.group:
+            return self.timecourse.group.name
+
+    @property
+    def group_pk(self):
+        if self.timecourse.group:
+            return self.timecourse.group.pk
+
+    @property
+    def timecourse_pk(self):
+        return self.timecourse.pk
+
+    @property
+    def value(self):
+        return self.timecourse.null_value
+
+    @property
+    def mean(self):
+        return self.timecourse.null_mean
+
+    @property
+    def median(self):
+        return self.timecourse.null_median
+
+    @property
+    def min(self):
+        return self.timecourse.null_min
+
+    @property
+    def max(self):
+        return self.timecourse.null_max
+
+    @property
+    def sd(self):
+        return self.timecourse.null_sd
+
+    @property
+    def se(self):
+        return self.timecourse.null_se
+
+    @property
+    def cv(self):
+        return self.timecourse.null_cv
+
+    @property
+    def unit(self):
+        return self.timecourse.unit
+
+    @property
+    def time(self):
+        return self.timecourse.null_time
+
+    @property
+    def time_unit(self):
+        return self.timecourse.time_unit
+
+    @property
+    def tissue(self):
+        if self.timecourse.tissue:
+            return self.timecourse.tissue.name
+
+    @property
+    def measurement_type(self):
+        return self.timecourse.measurement_type.name
+
+    @property
+    def choice(self):
+        return self.timecourse.choice
+
+    @property
+    def substance(self):
+        if self.timecourse.substance:
+            return self.timecourse.substance.name
+
+    @property
+    def normed(self):
+        return self.timecourse.normed

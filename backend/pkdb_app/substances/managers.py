@@ -3,6 +3,7 @@ the managers can be used to overwrite class methods of the models module.
 """
 from django.db import models
 
+
 class SubstanceManager(models.Manager):
     def update_or_create(self, *args, **kwargs):
         parents = kwargs["defaults"].pop('parents', [])
@@ -12,6 +13,3 @@ class SubstanceManager(models.Manager):
         substance.synonyms.add(*synonyms)
         substance.save()
         return substance
-
-
-

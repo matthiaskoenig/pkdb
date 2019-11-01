@@ -167,9 +167,10 @@
             "category": "sex",
             "choice": "col==sex"
           }
-	]
-   }
-  ]},
+        ]
+      }
+    ]
+  },
   "interventionset": {
     "descriptions": [
       "The drug (200 mg caffeine as uncoated tablet, Berlin Chemie, Germany) was administered in the morning after an overnight fast, together with 200 ml herbal tea. On day 21 of the treatment cycle, caffeine was administered 30min after the intake of the oral contraceptive. All volunteers had been instructed to refrain for at least 36 h prior to and during the caffeine test from all methylxanthine-containing beverages and food.",
@@ -295,7 +296,7 @@
         "unit": "ml/min || µg/ml || h || h || l"
       }
     ],
-	"timecourses": [
+    "timecourses": [
       {
         "group": "col==subject",
         "subset": "subject_type==group",
@@ -312,7 +313,7 @@
         "sd": "col==caf_sd || col==px_sd || col==px_caf_sd",
         "unit": "µg/ml || µg/ml || -"
       },
- {
+      {
         "individual": "col==subject",
         "subset": "subject_type==individual",
         "groupby": "subject",
@@ -320,7 +321,6 @@
           "Dcaf"
         ],
         "source": "test_study_Fig3.csv",
-
         "figure": "test_study_Fig3.png",
         "substance": "caffeine || paraxanthine || paraxanthine/caffeine",
         "tissue": "plasma",

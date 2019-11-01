@@ -13,6 +13,7 @@ from ..behaviours import Externable, Accessible
 
 from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 
+
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
@@ -120,6 +121,13 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
 
     @property
+    def raw_pk(self):
+        if self.raw:
+            return self.raw.pk
+        else:
+            return None
+
+    @property
     def route_name(self):
         if self.route:
             return self.route.name
@@ -143,6 +151,10 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     @property
     def study_name(self):
         return self.study.name
+
+    @property
+    def study_sid(self):
+        return self.study.sid
 
     @property
     def study(self):

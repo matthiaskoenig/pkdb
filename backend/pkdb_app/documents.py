@@ -1,4 +1,4 @@
-from django_elasticsearch_dsl import  fields, DEDField, Object, collections
+from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
 
@@ -8,6 +8,7 @@ from pkdb_app.users.permissions import user_group
 elastic_settings = {
     'number_of_shards': 1,
     'number_of_replicas': 1,
+
 }
 
 edge_ngram_filter = token_filter(
@@ -21,7 +22,6 @@ ngram_filter = token_filter(
     type="ngram",
     min_gram=1, max_gram=20
 )
-
 
 autocomplete_search = analyzer(
     'autocomplete_search',
@@ -58,7 +58,7 @@ def text_field(attr):
         analyzer=autocomplete,
         search_analyzer=autocomplete_search,
         fields={'raw': fields.KeywordField()}
-        )
+    )
 
 
 class ObjectField(DEDField, Object):
@@ -68,6 +68,7 @@ class ObjectField(DEDField, Object):
     This looks copy-pasted from some solution. Please provide short description
     and link to solution.
     """
+
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):
         data = {}
         if hasattr(self, 'properties'):
@@ -82,7 +83,8 @@ class ObjectField(DEDField, Object):
                     obj, field_value_to_ignore
                 )
         else:
-            for name, field in self._doc_class._doc_type.mapping.properties._params.get('properties', {}).items(): # noqa
+            for name, field in self._doc_class._doc_type.mapping.properties._params.get('properties',
+                                                                                        {}).items():  # noqa
                 if not isinstance(field, DEDField):
                     continue
 
@@ -127,7 +129,7 @@ class AccessView(DocumentViewSet):
             qs = search.query(
                 Q('match', access__raw=PUBLIC) |
                 Q('match', allowed_users__raw=self.request.user.username)
-                )
+            )
 
             # )
             # qs = qs.filter(
@@ -144,4 +146,3 @@ class AccessView(DocumentViewSet):
             )
 
             return qs
-

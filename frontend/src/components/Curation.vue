@@ -3,7 +3,7 @@
         <h1>Curation of pharmacokinetics data for PK-DB</h1>
         <p>
         A detailed guideline for curation of studies is provided in
-        <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
+        <a href="https://github.com/matthiaskoenig/pkdb_data/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
         </p>
         <measurement-types-table/>
         <substances-table/>

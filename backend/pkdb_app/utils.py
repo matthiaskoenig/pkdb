@@ -16,13 +16,15 @@ class SlugRelatedField(serializers.SlugRelatedField):
         'invalid': _('Invalid value.'),
     }
 
+
 def list_duplicates(seq):
-  seen = set()
-  seen_add = seen.add
-  # adds all elements it doesn't know yet to seen and all other to seen_twice
-  seen_twice = set(x for x in seq if x in seen or seen_add(x))
-  # turn the set into a list (as requested)
-  return list( seen_twice )
+    seen = set()
+    seen_add = seen.add
+    # adds all elements it doesn't know yet to seen and all other to seen_twice
+    seen_twice = set(x for x in seq if x in seen or seen_add(x))
+    # turn the set into a list (as requested)
+    return list(seen_twice)
+
 
 def create_choices(collection):
     """ Creates choices from given list of items.
@@ -58,7 +60,8 @@ def clean_import(data):
 
     return clean_dict
 
-def list_of_pk(field,obj):
+
+def list_of_pk(field, obj):
     result = []
     try:
         relevant_field = obj.to_dict().get(field)
@@ -68,6 +71,7 @@ def list_of_pk(field,obj):
     if relevant_field:
         result = [int(field_list["pk"]) for field_list in relevant_field]
     return result
+
 
 def ensure_dir(file_path):
     """ Checks for directory and creates if non-existant."""
@@ -87,13 +91,13 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
         else:
             lookup_dict = child
 
-        #instance_child.update_or_create(**lookup_dict, defaults=child)
+        # instance_child.update_or_create(**lookup_dict, defaults=child)
 
         try:
             obj = instance_child.get(**lookup_dict)
             for key, value in child.items():
                 if key == "annotations":
-                    update_or_create_multiple(obj,value,key,lookup_fields=["term","relation"])
+                    update_or_create_multiple(obj, value, key, lookup_fields=["term", "relation"])
                 else:
                     setattr(obj, key, value)
 
@@ -102,36 +106,33 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
 
 
         except instance_child.model.DoesNotExist:
-            instance_dict = {**lookup_dict,**child}
+            instance_dict = {**lookup_dict, **child}
             instance_child.create(**instance_dict)
 
 
-
-
-
-
-
-
-
 def create_multiple(parent, children, related_name):
-
     instance_child = getattr(parent, related_name)
     return [instance_child.create(**child) for child in children]
 
-def create_multiple_bulk(parent,related_name_parent,children,class_child):
-    return class_child.objects.bulk_create([class_child(**{related_name_parent:parent,**child}) for child in children])
+
+def create_multiple_bulk(parent, related_name_parent, children, class_child):
+    return class_child.objects.bulk_create(
+        [class_child(**{related_name_parent: parent, **child}) for child in children])
+
 
 def create_multiple_bulk_normalized(notnormalized_instances, model_class):
     if notnormalized_instances:
-        return model_class.objects.bulk_create([initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
+        return model_class.objects.bulk_create(
+            [initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
+
 
 def initialize_normed(notnorm_instance):
-
     norm = copy.copy(notnorm_instance)
     norm.pk = None
     norm.normed = True
     norm.normalize()
     norm.raw_id = notnorm_instance.pk
+
     try:
         norm.individual_id = notnorm_instance.individual.pk
 
@@ -144,13 +145,12 @@ def initialize_normed(notnorm_instance):
     except AttributeError:
         pass
 
-    #interventions have no add statistics because they should have no mean,median,sd,se,cv ...
+    # interventions have no add statistics because they should have no mean,median,sd,se,cv ...
     try:
         norm.add_error_measures()
     except AttributeError:
         pass
     return norm
-
 
 
 def recursive_iter(obj, keys=()):
@@ -177,7 +177,6 @@ def set_keys(d, value, *keys):
 
 
 def _validate_requried_key(attrs, key, details=None):
-
     if key not in attrs:
         error_json = {key: f"{key} is required."}
         if details:

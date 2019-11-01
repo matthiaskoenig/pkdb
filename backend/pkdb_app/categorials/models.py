@@ -28,12 +28,11 @@ ureg.define('NO_UNIT = [no_unit]')
 
 NO_UNIT = 'NO_UNIT'
 
-
 NUMERIC_TYPE = "numeric"
 CATEGORIAL_TYPE = "categorial"
 BOOLEAN_TYPE = "boolean"
 NUMERIC_CATEGORIAL_TYPE = "numeric_categorial"
-DTYPE_CHOICES = create_choices([NUMERIC_TYPE,CATEGORIAL_TYPE, BOOLEAN_TYPE,NUMERIC_CATEGORIAL_TYPE])
+DTYPE_CHOICES = create_choices([NUMERIC_TYPE, CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE])
 CAN_NEGATIVE_MEASUREMENT_TYPE = []
 
 
@@ -60,7 +59,7 @@ class Unit(models.Model):
 
 class Annotation(models.Model):
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
-    relation = models.CharField(max_length=CHAR_MAX_LENGTH,)
+    relation = models.CharField(max_length=CHAR_MAX_LENGTH, )
     collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     description = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -118,7 +117,6 @@ class MeasurementType(models.Model):
     def __repr__(self):
         return self.name
 
-
     @property
     def n_p_units(self):
         """
@@ -154,15 +152,14 @@ class MeasurementType(models.Model):
 
             raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
-
     def is_valid_unit(self, unit):
 
         if len(self.n_units) != 0:
             if unit:
                 return any([self.p_unit(unit).check(dim) for dim in self.valid_dimensions])
             else:
-                #unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
-                #return unit_not_required2
+                # unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
+                # return unit_not_required2
                 unit_not_required2 = NO_UNIT in self.n_units
                 return unit_not_required2
 
@@ -208,31 +205,30 @@ class MeasurementType(models.Model):
         return result
 
     def is_valid_choice(self, choice):
-        return choice in self.choices.values_list("name",flat=True)
+        return choice in self.choices.values_list("name", flat=True)
 
     def choices_list(self):
         return self.choices.values_list("name", flat=True)
 
     def annotations_strings(self):
-        return [f"relation <{annotation.relation}>:, {annotation.term}"for annotation in self.annotations.all()]
+        return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
 
     def _asdict(self):
         return {
-            "name":self.name,
-            "description":self.description,
-            "annotations":self.annotations_strings(),
-            "url_slug":self.url_slug,
-            "dtype":self.dtype,
+            "name": self.name,
+            "description": self.description,
+            "annotations": self.annotations_strings(),
+            "url_slug": self.url_slug,
+            "dtype": self.dtype,
             "choices": self.choices_list(),
             "units": self.n_units,
             "valid unit dimensions": self.valid_dimensions,
             "creator": self.creator.username,
         }
 
-
     def validate_choice(self, choice):
         if choice:
-            if self.dtype in [CATEGORIAL_TYPE,BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE]:
+            if self.dtype in [CATEGORIAL_TYPE, BOOLEAN_TYPE, NUMERIC_CATEGORIAL_TYPE]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`. " \
                           f"Allowed choices are: `{list(self.choices_list())}`."
@@ -244,11 +240,12 @@ class MeasurementType(models.Model):
                 raise ValueError({"choice": msg})
         elif self.choices.exists():
             msg = f"{choice}. A choice is required for `{self.name}`. Allowed choices are: `{list(self.choices_list())}`."
-            raise ValueError({"choice":msg})
+            raise ValueError({"choice": msg})
 
     @property
     def numeric_fields(self):
-        return ["value", "mean", "median", "min", "max","sd", "se", "cv"]
+        return ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
+
     @property
     def can_be_negative(self):
         return self.name in CAN_NEGATIVE_MEASUREMENT_TYPE
@@ -261,25 +258,24 @@ class MeasurementType(models.Model):
 
                     if isinstance(value, Number):
                         rule = value < 0
-                    #for timecourses
+                    # for timecourses
 
-                    elif isinstance(value,list):
+                    elif isinstance(value, list):
                         rule = any(v < 0 for v in value)
 
                     else:
                         rule = False
 
                     if rule:
-                            raise ValueError(
-                                {field: f"Numeric values need to be positive (>=0) "
-                                        f"for all measurement types except "
-                                        f"<{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail":data})
+                        raise ValueError(
+                            {field: f"Numeric values need to be positive (>=0) "
+                                    f"for all measurement types except "
+                                    f"<{CAN_NEGATIVE_MEASUREMENT_TYPE}>.", "detail": data})
 
     def validate_complete(self, data):
         # check unit
 
-
-        self.validate_unit(data.get("unit",None))
+        self.validate_unit(data.get("unit", None))
         self.validate_numeric(data)
 
         choice = data.get("choice", None)
@@ -289,12 +285,11 @@ class MeasurementType(models.Model):
         if time_unit:
             self.validate_time_unit(time_unit)
 
-        time_required_measurement_types = ["cumulative amount","cumulative metabolic ratio","recovery","auc_end"]
+        time_required_measurement_types = ["cumulative amount", "cumulative metabolic ratio", "recovery", "auc_end"]
         if self.name in time_required_measurement_types:
             details = f"for measurement type `{self.name}`"
-            _validate_requried_key(data,"time", details=details)
-            _validate_requried_key(data,"time_unit", details=details)
-
+            _validate_requried_key(data, "time", details=details)
+            _validate_requried_key(data, "time_unit", details=details)
 
     @property
     def creator_username(self):
@@ -302,4 +297,3 @@ class MeasurementType(models.Model):
         :return: list of normalized units in the data format of pint
         """
         return self.creator.username
-

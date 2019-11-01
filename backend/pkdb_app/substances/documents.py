@@ -3,6 +3,7 @@ from django_elasticsearch_dsl.registries import registry
 from ..documents import string_field, elastic_settings, ObjectField, text_field
 from .models import Substance
 
+
 # ------------------------------------
 # Elastic Substance Document
 # ------------------------------------

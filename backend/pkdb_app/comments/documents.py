@@ -5,6 +5,7 @@ from pkdb_app.documents import elastic_settings, string_field, ObjectField, \
     text_field
 from pkdb_app.comments.models import Comment, Description
 
+
 # ------------------------------------
 # Elastic Comment Document
 # ------------------------------------
@@ -49,4 +50,3 @@ class DescriptionDocument(Document):
     class Index:
         name = 'descriptions'
         settings = elastic_settings
-

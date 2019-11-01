@@ -27,7 +27,6 @@ class OutputSetManager(models.Manager):
         create_multiple(outputset, comments, 'comments')
 
         for output_ex in output_exs:
-
             intervention_ids = output_ex.pop('interventions', [])
             output_ex_instance = outputset.output_exs.create(**output_ex)
             output_ex_instance.interventions.add(*intervention_ids)
@@ -49,17 +48,19 @@ class OutputExManager(models.Manager):
         outputs = kwargs.pop('outputs', [])
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
+        descriptions = kwargs.pop('descriptions', [])
 
         output_ex = super().create(*args, **kwargs)
 
         output_ex.interventions.add(*interventions)
         create_multiple(output_ex, comments, 'comments')
+        create_multiple(output_ex, descriptions, 'descriptions')
 
         outputs_dj = create_multiple(output_ex, outputs, 'outputs')
-
         Output = apps.get_model('outputs', 'Output')
-        create_multiple_bulk_normalized(outputs_dj,Output)
-        output_ex.save()
+        outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
+        for output in outputs_normed:
+            output._interventions.add(*output.interventions.all())
 
         return output_ex
 
@@ -78,39 +79,43 @@ class TimecourseExManager(models.Manager):
         timecourses = kwargs.pop('timecourses', [])
         interventions = kwargs.pop('interventions', [])
         comments = kwargs.pop('comments', [])
+        descriptions = kwargs.pop('descriptions', [])
 
         timecourse_ex = super().create(*args, **kwargs)
         timecourse_ex.interventions.add(*interventions)
         create_multiple(timecourse_ex, comments, 'comments')
+        create_multiple(timecourse_ex, descriptions, 'descriptions')
 
         timecourses_dj = create_multiple(timecourse_ex, timecourses, 'timecourses')
         Timecourse = type(timecourses_dj[0])
 
-        Output = apps.get_model('outputs','Output')
+        Output = apps.get_model('outputs', 'Output')
 
-        timecourses = create_multiple_bulk_normalized(timecourses_dj,  Timecourse)
+        timecourses_normed = create_multiple_bulk_normalized(timecourses_dj, Timecourse)
+
+        for timecourse in timecourses_normed:
+            timecourse._interventions.add(*timecourse.interventions.all())
 
         # calculate pharmacokinetics data from normalized timecourses
-        for timecourse in timecourses:
+        for timecourse in timecourses_normed:
             if timecourse.measurement_type.name == "concentration" and timecourse.normed:
                 variables = timecourse.get_pharmacokinetic_variables()
                 c_type = variables.pop("c_type", None)
                 _ = variables.pop("bodyweight_type", None)
                 pk = f_pk(**variables)
 
-
                 key_mapping = {"auc": MeasurementType.objects.get(name="auc_end"),
-                               "aucinf":MeasurementType.objects.get(name="auc_inf"),
-                               "cl":MeasurementType.objects.get(name="clearance"),
-                               "cmax":MeasurementType.objects.get(name="cmax"),
-                               "kel":MeasurementType.objects.get(name="kel"),
-                               "thalf":MeasurementType.objects.get(name="thalf"),
+                               "aucinf": MeasurementType.objects.get(name="auc_inf"),
+                               "cl": MeasurementType.objects.get(name="clearance"),
+                               "cmax": MeasurementType.objects.get(name="cmax"),
+                               "kel": MeasurementType.objects.get(name="kel"),
+                               "thalf": MeasurementType.objects.get(name="thalf"),
                                "tmax": MeasurementType.objects.get(name="tmax"),
-                               "vd":MeasurementType.objects.get(name="vd"),
+                               "vd": MeasurementType.objects.get(name="vd"),
                                }
                 outputs = []
 
-                for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd","tmax"]:
+                for key in ["auc", "aucinf", "cl", "cmax", "kel", "thalf", "vd", "tmax"]:
                     pk_unit = pk[f"{key}_unit"]
                     if not np.isnan(pk[key]):
                         output_dict = {}
@@ -128,7 +133,9 @@ class TimecourseExManager(models.Manager):
                         outputs.append(output_dict)
 
                 outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
-                create_multiple_bulk_normalized(outputs_dj, Output)
+                outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
+                for output in outputs_normed:
+                    output._interventions.add(*output.interventions.all())
 
         timecourse_ex.save()
         return timecourse_ex

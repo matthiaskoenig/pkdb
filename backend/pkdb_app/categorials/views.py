@@ -37,18 +37,20 @@ class RouteViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
 
+
 class FormViewSet(viewsets.ModelViewSet):
     queryset = Form.objects.all()
     serializer_class = FormSerializer
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
 
+
 class MeasurementTypeElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     document = MeasurementTypeDocument
     serializer_class = MeasurementTypeElasticSerializer
     lookup_field = 'url_slug'
-    filter_backends = [FilteringFilterBackend,IdsFilterBackend,OrderingFilterBackend,MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = ("name",
                      "url_slug",
                      "dtype",
@@ -68,4 +70,4 @@ class MeasurementTypeElasticViewSet(DocumentViewSet):
         'operator': 'and'
     }
     filter_fields = {'name': 'name.raw'}
-    ordering_fields ={'name': 'name.raw',"dtype":"dtype.raw"}
+    ordering_fields = {'name': 'name.raw', "dtype": "dtype.raw"}

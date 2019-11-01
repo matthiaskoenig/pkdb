@@ -3,14 +3,14 @@ import json
 import os
 import sys
 
-#import requests
+# import requests
 from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient, RequestsClient
 from django.core.exceptions import ObjectDoesNotExist
 
 from pkdb_app.comments.models import Comment
-#from pkdb_app.data_management.setup_database import setup_database
-#from pkdb_app.data_management.upload_studies import upload_study_from_dir, read_reference_json, \
+# from pkdb_app.data_management.setup_database import setup_database
+# from pkdb_app.data_management.upload_studies import upload_study_from_dir, read_reference_json, \
 #    upload_reference_json, upload_files
 
 from pkdb_app.interventions.models import Substance
@@ -32,15 +32,16 @@ class AuthenticationAPITestCase(APITestCase):
 
     def test_api_token_auth(self):
         response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
-        assert json.loads(response.content) == {"non_field_errors":["Unable to log in with provided credentials."]} , json.loads(response.content)
-
+        assert json.loads(response.content) == {
+            "non_field_errors": ["Unable to log in with provided credentials."]}, json.loads(response.content)
 
     def test_create_superuser(self):
         User.objects.create_superuser(username="admin", password=self.password, email="")
         response = self.client.post("/api-token-auth/", data={"username": "admin", "password": self.password})
 
         assert response.status_code == 200, response.status_code
-        assert "token" in json.loads(response.content) ,json.loads(response.content)
+        assert "token" in json.loads(response.content), json.loads(response.content)
+
 
 '''
 class UploadStudy(APITestCase):

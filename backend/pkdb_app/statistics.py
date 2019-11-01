@@ -28,6 +28,7 @@ class Statistics(object):
         self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
 
+
 @api_view(['GET'])
 def study_pks_view(request):
     if request.method == 'GET':
@@ -38,6 +39,7 @@ class StatisticsViewSet(viewsets.ViewSet):
     """
     Get database statistics including version.
     """
+
     def list(self, request):
         instance = Statistics()
         serializer = StatisticsSerializer(instance)
@@ -62,5 +64,3 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "timecourse_count",
             ]
         }
-
-

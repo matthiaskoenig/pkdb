@@ -54,7 +54,6 @@ class CommentSerializer(WrongKeyValidationSerializer):
                     "detail": {str(data)},
                 })
 
-
     def to_internal_value(self, data):
         self._validate_comment(data)
         user = self.get_or_val_error(User, username=data[0])
@@ -69,7 +68,6 @@ class CommentSerializer(WrongKeyValidationSerializer):
 # Read Serializer
 ###############################################################################################
 class DescriptionElasticSerializer(serializers.HyperlinkedModelSerializer):
-
     class Meta:
         fields = ["pk", "text"]
         model = Description
@@ -79,5 +77,5 @@ class CommentElasticSerializer(serializers.HyperlinkedModelSerializer):
     user = UserElasticSerializer(read_only=True)
 
     class Meta:
-        fields = ["pk", "text","user"]
+        fields = ["pk", "text", "user"]
         model = Comment

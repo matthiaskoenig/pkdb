@@ -16,7 +16,7 @@ class MeasurementTypeDocument(Document):
 
     units = interventions = ObjectField(properties={
         'name': string_field('name')
-        }, multi=True)
+    }, multi=True)
 
     choices = ObjectField(
         attr="choices",
@@ -34,7 +34,7 @@ class MeasurementTypeDocument(Document):
                     "description": string_field("description"),
                     "label": string_field("label")
                 }
-                )
+            )
         }
     )
     annotations = ObjectField(

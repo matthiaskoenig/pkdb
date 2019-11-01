@@ -3,17 +3,17 @@
 
 <html lang="en" {% block htmlattr %}{% endblock %}>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}PK-DB{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}PK-DB{% endblock %}</title>
 
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css">
 
-  {% block head_css %}
-  <link rel="stylesheet" media="screen" href='{% static "css/main.css" %}'>
-  {% endblock %}
+    {% block head_css %}
+        <link rel="stylesheet" media="screen" href='{% static "css/main.css" %}'>
+    {% endblock %}
 
 </head>
 <body class='{% block pageclass %}{% endblock %}' {% block bodyattr %}{% endblock %}>
@@ -22,8 +22,8 @@
 {% block content %}{% endblock %}
 
 {% block footer %}
-<div class=container>
-</div>
+    <div class=container>
+    </div>
 {% endblock %}
 
 {% block tail_js %}
