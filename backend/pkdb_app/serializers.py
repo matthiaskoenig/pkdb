@@ -551,9 +551,9 @@ class ExSerializer(MappingSerializer):
 
                 except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
                     if err == ObjectDoesNotExist:
-                        msg = f'group: {data.get("group")} in study: {study_sid} does not exist'
+                        msg = f'group <{data.get("group")}> does not exist, check groups.'
                     else:
-                        msg = f'group: {data.get("group")} in study: {study_sid} has been defined multiple times.'
+                        msg = f'group <{data.get("group")}> is defined multiple times.'
 
                     raise serializers.ValidationError(msg)
 
@@ -568,10 +568,10 @@ class ExSerializer(MappingSerializer):
                     ).pk
 
                 except ObjectDoesNotExist:
-                    msg = f'individual: individual <{data.get("individual")}>  in study: <{study_sid}> does not exist'
+                    msg = f'individual: individual <{data.get("individual")}> does not exist, check individuals.'
                     raise serializers.ValidationError(msg)
                 except MultipleObjectsReturned:
-                    msg = f'individual: Multiple individuals with the name <{data.get("individual")}>  have been declared on study.'
+                    msg = f'individual: individual <{data.get("individual")}> is defined multiple times'
                     raise serializers.ValidationError(msg)
 
         if "interventions" in data:
@@ -590,7 +590,7 @@ class ExSerializer(MappingSerializer):
                             ).pk
                         )
                     except ObjectDoesNotExist:
-                        msg = f"intervention: <{intervention}> in study: <{study_sid}> does not exist"
+                        msg = f"intervention <{intervention}> does not exist, check interventions."
                         raise serializers.ValidationError(msg)
                 data["interventions"] = interventions
         return data
