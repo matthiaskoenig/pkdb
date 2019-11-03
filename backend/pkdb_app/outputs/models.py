@@ -9,7 +9,8 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from pkdb_app.categorials.models import MeasurementType, ureg, Tissue
+from pkdb_app.categorials.models import MeasurementType, Tissue
+from pkdb_app.categorials.behaviours import ureg
 from pkdb_app.interventions.models import Intervention
 
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG

@@ -3,31 +3,17 @@ Model for the categorical information.
 
 FIXME: Some duplication to pkdb_data/categorials
 """
-import pint
 from pint import UndefinedUnitError
-import numpy as np
-
 from numbers import Number
-
 from django.db import models
-from pkdb_app.categorials.managers import ChoiceManager
+
+from pkdb_app.categorials.managers import AnnotatableManager
 from pkdb_app.users.models import User
-from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key, CHAR_MAX_LENGTH_LONG
+from pkdb_app.utils import CHAR_MAX_LENGTH, create_choices, _validate_requried_key
+from pkdb_app.categorials.behaviours import Annotatable, ureg
 
-ureg = pint.UnitRegistry()
-
-# Units
-ureg.define('cups = count')
-ureg.define('beverages = count')
-ureg.define('none = count')
-ureg.define('yr = year')
-ureg.define('percent = 0.01*count')
-ureg.define('U = 60*10**6*mol/second')
-ureg.define('IU = [activity_amount]')
-ureg.define('NO_UNIT = [no_unit]')
 
 NO_UNIT = 'NO_UNIT'
-
 NUMERIC_TYPE = "numeric"
 CATEGORIAL_TYPE = "categorial"
 BOOLEAN_TYPE = "boolean"
@@ -58,6 +44,7 @@ class Unit(models.Model):
 
 
 class Annotation(models.Model):
+    """ Annotation Model """
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
     relation = models.CharField(max_length=CHAR_MAX_LENGTH, )
     collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -67,49 +54,52 @@ class Annotation(models.Model):
 
 class Choice(models.Model):
     """Choice Model"""
+    description = models.TextField(blank=True, null=True)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     annotations = models.ManyToManyField(Annotation)
-    description = models.TextField(blank=True, null=True)
-    objects = ChoiceManager()
+    objects = AnnotatableManager()
 
 
-class Tissue(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+class Tissue(Annotatable):
+    """ Tissue Model """
+
     creator = models.ForeignKey(User, related_name="tissues", on_delete=models.CASCADE)
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    description = models.TextField(blank=True, null=True)
 
 
-class Route(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+class Route(Annotatable):
+    """ Route Model """
+
     creator = models.ForeignKey(User, related_name="routes", on_delete=models.CASCADE)
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    description = models.TextField(blank=True, null=True)
 
 
-class Application(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+class Application(Annotatable):
+    """ Application Model """
     creator = models.ForeignKey(User, related_name="applications", on_delete=models.CASCADE)
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    description = models.TextField(blank=True, null=True)
 
 
-class Form(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+class Form(Annotatable):
+    """ Form Model """
+
     creator = models.ForeignKey(User, related_name="forms", on_delete=models.CASCADE)
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    description = models.TextField(blank=True, null=True)
 
 
 class MeasurementType(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    """ MeasurementType Model """
+    #fixme: add sid to pkdb_data and use Annotatable
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     units = models.ManyToManyField(Unit, related_name="measurement_types")
     dtype = models.CharField(max_length=CHAR_MAX_LENGTH, choices=DTYPE_CHOICES)
     creator = models.ForeignKey(User, related_name="measurement_types", on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice, related_name="measurement_types")
+
     description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
     annotations = models.ManyToManyField(Annotation)
+    objects = AnnotatableManager()
 
     def __str__(self):
         return self.name
@@ -143,7 +133,8 @@ class MeasurementType(models.Model):
     def dimension_to_n_unit(self):
         return {str(n_unit_p.dimensionality): n_unit_p for n_unit_p in self.n_p_units}
 
-    def p_unit(self, unit):
+    @staticmethod
+    def p_unit(unit):
         try:
             return ureg(unit)
         except (UndefinedUnitError, AttributeError):
@@ -171,7 +162,8 @@ class MeasurementType(models.Model):
 
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
-            msg = f"For measurement type `{self.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} is not allowed."
+            msg = f"For measurement type `{self.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} " \
+                  f"is not allowed."
             raise ValueError(
                 {"unit": msg, "Only units with the following dimensions are allowed:": self.valid_dimensions_str,
                  "Units are allowed which can be converted to the following normalized units:": self.n_units})
@@ -239,7 +231,8 @@ class MeasurementType(models.Model):
                       f"For encoding substances use the `substance` field."
                 raise ValueError({"choice": msg})
         elif self.choices.exists():
-            msg = f"{choice}. A choice is required for `{self.name}`. Allowed choices are: `{list(self.choices_list())}`."
+            msg = f"{choice}. A choice is required for `{self.name}`." \
+                  f" Allowed choices are: `{list(self.choices_list())}`."
             raise ValueError({"choice": msg})
 
     @property

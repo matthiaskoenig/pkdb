@@ -1,7 +1,19 @@
-from pkdb_app.categorials.models import ureg, MeasurementType
-from pkdb_app.substances.models import Substance
+from pkdb_app.behaviours import Sidable
+from pkdb_app.categorials.managers import AnnotatableManager
 from django.db import models
 from pkdb_app.utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
+import pint
+
+ureg = pint.UnitRegistry()
+# Units
+ureg.define('cups = count')
+ureg.define('beverages = count')
+ureg.define('none = count')
+ureg.define('yr = year')
+ureg.define('percent = 0.01*count')
+ureg.define('U = 60*10**6*mol/second')
+ureg.define('IU = [activity_amount]')
+ureg.define('NO_UNIT = [no_unit]')
 
 
 def map_field(fields):
@@ -51,13 +63,23 @@ class ValueableNotBlank(models.Model):
         abstract = True
 
 
+class Annotatable(Sidable):
+    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    annotations = models.ManyToManyField('categorials.Annotation')
+
+    objects = AnnotatableManager()
+
+    class Meta:
+        abstract = True
+
+
 class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
     measurement_type = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     measurement_type_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     choice_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    # substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
     substance = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
@@ -66,8 +88,8 @@ class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
 
 
 class MeasurementTypeable(ValueableNotBlank):
-    measurement_type = models.ForeignKey(MeasurementType, on_delete=models.CASCADE)
-    substance = models.ForeignKey(Substance, null=True, on_delete=models.PROTECT)
+    measurement_type = models.ForeignKey('categorials.MeasurementType', on_delete=models.CASCADE)
+    substance = models.ForeignKey('substances.Substance', null=True, on_delete=models.PROTECT)
     choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
@@ -124,7 +146,7 @@ class Normalizable(MeasurementTypeable):
         if substance and substance.mass:
             dimension_of_substance = self.measurement_type.p_unit(self.unit).dimensionality.get('[substance]')
             if dimension_of_substance != 0:
-                return (True, dimension_of_substance)
+                return True, dimension_of_substance
 
         return (False, None)
 
@@ -139,9 +161,9 @@ class Normalizable(MeasurementTypeable):
             molar_weight = ureg("g/mol") * self.substance.mass
             p_unit = self.measurement_type.p_unit(self.unit)
             this_quantity = p_unit * molar_weight ** dimension
-            return (this_quantity.magnitude, str(this_quantity.units))
+            return this_quantity.magnitude, str(this_quantity.units)
         else:
-            return (1, self.unit)
+            return 1, self.unit
 
     def normalize(self):
         """ Normalizes the units.
