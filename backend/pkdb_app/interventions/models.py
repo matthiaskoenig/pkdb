@@ -43,6 +43,8 @@ class InterventionSet(models.Model):
 
 class AbstractIntervention(models.Model):
     time = models.FloatField(null=True)
+    time_end = models.FloatField(null=True)
+
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     class Meta:
@@ -56,6 +58,7 @@ class AbstractInterventionMap(models.Model):
     form_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     application_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    time_end_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     route_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 

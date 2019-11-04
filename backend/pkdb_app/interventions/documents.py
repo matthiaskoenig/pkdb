@@ -38,6 +38,8 @@ class InterventionDocument(Document):
     choice = string_field('choice')
     time_unit = string_field('time_unit')
     time = fields.FloatField()
+    time_end = fields.FloatField()
+
     substance = string_field('substance_name')
     study_name = string_field('study_name')
     study_sid = string_field('study_sid')

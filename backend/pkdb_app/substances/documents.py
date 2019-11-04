@@ -34,6 +34,13 @@ class SubstanceDocument(Document):
             "label": string_field("label")
         }
     )
+    synonyms = ObjectField(
+        attr="synonyms",
+        multi=True,
+        properties={
+            "name": string_field("name"),
+        }
+    )
 
     class Django:
         model = Substance
