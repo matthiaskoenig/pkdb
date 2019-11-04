@@ -43,6 +43,9 @@ class Unit(models.Model):
         return ureg(self.name).u
 
 
+
+
+
 class Annotation(models.Model):
     """ Annotation Model """
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -290,3 +293,14 @@ class MeasurementType(models.Model):
         :return: list of normalized units in the data format of pint
         """
         return self.creator.username
+
+class Synonym(models.Model):
+    """Units Model"""
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    substance = models.ForeignKey('substances.Substance', on_delete=models.CASCADE, related_name="synonyms", null=True)
+    tissue = models.ForeignKey(Tissue, on_delete=models.CASCADE, related_name="synonyms", null=True)
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="synonyms", null=True)
+    form = models.ForeignKey(Form, on_delete=models.CASCADE, related_name="synonyms", null=True)
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="synonyms", null=True)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name="synonyms", null=True)
+    measurement_type = models.ForeignKey(MeasurementType, on_delete=models.CASCADE, related_name="synonyms", null=True)
