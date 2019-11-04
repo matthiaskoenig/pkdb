@@ -104,4 +104,4 @@ class SubstanceElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Substance
         fields = ["sid", 'url_slug', "name", "mass", "charge", "formula", "derived", "description", "parents",
-                  "annotations","synonyms"]
+                  "annotations", "synonyms"]
