@@ -2,10 +2,10 @@
 Serializers for substances.
 """
 from pkdb_app import utils
-from pkdb_app.categorials.serializers import AnnotationSerializer
+from pkdb_app.categorials.serializers import AnnotationSerializer, SynonymSerializer
 from rest_framework import serializers
 
-from pkdb_app.substances.models import Substance, SubstanceSynonym
+from pkdb_app.substances.models import Substance
 from pkdb_app.serializers import WrongKeyValidationSerializer
 
 # ----------------------------------
@@ -15,16 +15,7 @@ from ..utils import update_or_create_multiple
 # ----------------------------------
 # Substance
 # ----------------------------------
-class SynonymSerializer(WrongKeyValidationSerializer):
-    class Meta:
-        model = SubstanceSynonym
-        fields = ["name"]
 
-    def to_internal_value(self, data):
-        return {"name": data}
-
-    def to_representation(self, instance):
-        return instance.name
 
 
 class SubstanceSerializer(WrongKeyValidationSerializer):
@@ -108,8 +99,9 @@ class SubstanceSmallElasticSerializer(serializers.ModelSerializer):
 class SubstanceElasticSerializer(serializers.HyperlinkedModelSerializer):
     parents = SubstanceSmallElasticSerializer(many=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
+    synonyms = SynonymSerializer(many=True, read_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Substance
         fields = ["sid", 'url_slug', "name", "mass", "charge", "formula", "derived", "description", "parents",
-                  "annotations"]
+                  "annotations","synonyms"]

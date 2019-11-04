@@ -67,6 +67,4 @@ class Substance(Sidable, models.Model):
         return self.creator.username
 
 
-class SubstanceSynonym(models.Model):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    substance = models.ForeignKey(Substance, on_delete=models.CASCADE, related_name="synonyms")
+
