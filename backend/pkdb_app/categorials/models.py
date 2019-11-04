@@ -302,5 +302,4 @@ class Synonym(models.Model):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="synonyms", null=True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE, related_name="synonyms", null=True)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, related_name="synonyms", null=True)
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name="synonyms", null=True)
     measurement_type = models.ForeignKey(MeasurementType, on_delete=models.CASCADE, related_name="synonyms", null=True)

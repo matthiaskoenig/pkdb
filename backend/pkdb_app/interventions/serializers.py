@@ -38,6 +38,7 @@ INTERVENTION_FIELDS = [
     "form",
     "application",
     "time",
+    "time_end",
     "time_unit",
     "route",
 ]
