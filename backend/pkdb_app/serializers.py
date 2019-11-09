@@ -504,8 +504,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         unique_values = value_array.unique()
                         if len(unique_values) != 1:
                             raise serializers.ValidationError(
-                                [f"{values[1]} has to be unique for one "
-                                 f"timecourse: <{unique_values}>",
+                                [f"{values[1]} has to be unique for a single "
+                                 f"timecourse, but: <{unique_values}>. To "
+                                 f"define multiple timecourses in a single "
+                                 f"table use 'groupby' to define subsets.",
                                  data]
                             )
                         if keys[0] == "interventions":
