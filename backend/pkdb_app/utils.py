@@ -94,10 +94,13 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
         # instance_child.update_or_create(**lookup_dict, defaults=child)
 
         try:
-            obj = instance_child.get(**lookup_dict)
+
+            obj = instance_child.model.objects.get(**lookup_dict)
             for key, value in child.items():
                 if key == "annotations":
                     update_or_create_multiple(obj, value, key, lookup_fields=["term", "relation"])
+                elif key == "synonyms":
+                    update_or_create_multiple(obj, value, key, lookup_fields=["name"])
                 else:
                     setattr(obj, key, value)
 
@@ -106,7 +109,12 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
 
 
         except instance_child.model.DoesNotExist:
+
             instance_dict = {**lookup_dict, **child}
+            print("*"*100)
+            print(lookup_dict)
+            print(related_name)
+            print(instance_dict)
             instance_child.create(**instance_dict)
 
 
