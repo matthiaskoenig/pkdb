@@ -144,7 +144,7 @@ class GroupSerializer(ExSerializer):
             raise serializers.ValidationError(
             {
                 "characteristica": f"A characteristica with `'measurement_type' = '{measurement_type}'` is required on the `all` group.",
-                "details": attrs}
+                "details": characteristica}
             )
 
     def validate(self, attrs):

@@ -6,6 +6,7 @@ import copy
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
+
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
 
@@ -94,8 +95,10 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
         # instance_child.update_or_create(**lookup_dict, defaults=child)
 
         try:
-
-            obj = instance_child.model.objects.get(**lookup_dict)
+            if instance_child.model.__name__ in ["Choice","Unit"]:
+                obj = instance_child.get(**lookup_dict)
+            else:
+                obj = instance_child.model.objects.get(**lookup_dict)
             for key, value in child.items():
                 if key == "annotations":
                     update_or_create_multiple(obj, value, key, lookup_fields=["term", "relation"])
@@ -111,10 +114,6 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
         except instance_child.model.DoesNotExist:
 
             instance_dict = {**lookup_dict, **child}
-            print("*"*100)
-            print(lookup_dict)
-            print(related_name)
-            print(instance_dict)
             instance_child.create(**instance_dict)
 
 
