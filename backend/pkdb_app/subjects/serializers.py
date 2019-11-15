@@ -135,19 +135,27 @@ class GroupSerializer(ExSerializer):
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    @staticmethod
+    def _validate_required_measurement_type(measurement_type, characteristica):
+        is_measurement_type  = [characteristica_single.get("measurement_type").name == measurement_type for characteristica_single in
+                                characteristica]
+
+        if not any(is_measurement_type):
+            raise serializers.ValidationError(
+            {
+                "characteristica": f"A characteristica with `'measurement_type' = '{measurement_type}'` is required on the `all` group.",
+                "details": characteristica}
+            )
+
     def validate(self, attrs):
         """ validates species information on group with name all
         :param attrs:
         :return:
         """
         if attrs.get("name") == "all":
-            is_species = [characteristica_single.get("measurement_type").name == "species" for characteristica_single in
-                          attrs.get("characteristica", [])]
-            if not any(is_species):
-                raise serializers.ValidationError(
-                    {
-                        "characteristica": "A characteristica with `'measurement_type' = 'species'` is required on the `all` group.",
-                        "details": attrs})
+            characteristica = attrs.get("characteristica", [])
+            for measurement_type in ["species", "healthy"]:
+                self._validate_required_measurement_type(measurement_type, characteristica)
         return super().validate(attrs)
 
     def to_representation(self, instance):
