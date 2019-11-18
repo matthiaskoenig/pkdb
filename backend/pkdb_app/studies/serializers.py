@@ -254,7 +254,8 @@ class StudySerializer(SidSerializer):
         #######################################################################
 
         if data.get("reference"):
-            reference = Reference.objects.get(sid=data["reference"])
+            
+            reference = self.get_or_val_error(model=Reference, sid=data["reference"])
             if hasattr(reference, "study"):
                 if str(reference.study.sid) != str(data.get("sid")):
                     raise serializers.ValidationError(

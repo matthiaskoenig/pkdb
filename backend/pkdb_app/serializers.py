@@ -50,10 +50,11 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         except model.DoesNotExist:
             instance = None
         if not instance:
+
             raise serializers.ValidationError(
                 {
-                    api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist.",
-                    "detail": {**kwargs},
+                    model.__name__: "instance does not exist.",
+                    "detail": kwargs,
                 }
             )
 
