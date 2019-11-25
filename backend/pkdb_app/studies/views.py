@@ -174,7 +174,7 @@ def update_index_study(request):
                 action = data.get('action', 'index')
                 doc().update(thing=instances, action=action)
             except helpers.BulkIndexError:
-                pass
+                raise helpers.BulkIndexError
 
         return JsonResponse({"success": "True"})
 
@@ -184,7 +184,8 @@ def delete_elastic_study(related_elastic):
         try:
             doc().update(thing=instances, action="delete")
         except helpers.BulkIndexError:
-            pass
+            return False, "BulkIndexError"
+
 
 
 def related_elastic_dict(study):
