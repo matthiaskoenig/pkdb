@@ -342,7 +342,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                         raise serializers.ValidationError(
                             [
-                                f"header key <{values[1]}> dose not exist in <{DataFile.objects.get(pk=source).file}>.",
+                                f"header key <{values[1]}> does not exist in <{DataFile.objects.get(pk=source).file}>.",
                                 data
                             ]
                         )
