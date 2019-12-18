@@ -39,65 +39,65 @@ router = DefaultRouter()
 # URLs
 ###############################################################################################
 
-router.register("comments_elastic", ElasticCommentViewSet, base_name="comments_elastic")
-router.register("descriptions_elastic", ElasticDescriptionViewSet, base_name="descriptions_elastic")
+router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
+router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
 
-router.register("references", ReferencesViewSet, base_name="references")
-router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
+router.register("references", ReferencesViewSet, basename="references")
+router.register("references_elastic", ElasticReferenceViewSet, basename="references_elastic")
 
-router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")
-router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, base_name="measurement_types_elastic")
+router.register("measurement_types", MeasurementTypeViewSet, basename="measurement_types")
+router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, basename="measurement_types_elastic")
 
-router.register("tissues", TissueViewSet, base_name="tissues")
-router.register("applications", ApplicationViewSet, base_name="applications")
-router.register("forms", FormViewSet, base_name="forms")
-router.register("routes", RouteViewSet, base_name="routes")
+router.register("tissues", TissueViewSet, basename="tissues")
+router.register("applications", ApplicationViewSet, basename="applications")
+router.register("forms", FormViewSet, basename="forms")
+router.register("routes", RouteViewSet, basename="routes")
 
-router.register("users", UserViewSet, base_name="users")
+router.register("users", UserViewSet, basename="users")
 router.register("users", UserCreateViewSet)
-router.register("user_groups", UserGroupViewSet, base_name="user_groups")
+router.register("user_groups", UserGroupViewSet, basename="user_groups")
 
-router.register("substances", SubstanceViewSet, base_name="substances")
-router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
-router.register("substances_statistics", SubstanceStatisticsViewSet, base_name="substances_statistics")
+router.register("substances", SubstanceViewSet, basename="substances")
+router.register("substances_elastic", ElasticSubstanceViewSet, basename="substances_elastic")
+router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
 
-router.register("datafiles", DataFileViewSet, base_name="datafiles")
+router.register("datafiles", DataFileViewSet, basename="datafiles")
 
-router.register("studies", StudyViewSet, base_name="studies")
-router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elastic")
+router.register("studies", StudyViewSet, basename="studies")
+router.register("studies_elastic", ElasticStudyViewSet, basename="studies_elastic")
 
-router.register("statistics", StatisticsViewSet, base_name="statistics")
+router.register("statistics", StatisticsViewSet, basename="statistics")
 
 ###############################################################################################
 # Read URLs
 ###############################################################################################
 
-router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
-router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
-router.register("characteristica_elastic", CharacteristicaElasticViewSet, base_name="characteristica_elastic")
+router.register("individuals_elastic", IndividualViewSet, basename="individuals_elastic")
+router.register("groups_elastic", GroupViewSet, basename="groups_elastic")
+router.register("characteristica_elastic", CharacteristicaElasticViewSet, basename="characteristica_elastic")
 
-router.register("characteristica_groups", GroupCharacteristicaViewSet, base_name="characteristica_groups")
+router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet,
-                base_name="characteristica_individuals")
+                basename="characteristica_individuals")
 
-router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
-router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
-router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")
-router.register("output_intervention", OutputInterventionViewSet, base_name="output_intervention")
-router.register("timecourse_intervention", TimecourseInterventionViewSet, base_name="timecourse_intervention")
+router.register("interventions_elastic", ElasticInterventionViewSet, basename="interventions_elastic")
+router.register("timecourses_elastic", ElasticTimecourseViewSet, basename="timecourses_elastic")
+router.register("outputs_elastic", ElasticOutputViewSet, basename="outputs_elastic")
+router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
+router.register("timecourse_intervention", TimecourseInterventionViewSet, basename="timecourse_intervention")
 
 # Options
 router.register(
-    "characteristica_options", CharacteristicaOptionViewSet, base_name="characteristica_option"
+    "characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option"
 )
 router.register(
-    "intervention_options", InterventionOptionViewSet, base_name="intervention_option"
+    "intervention_options", InterventionOptionViewSet, basename="intervention_option"
 )
 router.register(
-    "output_options", OutputOptionViewSet, base_name="output_option"
+    "output_options", OutputOptionViewSet, basename="output_option"
 )
 router.register(
-    "timecourse_options", TimecourseOptionViewSet, base_name="timecourse_option"
+    "timecourse_options", TimecourseOptionViewSet, basename="timecourse_option"
 )
 
 schema_view = get_swagger_view(title="PKDB API")
