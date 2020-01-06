@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField
+from ..documents import string_field, elastic_settings, ObjectField, text_field
 from .models import MeasurementType
 
 
@@ -23,7 +23,7 @@ class MeasurementTypeDocument(Document):
         multi=True,
         properties={
             "name": string_field("name"),
-            "description": string_field('description'),
+            "description": text_field('description'),
             "annotations": ObjectField(
                 attr="annotations",
                 multi=True,
@@ -31,7 +31,7 @@ class MeasurementTypeDocument(Document):
                     "term": string_field("term"),
                     "relation": string_field("relation"),
                     "collection": string_field("collection"),
-                    "description": string_field("description"),
+                    "description": text_field("description"),
                     "label": string_field("label")
                 }
             )

@@ -465,7 +465,7 @@ class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
         model = Reference
         fields = ["sid"]  # , 'url']
 
-class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
+class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
 

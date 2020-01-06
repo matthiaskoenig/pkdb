@@ -18,7 +18,7 @@ django-allauth>=0.37.1
 django-bootstrap3>=11.0.0
 
 # Rest API
-djangorestframework>=3.9.4
+djangorestframework>=3.11.0
 Markdown>=3.1.1
 django-filter>=2.0
 django-rest-swagger>=2.2.0
@@ -36,8 +36,8 @@ elasticsearch-dsl== 7.1.0
 django-elasticsearch-dsl==7.1.1
 # see https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/pull/141
 #django-elasticsearch-dsl-drf==0.18
--e git+https://github.com/barseghyanartur/django-elasticsearch-dsl-drf.git#egg=django-elasticsearch-dsl-drf
-
+#-e git+https://github.com/barseghyanartur/django-elasticsearch-dsl-drf.git#egg=django-elasticsearch-dsl-drf
+django-elasticsearch-dsl-drf
 
 # Static and Media Storage
 django-storages>=1.7.1 

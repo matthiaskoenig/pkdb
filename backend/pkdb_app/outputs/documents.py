@@ -66,11 +66,11 @@ class OutputDocument(Document):
 
     class Index:
         name = 'outputs'
-        settings = {
-            'number_of_shards': 5,
-            'number_of_replicas': 1,
-            'max_result_window': 100000
-        }
+        settings = elastic_settings
+        settings['number_of_shards'] = 5
+        settings['number_of_replicas'] = 1
+        settings['max_result_window'] = 100000
+
 
 
 # ------------------------------------
@@ -190,10 +190,7 @@ class TimecourseInterventionDocument(Document):
 
     class Index:
         name = 'timecourses_interventions'
-        settings = {
-            'number_of_shards': 1,
-            'number_of_replicas': 1,
-        }
+        settings = elastic_settings
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
@@ -249,13 +246,13 @@ class OutputInterventionDocument(Document):
 
     class Index:
         name = 'outputs_interventions'
-        settings = {
-            'number_of_shards': 5,
-            'number_of_replicas': 1,
-            'max_result_window': 100000
-        }
+        settings = elastic_settings
+        settings['number_of_shards'] = 5
+        settings['number_of_replicas'] = 1
+        settings['max_result_window'] = 100000
 
-    def get_queryset(self):
+
+def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(OutputInterventionDocument, self).get_queryset().select_related(
             'intervention', 'output')

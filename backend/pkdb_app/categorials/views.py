@@ -69,5 +69,5 @@ class MeasurementTypeElasticViewSet(DocumentViewSet):
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw'}
-    ordering_fields = {'name': 'name.raw', "dtype": "dtype.raw"}
+    filter_fields = {'name': 'name'}
+    ordering_fields = {'name': 'name', "dtype": "dtype"}
