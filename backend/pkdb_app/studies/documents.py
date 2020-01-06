@@ -119,8 +119,8 @@ class ReferenceDocument(Document):
 # ------------------------------------
 @registry.register_document
 class StudyDocument(Document):
-    id = fields.StringField(attr='sid')
-    pk = fields.StringField(attr='sid')
+    id = fields.TextField(attr='sid')
+    pk = fields.TextField(attr='sid')
     sid = string_field(attr='sid')
     pkdb_version = fields.IntegerField(attr='pkdb_version')
     descriptions = ObjectField(
@@ -189,7 +189,7 @@ class StudyDocument(Document):
         attr="files_ordered",
         properties={
             'pk': fields.IntegerField(),
-            'file': fields.StringField(
+            'file': fields.TextField(
                 attr="file.url",
                 fielddata=True,
                 analyzer=autocomplete,
@@ -198,7 +198,7 @@ class StudyDocument(Document):
                     'raw': fields.KeywordField(),
                 }
             ),
-            'name': fields.StringField(
+            'name': fields.TextField(
                 fielddata=True,
                 analyzer=autocomplete,
                 search_analyzer=autocomplete_search,

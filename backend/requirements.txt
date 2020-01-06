@@ -2,7 +2,7 @@ pip>=19.2.1
 
 # core
 pytz==2018.4 #old
-Django < 3.0
+Django == 3.0.2
 gunicorn>=19.9.0
 newrelic>=3.2.2.94
 
@@ -31,9 +31,9 @@ coreapi>=2.3.3
 # ---------------------------------
 # django-elasticsearch-dsl only supports elasticsearch 6 (https://github.com/sabricot/django-elasticsearch-dsl/issues/170)
 
-#elasticsearch-dsl<7.0
-elasticsearch-dsl==6.4.0
-django-elasticsearch-dsl==6.4.2
+#elasticsearch-dsl == 7.1.0
+elasticsearch-dsl== 7.1.0
+django-elasticsearch-dsl==7.1.1
 # see https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/pull/141
 #django-elasticsearch-dsl-drf==0.18
 -e git+https://github.com/barseghyanartur/django-elasticsearch-dsl-drf.git#egg=django-elasticsearch-dsl-drf

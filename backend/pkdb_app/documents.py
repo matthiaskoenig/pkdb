@@ -8,6 +8,7 @@ from pkdb_app.users.permissions import user_group
 elastic_settings = {
     'number_of_shards': 1,
     'number_of_replicas': 1,
+    'max_ngram_diff': 15
 
 }
 
@@ -20,7 +21,7 @@ edge_ngram_filter = token_filter(
 ngram_filter = token_filter(
     'ngram_filter',
     type="ngram",
-    min_gram=1, max_gram=20
+    min_gram=1, max_gram=15
 )
 
 autocomplete_search = analyzer(
@@ -40,7 +41,7 @@ autocomplete = analyzer(
 
 
 def string_field(attr, **kwargs):
-    return fields.StringField(
+    return fields.TextField(
 
         attr=attr,
         fielddata=True,

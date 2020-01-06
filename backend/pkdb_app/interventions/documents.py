@@ -10,29 +10,29 @@ from ..interventions.models import Intervention
 @registry.register_document
 class InterventionDocument(Document):
     pk = fields.IntegerField()
-    measurement_type = fields.StringField(
+    measurement_type = fields.TextField(
         attr='measurement_type_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
 
-    form = fields.StringField(
+    form = fields.TextField(
         attr='form_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    route = fields.StringField(
+    route = fields.TextField(
         attr='route_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    application = fields.StringField(
+    application = fields.TextField(
         attr='application_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     choice = string_field('choice')

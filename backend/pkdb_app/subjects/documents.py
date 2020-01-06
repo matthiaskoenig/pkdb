@@ -137,10 +137,10 @@ class CharacteristicaDocument(Document):
 
     # group related
     group_pk = fields.IntegerField(attr='group_pk')
-    group_name = fields.StringField(
+    group_name = fields.TextField(
         attr='group_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     group_count = fields.IntegerField(attr='group_count')
@@ -148,36 +148,36 @@ class CharacteristicaDocument(Document):
         attr='group_parent_pk',
     )
     # individual_related
-    individual_name = fields.StringField(
+    individual_name = fields.TextField(
         attr='individual_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     individual_pk = fields.IntegerField(attr='individual_pk')
     individual_group_pk = fields.IntegerField(attr='individual_group_pk')
     ###
 
-    measurement_type = fields.StringField(
+    measurement_type = fields.TextField(
         attr='measurement_type_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    choice = fields.StringField(
+    choice = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    unit = fields.StringField(
+    unit = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    substance = fields.StringField(
+    substance = fields.TextField(
         attr='substance_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     count = fields.IntegerField()
@@ -230,10 +230,10 @@ class GroupCharacteristicaDocument(Document):
 
     # group related
     group_pk = fields.IntegerField(attr='group_pk')
-    group_name = fields.StringField(
+    group_name = fields.TextField(
         attr='group_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     group_count = fields.IntegerField(attr='group_count')
@@ -245,26 +245,26 @@ class GroupCharacteristicaDocument(Document):
     )
     count = fields.IntegerField()
 
-    measurement_type = fields.StringField(
+    measurement_type = fields.TextField(
         attr='measurement_type',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    choice = fields.StringField(
+    choice = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    unit = fields.StringField(
+    unit = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    substance = fields.StringField(
+    substance = fields.TextField(
         attr='substance',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     value = fields.FloatField(attr='value')
@@ -310,10 +310,10 @@ class IndividualCharacteristicaDocument(Document):
 
     # individual related
     individual_pk = fields.IntegerField(attr='individual_pk')
-    individual_name = fields.StringField(
+    individual_name = fields.TextField(
         attr='individual_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     individual_group_pk = fields.IntegerField(
@@ -324,26 +324,26 @@ class IndividualCharacteristicaDocument(Document):
     )
     count = fields.IntegerField()
 
-    measurement_type = fields.StringField(
+    measurement_type = fields.TextField(
         attr='measurement_type',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    choice = fields.StringField(
+    choice = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    unit = fields.StringField(
+    unit = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    substance = fields.StringField(
+    substance = fields.TextField(
         attr='substance',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     value = fields.FloatField(attr='value')
