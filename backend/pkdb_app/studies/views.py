@@ -288,7 +288,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
             return qs
 
 
-class ElasticReferenceViewSet(DocumentViewSet):
+class ElasticReferenceViewSet(BaseDocumentViewSet):
     """Read/query/search references. """
     document_uid_field = "sid__raw"
     lookup_field = "sid"
@@ -318,40 +318,3 @@ class ElasticReferenceViewSet(DocumentViewSet):
         "pdf": "pdf",
         "authors": "authors.last_name",
     }
-
-    def get_object(self):
-        """Get object."""
-        queryset = self.get_queryset()
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-        if lookup_url_kwarg not in self.kwargs:
-            raise AttributeError(
-                "Expected view %s to be called with a URL keyword argument "
-                "named '%s'. Fix your URL conf, or set the `.lookup_field` "
-                "attribute on the view correctly." % (
-                    self.__class__.__name__,
-                    lookup_url_kwarg
-                )
-            )
-
-        if lookup_url_kwarg == 'id':
-            obj = self.document.get(id=self.kwargs[lookup_url_kwarg])
-            return DictionaryProxy(obj.to_dict())
-        else:
-            queryset = queryset.filter(
-                'match',
-                **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
-            )
-
-            count = queryset.count()
-            if count == 1:
-                obj = queryset.execute().hits.hits[0]['_source']
-
-                return DictionaryProxy(obj)
-
-            elif count > 1:
-                raise Http404(
-                    "Multiple results matches the given query. "
-                    "Expected a single result."
-                )
-
-            raise Http404("No result matches the given query.")
