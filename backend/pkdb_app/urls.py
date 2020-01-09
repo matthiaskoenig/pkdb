@@ -13,7 +13,6 @@ from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet,
 from rest_framework.authtoken.views import obtain_auth_token
 
 from rest_framework.routers import DefaultRouter
-from rest_framework_swagger.views import get_swagger_view
 
 from .comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
 
@@ -22,7 +21,7 @@ from .views import serve_protected_document
 from .subjects.views import (
     DataFileViewSet,
     IndividualViewSet,
-    CharacteristicaElasticViewSet, CharacteristicaOptionViewSet, GroupViewSet, GroupCharacteristicaViewSet,
+     CharacteristicaOptionViewSet, GroupViewSet, GroupCharacteristicaViewSet,
     IndividualCharacteristicaViewSet)
 from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
 from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
@@ -74,12 +73,10 @@ router.register("statistics", StatisticsViewSet, basename="statistics")
 
 router.register("individuals_elastic", IndividualViewSet, basename="individuals_elastic")
 router.register("groups_elastic", GroupViewSet, basename="groups_elastic")
-router.register("characteristica_elastic", CharacteristicaElasticViewSet, basename="characteristica_elastic")
 
 router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet,
                 basename="characteristica_individuals")
-
 router.register("interventions_elastic", ElasticInterventionViewSet, basename="interventions_elastic")
 router.register("timecourses_elastic", ElasticTimecourseViewSet, basename="timecourses_elastic")
 router.register("outputs_elastic", ElasticOutputViewSet, basename="outputs_elastic")
@@ -100,11 +97,9 @@ router.register(
     "timecourse_options", TimecourseOptionViewSet, basename="timecourse_option"
 )
 
-schema_view = get_swagger_view(title="PKDB API")
 
 urlpatterns = [
     # authentication
-    # (r'^accounts_old/', include('allauth.urls')),
     url(r'^accounts/', include('rest_email_auth.urls')),
 
     # admin
@@ -117,7 +112,7 @@ urlpatterns = [
     path('verify/?P<key>[-\w]+)', obtain_auth_token),
     path('reset/?P<key>[-\w]+)', obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    url(r"api", schema_view, name="api"),
+    #url(r"api", schema_view, name="api"),
     url(r'^media/(?P<file>.*)$', serve_protected_document, name='serve_protected_document'),
 
     # for debugging

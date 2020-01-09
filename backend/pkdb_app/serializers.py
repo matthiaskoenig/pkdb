@@ -172,6 +172,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         :param entry:
         :return: list of entries
         """
+
         n = self.number_of_entries(entry)
         if n == 1:
             return [entry]

@@ -111,10 +111,11 @@ class IndividualViewSet(AccessView):
         'name': 'name.raw',
     }
 
+"""
 
 class CharacteristicaElasticViewSet(AccessView):
     pagination_class = CustomPagination
-    document = GroupCharacteristica
+    document = GroupCharacteristicaDocument
     serializer_class = CharacteristicaElasticBigSerializer
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
@@ -150,6 +151,8 @@ class CharacteristicaElasticViewSet(AccessView):
         'study_sid': 'study_sid',
 
     }
+"""
+
 
 
 class GroupCharacteristicaViewSet(AccessView):

@@ -117,7 +117,7 @@ class ObjectField(DEDField, Object):
 class AccessView(DocumentViewSet):
 
     def get_queryset(self):
-        search = self.search  # .query()
+        search = self.search #.query()
         # qs = super().get_queryset()
         # return qs
         group = user_group(self.request.user)
@@ -128,8 +128,8 @@ class AccessView(DocumentViewSet):
         elif group == "basic":
 
             qs = search.query(
-                Q('match', access__raw=PUBLIC) |
-                Q('match', allowed_users__raw=self.request.user.username)
+                Q('term', access__raw=PUBLIC) |
+                Q('term', allowed_users__raw=self.request.user.username)
             )
 
             # )

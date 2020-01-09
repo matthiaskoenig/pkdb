@@ -44,7 +44,7 @@ export default new Vuex.Store({
         django_domain: backend_domain,
 
         endpoints: {
-            api: backend_domain + '/api/v1',
+            api: backend_domain + '/api/v1/',
             obtainAuthToken: backend_domain + '/api-token-auth/',
             register: backend_domain + '/accounts/register/',
             verify: backend_domain + '/accounts/verify-email/',
