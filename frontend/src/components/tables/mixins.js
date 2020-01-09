@@ -57,7 +57,7 @@ var searchTableMixin = {
         },
         resource_url() {
 
-            return this.$store.state.endpoints.api + '/' + this.otype + '_elastic/?format=json'
+            return this.$store.state.endpoints.api  + this.otype + '_elastic/?format=json'
         },
         url() {
             var url = this.resource_url
