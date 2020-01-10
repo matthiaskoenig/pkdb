@@ -114,28 +114,28 @@ var searchTableMixin = {
 var UrlMixin = {
     methods: {
         group_url(pk) {
-            return this.$store.state.endpoints.api + '/groups_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'groups_elastic/' + pk + '/'
         },
         individual_url(pk) {
-            return this.$store.state.endpoints.api + '/individuals_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'individuals_elastic/' + pk + '/'
         },
         output_url(pk) {
-            return this.$store.state.endpoints.api + '/outputs_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'outputs_elastic/' + pk + '/'
         },
         timecourse_url(pk) {
-            return this.$store.state.endpoints.api + '/timecourses_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'timecourses_elastic/' + pk + '/'
         },
         timecourses_url(pks) {
-            return this.$store.state.endpoints.api + '/timecourses_elastic/?ids=' + pks.join('__')
+            return this.$store.state.endpoints.api + 'timecourses_elastic/?ids=' + pks.join('__')
         },
         intervention_url(pk) {
-            return this.$store.state.endpoints.api + '/interventions_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'interventions_elastic/' + pk + '/'
         },
         reference_url(pk) {
-            return this.$store.state.endpoints.api + '/references_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'references_elastic/' + pk + '/'
         },
         characterica_url(ids) {
-            return this.$store.state.endpoints.api + '/characteristica_elastic/?ids=' + ids.join('__')
+            return this.$store.state.endpoints.api + 'characteristica_elastic/?ids=' + ids.join('__')
         },
     }
 };

@@ -13,7 +13,7 @@
                 <td>
                     <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
                     <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+ table.item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + '/individuals_elastic/'+ table.item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + 'individuals_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
                     <div class="attr-card">

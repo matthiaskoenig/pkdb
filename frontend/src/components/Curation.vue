@@ -66,16 +66,16 @@
         },
         computed: {
             characteristica_options_url() {
-                return this.$store.state.endpoints.api + '/characteristica_options/';
+                return this.$store.state.endpoints.api + 'characteristica_options/';
             },
             intervention_options_url() {
-                return this.$store.state.endpoints.api + '/intervention_options/';
+                return this.$store.state.endpoints.api + 'intervention_options/';
             },
             output_options_url() {
-                return this.$store.state.endpoints.api + '/output_options/';
+                return this.$store.state.endpoints.api + 'output_options/';
             },
             substances_url() {
-                return this.$store.state.endpoints.api + '/substances_elastic/?page_size=1000';
+                return this.$store.state.endpoints.api + 'substances_elastic/?page_size=1000';
             }
 
         }

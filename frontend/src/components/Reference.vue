@@ -22,7 +22,7 @@
                 var tokens = path.split('/');
                 var entry_id = tokens[tokens.length-1];
                 console.log(entry_id);
-                return this.$store.state.endpoints.api + '/references_elastic/'+ entry_id + '/';
+                return this.$store.state.endpoints.api + 'references_elastic/'+ entry_id + '/';
             }
         },
     }

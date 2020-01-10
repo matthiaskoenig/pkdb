@@ -16,7 +16,7 @@
                     <!--
                     <file-button v-if="table.item.pdf" :resource_url='backend+table.item.pdf' :title="table.item.pdf"/>
                     -->
-                    <json-button :resource_url="api + '/references_elastic/'+ table.item.sid +'/'"/>
+                    <json-button :resource_url="api + 'references_elastic/'+ table.item.sid +'/'"/>
 
                 </td>
                 <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>

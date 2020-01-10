@@ -331,13 +331,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if ITEM_MAPPER in value:
                     values = value.split(ITEM_MAPPER)
                     values = [v.strip() for v in values]
-
                     if len(values) != 2 or values[0] != "col":
                         raise serializers.ValidationError(
                             ["field has wrong pattern col=='col_value'", data]
                         )
                     try:
                         entry_value = getattr(entry, values[1])
+
+
 
                     except AttributeError:
 
@@ -357,6 +358,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if keys[0] == "interventions":
                         entry_value = self.interventions_from_string(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
+
 
                     else:
                         set_keys(entry_dict, entry_value, *keys)
@@ -386,6 +388,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     {"source": "Source is provided but the mapping operator "
                                "'==' is not used in any field"})
 
+
             if data.get("groupby"):
                 groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
@@ -394,10 +397,28 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 groupby = [v.strip() for v in groupby.split("&")]
 
                 try:
-                    for group_name, group_df in df.groupby(groupby):
-                        for entry in group_df.itertuples():
-                            entry_dict = self.make_entry(entry, template, data, source)
+                    if "characteristica" in template:
+                        characteristica = template.pop("characteristica")
+                        for non_characteristica_keys, group_df in df.groupby(groupby, sort=False):
+                            entry_dict = self.make_entry(next(group_df.itertuples()), template, data, source)
+
+                            charcteristica = []
+
+                            for entry in group_df.itertuples():
+                                for characteristica_single in characteristica:
+                                    characteristica_single = self.make_entry(entry, characteristica_single, characteristica,
+                                                                         source)
+
+                                    charcteristica.append(characteristica_single)
+
+                            entry_dict["characteristica"] = charcteristica
                             entries.append(entry_dict)
+
+                    else:
+                        for group_name, group_df in df.groupby(groupby, sort=False):
+                            for entry in group_df.itertuples():
+                                entry_dict = self.make_entry(entry, template, data, source)
+                                entries.append(entry_dict)
                 except KeyError:
                     raise serializers.ValidationError(
                         [
@@ -410,6 +431,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 for entry in df.itertuples():
                     entry_dict = self.make_entry(entry, template, data, source)
                     entries.append(entry_dict)
+
+
 
         else:
             entries.append(template)

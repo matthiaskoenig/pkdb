@@ -82,68 +82,6 @@ class StudyViewSet(viewsets.ModelViewSet):
         elif group == "anonymous":
             return queryset.filter(access=PUBLIC)
 
-    @staticmethod
-    def group_validation(request):
-        if "groupset" in request.data and request.data["groupset"]:
-            groupset = request.data["groupset"]
-            if "groups" in groupset:
-                groups = groupset.get("groups", [])
-                if not isinstance(groups, list):
-                    raise ValidationError(
-                        {"groups": f"groups must be a list and not a {type(groups)}", "detail": groups})
-
-                parents_name = set()
-                groups_name = set()
-
-                for group in groups:
-                    parent_name = group.get("parent")
-                    if parent_name:
-                        parents_name.add(parent_name)
-                    group_name = group.get("name")
-                    if group_name:
-                        groups_name.add(group_name)
-                    if group_name == "all" and parent_name is not None:
-                        raise ValidationError({"groups": "parent is not allowed for group all"})
-
-                    elif group_name != "all" and parent_name is None:
-                        raise ValidationError(
-                            {
-                                "groups": f"'parent' field missing on group '{group_name}'. "
-                                          f"For all groups the parent group must be specified via "
-                                          f"the 'parent' field (with exception of the <all> group)."
-                             })
-
-                if "all" not in groups_name:
-                    raise ValidationError(
-                        {
-                            "group":
-                             "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
-                             "The `all` group is the group of all subjects which was studied and defines common "
-                             "characteristica for all groups and individuals. Species information are requirement "
-                             "on the all group. Create the `all` group or rename group to `all`. "
-                         }
-                    )
-
-                # validate if groups are missing
-                missing_groups = parents_name - groups_name
-                if missing_groups:
-                    msg = {
-                        "groups": f"The groups <{missing_groups}> have been used but not defined."
-                    }
-                    raise ValidationError(msg)
-
-    def partial_update(self, request, *args, **kwargs):
-        self.group_validation(request)
-        return super().partial_update(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        self.group_validation(request)
-        return super().update(request, *args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        self.group_validation(request)
-        return super().create(request, *args, **kwargs)
-
     def destroy(self, request, *args, **kwargs):
 
         # if get object does not find  an object it stops here

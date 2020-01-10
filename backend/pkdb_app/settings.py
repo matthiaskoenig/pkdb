@@ -72,7 +72,6 @@ INSTALLED_APPS = (
     # Third party apps
     "rest_framework",  # utilities for rest apis
     "django_filters",  # for filtering rest endpoints
-    "rest_framework_swagger",
     "corsheaders",
 
     # Elastic Search

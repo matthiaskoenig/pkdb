@@ -10,7 +10,6 @@ class GroupSetManager(models.Manager):
     def create(self, *args, **kwargs):
         study = kwargs.pop("study")
         group_exs = kwargs.pop("group_exs", [])
-
         descriptions = kwargs.pop("descriptions", [])
         comments = kwargs.pop("comments", [])
         groupset = super().create(*args, **kwargs)
@@ -18,26 +17,30 @@ class GroupSetManager(models.Manager):
         create_multiple(groupset, comments, "comments")
 
         study_group_exs = []
+        study_groups = set()
+
+
         for group_ex in group_exs:
+            # todo: check if this is necessary
             if "parent_ex" in group_ex:
                 for study_group_ex in study_group_exs:
                     if study_group_ex.name == group_ex["parent_ex"]:
+                        print("I am here")
+                        print("study_group_ex")
                         group_ex["parent_ex"] = study_group_ex
-
+            ###################################
             # create single group_ex
-            group_ex["study"] = study
-            group_ex["group_exs"] = study_group_exs
-
+            group_ex["study_groups"] = study_groups
             study_group_ex = groupset.group_exs.create(**group_ex)
-
             study_group_exs.append(study_group_ex)
+            #study_groups.update(study_group_ex.groups.values_list("pk"))
+
 
         groupset.save()
 
         # add characteristica from parents to the all_characteristica_normed if each group
         for group in groupset.groups:
             group.characteristica_all_normed.add(*group._characteristica_all_normed)
-
         return groupset
 
 
@@ -45,8 +48,8 @@ class GroupExManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica_ex = kwargs.pop("characteristica_ex", [])
         groups = kwargs.pop("groups", [])
-        study = kwargs.pop("study")
-        group_exs = kwargs.pop("group_exs")
+        study_groups = kwargs.pop("study_groups", [])
+
         comments = kwargs.pop("comments", [])
         descriptions = kwargs.pop("descriptions", [])
 
@@ -58,9 +61,10 @@ class GroupExManager(models.Manager):
             group_ex.characteristica_ex.create(**characteristica_ex_single)
 
         for group in groups:
-            group["study"] = study
-            group["group_exs"] = group_exs
-            group_ex.groups.create(**group)
+            group["study_groups"] = study_groups
+            dj_group = group_ex.groups.create(**group)
+            study_groups.add(dj_group.pk)
+
 
         create_multiple(group_ex, comments, "comments")
         create_multiple(group_ex, descriptions, "descriptions")
@@ -71,15 +75,11 @@ class GroupExManager(models.Manager):
 
 class GroupManager(models.Manager):
     def create(self, *args, **kwargs):
-        kwargs.pop("study")
         characteristica = kwargs.pop("characteristica", [])
-        group_exs = kwargs.pop("group_exs")
+        study_groups = kwargs.pop("study_groups")
 
         if kwargs.get("parent"):
-            for group_ex in group_exs:
-                if group_ex.name == kwargs["parent"]:
-                    ex = group_ex
-            kwargs["parent"] = self.model.objects.get(name=kwargs.get("parent"), ex=ex)
+            kwargs["parent"] = self.model.objects.filter(pk__in=study_groups).get(name=kwargs.get("parent"))
 
         group = super().create(*args, **kwargs)
         characteristica_updated = []

@@ -28,7 +28,7 @@
         methods: {
             get: function () {
                 var api_url;
-                api_url = this.api + '/statistics_data/?format=json';
+                api_url = this.api + 'statistics_data/?format=json';
                 axios.get(api_url)
                     .then(response => {
                         // JSON responses are automatically parsed.

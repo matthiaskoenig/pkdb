@@ -94,7 +94,7 @@
             }
         },
         mounted() {
-            axios.get(this.api + `/statistics/?format=json`)
+            axios.get(this.api + `statistics/?format=json`)
                 .then(response => {
                     // JSON responses are automatically parsed.
                     this.statistics = response.data;

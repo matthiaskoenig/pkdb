@@ -11,7 +11,7 @@
         >
             <template slot="items" slot-scope="table">
                 <td>
-                    <JsonButton :resource_url="api + '/substances/'+ table.item.url_slug+ '/?format=json' "/>
+                    <JsonButton :resource_url="api + 'substances/'+ table.item.url_slug+ '/?format=json' "/>
                 </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.sid}} </text-highlight> </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.name}} </text-highlight> </td>

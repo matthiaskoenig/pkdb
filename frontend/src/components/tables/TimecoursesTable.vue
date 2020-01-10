@@ -12,7 +12,7 @@
             <template slot="items" slot-scope="table">
                 <td>
                     <LinkButton :to="'/timecourses/'+ table.item.pk" :title="'Timecourse: '+table.item.pk" :icon="icon('output')"/>
-                    <JsonButton :resource_url="api + '/timecourses_elastic/'+ table.item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + 'timecourses_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.measurement_type }}</text-highlight></td>
                 <td>

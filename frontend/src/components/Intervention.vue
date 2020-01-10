@@ -21,7 +21,7 @@
                 var path = this.$route.path;
                 var tokens = path.split('/');
                 var entry_id = tokens[tokens.length-1];
-                return this.$store.state.endpoints.api + '/interventions_elastic/'+ entry_id +'/?format=json';
+                return this.$store.state.endpoints.api + 'interventions_elastic/'+ entry_id +'/?format=json';
             }
         },
     }

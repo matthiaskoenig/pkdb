@@ -82,7 +82,6 @@ class GroupSet(models.Model):
         else:
             return 0
 
-
 class AbstractGroup(models.Model):
     objects = GroupExManager()
 
@@ -111,6 +110,7 @@ class GroupEx(Externable, AbstractGroup):
     )
 
     parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
+    parent_ex_map  = models.CharField(max_length=CHAR_MAX_LENGTH)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     count = models.IntegerField(null=True)

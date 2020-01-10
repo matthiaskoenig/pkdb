@@ -15,7 +15,7 @@
                                  :icon="icon('group')"/>
 
                     <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+table.item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + '/groups_elastic/'+ table.item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + 'groups_elastic/'+ table.item.pk +'/?format=json'"/>
                 </td>
                 <td>
                     <group-chip :group="table.item" :search="search"/>

@@ -31,7 +31,7 @@ SUBJECT_FIELDS = ["name", "count"]
 SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
 GROUP_FIELDS = ["name", "count"]
-GROUP_MAP_FIELDS = ["name_map", "count_map"]
+GROUP_MAP_FIELDS = ["name_map", "count_map","parent_ex_map"]
 
 EXTERN_FILE_FIELDS = ["source", "subset_map", "groupby", "figure", "source_map", "figure_map"]
 
@@ -115,7 +115,7 @@ class GroupSerializer(ExSerializer):
     characteristica = CharacteristicaSerializer(
         many=True, read_only=False, required=False
     )
-    parent = serializers.CharField()
+    parent = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Group
@@ -254,7 +254,6 @@ class GroupExSerializer(ExSerializer):
         data = self.transform_map_fields(data)
 
         data["groups"] = groups
-
         # ----------------------------------
         # finished
         # ----------------------------------
@@ -283,7 +282,71 @@ class GroupSetSerializer(ExSerializer):
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
+        groups = []
+        for group_ex in data.get("group_exs", []):
+            groups.extend(group_ex.get("groups"))
+        self._group_validation(groups)
         return data
+
+    @staticmethod
+    def _group_validation(groups):
+        from pprint import pprint
+        pprint(groups)
+        if not isinstance(groups, list):
+            raise serializers.ValidationError(
+                {"groups": f"groups must be a list and not a {type(groups)}", "detail": groups})
+
+        parents_name = set()
+        groups_name = set()
+
+        for group in groups:
+            group_name = group.get("name")
+            if group_name:
+                if group_name in groups_name:
+                    msg = {
+                        "groups": f"Group names have to be unique. The group name  <{group_name}> was used more than once."
+                    }
+                    raise serializers.ValidationError(msg)
+                groups_name.add(group_name)
+
+
+            parent_name = group.get("parent")
+            if parent_name:
+                parents_name.add(parent_name)
+                if parent_name not in groups_name:
+                        msg = {
+                            "groups": f"The group <{parent_name}> have been used as a parent in group <{group_name}>. But it was not yet defined (order matters: add first the parent)"
+                        }
+                        raise serializers.ValidationError(msg)
+
+
+            if group_name == "all" and parent_name is not None:
+                raise serializers.ValidationError({"groups": "parent is not allowed for group all"})
+
+            elif group_name != "all" and parent_name is None:
+                raise serializers.ValidationError(
+                    {
+                        "groups": f"'parent' field missing on group '{group_name}'. "
+                                  f"For all groups the parent group must be specified via "
+                                  f"the 'parent' field (with exception of the <all> group)."
+                    })
+            elif group_name == parent_name:
+                raise serializers.ValidationError(
+                    {
+                        "groups": "'parent' field cannot be identical with 'name' field."
+                    })
+
+        if "all" not in groups_name:
+            raise serializers.ValidationError(
+                {
+                    "group":
+                        "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
+                        "The `all` group is the group of all subjects which was studied and defines common "
+                        "characteristica for all groups and individuals. Species information are requirement "
+                        "on the all group. Create the `all` group or rename group to `all`. "
+                }
+            )
+
 
 
 # ----------------------------------
