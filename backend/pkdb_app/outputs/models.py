@@ -458,6 +458,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         # dosing
         dosing = self.get_dosing()
 
+
+
         restricted_dosing_units = [
             'g',
             'g/kg',
@@ -467,16 +469,17 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         MeasurementType()
 
         if dosing:
-            if MeasurementType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
-                p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
-                p_unit_concentration = self.measurement_type.p_unit(pk_dict["c_unit"])
-                vd_unit = p_unit_dosing / p_unit_concentration
-                pk_dict["vd_unit"] = str(vd_unit)
-                pk_dict["dose"] = dosing.value
-                if dosing.time:
-                    pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(self.time_unit).magnitude
+            if dosing.substance == self.substance:
+                if MeasurementType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
+                    p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
+                    p_unit_concentration = self.measurement_type.p_unit(pk_dict["c_unit"])
+                    vd_unit = p_unit_dosing / p_unit_concentration
+                    pk_dict["vd_unit"] = str(vd_unit)
+                    pk_dict["dose"] = dosing.value
+                    if dosing.time:
+                        pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(self.time_unit).magnitude
 
-                pk_dict["dose_unit"] = dosing.unit
+                    pk_dict["dose_unit"] = dosing.unit
 
         # bodyweight dependent values
         if bodyweight:
