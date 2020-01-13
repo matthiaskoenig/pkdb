@@ -180,18 +180,25 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # create entries by splitting separators
         entries = [dict() for k in range(n)]
 
+        split_by_figure = False
+        number_spit_fields = 0
         for field in entry.keys():
             value = entry[field]
             try:
                 values = value.split(ITEM_SEPARATOR)
             except AttributeError:
                 values = [value]
+
             for k, value in enumerate(values):
 
                 if isinstance(value, str):
                     values[k] = value.strip()
                     if field == "interventions":
                         values[k] = self.interventions_from_string(value)
+
+                    elif field == "figure":
+                        split_by_figure = True
+
 
                     if values[k] in NA_VALUES:
                         values[k] = None
@@ -200,12 +207,16 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             # --- validation ---
             # names must be split in a split entry
-            if field == "name" and len(values) != n:
-                if len(values) == 1:
-                    raise serializers.ValidationError(
-                        f"names must be split and not left as <{values}>. "
-                        f"Otherwise UniqueConstrain of name is violated."
-                    )
+            if len(values) != n:
+                if field == "name":
+                    if len(values) == 1:
+                        raise serializers.ValidationError(
+                            f"names must be split and not left as <{values}>. "
+                            f"Otherwise UniqueConstrain of name is violated."
+                        )
+            else:
+                number_spit_fields += 1
+
 
             # check for old syntax
             for value in values:
@@ -227,6 +238,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             for k in range(n):
                 entries[k][field] = values[k]
+
+        if split_by_figure and number_spit_fields == 1:
+            raise serializers.ValidationError(
+                ["Splitting only on figure is not allowed. ", entries]
+            )
 
         return entries
 

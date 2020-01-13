@@ -25,8 +25,6 @@ class GroupSetManager(models.Manager):
             if "parent_ex" in group_ex:
                 for study_group_ex in study_group_exs:
                     if study_group_ex.name == group_ex["parent_ex"]:
-                        print("I am here")
-                        print("study_group_ex")
                         group_ex["parent_ex"] = study_group_ex
             ###################################
             # create single group_ex
@@ -132,7 +130,6 @@ class IndividualSetManager(models.Manager):
 
         # add characteristica from parents to the all_characteristica_normed if each individual
         for individual in individualset.individuals:
-            # print(individual._characteristica_all_normed.all())
             individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
         return individualset
 

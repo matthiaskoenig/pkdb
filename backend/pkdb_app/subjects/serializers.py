@@ -290,8 +290,7 @@ class GroupSetSerializer(ExSerializer):
 
     @staticmethod
     def _group_validation(groups):
-        from pprint import pprint
-        pprint(groups)
+
         if not isinstance(groups, list):
             raise serializers.ValidationError(
                 {"groups": f"groups must be a list and not a {type(groups)}", "detail": groups})
