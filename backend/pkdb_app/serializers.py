@@ -485,10 +485,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 try:
                     df[groupby]
                 except KeyError:
+                    extra_msg = ""
+                    if any("col==" in g for  g in groupby):
+                        extra_msg = "'col==*' is the wrong syntax for the key 'groupby'. Just use the column name. "
+
                     raise serializers.ValidationError(
                         {
                             "groupby":
-                                f"keys <{groupby}> used for groupby are "
+                                extra_msg +
+                                f"Keys <{groupby}> used for groupby are "
                                 f"missing in source file "
                                 f"<{DataFile.objects.get(pk=source).file.name}>. "
                                 f"To group by more then one column the '&' "
