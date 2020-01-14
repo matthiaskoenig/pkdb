@@ -2,7 +2,7 @@
 
 <template>
     <v-card>
-        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
+        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" />
         <v-data-table
                 :headers="headers"
                 :items="entries"
@@ -13,26 +13,20 @@
         >
             <template slot="items" slot-scope="table">
                 <td>
-                    <JsonButton :resource_url="api + 'measurement_types/'+ table.item.url_slug+ '/?format=json' "/>
+                    <JsonButton :resource_url="api + 'routes/'+ table.item.url_slug+ '/?format=json' "/>
                 </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.name}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.dtype}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.description}} </text-highlight> </td>
+
+                <td>{{table.item.sid}}</td>
+                <td>{{table.item.name}}</td>
+                <td>{{table.item.creator}}</td>
+                <td>{{table.item.description}}</td>
                 <td>
                     <ul>
-                        <v-chip v-for="unit in table.item.units">
-                            {{unit}}
+                        <v-chip v-for="synonyms in table.item.synonyms">
+                            {{synonyms}}
                         </v-chip>
                     </ul>
 
-                </td>
-                <td>
-                    <ul>
-                        <v-chip v-for="choice in table.item.choices">
-                            {{choice}}
-                        </v-chip>
-
-                    </ul>
                 </td>
                 <td>
 
@@ -57,7 +51,7 @@
     import NoData from '../tables/NoData';
 
     export default {
-        name: "MeasurementTypesTable",
+        name: "RoutesTable",
         components: {
             NoData,
             TableToolbar,
@@ -65,20 +59,26 @@
         mixins: [searchTableMixin, UrlMixin],
         data () {
             return {
-                otype: "measurement_types",
-                otype_single: "measurement_type",
+                otype: "routes",
+                otype_single: "routes",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
+                    {text: 'Sid', value: 'sid'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Data Type', value: 'dtype'},
+                    {text: 'Creator', value: 'creator'},
                     {text: 'Description', value: 'description'},
-                    {text: 'Units', value: 'units'},
-                    {text: 'Choices', value: 'choices'},
+                    {text: 'Synonyms', value: 'synonyms'},
                     {text: 'Annotations', value: 'annotations',sortable: false},
 
                 ]
             }
-        }
+        },
+        computed:
+            {
+                resource_url() {
+                    return this.$store.state.endpoints.api  + this.otype + '/?format=json'
+                }
+            }
 
     }
 </script>

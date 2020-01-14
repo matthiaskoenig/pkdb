@@ -60,7 +60,7 @@
         },
         computed: {
             resource_url() {
-                return this.api + '/statistics/?format=json'
+                return this.api + 'statistics/?format=json'
             },
             api() {
                 return this.$store.state.endpoints.api;

@@ -31,6 +31,14 @@
                     </ul>
 
                 </td>
+                <td>
+                    <ul>
+                        <v-chip v-for="synonyms in table.item.synonyms">
+                            {{synonyms}}
+                        </v-chip>
+                    </ul>
+
+                </td>
 
                 <td>
 
@@ -74,6 +82,7 @@
                     {text: 'Derived', value: 'derived'},
                     {text: 'Description', value: 'description'},
                     {text: 'Parents', value: 'parents',sortable: false},
+                    {text: 'Synonyms', value: 'synonyms'},
                     {text: 'Annotations', value: 'annotations',sortable: false},
 
                 ]

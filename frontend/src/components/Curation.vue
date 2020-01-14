@@ -7,6 +7,7 @@
         </p>
         <measurement-types-table/>
         <substances-table/>
+        <routes-table/>
 
         <!--
         <v-layout row wrap>
@@ -55,10 +56,12 @@
     import OutputBrowser from "./curation/OutputBrowser"
     import SubstancesTable from "./curation/SubstancesTable"
     import MeasurementTypesTable from "./curation/MeasurementTypesTable";
+    import RoutesTable from "./curation/RoutesTable";
 
     export default {
         name: "Curation",
         components: {
+            RoutesTable,
             MeasurementTypesTable,
             CharacteristicaBrowser,
             OutputBrowser,
