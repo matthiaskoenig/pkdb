@@ -7,7 +7,7 @@
             </v-flex>
             <v-flex>
                 <v-layout wrap>
-                    <span v-for="item in this.group.characteristica_all_normed">
+                    <span v-for="item in this.group.characteristica_all_normed" :key="item">
                         <characteristica-card :data="item" />
                     </span>
                 </v-layout>

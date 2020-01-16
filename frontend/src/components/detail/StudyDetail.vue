@@ -93,7 +93,6 @@
 </template>
 
 <script>
-    import {isEmpty} from "@/utils"
     import {lookup_icon} from "@/icons"
 
     import {UrlMixin} from "../tables/mixins";

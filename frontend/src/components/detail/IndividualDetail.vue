@@ -9,7 +9,7 @@
             </v-flex>
         <v-flex xs10>
             <v-layout wrap>
-            <span v-for="item in this.individual.characteristica_all_normed">
+            <span v-for="item in this.individual.characteristica_all_normed" :key="item">
                 <characteristica-card :data="item" />
             </span>
             </v-layout>
