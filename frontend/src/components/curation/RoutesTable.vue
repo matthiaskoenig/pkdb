@@ -1,5 +1,3 @@
-
-
 <template>
     <v-card>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" />
@@ -15,15 +13,14 @@
                 <td>
                     <JsonButton :resource_url="api + 'routes/'+ table.item.url_slug+ '/?format=json' "/>
                 </td>
-
                 <td>{{table.item.sid}}</td>
                 <td>{{table.item.name}}</td>
                 <td>{{table.item.creator}}</td>
                 <td>{{table.item.description}}</td>
                 <td>
                     <ul>
-                        <v-chip v-for="synonyms in table.item.synonyms">
-                            {{synonyms}}
+                        <v-chip v-for="synonym in table.item.synonyms" :key="synonym">
+                            {{synonym}}
                         </v-chip>
                     </ul>
 
@@ -31,14 +28,11 @@
                 <td>
 
                     <ul>
-                        <v-chip v-for="annotation in table.item.annotations">
-                            {{annotation.collection}}:<b>{{annotation.term}}</b>  |  {{annotation.relation}}
+                        <v-chip v-for="annotation in table.item.annotations" :key="annotation">
+                            {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
                         </v-chip>
-
                     </ul>
-
                 </td>
-
             </template>
             <no-data/>
         </v-data-table>

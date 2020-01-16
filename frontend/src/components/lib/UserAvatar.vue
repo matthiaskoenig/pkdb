@@ -7,7 +7,6 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
     export default {
         name: "UserAvatar",
         props: {

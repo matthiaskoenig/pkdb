@@ -52,7 +52,7 @@
             },
         },
         watch: {
-            search: function(newVal, oldVal) {
+            search: function(newVal) {
                 // console.log("search:" + this.search);
                 this.$emit('update', newVal)
             }

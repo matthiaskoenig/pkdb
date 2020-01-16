@@ -1,6 +1,7 @@
 import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
+import './plugins/vuetify'
 
 import VueResource from 'vue-resource';
 import App from './App.vue'

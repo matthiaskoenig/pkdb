@@ -21,7 +21,7 @@
 
         <v-card-text>
             <v-form>
-                <v-alert v-for="general_warning in general_warnings" :value="general_warnings" type="error">
+                <v-alert v-for="general_warning in general_warnings" :value="general_warnings" type="error" :key="general_warning">
                     {{general_warning}}
                 </v-alert>
                 <v-text-field v-on:keyup.enter="login" prepend-icon="fas fa-user-circle" :error="user_warnings" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>

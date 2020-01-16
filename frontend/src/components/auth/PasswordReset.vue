@@ -86,7 +86,7 @@
                 const payload = {"key":this.reset_key, password:this.password};
 
                 axios.post(this.$store.state.endpoints.password_reset, payload)
-                    .then((response)=>{
+                    .then(()=>{
                     })
                     .catch((error)=>{
                         this.warnings = error.response.data;

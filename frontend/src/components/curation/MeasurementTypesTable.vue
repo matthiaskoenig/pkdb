@@ -20,31 +20,25 @@
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.description}} </text-highlight> </td>
                 <td>
                     <ul>
-                        <v-chip v-for="unit in table.item.units">
+                        <v-chip v-for="unit in table.item.units" :key="unit">
                             {{unit}}
                         </v-chip>
                     </ul>
-
                 </td>
                 <td>
                     <ul>
-                        <v-chip v-for="choice in table.item.choices">
+                        <v-chip v-for="choice in table.item.choices" :key="choice">
                             {{choice}}
                         </v-chip>
-
                     </ul>
                 </td>
                 <td>
-
                     <ul>
-                        <v-chip v-for="annotation in table.item.annotations">
-                            {{annotation.collection}}:<b>{{annotation.term}}</b>  |  {{annotation.relation}}
+                        <v-chip v-for="annotation in table.item.annotations" :key="annotation">
+                            {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
                         </v-chip>
-
                     </ul>
-
                 </td>
-
             </template>
             <no-data/>
         </v-data-table>

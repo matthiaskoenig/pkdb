@@ -64,7 +64,7 @@
                 this.warnings = {};
                 const payload = {"email":this.email.toLowerCase()};
                 axios.post(this.$store.state.endpoints.request_password_reset, payload)
-                    .then((response)=>{
+                    .then(()=>{
                     })
                     .catch((error)=>{
                         this.warnings = error.response.data;
