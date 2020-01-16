@@ -80,7 +80,7 @@ export default new Vuex.Store({
             this.commit('setToken', payload.token);
             this.commit('setUsername', payload.username);
         },
-        logout(context) {
+        logout() {
             this.commit('clearToken');
             this.commit('clearUsername');
         },

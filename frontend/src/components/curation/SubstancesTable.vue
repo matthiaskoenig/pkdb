@@ -25,29 +25,23 @@
                 </td>
                 <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.description}} </text-highlight> </td>
                 <td>
-
                     <ul>
-                        <substance-chip v-for="parent in table.item.parents" :title="parent.sid"/>
+                        <substance-chip v-for="parent in table.item.parents" :title="parent.sid" :key="parent"/>
                     </ul>
-
                 </td>
                 <td>
                     <ul>
-                        <v-chip v-for="synonyms in table.item.synonyms">
-                            {{synonyms}}
+                        <v-chip v-for="synonym in table.item.synonyms" :key="synonym">
+                            {{synonym}}
                         </v-chip>
                     </ul>
-
                 </td>
-
                 <td>
-
                     <ul>
-                        <v-chip v-for="annotation in table.item.annotations">
-                            {{annotation.collection}}:<b>{{annotation.term}}</b>  |  {{annotation.relation}}
+                        <v-chip v-for="annotation in table.item.annotations" :key="annotation">
+                            {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
                         </v-chip>
                     </ul>
-
                 </td>
 
             </template>

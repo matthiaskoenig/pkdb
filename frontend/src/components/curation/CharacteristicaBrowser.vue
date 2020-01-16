@@ -29,7 +29,6 @@
       </v-card-text>
 
     <v-expand-transition color="blue lighten-1">
-
       <v-list v-if="choices.length">
           <v-card-text><strong> Choices: </strong></v-card-text>
         <v-list-tile v-for="(field, i) in choices" :key="i">
@@ -38,9 +37,6 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-
-
-
     </v-expand-transition>
   </v-card>
         <!--{{ options }}-->
@@ -76,20 +72,23 @@
 
             choices () {
                 if (!this.model) {
-                    this.name = null;
-                    this.dtype = null;
-                    this.units = null;
+                    //FIXME: unexpected side effects, this should be rewritten
+                    //this.name = null;
+                    //this.dtype = null;
+                    //this.units = null;
                     return []
-                }
-                var data = this.options['measurement_types'][this.model];
-                this.name = data['name'];
-                this.dtype = data['dtype'];
-                this.units = data['units'];
-                var choices = data['choices'];
-                if (choices){
-                    return choices.sort()
                 } else {
+                  const data = this.options['measurement_types'][this.model];
+                  // FIXME: unexpected side effects, must be solved differently
+                  // this.name = data['name'];
+                  // this.dtype = data['dtype'];
+                  // this.units = data['units'];
+                  const choices = data['choices'];
+                  if (choices){
+                    return choices.sort()
+                  } else {
                     return []
+                  }
                 }
             },
         },
