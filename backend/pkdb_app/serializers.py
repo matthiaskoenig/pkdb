@@ -196,7 +196,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if field == "interventions":
                         values[k] = self.interventions_from_string(value)
 
-                    elif field == "figure":
+                    elif field == "figure" and len(values) > 1:
                         split_by_figure = True
 
 
@@ -241,7 +241,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         if split_by_figure and number_spit_fields == 1:
             raise serializers.ValidationError(
-                ["Splitting only on figure is not allowed. ", entries]
+                ["Splitting only on figure is not allowed.", entries]
             )
 
         return entries
