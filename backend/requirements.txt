@@ -25,17 +25,8 @@ django-cors-headers>=2.4.0
 django-rest-email-auth
 coreapi>=2.3.3
 
-# ---------------------------------
-# Elastic Search (>=6.0 and <7.0)
-# ---------------------------------
-# django-elasticsearch-dsl only supports elasticsearch 6 (https://github.com/sabricot/django-elasticsearch-dsl/issues/170)
-
-#elasticsearch-dsl == 7.1.0
-elasticsearch-dsl== 7.1.0
+elasticsearch-dsl==7.1.0
 django-elasticsearch-dsl==7.1.1
-# see https://github.com/barseghyanartur/django-elasticsearch-dsl-drf/pull/141
-#django-elasticsearch-dsl-drf==0.18
-#-e git+https://github.com/barseghyanartur/django-elasticsearch-dsl-drf.git#egg=django-elasticsearch-dsl-drf
 django-elasticsearch-dsl-drf
 
 # Static and Media Storage

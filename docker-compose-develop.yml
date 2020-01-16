@@ -37,13 +37,10 @@ services:
   elasticsearch:
     restart: always
     environment:
-      #- cluster.initial_master_nodes=elasticsearch
-      #- "ES_JAVA_OPTS=-Xms4g -Xmx4g"
-      #- cluster.name=elasticsearch
       - bootstrap.memory_lock=true
       - discovery.type=single-node
       - cluster.name=elasticsearch
-      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
       - cluster.routing.allocation.disk.threshold_enabled=false
       - xpack.license.self_generated.type=trial
     ulimits:
