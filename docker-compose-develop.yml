@@ -28,7 +28,7 @@ services:
 
   postgres:
     restart: always
-    image: postgres:11.4
+    image: postgres:12.1
     ports:
       - "5433:5432"
     volumes:

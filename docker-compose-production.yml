@@ -27,7 +27,7 @@ volumes:
 services:
   postgres:
     restart: always
-    image: postgres:11.4
+    image: postgres:12.1
     ports:
       - "5433:5432"
     volumes:
@@ -35,7 +35,7 @@ services:
 
   elasticsearch:
     restart: always
-    image: elasticsearch:6.8.1
+    image: elasticsearch:7.5.1
     environment:
       - "ES_JAVA_OPTS=-Xms6g -Xmx6g"
     ports:
