@@ -1,6 +1,6 @@
 <template>
     <v-toolbar id="heading-toolbar" color="secondary" dark>
-            <Heading :count="count" :icon="icon" :title="title" :resource_url="resource_url"/>
+        <Heading :count="count" :icon="icon" :title="title" :resource_url="resource_url"/>
     </v-toolbar>
 </template>
 
