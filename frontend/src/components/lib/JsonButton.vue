@@ -1,10 +1,17 @@
 <template>
-    <span v-if="resource_url">
-        <v-btn slot="activator" fab dark small flat color="black" :href="resource_url"
-               :disabled="resource_url ? false : true" title="JSON for query">
-            <v-icon dark>fas fa-code</v-icon>
-        </v-btn>
-    </span>
+    <v-btn v-if="resource_url"
+           slot="activator"
+           fab
+           dark
+           small
+           text
+           color="black"
+           :href="resource_url"
+           :disabled="resource_url ? false : true"
+           title="JSON for query"
+    >
+        <v-icon dark>fas fa-code</v-icon>
+    </v-btn>
 </template>
 
 <script>

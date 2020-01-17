@@ -10,7 +10,7 @@ Vue.config.devtools = true;
  *  Domain
  *  -------------------------------------------------------------- */
 //  read from .env.template file
-var backend_domain = process.env.VUE_APP_API_BASE;
+const backend_domain = process.env.VUE_APP_API_BASE;
 
 
 if (!backend_domain) {
@@ -33,7 +33,7 @@ const vuexLocalStorage = new VuexPersist({
         // keepThisModuleToo: state.keepThisModuleToo
         // getRidOfThisModule: state.getRidOfThisModule (No one likes it.)
     })
-})
+});
 
 /** --------------------------------------------------------------
  *  Vuex store
