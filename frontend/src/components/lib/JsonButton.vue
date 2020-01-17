@@ -3,12 +3,13 @@
            slot="activator"
            fab
            dark
-           small
+           x-small
            text
            color="black"
            :href="resource_url"
            :disabled="resource_url ? false : true"
            title="JSON for query"
+           icon
     >
         <v-icon dark>fas fa-code</v-icon>
     </v-btn>
