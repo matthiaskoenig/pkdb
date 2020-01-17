@@ -47,7 +47,13 @@ within the research network Systems Medicine of the Liver ([LiSyM](http://www.li
 
 ## How to cite
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
-If you use PK-DB or data from PK-DB cite 
+If you use PK-DB data or the web interface cite
+
+> *PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling*  
+> Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König   
+> bioRxiv 760884; doi: https://doi.org/10.1101/760884 
+
+If you use PK-DB code cite in addition 
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 
