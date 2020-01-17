@@ -1,7 +1,9 @@
 import '@babel/polyfill'
 import Vue from 'vue'
-import './plugins/vuetify'
-import './plugins/vuetify'
+// import './plugins/vuetify'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+
 
 import VueResource from 'vue-resource';
 import App from './App.vue'
@@ -9,7 +11,6 @@ import router from './router'
 import store from './store'
 
 import './assets/pkdb.css';
-import './stylus/main.styl'
 
 Vue.use(VueResource);
 import VueAuthImage from 'vue-auth-image';
@@ -131,10 +132,13 @@ Vue.component('text-highlight', TextHighlight);
 
 Vue.config.productionTip = false;
 
+const opts = {}
+Vue.use(Vuetify)
 
 new Vue({
     router,
     store,
+    vuetify: new Vuetify(opts),
     render: h => h(App)
 }).$mount('#app');
 
