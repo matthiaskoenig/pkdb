@@ -185,4 +185,4 @@ docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loadda
 docker-compose -f $PKDB_DOCKER_COMPOSE_YAML run --rm backend ./manage.py  loaddata rest_email_auth pkdb_app/fixtures/rest_email_auth.json
 ```
 
-&copy; 2017-2019 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.
+&copy; 2017-2020 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.
