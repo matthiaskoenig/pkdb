@@ -6,6 +6,16 @@
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex xs12>
+                    <h2>PK-DB Team</h2>
+                    <p>
+                        <user-avatar username="mkoenig"/>
+                        <user-avatar username="janekg"/>
+                        <user-avatar username="kgreen"/>
+                        <user-avatar username="dimitra"/>
+                        <user-avatar username="jbrandhorst"/>
+                        <user-avatar username="deepa"/>
+                        <user-avatar username="yduport"/>
+                    </p>
                     <h2>How to cite</h2>
                     <p>
                         <i>PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling</i><br />
