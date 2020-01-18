@@ -11,6 +11,7 @@
             append-icon="fa-search"
             label="Search"
             single-line
+            color="white"
             hide-details
             :autofocus="autofocus"
     />
