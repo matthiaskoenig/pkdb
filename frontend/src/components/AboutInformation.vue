@@ -1,12 +1,15 @@
 <template>
     <v-card id="about-information">
-        <v-toolbar color="secondary" dark dense>
+        <v-toolbar color="#00a087" dense>
             <v-toolbar-title>About PK-DB</v-toolbar-title>
         </v-toolbar>
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex xs12>
-                    <h2>PK-DB Team</h2>
+                    <h2>Team</h2>
+                    <p>
+                        PK-DB is developed from the <a href="https://livermetabolism.com">Systems Medicine of the Liver Group</a> of Matthias König at the Humboldt-University Berlin.
+                    </p>
                     <p>
                         <user-avatar username="mkoenig"/>
                         <user-avatar username="janekg"/>
@@ -26,17 +29,18 @@
                     If you use PK-DB code cite also<br />
                         <a href="https://doi.org/10.5281/zenodo.1406979"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg"/></a>
                     </p>
-                    <h2>Report an issue</h2>
-                    <p>
-                    <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">
-                        <v-icon color="black" small>fas fa-fire</v-icon></a> <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">https://github.com/matthiaskoenig/pkdb/issues/new</a>
-                    </p>
                     <h2>Contact</h2>
                     <p>
                         <span v-for="item in contact_items" :key="item.name">
                             <a :href="item.to" :title="item.title"><v-icon color="black" small>{{ item.icon }}</v-icon></a>&nbsp;<a :href="item.to" :title="item.title">{{ item.title }}</a><br/>
                         </span>
                     </p>
+                    <h2>Report an issue</h2>
+                    <p>
+                    <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">
+                        <v-icon color="black" small>fas fa-fire</v-icon></a> <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">https://github.com/matthiaskoenig/pkdb/issues/new</a>
+                    </p>
+
                     <h2>Licensing</h2>
                     <p>
                     All data is governed by the PK-DB's <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md">Terms of use</a>
