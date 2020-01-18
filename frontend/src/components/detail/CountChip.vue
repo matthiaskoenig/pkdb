@@ -3,6 +3,7 @@
             :disabled="!count"
             label
             outlined
+            :to="to"
     >
         <v-icon :title="'Number of ' + name + 's'">{{ icon }}</v-icon>&nbsp;
         {{ count }}
@@ -13,6 +14,9 @@
     export default {
         name: "CountChip",
         props: {
+            to: {
+                type: String,
+            },
             count: {
                 type: Number,
                 required: true
