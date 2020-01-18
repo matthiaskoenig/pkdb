@@ -2,14 +2,17 @@
     <div class="study-info">
         <v-layout wrap>
             <v-flex md4>
+                <v-card flat>
+                <v-icon color="black">{{ icon('study') }}</v-icon>
+                <span class="heading-title">&nbsp;{{ study.sid }}</span>
                 <v-btn icon>
-                    <v-icon small
-                            :title="'Study has '+ study.access + ' access'"
+                    <v-icon
+                            :title="'Study is '+ study.access"
                             :color="study.access =='public' ? 'green' : 'red'"
                     >{{icon(study.access)}}</v-icon>
                 </v-btn>
                 <v-btn icon>
-                    <v-icon small
+                    <v-icon
                             :title="'Publication is '+ study.licence + ' access'"
                             :color="study.licence =='open' ? 'green' : 'red'"
                     >{{icon(study.licence)}}</v-icon>
@@ -20,6 +23,7 @@
                     </template>
                 </get-data>
                 <Annotations :item="study"/>
+                </v-card>
             </v-flex>
 
             <v-flex md2>
@@ -75,7 +79,7 @@
     import CountChip from "../detail/CountChip";
 
     export default {
-        name: "StudyInfo",
+        name: "StudyOverview",
         components: {
             ReferenceDetail: ReferenceDetail,
             FileImageView: FileImageView,
@@ -117,7 +121,4 @@
 </script>
 
 <style scoped>
-    .study-info {
-        padding-top: 50px;
-    }
 </style>

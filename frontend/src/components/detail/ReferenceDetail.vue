@@ -9,7 +9,7 @@
                 <span class="font-italic">{{ reference.journal }}, {{reference.date}}</span>
             </p>
             <p>
-                <v-btn icon v-on:click="abstractHidden = !abstractHidden">
+                <v-btn color="black" icon v-on:click="abstractHidden = !abstractHidden">
                     <template v-if="abstractHidden">
                         <v-icon title="Show abstract">far fa-plus-square</v-icon>
                     </template>
