@@ -27,7 +27,9 @@
         <!-- links -->
         <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API" color="white"><v-icon>{{ icon('api') }}</v-icon></v-btn>
+        <!--
         <v-btn icon :href="admin_url" title="Django admin interface" color="white"><v-icon>{{ icon('admin') }}</v-icon></v-btn>
+        -->
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository" color="white">
             <v-icon>{{ icon('github')}}</v-icon>
         </v-btn>
