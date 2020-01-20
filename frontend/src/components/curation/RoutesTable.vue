@@ -9,30 +9,28 @@
                 :loading="loading"
                 :class="table_class"
         >
-            <template v-slot:item="table">
-            <td>
-                    <JsonButton :resource_url="api + 'routes/'+ table.item.url_slug+ '/?format=json' "/>
-                </td>
-                <td>{{table.item.sid}}</td>
-                <td>{{table.item.name}}</td>
-                <td>{{table.item.creator}}</td>
-                <td>{{table.item.description}}</td>
-                <td>
-                    <ul>
-                        <v-chip v-for="synonym in table.item.synonyms" :key="synonym">
-                            {{synonym}}
-                        </v-chip>
-                    </ul>
+            <template v-slot:item.buttons="{ item }">
+                <JsonButton :resource_url="api + 'routes/'+ item.url_slug+ '/?format=json' "/>
+            </template>
+            <template v-slot:item.sid="{ item }">{{item.sid}}</template>
+            <template v-slot:item.name="{ item }">{{item.name}}</template>
+            <template v-slot:item.creator="{ item }">{{item.creator}}</template>
+            <template v-slot:item.description="{ item }">{{item.description}}</template>
+            <template v-slot:item.synonyms="{ item }">
+                <ul>
+                    <v-chip v-for="synonym in item.synonyms" :key="synonym">
+                        {{synonym}}
+                    </v-chip>
+                </ul>
 
-                </td>
-                <td>
+            </template>
+            <template v-slot:item.annotations="{ item }">
 
-                    <ul>
-                        <v-chip v-for="annotation in table.item.annotations" :key="annotation.term">
-                            {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
-                        </v-chip>
-                    </ul>
-                </td>
+                <ul>
+                    <v-chip v-for="annotation in item.annotations" :key="annotation.term">
+                        {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
+                    </v-chip>
+                </ul>
             </template>
             <no-data/>
         </v-data-table>

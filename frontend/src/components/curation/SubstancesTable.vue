@@ -9,42 +9,40 @@
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <JsonButton :resource_url="api + 'substances/'+ table.item.url_slug+ '/?format=json' "/>
-                </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.sid}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.name}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.mass}} </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.charge}}  </text-highlight> </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.formula}} </text-highlight> </td>
-                <td>
-                    <v-chip :disabled="true" color='green' v-if="table.item.derived" >
-                        <v-icon small title="derived from parents">{{icon("success")}}</v-icon>
-                    </v-chip>
-                </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.description}} </text-highlight> </td>
-                <td>
-                    <ul>
-                        <substance-chip v-for="parent in table.item.parents" :title="parent.sid" :key="parent"/>
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        <v-chip v-for="synonym in table.item.synonyms" :key="synonym">
-                            {{synonym}}
-                        </v-chip>
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        <v-chip v-for="annotation in table.item.annotations" :key="annotation">
-                            {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
-                        </v-chip>
-                    </ul>
-                </td>
-
+            <template v-slot:item.buttons="{ item }">
+                    <JsonButton :resource_url="api + 'substances/'+ item.url_slug+ '/?format=json' "/>
             </template>
+           <template v-slot:item.sid="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.sid}} </text-highlight> </template>
+           <template v-slot:item.name="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.name}} </text-highlight> </template>
+           <template v-slot:item.mass="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.mass}} </text-highlight> </template>
+           <template v-slot:item.charge="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.charge}}  </text-highlight> </template>
+           <template v-slot:item.formula="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.formula}} </text-highlight> </template>
+           <template v-slot:item.derived="{ item }">
+                <v-chip :disabled="true" color='green' v-if="item.derived" >
+                    <v-icon small title="derived from parents">{{icon("success")}}</v-icon>
+                </v-chip>
+            </template>
+           <template v-slot:item.description="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.description}} </text-highlight> </template>
+           <template v-slot:item.parents="{ item }">
+                <ul>
+                    <substance-chip v-for="parent in item.parents" :title="parent.sid" :key="parent"/>
+                </ul>
+            </template>
+           <template v-slot:item.synonyms="{ item }">
+                <ul>
+                    <v-chip v-for="synonym in item.synonyms" :key="synonym">
+                        {{synonym}}
+                    </v-chip>
+                </ul>
+            </template>
+           <template v-slot:item.annotations="{ item }">
+                <ul>
+                    <v-chip v-for="annotation in item.annotations" :key="annotation">
+                        {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
+                    </v-chip>
+                </ul>
+            </template>
+
             <no-data/>
         </v-data-table>
     </v-card>
