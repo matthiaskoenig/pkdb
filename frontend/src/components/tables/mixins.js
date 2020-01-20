@@ -8,7 +8,7 @@ var searchTableMixin = {
             entries: [],
             search: "",
             loading: true,
-            pagination: {},
+            options: {},
             rowsPerPageItems: [5, 10, 20, 50, 100],
             table_class: "elevation-1",
         }
@@ -61,9 +61,9 @@ var searchTableMixin = {
         },
         url() {
             var url = this.resource_url
-                + '&page=' + this.pagination.page
-                + '&page_size=' + this.pagination.rowsPerPage
-                + '&ordering=' + this.descending + this.pagination.sortBy;
+                + '&page=' + this.options.page
+                + '&page_size=' + this.options.itemsPerPage
+                + '&ordering=' + this.options.sortDesc + this.options.sortBy;
             if (this.search) {
                 url += '&search_multi_match=' + this.search
             }
@@ -76,7 +76,7 @@ var searchTableMixin = {
             return url
         },
         descending() {
-            return (this.pagination.descending ? "-" : "");
+            return (this.options.sortDesc ? "-" : "");
         }
     },
     methods: {
