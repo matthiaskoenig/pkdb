@@ -1,47 +1,38 @@
 <template>
-    <v-chip class="ma-2" color="black" text-color="white">
-        <v-avatar left class="green darken-4">
-            {{count}} Test
-        </v-avatar>
+    <v-chip color="black"
+            :disabled="!count"
+            label
+            outlined
+            :to="to"
+    >
+        <v-icon :title="'Number of ' + name + 's'">{{ icon }}</v-icon>&nbsp;
+        {{ count }}
     </v-chip>
-
-    <!--
-        <v-chip color="w" :disabled=disabled>
-            <v-icon small :title="'Number of '+icon+'s'">{{icon_object}}</v-icon>&nbsp;
-            {{ count }}
-        </v-chip>
-        -->
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
-
     export default {
         name: "CountChip",
         props: {
+            to: {
+                type: String,
+            },
             count: {
                 type: Number,
                 required: true
             },
-            disabled:{
-                type:Boolean,
-                required:false,
-                default:false
+            name: {
+                type: String,
+                required: true
             },
             icon:{
                 type:String,
                 required: true
             }
         },
-        computed: {
-            icon_object() {
-                return lookup_icon(this.icon)
-            },
-        }
-
+        computed: {}
     }
 </script>
 
 <style scoped>
-
 </style>

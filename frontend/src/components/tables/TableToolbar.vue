@@ -1,5 +1,5 @@
 <template>
-<v-toolbar id="heading-toolbar" color="secondary" dark>
+<v-toolbar id="heading-toolbar" color="#00a087" dense>
     <heading :count="count"
              :icon="icon(otype)"
              :title="capitalizeFirstLetter(otype)"
@@ -11,6 +11,7 @@
             append-icon="fa-search"
             label="Search"
             single-line
+            color="white"
             hide-details
             :autofocus="autofocus"
     />

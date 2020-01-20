@@ -1,43 +1,41 @@
 <template>
     <div class="study-info">
         <v-layout wrap>
+            <v-flex md4>
+                <v-card flat>
+                <v-icon color="black">{{ icon('study') }}</v-icon>
+                <span class="heading-title">&nbsp;{{ study.sid }}</span>
+                <v-btn icon>
+                    <v-icon
+                            :title="'Study is '+ study.access"
+                            :color="study.access =='public' ? 'green' : 'red'"
+                    >{{icon(study.access)}}</v-icon>
+                </v-btn>
+                <v-btn icon>
+                    <v-icon
+                            :title="'Publication is '+ study.licence + ' access'"
+                            :color="study.licence =='open' ? 'green' : 'red'"
+                    >{{icon(study.licence)}}</v-icon>
+                </v-btn>
+                <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
+                    <template slot-scope="reference">
+                        <reference-detail :reference="reference.data" :resource_url="reference_url(study.reference.sid)"/>
+                    </template>
+                </get-data>
+                <Annotations :item="study"/>
+                </v-card>
+            </v-flex>
+
             <v-flex md2>
                 <v-card flat>
-
-                    <div>
-                        <span class="attr">Access</span><br />
-                        <v-chip :disabled="true" :color="study.access =='public' ? 'green' : 'red'">
-                            <v-icon small :title="'Study has '+ study.access + ' access'">{{icon(study.access)}}</v-icon>
-                        </v-chip>
-                        <v-chip :disabled="true" :color="study.licence =='open' ? 'green' : 'red'" >
-                            <v-icon small :title="'Publication is '+ study.licence + ' access'">{{icon(study.licence)}}</v-icon>
-                        </v-chip>
-                    </div>
-
-                    <div v-if="study.substances && study.substances.length!=0">
-                        <span class="attr">Substances</span><br />
-                        <span v-for="s in study.substances" v-bind:key="s">
-                            <substance-chip :title="s"/>
-                        </span>
-                    </div>
-
-                    <div v-if="study.keywords && study.keywords.length!=0">
-                        <span class="attr">Keywords</span><br />
-                        <span v-for="keyword in study.keywords" :key="keyword">
-                            <keyword-chip :keyword="keyword"/><br />
-                        </span>
-                    </div>
-
                     <div>
                         <span class="attr">Creator</span><br />
                         <user-avatar :user="study.creator"/>
                     </div>
-
                     <div>
                         <span class="attr">Curators</span><br />
                         <user-rating v-for="curator in study.curators" :key="curator.pk" :user="curator"/>
                     </div>
-
                      <div v-if="study.files.length > 0">
                         <span class="attr">Files</span><br />
                           <span v-for="file in study.files" :key="file.pk">
@@ -47,23 +45,26 @@
 
                 </v-card>
             </v-flex>
-
-            <v-flex md5>
-                <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
-                    <template slot-scope="reference">
-                        <reference-detail :reference="reference.data" :resource_url="reference_url(study.reference.sid)"/>
-                    </template>
-                </get-data>
-                <Annotations :item="study"/>
+            <v-flex md2>
+                <v-card flat>
+                    <div v-if="study.substances && study.substances.length!=0">
+                        <span class="attr">Substances</span><br />
+                        <span v-for="s in study.substances" v-bind:key="s">
+                            <substance-chip :title="s"/>
+                        </span>
+                    </div>
+                </v-card>
             </v-flex>
 
-            <v-flex md5>
-                <div v-if="study.files.length == 0">
-                    <warning-chip title="No files or no permission"></warning-chip>
-                </div>
-                <div v-else>
-                    <file-image-view v-if="images.length != 0" :files="images"/>
-                </div>
+            <v-flex md4>
+                <v-alert v-if="study.files.length == 0"
+                         dense
+                         text
+                         type="info"
+                >
+                    No images or no permission
+                </v-alert>
+                <file-image-view v-else :files="images"/>
             </v-flex>
 
         </v-layout>
@@ -76,12 +77,10 @@
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
     import CountChip from "../detail/CountChip";
-    import WarningChip from "./WarningChip";
 
     export default {
-        name: "StudyInfo",
+        name: "StudyOverview",
         components: {
-            WarningChip,
             ReferenceDetail: ReferenceDetail,
             FileImageView: FileImageView,
             CountChip: CountChip
@@ -122,7 +121,4 @@
 </script>
 
 <style scoped>
-    .study-info {
-        padding-top: 50px;
-    }
 </style>
