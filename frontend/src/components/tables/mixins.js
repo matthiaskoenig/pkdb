@@ -111,7 +111,7 @@ var searchTableMixin = {
     }
 };
 
-var UrlMixin = {
+const UrlMixin = {
     methods: {
         group_url(pk) {
             return this.$store.state.endpoints.api + 'groups/' + pk + '/'
