@@ -5,46 +5,21 @@ import logging
 import os
 from os.path import join
 
-import dj_database_url
-from distutils.util import strtobool
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# ------------------------------------------------------------------------------------------------------------------
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['PKDB_SECRET_KEY']
-
 API_BASE = os.environ['PKDB_API_BASE']
 FRONTEND_BASE = os.environ['FRONTEND_BASE']
-
 API_URL = API_BASE + "/api/v1"
-# ------------------------------------------------------------------------------------------------------------------
-# AUTHENTICATION_BACKENDS = (
-#
-#    # Needed to login by username in Django admin, regardless of `allauth`
-##    'rest_email_auth.authentication.VerifiedEmailBackend',
-#    'django.contrib.auth.backends.ModelBackend',
-#
-#    # `allauth` specific authentication methods, such as login by e-mail
-#    'allauth.account.auth_backends.AuthenticationBackend',
-# )
-
-# AUTHENTICATION_BACKENDS = [
-# 'rest_email_auth.authentication.VerifiedEmailBackend',
-# 'django.contrib.auth.backends.ModelBackend',
-# ]
 
 AUTHENTICATION_BACKENDS = (
     # default
     'django.contrib.auth.backends.ModelBackend',
     # email login
-    # 'allauth.account.auth_backends.AuthenticationBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
     'rest_email_auth.authentication.VerifiedEmailBackend',
-
 )
 
-# The minimal settings dict required for the app
 REST_EMAIL_AUTH = {
     'EMAIL_VERIFICATION_URL': FRONTEND_BASE + '/#/verification/{key}',
     'PASSWORD_RESET_URL': FRONTEND_BASE + '/#/reset-password/{key}',
@@ -64,8 +39,6 @@ INSTALLED_APPS = (
     # Authentication
     'rest_email_auth',
     "rest_framework.authtoken",  # token authentication
-    # 'rest_auth',
-    # 'rest_auth.registration',
     'allauth',
     'allauth.account',
 
@@ -75,10 +48,7 @@ INSTALLED_APPS = (
     "corsheaders",
 
     # Elastic Search
-    # Django Elasticsearch integration
     'django_elasticsearch_dsl',
-
-    # Django REST framework Elasticsearch integration (this package)
     'django_elasticsearch_dsl_drf',
 
     # Your apps
@@ -282,8 +252,9 @@ DATABASES = {
 DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
 logging.info(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
 print(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
+
 # ------------------------------
-# LOCAL
+# local
 # ------------------------------
 if DJANGO_CONFIGURATION == 'local':
     DEBUG = True
@@ -304,7 +275,7 @@ if DJANGO_CONFIGURATION == 'local':
     }
 
 # -------------------------------------------------
-# Production
+# production
 # -------------------------------------------------
 elif DJANGO_CONFIGURATION == 'production':
     DEBUG = False
@@ -323,17 +294,11 @@ elif DJANGO_CONFIGURATION == 'production':
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
     # EMAIL_PORT = 587
     # EMAIL_USE_TLS = True
-    EMAIL_USE_TLS = False
     EMAIL_PORT = 25
+    EMAIL_USE_TLS = False
+    EMAIL_USE_SSL = False
     EMAIL_HOST_USER = os.environ['PKDB_EMAIL_HOST_USER']
     EMAIL_HOST_PASSWORD = os.environ['PKDB_EMAIL_HOST_PASSWORD']
-
-    if not EMAIL_HOST_USER:
-        raise ValueError("PKDB_EMAIL_HOST_USER could not be read, export the "
-                         "'PKDB_EMAIL_HOST_USER' environment variable.")
-    if not EMAIL_HOST_PASSWORD:
-        raise ValueError("PKDB_EMAIL_HOST_PASSWORD could not be read, export the "
-                         "'PKDB_EMAIL_HOST_PASSWORD' environment variable.")
 
     # Elastic Search
     ELASTICSEARCH_DSL = {
@@ -344,8 +309,9 @@ elif DJANGO_CONFIGURATION == 'production':
 
     # FIXME: remove after email testing
     from django.core.mail import send_mail
-    send_mail('Test mail production', 'Here is the message.',
-    'from@example.com', ['konigmatt@googlemail.com'], fail_silently=False)
+    send_mail(f"Site deployment '{API_BASE}'", 'Here is the message.',
+              'pk-db.com', ['konigmatt@googlemail.com'],
+              fail_silently=False)
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
