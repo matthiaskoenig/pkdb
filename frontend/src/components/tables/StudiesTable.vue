@@ -12,7 +12,7 @@
             <template v-slot:item.buttons="{ item }">
                 <LinkButton :to="'/studies/'+ item.sid" :title="'Study: '+item.pk" :icon="icon('study')"/>
                 <LinkButton v-if="item.reference" :to="'/references/'+ item.reference.sid" :title="'Reference: '+item.reference.sid" :icon="icon('reference')"/>
-                <JsonButton :resource_url="api + 'studies_elastic/'+ item.sid +'/?format=json'"/>
+                <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
                 <export-format-button :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
             </template>
             <template v-slot:item.sid="{ item }">

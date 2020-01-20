@@ -12,7 +12,7 @@
 
                 <template v-slot:item.buttons="{ item }">
                     <LinkButton :to="'/timecourses/'+ item.pk" :title="'Timecourse: '+item.pk" :icon="icon('output')"/>
-                    <JsonButton :resource_url="api + 'timecourses_elastic/'+ item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + 'timecourses/'+ item.pk +'/?format=json'"/>
                 </template>
 
                 <template v-slot:item.measurement_type="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.measurement_type }}</text-highlight></template>

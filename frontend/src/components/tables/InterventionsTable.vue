@@ -11,7 +11,7 @@
         >
             <template v-slot:item.buttons="{ item }">
                 <LinkButton :to="'/interventions/'+ item.pk" :title="'Group: '+ item.pk" :icon="icon(otype_single)"/>
-                    <JsonButton :resource_url="api + 'interventions_elastic/'+ item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + 'interventions/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.name="{ item }">
                 <intervention-chip :intervention="item" :search="search"/>

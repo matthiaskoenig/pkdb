@@ -62,8 +62,7 @@
                     })
             },
             substanceSuggest(){
-                //return this.api + "substances_elastic/suggest/?name_suggest__completion=" + this.search;
-                return this.api + "substances_elastic/";
+                return this.api + "substances/";
 
             },
         },

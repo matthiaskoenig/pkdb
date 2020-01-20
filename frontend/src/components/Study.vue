@@ -36,7 +36,7 @@
                 return tokens[tokens.length-1];
             },
             resource_url() {
-                return this.$store.state.endpoints.api + 'studies_elastic/'+ this.study_id +'/?format=json';
+                return this.$store.state.endpoints.api + 'studies/'+ this.study_id +'/?format=json';
             },
             study_pks_url(){
                 return this.$store.state.endpoints.api + 'study_pks/?format=json'
