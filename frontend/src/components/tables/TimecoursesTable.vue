@@ -9,47 +9,49 @@
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <LinkButton :to="'/timecourses/'+ table.item.pk" :title="'Timecourse: '+table.item.pk" :icon="icon('output')"/>
-                    <JsonButton :resource_url="api + 'timecourses_elastic/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.measurement_type }}</text-highlight></td>
-                <td>
-                    <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
+
+                <template v-slot:item.buttons="{ item }">
+                    <LinkButton :to="'/timecourses/'+ item.pk" :title="'Timecourse: '+item.pk" :icon="icon('output')"/>
+                    <JsonButton :resource_url="api + 'timecourses_elastic/'+ item.pk +'/?format=json'"/>
+                </template>
+
+                <template v-slot:item.measurement_type="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.measurement_type }}</text-highlight></template>
+                <template v-slot:item.group="{ item }">
+                    <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
                             <group-chip :group="data.data" :search="search"/>
                         </span>
                     </get-data>
-                </td>
-                <td>
-                    <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
+                </template>
+                <template v-slot:item.individual="{ item }">
+                    <get-data v-if="item.individual" :resource_url="individual_url(item.individual.pk)">
                         <span slot-scope="data">
                             <individual-chip :individual="data.data" :search="search"/>
                         </span>
                     </get-data>
-                <td>
-                    <span v-for="(intervention, index2) in table.item.interventions" :key="index2">
+                </template>
+                <template v-slot:item.interventions="{ item }">
+                    <span v-for="(intervention, index2) in item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
                         <span slot-scope="data">
                             <intervention-chip :intervention="data.data" :search="search"/>
                         </span>
                     </get-data>
                     </span>
-                </td>
-                <td>
+                </template>
+                <template v-slot:item.tissue="{ item }">
                     <text-highlight :queries="search.split(/[ ,]+/)">
-                        {{table.item.tissue}}
+                        {{item.tissue}}
                     </text-highlight>
-                </td>
-                <td>
-                    <substance-chip :title="table.item.substance" :search="search"/>
-                </td>
-                <td>
-                    <timecourse-plot :timecourse="table.item"/>
-                </td>
-            </template>
-            <no-data/>
+                </template>
+
+                <template v-slot:item.substance="{ item }">
+                    <substance-chip :title="item.substance" :search="search"/>
+                </template>
+                <template v-slot:item.timecourse="{ item }">
+                    <timecourse-plot :timecourse="item"/>
+                </template>
+                <no-data/>
 
         </v-data-table>
     </v-card>
@@ -94,7 +96,7 @@
                     {text: 'Interventions', value: 'interventions', sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
-                    {text: 'Timecourse', value: 'auc_end'},
+                    {text: 'Timecourse', value: 'timecourse'},
                 ]
             }
         },

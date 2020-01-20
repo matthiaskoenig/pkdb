@@ -163,10 +163,8 @@
             resource(data){
                 return {entries:data, count:data.length}
             },
-        },
-        created: function() {
-            this.resetVisibility();
         }
+
     }
 </script>
 

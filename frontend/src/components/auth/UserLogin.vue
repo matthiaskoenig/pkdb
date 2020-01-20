@@ -31,11 +31,11 @@
         <v-card-actions>
             <v-btn color="primary" v-on:click="login">Login</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn flat><router-link v-on:click.native="close" to="/registration" >
+                <v-btn text><router-link v-on:click.native="close" to="/registration" >
                    register
                 </router-link></v-btn>
 
-                 <v-btn flat><router-link v-on:click.native="close" to="/request-password-reset" >
+                 <v-btn text><router-link v-on:click.native="close" to="/request-password-reset" >
                    forgot password
                 </router-link></v-btn>
 

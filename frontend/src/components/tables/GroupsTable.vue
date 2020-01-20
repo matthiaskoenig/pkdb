@@ -9,29 +9,26 @@
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <link-button :to="'/groups/'+ table.item.pk" :title="'Group: '+table.item.pk"
+            <template v-slot:item.buttons="{ item }">
+                    <link-button :to="'/groups/'+ item.pk" :title="'Group: '+item.pk"
                                  :icon="icon('group')"/>
 
-                    <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+table.item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + 'groups_elastic/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td>
-                    <group-chip :group="table.item" :search="search"/>
-                </td>
-                <td>
-                    <group-chip v-if="table.item.parent" :group="table.item.parent" :search="search"/>
+                    <!--<link-button :to="'/studies/'+ item.study.pk" :title="'Study: '+item.study.name" :icon="icon('study')"/>-->
+                    <json-button :resource_url="api + 'groups_elastic/'+ item.pk +'/?format=json'"/>
+                </template>
+            <template v-slot:item.name="{ item }">
+                    <group-chip :group="item" :search="search"/>
+                </template>
+            <template v-slot:item.parent="{ item }">
+                    <group-chip v-if="item.parent" :group="item.parent" :search="search"/>
 
-                </td>
-                <td>
-                    <v-layout wrap>
-                        <span v-for="item in table.item.characteristica_all_normed" :key="item.pk">
-                            <characteristica-card :data="item"
-                                                  :resource_url="characterica_url(get_ids(table.item.characteristica_all_normed))"/>
-                        </span>
-                    </v-layout>
-                </td>
+                </template>
+            <template v-slot:item.characteristica="{ item }">
+                <v-layout wrap>
+                    <span v-for="characteristica in item.characteristica_all_normed" :key="characteristica.pk">
+                         <characteristica-card :data="characteristica" :resource_url="characterica_url([characteristica.pk])"/>
+                    </span>
+                </v-layout>
             </template>
             <no-data/>
         </v-data-table>

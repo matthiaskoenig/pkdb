@@ -58,7 +58,7 @@
             items() {
                 return [
                     {
-                        name: 'Studie',
+                        name: 'Study',
                         to: '/studies',
                         icon: this.icon('studies'),
                         count: this.data.study_count,

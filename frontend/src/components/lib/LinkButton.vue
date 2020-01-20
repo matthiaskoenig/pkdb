@@ -2,7 +2,7 @@
     <span class="link-button">
         <v-btn fab
                small
-               flat
+               text
                dark
                color="black"
                :to="to"

@@ -1,9 +1,7 @@
 <template>
-    <span id="user-avatar">
-          <v-avatar  :title="fullname" :size="32">
-            <img :src="src">
+          <v-avatar left :size="32">
+            <img :src="src" :alt=fullname>
           </v-avatar>
-    </span>
 </template>
 
 <script>
@@ -12,6 +10,7 @@
         props: {
             search: {type:String, default:""},
             user: {
+
                 type: Object,
                 required: false,
             },

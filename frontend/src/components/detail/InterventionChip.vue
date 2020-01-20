@@ -1,13 +1,23 @@
 <template>
+
+    <v-chip v-if="intervention" color="#2b83ba" title="Intervention Details" >
+        <v-icon small color="black">{{ icon('intervention') }}</v-icon>&nbsp;
+        <text-highlight :queries="search.split(/[ ,]+/)">{{ intervention.name }}</text-highlight>
+    </v-chip>
+
+    <!--
     <v-dialog class="detail-dialog text-xs-center">
-        <span slot="activator">
-            <v-chip v-if="intervention" color="#2b83ba" title="Intervention Details">
+        <template v-slot:activator="{ on }">
+
+            <v-chip v-if="intervention" color="#2b83ba" title="Intervention Details" >
                 <v-icon small color="black">{{ icon('intervention') }}</v-icon>&nbsp;
                 <text-highlight :queries="search.split(/[ ,]+/)">{{ intervention.name }}</text-highlight>
             </v-chip>
-        </span>
+
+        </template>
         <intervention-detail :intervention="intervention"/>
     </v-dialog>
+    -->
 </template>
 
 <script>

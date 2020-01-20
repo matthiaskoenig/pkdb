@@ -2,12 +2,19 @@
     <span id="study">
         <get-data :resource_url="resource_url">
             <div slot-scope="study">
+                <StudyDetail :study="study.data"  :resource_url="resource_url" />
+            </div>
+            <!--
+            <div slot-scope="study">
                 <get-data :resource_url="study_pks_url">
+
                     <div slot-scope="study_pks">
                         <StudyDetail :study="study.data" :study_pks="study_pks.data" :resource_url="resource_url" />
                     </div>
+
                 </get-data>
             </div>
+            -->
 
         </get-data>
     </span>

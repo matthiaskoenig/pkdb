@@ -9,51 +9,50 @@
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <LinkButton :to="'/outputs/'+ table.item.pk" :title="'Output: '+table.item.pk" :icon="icon(otype)"/>
-                    <JsonButton :resource_url="api + 'outputs_elastic/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.measurement_type }} </text-highlight> </td>
-                <td>
-                    <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
+                <template v-slot:item.buttons="{ item }">
+                    <LinkButton :to="'/outputs/'+ item.pk" :title="'Output: '+item.pk" :icon="icon(otype)"/>
+                    <JsonButton :resource_url="api + 'outputs_elastic/'+ item.pk +'/?format=json'"/>
+                </template>
+                <template v-slot:item.measurement_type="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.measurement_type }} </text-highlight> </template>
+                <template v-slot:item.group="{ item }">
+                    <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
                             <group-chip :group="data.data" :search="search"/>
                         </span>
                     </get-data>
-                </td>
-                <td>
-                    <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
+                </template>
+                <template v-slot:item.individual="{ item }">
+                    <get-data v-if="item.individual" :resource_url="individual_url(item.individual.pk)">
                         <span slot-scope="data">
                             <individual-chip :individual="data.data" :search="search"/>
                         </span>
                     </get-data>
-                <td>
-                    <span v-if="table.item.interventions" v-for="(intervention, index2) in table.item.interventions" :key="index2">
+                </template>
+            <template v-slot:item.interventions="{ item }">
+                    <span v-if="item.interventions" v-for="(intervention, index2) in item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
                             <span slot-scope="data">
                                 <intervention-chip :intervention="data.data" :search="search"/>
                             </span>
                         </get-data>&nbsp;
                     </span>
-                </td>
-                <td>
+                </template>
+                <template v-slot:item.tissue="{ item }">
                     <text-highlight :queries="search.split(/[ ,]+/)">
-                        {{table.item.tissue}}
+                        {{item.tissue}}
                     </text-highlight>
-                </td>
-                <td>
-                    {{table.item.time}}
-                    <span v-if="table.item.time_unit">[{{table.item.time_unit }}]</span>
-                </td>
-                <td><characteristica-card :data="table.item"/></td>
-                <td>
-                    <v-chip :disabled="true" color='green' v-if="table.item.calculated" >
-                        <v-icon small :title="'is calculated from timecourse with pk:' + table.item.timecourse.pk">{{icon("success")}}</v-icon>
+                </template>
+                <template v-slot:item.time="{ item }">
+                    {{item.time}}
+                    <span v-if="item.time_unit">[{{item.time_unit }}]</span>
+                </template>
+                <template v-slot:item.value="{ item }"><characteristica-card :data="item"/></template>
+                <template v-slot:item.calculated="{ item }">
+                    <v-chip :disabled="true" color='green' v-if="item.calculated" >
+                        <v-icon small :title="'is calculated from timecourse with pk:' + item.timecourse.pk">{{icon("success")}}</v-icon>
                     </v-chip>
-                </td>
+                </template>
 
-            </template>
             <no-data/>
         </v-data-table>
     </v-card>

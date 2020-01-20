@@ -9,8 +9,8 @@
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
+            <template v-slot:item="table">
+            <td>
                     <JsonButton :resource_url="api + 'routes/'+ table.item.url_slug+ '/?format=json' "/>
                 </td>
                 <td>{{table.item.sid}}</td>
@@ -28,7 +28,7 @@
                 <td>
 
                     <ul>
-                        <v-chip v-for="annotation in table.item.annotations" :key="annotation">
+                        <v-chip v-for="annotation in table.item.annotations" :key="annotation.term">
                             {{annotation.collection}}:<b>{{annotation.term}}</b> | {{annotation.relation}}
                         </v-chip>
                     </ul>

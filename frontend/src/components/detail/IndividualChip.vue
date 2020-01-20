@@ -1,11 +1,11 @@
 <template>
     <v-dialog class="detail-dialog text-xs-center">
-        <span slot="activator">
+        <template v-slot:activator="{ on }">
             <v-chip v-if="individual" color="#fdae61" title="Group Details">
                 <v-icon small color="black">{{ icon('individual') }}</v-icon>&nbsp;
                 <text-highlight :queries="search.split(/[ ,]+/)">{{ individual.name }}</text-highlight>
             </v-chip>
-        </span>
+        </template>
         <individual-detail :individual="individual"/>
     </v-dialog>
 </template>
