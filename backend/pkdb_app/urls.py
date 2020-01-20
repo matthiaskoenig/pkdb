@@ -56,7 +56,7 @@ router.register("_user_groups", UserGroupViewSet, basename="_user_groups")  # dj
 #router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
 #router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
 #router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
-#router.register("statistics", StatisticsViewSet, basename="statistics")
+router.register("statistics", StatisticsViewSet, basename="statistics")
 
 # Options
 #router.register("characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option")
