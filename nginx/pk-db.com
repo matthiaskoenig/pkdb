@@ -16,7 +16,7 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
 
-    server_name pk-db.com www.pk-db.com pk-db.de www.pk-db.de;
+    server_name www.pk-db.com pk-db.de www.pk-db.de;
     ssl_certificate     /etc/letsencrypt/live/pk-db.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/pk-db.com/privkey.pem;
 
