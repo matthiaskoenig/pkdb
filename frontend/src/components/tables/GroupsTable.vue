@@ -4,8 +4,8 @@
         <v-data-table
                 :headers="headers"
                 :items="entries"
-                :pagination.sync="pagination"
-                :total-items="count"
+                :options.sync="options"
+                :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
         >
