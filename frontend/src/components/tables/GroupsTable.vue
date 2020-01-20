@@ -14,7 +14,7 @@
                                  :icon="icon('group')"/>
 
                     <!--<link-button :to="'/studies/'+ item.study.pk" :title="'Study: '+item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + 'groups_elastic/'+ item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + 'groups/'+ item.pk +'/?format=json'"/>
                 </template>
             <template v-slot:item.name="{ item }">
                     <group-chip :group="item" :search="search"/>

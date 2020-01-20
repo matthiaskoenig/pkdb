@@ -57,7 +57,7 @@ var searchTableMixin = {
         },
         resource_url() {
 
-            return this.$store.state.endpoints.api  + this.otype + '_elastic/?format=json'
+            return this.$store.state.endpoints.api  + this.otype + '/?format=json'
         },
         url() {
             var url = this.resource_url
@@ -111,31 +111,31 @@ var searchTableMixin = {
     }
 };
 
-var UrlMixin = {
+const UrlMixin = {
     methods: {
         group_url(pk) {
-            return this.$store.state.endpoints.api + 'groups_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'groups/' + pk + '/'
         },
         individual_url(pk) {
-            return this.$store.state.endpoints.api + 'individuals_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'individuals/' + pk + '/'
         },
         output_url(pk) {
-            return this.$store.state.endpoints.api + 'outputs_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'outputs/' + pk + '/'
         },
         timecourse_url(pk) {
-            return this.$store.state.endpoints.api + 'timecourses_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'timecourses/' + pk + '/'
         },
         timecourses_url(pks) {
-            return this.$store.state.endpoints.api + 'timecourses_elastic/?ids=' + pks.join('__')
+            return this.$store.state.endpoints.api + 'timecourses/?ids=' + pks.join('__')
         },
         intervention_url(pk) {
-            return this.$store.state.endpoints.api + 'interventions_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'interventions/' + pk + '/'
         },
         reference_url(pk) {
-            return this.$store.state.endpoints.api + 'references_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'references/' + pk + '/'
         },
         characterica_url(ids) {
-            return this.$store.state.endpoints.api + 'characteristica_elastic/?ids=' + ids.join('__')
+            return this.$store.state.endpoints.api + 'characteristica/?ids=' + ids.join('__')
         },
     }
 };

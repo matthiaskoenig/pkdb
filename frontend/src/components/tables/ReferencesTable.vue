@@ -15,7 +15,7 @@
                     <!--
                     <file-button v-if="item.pdf" :resource_url='backend+item.pdf' :title="item.pdf"/>
                     -->
-                    <json-button :resource_url="api + 'references_elastic/'+ item.sid +'/'"/>
+                    <json-button :resource_url="api + 'references/'+ item.sid +'/'"/>
 
             </template>
             <template  v-slot:item.sid="{ item }">

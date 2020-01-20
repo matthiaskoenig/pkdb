@@ -11,7 +11,7 @@
         >
                 <template v-slot:item.buttons="{ item }">
                     <LinkButton :to="'/outputs/'+ item.pk" :title="'Output: '+item.pk" :icon="icon(otype)"/>
-                    <JsonButton :resource_url="api + 'outputs_elastic/'+ item.pk +'/?format=json'"/>
+                    <JsonButton :resource_url="api + 'outputs/'+ item.pk +'/?format=json'"/>
                 </template>
                 <template v-slot:item.measurement_type="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.measurement_type }} </text-highlight> </template>
                 <template v-slot:item.group="{ item }">

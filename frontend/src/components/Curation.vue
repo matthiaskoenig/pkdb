@@ -78,7 +78,7 @@
                 return this.$store.state.endpoints.api + 'output_options/';
             },
             substances_url() {
-                return this.$store.state.endpoints.api + 'substances_elastic/?page_size=1000';
+                return this.$store.state.endpoints.api + 'substances/?page_size=1000';
             }
 
         }

@@ -13,7 +13,7 @@
             <template v-slot:item.buttons="{ item }">
                     <link-button :to="'/individuals/'+ item.pk" :title="'Individual: '+item.pk" :icon="icon('individual')"/>
                     <!--<link-button :to="'/studies/'+ item.study.pk" :title="'Study: '+ item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + 'individuals_elastic/'+ item.pk +'/?format=json'"/>
+                    <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.individual="{ item }">
                 <div class="attr-card">
