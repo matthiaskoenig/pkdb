@@ -311,7 +311,7 @@ elif DJANGO_CONFIGURATION == 'production':
     send_mail(f"Site deployment '{API_BASE}'",
               'This is an automatically generated mail that the site is '
               'deployed.',
-              f'{API_BASE} mail@pk-db.com', ['konigmatt@googlemail.com'],
+              f'deployment-mail@pk-db.com', ['konigmatt@googlemail.com'],
               fail_silently=False)
 
     # Site
