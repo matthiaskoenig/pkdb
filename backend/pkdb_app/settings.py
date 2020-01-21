@@ -292,11 +292,11 @@ elif DJANGO_CONFIGURATION == 'production':
     SERVER_EMAIL = "mail@pk-db.com"
     DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
-    # EMAIL_PORT = 587
-    # EMAIL_USE_TLS = True
-    EMAIL_PORT = 25
-    EMAIL_USE_TLS = False
-    EMAIL_USE_SSL = False
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    # EMAIL_PORT = 465
+    # EMAIL_USE_SSL = True
+    # EMAIL_PORT = 25
     EMAIL_HOST_USER = os.environ['PKDB_EMAIL_HOST_USER']
     EMAIL_HOST_PASSWORD = os.environ['PKDB_EMAIL_HOST_PASSWORD']
 
@@ -307,10 +307,11 @@ elif DJANGO_CONFIGURATION == 'production':
         },
     }
 
-    # FIXME: remove after email testing
     from django.core.mail import send_mail
-    send_mail(f"Site deployment '{API_BASE}'", 'Here is the message.',
-              'pk-db.com', ['konigmatt@googlemail.com'],
+    send_mail(f"Site deployment '{API_BASE}'",
+              'This is an automatically generated mail that the site is '
+              'deployed.',
+              f'{API_BASE} mail@pk-db.com', ['konigmatt@googlemail.com'],
               fail_silently=False)
 
     # Site
