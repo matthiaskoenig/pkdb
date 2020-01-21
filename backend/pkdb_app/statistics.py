@@ -1,7 +1,6 @@
 """
 Basic information and statistics about data base content.
 """
-import pandas as pd
 from pkdb_app.outputs.models import Output, Timecourse
 from rest_framework import serializers
 from rest_framework.decorators import api_view

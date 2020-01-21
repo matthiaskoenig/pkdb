@@ -1,51 +1,51 @@
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from pkdb_app.categorials.documents import MeasurementTypeDocument
-from pkdb_app.categorials.models import MeasurementType, Tissue, Application, Route, Form
-from pkdb_app.categorials.serializers import MeasurementTypeSerializer, MeasurementTypeElasticSerializer, \
-    TissueSerializer, ApplicationSerializer, RouteSerializer, FormSerializer
+from pkdb_app.info_nodes.documents import MeasurementTypeDocument
+from pkdb_app.info_nodes.models import MeasurementType, Substance, Route, Form, Application, Tissue, Choice
+from pkdb_app.info_nodes.serializers import InfoNodeSerializer
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.users.permissions import IsAdminOrCreator
 from rest_framework import viewsets
 
 
-class MeasurementTypeViewSet(viewsets.ModelViewSet):
+class Chocie(object):
+    pass
+
+namedTuple =  ViewSet
+
+
+class InfoNodeViewSet(viewsets.ModelViewSet):
     queryset = MeasurementType.objects.all()
-    serializer_class = MeasurementTypeSerializer
+    serializer_class = InfoNodeSerializer
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
+    node_types = {
+        "measurement_type":MeasurementType,
+        "substance": Substance,
+        "measurement_type": Route,
+        "measurement_type": Form,
+        "measurement_type": Application,
+        "measurement_type": Tissue,
+        "measurement_type": Choice,
+
+     }
 
 
-class TissueViewSet(viewsets.ModelViewSet):
-    queryset = Tissue.objects.all()
-    serializer_class = TissueSerializer
-    permission_classes = (IsAdminOrCreator,)
-    lookup_field = "url_slug"
+class NoteTypes(models.TextChoices):
+    """ Note Types. """
+
+    Substance = 'substance', _('substance')
+    MeasurementType = 'measurement_type', _('measurement_type')
+    Route = 'route', _('route')
+    Form = 'form', _('form')
+    Application = 'application', _('application')
+    Tissue = 'tissue', _('tissue')
+    Chocie = 'choice', _('choice')
 
 
-class ApplicationViewSet(viewsets.ModelViewSet):
-    queryset = Application.objects.all()
-    serializer_class = ApplicationSerializer
-    permission_classes = (IsAdminOrCreator,)
-    lookup_field = "url_slug"
 
-
-class RouteViewSet(viewsets.ModelViewSet):
-    queryset = Route.objects.all()
-    serializer_class = RouteSerializer
-    permission_classes = (IsAdminOrCreator,)
-    lookup_field = "url_slug"
-
-
-class FormViewSet(viewsets.ModelViewSet):
-    queryset = Form.objects.all()
-    serializer_class = FormSerializer
-    permission_classes = (IsAdminOrCreator,)
-    lookup_field = "url_slug"
-
-
-class MeasurementTypeElasticViewSet(DocumentViewSet):
+class InfoNodeElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     document = MeasurementTypeDocument
     serializer_class = MeasurementTypeElasticSerializer

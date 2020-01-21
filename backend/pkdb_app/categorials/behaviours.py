@@ -1,17 +1,6 @@
-from pkdb_app.behaviours import Sidable
-from pkdb_app.categorials.managers import AnnotatableManager
 from django.db import models
 from pkdb_app.utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
-import pint
 
-ureg = pint.UnitRegistry()
-# Units
-ureg.define('cups = count')
-ureg.define('beverages = count')
-ureg.define('none = count')
-ureg.define('percent = 0.01*count')
-ureg.define('IU = [activity_amount]')
-ureg.define('NO_UNIT = [no_unit]')
 
 
 def map_field(fields):
@@ -56,17 +45,6 @@ class ValueableNotBlank(models.Model):
     se = models.FloatField(null=True)
     cv = models.FloatField(null=True)
     unit = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    class Meta:
-        abstract = True
-
-
-class Annotatable(Sidable):
-    description = models.TextField(blank=True, null=True)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    annotations = models.ManyToManyField('categorials.Annotation')
-
-    objects = AnnotatableManager()
 
     class Meta:
         abstract = True
