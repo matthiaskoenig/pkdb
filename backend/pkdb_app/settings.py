@@ -307,12 +307,13 @@ elif DJANGO_CONFIGURATION == 'production':
         },
     }
 
-    from django.core.mail import send_mail
-    send_mail(f"Site deployment '{API_BASE}'",
-              'This is an automatically generated mail that the site is '
-              'deployed.',
-              f'deployment-mail@pk-db.com', ['konigmatt@googlemail.com'],
-              fail_silently=False)
+    # Test email
+    # from django.core.mail import send_mail
+    # send_mail(f"Site deployment '{API_BASE}'",
+    #          'This is an automatically generated mail that the site is '
+    #          'deployed.',
+    #          f'deployment-mail@pk-db.com', ['konigmatt@googlemail.com'],
+    #          fail_silently=False)
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts
