@@ -21,8 +21,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': FRONTEND_BASE + '/#/verification/{key}',
-    'PASSWORD_RESET_URL': FRONTEND_BASE + '/#/reset-password/{key}',
+    'EMAIL_VERIFICATION_URL': FRONTEND_BASE + '/verification/{key}',
+    'PASSWORD_RESET_URL': FRONTEND_BASE + '/reset-password/{key}',
     'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
     'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
 }
@@ -265,9 +265,9 @@ ELASTICSEARCH_DSL = {
 # ------------------------------
 if DJANGO_CONFIGURATION == 'local':
     DEBUG = True
-    LOGIN_URL = API_BASE + "/#/account"
-    LOGIN_REDIRECT_URL = API_BASE + "/#/account"
-    ACCOUNT_LOGOUT_REDIRECT_URL = API_BASE + "/#/account"
+    LOGIN_URL = API_BASE + "/account"
+    LOGIN_REDIRECT_URL = API_BASE + "/account"
+    ACCOUNT_LOGOUT_REDIRECT_URL = API_BASE + "/account"
 
     # Mail
     EMAIL_HOST = "localhost"
@@ -279,9 +279,9 @@ if DJANGO_CONFIGURATION == 'local':
 # -------------------------------------------------
 elif DJANGO_CONFIGURATION == 'production':
     DEBUG = False
-    LOGIN_URL = "/#/account"
-    LOGIN_REDIRECT_URL = "/#/account"
-    ACCOUNT_LOGOUT_REDIRECT_URL = "/#/account"
+    LOGIN_URL = "/account"
+    LOGIN_REDIRECT_URL = "/account"
+    ACCOUNT_LOGOUT_REDIRECT_URL = "/account"
 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

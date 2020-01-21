@@ -39,7 +39,7 @@ import PasswordReset from './components/auth/PasswordReset';
 Vue.use(Router);
 
 export default new Router({
-    // mode: 'history',
+    mode: 'history',
     routes: [
         {
             path: '/',
