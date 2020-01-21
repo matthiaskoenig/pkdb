@@ -253,6 +253,13 @@ DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
 logging.info(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
 print(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
 
+# Elastic Search
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}
+
 # ------------------------------
 # local
 # ------------------------------
@@ -267,13 +274,6 @@ if DJANGO_CONFIGURATION == 'local':
     EMAIL_PORT = 1025
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-    # Elastic Search
-    ELASTICSEARCH_DSL = {
-        'default': {
-            'hosts': 'elasticsearch:9200'
-        },
-    }
-
 # -------------------------------------------------
 # production
 # -------------------------------------------------
@@ -282,6 +282,7 @@ elif DJANGO_CONFIGURATION == 'production':
     LOGIN_URL = "/#/account"
     LOGIN_REDIRECT_URL = "/#/account"
     ACCOUNT_LOGOUT_REDIRECT_URL = "/#/account"
+
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     # Mail
@@ -299,13 +300,6 @@ elif DJANGO_CONFIGURATION == 'production':
     # EMAIL_PORT = 25
     EMAIL_HOST_USER = os.environ['PKDB_EMAIL_HOST_USER']
     EMAIL_HOST_PASSWORD = os.environ['PKDB_EMAIL_HOST_PASSWORD']
-
-    # Elastic Search
-    ELASTICSEARCH_DSL = {
-        'default': {
-            'hosts': 'localhost:9200'
-        },
-    }
 
     # Test email
     # from django.core.mail import send_mail
