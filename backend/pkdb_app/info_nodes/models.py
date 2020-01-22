@@ -7,7 +7,6 @@ from numbers import Number
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-
 from pkdb_app.info_nodes.managers import InfoNodeManager
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.behaviours import Sidable
@@ -26,7 +25,7 @@ class Annotation(models.Model):
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
 
-class InfoNode(models.Model, Sidable):
+class InfoNode(Sidable):
 
 
     # todo:proably remove
@@ -52,16 +51,12 @@ class InfoNode(models.Model, Sidable):
     def annotations_strings(self):
         return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
 
-
-    def _asdict(self): #todo: should be done via serializer class ?
-        return {
-            "name": self.name,
-            "description": self.description,
-            "annotations": self.annotations_strings(),
-            "url_slug": self.url_slug,
-            "creator": self.creator.username,
-        }
-
+    @property
+    def n_units(self):
+        """
+        :return: list of normalized units as strings
+        """
+        return self.synonyms.values_list("name", flat=True)
 
 class Synonym(models.Model):
     """Synonyms Model"""
@@ -149,10 +144,10 @@ class MeasurementType(AbstractInfoNode):
      return None
 
     def __str__(self):
-        return self.name
+        return self.info_node.name
 
     def __repr__(self):
-        return self.name
+        return self.info_node.name
 
     @property
     def n_p_units(self):
@@ -209,7 +204,7 @@ class MeasurementType(AbstractInfoNode):
 
     def validate_unit(self, unit):
         if not self.is_valid_unit(unit):
-            msg = f"For measurement type `{self.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} " \
+            msg = f"For measurement type `{self.info_node.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} " \
                   f"is not allowed."
             raise ValueError(
                 {"unit": msg, "Only units with the following dimensions are allowed:": self.valid_dimensions_str,
@@ -228,7 +223,7 @@ class MeasurementType(AbstractInfoNode):
             return self.dimension_to_n_unit[str(self.unit_dimension(unit))]
         except KeyError:
             raise ValueError(
-                f"Dimension [{self.unit_dimension(unit)}] is not allowed for measurement type [{self.name}]."
+                f"Dimension [{self.unit_dimension(unit)}] is not allowed for measurement type [{self.info_node.name}]."
                 f" Dimension was calculated from unit :[{unit}]")
 
     def unit_dimension(self, unit):
@@ -249,38 +244,29 @@ class MeasurementType(AbstractInfoNode):
     def choices_list(self):
         return self.choices.values_list("name", flat=True)
 
-    def _asdict(self):
-        # todo: should be done via serializer class ?
-        return {
-            **self.info_node._asdict(),
-            "dtype": self.dtype,
-            "choices": self.choices_list(),
-            "units": self.n_units,
-            "valid unit dimensions": self.valid_dimensions
-        }
+
     @property
     def time_required(self):
-        if self.name in self.TIME_REQUIRED_MEASUREMENT_TYPES:
+        if self.info_node.name in self.TIME_REQUIRED_MEASUREMENT_TYPES:
             return True
         else:
-            False
-
+            return False
 
 
     def validate_choice(self, choice):
         if choice:
             if self.dtype in [self.DTypes.CATEGORIAL_TYPE, self.DTypes.BOOLEAN_TYPE, self.DTypes.NUMERIC_CATEGORIAL_TYPE]:
                 if not self.is_valid_choice(choice):
-                    msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.name}`. " \
+                    msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
                           f"Allowed choices are: `{list(self.choices_list())}`."
                     raise ValueError({"choice": msg})
             else:
-                msg = f"The field `choice` is not allowed for measurement type `{self.name}`. " \
+                msg = f"The field `choice` is not allowed for measurement type `{self.info_node.name}`. " \
                       f"For numerical values the fields `value`, `mean` or `median` are used. " \
                       f"For encoding substances use the `substance` field."
                 raise ValueError({"choice": msg})
         elif self.choices.exists():
-            msg = f"{choice}. A choice is required for `{self.name}`." \
+            msg = f"{choice}. A choice is required for `{self.info_node.name}`." \
                   f" Allowed choices are: `{list(self.choices_list())}`."
             raise ValueError({"choice": msg})
 
@@ -290,7 +276,7 @@ class MeasurementType(AbstractInfoNode):
 
     @property
     def can_be_negative(self):
-        return self.name in self.CAN_NEGATIVE
+        return self.info_node.name in self.CAN_NEGATIVE
 
     def validate_numeric(self, data):
         if self.dtype in [self.DTypes.NUMERIC_CATEGORIAL_TYPE, self.DTypes.NUMERIC_TYPE]:
@@ -316,7 +302,6 @@ class MeasurementType(AbstractInfoNode):
 
     def validate_complete(self, data):
         # check unit
-
         self.validate_unit(data.get("unit", None))
         self.validate_numeric(data)
 
@@ -328,7 +313,7 @@ class MeasurementType(AbstractInfoNode):
             self.validate_time_unit(time_unit)
 
         if self.time_required:
-            details = f"for measurement type `{self.name}`"
+            details = f"for measurement type `{self.info_node.name}`"
             _validate_requried_key(data, "time", details=details)
             _validate_requried_key(data, "time_unit", details=details)
 
@@ -337,7 +322,7 @@ class MeasurementType(AbstractInfoNode):
         """
         :return: list of normalized units in the data format of pint
         """
-        return self.creator.username
+        return self.info_node.creator.username
 
 
 class Substance(AbstractInfoNode):
@@ -356,6 +341,9 @@ class Substance(AbstractInfoNode):
     Has to be extended via ontology (Ontologable)
     """
     # this cannot be null (for class 1 & 2), must be null for class 3
+    info_node = models.OneToOneField(
+        InfoNode, related_name="substance", on_delete=models.SET_NULL, null=True
+    )
     chebi = models.CharField(null=True, max_length=CHAR_MAX_LENGTH, unique=True)
     mass = models.FloatField(null=True)
     charge = models.FloatField(null=True)
@@ -364,12 +352,12 @@ class Substance(AbstractInfoNode):
 
 
     def __str__(self):
-        return self.name
+        return self.info_node.name
 
     @property
     def derived(self):
         # validation rule: check that all labels are in derived and not more(split on `+/()`)
-        return self.parents.exists()
+        return self.info_node.parents.exists()
 
     @property
     def outputs_normed(self):
@@ -389,4 +377,4 @@ class Substance(AbstractInfoNode):
 
     @property
     def creator_username(self):
-        return self.creator.username
+        return self.info_node.creator.username

@@ -123,7 +123,6 @@ class BaseSerializer(WrongKeyValidationSerializer):
         instance = self.Meta.model.objects.create(**validated_data)
         self.update_or_create_related(instance, related_dict)
         instance.save()
-
         return instance
 
     def update(self, instance, validated_data):
@@ -162,9 +161,7 @@ class RouteSerializer(BaseSerializer):
 
 
 class MeasurementTypeSerializer(BaseSerializer):
-    choices = ChoiceSerializer(many=True, allow_null=True)
     units = UnitSerializer(many=True, allow_null=True)
-    synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
 
     class Meta:
         model = MeasurementType

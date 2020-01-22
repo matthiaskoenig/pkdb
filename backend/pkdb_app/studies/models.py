@@ -7,7 +7,7 @@ from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
 
 from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..substances.models import Substance
+from pkdb_app.info_nodes.models import Substance
 
 from ..storage import OverwriteStorage
 from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual

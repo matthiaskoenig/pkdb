@@ -11,7 +11,7 @@ from ..storage import OverwriteStorage
 from ..behaviours import (
     Externable, Accessible)
 
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from .managers import (
@@ -321,7 +321,7 @@ class CharacteristicaEx(
         - Group criteria, concrete properties/characteristics of the group of subjects.
 
         The type of characteristic is defined via the cvtype.
-        When group characterists are curated it is important to specify the inclusion/exclusion criteria in
+        When group characteristica are curated it is important to specify the inclusion/exclusion criteria in
         addition to the group criteria.
 
     This is the concrete selection/information of the characteristics.

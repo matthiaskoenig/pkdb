@@ -9,8 +9,8 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from pkdb_app.categorials.models import MeasurementType, Tissue
-from pkdb_app.categorials.behaviours import ureg
+from pkdb_app.info_nodes.models import MeasurementType, Tissue
+from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
 
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
@@ -26,7 +26,7 @@ from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Externable, Accessible)
 
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 
 TIME_NORM_UNIT = "hr"
 

@@ -1,10 +1,6 @@
-from django.urls import reverse
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from pkdb_app.categorials.models import MeasurementType, Route, Form, Application
-from rest_framework import viewsets
-from rest_framework.response import Response
 
 from pkdb_app.documents import AccessView
 from ..interventions.documents import InterventionDocument
@@ -15,30 +11,8 @@ from ..pagination import CustomPagination
 
 
 ###############################################################################################
-# Option Views
-###############################################################################################
-
-
-class InterventionOptionViewSet(viewsets.ViewSet):
-
-    @staticmethod
-    def get_options():
-        options = {}
-        options["measurement_type"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
-        options["substances"] = reverse('substances_elastic-list')
-        options["route"] = [k.name for k in Route.objects.all()]
-        options["form"] = [k.name for k in Form.objects.all()]
-        options["application"] = [k.name for k in Application.objects.all()]
-        return options
-
-    def list(self, request):
-        return Response(self.get_options())
-
-
-###############################################################################################
 # Elastic Views
 ###############################################################################################
-
 
 class ElasticInterventionViewSet(AccessView):
     document = InterventionDocument

@@ -1,8 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
-from pkdb_app.categorials.behaviours import map_field, VALUE_FIELDS_NO_UNIT, \
+from pkdb_app.behaviours import map_field, VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
 
 from pkdb_app.users.serializers import UserElasticSerializer

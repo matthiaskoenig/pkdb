@@ -4,20 +4,18 @@ Serializers for interventions.
 import numpy as np
 
 from pkdb_app import utils
-from pkdb_app.categorials.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
+from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
     VALUE_FIELDS_NO_UNIT, map_field
-from pkdb_app.categorials.serializers import MeasurementTypeableSerializer
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
 from rest_framework import serializers
 
-from pkdb_app.categorials.models import MeasurementType, Tissue
-
-from pkdb_app.users.serializers import UserElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
+from pkdb_app.users.serializers import UserElasticSerializer
 
+from pkdb_app.info_nodes.models import MeasurementType, Tissue, Substance
 from ..interventions.models import Intervention
-from ..substances.models import Substance
 from ..subjects.models import Group, DataFile, Individual
 
 from .models import (

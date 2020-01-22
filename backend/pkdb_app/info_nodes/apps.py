@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class CategorialsConfig(AppConfig):
+class InfoNodesConfig(AppConfig):
     name = "info_nodes"

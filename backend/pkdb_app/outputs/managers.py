@@ -7,7 +7,7 @@ from django.apps import apps
 import time
 import numpy as np
 
-from pkdb_app.categorials.models import MeasurementType
+from pkdb_app.info_nodes.models import MeasurementType
 from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 from ..analysis.pharmacokinetic import f_pk
 

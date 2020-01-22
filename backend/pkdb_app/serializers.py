@@ -6,7 +6,7 @@ import pandas as pd
 
 from django.db.models import Q
 
-from pkdb_app.categorials.behaviours import map_field
+from pkdb_app.behaviours import map_field
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
@@ -860,3 +860,4 @@ def validate_dict(dic):
             {"error": "data must be a dictionary",
              "detail": dic}
         )
+

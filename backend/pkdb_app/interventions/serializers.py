@@ -4,10 +4,10 @@ Serializers for interventions.
 import itertools
 
 from pkdb_app import utils
-from pkdb_app.categorials.behaviours import VALUE_FIELDS_NO_UNIT, \
+from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.categorials.models import Tissue, Route, Application, Form
-from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.info_nodes.models import Route, Application, Form
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
 
@@ -21,7 +21,7 @@ from ..interventions.models import (
 
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, PkSerializer)
+    NA_VALUES)
 from ..subjects.models import DataFile
 
 # ----------------------------------
