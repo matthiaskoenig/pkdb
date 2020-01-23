@@ -53,7 +53,7 @@ class AnnotationSerializer(serializers.ModelSerializer):
 
 class InfoNodeSerializer(serializers.ModelSerializer):
     """ Substance. """
-    parents = utils.SlugRelatedField(many=True, slug_field="name", queryset=InfoNode.objects.order_by('name'),
+    parents = utils.SlugRelatedField(many=True, slug_field="sid", queryset=InfoNode.objects.order_by('sid'),
                                      required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
