@@ -1,10 +1,5 @@
 <template>
     <v-card id="about-information">
-        <!--
-        <v-toolbar color="#00a087" dense>
-            <v-toolbar-title>About PK-DB</v-toolbar-title>
-        </v-toolbar>
-        -->
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex xs12>
@@ -68,7 +63,6 @@
 
 <script>
     import axios from 'axios'
-    import {lookup_icon} from "@/icons"
 
     export default {
         name: 'AboutInformation',
@@ -96,9 +90,6 @@
             }
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            }
         },
         mounted() {
             axios.get(this.api + `statistics/?format=json`)
@@ -111,7 +102,6 @@
                     this.errors.push(e)
                 })
         }
-
     }
 </script>
 

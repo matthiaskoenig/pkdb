@@ -1,14 +1,14 @@
 <template>
     <v-toolbar id="navigation" class="fixed-nav-bar" flat dense>
 
-        <v-btn icon to="/" title="Home" color="white"><v-icon>{{ icon('home') }}</v-icon></v-btn>
-        <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ icon('studies') }}</v-icon></v-btn>
-        <v-btn icon to="/groups" title="Groups" color="white"><v-icon>{{ icon('groups') }}</v-icon></v-btn>
-        <v-btn icon to="/individuals" title="Individuals" color="white"><v-icon>{{ icon('individuals') }}</v-icon></v-btn>
-        <v-btn icon to="/interventions" title="Interventions" color="white"><v-icon>{{ icon('interventions') }}</v-icon></v-btn>
-        <v-btn icon to="/outputs" title="Outputs" color="white"><v-icon>{{ icon('outputs') }}</v-icon></v-btn>
-        <v-btn icon to="/timecourses" title="Timecourses" color="white"><v-icon>{{ icon('timecourses') }}</v-icon></v-btn>
-        <v-btn icon to="/references" title="References" color="white"><v-icon>{{ icon('references') }}</v-icon></v-btn>
+        <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
+        <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
+        <v-btn icon to="/groups" title="Groups" color="white"><v-icon>{{ faIcon('groups') }}</v-icon></v-btn>
+        <v-btn icon to="/individuals" title="Individuals" color="white"><v-icon>{{ faIcon('individuals') }}</v-icon></v-btn>
+        <v-btn icon to="/interventions" title="Interventions" color="white"><v-icon>{{ faIcon('interventions') }}</v-icon></v-btn>
+        <v-btn icon to="/outputs" title="Outputs" color="white"><v-icon>{{ faIcon('outputs') }}</v-icon></v-btn>
+        <v-btn icon to="/timecourses" title="Timecourses" color="white"><v-icon>{{ faIcon('timecourses') }}</v-icon></v-btn>
+        <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
 
         <v-spacer></v-spacer>
 
@@ -18,26 +18,26 @@
             {{ username }}
         </v-chip>
         <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true">
-            <v-icon color="white">{{ icon('account') }}</v-icon>
+            <v-icon color="white">{{ faIcon('account') }}</v-icon>
         </v-btn>
         <v-dialog v-model="dialog" max-width="500">
             <user-login></user-login>
         </v-dialog>
 
         <!-- links -->
-        <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ icon('curation') }}</v-icon></v-btn>
-        <v-btn icon :href="api_url" title="REST API" color="white"><v-icon>{{ icon('api') }}</v-icon></v-btn>
+        <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
+        <v-btn icon :href="api_url" title="REST API" color="white"><v-icon>{{ faIcon('api') }}</v-icon></v-btn>
         <!--
-        <v-btn icon :href="admin_url" title="Django admin interface" color="white"><v-icon>{{ icon('admin') }}</v-icon></v-btn>
+        <v-btn icon :href="admin_url" title="Django admin interface" color="white"><v-icon>{{ faIcon('admin') }}</v-icon></v-btn>
         -->
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository" color="white">
-            <v-icon>{{ icon('github')}}</v-icon>
+            <v-icon>{{ faIcon('github')}}</v-icon>
         </v-btn>
     </v-toolbar>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
     import  UserLogin from "./auth/UserLogin"
 
     export default {
@@ -62,8 +62,8 @@
             }
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
+            faIcon: function (key) {
+                return lookupIcon(key)
             },
         }
     }

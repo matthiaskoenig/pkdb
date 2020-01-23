@@ -22,13 +22,11 @@
 
 <script>
     import axios from 'axios'
-    import {lookup_icon} from "@/icons"
-    import CountChip from "../detail/CountChip";
+    import {lookupIcon} from "@/icons"
 
     export default {
         name: 'CountTable',
         components: {
-            CountChip
         },
         data() {
             return {
@@ -60,28 +58,28 @@
                     {
                         name: 'Study',
                         to: '/studies',
-                        icon: this.icon('studies'),
+                        icon: this.faIcon('studies'),
                         count: this.data.study_count,
                         description: "Clinical or experimental study measuring data in either single or multiple groups and/or single or multiple individuals."
                     },
                     {
                         name: 'Group',
                         to: '/groups',
-                        icon: this.icon('groups'),
+                        icon: this.faIcon('groups'),
                         count: this.data.group_count,
                         description: "Group of individuals defined by certain characteristica, e.g., smoking status or medication."
                     },
                     {
                         name: 'Individual',
                         to: '/individuals',
-                        icon: this.icon('individuals'),
+                        icon: this.faIcon('individuals'),
                         count: this.data.individual_count,
                         description: "A single subject, characterized by the group it belongs to and personal characteristica like age, body weight or sex."
                     },
                     {
                         name: 'Intervention',
                         to: '/interventions',
-                        icon: this.icon('interventions'),
+                        icon: this.faIcon('interventions'),
                         count: this.data.intervention_count,
                         description: "Intervention which was performed in the study. Often this is the application of substances, e.g. caffeine or codeine, or changes in " +
                             "lifestyle like smoking cessation."
@@ -89,21 +87,21 @@
                     {
                         name: 'Output',
                         to: '/outputs',
-                        icon: this.icon('outputs'),
+                        icon: this.faIcon('outputs'),
                         count: this.data.output_count,
                         description: "Clinical or experimental output. These can be single parameters or variables, e.g. pharmacokinetic parameters like AUC, clearance or half-life of the applied substances."
                     },
                     {
                         name: 'Timecourse',
                         to: '/timecourses',
-                        icon: this.icon('timecourses'),
+                        icon: this.faIcon('timecourses'),
                         count: this.data.timecourse_count,
                         description: "Clinical or experimental time course measurements."
                     },
                     {
                         name: 'Reference',
                         to: '/references',
-                        icon: this.icon('references'),
+                        icon: this.faIcon('references'),
                         count: this.data.reference_count,
                         description: "Literature references from which the data was digitized and curated."
                     },
@@ -111,8 +109,8 @@
             }
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
+            faIcon: function (key) {
+                return lookupIcon(key)
             },
             fetch_data(url){
                 axios.get(url)

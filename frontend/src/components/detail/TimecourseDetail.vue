@@ -1,14 +1,14 @@
 <template>
     <v-card>
-        <Heading :title="'Timecourse: '+timecourse.pk" :icon="icon('timecourse')" :resource_url="resource_url"/>
+        <Heading :title="'Timecourse: '+timecourse.pk" :icon="faIcon('timecourse')" :resource_url="resource_url"/>
 
-        Group: <a v-if="timecourse.group" :href="timecourse.group" :title="timecourse.group"><v-icon>{{ icon('group') }}</v-icon></a><br />
+        Group: <a v-if="timecourse.group" :href="timecourse.group" :title="timecourse.group"><v-icon>{{ faIcon('group') }}</v-icon></a><br />
         Individual: <a v-if="timecourse.individual" :href="timecourse.individual" :title="timecourse.individual">
-        <v-icon>{{ icon('individual') }}</v-icon></a><br />
+        <v-icon>{{ faIcon('individual') }}</v-icon></a><br />
         Interventions: <span v-for="(intervention, index2) in timecourse.interventions" :key="index2"><br />
-                    <a :href="intervention" :title="intervention"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;</span><br />
+                    <a :href="intervention" :title="intervention"><v-icon>{{ faIcon('intervention') }}</v-icon></a>&nbsp;</span><br />
         Tissue: {{timecourse.tissue}}<br />
-        Substance: <a v-if="timecourse.substance" :href="timecourse.substance" :title="timecourse.substance"><v-icon>{{ icon('substance') }}</v-icon></a><br />
+        Substance: <a v-if="timecourse.substance" :href="timecourse.substance" :title="timecourse.substance"><v-icon>{{ faIcon('substance') }}</v-icon></a><br />
         Time: {{timecourse.time}}<br />
         Time Unit: {{ timecourse.time_unit }}<br />
         Unit: {{timecourse.unit}}<br />
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
     import TimecoursePlot from '@/components/plots/TimecoursePlot';
 
     export default {
@@ -47,7 +47,7 @@
         },
         methods: {
             icon: function (key) {
-                return lookup_icon(key)
+                return lookupIcon(key)
             },
         }
     }

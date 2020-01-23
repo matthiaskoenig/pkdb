@@ -1,36 +1,37 @@
 <template>
-
     <div :class="card_class">
-
-        <v-badge right color="black" left>
+        <v-badge right color="#BBBBBB">
             <span slot="badge">{{ count }}</span>
-            <span class="attr attr-characteristica">{{ data.measurement_type }}</span><br />
-
-            <span v-if="data.choice">
-                <span v-if="data.choice=='Y'"><v-icon color="success">fa fa-check-circle</v-icon></span>
-                <span v-if="data.choice=='N'"><v-icon color="error">fa fa-times-circle</v-icon></span>
-                <span v-if="(data.choice=='F') || (data.choice =='homo sapiens')"><v-icon color="primary">fa fa-female</v-icon></span>
-                <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon color="primary">fa fa-male</v-icon></span>
-                {{ data.choice }}
-            </span>
-            <span v-if="data.substance">
-                <substance-chip :title="data.substance"></substance-chip>
-            </span>
-            <span v-if="value || error">
-                <strong>{{ value }}<span v-if="data.unit"> [{{ data.unit }}]</span></strong><br />
-                <span v-if="error">{{ error }}</span>
-            </span>
-            <span v-else-if="!value & !error & !data.choice & !data.substance">
-                <v-icon small title='missing information for chararcterica'>{{icon("na")}}</v-icon>&nbsp;
-            </span>
+            <strong>{{ data.measurement_type }}</strong>
         </v-badge>
+        <br />
+
+        <span v-if="data.choice">
+            <span v-if="data.choice=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
+            <span v-if="data.choice=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
+            <span v-if="(data.choice=='F') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
+            <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
+            {{ data.choice }}
+        </span>
+        <span v-if="data.substance">
+            <object-chip :object="data.substance"
+                         otype="substance"
+                         :name="data.substance"
+            />
+        </span>
+        <span v-if="value || error">
+            {{ value }} <span v-if="error">{{ error }}</span><br />
+            <span v-if="data.unit">[{{ data.unit }}]</span>
+        </span>
+        <span v-else-if="!value & !error & !data.choice & !data.substance">
+            <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
+        </span>
+
     </div>
-
-
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
 
     export default {
         name: "CharacteristicaCard",
@@ -50,14 +51,14 @@
 
                 // min, max
                 if (this.data.min || this.data.max){
-                    value = '[' + (this.data.min ? this.data.min : '')  + ' - ' + (this.data.max ? this.data.max : '') + ']'
+                    value = '(' + (this.data.min ? this.toNumber(this.data.min) : '')  + ' - ' + (this.data.max ? this.toNumber(this.data.max) : '') + ')'
                 }
                 // sd, se, cv, unit
                 var error_fields = ['sd', 'se', 'cv'];
                 for (var i=0; i<error_fields.length; i++){
                     var field = error_fields[i];
                     if (this.data[field]){
-                        const token = ' ± ' + this.data[field] + ' (' + field + ')';
+                        const token = ' ± ' + this.toNumber(this.data[field]) + ' ' + field.toUpperCase() + '';
                         if (value){
                             value += token
                         } else {
@@ -73,15 +74,15 @@
                 // value, mean, median
 
                 if (this.data.value){
-                    value = this.data.value
+                    value = this.toNumber(this.data.value);
                 } else if (this.data.mean){
-                    value = this.data.mean
+                    value = this.toNumber(this.data.mean);
                 }
                 if (this.data.median){
                     if (value){
-                        value += '(median ' + this.data.median + ')'
+                        value += '(median ' + this.toNumber(this.data.median) + ')'
                     } else {
-                        value = 'median ' + this.data.median
+                        value = 'median ' + this.toNumber(this.data.median)
                     }
                 }
                 return value;
@@ -98,9 +99,14 @@
             }
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
+            faIcon: function (key) {
+                return lookupIcon(key)
             },
+            toNumber: function(s){
+                return parseFloat(s)
+            }
+        },
+        calculated: {
         }
     }
 </script>
@@ -128,7 +134,7 @@
         padding-right: 10px;
         padding-left: 10px;
         margin-bottom: 20px;
-        width: 250px;
+        width: 110px;
         height: 85px;
 
         border-style: none;

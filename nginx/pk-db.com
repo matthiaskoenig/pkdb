@@ -35,11 +35,6 @@ server {
 
         client_max_body_size 100m;
 
-        # fallback for vue router
-        location / {
-          try_files $uri $uri/ /index.html;
-        }
-
         location / {
                 # return 200 "ssl on proxy";
                 proxy_pass http://172.107.0.10:8888;

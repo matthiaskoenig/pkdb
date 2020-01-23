@@ -17,42 +17,44 @@ import axios from 'axios';
 /** --------------------------------------------------------------
  *  Library components
  *  -------------------------------------------------------------- */
-import JsonButton from './components/lib/JsonButton';
-import LinkButton from './components/lib/LinkButton';
-import FileButton from './components/lib/FileButton';
-import ExportFormatButton from './components/lib/ExportFormatButton';
+import JsonButton from './components/lib/buttons/JsonButton';
+import LinkButton from './components/lib/buttons/LinkButton';
+import FileButton from './components/lib/buttons/FileButton';
+import ExportFormatButton from './components/lib/buttons/ExportFormatButton';
+
+import ObjectChip from './components/lib/chips/ObjectChip';
+import FileChip from './components/lib/chips/FileChip';
+import CountChip from './components/lib/chips/CountChip';
+
 import Comments from './components/lib/Comments';
 import Descriptions from './components/lib/Descriptions';
 import Annotations from './components/lib/Annotations';
 import UserAvatar from './components/lib/UserAvatar';
 import UserRating from './components/lib/UserRating';
 import Heading from './components/lib/Heading';
+
 import GetData from './components/api/GetData';
 import GetPaginatedData from './components/api/GetPaginatedData';
-import SubstanceChip from './components/detail/SubstanceChip';
-import FileChip from './components/detail/FileChip';
-import KeywordChip from './components/detail/KeywordChip';
-import InterventionChip from './components/detail/InterventionChip';
-import Footer from './components/Footer';
 
-
-Vue.component('Footer', Footer);
 Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
 Vue.component('LinkButton', LinkButton);
 Vue.component('FileButton', FileButton);
+
+Vue.component('ObjectChip', ObjectChip);
+Vue.component('FileChip', FileChip);
+Vue.component('CountChip', CountChip);
+
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);
 Vue.component('Annotations', Annotations);
 Vue.component('UserAvatar', UserAvatar);
 Vue.component('UserRating', UserRating);
 Vue.component('Heading', Heading);
+
 Vue.component('GetData', GetData);
 Vue.component('GetPaginatedData', GetPaginatedData);
-Vue.component('SubstanceChip', SubstanceChip);
-Vue.component('FileChip', FileChip);
-Vue.component('KeywordChip', KeywordChip);
-Vue.component('InterventionChip', InterventionChip);
+
 Vue.component('text-highlight', TextHighlight);
 
 

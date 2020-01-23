@@ -5,12 +5,14 @@
             outlined
             :to="to"
     >
-        <v-icon :title="'Number of ' + name + 's'">{{ icon }}</v-icon>&nbsp;
+        <v-icon :title="'Number of ' + name + 's'">{{ faIcon }}</v-icon>&nbsp;
         {{ count }}
     </v-chip>
 </template>
 
 <script>
+    import {lookupIcon} from "@/icons"
+
     export default {
         name: "CountChip",
         props: {
@@ -30,7 +32,14 @@
                 required: true
             }
         },
-        computed: {}
+        computed: {
+            faIcon: function(){
+                return lookupIcon(this.icon)
+            }
+        },
+        methods: {
+
+        }
     }
 </script>
 

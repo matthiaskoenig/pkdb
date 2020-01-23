@@ -1,14 +1,14 @@
 <template>
     <v-dialog class="detail-dialog">
         <v-btn slot="activator" fab small :title="group.name">
-            <v-icon>{{ icon('group') }}</v-icon>
+            <v-icon>{{ faIcon('group') }}</v-icon>
         </v-btn>
         <group-detail :group="group"/>
     </v-dialog>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
     import GroupDetail from '../detail/GroupDetail'
 
     export default {
@@ -23,8 +23,8 @@
         computed: {
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
+            faIcon: function (key) {
+                return lookupIcon(key)
             },
         }
     }

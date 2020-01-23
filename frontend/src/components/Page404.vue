@@ -16,7 +16,6 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
     import UserLogin from './auth/UserLogin'
     export default {
         name: 'Page404',
@@ -34,9 +33,6 @@
             })
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
         }
     }
 </script>

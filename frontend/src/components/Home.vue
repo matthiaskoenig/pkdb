@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import CountTable from './statistics/CountTable'
+    import CountTable from './tables/CountTable'
     import AboutInformation from './AboutInformation'
 
     export default {
