@@ -1,5 +1,10 @@
 <template>
-    <v-toolbar id="navigation" class="fixed-nav-bar" flat dense>
+    <v-toolbar id="navigation"
+               class="fixed-nav-bar"
+               flat
+               dense
+               color="#000000"
+    >
 
         <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
         <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
@@ -77,6 +82,5 @@
         z-index: 9999;
         width: 100%;
         height: 50px;
-        background-color: #000000;
     }
 </style>
