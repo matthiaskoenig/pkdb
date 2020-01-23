@@ -29,7 +29,7 @@ class InfoNode(Sidable):
 
 
     # todo:proably remove
-    class NoteTypes(models.TextChoices):
+    class NTypes(models.TextChoices):
         """ Note Types. """
 
         Substance = 'substance', _('substance')
@@ -39,6 +39,15 @@ class InfoNode(Sidable):
         Application = 'application', _('application')
         Tissue = 'tissue', _('tissue')
         Choice = 'choice', _('choice')
+        Inofo_Node = 'info_node', _('info_node')
+
+    class DTypes(models.TextChoices):
+        """ Data Types. """
+        Abstract = 'abstract', _('abstract')
+        Boolean = 'boolean', _('boolean')
+        Numeric = 'numeric', _('numeric')
+        Categorical = 'categorical', _('categorical')
+        NumericCategorical = 'numeric_categorical', _('numeric_categorical')
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
@@ -46,17 +55,26 @@ class InfoNode(Sidable):
     creator = models.ForeignKey(User, related_name="info_nodes", on_delete=models.CASCADE)
     annotations = models.ManyToManyField(Annotation)
     parents = models.ManyToManyField("InfoNode", related_name="children")
-    node_type = models.CharField(choices=NoteTypes.choices, max_length=20)
+    ntype = models.CharField(choices=NTypes.choices, max_length=20)
+    dtype = models.CharField(choices=DTypes.choices, max_length=20)
 
     def annotations_strings(self):
         return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
 
     @property
-    def n_units(self):
+    def synonym_names(self):
         """
         :return: list of normalized units as strings
         """
-        return self.synonyms.values_list("name", flat=True)
+        return list(self.synonyms.values_list("name", flat=True))
+
+    @property
+    def creator_username(self):
+        """
+        :return: list of normalized units in the data format of pint
+        """
+        return self.creator.username
+
 
 class Synonym(models.Model):
     """Synonyms Model"""
@@ -126,16 +144,7 @@ class MeasurementType(AbstractInfoNode):
     CAN_NEGATIVE = [] # todo remove
     ADDITIVE = [] # todo remove
 
-    class DTypes(models.TextChoices):
-        """ Data Types. """
-        Abstract = 'abstract', _('abstract')
-        Boolean = 'boolean', _('boolean')
-        Numeric = 'numeric', _('numeric')
-        Categorical = 'categorical', _('categorical')
-        NumericCategorical = 'numeric_categorical', _('numeric_categorical')
-
     units = models.ManyToManyField(Unit, related_name="measurement_types")
-    dtype = models.CharField(choices=DTypes.choices, max_length=20)
 
 
     @property
@@ -317,12 +326,7 @@ class MeasurementType(AbstractInfoNode):
             _validate_requried_key(data, "time", details=details)
             _validate_requried_key(data, "time_unit", details=details)
 
-    @property
-    def creator_username(self):
-        """
-        :return: list of normalized units in the data format of pint
-        """
-        return self.info_node.creator.username
+
 
 
 class Substance(AbstractInfoNode):
@@ -375,6 +379,3 @@ class Substance(AbstractInfoNode):
     def interventions_normed(self):
         return self.intervention_set.filter(normed=True)
 
-    @property
-    def creator_username(self):
-        return self.info_node.creator.username

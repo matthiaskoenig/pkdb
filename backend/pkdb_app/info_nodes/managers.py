@@ -4,6 +4,9 @@ from pkdb_app.utils import update_or_create_multiple
 
 
 class InfoNodeManager(models.Manager):
+    # todo: delete now in serializer
+    """
+
     def update_or_create(self, *args, **kwargs):
 
         annotations = kwargs.pop('annotations', [])
@@ -43,3 +46,4 @@ class InfoNodeManager(models.Manager):
 
         instance.save()
         return instance
+    """

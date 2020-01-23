@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
 from pkdb_app import utils
+from django.apps import apps
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
+from pkdb_app.utils import update_or_create_multiple
 
 
 class EXMeasurementTypeableSerializer(ExSerializer):
@@ -49,17 +51,56 @@ class AnnotationSerializer(serializers.ModelSerializer):
         fields = ["term", "relation", "collection", "description", "label"]
 
 
-class InfoNodeSerializer(serializers.Serializer):
+class InfoNodeSerializer(serializers.ModelSerializer):
     """ Substance. """
     parents = utils.SlugRelatedField(many=True, slug_field="name", queryset=InfoNode.objects.order_by('name'),
                                      required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
 
-
     class Meta:
         model = InfoNode
         fields = ["sid", "url_slug", "name", "parents", "description", "ntype","synonyms","creator", "annotations"]
+
+    def create(self, validated_data):
+        synonyms_data = validated_data.pop("synonyms", [])
+        parents_data = validated_data.pop("parents", [])
+        annotations_data = validated_data.pop("annotations", [])
+
+        ntype = validated_data.get('ntype')
+        extra_fields = validated_data.get(ntype, {})
+
+        NOTE_TYPES = {
+            "info_node":"InfoNode",
+            "measurement_type": "MeasurementType",
+            "substance": "Substance",
+            "route": "Route",
+            "form": "Form",
+            "application": "Application",
+            "tissue": "Tissue",
+            "choice": "Choice",
+        }
+
+        Model = apps.get_model('info_nodes', NOTE_TYPES[ntype])
+        instance = InfoNode.objects.create(**validated_data)
+        update_or_create_multiple(instance, annotations_data, 'annotations', lookup_fields=["term", "relation"])
+        update_or_create_multiple(instance, synonyms_data, 'synonyms', lookup_fields=["name"])
+        instance.parents.add(*parents_data)
+        instance.save()
+
+        if Model != InfoNode:
+            if Model == MeasurementType:
+                units = extra_fields.pop('units', [])
+                specific_instance = Model.objects.create(info_node=instance, **extra_fields)
+                update_or_create_multiple(specific_instance, units, 'units', lookup_fields=["name"])
+            else:
+                specific_instance = Model.objects.create(info_node=instance, **extra_fields)
+
+            specific_instance.save()
+
+        return instance
+
+
 
     def to_internal_value(self, data):
         data["creator"] = self.context['request'].user.id
