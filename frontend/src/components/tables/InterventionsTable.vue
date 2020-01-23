@@ -10,18 +10,25 @@
                 :class="table_class"
         >
             <template v-slot:item.buttons="{ item }">
-                <LinkButton :to="'/interventions/'+ item.pk" :title="'Group: '+ item.pk" :icon="icon(otype_single)"/>
-                    <JsonButton :resource_url="api + 'interventions/'+ item.pk +'/?format=json'"/>
+                <LinkButton :to="'/interventions/'+ item.pk"
+                            :title="'Intervention: '+ item.pk"
+                            icon="intervention"
+                />
+                <JsonButton :resource_url="api + 'interventions/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.name="{ item }">
-                <intervention-chip :intervention="item" :search="search"/>
+                <object-chip :object="item"
+                             otype="intervention"
+                             :name="item.name"
+                             :search="search"
+                />
             </template>
             <template v-slot:item.application="{ item }">
-                <text-highlight :queries="[search]"> {{item.application }}</text-highlight><br />
-                <text-highlight :queries="[search]">{{item.time}}</text-highlight>
-                    <span v-if="item.time_unit"> [<text-highlight :queries="[search]">{{item.time_unit }}</text-highlight>]</span><br />
+                <text-highlight :queries="[search]">{{ item.application }}</text-highlight><br />
+                <text-highlight :queries="[search]">{{ item.time }}</text-highlight>
+                    <span v-if="item.time_unit"> [<text-highlight :queries="[search]">{{ item.time_unit }}</text-highlight>]</span><br />
                 <text-highlight :queries="[search]">{{ item.route }}</text-highlight><br />
-                <text-highlight :queries="[search]">{{item.form}}</text-highlight>
+                <text-highlight :queries="[search]">{{ item.form }}</text-highlight>
             </template>
             <template v-slot:item.value="{ item }">
                 <characteristica-card :data="item" />
@@ -37,8 +44,6 @@
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
-    import SubstanceChip from "../detail/SubstanceChip"
-    import InterventionChip from "../detail/InterventionChip"
 
     export default {
         name: "InterventionsTable",
@@ -46,8 +51,6 @@
             NoData,
             TableToolbar,
             CharacteristicaCard,
-            SubstanceChip,
-            InterventionChip
         },
         mixins: [searchTableMixin],
         data () {

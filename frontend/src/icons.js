@@ -47,9 +47,15 @@ const icons_table = {
     measurement_types: 'fas fa-user-tag'
 };
 
-
-function lookup_icon(key) {
-    return icons_table[key]
+/**
+ * Lookup icon key or return font awesome icon directly.
+ */
+function lookupIcon(key) {
+    if (key.startsWith("fa")){
+        return key
+    } else {
+        return icons_table[key]
+    }
 }
 
-export {lookup_icon};
+export {lookupIcon};

@@ -1,14 +1,14 @@
 <template>
     <v-dialog class="detail-dialog">
         <v-btn slot="activator" fab small :title="individual.name">
-            <v-icon>{{ icon('individual') }}</v-icon>
+            <v-icon>{{ faIcon('individual') }}</v-icon>
         </v-btn>
         <individual-detail :individual="individual"/>
     </v-dialog>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
     import IndividualDetail from '../detail/IndividualDetail'
 
     export default {
@@ -23,8 +23,8 @@
         computed: {
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
+            faIcon: function (key) {
+                return lookupIcon(key)
             },
         }
     }

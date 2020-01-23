@@ -3,14 +3,14 @@
 
         <a  @click.prevent="downloadItem(file_url)" :href="file_url" :title="file_url">
             <v-chip>
-                <v-icon color="orange" v-if="filetype(file)=='image'" small>{{ icon('file_image') }}</v-icon>
-                <v-icon color="blue" v-if="filetype(file)=='data'" small>{{ icon('file') }}</v-icon>
-                <v-icon color="green" v-if="filetype(file)=='spreadsheet'" small>{{ icon('file_excel') }}</v-icon>
-                <v-icon color="red" v-if="filetype(file)=='pdf'" small>{{ icon('file_pdf') }}</v-icon>
-                <v-icon color="white" v-if="filetype(file)=='other'" small>{{ icon('file') }}</v-icon>
+                <v-icon color="orange" v-if="filetype(file)=='image'" small>{{ faIcon('file_image') }}</v-icon>
+                <v-icon color="blue" v-if="filetype(file)=='data'" small>{{ faIcon('file') }}</v-icon>
+                <v-icon color="green" v-if="filetype(file)=='spreadsheet'" small>{{ faIcon('file_excel') }}</v-icon>
+                <v-icon color="red" v-if="filetype(file)=='pdf'" small>{{ faIcon('file_pdf') }}</v-icon>
+                <v-icon color="white" v-if="filetype(file)=='other'" small>{{ faIcon('file') }}</v-icon>
                 &nbsp;
                 <span v-show="showText">
-                    <text-highlight :queries="search.split(/[ ,]+/)">&nbsp;{{name(file)}}</text-highlight>
+                    <text-highlight :queries="search.split(/[ ,]+/)">&nbsp;{{ name(file) }}</text-highlight>
                 </span>
             </v-chip>
         </a>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
     import axios from 'axios'
 
     export default {
@@ -54,8 +54,8 @@
                         console.error(error);
                     })
             },
-            icon(key) {
-                return lookup_icon(key)
+            faIcon(key) {
+                return lookupIcon(key)
             },
             name(url) {
                 return url.substr(url.lastIndexOf('/') + 1);
@@ -96,14 +96,11 @@
             file_url() {
                 if (this.file.startsWith(this.backend)){
                     return this.file
-
                 }
                 else{
                     return this.backend+this.file
                 }
-
             },
-
         },
     }
 </script>

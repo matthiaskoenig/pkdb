@@ -9,12 +9,14 @@
                :title="title"
                :disabled="to ? false : true"
         >
-            <v-icon>{{ icon }}</v-icon>
+            <v-icon>{{ faIcon(icon) }}</v-icon>
         </v-btn>
     </span>
 </template>
 
 <script>
+    import {lookupIcon} from "@/icons"
+
     export default {
         name: "DetailButton",
         props: {
@@ -30,6 +32,11 @@
                 required: true
             },
         },
+        methods: {
+            faIcon(key) {
+                return lookupIcon(key)
+            },
+        }
     }
 </script>
 

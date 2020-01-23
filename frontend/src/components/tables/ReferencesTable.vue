@@ -10,13 +10,16 @@
                 :class="table_class"
         >
             <template v-slot:item.buttons="{ item }">
-                    <link-button :to="'/references/'+ item.sid" :title="'Reference: '+item.name" :icon="icon('reference')"/>
-                    <link-button v-if="item.study" :to="'/studies/'+ item.study.sid" :title="'Study: '+item.study.name" :icon="icon('study')"/>
-                    <!--
-                    <file-button v-if="item.pdf" :resource_url='backend+item.pdf' :title="item.pdf"/>
-                    -->
+                    <link-button :to="'/references/'+ item.sid"
+                                 :title="'Reference: '+item.name"
+                                 icon="reference"
+                    />
+                    <link-button v-if="item.study"
+                                 :to="'/studies/'+ item.study.sid"
+                                 :title="'Study: '+item.study.name"
+                                 icon="study"
+                    />
                     <json-button :resource_url="api + 'references/'+ item.sid +'/'"/>
-
             </template>
             <template  v-slot:item.sid="{ item }">
                 <text-highlight :queries="[search]">{{ item.sid }}</text-highlight>

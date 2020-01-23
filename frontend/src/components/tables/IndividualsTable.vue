@@ -11,28 +11,32 @@
         >
 
             <template v-slot:item.buttons="{ item }">
-                    <link-button :to="'/individuals/'+ item.pk" :title="'Individual: '+item.pk" :icon="icon('individual')"/>
-                    <!--<link-button :to="'/studies/'+ item.study.pk" :title="'Study: '+ item.study.name" :icon="icon('study')"/>-->
+                    <link-button :to="'/individuals/'+ item.pk"
+                                 :title="'Individual: '+item.pk"
+                                 icon="individual"
+                    />
                     <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.individual="{ item }">
                 <div class="attr-card">
-                    <individual-chip :individual="item" :search="search"/>
+                    <object-chip :object="item"
+                                 otype="individual"
+                                 :search="search"
+                    />
                 </div>
             </template>
             <template v-slot:item.group="{ item }">
                 <get-data :resource_url="group_url(item.group.pk)">
                     <span slot-scope="group">
-                        <group-chip :group="group.data" :search="search"/>
+                        <object-chip :object="group.data"
+                                     otype="group"
+                                     :search="search"
+                        />
                     </span>
                 </get-data>
             </template>
             <template v-slot:item.characteristica="{ item }">
-                <v-layout wrap>
-                    <span v-for="characteristica in item.characteristica_all_normed" :key="characteristica.pk">
-                         <characteristica-card :data="characteristica" :resource_url="characterica_url([characteristica.pk])"/>
-                    </span>
-                </v-layout>
+                <characteristica-card-deck :characteristica="item.characteristica_all_normed" />
             </template>
             <no-data/>
         </v-data-table>
@@ -43,18 +47,14 @@
     import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
-    import CharacteristicaCard from '../detail/CharacteristicaCard'
-    import GroupChip from '../detail/GroupChip'
-    import IndividualChip from '../detail/IndividualChip'
+    import CharacteristicaCardDeck from '../detail/CharacteristicaCardDeck'
 
     export default {
         name: "IndividualsTable",
         components: {
             NoData,
             TableToolbar,
-            CharacteristicaCard,
-            IndividualChip,
-            GroupChip
+            CharacteristicaCardDeck,
         },
         mixins: [searchTableMixin, UrlMixin],
         data () {

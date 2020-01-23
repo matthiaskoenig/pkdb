@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {lookup_icon} from "@/icons"
+import {lookupIcon} from "@/icons"
 
 var searchTableMixin = {
     data() {
@@ -80,8 +80,8 @@ var searchTableMixin = {
         }
     },
     methods: {
-        icon(key) {
-            return lookup_icon(key)
+        faIcon(key) {
+            return lookupIcon(key)
         },
         searchUpdate(newValue) {
             this.search = newValue

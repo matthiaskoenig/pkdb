@@ -3,19 +3,19 @@
         <v-layout wrap>
             <v-flex md4>
                 <v-card flat>
-                <v-icon color="black">{{ icon('study') }}</v-icon>
+                <v-icon color="black">{{ faIcon('study') }}</v-icon>
                 <span class="heading-title">&nbsp;{{ study.sid }}</span>
                 <v-btn icon>
                     <v-icon
                             :title="'Study is '+ study.access"
                             :color="study.access =='public' ? 'green' : 'red'"
-                    >{{icon(study.access)}}</v-icon>
+                    >{{ faIcon(study.access) }}</v-icon>
                 </v-btn>
                 <v-btn icon>
                     <v-icon
                             :title="'Publication is '+ study.licence + ' access'"
                             :color="study.licence =='open' ? 'green' : 'red'"
-                    >{{icon(study.licence)}}</v-icon>
+                    >{{ faIcon(study.licence) }}</v-icon>
                 </v-btn>
                 <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
                     <template slot-scope="reference">
@@ -34,7 +34,10 @@
                     </div>
                     <div>
                         <span class="attr">Curators</span><br />
-                        <user-rating v-for="curator in study.curators" :key="curator.pk" :user="curator"/>
+                        <user-rating v-for="curator in study.curators"
+                                     :key="curator.pk"
+                                     :user="curator"
+                        />
                     </div>
                      <div v-if="study.files.length > 0">
                         <span class="attr">Files</span><br />
@@ -49,8 +52,10 @@
                 <v-card flat>
                     <div v-if="study.substances && study.substances.length!=0">
                         <span class="attr">Substances</span><br />
-                        <span v-for="s in study.substances" v-bind:key="s">
-                            <substance-chip :title="s"/>
+                        <span v-for="substance in study.substances" v-bind:key="substance">
+                            <object-chip :object="substance"
+                                         otype="substance"
+                            />
                         </span>
                     </div>
                 </v-card>
@@ -72,18 +77,16 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
     import ReferenceDetail from "./ReferenceDetail"
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
-    import CountChip from "../detail/CountChip";
 
     export default {
         name: "StudyOverview",
         components: {
             ReferenceDetail: ReferenceDetail,
             FileImageView: FileImageView,
-            CountChip: CountChip
         },
         props: {
             study: {
@@ -109,8 +112,8 @@
             }
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
+            faIcon: function (key) {
+                return lookupIcon(key)
             },
             is_image(file){
                 return (file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg"));

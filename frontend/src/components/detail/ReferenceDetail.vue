@@ -37,8 +37,6 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
-
 
     export default {
         name: "ReferenceDetail",
@@ -58,9 +56,6 @@
         computed: {
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
         }
     }
 </script>
