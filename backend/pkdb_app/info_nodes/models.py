@@ -170,7 +170,7 @@ class MeasurementType(AbstractInfoNode):
         """
         :return: list of normalized units as strings
         """
-        return self.units.values_list("name", flat=True)
+        return list(self.units.values_list("name", flat=True))
 
     @property
     def valid_dimensions(self):

@@ -2,7 +2,9 @@ from rest_framework import serializers
 
 from pkdb_app import utils
 from django.apps import apps
-from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance
+
+from pkdb_app.info_nodes.documents import InfoNodeDocument
+from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.utils import update_or_create_multiple
 
@@ -51,16 +53,49 @@ class AnnotationSerializer(serializers.ModelSerializer):
         fields = ["term", "relation", "collection", "description", "label"]
 
 
+class UnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Unit
+        fields = ["name"]
+
+    def to_internal_value(self, data):
+        return {"name": data}
+
+    def to_representation(self, instance):
+        return instance.name
+
+
+class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
+    units = UnitSerializer(many=True, allow_null=True, required=False)
+
+    class Meta:
+        model = MeasurementType
+        fields = ["units"]
+
+    def to_internal_value(self, data):
+
+        return super().to_internal_value(data)
+
+
+
+
 class InfoNodeSerializer(serializers.ModelSerializer):
     """ Substance. """
     parents = utils.SlugRelatedField(many=True, slug_field="sid", queryset=InfoNode.objects.order_by('sid'),
                                      required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
     annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
+    measurement_type = MeasurementTypeExtraSerializer(allow_null=True, required=False)
 
     class Meta:
         model = InfoNode
-        fields = ["sid", "url_slug", "name", "parents", "description", "ntype","synonyms","creator", "annotations"]
+        fields = ["sid", "url_slug", "name", "parents", "description", "ntype","synonyms","creator", "annotations", "measurement_type"]
+
+    def to_internal_value(self, data):
+        print("*"*100)
+        print(data)
+        print("*"*100)
+        return super().to_internal_value(data)
 
     def create(self, validated_data):
         synonyms_data = validated_data.pop("synonyms", [])
@@ -68,7 +103,8 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         annotations_data = validated_data.pop("annotations", [])
 
         ntype = validated_data.get('ntype')
-        extra_fields = validated_data.get(ntype, {})
+        extra_fields = validated_data.pop(ntype, {})
+        print(extra_fields)
 
         NOTE_TYPES = {
             "info_node":"InfoNode",
@@ -98,6 +134,8 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
             specific_instance.save()
 
+        InfoNodeDocument().update(instance)
+
         return instance
 
 
@@ -107,33 +145,11 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
+
         data = super().to_representation(instance)
         data["creator"] = instance.creator.username
         return data
 
-
-class InfoNodeMainSerializer(serializers.ModelSerializer):
-    info_node = InfoNodeSerializer(read_only=True)
-    class Meta:
-        model = None  # is set in the get_serializer_class function in the view
-
-
-
-
-class UnitSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Unit
-        fields = ["name"]
-
-    def to_representation(self, instance):
-        return instance.name
-
-
-class MeasurementTypeSerializer(InfoNodeMainSerializer):
-    units = UnitSerializer(many=True, allow_null=True)
-
-    class Meta:
-        model = None  # is set in the get_serializer_class function in the view
 
 ###############################################################################################
 # Elastic Serializer
@@ -150,15 +166,10 @@ class SubstanceExtraSerializer(serializers.ModelSerializer):
         fields = [ "mass", "charge", "formula", "derived"]
 
 
-class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
-    model = MeasurementTypeSerializer
-    fields = ["units", "dtype", "choices"]
-
-
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
     parents = SmallInfoNodeElasticSerializer(many=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
-    synonyms = SynonymSerializer(many=True, read_only=True, required=False, allow_null=True)
+    #synonyms = SynonymSerializer(many=True, read_only=True, required=False, allow_null=True)
     substance = SubstanceExtraSerializer(required=False, allow_null=True)
     measurement_type = MeasurementTypeExtraSerializer(required=False, allow_null=True)
 

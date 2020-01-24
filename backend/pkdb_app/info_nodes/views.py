@@ -3,12 +3,11 @@ from collections import namedtuple
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
-from rest_framework import serializers, viewsets
+from rest_framework import viewsets
 
 from pkdb_app.info_nodes.documents import InfoNodeDocument
-from pkdb_app.info_nodes.models import MeasurementType, Substance, Route, Form, Application, Tissue, Choice, InfoNode
-from pkdb_app.info_nodes.serializers import InfoNodeMainSerializer, MeasurementTypeSerializer, \
-    InfoNodeElasticSerializer, InfoNodeSerializer
+from pkdb_app.info_nodes.models import  InfoNode
+from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer, InfoNodeSerializer
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.users.permissions import IsAdminOrCreator
 

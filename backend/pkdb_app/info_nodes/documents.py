@@ -24,7 +24,7 @@ class InfoNodeDocument(Document):
     description = string_field('description')
     creator = string_field("creator_username")
     annotations = annotation_field
-    synonyms = string_field('synonym_names', multi=True)
+    synonyms = string_field('synonym_names', multi=True) #todo: this might be wrong
     parents = ObjectField(properties={
         'sid': string_field('sid'),
         'url_slug': string_field('url_slug')
@@ -43,8 +43,12 @@ class InfoNodeDocument(Document):
                     "annotations": annotation_field
                 }
             ),
-            "dtype": string_field('dtype'),
-            "units": string_field('n_units', multi=True)
+            "units":ObjectField(
+                attr="units",
+                multi=True,
+                properties={
+                    "name": string_field("name"), #todo:this tooo
+                })
         }
     )
     #substance
@@ -62,7 +66,7 @@ class InfoNodeDocument(Document):
     class Django:
         model = InfoNode
         # Ignore auto updating of Elasticsearch when a model is saved/deleted
-        ignore_signals = False
+        ignore_signals = True
         # Don't perform an index refresh after every update
         auto_refresh = False
 
