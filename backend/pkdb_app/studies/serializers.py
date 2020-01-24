@@ -23,7 +23,7 @@ from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, 
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from .models import Reference, Author, Study, Rating
-from ..serializers import WrongKeyValidationSerializer, SidSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer
 
 
 # ----------------------------------
@@ -60,7 +60,6 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
             "journal",
             "date",
             "authors",
-            "pdf",
         )
 
     def create(self, validated_data):
@@ -388,7 +387,7 @@ class StudySerializer(SidSerializer):
 ###############################################################################################
 # Elastic Serializer
 ###############################################################################################
-class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
+class AuthorElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
@@ -404,21 +403,9 @@ class CuratorRatingElasticSerializer(serializers.Serializer):
         fields = ["rating", "username", "first_name", "last_name"]
 
 
-class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    licence = serializers.CharField(read_only=True)
-    curators = CuratorRatingElasticSerializer(many=True, read_only=True)
-    creator = UserElasticSerializer(read_only=True)
-    collaborators = UserElasticSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Study
-        fields = ["pk", "sid", "name", "licence", "curators", "collaborators", "creator"]
-
-
-class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
+class ReferenceElasticSerializer(serializers.ModelSerializer):
+    study = StudySmallElasticSerializer(read_only=True)
     authors = AuthorElasticSerializer(many=True, read_only=True)
-    pdf = serializers.SerializerMethodField()
-    study = StudySmallElasticSerializer()
 
     class Meta:
         model = Reference
@@ -434,33 +421,10 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
             "journal",
             "date",
             "authors",
-            "pdf",
         )
 
-    def get_pdf(self, obj):
-        user = self.context["request"].user
-        if get_study_file_permission(user, AttrDict(obj.study)):
-            return obj.to_dict().get("pdf")
-        else:
-            return None
 
-    def to_representation(self, instance):
-        """ Convert to JSON.
-
-        :param instance:
-        :return:
-        """
-
-        rep = super().to_representation(instance)
-        request = self.context.get("request")
-        # replace file url
-        if rep["pdf"]:
-            rep["pdf"] = request.build_absolute_uri(instance.pdf)
-
-        return rep
-
-
-class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
         fields = ["pk", "sid"]  # , 'url']

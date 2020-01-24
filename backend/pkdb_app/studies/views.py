@@ -232,7 +232,7 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('sid', 'study_name', 'study_pk', 'pmid', 'title', 'abstract', 'name', 'journal')
+    search_fields = ('sid', 'pmid', 'title', 'abstract', 'name', 'journal')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -241,8 +241,6 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
-        "study_name": "study_name",
-        "study_pk": "study_pk",
         "pmid": "pmid",
         "name": "name",
         "doi": "doi",

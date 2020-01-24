@@ -2,7 +2,7 @@ from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
-    ObjectField
+    ObjectField, study_field
 
 from pkdb_app.studies.models import Reference, Study
 
@@ -45,60 +45,24 @@ def common_setfields(model, attr=None):
 # ------------------------------------
 # Elastic Reference Document
 # ------------------------------------
+# TODO: add permissions like on all other elastic documents.
 @registry.register_document
 class ReferenceDocument(Document):
     pk = fields.IntegerField(attr='pk')
     sid = string_field(attr='sid')
     pmid = string_field(attr='pmid')
-    study = ObjectField(properties={
-        "pk": fields.IntegerField(),
-        "sid": string_field('sid'),
-        "name": string_field('name'),
-        "licence": string_field("licence"),
-        "creator": fields.ObjectField(
-            properties={
-                'first_name': string_field("first_name"),
-                'last_name': string_field("last_name"),
-                'pk': string_field("pk"),
-                'username': string_field("username"),
-            }
-        ),
-        "curators": fields.ObjectField(
-            attr="ratings",
-            properties={
-                'first_name': string_field("user.first_name"),
-                'last_name': string_field("user.last_name"),
-                'pk': string_field("user.pk"),
-                'username': string_field("user.username"),
-                'rating': fields.FloatField(attr='rating')
-
-            },
-            multi=True
-        ),
-        "collaborators": fields.ObjectField(
-            attr="collaborators",
-            properties={
-                'first_name': string_field("first_name"),
-                'last_name': string_field("last_name"),
-                'pk': string_field("pk"),
-                'username': string_field("username")
-
-            },
-            multi=True
-        )
-    })
+    study = study_field
     name = string_field("name")
     doi = string_field("doi")
     title = string_field("title")
     abstract = text_field("abstract")
     journal = text_field("journal")
     date = fields.DateField()
-    pdf = fields.FileField(fielddata=True)
 
     authors = ObjectField(properties={
+        'pk': fields.IntegerField(),
         'first_name': string_field("first_name"),
         'last_name': string_field("last_name"),
-        'pk': fields.IntegerField(),
     })
 
     class Django:

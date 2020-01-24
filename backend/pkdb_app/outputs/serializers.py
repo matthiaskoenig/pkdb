@@ -393,7 +393,7 @@ class OutputSetSerializer(ExSerializer):
 # Elastic Serializer
 ###############################################################################################
 
-class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     outputs = serializers.SerializerMethodField()
@@ -439,7 +439,7 @@ class TimecourseInterventionSerializer(serializers.ModelSerializer):
         return rep
 
 
-class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
+class OutputElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
@@ -472,7 +472,7 @@ class OutputElasticSerializer(serializers.HyperlinkedModelSerializer):
                 )
 
 
-class TimecourseElasticSerializer(serializers.HyperlinkedModelSerializer):
+class TimecourseElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()

@@ -838,7 +838,7 @@ class SidSerializer(WrongKeyValidationSerializer):
             return super().is_valid(raise_exception)
 
 
-class ReadSerializer(serializers.HyperlinkedModelSerializer):
+class ReadSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

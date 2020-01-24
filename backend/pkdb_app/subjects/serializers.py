@@ -588,7 +588,7 @@ class IndividualSmallElasticSerializer(serializers.ModelSerializer):
         fields = ['pk', 'name']
 
 
-class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+class IndividualSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     individuals = serializers.SerializerMethodField()

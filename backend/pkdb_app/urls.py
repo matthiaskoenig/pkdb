@@ -3,7 +3,6 @@ Django URLs
 """
 from django.urls import path, include
 from django.conf.urls import url
-from django.contrib import admin
 from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet, TissueViewSet, \
     ApplicationViewSet, FormViewSet, RouteViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet,  OutputInterventionViewSet, \
@@ -40,12 +39,13 @@ router.register("statistics", StatisticsViewSet, basename="statistics")
 # Elastic URLs
 ###############################################################################################
 router.register("studies", ElasticStudyViewSet, basename="studies")  # elastic
+router.register("references", ElasticReferenceViewSet, basename="references")  # elastic
+
 router.register("groups", GroupViewSet, basename="groups_elastic")
 router.register("individuals", IndividualViewSet, basename="individuals")
 router.register("interventions", ElasticInterventionViewSet, basename="interventions")
 router.register("outputs", ElasticOutputViewSet, basename="outputs")
 router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
-router.register("references", ElasticReferenceViewSet, basename="references")  # elastic
 
 router.register("measurement_types", MeasurementTypeElasticViewSet, basename="measurement_types")
 router.register("substances", ElasticSubstanceViewSet, basename="substances")  # elastic
@@ -93,8 +93,6 @@ router.register("timecourse_intervention", TimecourseInterventionViewSet, basena
 urlpatterns = [
     # authentication
     url(r'^accounts/', include('rest_email_auth.urls')),
-    # admin
-    path("admin/", admin.site.urls),
     # api
     path(r"api/v1/", include(router.urls)),
     path("api/v1/study_pks/", study_pks_view),

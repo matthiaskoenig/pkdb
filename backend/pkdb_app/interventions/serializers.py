@@ -231,7 +231,6 @@ class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
 
 # Intervention related Serializer
 class InterventionSmallElasticSerializer(serializers.ModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
     class Meta:
         model = Intervention
         fields = ["pk", 'name']  # , 'url']

@@ -61,25 +61,23 @@ class Reference(models.Model):
     abstract = models.TextField(null=True)
     journal = models.TextField(null=True)
     date = models.DateField()
-    pdf = models.FileField(upload_to="study", storage=OverwriteStorage(), null=True)
     authors = models.ManyToManyField(Author, related_name="references")
 
     def __str__(self):
         return self.title
 
+    #FIXME: Remove
     @property
     def study_pk(self):
         if self.study:
             return self.study.pk
-        else:
-            return ""
+        return ""
 
     @property
     def study_name(self):
         if self.study:
             return self.study.name
-        else:
-            return ""
+        return ""
 
 
 class Rating(models.Model):
