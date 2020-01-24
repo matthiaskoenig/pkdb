@@ -11,7 +11,7 @@ VALUE_FIELDS_NO_UNIT = ["value", "mean", "median", "min", "max", "sd", "se", "cv
 VALUE_FIELDS = VALUE_FIELDS_NO_UNIT + ["unit"]
 VALUE_MAP_FIELDS = map_field(VALUE_FIELDS)
 
-MEASUREMENTTYPE_FIELDS = ["measurement_type", "choice", "substance"] + VALUE_FIELDS
+MEASUREMENTTYPE_FIELDS = ["measurement_type", "choice"] + VALUE_FIELDS + ["substance"]
 EX_MEASUREMENTTYPE_FIELDS = MEASUREMENTTYPE_FIELDS + map_field(MEASUREMENTTYPE_FIELDS)
 
 

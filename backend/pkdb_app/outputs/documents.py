@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField
+from ..documents import string_field, elastic_settings, ObjectField, study_field
 from .models import Output, Timecourse, TimecourseIntervention, OutputIntervention
 
 
@@ -10,11 +10,12 @@ from .models import Output, Timecourse, TimecourseIntervention, OutputInterventi
 @registry.register_document
 class OutputDocument(Document):
     pk = fields.IntegerField('pk')
-    study = string_field('study_name')
+    study = study_field
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
+        'name': string_field('name'),
         'count': fields.IntegerField(),
-        'name': string_field('name')})
+    })
     individual = ObjectField(properties={
         'pk': fields.IntegerField(),
         'name': string_field('name')})
@@ -22,7 +23,7 @@ class OutputDocument(Document):
         'pk': fields.IntegerField(),
         'name': string_field('name')
     }, multi=True)
-    substance = string_field("substance_name")
+    substance = string_field("substance_name") # FIXME:
     choice = string_field("choice")
     ex = ObjectField(properties={
         'pk': string_field('pk')}
@@ -78,7 +79,7 @@ class OutputDocument(Document):
 # ------------------------------------
 @registry.register_document
 class TimecourseDocument(Document):
-    study = string_field('study_name')
+    study = study_field
     pk = fields.IntegerField('pk')
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
@@ -102,7 +103,7 @@ class TimecourseDocument(Document):
     raw = ObjectField(properties={
         'pk': fields.IntegerField()}
     )
-    pharmacokinetics = ObjectField(properties={
+    outputs = ObjectField(properties={
         'pk': fields.IntegerField()},
         multi=True
     )

@@ -13,6 +13,7 @@ from collections import OrderedDict
 from rest_framework.settings import api_settings
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
+from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
 
@@ -837,7 +838,7 @@ class SidSerializer(WrongKeyValidationSerializer):
             return super().is_valid(raise_exception)
 
 
-class ReadSerializer(serializers.HyperlinkedModelSerializer):
+class ReadSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -861,3 +862,8 @@ def validate_dict(dic):
              "detail": dic}
         )
 
+
+class StudySmallElasticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Study
+        fields = ['pk','sid', 'name']  # ,'url']

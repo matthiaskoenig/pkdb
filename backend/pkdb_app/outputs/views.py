@@ -4,8 +4,7 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
 
 from pkdb_app.documents import AccessView
 from .documents import OutputDocument, TimecourseDocument, OutputInterventionDocument, TimecourseInterventionDocument
-from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputAnalysisSerializer,
-                          OutputSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
+from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
 from ..pagination import CustomPagination
 
 ###############################################################################################

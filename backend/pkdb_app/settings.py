@@ -28,7 +28,6 @@ REST_EMAIL_AUTH = {
 }
 
 INSTALLED_APPS = (
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.sites",
     "django.contrib.contenttypes",
@@ -126,7 +125,7 @@ MEDIA_URL = "/media/"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "pkdb_app", "templates")],
+        "DIRS": STATICFILES_DIRS,
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

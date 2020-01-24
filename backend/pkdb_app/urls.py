@@ -3,12 +3,12 @@ Django URLs
 """
 from django.urls import path, include
 from django.conf.urls import url
-from django.contrib import admin
 
 from pkdb_app.info_nodes.views import InfoNodeViewSet, InfoNodeElasticViewSet
 from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputInterventionViewSet, TimecourseInterventionViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
+
 
 from .views import serve_protected_document
 
@@ -16,7 +16,7 @@ from .subjects.views import (
     DataFileViewSet,
     IndividualViewSet, GroupViewSet, GroupCharacteristicaViewSet,
     IndividualCharacteristicaViewSet)
-from .interventions.views import ElasticInterventionViewSet
+from .interventions.views import ElasticInterventionViewSet, ElasticInterventionAnalysisViewSet
 from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
 from .studies.views import (
     ReferencesViewSet,
@@ -27,33 +27,49 @@ from .statistics import StatisticsViewSet, study_pks_view
 
 router = DefaultRouter()
 
+# statistics and plot data
 ###############################################################################################
-# URLs
+# Misc URLs
+###############################################################################################
+router.register("statistics", StatisticsViewSet, basename="statistics")
+
+###############################################################################################
+# Elastic URLs
+###############################################################################################
+router.register("studies", ElasticStudyViewSet, basename="studies")  # elastic
+router.register("references", ElasticReferenceViewSet, basename="references")  # elastic
+
+router.register("groups", GroupViewSet, basename="groups_elastic")
+router.register("individuals", IndividualViewSet, basename="individuals")
+router.register("interventions", ElasticInterventionViewSet, basename="interventions")
+router.register("outputs", ElasticOutputViewSet, basename="outputs")
+router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
+
+router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
+
+
+###############################################################################################
+# Django URLs
 ###############################################################################################
 
+# django (mainly write endpoints)
+router.register("_studies", StudyViewSet, basename="_studies")
+router.register("_references", ReferencesViewSet, basename="_references")
+router.register("_datafiles", DataFileViewSet, basename="_datafiles")
 
-router.register("_studies", StudyViewSet, basename="_studies")  # django
-router.register("_references", ReferencesViewSet, basename="_references")  # django
-router.register("_datafiles", DataFileViewSet, basename="_datafiles")  # django
-router.register(r'_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
+router.register("_users", UserViewSet, basename="_users")
+router.register("_users", UserCreateViewSet, basename="_users")
+router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
-#router.register("_measurement_types", MeasurementTypeViewSet, basename="_measurement_types") # django
-#router.register("_substances", SubstanceViewSet, basename="_substances")  # django
-#router.register("_tissues", TissueViewSet, basename="_tissues")  # django
-#router.register("_applications", ApplicationViewSet, basename="_applications")  # django
-#router.register("_forms", FormViewSet, basename="_forms")  # django
-#router.register("_routes", RouteViewSet, basename="_routes")  # django
 
-#Users
-router.register("_users", UserViewSet, basename="_users")  # django
-router.register("_users", UserCreateViewSet, basename="_users")  # django
-router.register("_user_groups", UserGroupViewSet, basename="_user_groups")  # django
+router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
-# todo: remove #########################################
+
+
+# TODO: remove #########################################
 #router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
 #router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
 #router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
-router.register("statistics", StatisticsViewSet, basename="statistics")
 
 # Options
 #router.register("characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option")
@@ -61,20 +77,8 @@ router.register("statistics", StatisticsViewSet, basename="statistics")
 #router.register("output_options", OutputOptionViewSet, basename="output_option")
 #router.register("timecourse_options", TimecourseOptionViewSet, basename="timecourse_option")
 
-###############################################################################################
-# Elastic URLs
-###############################################################################################
-router.register("studies", ElasticStudyViewSet, basename="studies")  # elastic
-router.register("references", ElasticReferenceViewSet, basename="references")  # elastic
-router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
-router.register("individuals", IndividualViewSet, basename="individuals")
-router.register("groups", GroupViewSet, basename="groups")
-router.register("interventions", ElasticInterventionViewSet, basename="interventions")
-router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
-router.register("outputs", ElasticOutputViewSet, basename="outputs")
-
-
 # todo: remove -> this is for pkdb_analysis
+router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
 router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
 router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
@@ -82,12 +86,9 @@ router.register("timecourse_intervention", TimecourseInterventionViewSet, basena
 
 
 
-
 urlpatterns = [
     # authentication
     url(r'^accounts/', include('rest_email_auth.urls')),
-    # admin
-    path("admin/", admin.site.urls),
     # api
     path(r"api/v1/", include(router.urls)),
     path("api/v1/study_pks/", study_pks_view),

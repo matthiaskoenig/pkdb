@@ -86,5 +86,22 @@ class SubstanceStatisticsSerializer(serializers.ModelSerializer):
         fields = ["name", "outputs", "outputs_calculated", "interventions", "timecourses"]
 
 
+###############################################################################################
+# Elastic Serializer
+###############################################################################################
 
+class SubstanceSmallElasticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Substance
+        fields = ["sid", 'url_slug']
+
+
+class SubstanceElasticSerializer(serializers.ModelSerializer):
+    parents = SubstanceSmallElasticSerializer(many=True)
+    annotations = AnnotationSerializer(many=True, allow_null=True)
+    synonyms = SynonymSerializer(many=True, read_only=True, required=False, allow_null=True)
+
+    class Meta:
+        model = Substance
+        fields = ["sid", 'url_slug', "name", "mass", "charge", "formula", "derived", "description", "parents", "annotations", "synonyms"]
 

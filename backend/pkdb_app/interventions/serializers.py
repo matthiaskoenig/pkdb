@@ -21,7 +21,7 @@ from ..interventions.models import (
 
 from ..serializers import (
     ExSerializer,
-    NA_VALUES)
+    NA_VALUES, PkSerializer, StudySmallElasticSerializer)
 from ..subjects.models import DataFile
 
 # ----------------------------------
@@ -40,7 +40,6 @@ INTERVENTION_FIELDS = [
     "time",
     "time_end",
     "time_unit",
-    "route",
 ]
 
 INTERVENTION_MAP_FIELDS = map_field(INTERVENTION_FIELDS)
@@ -217,28 +216,50 @@ class InterventionSetSerializer(ExSerializer):
 ###############################################################################################
 
 
-class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     interventions = serializers.SerializerMethodField()
 
     class Meta:
         model = InterventionSet
-        fields = ["pk", "descriptions", "interventions", "comments"]
+        fields = ["pk", "descriptions", "comments", "interventions", ]
 
     def get_interventions(self, obj):
         return list_of_pk("interventions", obj)
 
 
 # Intervention related Serializer
-class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+class InterventionSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Intervention
         fields = ["pk", 'name']  # , 'url']
 
 
+
 class InterventionElasticSerializer(serializers.ModelSerializer):
+    pk = serializers.IntegerField()
+    study = StudySmallElasticSerializer(read_only=True)
+    measurement_type = serializers.CharField()
+    route = serializers.CharField()
+    application = serializers.CharField()
+    form = serializers.CharField()
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
+    substance = serializers.CharField(allow_null=True)
+
+    class Meta:
+        model = Intervention
+        fields = ["pk", "normed"] + INTERVENTION_FIELDS + ["study"] + MEASUREMENTTYPE_FIELDS
+
+
+class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
     intervention_pk = serializers.IntegerField(source="pk")
     substance = serializers.CharField(allow_null=True)
     measurement_type = serializers.CharField()

@@ -1,8 +1,6 @@
-from django.http import Http404
-from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
-    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from django_elasticsearch_dsl_drf.utils import DictionaryProxy
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet, BaseDocumentViewSet
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,\
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument, TimecourseInterventionDocument, \
     OutputInterventionDocument
@@ -10,14 +8,13 @@ from pkdb_app.outputs.models import TimecourseIntervention, OutputIntervention
 from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
-from rest_framework.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from elasticsearch import helpers
 from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, CharacteristicaDocument, \
+from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 
 from .models import Reference, Study
@@ -25,7 +22,9 @@ from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer)
+    StudyElasticSerializer
+)
+
 from rest_framework import viewsets
 import django_filters.rest_framework
 from rest_framework import filters
@@ -48,7 +47,6 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filter_fields = ("sid",)
-    # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (IsAdminOrCreatorOrCurator,)
 
@@ -141,7 +139,6 @@ def related_elastic_dict(study):
         StudyDocument: study,
         GroupDocument: groups,
         IndividualDocument: individuals,
-        CharacteristicaDocument: study.characteristica,
         GroupCharacteristicaDocument: GroupCharacteristica.objects.filter(group__in=groups),
         IndividualCharacteristicaDocument: IndividualCharacteristica.objects.filter(individual__in=individuals),
         TimecourseInterventionDocument: TimecourseIntervention.objects.filter(timecourse__in=timecourses),
@@ -235,7 +232,7 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('sid', 'study_name', 'study_pk', 'pmid', 'title', 'abstract', 'name', 'journal')
+    search_fields = ('sid', 'pmid', 'title', 'abstract', 'name', 'journal')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -244,8 +241,6 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
-        "study_name": "study_name",
-        "study_pk": "study_pk",
         "pmid": "pmid",
         "name": "name",
         "doi": "doi",

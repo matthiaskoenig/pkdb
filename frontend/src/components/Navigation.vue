@@ -8,12 +8,12 @@
 
         <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
         <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
+        <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
         <v-btn icon to="/groups" title="Groups" color="white"><v-icon>{{ faIcon('groups') }}</v-icon></v-btn>
         <v-btn icon to="/individuals" title="Individuals" color="white"><v-icon>{{ faIcon('individuals') }}</v-icon></v-btn>
         <v-btn icon to="/interventions" title="Interventions" color="white"><v-icon>{{ faIcon('interventions') }}</v-icon></v-btn>
         <v-btn icon to="/outputs" title="Outputs" color="white"><v-icon>{{ faIcon('outputs') }}</v-icon></v-btn>
         <v-btn icon to="/timecourses" title="Timecourses" color="white"><v-icon>{{ faIcon('timecourses') }}</v-icon></v-btn>
-        <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
 
         <v-spacer></v-spacer>
 
@@ -32,9 +32,6 @@
         <!-- links -->
         <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
         <v-btn icon :href="api_url" title="REST API" color="white"><v-icon>{{ faIcon('api') }}</v-icon></v-btn>
-        <!--
-        <v-btn icon :href="admin_url" title="Django admin interface" color="white"><v-icon>{{ faIcon('admin') }}</v-icon></v-btn>
-        -->
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository" color="white">
             <v-icon>{{ faIcon('github')}}</v-icon>
         </v-btn>

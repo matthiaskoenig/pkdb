@@ -8,7 +8,8 @@ from pkdb_app.comments.models import Comment, Description
 
 # ------------------------------------
 # Elastic Comment Document
-# ------------------------------------
+# -----------------------------------
+# TODO: Remove this file
 @registry.register_document
 class CommentDocument(Document):
     pk = fields.IntegerField(attr='pk')
