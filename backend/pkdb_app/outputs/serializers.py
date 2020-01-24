@@ -399,7 +399,7 @@ class OutputSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["pk", "descriptions", "outputs", "timecourses", "comments"]
+        fields = ["pk", "descriptions", "comments", "outputs", "timecourses",]
 
     def get_outputs(self, obj):
         return list_of_pk("outputs", obj)

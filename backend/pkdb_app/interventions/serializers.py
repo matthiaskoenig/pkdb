@@ -217,21 +217,21 @@ class InterventionSetSerializer(ExSerializer):
 ###############################################################################################
 
 
-class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     interventions = serializers.SerializerMethodField()
 
     class Meta:
         model = InterventionSet
-        fields = ["pk", "descriptions", "interventions", "comments"]
+        fields = ["pk", "descriptions", "comments", "interventions", ]
 
     def get_interventions(self, obj):
         return list_of_pk("interventions", obj)
 
 
 # Intervention related Serializer
-class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+class InterventionSmallElasticSerializer(serializers.ModelSerializer):
     # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
     class Meta:
         model = Intervention

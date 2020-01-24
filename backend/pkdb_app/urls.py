@@ -34,29 +34,50 @@ from .statistics import StatisticsViewSet, study_pks_view
 
 router = DefaultRouter()
 
+# statistics and plot data
 ###############################################################################################
-# URLs
+# Misc URLs
+###############################################################################################
+router.register("statistics", StatisticsViewSet, basename="statistics")
+
+###############################################################################################
+# Elastic URLs
+###############################################################################################
+router.register("studies", ElasticStudyViewSet, basename="studies")  # elastic
+router.register("groups", GroupViewSet, basename="groups_elastic")
+router.register("individuals", IndividualViewSet, basename="individuals")
+router.register("interventions", ElasticInterventionViewSet, basename="interventions")
+router.register("outputs", ElasticOutputViewSet, basename="outputs")
+router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
+router.register("references", ElasticReferenceViewSet, basename="references")  # elastic
+
+router.register("measurement_types", MeasurementTypeElasticViewSet, basename="measurement_types")
+router.register("substances", ElasticSubstanceViewSet, basename="substances")  # elastic
+
+###############################################################################################
+# Django URLs
 ###############################################################################################
 
+# django (mainly write endpoints)
+router.register("_studies", StudyViewSet, basename="_studies")
+router.register("_references", ReferencesViewSet, basename="_references")
+router.register("_datafiles", DataFileViewSet, basename="_datafiles")
+router.register("_users", UserViewSet, basename="_users")
+router.register("_users", UserCreateViewSet, basename="_users")
+router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
-router.register("_studies", StudyViewSet, basename="_studies")  # django
-router.register("_references", ReferencesViewSet, basename="_references")  # django
 router.register("_measurement_types", MeasurementTypeViewSet, basename="_measurement_types") # django
 router.register("_substances", SubstanceViewSet, basename="_substances")  # django
-router.register("_datafiles", DataFileViewSet, basename="_datafiles")  # django
 router.register("_tissues", TissueViewSet, basename="_tissues")  # django
 router.register("_applications", ApplicationViewSet, basename="_applications")  # django
 router.register("_forms", FormViewSet, basename="_forms")  # django
 router.register("_routes", RouteViewSet, basename="_routes")  # django
-router.register("_users", UserViewSet, basename="_users")  # django
-router.register("_users", UserCreateViewSet, basename="_users")  # django
-router.register("_user_groups", UserGroupViewSet, basename="_user_groups")  # django
 
-# todo: remove #########################################
+
+# TODO: remove #########################################
 #router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
 #router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
 #router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
-router.register("statistics", StatisticsViewSet, basename="statistics")
 
 # Options
 #router.register("characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option")
@@ -64,26 +85,11 @@ router.register("statistics", StatisticsViewSet, basename="statistics")
 #router.register("output_options", OutputOptionViewSet, basename="output_option")
 #router.register("timecourse_options", TimecourseOptionViewSet, basename="timecourse_option")
 
-###############################################################################################
-# Elastic URLs
-###############################################################################################
-router.register("studies", ElasticStudyViewSet, basename="studies")  # elastic
-router.register("references", ElasticReferenceViewSet, basename="references")  # elastic
-router.register("measurement_types", MeasurementTypeElasticViewSet, basename="measurement_types")
-router.register("substances", ElasticSubstanceViewSet, basename="substances")  # elastic
-router.register("individuals", IndividualViewSet, basename="individuals")
-router.register("groups", GroupViewSet, basename="groups_elastic")
-router.register("interventions", ElasticInterventionViewSet, basename="interventions")
-router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
-router.register("outputs", ElasticOutputViewSet, basename="outputs")
-
-
 # todo: remove -> this is for pkdb_analysis
 router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
 router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
 router.register("timecourse_intervention", TimecourseInterventionViewSet, basename="timecourse_intervention")
-
 
 
 

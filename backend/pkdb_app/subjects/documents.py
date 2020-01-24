@@ -2,7 +2,7 @@ from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from pkdb_app.subjects.models import Individual, Characteristica, Group, GroupCharacteristica, IndividualCharacteristica
-from pkdb_app.interventions.documents import string_field, ObjectField
+from pkdb_app.interventions.documents import string_field
 from ..documents import elastic_settings
 
 html_strip = analyzer(
@@ -11,6 +11,14 @@ html_strip = analyzer(
     filter=["standard", "lowercase", "stop", "snowball"],
     char_filter=["html_strip"]
 )
+
+study_field = ObjectField(
+        properties={
+            'pk': fields.IntegerField('pk'),
+            'name': string_field('name'),
+            'count': fields.IntegerField('count')
+        }
+    )
 
 characteristica_object_field = fields.ObjectField(
     properties={
@@ -43,8 +51,8 @@ class IndividualDocument(Document):
     name = string_field('name')
     group = ObjectField(
         properties={
-            'name': string_field('name'),
             'pk': fields.IntegerField('pk'),
+            'name': string_field('name'),
             'count': fields.IntegerField('count')
         }
     )

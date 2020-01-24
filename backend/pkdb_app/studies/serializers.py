@@ -396,12 +396,12 @@ class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
     rating = serializers.FloatField()
+    username = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
-    username = serializers.CharField()
 
     class Meta:
-        fields = ("id", "first_name", "last_name", "username", "rating")
+        fields = ["rating", "username", "first_name", "last_name"]
 
 
 class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
@@ -463,13 +463,12 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
 class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Reference
-        fields = ["sid"]  # , 'url']
+        fields = ["pk", "sid"]  # , 'url']
 
 class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
 
-    pkdb_version = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
     licence = serializers.CharField(read_only=True)
     access = serializers.CharField(read_only=True)
@@ -498,25 +497,29 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             "name",
             "licence",
             "access",
-            "comments",
-            "descriptions",
-            "reference",
-            "pkdb_version",
-            "curators",
-            "collaborators",
-            "creator",
-            "substances",
-            "files",
-            "groupset",
-            "individualset",
-            "interventionset",
-            "outputset",
+
             "group_count",
             "individual_count",
             "intervention_count",
             "output_count",
             "output_calculated_count",
-            "timecourse_count"
+            "timecourse_count",
+
+            "reference",
+            "creator",
+            "curators",
+            "collaborators",
+
+            "comments",
+            "descriptions",
+
+            "files",
+            "substances",
+
+            "groupset",
+            "individualset",
+            "interventionset",
+            "outputset",
         ]
 
         read_only_fields = fields

@@ -67,15 +67,14 @@ class CommentSerializer(WrongKeyValidationSerializer):
 ###############################################################################################
 # Read Serializer
 ###############################################################################################
-class DescriptionElasticSerializer(serializers.HyperlinkedModelSerializer):
+class DescriptionElasticSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ["pk", "text"]
         model = Description
 
 
-class CommentElasticSerializer(serializers.HyperlinkedModelSerializer):
-    user = UserElasticSerializer(read_only=True)
+class CommentElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
-        fields = ["pk", "text", "user"]
+        fields = ["pk", "username", "text", ]
         model = Comment

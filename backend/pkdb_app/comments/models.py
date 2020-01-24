@@ -65,6 +65,10 @@ class Comment(models.Model):
     class Meta:
         ordering = ['pk']
 
+    @property
+    def username(self):
+        return self.user.username
+
 
 class Description(models.Model):
     text = models.TextField(blank=True, null=True)

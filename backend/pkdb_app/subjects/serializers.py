@@ -346,11 +346,11 @@ class GroupSetSerializer(ExSerializer):
                 }
             )
 
-
-
 # ----------------------------------
 # Individual
 # ----------------------------------
+
+
 class IndividualSerializer(ExSerializer):
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
@@ -550,15 +550,10 @@ class CharacteristicaElasticBigSerializer(ReadSerializer):
 # maybe depreciated
 class DataFileElasticSerializer(serializers.ModelSerializer):
     file = serializers.CharField()
-    timecourses = serializers.SerializerMethodField()
 
     class Meta:
         model = DataFile
-        fields = ["pk", "name", "file", "timecourses"]
-
-    def get_timecourses(self, obj):
-        return list_of_pk("timecourses", obj)
-
+        fields = ["pk", "name", "file"]
 
 class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     value = serializers.FloatField(allow_null=True)
@@ -601,7 +596,7 @@ class GroupSetElasticSmallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupSet
-        fields = ["pk", "descriptions", "groups", "comments"]
+        fields = ["pk", "descriptions", "comments", "groups"]
 
     def get_groups(self, obj):
         return list_of_pk("groups", obj)
@@ -654,7 +649,7 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 
     class Meta:
         model = IndividualSet
-        fields = ["pk", "descriptions", "individuals", "comments"]
+        fields = ["pk", "descriptions", "comments", "individuals"]
 
     def get_individuals(self, obj):
         return list_of_pk("individuals", obj)
