@@ -1,7 +1,6 @@
 """
 Studies serializers.
 """
-from elasticsearch_dsl import AttrDict
 
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
@@ -106,19 +105,6 @@ class CuratorRatingSerializer(serializers.ModelSerializer):
 
 class StudySerializer(SidSerializer):
     """ Study Serializer.
-
-    JSON -> Model_Ex
-    - to_internal_value
-    - validate
-    - is_valid (triggers create or update)
-
-    Validators:
-    - field validators (local)
-    - validate (model)
-
-    Model_Ex -> JSON
-    - to representation
-
     """
 
     reference = utils.SlugRelatedField(slug_field="sid",
@@ -164,8 +150,8 @@ class StudySerializer(SidSerializer):
         model = Study
         fields = (
             "sid",
-            "pkdb_version",
             "name",
+            "date",
             "reference",
             "creator",
             "curators",
@@ -181,27 +167,6 @@ class StudySerializer(SidSerializer):
             "comments",
         )
         write_only_fields = ('curators', 'collaborators')
-
-    def create(self, validated_data):
-        related = self.pop_relations(validated_data)
-        instance, _ = Study.objects.update_or_create(
-            sid=validated_data["sid"],
-            defaults=validated_data,
-        )
-        instance = self.create_relations(instance, related)
-        instance.save()
-        return instance
-
-    def update(self, instance, validated_data):
-
-        # remove nested relations (handled via own serializers)
-        related = self.pop_relations(validated_data)
-
-        for name, value in validated_data.items():
-            setattr(instance, name, value)
-        instance.save()
-        instance = self.create_relations(instance, related)
-        return instance
 
     def to_internal_value(self, data):
 
@@ -269,6 +234,29 @@ class StudySerializer(SidSerializer):
                     )
 
         return super().to_internal_value(data)
+    def create(self, validated_data):
+
+        related = self.pop_relations(validated_data)
+        instance, _ = Study.objects.update_or_create(
+            sid=validated_data["sid"],
+            defaults=validated_data,
+        )
+        instance = self.create_relations(instance, related)
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        # remove nested relations (handled via own serializers)
+        related = self.pop_relations(validated_data)
+
+        for name, value in validated_data.items():
+
+            setattr(instance, name, value)
+        instance.save()
+        instance = self.create_relations(instance, related)
+        return instance
+
+
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -316,7 +304,7 @@ class StudySerializer(SidSerializer):
         :param validated_data:
         :return:
         """
-        related_foreinkeys = self.related_sets().copy()
+        related_foreignkeys = self.related_sets().copy()
 
         related_many2many = {
             "descriptions": Description,
@@ -325,12 +313,12 @@ class StudySerializer(SidSerializer):
             "collaborators": User,
             "files": DataFile,
         }
-        related_foreinkeys_dict = {
-            name: validated_data.pop(name, None) for name in related_foreinkeys.keys()
+        related_foreignkeys_dict = {
+            name: validated_data.pop(name, None) for name in related_foreignkeys.keys()
         }
         related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if
                                   name in validated_data}
-        related = {**related_foreinkeys_dict, **related_many2many_dict}
+        related = {**related_foreignkeys_dict, **related_many2many_dict}
         return related
 
     def create_relations(self, study, related):
@@ -461,6 +449,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             "name",
             "licence",
             "access",
+            "date",
 
             "group_count",
             "individual_count",

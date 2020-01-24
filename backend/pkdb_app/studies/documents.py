@@ -87,6 +87,10 @@ class StudyDocument(Document):
     id = fields.TextField(attr='sid')
     pk = fields.TextField(attr='sid')
     sid = string_field(attr='sid')
+    name = string_field("name")
+    licence = string_field("licence")
+    access = string_field("access")
+    date = fields.DateField()
 
     descriptions = descriptions_field
     comments = comments_field
@@ -106,9 +110,6 @@ class StudyDocument(Document):
             'last_name': string_field("last_name"),
         }
     )
-    name = string_field("name")
-    licence = string_field("licence")
-    access = string_field("access")
     reference = ObjectField(
         properties={
             'pk': fields.IntegerField(attr='pk'),

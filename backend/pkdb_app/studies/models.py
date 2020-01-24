@@ -1,6 +1,7 @@
 """
 Django model for Study.
 """
+from datetime import datetime
 from django.db import models
 from pkdb_app.users.models import PUBLIC, PRIVATE
 
@@ -96,7 +97,7 @@ class Study(Sidable, models.Model):
     Mainly reported as a single publication.
     """
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    pkdb_version = models.IntegerField(default=CURRENT_VERSION)
+    date = models.DateField(default=datetime.now)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
 
