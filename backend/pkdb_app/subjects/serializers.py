@@ -157,40 +157,6 @@ class GroupSerializer(ExSerializer):
             for measurement_type in ["species", "healthy"]:
                 self._validate_required_measurement_type(measurement_type, characteristica)
 
-        #validate on django instance before save.
-        """
-         disease = False
-        healthy = "NR"
-
-        for characteristica_single in attrs.get("characteristica_all_normed", []):
-            if characteristica_single.get("measurement_type").name == "disease":
-
-                if characteristica_single.get("choice") != "NR":
-                    disease = characteristica_single.get("choice")
-                else:
-                    disease = True
-
-            if characteristica_single.get("measurement_type").name == "healthy":
-                healthy = characteristica_single.get("choice")
-        print(attrs.get("characteristica_all_normed", []))
-        if not any([all([disease == True, healthy == False]), all([disease == False, healthy == True]),
-                    all([disease == "NR", healthy == "NR"])]):
-            msg = f"1. Groups and individuals cannot be healthy ({{'measurement_type':'healthy, 'choice':True}}) " \
-                  f"and have a disease ({{'measurement_type':'disease, ... }}). \n " \
-                  f"2. Groups and individuals cannot be sick ({{'measurement_type':'healthy, 'choice':False}}) " \
-                  f"and have no disease ({{'measurement_type':'disease, ... }}).  \n " \
-                  f"3. Groups and individuals cannot sick ({{'measurement_type':'healthy, 'choice':False}}) " \
-                  f"and have no disease ({{'measurement_type':'disease, ... }}). "
-
-            raise serializers.ValidationError(
-                {
-                    "characteristica": msg,
-                    "details": attrs.get("characteristica_all_normed", [])}
-            )
-        
-        """
-
-
         return super().validate(attrs)
 
     def to_representation(self, instance):
@@ -609,7 +575,7 @@ class GroupSmallElasticSerializer(serializers.ModelSerializer):
 
 
 class GroupElasticSerializer(serializers.ModelSerializer):
-    # study = StudySmallElasticSerializer(read_only=True)
+    study = StudySmallElasticSerializer(read_only=True)
     parent = GroupSmallElasticSerializer(read_only=True)
     characteristica_all_normed = serializers.SerializerMethodField()
     allowed_users = UserElasticSerializer(many=True, read_only=True)
@@ -618,10 +584,10 @@ class GroupElasticSerializer(serializers.ModelSerializer):
         model = Group
         fields = (
             'pk',
+            'study',
             'parent',
             'count',
             'name',
-            'study',
             'characteristica_all_normed',
             "access",
             "allowed_users"

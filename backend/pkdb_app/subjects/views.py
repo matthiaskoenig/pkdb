@@ -1,5 +1,4 @@
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
-from elasticsearch_dsl import Q
 
 from pkdb_app.categorials.models import MeasurementType
 from pkdb_app.users.permissions import StudyPermission
@@ -7,24 +6,27 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.subjects.models import (
-    DataFile,
-    SUBJECT_TYPE_GROUP, SUBJECT_TYPE_INDIVIDUAL, GroupCharacteristica, IndividualCharacteristica)
+from pkdb_app.subjects.models import DataFile
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
-    IndividualElasticSerializer, GroupElasticSerializer, CharacteristicaElasticBigSerializer,
-    CharacteristicaElasticSerializer, GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer)
+    IndividualElasticSerializer,
+    GroupElasticSerializer,
+    GroupCharacteristicaSerializer,
+    IndividualCharacteristicaSerializer
+)
 
-from pkdb_app.subjects.documents import IndividualDocument, CharacteristicaDocument, GroupDocument, \
+from pkdb_app.subjects.documents import IndividualDocument, GroupDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
+
 ############################################################
 # Elastic Search Views
 ###########################################################
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
-    CompoundSearchFilterBackend,
-    IdsFilterBackend, MultiMatchSearchFilterBackend)
+    IdsFilterBackend,
+    MultiMatchSearchFilterBackend,
+    )
 
 from pkdb_app.documents import AccessView
 
@@ -110,49 +112,6 @@ class IndividualViewSet(AccessView):
         'group': 'group.raw',
         'name': 'name.raw',
     }
-
-"""
-
-class CharacteristicaElasticViewSet(AccessView):
-    pagination_class = CustomPagination
-    document = GroupCharacteristicaDocument
-    serializer_class = CharacteristicaElasticBigSerializer
-    lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-
-    search_fields = (
-        'choice',
-    )
-    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
-    multi_match_options = {
-        'operator': 'and'
-    }
-    ordering_fields = {
-        'choice': 'choice.raw',
-        "count": 'count',
-    }
-
-    filter_fields = {
-        'pk': 'pk',
-        'value': 'value',
-        'mean': 'mean',
-        'median': 'median',
-        'min': 'min',
-        'max': 'max',
-        'se': 'se',
-        'sd': 'sd',
-        'cv': 'cv',
-        'normed': 'normed',
-        'group_name': 'group_name.raw',
-        'group_pk': 'group_pk',
-
-        'individual_name': 'individual_name.raw',
-        'individual_pk': 'individual_pk',
-        'study_sid': 'study_sid',
-
-    }
-"""
-
 
 
 class GroupCharacteristicaViewSet(AccessView):
