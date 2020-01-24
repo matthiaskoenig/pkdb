@@ -15,9 +15,16 @@ annotation_field = ObjectField(
                 }
             )
 
+small_info_node_properties = {
+        'sid': string_field('sid'),
+        'name': string_field('name'),
+        "description": text_field('description'),
+        "annotations": annotation_field,
+    }
+
+
 @registry.register_document
 class InfoNodeDocument(Document):
-    # pk = fields.IntegerField() not sure, maybe needed
     sid = string_field('sid')
     name = string_field('name')
     url_slug = string_field('url_slug')
@@ -25,11 +32,9 @@ class InfoNodeDocument(Document):
     creator = string_field("creator_username")
     annotations = annotation_field
     synonyms = string_field('synonym_names', multi=True) #todo: this might be wrong
-    parents = ObjectField(properties={
-        'sid': string_field('sid'),
-        'url_slug': string_field('url_slug')
-    }, multi=True)
+    parents = ObjectField(properties=small_info_node_properties, multi=True)
     ntype = string_field('ntype')
+    dtype = string_field('dtype')
 
     #measurement type
     measurement_type = ObjectField(
@@ -37,22 +42,19 @@ class InfoNodeDocument(Document):
             "choices": ObjectField(
                 attr="choices",
                 multi=True,
-                properties={
-                    "name": string_field("name"),
-                    "description": text_field('description'),
-                    "annotations": annotation_field
-                }
+                properties=small_info_node_properties
             ),
             "units":ObjectField(
                 attr="units",
                 multi=True,
                 properties={
+                    "pk": fields.IntegerField(),
                     "name": string_field("name"), #todo:this tooo
                 })
         }
     )
     #substance
-    substance =  ObjectField(
+    substance = ObjectField(
         properties={
 
             "chebi": string_field('chebi'),

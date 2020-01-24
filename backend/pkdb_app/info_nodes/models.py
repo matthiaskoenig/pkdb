@@ -27,8 +27,6 @@ class Annotation(models.Model):
 
 class InfoNode(Sidable):
 
-
-    # todo:proably remove
     class NTypes(models.TextChoices):
         """ Note Types. """
 
@@ -45,6 +43,7 @@ class InfoNode(Sidable):
         """ Data Types. """
         Abstract = 'abstract', _('abstract')
         Boolean = 'boolean', _('boolean')
+        Undefined = 'undefined', _('undefined')
         Numeric = 'numeric', _('numeric')
         Categorical = 'categorical', _('categorical')
         NumericCategorical = 'numeric_categorical', _('numeric_categorical')
@@ -53,10 +52,10 @@ class InfoNode(Sidable):
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     description = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(User, related_name="info_nodes", on_delete=models.CASCADE)
-    annotations = models.ManyToManyField(Annotation)
+    annotations = models.ManyToManyField(Annotation, "info_nodes")
     parents = models.ManyToManyField("InfoNode", related_name="children")
-    ntype = models.CharField(choices=NTypes.choices, max_length=20)
-    dtype = models.CharField(choices=DTypes.choices, max_length=20)
+    ntype = models.CharField(null=False, blank=False, choices=NTypes.choices, max_length=20)
+    dtype = models.CharField(null=False, blank=False, choices=DTypes.choices, max_length=20)
 
     def annotations_strings(self):
         return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
@@ -90,15 +89,12 @@ class AbstractInfoNode(models.Model):
         abstract = True
 
 
-class Choice(AbstractInfoNode):
-    info_node = models.OneToOneField(
-        InfoNode, related_name="choice", on_delete=models.SET_NULL, null=True)
 
 
 class Tissue(AbstractInfoNode):
     """ Tissue Model """
     info_node = models.OneToOneField(
-        InfoNode, related_name="tissue", on_delete=models.SET_NULL, null=True
+        InfoNode, related_name="tissue", on_delete=models.CASCADE, null=True
     )
 
 
@@ -106,21 +102,21 @@ class Route(AbstractInfoNode):
     """ Route Model """
 
     info_node = models.OneToOneField(
-        InfoNode, related_name="route", on_delete=models.SET_NULL, null=True
+        InfoNode, related_name="route", on_delete=models.CASCADE, null=True
     )
 
 
 class Application(AbstractInfoNode):
     """ Application Model """
     info_node = models.OneToOneField(
-        InfoNode, related_name="application", on_delete=models.SET_NULL, null=True
+        InfoNode, related_name="application", on_delete=models.CASCADE, null=True
     )
 
 
 class Form(AbstractInfoNode):
     """ Form Model """
     info_node = models.OneToOneField(
-        InfoNode, related_name="form", on_delete=models.SET_NULL, null=True
+        InfoNode, related_name="form", on_delete=models.CASCADE, null=True
     )
 
 
@@ -136,7 +132,7 @@ class Unit(models.Model):
 class MeasurementType(AbstractInfoNode):
     """ MeasurementType Model """
     info_node = models.OneToOneField(
-        InfoNode, related_name="measurement_type", on_delete=models.SET_NULL, null=True
+        InfoNode, related_name="measurement_type", on_delete=models.CASCADE, null=True
     )
 
     NO_UNIT = 'NO_UNIT' #todo: remove NO_UNIT and add extra keyword or add an extra measurement_type with optional no units.
@@ -146,11 +142,6 @@ class MeasurementType(AbstractInfoNode):
 
     units = models.ManyToManyField(Unit, related_name="measurement_types")
 
-
-    @property
-    def choices(self):
-     assert NotImplementedError
-     return None
 
     def __str__(self):
         return self.info_node.name
@@ -248,10 +239,10 @@ class MeasurementType(AbstractInfoNode):
         return result
 
     def is_valid_choice(self, choice):
-        return choice in self.choices.values_list("name", flat=True)
+        return choice in self.choices.values_list("info_nodes__name", flat=True)
 
     def choices_list(self):
-        return self.choices.values_list("name", flat=True)
+        return self.choices.values_list("info_nodes__name", flat=True)
 
 
     @property
@@ -264,7 +255,7 @@ class MeasurementType(AbstractInfoNode):
 
     def validate_choice(self, choice):
         if choice:
-            if self.dtype in [self.DTypes.CATEGORIAL_TYPE, self.DTypes.BOOLEAN_TYPE, self.DTypes.NUMERIC_CATEGORIAL_TYPE]:
+            if self.info_node.dtype in [self.info_node.DTypes.Categorical, self.info_node.DTypes.Boolean, self.info_node.DTypes.NumericCategorical]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
                           f"Allowed choices are: `{list(self.choices_list())}`."
@@ -288,7 +279,7 @@ class MeasurementType(AbstractInfoNode):
         return self.info_node.name in self.CAN_NEGATIVE
 
     def validate_numeric(self, data):
-        if self.dtype in [self.DTypes.NUMERIC_CATEGORIAL_TYPE, self.DTypes.NUMERIC_TYPE]:
+        if self.info_node.dtype in [self.info_node.DTypes.NumericCategorical, self.info_node.DTypes.Numeric]:
             for field in self.numeric_fields:
                 value = data.get(field)
                 if not self.can_be_negative:
@@ -328,6 +319,26 @@ class MeasurementType(AbstractInfoNode):
 
 
 
+class Choice(AbstractInfoNode):
+    info_node = models.OneToOneField(
+        InfoNode, related_name="choice", on_delete=models.CASCADE, null=True)
+    measurement_type = models.ForeignKey(MeasurementType, related_name="choices", on_delete=models.SET_NULL, null=True)
+
+    @property
+    def sid(self):
+        return self.info_node.sid
+
+    @property
+    def name(self):
+        return self.info_node.name
+
+    @property
+    def description(self):
+        return self.info_node.description
+
+    @property
+    def annotations(self):
+        return self.info_node.annotations
 
 class Substance(AbstractInfoNode):
     """ Substances.
@@ -346,7 +357,7 @@ class Substance(AbstractInfoNode):
     """
     # this cannot be null (for class 1 & 2), must be null for class 3
     info_node = models.OneToOneField(
-        InfoNode, related_name="substance", on_delete=models.SET_NULL, null=True
+        InfoNode, related_name="substance", on_delete=models.CASCADE, null=True
     )
     chebi = models.CharField(null=True, max_length=CHAR_MAX_LENGTH, unique=True)
     mass = models.FloatField(null=True)

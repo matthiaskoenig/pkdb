@@ -113,7 +113,7 @@ class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
 
 
 class MeasurementTypeable(ValueableNotBlank):
-    measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.CASCADE)
+    measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.PROTECT)
     substance = models.ForeignKey('info_nodes.Substance', null=True, on_delete=models.PROTECT)
     choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
@@ -125,12 +125,12 @@ class MeasurementTypeable(ValueableNotBlank):
 
     @property
     def measurement_type_name(self):
-        return self.measurement_type.name
+        return self.measurement_type.info_node.name
 
     @property
     def substance_name(self):
         if self.substance:
-            return self.substance.name
+            return self.substance.infonode.name
 
     @property
     def choices(self):

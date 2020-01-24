@@ -61,7 +61,6 @@ router.register("_users", UserViewSet, basename="_users")
 router.register("_users", UserCreateViewSet, basename="_users")
 router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
-
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
 

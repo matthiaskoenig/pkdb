@@ -97,7 +97,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].validate_complete(data=attrs)
+            attrs["measurement_type"].measurement_type.validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -271,7 +271,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].validate_complete(data=attrs)
+            attrs["measurement_type"].measurement_type.validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 

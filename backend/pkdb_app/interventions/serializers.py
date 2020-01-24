@@ -6,7 +6,7 @@ import itertools
 from pkdb_app import utils
 from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.info_nodes.models import Route, Application, Form
+from pkdb_app.info_nodes.models import Route, Application, Form, InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
@@ -58,17 +58,17 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     route = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Route.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Route))
 
     application = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Application.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Application))
 
     form = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Form.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form))
 
     class Meta:
         model = Intervention
@@ -107,7 +107,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].validate_complete(data=attrs)
+            attrs["measurement_type"].measurement_type.validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
