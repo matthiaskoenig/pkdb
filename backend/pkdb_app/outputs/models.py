@@ -131,7 +131,7 @@ class Output(AbstractOutput, Normalizable, Accessible):
 
     # calculated by timecourse data
     calculated = models.BooleanField(default=False)
-    timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="pharmacokinetics", null=True)
+    timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="outputs", null=True)
     objects = OutputManager()
 
     @property

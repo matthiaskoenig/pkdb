@@ -9,8 +9,7 @@ from rest_framework.response import Response
 from pkdb_app.documents import AccessView
 from pkdb_app.outputs.models import Output, OutputIntervention, TimecourseIntervention
 from .documents import OutputDocument, TimecourseDocument, OutputInterventionDocument, TimecourseInterventionDocument
-from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputAnalysisSerializer,
-                          OutputSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
+from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
 from ..pagination import CustomPagination
 import pandas as pd
 import numpy as np

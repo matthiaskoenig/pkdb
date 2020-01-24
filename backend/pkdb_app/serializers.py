@@ -13,6 +13,7 @@ from collections import OrderedDict
 from rest_framework.settings import api_settings
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
+from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.utils import recursive_iter, set_keys
 
@@ -860,3 +861,9 @@ def validate_dict(dic):
             {"error": "data must be a dictionary",
              "detail": dic}
         )
+
+
+class StudySmallElasticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Study
+        fields = ['pk','sid', 'name']  # ,'url']

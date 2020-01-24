@@ -5,10 +5,9 @@ from pkdb_app.categorials.behaviours import map_field, VALUE_FIELDS_NO_UNIT, \
 from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
 
+from pkdb_app.serializers import StudySmallElasticSerializer
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
-from ..studies.models import Study
-from operator import itemgetter
 from ..utils import list_of_pk, _validate_requried_key
 
 from .models import (
@@ -22,7 +21,7 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
     GroupCharacteristica, IndividualCharacteristica)
-from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer, validate_dict
+from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
 
 CHARACTERISTICA_FIELDS = ['count']
 CHARACTERISTICA_MAP_FIELDS = map_field(CHARACTERISTICA_FIELDS)
@@ -538,22 +537,6 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
         model = Characteristica
         fields = ['pk'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['normed']  # + ['access','allowed_users']
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        for field in VALUE_FIELDS_NO_UNIT:
-            try:
-                rep[field] = '{:.2e}'.format(rep[field])
-            except (ValueError, TypeError):
-                pass
-
-        return rep
-
-
-class StudySmallElasticSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Study
-        fields = ['pk','sid', 'name']  # ,'url']
-
 
 # Group related Serializer
 class GroupSetElasticSmallSerializer(serializers.ModelSerializer):
@@ -590,13 +573,12 @@ class GroupElasticSerializer(serializers.ModelSerializer):
             'study',
             'characteristica',
         )
+    #FIXME: Remove this.
 
     def get_characteristica(self, instance):
         if instance.characteristica_all_normed:
-            characteristica = sorted(instance.characteristica_all_normed, key=itemgetter('count'))
-            return CharacteristicaElasticSerializer(characteristica, many=True, read_only=True).data
-        else:
-            return []
+            return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
+        return []
 
 
 # Individual related Serializer
@@ -620,24 +602,24 @@ class IndividualSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer
 
 
 class IndividualElasticSerializer(serializers.ModelSerializer):
-    # study = StudySmallElasticSerializer(read_only=True)
+    study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
-    characteristica = CharacteristicaElasticSerializer(many=True, read_only=True)
+    characteristica = serializers.SerializerMethodField()
 
     class Meta:
         model = Individual
         fields = (
             'pk',
             'name',
-            'group',
             'study',
+            'group',
             'characteristica',
         )
-
+    #FIXME: Remove this.
     def get_characteristica(self, instance):
-        characteristica = sorted(instance.characteristica_all_normed, key=itemgetter('count'))
-        return CharacteristicaElasticSerializer(characteristica, many=True, read_only=True).data
-
+        if instance.characteristica_all_normed:
+            return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
+        return []
 
 class GroupCharacteristicaSerializer(serializers.ModelSerializer):
     class Meta:

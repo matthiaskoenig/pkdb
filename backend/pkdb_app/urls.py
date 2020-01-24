@@ -6,24 +6,20 @@ from django.conf.urls import url
 from django.contrib import admin
 from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet, TissueViewSet, \
     ApplicationViewSet, FormViewSet, RouteViewSet
-from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
-    TimecourseOptionViewSet, OutputInterventionViewSet, \
+from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet,  OutputInterventionViewSet, \
     TimecourseInterventionViewSet
-from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
+from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet
 from rest_framework.authtoken.views import obtain_auth_token
-
 from rest_framework.routers import DefaultRouter
 
-from .comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
 
 from .views import serve_protected_document
 
 from .subjects.views import (
     DataFileViewSet,
-    IndividualViewSet,
-     CharacteristicaOptionViewSet, GroupViewSet, GroupCharacteristicaViewSet,
+    IndividualViewSet, GroupViewSet, GroupCharacteristicaViewSet,
     IndividualCharacteristicaViewSet)
-from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
+from .interventions.views import ElasticInterventionViewSet, ElasticInterventionAnalysisViewSet
 from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
 from .studies.views import (
     ReferencesViewSet,
@@ -86,6 +82,7 @@ router.register("_routes", RouteViewSet, basename="_routes")  # django
 #router.register("timecourse_options", TimecourseOptionViewSet, basename="timecourse_option")
 
 # todo: remove -> this is for pkdb_analysis
+router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
 router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
 router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
