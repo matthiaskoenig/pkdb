@@ -159,11 +159,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
 
-###############################################################################################
+# -----------------------------------------------------------------------------
 # Elastic Serializer
-###############################################################################################
-
-
+# -----------------------------------------------------------------------------
 class UserElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

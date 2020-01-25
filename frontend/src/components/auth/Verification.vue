@@ -1,12 +1,7 @@
 <template>
-    <div>
-        <div v-if="verification_message.length > 0">
-            {{verification_message}}
-        </div>
-
+    <div v-if="verification_message.length > 0">
+        {{verification_message}}
     </div>
-
-
 </template>
 
 <script>
@@ -23,34 +18,26 @@
 
             }
         },
-
         computed: {
             key_warnings(){
+                let warnings = [];
                 if ("key" in this.warnings){
-                    return this.warnings["key"]
+                    warnings = this.warnings["key"]
                 }
-                else {
-                    return []
-                }
+                return warnings;
             },
-
             verification_key() {
                 return this.$route.params.id;
-
             },
-
-
-
         },
         methods: {
             verify: function(){
-                // reset store
-                // reset warnings
                 this.warnings = {};
                 this.success = false;
 
-                const payload = {"key":this.verification_key};
-
+                const payload = {
+                    "key": this.verification_key
+                };
                 axios.post(this.$store.state.endpoints.verify, payload)
                     .then((response)=>{
 
@@ -73,7 +60,6 @@
                     return this.key_warnings
                 }
             }
-
         },
         beforeMount(){
             this.verify()

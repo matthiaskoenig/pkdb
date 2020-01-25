@@ -10,27 +10,27 @@
             </div>
             </v-card-title>
             <v-card-text>
-
-                <v-form
-                        onSubmit="return false;"
-                >
-                    <v-text-field v-on:keyup.enter="request_reset" prepend-icon="fas fa-envelope"  :error="email_warnings.length > 0" :error-messages="email_warnings" v-model="email" name="email" label="Email" type="text"></v-text-field>
-
+                <v-form onSubmit="return false;">
+                    <v-text-field v-on:keyup.enter="request_reset"
+                                  prepend-icon="fas fa-envelope"
+                                  :error="email_warnings.length > 0"
+                                  :error-messages="email_warnings"
+                                  v-model="email"
+                                  name="email"
+                                  label="Email"
+                                  type="text"
+                    />
                 </v-form>
-
             </v-card-text>
             <v-card-actions>
-                <v-alert :value="alertShow"  type="success" >
+                <v-alert :value="alertShow" type="success">
                 {{message}}
                 </v-alert>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" v-on:click="request_reset" >request reset</v-btn>
+                <v-spacer/>
+                <v-btn color="primary" v-on:click="request_reset">request reset</v-btn>
             </v-card-actions>
-
         </v-card>
-
     </div>
-
 </template>
 
 <script>
@@ -76,8 +76,6 @@
                     }
                     });
             }
-
-
         }
     }
 </script>

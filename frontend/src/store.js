@@ -46,6 +46,7 @@ export default new Vuex.Store({
         endpoints: {
             api: backend_domain + '/api/v1/',
             obtainAuthToken: backend_domain + '/api-token-auth/',
+            // FIXME: are these endpoints used?
             register: backend_domain + '/accounts/register/',
             verify: backend_domain + '/accounts/verify-email/',
             request_password_reset: backend_domain + '/accounts/request-password-reset/',
@@ -54,7 +55,6 @@ export default new Vuex.Store({
 
         username: localStorage.getItem('username'),
         token: localStorage.getItem('token'),
-
     },
     mutations: {
         setToken(state, token) {
