@@ -56,7 +56,6 @@
                 return this.$store.state.django_domain + '/admin/';
             },
             api_url() {
-
                 return this.$store.state.endpoints.api;
             },
             username(){

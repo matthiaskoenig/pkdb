@@ -1,31 +1,12 @@
 """
-Shared django settings.
+DJANGO settings
 """
-import logging
 import os
-from os.path import join
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 SECRET_KEY = os.environ['PKDB_SECRET_KEY']
 API_BASE = os.environ['PKDB_API_BASE']
-FRONTEND_BASE = os.environ['FRONTEND_BASE']
 API_URL = API_BASE + "/api/v1"
-
-AUTHENTICATION_BACKENDS = (
-    # default
-    'django.contrib.auth.backends.ModelBackend',
-    # email login
-    'allauth.account.auth_backends.AuthenticationBackend',
-    'rest_email_auth.authentication.VerifiedEmailBackend',
-)
-
-REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': FRONTEND_BASE + '/verification/{key}',
-    'PASSWORD_RESET_URL': FRONTEND_BASE + '/reset-password/{key}',
-    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
-    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
-}
 
 INSTALLED_APPS = (
     "django.contrib.auth",
@@ -35,18 +16,16 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Authentication
+    # authentication
     'rest_email_auth',
     "rest_framework.authtoken",  # token authentication
-    'allauth',
-    'allauth.account',
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
     "django_filters",  # for filtering rest endpoints
     "corsheaders",
 
-    # Elastic Search
+    # elasticsearch
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
 
@@ -59,16 +38,7 @@ INSTALLED_APPS = (
     "pkdb_app.outputs",
     "pkdb_app.comments",
 )
-# django-allauth settings
-SITE_ID = 1
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_MIN_LENGTH = 3
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-# https://docs.djangoproject.com/en/2.0/topics/http/middleware/
 MIDDLEWARE = (
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -88,9 +58,6 @@ ROOT_URLCONF = "pkdb_app.urls"
 
 WSGI_APPLICATION = "pkdb_app.wsgi.application"
 
-# Email
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
 ADMINS = (
     ("mkoenig", "konigmatt@googlemail.com"),
     ("janekg89", "janekg89@hotmail.de"),
@@ -100,26 +67,22 @@ ADMINS = (
 APPEND_SLASH = False
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = False
 USE_L10N = True
 USE_TZ = True
 LOGIN_REDIRECT_URL = "/"
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+# Static files
 STATIC_ROOT = "/static"
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
+STATICFILES_DIRS = []
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
 # Media files
-MEDIA_ROOT = '/media/'  # join(BASE_DIR, "media")
+MEDIA_ROOT = "/media/"
 MEDIA_URL = "/media/"
 
 TEMPLATES = [
@@ -129,7 +92,6 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -139,18 +101,28 @@ TEMPLATES = [
     }
 ]
 
-# Custom user app
+# authentication
+AUTHENTICATION_BACKENDS = (
+    # default
+    'django.contrib.auth.backends.ModelBackend',
+    # email login
+    'rest_email_auth.authentication.VerifiedEmailBackend',
+)
+REST_EMAIL_AUTH = {
+    'EMAIL_VERIFICATION_URL': API_BASE + '/verification/{key}',
+    'PASSWORD_RESET_URL': API_BASE + '/reset-password/{key}',
+    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
+    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
+}
 AUTH_USER_MODEL = "users.User"
 
 # Password Validation
 # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Logging
@@ -223,19 +195,7 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ),
 }
-LOGIN_URL = "rest_framework:login"
-LOGOUT_URL = "rest_framework:logout"
 
-SWAGGER_SETTINGS = {
-    "LOGIN_URL": "rest_framework:login",
-    "LOGOUT_URL": "rest_framework:logout",
-    "USE_SESSION_AUTH": True,
-    "DOC_EXPANSION": "list",
-    "APIS_SORTER": "alpha",
-    "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
-}
-
-# Postgres
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -247,17 +207,13 @@ DATABASES = {
     }
 }
 
-DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
-logging.info(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
-print(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
-
-# Elastic Search
 ELASTICSEARCH_DSL = {
     'default': {
         'hosts': 'elasticsearch:9200'
     },
 }
 
+DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
 # ------------------------------
 # local
 # ------------------------------

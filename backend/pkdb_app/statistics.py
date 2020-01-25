@@ -28,10 +28,12 @@ class Statistics(object):
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
 
 
-@api_view(['GET'])
-def study_pks_view(request):
-    if request.method == 'GET':
-        return Response(list(Study.objects.values_list("pk", flat=True)))
+
+# FIXME: remove
+#@api_view(['GET'])
+#def study_pks_view(request):
+#    if request.method == 'GET':
+#        return Response(list(Study.objects.values_list("pk", flat=True)))
 
 
 class StatisticsViewSet(viewsets.ViewSet):

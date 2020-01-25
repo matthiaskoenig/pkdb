@@ -37,10 +37,10 @@ docker image rm -f pkdb_elasticsearch:latest
 docker image rm -f pkdb_nginx:latest
 
 # make sure volumes are removed
+docker volume rm -f pkdb_node_modules
 docker volume rm -f pkdb_django_media
 docker volume rm -f pkdb_django_static
 docker volume rm -f pkdb_elasticsearch_data
-docker volume rm -f pkdb_node_modules
 docker volume rm -f pkdb_postgres_data
 docker volume rm -f pkdb_vue_dist
 
