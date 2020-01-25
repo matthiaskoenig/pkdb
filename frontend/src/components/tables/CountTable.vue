@@ -7,7 +7,11 @@
                       class="elevation-1"
         >
             <template v-slot:item.name="{ item }">
-                <strong>{{ item.name }}s</strong>
+
+                <strong>
+                    <span v-if="item.name_plural">{{ item.name_plural }}</span>
+                    <span v-else>{{ item.name }}s</span>
+                </strong>
             </template>
             <template v-slot:item.count="{ item }">
                 <count-chip :count="item.count"
@@ -57,6 +61,7 @@
                 return [
                     {
                         name: 'Study',
+                        name_plural: 'Studies',
                         to: '/studies',
                         icon: this.faIcon('studies'),
                         count: this.data.study_count,
