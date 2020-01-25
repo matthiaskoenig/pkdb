@@ -98,7 +98,8 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         try:
             # perform via dedicated function on categorials
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
-            if "substance" in attrs:
+            if "substance" in attrs and  attrs["substance"] is not None:
+
                 attrs['substance'] = attrs['substance'].substance
 
             attrs['measurement_type'].validate_complete(data=attrs)
