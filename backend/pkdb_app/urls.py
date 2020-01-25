@@ -65,7 +65,14 @@ router.register("individuals", IndividualViewSet, basename="individuals")
 router.register("interventions", ElasticInterventionViewSet, basename="interventions")
 router.register("outputs", ElasticOutputViewSet, basename="outputs")
 router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
+<<<<<<< HEAD
 router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
+=======
+
+
+router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
+
+>>>>>>> 9d81321d7843dd04ab18370f3a82c2b4f1ef0a58
 
 # -----------------------------------------------------------------------------
 # Django URLs
@@ -98,6 +105,7 @@ router.register("characteristica_groups", GroupCharacteristicaViewSet, basename=
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
 router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
 router.register("timecourse_intervention", TimecourseInterventionViewSet, basename="timecourse_intervention")
+
 
 urlpatterns = [
     # api
