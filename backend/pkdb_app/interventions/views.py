@@ -4,9 +4,7 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
 
 from pkdb_app.documents import AccessView
 from ..interventions.documents import InterventionDocument
-
 from ..interventions.serializers import InterventionElasticSerializer, InterventionElasticSerializerAnalysis
-
 from ..pagination import CustomPagination
 
 
@@ -21,7 +19,8 @@ class ElasticInterventionViewSet(AccessView):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
-    'name', 'study', 'access', 'measurement_type', 'substance', "form", "tissue", "application", 'route', 'time_unit')
+        'name', 'study', 'access', 'measurement_type', 'substance', "form", "tissue", "application", 'route',
+        'time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     filter_fields = {
 
@@ -69,7 +68,8 @@ class ElasticInterventionAnalysisViewSet(AccessView):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
-    'name', 'study_sid', 'access', 'measurement_type', 'substance', "form", "tissue", "application", 'route', 'time_unit')
+        'name', 'study_sid', 'access', 'measurement_type', 'substance', "form", "tissue", "application", 'route',
+        'time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'

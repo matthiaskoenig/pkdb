@@ -1,15 +1,15 @@
 """
 the managers can be used to overwrite class methods of the models module.
 """
-from datetime import timedelta
-from django.db import models
-from django.apps import apps
 import time
-import numpy as np
 
-from pkdb_app.info_nodes.models import MeasurementType, InfoNode
-from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
+import numpy as np
+from django.apps import apps
+from django.db import models
+
+from pkdb_app.info_nodes.models import MeasurementType
 from ..analysis.pharmacokinetic import f_pk
+from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 
 class OutputSetManager(models.Manager):

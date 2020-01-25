@@ -6,7 +6,7 @@ from pkdb_app.interventions.models import (
     InterventionSet,
 )
 from pkdb_app.outputs.models import OutputEx, OutputSet, TimecourseEx
-from pkdb_app.studies.models import Reference, Study
+from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import (
     IndividualEx,
     IndividualSet,

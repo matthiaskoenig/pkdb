@@ -6,14 +6,10 @@ How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
 
+from django.apps import apps
 from django.db import models
-from ..storage import OverwriteStorage
-from ..behaviours import (
-    Externable, Accessible)
 
 from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
-
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from .managers import (
     GroupExManager,
     GroupSetManager,
@@ -23,8 +19,10 @@ from .managers import (
     GroupManager,
     CharacteristicaExManager,
 )
-
-from django.apps import apps
+from ..behaviours import (
+    Externable, Accessible)
+from ..storage import OverwriteStorage
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
@@ -82,6 +80,7 @@ class GroupSet(models.Model):
         else:
             return 0
 
+
 class AbstractGroup(models.Model):
     objects = GroupExManager()
 
@@ -110,7 +109,7 @@ class GroupEx(Externable, AbstractGroup):
     )
 
     parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
-    parent_ex_map  = models.CharField(max_length=CHAR_MAX_LENGTH)
+    parent_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     count = models.IntegerField(null=True)

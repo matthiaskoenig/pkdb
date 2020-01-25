@@ -1,8 +1,9 @@
-from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from pkdb_app.subjects.models import Individual, Group, GroupCharacteristica, IndividualCharacteristica
+from elasticsearch_dsl import analyzer
+
 from pkdb_app.interventions.documents import string_field
+from pkdb_app.subjects.models import Individual, Group, GroupCharacteristica, IndividualCharacteristica
 from ..documents import elastic_settings, study_field, ObjectField
 
 html_strip = analyzer(
@@ -11,8 +12,6 @@ html_strip = analyzer(
     filter=["standard", "lowercase", "stop", "snowball"],
     char_filter=["html_strip"]
 )
-
-
 
 characteristica_object_field = fields.ObjectField(
     properties={

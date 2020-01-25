@@ -2,19 +2,17 @@
 Django model for Study.
 """
 from datetime import datetime
+
 from django.db import models
-from pkdb_app.users.models import PUBLIC, PRIVATE
 
-from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
-
-from ..interventions.models import InterventionSet, DataFile, Intervention
 from pkdb_app.info_nodes.models import Substance
-
-from ..storage import OverwriteStorage
-from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..behaviours import Sidable
+from ..interventions.models import InterventionSet, DataFile, Intervention
+from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
+from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -67,7 +65,7 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
-    #FIXME: Remove
+    # FIXME: Remove
     @property
     def study_pk(self):
         if self.study:

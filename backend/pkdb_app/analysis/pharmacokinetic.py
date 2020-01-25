@@ -4,12 +4,12 @@ Helper functions for pharmacokinetic analysis.
 Takes concentration~time curves in plasma as input for analysis.
 Pharmacokinetic parameters are than calculated and returned.
 """
-import pandas as pd
-import numpy as np
-from scipy import stats
-from matplotlib import pyplot as plt
 import warnings
-import functools
+
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+from scipy import stats
 
 
 # TODO: add estimation of confidence intervals (use also the errorbars on the curves)

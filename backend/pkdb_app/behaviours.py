@@ -4,8 +4,9 @@ Reusable behavior for models.
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from .utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
 from pkdb_app.info_nodes.units import ureg
+from .utils import CHAR_MAX_LENGTH_LONG, CHAR_MAX_LENGTH
+
 
 class Sidable(models.Model):
     """ Model has an sid. """
@@ -49,7 +50,6 @@ class Accessible(models.Model):
     @property
     def study_sid(self):
         return self.study.sid
-
 
 
 def map_field(fields):

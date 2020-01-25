@@ -1,29 +1,26 @@
 """
 Django URLs
 """
-from django.urls import path, include
 from django.conf.urls import url
-
-from pkdb_app.info_nodes.views import InfoNodeViewSet, InfoNodeElasticViewSet
-from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputInterventionViewSet, TimecourseInterventionViewSet
+from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
-
-from .views import serve_protected_document
-
-from .subjects.views import (
-    DataFileViewSet,
-    IndividualViewSet, GroupViewSet, GroupCharacteristicaViewSet,
-    IndividualCharacteristicaViewSet)
+from pkdb_app.info_nodes.views import InfoNodeViewSet, InfoNodeElasticViewSet
+from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputInterventionViewSet, \
+    TimecourseInterventionViewSet
 from .interventions.views import ElasticInterventionViewSet, ElasticInterventionAnalysisViewSet
-from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
+from .statistics import StatisticsViewSet, study_pks_view
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
     ElasticReferenceViewSet, ElasticStudyViewSet, update_index_study)
-
-from .statistics import StatisticsViewSet, study_pks_view
+from .subjects.views import (
+    DataFileViewSet,
+    IndividualViewSet, GroupViewSet, GroupCharacteristicaViewSet,
+    IndividualCharacteristicaViewSet)
+from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
+from .views import serve_protected_document
 
 router = DefaultRouter()
 
@@ -47,7 +44,6 @@ router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
 
 router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
 
-
 ###############################################################################################
 # Django URLs
 ###############################################################################################
@@ -63,18 +59,16 @@ router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
-
-
 # TODO: remove #########################################
-#router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
-#router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
-#router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
+# router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
+# router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
+# router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
 
 # Options
-#router.register("characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option")
-#router.register("intervention_options", InterventionOptionViewSet, basename="intervention_option")
-#router.register("output_options", OutputOptionViewSet, basename="output_option")
-#router.register("timecourse_options", TimecourseOptionViewSet, basename="timecourse_option")
+# router.register("characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option")
+# router.register("intervention_options", InterventionOptionViewSet, basename="intervention_option")
+# router.register("output_options", OutputOptionViewSet, basename="output_option")
+# router.register("timecourse_options", TimecourseOptionViewSet, basename="timecourse_option")
 
 # todo: remove -> this is for pkdb_analysis
 router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
@@ -82,8 +76,6 @@ router.register("characteristica_groups", GroupCharacteristicaViewSet, basename=
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
 router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
 router.register("timecourse_intervention", TimecourseInterventionViewSet, basename="timecourse_intervention")
-
-
 
 urlpatterns = [
     # authentication

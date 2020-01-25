@@ -1,21 +1,4 @@
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
-
-from pkdb_app.users.permissions import StudyPermission
-from rest_framework import viewsets
-
-from pkdb_app.pagination import CustomPagination
-from pkdb_app.subjects.models import DataFile
-from pkdb_app.subjects.serializers import (
-    DataFileSerializer,
-    IndividualElasticSerializer,
-    GroupElasticSerializer,
-    GroupCharacteristicaSerializer,
-    IndividualCharacteristicaSerializer
-)
-
-from pkdb_app.subjects.documents import IndividualDocument, GroupDocument, \
-    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-
 ############################################################
 # Elastic Search Views
 ###########################################################
@@ -24,8 +7,21 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     OrderingFilterBackend,
     IdsFilterBackend,
     MultiMatchSearchFilterBackend)
+from rest_framework import viewsets
 
 from pkdb_app.documents import AccessView
+from pkdb_app.pagination import CustomPagination
+from pkdb_app.subjects.documents import IndividualDocument, GroupDocument, \
+    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
+from pkdb_app.subjects.models import DataFile
+from pkdb_app.subjects.serializers import (
+    DataFileSerializer,
+    IndividualElasticSerializer,
+    GroupElasticSerializer,
+    GroupCharacteristicaSerializer,
+    IndividualCharacteristicaSerializer
+)
+from pkdb_app.users.permissions import StudyPermission
 
 
 class GroupViewSet(AccessView):

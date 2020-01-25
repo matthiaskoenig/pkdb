@@ -3,27 +3,24 @@ Serializers for interventions.
 """
 import itertools
 
+from rest_framework import serializers
+
 from pkdb_app import utils
 from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.info_nodes.models import Route, Application, Form, InfoNode
+from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
-from rest_framework import serializers
-
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
-
 from ..interventions.models import (
     InterventionSet,
     Intervention,
     InterventionEx)
-
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, PkSerializer, StudySmallElasticSerializer)
+    NA_VALUES, StudySmallElasticSerializer)
 from ..subjects.models import DataFile
-
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
@@ -241,7 +238,6 @@ class InterventionSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Intervention
         fields = ["pk", 'name']  # , 'url']
-
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):

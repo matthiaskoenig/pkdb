@@ -1,9 +1,9 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
+from pkdb_app.comments.models import Comment, Description
 from pkdb_app.documents import elastic_settings, string_field, ObjectField, \
     text_field
-from pkdb_app.comments.models import Comment, Description
 
 
 # ------------------------------------

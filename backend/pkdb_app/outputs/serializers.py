@@ -2,42 +2,35 @@
 Serializers for interventions.
 """
 import numpy as np
+from rest_framework import serializers
 
 from pkdb_app import utils
 from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, \
     VALUE_FIELDS_NO_UNIT, map_field
+from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
-from rest_framework import serializers
-
-from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
-    CommentElasticSerializer
-from pkdb_app.users.serializers import UserElasticSerializer
-
-from pkdb_app.info_nodes.models import MeasurementType, Tissue, Substance, InfoNode
-from ..interventions.models import Intervention
-from ..subjects.models import Group, DataFile, Individual
-
 from .models import (
     Output,
     OutputSet,
     Timecourse,
     OutputEx,
     TimecourseEx, OutputIntervention, TimecourseIntervention)
-
+from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+    CommentElasticSerializer
+from ..interventions.models import Intervention
 from ..serializers import (
     ExSerializer, PkSerializer, StudySmallElasticSerializer)
-
+from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
-
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
 from ..utils import list_of_pk, _validate_requried_key
 
 TISSUE_FIELD = ["tissue"]
-TIME_FIELDS = [ "time", "time_unit"]
+TIME_FIELDS = ["time", "time_unit"]
 OUTPUT_FIELDS = TISSUE_FIELD + TIME_FIELDS
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
@@ -284,7 +277,6 @@ class TimecourseSerializer(BaseOutputExSerializer):
             if 'tissue' in attrs:
                 attrs['tissue'] = attrs['tissue'].tissue
 
-
             attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
@@ -413,7 +405,7 @@ class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["pk", "descriptions", "comments", "outputs", "timecourses",]
+        fields = ["pk", "descriptions", "comments", "outputs", "timecourses", ]
 
     def get_outputs(self, obj):
         return list_of_pk("outputs", obj)
@@ -481,7 +473,7 @@ class OutputElasticSerializer(serializers.ModelSerializer):
                 + MEASUREMENTTYPE_FIELDS
                 + TIME_FIELDS
                 + VALUE_FIELDS
-                )
+        )
 
 
 class TimecourseElasticSerializer(serializers.ModelSerializer):
@@ -501,9 +493,8 @@ class TimecourseElasticSerializer(serializers.ModelSerializer):
                 ["pk", "normed", "outputs"]
                 + TISSUE_FIELD
                 + ["study"]
-                + ["group", "individual",  "interventions"]
+                + ["group", "individual", "interventions"]
                 + MEASUREMENTTYPE_FIELDS
                 + TIME_FIELDS
                 + VALUE_FIELDS
         )
-

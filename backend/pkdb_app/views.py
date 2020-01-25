@@ -2,10 +2,11 @@
 Views
 """
 import os
+
 from django.http import HttpResponse, FileResponse, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
-from pkdb_app.users.permissions import get_study_file_permission
 
+from pkdb_app.users.permissions import get_study_file_permission
 from .studies.models import Reference
 from .subjects.models import DataFile
 
@@ -19,13 +20,9 @@ def test_500_view(request):
     return HttpResponse(status=500)
 
 
-
 from rest_framework.authentication import (
 
     TokenAuthentication)
-
-
-
 
 
 class CreateListModelMixin(object):

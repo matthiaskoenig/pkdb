@@ -2,20 +2,19 @@
 Model for the InfoNodes.
 
 """
-from pint import UndefinedUnitError
 from numbers import Number
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from pint import UndefinedUnitError
 
-from pkdb_app.info_nodes.managers import InfoNodeManager
-from pkdb_app.info_nodes.units import ureg
 from pkdb_app.behaviours import Sidable
+from pkdb_app.info_nodes.units import ureg
 from pkdb_app.users.models import User
 from pkdb_app.utils import CHAR_MAX_LENGTH, _validate_requried_key
 
 
 class Annotation(models.Model):
-
     """ Annotation Model
     """
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -26,7 +25,6 @@ class Annotation(models.Model):
 
 
 class InfoNode(Sidable):
-
     class NTypes(models.TextChoices):
         """ Note Types. """
 
@@ -82,7 +80,6 @@ class Synonym(models.Model):
 
 
 class AbstractInfoNode(models.Model):
-
     class Meta:
         abstract = True
 
@@ -131,17 +128,17 @@ class MeasurementType(AbstractInfoNode):
         InfoNode, related_name="measurement_type", on_delete=models.CASCADE, null=True
     )
 
-    NO_UNIT = 'NO_UNIT' #todo: remove NO_UNIT and add extra keyword or add an extra measurement_type with optional no units.
-    TIME_REQUIRED_MEASUREMENT_TYPES = ["cumulative amount", "cumulative metabolic ratio", "recovery", "auc_end"]  #todo: remove and add extra keyword.
-    CAN_NEGATIVE = [] # todo remove
-    ADDITIVE = [] # todo remove
+    NO_UNIT = 'NO_UNIT'  # todo: remove NO_UNIT and add extra keyword or add an extra measurement_type with optional no units.
+    TIME_REQUIRED_MEASUREMENT_TYPES = ["cumulative amount", "cumulative metabolic ratio", "recovery",
+                                       "auc_end"]  # todo: remove and add extra keyword.
+    CAN_NEGATIVE = []  # todo remove
+    ADDITIVE = []  # todo remove
 
     units = models.ManyToManyField(Unit, related_name="measurement_types")
 
     @property
     def choices(self):
         return self.info_node.choices.all()
-
 
     def __str__(self):
         return self.info_node.name
@@ -244,7 +241,6 @@ class MeasurementType(AbstractInfoNode):
     def choices_list(self):
         return self.choices.values_list("info_node__name", flat=True)
 
-
     @property
     def time_required(self):
         if self.info_node.name in self.TIME_REQUIRED_MEASUREMENT_TYPES:
@@ -252,10 +248,10 @@ class MeasurementType(AbstractInfoNode):
         else:
             return False
 
-
     def validate_choice(self, choice):
         if choice:
-            if self.info_node.dtype in [self.info_node.DTypes.Categorical, self.info_node.DTypes.Boolean, self.info_node.DTypes.NumericCategorical]:
+            if self.info_node.dtype in [self.info_node.DTypes.Categorical, self.info_node.DTypes.Boolean,
+                                        self.info_node.DTypes.NumericCategorical]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
                           f"Allowed choices are: `{list(self.choices_list())}`."
@@ -318,7 +314,6 @@ class MeasurementType(AbstractInfoNode):
             _validate_requried_key(data, "time_unit", details=details)
 
 
-
 class Choice(AbstractInfoNode):
     info_node = models.OneToOneField(
         InfoNode, related_name="choice", on_delete=models.CASCADE, null=True)
@@ -339,6 +334,7 @@ class Choice(AbstractInfoNode):
     @property
     def annotations(self):
         return self.info_node.annotations
+
 
 class Substance(AbstractInfoNode):
     """ Substances.
@@ -364,8 +360,6 @@ class Substance(AbstractInfoNode):
     charge = models.FloatField(null=True)
     formula = models.CharField(null=True, max_length=CHAR_MAX_LENGTH)  # chemical formula
 
-
-
     def __str__(self):
         return self.info_node.name
 
@@ -389,4 +383,3 @@ class Substance(AbstractInfoNode):
     @property
     def interventions_normed(self):
         return self.intervention_set.filter(normed=True)
-

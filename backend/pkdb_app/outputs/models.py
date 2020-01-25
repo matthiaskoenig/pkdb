@@ -2,31 +2,29 @@
 Describe outputs and timecourses
 """
 
-import numpy as np
 import math
-import pandas as pd
 
+import numpy as np
+import pandas as pd
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 from pkdb_app.info_nodes.models import MeasurementType, Tissue
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
-
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from pkdb_app.subjects.models import Group, DataFile, Individual
-
 from .managers import (
     OutputSetManager,
     OutputExManager,
     TimecourseExManager,
     OutputManager
 )
-from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Externable, Accessible)
-
-from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from ..normalization import get_cv, get_se, get_sd
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 TIME_NORM_UNIT = "hr"
 
@@ -458,8 +456,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         # dosing
         dosing = self.get_dosing()
 
-
-
         restricted_dosing_units = [
             'g',
             'g/kg',
@@ -477,7 +473,8 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
                     pk_dict["vd_unit"] = str(vd_unit)
                     pk_dict["dose"] = dosing.value
                     if dosing.time:
-                        pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(self.time_unit).magnitude
+                        pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(
+                            self.time_unit).magnitude
 
                     pk_dict["dose_unit"] = dosing.unit
 
@@ -719,8 +716,6 @@ class TimecourseIntervention(Accessible, models.Model):
     def substance(self):
         if self.timecourse.substance:
             return self.timecourse.substance.info_node.name
-
-
 
     @property
     def normed(self):

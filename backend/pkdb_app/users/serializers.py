@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+from rest_email_auth import models, signals
 from rest_email_auth.authentication import VerifiedEmailBackend
-from rest_email_auth.serializers import RegistrationSerializer, EmailSerializer
+from rest_email_auth.serializers import RegistrationSerializer
 from rest_framework import serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 from .models import User
-from django.contrib.auth.models import Group
-from rest_email_auth import models, signals
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -167,5 +167,5 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ( "username", "first_name", "last_name",)
+        fields = ("username", "first_name", "last_name",)
         read_only_fields = ("username",)

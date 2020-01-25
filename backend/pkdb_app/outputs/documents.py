@@ -1,7 +1,8 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField, study_field
+
 from .models import Output, Timecourse, TimecourseIntervention, OutputIntervention
+from ..documents import string_field, elastic_settings, ObjectField, study_field
 
 
 # ------------------------------------
@@ -23,7 +24,7 @@ class OutputDocument(Document):
         'pk': fields.IntegerField(),
         'name': string_field('name')
     }, multi=True)
-    substance = string_field("substance_name") # FIXME:
+    substance = string_field("substance_name")  # FIXME:
     choice = string_field("choice")
     ex = ObjectField(properties={
         'pk': string_field('pk')}
@@ -71,7 +72,6 @@ class OutputDocument(Document):
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
         settings['max_result_window'] = 100000
-
 
 
 # ------------------------------------
@@ -254,6 +254,6 @@ class OutputInterventionDocument(Document):
 
 
 def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(OutputInterventionDocument, self).get_queryset().select_related(
-            'intervention', 'output')
+    """Not mandatory but to improve performance we can select related in one sql request"""
+    return super(OutputInterventionDocument, self).get_queryset().select_related(
+        'intervention', 'output')

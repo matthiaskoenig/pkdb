@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField, study_field
+
+from ..documents import string_field, elastic_settings, study_field
 from ..interventions.models import Intervention
 
 
@@ -42,8 +43,8 @@ class InterventionDocument(Document):
 
     substance = string_field('substance_name')
     study = study_field
-    study_name = string_field('study_name') # FIXME: Remove
-    study_sid = string_field('study_sid') # FIXME: Remove
+    study_name = string_field('study_name')  # FIXME: Remove
+    study_sid = string_field('study_sid')  # FIXME: Remove
 
     name = string_field('name')
     normed = fields.BooleanField()

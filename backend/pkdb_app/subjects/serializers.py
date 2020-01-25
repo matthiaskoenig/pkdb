@@ -1,15 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
-from pkdb_app.behaviours import map_field, VALUE_FIELDS_NO_UNIT, \
-    MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from rest_framework import serializers
 
+from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
 from pkdb_app.serializers import StudySmallElasticSerializer
-from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
-    CommentElasticSerializer
-from ..utils import list_of_pk, _validate_requried_key
-
 from .models import (
     Group,
     GroupSet,
@@ -21,7 +16,10 @@ from .models import (
     CharacteristicaEx,
     GroupEx,
     GroupCharacteristica, IndividualCharacteristica)
+from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
+    CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
+from ..utils import list_of_pk, _validate_requried_key
 
 CHARACTERISTICA_FIELDS = ['count']
 CHARACTERISTICA_MAP_FIELDS = map_field(CHARACTERISTICA_FIELDS)
@@ -29,7 +27,7 @@ SUBJECT_FIELDS = ['name', 'count']
 SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
 GROUP_FIELDS = ['name', 'count']
-GROUP_MAP_FIELDS = ['name_map', 'count_map','parent_ex_map']
+GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map']
 
 EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'figure', 'source_map', 'figure_map']
 
@@ -139,15 +137,16 @@ class GroupSerializer(ExSerializer):
 
     @staticmethod
     def _validate_required_measurement_type(measurement_type, characteristica):
-        is_measurement_type  = [characteristica_single.get('measurement_type').info_node.name == measurement_type for characteristica_single in
-                                characteristica]
+        is_measurement_type = [characteristica_single.get('measurement_type').info_node.name == measurement_type for
+                               characteristica_single in
+                               characteristica]
 
         if not any(is_measurement_type):
             raise serializers.ValidationError(
-            {
-                'characteristica': f"A characteristica with `'measurement_type' = '{measurement_type}'` is required "
-                                   f"on the `all` group.",
-                'details': characteristica}
+                {
+                    'characteristica': f"A characteristica with `'measurement_type' = '{measurement_type}'` is required "
+                                       f"on the `all` group.",
+                    'details': characteristica}
             )
 
     def validate(self, attrs):
@@ -277,17 +276,15 @@ class GroupSetSerializer(ExSerializer):
                     raise serializers.ValidationError(msg)
                 groups_name.add(group_name)
 
-
             parent_name = group.get('parent')
             if parent_name:
                 parents_name.add(parent_name)
                 if parent_name not in groups_name:
-                        msg = {
-                            'groups': f'The group <{parent_name}> have been used as a parent in group <{group_name}>. '
-                                      f'But it was not yet defined (order matters: add first the parent)'
-                        }
-                        raise serializers.ValidationError(msg)
-
+                    msg = {
+                        'groups': f'The group <{parent_name}> have been used as a parent in group <{group_name}>. '
+                                  f'But it was not yet defined (order matters: add first the parent)'
+                    }
+                    raise serializers.ValidationError(msg)
 
             if group_name == 'all' and parent_name is not None:
                 raise serializers.ValidationError({'groups': 'parent is not allowed for group all'})
@@ -315,6 +312,7 @@ class GroupSetSerializer(ExSerializer):
                         'on the all group. Create the `all` group or rename group to `all`. '
                 }
             )
+
 
 # ----------------------------------
 # Individual
@@ -509,8 +507,8 @@ class CharacteristicaElasticBigSerializer(ReadSerializer):
         model = Characteristica
         fields = ['pk', 'raw_pk', 'normed', 'study_sid', 'study_name',
                   'subject_type'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['group_pk', 'group_name',
-                                                                                        'group_count',
-                                                                                        'group_parent_pk'] + [
+                                                                                       'group_count',
+                                                                                       'group_parent_pk'] + [
                      'individual_pk', 'individual_name', 'individual_group_pk']
 
 
@@ -524,6 +522,7 @@ class DataFileElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataFile
         fields = ['pk', 'name', 'file']
+
 
 class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     value = serializers.FloatField(allow_null=True)
@@ -577,7 +576,8 @@ class GroupElasticSerializer(serializers.ModelSerializer):
             'study',
             'characteristica',
         )
-    #FIXME: Remove this.
+
+    # FIXME: Remove this.
 
     def get_characteristica(self, instance):
         if instance.characteristica_all_normed:
@@ -619,11 +619,13 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
             'group',
             'characteristica',
         )
-    #FIXME: Remove this.
+
+    # FIXME: Remove this.
     def get_characteristica(self, instance):
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
         return []
+
 
 class GroupCharacteristicaSerializer(serializers.ModelSerializer):
     class Meta:

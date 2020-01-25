@@ -1,11 +1,11 @@
 from django.contrib.auth.models import Group
 from rest_framework import viewsets, mixins
-from rest_framework.permissions import IsAdminUser
 from rest_framework.authtoken.views import ObtainAuthToken
-from pkdb_app.users.models import User
-from pkdb_app.users.serializers import UserGroupSerializer, CreateUserSerializer, UserSerializer
+from rest_framework.permissions import IsAdminUser
 
+from pkdb_app.users.models import User
 from pkdb_app.users.serializers import AuthTokenSerializerCostum
+from pkdb_app.users.serializers import UserGroupSerializer, CreateUserSerializer, UserSerializer
 
 
 class UserViewSet(

@@ -1,11 +1,11 @@
 """
 Generic utility functions.
 """
-import os
 import copy
-from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
+import os
 
+from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
@@ -95,7 +95,7 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
         # instance_child.update_or_create(**lookup_dict, defaults=child)
 
         try:
-            if instance_child.model.__name__ in ["Choice","Unit"]:
+            if instance_child.model.__name__ in ["Choice", "Unit"]:
                 obj = instance_child.get(**lookup_dict)
             else:
                 obj = instance_child.model.objects.get(**lookup_dict)

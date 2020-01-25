@@ -1,26 +1,27 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField, text_field
+
 from .models import InfoNode
+from ..documents import string_field, elastic_settings, ObjectField, text_field
 
 annotation_field = ObjectField(
-                attr="annotations",
-                multi=True,
-                properties={
-                    "term": string_field("term"),
-                    "relation": string_field("relation"),
-                    "collection": string_field("collection"),
-                    "description": text_field("description"),
-                    "label": string_field("label")
-                }
-            )
+    attr="annotations",
+    multi=True,
+    properties={
+        "term": string_field("term"),
+        "relation": string_field("relation"),
+        "collection": string_field("collection"),
+        "description": text_field("description"),
+        "label": string_field("label")
+    }
+)
 
 small_info_node_properties = {
-        'sid': string_field('sid'),
-        'name': string_field('name'),
-        "description": text_field('description'),
-        "annotations": annotation_field,
-    }
+    'sid': string_field('sid'),
+    'name': string_field('name'),
+    "description": text_field('description'),
+    "annotations": annotation_field,
+}
 
 
 @registry.register_document
@@ -31,12 +32,12 @@ class InfoNodeDocument(Document):
     description = string_field('description')
     creator = string_field("creator_username")
     annotations = annotation_field
-    synonyms = string_field('synonym_names', multi=True) #todo: this might be wrong
+    synonyms = string_field('synonym_names', multi=True)  # todo: this might be wrong
     parents = ObjectField(properties=small_info_node_properties, multi=True)
     ntype = string_field('ntype')
     dtype = string_field('dtype')
 
-    #measurement type
+    # measurement type
     measurement_type = ObjectField(
         properties={
             "choices": ObjectField(
@@ -44,16 +45,16 @@ class InfoNodeDocument(Document):
                 multi=True,
                 properties=small_info_node_properties
             ),
-            "units":ObjectField(
+            "units": ObjectField(
                 attr="units",
                 multi=True,
                 properties={
                     "pk": fields.IntegerField(),
-                    "name": string_field("name"), #todo:this tooo
+                    "name": string_field("name"),  # todo:this tooo
                 })
         }
     )
-    #substance
+    # substance
     substance = ObjectField(
         properties={
 
@@ -63,7 +64,6 @@ class InfoNodeDocument(Document):
             "formula": string_field('formula'),
 
         })
-
 
     class Django:
         model = InfoNode
