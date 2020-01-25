@@ -99,7 +99,11 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            attrs['measurement_type'].measurement_type.validate_complete(data=attrs)
+            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
+            if "substance" in attrs:
+                attrs['substance'] = attrs['substance'].substance
+
+            attrs['measurement_type'].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -135,7 +139,7 @@ class GroupSerializer(ExSerializer):
 
     @staticmethod
     def _validate_required_measurement_type(measurement_type, characteristica):
-        is_measurement_type  = [characteristica_single.get('measurement_type').name == measurement_type for characteristica_single in
+        is_measurement_type  = [characteristica_single.get('measurement_type').info_node.name == measurement_type for characteristica_single in
                                 characteristica]
 
         if not any(is_measurement_type):

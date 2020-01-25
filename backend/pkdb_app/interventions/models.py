@@ -133,21 +133,21 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     @property
     def route_name(self):
         if self.route:
-            return self.route.name
+            return self.route.info_node.name
         else:
             return None
 
     @property
     def application_name(self):
         if self.application:
-            return self.application.name
+            return self.application.info_node.name
         else:
             return None
 
     @property
     def form_name(self):
         if self.form:
-            return self.form.name
+            return self.form.info_node.name
         else:
             return None
 

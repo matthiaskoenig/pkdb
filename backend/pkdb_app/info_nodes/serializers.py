@@ -74,13 +74,17 @@ class SubstanceExtraSerializer(serializers.ModelSerializer):
 
 
 class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
+    choices = serializers.SlugRelatedField("name", many=True, read_only=True)
     units = UnitSerializer(many=True, allow_null=True, required=False)
-    choices = serializers.SlugRelatedField("sid", many=True, queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Choice), required=False, allow_null=True)
     class Meta:
         model = MeasurementType
         fields = ["units", "choices"]
 
-
+class ChoiceExtraSerializer(serializers.ModelSerializer):
+    measurement_types = serializers.SlugRelatedField("sid", many=True, queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.MeasurementType), required=False, allow_null=True)
+    class Meta:
+        model = Choice
+        fields = ["measurement_types"]
 
 class InfoNodeSerializer(serializers.ModelSerializer):
     """ Substance. """
@@ -90,10 +94,10 @@ class InfoNodeSerializer(serializers.ModelSerializer):
     annotations = AnnotationSerializer(many=True, read_only=False, required=False, allow_null=True)
     measurement_type = MeasurementTypeExtraSerializer(allow_null=True, required=False)
     substance = SubstanceExtraSerializer(allow_null=True, required=False)
-
+    choice = ChoiceExtraSerializer(allow_null=True, required=False)
     class Meta:
         model = InfoNode
-        fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description","synonyms","creator", "annotations", "measurement_type", "substance"]
+        fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description","synonyms","creator", "annotations", "measurement_type", "substance", "choice"]
 
 
     @staticmethod
@@ -156,9 +160,6 @@ class InfoNodeSerializer(serializers.ModelSerializer):
             "tissue": "Tissue",
             "choice": "Choice",
         }
-        if validated_data["name"] == "sex":
-
-            print("I am here")
 
         Model = apps.get_model('info_nodes', NOTE_TYPES[ntype])
         instance = InfoNode.objects.create(**validated_data)
@@ -171,18 +172,22 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         if Model != InfoNode:
             if Model == MeasurementType:
                 units = extra_fields.pop('units', [])
-                choices = extra_fields.pop('choices', [])
 
                 specific_instance = Model.objects.create(info_node=instance, **extra_fields)
-                specific_instance.choices.add(*[info_node.choice for info_node in choices])
 
                 update_or_create_multiple(specific_instance, units, 'units', lookup_fields=["name"])
+            elif Model == Choice:
+                measurement_types = extra_fields.pop('measurement_types', [])
+                specific_instance = Model.objects.create(info_node=instance, **extra_fields)
+                specific_instance.measurement_types.add(*measurement_types)
+                InfoNodeDocument().update(measurement_types)
 
 
             else:
                 specific_instance = Model.objects.create(info_node=instance, **extra_fields)
 
             specific_instance.save()
+
 
         InfoNodeDocument().update(instance)
 

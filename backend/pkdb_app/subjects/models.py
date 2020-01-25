@@ -170,7 +170,7 @@ class Group(Accessible):
     def _characteristica_all(self):
         _characteristica_all = self.characteristica.all()
         this_measurements = _characteristica_all.exclude(
-            measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         if self.parent:
             _characteristica_all = _characteristica_all | self.parent._characteristica_all.exclude(
                 measurement_type__in=this_measurements)
@@ -275,7 +275,7 @@ class Individual(AbstractIndividual, Accessible):
         # charcteristica from related groups with the same measurement type as these used in the individual are excluded.
         # this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
         this_measurements = _characteristica_normed.exclude(
-            measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         return (_characteristica_normed | self.group._characteristica_all_normed.exclude(
             measurement_type__in=this_measurements))
 
@@ -446,7 +446,7 @@ class SubjectCharacteristica(models.Model):
 
     @property
     def measurement_type(self):
-        return self.characteristica.measurement_type.name
+        return self.characteristica.measurement_type.info_node.name
 
     @property
     def choice(self):
@@ -455,7 +455,7 @@ class SubjectCharacteristica(models.Model):
     @property
     def substance(self):
         if self.characteristica.substance:
-            return self.characteristica.substance.name
+            return self.characteristica.substance.info_node.name
 
     @property
     def unit(self):

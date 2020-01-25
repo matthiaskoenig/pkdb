@@ -107,7 +107,14 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].measurement_type.validate_complete(data=attrs)
+            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
+            attrs['substance'] = attrs['substance'].substance
+            attrs['form'] = attrs['form'].form
+            attrs['application'] = attrs['application'].application
+            attrs['route'] = attrs['route'].route
+
+            attrs["measurement_type"].validate_complete(data=attrs)
+
         except ValueError as err:
             raise serializers.ValidationError(err)
 

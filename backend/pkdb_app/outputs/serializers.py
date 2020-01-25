@@ -14,7 +14,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from pkdb_app.users.serializers import UserElasticSerializer
 
-from pkdb_app.info_nodes.models import MeasurementType, Tissue, Substance
+from pkdb_app.info_nodes.models import MeasurementType, Tissue, Substance, InfoNode
 from ..interventions.models import Intervention
 from ..subjects.models import Group, DataFile, Individual
 
@@ -67,7 +67,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
     )
     tissue = utils.SlugRelatedField(
         slug_field="name",
-        queryset=Tissue.objects.all(),
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Tissue),
         read_only=False,
         required=False
     )
@@ -97,7 +97,13 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].measurement_type.validate_complete(data=attrs)
+            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
+            if 'substance' in attrs:
+                attrs['substance'] = attrs['substance'].substance
+            if 'tissue' in attrs:
+                attrs['tissue'] = attrs['tissue'].tissue
+
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -225,7 +231,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
     )
     substance = utils.SlugRelatedField(
         slug_field="name",
-        queryset=Substance.objects.all(),
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Substance),
         read_only=False,
         required=False,
         allow_null=True,
@@ -233,13 +239,13 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
     measurement_type = utils.SlugRelatedField(
         slug_field="name",
-        queryset=MeasurementType.objects.all(),
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.MeasurementType),
         read_only=False,
         required=False
     )
     tissue = utils.SlugRelatedField(
         slug_field="name",
-        queryset=Tissue.objects.all(),
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Tissue),
         read_only=False,
         required=False
     )
@@ -271,7 +277,15 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].measurement_type.validate_complete(data=attrs)
+
+            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
+            if 'substance' in attrs:
+                attrs['substance'] = attrs['substance'].substance
+            if 'tissue' in attrs:
+                attrs['tissue'] = attrs['tissue'].tissue
+
+
+            attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
             raise serializers.ValidationError(err)
 

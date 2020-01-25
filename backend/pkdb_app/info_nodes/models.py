@@ -83,12 +83,8 @@ class Synonym(models.Model):
 
 class AbstractInfoNode(models.Model):
 
-    objects = InfoNodeManager()
-
     class Meta:
         abstract = True
-
-
 
 
 class Tissue(AbstractInfoNode):
@@ -141,6 +137,10 @@ class MeasurementType(AbstractInfoNode):
     ADDITIVE = [] # todo remove
 
     units = models.ManyToManyField(Unit, related_name="measurement_types")
+
+    @property
+    def choices(self):
+        return self.info_node.choices.all()
 
 
     def __str__(self):
@@ -239,10 +239,10 @@ class MeasurementType(AbstractInfoNode):
         return result
 
     def is_valid_choice(self, choice):
-        return choice in self.choices.values_list("info_nodes__name", flat=True)
+        return choice in self.choices_list()
 
     def choices_list(self):
-        return self.choices.values_list("info_nodes__name", flat=True)
+        return self.choices.values_list("info_node__name", flat=True)
 
 
     @property
@@ -322,7 +322,7 @@ class MeasurementType(AbstractInfoNode):
 class Choice(AbstractInfoNode):
     info_node = models.OneToOneField(
         InfoNode, related_name="choice", on_delete=models.CASCADE, null=True)
-    measurement_type = models.ForeignKey(MeasurementType, related_name="choices", on_delete=models.SET_NULL, null=True)
+    measurement_types = models.ManyToManyField(InfoNode, related_name="choices")
 
     @property
     def sid(self):

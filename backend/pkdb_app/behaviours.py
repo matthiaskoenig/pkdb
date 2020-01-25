@@ -130,7 +130,7 @@ class MeasurementTypeable(ValueableNotBlank):
     @property
     def substance_name(self):
         if self.substance:
-            return self.substance.infonode.name
+            return self.substance.info_node.name
 
     @property
     def choices(self):

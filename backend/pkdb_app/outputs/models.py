@@ -136,7 +136,7 @@ class Output(AbstractOutput, Normalizable, Accessible):
 
     @property
     def tissue_name(self):
-        return self.tissue.name
+        return self.tissue.info_node.name
 
     @property
     def interventions(self):
@@ -280,7 +280,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
 
     @property
     def tissue_name(self):
-        return self.tissue.name
+        return self.tissue.info_node.name
 
     @property
     def interventions(self):
@@ -408,13 +408,13 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
 
     def get_bodyweight(self):
         weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(
-            measurement_type__name="weight")
+            measurement_type__info_node__name="weight")
         return weight_measurememnt_type
 
     def get_dosing(self):
 
         try:
-            dosing_measurement_type = self.interventions.get(normed=True, measurement_type__name="dosing")
+            dosing_measurement_type = self.interventions.get(normed=True, measurement_type__info_node__name="dosing")
             return dosing_measurement_type
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
@@ -429,7 +429,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         pk_dict = {}
 
         # substance
-        pk_dict["compound"] = self.substance.name
+        pk_dict["compound"] = self.substance.info_node.name
 
         # bodyweight
         bodyweight = self.get_bodyweight().first()
@@ -470,7 +470,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
 
         if dosing:
             if dosing.substance == self.substance:
-                if MeasurementType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
+                if MeasurementType.objects.get(info_node__name="restricted dosing").is_valid_unit(dosing.unit):
                     p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
                     p_unit_concentration = self.measurement_type.p_unit(pk_dict["c_unit"])
                     vd_unit = p_unit_dosing / p_unit_concentration
@@ -591,11 +591,11 @@ class OutputIntervention(Accessible, models.Model):
     @property
     def tissue(self):
         if self.output.tissue:
-            return self.output.tissue.name
+            return self.output.tissue.info_node.name
 
     @property
     def measurement_type(self):
-        return self.output.measurement_type.name
+        return self.output.measurement_type.info_node.name
 
     @property
     def choice(self):
@@ -604,7 +604,7 @@ class OutputIntervention(Accessible, models.Model):
     @property
     def substance(self):
         if self.output.substance:
-            return self.output.substance.name
+            return self.output.substance.info_node.name
 
     @property
     def normed(self):
@@ -705,11 +705,11 @@ class TimecourseIntervention(Accessible, models.Model):
     @property
     def tissue(self):
         if self.timecourse.tissue:
-            return self.timecourse.tissue.name
+            return self.timecourse.tissue.info_node.name
 
     @property
     def measurement_type(self):
-        return self.timecourse.measurement_type.name
+        return self.timecourse.measurement_type.info_node.name
 
     @property
     def choice(self):
@@ -718,7 +718,9 @@ class TimecourseIntervention(Accessible, models.Model):
     @property
     def substance(self):
         if self.timecourse.substance:
-            return self.timecourse.substance.name
+            return self.timecourse.substance.info_node.name
+
+
 
     @property
     def normed(self):
