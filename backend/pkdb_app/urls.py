@@ -90,6 +90,10 @@ router.register("timecourse_intervention", TimecourseInterventionViewSet, basena
 
 
 urlpatterns = [
+    # authentification
+    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+
     # api
     path("api/v1/", include(router.urls)),
     path("api/v1/update_index/", update_index_study),
@@ -98,10 +102,9 @@ urlpatterns = [
     url(r'^media/(?P<file>.*)$', serve_protected_document,
         name='serve_protected_document'),
 
-    # authentification
-    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
+
     url(r'^accounts/', include('rest_email_auth.urls')),
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+
     path('verify/?P<key>[-\w]+)', obtain_auth_token),
     path('reset/?P<key>[-\w]+)', obtain_auth_token),
 ]

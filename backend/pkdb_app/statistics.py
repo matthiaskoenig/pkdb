@@ -26,14 +26,23 @@ class Statistics(object):
         self.output_count = Output.objects.filter(normed=True).count()
         self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
+        self.studies = []
 
+        for study in Study.objects.all():  # type: Study
+            info = {
+                'sid': study.sid,
+                'date': study.date,
+                'name': study.name,
+                'licence': study.licence,
+                'access': study.access,
+                'group_count': study.group_count,
+                'individual_count': study.individual_count,
+                'intervention_count': study.intervention_count,
+                'output_count': study.output_count,
+                'timecourse_count': study.timecourse_count,
 
-
-# FIXME: remove
-#@api_view(['GET'])
-#def study_pks_view(request):
-#    if request.method == 'GET':
-#        return Response(list(Study.objects.values_list("pk", flat=True)))
+            }
+            self.studies.append(info)
 
 
 class StatisticsViewSet(viewsets.ViewSet):
@@ -63,5 +72,6 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "output_count",
                 "output_calculated_count",
                 "timecourse_count",
+                "studies",
             ]
         }
