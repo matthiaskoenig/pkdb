@@ -104,11 +104,9 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
-            attrs['substance'] = attrs['substance'].substance
-            attrs['form'] = attrs['form'].form
-            attrs['application'] = attrs['application'].application
-            attrs['route'] = attrs['route'].route
+            for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
+                if info_node in attrs:
+                    attrs[info_node] = getattr(attrs[info_node],info_node )
 
             attrs["measurement_type"].validate_complete(data=attrs)
 
