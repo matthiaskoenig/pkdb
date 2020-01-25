@@ -1,7 +1,7 @@
 <template>
     <div :class="card_class">
 
-        <v-badge right dark color="#CCCCCC">
+        <v-badge inline left light overlap color="#BBBBBB">
             <span slot="badge">{{ data.count }}</span>
             <strong>{{ data.measurement_type }}</strong>
         </v-badge>

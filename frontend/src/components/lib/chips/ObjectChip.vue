@@ -1,6 +1,6 @@
 <template>
     <span>
-     <v-badge v-if="count" right dark color="#000000">
+     <v-badge v-if="count" right dark overlap color="#000000">
         <span slot="badge">{{ count }}</span>
         <v-btn :color="color" fab x-small dark>
             <v-icon small color="black">{{ icon }}</v-icon>&nbsp;
