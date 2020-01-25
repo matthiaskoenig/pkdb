@@ -80,19 +80,8 @@ router.register("_users", UserCreateViewSet, basename="_users")
 router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
-
-# TODO: remove #########################################
-# router.register("comments_elastic", ElasticCommentViewSet, basename="comments_elastic")
-# router.register("descriptions_elastic", ElasticDescriptionViewSet, basename="descriptions_elastic")
-# router.register("substances_statistics", SubstanceStatisticsViewSet, basename="substances_statistics")
-
-# Options
-# router.register("characteristica_options", CharacteristicaOptionViewSet, basename="characteristica_option")
-# router.register("intervention_options", InterventionOptionViewSet, basename="intervention_option")
-# router.register("output_options", OutputOptionViewSet, basename="output_option")
-# router.register("timecourse_options", TimecourseOptionViewSet, basename="timecourse_option")
-
 # todo: remove -> this is for pkdb_analysis
+
 router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
 router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
 router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
