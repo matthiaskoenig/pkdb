@@ -44,7 +44,10 @@ const icons_table = {
     open: 'fab fa-creative-commons-pd-alt',
     na: 'fas fa-ban',
     success: 'fas fa-check-circle',
-    measurement_types: 'fas fa-user-tag'
+    measurement_type: 'fas fa-heartbeat',
+    measurement_types: 'fas fa-heartbeat',
+    tissue: 'fas fa-map-marker-alt',
+    tissues: 'fas fa-map-marker-alt',
 };
 
 /**

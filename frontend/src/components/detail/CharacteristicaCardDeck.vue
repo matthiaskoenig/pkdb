@@ -3,13 +3,19 @@
         <v-layout wrap>
             <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
                 <characteristica-card :data="item" />
+
+            </span>
+            <span v-for="item in sortedCharacteristica.values" :key="item.pk">
+                <characteristica-card :data="item" />
             </span>
         </v-layout>
+        <!--
         <v-layout wrap>
             <span v-for="item in sortedCharacteristica.values" :key="item.pk">
                 <characteristica-card :data="item" />
             </span>
         </v-layout>
+        -->
     </span>
 
 </template>

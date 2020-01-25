@@ -1,17 +1,24 @@
 <template>
     <div :class="card_class">
-        <v-badge right color="#BBBBBB">
-            <span slot="badge">{{ count }}</span>
+
+        <v-badge right dark color="#CCCCCC">
+            <span slot="badge">{{ data.count }}</span>
             <strong>{{ data.measurement_type }}</strong>
         </v-badge>
         <br />
 
+        <!--
+        <strong>{{ data.measurement_type }}</strong><br />
+        -->
         <span v-if="data.choice">
             <span v-if="data.choice=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
             <span v-if="data.choice=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
             <span v-if="(data.choice=='F') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
             <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
             {{ data.choice }}
+        </span>
+        <span v-else>
+            <span><v-icon small color="black">fa fa-bolt</v-icon></span>
         </span>
         <span v-if="value || error">
             {{ value }} <span v-if="error">{{ error }}</span><br />
@@ -96,9 +103,10 @@
             faIcon: function (key) {
                 return lookupIcon(key)
             },
-            toNumber: function(s){
-                return parseFloat(s)
-            }
+            toNumber: function(num){
+                // round to two numbers
+                return +(Math.round(num + "e+2")  + "e-2");
+            },
         },
         calculated: {
         }
@@ -111,10 +119,10 @@
     }
 
     .characteristica_card {
-        padding-top: 25px;
+        padding-top: 20px;
         padding-right: 10px;
         padding-left: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         width: 110px;
         height: 85px;
 
@@ -124,11 +132,11 @@
     }
 
     .characteristica_card_wide {
-        padding-top: 25px;
+        padding-top: 20px;
         padding-right: 10px;
         padding-left: 10px;
-        margin-bottom: 20px;
-        width: 110px;
+        margin-bottom: 10px;
+        width: 200px;
         height: 85px;
 
         border-style: none;

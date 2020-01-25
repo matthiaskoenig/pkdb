@@ -22,7 +22,12 @@
                 <JsonButton :resource_url="api + 'timecourses/'+ item.pk +'/?format=json'"/>
             </template>
 
-            <template v-slot:item.measurement_type="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.measurement_type }} </text-highlight> </template>
+            <template v-slot:item.measurement_type="{ item }">
+                <object-chip :object="item.measurement_type"
+                             otype="measurement_type"
+                             :search="search"
+                />
+            </template>
             <template v-slot:item.subject="{ item }">
                 <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
@@ -54,9 +59,10 @@
                     </span>
             </template>
             <template v-slot:item.tissue="{ item }">
-                <text-highlight :queries="search.split(/[ ,]+/)">
-                    {{ item.tissue }}
-                </text-highlight>
+                <object-chip :object="item.tissue"
+                             otype="tissue"
+                             :search="search"
+                />
             </template>
 
             <template v-slot:item.substance="{ item }">

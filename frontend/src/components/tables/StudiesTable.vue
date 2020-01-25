@@ -42,7 +42,7 @@
                     <object-chip :object="substance"
                                  otype="substance"
                                  :search="search"
-                    />
+                    /><br />
                 </span>
             </template>
 

@@ -23,20 +23,19 @@
                 <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.individual="{ item }">
-                <div class="attr-card">
-                    <object-chip :object="item"
-                                 otype="individual"
-                                 :search="search"
-                    />
-                </div>
+                <object-chip :object="item"
+                             otype="individual"
+                             :search="search"
+                />
             </template>
             <template v-slot:item.group="{ item }">
                 <get-data :resource_url="group_url(item.group.pk)">
                     <span slot-scope="group">
-                        <object-chip :object="group.data"
-                                     otype="group"
-                                     :search="search"
-                        />
+                    <object-chip :object="group.data"
+                                 otype="group"
+                                 :count="group.data.count"
+                                 :search="search"
+                    />
                     </span>
                 </get-data>
             </template>

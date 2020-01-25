@@ -21,7 +21,12 @@
                     />
                     <JsonButton :resource_url="api + 'outputs/'+ item.pk +'/?format=json'"/>
                 </template>
-                <template v-slot:item.measurement_type="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.measurement_type }} </text-highlight> </template>
+                <template v-slot:item.measurement_type="{ item }">
+                    <object-chip :object="item.measurement_type"
+                                 otype="measurement_type"
+                                 :search="search"
+                    />
+                </template>
                 <template v-slot:item.subject="{ item }">
                     <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
@@ -40,6 +45,18 @@
                         </span>
                     </get-data>
                 </template>
+                <template v-slot:item.calculated="{ item }">
+                    <v-icon v-if="!item.calculated"
+                            small
+                            color="success">fas fa-check-circle
+                    </v-icon>
+                    <v-icon v-else
+                            small
+                            color="black"
+                            :title="'Calculated from timecourse: ' + item.timecourse.pk">fas fa-times-circle
+                    </v-icon>
+
+                </template>
                 <template v-slot:item.interventions="{ item }">
                     <span v-if="item.interventions" v-for="(intervention, index2) in item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
@@ -53,9 +70,10 @@
                     </span>
                 </template>
                 <template v-slot:item.tissue="{ item }">
-                    <text-highlight :queries="search.split(/[ ,]+/)">
-                        {{ item.tissue }}
-                    </text-highlight>
+                    <object-chip :object="item.tissue"
+                                 otype="tissue"
+                                 :search="search"
+                    />
                 </template>
 
                 <template v-slot:item.time="{ item }">
@@ -63,11 +81,6 @@
                     <span v-if="item.time_unit">[{{ item.time_unit }}]</span>
                 </template>
                 <template v-slot:item.value="{ item }"><characteristica-card :data="item"/></template>
-                <template v-slot:item.calculated="{ item }">
-                    <v-chip :disabled="true" color='green' v-if="item.calculated" >
-                        <v-icon small :title="'is calculated from timecourse with pk:' + item.timecourse.pk">fas fa-check-circle</v-icon>
-                    </v-chip>
-                </template>
 
             <no-data/>
         </v-data-table>
@@ -94,13 +107,14 @@
                 otype_single: "output",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
+                    {text: 'Measured', value: 'calculated'},
                     {text: 'Measurement Type', value: 'measurement_type'},
                     {text: 'Subjects', value: 'subject'},
                     {text: 'Interventions', value: 'interventions',sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Time', value: 'time'},
                     {text: 'Value', value: 'value'},
-                    {text: 'Calculated', value: 'calculated'},
+
 
                 ]
             }

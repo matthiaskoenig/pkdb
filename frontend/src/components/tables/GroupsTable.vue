@@ -24,9 +24,11 @@
             <template v-slot:item.name="{ item }">
                 <object-chip :object="item"
                              otype="group"
+                             :count="item.count"
                              :search="search"
                 />
             </template>
+            <!--
             <template v-slot:item.parent="{ item }">
                 <object-chip v-if="item.parent"
                              :object="item.parent"
@@ -34,6 +36,7 @@
                              :search="search"
                 />
             </template>
+            -->
             <template v-slot:item.characteristica="{ item }">
                 <characteristica-card-deck :characteristica="item.characteristica" />
             </template>
@@ -63,7 +66,8 @@
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Parent', value: 'parent'},
+
+                    // {text: 'Parent', value: 'parent'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }
