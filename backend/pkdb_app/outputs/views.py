@@ -1,53 +1,12 @@
-from django.urls import reverse
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from pkdb_app.categorials.models import MeasurementType, Tissue
-from rest_framework import viewsets
-from rest_framework.response import Response
 
 from pkdb_app.documents import AccessView
-from pkdb_app.outputs.models import Output, OutputIntervention, TimecourseIntervention
 from .documents import OutputDocument, TimecourseDocument, OutputInterventionDocument, TimecourseInterventionDocument
-from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputInterventionSerializer, TimecourseInterventionSerializer)
+from .serializers import (OutputElasticSerializer, TimecourseElasticSerializer, OutputInterventionSerializer,
+                          TimecourseInterventionSerializer)
 from ..pagination import CustomPagination
-import pandas as pd
-import numpy as np
-import math
-
-
-###############################################################################################
-# Option Views
-###############################################################################################
-
-
-class OutputOptionViewSet(viewsets.ViewSet):
-
-    @staticmethod
-    def get_options():
-        options = {}
-        options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
-        options["substances"] = reverse('substances_elastic-list')
-        options["tissue"] = [k.name for k in Tissue.objects.all()]
-
-        return options
-
-    def list(self, request):
-        return Response(self.get_options())
-
-
-class TimecourseOptionViewSet(viewsets.ViewSet):
-
-    @staticmethod
-    def get_options():
-        options = {}
-        options["measurememnt_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
-        options["substances"] = reverse('substances_elastic-list')
-        options["tissue"] = [k.name for k in Tissue.objects.all()]
-        return options
-
-    def list(self, request):
-        return Response(self.get_options())
 
 
 ###############################################################################################

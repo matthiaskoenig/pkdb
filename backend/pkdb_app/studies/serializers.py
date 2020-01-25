@@ -2,27 +2,25 @@
 Studies serializers.
 """
 
+from rest_framework import serializers
+
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
 from pkdb_app.users.permissions import get_study_file_permission
-from rest_framework import serializers
-
+from .models import Reference, Author, Study, Rating
 from ..comments.models import Description, Comment
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
     DescriptionElasticSerializer
-from ..subjects.models import GroupSet, IndividualSet
-from ..users.serializers import UserElasticSerializer
-from ..utils import update_or_create_multiple, create_multiple, list_duplicates
-
 from ..interventions.models import DataFile, InterventionSet
-
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer
+from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
-from .models import Reference, Author, Study, Rating
-from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer
+from ..users.serializers import UserElasticSerializer
+from ..utils import update_or_create_multiple, create_multiple, list_duplicates
 
 
 # ----------------------------------
@@ -234,6 +232,7 @@ class StudySerializer(SidSerializer):
                     )
 
         return super().to_internal_value(data)
+
     def create(self, validated_data):
 
         related = self.pop_relations(validated_data)
@@ -250,13 +249,10 @@ class StudySerializer(SidSerializer):
         related = self.pop_relations(validated_data)
 
         for name, value in validated_data.items():
-
             setattr(instance, name, value)
         instance.save()
         instance = self.create_relations(instance, related)
         return instance
-
-
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -416,6 +412,7 @@ class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
         fields = ["pk", "sid"]  # , 'url']
+
 
 class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()

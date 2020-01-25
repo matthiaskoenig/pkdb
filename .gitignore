@@ -63,9 +63,10 @@ backend/pkdb_app/users/migrations/00*.py
 backend/pkdb_app/subjects/migrations/00*.py
 backend/pkdb_app/interventions/migrations/00*.py
 backend/pkdb_app/comments/migrations/00*.py
-backend/pkdb_app/categorials/migrations/00*.py
 backend/pkdb_app/outputs/migrations/00*.py
-backend/pkdb_app/substances/migrations/00*.py
+backend/pkdb_app/depricated/categorials/migrations/00*.py
+backend/pkdb_app/depricated/substances/migrations/00*.py
+backend/pkdb_app/info_nodes/migrations/00*.py
 
 
 # Installer logs

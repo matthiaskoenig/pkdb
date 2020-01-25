@@ -3,27 +3,24 @@ Serializers for interventions.
 """
 import itertools
 
-from pkdb_app import utils
-from pkdb_app.categorials.behaviours import VALUE_FIELDS_NO_UNIT, \
-    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.categorials.models import Tissue, Route, Application, Form
-from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
-from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from rest_framework import serializers
 
+from pkdb_app import utils
+from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
+    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.info_nodes.models import InfoNode
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
-
 from ..interventions.models import (
     InterventionSet,
     Intervention,
     InterventionEx)
-
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, PkSerializer, StudySmallElasticSerializer)
+    NA_VALUES, StudySmallElasticSerializer)
 from ..subjects.models import DataFile
-
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
@@ -58,17 +55,17 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     route = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Route.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Route))
 
     application = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Application.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Application))
 
     form = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Form.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form))
 
     class Meta:
         model = Intervention
@@ -107,7 +104,12 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
+            for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
+                if info_node in attrs:
+                    attrs[info_node] = getattr(attrs[info_node],info_node )
+
             attrs["measurement_type"].validate_complete(data=attrs)
+
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -236,7 +238,6 @@ class InterventionSmallElasticSerializer(serializers.ModelSerializer):
         fields = ["pk", 'name']  # , 'url']
 
 
-
 class InterventionElasticSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
@@ -279,3 +280,12 @@ class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
         model = Intervention
         fields = ["study_sid", "study_name", "intervention_pk", "raw_pk",
                   "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        for field in VALUE_FIELDS_NO_UNIT + ["time"]:
+            try:
+                rep[field] = '{:.2e}'.format(rep[field])
+            except (ValueError, TypeError):
+                pass
+        return rep

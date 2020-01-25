@@ -1,8 +1,9 @@
 """
 the managers can be used to overwrite class methods of the models module.
 """
-from django.db import models
 from django.apps import apps
+from django.db import models
+
 from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 

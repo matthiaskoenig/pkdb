@@ -1,8 +1,9 @@
 """
 the managers can be used to overwrite class methods of the models module.
 """
-from django.db import models
 from django.apps import apps
+from django.db import models
+
 from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 
@@ -19,7 +20,6 @@ class GroupSetManager(models.Manager):
         study_group_exs = []
         study_groups = set()
 
-
         for group_ex in group_exs:
             # todo: check if this is necessary
             if "parent_ex" in group_ex:
@@ -31,8 +31,7 @@ class GroupSetManager(models.Manager):
             group_ex["study_groups"] = study_groups
             study_group_ex = groupset.group_exs.create(**group_ex)
             study_group_exs.append(study_group_ex)
-            #study_groups.update(study_group_ex.groups.values_list("pk"))
-
+            # study_groups.update(study_group_ex.groups.values_list("pk"))
 
         groupset.save()
 
@@ -62,7 +61,6 @@ class GroupExManager(models.Manager):
             group["study_groups"] = study_groups
             dj_group = group_ex.groups.create(**group)
             study_groups.add(dj_group.pk)
-
 
         create_multiple(group_ex, comments, "comments")
         create_multiple(group_ex, descriptions, "descriptions")

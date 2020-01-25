@@ -1,11 +1,18 @@
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
-
-from pkdb_app.categorials.models import MeasurementType
-from pkdb_app.users.permissions import StudyPermission
+############################################################
+# Elastic Search Views
+###########################################################
+from django_elasticsearch_dsl_drf.filter_backends import (
+    FilteringFilterBackend,
+    OrderingFilterBackend,
+    IdsFilterBackend,
+    MultiMatchSearchFilterBackend)
 from rest_framework import viewsets
-from rest_framework.response import Response
 
+from pkdb_app.documents import AccessView
 from pkdb_app.pagination import CustomPagination
+from pkdb_app.subjects.documents import IndividualDocument, GroupDocument, \
+    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
@@ -14,21 +21,7 @@ from pkdb_app.subjects.serializers import (
     GroupCharacteristicaSerializer,
     IndividualCharacteristicaSerializer
 )
-
-from pkdb_app.subjects.documents import IndividualDocument, GroupDocument, \
-    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-
-############################################################
-# Elastic Search Views
-###########################################################
-from django_elasticsearch_dsl_drf.filter_backends import (
-    FilteringFilterBackend,
-    OrderingFilterBackend,
-    IdsFilterBackend,
-    MultiMatchSearchFilterBackend,
-    )
-
-from pkdb_app.documents import AccessView
+from pkdb_app.users.permissions import StudyPermission
 
 
 class GroupViewSet(AccessView):
@@ -293,15 +286,3 @@ class DataFileViewSet(viewsets.ModelViewSet):
             pass
 
         return super().create(request, *args, **kwargs)
-
-
-class CharacteristicaOptionViewSet(viewsets.ViewSet):
-
-    @staticmethod
-    def get_options():
-        options = {}
-        options["measurement_types"] = {k.name: k._asdict() for k in MeasurementType.objects.all()}
-        return options
-
-    def list(self, request):
-        return Response(self.get_options())

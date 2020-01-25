@@ -3,26 +3,23 @@ from django_elasticsearch_dsl.registries import registry
 
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
     ObjectField, study_field
-
 from pkdb_app.studies.models import Reference, Study
 
-
 comments_field = fields.ObjectField(
-        properties={
-            'pk': fields.IntegerField(),
-            'username': string_field("username"),
-            'text': text_field("text"),
-        },
-        multi=True
-    )
-
+    properties={
+        'pk': fields.IntegerField(),
+        'username': string_field("username"),
+        'text': text_field("text"),
+    },
+    multi=True
+)
 
 descriptions_field = ObjectField(
-                properties={
-                    'text': text_field("text"),
-                    'pk': fields.IntegerField()
-                },
-                multi=True)
+    properties={
+        'text': text_field("text"),
+        'pk': fields.IntegerField()
+    },
+    multi=True)
 
 
 def common_setfields(model, attr=None):

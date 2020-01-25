@@ -1,20 +1,18 @@
 """
 Django model for Study.
 """
-from datetime import datetime
+import datetime
+
 from django.db import models
+
+from pkdb_app.info_nodes.models import Substance
 from pkdb_app.users.models import PUBLIC, PRIVATE
-
-from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
-
-from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..substances.models import Substance
-
-from ..storage import OverwriteStorage
-from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..behaviours import Sidable
+from ..interventions.models import InterventionSet, DataFile, Intervention
+from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
+from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -67,7 +65,7 @@ class Reference(models.Model):
     def __str__(self):
         return self.title
 
-    #FIXME: Remove
+    # FIXME: Remove
     @property
     def study_pk(self):
         if self.study:
@@ -97,7 +95,7 @@ class Study(Sidable, models.Model):
     Mainly reported as a single publication.
     """
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    date = models.DateField(default=datetime.now)
+    date = models.DateField(default=datetime.date.today)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
 
@@ -222,14 +220,14 @@ class Study(Sidable, models.Model):
 
         substances_dj = Substance.objects.filter(pk__in=set(all_substances))
 
-        basic_substances_dj = substances_dj.filter(parents__isnull=True)
+        basic_substances_dj = substances_dj.filter(info_node__parents__isnull=True)
         if basic_substances_dj:
-            basic_substances.extend(list(basic_substances_dj.values_list("name", flat=True)))
+            basic_substances.extend(list(basic_substances_dj.values_list("info_node__name", flat=True)))
 
-        substances_derived_dj = substances_dj.filter(parents__isnull=False)
+        substances_derived_dj = substances_dj.filter(info_node__parents__isnull=False)
         if substances_derived_dj:
             basic_substances.extend(
-                list(substances_derived_dj.values_list("parents__name", flat=True))
+                list(substances_derived_dj.values_list("info_node__parents__name", flat=True))
             )
 
         return list(set(basic_substances))

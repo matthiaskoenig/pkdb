@@ -1,9 +1,9 @@
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from elasticsearch_dsl import AttrDict
+from rest_framework import permissions
+
 from pkdb_app.studies.models import OPEN, Study
 from pkdb_app.users.models import PUBLIC
-from pkdb_app.users.serializers import UserSerializer
-from rest_framework import permissions
 
 
 def is_allowed_method(request):

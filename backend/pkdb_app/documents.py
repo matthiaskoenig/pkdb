@@ -61,6 +61,7 @@ def text_field(attr):
         fields={'raw': fields.KeywordField()}
     )
 
+
 class ObjectField(DEDField, Object):
     """
     FIXME: DOCUMENT ME
@@ -116,17 +117,16 @@ class ObjectField(DEDField, Object):
 study_field = fields.ObjectField(
     attr="study",
     properties={
-            'sid': string_field('sid'),
-            'name': string_field('name'),
-        }
-    )
-
+        'sid': string_field('sid'),
+        'name': string_field('name'),
+    }
+)
 
 
 class AccessView(DocumentViewSet):
 
     def get_queryset(self):
-        search = self.search #.query()
+        search = self.search  # .query()
         # qs = super().get_queryset()
         # return qs
         group = user_group(self.request.user)

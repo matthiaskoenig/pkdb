@@ -1,15 +1,15 @@
 """
 the managers can be used to overwrite class methods of the models module.
 """
-from datetime import timedelta
-from django.db import models
-from django.apps import apps
 import time
-import numpy as np
 
-from pkdb_app.categorials.models import MeasurementType
-from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
+import numpy as np
+from django.apps import apps
+from django.db import models
+
+from pkdb_app.info_nodes.models import MeasurementType
 from ..analysis.pharmacokinetic import f_pk
+from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 
 class OutputSetManager(models.Manager):
@@ -98,20 +98,20 @@ class TimecourseExManager(models.Manager):
 
         # calculate pharmacokinetics data from normalized timecourses
         for timecourse in timecourses_normed:
-            if timecourse.measurement_type.name == "concentration" and timecourse.normed:
+            if timecourse.measurement_type.info_node.name == "concentration" and timecourse.normed:
                 variables = timecourse.get_pharmacokinetic_variables()
                 c_type = variables.pop("c_type", None)
                 _ = variables.pop("bodyweight_type", None)
                 pk = f_pk(**variables)
 
-                key_mapping = {"auc": MeasurementType.objects.get(name="auc_end"),
-                               "aucinf": MeasurementType.objects.get(name="auc_inf"),
-                               "cl": MeasurementType.objects.get(name="clearance"),
-                               "cmax": MeasurementType.objects.get(name="cmax"),
-                               "kel": MeasurementType.objects.get(name="kel"),
-                               "thalf": MeasurementType.objects.get(name="thalf"),
-                               "tmax": MeasurementType.objects.get(name="tmax"),
-                               "vd": MeasurementType.objects.get(name="vd"),
+                key_mapping = {"auc": MeasurementType.objects.get(info_node__name="auc_end"),
+                               "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),
+                               "cl": MeasurementType.objects.get(info_node__name="clearance"),
+                               "cmax": MeasurementType.objects.get(info_node__name="cmax"),
+                               "kel": MeasurementType.objects.get(info_node__name="kel"),
+                               "thalf": MeasurementType.objects.get(info_node__name="thalf"),
+                               "tmax": MeasurementType.objects.get(info_node__name="tmax"),
+                               "vd": MeasurementType.objects.get(info_node__name="vd"),
                                }
                 outputs = []
 
@@ -127,7 +127,7 @@ class TimecourseExManager(models.Manager):
                         output_dict["substance"] = timecourse.substance
                         output_dict["group"] = timecourse.group
                         output_dict["individual"] = timecourse.individual
-                        if output_dict["measurement_type"].name == "auc_end":
+                        if output_dict["measurement_type"].info_node.name == "auc_end":
                             output_dict["time"] = max(timecourse.time)
                             output_dict["time_unit"] = timecourse.time_unit
                         outputs.append(output_dict)

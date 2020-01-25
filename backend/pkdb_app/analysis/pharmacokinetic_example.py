@@ -2,8 +2,8 @@
 This examples shows how based on time and concentration vector the
 pharmacokinetic parameters can be calculated.
 """
-import pharmacokinetic
 import pandas as pd
+import pharmacokinetic
 from matplotlib import pyplot as plt
 
 

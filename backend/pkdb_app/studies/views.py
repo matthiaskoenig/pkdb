@@ -1,22 +1,28 @@
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,\
+import django_filters.rest_framework
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q as DQ
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
+from elasticsearch import helpers
+from elasticsearch_dsl.query import Q
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
+from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument, TimecourseInterventionDocument, \
     OutputInterventionDocument
 from pkdb_app.outputs.models import TimecourseIntervention, OutputIntervention
-from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
-from pkdb_app.users.models import PUBLIC
-from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from elasticsearch import helpers
-from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-
+from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
+from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from .models import Reference, Study
 from .serializers import (
     ReferenceSerializer,
@@ -24,16 +30,6 @@ from .serializers import (
     ReferenceElasticSerializer,
     StudyElasticSerializer
 )
-
-from rest_framework import viewsets
-import django_filters.rest_framework
-from rest_framework import filters
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q as DQ
-
-from elasticsearch_dsl.query import Q
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -123,7 +119,6 @@ def delete_elastic_study(related_elastic):
             return False, "BulkIndexError"
 
 
-
 def related_elastic_dict(study):
     """ Dictionary of elastic documents for given study.
 
@@ -192,7 +187,6 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
     }
-
 
     def get_queryset(self):
         search = self.search

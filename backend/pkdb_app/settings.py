@@ -32,9 +32,8 @@ INSTALLED_APPS = (
     # Your apps
     "pkdb_app.users",
     "pkdb_app.studies",
-    "pkdb_app.categorials",
+    "pkdb_app.info_nodes",
     "pkdb_app.subjects",
-    "pkdb_app.substances",
     "pkdb_app.interventions",
     "pkdb_app.outputs",
     "pkdb_app.comments",

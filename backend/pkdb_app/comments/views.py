@@ -1,7 +1,8 @@
 # Create your views here.
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, CompoundSearchFilterBackend, \
-    IdsFilterBackend, MultiMatchSearchFilterBackend
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
+    MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+
 from pkdb_app.comments.documents import CommentDocument, DescriptionDocument
 from pkdb_app.comments.serializers import DescriptionElasticSerializer, CommentElasticSerializer
 

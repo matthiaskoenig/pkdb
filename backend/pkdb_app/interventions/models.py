@@ -4,14 +4,12 @@ group or individual).
 """
 from django.db import models
 
-from pkdb_app.categorials.models import Application, Form, Route
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
-from ..subjects.models import DataFile
-
-from ..interventions.managers import InterventionSetManager, InterventionExManager
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.info_nodes.models import Application, Form, Route
 from ..behaviours import Externable, Accessible
-
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
+from ..interventions.managers import InterventionSetManager, InterventionExManager
+from ..subjects.models import DataFile
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 
 # -------------------------------------------------
@@ -133,21 +131,21 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     @property
     def route_name(self):
         if self.route:
-            return self.route.name
+            return self.route.info_node.name
         else:
             return None
 
     @property
     def application_name(self):
         if self.application:
-            return self.application.name
+            return self.application.info_node.name
         else:
             return None
 
     @property
     def form_name(self):
         if self.form:
-            return self.form.name
+            return self.form.info_node.name
         else:
             return None
 

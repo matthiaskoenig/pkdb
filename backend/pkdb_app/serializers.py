@@ -1,16 +1,16 @@
 import copy
-from pathlib import Path
-import numpy as np
 import numbers
-import pandas as pd
-
-from django.db.models import Q
-
-from pkdb_app.categorials.behaviours import map_field
-from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.db.models import Q
+from rest_framework import serializers
 from rest_framework.settings import api_settings
+
+from pkdb_app.behaviours import map_field
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.studies.models import Study
@@ -51,7 +51,6 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         except model.DoesNotExist:
             instance = None
         if not instance:
-
             raise serializers.ValidationError(
                 {
                     model.__name__: "instance does not exist.",
@@ -200,7 +199,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     elif field == "figure" and len(values) > 1:
                         split_by_figure = True
 
-
                     if values[k] in NA_VALUES:
                         values[k] = None
                     elif values[k] == "[]":
@@ -217,7 +215,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         )
             else:
                 number_spit_fields += 1
-
 
             # check for old syntax
             for value in values:
@@ -405,7 +402,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     {"source": "Source is provided but the mapping operator "
                                "'==' is not used in any field"})
 
-
             if data.get("groupby"):
                 groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
@@ -423,8 +419,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                             for entry in group_df.itertuples():
                                 for characteristica_single in characteristica:
-                                    characteristica_single = self.make_entry(entry, characteristica_single, characteristica,
-                                                                         source)
+                                    characteristica_single = self.make_entry(entry, characteristica_single,
+                                                                             characteristica,
+                                                                             source)
 
                                     charcteristica.append(characteristica_single)
 
@@ -487,7 +484,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     df[groupby]
                 except KeyError:
                     extra_msg = ""
-                    if any("col==" in g for  g in groupby):
+                    if any("col==" in g for g in groupby):
                         extra_msg = "'col==*' is the wrong syntax for the key 'groupby'. Just use the column name. "
 
                     raise serializers.ValidationError(
@@ -598,13 +595,13 @@ class ExSerializer(MappingSerializer):
                         & Q(name=data.get("group"))
                     ).pk
                 except ObjectDoesNotExist:
-                        raise serializers.ValidationError(
-                            f'group <{data.get("group")}> does not exist, check groups.'
-                        )
+                    raise serializers.ValidationError(
+                        f'group <{data.get("group")}> does not exist, check groups.'
+                    )
                 except MultipleObjectsReturned:
-                        raise serializers.ValidationError(
-                            f'group <{data.get("group")}> is defined multiple times.'
-                        )
+                    raise serializers.ValidationError(
+                        f'group <{data.get("group")}> is defined multiple times.'
+                    )
 
         if "individual" in data:
             if data["individual"]:
@@ -866,4 +863,4 @@ def validate_dict(dic):
 class StudySmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Study
-        fields = ['pk','sid', 'name']  # ,'url']
+        fields = ['pk', 'sid', 'name']  # ,'url']
