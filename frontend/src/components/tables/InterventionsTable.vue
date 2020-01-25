@@ -10,6 +10,11 @@
                 :class="table_class"
         >
             <template v-slot:item.buttons="{ item }">
+                <LinkButton v-if="item.study"
+                            :to="'/studies/'+ item.study.sid"
+                            :title="'Study: '+item.study.name"
+                            icon="study"
+                />
                 <LinkButton :to="'/interventions/'+ item.pk"
                             :title="'Intervention: '+ item.pk"
                             icon="intervention"
@@ -21,6 +26,12 @@
                              otype="intervention"
                              :name="item.name"
                              :search="search"
+                />
+            </template>
+            <template v-slot:item.substance="{ item }">
+                <object-chip :object="item.substance"
+                             otype="substance"
+                             :name="item.substance"
                 />
             </template>
             <template v-slot:item.application="{ item }">
@@ -60,6 +71,7 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Name', value: 'name'},
+                    {text: 'Substance', value: 'substance'},
                     {text: 'Application', value: 'application'},
                     {text: 'Measurement', value: 'value'},
                 ],

@@ -11,11 +11,16 @@
         >
 
             <template v-slot:item.buttons="{ item }">
-                    <link-button :to="'/individuals/'+ item.pk"
-                                 :title="'Individual: '+item.pk"
-                                 icon="individual"
-                    />
-                    <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
+                <LinkButton v-if="item.study"
+                            :to="'/studies/'+ item.study.sid"
+                            :title="'Study: '+item.study.name"
+                            icon="study"
+                />
+                <link-button :to="'/individuals/'+ item.pk"
+                             :title="'Individual: '+item.pk"
+                             icon="individual"
+                />
+                <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.individual="{ item }">
                 <div class="attr-card">
@@ -36,7 +41,7 @@
                 </get-data>
             </template>
             <template v-slot:item.characteristica="{ item }">
-                <characteristica-card-deck :characteristica="item.characteristica_all_normed" />
+                <characteristica-card-deck :characteristica="item.characteristica" />
             </template>
             <no-data/>
         </v-data-table>

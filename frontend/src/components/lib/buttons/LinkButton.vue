@@ -3,8 +3,7 @@
         <v-btn fab
                small
                text
-               dark
-               color="black"
+               :color="color"
                :to="to"
                :title="title"
                :disabled="to ? false : true"
@@ -30,6 +29,10 @@
             icon: {
                 type: String,
                 required: true
+            },
+            color: {
+                type: String,
+                default: "black"
             },
         },
         methods: {

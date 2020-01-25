@@ -65,7 +65,6 @@
 
                 <!-- Outputs -->
                 <v-flex xs12 v-show="visible.outputs || visible.timecourses">
-
                     <annotations  v-if="study.outputset" :item="study.outputset"/>
                     <span ref="outputs"></span>
                     <count-chip :count="study.output_count" icon="output" name="output"></count-chip>
@@ -131,37 +130,17 @@
         computed: {},
         methods:{
             scrollMeTo(refName) {
-                var element = this.$refs[refName];
-                var top = element.offsetTop - 100;
-
+                let element = this.$refs[refName];
+                let top = element.offsetTop - 100;
                 window.scrollTo(0, top);
             },
             faIcon: function (key) {
                 return lookupIcon(key)
             },
-
-            toggleVisibility(item_id){
-                // only items with counts can be made visible
-                if (this.counts[item_id]>0){
-                    this.visible[item_id] = !this.visible[item_id];
-                }
-            },
-            resetVisibility(){
-                var keys = Object.keys(this.counts);
-                for (var k=0; k<keys.length; k++){
-                    var key = keys[k];
-                    if (this.counts[key] > 0){
-                        this.visible[key] = true
-                    } else {
-                        this.visible[key] = false
-                    }
-                }
-            },
             resource(data){
                 return {entries:data, count:data.length}
             },
         }
-
     }
 </script>
 
@@ -173,7 +152,7 @@
         z-index: 9999;
         width: 100%;
         height: 32px;
-        background-color: #00a087;
+        background-color: #CCCCCC;
     }
     .study-content {
         margin-top: 50px;

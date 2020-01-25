@@ -10,6 +10,11 @@
                 :class="table_class"
         >
                 <template v-slot:item.buttons="{ item }">
+                    <LinkButton v-if="item.study"
+                                :to="'/studies/'+ item.study.sid"
+                                :title="'Study: '+item.study.name"
+                                icon="study"
+                    />
                     <LinkButton :to="'/outputs/'+ item.pk"
                                 :title="'Output: '+item.pk"
                                 :icon="otype"

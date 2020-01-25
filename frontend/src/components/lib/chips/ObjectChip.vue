@@ -1,21 +1,19 @@
 <template>
-    <v-chip :color="color"
-            :title="otype"
-            outlined
-    >
+    <span>
+            <v-btn :color="color" fab x-small dark>
+                <v-icon small color="black">{{ icon }}</v-icon>&nbsp;
+            </v-btn>
+            &nbsp;
+            <v-btn v-if="count"
+                   small
+                   color="black"
+                   fab
+                   dark
+                   title="count">{{ count }}
+            </v-btn>
+            <text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight>
 
-        <v-icon left small color="black">{{ icon }}</v-icon>&nbsp;
-        <text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight>
-
-
-
-        <v-btn v-if="count"
-               small
-               color="black"
-               fab
-               dark
-               title="count">{{ count }}</v-btn>
-    </v-chip>
+    </span>
 </template>
 
 <script>

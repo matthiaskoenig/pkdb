@@ -10,13 +10,16 @@
                 :class="table_class"
         >
             <template v-slot:item.buttons="{ item }">
-                <link-button :to="'/groups/'+ item.pk"
-                             :title="'Group: '+item.pk"
+                <LinkButton v-if="item.study"
+                            :to="'/studies/'+ item.study.sid"
+                            :title="'Study: '+item.study.name"
+                            icon="study"
+                />
+                <link-button :to="'/groups/' + item.pk"
+                             :title="'Group: ' + item.pk"
                              icon="group"
                 />
-
-                <!--<link-button :to="'/studies/'+ item.study.pk" :title="'Study: '+item.study.name" :icon="icon('study')"/>-->
-                <json-button :resource_url="api + 'groups/'+ item.pk +'/?format=json'"/>
+                <json-button :resource_url="api + 'groups/' + item.pk + '/?format=json'"/>
             </template>
             <template v-slot:item.name="{ item }">
                 <object-chip :object="item"
@@ -32,7 +35,7 @@
                 />
             </template>
             <template v-slot:item.characteristica="{ item }">
-                <characteristica-card-deck :characteristica="item.characteristica_all_normed" />
+                <characteristica-card-deck :characteristica="item.characteristica" />
             </template>
             <no-data/>
         </v-data-table>

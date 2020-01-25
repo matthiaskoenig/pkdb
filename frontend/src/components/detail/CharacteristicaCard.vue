@@ -13,12 +13,6 @@
             <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
             {{ data.choice }}
         </span>
-        <span v-if="data.substance">
-            <object-chip :object="data.substance"
-                         otype="substance"
-                         :name="data.substance"
-            />
-        </span>
         <span v-if="value || error">
             {{ value }} <span v-if="error">{{ error }}</span><br />
             <span v-if="data.unit">[{{ data.unit }}]</span>

@@ -9,29 +9,24 @@
                 <span class="font-italic">{{ reference.journal }}, {{reference.date}}</span>
             </p>
             <p>
+                <!--
                 <v-btn color="black" icon v-on:click="abstractHidden = !abstractHidden">
                     <template v-if="abstractHidden">
-                        <v-icon title="Show abstract">far fa-plus-square</v-icon>
+                        <v-icon title="Show abstract" small>far fa-plus-square</v-icon>
                     </template>
                     <template v-else>
                         <v-icon title="Hide abstract">far fa-minus-square</v-icon>
                     </template>
                 </v-btn>
+                -->
                 <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" title="PubMed" target="_blank">PMID:{{reference.pmid }}</a>
             </p>
-            <p>
-                <file-chip v-if="reference.pdf" :file="reference.pdf"></file-chip>
-                <v-alert v-else
-                     dense
-                     text
-                     type="info"
-                >
-                    No PDF or no permission
-                </v-alert>
-            </p>
+            <p>{{ reference.abstract }}</p>
+            <!--
             <p v-if="!abstractHidden" class="text-justify">
                 {{ reference.abstract }}
             </p>
+            -->
             </v-card>
     </div>
 </template>

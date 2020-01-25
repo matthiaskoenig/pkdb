@@ -10,21 +10,25 @@
                 :class="table_class"
         >
             <template v-slot:item.buttons="{ item }">
-                <LinkButton :to="'/studies/'+ item.sid" :title="'Study: '+item.pk" icon="study"/>
-                <LinkButton v-if="item.reference" :to="'/references/'+ item.reference.sid" :title="'Reference: '+item.reference.sid" icon="reference"/>
+                <LinkButton :to="'/studies/'+ item.sid"
+                            :title="'Study: '+item.pk"
+                            icon="study"
+                />
+                <LinkButton v-if="item.reference"
+                            :to="'/references/'+ item.reference.sid"
+                            :title="'Reference: '+item.reference.sid"
+                            icon="reference"
+                />
                 <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
-                <export-format-button :resource_url="api + '_studies/'+ item.sid +'/?format=json'"/>
             </template>
             <template v-slot:item.sid="{ item }">
                 <text-highlight :queries="search.split(/[ ,]+/)"> {{ item.sid }}</text-highlight>
-
             </template>
+
 
             <template v-slot:item.name="{ item }">
                 <text-highlight :queries="search.split(/[ ,]+/)"> {{ item.name }}</text-highlight>
             </template>
-
-
             <template v-slot:item.counts="{ item }">
                 <count-chip :count=item.group_count icon="group" name="group"></count-chip>
                 <count-chip :count=item.individual_count icon="individual" name="individual"></count-chip>
@@ -83,6 +87,7 @@
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Sid', value: 'sid'},
                     {text: 'Name', value: 'name'},
+                    {text: 'Date', value: 'date'},
                     {text: 'Counts', value: 'counts', sortable: false},
                     {text: 'Substances', value: 'substances', sortable: false},
                     {text: 'Creator', value: 'creator',},
