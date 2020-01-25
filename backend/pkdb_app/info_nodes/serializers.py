@@ -129,7 +129,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         Model = self.NTypes()[ntype]
 
         if instance is None:
-            instance = Model.objects.create(validated_data)
+            instance = InfoNode.objects.create(**validated_data)
 
         update_or_create_multiple(instance, annotations_data, 'annotations', lookup_fields=["term", "relation"])
         update_or_create_multiple(instance, synonyms_data, 'synonyms', lookup_fields=["name"])
