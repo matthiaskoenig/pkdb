@@ -28,11 +28,12 @@ class Statistics(object):
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
         self.studies = []
 
-        for study in Study.objects.all():  # type: Study
+        for study in Study.objects.all().order_by('date'):  # type: Study
             info = {
                 'sid': study.sid,
                 'date': study.date,
                 'name': study.name,
+                'creator': study.creator.username,
                 'licence': study.licence,
                 'access': study.access,
                 'group_count': study.group_count,

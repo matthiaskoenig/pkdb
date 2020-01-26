@@ -10,8 +10,12 @@
   },
   "dependencies": {
     "@statnett/vue-plotly": "^0.3.2",
+    "acorn": "^7.1.0",
     "axios": "^0.19.1",
     "base-64": "^0.1.0",
+    "vega": "^5.9.1",
+    "vega-embed": "^6.2.2",
+    "vega-lite": "^4.0.2",
     "vue": "^2.6.11",
     "vue-auth-image": "0.0.3",
     "vue-plotly": "^1.0.1",
