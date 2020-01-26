@@ -3,6 +3,7 @@
         <v-layout row wrap>
             <v-flex xs6>
                 <count-table />
+                <br />
                 <statistics-vega-plot></statistics-vega-plot>
             </v-flex>
             <v-flex xs6>
