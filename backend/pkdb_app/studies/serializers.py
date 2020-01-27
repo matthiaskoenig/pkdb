@@ -374,12 +374,14 @@ class StudySerializer(SidSerializer):
             _validate_requried_key(attrs, "date", extra_message="For a study with a '^PKDB\d+$' identifier "
                                                                 "the date must be set in the study.json.")
         else:
-            _validate_not_allowed_key(attrs, "date", extra_message="For a study without a '^PKDB\d+$' identifier "
+            if attrs.get("date", None) is not None:
+                _validate_not_allowed_key(attrs, "date", extra_message="For a study without a '^PKDB\d+$' identifier "
                                                                 "the date must not be set in the study.json.")
 
-        if attrs["creator"] not in attrs["curators"]:
-            error_json = {"creator": "Creator must be in curator."}
-            raise serializers.ValidationError(error_json)
+        if "curators" in attrs and "creator" in attrs:
+            if attrs["creator"] not in [curator["user"] for curator in attrs["curators"]]:
+                error_json = {"creator": "Creator must be in curator."}
+                raise serializers.ValidationError(error_json)
         return super().validate(attrs)
 
 

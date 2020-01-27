@@ -864,3 +864,5 @@ class StudySmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Study
         fields = ['pk', 'sid', 'name']  # ,'url']
+
+

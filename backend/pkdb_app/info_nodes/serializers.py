@@ -33,15 +33,13 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
 
 
 class SynonymSerializer(WrongKeyValidationSerializer):
+    pk = serializers.IntegerField(read_only=True)
     class Meta:
         model = Synonym
-        fields = ["name"]
+        fields = ["name","pk"]
 
     def to_internal_value(self, data):
         return {"name": data}
-
-    def to_representation(self, instance):
-        return instance.name
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
@@ -181,6 +179,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 # Elastic Serializer
 ###############################################################################################
 
+
 class SmallInfoNodeElasticSerializer(serializers.ModelSerializer):
     annotations = AnnotationSerializer(many=True, allow_null=True)
 
@@ -192,7 +191,7 @@ class SmallInfoNodeElasticSerializer(serializers.ModelSerializer):
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
     parents = SmallInfoNodeElasticSerializer(many=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
-    synonyms = serializers.SerializerMethodField()
+    synonyms = SynonymSerializer(many=True, allow_null=True)
     substance = SubstanceExtraSerializer(required=False, allow_null=True)
     measurement_type = MeasurementTypeExtraSerializer(required=False, allow_null=True)
 
@@ -201,10 +200,3 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
         fields = ["sid", "name", 'url_slug', "ntype", "dtype", "description", "synonyms", "parents", "annotations",
                   "measurement_type", "substance"]
 
-    @staticmethod
-    def get_synonyms(obj):
-        """Get synonyms."""
-        if obj.synonyms:
-            return list(obj.synonyms)
-        else:
-            return []

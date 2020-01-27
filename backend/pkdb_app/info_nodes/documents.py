@@ -2,7 +2,7 @@ from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from .models import InfoNode
-from ..documents import string_field, elastic_settings, ObjectField, text_field
+from ..documents import string_field, elastic_settings, ObjectField, text_field, basic_object
 
 annotation_field = ObjectField(
     attr="annotations",
@@ -32,7 +32,8 @@ class InfoNodeDocument(Document):
     description = string_field('description')
     creator = string_field("creator_username")
     annotations = annotation_field
-    synonyms = string_field('synonym_names', multi=True)  # todo: this might be wrong
+    synonyms = basic_object("synonyms", multi=True)
+    #synonyms = string_field('synonym_names', multi=True)  # todo: this might be wrong
     parents = ObjectField(properties=small_info_node_properties, multi=True)
     ntype = string_field('ntype')
     dtype = string_field('dtype')
@@ -45,13 +46,7 @@ class InfoNodeDocument(Document):
                 multi=True,
                 properties=small_info_node_properties
             ),
-            "units": ObjectField(
-                attr="units",
-                multi=True,
-                properties={
-                    "pk": fields.IntegerField(),
-                    "name": string_field("name"),  # todo:this tooo
-                })
+            "units": basic_object("units", multi=True)
         }
     )
     # substance

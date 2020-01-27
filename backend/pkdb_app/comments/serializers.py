@@ -39,6 +39,7 @@ class CommentSerializer(WrongKeyValidationSerializer):
         model = Comment
 
     def _validate_comment(self, data):
+
         if not (isinstance(data, list) and len(data) == 2):
             raise serializers.ValidationError(
                 {
@@ -52,6 +53,8 @@ class CommentSerializer(WrongKeyValidationSerializer):
                     "comments": "empty comments are not allowed",
                     "detail": {str(data)},
                 })
+
+
 
     def to_internal_value(self, data):
         self._validate_comment(data)

@@ -32,23 +32,26 @@ class InfoNodeElasticViewSet(DocumentViewSet):
     serializer_class = InfoNodeElasticSerializer
     lookup_field = 'url_slug'
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ("name",
-                     "url_slug",
-                     "dtype",
-                     "description",
-                     "units",
-                     "annotations.name",
-                     "annotations.description",
-                     "annotations.label",
-                     "choices.name",
-                     "choices.description",
-                     "choices.annotations.name",
-                     "choices.annotations.description",
-                     "choices.annotations.label"
-                     )
+    search_fields = (
+        "sid",
+        "name",
+        "description",
+        "url_slug",
+        "dtype",
+        "ntype",
+        "units",
+        "annotations.name",
+        "annotations.description",
+        "annotations.label",
+        "measurement_type.choices.name",
+        "measurement_type.choices.description",
+        "measurement_type.choices.annotations.name",
+        "measurement_type.choices.annotations.description",
+        "measurement_type.choices.annotations.label"
+        )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name'}
+    filter_fields = {'name': 'name.raw', "ntype": "ntype.raw"}
     ordering_fields = {'name': 'name', "dtype": "dtype"}

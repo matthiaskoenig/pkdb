@@ -51,6 +51,15 @@ def string_field(attr, **kwargs):
         **kwargs
     )
 
+def basic_object(attr, **kwargs):
+    return ObjectField(
+        attr=attr,
+        properties={
+            "pk": fields.IntegerField(),
+            "name": string_field("name"),
+        },
+        **kwargs
+    )
 
 def text_field(attr):
     return fields.TextField(
