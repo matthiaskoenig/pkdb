@@ -7,6 +7,7 @@ var searchTableMixin = {
             count: 0,
             entries: [],
             search: "",
+            ntype: "all",
             loading: true,
             options: {},
             rowsPerPageItems: [5, 10, 20, 50, 100],
@@ -41,6 +42,12 @@ var searchTableMixin = {
             },
             deep: true
         },
+        ntype: {
+            handler() {
+                this.getData();
+            },
+            deep: true
+        },
         url: {
             handler() {
                 this.getData();
@@ -66,6 +73,9 @@ var searchTableMixin = {
                 + '&ordering=' + this.options.sortDesc + this.options.sortBy;
             if (this.search) {
                 url += '&search_multi_match=' + this.search
+            }
+            if (this.ntype !== "all" ){
+                url += '&ntype=' + this.ntype
             }
             if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
