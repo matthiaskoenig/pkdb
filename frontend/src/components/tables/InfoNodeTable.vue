@@ -3,6 +3,8 @@
 <template>
 
     <v-card>
+
+        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-col class="d-flex" cols="12" sm="6">
             <v-select
                     :items="ntypes"
@@ -12,7 +14,6 @@
                     solo
             ></v-select>
         </v-col>
-        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
                 :items="entries"
@@ -65,7 +66,9 @@
                     <span v-if="item.measurement_type.choices.length > 0" >
                         Choices:
                     <v-chip v-for="choice in item.measurement_type.choices" :key="choice">
-                        {{choice}}
+                        <text-highlight :queries="search.split(/[ ,]+/)">
+                            {{choice}}
+                        </text-highlight>
                     </v-chip>
                     </span >
 
