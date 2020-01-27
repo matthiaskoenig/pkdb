@@ -48,6 +48,9 @@ class InfoNodeElasticViewSet(DocumentViewSet):
         "measurement_type.choices.annotations.name",
         "measurement_type.choices.annotations.description",
         "measurement_type.choices.annotations.label"
+        "substance.mass",
+        "substance.formula",
+        "substance.charge",
         )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {

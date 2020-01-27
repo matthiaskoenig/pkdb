@@ -73,7 +73,7 @@
 
                 <span v-if="item.ntype==='substance'">
                     <text-highlight :queries="search.split(/[ ,]+/)"> Mass: {{item.substance.mass}} </text-highlight>
-                    <text-highlight :queries="search.split(/[ ,]+/)"> Charge {{item.substance.charge}} </text-highlight>
+                    <text-highlight :queries="search.split(/[ ,]+/)"> Charge: {{item.substance.charge}} </text-highlight>
                     <text-highlight :queries="search.split(/[ ,]+/)"> Formula: {{item.substance.formula}} </text-highlight>
                     <text-highlight :queries="search.split(/[ ,]+/)"> Derived: {{item.substance.derived}} </text-highlight>
                 </span>

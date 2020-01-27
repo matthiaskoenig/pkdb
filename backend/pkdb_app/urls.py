@@ -83,10 +83,10 @@ router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # djang
 # todo: remove -> this is for pkdb_analysis
 
 router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
-router.register("characteristica_groups", GroupCharacteristicaViewSet, basename="characteristica_groups")
-router.register("characteristica_individuals", IndividualCharacteristicaViewSet, basename="characteristica_individuals")
-router.register("output_intervention", OutputInterventionViewSet, basename="output_intervention")
-router.register("timecourse_intervention", TimecourseInterventionViewSet, basename="timecourse_intervention")
+router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups_analysis")
+router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
+router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
+router.register("timecourse_analysis", TimecourseInterventionViewSet, basename="timecourse_analysis")
 
 
 urlpatterns = [
