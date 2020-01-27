@@ -183,9 +183,16 @@ def set_keys(d, value, *keys):
     d[keys[-1]] = value
 
 
-def _validate_requried_key(attrs, key, details=None):
+def _validate_requried_key(attrs, key, details=None, extra_message=""):
     if key not in attrs:
-        error_json = {key: f"{key} is required."}
+        error_json = {key: f"{key} is required. {extra_message}"}
+        if details:
+            error_json["details"] = details
+        raise serializers.ValidationError(error_json)
+
+def _validate_not_allowed_key(attrs, key, details=None, extra_message=""):
+    if key not in attrs:
+        error_json = {key: f"{key} is not allowed. {extra_message}"}
         if details:
             error_json["details"] = details
         raise serializers.ValidationError(error_json)

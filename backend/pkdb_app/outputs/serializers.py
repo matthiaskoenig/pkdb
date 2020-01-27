@@ -92,9 +92,11 @@ class OutputSerializer(MeasurementTypeableSerializer):
             # perform via dedicated function on categorials
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
             if 'substance' in attrs:
-                attrs['substance'] = attrs['substance'].substance
+                if attrs['substance'] is not None:
+                    attrs['substance'] = attrs['substance'].substance
             if 'tissue' in attrs:
-                attrs['tissue'] = attrs['tissue'].tissue
+                if attrs['tissue'] is not None:
+                    attrs['tissue'] = attrs['tissue'].tissue
 
             attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:
@@ -273,9 +275,11 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
             if 'substance' in attrs:
-                attrs['substance'] = attrs['substance'].substance
+                    if attrs['substance'] is not None:
+                        attrs['substance'] = attrs['substance'].substance
             if 'tissue' in attrs:
-                attrs['tissue'] = attrs['tissue'].tissue
+                if attrs['tissue'] is not None:
+                    attrs['tissue'] = attrs['tissue'].tissue
 
             attrs["measurement_type"].validate_complete(data=attrs)
         except ValueError as err:

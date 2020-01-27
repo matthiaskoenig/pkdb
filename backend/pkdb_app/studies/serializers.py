@@ -20,7 +20,8 @@ from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, 
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from ..users.serializers import UserElasticSerializer
-from ..utils import update_or_create_multiple, create_multiple, list_duplicates
+from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_requried_key, \
+    _validate_not_allowed_key
 
 
 # ----------------------------------
@@ -366,6 +367,16 @@ class StudySerializer(SidSerializer):
         study.save()
 
         return study
+
+    def validate(self, attrs):
+        if str(attrs.get("sid")).startswith("PKDB"):
+            _validate_requried_key(attrs, "date", extra_message="For a study with a '^PKDB\d+$' identifier "
+                                                                "the date must be set in the study.json.")
+        else:
+            _validate_not_allowed_key(attrs, "date", extra_message="For a study without a '^PKDB\d+$' identifier "
+                                                                "the date must not be set in the study.json.")
+
+        return super().validate(attrs)
 
 
 ###############################################################################################

@@ -106,13 +106,13 @@ class InterventionSerializer(MeasurementTypeableSerializer):
             # perform via dedicated function on categorials
             for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
                 if info_node in attrs:
-                    attrs[info_node] = getattr(attrs[info_node],info_node )
+                    if attrs[info_node] is not None:
+                        attrs[info_node] = getattr(attrs[info_node],info_node)
 
             attrs["measurement_type"].validate_complete(data=attrs)
 
         except ValueError as err:
             raise serializers.ValidationError(err)
-
         return super().validate(attrs)
 
 
