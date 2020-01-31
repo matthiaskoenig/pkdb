@@ -19,7 +19,7 @@ from ..interventions.models import (
     InterventionEx)
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer)
+    NA_VALUES, StudySmallElasticSerializer, PkNameSerializer)
 from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
@@ -241,10 +241,14 @@ class InterventionSmallElasticSerializer(serializers.ModelSerializer):
 class InterventionElasticSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
-    measurement_type = serializers.CharField()
-    route = serializers.CharField()
-    application = serializers.CharField()
-    form = serializers.CharField()
+
+    measurement_type = PkNameSerializer(source="i_measurement_type", allow_null=True)
+    route = PkNameSerializer(source="i_route", allow_null=True)
+    application = PkNameSerializer(source="i_application", allow_null=True)
+    form = PkNameSerializer(source="i_form", allow_null=True)
+    substance = PkNameSerializer(source="i_substance", allow_null=True)
+    choice = PkNameSerializer(source="i_choice", allow_null=True)
+
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -253,7 +257,6 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    substance = serializers.CharField(allow_null=True)
 
     class Meta:
         model = Intervention
@@ -262,11 +265,12 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
 
 class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
     intervention_pk = serializers.IntegerField(source="pk")
-    substance = serializers.CharField(allow_null=True)
-    measurement_type = serializers.CharField()
-    route = serializers.CharField()
-    application = serializers.CharField()
-    form = serializers.CharField()
+    substance = serializers.CharField(source="substance_name", allow_null=True)
+    measurement_type = serializers.CharField(source="measurement_type_name",)
+    route = serializers.CharField(source="route_name",)
+    application = serializers.CharField(source="application_name",)
+    form = serializers.CharField(source="form_name",)
+    choice = serializers.CharField(source="choice_name")
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)

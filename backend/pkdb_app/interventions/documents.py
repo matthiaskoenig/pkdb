@@ -1,7 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
-from ..documents import string_field, elastic_settings, study_field
+from ..documents import string_field, elastic_settings, study_field, basic_object
 from ..interventions.models import Intervention
 
 
@@ -11,37 +11,29 @@ from ..interventions.models import Intervention
 @registry.register_document
 class InterventionDocument(Document):
     pk = fields.IntegerField()
-    measurement_type = fields.TextField(
+    measurement_type = basic_object("i_measurement_type")
+    form = basic_object("i_route")
+    route = basic_object("i_route")
+    application = basic_object("i_application")
+    choice = basic_object("i_choice")
+    substance = basic_object("i_substance")
+
+    time_unit = string_field('time_unit')
+
+    time = fields.FloatField()
+    time_end = fields.FloatField()
+
+    measurement_type_name = fields.TextField(
         attr='measurement_type_name',
         fields={
             'raw': fields.TextField(analyzer='keyword'),
         }
     )
-
-    form = fields.TextField(
-        attr='form_name',
-        fields={
-            'raw': fields.TextField(analyzer='keyword'),
-        }
-    )
-    route = fields.TextField(
-        attr='route_name',
-        fields={
-            'raw': fields.TextField(analyzer='keyword'),
-        }
-    )
-    application = fields.TextField(
-        attr='application_name',
-        fields={
-            'raw': fields.TextField(analyzer='keyword'),
-        }
-    )
-    choice = string_field('choice')
-    time_unit = string_field('time_unit')
-    time = fields.FloatField()
-    time_end = fields.FloatField()
-
-    substance = string_field('substance_name')
+    form_name = string_field('form_name')
+    route_name = string_field('route_name')
+    application_name = string_field('application_name')
+    choice_name = string_field('choice_name')
+    substance_name = string_field('substance_name')  #FIXME: Remove
     study = study_field
     study_name = string_field('study_name')  # FIXME: Remove
     study_sid = string_field('study_sid')  # FIXME: Remove

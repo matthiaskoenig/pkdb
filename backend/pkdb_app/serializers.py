@@ -852,6 +852,12 @@ class PkSerializer(serializers.Serializer):
         fields = ["pk", ]
 
 
+class PkNameSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+
+    class Meta:
+        fields = ["pk", "name"]
+
 def validate_dict(dic):
     if not isinstance(dic, dict):
         raise serializers.ValidationError(

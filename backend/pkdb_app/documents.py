@@ -131,7 +131,6 @@ study_field = fields.ObjectField(
     }
 )
 
-
 class AccessView(DocumentViewSet):
 
     def get_queryset(self):

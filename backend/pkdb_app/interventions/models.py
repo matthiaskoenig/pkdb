@@ -128,6 +128,43 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
         else:
             return None
 
+    def _i(self, info_node):
+        related_field = getattr(self, info_node)
+        if related_field:
+            return related_field.info_node
+
+    @property
+    def i_application(self):
+        return self._i("application")
+
+    @property
+    def i_route(self):
+        return self._i("route")
+
+    @property
+    def i_form(self):
+        return self._i("form")
+
+    @property
+    def i_measurement_type(self):
+        return self._i("measurement_type")
+
+    @property
+    def i_choice(self):
+        return self._i("choice")
+
+    @property
+
+    def i_substance(self):
+        return self._i("substance")
+
+    @property
+    def choice_name(self):
+        if self.choice:
+            return self.choice.info_node.name
+        else:
+            return None
+
     @property
     def route_name(self):
         if self.route:
