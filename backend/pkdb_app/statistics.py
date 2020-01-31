@@ -3,13 +3,15 @@ Basic information and statistics about data base content.
 """
 from rest_framework import serializers
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from pkdb_app._version import __version__
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.models import Output, Timecourse
+from pkdb_app.studies.documents import StudyDocument
 from pkdb_app.studies.models import Study, Reference
+from pkdb_app.studies.serializers import StudyElasticStatisticsSerializer
+from pkdb_app.studies.views import ElasticStudyViewSet
 from pkdb_app.subjects.models import Group, Individual
 
 
@@ -26,24 +28,7 @@ class Statistics(object):
         self.output_count = Output.objects.filter(normed=True).count()
         self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
-        self.studies = []
-
-        for study in Study.objects.all().order_by('date'):  # type: Study
-            info = {
-                'sid': study.sid,
-                'date': study.date,
-                'name': study.name,
-                'creator': study.creator.username,
-                'licence': study.licence,
-                'access': study.access,
-                'group_count': study.group_count,
-                'individual_count': study.individual_count,
-                'intervention_count': study.intervention_count,
-                'output_count': study.output_count,
-                'timecourse_count': study.timecourse_count,
-
-            }
-            self.studies.append(info)
+        self.studies = StudyElasticStatisticsSerializer(StudyDocument().get_queryset()).data
 
 
 class StatisticsViewSet(viewsets.ViewSet):

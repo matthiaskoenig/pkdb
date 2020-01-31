@@ -431,6 +431,39 @@ class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
         fields = ["pk", "sid"]  # , 'url']
 
 
+class StudyElasticStatisticsSerializer(serializers.Serializer):
+    name = serializers.CharField(read_only=True)
+    licence = serializers.CharField(read_only=True)
+    access = serializers.CharField(read_only=True)
+    curators = CuratorRatingElasticSerializer(many=True, read_only=True)
+    creator = UserElasticSerializer(read_only=True)
+
+    class Meta:
+        model = Study
+
+        fields = [
+            "pk",
+            "sid",
+            "name",
+            "licence",
+            "access",
+            "date",
+
+            "group_count",
+            "individual_count",
+            "intervention_count",
+            "output_count",
+            "output_calculated_count",
+            "timecourse_count",
+
+            "creator",
+            "substances",
+        ]
+
+        read_only_fields = fields
+
+
+
 class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
@@ -507,3 +540,4 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
         else:
             return []
+
