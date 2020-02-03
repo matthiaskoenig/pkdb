@@ -449,7 +449,8 @@ class SubjectCharacteristica(models.Model):
 
     @property
     def choice(self):
-        return self.characteristica.choice
+        if self.characteristica.choice:
+            return self.characteristica.choice.info_node.name
 
     @property
     def substance(self):

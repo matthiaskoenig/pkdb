@@ -13,59 +13,6 @@ from ..pagination import CustomPagination
 # Elastic Views
 ###############################################################################################
 
-class ElasticOutputViewSet(AccessView):
-    document = OutputDocument
-    serializer_class = OutputElasticSerializer
-    pagination_class = CustomPagination
-    lookup_field = "id"
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('study', 'measurement_type', 'substance', 'group.name', 'individual.name', "tissue", 'time_unit',
-                     'interventions.name')
-    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
-    multi_match_options = {
-        'operator': 'and'
-    }
-    filter_fields = {
-
-        'study_name': 'study_name.raw',
-        'study_sid': 'study_sid.raw',
-
-        'group_pk': {'field': 'group.pk',
-                     'lookups': [
-                         LOOKUP_QUERY_IN,
-                     ],
-                     },
-        'timecourse_pk': {'field': 'timecourse.pk',
-                          'lookups': [
-                              LOOKUP_QUERY_IN,
-                          ],
-                          },
-        'individual_pk': {'field': 'individual.pk',
-                          'lookups': [
-                              LOOKUP_QUERY_IN,
-                          ]},
-        'interventions_pk': {'field': 'interventions.pk',
-                             'lookups': [
-                                 LOOKUP_QUERY_IN,
-                             ],
-                             },
-        'tissue': "tissue.raw",
-        'time': 'time.raw',
-        'choice': 'choice.raw',
-        'normed': 'normed',
-        'calculated': 'calculated',
-        'unit': 'unit.raw',
-        'substance': 'substance.raw',
-        'measurement_type': 'measurement_type.raw',
-    }
-
-    ordering_fields = {'measurement_type': 'measurement_type.raw',
-                       'tissue': 'tissue.raw',
-                       'substance': 'substance',
-                       'group': 'group.name',
-                       'individual': 'individual.name',
-                       'value': 'value',
-                       }
 
 
 class OutputInterventionViewSet(AccessView):
@@ -128,8 +75,8 @@ class OutputInterventionViewSet(AccessView):
         'substance': 'substance.raw',
         'choice': 'choice.raw',
         'unit': 'unit.raw',
-
     }
+
     ordering_fields = {'measurement_type': 'measurement_type.raw',
                        'tissue': 'tissue.raw',
                        'substance': 'substance.raw',
@@ -205,36 +152,84 @@ class TimecourseInterventionViewSet(AccessView):
                        }
 
 
+# Elastic
+
+common_search_fields = (
+    'study.sid',
+    'study.name',
+    'measurement_type.name',
+    'substance.name',
+    "tissue.name",
+    "choice.name",
+    'time_unit',
+    'group.name',
+    'individual.name',
+    'interventions.name')
+
+common_filter_fields = {
+        'study_name': 'study.name.raw',
+        'study_sid': 'study.sid.raw',
+        'group_pk': {'field': 'group.pk',
+                     'lookups': [
+                         LOOKUP_QUERY_IN,
+                     ],
+                     },
+        'timecourse_pk': {'field': 'timecourse.pk',
+                          'lookups': [
+                              LOOKUP_QUERY_IN,
+                          ],
+                          },
+        'individual_pk': {'field': 'individual.pk',
+                          'lookups': [
+                              LOOKUP_QUERY_IN,
+                          ]},
+        'interventions_pk': {'field': 'interventions.pk',
+                             'lookups': [
+                                 LOOKUP_QUERY_IN,
+                             ],
+                             },
+        'tissue': "tissue.name.raw",
+        'time': 'time.raw',
+        'choice': 'choice.name.raw',
+        'normed': 'normed',
+        'calculated': 'calculated',
+        'unit': 'unit.raw',
+        'substance': 'substance.name.raw',
+        'measurement_type': 'measurement_type.name.raw',
+    }
+
+common_ordering_fields = {
+        'measurement_type': 'measurement_type.name.raw',
+        'tissue': 'tissue.name.raw',
+        'group': 'group.name',
+        'individual': 'individual.name',
+        'substance': 'substance.name',
+    }
+
+
+class ElasticOutputViewSet(AccessView):
+    document = OutputDocument
+    serializer_class = OutputElasticSerializer
+    pagination_class = CustomPagination
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    search_fields = common_search_fields
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {'operator': 'and'}
+    filter_fields = common_filter_fields
+    ordering_fields = common_ordering_fields
+
+
 class ElasticTimecourseViewSet(AccessView):
     document = TimecourseDocument
     serializer_class = TimecourseElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('study', 'measurement_type', 'substance', "tissue", 'time_unit', 'group.name', 'individual.name',
-                     'interventions.name')
+    search_fields = common_search_fields
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'pk': 'pk',
-                     'normed': 'normed',
-                     'study': 'study.raw',
-                     'substance': 'substance',
-                     'measurement_type': 'measurement_type.raw',
-                     'group_pk': {'field': 'group.pk',
-                                  'lookups': [
-                                      LOOKUP_QUERY_IN,
-                                  ],
-                                  },
-                     'individual_pk': {'field': 'individual.pk',
-                                       'lookups': [
-                                           LOOKUP_QUERY_IN,
-                                       ],
-                                       }}
-    ordering_fields = {'measurement_type': 'measurement_type.raw',
-                       'tissue': 'tissue.raw',
-                       'group': 'group.name',
-                       'individual': 'individual.name',
-                       'substance': 'substance',
-                       }
+    filter_fields = common_filter_fields
+    ordering_fields = common_ordering_fields

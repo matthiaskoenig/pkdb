@@ -596,7 +596,8 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def choice(self):
-        return self.output.choice
+        if self.output.choice:
+            return self.output.choice.info_node.name
 
     @property
     def substance(self):
@@ -710,7 +711,8 @@ class TimecourseIntervention(Accessible, models.Model):
 
     @property
     def choice(self):
-        return self.timecourse.choice
+        if self.timecourse.choice:
+            return self.output.choice.info_node.name
 
     @property
     def substance(self):

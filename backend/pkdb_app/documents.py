@@ -61,6 +61,25 @@ def basic_object(attr, **kwargs):
         **kwargs
     )
 
+def info_node(attr, **kwargs):
+    return fields.ObjectField(
+        attr=attr,
+        properties={
+           'sid': string_field('sid'),
+           'name': string_field('name'),
+       },
+
+        **kwargs
+    )
+
+study_field = fields.ObjectField(
+    attr="study",
+    properties={
+        'sid': string_field('sid'),
+        'name': string_field('name'),
+    }
+)
+
 def text_field(attr):
     return fields.TextField(
         attr=attr,
@@ -123,13 +142,6 @@ class ObjectField(DEDField, Object):
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
 
-study_field = fields.ObjectField(
-    attr="study",
-    properties={
-        'sid': string_field('sid'),
-        'name': string_field('name'),
-    }
-)
 
 class AccessView(DocumentViewSet):
 

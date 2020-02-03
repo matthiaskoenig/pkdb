@@ -115,7 +115,7 @@ class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
 class MeasurementTypeable(ValueableNotBlank):
     measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.PROTECT)
     substance = models.ForeignKey('info_nodes.Substance', null=True, on_delete=models.PROTECT)
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    choice = models.ForeignKey('info_nodes.Choice', null=True, on_delete=models.PROTECT)
 
     class Meta:
         abstract = True
@@ -135,6 +135,38 @@ class MeasurementTypeable(ValueableNotBlank):
     @property
     def choices(self):
         return self.measurement_type.choices_list()
+
+
+    def _i(self, info_node):
+        related_field = getattr(self, info_node)
+        if related_field:
+            return related_field.info_node
+
+    @property
+    def i_measurement_type(self):
+        return self._i("measurement_type")
+
+    @property
+    def i_choice(self):
+        return self._i("choice")
+
+    @property
+    def i_substance(self):
+        return self._i("substance")
+
+    @property
+    def study_name(self):
+        return self.study.name
+
+    @property
+    def study_sid(self):
+        return self.study.sid
+
+    @property
+    def choice_name(self):
+        if self.choice:
+            return self.choice.info_node.name
+        return None
 
 
 class Normalizable(MeasurementTypeable):

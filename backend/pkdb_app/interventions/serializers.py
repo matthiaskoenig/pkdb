@@ -19,7 +19,7 @@ from ..interventions.models import (
     InterventionEx)
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer, PkNameSerializer)
+    NA_VALUES, StudySmallElasticSerializer, SidNameSerializer)
 from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
@@ -109,7 +109,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                     if attrs[info_node] is not None:
                         attrs[info_node] = getattr(attrs[info_node],info_node)
 
-            attrs["measurement_type"].validate_complete(data=attrs)
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
 
         except ValueError as err:
             raise serializers.ValidationError(err)
@@ -242,12 +242,12 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
 
-    measurement_type = PkNameSerializer(source="i_measurement_type", allow_null=True)
-    route = PkNameSerializer(source="i_route", allow_null=True)
-    application = PkNameSerializer(source="i_application", allow_null=True)
-    form = PkNameSerializer(source="i_form", allow_null=True)
-    substance = PkNameSerializer(source="i_substance", allow_null=True)
-    choice = PkNameSerializer(source="i_choice", allow_null=True)
+    measurement_type = SidNameSerializer(read_only=True)
+    route = SidNameSerializer(allow_null=True, read_only=True)
+    application = SidNameSerializer(allow_null=True, read_only=True)
+    form = SidNameSerializer(allow_null=True, read_only=True)
+    substance = SidNameSerializer(allow_null=True, read_only=True)
+    choice = SidNameSerializer(allow_null=True, read_only=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)

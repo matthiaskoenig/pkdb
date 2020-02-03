@@ -163,6 +163,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
         'creator.last_name',
         'creator.user',
 
+
         'curators.first_name',
         'curators.last_name',
         'curators.user',
@@ -180,6 +181,9 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
     filter_fields = {
         'sid': 'sid.raw',
         'name': 'name.raw',
+        'creator': 'creator.username.raw',
+        'curator': 'curators.username.raw',
+        'collaborator': 'collaborators.name.raw',
         'licence': 'licence.raw',
         'access': 'access.raw',
         'substances': 'substances.raw',

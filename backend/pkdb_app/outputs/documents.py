@@ -2,7 +2,7 @@ from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from .models import Output, Timecourse, TimecourseIntervention, OutputIntervention
-from ..documents import string_field, elastic_settings, ObjectField, study_field
+from ..documents import string_field, elastic_settings, ObjectField, study_field, info_node
 
 
 # ------------------------------------
@@ -24,8 +24,8 @@ class OutputDocument(Document):
         'pk': fields.IntegerField(),
         'name': string_field('name')
     }, multi=True)
-    substance = string_field("substance_name")  # FIXME:
-    choice = string_field("choice")
+    substance_name = string_field("substance_name")  # FIXME:
+    choice_name = string_field("choice_name")
     ex = ObjectField(properties={
         'pk': string_field('pk')}
     )
@@ -49,7 +49,10 @@ class OutputDocument(Document):
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
     tissue = string_field('tissue_name')
-    measurement_type = string_field("measurement_type_name")
+    measurement_type =  info_node('i_measurement'),
+    substance = info_node('i_substance'),
+    choice = info_node('i_choice'),
+    measurement_type_name = string_field("measurement_type_name")
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
@@ -93,7 +96,6 @@ class TimecourseDocument(Document):
         'pk': fields.IntegerField(),
         'name': string_field('name')
     }, multi=True)
-    substance = string_field("substance_name")
     ex = ObjectField(
         properties={
             'pk': string_field('pk')
@@ -119,8 +121,11 @@ class TimecourseDocument(Document):
     time_unit = string_field('time_unit')
     figure = string_field('figure')
     time = fields.FloatField('null_time', multi=True)
-    tissue = string_field('tissue_name')
-    measurement_type = string_field("measurement_type_name")
+    tissue = info_node('i_tissue'),
+    measurement_type =  info_node('i_measurement'),
+    substance = info_node('i_substance'),
+    choice = info_node('i_choice'),
+
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",

@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
-from pkdb_app.serializers import StudySmallElasticSerializer
+from pkdb_app.serializers import StudySmallElasticSerializer, SidNameSerializer
 from .models import (
     Group,
     GroupSet,
@@ -97,12 +97,13 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
-            if "substance" in attrs:
-                if attrs["substance"] is not None:
-                    attrs['substance'] = attrs['substance'].substance
+            for info_node in ['substance', 'measurement_type']:
+                if info_node in attrs:
+                    if attrs[info_node] is not None:
+                        attrs[info_node] = getattr(attrs[info_node], info_node)
 
-            attrs['measurement_type'].validate_complete(data=attrs)
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
+
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -534,8 +535,9 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    measurement_type = serializers.CharField()
-    substance = serializers.CharField(allow_null=True)
+    measurement_type = SidNameSerializer()
+    substance = SidNameSerializer(allow_null=True)
+    choice = SidNameSerializer(allow_null=True)
 
     class Meta:
         model = Characteristica

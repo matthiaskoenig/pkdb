@@ -4,7 +4,7 @@ from elasticsearch_dsl import analyzer
 
 from pkdb_app.interventions.documents import string_field
 from pkdb_app.subjects.models import Individual, Group, GroupCharacteristica, IndividualCharacteristica
-from ..documents import elastic_settings, study_field, ObjectField
+from ..documents import elastic_settings, study_field, ObjectField, info_node
 
 html_strip = analyzer(
     'html_strip',
@@ -16,9 +16,9 @@ html_strip = analyzer(
 characteristica_object_field = fields.ObjectField(
     properties={
         'pk': fields.IntegerField(),
-        'measurement_type': string_field('measurement_type_name'),
-        'substance': string_field('substance_name'),
-        'choice': string_field('choice'),
+        'measurement_type': info_node('i_measurement_type'),
+        'substance': info_node('i_substance'),
+        'choice': info_node('i_choice'),
         'value': fields.FloatField('value'),
         'mean': fields.FloatField(),
         'median': fields.FloatField(),

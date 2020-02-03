@@ -27,6 +27,9 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.MeasurementType)
     )
 
+    choice = serializers.CharField(allow_null=True)
+
+
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         return rep

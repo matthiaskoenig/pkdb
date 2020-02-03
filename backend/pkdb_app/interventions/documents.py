@@ -1,7 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
-from ..documents import string_field, elastic_settings, study_field, basic_object
+from ..documents import string_field, elastic_settings, study_field, basic_object, info_node
 from ..interventions.models import Intervention
 
 
@@ -11,12 +11,12 @@ from ..interventions.models import Intervention
 @registry.register_document
 class InterventionDocument(Document):
     pk = fields.IntegerField()
-    measurement_type = basic_object("i_measurement_type")
-    form = basic_object("i_route")
-    route = basic_object("i_route")
-    application = basic_object("i_application")
-    choice = basic_object("i_choice")
-    substance = basic_object("i_substance")
+    measurement_type = info_node("i_measurement_type")
+    form = info_node("i_route")
+    route = info_node("i_route")
+    application = info_node("i_application")
+    choice = info_node("i_choice")
+    substance = info_node("i_substance")
 
     time_unit = string_field('time_unit')
 

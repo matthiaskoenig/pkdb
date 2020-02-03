@@ -20,7 +20,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, PkSerializer, StudySmallElasticSerializer)
+    ExSerializer, PkSerializer, StudySmallElasticSerializer, SidNameSerializer)
 from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
@@ -98,7 +98,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
                 if attrs['tissue'] is not None:
                     attrs['tissue'] = attrs['tissue'].tissue
 
-            attrs["measurement_type"].validate_complete(data=attrs)
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
+
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -281,7 +282,8 @@ class TimecourseSerializer(BaseOutputExSerializer):
                 if attrs['tissue'] is not None:
                     attrs['tissue'] = attrs['tissue'].tissue
 
-            attrs["measurement_type"].validate_complete(data=attrs)
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
+
         except ValueError as err:
             raise serializers.ValidationError(err)
 
@@ -449,12 +451,15 @@ class TimecourseInterventionSerializer(serializers.ModelSerializer):
 
 class OutputElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
+
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
-    substance = serializers.CharField()
-    measurement_type = serializers.CharField()
-    tissue = serializers.CharField()
+
+    substance = SidNameSerializer(read_only=True, allow_null=True)
+    measurement_type = SidNameSerializer(read_only=True, allow_null=True)
+    tissue = SidNameSerializer(read_only=True, allow_null=True)
+    choice = SidNameSerializer(read_only=True, allow_null=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -485,11 +490,13 @@ class TimecourseElasticSerializer(serializers.ModelSerializer):
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
-    measurement_type = serializers.CharField()
-    tissue = serializers.CharField()
 
     outputs = PkSerializer(many=True)
-    substance = serializers.CharField()
+
+    substance = SidNameSerializer(read_only=True, allow_null=True)
+    measurement_type = SidNameSerializer(read_only=True, allow_null=True)
+    tissue = SidNameSerializer(read_only=True, allow_null=True)
+    choice = SidNameSerializer(read_only=True, allow_null=True)
 
     class Meta:
         model = Timecourse

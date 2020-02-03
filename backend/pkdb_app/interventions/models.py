@@ -116,7 +116,6 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-
     route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
@@ -125,13 +124,7 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     def raw_pk(self):
         if self.raw:
             return self.raw.pk
-        else:
-            return None
-
-    def _i(self, info_node):
-        related_field = getattr(self, info_node)
-        if related_field:
-            return related_field.info_node
+        return None
 
     @property
     def i_application(self):
@@ -146,53 +139,22 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
         return self._i("form")
 
     @property
-    def i_measurement_type(self):
-        return self._i("measurement_type")
-
-    @property
-    def i_choice(self):
-        return self._i("choice")
-
-    @property
-
-    def i_substance(self):
-        return self._i("substance")
-
-    @property
-    def choice_name(self):
-        if self.choice:
-            return self.choice.info_node.name
-        else:
-            return None
-
-    @property
     def route_name(self):
         if self.route:
             return self.route.info_node.name
-        else:
-            return None
+        return None
 
     @property
     def application_name(self):
         if self.application:
             return self.application.info_node.name
-        else:
-            return None
+        return None
 
     @property
     def form_name(self):
         if self.form:
             return self.form.info_node.name
-        else:
-            return None
-
-    @property
-    def study_name(self):
-        return self.study.name
-
-    @property
-    def study_sid(self):
-        return self.study.sid
+        return None
 
     @property
     def study(self):

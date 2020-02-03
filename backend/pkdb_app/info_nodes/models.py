@@ -256,6 +256,7 @@ class MeasurementType(AbstractInfoNode):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
                           f"Allowed choices are: `{list(self.choices_list())}`."
                     raise ValueError({"choice": msg})
+                return self.choices.get(info_node__name=choice)
             else:
                 msg = f"The field `choice` is not allowed for measurement type `{self.info_node.name}`. " \
                       f"For numerical values the fields `value`, `mean` or `median` are used. " \
@@ -302,7 +303,8 @@ class MeasurementType(AbstractInfoNode):
         self.validate_numeric(data)
 
         choice = data.get("choice", None)
-        self.validate_choice(choice)
+        d_choice = self.validate_choice(choice)
+
 
         time_unit = data.get("time_unit", None)
         if time_unit:
@@ -312,6 +314,8 @@ class MeasurementType(AbstractInfoNode):
             details = f"for measurement type `{self.info_node.name}`"
             _validate_requried_key(data, "time", details=details)
             _validate_requried_key(data, "time_unit", details=details)
+
+        return {"choice":d_choice}
 
 
 class Choice(AbstractInfoNode):

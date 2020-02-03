@@ -11,6 +11,7 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 
 from pkdb_app.behaviours import map_field
+from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.studies.models import Study
@@ -852,11 +853,10 @@ class PkSerializer(serializers.Serializer):
         fields = ["pk", ]
 
 
-class PkNameSerializer(serializers.Serializer):
-    pk = serializers.IntegerField()
+class SidNameSerializer(serializers.Serializer):
+    sid = serializers.CharField(allow_null=True)
+    name = serializers.CharField(allow_null=True)
 
-    class Meta:
-        fields = ["pk", "name"]
 
 def validate_dict(dic):
     if not isinstance(dic, dict):
