@@ -12,7 +12,7 @@ from ..interventions.models import Intervention
 class InterventionDocument(Document):
     pk = fields.IntegerField()
     measurement_type = info_node("i_measurement_type")
-    form = info_node("i_route")
+    form = info_node("i_form")
     route = info_node("i_route")
     application = info_node("i_application")
     choice = info_node("i_choice")

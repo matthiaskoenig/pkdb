@@ -19,7 +19,15 @@ class ElasticInterventionViewSet(AccessView):
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
-        'name', 'study', 'access', 'measurement_type', 'substance', "form", "tissue", "application", 'route',
+        'name',
+        'study',
+        'access',
+        'measurement_type.name',
+        'substance.name',
+        "form.name",
+        "tissue.name",
+        "application.name",
+        'route.name',
         'time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     filter_fields = {

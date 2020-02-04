@@ -115,12 +115,14 @@ class OutputEx(Externable,
 
     objects = OutputExManager()
 
-class Outputable(Normalizable):
+class Outputable(Normalizable, models.Model):
 
     class Meta:
         abstract = True
 
+    @property
     def i_tissue(self):
+
         return self._i("tissue")
 
     @property
@@ -285,6 +287,10 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
     objects = OutputManager()
+
+    @property
+    def i_tissue(self):
+        return self._i("tissue")
 
     @property
     def interventions(self):
@@ -725,7 +731,6 @@ class TimecourseIntervention(Accessible, models.Model):
     def substance(self):
         if self.timecourse.substance:
             return self.timecourse.substance.info_node.name
-
 
 
     @property
