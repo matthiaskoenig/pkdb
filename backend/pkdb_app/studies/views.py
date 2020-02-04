@@ -186,7 +186,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
         'collaborator': 'collaborators.name.raw',
         'licence': 'licence.raw',
         'access': 'access.raw',
-        'substances': 'substances.raw',
+        'substance': 'substances.name.raw',
     }
     ordering_fields = {
         'sid': 'sid',

@@ -48,11 +48,10 @@ class OutputDocument(Document):
     unit = string_field('unit')
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
-    tissue = string_field('tissue_name')
-    measurement_type =  info_node('i_measurement'),
+    tissue = info_node('i_tissue'),
+    measurement_type =  info_node('i_measurement_type'),
     substance = info_node('i_substance'),
     choice = info_node('i_choice'),
-    measurement_type_name = string_field("measurement_type_name")
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
@@ -122,7 +121,7 @@ class TimecourseDocument(Document):
     figure = string_field('figure')
     time = fields.FloatField('null_time', multi=True)
     tissue = info_node('i_tissue'),
-    measurement_type =  info_node('i_measurement'),
+    measurement_type =  info_node('i_measurement_type'),
     substance = info_node('i_substance'),
     choice = info_node('i_choice'),
 

@@ -115,8 +115,21 @@ class OutputEx(Externable,
 
     objects = OutputExManager()
 
+class Outputable(Normalizable):
 
-class Output(AbstractOutput, Normalizable, Accessible):
+    class Meta:
+        abstract = True
+
+    def i_tissue(self):
+        return self._i("tissue")
+
+    @property
+    def tissue_name(self):
+        if self.tissue:
+            return self.tissue.info_node.name
+
+
+class Output(AbstractOutput, Outputable, Accessible):
     """ Storage of data sets. """
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
@@ -132,9 +145,6 @@ class Output(AbstractOutput, Normalizable, Accessible):
     timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="outputs", null=True)
     objects = OutputManager()
 
-    @property
-    def tissue_name(self):
-        return self.tissue.info_node.name
 
     @property
     def interventions(self):
@@ -254,7 +264,7 @@ class TimecourseEx(
     objects = TimecourseExManager()
 
 
-class Timecourse(AbstractOutput, Normalizable, Accessible):
+class Timecourse(AbstractOutput, Outputable, Accessible):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
@@ -275,10 +285,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
     objects = OutputManager()
-
-    @property
-    def tissue_name(self):
-        return self.tissue.info_node.name
 
     @property
     def interventions(self):
@@ -620,6 +626,7 @@ class TimecourseIntervention(Accessible, models.Model):
     class Meta:
         unique_together = ("timecourse", "intervention")
 
+
     @property
     def study(self):
         return self.intervention.study
@@ -718,6 +725,8 @@ class TimecourseIntervention(Accessible, models.Model):
     def substance(self):
         if self.timecourse.substance:
             return self.timecourse.substance.info_node.name
+
+
 
     @property
     def normed(self):
