@@ -3,19 +3,19 @@
 
         <v-badge inline left light overlap color="#BBBBBB">
             <span slot="badge">{{ data.count }}</span>
-            <strong>{{ data.measurement_type }}</strong>
+            <node-element :data="data.measurement_type"/>
         </v-badge>
         <br />
 
         <!--
         <strong>{{ data.measurement_type }}</strong><br />
         -->
-        <span v-if="data.choice">
-            <span v-if="data.choice=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
-            <span v-if="data.choice=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
-            <span v-if="(data.choice=='F') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
-            <span v-if="(data.choice=='M') || (data.choice =='homo sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
-            {{ data.choice }}
+        <span v-if="data.choice && data.choice.sid">
+            <span v-if="data.choice.sid=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
+            <span v-if="data.choice.sid=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
+            <span v-if="(data.choice.sid=='F') || (data.choice.sid =='homo sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
+            <span v-if="(data.choice.sid=='M') || (data.choice.sid =='homo sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
+            {{ data.choice.name }}
         </span>
         <span v-else>
             <span><v-icon small color="black">fa fa-bolt</v-icon></span>

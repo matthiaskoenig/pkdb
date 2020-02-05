@@ -5,7 +5,7 @@
             outlined
             :to="to"
     >
-        <v-icon :title="'Number of ' + name + 's'">{{ faIcon }}</v-icon>&nbsp;
+        <v-icon color="black" :title="'Number of ' + name + 's'">{{ faIcon }}</v-icon>
         {{ count }}
     </v-chip>
 </template>

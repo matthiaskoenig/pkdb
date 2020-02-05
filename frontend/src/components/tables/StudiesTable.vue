@@ -38,7 +38,7 @@
             </template>
 
             <template v-slot:item.substances="{ item }">
-                <span v-for="(substance, index2) in item.substances" :key="index2">
+                <span v-for="substance in item.substances" :key="substance.sid">
                     <object-chip :object="substance"
                                  otype="substance"
                                  :search="search"

@@ -24,14 +24,12 @@
             <template v-slot:item.name="{ item }">
                 <object-chip :object="item"
                              otype="intervention"
-                             :name="item.name"
                              :search="search"
                 />
             </template>
             <template v-slot:item.substance="{ item }">
                 <object-chip :object="item.substance"
                              otype="substance"
-                             :name="item.substance"
                 />
             </template>
             <template v-slot:item.application="{ item }">

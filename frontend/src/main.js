@@ -26,6 +26,8 @@ import ObjectChip from './components/lib/chips/ObjectChip';
 import FileChip from './components/lib/chips/FileChip';
 import CountChip from './components/lib/chips/CountChip';
 
+import NodeElement from './components/lib/NodeElement';
+
 import Comments from './components/lib/Comments';
 import Descriptions from './components/lib/Descriptions';
 import Annotations from './components/lib/Annotations';
@@ -44,6 +46,8 @@ Vue.component('FileButton', FileButton);
 Vue.component('ObjectChip', ObjectChip);
 Vue.component('FileChip', FileChip);
 Vue.component('CountChip', CountChip);
+
+Vue.component('NodeElement', NodeElement);
 
 Vue.component('Comments', Comments);
 Vue.component('Descriptions', Descriptions);

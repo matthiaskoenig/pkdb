@@ -1,15 +1,30 @@
 <template>
     <span>
-     <v-badge v-if="count" right dark overlap color="#000000">
+     <v-badge v-if="count" left dark overlap color="#000000">
         <span slot="badge">{{ count }}</span>
-        <v-btn :color="color" fab x-small dark>
-            <v-icon small color="black">{{ icon }}</v-icon>&nbsp;
+        <v-btn :color="color"
+               fab
+               x-small
+               dark
+               elevation="0"
+               :link="false"
+        >
+            <v-icon small
+                    color="black"
+            >{{ icon }}</v-icon>&nbsp;
         </v-btn>
      </v-badge>    &nbsp;
 
-    <v-btn v-if="!count" :color="color" fab x-small dark>
+    <v-btn v-if="!count"
+           :color="color"
+           fab
+           x-small
+           dark
+           elevation="0"
+           :link="false"
+    >
         <v-icon small color="black">{{ icon }}</v-icon>&nbsp;
-    </v-btn>
+    </v-btn>&nbsp;
     <text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight>
     </span>
 </template>
@@ -40,15 +55,7 @@
         },
         computed: {
             name: function (){
-                if (this.otype.startsWith('substance')){
-                    return this.object;
-                } else if (this.otype.startsWith('measurement_type')){
-                    return this.object;
-                } else if (this.otype.startsWith('tissue')){
-                    return this.object;
-                } else {
-                    return this.object.name;
-                }
+                return this.object.name;
             },
             color: function () {
                 if (this.otype.startsWith('group')) {
