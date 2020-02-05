@@ -1,5 +1,5 @@
 <template>
-      <v-avatar left :size="32">
+      <v-avatar left :size="32" :title="fullname">
         <img :src="src" :alt=fullname>
       </v-avatar>
 </template>
@@ -54,6 +54,8 @@
                         image = 'jbrandhorst_128.png';
                     } else if (this.initials === 'YD'){
                         image = 'yduport_128.png';
+                    } else if (this.initials === 'FB'){
+                        image = 'FlorBar_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -71,6 +73,8 @@
                         image = 'deepa_128.png';
                     } else if (this.username === 'yduport'){
                         image = 'yduport_128.png';
+                    } else if (this.username === 'FlorBar'){
+                        image = 'FlorBar_128.png';
                     }
                 }
                 return img_dir + image
