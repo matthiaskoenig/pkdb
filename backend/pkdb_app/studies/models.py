@@ -222,15 +222,15 @@ class Study(Sidable, models.Model):
 
         basic_substances_dj = substances_dj.filter(info_node__parents__isnull=True)
         if basic_substances_dj:
-            basic_substances.extend(list(basic_substances_dj.values_list("info_node__name", flat=True)))
+            basic_substances.extend(list(basic_substances_dj.values_list("info_node__pk", flat=True)))
 
         substances_derived_dj = substances_dj.filter(info_node__parents__isnull=False)
         if substances_derived_dj:
             basic_substances.extend(
-                list(substances_derived_dj.values_list("info_node__parents__name", flat=True))
+                list(substances_derived_dj.values_list("info_node__parents__pk", flat=True))
             )
 
-        return list(set(basic_substances))
+        return Substance.objects.filter(pk__in=set(basic_substances))
 
     @property
     def files_url(self):

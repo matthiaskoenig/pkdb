@@ -2,7 +2,7 @@ from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from pkdb_app.documents import autocomplete, autocomplete_search, elastic_settings, string_field, text_field, \
-    ObjectField, study_field
+    ObjectField, study_field, info_node
 from pkdb_app.studies.models import Reference, Study
 
 comments_field = fields.ObjectField(
@@ -135,7 +135,7 @@ class StudyDocument(Document):
         },
         multi=True
     )
-    substances = string_field(attr="get_substances", multi=True)
+    substances = info_node(attr="get_substances", multi=True)
     files = ObjectField(
         attr="files_ordered",
         properties={
