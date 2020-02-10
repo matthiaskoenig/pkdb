@@ -5,7 +5,7 @@ import datetime
 
 from django.db import models
 
-from pkdb_app.info_nodes.models import Substance
+from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..behaviours import Sidable
 from ..interventions.models import InterventionSet, DataFile, Intervention
@@ -230,7 +230,7 @@ class Study(Sidable, models.Model):
                 list(substances_derived_dj.values_list("info_node__parents__pk", flat=True))
             )
 
-        return Substance.objects.filter(pk__in=set(basic_substances))
+        return InfoNode.objects.filter(pk__in=set(basic_substances))
 
     @property
     def files_url(self):
