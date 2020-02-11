@@ -126,6 +126,7 @@ class Study(Sidable, models.Model):
     )
     files = models.ManyToManyField(DataFile)
 
+
     class Meta:
         verbose_name_plural = "studies"
 

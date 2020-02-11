@@ -90,6 +90,9 @@ class Description(models.Model):
     study = models.ForeignKey(
         Study, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
+    study_as_warning = models.ForeignKey(
+        Study, related_name="warnings", null=True, on_delete=models.CASCADE
+    )
 
     individual_ex = models.ForeignKey(
         IndividualEx, related_name="descriptions", null=True, on_delete=models.CASCADE

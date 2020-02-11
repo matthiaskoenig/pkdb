@@ -245,10 +245,11 @@ class TimecourseSerializer(BaseOutputExSerializer):
         read_only=False,
         required=False
     )
+    outputs = OutputSerializer(many=True, read_only=True)
 
     class Meta:
         model = Timecourse
-        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
+        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"] +["outputs"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -287,7 +288,10 @@ class TimecourseSerializer(BaseOutputExSerializer):
         except ValueError as err:
             raise serializers.ValidationError(err)
 
+
+
         return super().validate(attrs)
+
 
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
@@ -413,6 +417,9 @@ class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
         model = OutputSet
         fields = ["pk", "descriptions", "comments", "outputs", "timecourses", ]
 
+        read_only_fields = fields
+
+
     def get_outputs(self, obj):
         return list_of_pk("outputs", obj)
 
@@ -426,12 +433,16 @@ class OutputInterventionSerializer(serializers.ModelSerializer):
         fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
                   "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
 
+        read_only_fields = fields
+
 
 class TimecourseInterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimecourseIntervention
         fields = ["study_sid", "study_name", "timecourse_pk", "intervention_pk", "group_pk", "individual_pk",
                   "normed"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+        read_only_fields = fields
+
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -450,16 +461,16 @@ class TimecourseInterventionSerializer(serializers.ModelSerializer):
 
 
 class OutputElasticSerializer(serializers.ModelSerializer):
-    study = StudySmallElasticSerializer(read_only=True)
+    study = StudySmallElasticSerializer()
 
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
 
-    substance = SidNameSerializer(read_only=True, allow_null=True)
-    measurement_type = SidNameSerializer(read_only=True, allow_null=True)
-    tissue = SidNameSerializer(read_only=True, allow_null=True)
-    choice = SidNameSerializer(read_only=True, allow_null=True)
+    substance = SidNameSerializer( allow_null=True)
+    measurement_type = SidNameSerializer( allow_null=True)
+    tissue = SidNameSerializer( allow_null=True)
+    choice = SidNameSerializer( allow_null=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -483,20 +494,22 @@ class OutputElasticSerializer(serializers.ModelSerializer):
                 + TIME_FIELDS
                 + VALUE_FIELDS
         )
+        read_only_fields = fields
+
 
 
 class TimecourseElasticSerializer(serializers.ModelSerializer):
-    study = StudySmallElasticSerializer(read_only=True)
+    study = StudySmallElasticSerializer()
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
 
     outputs = PkSerializer(many=True)
 
-    substance = SidNameSerializer(read_only=True, allow_null=True)
-    measurement_type = SidNameSerializer(read_only=True, allow_null=True)
-    tissue = SidNameSerializer(read_only=True, allow_null=True)
-    choice = SidNameSerializer(read_only=True, allow_null=True)
+    substance = SidNameSerializer( allow_null=True)
+    measurement_type = SidNameSerializer( allow_null=True)
+    tissue = SidNameSerializer( allow_null=True)
+    choice = SidNameSerializer(allow_null=True)
 
     class Meta:
         model = Timecourse
@@ -509,3 +522,5 @@ class TimecourseElasticSerializer(serializers.ModelSerializer):
                 + TIME_FIELDS
                 + VALUE_FIELDS
         )
+        read_only_fields = fields
+

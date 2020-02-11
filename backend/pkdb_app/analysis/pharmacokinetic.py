@@ -11,7 +11,6 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from scipy import stats
 
-
 # TODO: add estimation of confidence intervals (use also the errorbars on the curves)
 # Currently only simple calculation of pharmacokinetic parameters
 
@@ -288,6 +287,7 @@ def _max_half(t, c):
     idx = np.argmax(c)
     if idx == len(c) - 1:
         # no maximum reached within the time course
+        #raise serializers.ValidationError({"timecourse": "No MAXIMUM reached within time course, last value used."})
         warnings.warn("No MAXIMUM reached within time course, last value used.")
     if idx == 0:
         # no maximum in time course

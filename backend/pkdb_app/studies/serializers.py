@@ -144,6 +144,9 @@ class StudySerializer(SidSerializer):
     files = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True, many=True
     )
+    warnings = DescriptionSerializer(
+        many=True, read_only=True, required=False, allow_null=True
+    )
 
     class Meta:
         model = Study
@@ -164,6 +167,7 @@ class StudySerializer(SidSerializer):
             "outputset",
             "files",
             "comments",
+            "warnings"
         )
         write_only_fields = ('curators', 'collaborators')
 
@@ -392,6 +396,8 @@ class AuthorElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
+        read_only_fields = fields
+
 
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
@@ -423,12 +429,16 @@ class ReferenceElasticSerializer(serializers.ModelSerializer):
             "date",
             "authors",
         )
+        read_only_fields = fields
+
 
 
 class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
         fields = ["pk", "sid"]  # , 'url']
+        read_only_fields = fields
+
 
 
 class StudyElasticStatisticsSerializer(serializers.Serializer):
@@ -469,24 +479,24 @@ class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
 
-    name = serializers.CharField(read_only=True)
-    licence = serializers.CharField(read_only=True)
-    access = serializers.CharField(read_only=True)
+    name = serializers.CharField()
+    licence = serializers.CharField()
+    access = serializers.CharField()
 
-    curators = CuratorRatingElasticSerializer(many=True, read_only=True)
-    creator = UserElasticSerializer(read_only=True)
-    collaborators = UserElasticSerializer(many=True, read_only=True)
+    curators = CuratorRatingElasticSerializer(many=True, )
+    creator = UserElasticSerializer()
+    collaborators = UserElasticSerializer(many=True, )
 
-    substances = SidNameSerializer(many=True, read_only=True)
+    substances = SidNameSerializer(many=True, )
 
-    files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, read_only=True)
+    files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, )
 
-    comments = CommentElasticSerializer(many=True, read_only=True)
-    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
-    groupset = GroupSetElasticSmallSerializer(read_only=True)
-    individualset = IndividualSetElasticSmallSerializer(read_only=True)
-    interventionset = InterventionSetElasticSmallSerializer(read_only=True)
-    outputset = OutputSetElasticSmallSerializer(read_only=True)
+    comments = CommentElasticSerializer(many=True, )
+    descriptions = DescriptionElasticSerializer(many=True, )
+    groupset = GroupSetElasticSmallSerializer()
+    individualset = IndividualSetElasticSmallSerializer()
+    interventionset = InterventionSetElasticSmallSerializer()
+    outputset = OutputSetElasticSmallSerializer()
 
     class Meta:
         model = Study
