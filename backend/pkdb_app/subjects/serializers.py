@@ -19,7 +19,7 @@ from .models import (
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
-from ..utils import list_of_pk, _validate_requried_key
+from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create
 
 CHARACTERISTICA_FIELDS = ['count']
 CHARACTERISTICA_MAP_FIELDS = map_field(CHARACTERISTICA_FIELDS)
@@ -258,6 +258,32 @@ class GroupSetSerializer(ExSerializer):
         self._group_validation(groups)
         return data
 
+    def create(self, validated_data):
+        groupset, poped_data = _create(model_manager=self.Meta.model.objects,
+                                              validated_data=validated_data,
+                                              create_multiple_keys=['descriptions', 'comments'],
+                                              pop=["study","group_exs"])
+
+        study_group_exs = []
+        study_groups = set()
+        for group_ex in poped_data["group_exs"]:
+            # todo: check if this is necessary
+            if "parent_ex" in group_ex:
+                for study_group_ex in study_group_exs:
+                    if study_group_ex.name == group_ex["parent_ex"]:
+                        group_ex["parent_ex"] = study_group_ex
+            ###################################
+            # create single group_ex
+            group_ex["study_groups"] = study_groups
+            study_group_ex = groupset.group_exs.create(**group_ex)
+            study_group_exs.append(study_group_ex)
+        groupset.save()
+
+        # add characteristica from parents to the all_characteristica_normed if each group
+        for group in groupset.groups:
+            group.characteristica_all_normed.add(*group._characteristica_all_normed)
+        return groupset
+
     @staticmethod
     def _group_validation(groups):
 
@@ -495,6 +521,30 @@ class IndividualSetSerializer(ExSerializer):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
+
+    def create(self, validated_data):
+        individual_exs = validated_data.pop("individual_exs", [])
+        descriptions = validated_data.pop("descriptions", [])
+        validated_data.pop("study")
+        comments = validated_data.pop("comments", [])
+
+
+        individualset = self.Meta.model.objects.create(validated_data)
+
+        create_multiple(individualset, descriptions, "descriptions")
+        create_multiple(individualset, comments, "comments")
+        create_multiple(individualset, individual_exs, "individual_exs")
+
+        #Comment = apps.get_model('comments', 'Comment')
+        #Description = apps.get_model('comments', 'Description')
+        #create_multiple_bulk(individualset, "individualset", descriptions, Description)
+        #create_multiple_bulk(individualset, "individualset", comments, Comment)
+        individualset.save()
+
+        # add characteristica from parents to the all_characteristica_normed if each individual
+        for individual in individualset.individuals:
+            individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
+        return individualset
 
 
 ###############################################################################################

@@ -16,7 +16,6 @@ from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.subjects.models import Group, DataFile, Individual
 from .managers import (
-    OutputSetManager,
     OutputExManager,
     TimecourseExManager,
     OutputManager
@@ -33,7 +32,6 @@ TIME_NORM_UNIT = "hr"
 # OUTPUTS
 # -------------------------------------------------
 class OutputSet(models.Model):
-    objects = OutputSetManager()
 
     @property
     def outputs(self):
@@ -161,7 +159,6 @@ class Output(AbstractOutput, Outputable, Accessible):
 
     @property
     def study(self):
-
         try:
             return self.ex.outputset.study
 
@@ -173,7 +170,6 @@ class Output(AbstractOutput, Outputable, Accessible):
                 return None
 
     # for elastic search. NaNs are not allowed in elastic search
-
     def null_attr(self, attr):
         value = getattr(self, attr)
         if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):

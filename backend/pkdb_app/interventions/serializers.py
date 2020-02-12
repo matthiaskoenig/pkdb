@@ -24,7 +24,7 @@ from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates, _validate_requried_key
+from ..utils import list_of_pk, list_duplicates, _validate_requried_key, _create
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -209,8 +209,15 @@ class InterventionSetSerializer(ExSerializer):
                     "intervention_set": "Itervention names are required to be unique within a study.",
                     "duplicated intervention names": duplicated_intervention_names
                 })
-
         return super().validate(attrs)
+
+    def create(self, validated_data):
+        interventionset, poped_data = _create(model_manager=self.Meta.model.objects,
+                                        validated_data=validated_data,
+                                        create_multiple_keys=['descriptions', 'comments','intervention_exs'],
+                                        pop=["study"])
+
+        return interventionset
 
 
 ###############################################################################################

@@ -298,6 +298,13 @@ class StudySerializer(SidSerializer):
             "interventionset": InterventionSet,
             "outputset": OutputSet,
         }
+    def related_serializer(self):
+        return {
+            "groupset": GroupSetSerializer,
+            "individualset": IndividualSetSerializer,
+            "interventionset": InterventionSetSerializer,
+            "outputset": OutputSetSerializer,
+        }
 
     def pop_relations(self, validated_data):
         """ Remove nested relations (handled via own serializers)
@@ -330,12 +337,17 @@ class StudySerializer(SidSerializer):
         :return:
         """
 
-        for name, model in self.related_sets().items():
+        #for name, model in self.related_sets().items():
+        for name, serializer in self.related_serializer().items():
+
 
             if related[name] is not None:
                 if getattr(study, name):
                     getattr(study, name).delete()
-                instance = model.objects.create(study=study, **related[name])
+
+                #instance = model.objects.create(study=study, **related[name])
+                instance = serializer().create(validated_data={"study":study, **related[name]})
+
                 setattr(study, name, instance)
             study.save()
 

@@ -7,23 +7,6 @@ from django.db import models
 from ..utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 
-class InterventionSetManager(models.Manager):
-    def create(self, *args, **kwargs):
-        intervention_exs = kwargs.pop('intervention_exs', [])
-        descriptions = kwargs.pop('descriptions', [])
-        comments = kwargs.pop('comments', [])
-
-        kwargs.pop('study')
-
-        interventionset = super().create(*args, **kwargs)
-
-        create_multiple(interventionset, descriptions, 'descriptions')
-        create_multiple(interventionset, intervention_exs, 'intervention_exs')
-        create_multiple(interventionset, comments, 'comments')
-        interventionset.save()
-
-        return interventionset
-
 
 class InterventionExManager(models.Manager):
     def create(self, *args, **kwargs):

@@ -132,6 +132,18 @@ def create_multiple_bulk_normalized(notnormalized_instances, model_class):
         return model_class.objects.bulk_create(
             [initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
 
+def _create(validated_data, model_manager, create_multiple_keys=[], add_multiple_keys=[], pop=[]):
+    poped_data = {related: validated_data.pop(related, []) for related in pop}
+    related_data_create = {related: validated_data.pop(related, []) for related in create_multiple_keys}
+    related_data_add = {related: validated_data.pop(related, []) for related in add_multiple_keys}
+    instance = model_manager.create(**validated_data)
+    for key, item in related_data_create.items():
+        create_multiple(instance, item, key)
+
+    for key, item in related_data_add.items():
+        getattr(instance,key).add(*item)
+
+    return instance, poped_data
 
 def initialize_normed(notnorm_instance):
     norm = copy.copy(notnorm_instance)
@@ -152,7 +164,7 @@ def initialize_normed(notnorm_instance):
     except AttributeError:
         pass
 
-    # interventions have no add statistics because they should have no mean,median,sd,se,cv ...
+    # interventions have no add add_error_measures() because they should have no mean,median,sd,se,cv ...
     try:
         norm.add_error_measures()
     except AttributeError:

@@ -7,40 +7,6 @@ from django.db import models
 from pkdb_app.utils import create_multiple, create_multiple_bulk, create_multiple_bulk_normalized
 
 
-class GroupSetManager(models.Manager):
-    def create(self, *args, **kwargs):
-        study = kwargs.pop("study")
-        group_exs = kwargs.pop("group_exs", [])
-        descriptions = kwargs.pop("descriptions", [])
-        comments = kwargs.pop("comments", [])
-        groupset = super().create(*args, **kwargs)
-        create_multiple(groupset, descriptions, "descriptions")
-        create_multiple(groupset, comments, "comments")
-
-        study_group_exs = []
-        study_groups = set()
-
-        for group_ex in group_exs:
-            # todo: check if this is necessary
-            if "parent_ex" in group_ex:
-                for study_group_ex in study_group_exs:
-                    if study_group_ex.name == group_ex["parent_ex"]:
-                        group_ex["parent_ex"] = study_group_ex
-            ###################################
-            # create single group_ex
-            group_ex["study_groups"] = study_groups
-            study_group_ex = groupset.group_exs.create(**group_ex)
-            study_group_exs.append(study_group_ex)
-            # study_groups.update(study_group_ex.groups.values_list("pk"))
-
-        groupset.save()
-
-        # add characteristica from parents to the all_characteristica_normed if each group
-        for group in groupset.groups:
-            group.characteristica_all_normed.add(*group._characteristica_all_normed)
-        return groupset
-
-
 class GroupExManager(models.Manager):
     def create(self, *args, **kwargs):
         characteristica_ex = kwargs.pop("characteristica_ex", [])
@@ -104,32 +70,6 @@ class CharacteristicaExManager(models.Manager):
 
         instance.save()
         return instance
-
-
-class IndividualSetManager(models.Manager):
-
-    def create(self, *args, **kwargs):
-        individual_exs = kwargs.pop("individual_exs", [])
-        descriptions = kwargs.pop("descriptions", [])
-        kwargs.pop("study")
-        comments = kwargs.pop("comments", [])
-
-        Comment = apps.get_model('comments', 'Comment')
-        Description = apps.get_model('comments', 'Description')
-
-        individualset = super().create(*args, **kwargs)
-
-        # create_multiple(individualset, descriptions, "descriptions")
-        # create_multiple_bulk(individualset,"individualset", individual_exs, IndividualEx)
-        create_multiple(individualset, individual_exs, "individual_exs")
-        create_multiple_bulk(individualset, "individualset", descriptions, Description)
-        create_multiple_bulk(individualset, "individualset", comments, Comment)
-        individualset.save()
-
-        # add characteristica from parents to the all_characteristica_normed if each individual
-        for individual in individualset.individuals:
-            individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
-        return individualset
 
 
 class IndividualExManager(models.Manager):

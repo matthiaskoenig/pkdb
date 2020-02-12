@@ -7,7 +7,7 @@ from django.db import models
 from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 from pkdb_app.info_nodes.models import Application, Form, Route
 from ..behaviours import Externable, Accessible
-from ..interventions.managers import InterventionSetManager, InterventionExManager
+from ..interventions.managers import  InterventionExManager
 from ..subjects.models import DataFile
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
@@ -17,7 +17,6 @@ from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 # -------------------------------------------------
 
 class InterventionSet(models.Model):
-    objects = InterventionSetManager()
 
     @property
     def interventions(self):

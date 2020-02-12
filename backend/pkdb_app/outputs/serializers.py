@@ -1,6 +1,8 @@
 """
 Serializers for interventions.
 """
+import warnings
+
 import numpy as np
 from rest_framework import serializers
 
@@ -27,7 +29,7 @@ from ..subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, _validate_requried_key
+from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create
 
 TISSUE_FIELD = ["tissue"]
 TIME_FIELDS = ["time", "time_unit"]
@@ -89,7 +91,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "interventions")
 
         try:
-            # perform via dedicated function on categorials
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
             if 'substance' in attrs:
                 if attrs['substance'] is not None:
@@ -104,6 +105,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
+
+    def create(self, validated_data):
+        output = super().create(validated_data)
+        print(output)
+        return output
+
 
 
 class BaseOutputExSerializer(ExSerializer):
@@ -199,6 +206,7 @@ class OutputExSerializer(BaseOutputExSerializer):
         data = self.transform_map_fields(data)
 
         data["outputs"] = outputs
+
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
 
@@ -362,7 +370,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         # finished
         # ----------------------------------
         data = self.transform_map_fields(data)
-
         data["timecourses"] = timecourses
 
         data = self.to_internal_related_fields(data)
@@ -401,6 +408,29 @@ class OutputSetSerializer(ExSerializer):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
+
+    def create(self, validated_data):
+        outputset, poped_data = _create( model_manager=self.Meta.model.objects,
+                                         validated_data=validated_data,
+                                         create_multiple_keys=['descriptions','comments'],
+                                         pop=["study", "output_exs", "timecourse_exs"])
+
+        with warnings.catch_warnings(record=True) as ws:
+            # this warnings come from analysis.pharmacokinetic.py
+
+            for output_ex in poped_data["output_exs"]:
+                output_ex_instance, _ = _create(model_manager=outputset.output_exs, validated_data=output_ex, add_multiple_keys=['interventions'])
+                output_ex_instance.save()
+
+            for timecourse_ex in poped_data["timecourse_exs"]:
+                timecourse_ex_instance, _ = _create(model_manager=outputset.timecourse_exs, validated_data=timecourse_ex, add_multiple_keys=['interventions'])
+                timecourse_ex_instance.save()
+
+            outputset.save()
+            if len(ws) > 0:
+                create_multiple(poped_data["study"], [{"text": w.message} for w in ws], 'warnings')
+
+        return outputset
 
 
 ###############################################################################################

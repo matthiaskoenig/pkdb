@@ -12,9 +12,7 @@ from django.db import models
 from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 from .managers import (
     GroupExManager,
-    GroupSetManager,
     IndividualExManager,
-    IndividualSetManager,
     IndividualManager,
     GroupManager,
     CharacteristicaExManager,
@@ -66,7 +64,6 @@ class DataFile(models.Model):
 
 
 class GroupSet(models.Model):
-    objects = GroupSetManager()
 
     @property
     def groups(self):
@@ -184,8 +181,6 @@ class Group(Accessible):
 # Individual
 # ----------------------------------
 class IndividualSet(models.Model):
-    objects = IndividualSetManager()
-
     @property
     def individuals(self):
         individuals = Individual.objects.filter(ex__in=self.individual_exs.all())

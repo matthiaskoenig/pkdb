@@ -11,12 +11,11 @@ from rest_framework import serializers
 from rest_framework.settings import api_settings
 
 from pkdb_app.behaviours import map_field
-from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.normalization import get_se, get_sd, get_cv
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.utils import recursive_iter, set_keys
+from pkdb_app.utils import recursive_iter, set_keys, create_multiple
 
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
