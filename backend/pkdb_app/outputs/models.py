@@ -17,7 +17,6 @@ from pkdb_app.interventions.models import Intervention
 from pkdb_app.subjects.models import Group, DataFile, Individual
 from .managers import (
     OutputExManager,
-    TimecourseExManager,
     OutputManager
 )
 from ..behaviours import (
@@ -143,6 +142,8 @@ class Output(AbstractOutput, Outputable, Accessible):
     # calculated by timecourse data
     calculated = models.BooleanField(default=False)
     timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="outputs", null=True)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="outputs")
+
     objects = OutputManager()
 
 
@@ -157,17 +158,6 @@ class Output(AbstractOutput, Outputable, Accessible):
         else:
             return self.raw._interventions
 
-    @property
-    def study(self):
-        try:
-            return self.ex.outputset.study
-
-        except AttributeError:
-            try:
-                return self.timecourse.ex.outputset.study
-
-            except AttributeError:
-                return None
 
     # for elastic search. NaNs are not allowed in elastic search
     def null_attr(self, attr):
@@ -259,8 +249,6 @@ class TimecourseEx(
 
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
-    objects = TimecourseExManager()
-
 
 class Timecourse(AbstractOutput, Outputable, Accessible):
     """ Storing of time course data.
@@ -282,6 +270,8 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
     se = ArrayField(models.FloatField(null=True), null=True)
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="timecourses")
+
     objects = OutputManager()
 
     @property
@@ -299,9 +289,6 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
             except AttributeError:
                 return Intervention.objects.none()
 
-    @property
-    def study(self):
-        return self.ex.outputset.study
 
     @property
     def figure(self):

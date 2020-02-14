@@ -1,6 +1,7 @@
 """
 Studies serializers.
 """
+import timeit
 
 from rest_framework import serializers
 
@@ -173,6 +174,7 @@ class StudySerializer(SidSerializer):
 
     def to_internal_value(self, data):
 
+
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
@@ -327,6 +329,7 @@ class StudySerializer(SidSerializer):
         related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if
                                   name in validated_data}
         related = {**related_foreignkeys_dict, **related_many2many_dict}
+
         return related
 
     def create_relations(self, study, related):
@@ -337,19 +340,22 @@ class StudySerializer(SidSerializer):
         :return:
         """
 
-        #for name, model in self.related_sets().items():
+
         for name, serializer in self.related_serializer().items():
 
-
             if related[name] is not None:
+
                 if getattr(study, name):
                     getattr(study, name).delete()
 
-                #instance = model.objects.create(study=study, **related[name])
-                instance = serializer().create(validated_data={"study":study, **related[name]})
+                context = self.context
+                context["study"] = study
+                instance = serializer(context=context).create(validated_data={**related[name]})
+
 
                 setattr(study, name, instance)
             study.save()
+
 
         if "curators" in related:
             study.ratings.all().delete()
@@ -381,6 +387,7 @@ class StudySerializer(SidSerializer):
                     study.files.add(file_pk)
 
         study.save()
+
 
         return study
 

@@ -586,12 +586,11 @@ class ExSerializer(MappingSerializer):
 
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
-
         if "group" in data:
             if data["group"]:
                 try:
                     data["group"] = Group.objects.get(
-                        Q(ex__groupset__study__sid=study_sid)
+                        Q(study__sid=study_sid)
                         & Q(name=data.get("group"))
                     ).pk
                 except ObjectDoesNotExist:
@@ -607,7 +606,7 @@ class ExSerializer(MappingSerializer):
             if data["individual"]:
                 try:
                     study_individuals = Individual.objects.filter(
-                        ex__individualset__study__sid=study_sid
+                       study__sid=study_sid
                     )
                     data["individual"] = study_individuals.get(
                         name=data.get("individual")
@@ -634,7 +633,7 @@ class ExSerializer(MappingSerializer):
                     try:
                         interventions.append(
                             Intervention.objects.get(
-                                Q(ex__interventionset__study__sid=study_sid)
+                                Q(study__sid=study_sid)
                                 & Q(name=intervention, normed=True)
                             ).pk
                         )

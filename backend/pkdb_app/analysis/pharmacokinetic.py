@@ -318,6 +318,7 @@ def _kel(t, c, slope=None):
     """
     if slope is None:
         [slope, intercept, r_value, p_value, std_err, max_index] = _regression(t, c)
+
     return -slope
 
 
@@ -398,4 +399,10 @@ def _regression(t, c):
     # y = np.log(c[-4:])
 
     slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+
+    if -slope < 0:
+        warnings.warn("The regression results in a positive slope, a negative elimination rates follows form that."
+                      "This is not allowed. Elimination rate is set to NaN ")
+        slope = np.NAN
+
     return [slope, intercept, r_value, p_value, std_err, max_index]

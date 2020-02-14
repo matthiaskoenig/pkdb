@@ -7,7 +7,6 @@ from django.db import models
 from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 from pkdb_app.info_nodes.models import Application, Form, Route
 from ..behaviours import Externable, Accessible
-from ..interventions.managers import  InterventionExManager
 from ..subjects.models import DataFile
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
@@ -94,7 +93,6 @@ class InterventionEx(
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    objects = InterventionExManager()
 
     class Meta:
         unique_together = ("interventionset", "name", "name_map", "source")
@@ -118,6 +116,7 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="interventions")
 
     @property
     def raw_pk(self):
@@ -154,7 +153,3 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
         if self.form:
             return self.form.info_node.name
         return None
-
-    @property
-    def study(self):
-        return self.ex.interventionset.study

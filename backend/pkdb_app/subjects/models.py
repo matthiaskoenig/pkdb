@@ -11,8 +11,6 @@ from django.db import models
 
 from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 from .managers import (
-    GroupExManager,
-    IndividualExManager,
     IndividualManager,
     GroupManager,
     CharacteristicaExManager,
@@ -78,17 +76,7 @@ class GroupSet(models.Model):
             return 0
 
 
-class AbstractGroup(models.Model):
-    objects = GroupExManager()
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.name
-
-
-class GroupEx(Externable, AbstractGroup):
+class GroupEx(Externable):
     """ Group (external curated layer).
 
     Groups are defined via their characteristica.
@@ -112,7 +100,6 @@ class GroupEx(Externable, AbstractGroup):
     count = models.IntegerField(null=True)
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    objects = GroupExManager()
 
     @property
     def study(self):
@@ -124,6 +111,10 @@ class GroupEx(Externable, AbstractGroup):
 
     class Meta:
         unique_together = ("groupset", "name", "name_map", "source")
+
+    def __str__(self):
+        return self.name
+
 
 
 class Group(Accessible):
@@ -138,14 +129,13 @@ class Group(Accessible):
     parent = models.ForeignKey("Group", null=True, on_delete=models.CASCADE)
     characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="groups",
                                                         through="GroupCharacteristica")
+
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="groups")
+
     objects = GroupManager()
 
     # class Meta:
     # todo: in validator unique_together = ('ex__groupset', 'name')
-
-    @property
-    def study(self):
-        return self.ex.groupset.study
 
     @property
     def source(self):
@@ -216,7 +206,6 @@ class IndividualEx(Externable, AbstractIndividual):
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    objects = IndividualExManager()
 
     class Meta:
         unique_together = ("individualset", "name", "name_map", "source")
@@ -248,6 +237,9 @@ class Individual(AbstractIndividual, Accessible):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="individuals",
                                                         through="IndividualCharacteristica")
+
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="individuals")
+
     objects = IndividualManager()
 
     @property
@@ -272,10 +264,6 @@ class Individual(AbstractIndividual, Accessible):
             measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         return (_characteristica_normed | self.group._characteristica_all_normed.exclude(
             measurement_type__in=this_measurements))
-
-    @property
-    def study(self):
-        return self.ex.individualset.study
 
     @property
     def group_indexing(self):

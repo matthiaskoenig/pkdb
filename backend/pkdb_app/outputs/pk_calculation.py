@@ -1,9 +1,6 @@
 from django.apps import apps
-
 from pkdb_app.analysis.pharmacokinetic import f_pk
-from pkdb_app.outputs.serializers import OutputSerializer
-
-
+import numpy as np
 def _calculate_outputs(timecourse):
     outputs = []
     MeasurementType = apps.get_model('info_nodes.MeasurementType')
@@ -39,7 +36,6 @@ def _calculate_outputs(timecourse):
                 if output_dict["measurement_type"].info_node.name == "auc_end":
                     output_dict["time"] = max(timecourse.time)
                     output_dict["time_unit"] = timecourse.time_unit
+                output_dict["study"] = timecourse.study
                 outputs.append(output_dict)
-    serializer = OutputSerializer(data=outputs, many=True)
-    serializer.is_valid(raise_exception=True)
     return outputs

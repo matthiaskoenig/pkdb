@@ -3,6 +3,7 @@ Serializers for interventions.
 """
 import itertools
 
+from django.apps import apps
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -24,7 +25,8 @@ from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates, _validate_requried_key, _create
+from ..utils import list_of_pk, list_duplicates, _validate_requried_key, _create, create_multiple_bulk, \
+    create_multiple_bulk_normalized
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -172,6 +174,22 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    def create(self, validated_data):
+        intervention_set = validated_data.pop("intervention_set")
+        intervention_ex, poped_data = _create(model_manager=intervention_set.intervention_exs,
+                                              validated_data=validated_data,
+                                              create_multiple_keys=['descriptions', 'comments'],
+                                              pop=['interventions'])
+
+        interventions = poped_data["interventions"]
+        for intervention in interventions:
+            intervention["study"] = self.context["study"]
+
+        not_norm_interventions = create_multiple_bulk(intervention_ex, "ex", interventions, Intervention)
+        create_multiple_bulk_normalized(not_norm_interventions, Intervention)
+        intervention_ex.save()
+        return intervention_ex
+
 
 class InterventionSetSerializer(ExSerializer):
     """ InterventionSet. """
@@ -193,10 +211,10 @@ class InterventionSetSerializer(ExSerializer):
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
-
         return data
 
     def validate(self, attrs):
+        # unique together not working because study is not part of the serializer validation but is added after create
         intervention_exs = attrs.get("intervention_exs")
         all_interventions = list(
             itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
@@ -206,16 +224,24 @@ class InterventionSetSerializer(ExSerializer):
         if duplicated_intervention_names:
             raise serializers.ValidationError(
                 {
-                    "intervention_set": "Itervention names are required to be unique within a study.",
+                    "intervention_set": "Intervention names are required to be unique within a study.",
                     "duplicated intervention names": duplicated_intervention_names
                 })
         return super().validate(attrs)
 
+
+
     def create(self, validated_data):
+
         interventionset, poped_data = _create(model_manager=self.Meta.model.objects,
                                         validated_data=validated_data,
-                                        create_multiple_keys=['descriptions', 'comments','intervention_exs'],
-                                        pop=["study"])
+                                        create_multiple_keys=['descriptions', 'comments'], pop=['intervention_exs'])
+
+        intervention_exs =  poped_data['intervention_exs']
+        for intervention_ex in intervention_exs:
+            intervention_ex["intervention_set"] = interventionset
+
+        InterventionExSerializer(context=self.context,many=True).create(validated_data=poped_data['intervention_exs'])
 
         return interventionset
 

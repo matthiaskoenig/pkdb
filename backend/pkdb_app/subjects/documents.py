@@ -120,7 +120,7 @@ class GroupDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(GroupDocument, self).get_queryset().select_related(
-            'ex__groupset__study', 'parent').prefetch_related("characteristica")
+            'study', 'parent').prefetch_related("characteristica")
 
 
 @registry.register_document

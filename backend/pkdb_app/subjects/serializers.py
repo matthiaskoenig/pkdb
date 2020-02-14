@@ -235,6 +235,26 @@ class GroupExSerializer(ExSerializer):
         rep = super().to_representation(instance)
         return rep
 
+    def create(self, validated_data):
+        group_set = validated_data.pop("group_set")
+        group_ex, popped_data =  _create(validated_data=validated_data, model_manager=group_set.group_exs, create_multiple_keys=["comments", "descriptions"],pop=["characteristica_ex","groups","study_groups"])
+
+
+        for characteristica_ex_single in popped_data["characteristica_ex"]:
+            characteristica_ex_single["count"] = characteristica_ex_single.get(
+                "count", group_ex.count
+            )
+            group_ex.characteristica_ex.create(**characteristica_ex_single)
+
+        for group in popped_data["groups"]:
+            group["study_groups"] = popped_data["study_groups"]
+            group["study"] = self.context["study"]
+            dj_group = group_ex.groups.create(**group)
+            popped_data["study_groups"].add(dj_group.pk)
+
+        group_ex.save()
+        return group_ex
+
 
 class GroupSetSerializer(ExSerializer):
     descriptions = DescriptionSerializer(
@@ -262,12 +282,16 @@ class GroupSetSerializer(ExSerializer):
         groupset, poped_data = _create(model_manager=self.Meta.model.objects,
                                               validated_data=validated_data,
                                               create_multiple_keys=['descriptions', 'comments'],
-                                              pop=["study","group_exs"])
+                                              pop=["group_exs"])
 
         study_group_exs = []
         study_groups = set()
+
+        group_exs = poped_data["group_exs"]
+        for group_ex in group_exs:
+            group_ex["group_set"] = groupset
+
         for group_ex in poped_data["group_exs"]:
-            # todo: check if this is necessary
             if "parent_ex" in group_ex:
                 for study_group_ex in study_group_exs:
                     if study_group_ex.name == group_ex["parent_ex"]:
@@ -275,7 +299,7 @@ class GroupSetSerializer(ExSerializer):
             ###################################
             # create single group_ex
             group_ex["study_groups"] = study_groups
-            study_group_ex = groupset.group_exs.create(**group_ex)
+            study_group_ex = GroupExSerializer(context=self.context).create(validated_data=group_ex)
             study_group_exs.append(study_group_ex)
         groupset.save()
 
@@ -363,7 +387,7 @@ class IndividualSerializer(ExSerializer):
         if group:
             try:
                 group = Group.objects.get(
-                    Q(ex__groupset__study__sid=study_sid) & Q(name=group)
+                    Q(study__sid=study_sid) & Q(name=group)
                 ).pk
             except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
                 if err == ObjectDoesNotExist:
@@ -443,7 +467,7 @@ class IndividualExSerializer(ExSerializer):
         if group:
             try:
                 group = Group.objects.get(
-                    Q(ex__groupset__study__sid=study_sid) & Q(name=group)
+                    Q(study__sid=study_sid) & Q(name=group)
                 ).pk
             except ObjectDoesNotExist:
                 msg = f'group: {group} in study: {study_sid} does not exist'
@@ -503,6 +527,25 @@ class IndividualExSerializer(ExSerializer):
                     rep['group'] = instance.group_map
         return rep
 
+    def create(self, validated_data):
+        individual_set = validated_data.pop("individual_set")
+        individual_ex, poped_data = _create(model_manager=individual_set.individual_exs,
+                                              validated_data=validated_data,
+                                              create_multiple_keys=['descriptions', 'comments', 'characteristica_ex'],
+                                              pop=['individuals'])
+
+        individuals = poped_data["individuals"]
+        for individual in individuals:
+            individual["study"] = self.context["study"]
+        individuals = create_multiple(individual_ex, individuals, "individuals")
+
+        # add characteristica from parents to the all_characteristica_normed if each individual
+        for individual in individuals:
+            individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
+
+        individual_ex.save()
+        return individual_ex
+
 
 class IndividualSetSerializer(ExSerializer):
     individual_exs = IndividualExSerializer(many=True, read_only=False, required=False)
@@ -523,27 +566,17 @@ class IndividualSetSerializer(ExSerializer):
         return data
 
     def create(self, validated_data):
-        individual_exs = validated_data.pop("individual_exs", [])
-        descriptions = validated_data.pop("descriptions", [])
-        validated_data.pop("study")
-        comments = validated_data.pop("comments", [])
+        individualset, poped_data = _create(model_manager=self.Meta.model.objects,
+                                       validated_data=validated_data,
+                                       create_multiple_keys=['descriptions', 'comments'],
+                                       pop=["study", "individual_exs"])
 
+        individual_exs = poped_data['individual_exs']
+        for individual_ex in individual_exs:
+            individual_ex["individual_set"] = individualset
 
-        individualset = self.Meta.model.objects.create(validated_data)
+        IndividualExSerializer(context=self.context, many=True).create(validated_data=poped_data["individual_exs"])
 
-        create_multiple(individualset, descriptions, "descriptions")
-        create_multiple(individualset, comments, "comments")
-        create_multiple(individualset, individual_exs, "individual_exs")
-
-        #Comment = apps.get_model('comments', 'Comment')
-        #Description = apps.get_model('comments', 'Description')
-        #create_multiple_bulk(individualset, "individualset", descriptions, Description)
-        #create_multiple_bulk(individualset, "individualset", comments, Comment)
-        individualset.save()
-
-        # add characteristica from parents to the all_characteristica_normed if each individual
-        for individual in individualset.individuals:
-            individual.characteristica_all_normed.add(*individual._characteristica_all_normed)
         return individualset
 
 

@@ -1,9 +1,12 @@
 """
 Serializers for interventions.
 """
+import ast
+import json
 import warnings
 
 import numpy as np
+from django.apps import apps
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -12,6 +15,7 @@ from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELD
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
+from pkdb_app.outputs.pk_calculation import _calculate_outputs
 from .models import (
     Output,
     OutputSet,
@@ -29,7 +33,8 @@ from ..subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create
+from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
+    create_multiple_bulk
 
 TISSUE_FIELD = ["tissue"]
 TIME_FIELDS = ["time", "time_unit"]
@@ -42,8 +47,8 @@ OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 # Outputs
 # ----------------------------------
 
-
 class OutputSerializer(MeasurementTypeableSerializer):
+
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -74,7 +79,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
     def to_internal_value(self, data):
         data.pop("comments", None)
         data.pop("descriptions", None)
-
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
@@ -106,12 +110,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
         return super().validate(attrs)
 
-    def create(self, validated_data):
-        output = super().create(validated_data)
-        print(output)
-        return output
-
-
 
 class BaseOutputExSerializer(ExSerializer):
     def to_representation(self, instance):
@@ -135,8 +133,11 @@ class BaseOutputExSerializer(ExSerializer):
 
 class OutputExSerializer(BaseOutputExSerializer):
     group = serializers.PrimaryKeyRelatedField(
-        queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
-    )
+        queryset=Group.objects.all(),
+        read_only=False,
+        required=False,
+        allow_null=True,
+     )
     individual = serializers.PrimaryKeyRelatedField(
         queryset=Individual.objects.all(),
         read_only=False,
@@ -215,6 +216,17 @@ class OutputExSerializer(BaseOutputExSerializer):
     def validate_figure(self, value):
         self._validate_figure(value)
         return value
+
+    def create(self, validated_data):
+        output_ex, _ = _create(model_manager=self.Meta.model.objects,
+                               validated_data=validated_data,
+                               add_multiple_keys=['interventions'],
+                               create_multiple_keys=['comments', 'descriptions', 'outputs'])
+
+        outputs_normed = create_multiple_bulk_normalized(output_ex.outputs.all(), Output)
+        for output in outputs_normed:
+            output._interventions.add(*output.interventions.all())
+        return output_ex
 
 
 class TimecourseSerializer(BaseOutputExSerializer):
@@ -306,10 +318,16 @@ class TimecourseSerializer(BaseOutputExSerializer):
             raise serializers.ValidationError({"time": "no timepoints are allowed to be nan", "detail": time})
 
 
+
+
+
 class TimecourseExSerializer(BaseOutputExSerializer):
+
+
     group = serializers.PrimaryKeyRelatedField(
-        queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
+        queryset=Group.objects.all(), read_only=False, required=False, allow_null=True,
     )
+
     individual = serializers.PrimaryKeyRelatedField(
         queryset=Individual.objects.all(),
         read_only=False,
@@ -323,6 +341,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         required=False,
         allow_null=True,
     )
+
 
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
@@ -341,6 +360,8 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     timecourses = TimecourseSerializer(
         many=True, write_only=True, required=False, allow_null=True
     )
+
+
 
     class Meta:
         model = TimecourseEx
@@ -381,6 +402,48 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         self._validate_figure(value)
         return value
 
+    def create(self,validated_data):
+
+
+        timecourse_ex, poped_data = _create(model_manager=TimecourseEx.objects, validated_data=validated_data,
+                                   add_multiple_keys=['interventions'],
+                                   create_multiple_keys=['comments', 'descriptions'], pop=['timecourses'])
+
+        timecourses = poped_data["timecourses"]
+        for timecourse in timecourses:
+            timecourse["study"] = self.context["study"]
+        create_multiple(timecourse_ex, timecourses, 'timecourses')
+
+
+        Output = apps.get_model('outputs', 'Output')
+        Timecourse = apps.get_model('outputs', 'Timecourse')
+
+        timecourses_normed = create_multiple_bulk_normalized(timecourse_ex.timecourses.all(), Timecourse)
+        for timecourse in timecourses_normed:
+            timecourse._interventions.add(*timecourse.interventions.all())
+
+            # calculate pharmacokinetics data from normalized timecourses
+            outputs = _calculate_outputs(timecourse)
+
+            errors = []
+            for output in outputs:
+                try:
+                    output["measurement_type"].validate_complete(output)
+                except ValueError as err:
+                    errors.append(err)
+            if errors:
+                raise serializers.ValidationError({"calculated outputs":errors})
+
+            outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
+            outputs_normed = []
+            if outputs_dj:
+                outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
+                for output in outputs_normed:
+                    output._interventions.add(*output.interventions.all())
+
+        timecourse_ex.save()
+        return timecourse_ex
+
 
 class OutputSetSerializer(ExSerializer):
     """
@@ -410,26 +473,35 @@ class OutputSetSerializer(ExSerializer):
         return data
 
     def create(self, validated_data):
+        pop_keys = ["output_exs", "timecourse_exs"]
         outputset, poped_data = _create( model_manager=self.Meta.model.objects,
                                          validated_data=validated_data,
                                          create_multiple_keys=['descriptions','comments'],
-                                         pop=["study", "output_exs", "timecourse_exs"])
+                                         pop=["output_exs", "timecourse_exs"])
+
+        for k in pop_keys:
+
+            for external_data in poped_data[k]:
+                external_data["outputset"] = outputset
 
         with warnings.catch_warnings(record=True) as ws:
             # this warnings come from analysis.pharmacokinetic.py
-
+            outputs_exs = []
             for output_ex in poped_data["output_exs"]:
-                output_ex_instance, _ = _create(model_manager=outputset.output_exs, validated_data=output_ex, add_multiple_keys=['interventions'])
-                output_ex_instance.save()
+                output_ex_instance, _ = _create(model_serializer=OutputExSerializer(context=self.context), validated_data=output_ex, add_multiple_keys=['interventions'])
+                outputs_exs.append(output_ex_instance)
+            outputset.output_exs.add(*outputs_exs)
+            timecourse_exs = []
 
             for timecourse_ex in poped_data["timecourse_exs"]:
-                timecourse_ex_instance, _ = _create(model_manager=outputset.timecourse_exs, validated_data=timecourse_ex, add_multiple_keys=['interventions'])
-                timecourse_ex_instance.save()
+                timecourse_ex_instance, _ = _create(model_serializer=TimecourseExSerializer(context=self.context), validated_data=timecourse_ex, add_multiple_keys=['interventions'])
+                timecourse_exs.append(timecourse_ex_instance)
+
+            outputset.timecourse_exs.add(*timecourse_exs)
 
             outputset.save()
             if len(ws) > 0:
-                create_multiple(poped_data["study"], [{"text": w.message} for w in ws], 'warnings')
-
+                create_multiple(self.context["study"], [{"text": w.message} for w in ws], 'warnings')
         return outputset
 
 

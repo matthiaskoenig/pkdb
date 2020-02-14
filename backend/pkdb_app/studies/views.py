@@ -60,6 +60,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     lookup_field = "sid"
     permission_classes = (StudyPermission,)
 
+
     def get_queryset(self):
         queryset = super().get_queryset()
         group = user_group(self.request.user)
@@ -91,6 +92,8 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
+import timeit
+
 
 @csrf_exempt
 def update_index_study(request):
@@ -98,16 +101,24 @@ def update_index_study(request):
         data = JSONParser().parse(request)
         try:
             study = Study.objects.get(sid=data["sid"])
+
         except ObjectDoesNotExist:
             return JsonResponse({"success": "False", "reason": "Instance not in database"})
 
         related_elastic = related_elastic_dict(study)
         for doc, instances in related_elastic.items():
+            start_time = timeit.default_timer()
+            # code you want to evaluate
+
             try:
                 action = data.get('action', 'index')
                 doc().update(thing=instances, action=action)
             except helpers.BulkIndexError:
                 raise helpers.BulkIndexError
+
+            elapsed = timeit.default_timer() - start_time
+            print(doc)
+            print(elapsed)
 
         return JsonResponse({"success": "True"})
 
@@ -135,13 +146,15 @@ def related_elastic_dict(study):
         StudyDocument: study,
         GroupDocument: groups,
         IndividualDocument: individuals,
-        GroupCharacteristicaDocument: GroupCharacteristica.objects.filter(group__in=groups),
-        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.filter(individual__in=individuals),
-        TimecourseInterventionDocument: TimecourseIntervention.objects.filter(timecourse__in=timecourses),
-        OutputInterventionDocument: OutputIntervention.objects.filter(output__in=outputs),
+        GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(group__in=groups),
+        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related( 'individual', 'characteristica').filter(individual__in=individuals),
+        TimecourseInterventionDocument: TimecourseIntervention.objects.select_related(
+        'intervention', 'timecourse').filter(timecourse__in=timecourses),
+        OutputInterventionDocument: OutputIntervention.objects.select_related(
+        'intervention', 'output').filter(output__in=outputs),
         InterventionDocument: interventions,
-        OutputDocument: study.outputs,
-        TimecourseDocument: study.timecourses,
+        OutputDocument: study.outputs.all(),
+        TimecourseDocument: study.timecourses.all(),
 
     }
     if study.reference:

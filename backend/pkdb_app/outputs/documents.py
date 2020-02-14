@@ -66,6 +66,11 @@ class OutputDocument(Document):
         # Don't perform an index refresh after every update
         auto_refresh = False
 
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(OutputDocument, self).get_queryset().select_related(
+            'study', 'individual', 'group',).prefetch_related('interventions')
+
     class Index:
         name = 'outputs'
         settings = elastic_settings

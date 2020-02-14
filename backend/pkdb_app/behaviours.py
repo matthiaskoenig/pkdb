@@ -113,6 +113,7 @@ class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
 
 
 class MeasurementTypeable(ValueableNotBlank):
+
     measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.PROTECT)
     substance = models.ForeignKey('info_nodes.Substance', null=True, on_delete=models.PROTECT)
     choice = models.ForeignKey('info_nodes.Choice', null=True, on_delete=models.PROTECT)
