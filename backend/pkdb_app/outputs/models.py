@@ -16,7 +16,6 @@ from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.subjects.models import Group, DataFile, Individual
 from .managers import (
-    OutputExManager,
     OutputManager
 )
 from ..behaviours import (
@@ -110,7 +109,6 @@ class OutputEx(Externable,
 
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
-    objects = OutputExManager()
 
 class Outputable(Normalizable, models.Model):
 

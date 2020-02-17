@@ -218,10 +218,19 @@ class OutputExSerializer(BaseOutputExSerializer):
         return value
 
     def create(self, validated_data):
-        output_ex, _ = _create(model_manager=self.Meta.model.objects,
+        output_ex, poped_data = _create(model_manager=self.Meta.model.objects,
                                validated_data=validated_data,
                                add_multiple_keys=['interventions'],
-                               create_multiple_keys=['comments', 'descriptions', 'outputs'])
+                               create_multiple_keys=['comments', 'descriptions'],
+                               pop=['outputs'])
+
+        outputs = poped_data["outputs"]
+        for output in outputs:
+            output["study"] = self.context["study"]
+
+        #create_multiple_bulk(output_ex, 'ex', outputs, Output)
+        create_multiple(output_ex, outputs, 'outputs')
+
 
         outputs_normed = create_multiple_bulk_normalized(output_ex.outputs.all(), Output)
         for output in outputs_normed:
