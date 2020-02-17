@@ -98,6 +98,7 @@ import timeit
 @csrf_exempt
 def update_index_study(request):
     if request.method == 'POST':
+
         data = JSONParser().parse(request)
         try:
             study = Study.objects.get(sid=data["sid"])
@@ -107,7 +108,6 @@ def update_index_study(request):
 
         related_elastic = related_elastic_dict(study)
         for doc, instances in related_elastic.items():
-            start_time = timeit.default_timer()
             # code you want to evaluate
 
             try:
@@ -116,9 +116,7 @@ def update_index_study(request):
             except helpers.BulkIndexError:
                 raise helpers.BulkIndexError
 
-            elapsed = timeit.default_timer() - start_time
-            print(doc)
-            print(elapsed)
+
 
         return JsonResponse({"success": "True"})
 
@@ -140,21 +138,54 @@ def related_elastic_dict(study):
     interventions = study.interventions.all()
     groups = study.groups.all()
     individuals = study.individuals.all()
-    outputs = study.outputs.all()
-    timecourses = study.timecourses.all()
+
+
+    related_outputs_intervention = [
+        'intervention',
+        'output',
+        'output__individual',
+        'output__group',
+        'output__measurement_type__info_node',
+        'output__tissue__info_node',
+        'output__substance__info_node',
+    ]
+
+    related_timecourses_intervention = [
+        'intervention',
+        'timecourse',
+        'timecourse__individual',
+        'timecourse__group',
+        'timecourse__measurement_type__info_node',
+        'timecourse__tissue__info_node',
+        'timecourse__substance__info_node',
+    ]
+    related_outputs = [
+        'individual',
+        'group',
+        'measurement_type__info_node',
+        'tissue__info_node',
+        'substance__info_node',
+    ]
+
+    related_timecourses = [
+        'individual',
+        'group',
+        'measurement_type__info_node',
+        'tissue__info_node',
+        'substance__info_node',
+    ]
+
     docs_dict = {
         StudyDocument: study,
         GroupDocument: groups,
         IndividualDocument: individuals,
         GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(group__in=groups),
-        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related( 'individual', 'characteristica').filter(individual__in=individuals),
-        TimecourseInterventionDocument: TimecourseIntervention.objects.select_related(
-        'intervention', 'timecourse').filter(timecourse__in=timecourses),
-        OutputInterventionDocument: OutputIntervention.objects.select_related(
-        'intervention', 'output').filter(output__in=outputs),
+        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual', 'characteristica').filter(individual__in=individuals),
         InterventionDocument: interventions,
-        OutputDocument: study.outputs.all(),
-        TimecourseDocument: study.timecourses.all(),
+        OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('_interventions'),
+        TimecourseDocument: study.timecourses.select_related(*related_timecourses).prefetch_related('_interventions'),
+        TimecourseInterventionDocument: TimecourseIntervention.objects.select_related(*related_timecourses_intervention).filter(intervention__in=interventions),
+        OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(intervention__in=interventions),
 
     }
     if study.reference:

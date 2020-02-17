@@ -3,6 +3,7 @@ Studies serializers.
 """
 import timeit
 
+from django.db import connection
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -340,11 +341,9 @@ class StudySerializer(SidSerializer):
         :return:
         """
 
-
         for name, serializer in self.related_serializer().items():
 
             if related[name] is not None:
-
                 if getattr(study, name):
                     getattr(study, name).delete()
 

@@ -1,8 +1,7 @@
 """
 Serializers for interventions.
 """
-import ast
-import json
+
 import warnings
 
 import numpy as np
@@ -132,6 +131,7 @@ class BaseOutputExSerializer(ExSerializer):
 
 
 class OutputExSerializer(BaseOutputExSerializer):
+
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(),
         read_only=False,
@@ -151,6 +151,7 @@ class OutputExSerializer(BaseOutputExSerializer):
         required=False,
         allow_null=True,
     )
+
 
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
@@ -225,14 +226,16 @@ class OutputExSerializer(BaseOutputExSerializer):
                                pop=['outputs'])
 
         outputs = poped_data["outputs"]
+        outputs_interventions = []
         for output in outputs:
             output["study"] = self.context["study"]
+            outputs_interventions.append(output.pop('interventions', []))
 
-        #create_multiple_bulk(output_ex, 'ex', outputs, Output)
-        create_multiple(output_ex, outputs, 'outputs')
+        outputs_dj = create_multiple_bulk(output_ex, 'ex', outputs, Output)
+        for output, intervetions  in zip(outputs_dj, outputs_interventions):
+            output._interventions.add(*intervetions)
 
-
-        outputs_normed = create_multiple_bulk_normalized(output_ex.outputs.all(), Output)
+        outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
         for output in outputs_normed:
             output._interventions.add(*output.interventions.all())
         return output_ex
@@ -426,6 +429,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
 
         Output = apps.get_model('outputs', 'Output')
         Timecourse = apps.get_model('outputs', 'Timecourse')
+        #create_multiple_bulk(timecourse_ex, ex',timecourses, Timecourse)
 
         timecourses_normed = create_multiple_bulk_normalized(timecourse_ex.timecourses.all(), Timecourse)
         for timecourse in timecourses_normed:
@@ -444,7 +448,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
                 raise serializers.ValidationError({"calculated outputs":errors})
 
             outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
-            outputs_normed = []
             if outputs_dj:
                 outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
                 for output in outputs_normed:
