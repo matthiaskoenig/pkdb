@@ -2,6 +2,11 @@ from django.apps import apps
 from pkdb_app.analysis.pharmacokinetic import f_pk
 import numpy as np
 def _calculate_outputs(timecourse):
+    """
+
+    :param timecourse: models.Timecourse
+    :return:
+    """
     outputs = []
     MeasurementType = apps.get_model('info_nodes.MeasurementType')
 

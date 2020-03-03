@@ -152,7 +152,6 @@ class OutputExSerializer(BaseOutputExSerializer):
         allow_null=True,
     )
 
-
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
