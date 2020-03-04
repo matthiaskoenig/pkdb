@@ -25,7 +25,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     if tc_type == "concentration" and tc.normed:
         # pharmacokinetics are only calculated on normalized concentrations
 
-        variables = tc.timecourse_to_pkdict()
+        variables = timecourse_to_pkdict(tc)
         c_type = variables.pop("c_type", None)
         _ = variables.pop("bodyweight_type", None)
 
