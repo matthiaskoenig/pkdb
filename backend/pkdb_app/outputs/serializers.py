@@ -14,7 +14,7 @@ from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELD
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
-from pkdb_app.outputs.pk_calculation import _calculate_outputs
+from pkdb_app.outputs.pk_calculation import outputs_from_timecourse
 from .models import (
     Output,
     OutputSet,
@@ -319,21 +319,14 @@ class TimecourseSerializer(BaseOutputExSerializer):
         except ValueError as err:
             raise serializers.ValidationError(err)
 
-
-
         return super().validate(attrs)
-
 
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
             raise serializers.ValidationError({"time": "no timepoints are allowed to be nan", "detail": time})
 
 
-
-
-
 class TimecourseExSerializer(BaseOutputExSerializer):
-
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True,
@@ -353,7 +346,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         allow_null=True,
     )
 
-
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -366,13 +358,10 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-
     # internal data
     timecourses = TimecourseSerializer(
         many=True, write_only=True, required=False, allow_null=True
     )
-
-
 
     class Meta:
         model = TimecourseEx
@@ -413,9 +402,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         self._validate_figure(value)
         return value
 
-    def create(self,validated_data):
-
-
+    def create(self, validated_data):
         timecourse_ex, poped_data = _create(model_manager=TimecourseEx.objects, validated_data=validated_data,
                                    add_multiple_keys=['interventions'],
                                    create_multiple_keys=['comments', 'descriptions'], pop=['timecourses'])
@@ -435,7 +422,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
             timecourse._interventions.add(*timecourse.interventions.all())
 
             # calculate pharmacokinetics data from normalized timecourses
-            outputs = _calculate_outputs(timecourse)
+            outputs = outputs_from_timecourse(timecourse)
 
             errors = []
             for output in outputs:
