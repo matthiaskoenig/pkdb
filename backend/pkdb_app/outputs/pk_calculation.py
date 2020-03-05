@@ -70,7 +70,7 @@ def timecourse_to_pkdict(tc: Timecourse) -> Dict:
     :return: dict
     """
     pk_dict = {}
-    
+
     # substance
     pk_dict["substance"] = tc.substance.info_node.name
 
