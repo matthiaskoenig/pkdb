@@ -103,5 +103,6 @@ def timecourse_to_pkdict(tc: Timecourse) -> Dict:
                 pk_dict["dose"] = Q_(dosing.value, dosing.unit)
                 if dosing.time:
                     pk_dict["intervention_time"] = Q_(dosing.time, dosing.time_unit)
-
+    else:
+        pk_dict["dose"] = None
     return pk_dict
