@@ -25,9 +25,9 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     # pharmacokinetics are only calculated on normalized concentrations
     if tc_type == "concentration" and tc.normed:
         variables = timecourse_to_pkdict(tc)
-        c_type = variables.pop("c_type", None)
+        ctype = variables.pop("ctype", None)
 
-        pkinf = pharmacokinetics.PKInference(**variables)
+        pkinf = pharmacokinetics.TimecoursePK(**variables)
         pk = pkinf.pk
 
         key_mapping = {
@@ -39,15 +39,16 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
             "thalf": MeasurementType.objects.get(info_node__name="thalf"),
             "tmax": MeasurementType.objects.get(info_node__name="tmax"),
             "vd": MeasurementType.objects.get(info_node__name="vd"),
-            "vdss": MeasurementType.objects.get(info_node__name="vdss"),
+            "vdss": MeasurementType.objects.get(info_node__name="vd_ss"),
         }
 
         for key in key_mapping.keys():
             pk_par = getattr(pk, key)
-            if not np.isnan(pk[key]):
+            # check that exists
+            if pk_par and not np.isnan(pk_par.magnitude):
                 output_dict = {}
-                output_dict[c_type] = pk_par.magnitude
-                output_dict["unit"] = pk_par.units
+                output_dict[ctype] = pk_par.magnitude
+                output_dict["unit"] = str(pk_par.units)
                 output_dict["measurement_type"] = key_mapping[key]
                 output_dict["calculated"] = True
                 output_dict["tissue"] = tc.tissue
@@ -57,7 +58,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
                 output_dict["study"] = tc.study
                 if output_dict["measurement_type"].info_node.name == "auc_end":
                     output_dict["time"] = max(tc.time)
-                    output_dict["time_unit"] = tc.time_unit
+                    output_dict["time_unit"] = str(tc.time_unit)
 
                 outputs.append(output_dict)
 
@@ -70,42 +71,37 @@ def timecourse_to_pkdict(tc: Timecourse) -> Dict:
     :return: dict
     """
     pk_dict = {}
+    Q_ = ureg.Quantity
+    pk_dict['ureg'] = ureg  # for unit conversions
 
     # substance
     pk_dict["substance"] = tc.substance.info_node.name
-
     # time
-    pk_dict["t"] = pd.Series(tc.time)
-    pk_dict["t_unit"] = tc.time_unit
+    pk_dict["time"] = Q_(pd.Series(tc.time).values, tc.time_unit)
 
     # concentration
-    pk_dict["c_unit"] = tc.unit
-
+    values = None
+    ctype = None
     if tc.mean:
-        pk_dict["c"] = pd.Series(tc.mean)
-        pk_dict["c_type"] = "mean"
+        values = pd.Series(tc.mean).values
+        ctype = "mean"
     elif tc.median:
-        pk_dict["c"] = pd.Series(tc.median)
-        pk_dict["c_type"] = "median"
+        values = pd.Series(tc.median).values
+        ctype = "median"
     elif tc.value:
-        pk_dict["c"] = pd.Series(tc.value)
-        pk_dict["c_type"] = "value"
+        values = pd.Series(tc.value).values
+        ctype = "value"
+    if ctype is not None:
+        pk_dict["concentration"] = Q_(values, tc.unit)
+        pk_dict['ctype'] = ctype
 
     # dosing
     dosing = tc.get_dosing()
     if dosing:
         if dosing.substance == tc.substance:
             if MeasurementType.objects.get(info_node__name="restricted dosing").is_valid_unit(dosing.unit):
-                p_unit_dosing = tc.measurement_type.p_unit(dosing.unit)
-                p_unit_concentration = tc.measurement_type.p_unit(pk_dict["c_unit"])
-                vd_unit = p_unit_dosing / p_unit_concentration
-                pk_dict["vd_unit"] = str(vd_unit)
-                pk_dict["dose"] = dosing.value
+                pk_dict["dose"] = Q_(dosing.value, dosing.unit)
                 if dosing.time:
-                    # convert dosing time in units of the timecourse
-                    pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(
-                        tc.time_unit).magnitude
-
-                pk_dict["dose_unit"] = dosing.unit
+                    pk_dict["intervention_time"] = Q_(dosing.time, dosing.time_unit)
 
     return pk_dict
