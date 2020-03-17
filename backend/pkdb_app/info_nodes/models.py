@@ -175,7 +175,9 @@ class MeasurementType(AbstractInfoNode):
     @staticmethod
     def p_unit(unit):
         try:
-            return ureg(unit)
+            p_unit = ureg(unit)
+            p_unit.u
+            return p_unit
         except (UndefinedUnitError, AttributeError):
             if unit == "%":
                 raise ValueError(f"unit: [{unit}] has to written as 'percent'")
