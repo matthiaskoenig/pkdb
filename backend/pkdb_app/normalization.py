@@ -3,7 +3,6 @@
 # cv is coeficient of variance. sd/mean
 import numpy as np
 
-
 def get_sd(se, count, cv, mean):
     sd = None
     is_se = sd is not None
