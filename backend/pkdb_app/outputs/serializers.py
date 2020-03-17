@@ -3,6 +3,7 @@ Serializers for interventions.
 """
 
 import warnings
+import traceback
 
 import numpy as np
 from django.apps import apps
@@ -424,7 +425,13 @@ class TimecourseExSerializer(BaseOutputExSerializer):
             timecourse._interventions.add(*timecourse.interventions.all())
 
             # calculate pharmacokinetics outputs
-            outputs = pkoutputs_from_timecourse(timecourse)
+            outputs = []
+            try:
+                outputs = pkoutputs_from_timecourse(timecourse)
+            except Exception as e:
+                raise serializers.ValidationError(
+                    {"pharmacokinetics exception": traceback.format_exc()}
+                )
 
             errors = []
             for output in outputs:

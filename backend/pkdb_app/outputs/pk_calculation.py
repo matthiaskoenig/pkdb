@@ -2,6 +2,7 @@
 Calculate pharmacokinetics
 """
 from typing import List, Dict
+import warnings
 import numpy as np
 import pandas as pd
 from django.apps import apps
@@ -24,7 +25,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
 
     # pharmacokinetics are only calculated on normalized concentrations
     if tc_type == "concentration" and tc.normed:
-        variables = timecourse_to_pkdict(tc)
+        variables = _timecourse_to_pkdict(tc)
         ctype = variables.pop("ctype", None)
 
         pkinf = pharmacokinetics.TimecoursePK(**variables)
@@ -65,7 +66,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     return outputs
 
 
-def timecourse_to_pkdict(tc: Timecourse) -> Dict:
+def _timecourse_to_pkdict(tc: Timecourse) -> Dict:
     """Create dictionary for pk calculation from timecourse.
 
     :return: dict
@@ -102,8 +103,11 @@ def timecourse_to_pkdict(tc: Timecourse) -> Dict:
     if dosing:
         if dosing.substance == tc.substance:
             if MeasurementType.objects.get(info_node__name="restricted dosing").is_valid_unit(dosing.unit):
-                pk_dict["dose"] = Q_(dosing.value, dosing.unit)
-                if dosing.time:
+                if dosing.value is not None:
+                    pk_dict["dose"] = Q_(dosing.value, dosing.unit)
+                else:
+                    warnings.warn(f"restricted dosing requires value: {dosing}")
+                if dosing.time is not None:
                     pk_dict["intervention_time"] = Q_(dosing.time, dosing.time_unit)
 
     return pk_dict
