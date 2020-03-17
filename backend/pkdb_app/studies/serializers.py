@@ -1,8 +1,6 @@
 """
 Studies serializers.
 """
-import timeit
-
 from django.db import connection
 from rest_framework import serializers
 
@@ -26,9 +24,6 @@ from ..utils import update_or_create_multiple, create_multiple, list_duplicates,
     _validate_not_allowed_key
 
 
-# ----------------------------------
-# Study / Reference
-# ----------------------------------
 class AuthorSerializer(WrongKeyValidationSerializer):
     id = serializers.ReadOnlyField()
 
@@ -63,10 +58,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         )
 
     def create(self, validated_data):
-        # return super().create(validated_data)
-
         authors_data = validated_data.pop("authors", [])
-
         reference = Reference.objects.create(**validated_data)
         update_or_create_multiple(reference, authors_data, "authors")
         reference.save()
@@ -105,9 +97,7 @@ class CuratorRatingSerializer(serializers.ModelSerializer):
 
 
 class StudySerializer(SidSerializer):
-    """ Study Serializer.
-    """
-
+    """ Study Serializer."""
     reference = utils.SlugRelatedField(slug_field="sid",
                                        queryset=Reference.objects.all(), required=True, allow_null=False
                                        )
@@ -121,21 +111,18 @@ class StudySerializer(SidSerializer):
         required=False,
         allow_null=True,
     )
-
     creator = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
         required=False,
         allow_null=True,
     )
-
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-
     interventionset = InterventionSetSerializer(
         read_only=False, required=False, allow_null=True
     )
@@ -187,15 +174,13 @@ class StudySerializer(SidSerializer):
                     if len(curator_and_rating) != 2:
                         raise serializers.ValidationError(
                             {
-                                "curators": " Each curator in the list of curator can be added either via the curator "
+                                "curators": "Each curator in the list of curator can be added either via the curator "
                                             "username or as a list with first position beeing the curator username "
-                                            " and the second posion the rating between (0-5)",
+                                            "and the second posion the rating between (0-5).",
                                 "details": curator_and_rating,
-
                             })
                     rating_dict["user"] = curator_and_rating[0]
                     rating_dict["rating"] = curator_and_rating[1]
-
                 else:
                     rating_dict["user"] = curator_and_rating
                     rating_dict["rating"] = 0
@@ -204,23 +189,18 @@ class StudySerializer(SidSerializer):
             data["curators"] = ratings
 
         # check for duplicates
-        #######################################
         for item in ["collaborators", "curators", "substances"]:
-
             if item in ["curators"]:
                 related_unique_field = "user"
                 unique_values = [instance.get(related_unique_field) for instance in data.get(item, [])]
-
             else:
                 unique_values = data.get(item, [])
-
             duplicates = list_duplicates(unique_values)
             if duplicates:
                 raise serializers.ValidationError(
                     {item: f"Duplicated {item} <{duplicates}> are not allowed."})
 
-        #######################################################################
-
+        # handle reference
         if data.get("reference"):
             reference = self.get_or_val_error(model=Reference, sid=data["reference"])
             if hasattr(reference, "study"):
@@ -404,15 +384,14 @@ class StudySerializer(SidSerializer):
         return super().validate(attrs)
 
 
-###############################################################################################
+# --------------------
 # Elastic Serializer
-###############################################################################################
+# --------------------
 class AuthorElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
         read_only_fields = fields
-
 
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
@@ -562,4 +541,3 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
         else:
             return []
-

@@ -20,7 +20,7 @@ from .managers import (
 )
 from ..behaviours import (
     Externable, Accessible)
-from ..normalization import get_cv, get_se, get_sd
+from ..error_measures import calculate_cv, calculate_se, calculate_sd
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 TIME_NORM_UNIT = "hr"
@@ -196,15 +196,15 @@ class Output(AbstractOutput, Outputable, Accessible):
     def add_error_measures(self):
         if self.group:
             if not self.sd:
-                self.sd = get_sd(
+                self.sd = calculate_sd(
                     se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
                 )
             if not self.se:
-                self.se = get_se(
+                self.se = calculate_se(
                     sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
                 )
             if not self.cv:
-                self.cv = get_cv(
+                self.cv = calculate_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
 
@@ -299,19 +299,19 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
         """ Calculates additional error measures."""
         if self.group:
             if not self.sd:
-                sd = get_sd(
+                sd = calculate_sd(
                     se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
                 )
                 if isinstance(sd, np.ndarray):
                     self.sd = list(sd)
             if not self.se:
-                se = get_se(
+                se = calculate_se(
                     sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
                 )
                 if isinstance(se, np.ndarray):
                     self.se = list(se)
             if not self.cv:
-                cv = get_cv(
+                cv = calculate_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
                 if isinstance(cv, np.ndarray):

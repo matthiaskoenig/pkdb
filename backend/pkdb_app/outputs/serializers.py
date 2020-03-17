@@ -485,41 +485,54 @@ class OutputSetSerializer(ExSerializer):
 
     def create(self, validated_data):
         pop_keys = ["output_exs", "timecourse_exs"]
-        outputset, poped_data = _create( model_manager=self.Meta.model.objects,
-                                         validated_data=validated_data,
-                                         create_multiple_keys=['descriptions','comments'],
-                                         pop=["output_exs", "timecourse_exs"])
+        outputset, poped_data = _create(
+            model_manager=self.Meta.model.objects,
+            validated_data=validated_data,
+            create_multiple_keys=['descriptions', 'comments'],
+            pop=["output_exs", "timecourse_exs"]
+        )
 
         for k in pop_keys:
-
             for external_data in poped_data[k]:
                 external_data["outputset"] = outputset
 
         with warnings.catch_warnings(record=True) as ws:
-            # this warnings come from analysis.pharmacokinetic.py
+            # warnings come from pharmacokinetics and error_measures
             outputs_exs = []
             for output_ex in poped_data["output_exs"]:
-                output_ex_instance, _ = _create(model_serializer=OutputExSerializer(context=self.context), validated_data=output_ex, add_multiple_keys=['interventions'])
+                output_ex_instance, _ = _create(
+                    model_serializer=OutputExSerializer(context=self.context),
+                    validated_data=output_ex,
+                    add_multiple_keys=['interventions']
+                )
                 outputs_exs.append(output_ex_instance)
             outputset.output_exs.add(*outputs_exs)
             timecourse_exs = []
 
             for timecourse_ex in poped_data["timecourse_exs"]:
-                timecourse_ex_instance, _ = _create(model_serializer=TimecourseExSerializer(context=self.context), validated_data=timecourse_ex, add_multiple_keys=['interventions'])
+                timecourse_ex_instance, _ = _create(
+                    model_serializer=TimecourseExSerializer(context=self.context),
+                    validated_data=timecourse_ex,
+                    add_multiple_keys=['interventions']
+                )
                 timecourse_exs.append(timecourse_ex_instance)
 
             outputset.timecourse_exs.add(*timecourse_exs)
-
             outputset.save()
+
+            # create warning messages
             if len(ws) > 0:
-                create_multiple(self.context["study"], [{"text": w.message} for w in ws], 'warnings')
+
+                create_multiple(self.context["study"], [
+                    {
+                        "text": f"{w.filename}: '{w.message}'"
+                    } for w in ws], 'warnings')
         return outputset
 
 
-###############################################################################################
+# -----------------------
 # Elastic Serializer
-###############################################################################################
-
+# -----------------------
 class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
