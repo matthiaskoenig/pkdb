@@ -2,9 +2,12 @@
 Serializers for interventions.
 """
 
+
 import warnings
+import traceback
 
 import numpy as np
+
 from django.apps import apps
 from rest_framework import serializers
 
@@ -14,7 +17,7 @@ from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELD
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
-from pkdb_app.outputs.pk_calculation import _calculate_outputs
+from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
 from .models import (
     Output,
     OutputSet,
@@ -305,7 +308,6 @@ class TimecourseSerializer(BaseOutputExSerializer):
 
         try:
             # perform via dedicated function on categorials
-
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
             if 'substance' in attrs:
                     if attrs['substance'] is not None:
@@ -319,21 +321,14 @@ class TimecourseSerializer(BaseOutputExSerializer):
         except ValueError as err:
             raise serializers.ValidationError(err)
 
-
-
         return super().validate(attrs)
-
 
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
             raise serializers.ValidationError({"time": "no timepoints are allowed to be nan", "detail": time})
 
 
-
-
-
 class TimecourseExSerializer(BaseOutputExSerializer):
-
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True,
@@ -353,7 +348,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         allow_null=True,
     )
 
-
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -366,13 +360,10 @@ class TimecourseExSerializer(BaseOutputExSerializer):
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-
     # internal data
     timecourses = TimecourseSerializer(
         many=True, write_only=True, required=False, allow_null=True
     )
-
-
 
     class Meta:
         model = TimecourseEx
@@ -413,29 +404,36 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         self._validate_figure(value)
         return value
 
-    def create(self,validated_data):
-
-
-        timecourse_ex, poped_data = _create(model_manager=TimecourseEx.objects, validated_data=validated_data,
-                                   add_multiple_keys=['interventions'],
-                                   create_multiple_keys=['comments', 'descriptions'], pop=['timecourses'])
+    def create(self, validated_data):
+        timecourse_ex, poped_data = _create(
+            model_manager=TimecourseEx.objects,
+            validated_data=validated_data,
+            add_multiple_keys=['interventions'],
+            create_multiple_keys=['comments', 'descriptions'],
+            pop=['timecourses']
+        )
 
         timecourses = poped_data["timecourses"]
         for timecourse in timecourses:
             timecourse["study"] = self.context["study"]
         create_multiple(timecourse_ex, timecourses, 'timecourses')
 
-
+        # FIXME: why these 2 lines, seems unnecessary
         Output = apps.get_model('outputs', 'Output')
         Timecourse = apps.get_model('outputs', 'Timecourse')
-        #create_multiple_bulk(timecourse_ex, ex',timecourses, Timecourse)
 
         timecourses_normed = create_multiple_bulk_normalized(timecourse_ex.timecourses.all(), Timecourse)
         for timecourse in timecourses_normed:
             timecourse._interventions.add(*timecourse.interventions.all())
 
-            # calculate pharmacokinetics data from normalized timecourses
-            outputs = _calculate_outputs(timecourse)
+            # calculate pharmacokinetics outputs
+            outputs = []
+            try:
+                outputs = pkoutputs_from_timecourse(timecourse)
+            except Exception as e:
+                raise serializers.ValidationError(
+                    {"pharmacokinetics exception": traceback.format_exc()}
+                )
 
             errors = []
             for output in outputs:
@@ -444,7 +442,9 @@ class TimecourseExSerializer(BaseOutputExSerializer):
                 except ValueError as err:
                     errors.append(err)
             if errors:
-                raise serializers.ValidationError({"calculated outputs":errors})
+                raise serializers.ValidationError(
+                    {"calculated outputs": errors}
+                )
 
             outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
             if outputs_dj:

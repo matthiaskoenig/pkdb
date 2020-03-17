@@ -174,8 +174,6 @@ class StudySerializer(SidSerializer):
         write_only_fields = ('curators', 'collaborators')
 
     def to_internal_value(self, data):
-
-
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
@@ -224,7 +222,6 @@ class StudySerializer(SidSerializer):
         #######################################################################
 
         if data.get("reference"):
-
             reference = self.get_or_val_error(model=Reference, sid=data["reference"])
             if hasattr(reference, "study"):
                 if str(reference.study.sid) != str(data.get("sid")):
@@ -450,13 +447,11 @@ class ReferenceElasticSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-
 class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
         fields = ["pk", "sid"]  # , 'url']
         read_only_fields = fields
-
 
 
 class StudyElasticStatisticsSerializer(serializers.Serializer):
@@ -465,7 +460,6 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
     access = serializers.CharField(read_only=True)
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
     creator = UserElasticSerializer(read_only=True)
-
 
     class Meta:
         model = Study
@@ -490,7 +484,6 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
         ]
 
         read_only_fields = fields
-
 
 
 class StudyElasticSerializer(serializers.ModelSerializer):

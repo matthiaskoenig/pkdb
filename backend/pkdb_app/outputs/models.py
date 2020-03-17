@@ -389,7 +389,7 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
     def null_time(self):
         return self.null_attr('time')
 
-    ###############################################################################
+
     @property
     def related_subject(self):
         if self.group:
@@ -398,97 +398,19 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
             return self.individual
 
     def get_bodyweight(self):
-        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(
+        weight_measurement_type = self.related_subject.characteristica_all_normed.filter(
             measurement_type__info_node__name="weight")
-        return weight_measurememnt_type
+        return weight_measurement_type
 
     def get_dosing(self):
-
         try:
-            dosing_measurement_type = self.interventions.get(normed=True, measurement_type__info_node__name="dosing")
+            dosing_measurement_type = self.interventions.get(
+                normed=True, measurement_type__info_node__name="dosing"
+            )
             return dosing_measurement_type
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
-
-    def get_pharmacokinetic_variables(self):
-        """Get data for pharmacokinetics calculation
-
-        :return: dict of data for calculation of pharmacokinetics
-        """
-        # TODO: This should be refactored in the pharmacokinetics module
-        pk_dict = {}
-
-        # substance
-        pk_dict["compound"] = self.substance.info_node.name
-
-        # bodyweight
-        bodyweight = self.get_bodyweight().first()
-
-        # time
-        pk_dict["t"] = pd.Series(self.time)
-        pk_dict["t_unit"] = self.time_unit
-
-        # concentration
-        # FIXME: the timecourse data must be filtered based on the dosing times
-        #   (or alternatively this should be handled in the pk calculation)
-        pk_dict["c_unit"] = self.unit
-
-        if self.mean:
-            pk_dict["c"] = pd.Series(self.mean)
-            pk_dict["c_type"] = "mean"
-
-        elif self.median:
-            pk_dict["c"] = pd.Series(self.median)
-            pk_dict["c_type"] = "median"
-
-        elif self.value:
-            pk_dict["c"] = pd.Series(self.value)
-            pk_dict["c_type"] = "value"
-
-        # dosing
-        dosing = self.get_dosing()
-
-        restricted_dosing_units = [
-            'g',
-            'g/kg',
-            'mol',
-            'mol/kg',
-        ]
-        MeasurementType()
-
-        if dosing:
-            if dosing.substance == self.substance:
-                if MeasurementType.objects.get(info_node__name="restricted dosing").is_valid_unit(dosing.unit):
-                    p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
-                    p_unit_concentration = self.measurement_type.p_unit(pk_dict["c_unit"])
-                    vd_unit = p_unit_dosing / p_unit_concentration
-                    pk_dict["vd_unit"] = str(vd_unit)
-                    pk_dict["dose"] = dosing.value
-                    if dosing.time:
-                        pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(
-                            self.time_unit).magnitude
-
-                    pk_dict["dose_unit"] = dosing.unit
-
-        # bodyweight dependent values
-        if bodyweight:
-            pk_dict["bodyweight_unit"] = bodyweight.unit
-
-            if bodyweight.value:
-                pk_dict["bodyweight"] = bodyweight.value
-                pk_dict["bodyweight_type"] = "value"
-
-            elif bodyweight.mean:
-                pk_dict["bodyweight"] = bodyweight.mean
-                pk_dict["bodyweight_type"] = "mean"
-
-
-            elif bodyweight.median:
-                pk_dict["bodyweight"] = bodyweight.median
-                pk_dict["bodyweight_type"] = "median"
-
-        return pk_dict
 
 
 class OutputIntervention(Accessible, models.Model):
