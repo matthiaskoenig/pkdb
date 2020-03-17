@@ -1,9 +1,7 @@
 """
 Studies serializers.
 """
-import timeit
 
-from django.db import connection
 from rest_framework import serializers
 
 from pkdb_app import utils
