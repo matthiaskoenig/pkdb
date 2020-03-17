@@ -21,9 +21,14 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     :return:
     """
     outputs = []
-    tc_type = tc.measurement_type.info_node.name
+
+    dosing = tc.get_dosing()
+    if not dosing or dosing.application != "single dose":
+        # pharmacokinetics are only calculated for single dose experiments
+        return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
+    tc_type = tc.measurement_type.info_node.name
     if tc_type == "concentration" and tc.normed:
         variables = _timecourse_to_pkdict(tc)
         ctype = variables.pop("ctype", None)
@@ -102,6 +107,9 @@ def _timecourse_to_pkdict(tc: Timecourse) -> Dict:
     dosing = tc.get_dosing()
     if dosing:
         if dosing.substance == tc.substance:
+            # pharmacokinetics is only calculated for single dose experiments
+            # where the applied substance is the measured substance!
+
             if MeasurementType.objects.get(info_node__name="restricted dosing").is_valid_unit(dosing.unit):
                 if dosing.value is not None:
                     pk_dict["dose"] = Q_(dosing.value, dosing.unit)
