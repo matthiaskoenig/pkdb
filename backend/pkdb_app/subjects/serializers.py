@@ -158,7 +158,7 @@ class GroupSerializer(ExSerializer):
         '''
         if attrs.get('name') == 'all':
             characteristica = attrs.get('characteristica', [])
-            for measurement_type in ['species', 'healthy']:
+            for measurement_type in ['species', 'healthy', 'sex']:
                 self._validate_required_measurement_type(measurement_type, characteristica)
 
         return super().validate(attrs)
