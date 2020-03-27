@@ -418,10 +418,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
             timecourse["study"] = self.context["study"]
         create_multiple(timecourse_ex, timecourses, 'timecourses')
 
-        # FIXME: why these 2 lines, seems unnecessary
-        Output = apps.get_model('outputs', 'Output')
-        Timecourse = apps.get_model('outputs', 'Timecourse')
-
         timecourses_normed = create_multiple_bulk_normalized(timecourse_ex.timecourses.all(), Timecourse)
         for timecourse in timecourses_normed:
             timecourse._interventions.add(*timecourse.interventions.all())

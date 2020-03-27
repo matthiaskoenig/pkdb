@@ -175,7 +175,7 @@ class StudySerializer(SidSerializer):
                             {
                                 "curators": "Each curator in the list of curator can be added either via the curator "
                                             "username or as a list with first position beeing the curator username "
-                                            "and the second posion the rating between (0-5).",
+                                            "and the second position the rating between (0-5).",
                                 "details": curator_and_rating,
                             })
                     rating_dict["user"] = curator_and_rating[0]

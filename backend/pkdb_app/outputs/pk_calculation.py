@@ -23,7 +23,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     outputs = []
 
     dosing = tc.get_dosing()
-    if not dosing or dosing.application != "single dose":
+    if not dosing or dosing.application.info_node.name != "single dose":
         # pharmacokinetics are only calculated for single dose experiments
         return outputs
 
