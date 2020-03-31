@@ -102,7 +102,6 @@ urlpatterns = [
     url(r'^media/(?P<file>.*)$', serve_protected_document,
         name='serve_protected_document'),
 
-
     url(r'^accounts/', include('rest_email_auth.urls')),
 
     path('verify/?P<key>[-\w]+)', obtain_auth_token),

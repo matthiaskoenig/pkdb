@@ -277,7 +277,6 @@ class DataFileViewSet(viewsets.ModelViewSet):
     permission_classes = (StudyPermission,)
 
     def create(self, request, *args, **kwargs):
-
         try:
             DataFile.objects.filter(file=f"data/{request.data['file'].name}").delete()
 
