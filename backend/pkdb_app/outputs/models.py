@@ -5,13 +5,12 @@ Describe outputs and timecourses
 import math
 
 import numpy as np
-import pandas as pd
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 
 from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
-from pkdb_app.info_nodes.models import MeasurementType, Tissue
+from pkdb_app.info_nodes.models import Tissue, Method
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.subjects.models import Group, DataFile, Individual
@@ -77,6 +76,8 @@ class AbstractOutput(models.Model):
 
 class AbstractOutputMap(models.Model):
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    method_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
@@ -108,6 +109,7 @@ class OutputEx(Externable,
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    method = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
 
 class Outputable(Normalizable, models.Model):
@@ -125,6 +127,16 @@ class Outputable(Normalizable, models.Model):
         if self.tissue:
             return self.tissue.info_node.name
 
+    @property
+    def i_method(self):
+
+        return self._i("method")
+
+    @property
+    def method_name(self):
+        if self.method:
+            return self.method.info_node.name
+
 
 class Output(AbstractOutput, Outputable, Accessible):
     """ Storage of data sets. """
@@ -134,6 +146,7 @@ class Output(AbstractOutput, Outputable, Accessible):
     _interventions = models.ManyToManyField(Intervention, through="OutputIntervention")
 
     tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
+    method = models.ForeignKey(Method, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
@@ -246,6 +259,7 @@ class TimecourseEx(
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    method = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
 
 class Timecourse(AbstractOutput, Outputable, Accessible):
@@ -258,6 +272,7 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
     _interventions = models.ManyToManyField(Intervention, through="TimecourseIntervention")
     ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
     tissue = models.ForeignKey(Tissue, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
+    method = models.ForeignKey(Method, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -272,9 +287,6 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
 
     objects = OutputManager()
 
-    @property
-    def i_tissue(self):
-        return self._i("tissue")
 
     @property
     def interventions(self):
@@ -506,6 +518,11 @@ class OutputIntervention(Accessible, models.Model):
             return self.output.tissue.info_node.name
 
     @property
+    def method(self):
+        if self.output.method:
+            return self.output.method.info_node.name
+
+    @property
     def measurement_type(self):
         return self.output.measurement_type.info_node.name
 
@@ -622,13 +639,18 @@ class TimecourseIntervention(Accessible, models.Model):
             return self.timecourse.tissue.info_node.name
 
     @property
+    def method(self):
+        if self.timecourse.method:
+            return self.timecourse.method.info_node.name
+
+    @property
     def measurement_type(self):
         return self.timecourse.measurement_type.info_node.name
 
     @property
     def choice(self):
         if self.timecourse.choice:
-            return self.output.choice.info_node.name
+            return self.timecourse.choice.info_node.name
 
     @property
     def substance(self):

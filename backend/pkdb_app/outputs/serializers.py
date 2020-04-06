@@ -38,9 +38,9 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-TISSUE_FIELD = ["tissue"]
+EXTRA_FIELDS = ["tissue", "method"]
 TIME_FIELDS = ["time", "time_unit"]
-OUTPUT_FIELDS = TISSUE_FIELD + TIME_FIELDS
+OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 
@@ -74,6 +74,13 @@ class OutputSerializer(MeasurementTypeableSerializer):
         required=False
     )
 
+    method = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Method),
+        read_only=False,
+        required=False
+    )
+
     class Meta:
         model = Output
         fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
@@ -98,12 +105,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
-            if 'substance' in attrs:
-                if attrs['substance'] is not None:
-                    attrs['substance'] = attrs['substance'].substance
-            if 'tissue' in attrs:
-                if attrs['tissue'] is not None:
-                    attrs['tissue'] = attrs['tissue'].tissue
+
+            for key in ['substance', 'tissue', 'method']:
+                if key in attrs:
+                    if attrs[key] is not None:
+                        attrs[key] = getattr(attrs[key], key)
+
 
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
 
@@ -279,6 +286,13 @@ class TimecourseSerializer(BaseOutputExSerializer):
         read_only=False,
         required=False
     )
+
+    method = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Method),
+        read_only=False,
+        required=False
+    )
     outputs = OutputSerializer(many=True, read_only=True)
 
     class Meta:
@@ -309,12 +323,12 @@ class TimecourseSerializer(BaseOutputExSerializer):
         try:
             # perform via dedicated function on categorials
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
-            if 'substance' in attrs:
-                    if attrs['substance'] is not None:
-                        attrs['substance'] = attrs['substance'].substance
-            if 'tissue' in attrs:
-                if attrs['tissue'] is not None:
-                    attrs['tissue'] = attrs['tissue'].tissue
+
+            for key in ['substance', 'tissue', 'method']:
+                if key in attrs:
+                    if attrs[key] is not None:
+                        attrs[key] = getattr(attrs[key], key)
+
 
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
 
@@ -592,6 +606,7 @@ class OutputElasticSerializer(serializers.ModelSerializer):
     substance = SidNameSerializer( allow_null=True)
     measurement_type = SidNameSerializer( allow_null=True)
     tissue = SidNameSerializer( allow_null=True)
+    method = SidNameSerializer( allow_null=True)
     choice = SidNameSerializer( allow_null=True)
 
     value = serializers.FloatField(allow_null=True)
@@ -609,7 +624,7 @@ class OutputElasticSerializer(serializers.ModelSerializer):
         model = Output
         fields = (
                 ["pk", "normed", "calculated", "timecourse"]
-                + TISSUE_FIELD
+                + EXTRA_FIELDS
                 + ["study"]
                 + ["group", "individual", "interventions"]
                 + MEASUREMENTTYPE_FIELDS
@@ -631,13 +646,14 @@ class TimecourseElasticSerializer(serializers.ModelSerializer):
     substance = SidNameSerializer( allow_null=True)
     measurement_type = SidNameSerializer( allow_null=True)
     tissue = SidNameSerializer( allow_null=True)
+    method = SidNameSerializer( allow_null=True)
     choice = SidNameSerializer(allow_null=True)
 
     class Meta:
         model = Timecourse
         fields = (
                 ["pk", "normed", "outputs"]
-                + TISSUE_FIELD
+                + EXTRA_FIELDS
                 + ["study"]
                 + ["group", "individual", "interventions"]
                 + MEASUREMENTTYPE_FIELDS

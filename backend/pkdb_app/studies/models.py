@@ -137,6 +137,10 @@ class Study(Sidable, models.Model):
         return '%s' % self.name
 
     @property
+    def reference_date(self):
+        return self.reference.date
+
+    @property
     def individuals(self):
         try:
             return self.individualset.individuals.all()

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
-    Form, Tissue, Application
+    Form, Tissue, Application, Method
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.utils import update_or_create_multiple
 
@@ -118,6 +118,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
             "form": Form,
             "application": Application,
             "tissue": Tissue,
+            "method": Method,
             "choice": Choice,
         }
 

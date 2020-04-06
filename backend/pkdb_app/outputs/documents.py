@@ -47,6 +47,8 @@ class OutputDocument(Document):
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
     tissue = info_node('i_tissue')
+    method = info_node('i_method')
+
     measurement_type = info_node('i_measurement_type')
     substance = info_node('i_substance')
     choice = info_node('i_choice')
@@ -124,7 +126,8 @@ class TimecourseDocument(Document):
     figure = string_field('figure')
     time = fields.FloatField('null_time', multi=True)
     tissue = info_node('i_tissue')
-    measurement_type =  info_node('i_measurement_type')
+    method = info_node('i_method')
+    measurement_type = info_node('i_measurement_type')
     substance = info_node('i_substance')
     choice = info_node('i_choice')
 
@@ -159,6 +162,7 @@ class TimecourseInterventionDocument(Document):
     group_pk = fields.IntegerField('group_pk')
     individual_pk = fields.IntegerField('individual_pk')
 
+    method = string_field('method')
     tissue = string_field('tissue')
     time = fields.FloatField('time', multi=True)
     time_unit = string_field('time_unit')
@@ -219,6 +223,7 @@ class OutputInterventionDocument(Document):
     substance = string_field("substance")
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
+    method = string_field('method')
     tissue = string_field('tissue')
     time = fields.FloatField('time')
     time_unit = string_field('time_unit')

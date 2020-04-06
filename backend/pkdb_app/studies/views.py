@@ -215,8 +215,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
         'name',
         'reference',
-        'substances',
         'files',
+
+        'substances.name'
+
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {

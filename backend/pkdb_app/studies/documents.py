@@ -114,6 +114,8 @@ class StudyDocument(Document):
             'name': string_field(attr="name"),
         }
     )
+    reference_date = fields.DateField()
+
     curators = fields.ObjectField(
         attr="ratings",
         properties={

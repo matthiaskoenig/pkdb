@@ -467,6 +467,7 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
 class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
+    reference_date = serializers.CharField()
 
     name = serializers.CharField()
     licence = serializers.CharField()
@@ -506,6 +507,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             "timecourse_count",
 
             "reference",
+            "reference_date",
             "creator",
             "curators",
             "collaborators",

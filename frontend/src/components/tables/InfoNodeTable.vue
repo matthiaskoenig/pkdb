@@ -102,7 +102,7 @@
         data () {
             return {
                 otype: "info_nodes",
-                ntypes:["all", "info_node", "choice","measurement_type","application",  "tissue", "route", "form", "substance"],
+                ntypes:["all", "info_node", "choice","measurement_type","application",  "tissue", "method", "route", "form", "substance"],
                 otype_single: "info_nodes",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},

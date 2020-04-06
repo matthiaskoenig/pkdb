@@ -34,8 +34,10 @@ class InfoNode(Sidable):
         Form = 'form', _('form')
         Application = 'application', _('application')
         Tissue = 'tissue', _('tissue')
+        Method = 'method', _('method')
+
         Choice = 'choice', _('choice')
-        Inofo_Node = 'info_node', _('info_node')
+        Info_Node = 'info_node', _('info_node')
 
     class DTypes(models.TextChoices):
         """ Data Types. """
@@ -88,6 +90,13 @@ class Tissue(AbstractInfoNode):
     """ Tissue Model """
     info_node = models.OneToOneField(
         InfoNode, related_name="tissue", on_delete=models.CASCADE, null=True
+    )
+
+
+class Method(AbstractInfoNode):
+    """ Method Model """
+    info_node = models.OneToOneField(
+        InfoNode, related_name="method", on_delete=models.CASCADE, null=True
     )
 
 
