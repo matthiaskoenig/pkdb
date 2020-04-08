@@ -58,6 +58,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
                 output_dict["measurement_type"] = key_mapping[key]
                 output_dict["calculated"] = True
                 output_dict["tissue"] = tc.tissue
+                output_dict["method"] = tc.method
                 output_dict["substance"] = tc.substance
                 output_dict["group"] = tc.group
                 output_dict["individual"] = tc.individual
