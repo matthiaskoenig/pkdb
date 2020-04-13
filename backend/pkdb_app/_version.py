@@ -1,4 +1,4 @@
 """
 Definition of version string.
 """
-__version__ = "0.8.0b4"
+__version__ = "0.8.0b5"
