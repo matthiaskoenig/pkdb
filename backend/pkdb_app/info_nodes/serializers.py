@@ -29,7 +29,6 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
 
     choice = serializers.CharField(allow_null=True)
 
-
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         return rep
@@ -64,7 +63,7 @@ class UnitSerializer(serializers.ModelSerializer):
         return {"name": data}
 
     def to_representation(self, instance):
-        return instance.name
+        return instance["name"]
 
 
 class SubstanceExtraSerializer(serializers.ModelSerializer):
