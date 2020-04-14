@@ -63,7 +63,12 @@ class UnitSerializer(serializers.ModelSerializer):
         return {"name": data}
 
     def to_representation(self, instance):
-        return instance["name"]
+        try:
+            return instance["name"]
+
+        except TypeError:
+            return instance.name
+
 
 
 class SubstanceExtraSerializer(serializers.ModelSerializer):
