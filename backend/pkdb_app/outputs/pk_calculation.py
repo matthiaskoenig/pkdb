@@ -22,10 +22,17 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     """
     outputs = []
 
-    dosing = tc.get_dosing()
-    if not dosing or dosing.application.info_node.name != "single dose":
-        # pharmacokinetics are only calculated for single dose experiments
+    dosing = tc.get_single_dosing()
+    if not dosing:
+        # dosing information must exist
         return outputs
+    else:
+        if dosing.application.info_node.name != "single dose":
+            # dosing must be a single dose experiments
+            return outputs
+        if tc.substance.info_node.name != dosing.substance:
+            # the dosing substance must correspond to the timecouse substance
+            return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
     tc_type = tc.measurement_type.info_node.name
@@ -105,7 +112,7 @@ def _timecourse_to_pkdict(tc: Timecourse) -> Dict:
     # dosing
     pk_dict["dose"] = Q_(np.nan, "mg")
 
-    dosing = tc.get_dosing()
+    dosing = tc.get_single_dosing()
     if dosing:
         if dosing.substance == tc.substance:
             # pharmacokinetics is only calculated for single dose experiments

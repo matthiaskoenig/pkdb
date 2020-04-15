@@ -414,7 +414,11 @@ class Timecourse(AbstractOutput, Outputable, Accessible):
             measurement_type__info_node__name="weight")
         return weight_measurement_type
 
-    def get_dosing(self):
+    def get_single_dosing(self) -> Intervention:
+        """Returns a single intervention of type dosing if existing.
+
+        If multiple dosing interventions exist, no dosing is returned!.
+        """
         try:
             dosing_measurement_type = self.interventions.get(
                 normed=True, measurement_type__info_node__name="dosing"
