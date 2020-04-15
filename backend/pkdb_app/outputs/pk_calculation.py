@@ -30,8 +30,10 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
         if dosing.application.info_node.name != "single dose":
             # dosing must be a single dose experiments
             return outputs
-        if tc.substance.info_node.name != dosing.substance:
+        if tc.substance.info_node.name != dosing.substance.info_node.name:
             # the dosing substance must correspond to the timecouse substance
+            warnings.warn(f"No pharmacokinetics for: {tc.substance} != {dosing.substance}")
+
             return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
