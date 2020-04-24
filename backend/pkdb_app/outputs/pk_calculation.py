@@ -26,23 +26,23 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     if not dosing:
         # dosing information must exist
         return outputs
-    else:
-        if dosing.application.info_node.name != "single dose":
-            # dosing must be a single dose experiments
-            return outputs
-        if tc.substance.info_node.name != dosing.substance.info_node.name:
-            # the dosing substance must correspond to the timecouse substance
-            warnings.warn(f"No pharmacokinetics for: {tc.substance} != {dosing.substance}")
-
-            return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
     tc_type = tc.measurement_type.info_node.name
     if tc_type == "concentration" and tc.normed:
+
         variables = _timecourse_to_pkdict(tc)
         ctype = variables.pop("ctype", None)
 
-        pkinf = pharmacokinetics.TimecoursePK(**variables)
+        if dosing.application.info_node.name != "single dose" or tc.substance.info_node.name != dosing.substance.info_node.name:
+            _ = variables.pop("dosing", None)
+            _ = variables.pop("intervention_time", None)
+            pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
+
+        else:
+            pkinf = pharmacokinetics.TimecoursePK(**variables)
+
+
         pk = pkinf.pk
 
         key_mapping = {
@@ -58,7 +58,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
         }
 
         for key in key_mapping.keys():
-            pk_par = getattr(pk, key)
+            pk_par = getattr(pk, key, None)
             # check that exists
             if pk_par and not np.isnan(pk_par.magnitude):
                 output_dict = {}
