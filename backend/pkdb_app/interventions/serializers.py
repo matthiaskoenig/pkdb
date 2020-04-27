@@ -216,16 +216,17 @@ class InterventionSetSerializer(ExSerializer):
     def validate(self, attrs):
         # unique together not working because study is not part of the serializer validation but is added after create
         intervention_exs = attrs.get("intervention_exs")
-        all_interventions = list(
-            itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
-        all_intervention_names = [intervention["name"] for intervention in all_interventions]
+        if intervention_exs:
+            all_interventions = list(
+                itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
+            all_intervention_names = [intervention["name"] for intervention in all_interventions]
 
-        duplicated_intervention_names = list_duplicates(all_intervention_names)
-        if duplicated_intervention_names:
-            raise serializers.ValidationError(
-                {
-                    "intervention_set": "Intervention names are required to be unique within a study.",
-                    "duplicated intervention names": duplicated_intervention_names
+            duplicated_intervention_names = list_duplicates(all_intervention_names)
+            if duplicated_intervention_names:
+                raise serializers.ValidationError(
+                    {
+                        "intervention_set": "Intervention names are required to be unique within a study.",
+                        "duplicated intervention names": duplicated_intervention_names
                 })
         return super().validate(attrs)
 
