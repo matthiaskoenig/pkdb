@@ -44,12 +44,21 @@ const icons_table = {
     open: 'fab fa-creative-commons-pd-alt',
     na: 'fas fa-ban',
     success: 'fas fa-check-circle',
-    measurement_types: 'fas fa-user-tag'
+    measurement_type: 'fas fa-heartbeat',
+    measurement_types: 'fas fa-heartbeat',
+    tissue: 'fas fa-map-marker-alt',
+    tissues: 'fas fa-map-marker-alt',
 };
 
-
-function lookup_icon(key) {
-    return icons_table[key]
+/**
+ * Lookup icon key or return font awesome icon directly.
+ */
+function lookupIcon(key) {
+    if (key.startsWith("fa")){
+        return key
+    } else {
+        return icons_table[key]
+    }
 }
 
-export {lookup_icon};
+export {lookupIcon};

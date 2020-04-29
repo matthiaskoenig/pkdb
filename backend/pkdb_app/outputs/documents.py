@@ -1,7 +1,8 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField
+
 from .models import Output, Timecourse, TimecourseIntervention, OutputIntervention
+from ..documents import string_field, elastic_settings, ObjectField, study_field, info_node
 
 
 # ------------------------------------
@@ -10,11 +11,12 @@ from .models import Output, Timecourse, TimecourseIntervention, OutputInterventi
 @registry.register_document
 class OutputDocument(Document):
     pk = fields.IntegerField('pk')
-    study = string_field('study_name')
+    study = study_field
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
+        'name': string_field('name'),
         'count': fields.IntegerField(),
-        'name': string_field('name')})
+    })
     individual = ObjectField(properties={
         'pk': fields.IntegerField(),
         'name': string_field('name')})
@@ -22,8 +24,6 @@ class OutputDocument(Document):
         'pk': fields.IntegerField(),
         'name': string_field('name')
     }, multi=True)
-    substance = string_field("substance_name")
-    choice = string_field("choice")
     ex = ObjectField(properties={
         'pk': string_field('pk')}
     )
@@ -46,8 +46,12 @@ class OutputDocument(Document):
     unit = string_field('unit')
     time_unit = string_field('time_unit')
     time = fields.FloatField('null_time')
-    tissue = string_field('tissue_name')
-    measurement_type = string_field("measurement_type_name")
+    tissue = info_node('i_tissue')
+    method = info_node('i_method')
+
+    measurement_type = info_node('i_measurement_type')
+    substance = info_node('i_substance')
+    choice = info_node('i_choice')
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
@@ -64,13 +68,17 @@ class OutputDocument(Document):
         # Don't perform an index refresh after every update
         auto_refresh = False
 
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(OutputDocument, self).get_queryset().select_related(
+            'study', 'individual', 'group',).prefetch_related('interventions')
+
     class Index:
         name = 'outputs'
-        settings = {
-            'number_of_shards': 5,
-            'number_of_replicas': 1,
-            'max_result_window': 100000
-        }
+        settings = elastic_settings
+        settings['number_of_shards'] = 5
+        settings['number_of_replicas'] = 1
+        settings['max_result_window'] = 100000
 
 
 # ------------------------------------
@@ -78,7 +86,7 @@ class OutputDocument(Document):
 # ------------------------------------
 @registry.register_document
 class TimecourseDocument(Document):
-    study = string_field('study_name')
+    study = study_field
     pk = fields.IntegerField('pk')
     group = ObjectField(properties={
         'pk': fields.IntegerField(),
@@ -92,7 +100,6 @@ class TimecourseDocument(Document):
         'pk': fields.IntegerField(),
         'name': string_field('name')
     }, multi=True)
-    substance = string_field("substance_name")
     ex = ObjectField(
         properties={
             'pk': string_field('pk')
@@ -102,7 +109,7 @@ class TimecourseDocument(Document):
     raw = ObjectField(properties={
         'pk': fields.IntegerField()}
     )
-    pharmacokinetics = ObjectField(properties={
+    outputs = ObjectField(properties={
         'pk': fields.IntegerField()},
         multi=True
     )
@@ -118,8 +125,12 @@ class TimecourseDocument(Document):
     time_unit = string_field('time_unit')
     figure = string_field('figure')
     time = fields.FloatField('null_time', multi=True)
-    tissue = string_field('tissue_name')
-    measurement_type = string_field("measurement_type_name")
+    tissue = info_node('i_tissue')
+    method = info_node('i_method')
+    measurement_type = info_node('i_measurement_type')
+    substance = info_node('i_substance')
+    choice = info_node('i_choice')
+
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
@@ -151,6 +162,7 @@ class TimecourseInterventionDocument(Document):
     group_pk = fields.IntegerField('group_pk')
     individual_pk = fields.IntegerField('individual_pk')
 
+    method = string_field('method')
     tissue = string_field('tissue')
     time = fields.FloatField('time', multi=True)
     time_unit = string_field('time_unit')
@@ -190,10 +202,7 @@ class TimecourseInterventionDocument(Document):
 
     class Index:
         name = 'timecourses_interventions'
-        settings = {
-            'number_of_shards': 1,
-            'number_of_replicas': 1,
-        }
+        settings = elastic_settings
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
@@ -214,6 +223,7 @@ class OutputInterventionDocument(Document):
     substance = string_field("substance")
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
+    method = string_field('method')
     tissue = string_field('tissue')
     time = fields.FloatField('time')
     time_unit = string_field('time_unit')
@@ -249,13 +259,13 @@ class OutputInterventionDocument(Document):
 
     class Index:
         name = 'outputs_interventions'
-        settings = {
-            'number_of_shards': 5,
-            'number_of_replicas': 1,
-            'max_result_window': 100000
-        }
+        settings = elastic_settings
+        settings['number_of_shards'] = 5
+        settings['number_of_replicas'] = 1
+        settings['max_result_window'] = 100000
 
-    def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(OutputInterventionDocument, self).get_queryset().select_related(
-            'intervention', 'output')
+
+def get_queryset(self):
+    """Not mandatory but to improve performance we can select related in one sql request"""
+    return super(OutputInterventionDocument, self).get_queryset().select_related(
+        'intervention', 'output')

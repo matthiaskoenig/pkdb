@@ -5,80 +5,20 @@
         A detailed guideline for curation of studies is provided in
         <a href="https://github.com/matthiaskoenig/pkdb_data/blob/develop/CURATION.md" target="_blank">CURATION.md</a>.
         </p>
-        <measurement-types-table/>
-        <substances-table/>
-
-        <!--
-        <v-layout row wrap>
-
-            <v-flex xs4>
-                <get-data :resource_url="characteristica_options_url">
-                  <template slot-scope="characteristica">
-                      <characteristica-browser :options="characteristica.data" title="Characteristica"/>
-                  </template>
-                </get-data>
-            </v-flex>
-
-
-        </v-layout>
-
-        <h2>Choices for interventions and outputs</h2>
-        <v-layout row wrap>
-            <v-flex xs4>
-                <get-data :resource_url="substances_url">
-                    <template slot-scope="substances">
-                        <substance-browser :substances="substances.data.data" title="Substances"/>
-                    </template>
-                </get-data>
-            </v-flex>
-            <v-flex xs4>
-                <get-data :resource_url="intervention_options_url">
-                    <template slot-scope="intervention">
-                        <characteristica-browser :options="intervention.data" title="Interventions"/>
-                    </template>
-                </get-data>
-            </v-flex>
-            <v-flex xs4>
-                <get-data :resource_url="output_options_url">
-                    <template slot-scope="output">
-                        <output-browser :options="output.data" title="PK types"/>
-                    </template>
-                </get-data>
-            </v-flex>
-        </v-layout>
-        -->
+        <info-node-table/>
     </div>
 </template>
 
 <script>
-    import CharacteristicaBrowser from "./curation/CharacteristicaBrowser"
-    import OutputBrowser from "./curation/OutputBrowser"
-    import SubstancesTable from "./curation/SubstancesTable"
-    import MeasurementTypesTable from "./curation/MeasurementTypesTable";
+    import InfoNodeTable from "./tables/InfoNodeTable";
 
     export default {
         name: "Curation",
         components: {
-            MeasurementTypesTable,
-            CharacteristicaBrowser,
-            OutputBrowser,
-            SubstancesTable,
-        },
-        computed: {
-            characteristica_options_url() {
-                return this.$store.state.endpoints.api + '/characteristica_options/';
-            },
-            intervention_options_url() {
-                return this.$store.state.endpoints.api + '/intervention_options/';
-            },
-            output_options_url() {
-                return this.$store.state.endpoints.api + '/output_options/';
-            },
-            substances_url() {
-                return this.$store.state.endpoints.api + '/substances_elastic/?page_size=1000';
-            }
+            InfoNodeTable,
 
-        }
+        },
+
     }
 </script>
 

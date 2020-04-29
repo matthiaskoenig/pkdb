@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {lookup_icon} from "@/icons"
+import {lookupIcon} from "@/icons"
 
 var searchTableMixin = {
     data() {
@@ -7,8 +7,9 @@ var searchTableMixin = {
             count: 0,
             entries: [],
             search: "",
+            ntype: "all",
             loading: true,
-            pagination: {},
+            options: {},
             rowsPerPageItems: [5, 10, 20, 50, 100],
             table_class: "elevation-1",
         }
@@ -41,6 +42,12 @@ var searchTableMixin = {
             },
             deep: true
         },
+        ntype: {
+            handler() {
+                this.getData();
+            },
+            deep: true
+        },
         url: {
             handler() {
                 this.getData();
@@ -57,15 +64,18 @@ var searchTableMixin = {
         },
         resource_url() {
 
-            return this.$store.state.endpoints.api + '/' + this.otype + '_elastic/?format=json'
+            return this.$store.state.endpoints.api  + this.otype + '/?format=json'
         },
         url() {
             var url = this.resource_url
-                + '&page=' + this.pagination.page
-                + '&page_size=' + this.pagination.rowsPerPage
-                + '&ordering=' + this.descending + this.pagination.sortBy;
+                + '&page=' + this.options.page
+                + '&page_size=' + this.options.itemsPerPage
+                + '&ordering=' + this.options.sortDesc + this.options.sortBy;
             if (this.search) {
                 url += '&search_multi_match=' + this.search
+            }
+            if (this.ntype !== "all" ){
+                url += '&ntype=' + this.ntype
             }
             if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
@@ -76,12 +86,12 @@ var searchTableMixin = {
             return url
         },
         descending() {
-            return (this.pagination.descending ? "-" : "");
+            return (this.options.sortDesc ? "-" : "");
         }
     },
     methods: {
-        icon(key) {
-            return lookup_icon(key)
+        faIcon(key) {
+            return lookupIcon(key)
         },
         searchUpdate(newValue) {
             this.search = newValue
@@ -111,31 +121,31 @@ var searchTableMixin = {
     }
 };
 
-var UrlMixin = {
+const UrlMixin = {
     methods: {
         group_url(pk) {
-            return this.$store.state.endpoints.api + '/groups_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'groups/' + pk + '/'
         },
         individual_url(pk) {
-            return this.$store.state.endpoints.api + '/individuals_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'individuals/' + pk + '/'
         },
         output_url(pk) {
-            return this.$store.state.endpoints.api + '/outputs_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'outputs/' + pk + '/'
         },
         timecourse_url(pk) {
-            return this.$store.state.endpoints.api + '/timecourses_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'timecourses/' + pk + '/'
         },
         timecourses_url(pks) {
-            return this.$store.state.endpoints.api + '/timecourses_elastic/?ids=' + pks.join('__')
+            return this.$store.state.endpoints.api + 'timecourses/?ids=' + pks.join('__')
         },
         intervention_url(pk) {
-            return this.$store.state.endpoints.api + '/interventions_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'interventions/' + pk + '/'
         },
         reference_url(pk) {
-            return this.$store.state.endpoints.api + '/references_elastic/' + pk + '/'
+            return this.$store.state.endpoints.api + 'references/' + pk + '/'
         },
         characterica_url(ids) {
-            return this.$store.state.endpoints.api + '/characteristica_elastic/?ids=' + ids.join('__')
+            return this.$store.state.endpoints.api + 'characteristica/?ids=' + ids.join('__')
         },
     }
 };

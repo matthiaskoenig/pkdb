@@ -1,34 +1,28 @@
 """
 Studies serializers.
 """
-from elasticsearch_dsl import AttrDict
+from rest_framework import serializers
 
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
 from pkdb_app.users.permissions import get_study_file_permission
-from rest_framework import serializers
-
+from .models import Reference, Author, Study, Rating
 from ..comments.models import Description, Comment
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
     DescriptionElasticSerializer
-from ..subjects.models import GroupSet, IndividualSet
-from ..users.serializers import UserElasticSerializer
-from ..utils import update_or_create_multiple, create_multiple, list_duplicates
-
 from ..interventions.models import DataFile, InterventionSet
-
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameSerializer
+from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
-from .models import Reference, Author, Study, Rating
-from ..serializers import WrongKeyValidationSerializer, SidSerializer
+from ..users.serializers import UserElasticSerializer
+from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_requried_key, \
+    _validate_not_allowed_key
 
 
-# ----------------------------------
-# Study / Reference
-# ----------------------------------
 class AuthorSerializer(WrongKeyValidationSerializer):
     id = serializers.ReadOnlyField()
 
@@ -60,14 +54,10 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
             "journal",
             "date",
             "authors",
-            "pdf",
         )
 
     def create(self, validated_data):
-        # return super().create(validated_data)
-
         authors_data = validated_data.pop("authors", [])
-
         reference = Reference.objects.create(**validated_data)
         update_or_create_multiple(reference, authors_data, "authors")
         reference.save()
@@ -106,22 +96,7 @@ class CuratorRatingSerializer(serializers.ModelSerializer):
 
 
 class StudySerializer(SidSerializer):
-    """ Study Serializer.
-
-    JSON -> Model_Ex
-    - to_internal_value
-    - validate
-    - is_valid (triggers create or update)
-
-    Validators:
-    - field validators (local)
-    - validate (model)
-
-    Model_Ex -> JSON
-    - to representation
-
-    """
-
+    """ Study Serializer."""
     reference = utils.SlugRelatedField(slug_field="sid",
                                        queryset=Reference.objects.all(), required=True, allow_null=False
                                        )
@@ -135,21 +110,18 @@ class StudySerializer(SidSerializer):
         required=False,
         allow_null=True,
     )
-
     creator = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
         required=False,
         allow_null=True,
     )
-
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-
     interventionset = InterventionSetSerializer(
         read_only=False, required=False, allow_null=True
     )
@@ -160,13 +132,16 @@ class StudySerializer(SidSerializer):
     files = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True, many=True
     )
+    warnings = DescriptionSerializer(
+        many=True, read_only=True, required=False, allow_null=True
+    )
 
     class Meta:
         model = Study
         fields = (
             "sid",
-            "pkdb_version",
             "name",
+            "date",
             "reference",
             "creator",
             "curators",
@@ -180,32 +155,11 @@ class StudySerializer(SidSerializer):
             "outputset",
             "files",
             "comments",
+            "warnings"
         )
         write_only_fields = ('curators', 'collaborators')
 
-    def create(self, validated_data):
-        related = self.pop_relations(validated_data)
-        instance, _ = Study.objects.update_or_create(
-            sid=validated_data["sid"],
-            defaults=validated_data,
-        )
-        instance = self.create_relations(instance, related)
-        instance.save()
-        return instance
-
-    def update(self, instance, validated_data):
-
-        # remove nested relations (handled via own serializers)
-        related = self.pop_relations(validated_data)
-
-        for name, value in validated_data.items():
-            setattr(instance, name, value)
-        instance.save()
-        instance = self.create_relations(instance, related)
-        return instance
-
     def to_internal_value(self, data):
-
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
@@ -219,15 +173,13 @@ class StudySerializer(SidSerializer):
                     if len(curator_and_rating) != 2:
                         raise serializers.ValidationError(
                             {
-                                "curators": " Each curator in the list of curator can be added either via the curator "
+                                "curators": "Each curator in the list of curator can be added either via the curator "
                                             "username or as a list with first position beeing the curator username "
-                                            " and the second posion the rating between (0-5)",
+                                            "and the second position the rating between (0-5).",
                                 "details": curator_and_rating,
-
                             })
                     rating_dict["user"] = curator_and_rating[0]
                     rating_dict["rating"] = curator_and_rating[1]
-
                 else:
                     rating_dict["user"] = curator_and_rating
                     rating_dict["rating"] = 0
@@ -236,25 +188,20 @@ class StudySerializer(SidSerializer):
             data["curators"] = ratings
 
         # check for duplicates
-        #######################################
         for item in ["collaborators", "curators", "substances"]:
-
             if item in ["curators"]:
                 related_unique_field = "user"
                 unique_values = [instance.get(related_unique_field) for instance in data.get(item, [])]
-
             else:
                 unique_values = data.get(item, [])
-
             duplicates = list_duplicates(unique_values)
             if duplicates:
                 raise serializers.ValidationError(
                     {item: f"Duplicated {item} <{duplicates}> are not allowed."})
 
-        #######################################################################
-
+        # handle reference
         if data.get("reference"):
-            reference = Reference.objects.get(sid=data["reference"])
+            reference = self.get_or_val_error(model=Reference, sid=data["reference"])
             if hasattr(reference, "study"):
                 if str(reference.study.sid) != str(data.get("sid")):
                     raise serializers.ValidationError(
@@ -269,6 +216,27 @@ class StudySerializer(SidSerializer):
                     )
 
         return super().to_internal_value(data)
+
+    def create(self, validated_data):
+
+        related = self.pop_relations(validated_data)
+        instance, _ = Study.objects.update_or_create(
+            sid=validated_data["sid"],
+            defaults=validated_data,
+        )
+        instance = self.create_relations(instance, related)
+        instance.save()
+        return instance
+
+    def update(self, instance, validated_data):
+        # remove nested relations (handled via own serializers)
+        related = self.pop_relations(validated_data)
+
+        for name, value in validated_data.items():
+            setattr(instance, name, value)
+        instance.save()
+        instance = self.create_relations(instance, related)
+        return instance
 
     def to_representation(self, instance):
         """ Convert to JSON.
@@ -309,6 +277,13 @@ class StudySerializer(SidSerializer):
             "interventionset": InterventionSet,
             "outputset": OutputSet,
         }
+    def related_serializer(self):
+        return {
+            "groupset": GroupSetSerializer,
+            "individualset": IndividualSetSerializer,
+            "interventionset": InterventionSetSerializer,
+            "outputset": OutputSetSerializer,
+        }
 
     def pop_relations(self, validated_data):
         """ Remove nested relations (handled via own serializers)
@@ -316,7 +291,7 @@ class StudySerializer(SidSerializer):
         :param validated_data:
         :return:
         """
-        related_foreinkeys = self.related_sets().copy()
+        related_foreignkeys = self.related_sets().copy()
 
         related_many2many = {
             "descriptions": Description,
@@ -325,12 +300,13 @@ class StudySerializer(SidSerializer):
             "collaborators": User,
             "files": DataFile,
         }
-        related_foreinkeys_dict = {
-            name: validated_data.pop(name, None) for name in related_foreinkeys.keys()
+        related_foreignkeys_dict = {
+            name: validated_data.pop(name, None) for name in related_foreignkeys.keys()
         }
         related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if
                                   name in validated_data}
-        related = {**related_foreinkeys_dict, **related_many2many_dict}
+        related = {**related_foreignkeys_dict, **related_many2many_dict}
+
         return related
 
     def create_relations(self, study, related):
@@ -341,14 +317,20 @@ class StudySerializer(SidSerializer):
         :return:
         """
 
-        for name, model in self.related_sets().items():
+        for name, serializer in self.related_serializer().items():
 
             if related[name] is not None:
                 if getattr(study, name):
                     getattr(study, name).delete()
-                instance = model.objects.create(study=study, **related[name])
+
+                context = self.context
+                context["study"] = study
+                instance = serializer(context=context).create(validated_data={**related[name]})
+
+
                 setattr(study, name, instance)
             study.save()
+
 
         if "curators" in related:
             study.ratings.all().delete()
@@ -381,43 +363,49 @@ class StudySerializer(SidSerializer):
 
         study.save()
 
+
         return study
 
+    def validate(self, attrs):
 
-###############################################################################################
+        if str(attrs.get("sid")).startswith("PKDB"):
+            _validate_requried_key(attrs, "date", extra_message="For a study with a '^PKDB\d+$' identifier "
+                                                                "the date must be set in the study.json.")
+        else:
+            if attrs.get("date", None) is not None:
+                _validate_not_allowed_key(attrs, "date", extra_message="For a study without a '^PKDB\d+$' identifier "
+                                                                "the date must not be set in the study.json.")
+
+        if "curators" in attrs and "creator" in attrs:
+            if attrs["creator"] not in [curator["user"] for curator in attrs["curators"]]:
+                error_json = {"creator": "Creator must be in curator."}
+                raise serializers.ValidationError(error_json)
+        return super().validate(attrs)
+
+
+# --------------------
 # Elastic Serializer
-###############################################################################################
-class AuthorElasticSerializer(serializers.HyperlinkedModelSerializer):
+# --------------------
+class AuthorElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
+        read_only_fields = fields
 
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
     rating = serializers.FloatField()
+    username = serializers.CharField()
     first_name = serializers.CharField()
     last_name = serializers.CharField()
-    username = serializers.CharField()
 
     class Meta:
-        fields = ("id", "first_name", "last_name", "username", "rating")
+        fields = ["rating", "username", "first_name", "last_name"]
 
 
-class StudySmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    licence = serializers.CharField(read_only=True)
-    curators = CuratorRatingElasticSerializer(many=True, read_only=True)
-    creator = UserElasticSerializer(read_only=True)
-    collaborators = UserElasticSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Study
-        fields = ["pk", "sid", "name", "licence", "curators", "collaborators", "creator"]
-
-
-class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
+class ReferenceElasticSerializer(serializers.ModelSerializer):
+    study = StudySmallElasticSerializer(read_only=True)
     authors = AuthorElasticSerializer(many=True, read_only=True)
-    pdf = serializers.SerializerMethodField()
-    study = StudySmallElasticSerializer()
 
     class Meta:
         model = Reference
@@ -433,60 +421,23 @@ class ReferenceElasticSerializer(serializers.HyperlinkedModelSerializer):
             "journal",
             "date",
             "authors",
-            "pdf",
         )
-
-    def get_pdf(self, obj):
-        user = self.context["request"].user
-        if get_study_file_permission(user, AttrDict(obj.study)):
-            return obj.to_dict().get("pdf")
-        else:
-            return None
-
-    def to_representation(self, instance):
-        """ Convert to JSON.
-
-        :param instance:
-        :return:
-        """
-
-        rep = super().to_representation(instance)
-        request = self.context.get("request")
-        # replace file url
-        if rep["pdf"]:
-            rep["pdf"] = request.build_absolute_uri(instance.pdf)
-
-        return rep
+        read_only_fields = fields
 
 
-class ReferenceSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
+class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reference
-        fields = ["sid"]  # , 'url']
+        fields = ["pk", "sid"]  # , 'url']
+        read_only_fields = fields
 
-class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
-    pk = serializers.CharField()
-    reference = ReferenceSmallElasticSerializer()
 
-    pkdb_version = serializers.CharField(read_only=True)
+class StudyElasticStatisticsSerializer(serializers.Serializer):
     name = serializers.CharField(read_only=True)
     licence = serializers.CharField(read_only=True)
     access = serializers.CharField(read_only=True)
-
     curators = CuratorRatingElasticSerializer(many=True, read_only=True)
     creator = UserElasticSerializer(read_only=True)
-    collaborators = UserElasticSerializer(many=True, read_only=True)
-
-    substances = serializers.SerializerMethodField()
-
-    files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, read_only=True)
-
-    comments = CommentElasticSerializer(many=True, read_only=True)
-    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
-    groupset = GroupSetElasticSmallSerializer(read_only=True)
-    individualset = IndividualSetElasticSmallSerializer(read_only=True)
-    interventionset = InterventionSetElasticSmallSerializer(read_only=True)
-    outputset = OutputSetElasticSmallSerializer(read_only=True)
 
     class Meta:
         model = Study
@@ -497,25 +448,80 @@ class StudyElasticSerializer(serializers.HyperlinkedModelSerializer):
             "name",
             "licence",
             "access",
-            "comments",
-            "descriptions",
-            "reference",
-            "pkdb_version",
-            "curators",
-            "collaborators",
-            "creator",
-            "substances",
-            "files",
-            "groupset",
-            "individualset",
-            "interventionset",
-            "outputset",
+            "date",
+
             "group_count",
             "individual_count",
             "intervention_count",
             "output_count",
             "output_calculated_count",
-            "timecourse_count"
+            "timecourse_count",
+
+            "creator",
+            "substances",
+        ]
+
+        read_only_fields = fields
+
+
+class StudyElasticSerializer(serializers.ModelSerializer):
+    pk = serializers.CharField()
+    reference = ReferenceSmallElasticSerializer()
+    reference_date = serializers.CharField()
+
+    name = serializers.CharField()
+    licence = serializers.CharField()
+    access = serializers.CharField()
+
+    curators = CuratorRatingElasticSerializer(many=True, )
+    creator = UserElasticSerializer()
+    collaborators = UserElasticSerializer(many=True, )
+
+    substances = SidNameSerializer(many=True, )
+
+    files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, )
+
+    comments = CommentElasticSerializer(many=True, )
+    descriptions = DescriptionElasticSerializer(many=True, )
+    groupset = GroupSetElasticSmallSerializer()
+    individualset = IndividualSetElasticSmallSerializer()
+    interventionset = InterventionSetElasticSmallSerializer()
+    outputset = OutputSetElasticSmallSerializer()
+
+    class Meta:
+        model = Study
+
+        fields = [
+            "pk",
+            "sid",
+            "name",
+            "licence",
+            "access",
+            "date",
+
+            "group_count",
+            "individual_count",
+            "intervention_count",
+            "output_count",
+            "output_calculated_count",
+            "timecourse_count",
+
+            "reference",
+            "reference_date",
+            "creator",
+            "curators",
+            "collaborators",
+
+            "comments",
+            "descriptions",
+
+            "files",
+            "substances",
+
+            "groupset",
+            "individualset",
+            "interventionset",
+            "outputset",
         ]
 
         read_only_fields = fields

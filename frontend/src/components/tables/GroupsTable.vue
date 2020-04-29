@@ -4,34 +4,41 @@
         <v-data-table
                 :headers="headers"
                 :items="entries"
-                :pagination.sync="pagination"
-                :total-items="count"
+                :options.sync="options"
+                :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <link-button :to="'/groups/'+ table.item.pk" :title="'Group: '+table.item.pk"
-                                 :icon="icon('group')"/>
-
-                    <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+table.item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + '/groups_elastic/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td>
-                    <group-chip :group="table.item" :search="search"/>
-                </td>
-                <td>
-                    <group-chip v-if="table.item.parent" :group="table.item.parent" :search="search"/>
-
-                </td>
-                <td>
-                    <v-layout wrap>
-                        <span v-for="item in table.item.characteristica_all_normed" :key="item.pk">
-                            <characteristica-card :data="item"
-                                                  :resource_url="characterica_url(get_ids(table.item.characteristica_all_normed))"/>
-                        </span>
-                    </v-layout>
-                </td>
+            <template v-slot:item.buttons="{ item }">
+                <LinkButton v-if="item.study"
+                            :to="'/studies/'+ item.study.sid"
+                            :title="'Study: '+item.study.name"
+                            icon="study"
+                />
+                <link-button :to="'/groups/' + item.pk"
+                             :title="'Group: ' + item.pk"
+                             icon="group"
+                />
+                <json-button :resource_url="api + 'groups/' + item.pk + '/?format=json'"/>
+            </template>
+            <template v-slot:item.name="{ item }">
+                <object-chip :object="item"
+                             otype="group"
+                             :count="item.count"
+                             :search="search"
+                />
+            </template>
+            <!--
+            <template v-slot:item.parent="{ item }">
+                <object-chip v-if="item.parent"
+                             :object="item.parent"
+                             otype="group"
+                             :search="search"
+                />
+            </template>
+            -->
+            <template v-slot:item.characteristica="{ item }">
+                <characteristica-card-deck :characteristica="item.characteristica" />
             </template>
             <no-data/>
         </v-data-table>
@@ -42,18 +49,16 @@
     import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
-    import CharacteristicaCard from '../detail/CharacteristicaCard'
-    import GroupChip from '../detail/GroupChip'
+    import CharacteristicaCardDeck from '../detail/CharacteristicaCardDeck'
 
     export default {
         name: "GroupsTable",
         components: {
+            CharacteristicaCardDeck,
             NoData,
             TableToolbar,
-            CharacteristicaCard,
-            GroupChip
         },
-        mixins: [searchTableMixin,UrlMixin],
+        mixins: [searchTableMixin, UrlMixin],
         data () {
             return {
                 otype: "groups",
@@ -61,7 +66,8 @@
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Name', value: 'name'},
-                    {text: 'Parent', value: 'parent'},
+
+                    // {text: 'Parent', value: 'parent'},
                     {text: 'Characteristica', value: 'characteristica'},
                 ]
             }

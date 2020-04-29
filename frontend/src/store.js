@@ -10,7 +10,7 @@ Vue.config.devtools = true;
  *  Domain
  *  -------------------------------------------------------------- */
 //  read from .env.template file
-var backend_domain = process.env.VUE_APP_API_BASE;
+const backend_domain = process.env.VUE_APP_API_BASE;
 
 
 if (!backend_domain) {
@@ -33,7 +33,7 @@ const vuexLocalStorage = new VuexPersist({
         // keepThisModuleToo: state.keepThisModuleToo
         // getRidOfThisModule: state.getRidOfThisModule (No one likes it.)
     })
-})
+});
 
 /** --------------------------------------------------------------
  *  Vuex store
@@ -44,8 +44,9 @@ export default new Vuex.Store({
         django_domain: backend_domain,
 
         endpoints: {
-            api: backend_domain + '/api/v1',
+            api: backend_domain + '/api/v1/',
             obtainAuthToken: backend_domain + '/api-token-auth/',
+            // FIXME: are these endpoints used?
             register: backend_domain + '/accounts/register/',
             verify: backend_domain + '/accounts/verify-email/',
             request_password_reset: backend_domain + '/accounts/request-password-reset/',
@@ -54,7 +55,6 @@ export default new Vuex.Store({
 
         username: localStorage.getItem('username'),
         token: localStorage.getItem('token'),
-
     },
     mutations: {
         setToken(state, token) {
@@ -80,7 +80,7 @@ export default new Vuex.Store({
             this.commit('setToken', payload.token);
             this.commit('setUsername', payload.username);
         },
-        logout(context) {
+        logout() {
             this.commit('clearToken');
             this.commit('clearUsername');
         },

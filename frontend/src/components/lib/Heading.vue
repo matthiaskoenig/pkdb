@@ -1,6 +1,10 @@
 <template>
     <span id="heading">
-        <v-icon :title="title">{{ icon }}</v-icon>&nbsp;
+        <v-icon :title="title"
+                color="black"
+        >
+            {{ icon }}
+        </v-icon>&nbsp;
         <v-badge v-if="count" right color="red">
             <span slot="badge">{{ count }}</span>
             <span class="heading-title">{{ title }}</span>

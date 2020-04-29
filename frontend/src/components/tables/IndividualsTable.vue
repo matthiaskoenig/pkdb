@@ -4,36 +4,43 @@
         <v-data-table
                 :headers="headers"
                 :items="entries"
-                :pagination.sync="pagination"
-                :total-items="count"
+                :options.sync="options"
+                :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <link-button :to="'/individuals/'+ table.item.pk" :title="'Individual: '+table.item.pk" :icon="icon('individual')"/>
-                    <!--<link-button :to="'/studies/'+ table.item.study.pk" :title="'Study: '+ table.item.study.name" :icon="icon('study')"/>-->
-                    <json-button :resource_url="api + '/individuals_elastic/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td>
-                    <div class="attr-card">
-                        <individual-chip :individual="table.item" :search="search"/>
-                    </div>
-                </td>
-                <td>
-                    <get-data :resource_url="group_url(table.item.group.pk)">
-                        <span slot-scope="group">
-                            <group-chip :group="group.data" :search="search"/>
-                        </span>
-                    </get-data>
-                </td>
-                <td>
-                     <v-layout wrap>
-                        <span v-for="item in table.item.characteristica_all_normed" :key="item.pk">
-                            <characteristica-card :data="item" :resource_url="characterica_url(get_ids(table.item.characteristica_all_normed))" />
-                        </span>
-                     </v-layout>
-                </td>
+
+            <template v-slot:item.buttons="{ item }">
+                <LinkButton v-if="item.study"
+                            :to="'/studies/'+ item.study.sid"
+                            :title="'Study: '+item.study.name"
+                            icon="study"
+                />
+                <link-button :to="'/individuals/'+ item.pk"
+                             :title="'Individual: '+item.pk"
+                             icon="individual"
+                />
+                <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
+            </template>
+            <template v-slot:item.individual="{ item }">
+                <object-chip :object="item"
+                             otype="individual"
+                             :search="search"
+                />
+            </template>
+            <template v-slot:item.group="{ item }">
+                <get-data :resource_url="group_url(item.group.pk)">
+                    <span slot-scope="group">
+                    <object-chip :object="group.data"
+                                 otype="group"
+                                 :count="group.data.count"
+                                 :search="search"
+                    />
+                    </span>
+                </get-data>
+            </template>
+            <template v-slot:item.characteristica="{ item }">
+                <characteristica-card-deck :characteristica="item.characteristica" />
             </template>
             <no-data/>
         </v-data-table>
@@ -44,18 +51,14 @@
     import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
-    import CharacteristicaCard from '../detail/CharacteristicaCard'
-    import GroupChip from '../detail/GroupChip'
-    import IndividualChip from '../detail/IndividualChip'
+    import CharacteristicaCardDeck from '../detail/CharacteristicaCardDeck'
 
     export default {
         name: "IndividualsTable",
         components: {
             NoData,
             TableToolbar,
-            CharacteristicaCard,
-            IndividualChip,
-            GroupChip
+            CharacteristicaCardDeck,
         },
         mixins: [searchTableMixin, UrlMixin],
         data () {

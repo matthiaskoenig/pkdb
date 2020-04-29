@@ -1,14 +1,15 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
+from pkdb_app.comments.models import Comment, Description
 from pkdb_app.documents import elastic_settings, string_field, ObjectField, \
     text_field
-from pkdb_app.comments.models import Comment, Description
 
 
 # ------------------------------------
 # Elastic Comment Document
-# ------------------------------------
+# -----------------------------------
+# TODO: Remove this file
 @registry.register_document
 class CommentDocument(Document):
     pk = fields.IntegerField(attr='pk')

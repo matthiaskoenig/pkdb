@@ -1,31 +1,40 @@
 <template>
     <div id="reference-detail">
-        <v-card max-width="1000" flat>
-
-            <v-icon>{{ icon('reference') }}</v-icon>&nbsp;<strong>{{ reference.title }}</strong><br />
-            <span v-for="(author, index) in reference.authors" :key="index">
-                {{ author.first_name }} {{ author.last_name }},
-            </span><br />
-            <i>{{ reference.journal }}, {{reference.date}}</i><br/>
-
-            <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" title="PubMed" target="_blank">PMID:{{reference.pmid }}</a><br/>
-
-            <file-chip v-if="reference.pdf" :file="reference.pdf"></file-chip>
-            <warning-chip v-else title="No PDF or no permission"></warning-chip><br />
-            {{reference.abstract}}<br/>
-
-        </v-card>
+        <v-card flat>
+            <p>
+                <span class="font-weight-black">{{ reference.title }}</span><br />
+                <span class="font-weight-light" v-for="(author, index) in reference.authors" :key="index">
+                    {{ author.first_name }} {{ author.last_name }},
+                </span><br />
+                <span class="font-italic">{{ reference.journal }}, {{reference.date}}</span>
+            </p>
+            <p>
+                <!--
+                <v-btn color="black" icon v-on:click="abstractHidden = !abstractHidden">
+                    <template v-if="abstractHidden">
+                        <v-icon title="Show abstract" small>far fa-plus-square</v-icon>
+                    </template>
+                    <template v-else>
+                        <v-icon title="Hide abstract">far fa-minus-square</v-icon>
+                    </template>
+                </v-btn>
+                -->
+                <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" title="PubMed" target="_blank">PMID:{{reference.pmid }}</a>
+            </p>
+            <p>{{ reference.abstract }}</p>
+            <!--
+            <p v-if="!abstractHidden" class="text-justify">
+                {{ reference.abstract }}
+            </p>
+            -->
+            </v-card>
     </div>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
-    import WarningChip from "./WarningChip";
-
 
     export default {
         name: "ReferenceDetail",
-        components: {WarningChip},
         props: {
             reference: {
                 type: Object,
@@ -34,12 +43,14 @@
                 type: String
             }
         },
+        data() {
+            return {
+                abstractHidden: true
+            }
+        },
         computed: {
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
         }
     }
 </script>

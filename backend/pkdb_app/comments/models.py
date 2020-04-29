@@ -6,7 +6,7 @@ from pkdb_app.interventions.models import (
     InterventionSet,
 )
 from pkdb_app.outputs.models import OutputEx, OutputSet, TimecourseEx
-from pkdb_app.studies.models import Reference, Study
+from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import (
     IndividualEx,
     IndividualSet,
@@ -65,6 +65,10 @@ class Comment(models.Model):
     class Meta:
         ordering = ['pk']
 
+    @property
+    def username(self):
+        return self.user.username
+
 
 class Description(models.Model):
     text = models.TextField(blank=True, null=True)
@@ -85,6 +89,9 @@ class Description(models.Model):
     )
     study = models.ForeignKey(
         Study, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+    study_as_warning = models.ForeignKey(
+        Study, related_name="warnings", null=True, on_delete=models.CASCADE
     )
 
     individual_ex = models.ForeignKey(

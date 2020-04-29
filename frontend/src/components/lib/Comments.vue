@@ -1,10 +1,10 @@
 <template>
     <div id="comments" v-if="comments && comments.length>0">
 
-        <span v-for="comment in comments">
+        <span v-for="comment in comments" :key="comment.pk">
             <v-layout row wrap>
                 <v-flex xs1>
-                    <user-avatar :user="comment.user"/>
+                    <user-avatar :username="comment.username"/>
                 </v-flex>
                 <v-flex xs11>
                     {{comment.text}}

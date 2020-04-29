@@ -4,50 +4,76 @@
         <v-data-table
                 :headers="headers"
                 :items="entries"
-                :pagination.sync="pagination"
-                :total-items="count"
+                :options.sync="options"
+                :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <LinkButton :to="'/timecourses/'+ table.item.pk" :title="'Timecourse: '+table.item.pk" :icon="icon('output')"/>
-                    <JsonButton :resource_url="api + '/timecourses_elastic/'+ table.item.pk +'/?format=json'"/>
-                </td>
-                <td><text-highlight :queries="search.split(/[ ,]+/)">{{table.item.measurement_type }}</text-highlight></td>
-                <td>
-                    <get-data v-if="table.item.group" :resource_url="group_url(table.item.group.pk)">
+            <template v-slot:item.buttons="{ item }">
+                <LinkButton v-if="item.study"
+                            :to="'/studies/'+ item.study.sid"
+                            :title="'Study: '+item.study.name"
+                            icon="study"
+                />
+                <LinkButton :to="'/timecourses/'+ item.pk"
+                            :title="'Timecourse: '+item.pk"
+                            icon="timecourse"
+                />
+                <JsonButton :resource_url="api + 'timecourses/'+ item.pk +'/?format=json'"/>
+            </template>
+
+            <template v-slot:item.measurement_type="{ item }">
+                <object-chip :object="item.measurement_type"
+                             otype="measurement_type"
+                             :search="search"
+                />
+            </template>
+            <template v-slot:item.subject="{ item }">
+                <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
-                            <group-chip :group="data.data" :search="search"/>
+                            <object-chip :object="data.data"
+                                         otype="group"
+                                         :search="search"
+                            />
                         </span>
-                    </get-data>
-                </td>
-                <td>
-                    <get-data v-if="table.item.individual" :resource_url="individual_url(table.item.individual.pk)">
+                </get-data>
+                <get-data v-if="item.individual" :resource_url="individual_url(item.individual.pk)">
                         <span slot-scope="data">
-                            <individual-chip :individual="data.data" :search="search"/>
+                            <object-chip :object="data.data"
+                                         otype="individual"
+                                         :search="search"
+                            />
                         </span>
-                    </get-data>
-                <td>
-                    <span v-for="(intervention, index2) in table.item.interventions" :key="index2">
+                </get-data>
+            </template>
+            <template v-slot:item.interventions="{ item }">
+                    <span v-if="item.interventions" v-for="(intervention, index2) in item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
-                        <span slot-scope="data">
-                            <intervention-chip :intervention="data.data" :search="search"/>
-                        </span>
-                    </get-data>
+                            <span slot-scope="data">
+                                <object-chip :object="data.data"
+                                             otype="intervention"
+                                             :search="search"
+                                />
+                            </span>
+                        </get-data>&nbsp;
                     </span>
-                </td>
-                <td>
-                    <text-highlight :queries="search.split(/[ ,]+/)">
-                        {{table.item.tissue}}
-                    </text-highlight>
-                </td>
-                <td>
-                    <substance-chip :title="table.item.substance" :search="search"/>
-                </td>
-                <td>
-                    <timecourse-plot :timecourse="table.item"/>
-                </td>
+            </template>
+            <template v-slot:item.tissue="{ item }">
+                <object-chip :object="item.tissue"
+                             otype="tissue"
+                             :search="search"
+                />
+            </template>
+
+            <template v-slot:item.substance="{ item }">
+                <object-chip :object="item.substance"
+                             otype="substance"
+                             :search="search"
+                />
+            </template>
+
+            <template v-slot:item.timecourse="{ item }">
+                <timecourse-plot :timecourse="item"/>
             </template>
             <no-data/>
 
@@ -59,27 +85,14 @@
     import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
-    import GroupButton from '../lib/GroupButton'
-    import IndividualButton from '../lib/IndividualButton'
     import TimecoursePlot from '../plots/TimecoursePlot'
-    import SubstanceChip from "../detail/SubstanceChip"
-    import InterventionChip from "../detail/InterventionChip"
-    import GroupChip from "../detail/GroupChip"
-    import IndividualChip from "../detail/IndividualChip"
-
 
     export default {
         name: "TimecoursesTable",
         components: {
             NoData,
             TableToolbar,
-            GroupButton,
-            IndividualButton,
             TimecoursePlot,
-            SubstanceChip,
-            InterventionChip,
-            GroupChip,
-            IndividualChip
         },
         mixins: [searchTableMixin, UrlMixin],
         data() {
@@ -89,12 +102,11 @@
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Measurement Type', value: 'measurement_type'},
-                    {text: 'Group', value: 'group'},
-                    {text: 'Individual', value: 'individual'},
+                    {text: 'Subjects', value: 'subject'},
                     {text: 'Interventions', value: 'interventions', sortable: false},
                     {text: 'Tissue', value: 'tissue'},
                     {text: 'Substance', value: 'substance'},
-                    {text: 'Timecourse', value: 'auc_end'},
+                    {text: 'Timecourse', value: 'timecourse'},
                 ]
             }
         },

@@ -4,31 +4,29 @@
         <v-data-table
                 :headers="headers"
                 :items="entries"
-                :pagination.sync="pagination"
-                :total-items="count"
+                :options.sync="options"
+                :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
         >
-            <template slot="items" slot-scope="table">
-                <td>
-                    <link-button :to="'/references/'+ table.item.sid" :title="'Reference: '+table.item.name" :icon="icon('reference')"/>
-                    <link-button v-if="table.item.study" :to="'/studies/'+ table.item.study.sid" :title="'Study: '+table.item.study.name" :icon="icon('study')"/>
-                    <!--
-                    <file-button v-if="table.item.pdf" :resource_url='backend+table.item.pdf' :title="table.item.pdf"/>
-                    -->
-                    <json-button :resource_url="api + '/references_elastic/'+ table.item.sid +'/'"/>
-
-                </td>
-                <td><text-highlight :queries="[search]">{{ table.item.sid }}</text-highlight></td>
-                <td>
-                    <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+table.item.pmid"
-                       target="_blank"><text-highlight :queries="[search]">{{ table.item.pmid }}</text-highlight></a>
-                </td>
-                <td> <text-highlight :queries="[search]">{{ table.item.name }}</text-highlight> </td>
-                <td> <text-highlight :queries="[search]">{{table.item.title}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.journal}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.date}}</text-highlight></td>
-                <td> <text-highlight :queries="[search]">{{table.item.abstract}}</text-highlight></td>
+            <template v-slot:item.buttons="{ item }">
+                    <LinkButton v-if="item.study"
+                                :to="'/studies/'+ item.study.sid"
+                                :title="'Study: '+item.study.name"
+                                icon="study"
+                    />
+                    <link-button :to="'/references/'+ item.sid"
+                                 :title="'Reference: '+item.name"
+                                 icon="reference"
+                    />
+                    <json-button :resource_url="api + 'references/'+ item.sid +'/'"/>
+            </template>
+            <template  v-slot:item.sid="{ item }">
+                <text-highlight :queries="[search]">{{ item.sid }}</text-highlight>
+            </template>
+            <template  v-slot:item.pmid="{ item }">
+                <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+item.pmid"
+                   target="_blank"><text-highlight :queries="[search]">{{ item.pmid }}</text-highlight></a>
             </template>
             <no-data/>
         </v-data-table>

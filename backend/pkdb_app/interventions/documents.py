@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from ..documents import string_field, elastic_settings, ObjectField
+
+from ..documents import string_field, elastic_settings, study_field, basic_object, info_node
 from ..interventions.models import Intervention
 
 
@@ -10,39 +11,32 @@ from ..interventions.models import Intervention
 @registry.register_document
 class InterventionDocument(Document):
     pk = fields.IntegerField()
-    measurement_type = fields.StringField(
-        attr='measurement_type_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
+    measurement_type = info_node("i_measurement_type")
+    form = info_node("i_form")
+    route = info_node("i_route")
+    application = info_node("i_application")
+    choice = info_node("i_choice")
+    substance = info_node("i_substance")
 
-    form = fields.StringField(
-        attr='form_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    route = fields.StringField(
-        attr='route_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    application = fields.StringField(
-        attr='application_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    choice = string_field('choice')
     time_unit = string_field('time_unit')
+
     time = fields.FloatField()
     time_end = fields.FloatField()
 
-    substance = string_field('substance_name')
-    study_name = string_field('study_name')
-    study_sid = string_field('study_sid')
+    measurement_type_name = fields.TextField(
+        attr='measurement_type_name',
+        fields={
+            'raw': fields.TextField(analyzer='keyword'),
+        }
+    )
+    form_name = string_field('form_name')
+    route_name = string_field('route_name')
+    application_name = string_field('application_name')
+    choice_name = string_field('choice_name')
+    substance_name = string_field('substance_name')  #FIXME: Remove
+    study = study_field
+    study_name = string_field('study_name')  # FIXME: Remove
+    study_sid = string_field('study_sid')  # FIXME: Remove
 
     name = string_field('name')
     normed = fields.BooleanField()
@@ -79,4 +73,4 @@ class InterventionDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(InterventionDocument, self).get_queryset().select_related(
-            'ex__interventionset__study')
+            'study')

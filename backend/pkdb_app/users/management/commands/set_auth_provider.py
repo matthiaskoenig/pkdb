@@ -9,6 +9,7 @@ docker-compose run web python manage.py set_auth_provider github $GITHUB_CLIENT_
 from allauth.socialaccount.models import SocialApp
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
+
 from pkdb_app.settings import SITE_ID
 
 

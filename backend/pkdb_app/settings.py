@@ -1,59 +1,14 @@
 """
-Shared django settings.
+DJANGO settings
 """
-import logging
 import os
-from os.path import join
-
-import dj_database_url
-from distutils.util import strtobool
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# ------------------------------------------------------------------------------------------------------------------
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['PKDB_SECRET_KEY']
-
 API_BASE = os.environ['PKDB_API_BASE']
-FRONTEND_BASE = os.environ['FRONTEND_BASE']
-
 API_URL = API_BASE + "/api/v1"
-# ------------------------------------------------------------------------------------------------------------------
-# AUTHENTICATION_BACKENDS = (
-#
-#    # Needed to login by username in Django admin, regardless of `allauth`
-##    'rest_email_auth.authentication.VerifiedEmailBackend',
-#    'django.contrib.auth.backends.ModelBackend',
-#
-#    # `allauth` specific authentication methods, such as login by e-mail
-#    'allauth.account.auth_backends.AuthenticationBackend',
-# )
-
-# AUTHENTICATION_BACKENDS = [
-# 'rest_email_auth.authentication.VerifiedEmailBackend',
-# 'django.contrib.auth.backends.ModelBackend',
-# ]
-
-AUTHENTICATION_BACKENDS = (
-    # default
-    'django.contrib.auth.backends.ModelBackend',
-    # email login
-    # 'allauth.account.auth_backends.AuthenticationBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-    'rest_email_auth.authentication.VerifiedEmailBackend',
-
-)
-
-# The minimal settings dict required for the app
-REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': FRONTEND_BASE + '/#/verification/{key}',
-    'PASSWORD_RESET_URL': FRONTEND_BASE + '/#/reset-password/{key}',
-    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
-    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
-}
 
 INSTALLED_APPS = (
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.sites",
     "django.contrib.contenttypes",
@@ -61,47 +16,29 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Authentication
+    # authentication
     'rest_email_auth',
     "rest_framework.authtoken",  # token authentication
-    # 'rest_auth',
-    # 'rest_auth.registration',
-    'allauth',
-    'allauth.account',
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
     "django_filters",  # for filtering rest endpoints
-    "rest_framework_swagger",
     "corsheaders",
 
-    # Elastic Search
-    # Django Elasticsearch integration
+    # elasticsearch
     'django_elasticsearch_dsl',
-
-    # Django REST framework Elasticsearch integration (this package)
     'django_elasticsearch_dsl_drf',
 
     # Your apps
     "pkdb_app.users",
     "pkdb_app.studies",
-    "pkdb_app.categorials",
+    "pkdb_app.info_nodes",
     "pkdb_app.subjects",
-    "pkdb_app.substances",
     "pkdb_app.interventions",
     "pkdb_app.outputs",
     "pkdb_app.comments",
 )
-# django-allauth settings
-SITE_ID = 1
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_MIN_LENGTH = 3
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
 
-# https://docs.djangoproject.com/en/2.0/topics/http/middleware/
 MIDDLEWARE = (
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -121,9 +58,6 @@ ROOT_URLCONF = "pkdb_app.urls"
 
 WSGI_APPLICATION = "pkdb_app.wsgi.application"
 
-# Email
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
 ADMINS = (
     ("mkoenig", "konigmatt@googlemail.com"),
     ("janekg89", "janekg89@hotmail.de"),
@@ -133,36 +67,31 @@ ADMINS = (
 APPEND_SLASH = False
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = False
 USE_L10N = True
 USE_TZ = True
 LOGIN_REDIRECT_URL = "/"
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+# Static files
 STATIC_ROOT = "/static"
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [join(BASE_DIR, "pkdb_app", "static")]
+STATICFILES_DIRS = []
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
 
 # Media files
-MEDIA_ROOT = '/media/'  # join(BASE_DIR, "media")
+MEDIA_ROOT = "/media/"
 MEDIA_URL = "/media/"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": STATICFILES_DIRS + [os.path.join(BASE_DIR, "pkdb_app", "templates")],
+        "DIRS": STATICFILES_DIRS,
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -172,18 +101,28 @@ TEMPLATES = [
     }
 ]
 
-# Custom user app
+# authentication
+AUTHENTICATION_BACKENDS = (
+    # default
+    'django.contrib.auth.backends.ModelBackend',
+    # email login
+    'rest_email_auth.authentication.VerifiedEmailBackend',
+)
+REST_EMAIL_AUTH = {
+    'EMAIL_VERIFICATION_URL': API_BASE + '/verification/{key}',
+    'PASSWORD_RESET_URL': API_BASE + '/reset-password/{key}',
+    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
+    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
+}
 AUTH_USER_MODEL = "users.User"
 
 # Password Validation
 # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Logging
@@ -256,19 +195,7 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
     ),
 }
-LOGIN_URL = "rest_framework:login"
-LOGOUT_URL = "rest_framework:logout"
 
-SWAGGER_SETTINGS = {
-    "LOGIN_URL": "rest_framework:login",
-    "LOGOUT_URL": "rest_framework:logout",
-    "USE_SESSION_AUTH": True,
-    "DOC_EXPANSION": "list",
-    "APIS_SORTER": "alpha",
-    "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
-}
-
-# Postgres
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -280,38 +207,36 @@ DATABASES = {
     }
 }
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}
+
 DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
-logging.info(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
-print(f"DJANGO_CONFIGURATION: {DJANGO_CONFIGURATION}")
 # ------------------------------
-# LOCAL
+# local
 # ------------------------------
 if DJANGO_CONFIGURATION == 'local':
     DEBUG = True
-    LOGIN_URL = API_BASE + "/#/account"
-    LOGIN_REDIRECT_URL = API_BASE + "/#/account"
-    ACCOUNT_LOGOUT_REDIRECT_URL = API_BASE + "/#/account"
+    LOGIN_URL = API_BASE + "/account"
+    LOGIN_REDIRECT_URL = API_BASE + "/account"
+    ACCOUNT_LOGOUT_REDIRECT_URL = API_BASE + "/account"
 
     # Mail
     EMAIL_HOST = "localhost"
     EMAIL_PORT = 1025
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-    # Elastic Search
-    ELASTICSEARCH_DSL = {
-        'default': {
-            'hosts': 'elasticsearch:9200'
-        },
-    }
-
 # -------------------------------------------------
-# Production
+# production
 # -------------------------------------------------
 elif DJANGO_CONFIGURATION == 'production':
     DEBUG = False
-    LOGIN_URL = "/#/account"
-    LOGIN_REDIRECT_URL = "/#/account"
-    ACCOUNT_LOGOUT_REDIRECT_URL = "/#/account"
+    LOGIN_URL = "/account"
+    LOGIN_REDIRECT_URL = "/account"
+    ACCOUNT_LOGOUT_REDIRECT_URL = "/account"
+
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     # Mail
@@ -322,31 +247,21 @@ elif DJANGO_CONFIGURATION == 'production':
     SERVER_EMAIL = "mail@pk-db.com"
     DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
-    # EMAIL_PORT = 587
-    # EMAIL_USE_TLS = True
-    EMAIL_USE_TLS = False
-    EMAIL_PORT = 25
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    # EMAIL_PORT = 465
+    # EMAIL_USE_SSL = True
+    # EMAIL_PORT = 25
     EMAIL_HOST_USER = os.environ['PKDB_EMAIL_HOST_USER']
     EMAIL_HOST_PASSWORD = os.environ['PKDB_EMAIL_HOST_PASSWORD']
 
-    if not EMAIL_HOST_USER:
-        raise ValueError("PKDB_EMAIL_HOST_USER could not be read, export the "
-                         "'PKDB_EMAIL_HOST_USER' environment variable.")
-    if not EMAIL_HOST_PASSWORD:
-        raise ValueError("PKDB_EMAIL_HOST_PASSWORD could not be read, export the "
-                         "'PKDB_EMAIL_HOST_PASSWORD' environment variable.")
-
-    # Elastic Search
-    ELASTICSEARCH_DSL = {
-        'default': {
-            'hosts': 'localhost:9200'
-        },
-    }
-
-    # FIXME: remove after email testing
+    # Test email
     # from django.core.mail import send_mail
-    # send_mail('Test mail production', 'Here is the message.',
-    # 'from@example.com', ['konigmatt@googlemail.com'], fail_silently=False)
+    # send_mail(f"Site deployment '{API_BASE}'",
+    #          'This is an automatically generated mail that the site is '
+    #          'deployed.',
+    #          f'deployment-mail@pk-db.com', ['konigmatt@googlemail.com'],
+    #          fail_silently=False)
 
     # Site
     # https://docs.djangoproject.com/en/2.0/ref/settings/#allowed-hosts

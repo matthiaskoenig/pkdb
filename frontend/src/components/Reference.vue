@@ -18,11 +18,11 @@
         },
         computed: {
             resource_url() {
-                var path = this.$route.path;
-                var tokens = path.split('/');
-                var entry_id = tokens[tokens.length-1];
+                const path = this.$route.path;
+                const tokens = path.split('/');
+                const entry_id = tokens[tokens.length - 1];
                 console.log(entry_id);
-                return this.$store.state.endpoints.api + '/references_elastic/'+ entry_id + '/';
+                return this.$store.state.endpoints.api + 'references_elastic/'+ entry_id + '/';
             }
         },
     }

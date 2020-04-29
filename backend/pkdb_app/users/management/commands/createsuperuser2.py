@@ -1,6 +1,6 @@
 from django.contrib.auth.management.commands import createsuperuser
-from django.core.management import CommandError
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.management import CommandError
 from rest_email_auth.models import EmailAddress
 
 

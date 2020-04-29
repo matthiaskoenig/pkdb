@@ -2,31 +2,25 @@
 Describe outputs and timecourses
 """
 
-import numpy as np
 import math
-import pandas as pd
 
+import numpy as np
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
-from pkdb_app.categorials.models import MeasurementType, Tissue
-from pkdb_app.categorials.behaviours import ureg
+
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.info_nodes.models import Tissue, Method
+from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
-
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from pkdb_app.subjects.models import Group, DataFile, Individual
-
 from .managers import (
-    OutputSetManager,
-    OutputExManager,
-    TimecourseExManager,
     OutputManager
 )
-from ..normalization import get_cv, get_se, get_sd
 from ..behaviours import (
     Externable, Accessible)
-
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
+from ..error_measures import calculate_cv, calculate_se, calculate_sd
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 TIME_NORM_UNIT = "hr"
 
@@ -35,7 +29,6 @@ TIME_NORM_UNIT = "hr"
 # OUTPUTS
 # -------------------------------------------------
 class OutputSet(models.Model):
-    objects = OutputSetManager()
 
     @property
     def outputs(self):
@@ -83,6 +76,8 @@ class AbstractOutput(models.Model):
 
 class AbstractOutputMap(models.Model):
     tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    method_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+
     time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
@@ -114,11 +109,36 @@ class OutputEx(Externable,
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    method = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
-    objects = OutputExManager()
+
+class Outputable(Normalizable, models.Model):
+
+    class Meta:
+        abstract = True
+
+    @property
+    def i_tissue(self):
+
+        return self._i("tissue")
+
+    @property
+    def tissue_name(self):
+        if self.tissue:
+            return self.tissue.info_node.name
+
+    @property
+    def i_method(self):
+
+        return self._i("method")
+
+    @property
+    def method_name(self):
+        if self.method:
+            return self.method.info_node.name
 
 
-class Output(AbstractOutput, Normalizable, Accessible):
+class Output(AbstractOutput, Outputable, Accessible):
     """ Storage of data sets. """
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
@@ -126,17 +146,17 @@ class Output(AbstractOutput, Normalizable, Accessible):
     _interventions = models.ManyToManyField(Intervention, through="OutputIntervention")
 
     tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
+    method = models.ForeignKey(Method, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
 
     ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
 
     # calculated by timecourse data
     calculated = models.BooleanField(default=False)
-    timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="pharmacokinetics", null=True)
+    timecourse = models.ForeignKey("Timecourse", on_delete=models.CASCADE, related_name="outputs", null=True)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="outputs")
+
     objects = OutputManager()
 
-    @property
-    def tissue_name(self):
-        return self.tissue.name
 
     @property
     def interventions(self):
@@ -149,21 +169,8 @@ class Output(AbstractOutput, Normalizable, Accessible):
         else:
             return self.raw._interventions
 
-    @property
-    def study(self):
-
-        try:
-            return self.ex.outputset.study
-
-        except AttributeError:
-            try:
-                return self.timecourse.ex.outputset.study
-
-            except AttributeError:
-                return None
 
     # for elastic search. NaNs are not allowed in elastic search
-
     def null_attr(self, attr):
         value = getattr(self, attr)
         if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):
@@ -202,15 +209,15 @@ class Output(AbstractOutput, Normalizable, Accessible):
     def add_error_measures(self):
         if self.group:
             if not self.sd:
-                self.sd = get_sd(
+                self.sd = calculate_sd(
                     se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
                 )
             if not self.se:
-                self.se = get_se(
+                self.se = calculate_se(
                     sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
                 )
             if not self.cv:
-                self.cv = get_cv(
+                self.cv = calculate_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
 
@@ -252,11 +259,10 @@ class TimecourseEx(
     interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    method = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
-    objects = TimecourseExManager()
 
-
-class Timecourse(AbstractOutput, Normalizable, Accessible):
+class Timecourse(AbstractOutput, Outputable, Accessible):
     """ Storing of time course data.
 
     Store a binary blop of the data (json, pandas dataframe or similar, backwards compatible).
@@ -266,6 +272,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     _interventions = models.ManyToManyField(Intervention, through="TimecourseIntervention")
     ex = models.ForeignKey(TimecourseEx, related_name="timecourses", on_delete=models.CASCADE)
     tissue = models.ForeignKey(Tissue, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
+    method = models.ForeignKey(Method, related_name="timecourses", null=True, blank=True, on_delete=models.CASCADE)
 
     value = ArrayField(models.FloatField(null=True), null=True)
     mean = ArrayField(models.FloatField(null=True), null=True)
@@ -276,11 +283,10 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     se = ArrayField(models.FloatField(null=True), null=True)
     cv = ArrayField(models.FloatField(null=True), null=True)
     time = ArrayField(models.FloatField(null=True), null=True)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="timecourses")
+
     objects = OutputManager()
 
-    @property
-    def tissue_name(self):
-        return self.tissue.name
 
     @property
     def interventions(self):
@@ -293,9 +299,6 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             except AttributeError:
                 return Intervention.objects.none()
 
-    @property
-    def study(self):
-        return self.ex.outputset.study
 
     @property
     def figure(self):
@@ -308,19 +311,19 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
         """ Calculates additional error measures."""
         if self.group:
             if not self.sd:
-                sd = get_sd(
+                sd = calculate_sd(
                     se=self.se, count=self.group.count, mean=self.mean, cv=self.cv
                 )
                 if isinstance(sd, np.ndarray):
                     self.sd = list(sd)
             if not self.se:
-                se = get_se(
+                se = calculate_se(
                     sd=self.sd, count=self.group.count, mean=self.mean, cv=self.cv
                 )
                 if isinstance(se, np.ndarray):
                     self.se = list(se)
             if not self.cv:
-                cv = get_cv(
+                cv = calculate_cv(
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
                 if isinstance(cv, np.ndarray):
@@ -398,7 +401,7 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
     def null_time(self):
         return self.null_attr('time')
 
-    ###############################################################################
+
     @property
     def related_subject(self):
         if self.group:
@@ -407,95 +410,23 @@ class Timecourse(AbstractOutput, Normalizable, Accessible):
             return self.individual
 
     def get_bodyweight(self):
-        weight_measurememnt_type = self.related_subject.characteristica_all_normed.filter(
-            measurement_type__name="weight")
-        return weight_measurememnt_type
+        weight_measurement_type = self.related_subject.characteristica_all_normed.filter(
+            measurement_type__info_node__name="weight")
+        return weight_measurement_type
 
-    def get_dosing(self):
+    def get_single_dosing(self) -> Intervention:
+        """Returns a single intervention of type dosing if existing.
 
+        If multiple dosing interventions exist, no dosing is returned!.
+        """
         try:
-            dosing_measurement_type = self.interventions.get(normed=True, measurement_type__name="dosing")
+            dosing_measurement_type = self.interventions.get(
+                normed=True, measurement_type__info_node__name="dosing"
+            )
             return dosing_measurement_type
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
-
-    def get_pharmacokinetic_variables(self):
-        """Get data for pharmacokinetics calculation
-
-        :return: dict of data for calculation of pharmacokinetics
-        """
-        # TODO: This should be refactored in the pharmacokinetics module
-        pk_dict = {}
-
-        # substance
-        pk_dict["compound"] = self.substance.name
-
-        # bodyweight
-        bodyweight = self.get_bodyweight().first()
-
-        # time
-        pk_dict["t"] = pd.Series(self.time)
-        pk_dict["t_unit"] = self.time_unit
-
-        # concentration
-        # FIXME: the timecourse data must be filtered based on the dosing times
-        #   (or alternatively this should be handled in the pk calculation)
-        pk_dict["c_unit"] = self.unit
-
-        if self.mean:
-            pk_dict["c"] = pd.Series(self.mean)
-            pk_dict["c_type"] = "mean"
-
-        elif self.median:
-            pk_dict["c"] = pd.Series(self.median)
-            pk_dict["c_type"] = "median"
-
-        elif self.value:
-            pk_dict["c"] = pd.Series(self.value)
-            pk_dict["c_type"] = "value"
-
-        # dosing
-        dosing = self.get_dosing()
-
-        restricted_dosing_units = [
-            'g',
-            'g/kg',
-            'mol',
-            'mol/kg',
-        ]
-        MeasurementType()
-
-        if dosing:
-            if MeasurementType.objects.get(name="restricted dosing").is_valid_unit(dosing.unit):
-                p_unit_dosing = self.measurement_type.p_unit(dosing.unit)
-                p_unit_concentration = self.measurement_type.p_unit(pk_dict["c_unit"])
-                vd_unit = p_unit_dosing / p_unit_concentration
-                pk_dict["vd_unit"] = str(vd_unit)
-                pk_dict["dose"] = dosing.value
-                if dosing.time:
-                    pk_dict["intervention_time"] = (ureg(dosing.time_unit) * dosing.time).to(self.time_unit).magnitude
-
-                pk_dict["dose_unit"] = dosing.unit
-
-        # bodyweight dependent values
-        if bodyweight:
-            pk_dict["bodyweight_unit"] = bodyweight.unit
-
-            if bodyweight.value:
-                pk_dict["bodyweight"] = bodyweight.value
-                pk_dict["bodyweight_type"] = "value"
-
-            elif bodyweight.mean:
-                pk_dict["bodyweight"] = bodyweight.mean
-                pk_dict["bodyweight_type"] = "mean"
-
-
-            elif bodyweight.median:
-                pk_dict["bodyweight"] = bodyweight.median
-                pk_dict["bodyweight_type"] = "median"
-
-        return pk_dict
 
 
 class OutputIntervention(Accessible, models.Model):
@@ -588,20 +519,26 @@ class OutputIntervention(Accessible, models.Model):
     @property
     def tissue(self):
         if self.output.tissue:
-            return self.output.tissue.name
+            return self.output.tissue.info_node.name
+
+    @property
+    def method(self):
+        if self.output.method:
+            return self.output.method.info_node.name
 
     @property
     def measurement_type(self):
-        return self.output.measurement_type.name
+        return self.output.measurement_type.info_node.name
 
     @property
     def choice(self):
-        return self.output.choice
+        if self.output.choice:
+            return self.output.choice.info_node.name
 
     @property
     def substance(self):
         if self.output.substance:
-            return self.output.substance.name
+            return self.output.substance.info_node.name
 
     @property
     def normed(self):
@@ -618,6 +555,7 @@ class TimecourseIntervention(Accessible, models.Model):
 
     class Meta:
         unique_together = ("timecourse", "intervention")
+
 
     @property
     def study(self):
@@ -702,20 +640,27 @@ class TimecourseIntervention(Accessible, models.Model):
     @property
     def tissue(self):
         if self.timecourse.tissue:
-            return self.timecourse.tissue.name
+            return self.timecourse.tissue.info_node.name
+
+    @property
+    def method(self):
+        if self.timecourse.method:
+            return self.timecourse.method.info_node.name
 
     @property
     def measurement_type(self):
-        return self.timecourse.measurement_type.name
+        return self.timecourse.measurement_type.info_node.name
 
     @property
     def choice(self):
-        return self.timecourse.choice
+        if self.timecourse.choice:
+            return self.timecourse.choice.info_node.name
 
     @property
     def substance(self):
         if self.timecourse.substance:
-            return self.timecourse.substance.name
+            return self.timecourse.substance.info_node.name
+
 
     @property
     def normed(self):

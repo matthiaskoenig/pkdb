@@ -1,17 +1,18 @@
 """
 Basic information and statistics about data base content.
 """
-import pandas as pd
-from pkdb_app.outputs.models import Output, Timecourse
 from rest_framework import serializers
-from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
 
 from pkdb_app._version import __version__
-from pkdb_app.studies.models import Study, Reference
-from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.interventions.models import Intervention
+from pkdb_app.outputs.models import Output, Timecourse
+from pkdb_app.studies.documents import StudyDocument
+from pkdb_app.studies.models import Study, Reference
+from pkdb_app.studies.serializers import StudyElasticStatisticsSerializer
+from pkdb_app.studies.views import ElasticStudyViewSet
+from pkdb_app.subjects.models import Group, Individual
 
 
 class Statistics(object):
@@ -27,12 +28,7 @@ class Statistics(object):
         self.output_count = Output.objects.filter(normed=True).count()
         self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
         self.timecourse_count = Timecourse.objects.filter(normed=True).count()
-
-
-@api_view(['GET'])
-def study_pks_view(request):
-    if request.method == 'GET':
-        return Response(list(Study.objects.values_list("pk", flat=True)))
+        self.studies = StudyElasticStatisticsSerializer(StudyDocument().get_queryset()).data
 
 
 class StatisticsViewSet(viewsets.ViewSet):
@@ -62,5 +58,6 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "output_count",
                 "output_calculated_count",
                 "timecourse_count",
+                "studies",
             ]
         }

@@ -1,7 +1,7 @@
 <template>
-<v-toolbar id="heading-toolbar" color="secondary" dark>
+<v-toolbar id="heading-toolbar" color="#CCCCCC" dense>
     <heading :count="count"
-             :icon="icon(otype)"
+             :icon="faIcon(otype)"
              :title="capitalizeFirstLetter(otype)"
              :resource_url="url"
     />
@@ -11,6 +11,7 @@
             append-icon="fa-search"
             label="Search"
             single-line
+            color="white"
             hide-details
             :autofocus="autofocus"
     />
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
+    import {lookupIcon} from "@/icons"
 
     export default {
         name: "TableToolbar",
@@ -44,16 +45,15 @@
             }
         },
         methods: {
-            icon(key) {
-                return lookup_icon(key)
+            faIcon(key) {
+                return lookupIcon(key)
             },
             capitalizeFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             },
         },
         watch: {
-            search: function(newVal, oldVal) {
-                // console.log("search:" + this.search);
+            search: function(newVal) {
                 this.$emit('update', newVal)
             }
         }

@@ -3,47 +3,72 @@
         <span v-if="user">
             <v-card-text>
             <v-form>
-                <v-text-field readonly prepend-icon="fas fa-user-circle" v-model="user" name="username" label="Username" type="text" :value="user"></v-text-field>
+                <v-text-field readonly
+                              prepend-icon="fas fa-user-circle"
+                              v-model="user"
+                              name="username"
+                              label="Username"
+                              type="text"
+                              :value="user"
+                />
             </v-form>
             </v-card-text>
             <v-card-actions>
                 <v-btn color="primary"  v-on:click="logout">Logout</v-btn>
-
-                <v-spacer> </v-spacer>
+                <v-spacer/>
                 <v-btn flat>
-                <router-link   v-on:click.native="close" to="/request-password-reset" >
-                   password reset
-                </router-link>
+                    <router-link v-on:click.native="close" to="/request-password-reset">
+                       password reset
+                    </router-link>
                 </v-btn>
             </v-card-actions>
         </span>
         <span v-else>
-
-        <v-card-text>
-            <v-form>
-                <v-alert v-for="general_warning in general_warnings" :value="general_warnings" type="error">
-                    {{general_warning}}
-                </v-alert>
-                <v-text-field v-on:keyup.enter="login" prepend-icon="fas fa-user-circle" :error="user_warnings" :error-messages="user_warnings" v-model="username" name="username" label="Login" type="text"></v-text-field>
-                <v-text-field v-on:keyup.enter="login" prepend-icon='fas fa-lock' :error="password_warnings" :error-messages="password_warnings" v-model="password" name="password" label="Password" id="password" type="password"></v-text-field>
-            </v-form>
-        </v-card-text>
-        <v-card-actions>
-            <v-btn color="primary" v-on:click="login">Login</v-btn>
-                <v-spacer></v-spacer>
-                <v-btn flat><router-link v-on:click.native="close" to="/registration" >
-                   register
-                </router-link></v-btn>
-
-                 <v-btn flat><router-link v-on:click.native="close" to="/request-password-reset" >
-                   forgot password
-                </router-link></v-btn>
-
-        </v-card-actions>
+            <v-card-text>
+                <v-form>
+                    <v-alert v-for="general_warning in general_warnings"
+                             :value="general_warnings"
+                             type="error"
+                             :key="general_warning">
+                        {{general_warning}}
+                    </v-alert>
+                    <v-text-field v-on:keyup.enter="login"
+                                  prepend-icon="fas fa-user-circle"
+                                  :error="user_warnings"
+                                  :error-messages="user_warnings"
+                                  v-model="username"
+                                  name="username"
+                                  label="Login"
+                                  type="text"
+                    />
+                    <v-text-field v-on:keyup.enter="login"
+                                  prepend-icon='fas fa-lock'
+                                  :error="password_warnings"
+                                  :error-messages="password_warnings"
+                                  v-model="password"
+                                  name="password"
+                                  label="Password"
+                                  id="password"
+                                  type="password"
+                    />
+                </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="primary" v-on:click="login">Login</v-btn>
+                    <v-spacer/>
+                    <v-btn text>
+                        <router-link v-on:click.native="close" to="/registration" >
+                        register
+                        </router-link>
+                    </v-btn>
+                    <v-btn text>
+                        <router-link v-on:click.native="close" to="/request-password-reset" >
+                        forgot password
+                        </router-link>
+                    </v-btn>
+            </v-card-actions>
         </span>
-
     </v-card>
-
 </template>
 
 <script>
@@ -111,9 +136,7 @@
                 else{
                     return null
                 }
-
             }
-
         },
         methods: {
             close() {

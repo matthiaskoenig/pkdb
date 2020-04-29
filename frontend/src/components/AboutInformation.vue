@@ -1,51 +1,63 @@
 <template>
     <v-card id="about-information">
-        <v-toolbar color="secondary" dark dense>
-            <v-toolbar-title>About PK-DB</v-toolbar-title>
-        </v-toolbar>
         <v-container fluid>
             <v-layout row wrap>
                 <v-flex xs12>
-                    <strong>Version</strong>: {{ version }}<br />
+                    <h2>PK-DB Team</h2>
+                    <p>
+                        PK-DB is developed from the <a href="https://livermetabolism.com">Systems Medicine of the Liver Group</a> of Matthias König at the Humboldt-University Berlin.
+                    </p>
+                    <p>
+                        <user-avatar username="mkoenig"/>
+                        <user-avatar username="janekg"/>
+                        <user-avatar username="kgreen"/>
+                        <user-avatar username="dimitra"/>
+                        <user-avatar username="jbrandhorst"/>
+                        <user-avatar username="deepa"/>
+                        <user-avatar username="yduport"/>
+                        <user-avatar username="FlorBar"/>
+                        <user-avatar username="adriankl"/>
+                        <user-avatar username="dannythekey"/>
+                    </p>
+                    <p>
+                    <strong>Version</strong>: {{ version }}
+                    </p>
+
+                    <h2>Licensing</h2>
+                    <p>
+                        All data is governed by the PK-DB's <a href="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md">Terms of use</a>
+                    </p>
+
+                    <h2>How to cite</h2>
+                    <p>
+                        <i>PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling</i><br />
+                        Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König<br />
+                        bioRxiv 760884; doi: <a href="https://doi.org/10.1101/760884">https://doi.org/10.1101/760884</a>
+                    </p>
+                    <p>
+                    If you use PK-DB code cite also
+                        <a href="https://doi.org/10.5281/zenodo.1406979"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg"/></a>
+                    </p>
+                    <h2>Report an issue</h2>
+                    <p>
+                        <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">
+                            <v-icon color="black" small>fas fa-fire</v-icon></a> <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">https://github.com/matthiaskoenig/pkdb/issues/new</a>
+                    </p>
+
+                    <h2>Contact</h2>
                     <p>
                         <span v-for="item in contact_items" :key="item.name">
                             <a :href="item.to" :title="item.title"><v-icon color="black" small>{{ item.icon }}</v-icon></a>&nbsp;<a :href="item.to" :title="item.title">{{ item.title }}</a><br/>
                         </span>
                     </p>
-                    <p>
-                        <strong>Citation</strong>:&nbsp;<a href="https://doi.org/10.5281/zenodo.1406979"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg" alt="DOI"></a>
-                    </p>
-
-                    <h2>Curation workflow</h2>
-                    <p>
-                        A) Literature research is performed for substances in liver function tests. Study data for
-                        the integration
-                        of datasets with computational models is extracted. This includes information about study
-                        design, subjects,
-                        interventions, and dosing schema. Important lifestyle factors like smoking behavior, alcohol
-                        consumption,
-                        oral contraceptives, or coffee consumption are recorded. Datasets depicted in the figures
-                        and tables are
-                        digitized in machine-readable formats and basic metadata is annotated. Pharmacokinetics
-                        parameters are
-                        extracted from publication text, tables and figures. B) Study information, datasets, and
-                        corresponding
-                        metadata are made accessible under FAIR principles.
-                    </p>
-                    <p>
-                        <v-img src="/assets/images/workflow.png" max-width="600"/>
-                    </p>
-
 
                     <h2>Funding</h2>
                     <p>
                         This project is supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054).
                         <br /><br/>
-                        <a href="https://www.bmbf.de/" target="_blank"><img src="/assets/images/bmbf.png" height="75" /></a>&nbsp;
+                        <a href="https://www.bmbf.de/" target="_blank"><img src="/assets/images/bmbf.png" height="50" /></a>&nbsp;
                         <a href="http://www.lisym.org" target="_blank"><img src="/assets/images/lisym.png" height="50" /></a>
                     </p>
-
-
                 </v-flex>
             </v-layout>
         </v-container>
@@ -54,7 +66,6 @@
 
 <script>
     import axios from 'axios'
-    import {lookup_icon} from "@/icons"
 
     export default {
         name: 'AboutInformation',
@@ -71,14 +82,7 @@
                         icon: 'fas fa-envelope',
                         title: 'koenigmx@hu-berlin.de',
                         to: 'mailto:koenigmx@hu-berlin.de'
-                    },
-                    {
-                        name: 'GitHub',
-                        icon: 'fab fa-github',
-                        title: 'https://github.com/matthiaskoenig/pkdb',
-                        to: 'https://github.com/matthiaskoenig/pkdb'
                     }
-
                 ]
 
             }
@@ -89,12 +93,9 @@
             }
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            }
         },
         mounted() {
-            axios.get(this.api + `/statistics/?format=json`)
+            axios.get(this.api + `statistics/?format=json`)
                 .then(response => {
                     // JSON responses are automatically parsed.
                     this.statistics = response.data;
@@ -104,7 +105,6 @@
                     this.errors.push(e)
                 })
         }
-
     }
 </script>
 

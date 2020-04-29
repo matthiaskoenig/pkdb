@@ -1,40 +1,35 @@
-from django.http import Http404
-from django_elasticsearch_dsl_drf.filter_backends import CompoundSearchFilterBackend, \
-    FilteringFilterBackend, OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from django_elasticsearch_dsl_drf.utils import DictionaryProxy
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+import django_filters.rest_framework
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q as DQ
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
+from elasticsearch import helpers
+from elasticsearch_dsl.query import Q
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
+from pkdb_app.interventions.documents import InterventionDocument
 from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument, TimecourseInterventionDocument, \
     OutputInterventionDocument
 from pkdb_app.outputs.models import TimecourseIntervention, OutputIntervention
+from pkdb_app.pagination import CustomPagination
+from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
+from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
+    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
-from rest_framework.exceptions import ValidationError
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from elasticsearch import helpers
-from pkdb_app.interventions.documents import InterventionDocument
-from pkdb_app.pagination import CustomPagination
-from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, CharacteristicaDocument, \
-    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-
 from .models import Reference, Study
 from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer)
-from rest_framework import viewsets
-import django_filters.rest_framework
-from rest_framework import filters
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q as DQ
-
-from elasticsearch_dsl.query import Q
+    StudyElasticSerializer
+)
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -48,7 +43,6 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
     )
     filter_fields = ("sid",)
-    # filter_fields = ( 'pmid', 'doi','title', 'abstract', 'journal','date', 'authors')
     search_fields = filter_fields
     permission_classes = (IsAdminOrCreatorOrCurator,)
 
@@ -66,6 +60,7 @@ class StudyViewSet(viewsets.ModelViewSet):
     lookup_field = "sid"
     permission_classes = (StudyPermission,)
 
+
     def get_queryset(self):
         queryset = super().get_queryset()
         group = user_group(self.request.user)
@@ -82,68 +77,6 @@ class StudyViewSet(viewsets.ModelViewSet):
         elif group == "anonymous":
             return queryset.filter(access=PUBLIC)
 
-    @staticmethod
-    def group_validation(request):
-        if "groupset" in request.data and request.data["groupset"]:
-            groupset = request.data["groupset"]
-            if "groups" in groupset:
-                groups = groupset.get("groups", [])
-                if not isinstance(groups, list):
-                    raise ValidationError(
-                        {"groups": f"groups must be a list and not a {type(groups)}", "detail": groups})
-
-                parents_name = set()
-                groups_name = set()
-
-                for group in groups:
-                    parent_name = group.get("parent")
-                    if parent_name:
-                        parents_name.add(parent_name)
-                    group_name = group.get("name")
-                    if group_name:
-                        groups_name.add(group_name)
-                    if group_name == "all" and parent_name is not None:
-                        raise ValidationError({"groups": "parent is not allowed for group all"})
-
-                    elif group_name != "all" and parent_name is None:
-                        raise ValidationError(
-                            {
-                                "groups": f"'parent' field missing on group '{group_name}'. "
-                                          f"For all groups the parent group must be specified via "
-                                          f"the 'parent' field (with exception of the <all> group)."
-                             })
-
-                if "all" not in groups_name:
-                    raise ValidationError(
-                        {
-                            "group":
-                             "A group with the name `all` is missing (studies without such a group cannot be uploaded). "
-                             "The `all` group is the group of all subjects which was studied and defines common "
-                             "characteristica for all groups and individuals. Species information are requirement "
-                             "on the all group. Create the `all` group or rename group to `all`. "
-                         }
-                    )
-
-                # validate if groups are missing
-                missing_groups = parents_name - groups_name
-                if missing_groups:
-                    msg = {
-                        "groups": f"The groups <{missing_groups}> have been used but not defined."
-                    }
-                    raise ValidationError(msg)
-
-    def partial_update(self, request, *args, **kwargs):
-        self.group_validation(request)
-        return super().partial_update(request, *args, **kwargs)
-
-    def update(self, request, *args, **kwargs):
-        self.group_validation(request)
-        return super().update(request, *args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        self.group_validation(request)
-        return super().create(request, *args, **kwargs)
-
     def destroy(self, request, *args, **kwargs):
 
         # if get object does not find  an object it stops here
@@ -155,26 +88,35 @@ class StudyViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
+
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
+import timeit
+
 
 @csrf_exempt
 def update_index_study(request):
     if request.method == 'POST':
+
         data = JSONParser().parse(request)
         try:
             study = Study.objects.get(sid=data["sid"])
+
         except ObjectDoesNotExist:
             return JsonResponse({"success": "False", "reason": "Instance not in database"})
 
         related_elastic = related_elastic_dict(study)
         for doc, instances in related_elastic.items():
+            # code you want to evaluate
+
             try:
                 action = data.get('action', 'index')
                 doc().update(thing=instances, action=action)
             except helpers.BulkIndexError:
-                pass
+                raise helpers.BulkIndexError
+
+
 
         return JsonResponse({"success": "True"})
 
@@ -184,7 +126,7 @@ def delete_elastic_study(related_elastic):
         try:
             doc().update(thing=instances, action="delete")
         except helpers.BulkIndexError:
-            pass
+            return False, "BulkIndexError"
 
 
 def related_elastic_dict(study):
@@ -196,20 +138,54 @@ def related_elastic_dict(study):
     interventions = study.interventions.all()
     groups = study.groups.all()
     individuals = study.individuals.all()
-    outputs = study.outputs.all()
-    timecourses = study.timecourses.all()
+
+
+    related_outputs_intervention = [
+        'intervention',
+        'output',
+        'output__individual',
+        'output__group',
+        'output__measurement_type__info_node',
+        'output__tissue__info_node',
+        'output__substance__info_node',
+    ]
+
+    related_timecourses_intervention = [
+        'intervention',
+        'timecourse',
+        'timecourse__individual',
+        'timecourse__group',
+        'timecourse__measurement_type__info_node',
+        'timecourse__tissue__info_node',
+        'timecourse__substance__info_node',
+    ]
+    related_outputs = [
+        'individual',
+        'group',
+        'measurement_type__info_node',
+        'tissue__info_node',
+        'substance__info_node',
+    ]
+
+    related_timecourses = [
+        'individual',
+        'group',
+        'measurement_type__info_node',
+        'tissue__info_node',
+        'substance__info_node',
+    ]
+
     docs_dict = {
         StudyDocument: study,
         GroupDocument: groups,
         IndividualDocument: individuals,
-        CharacteristicaDocument: study.characteristica,
-        GroupCharacteristicaDocument: GroupCharacteristica.objects.filter(group__in=groups),
-        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.filter(individual__in=individuals),
-        TimecourseInterventionDocument: TimecourseIntervention.objects.filter(timecourse__in=timecourses),
-        OutputInterventionDocument: OutputIntervention.objects.filter(output__in=outputs),
+        GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(group__in=groups),
+        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual', 'characteristica').filter(individual__in=individuals),
         InterventionDocument: interventions,
-        OutputDocument: study.outputs,
-        TimecourseDocument: study.timecourses,
+        OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('_interventions'),
+        TimecourseDocument: study.timecourses.select_related(*related_timecourses).prefetch_related('_interventions'),
+        TimecourseInterventionDocument: TimecourseIntervention.objects.select_related(*related_timecourses_intervention).filter(intervention__in=interventions),
+        OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(intervention__in=interventions),
 
     }
     if study.reference:
@@ -217,7 +193,7 @@ def related_elastic_dict(study):
     return docs_dict
 
 
-class ElasticStudyViewSet(DocumentViewSet):
+class ElasticStudyViewSet(BaseDocumentViewSet):
     document_uid_field = "sid__raw"
     lookup_field = "sid"
     document = StudyDocument
@@ -232,14 +208,17 @@ class ElasticStudyViewSet(DocumentViewSet):
         'creator.last_name',
         'creator.user',
 
+
         'curators.first_name',
         'curators.last_name',
         'curators.user',
 
         'name',
         'reference',
-        'substances',
         'files',
+
+        'substances.name'
+
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
@@ -249,50 +228,16 @@ class ElasticStudyViewSet(DocumentViewSet):
     filter_fields = {
         'sid': 'sid.raw',
         'name': 'name.raw',
+        'creator': 'creator.username.raw',
+        'curator': 'curators.username.raw',
+        'collaborator': 'collaborators.name.raw',
         'licence': 'licence.raw',
         'access': 'access.raw',
-        'substances': 'substances.raw',
+        'substance': 'substances.name.raw',
     }
     ordering_fields = {
         'sid': 'sid',
     }
-
-    def get_object(self):
-        """Get object."""
-        queryset = self.get_queryset()
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-        if lookup_url_kwarg not in self.kwargs:
-            raise AttributeError(
-                "Expected view %s to be called with a URL keyword argument "
-                "named '%s'. Fix your URL conf, or set the `.lookup_field` "
-                "attribute on the view correctly." % (
-                    self.__class__.__name__,
-                    lookup_url_kwarg
-                )
-            )
-
-        if lookup_url_kwarg == 'id':
-            obj = self.document.get(id=self.kwargs[lookup_url_kwarg])
-            return DictionaryProxy(obj.to_dict())
-        else:
-            queryset = queryset.filter(
-                'match',
-                **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
-            )
-
-            count = queryset.count()
-            if count == 1:
-                obj = queryset.execute().hits.hits[0]['_source']
-
-                return DictionaryProxy(obj)
-
-            elif count > 1:
-                raise Http404(
-                    "Multiple results matches the given query. "
-                    "Expected a single result."
-                )
-
-            raise Http404("No result matches the given query.")
 
     def get_queryset(self):
         search = self.search
@@ -323,7 +268,7 @@ class ElasticStudyViewSet(DocumentViewSet):
             return qs
 
 
-class ElasticReferenceViewSet(DocumentViewSet):
+class ElasticReferenceViewSet(BaseDocumentViewSet):
     """Read/query/search references. """
     document_uid_field = "sid__raw"
     lookup_field = "sid"
@@ -332,7 +277,7 @@ class ElasticReferenceViewSet(DocumentViewSet):
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('sid', 'study_name', 'study_pk', 'pmid', 'title', 'abstract', 'name', 'journal')
+    search_fields = ('sid', 'pmid', 'title', 'abstract', 'name', 'journal')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -341,8 +286,6 @@ class ElasticReferenceViewSet(DocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
-        "study_name": "study_name",
-        "study_pk": "study_pk",
         "pmid": "pmid",
         "name": "name",
         "doi": "doi",
@@ -353,40 +296,3 @@ class ElasticReferenceViewSet(DocumentViewSet):
         "pdf": "pdf",
         "authors": "authors.last_name",
     }
-
-    def get_object(self):
-        """Get object."""
-        queryset = self.get_queryset()
-        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-        if lookup_url_kwarg not in self.kwargs:
-            raise AttributeError(
-                "Expected view %s to be called with a URL keyword argument "
-                "named '%s'. Fix your URL conf, or set the `.lookup_field` "
-                "attribute on the view correctly." % (
-                    self.__class__.__name__,
-                    lookup_url_kwarg
-                )
-            )
-
-        if lookup_url_kwarg == 'id':
-            obj = self.document.get(id=self.kwargs[lookup_url_kwarg])
-            return DictionaryProxy(obj.to_dict())
-        else:
-            queryset = queryset.filter(
-                'match',
-                **{self.document_uid_field: self.kwargs[lookup_url_kwarg]}
-            )
-
-            count = queryset.count()
-            if count == 1:
-                obj = queryset.execute().hits.hits[0]['_source']
-
-                return DictionaryProxy(obj)
-
-            elif count > 1:
-                raise Http404(
-                    "Multiple results matches the given query. "
-                    "Expected a single result."
-                )
-
-            raise Http404("No result matches the given query.")

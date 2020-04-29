@@ -1,20 +1,22 @@
 import copy
-from pathlib import Path
-import numpy as np
 import numbers
-import pandas as pd
-
-from django.db.models import Q
-
-from pkdb_app.categorials.behaviours import map_field
-from rest_framework import serializers
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from collections import OrderedDict
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.db.models import Q
+from rest_framework import serializers
 from rest_framework.settings import api_settings
+
+from pkdb_app.behaviours import map_field
 from pkdb_app.interventions.models import DataFile, Intervention
-from pkdb_app.normalization import get_se, get_sd, get_cv
+
+from pkdb_app.error_measures import calculate_se, calculate_sd, calculate_cv
+from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.utils import recursive_iter, set_keys
+from pkdb_app.utils import recursive_iter, set_keys, create_multiple
 
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
@@ -52,8 +54,8 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         if not instance:
             raise serializers.ValidationError(
                 {
-                    api_settings.NON_FIELD_ERRORS_KEY: "instance does not exist.",
-                    "detail": {**kwargs},
+                    model.__name__: "instance does not exist.",
+                    "detail": kwargs,
                 }
             )
 
@@ -171,6 +173,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         :param entry:
         :return: list of entries
         """
+
         n = self.number_of_entries(entry)
         if n == 1:
             return [entry]
@@ -178,18 +181,24 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # create entries by splitting separators
         entries = [dict() for k in range(n)]
 
+        split_by_figure = False
+        number_spit_fields = 0
         for field in entry.keys():
             value = entry[field]
             try:
                 values = value.split(ITEM_SEPARATOR)
             except AttributeError:
                 values = [value]
+
             for k, value in enumerate(values):
 
                 if isinstance(value, str):
                     values[k] = value.strip()
                     if field == "interventions":
                         values[k] = self.interventions_from_string(value)
+
+                    elif field == "figure" and len(values) > 1:
+                        split_by_figure = True
 
                     if values[k] in NA_VALUES:
                         values[k] = None
@@ -198,12 +207,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             # --- validation ---
             # names must be split in a split entry
-            if field == "name" and len(values) != n:
-                if len(values) == 1:
-                    raise serializers.ValidationError(
-                        f"names must be split and not left as <{values}>. "
-                        f"Otherwise UniqueConstrain of name is violated."
-                    )
+            if len(values) != n:
+                if field == "name":
+                    if len(values) == 1:
+                        raise serializers.ValidationError(
+                            f"names must be split and not left as <{values}>. "
+                            f"Otherwise UniqueConstrain of name is violated."
+                        )
+            else:
+                number_spit_fields += 1
 
             # check for old syntax
             for value in values:
@@ -225,6 +237,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
             for k in range(n):
                 entries[k][field] = values[k]
+
+        if split_by_figure and number_spit_fields == 1:
+            raise serializers.ValidationError(
+                ["Splitting only on figure is not allowed.", entries]
+            )
 
         return entries
 
@@ -329,7 +346,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if ITEM_MAPPER in value:
                     values = value.split(ITEM_MAPPER)
                     values = [v.strip() for v in values]
-
                     if len(values) != 2 or values[0] != "col":
                         raise serializers.ValidationError(
                             ["field has wrong pattern col=='col_value'", data]
@@ -337,11 +353,13 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     try:
                         entry_value = getattr(entry, values[1])
 
+
+
                     except AttributeError:
 
                         raise serializers.ValidationError(
                             [
-                                f"header key <{values[1]}> dose not exist in <{DataFile.objects.get(pk=source).file}>.",
+                                f"header key <{values[1]}> does not exist in <{DataFile.objects.get(pk=source).file}>.",
                                 data
                             ]
                         )
@@ -355,6 +373,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if keys[0] == "interventions":
                         entry_value = self.interventions_from_string(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
+
 
                     else:
                         set_keys(entry_dict, entry_value, *keys)
@@ -392,10 +411,29 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 groupby = [v.strip() for v in groupby.split("&")]
 
                 try:
-                    for group_name, group_df in df.groupby(groupby):
-                        for entry in group_df.itertuples():
-                            entry_dict = self.make_entry(entry, template, data, source)
+                    if "characteristica" in template:
+                        characteristica = template.pop("characteristica")
+                        for non_characteristica_keys, group_df in df.groupby(groupby, sort=False):
+                            entry_dict = self.make_entry(next(group_df.itertuples()), template, data, source)
+
+                            charcteristica = []
+
+                            for entry in group_df.itertuples():
+                                for characteristica_single in characteristica:
+                                    characteristica_single = self.make_entry(entry, characteristica_single,
+                                                                             characteristica,
+                                                                             source)
+
+                                    charcteristica.append(characteristica_single)
+
+                            entry_dict["characteristica"] = charcteristica
                             entries.append(entry_dict)
+
+                    else:
+                        for group_name, group_df in df.groupby(groupby, sort=False):
+                            for entry in group_df.itertuples():
+                                entry_dict = self.make_entry(entry, template, data, source)
+                                entries.append(entry_dict)
                 except KeyError:
                     raise serializers.ValidationError(
                         [
@@ -408,6 +446,8 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 for entry in df.itertuples():
                     entry_dict = self.make_entry(entry, template, data, source)
                     entries.append(entry_dict)
+
+
 
         else:
             entries.append(template)
@@ -444,10 +484,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 try:
                     df[groupby]
                 except KeyError:
+                    extra_msg = ""
+                    if any("col==" in g for g in groupby):
+                        extra_msg = "'col==*' is the wrong syntax for the key 'groupby'. Just use the column name. "
+
                     raise serializers.ValidationError(
                         {
                             "groupby":
-                                f"keys <{groupby}> used for groupby are "
+                                extra_msg +
+                                f"Keys <{groupby}> used for groupby are "
                                 f"missing in source file "
                                 f"<{DataFile.objects.get(pk=source).file.name}>. "
                                 f"To group by more then one column the '&' "
@@ -499,13 +544,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                     # get rid of dict
                     if keys[0] in ["individual", "group", "interventions",
-                                   "substance", "tissue", "time_unit", "unit",
+                                   "substance", "tissue", "method", "time_unit", "unit",
                                    "measurement_type"]:
                         unique_values = value_array.unique()
                         if len(unique_values) != 1:
                             raise serializers.ValidationError(
-                                [f"{values[1]} has to be unique for one "
-                                 f"timecourse: <{unique_values}>",
+                                [f"{values[1]} has to be unique for a single "
+                                 f"timecourse, but: <{unique_values}>. To "
+                                 f"define multiple timecourses in a single "
+                                 f"table use 'groupby' to define subsets.",
                                  data]
                             )
                         if keys[0] == "interventions":
@@ -537,34 +584,85 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
-
-    def to_internal_related_fields(self, data):
+    def to_in(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
-
         if "group" in data:
             if data["group"]:
                 try:
                     data["group"] = Group.objects.get(
-                        Q(ex__groupset__study__sid=study_sid)
+                        Q(study__sid=study_sid)
                         & Q(name=data.get("group"))
-                    ).pk
+                    )
                 except ObjectDoesNotExist:
-                        raise serializers.ValidationError(
-                            f'group <{data.get("group")}> does not exist, check groups.'
-                        )
+                    raise serializers.ValidationError(
+                        f'group <{data.get("group")}> does not exist, check groups.'
+                    )
                 except MultipleObjectsReturned:
-                        raise serializers.ValidationError(
-                            f'group <{data.get("group")}> is defined multiple times.'
-                        )
+                    raise serializers.ValidationError(
+                        f'group <{data.get("group")}> is defined multiple times.'
+                    )
 
         if "individual" in data:
             if data["individual"]:
                 try:
-                    study_individuals = Individual.objects.filter(
-                        ex__individualset__study__sid=study_sid
+                    data["individual"] = Individual.objects.get(
+                        Q(study__sid=study_sid) & Q(name=data.get("individual"))
                     )
-                    data["individual"] = study_individuals.get(
-                        name=data.get("individual")
+
+                except ObjectDoesNotExist:
+                    raise serializers.ValidationError(
+                        f'individual: individual <{data.get("individual")}> does '
+                        f'not exist, check individuals.'
+                    )
+                except MultipleObjectsReturned:
+                    raise serializers.ValidationError(
+                        f'individual: individual <{data.get("individual")}> is '
+                        f'defined multiple times'
+                    )
+
+        if "interventions" in data:
+            if data["interventions"]:
+                interventions = []
+                if isinstance(data["interventions"], str):
+                    data["interventions"] = self.interventions_from_string(data["interventions"])
+
+                for intervention in data["interventions"]:
+                    try:
+                        interventions.append(
+                            Intervention.objects.get(
+                                Q(study__sid=study_sid)
+                                & Q(name=intervention, normed=True)
+                            )
+                        )
+                    except ObjectDoesNotExist:
+                        raise serializers.ValidationError(
+                            f"intervention <{intervention}> does not exist, check interventions."
+                        )
+                data["interventions"] = interventions
+        return data
+    def to_internal_related_fields(self, data):
+        study_sid = self.context["request"].path.split("/")[-2]
+        if "group" in data:
+            if data["group"]:
+                try:
+                    data["group"] = Group.objects.get(
+                        Q(study__sid=study_sid)
+                        & Q(name=data.get("group"))
+                    ).pk
+                except ObjectDoesNotExist:
+                    raise serializers.ValidationError(
+                        f'group <{data.get("group")}> does not exist, check groups.'
+                    )
+                except MultipleObjectsReturned:
+                    raise serializers.ValidationError(
+                        f'group <{data.get("group")}> is defined multiple times.'
+                    )
+
+        if "individual" in data:
+            if data["individual"]:
+                try:
+                    data["individual"] = Individual.objects.get(
+                        Q(study__sid=study_sid) & Q(name=data.get("individual"))
                     ).pk
 
                 except ObjectDoesNotExist:
@@ -588,7 +686,7 @@ class ExSerializer(MappingSerializer):
                     try:
                         interventions.append(
                             Intervention.objects.get(
-                                Q(ex__interventionset__study__sid=study_sid)
+                                Q(study__sid=study_sid)
                                 & Q(name=intervention, normed=True)
                             ).pk
                         )
@@ -676,19 +774,20 @@ class ExSerializer(MappingSerializer):
     def _to_internal_se(data):
         input_names = ["count", "sd", "mean", "cv"]
         se_input = {name: data.get(name) for name in input_names}
-        return get_se(**se_input)
+        return calculate_se(**se_input)
 
     @staticmethod
     def _to_internal_sd(data):
         input_names = ["count", "se", "mean", "cv"]
         sd_input = {name: data.get(name) for name in input_names}
-        return get_sd(**sd_input)
+        return calculate_sd(**sd_input)
 
     @staticmethod
     def _to_internal_cv(data):
         input_names = ["count", "sd", "mean", "se"]
         cv_input = {name: data.get(name) for name in input_names}
-        return get_cv(**cv_input)
+        return calculate_cv(**cv_input)
+
 
     def _add_statistic_values(self, data, count):
         se = data.get("se")
@@ -789,7 +888,7 @@ class SidSerializer(WrongKeyValidationSerializer):
             return super().is_valid(raise_exception)
 
 
-class ReadSerializer(serializers.HyperlinkedModelSerializer):
+class ReadSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
@@ -806,9 +905,20 @@ class PkSerializer(serializers.Serializer):
         fields = ["pk", ]
 
 
+class SidNameSerializer(serializers.Serializer):
+    sid = serializers.CharField(allow_null=True)
+    name = serializers.CharField(allow_null=True)
+
+
 def validate_dict(dic):
     if not isinstance(dic, dict):
         raise serializers.ValidationError(
             {"error": "data must be a dictionary",
              "detail": dic}
         )
+
+
+class StudySmallElasticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Study
+        fields = ['pk', 'sid', 'name']  # ,'url']

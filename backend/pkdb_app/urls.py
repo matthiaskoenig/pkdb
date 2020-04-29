@@ -1,129 +1,109 @@
 """
 Django URLs
 """
-from django.urls import path, include
 from django.conf.urls import url
-from django.contrib import admin
-from pkdb_app.categorials.views import MeasurementTypeViewSet, MeasurementTypeElasticViewSet, TissueViewSet, \
-    ApplicationViewSet, FormViewSet, RouteViewSet
-from pkdb_app.outputs.views import ElasticTimecourseViewSet, ElasticOutputViewSet, OutputOptionViewSet, \
-    TimecourseOptionViewSet, OutputInterventionViewSet, \
-    TimecourseInterventionViewSet
-from pkdb_app.substances.views import SubstanceViewSet, ElasticSubstanceViewSet, SubstanceStatisticsViewSet
+from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
-
 from rest_framework.routers import DefaultRouter
-from rest_framework_swagger.views import get_swagger_view
 
-from .comments.views import ElasticCommentViewSet, ElasticDescriptionViewSet
+from .statistics import (
+    StatisticsViewSet,
+)
 
-from .views import serve_protected_document
-
-from .subjects.views import (
-    DataFileViewSet,
-    IndividualViewSet,
-    CharacteristicaElasticViewSet, CharacteristicaOptionViewSet, GroupViewSet, GroupCharacteristicaViewSet,
-    IndividualCharacteristicaViewSet)
-from .interventions.views import InterventionOptionViewSet, ElasticInterventionViewSet
-from .users.views import UserViewSet, UserCreateViewSet, UserGroupViewSet, ObtainAuthTokenCustom
+from .info_nodes.views import (
+    InfoNodeViewSet,
+    InfoNodeElasticViewSet,
+)
+from .outputs.views import (
+    ElasticTimecourseViewSet,
+    ElasticOutputViewSet,
+    OutputInterventionViewSet,
+    TimecourseInterventionViewSet,
+)
+from .interventions.views import (
+    ElasticInterventionViewSet,
+    ElasticInterventionAnalysisViewSet
+)
 from .studies.views import (
     ReferencesViewSet,
     StudyViewSet,
-    ElasticReferenceViewSet, ElasticStudyViewSet, update_index_study)
+    ElasticReferenceViewSet,
+    ElasticStudyViewSet,
+    update_index_study,
+)
+from .subjects.views import (
+    DataFileViewSet,
+    IndividualViewSet,
+    GroupViewSet,
+    GroupCharacteristicaViewSet,
+    IndividualCharacteristicaViewSet,
+)
+from .users.views import (
+    UserViewSet,
+    UserCreateViewSet,
+    UserGroupViewSet,
+    ObtainAuthTokenCustom,
+)
+from .views import serve_protected_document
 
-from .statistics import StatisticsViewSet, study_pks_view
 
 router = DefaultRouter()
 
-###############################################################################################
-# URLs
-###############################################################################################
+# -----------------------------------------------------------------------------
+# Misc URLs
+# -----------------------------------------------------------------------------
+router.register("statistics", StatisticsViewSet, basename="statistics")
 
-router.register("comments_elastic", ElasticCommentViewSet, base_name="comments_elastic")
-router.register("descriptions_elastic", ElasticDescriptionViewSet, base_name="descriptions_elastic")
+# -----------------------------------------------------------------------------
+# Elastic URLs
+# -----------------------------------------------------------------------------
+router.register("studies", ElasticStudyViewSet, basename="studies")
+router.register("references", ElasticReferenceViewSet, basename="references")
 
-router.register("references", ReferencesViewSet, base_name="references")
-router.register("references_elastic", ElasticReferenceViewSet, base_name="references_elastic")
+router.register("groups", GroupViewSet, basename="groups_elastic")
+router.register("individuals", IndividualViewSet, basename="individuals")
+router.register("interventions", ElasticInterventionViewSet, basename="interventions")
+router.register("outputs", ElasticOutputViewSet, basename="outputs")
+router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
+router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
 
-router.register("measurement_types", MeasurementTypeViewSet, base_name="measurement_types")
-router.register("measurement_types_elastic", MeasurementTypeElasticViewSet, base_name="measurement_types_elastic")
+# -----------------------------------------------------------------------------
+# Django URLs
+# -----------------------------------------------------------------------------
+# django (mainly write endpoints)
+router.register("_studies", StudyViewSet, basename="_studies")
+router.register("_references", ReferencesViewSet, basename="_references")
+router.register("_datafiles", DataFileViewSet, basename="_datafiles")
 
-router.register("tissues", TissueViewSet, base_name="tissues")
-router.register("applications", ApplicationViewSet, base_name="applications")
-router.register("forms", FormViewSet, base_name="forms")
-router.register("routes", RouteViewSet, base_name="routes")
+router.register("_users", UserViewSet, basename="_users")
+router.register("_users", UserCreateViewSet, basename="_users")
+router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
-router.register("users", UserViewSet, base_name="users")
-router.register("users", UserCreateViewSet)
-router.register("user_groups", UserGroupViewSet, base_name="user_groups")
+router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
+# todo: remove -> this is for pkdb_analysis
 
-router.register("substances", SubstanceViewSet, base_name="substances")
-router.register("substances_elastic", ElasticSubstanceViewSet, base_name="substances_elastic")
-router.register("substances_statistics", SubstanceStatisticsViewSet, base_name="substances_statistics")
+router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
+router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups_analysis")
+router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
+router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
+router.register("timecourse_analysis", TimecourseInterventionViewSet, basename="timecourse_analysis")
 
-router.register("datafiles", DataFileViewSet, base_name="datafiles")
-
-router.register("studies", StudyViewSet, base_name="studies")
-router.register("studies_elastic", ElasticStudyViewSet, base_name="studies_elastic")
-
-router.register("statistics", StatisticsViewSet, base_name="statistics")
-
-###############################################################################################
-# Read URLs
-###############################################################################################
-
-router.register("individuals_elastic", IndividualViewSet, base_name="individuals_elastic")
-router.register("groups_elastic", GroupViewSet, base_name="groups_elastic")
-router.register("characteristica_elastic", CharacteristicaElasticViewSet, base_name="characteristica_elastic")
-
-router.register("characteristica_groups", GroupCharacteristicaViewSet, base_name="characteristica_groups")
-router.register("characteristica_individuals", IndividualCharacteristicaViewSet,
-                base_name="characteristica_individuals")
-
-router.register("interventions_elastic", ElasticInterventionViewSet, base_name="interventions_elastic")
-router.register("timecourses_elastic", ElasticTimecourseViewSet, base_name="timecourses_elastic")
-router.register("outputs_elastic", ElasticOutputViewSet, base_name="outputs_elastic")
-router.register("output_intervention", OutputInterventionViewSet, base_name="output_intervention")
-router.register("timecourse_intervention", TimecourseInterventionViewSet, base_name="timecourse_intervention")
-
-# Options
-router.register(
-    "characteristica_options", CharacteristicaOptionViewSet, base_name="characteristica_option"
-)
-router.register(
-    "intervention_options", InterventionOptionViewSet, base_name="intervention_option"
-)
-router.register(
-    "output_options", OutputOptionViewSet, base_name="output_option"
-)
-router.register(
-    "timecourse_options", TimecourseOptionViewSet, base_name="timecourse_option"
-)
-
-schema_view = get_swagger_view(title="PKDB API")
 
 urlpatterns = [
-    # authentication
-    # (r'^accounts_old/', include('allauth.urls')),
+    # authentification
+    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+
+    # api
+    path("api/v1/", include(router.urls)),
+    path("api/v1/update_index/", update_index_study),
+
+    # media files
+    url(r'^media/(?P<file>.*)$', serve_protected_document,
+        name='serve_protected_document'),
+
     url(r'^accounts/', include('rest_email_auth.urls')),
 
-    # admin
-    path("admin/", admin.site.urls),
-    # api
-    path(r"api/v1/", include(router.urls)),
-    path("api/v1/study_pks/", study_pks_view),
-    path("api/v1/update_index/", update_index_study),
-    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
     path('verify/?P<key>[-\w]+)', obtain_auth_token),
     path('reset/?P<key>[-\w]+)', obtain_auth_token),
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
-    url(r"api", schema_view, name="api"),
-    url(r'^media/(?P<file>.*)$', serve_protected_document, name='serve_protected_document'),
-
-    # for debugging
-    # url(r'test/', views.test_500_view, name='test'),
-    # url(r'test/', views.test_view, name='test'),
-    # the 'api-root' from django rest-frameworks default router
-    # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
-    # re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
-]  # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

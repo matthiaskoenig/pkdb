@@ -8,6 +8,7 @@ from pkdb_app.users.permissions import user_group
 elastic_settings = {
     'number_of_shards': 1,
     'number_of_replicas': 1,
+    'max_ngram_diff': 15
 
 }
 
@@ -20,7 +21,7 @@ edge_ngram_filter = token_filter(
 ngram_filter = token_filter(
     'ngram_filter',
     type="ngram",
-    min_gram=1, max_gram=20
+    min_gram=1, max_gram=15
 )
 
 autocomplete_search = analyzer(
@@ -40,7 +41,7 @@ autocomplete = analyzer(
 
 
 def string_field(attr, **kwargs):
-    return fields.StringField(
+    return fields.TextField(
 
         attr=attr,
         fielddata=True,
@@ -50,6 +51,34 @@ def string_field(attr, **kwargs):
         **kwargs
     )
 
+def basic_object(attr, **kwargs):
+    return ObjectField(
+        attr=attr,
+        properties={
+            "pk": fields.IntegerField(),
+            "name": string_field("name"),
+        },
+        **kwargs
+    )
+
+def info_node(attr, **kwargs):
+    return fields.ObjectField(
+        attr=attr,
+        properties={
+           'sid': string_field('sid'),
+           'name': string_field('name'),
+       },
+
+        **kwargs
+    )
+
+study_field = fields.ObjectField(
+    attr="study",
+    properties={
+        'sid': string_field('sid'),
+        'name': string_field('name'),
+    }
+)
 
 def text_field(attr):
     return fields.TextField(
@@ -113,6 +142,7 @@ class ObjectField(DEDField, Object):
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
 
+
 class AccessView(DocumentViewSet):
 
     def get_queryset(self):
@@ -127,8 +157,8 @@ class AccessView(DocumentViewSet):
         elif group == "basic":
 
             qs = search.query(
-                Q('match', access__raw=PUBLIC) |
-                Q('match', allowed_users__raw=self.request.user.username)
+                Q('term', access__raw=PUBLIC) |
+                Q('term', allowed_users__raw=self.request.user.username)
             )
 
             # )

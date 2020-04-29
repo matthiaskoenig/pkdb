@@ -6,25 +6,19 @@ How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
 
+from django.apps import apps
 from django.db import models
-from ..storage import OverwriteStorage
-from ..behaviours import (
-    Externable, Accessible)
 
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
-
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
 from .managers import (
-    GroupExManager,
-    GroupSetManager,
-    IndividualExManager,
-    IndividualSetManager,
     IndividualManager,
     GroupManager,
     CharacteristicaExManager,
 )
-
-from django.apps import apps
+from ..behaviours import (
+    Externable, Accessible)
+from ..storage import OverwriteStorage
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
@@ -68,7 +62,6 @@ class DataFile(models.Model):
 
 
 class GroupSet(models.Model):
-    objects = GroupSetManager()
 
     @property
     def groups(self):
@@ -83,17 +76,7 @@ class GroupSet(models.Model):
             return 0
 
 
-class AbstractGroup(models.Model):
-    objects = GroupExManager()
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.name
-
-
-class GroupEx(Externable, AbstractGroup):
+class GroupEx(Externable):
     """ Group (external curated layer).
 
     Groups are defined via their characteristica.
@@ -111,12 +94,12 @@ class GroupEx(Externable, AbstractGroup):
     )
 
     parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
+    parent_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH)
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     count = models.IntegerField(null=True)
     count_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    objects = GroupExManager()
 
     @property
     def study(self):
@@ -128,6 +111,10 @@ class GroupEx(Externable, AbstractGroup):
 
     class Meta:
         unique_together = ("groupset", "name", "name_map", "source")
+
+    def __str__(self):
+        return self.name
+
 
 
 class Group(Accessible):
@@ -142,14 +129,13 @@ class Group(Accessible):
     parent = models.ForeignKey("Group", null=True, on_delete=models.CASCADE)
     characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="groups",
                                                         through="GroupCharacteristica")
+
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="groups")
+
     objects = GroupManager()
 
     # class Meta:
     # todo: in validator unique_together = ('ex__groupset', 'name')
-
-    @property
-    def study(self):
-        return self.ex.groupset.study
 
     @property
     def source(self):
@@ -170,7 +156,7 @@ class Group(Accessible):
     def _characteristica_all(self):
         _characteristica_all = self.characteristica.all()
         this_measurements = _characteristica_all.exclude(
-            measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         if self.parent:
             _characteristica_all = _characteristica_all | self.parent._characteristica_all.exclude(
                 measurement_type__in=this_measurements)
@@ -185,8 +171,6 @@ class Group(Accessible):
 # Individual
 # ----------------------------------
 class IndividualSet(models.Model):
-    objects = IndividualSetManager()
-
     @property
     def individuals(self):
         individuals = Individual.objects.filter(ex__in=self.individual_exs.all())
@@ -222,7 +206,6 @@ class IndividualEx(Externable, AbstractIndividual):
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    objects = IndividualExManager()
 
     class Meta:
         unique_together = ("individualset", "name", "name_map", "source")
@@ -254,6 +237,9 @@ class Individual(AbstractIndividual, Accessible):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="individuals",
                                                         through="IndividualCharacteristica")
+
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="individuals")
+
     objects = IndividualManager()
 
     @property
@@ -275,13 +261,9 @@ class Individual(AbstractIndividual, Accessible):
         # charcteristica from related groups with the same measurement type as these used in the individual are excluded.
         # this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
         this_measurements = _characteristica_normed.exclude(
-            measurement_type__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
         return (_characteristica_normed | self.group._characteristica_all_normed.exclude(
             measurement_type__in=this_measurements))
-
-    @property
-    def study(self):
-        return self.ex.individualset.study
 
     @property
     def group_indexing(self):
@@ -321,7 +303,7 @@ class CharacteristicaEx(
         - Group criteria, concrete properties/characteristics of the group of subjects.
 
         The type of characteristic is defined via the cvtype.
-        When group characterists are curated it is important to specify the inclusion/exclusion criteria in
+        When group characteristica are curated it is important to specify the inclusion/exclusion criteria in
         addition to the group criteria.
 
     This is the concrete selection/information of the characteristics.
@@ -446,16 +428,17 @@ class SubjectCharacteristica(models.Model):
 
     @property
     def measurement_type(self):
-        return self.characteristica.measurement_type.name
+        return self.characteristica.measurement_type.info_node.name
 
     @property
     def choice(self):
-        return self.characteristica.choice
+        if self.characteristica.choice:
+            return self.characteristica.choice.info_node.name
 
     @property
     def substance(self):
         if self.characteristica.substance:
-            return self.characteristica.substance.name
+            return self.characteristica.substance.info_node.name
 
     @property
     def unit(self):

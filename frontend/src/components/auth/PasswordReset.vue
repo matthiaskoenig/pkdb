@@ -1,5 +1,4 @@
 <template>
-
     <v-card>
         <v-card-title primary-title>
             <div>
@@ -8,26 +7,23 @@
             </div>
         </v-card-title>
         <v-card-text>
-
-            <v-form
-                    onSubmit="return false;"
-            >
-                <v-text-field v-on:keyup.enter="reset_password" prepend-icon="fas fa-envelope"  :error="password_warnings.length > 0" :error-messages="password_warnings" v-model="password" name="password" label="Password" type="password"></v-text-field>
-
+            <v-form onSubmit="return false;">
+                <v-text-field v-on:keyup.enter="reset_password" prepend-icon="fas fa-envelope"
+                              :error="password_warnings.length > 0"
+                              :error-messages="password_warnings" v-model="password" name="password"
+                              label="Password" type="password"></v-text-field>
             </v-form>
-
         </v-card-text>
         <v-card-actions>
-            <v-alert :value="alertShow"  type="success" >
+            <v-alert :value="alertShow" type="success">
                 {{message}}
             </v-alert>
-            <v-alert :value="key_warnings_show"  type="error" >
+            <v-alert :value="key_warnings_show" type="error">
                 {{key_warnings}}
             </v-alert>
             <v-spacer></v-spacer>
-            <v-btn color="primary" v-on:click="reset_password" >submit</v-btn>
+            <v-btn color="primary" v-on:click="reset_password">submit</v-btn>
         </v-card-actions>
-
     </v-card>
 </template>
 
@@ -36,63 +32,55 @@
 
     export default {
         name: "Verification",
-        data(){
+        data() {
             return {
-                warnings:{},
-                password : "",
-                message:[],
-                alertShow:false
+                warnings: {},
+                password: "",
+                message: [],
+                alertShow: false
 
             }
         },
-
         computed: {
-            key_warnings(){
-                if (this.key_warnings_show){
+            key_warnings() {
+                if (this.key_warnings_show) {
                     return this.warnings["key"]
-                }
-                else {
+                } else {
                     return []
                 }
             },
-            password_warnings(){
-                if ("password" in this.warnings){
+            password_warnings() {
+                if ("password" in this.warnings) {
                     return this.warnings["password"]
-                }
-                else {
+                } else {
                     return []
                 }
             },
-            key_warnings_show(){
+            key_warnings_show() {
                 return "key" in this.warnings
             },
-
-
             reset_key() {
                 return this.$route.params.id;
 
             },
-
-
-
         },
         methods: {
-            reset_password: function(){
-                // reset store
-                // reset warnings
+            reset_password: function () {
                 this.warnings = {};
                 this.alertShow = false;
-
-                const payload = {"key":this.reset_key, password:this.password};
+                const payload = {
+                    "key": this.reset_key,
+                    password: this.password
+                };
 
                 axios.post(this.$store.state.endpoints.password_reset, payload)
-                    .then((response)=>{
+                    .then(() => {
                     })
-                    .catch((error)=>{
+                    .catch((error) => {
                         this.warnings = error.response.data;
                     })
                     .finally(() => {
-                        if(Object.keys(this.warnings).length === 0){
+                        if (Object.keys(this.warnings).length === 0) {
                             this.alertShow = true;
                             this.message = "Successful password reset. You can now login with your new password"
                         }

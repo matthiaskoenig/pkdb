@@ -1,8 +1,8 @@
 <template>
     <v-card>
-        <heading-toolbar :title="'Intervention: '+intervention.pk" :icon="icon('intervention')" :resource_url="resource_url"/>
+        <heading-toolbar :title="'Intervention: '+intervention.pk" icon="intervention" :resource_url="resource_url"/>
 
-        <v-layout wrao>
+        <v-layout wrap>
             <v-flex xs4>
                 <characteristica-card :data="intervention" />
             </v-flex>
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
     import CharacteristicaCard from './CharacteristicaCard';
 
     export default {
@@ -54,9 +53,6 @@
         computed: {
         },
         methods: {
-            icon: function (key) {
-                return lookup_icon(key)
-            },
         }
     }
 </script>

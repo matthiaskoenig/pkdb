@@ -7,25 +7,19 @@
                         <navigation></navigation>
                     </v-flex>
                 </v-layout>
-                <v-layout row style="padding-top: 20px;">
+                <v-layout row style="padding-top: 30px;">
                     <v-flex xs12>
                         <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
                     </v-flex>
                 </v-layout>
 
                 <v-layout row>
-
                     <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
-
                         <footer-f></footer-f>
-
-
                     </v-flex>
                 </v-layout>
             </v-container>
-
         </v-app>
-
     </div>
 </template>
 

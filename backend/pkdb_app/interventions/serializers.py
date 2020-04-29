@@ -3,31 +3,30 @@ Serializers for interventions.
 """
 import itertools
 
-from pkdb_app import utils
-from pkdb_app.categorials.behaviours import VALUE_FIELDS_NO_UNIT, \
-    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.categorials.models import Tissue, Route, Application, Form
-from pkdb_app.categorials.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
-from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
+from django.apps import apps
 from rest_framework import serializers
 
+from pkdb_app import utils
+from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
+    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.info_nodes.models import InfoNode
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
-
 from ..interventions.models import (
     InterventionSet,
     Intervention,
     InterventionEx)
-
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, PkSerializer)
+    NA_VALUES, StudySmallElasticSerializer, SidNameSerializer)
 from ..subjects.models import DataFile
-
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates, _validate_requried_key
+from ..utils import list_of_pk, list_duplicates, _validate_requried_key, _create, create_multiple_bulk, \
+    create_multiple_bulk_normalized
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -40,7 +39,6 @@ INTERVENTION_FIELDS = [
     "time",
     "time_end",
     "time_unit",
-    "route",
 ]
 
 INTERVENTION_MAP_FIELDS = map_field(INTERVENTION_FIELDS)
@@ -59,17 +57,17 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     route = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Route.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Route))
 
     application = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Application.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Application))
 
     form = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=Form.objects.all())
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form))
 
     class Meta:
         model = Intervention
@@ -108,10 +106,15 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            attrs["measurement_type"].validate_complete(data=attrs)
+            for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
+                if info_node in attrs:
+                    if attrs[info_node] is not None:
+                        attrs[info_node] = getattr(attrs[info_node],info_node)
+
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
+
         except ValueError as err:
             raise serializers.ValidationError(err)
-
         return super().validate(attrs)
 
 
@@ -171,6 +174,22 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    def create(self, validated_data):
+        intervention_set = validated_data.pop("intervention_set")
+        intervention_ex, poped_data = _create(model_manager=intervention_set.intervention_exs,
+                                              validated_data=validated_data,
+                                              create_multiple_keys=['descriptions', 'comments'],
+                                              pop=['interventions'])
+
+        interventions = poped_data["interventions"]
+        for intervention in interventions:
+            intervention["study"] = self.context["study"]
+
+        not_norm_interventions = create_multiple_bulk(intervention_ex, "ex", interventions, Intervention)
+        create_multiple_bulk_normalized(not_norm_interventions, Intervention)
+        intervention_ex.save()
+        return intervention_ex
+
 
 class InterventionSetSerializer(ExSerializer):
     """ InterventionSet. """
@@ -192,24 +211,40 @@ class InterventionSetSerializer(ExSerializer):
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
-
         return data
 
     def validate(self, attrs):
+        # unique together not working because study is not part of the serializer validation but is added after create
         intervention_exs = attrs.get("intervention_exs")
-        all_interventions = list(
-            itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
-        all_intervention_names = [intervention["name"] for intervention in all_interventions]
+        if intervention_exs:
+            all_interventions = list(
+                itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
+            all_intervention_names = [intervention["name"] for intervention in all_interventions]
 
-        duplicated_intervention_names = list_duplicates(all_intervention_names)
-        if duplicated_intervention_names:
-            raise serializers.ValidationError(
-                {
-                    "intervention_set": "Itervention names are required to be unique within a study.",
-                    "duplicated intervention names": duplicated_intervention_names
+            duplicated_intervention_names = list_duplicates(all_intervention_names)
+            if duplicated_intervention_names:
+                raise serializers.ValidationError(
+                    {
+                        "intervention_set": "Intervention names are required to be unique within a study.",
+                        "duplicated intervention names": duplicated_intervention_names
                 })
-
         return super().validate(attrs)
+
+
+
+    def create(self, validated_data):
+
+        interventionset, poped_data = _create(model_manager=self.Meta.model.objects,
+                                        validated_data=validated_data,
+                                        create_multiple_keys=['descriptions', 'comments'], pop=['intervention_exs'])
+
+        intervention_exs =  poped_data['intervention_exs']
+        for intervention_ex in intervention_exs:
+            intervention_ex["intervention_set"] = interventionset
+
+        InterventionExSerializer(context=self.context,many=True).create(validated_data=poped_data['intervention_exs'])
+
+        return interventionset
 
 
 ###############################################################################################
@@ -217,34 +252,59 @@ class InterventionSetSerializer(ExSerializer):
 ###############################################################################################
 
 
-class InterventionSetElasticSmallSerializer(serializers.HyperlinkedModelSerializer):
+class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     interventions = serializers.SerializerMethodField()
 
     class Meta:
         model = InterventionSet
-        fields = ["pk", "descriptions", "interventions", "comments"]
+        fields = ["pk", "descriptions", "comments", "interventions", ]
 
     def get_interventions(self, obj):
         return list_of_pk("interventions", obj)
 
 
 # Intervention related Serializer
-class InterventionSmallElasticSerializer(serializers.HyperlinkedModelSerializer):
-    # url = serializers.HyperlinkedIdentityField(read_only=True,view_name="groups_read-detail")
+class InterventionSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Intervention
         fields = ["pk", 'name']  # , 'url']
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
+    pk = serializers.IntegerField()
+    study = StudySmallElasticSerializer(read_only=True)
+
+    measurement_type = SidNameSerializer(read_only=True)
+    route = SidNameSerializer(allow_null=True, read_only=True)
+    application = SidNameSerializer(allow_null=True, read_only=True)
+    form = SidNameSerializer(allow_null=True, read_only=True)
+    substance = SidNameSerializer(allow_null=True, read_only=True)
+    choice = SidNameSerializer(allow_null=True, read_only=True)
+
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
+
+    class Meta:
+        model = Intervention
+        fields = ["pk", "normed"] + INTERVENTION_FIELDS + ["study"] + MEASUREMENTTYPE_FIELDS
+
+
+class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
     intervention_pk = serializers.IntegerField(source="pk")
-    substance = serializers.CharField(allow_null=True)
-    measurement_type = serializers.CharField()
-    route = serializers.CharField()
-    application = serializers.CharField()
-    form = serializers.CharField()
+    substance = serializers.CharField(source="substance_name", allow_null=True)
+    measurement_type = serializers.CharField(source="measurement_type_name",)
+    route = serializers.CharField(source="route_name",)
+    application = serializers.CharField(source="application_name",)
+    form = serializers.CharField(source="form_name",)
+    choice = serializers.CharField(source="choice_name")
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)

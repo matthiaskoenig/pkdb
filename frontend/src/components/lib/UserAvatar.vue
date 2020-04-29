@@ -1,13 +1,10 @@
 <template>
-    <span id="user-avatar">
-          <v-avatar  :title="fullname" :size="32">
-            <img :src="src">
-          </v-avatar>
-    </span>
+      <v-avatar left :size="32" :title="fullname">
+        <img :src="src" :alt=fullname>
+      </v-avatar>
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
     export default {
         name: "UserAvatar",
         props: {
@@ -57,6 +54,12 @@
                         image = 'jbrandhorst_128.png';
                     } else if (this.initials === 'YD'){
                         image = 'yduport_128.png';
+                    } else if (this.initials === 'FB'){
+                        image = 'FlorBar_128.png';
+                    } else if (this.initials === 'AK'){
+                        image = 'adrian_128.png';
+                    } else if (this.initials === 'DK'){
+                        image = 'danny_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -74,6 +77,12 @@
                         image = 'deepa_128.png';
                     } else if (this.username === 'yduport'){
                         image = 'yduport_128.png';
+                    } else if (this.username === 'FlorBar'){
+                        image = 'FlorBar_128.png';
+                    } else if (this.username === 'adriankl'){
+                        image = 'adrian_128.png';
+                    } else if (this.username === 'dannythekey'){
+                        image = 'danny_128.png';
                     }
                 }
                 return img_dir + image

@@ -1,19 +1,18 @@
 """
 Django model for Study.
 """
+import datetime
+
 from django.db import models
+
+from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
-
-from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
-
-from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..substances.models import Substance
-
-from ..storage import OverwriteStorage
-from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 from ..behaviours import Sidable
+from ..interventions.models import InterventionSet, DataFile, Intervention
+from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
+from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -61,25 +60,23 @@ class Reference(models.Model):
     abstract = models.TextField(null=True)
     journal = models.TextField(null=True)
     date = models.DateField()
-    pdf = models.FileField(upload_to="study", storage=OverwriteStorage(), null=True)
     authors = models.ManyToManyField(Author, related_name="references")
 
     def __str__(self):
         return self.title
 
+    # FIXME: Remove
     @property
     def study_pk(self):
         if self.study:
             return self.study.pk
-        else:
-            return ""
+        return ""
 
     @property
     def study_name(self):
         if self.study:
             return self.study.name
-        else:
-            return ""
+        return ""
 
 
 class Rating(models.Model):
@@ -98,7 +95,7 @@ class Study(Sidable, models.Model):
     Mainly reported as a single publication.
     """
     sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    pkdb_version = models.IntegerField(default=CURRENT_VERSION)
+    date = models.DateField(default=datetime.date.today)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
 
@@ -129,6 +126,7 @@ class Study(Sidable, models.Model):
     )
     files = models.ManyToManyField(DataFile)
 
+
     class Meta:
         verbose_name_plural = "studies"
 
@@ -137,6 +135,10 @@ class Study(Sidable, models.Model):
 
     def __str__(self):
         return '%s' % self.name
+
+    @property
+    def reference_date(self):
+        return self.reference.date
 
     @property
     def individuals(self):
@@ -223,17 +225,17 @@ class Study(Sidable, models.Model):
 
         substances_dj = Substance.objects.filter(pk__in=set(all_substances))
 
-        basic_substances_dj = substances_dj.filter(parents__isnull=True)
+        basic_substances_dj = substances_dj.filter(info_node__parents__isnull=True)
         if basic_substances_dj:
-            basic_substances.extend(list(basic_substances_dj.values_list("name", flat=True)))
+            basic_substances.extend(list(basic_substances_dj.values_list("info_node__pk", flat=True)))
 
-        substances_derived_dj = substances_dj.filter(parents__isnull=False)
+        substances_derived_dj = substances_dj.filter(info_node__parents__isnull=False)
         if substances_derived_dj:
             basic_substances.extend(
-                list(substances_derived_dj.values_list("parents__name", flat=True))
+                list(substances_derived_dj.values_list("info_node__parents__pk", flat=True))
             )
 
-        return list(set(basic_substances))
+        return InfoNode.objects.filter(pk__in=set(basic_substances))
 
     @property
     def files_url(self):

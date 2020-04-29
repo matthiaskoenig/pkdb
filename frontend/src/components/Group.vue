@@ -25,7 +25,7 @@
                 var path = this.$route.path;
                 var tokens = path.split('/');
                 var group_id = tokens[tokens.length-1];
-                return this.api + '/groups_elastic/'+ group_id +'/?format=json';
+                return this.api + 'groups_elastic/'+ group_id +'/?format=json';
             }
         },
     }

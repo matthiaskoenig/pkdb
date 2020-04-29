@@ -1,10 +1,11 @@
 """
 Generic utility functions.
 """
-import os
 import copy
-from rest_framework import serializers
+import os
+
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 
 CHAR_MAX_LENGTH = 200
 CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
@@ -94,10 +95,15 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
         # instance_child.update_or_create(**lookup_dict, defaults=child)
 
         try:
-            obj = instance_child.get(**lookup_dict)
+            if instance_child.model.__name__ in ["Choice", "Unit"]:
+                obj = instance_child.get(**lookup_dict)
+            else:
+                obj = instance_child.model.objects.get(**lookup_dict)
             for key, value in child.items():
                 if key == "annotations":
                     update_or_create_multiple(obj, value, key, lookup_fields=["term", "relation"])
+                elif key == "synonyms":
+                    update_or_create_multiple(obj, value, key, lookup_fields=["name"])
                 else:
                     setattr(obj, key, value)
 
@@ -106,6 +112,7 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
 
 
         except instance_child.model.DoesNotExist:
+
             instance_dict = {**lookup_dict, **child}
             instance_child.create(**instance_dict)
 
@@ -125,6 +132,24 @@ def create_multiple_bulk_normalized(notnormalized_instances, model_class):
         return model_class.objects.bulk_create(
             [initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
 
+def _create(validated_data, model_manager=None, model_serializer= None,  create_multiple_keys=[], add_multiple_keys=[], pop=[]):
+    poped_data = {related: validated_data.pop(related, []) for related in pop}
+    related_data_create = {related: validated_data.pop(related, []) for related in create_multiple_keys}
+    related_data_add = {related: validated_data.pop(related, []) for related in add_multiple_keys}
+    if model_manager is not None:
+        instance = model_manager.create(**validated_data)
+    elif model_serializer is not None:
+        instance = model_serializer.create(validated_data=validated_data)
+    else:
+        raise ValueError("Either model_manager or model_serializer are required.")
+
+    for key, item in related_data_create.items():
+        create_multiple(instance, item, key)
+
+    for key, item in related_data_add.items():
+        getattr(instance,key).add(*item)
+
+    return instance, poped_data
 
 def initialize_normed(notnorm_instance):
     norm = copy.copy(notnorm_instance)
@@ -145,7 +170,7 @@ def initialize_normed(notnorm_instance):
     except AttributeError:
         pass
 
-    # interventions have no add statistics because they should have no mean,median,sd,se,cv ...
+    # interventions have no add add_error_measures() because they should have no mean,median,sd,se,cv ...
     try:
         norm.add_error_measures()
     except AttributeError:
@@ -176,9 +201,16 @@ def set_keys(d, value, *keys):
     d[keys[-1]] = value
 
 
-def _validate_requried_key(attrs, key, details=None):
+def _validate_requried_key(attrs, key, details=None, extra_message=""):
     if key not in attrs:
-        error_json = {key: f"{key} is required."}
+        error_json = {key: f"The key <{key}> is required. {extra_message}"}
+        if details:
+            error_json["details"] = details
+        raise serializers.ValidationError(error_json)
+
+def _validate_not_allowed_key(attrs, key, details=None, extra_message=""):
+    if key in attrs:
+        error_json = {key: f"The key <{key}> is not allowed. {extra_message}"}
         if details:
             error_json["details"] = details
         raise serializers.ValidationError(error_json)

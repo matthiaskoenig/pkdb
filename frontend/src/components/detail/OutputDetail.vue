@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <Heading :title="'Output: '+output.pk" :icon="icon('output')" :resource_url="resource_url"/>
+        <Heading :title="'Output: '+output.pk" icon="output" :resource_url="resource_url"/>
         <div>
         Group:
         <get-data v-if="output.group" :resource_url="group_url(output.group.pk)">
@@ -17,7 +17,7 @@
         </get-data><br />
 
         Interventions: <span v-for="(intervention, index2) in output.interventions" :key="index2"><br />
-                    <a :href="intervention_url(intervention.pk)" :title="intervention.name"><v-icon>{{ icon('intervention') }}</v-icon></a>&nbsp;</span><br />
+                    <a :href="intervention_url(intervention.pk)" :title="intervention.name"><v-icon>{{ faIcon('intervention') }}</v-icon></a>&nbsp;</span><br />
         Tissue: {{output.tissue}}<br />
         Substance:           <substance-chip :title="output.substance.name"/>
         Time Unit: {{ output.time_unit }}<br />
@@ -36,14 +36,14 @@
 </template>
 
 <script>
-    import {lookup_icon} from "@/icons"
-    import IndividualButton from '../lib/IndividualButton'
-    import GroupButton from '../lib/GroupButton'
+    import {lookupIcon} from "@/icons"
     import {UrlMixin} from "../tables/mixins";
 
     export default {
         name: "OutputDetail",
-        components: {IndividualButton,GroupButton},
+        components: {
+
+        },
         props: {
             output: {
                 type: Object,
@@ -57,7 +57,7 @@
         mixins : [UrlMixin],
         methods: {
             icon: function (key) {
-                return lookup_icon(key)
+                return lookupIcon(key)
             },
         }
     }

@@ -1,9 +1,10 @@
-from elasticsearch_dsl import analyzer
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from pkdb_app.subjects.models import Individual, Characteristica, Group, GroupCharacteristica, IndividualCharacteristica
-from pkdb_app.interventions.documents import string_field, ObjectField
-from ..documents import elastic_settings
+from elasticsearch_dsl import analyzer
+
+from pkdb_app.interventions.documents import string_field
+from pkdb_app.subjects.models import Individual, Group, GroupCharacteristica, IndividualCharacteristica
+from ..documents import elastic_settings, study_field, ObjectField, info_node
 
 html_strip = analyzer(
     'html_strip',
@@ -15,9 +16,9 @@ html_strip = analyzer(
 characteristica_object_field = fields.ObjectField(
     properties={
         'pk': fields.IntegerField(),
-        'measurement_type': string_field('measurement_type_name'),
-        'substance': string_field('substance_name'),
-        'choice': string_field('choice'),
+        'measurement_type': info_node('i_measurement_type'),
+        'substance': info_node('i_substance'),
+        'choice': info_node('i_choice'),
         'value': fields.FloatField('value'),
         'mean': fields.FloatField(),
         'median': fields.FloatField(),
@@ -41,15 +42,15 @@ class IndividualDocument(Document):
     """Individual elastic search document"""
     pk = fields.IntegerField(attr='pk')
     name = string_field('name')
-    group = ObjectField(
+    group = fields.ObjectField(
         properties={
-            'name': string_field('name'),
             'pk': fields.IntegerField('pk'),
+            'name': string_field('name'),
             'count': fields.IntegerField('count')
         }
     )
-    study = string_field('study_name')
-    ex = ObjectField(
+    study = study_field
+    ex = fields.ObjectField(
         properties={
             'pk': fields.IntegerField('pk')
         }
@@ -86,11 +87,11 @@ class GroupDocument(Document):
     name = string_field('name')
     count = fields.IntegerField(attr='count')
     parent = ObjectField(properties={
-        'name': string_field('name'),
         'pk': fields.IntegerField('pk'),
+        'name': string_field('name'),
         'count': fields.IntegerField('count')
     })
-    study = string_field('study_name')
+    study = study_field
     ex = ObjectField(properties={
         'pk': fields.IntegerField('pk')
     })
@@ -119,107 +120,7 @@ class GroupDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(GroupDocument, self).get_queryset().select_related(
-            'ex__groupset__study', 'parent').prefetch_related("characteristica")
-
-
-# ------------------------------------
-# Elastic Characteristica Document
-# ------------------------------------
-@registry.register_document
-class CharacteristicaDocument(Document):
-    """ Characteristica elastic search document. """
-    id = fields.IntegerField(attr='id')
-    raw_pk = string_field('raw_pk')
-
-    study_name = string_field('study_name')
-    study_sid = string_field('study_sid')
-    subject_type = string_field('subject_type')
-
-    # group related
-    group_pk = fields.IntegerField(attr='group_pk')
-    group_name = fields.StringField(
-        attr='group_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    group_count = fields.IntegerField(attr='group_count')
-    group_parent_pk = fields.IntegerField(
-        attr='group_parent_pk',
-    )
-    # individual_related
-    individual_name = fields.StringField(
-        attr='individual_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    individual_pk = fields.IntegerField(attr='individual_pk')
-    individual_group_pk = fields.IntegerField(attr='individual_group_pk')
-    ###
-
-    measurement_type = fields.StringField(
-        attr='measurement_type_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    choice = fields.StringField(
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    unit = fields.StringField(
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    substance = fields.StringField(
-        attr='substance_name',
-        fields={
-            'raw': fields.StringField(analyzer='keyword'),
-        }
-    )
-    count = fields.IntegerField()
-    value = fields.FloatField(attr='value')
-    mean = fields.FloatField(attr='mean')
-    median = fields.FloatField(attr='median')
-    min = fields.FloatField(attr='min')
-    max = fields.FloatField(attr='max')
-    se = fields.FloatField(attr='se')
-    sd = fields.FloatField(attr='sd')
-    cv = fields.FloatField(attr='cv')
-
-    normed = fields.BooleanField()
-
-    access = string_field('access')
-    allowed_users = fields.ObjectField(
-        attr="allowed_users",
-        properties={
-            'username': string_field("username")
-        },
-        multi=True
-    )
-
-    class Django:
-        model = Characteristica
-        # Ignore auto updating of Elasticsearch when a model is saved/deleted:
-        ignore_signals = True
-        # Don't perform an index refresh after every update
-        auto_refresh = False
-
-    class Index:
-        name = "characteristica"
-        settings = {**elastic_settings, 'max_result_window': 50000}
-
-    def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(CharacteristicaDocument, self).get_queryset().select_related(
-            'group', 'individual')
-
-
-# Elastic Characteristica Document
-# ------------------------------------
+            'study', 'parent').prefetch_related("characteristica")
 
 
 @registry.register_document
@@ -230,10 +131,10 @@ class GroupCharacteristicaDocument(Document):
 
     # group related
     group_pk = fields.IntegerField(attr='group_pk')
-    group_name = fields.StringField(
+    group_name = fields.TextField(
         attr='group_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     group_count = fields.IntegerField(attr='group_count')
@@ -245,26 +146,26 @@ class GroupCharacteristicaDocument(Document):
     )
     count = fields.IntegerField()
 
-    measurement_type = fields.StringField(
+    measurement_type = fields.TextField(
         attr='measurement_type',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    choice = fields.StringField(
+    choice = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    unit = fields.StringField(
+    unit = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    substance = fields.StringField(
+    substance = fields.TextField(
         attr='substance',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     value = fields.FloatField(attr='value')
@@ -310,10 +211,10 @@ class IndividualCharacteristicaDocument(Document):
 
     # individual related
     individual_pk = fields.IntegerField(attr='individual_pk')
-    individual_name = fields.StringField(
+    individual_name = fields.TextField(
         attr='individual_name',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     individual_group_pk = fields.IntegerField(
@@ -324,26 +225,26 @@ class IndividualCharacteristicaDocument(Document):
     )
     count = fields.IntegerField()
 
-    measurement_type = fields.StringField(
+    measurement_type = fields.TextField(
         attr='measurement_type',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    choice = fields.StringField(
+    choice = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    unit = fields.StringField(
+    unit = fields.TextField(
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
-    substance = fields.StringField(
+    substance = fields.TextField(
         attr='substance',
         fields={
-            'raw': fields.StringField(analyzer='keyword'),
+            'raw': fields.TextField(analyzer='keyword'),
         }
     )
     value = fields.FloatField(attr='value')

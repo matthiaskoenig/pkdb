@@ -4,14 +4,11 @@ group or individual).
 """
 from django.db import models
 
-from pkdb_app.categorials.models import Application, Form, Route
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
-from ..subjects.models import DataFile
-
-from ..interventions.managers import InterventionSetManager, InterventionExManager
+from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.info_nodes.models import Application, Form, Route
 from ..behaviours import Externable, Accessible
-
-from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
+from ..subjects.models import DataFile
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 
 # -------------------------------------------------
@@ -19,7 +16,6 @@ from pkdb_app.categorials.behaviours import Normalizable, ExMeasurementTypeable
 # -------------------------------------------------
 
 class InterventionSet(models.Model):
-    objects = InterventionSetManager()
 
     @property
     def interventions(self):
@@ -97,7 +93,6 @@ class InterventionEx(
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    objects = InterventionExManager()
 
     class Meta:
         unique_together = ("interventionset", "name", "name_map", "source")
@@ -118,47 +113,43 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     )
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-
     route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="interventions")
 
     @property
     def raw_pk(self):
         if self.raw:
             return self.raw.pk
-        else:
-            return None
+        return None
+
+    @property
+    def i_application(self):
+        return self._i("application")
+
+    @property
+    def i_route(self):
+        return self._i("route")
+
+    @property
+    def i_form(self):
+        return self._i("form")
 
     @property
     def route_name(self):
         if self.route:
-            return self.route.name
-        else:
-            return None
+            return self.route.info_node.name
+        return None
 
     @property
     def application_name(self):
         if self.application:
-            return self.application.name
-        else:
-            return None
+            return self.application.info_node.name
+        return None
 
     @property
     def form_name(self):
         if self.form:
-            return self.form.name
-        else:
-            return None
-
-    @property
-    def study_name(self):
-        return self.study.name
-
-    @property
-    def study_sid(self):
-        return self.study.sid
-
-    @property
-    def study(self):
-        return self.ex.interventionset.study
+            return self.form.info_node.name
+        return None
