@@ -17,6 +17,7 @@
                         <user-avatar username="yduport"/>
                         <user-avatar username="FlorBar"/>
                         <user-avatar username="adriankl"/>
+                        <user-avatar username="dannythekey"/>
                     </p>
                     <p>
                     <strong>Version</strong>: {{ version }}

@@ -58,6 +58,8 @@
                         image = 'FlorBar_128.png';
                     } else if (this.initials === 'AK'){
                         image = 'adrian_128.png';
+                    } else if (this.initials === 'DK'){
+                        image = 'danny_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -79,6 +81,8 @@
                         image = 'FlorBar_128.png';
                     } else if (this.username === 'adriankl'){
                         image = 'adrian_128.png';
+                    } else if (this.username === 'dannythekey'){
+                        image = 'danny_128.png';
                     }
                 }
                 return img_dir + image
