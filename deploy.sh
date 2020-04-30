@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Automatic deployment develop.pk-db.com
 # -----------------------------------------------------------------------------
-# Necessary to have cached credentials for pulling updates
+# - !necessary to have cached credentials for pulling updates
 # FIXME: run in cronjob (sudo cron)
 # FIXME: logging of all output for debugging
 # FIXME: logging of study uploads and errors for dayly report
