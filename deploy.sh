@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Automatic deployment develop.pk-db.com
 # -----------------------------------------------------------------------------
-# sudo ./deploy.sh 2>&1 | tee ./deploy.logsudo ./deploy.sh 2>&1 | tee ./deploy.log
+# sudo source deploy.sh
 # - !necessary to have cached git credentials for pulling updates
 # - !virtualenv must be updated manually
 
