@@ -2,7 +2,9 @@
 # Automatic deployment develop.pk-db.com
 # -----------------------------------------------------------------------------
 # sudo ./deploy.sh 2>&1 | tee ./deploy.logsudo ./deploy.sh 2>&1 | tee ./deploy.log
-# - !necessary to have cached credentials for pulling updates
+# - !necessary to have cached git credentials for pulling updates
+# - !virtualenv must be updated manually
+
 # FIXME: run in cronjob (sudo cron)
 # FIXME: logging of all output for debugging
 # FIXME: logging of study uploads and errors for dayly report
@@ -19,6 +21,8 @@ echo $DIR
 git pull
 # set environment variables
 set -a && source .env.production
+# TODO backup
+
 # deploy
 ./docker-purge.sh
 
@@ -32,11 +36,8 @@ set -a && source .env.develop
 echo "-------------------------"
 echo "UPLOAD DATA"
 echo "-------------------------"
-# activate environment on server
-source $HOME/envs/pkdb_data/bin/activate
-pip install -e . --upgrade
-upload_nodes
-upload_studies
+$HOME/envs/pkdb_data/bin/upload_nodes
+$HOME/envs/pkdb_data/bin/upload_studies
 
 
 
