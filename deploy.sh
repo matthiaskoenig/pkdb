@@ -3,6 +3,7 @@
 # -----------------------------------------------------------------------------
 # sudo source deploy.sh
 # - !necessary to have cached git credentials for pulling updates
+# - !sudo required for some commands
 # - !virtualenv must be updated manually
 
 # FIXME: run in cronjob (sudo cron)
@@ -21,8 +22,8 @@ echo $DIR
 git pull
 # set environment variables
 set -a && source .env.production
-# TODO backup
-
+# backup
+./backup.sh
 # deploy
 ./docker-purge.sh
 
