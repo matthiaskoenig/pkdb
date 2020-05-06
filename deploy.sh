@@ -6,6 +6,7 @@
 # - !sudo required for some commands
 # - !virtualenv must be updated manually
 
+# FIXME: ensure no merge conflicts
 # FIXME: run in cronjob (sudo cron)
 # FIXME: logging of all output for debugging
 # FIXME: logging of study uploads and errors for dayly report
