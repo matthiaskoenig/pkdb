@@ -237,7 +237,7 @@ class GroupExSerializer(ExSerializer):
 
     def create(self, validated_data):
         group_set = validated_data.pop("group_set")
-        group_ex, popped_data =  _create(validated_data=validated_data, model_manager=group_set.group_exs, create_multiple_keys=["comments", "descriptions"],pop=["characteristica_ex","groups","study_groups"])
+        group_ex, popped_data =  _create(validated_data=validated_data, model_manager=group_set.group_exs, create_multiple_keys=["comments", "descriptions"],pop=["characteristica_ex","groups","study_groups", "parent_ex"])
 
 
         for characteristica_ex_single in popped_data["characteristica_ex"]:
