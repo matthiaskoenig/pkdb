@@ -179,7 +179,6 @@ class GroupExSerializer(ExSerializer):
     figure = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-    parent_ex = serializers.CharField()
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -296,6 +295,7 @@ class GroupSetSerializer(ExSerializer):
                 for study_group_ex in study_group_exs:
                     if study_group_ex.name == group_ex["parent_ex"]:
                         group_ex["parent_ex"] = study_group_ex
+
             ###################################
             # create single group_ex
             group_ex["study_groups"] = study_groups
@@ -389,16 +389,13 @@ class IndividualSerializer(ExSerializer):
                 group = Group.objects.get(
                     Q(study__sid=study_sid) & Q(name=group)
                 ).pk
-            except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
-                if err == ObjectDoesNotExist:
-                    msg = f'group: {group} in study: {study_sid} does not exist'
-                else:
-                    msg = f'group: {group} in study: {study_sid} has been defined multiple times.'
-
-                raise serializers.ValidationError(msg)
             except ObjectDoesNotExist:
                 msg = f'group: {group} in study: {study_sid} does not exist'
                 raise serializers.ValidationError(msg)
+            except MultipleObjectsReturned:
+                msg = f'group: {group} in study: {study_sid} has been defined multiple times.'
+                raise serializers.ValidationError(msg)
+
         else:
             msg = {'group': f'group is required on individual', 'detail': group}
             raise serializers.ValidationError(msg)
