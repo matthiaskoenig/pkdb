@@ -237,7 +237,7 @@ class GroupExSerializer(ExSerializer):
 
     def create(self, validated_data):
         group_set = validated_data.pop("group_set")
-        group_ex, popped_data =  _create(validated_data=validated_data, model_manager=group_set.group_exs, create_multiple_keys=["comments", "descriptions"],pop=["characteristica_ex","groups","study_groups"])
+        group_ex, popped_data =  _create(validated_data=validated_data, model_manager=group_set.group_exs, create_multiple_keys=["comments", "descriptions"],pop=["characteristica_ex","groups","study_groups", "parent_ex"])
 
 
         for characteristica_ex_single in popped_data["characteristica_ex"]:
@@ -296,6 +296,7 @@ class GroupSetSerializer(ExSerializer):
                 for study_group_ex in study_group_exs:
                     if study_group_ex.name == group_ex["parent_ex"]:
                         group_ex["parent_ex"] = study_group_ex
+
             ###################################
             # create single group_ex
             group_ex["study_groups"] = study_groups
@@ -389,16 +390,13 @@ class IndividualSerializer(ExSerializer):
                 group = Group.objects.get(
                     Q(study__sid=study_sid) & Q(name=group)
                 ).pk
-            except (ObjectDoesNotExist, MultipleObjectsReturned) as err:
-                if err == ObjectDoesNotExist:
-                    msg = f'group: {group} in study: {study_sid} does not exist'
-                else:
-                    msg = f'group: {group} in study: {study_sid} has been defined multiple times.'
-
-                raise serializers.ValidationError(msg)
             except ObjectDoesNotExist:
                 msg = f'group: {group} in study: {study_sid} does not exist'
                 raise serializers.ValidationError(msg)
+            except MultipleObjectsReturned:
+                msg = f'group: {group} in study: {study_sid} has been defined multiple times.'
+                raise serializers.ValidationError(msg)
+
         else:
             msg = {'group': f'group is required on individual', 'detail': group}
             raise serializers.ValidationError(msg)

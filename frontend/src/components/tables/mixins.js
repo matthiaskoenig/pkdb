@@ -10,7 +10,9 @@ var searchTableMixin = {
             ntype: "all",
             loading: true,
             options: {},
-            rowsPerPageItems: [5, 10, 20, 50, 100],
+            footer_options:{
+                itemsPerPageOptions:[5, 10, 20, 50, 100]
+            },
             table_class: "elevation-1",
         }
     },

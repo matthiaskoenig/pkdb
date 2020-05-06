@@ -178,9 +178,9 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "pkdb_app.pagination.CustomPagination",
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 20)),
-    'PAGINATE_BY': 10,  # Default to 10
+    'PAGINATE_BY': 1000,  # Default to 10
     'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
-    'MAX_PAGINATE_BY': 100,
+    'MAX_PAGINATE_BY': 1000,
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S%z",
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
