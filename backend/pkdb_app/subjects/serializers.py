@@ -179,6 +179,7 @@ class GroupExSerializer(ExSerializer):
     figure = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
+    parent_ex = serializers.CharField()
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
