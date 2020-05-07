@@ -40,7 +40,6 @@ class InterventionSet(models.Model):
 class AbstractIntervention(models.Model):
     time = models.FloatField(null=True)
     time_end = models.FloatField(null=True)
-
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
     class Meta:
@@ -62,12 +61,7 @@ class AbstractInterventionMap(models.Model):
         abstract = True
 
 
-class InterventionEx(
-    Externable,
-    AbstractIntervention,
-    AbstractInterventionMap,
-    ExMeasurementTypeable
-):
+class InterventionEx(Externable):
     """ Intervention (external curated layer)."""
 
     source = models.ForeignKey(
@@ -87,15 +81,6 @@ class InterventionEx(
         InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE
     )
 
-    form = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    application = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    route = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    class Meta:
-        unique_together = ("interventionset", "name", "name_map", "source")
 
 
 class Intervention(Accessible, Normalizable, AbstractIntervention):
@@ -153,3 +138,5 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
         if self.form:
             return self.form.info_node.name
         return None
+
+
