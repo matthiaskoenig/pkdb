@@ -1,11 +1,12 @@
 # -----------------------------------------------------------------------------
 # Automatic deployment develop.pk-db.com
 # -----------------------------------------------------------------------------
-# sudo source deploy.sh
+# source deploy.sh 2>&1 | tee ./deploy.log
 # - !necessary to have cached git credentials for pulling updates
 # - !sudo required for some commands
 # - !virtualenv must be updated manually
 
+# FIXME: ensure no merge conflicts
 # FIXME: run in cronjob (sudo cron)
 # FIXME: logging of all output for debugging
 # FIXME: logging of study uploads and errors for dayly report
