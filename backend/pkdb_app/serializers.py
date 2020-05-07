@@ -472,7 +472,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
             # read dataframe subset
             df = self.df_from_file(source, subset)
             template = copy.deepcopy(template)
-
             if data.get("groupby"):
                 groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
@@ -482,7 +481,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 groupby = [v.strip() for v in groupby.split("&")]
                 array_dicts = []
                 try:
-                    df[groupby]
+                    if df[groupby].dropna().empty:
+                        raise serializers.ValidationError(
+                            {
+                                "groupby":
+                                    f"The values in the columns <{groupby}> used for groupby are not allowed to be 'na'."
+                            }
+                        )
+
                 except KeyError:
                     extra_msg = ""
                     if any("col==" in g for g in groupby):
@@ -750,7 +756,7 @@ class ExSerializer(MappingSerializer):
         elif not (is_individual or is_group):
             raise serializers.ValidationError(
                 {
-                    api_settings.NON_FIELD_ERRORS_KEY: f"group or individual is required on output"
+                    api_settings.NON_FIELD_ERRORS_KEY: f"Group or individual is required on output."
                 }
             )
 

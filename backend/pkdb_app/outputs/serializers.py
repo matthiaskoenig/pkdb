@@ -89,7 +89,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         data.pop("comments", None)
         data.pop("descriptions", None)
         data = self.retransform_map_fields(data)
-        data = self.to_internal_related_fields(data)
+        data = self.to_internal_related_fields(data) # fixme
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -250,7 +250,7 @@ class OutputExSerializer(BaseOutputExSerializer):
         return output_ex
 
 
-class TimecourseSerializer(BaseOutputExSerializer):
+class TimecourseSerializer(MeasurementTypeableSerializer):
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -309,6 +309,7 @@ class TimecourseSerializer(BaseOutputExSerializer):
     def validate(self, attrs):
         self._validate_individual_output(attrs)
         self._validate_group_output(attrs)
+
         self.validate_group_individual_output(attrs)
 
         _validate_requried_key(attrs, "substance")
@@ -399,7 +400,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
             raise serializers.ValidationError(f"each timecourse has to be a dict and not <{data}>")
         temp_timecourses = self.split_entry(data)
         timecourses = []
-
         for timecourse in temp_timecourses:
             timecourses_from_file = self.array_from_file(timecourse)
             timecourses.extend(timecourses_from_file)
@@ -420,7 +420,7 @@ class TimecourseExSerializer(BaseOutputExSerializer):
 
     def create(self, validated_data):
         timecourse_ex, poped_data = _create(
-            model_manager=TimecourseEx.objects,
+            model_manager=self.Meta.model.objects,
             validated_data=validated_data,
             add_multiple_keys=['interventions'],
             create_multiple_keys=['comments', 'descriptions'],
@@ -433,34 +433,35 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         create_multiple(timecourse_ex, timecourses, 'timecourses')
 
         timecourses_normed = create_multiple_bulk_normalized(timecourse_ex.timecourses.all(), Timecourse)
-        for timecourse in timecourses_normed:
-            timecourse._interventions.add(*timecourse.interventions.all())
+        if timecourses_normed is not None:
+            for timecourse in timecourses_normed:
+                timecourse._interventions.add(*timecourse.interventions.all())
 
-            # calculate pharmacokinetics outputs
-            outputs = []
-            try:
-                outputs = pkoutputs_from_timecourse(timecourse)
-            except Exception as e:
-                raise serializers.ValidationError(
-                    {"pharmacokinetics exception": traceback.format_exc()}
-                )
-
-            errors = []
-            for output in outputs:
+                # calculate pharmacokinetics outputs
+                outputs = []
                 try:
-                    output["measurement_type"].validate_complete(output)
-                except ValueError as err:
-                    errors.append(err)
-            if errors:
-                raise serializers.ValidationError(
-                    {"calculated outputs": errors}
-                )
+                    outputs = pkoutputs_from_timecourse(timecourse)
+                except Exception as e:
+                    raise serializers.ValidationError(
+                        {"pharmacokinetics exception": traceback.format_exc()}
+                    )
 
-            outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
-            if outputs_dj:
-                outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
-                for output in outputs_normed:
-                    output._interventions.add(*output.interventions.all())
+                errors = []
+                for output in outputs:
+                    try:
+                        output["measurement_type"].validate_complete(output)
+                    except ValueError as err:
+                        errors.append(err)
+                if errors:
+                    raise serializers.ValidationError(
+                        {"calculated outputs": errors}
+                    )
+
+                outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
+                if outputs_dj:
+                    outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
+                    for output in outputs_normed:
+                        output._interventions.add(*output.interventions.all())
 
         timecourse_ex.save()
         return timecourse_ex
