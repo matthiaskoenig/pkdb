@@ -590,62 +590,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
-    def to_in(self, data):
-        study_sid = self.context["request"].path.split("/")[-2]
-        if "group" in data:
-            if data["group"]:
-                try:
-                    data["group"] = Group.objects.get(
-                        Q(study__sid=study_sid)
-                        & Q(name=data.get("group"))
-                    )
-                except ObjectDoesNotExist:
-                    raise serializers.ValidationError(
-                        f'group <{data.get("group")}> does not exist, check groups.'
-                    )
-                except MultipleObjectsReturned:
-                    raise serializers.ValidationError(
-                        f'group <{data.get("group")}> is defined multiple times.'
-                    )
 
-        if "individual" in data:
-            if data["individual"]:
-                try:
-                    data["individual"] = Individual.objects.get(
-                        Q(study__sid=study_sid) & Q(name=data.get("individual"))
-                    )
-
-                except ObjectDoesNotExist:
-                    raise serializers.ValidationError(
-                        f'individual: individual <{data.get("individual")}> does '
-                        f'not exist, check individuals.'
-                    )
-                except MultipleObjectsReturned:
-                    raise serializers.ValidationError(
-                        f'individual: individual <{data.get("individual")}> is '
-                        f'defined multiple times'
-                    )
-
-        if "interventions" in data:
-            if data["interventions"]:
-                interventions = []
-                if isinstance(data["interventions"], str):
-                    data["interventions"] = self.interventions_from_string(data["interventions"])
-
-                for intervention in data["interventions"]:
-                    try:
-                        interventions.append(
-                            Intervention.objects.get(
-                                Q(study__sid=study_sid)
-                                & Q(name=intervention, normed=True)
-                            )
-                        )
-                    except ObjectDoesNotExist:
-                        raise serializers.ValidationError(
-                            f"intervention <{intervention}> does not exist, check interventions."
-                        )
-                data["interventions"] = interventions
-        return data
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
         if "group" in data:

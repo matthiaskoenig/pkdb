@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
-from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.serializers import StudySmallElasticSerializer, SidNameSerializer
 from .models import (
     Group,
@@ -51,8 +51,7 @@ class DataFileSerializer(WrongKeyValidationSerializer):
 # ----------------------------------
 # Characteristica
 # ----------------------------------
-class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
-    count = serializers.IntegerField(required=False)
+class CharacteristicaExSerializer(WrongKeyValidationSerializer):
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -62,22 +61,17 @@ class CharacteristicaExSerializer(EXMeasurementTypeableSerializer):
 
     class Meta:
         model = CharacteristicaEx
-        fields = (
-                CHARACTERISTICA_FIELDS
-                + CHARACTERISTICA_MAP_FIELDS
-                + EX_MEASUREMENTTYPE_FIELDS
-                + ['comments', 'descriptions']
-        )
+        fields = ['comments', 'descriptions']
 
     def to_internal_value(self, data):
+        drop_fields =  CHARACTERISTICA_FIELDS + CHARACTERISTICA_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
+        [data.pop(field, None) for field in drop_fields]
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
     def to_representation(self, instance):
-        rep = super().to_representation(instance)
-
-        return rep
+        return super().to_representation(instance)
 
 
 class CharacteristicaSerializer(MeasurementTypeableSerializer):
@@ -179,7 +173,7 @@ class GroupExSerializer(ExSerializer):
     figure = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-    parent_ex = serializers.CharField()
+
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -194,10 +188,7 @@ class GroupExSerializer(ExSerializer):
     class Meta:
         model = GroupEx
         fields = (
-                EXTERN_FILE_FIELDS
-                + GROUP_FIELDS
-                + GROUP_MAP_FIELDS
-                + ['parent_ex', 'characteristica_ex', 'groups', 'comments', 'descriptions']
+                EXTERN_FILE_FIELDS +['characteristica_ex', 'groups', 'comments', 'descriptions']
         )
 
     def to_internal_value(self, data):
@@ -220,8 +211,13 @@ class GroupExSerializer(ExSerializer):
             groups_from_file = self.entries_from_file(group)
             groups.extend(groups_from_file)
 
+        drop_fields = GROUP_FIELDS + GROUP_MAP_FIELDS+ ['parent_ex']
+        [data.pop(field, None) for field in drop_fields]
+
         data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
+
+
 
         data['groups'] = groups
         # ----------------------------------
@@ -241,9 +237,6 @@ class GroupExSerializer(ExSerializer):
 
 
         for characteristica_ex_single in popped_data["characteristica_ex"]:
-            characteristica_ex_single["count"] = characteristica_ex_single.get(
-                "count", group_ex.count
-            )
             group_ex.characteristica_ex.create(**characteristica_ex_single)
 
         for group in popped_data["groups"]:
@@ -425,9 +418,6 @@ class IndividualExSerializer(ExSerializer):
     characteristica_ex = CharacteristicaExSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
-    group = serializers.PrimaryKeyRelatedField(
-        queryset=Group.objects.all(), required=False, allow_null=True
-    )
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -450,10 +440,6 @@ class IndividualExSerializer(ExSerializer):
     class Meta:
         model = IndividualEx
         fields = EXTERN_FILE_FIELDS + [
-            'name',
-            'name_map',
-            'group',
-            'group_map',
             'characteristica_ex',
             'individuals',
             'comments',
@@ -496,6 +482,9 @@ class IndividualExSerializer(ExSerializer):
         # ----------------------------------
         # finished external format
         # ----------------------------------
+        drop_fields = ['name','name_map','group','group_map']
+        [data.pop(field, None) for field in drop_fields]
+
         data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
@@ -508,11 +497,6 @@ class IndividualExSerializer(ExSerializer):
         self.validate_wrong_keys(data)
 
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
-
-    def validate_characteristica_ex(self, attrs):
-        for characteristica in attrs:
-            self._validate_individual_characteristica(characteristica)
-        return attrs
 
     def to_representation(self, instance):
 

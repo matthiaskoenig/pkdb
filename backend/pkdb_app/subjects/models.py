@@ -93,14 +93,6 @@ class GroupEx(Externable):
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
     )
 
-    parent_ex = models.ForeignKey("GroupEX", null=True, on_delete=models.CASCADE)
-    parent_ex_map = models.CharField(max_length=CHAR_MAX_LENGTH)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    count = models.IntegerField(null=True)
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-
     @property
     def study(self):
         return self.groupset.study
@@ -108,13 +100,6 @@ class GroupEx(Externable):
     @property
     def reference(self):
         return self.study.reference
-
-    class Meta:
-        unique_together = ("groupset", "name", "name_map", "source")
-
-    def __str__(self):
-        return self.name
-
 
 
 class Group(Accessible):
@@ -192,7 +177,7 @@ class AbstractIndividual(models.Model):
         return self.name
 
 
-class IndividualEx(Externable, AbstractIndividual):
+class IndividualEx(Externable):
     """ Individual (external curated layer).
     This contains maps and splittings.
     Individuals are defined via their characteristics, analogue to groups.
@@ -201,14 +186,6 @@ class IndividualEx(Externable, AbstractIndividual):
     source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
     figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="individual_exs", null=True)
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    name_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-
-    class Meta:
-        unique_together = ("individualset", "name", "name_map", "source")
 
     @property
     def study(self):
@@ -283,16 +260,7 @@ class Individual(AbstractIndividual, Accessible):
 # Characteristica
 # ----------------------------------
 
-class AbstractCharacteristica(models.Model):
-    count = models.IntegerField(null=True)
-
-    class Meta:
-        abstract = True
-
-
-class CharacteristicaEx(
-    ExMeasurementTypeable,
-    AbstractCharacteristica):
+class CharacteristicaEx(models.Model):
     """ Characteristica  (external curated layer).
 
         Characteristics are used to store information about a group of subjects.
@@ -309,9 +277,6 @@ class CharacteristicaEx(
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
-
-    count_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
     group_ex = models.ForeignKey(
         GroupEx, related_name="characteristica_ex", null=True, on_delete=models.CASCADE
     )
@@ -321,10 +286,11 @@ class CharacteristicaEx(
         null=True,
         on_delete=models.CASCADE,
     )
+
     objects = CharacteristicaExManager()
 
 
-class Characteristica(Accessible, Normalizable, AbstractCharacteristica):
+class Characteristica(Accessible, Normalizable):
     """ Characteristic. """
 
     group = models.ForeignKey(

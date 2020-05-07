@@ -49,16 +49,7 @@ class AbstractIntervention(models.Model):
         return self.name
 
 
-class AbstractInterventionMap(models.Model):
-    form_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    application_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    time_end_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    route_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
-    class Meta:
-        abstract = True
 
 
 class InterventionEx(Externable):
