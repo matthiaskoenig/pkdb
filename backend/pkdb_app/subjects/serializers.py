@@ -27,7 +27,7 @@ SUBJECT_FIELDS = ['name', 'count']
 SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
 GROUP_FIELDS = ['name', 'count']
-GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map']
+GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map', 'parent_map']
 
 EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'figure', 'source_map', 'figure_map']
 
@@ -211,10 +211,11 @@ class GroupExSerializer(ExSerializer):
             groups_from_file = self.entries_from_file(group)
             groups.extend(groups_from_file)
 
+
+        data = self.transform_ex_fields(data)
         drop_fields = GROUP_FIELDS + GROUP_MAP_FIELDS+ ['parent_ex']
         [data.pop(field, None) for field in drop_fields]
 
-        data = self.transform_ex_fields(data)
         data = self.transform_map_fields(data)
 
 

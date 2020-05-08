@@ -85,11 +85,7 @@ class AbstractOutputMap(models.Model):
         abstract = True
 
 
-class OutputEx(Externable,
-               AbstractOutput,
-               AbstractOutputMap,
-               ExMeasurementTypeable
-               ):
+class OutputEx(Externable):
     source = models.ForeignKey(
         DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
     )
@@ -99,18 +95,6 @@ class OutputEx(Externable,
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
-
-    group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention)
-
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    method = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-
 
 class Outputable(Normalizable, models.Model):
 
@@ -222,23 +206,8 @@ class Output(AbstractOutput, Outputable, Accessible):
                 )
 
 
-class TimecourseEx(
-    Externable,
-    AbstractOutput,
-    AbstractOutputMap,
-    ExMeasurementTypeable
-):
+class TimecourseEx(Externable):
     """
-    Don't split the mappings to csv for
-    value
-    mean
-    median
-    min
-    max
-    sd
-    se
-    cv
-    time
     """
     source = models.ForeignKey(
         DataFile, related_name="s_timecourse_exs", null=True, on_delete=models.SET_NULL
@@ -249,17 +218,6 @@ class TimecourseEx(
     outputset = models.ForeignKey(
         OutputSet, related_name="timecourse_exs", on_delete=models.CASCADE, null=True
     )
-
-    group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention)
-
-    group_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    individual_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    interventions_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    tissue = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    method = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
 
 class Timecourse(AbstractOutput, Outputable, Accessible):

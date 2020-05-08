@@ -39,10 +39,11 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         payload_keys = data.keys()
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
+
                 payload_key = self.retransform_map_string(payload_key)
                 msg = {
                     payload_key: f"'{payload_key}' is an incorrect field, "
-                                 f"supported fields are {sorted([f for f in serializer_fields if not 'map' in f])}"}
+                                 f"supported fields are {str([f for f in serializer_fields if not 'map' in f])}"}
                 raise serializers.ValidationError(msg)
 
     def get_or_val_error(self, model, *args, **kwargs):

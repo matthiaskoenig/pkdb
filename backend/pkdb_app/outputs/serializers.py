@@ -120,47 +120,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
         return super().validate(attrs)
 
 
-class BaseOutputExSerializer(ExSerializer):
-    def to_representation(self, instance):
 
-        rep = super().to_representation(instance)
-
-        if "group" in rep:
-            if rep["group"]:
-                if instance.group:
-                    rep["group"] = instance.group.name
-                if instance.group_map:
-                    rep["group"] = instance.group_map
-
-        if "interventions" in rep:
-            rep["interventions"] = [
-                intervention.name for intervention in instance.interventions.all()
-            ]
-
-        return rep
-
-
-class OutputExSerializer(BaseOutputExSerializer):
-
-    group = serializers.PrimaryKeyRelatedField(
-        queryset=Group.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-     )
-    individual = serializers.PrimaryKeyRelatedField(
-        queryset=Individual.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
-    interventions = serializers.PrimaryKeyRelatedField(
-        queryset=Intervention.objects.all(),
-        many=True,
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
+class OutputExSerializer(ExSerializer):
 
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
@@ -184,19 +145,10 @@ class OutputExSerializer(BaseOutputExSerializer):
     class Meta:
         model = OutputEx
         fields = (
-                EXTERN_FILE_FIELDS
-                + OUTPUT_FIELDS
-                + OUTPUT_MAP_FIELDS
-                + EX_MEASUREMENTTYPE_FIELDS
-                + ["group", "individual", "interventions"]
-                + [
-                    "group_map",
-                    "individual_map",
-                    "interventions_map",
+                EXTERN_FILE_FIELDS + [
                     "outputs",
                     "comments",
                     "descriptions"
-
                 ]
         )
 
@@ -214,11 +166,17 @@ class OutputExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
-        data = self.transform_map_fields(data)
 
+        # here I am
+        drop_fields = OUTPUT_FIELDS + \
+                      OUTPUT_MAP_FIELDS + \
+                      EX_MEASUREMENTTYPE_FIELDS+ \
+                      ["group", "individual", "interventions"] + \
+                      ["group_map","individual_map", "interventions_map"]
+        [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
 
-        data = self.to_internal_related_fields(data)
+        data = self.transform_map_fields(data)
         self.validate_wrong_keys(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -230,7 +188,6 @@ class OutputExSerializer(BaseOutputExSerializer):
     def create(self, validated_data):
         output_ex, poped_data = _create(model_manager=self.Meta.model.objects,
                                validated_data=validated_data,
-                               add_multiple_keys=['interventions'],
                                create_multiple_keys=['comments', 'descriptions'],
                                pop=['outputs'])
 
@@ -343,25 +300,7 @@ class TimecourseSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError({"time": "no timepoints are allowed to be nan", "detail": time})
 
 
-class TimecourseExSerializer(BaseOutputExSerializer):
-
-    group = serializers.PrimaryKeyRelatedField(
-        queryset=Group.objects.all(), read_only=False, required=False, allow_null=True,
-    )
-
-    individual = serializers.PrimaryKeyRelatedField(
-        queryset=Individual.objects.all(),
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
-    interventions = serializers.PrimaryKeyRelatedField(
-        queryset=Intervention.objects.all(),
-        many=True,
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
+class TimecourseExSerializer(ExSerializer):
 
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
@@ -384,11 +323,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         model = TimecourseEx
         fields = (
                 EXTERN_FILE_FIELDS
-                + OUTPUT_FIELDS
-                + OUTPUT_MAP_FIELDS
-                + EX_MEASUREMENTTYPE_FIELDS
-                + ["group", "individual", "interventions"]
-                + ["group_map", "individual_map", "interventions_map"]
                 + ["timecourses", "comments", "descriptions"]
         )
 
@@ -406,10 +340,16 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
+        drop_fields = OUTPUT_FIELDS + \
+                      OUTPUT_MAP_FIELDS + \
+                      EX_MEASUREMENTTYPE_FIELDS + \
+                      ["group", "individual", "interventions"] + \
+                      ["group_map", "individual_map", "interventions_map"]
+        [data.pop(field, None) for field in drop_fields]
+
         data = self.transform_map_fields(data)
         data["timecourses"] = timecourses
 
-        data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
@@ -422,7 +362,6 @@ class TimecourseExSerializer(BaseOutputExSerializer):
         timecourse_ex, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
-            add_multiple_keys=['interventions'],
             create_multiple_keys=['comments', 'descriptions'],
             pop=['timecourses']
         )
@@ -514,7 +453,6 @@ class OutputSetSerializer(ExSerializer):
                 output_ex_instance, _ = _create(
                     model_serializer=OutputExSerializer(context=self.context),
                     validated_data=output_ex,
-                    add_multiple_keys=['interventions']
                 )
                 outputs_exs.append(output_ex_instance)
             outputset.output_exs.add(*outputs_exs)
@@ -524,7 +462,6 @@ class OutputSetSerializer(ExSerializer):
                 timecourse_ex_instance, _ = _create(
                     model_serializer=TimecourseExSerializer(context=self.context),
                     validated_data=timecourse_ex,
-                    add_multiple_keys=['interventions']
                 )
                 timecourse_exs.append(timecourse_ex_instance)
 
