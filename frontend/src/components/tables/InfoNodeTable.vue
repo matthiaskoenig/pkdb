@@ -21,6 +21,7 @@
                 :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
+                :footer-props="footer_options"
         >
             <template v-slot:item.buttons="{ item }">
                 <JsonButton :resource_url="api + 'info_nodes/'+ item.url_slug+ '/?format=json' "/>

@@ -75,6 +75,7 @@ class InfoNode(Sidable):
         return self.creator.username
 
 
+
 class Synonym(models.Model):
     """Synonyms Model"""
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)

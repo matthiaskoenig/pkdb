@@ -35,12 +35,9 @@ class CharacteristicaExManager(models.Manager):
     def create(self, *args, **kwargs):
         comments = kwargs.pop("comments", [])
         descriptions = kwargs.pop("descriptions", [])
-
         instance = super().create(*args, **kwargs)
-
         create_multiple(instance, comments, "comments")
         create_multiple(instance, descriptions, "descriptions")
-
         instance.save()
         return instance
 

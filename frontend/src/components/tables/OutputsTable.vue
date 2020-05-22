@@ -8,6 +8,7 @@
                 :server-items-length="count"
                 :loading="loading"
                 :class="table_class"
+                :footer-props="footer_options"
         >
                 <template v-slot:item.buttons="{ item }">
                     <LinkButton v-if="item.study"

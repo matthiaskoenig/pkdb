@@ -39,10 +39,11 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         payload_keys = data.keys()
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
+
                 payload_key = self.retransform_map_string(payload_key)
                 msg = {
                     payload_key: f"'{payload_key}' is an incorrect field, "
-                                 f"supported fields are {sorted([f for f in serializer_fields if not 'map' in f])}"}
+                                 f"supported fields are {str([f for f in serializer_fields if not 'map' in f])}"}
                 raise serializers.ValidationError(msg)
 
     def get_or_val_error(self, model, *args, **kwargs):
@@ -472,7 +473,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
             # read dataframe subset
             df = self.df_from_file(source, subset)
             template = copy.deepcopy(template)
-
             if data.get("groupby"):
                 groupby = template.pop("groupby")
                 if not isinstance(groupby, str):
@@ -482,7 +482,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 groupby = [v.strip() for v in groupby.split("&")]
                 array_dicts = []
                 try:
-                    df[groupby]
+                    if df[groupby].dropna().empty:
+                        raise serializers.ValidationError(
+                            {
+                                "groupby":
+                                    f"The values in the columns <{groupby}> used for groupby are not allowed to be 'na'."
+                            }
+                        )
+
                 except KeyError:
                     extra_msg = ""
                     if any("col==" in g for g in groupby):
@@ -584,62 +591,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
-    def to_in(self, data):
-        study_sid = self.context["request"].path.split("/")[-2]
-        if "group" in data:
-            if data["group"]:
-                try:
-                    data["group"] = Group.objects.get(
-                        Q(study__sid=study_sid)
-                        & Q(name=data.get("group"))
-                    )
-                except ObjectDoesNotExist:
-                    raise serializers.ValidationError(
-                        f'group <{data.get("group")}> does not exist, check groups.'
-                    )
-                except MultipleObjectsReturned:
-                    raise serializers.ValidationError(
-                        f'group <{data.get("group")}> is defined multiple times.'
-                    )
 
-        if "individual" in data:
-            if data["individual"]:
-                try:
-                    data["individual"] = Individual.objects.get(
-                        Q(study__sid=study_sid) & Q(name=data.get("individual"))
-                    )
-
-                except ObjectDoesNotExist:
-                    raise serializers.ValidationError(
-                        f'individual: individual <{data.get("individual")}> does '
-                        f'not exist, check individuals.'
-                    )
-                except MultipleObjectsReturned:
-                    raise serializers.ValidationError(
-                        f'individual: individual <{data.get("individual")}> is '
-                        f'defined multiple times'
-                    )
-
-        if "interventions" in data:
-            if data["interventions"]:
-                interventions = []
-                if isinstance(data["interventions"], str):
-                    data["interventions"] = self.interventions_from_string(data["interventions"])
-
-                for intervention in data["interventions"]:
-                    try:
-                        interventions.append(
-                            Intervention.objects.get(
-                                Q(study__sid=study_sid)
-                                & Q(name=intervention, normed=True)
-                            )
-                        )
-                    except ObjectDoesNotExist:
-                        raise serializers.ValidationError(
-                            f"intervention <{intervention}> does not exist, check interventions."
-                        )
-                data["interventions"] = interventions
-        return data
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
         if "group" in data:
@@ -750,7 +702,7 @@ class ExSerializer(MappingSerializer):
         elif not (is_individual or is_group):
             raise serializers.ValidationError(
                 {
-                    api_settings.NON_FIELD_ERRORS_KEY: f"group or individual is required on output"
+                    api_settings.NON_FIELD_ERRORS_KEY: f"Group or individual is required on output."
                 }
             )
 

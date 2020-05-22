@@ -126,3 +126,5 @@ celerybeat-schedule
 
 # C extensions
 *.so
+
+.git-credentials

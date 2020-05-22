@@ -20,7 +20,7 @@ from ..interventions.models import (
     InterventionEx)
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer, SidNameSerializer)
+    NA_VALUES, StudySmallElasticSerializer, SidNameSerializer, MappingSerializer)
 from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
@@ -118,7 +118,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         return super().validate(attrs)
 
 
-class InterventionExSerializer(EXMeasurementTypeableSerializer):
+class InterventionExSerializer(MappingSerializer):
     ######
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
@@ -141,9 +141,6 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
         model = InterventionEx
         fields = (
                 EXTERN_FILE_FIELDS
-                + INTERVENTION_FIELDS
-                + INTERVENTION_MAP_FIELDS
-                + EX_MEASUREMENTTYPE_FIELDS
                 + ["interventions", "comments", "descriptions"]
         )
 
@@ -163,12 +160,13 @@ class InterventionExSerializer(EXMeasurementTypeableSerializer):
         for intervention in temp_interventions:
             interventions_from_file = self.entries_from_file(intervention)
             interventions.extend(interventions_from_file)
+
+        drop_fields =  INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
+        [data.pop(field, None) for field in drop_fields]
         # ----------------------------------
         # finished
         # ----------------------------------
-
         data = self.transform_map_fields(data)
-
         data["interventions"] = interventions
         self.validate_wrong_keys(data)
 

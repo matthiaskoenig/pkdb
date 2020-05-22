@@ -19,11 +19,20 @@ SUBSTANCE_EXTRA = ["chebi", "formula", "charge", "mass"]
 MEASUREMENT_TYPE_EXTRA = ["units"]
 
 
+
+
 class InfoNodeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrCreator,)
     lookup_field = "url_slug"
     serializer_class = InfoNodeSerializer
     queryset = InfoNode.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        if isinstance(kwargs.get('data', {}), list):
+            kwargs['many'] = True
+            return super().get_serializer(*args, **kwargs)
+
+        return super().get_serializer(*args, **kwargs)
 
 
 class InfoNodeElasticViewSet(DocumentViewSet):

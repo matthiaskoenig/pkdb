@@ -6,7 +6,7 @@ from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, Meas
     Form, Tissue, Application, Method
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.utils import update_or_create_multiple
-
+from rest_framework.fields import empty
 
 class EXMeasurementTypeableSerializer(ExSerializer):
     measurement_type = serializers.CharField(allow_blank=False)
@@ -97,6 +97,36 @@ class ChoiceExtraSerializer(serializers.ModelSerializer):
         fields = ["measurement_types"]
 
 
+class InfoNodeListSerializer(serializers.ListSerializer):
+
+    def run_validation(self, data=empty):
+        return data
+
+
+    def update(self, instance, validated_data):
+        return self.create(validated_data)
+
+    def create(self, validated_data):
+        info_nodes_pks = []
+        for validated_data_single in validated_data:
+            try:
+                instance = InfoNode.objects.get(url_slug=validated_data_single.get("url_slug"))
+            except InfoNode.DoesNotExist:
+                instance = None
+
+            info_node_serializer = InfoNodeSerializer(data=validated_data_single, context=self.context, instance=instance)
+            info_node_serializer.is_valid(raise_exception=True)
+            info_node = info_node_serializer.update_or_create(
+                validated_data=info_node_serializer.validated_data,
+                instance=instance,
+                update_document=False)
+            info_nodes_pks.append(info_node.pk)
+
+        instances = InfoNode.objects.filter(pk__in=info_nodes_pks)
+        InfoNodeDocument().update(instances)
+        return instances
+
+
 class InfoNodeSerializer(serializers.ModelSerializer):
     """ Substance. """
     parents = utils.SlugRelatedField(many=True, slug_field="sid", queryset=InfoNode.objects.all(),
@@ -109,6 +139,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfoNode
+        list_serializer_class = InfoNodeListSerializer
         fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description", "synonyms", "creator",
                   "annotations", "measurement_type", "substance", "choice"]
 
@@ -126,7 +157,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
             "choice": Choice,
         }
 
-    def update_or_create(self, validated_data, instance=None):
+    def update_or_create(self, validated_data, instance=None, update_document=True):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
         annotations_data = validated_data.pop("annotations", [])
@@ -154,14 +185,16 @@ class InfoNodeSerializer(serializers.ModelSerializer):
                 specific_instance, _ = Model.objects.update_or_create(info_node=instance, defaults=extra_fields)
                 specific_instance.measurement_types.clear()
                 specific_instance.measurement_types.add(*measurement_types)
-                InfoNodeDocument().update(measurement_types)
+                if update_document:
+                    InfoNodeDocument().update(measurement_types)
 
             else:
                 specific_instance, _ = Model.objects.update_or_create(info_node=instance, defaults=extra_fields)
 
             specific_instance.save()
 
-        InfoNodeDocument().update(instance)
+        if update_document:
+            InfoNodeDocument().update(instance)
 
         return instance
 
