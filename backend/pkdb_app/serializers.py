@@ -35,7 +35,6 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         """
         validate that all keys correspond to a model field.
         """
-        print(additional_fields)
         serializer_fields = tuple(self.Meta.fields) + tuple(additional_fields)
         payload_keys = data.keys()
         for payload_key in payload_keys:
