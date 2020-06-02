@@ -67,7 +67,6 @@ class CharacteristicaExSerializer(WrongKeyValidationSerializer):
         drop_fields =  CHARACTERISTICA_FIELDS + CHARACTERISTICA_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
         [data.pop(field, None) for field in drop_fields]
         data = super().to_internal_value(data)
-        self.validate_wrong_keys(data)
         return data
 
     def to_representation(self, instance):
@@ -85,7 +84,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         data.pop('comments', None)
         data.pop('descriptions', None)
         self._is_required(data, 'measurement_type')
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data, additional_fields=CharacteristicaExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -122,7 +121,8 @@ class GroupSerializer(ExSerializer):
         data.pop('descriptions', None)
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data, additional_fields=GroupExSerializer.Meta.fields)
+
         _validate_requried_key(data, 'count')
 
         for characteristica_single in data.get('characteristica', []):
@@ -406,7 +406,8 @@ class IndividualSerializer(ExSerializer):
 
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data,additional_fields=IndividualExSerializer.Meta.fields)
+
 
         for characteristica_single in data.get('characteristica', []):
             disabled = ['mean', 'median', 'sd', 'se', 'cv']
@@ -494,9 +495,6 @@ class IndividualExSerializer(ExSerializer):
 
         if 'group' in data:
             data['group'] = self.group_to_internal_value(data.get('group'), study_sid)
-
-        self.validate_wrong_keys(data)
-
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):
