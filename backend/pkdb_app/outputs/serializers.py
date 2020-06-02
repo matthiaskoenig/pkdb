@@ -90,7 +90,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         data.pop("descriptions", None)
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data) # fixme
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data, additional_fields=OutputExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -177,7 +177,7 @@ class OutputExSerializer(ExSerializer):
         data["outputs"] = outputs
 
         data = self.transform_map_fields(data)
-        self.validate_wrong_keys(data)
+
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -260,7 +260,7 @@ class TimecourseSerializer(MeasurementTypeableSerializer):
         data.pop("comments", None)
         data.pop("descriptions", None)
         data = self.to_internal_related_fields(data)
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data, additional_fields=TimecourseExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -297,7 +297,7 @@ class TimecourseSerializer(MeasurementTypeableSerializer):
 
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
-            raise serializers.ValidationError({"time": "no timepoints are allowed to be nan", "detail": time})
+            raise serializers.ValidationError({"time": "no time points are allowed to be nan", "detail": time})
 
 
 class TimecourseExSerializer(ExSerializer):
@@ -350,7 +350,6 @@ class TimecourseExSerializer(ExSerializer):
         data = self.transform_map_fields(data)
         data["timecourses"] = timecourses
 
-        self.validate_wrong_keys(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 

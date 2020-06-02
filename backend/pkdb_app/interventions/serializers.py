@@ -79,7 +79,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data, additional_fields=InterventionExSerializer.Meta.fields)
 
         _validate_requried_key(data, "measurement_type")
         measurement_type = data.get("measurement_type")
@@ -168,7 +168,6 @@ class InterventionExSerializer(MappingSerializer):
         # ----------------------------------
         data = self.transform_map_fields(data)
         data["interventions"] = interventions
-        self.validate_wrong_keys(data)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
