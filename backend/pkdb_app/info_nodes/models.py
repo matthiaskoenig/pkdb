@@ -3,6 +3,7 @@ Model for the InfoNodes.
 
 """
 from numbers import Number
+import pint
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -195,10 +196,17 @@ class MeasurementType(AbstractInfoNode):
             raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
     def is_valid_unit(self, unit):
+        try:
+            p_unit = self.p_unit(unit)
+
+        except pint.DefinitionSyntaxError:
+            msg = f"The unit [{unit}] has a wrong syntax."
+            raise ValueError(
+                {"unit": msg})
 
         if len(self.n_units) != 0:
             if unit:
-                return any([self.p_unit(unit).check(dim) for dim in self.valid_dimensions])
+                return any([p_unit.check(dim) for dim in self.valid_dimensions])
             else:
                 # unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
                 # return unit_not_required2
