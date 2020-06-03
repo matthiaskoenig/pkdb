@@ -33,7 +33,7 @@ cd ../pkdb_data
 git pull
 
 # FIXME: how to set environment variables in shell
-set -a && source .env.develop
+set -a && source .env.production
 
 echo "-------------------------"
 echo "UPLOAD DATA"
