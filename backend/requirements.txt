@@ -5,7 +5,7 @@ json-logging>=1.0.5
 psycopg2-binary>=2.8.4
 
 # django
-Django == 3.0.6
+Django == 3.0.7
 django-model-utils>=4.0.0
 django-extra-fields>=2.0.2
 django-storages>=1.8

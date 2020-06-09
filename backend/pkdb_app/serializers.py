@@ -31,11 +31,11 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
             k = k[:-4]
         return k
 
-    def validate_wrong_keys(self, data):
+    def validate_wrong_keys(self, data, additional_fields=tuple([])):
         """
         validate that all keys correspond to a model field.
         """
-        serializer_fields = self.Meta.fields
+        serializer_fields = tuple(self.Meta.fields) + tuple(additional_fields)
         payload_keys = data.keys()
         for payload_key in payload_keys:
             if payload_key not in serializer_fields:
