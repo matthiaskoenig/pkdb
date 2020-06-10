@@ -3,6 +3,7 @@ Django URLs
 """
 from django.conf.urls import url
 from django.urls import path, include
+from pkdb_app.figures.views import FigureAnalysisViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -87,12 +88,13 @@ router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups
 router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
 router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
 router.register("timecourse_analysis", TimecourseInterventionViewSet, basename="timecourse_analysis")
+router.register("figure_analysis", FigureAnalysisViewSet, basename="figure_analysis")
 
 
 urlpatterns = [
     # authentification
     path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path('api-auth/', include("rest_framework.urls", namespace="rest_framework")),
 
     # api
     path("api/v1/", include(router.urls)),

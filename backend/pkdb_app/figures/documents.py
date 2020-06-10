@@ -51,12 +51,12 @@ class FigureAnalysisDocument(Document):
     study_name = string_field('study_name')
     output_pk = fields.IntegerField('output_pk')
     figure_pk = fields.IntegerField('figure_pk')
-    figure_name = fields.IntegerField('figure_name')
+    figure_name = string_field('figure_name')
     dataset_pk = fields.IntegerField('dataset_pk')
-    dataset_name = fields.IntegerField('dataset_pk')
+    dataset_name = string_field('dataset_name')
     dataset_point_pk = fields.IntegerField('dataset_point_pk')
-    d_type = fields.IntegerField('d_type')
-    f_type = fields.IntegerField('f_type')
+    d_type = string_field('d_type')
+    f_type = string_field('f_type')
 
     # for permissions
     access = string_field('access')

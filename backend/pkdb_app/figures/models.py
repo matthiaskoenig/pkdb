@@ -39,6 +39,10 @@ class Dimension(Accessible):
     study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="dimensions")
 
     @property
+    def output_pk(self):
+        return self.output.pk
+
+    @property
     def figure_pk(self):
         return self.dataset_point.dataset.figure.pk
 

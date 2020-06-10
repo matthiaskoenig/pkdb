@@ -76,7 +76,6 @@ class DataSetSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 f"Outputs have no values on shared Field")
         for shared_values, shared_data in data_set.groupby(shared_fields):
-            print(shared_data["label"])
             x_data = shared_data[shared_data["d_type"] == "x"]
             y_data = shared_data[shared_data["d_type"] == "y"]
 
@@ -182,6 +181,15 @@ class FigureSerializer(ExSerializer):
 class FigureAnalysisSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dimension
-        fields = ["study_sid", "figure_pk", "figure_name", ""]
-
+        fields = ["study_sid",
+                  "figure_pk",
+                  "figure_name",
+                  "output_pk",
+                  "figure_pk",
+                  "figure_name",
+                  "dataset_pk",
+                  "dataset_name",
+                  "dataset_point_pk",
+                  "d_type",
+                  "f_type"]
         read_only_fields = fields

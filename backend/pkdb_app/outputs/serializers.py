@@ -427,7 +427,7 @@ class OutputSetSerializer(ExSerializer):
 
     def to_internal_value(self, data):
         data_figures = []
-        for figure_data in data["figures"]:
+        for figure_data in data.get("figures", []):
             data_figures.extend(self.split_entry(figure_data))
         data["figures"] = data_figures
         data = super().to_internal_value(data)
