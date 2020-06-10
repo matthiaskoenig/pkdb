@@ -3,6 +3,7 @@ Studies serializers.
 """
 from rest_framework import serializers
 
+
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
@@ -41,6 +42,7 @@ class AuthorSerializer(WrongKeyValidationSerializer):
 
 class ReferenceSerializer(WrongKeyValidationSerializer):
     authors = AuthorSerializer(many=True, read_only=False)
+
 
     class Meta:
         model = Reference

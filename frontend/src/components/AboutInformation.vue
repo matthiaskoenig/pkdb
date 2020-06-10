@@ -18,6 +18,7 @@
                         <user-avatar username="FlorBar"/>
                         <user-avatar username="adriankl"/>
                         <user-avatar username="dannythekey"/>
+                        <user-avatar username="SaraD-hub"/>
                     </p>
                     <p>
                     <strong>Version</strong>: {{ version }}
