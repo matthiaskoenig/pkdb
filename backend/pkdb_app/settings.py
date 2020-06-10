@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     "pkdb_app.interventions",
     "pkdb_app.outputs",
     "pkdb_app.comments",
+    "pkdb_app.figures",
 )
 
 MIDDLEWARE = (

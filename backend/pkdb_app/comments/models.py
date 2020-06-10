@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+from pkdb_app.figures.models import Figure, DataSet, Dimension
 from pkdb_app.interventions.models import (
     InterventionEx,
     InterventionSet,
@@ -23,20 +24,22 @@ class Comment(models.Model):
         User, related_name="comments", null=True, on_delete=models.CASCADE
     )
     date_time = models.DateTimeField(auto_now_add=True, blank=True)
-    ####
 
     individual_ex = models.ForeignKey(
         IndividualEx, related_name="comments", null=True, on_delete=models.CASCADE
     )
+
     individualset = models.ForeignKey(
         IndividualSet, related_name="comments", null=True, on_delete=models.CASCADE
     )
     group_ex = models.ForeignKey(
         GroupEx, related_name="comments", null=True, on_delete=models.CASCADE
     )
+
     groupset = models.ForeignKey(
         GroupSet, related_name="comments", null=True, on_delete=models.CASCADE
     )
+
     characteristica_ex = models.ForeignKey(
         CharacteristicaEx, related_name="comments", null=True, on_delete=models.CASCADE
     )
@@ -44,9 +47,23 @@ class Comment(models.Model):
     output_ex = models.ForeignKey(
         OutputEx, related_name="comments", null=True, on_delete=models.CASCADE
     )
+
     outputset = models.ForeignKey(
         OutputSet, related_name="comments", null=True, on_delete=models.CASCADE
     )
+
+    figures = models.ForeignKey(
+        Figure, related_name="comments", null=True, on_delete=models.CASCADE
+    )
+
+    datasets = models.ForeignKey(
+        DataSet, related_name="comments", null=True, on_delete=models.CASCADE
+    )
+
+    dimensions = models.ForeignKey(
+        Dimension, related_name="comments", null=True, on_delete=models.CASCADE
+    )
+
     timecourse_ex = models.ForeignKey(
         TimecourseEx, related_name="comments", null=True, on_delete=models.CASCADE
     )
@@ -83,6 +100,17 @@ class Description(models.Model):
     )
     outputset = models.ForeignKey(
         OutputSet, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+    figures = models.ForeignKey(
+        Figure, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    datasets = models.ForeignKey(
+        DataSet, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    dimensions = models.ForeignKey(
+        Dimension, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
     individualset = models.ForeignKey(
         IndividualSet, related_name="descriptions", null=True, on_delete=models.CASCADE

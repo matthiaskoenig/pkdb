@@ -98,19 +98,6 @@ class ValueableNotBlank(models.Model):
         abstract = True
 
 
-class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
-    measurement_type = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    measurement_type_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    substance = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    class Meta:
-        abstract = True
-
-
 class MeasurementTypeable(ValueableNotBlank):
 
     measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.PROTECT)

@@ -16,7 +16,7 @@ from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.error_measures import calculate_se, calculate_sd, calculate_cv
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.utils import recursive_iter, set_keys, create_multiple
+from pkdb_app.utils import recursive_iter, set_keys
 
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="

@@ -7,8 +7,8 @@ import warnings
 import traceback
 
 import numpy as np
+from pkdb_app.figures.serializers import FigureSerializer
 
-from django.apps import apps
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -38,7 +38,7 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-EXTRA_FIELDS = ["tissue", "method"]
+EXTRA_FIELDS = ["tissue", "method","label", ]
 TIME_FIELDS = ["time", "time_unit"]
 OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
@@ -83,7 +83,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
     class Meta:
         model = Output
-        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
+        fields = OUTPUT_FIELDS + ['label'] + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -167,7 +167,6 @@ class OutputExSerializer(ExSerializer):
         # finished
         # ----------------------------------
 
-        # here I am
         drop_fields = OUTPUT_FIELDS + \
                       OUTPUT_MAP_FIELDS + \
                       EX_MEASUREMENTTYPE_FIELDS+ \
@@ -254,7 +253,7 @@ class TimecourseSerializer(MeasurementTypeableSerializer):
 
     class Meta:
         model = Timecourse
-        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"] +["outputs"]
+        fields = OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"] + ["outputs"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -266,7 +265,6 @@ class TimecourseSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         self._validate_individual_output(attrs)
         self._validate_group_output(attrs)
-
         self.validate_group_individual_output(attrs)
 
         _validate_requried_key(attrs, "substance")
@@ -409,7 +407,7 @@ class OutputSetSerializer(ExSerializer):
     """
     OutputSet
     """
-
+    figures = FigureSerializer(many=True, read_only=False, required=False, allow_null=True)
     output_exs = OutputExSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -425,20 +423,24 @@ class OutputSetSerializer(ExSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["descriptions", "timecourse_exs", "output_exs", "comments"]
+        fields = ["descriptions", "timecourse_exs", "output_exs", "comments", "figures"]
 
     def to_internal_value(self, data):
+        data_figures = []
+        for figure_data in data["figures"]:
+            data_figures.extend(self.split_entry(figure_data))
+        data["figures"] = data_figures
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
     def create(self, validated_data):
-        pop_keys = ["output_exs", "timecourse_exs"]
+        pop_keys = ["output_exs", "timecourse_exs", "figures"]
         outputset, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
             create_multiple_keys=['descriptions', 'comments'],
-            pop=["output_exs", "timecourse_exs"]
+            pop=pop_keys
         )
 
         for k in pop_keys:
@@ -465,6 +467,17 @@ class OutputSetSerializer(ExSerializer):
                 timecourse_exs.append(timecourse_ex_instance)
 
             outputset.timecourse_exs.add(*timecourse_exs)
+            outputset.save()
+
+            figures = []
+            for figure in poped_data["figures"]:
+                figure_instance, _ = _create(
+                    model_serializer=FigureSerializer(context=self.context),
+                    validated_data=figure,
+                )
+                figures.append(figure_instance)
+            outputset.figures.add(*figures)
+
             outputset.save()
 
             # create warning messages

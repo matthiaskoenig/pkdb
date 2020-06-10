@@ -9,7 +9,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 
-from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.behaviours import Normalizable
 from pkdb_app.info_nodes.models import Tissue, Method
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.interventions.models import Intervention
@@ -74,16 +74,6 @@ class AbstractOutput(models.Model):
         abstract = True
 
 
-class AbstractOutputMap(models.Model):
-    tissue_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    method_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    time_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    time_unit_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    class Meta:
-        abstract = True
-
 
 class OutputEx(Externable):
     source = models.ForeignKey(
@@ -124,7 +114,7 @@ class Outputable(Normalizable, models.Model):
 
 class Output(AbstractOutput, Outputable, Accessible):
     """ Storage of data sets. """
-
+    label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     _interventions = models.ManyToManyField(Intervention, through="OutputIntervention")

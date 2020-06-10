@@ -9,7 +9,7 @@ From the data structure this has to be handled very similar.
 from django.apps import apps
 from django.db import models
 
-from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.behaviours import Normalizable
 from .managers import (
     IndividualManager,
     GroupManager,

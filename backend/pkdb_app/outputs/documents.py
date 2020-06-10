@@ -48,10 +48,10 @@ class OutputDocument(Document):
     time = fields.FloatField('null_time')
     tissue = info_node('i_tissue')
     method = info_node('i_method')
-
     measurement_type = info_node('i_measurement_type')
     substance = info_node('i_substance')
     choice = info_node('i_choice')
+    label = string_field('label')
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
@@ -265,7 +265,7 @@ class OutputInterventionDocument(Document):
         settings['max_result_window'] = 100000
 
 
-def get_queryset(self):
-    """Not mandatory but to improve performance we can select related in one sql request"""
-    return super(OutputInterventionDocument, self).get_queryset().select_related(
-        'intervention', 'output')
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(OutputInterventionDocument, self).get_queryset().select_related(
+            'intervention', 'output')
