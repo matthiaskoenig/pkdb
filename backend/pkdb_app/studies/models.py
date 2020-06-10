@@ -14,6 +14,7 @@ from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, I
 from ..users.models import User
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
+
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
 
@@ -46,14 +47,16 @@ class Author(models.Model):
     def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
+from django.core.validators import RegexValidator
+alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
 class Reference(models.Model):
     """
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
-    pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)  # optional
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric])
+    pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, validators=[alphanumeric])  # optional
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True)  # optional
     title = models.TextField()
@@ -94,7 +97,7 @@ class Study(Sidable, models.Model):
 
     Mainly reported as a single publication.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric])
     date = models.DateField(default=datetime.date.today)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
