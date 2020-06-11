@@ -58,6 +58,7 @@ class InfoNode(Sidable):
     ntype = models.CharField(null=False, blank=False, choices=NTypes.choices, max_length=20)
     dtype = models.CharField(null=False, blank=False, choices=DTypes.choices, max_length=20)
 
+
     def annotations_strings(self):
         return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
 
