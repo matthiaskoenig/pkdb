@@ -6,7 +6,7 @@ from pkdb_app.interventions.models import (
     InterventionEx,
     InterventionSet,
 )
-from pkdb_app.outputs.models import OutputEx, OutputSet, TimecourseEx
+from pkdb_app.outputs.models import OutputEx, OutputSet
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import (
     IndividualEx,
@@ -62,10 +62,6 @@ class Comment(models.Model):
 
     dimensions = models.ForeignKey(
         Dimension, related_name="comments", null=True, on_delete=models.CASCADE
-    )
-
-    timecourse_ex = models.ForeignKey(
-        TimecourseEx, related_name="comments", null=True, on_delete=models.CASCADE
     )
 
     intervention_ex = models.ForeignKey(
@@ -136,10 +132,6 @@ class Description(models.Model):
 
     output_ex = models.ForeignKey(
         OutputEx, related_name="descriptions", null=True, on_delete=models.CASCADE
-    )
-
-    timecourse_ex = models.ForeignKey(
-        TimecourseEx, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
 
     intervention_ex = models.ForeignKey(

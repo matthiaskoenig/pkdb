@@ -1,10 +1,14 @@
+import traceback
+
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
 from pkdb_app.figures.models import Figure, DataSet, Dimension, DataSetPoint
+from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.utils import _create
 from rest_framework import serializers
 import pandas as pd
+import numpy as np
 
 class DimensionSerializer(WrongKeyValidationSerializer):
     output = serializers.CharField(write_only=True, allow_null=False, allow_blank=False)
@@ -61,10 +65,7 @@ class DataSetSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError(
                 {"output_set":{"figures":[{"datasets":{"dimensions":f"No Outputs with label <{x_label}> or <{y_label}> in DataSet"}}]}})
 
-
-
         data_set["d_type"] = None
-
         data_set.loc[data_set['label'] == x_label,'d_type'] = 'x'
         data_set.loc[data_set['label'] == y_label,'d_type'] = 'y'
 
@@ -172,6 +173,53 @@ class FigureSerializer(ExSerializer):
                     create_multiple_keys=['comments', 'descriptions'])
 
         return figure_instance
+
+    def validate_timecourse(self):
+        raise NotImplementedError
+
+    def _validate_interventions(self, data):
+        # all outputs of an timecourse have to share the same interventions.
+        raise NotImplementedError
+
+    def _validate_time(self, time):
+        if any(np.isnan(np.array(time))):
+            raise serializers.ValidationError({"time": "no time points are allowed to be nan", "detail": time})
+
+    @staticmethod
+    def _validate_figure(datafile):
+        if datafile:
+            allowed_endings = ['png', 'jpg', 'jpeg', 'tif', 'tiff']
+            if not any([datafile.file.name.endswith(ending)
+                        for ending in allowed_endings]):
+                raise serializers.ValidationError(
+                    {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
+
+
+    def calculate_pks_from_timecourses(self):
+        # calculate pharmacokinetics outputs
+        try:
+            outputs = pkoutputs_from_timecourse(timecourse)
+        except Exception as e:
+            raise serializers.ValidationError(
+                {"pharmacokinetics exception": traceback.format_exc()}
+            )
+
+        errors = []
+        for output in outputs:
+            try:
+                output["measurement_type"].validate_complete(output)
+            except ValueError as err:
+                errors.append(err)
+        if errors:
+            raise serializers.ValidationError(
+                {"calculated outputs": errors}
+            )
+
+        outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
+        if outputs_dj:
+            outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
+            for output in outputs_normed:
+                output._interventions.add(*output.interventions.all())
 
 
 ################################

@@ -17,13 +17,6 @@ def calculate_sd(se, count, cv, mean):
     is_mean = mean is not None
     is_cv = cv is not None
 
-    if isinstance(se, list):
-        se = list(map(float, se))
-    if isinstance(mean, list):
-        mean = list(map(float, mean))
-    if isinstance(cv, list):
-        cv = list(map(float, cv))
-
     if is_se and is_count:
         sd = np.multiply(se, np.sqrt(count))
     elif is_cv and is_mean:
@@ -33,12 +26,6 @@ def calculate_sd(se, count, cv, mean):
 
 def calculate_se(sd, count, cv, mean):
     """Calculates SE from given fields."""
-    if isinstance(sd, list):
-        sd = list(map(float, sd))
-    if isinstance(mean, list):
-        mean = list(map(float, mean))
-    if isinstance(cv, list):
-        cv = list(map(float, cv))
 
     se = None
     is_sd = sd is not None
@@ -55,12 +42,6 @@ def calculate_se(sd, count, cv, mean):
 
 def calculate_cv(sd, count, se, mean):
     """Calculates CV from given fields"""
-    if isinstance(sd, list):
-        sd = list(map(float, sd))
-    if isinstance(mean, list):
-        mean = list(map(float, mean))
-    if isinstance(se, list):
-        se = list(map(float, se))
 
     cv = None
     is_sd = sd is not None

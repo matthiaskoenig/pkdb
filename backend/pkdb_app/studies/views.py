@@ -15,9 +15,9 @@ from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from pkdb_app.interventions.documents import InterventionDocument
-from pkdb_app.outputs.documents import OutputDocument, TimecourseDocument, TimecourseInterventionDocument, \
+from pkdb_app.outputs.documents import OutputDocument, \
     OutputInterventionDocument
-from pkdb_app.outputs.models import TimecourseIntervention, OutputIntervention
+from pkdb_app.outputs.models import OutputIntervention
 from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
@@ -153,24 +153,8 @@ def related_elastic_dict(study):
         'output__substance__info_node',
     ]
 
-    related_timecourses_intervention = [
-        'intervention',
-        'timecourse',
-        'timecourse__individual',
-        'timecourse__group',
-        'timecourse__measurement_type__info_node',
-        'timecourse__tissue__info_node',
-        'timecourse__substance__info_node',
-    ]
-    related_outputs = [
-        'individual',
-        'group',
-        'measurement_type__info_node',
-        'tissue__info_node',
-        'substance__info_node',
-    ]
 
-    related_timecourses = [
+    related_outputs = [
         'individual',
         'group',
         'measurement_type__info_node',
@@ -186,11 +170,8 @@ def related_elastic_dict(study):
         IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual', 'characteristica').filter(individual__in=individuals),
         InterventionDocument: interventions,
         OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('_interventions'),
-        TimecourseDocument: study.timecourses.select_related(*related_timecourses).prefetch_related('_interventions'),
-        TimecourseInterventionDocument: TimecourseIntervention.objects.select_related(*related_timecourses_intervention).filter(intervention__in=interventions),
         OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(intervention__in=interventions),
         FigureAnalysisDocument: dimensions,
-
     }
     if study.reference:
         docs_dict[ReferenceDocument] = study.reference

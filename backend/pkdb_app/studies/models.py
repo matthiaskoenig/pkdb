@@ -9,7 +9,7 @@ from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..behaviours import Sidable
 from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
+from ..outputs.models import OutputSet, Output, OutputIntervention
 from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
@@ -189,20 +189,6 @@ class Study(Sidable, models.Model):
             return OutputIntervention.objects.none()
 
     @property
-    def timecourses(self):
-        try:
-            return self.outputset.timecourses.all()
-        except AttributeError:
-            return Timecourse.objects.none()
-
-    @property
-    def timecourses_interventions(self):
-        try:
-            return self.outputset.timecourses_interventions.all()
-        except AttributeError:
-            return TimecourseIntervention.objects.none()
-
-    @property
     def get_substances(self):
         """ Get all substances for given study.
 
@@ -219,11 +205,6 @@ class Study(Sidable, models.Model):
         if self.outputs:
             all_substances.extend(
                 list(self.outputs.filter(substance__isnull=False).values_list("substance__pk", flat=True))
-            )
-
-        if self.timecourses:
-            all_substances.extend(
-                list(self.timecourses.filter(substance__isnull=False).values_list("substance__pk", flat=True))
             )
 
         substances_dj = Substance.objects.filter(pk__in=set(all_substances))
@@ -260,12 +241,6 @@ class Study(Sidable, models.Model):
     def group_count(self):
         if self.groupset:
             return self.groupset.groups.count()
-        return 0
-
-    @property
-    def timecourse_count(self):
-        if self.outputset:
-            return self.outputset.timecourses.filter(normed=True).count()
         return 0
 
     @property

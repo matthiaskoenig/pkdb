@@ -97,7 +97,6 @@ class StudyDocument(Document):
     intervention_count = fields.IntegerField()
     output_count = fields.IntegerField()
     output_calculated_count = fields.IntegerField()
-    timecourse_count = fields.IntegerField()
 
     creator = fields.ObjectField(
         properties={
@@ -158,12 +157,6 @@ class StudyDocument(Document):
                 fields={
                     'raw': fields.KeywordField(),
                 }
-            ),
-            'timecourses': ObjectField(
-                properties={
-                    'pk': fields.IntegerField(multi=True),
-                },
-                multi=True
             )
         },
         multi=True
@@ -182,13 +175,7 @@ class StudyDocument(Document):
                 properties={
                     "pk": fields.FloatField(),
                 }
-            ),
-            "timecourses": ObjectField(
-                attr="timecourses_normed",
-                properties={
-                    "pk": fields.FloatField(),
-                }
-            ),
+            )
         }
     )
 

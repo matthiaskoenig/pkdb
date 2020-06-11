@@ -455,122 +455,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return entries
 
-    def array_from_file(self, data):
-        """ Handle conversion of time course data.
-
-        :param data:
-        :return:
-        """
-        source = data.get("source")
-        if source:
-            template = copy.deepcopy(data)
-
-            # get data
-            template.pop("source")
-            template.pop("figure", None)
-            subset = template.pop("subset", None)
-
-            # read dataframe subset
-            df = self.df_from_file(source, subset)
-            template = copy.deepcopy(template)
-            if data.get("groupby"):
-                groupby = template.pop("groupby")
-                if not isinstance(groupby, str):
-                    raise serializers.ValidationError(
-                        {"groupby": "groupby must be a string"}
-                    )
-                groupby = [v.strip() for v in groupby.split("&")]
-                array_dicts = []
-                try:
-                    if df[groupby].dropna().empty:
-                        raise serializers.ValidationError(
-                            {
-                                "groupby":
-                                    f"The values in the columns <{groupby}> used for groupby are not allowed to be 'na'."
-                            }
-                        )
-
-                except KeyError:
-                    extra_msg = ""
-                    if any("col==" in g for g in groupby):
-                        extra_msg = "'col==*' is the wrong syntax for the key 'groupby'. Just use the column name. "
-
-                    raise serializers.ValidationError(
-                        {
-                            "groupby":
-                                extra_msg +
-                                f"Keys <{groupby}> used for groupby are "
-                                f"missing in source file "
-                                f"<{DataFile.objects.get(pk=source).file.name}>. "
-                                f"To group by more then one column the '&' "
-                                f"operator can be used. E.g. 'col1 & col2 & col3'"
-                        })
-
-                for group_name, group_df in df.groupby(groupby):
-                    array_dict = copy.deepcopy(template)
-                    self.dict_from_array(array_dict, group_df, data, source)
-
-                    array_dicts.append(array_dict)
-
-            else:
-                array_dict = copy.deepcopy(template)
-                self.dict_from_array(array_dict, df, data, source)
-                array_dicts = [array_dict]
-
-        else:
-            raise serializers.ValidationError(
-                "For timecourse data a 'source' file must be provided."
-            )
-        return array_dicts
-
-    def dict_from_array(self, array_dict, df, data, source):
-        recursive_array_dict = list(recursive_iter(array_dict))
-
-        for keys, value in recursive_array_dict:
-            if isinstance(value, str):
-                if ITEM_MAPPER in value:
-                    values = value.split(ITEM_MAPPER)
-                    values = [v.strip() for v in values]
-
-                    if len(values) != 2 or values[0] != "col":
-                        raise serializers.ValidationError(
-                            ["field has wrong pattern col=='col_value'", data]
-                        )
-
-                    try:
-                        value_array = df[values[1]]
-
-                    except KeyError:
-                        raise serializers.ValidationError(
-                            [
-                                f"header key <{values[1]}> is missing in file "
-                                f"<{DataFile.objects.get(pk=source).file}>",
-                                data,
-                            ]
-                        )
-
-                    # get rid of dict
-                    if keys[0] in ["individual", "group", "interventions",
-                                   "substance", "tissue", "method", "time_unit", "unit",
-                                   "measurement_type"]:
-                        unique_values = value_array.unique()
-                        if len(unique_values) != 1:
-                            raise serializers.ValidationError(
-                                [f"{values[1]} has to be unique for a single "
-                                 f"timecourse, but: <{unique_values}>. To "
-                                 f"define multiple timecourses in a single "
-                                 f"table use 'groupby' to define subsets.",
-                                 data]
-                            )
-                        if keys[0] == "interventions":
-                            entry_value = self.interventions_from_string(unique_values[0])
-                            set_keys(array_dict, entry_value, *keys[:1])
-                        else:
-                            set_keys(array_dict, unique_values[0], *keys)
-
-                    else:
-                        set_keys(array_dict, value_array.values.tolist(), *keys)
-
     def to_internal_value(self, data):
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
@@ -649,14 +533,6 @@ class ExSerializer(MappingSerializer):
                 data["interventions"] = interventions
         return data
 
-    @staticmethod
-    def _validate_figure(datafile):
-        if datafile:
-            allowed_endings = ['png', 'jpg', 'jpeg', 'tif', 'tiff']
-            if not any([datafile.file.name.endswith(ending)
-                        for ending in allowed_endings]):
-                raise serializers.ValidationError(
-                    {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
 
     def _validate_disabled_data(self, data_dict, disabled):
         disabled = set(disabled)
@@ -770,7 +646,6 @@ class ExSerializer(MappingSerializer):
             "characteristica_ex": "characteristica",
             "parent_ex": "parent",
             "output_exs": "outputs",
-            "timecourse_exs": "timecourses",
         }
 
     @classmethod

@@ -16,11 +16,8 @@ from .info_nodes.views import (
     InfoNodeElasticViewSet,
 )
 from .outputs.views import (
-    ElasticTimecourseViewSet,
     ElasticOutputViewSet,
-    OutputInterventionViewSet,
-    TimecourseInterventionViewSet,
-)
+    OutputInterventionViewSet)
 from .interventions.views import (
     ElasticInterventionViewSet,
     ElasticInterventionAnalysisViewSet
@@ -65,7 +62,6 @@ router.register("groups", GroupViewSet, basename="groups_elastic")
 router.register("individuals", IndividualViewSet, basename="individuals")
 router.register("interventions", ElasticInterventionViewSet, basename="interventions")
 router.register("outputs", ElasticOutputViewSet, basename="outputs")
-router.register("timecourses", ElasticTimecourseViewSet, basename="timecourses")
 router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
 
 # -----------------------------------------------------------------------------
@@ -81,13 +77,11 @@ router.register("_users", UserCreateViewSet, basename="_users")
 router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
-# todo: remove -> this is for pkdb_analysis
 
 router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
 router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups_analysis")
 router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
 router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
-router.register("timecourse_analysis", TimecourseInterventionViewSet, basename="timecourse_analysis")
 router.register("figure_analysis", FigureAnalysisViewSet, basename="figure_analysis")
 
 

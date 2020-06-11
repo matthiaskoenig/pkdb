@@ -304,7 +304,7 @@ class MeasurementType(AbstractInfoNode):
                     if isinstance(value, Number):
                         rule = value < 0
                     # for timecourses
-
+                    # todo: remove?
                     elif isinstance(value, list):
                         rule = any(v < 0 for v in value)
 
@@ -399,10 +399,6 @@ class Substance(AbstractInfoNode):
     @property
     def outputs_calculated(self):
         return self.output_set.filter(normed=True, calculated=True)
-
-    @property
-    def timecourses_normed(self):
-        return self.timecourse_set.filter(normed=True)
 
     @property
     def interventions_normed(self):

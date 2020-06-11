@@ -29,7 +29,7 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 GROUP_FIELDS = ['name', 'count']
 GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map', 'parent_map']
 
-EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'figure', 'source_map', 'figure_map']
+EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'source_map']
 
 
 # todo: move datafile from subjects module
@@ -168,9 +168,6 @@ class GroupExSerializer(ExSerializer):
         many=True, read_only=False, required=False
     )
     source = serializers.PrimaryKeyRelatedField(
-        queryset=DataFile.objects.all(), required=False, allow_null=True
-    )
-    figure = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
 
@@ -421,9 +418,6 @@ class IndividualExSerializer(ExSerializer):
         many=True, read_only=False, required=False, allow_null=True
     )
     source = serializers.PrimaryKeyRelatedField(
-        queryset=DataFile.objects.all(), required=False, allow_null=True
-    )
-    figure = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
 

@@ -457,7 +457,6 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
             "intervention_count",
             "output_count",
             "output_calculated_count",
-            "timecourse_count",
 
             "creator",
             "substances",
@@ -506,7 +505,6 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             "intervention_count",
             "output_count",
             "output_calculated_count",
-            "timecourse_count",
 
             "reference",
             "reference_date",

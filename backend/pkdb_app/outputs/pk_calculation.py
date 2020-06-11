@@ -11,10 +11,10 @@ from pkdb_analysis.pk import pharmacokinetics
 
 MeasurementType = apps.get_model('info_nodes.MeasurementType')
 Output = apps.get_model('outputs.Output')
-Timecourse = apps.get_model('outputs.Timecourse')
+#Timecourse = apps.get_model('outputs.Timecourse')
 
 
-def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
+def pkoutputs_from_timecourse(tc) -> List[Dict]:
     """Calculates pharmacokinetics outputs for timecourse.
 
     :param tc: models.Timecourse
@@ -81,7 +81,7 @@ def pkoutputs_from_timecourse(tc: Timecourse) -> List[Dict]:
     return outputs
 
 
-def _timecourse_to_pkdict(tc: Timecourse) -> Dict:
+def _timecourse_to_pkdict(tc) -> Dict:
     """Create dictionary for pk calculation from timecourse.
 
     :return: dict

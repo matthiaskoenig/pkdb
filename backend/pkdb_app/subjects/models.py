@@ -6,7 +6,6 @@ How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
 
-from django.apps import apps
 from django.db import models
 
 from pkdb_app.behaviours import Normalizable
@@ -18,7 +17,7 @@ from .managers import (
 from ..behaviours import (
     Externable, Accessible)
 from ..storage import OverwriteStorage
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from ..utils import CHAR_MAX_LENGTH
 
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
@@ -45,12 +44,6 @@ class DataFile(models.Model):
     @property
     def name(self):
         return self.file.name
-
-    @property
-    def timecourses(self):
-        Timecourse = apps.get_model('outputs', 'Timecourse')
-        tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(normed=True)
-        return tc
 
     def __str__(self):
         return self.file.name
@@ -85,9 +78,6 @@ class GroupEx(Externable):
 
     source = models.ForeignKey(
         DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
-    )
-    figure = models.ForeignKey(
-        DataFile, related_name="f_group_exs", null=True, on_delete=models.SET_NULL
     )
     groupset = models.ForeignKey(
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
@@ -125,10 +115,6 @@ class Group(Accessible):
     @property
     def source(self):
         return self.ex.source
-
-    @property
-    def figure(self):
-        return self.ex.figure
 
     @property
     def parents(self):
@@ -184,7 +170,6 @@ class IndividualEx(Externable):
     """
 
     source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
 
     @property
@@ -222,10 +207,6 @@ class Individual(AbstractIndividual, Accessible):
     @property
     def source(self):
         return self.ex.source
-
-    @property
-    def figure(self):
-        return self.ex.figure
 
     @property
     def _characteristica_normed(self):
