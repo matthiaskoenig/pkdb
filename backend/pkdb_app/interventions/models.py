@@ -61,12 +61,6 @@ class InterventionEx(Externable):
         null=True,
         on_delete=models.CASCADE,
     )
-    figure = models.ForeignKey(
-        DataFile,
-        related_name="f_intervention_exs",
-        null=True,
-        on_delete=models.CASCADE,
-    )
 
     interventionset = models.ForeignKey(
         InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE

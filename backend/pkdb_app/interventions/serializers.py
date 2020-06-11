@@ -123,9 +123,6 @@ class InterventionExSerializer(MappingSerializer):
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-    figure = serializers.PrimaryKeyRelatedField(
-        queryset=DataFile.objects.all(), required=False, allow_null=True
-    )
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
