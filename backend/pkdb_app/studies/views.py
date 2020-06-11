@@ -169,7 +169,7 @@ def related_elastic_dict(study):
         GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(group__in=groups),
         IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual', 'characteristica').filter(individual__in=individuals),
         InterventionDocument: interventions,
-        OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('_interventions'),
+        OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('interventions'),
         OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(intervention__in=interventions),
         FigureAnalysisDocument: dimensions,
     }

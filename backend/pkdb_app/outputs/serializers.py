@@ -183,11 +183,11 @@ class OutputExSerializer(ExSerializer):
 
         outputs_dj = create_multiple_bulk(output_ex, 'ex', outputs, Output)
         for output, intervetions  in zip(outputs_dj, outputs_interventions):
-            output._interventions.add(*intervetions)
+            output.interventions.add(*intervetions)
 
         outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
         for output in outputs_normed:
-            output._interventions.add(*output.interventions.all())
+            output.interventions.add(*output.interventions.all())
         return output_ex
 
 

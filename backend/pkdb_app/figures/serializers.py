@@ -219,7 +219,7 @@ class FigureSerializer(ExSerializer):
         if outputs_dj:
             outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
             for output in outputs_normed:
-                output._interventions.add(*output.interventions.all())
+                output.interventions.add(*output.interventions.all())
 
 
 ################################
