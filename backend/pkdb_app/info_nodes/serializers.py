@@ -157,6 +157,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
             "choice": Choice,
         }
 
+
     def update_or_create(self, validated_data, instance=None, update_document=True):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
