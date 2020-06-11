@@ -39,7 +39,11 @@ echo "-------------------------"
 echo "UPLOAD DATA"
 echo "-------------------------"
 $HOME/envs/pkdb_data/bin/upload_nodes
-$HOME/envs/pkdb_data/bin/upload_studies
+
+# run upload and allow disconnect of connection
+# FIXME: add logging
+nohup $HOME/envs/pkdb_data/bin/upload_studies &
+
 
 
 
