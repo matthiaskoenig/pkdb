@@ -28,11 +28,15 @@ services:
 
   postgres:
     restart: always
-    image: postgres:12.1
+    image: postgres:12.3
     ports:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${PKDB_DB_NAME}
+      - POSTGRES_USER=${PKDB_DB_USER}
+      - POSTGRES_PASSWORD=${PKDB_DB_PASSWORD}
 
   elasticsearch:
     restart: always
@@ -47,9 +51,7 @@ services:
       memlock:
         soft: -1
         hard: -1
-
-    image: elasticsearch:7.5.1
-
+    image: elasticsearch:7.7.1
     ports:
       - "9123:9200"
     volumes:
