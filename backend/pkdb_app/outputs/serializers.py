@@ -4,8 +4,6 @@ Serializers for outputs.
 
 
 import warnings
-from pkdb_app.figures.serializers import FigureSerializer
-
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -37,7 +35,18 @@ TIME_FIELDS = ["time", "time_unit"]
 OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
-
+OUTPUT_FOREIGN_KEYS = [
+            'measurement_type',
+            'substance',
+            'choice',
+            'raw',
+            'group',
+            'individual',
+            'tissue',
+            'method',
+            'ex',
+            'study'
+        ]
 
 # ----------------------------------
 # Outputs
@@ -65,7 +74,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
         slug_field="name",
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Tissue),
         read_only=False,
-        required=False
+        required=False,
+        allow_null=True,
     )
 
     method = utils.SlugRelatedField(
@@ -83,7 +93,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         data.pop("comments", None)
         data.pop("descriptions", None)
         data = self.retransform_map_fields(data)
-        data = self.to_internal_related_fields(data) # fixme
+        data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data, additional_fields=OutputExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -182,8 +192,8 @@ class OutputExSerializer(ExSerializer):
             outputs_interventions.append(output.pop('interventions', []))
 
         outputs_dj = create_multiple_bulk(output_ex, 'ex', outputs, Output)
-        for output, intervetions  in zip(outputs_dj, outputs_interventions):
-            output.interventions.add(*intervetions)
+        for output, interventions  in zip(outputs_dj, outputs_interventions):
+            output.interventions.add(*interventions)
 
         outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
         for output in outputs_normed:
@@ -195,7 +205,6 @@ class OutputSetSerializer(ExSerializer):
     """
     OutputSet
     """
-    figures = FigureSerializer(many=True, read_only=False, required=False, allow_null=True)
     output_exs = OutputExSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -209,19 +218,15 @@ class OutputSetSerializer(ExSerializer):
 
     class Meta:
         model = OutputSet
-        fields = ["descriptions", "comments", "output_exs", "figures"]
+        fields = ["descriptions", "comments", "output_exs"]
 
     def to_internal_value(self, data):
-        data_figures = []
-        for figure_data in data.get("figures", []):
-            data_figures.extend(self.split_entry(figure_data))
-        data["figures"] = data_figures
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
     def create(self, validated_data):
-        pop_keys = ["output_exs", "figures"]
+        pop_keys = ["output_exs"]
         outputset, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -244,18 +249,6 @@ class OutputSetSerializer(ExSerializer):
                 outputs_exs.append(output_ex_instance)
             outputset.output_exs.add(*outputs_exs)
             outputset.save()
-
-            figures = []
-            for figure in poped_data["figures"]:
-                figure_instance, _ = _create(
-                    model_serializer=FigureSerializer(context=self.context),
-                    validated_data=figure,
-                )
-                figures.append(figure_instance)
-            outputset.figures.add(*figures)
-
-            outputset.save()
-
             # create warning messages
             if len(ws) > 0:
 

@@ -4,6 +4,7 @@ Django model for Study.
 import datetime
 
 from django.db import models
+from pkdb_app.data.models import DataSet
 
 from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
@@ -127,6 +128,11 @@ class Study(Sidable, models.Model):
     outputset = models.OneToOneField(
         OutputSet, related_name="study", on_delete=models.SET_NULL, null=True
     )
+
+    dataset = models.OneToOneField(
+        DataSet, related_name="study", on_delete=models.SET_NULL, null=True
+    )
+
     files = models.ManyToManyField(DataFile)
 
 

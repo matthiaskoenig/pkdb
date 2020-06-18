@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-from pkdb_app.figures.models import Figure, DataSet, Dimension
+from pkdb_app.data.models import Data, DataSet, Dimension, SubSet
 from pkdb_app.interventions.models import (
     InterventionEx,
     InterventionSet,
@@ -52,12 +52,16 @@ class Comment(models.Model):
         OutputSet, related_name="comments", null=True, on_delete=models.CASCADE
     )
 
-    figures = models.ForeignKey(
-        Figure, related_name="comments", null=True, on_delete=models.CASCADE
-    )
-
     datasets = models.ForeignKey(
         DataSet, related_name="comments", null=True, on_delete=models.CASCADE
+    )
+
+    data = models.ForeignKey(
+        Data, related_name="comments", null=True, on_delete=models.CASCADE
+    )
+
+    subsets = models.ForeignKey(
+        SubSet, related_name="comments", null=True, on_delete=models.CASCADE
     )
 
     dimensions = models.ForeignKey(
@@ -97,13 +101,19 @@ class Description(models.Model):
     outputset = models.ForeignKey(
         OutputSet, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
-    figures = models.ForeignKey(
-        Figure, related_name="descriptions", null=True, on_delete=models.CASCADE
-    )
 
     datasets = models.ForeignKey(
         DataSet, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
+
+    data = models.ForeignKey(
+        Data, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
+    subsets = models.ForeignKey(
+        SubSet, related_name="descriptions", null=True, on_delete=models.CASCADE
+    )
+
 
     dimensions = models.ForeignKey(
         Dimension, related_name="descriptions", null=True, on_delete=models.CASCADE

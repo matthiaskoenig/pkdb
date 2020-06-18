@@ -1,6 +1,10 @@
 """
 Studies serializers.
 """
+from collections import OrderedDict
+
+from pkdb_app.data.models import DataSet
+from pkdb_app.data.serializers import DataSetSerializer
 from rest_framework import serializers
 
 
@@ -131,6 +135,8 @@ class StudySerializer(SidSerializer):
         read_only=False, required=False, allow_null=True
     )
     outputset = OutputSetSerializer(read_only=False, required=False, allow_null=True)
+    dataset = DataSetSerializer(read_only=False, required=False, allow_null=True)
+
     files = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True, many=True
     )
@@ -155,6 +161,7 @@ class StudySerializer(SidSerializer):
             "individualset",
             "interventionset",
             "outputset",
+            "dataset",
             "files",
             "comments",
             "warnings"
@@ -273,19 +280,25 @@ class StudySerializer(SidSerializer):
 
     @staticmethod
     def related_sets():
-        return {
-            "groupset": GroupSet,
-            "individualset": IndividualSet,
-            "interventionset": InterventionSet,
-            "outputset": OutputSet,
-        }
+        return OrderedDict(
+            [
+                ("groupset", GroupSet),
+                ("individualset", IndividualSet),
+                ("interventionset", InterventionSet),
+                ("outputset", OutputSet),
+                ("dataset", DataSet),
+            ]
+        )
     def related_serializer(self):
-        return {
-            "groupset": GroupSetSerializer,
-            "individualset": IndividualSetSerializer,
-            "interventionset": InterventionSetSerializer,
-            "outputset": OutputSetSerializer,
-        }
+        return OrderedDict(
+            [
+                ("groupset", GroupSetSerializer),
+                ("individualset", IndividualSetSerializer),
+                ("interventionset", InterventionSetSerializer),
+                ("outputset", OutputSetSerializer),
+                ("dataset", DataSetSerializer),
+            ]
+        )
 
     def pop_relations(self, validated_data):
         """ Remove nested relations (handled via own serializers)
@@ -302,13 +315,10 @@ class StudySerializer(SidSerializer):
             "collaborators": User,
             "files": DataFile,
         }
-        related_foreignkeys_dict = {
-            name: validated_data.pop(name, None) for name in related_foreignkeys.keys()
-        }
-        related_many2many_dict = {name: validated_data.pop(name) for name in related_many2many.keys() if
-                                  name in validated_data}
-        related = {**related_foreignkeys_dict, **related_many2many_dict}
-
+        related_foreignkeys_dict = OrderedDict([(name, validated_data.pop(name, None)) for name in related_foreignkeys.keys()])
+        related_many2many_dict = OrderedDict([(name, validated_data.pop(name)) for name in related_many2many.keys() if
+                                  name in validated_data])
+        related = OrderedDict(list(related_foreignkeys_dict.items()) + list(related_many2many_dict.items()))
         return related
 
     def create_relations(self, study, related):

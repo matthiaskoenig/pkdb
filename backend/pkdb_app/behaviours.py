@@ -26,6 +26,7 @@ class Externable(models.Model):
     class Meta:
         abstract = True
 
+
 class Accessible(models.Model):
     class Meta:
         abstract = True

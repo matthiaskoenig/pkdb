@@ -8,8 +8,8 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
-from pkdb_app.figures.documents import FigureAnalysisDocument
-from pkdb_app.figures.models import Dimension
+from pkdb_app.data.documents import DataAnalysisDocument
+from pkdb_app.data.models import Dimension
 from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
@@ -171,7 +171,7 @@ def related_elastic_dict(study):
         InterventionDocument: interventions,
         OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('interventions'),
         OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(intervention__in=interventions),
-        FigureAnalysisDocument: dimensions,
+        DataAnalysisDocument: dimensions,
     }
     if study.reference:
         docs_dict[ReferenceDocument] = study.reference
