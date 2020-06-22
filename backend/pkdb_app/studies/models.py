@@ -180,12 +180,6 @@ class Study(Sidable, models.Model):
         except AttributeError:
             return Intervention.objects.none()
 
-    @property
-    def outputs(self):
-        try:
-            return self.outputset.outputs.all()
-        except AttributeError:
-            return Output.objects.none()
 
     @property
     def outputs_interventions(self):
@@ -265,7 +259,6 @@ class Study(Sidable, models.Model):
     def output_count(self):
         if self.outputset:
             return self.outputset.outputs.filter(normed=True).count()
-
         return 0
 
     @property

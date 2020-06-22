@@ -197,7 +197,8 @@ class OutputExSerializer(ExSerializer):
 
         outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
         for output in outputs_normed:
-            output.interventions.add(*output.interventions.all())
+            output.interventions.add(*output.raw.interventions.all())
+
         return output_ex
 
 

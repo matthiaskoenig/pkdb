@@ -1,8 +1,11 @@
+
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from pkdb_app.behaviours import Accessible
+from pkdb_app.interventions.models import Intervention
 from pkdb_app.utils import CHAR_MAX_LENGTH
 from django.utils.translation import gettext_lazy as _
-
+import pandas as pd
 
 class DataSet(models.Model):
     """
@@ -32,6 +35,62 @@ class SubSet(models.Model):
     """
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
+
+    def get_single_dosing(self) -> Intervention:
+        """Returns a single intervention of type dosing if existing.
+        If multiple dosing interventions exist, no dosing is returned!.
+        """
+        try:
+            dosing_measurement_type = Intervention.objects.filter(id__in=self.interventions).get(
+                normed=True, measurement_type__info_node__name="dosing"
+            )
+            return dosing_measurement_type
+
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            return None
+
+    @property
+    def outputs(self):
+        return self.data_points.values_list('outputs', flat=True)
+
+    @property
+    def interventions(self):
+        return self.data_points.values_list('outputs__interventions', flat=True)
+
+    def _timecourse_extra(self):
+        return {
+            'interventions':'outputs__interventions',
+            'interventions__measurement_type': 'outputs__interventions__measurement_type',
+            'interventions__substance': 'outputs__interventions__substance',
+            'application':'outputs__interventions__application',
+            'measurement_type': 'outputs__measurement_type',
+            'measurement_type_name': 'outputs__measurement_type__info_node__name',
+            'tissue': 'outputs__tissue',
+            'tissue_name': 'outputs__tissue__info_node__name',
+            'method': 'outputs__method',
+            'method_name': 'outputs__method__info_node__name',
+            'substance': 'outputs__substance',
+            'substance_name': 'outputs__substance__info_node__name',
+            'group': 'outputs__group',
+            'individual': 'outputs__individual',
+            'time': 'outputs__time',
+            'value': 'outputs__value',
+            'mean': 'outputs__mean',
+            'median': 'outputs__median',
+            'cv': 'outputs__cv',
+            'sd': 'outputs__sd',
+            'se': 'outputs__se',
+            'time_unit': 'outputs__time_unit',
+            'unit': 'outputs__unit',
+
+        }
+
+    def timecourse(self):
+        return self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values())
+
+    def timecourse_df(self):
+        return pd.DataFrame(self.timecourse()).rename(columns={v:k for k,v in self._timecourse_extra().items()})
+
 
 
 class DataPoint(models.Model):

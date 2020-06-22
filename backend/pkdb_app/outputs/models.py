@@ -29,7 +29,8 @@ class OutputSet(models.Model):
 
     @property
     def outputs(self):
-        return Output.objects.filter(ex__in=self.output_exs.all())
+        return self.study.outputs
+        #return Output.objects.filter(ex__in=self.output_exs.all())
 
     @property
     def outputs_normed(self):
@@ -91,7 +92,8 @@ class Output(AbstractOutput, Outputable, Accessible):
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention, through="OutputIntervention")
+    interventions = models.ManyToManyField(Intervention, through="OutputIntervention", related_name="outputs")
+    timecourse = models.ForeignKey('data.Subset', on_delete=models.CASCADE, null=True, blank=True, related_name="pks")
 
     tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
     method = models.ForeignKey(Method, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)

@@ -80,11 +80,11 @@ class SubSetSerializer(ExSerializer):
                 raise serializers.ValidationError(
                     {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
 
-    def calculate_pks_from_timecourses(self, timecourse):
+    def calculate_pks_from_timecourses(self, subset):
 
         # calculate pharmacokinetics outputs
         try:
-            outputs = pkoutputs_from_timecourse(timecourse)
+            outputs = pkoutputs_from_timecourse(subset)
         except Exception as e:
             raise serializers.ValidationError(
                 {"pharmacokinetics exception": traceback.format_exc()}
@@ -98,14 +98,19 @@ class SubSetSerializer(ExSerializer):
                 errors.append(err)
         if errors:
             raise serializers.ValidationError(
-                {"calculated outputs": errors}
+                {"calculated outputs": errors},
             )
+        interventions = [o.pop("interventions") for o in outputs]
+        outputs_dj = create_multiple_bulk(subset, "timecourse", outputs, Output)
 
-        outputs_dj = create_multiple_bulk(timecourse, "timecourse", outputs, Output)
+        for intervention, output in zip(interventions,outputs_dj):
+            output.interventions.add(intervention)
+
         if outputs_dj:
             outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
             for output in outputs_normed:
-                output.interventions.add(*output.interventions.all())
+                output.interventions.add(*output.raw.interventions.all())
+        subset.save()
 
     @staticmethod
     def _add_id_to_foreign_keys(value:str):
@@ -187,9 +192,11 @@ class SubSetSerializer(ExSerializer):
         dimensions = []
         for output in subset_outputs.iterator():
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
-            dimension = Dimension(dimension=0,study=study, output=output,data_point= data_point_instance)
+            dimension = Dimension(dimension=0,study=study, output=output,data_point=data_point_instance)
             dimensions.append(dimension)
         Dimension.objects.bulk_create(dimensions)
+
+        self.calculate_pks_from_timecourses(subset_instance)
 
 
 
