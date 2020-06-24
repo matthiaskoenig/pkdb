@@ -35,6 +35,7 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
     timecourse = subset.timecourse()
 
 
+
     if  timecourse["measurement_type_name"] == "concentration":
 
         variables = _timecourse_to_pkdict(timecourse, dosing)
@@ -82,7 +83,6 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
                 output_dict["group"] =  get_or_none(id=timecourse["group"],model=Group)
                 output_dict["individual"] = get_or_none(timecourse["individual"], model=Individual)
                 output_dict["interventions"] = timecourse["interventions"]
-
                 output_dict["study"] = dosing.study
                 if output_dict["measurement_type"].info_node.name == "auc_end":
                     output_dict["time"] = max(timecourse["time"])
@@ -138,5 +138,4 @@ def _timecourse_to_pkdict(tc: pd.DataFrame, dosing) -> Dict:
                     warnings.warn(f"restricted dosing requires value: {dosing}")
                 if dosing.time is not None:
                     pk_dict["intervention_time"] = Q_(dosing.time, dosing.time_unit)
-    print(pk_dict)
     return pk_dict

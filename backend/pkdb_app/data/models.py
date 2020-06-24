@@ -1,5 +1,4 @@
 import itertools
-
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
 from pkdb_app.behaviours import Accessible
@@ -7,6 +6,8 @@ from pkdb_app.interventions.models import Intervention
 from pkdb_app.utils import CHAR_MAX_LENGTH
 from django.utils.translation import gettext_lazy as _
 import pandas as pd
+from django.apps import apps
+
 
 class DataSet(models.Model):
     """
@@ -58,13 +59,9 @@ class SubSet(models.Model):
     def interventions(self):
         return self.data_points.values_list('outputs__interventions', flat=True)
 
-    def _timecourse_extra(self):
+    def timecourse_extra_no_intervention(self):
         return {
-            'interventions':'outputs__interventions__pk',
-            'interventions__measurement_type': 'outputs__interventions__measurement_type',
-            'label': 'outputs__label',
-            'interventions__substance': 'outputs__interventions__substance',
-            'application':'outputs__interventions__application',
+            'output': 'outputs__pk',
             'measurement_type': 'outputs__measurement_type',
             'measurement_type_name': 'outputs__measurement_type__info_node__name',
             'tissue': 'outputs__tissue',
@@ -84,47 +81,73 @@ class SubSet(models.Model):
             'se': 'outputs__se',
             'time_unit': 'outputs__time_unit',
             'unit': 'outputs__unit',
+        }
+    def _timecourse_extra(self):
+        return {
+            **self.timecourse_extra_no_intervention(),
+            'label': 'outputs__label',
+            'application': 'outputs__interventions__application',
+            'application_name': 'outputs__interventions__application__info_node__name',
+            'interventions':'outputs__interventions__pk',
+            'interventions_measurement_type': 'outputs__interventions__measurement_type',
+            'interventions_substance': 'outputs__interventions__substance',
 
         }
 
     def merge_values(self, values):
-        grouped_results = itertools.groupby(values, key=lambda value: value['outputs__label'])
+        def to_list(tdf):
+            this = tdf.apply(tuple).to_dict()
+            return pd.Series(this).apply(tuple_or_value)
 
-        merged_values = []
-        for k, g in grouped_results:
-            groups = list(g)
-            merged_value = {}
-            for group in groups:
-                for key, val in group.items():
-                    if not merged_value.get(key) and merged_value.get(key) != 0:
-                        merged_value[key] = val
-                    elif val != merged_value[key]:
-                        if isinstance(merged_value[key], list):
-                            if val not in merged_value[key]:
-                                merged_value[key].append(val)
-                        else:
-                            old_val = merged_value[key]
-                            merged_value[key] = [old_val, val]
-            merged_values.append(merged_value)
-        return merged_values[0]
 
-    @staticmethod
-    def validate_timecourse(timecourse):
-        unique_values = [
-            "interventions",
-            "application",
-            "measurement_type",
-            "tissue",
-            "method",
-            "substance",
-            "group",
-            "individual",
-            "unit",
-            "time_unit"
-        ]
-        for value in unique_values:
-            if isinstance(timecourse[value], list):
-                raise Exception(f"subset used for timecourse is not unique on {value}. Values are {list(timecourse[value])} ")
+        def tuple_or_value(values):
+            if len(set(values)) == 1:
+                return list(values)[0]
+
+            return values
+
+
+
+        merged_dict = pd.DataFrame(values).groupby(["outputs__pk"],as_index=False).apply(to_list).to_dict("list")
+
+
+
+        for key, values in merged_dict.items():
+            if key not in ['outputs__time','outputs__value', 'outputs__mean','outputs__median','outputs__cv','outputs__sd' 'outputs__se']:
+                merged_dict[key] = tuple_or_value(values)
+
+            if all(v is None for v in values):
+                    merged_dict[key] = None
+
+        return merged_dict
+
+
+    def get_name(self, values, Model):
+        if isinstance(values,int):
+            return Model.objects.get(pk=values).name
+        else:
+            return [self.get_name(value,Model)for value in values]
+
+    def validate_timecourse(self, timecourse):
+        unique_values = {
+            "interventions":Intervention,
+            "application_name":None,
+            "measurement_type_name":None,
+            "tissue_name":None,
+            "method_name":None,
+            "substance_name":None,
+            "group": apps.get_model("subjects.Group"),
+            "individual": apps.get_model("subjects.Individual"),
+            "unit": None,
+            "time_unit":None,
+        }
+        for key, value in unique_values.items():
+            if isinstance(timecourse[key], list):
+                if value:
+                    name = self.get_name(timecourse[key],value)
+                else:
+                    name = list(timecourse[key])
+                raise Exception(f"subset used for timecourse is not unique on {key}. Values are {name} ")
 
 
     def timecourse(self):
@@ -136,6 +159,9 @@ class SubSet(models.Model):
     def reformat_timecourse(self,timecourse, mapping):
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
+            if new_key == "interventions":
+                if isinstance(timecourse[new_key], int):
+                    timecourse[new_key] = (timecourse[new_key],)
 
 class DataPoint(models.Model):
     """

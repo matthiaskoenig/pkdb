@@ -94,10 +94,11 @@ class SubSetSerializer(ExSerializer):
                 {"calculated outputs": errors},
             )
         interventions = [o.pop("interventions") for o in outputs]
+
         outputs_dj = create_multiple_bulk(subset, "timecourse", outputs, Output)
 
         for intervention, output in zip(interventions,outputs_dj):
-            output.interventions.add(intervention)
+            output.interventions.add(*intervention)
 
         if outputs_dj:
             outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
