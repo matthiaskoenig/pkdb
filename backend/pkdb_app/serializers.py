@@ -455,6 +455,15 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return entries
 
+    @staticmethod
+    def _validate_image(datafile):
+        if datafile:
+            allowed_endings = ['png', 'jpg', 'jpeg', 'tif', 'tiff']
+            if not any([datafile.file.name.endswith(ending)
+                        for ending in allowed_endings]):
+                raise serializers.ValidationError(
+                    {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
+
     def to_internal_value(self, data):
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
@@ -475,6 +484,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
+
 
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]

@@ -32,32 +32,14 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
         # dosing information must exist
         return outputs
     # pharmacokinetics are only calculated on normalized concentrations
-    timecourse_df = subset.timecourse_df()
-    def validate_unique_fields(timecourse_df):
-        unique_values = [
-            "interventions",
-            "application",
-            "measurement_type",
-            "tissue",
-            "method",
-            "substance",
-            "group",
-            "individual",
-            "unit",
-            "time_unit"
-        ]
-        for value in unique_values:
-            if len(timecourse_df[value].unique()) != 1:
-                raise Exception(f"subset used for timecourse is not unique on {value}. Intervetions are {list(timecourse_df[value])} ")
-
-    validate_unique_fields(timecourse_df)
+    timecourse = subset.timecourse()
 
 
-    if  timecourse_df.measurement_type_name.iloc[0] == "concentration":
+    if  timecourse["measurement_type_name"] == "concentration":
 
-        variables = _timecourse_to_pkdict(timecourse_df, dosing)
+        variables = _timecourse_to_pkdict(timecourse, dosing)
         ctype = variables.pop("ctype", None)
-        if dosing.application.info_node.name == "single dose" and timecourse_df.substance.iloc[0] == dosing.substance.pk:
+        if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
             pkinf = pharmacokinetics.TimecoursePK(**variables)
 
         else:
@@ -94,17 +76,17 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
                 output_dict["unit"] = str(pk_par.units)
                 output_dict["measurement_type"] = key_mapping[key]
                 output_dict["calculated"] = True
-                output_dict["tissue"] = get_or_none(timecourse_df.tissue.iloc[0], model=Tissue)
-                output_dict["method"] = get_or_none(timecourse_df.method.iloc[0], model=Method)
-                output_dict["substance"] = get_or_none(id=timecourse_df.substance.iloc[0], model=Substance)
-                output_dict["group"] =  get_or_none(id=timecourse_df.group.iloc[0],model=Group)
-                output_dict["individual"] = get_or_none(timecourse_df.individual.iloc[0], model=Individual)
-                output_dict["interventions"] = timecourse_df.interventions.iloc[0]
+                output_dict["tissue"] = get_or_none(timecourse["tissue"], model=Tissue)
+                output_dict["method"] = get_or_none(timecourse["method"], model=Method)
+                output_dict["substance"] = get_or_none(id=timecourse["substance"], model=Substance)
+                output_dict["group"] =  get_or_none(id=timecourse["group"],model=Group)
+                output_dict["individual"] = get_or_none(timecourse["individual"], model=Individual)
+                output_dict["interventions"] = timecourse["interventions"]
 
                 output_dict["study"] = dosing.study
                 if output_dict["measurement_type"].info_node.name == "auc_end":
-                    output_dict["time"] = max(timecourse_df.time)
-                    output_dict["time_unit"] = str(timecourse_df.time_unit.iloc[0])
+                    output_dict["time"] = max(timecourse["time"])
+                    output_dict["time_unit"] = str(timecourse["time_unit"])
 
                 outputs.append(output_dict)
 
@@ -121,31 +103,31 @@ def _timecourse_to_pkdict(tc: pd.DataFrame, dosing) -> Dict:
     pk_dict['ureg'] = ureg  # for unit conversions
 
     # substance
-    pk_dict["substance"] = tc.substance_name.iloc[0]
+    pk_dict["substance"] = tc["substance_name"]
     # time
-    pk_dict["time"] = Q_(tc.time.values, tc.time_unit.iloc[0])
+    pk_dict["time"] = Q_(np.array(tc["time"]), tc["time_unit"])
 
-    # concentration
+    # concentratio
     values = None
     ctype = None
-    if any(tc["mean"].values):
-        values = tc["mean"].values
+    if any(np.array(tc["mean"])):
+        values = np.array(tc["mean"])
         ctype = "mean"
-    elif any(tc["mean"].values):
-        values = tc["median"].values
+    elif any(tc["median"]):
+        values = tc["median"]
         ctype = "median"
-    elif any(tc.value.values):
-        values = tc.value.values
+    elif any(np.array(tc["value"])):
+        values = np.array(tc["value"])
         ctype = "value"
     if ctype is not None:
-        pk_dict["concentration"] = Q_(values, tc.unit.iloc[0])
+        pk_dict["concentration"] = Q_(values, tc["unit"])
         pk_dict['ctype'] = ctype
 
     # dosing
     pk_dict["dose"] = Q_(np.nan, "mg")
 
     if dosing:
-        if dosing.substance.pk == tc.substance.iloc[0]:
+        if dosing.substance.pk == tc["substance"]:
             # pharmacokinetics is only calculated for single dose experiments
             # where the applied substance is the measured substance!
 
@@ -156,5 +138,5 @@ def _timecourse_to_pkdict(tc: pd.DataFrame, dosing) -> Dict:
                     warnings.warn(f"restricted dosing requires value: {dosing}")
                 if dosing.time is not None:
                     pk_dict["intervention_time"] = Q_(dosing.time, dosing.time_unit)
-
+    print(pk_dict)
     return pk_dict

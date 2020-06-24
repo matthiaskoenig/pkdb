@@ -28,8 +28,7 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
 GROUP_FIELDS = ['name', 'count']
 GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map', 'parent_map']
-
-EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'source_map']
+EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'source_map', 'image', 'image_map']
 
 
 # todo: move datafile from subjects module
@@ -164,13 +163,16 @@ class GroupSerializer(ExSerializer):
 
 
 class GroupExSerializer(ExSerializer):
+
     characteristica_ex = CharacteristicaExSerializer(
         many=True, read_only=False, required=False
     )
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-
+    image = serializers.PrimaryKeyRelatedField(
+        queryset=DataFile.objects.all(), required=False, allow_null=True
+    )
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -245,6 +247,11 @@ class GroupExSerializer(ExSerializer):
 
         group_ex.save()
         return group_ex
+
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
+
 
 
 class GroupSetSerializer(ExSerializer):
@@ -420,7 +427,9 @@ class IndividualExSerializer(ExSerializer):
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-
+    image = serializers.PrimaryKeyRelatedField(
+        queryset=DataFile.objects.all(), required=False, allow_null=True
+    )
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -432,6 +441,11 @@ class IndividualExSerializer(ExSerializer):
     individuals = IndividualSerializer(
         many=True, write_only=True, required=False, allow_null=True
     )
+
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
+
 
     class Meta:
         model = IndividualEx

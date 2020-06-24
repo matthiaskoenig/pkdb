@@ -1,3 +1,4 @@
+import itertools
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
@@ -59,8 +60,9 @@ class SubSet(models.Model):
 
     def _timecourse_extra(self):
         return {
-            'interventions':'outputs__interventions',
+            'interventions':'outputs__interventions__pk',
             'interventions__measurement_type': 'outputs__interventions__measurement_type',
+            'label': 'outputs__label',
             'interventions__substance': 'outputs__interventions__substance',
             'application':'outputs__interventions__application',
             'measurement_type': 'outputs__measurement_type',
@@ -85,13 +87,55 @@ class SubSet(models.Model):
 
         }
 
+    def merge_values(self, values):
+        grouped_results = itertools.groupby(values, key=lambda value: value['outputs__label'])
+
+        merged_values = []
+        for k, g in grouped_results:
+            groups = list(g)
+            merged_value = {}
+            for group in groups:
+                for key, val in group.items():
+                    if not merged_value.get(key) and merged_value.get(key) != 0:
+                        merged_value[key] = val
+                    elif val != merged_value[key]:
+                        if isinstance(merged_value[key], list):
+                            if val not in merged_value[key]:
+                                merged_value[key].append(val)
+                        else:
+                            old_val = merged_value[key]
+                            merged_value[key] = [old_val, val]
+            merged_values.append(merged_value)
+        return merged_values[0]
+
+    @staticmethod
+    def validate_timecourse(timecourse):
+        unique_values = [
+            "interventions",
+            "application",
+            "measurement_type",
+            "tissue",
+            "method",
+            "substance",
+            "group",
+            "individual",
+            "unit",
+            "time_unit"
+        ]
+        for value in unique_values:
+            if isinstance(timecourse[value], list):
+                raise Exception(f"subset used for timecourse is not unique on {value}. Values are {list(timecourse[value])} ")
+
+
     def timecourse(self):
-        return self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values())
+        timecourse = self.merge_values(self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
+        self.reformat_timecourse(timecourse,self._timecourse_extra())
+        self.validate_timecourse(timecourse)
+        return timecourse
 
-    def timecourse_df(self):
-        return pd.DataFrame(self.timecourse()).rename(columns={v:k for k,v in self._timecourse_extra().items()})
-
-
+    def reformat_timecourse(self,timecourse, mapping):
+        for new_key, old_key in mapping.items():
+            timecourse[new_key] = timecourse.pop(old_key)
 
 class DataPoint(models.Model):
     """

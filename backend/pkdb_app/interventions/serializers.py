@@ -123,6 +123,11 @@ class InterventionExSerializer(MappingSerializer):
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
+
+    image = serializers.PrimaryKeyRelatedField(
+        queryset=DataFile.objects.all(), required=False, allow_null=True
+    )
+
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -140,6 +145,9 @@ class InterventionExSerializer(MappingSerializer):
                 EXTERN_FILE_FIELDS
                 + ["interventions", "comments", "descriptions"]
         )
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
 
     def to_internal_value(self, data):
         # ----------------------------------

@@ -79,6 +79,10 @@ class GroupEx(Externable):
     source = models.ForeignKey(
         DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
     )
+    image = models.ForeignKey(
+        DataFile, related_name="i_group_exs", null=True, on_delete=models.SET_NULL
+    )
+
     groupset = models.ForeignKey(
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
     )
@@ -115,6 +119,10 @@ class Group(Accessible):
     @property
     def source(self):
         return self.ex.source
+
+    @property
+    def image(self):
+        return self.ex.image
 
     @property
     def parents(self):
@@ -170,6 +178,7 @@ class IndividualEx(Externable):
     """
 
     source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
+    image = models.ForeignKey(DataFile, related_name="i_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
 
     @property
@@ -207,6 +216,10 @@ class Individual(AbstractIndividual, Accessible):
     @property
     def source(self):
         return self.ex.source
+
+    @property
+    def image(self):
+        return self.ex.image
 
     @property
     def _characteristica_normed(self):

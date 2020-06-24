@@ -21,7 +21,7 @@ class Externable(models.Model):
     subset_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     source_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    figure_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    image_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True

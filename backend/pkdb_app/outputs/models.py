@@ -57,6 +57,9 @@ class OutputEx(Externable):
     source = models.ForeignKey(
         DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
     )
+    image = models.ForeignKey(
+        DataFile, related_name="i_output_exs", null=True, on_delete=models.SET_NULL
+    )
     outputset = models.ForeignKey(
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )

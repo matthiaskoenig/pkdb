@@ -131,6 +131,10 @@ class OutputExSerializer(ExSerializer):
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
 
+    image = serializers.PrimaryKeyRelatedField(
+        queryset=DataFile.objects.all(), required=False, allow_null=True
+    )
+
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -177,7 +181,9 @@ class OutputExSerializer(ExSerializer):
         data = self.transform_map_fields(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
-
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
 
     def create(self, validated_data):
         output_ex, poped_data = _create(model_manager=self.Meta.model.objects,
