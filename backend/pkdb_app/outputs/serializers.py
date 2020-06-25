@@ -2,7 +2,6 @@
 Serializers for outputs.
 """
 
-
 import warnings
 from rest_framework import serializers
 
@@ -30,7 +29,7 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-EXTRA_FIELDS = ["tissue", "method","label", ]
+EXTRA_FIELDS = ["tissue", "method","label",]
 TIME_FIELDS = ["time", "time_unit"]
 OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
@@ -103,6 +102,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self.validate_group_individual_output(attrs)
 
         _validate_requried_key(attrs, "measurement_type")
+
+
         _validate_requried_key(attrs, "substance")
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
@@ -179,6 +180,7 @@ class OutputExSerializer(ExSerializer):
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_image(self, value):

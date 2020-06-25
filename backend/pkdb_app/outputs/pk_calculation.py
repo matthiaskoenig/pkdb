@@ -93,7 +93,8 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
     return outputs
 
 
-def _timecourse_to_pkdict(tc: pd.DataFrame, dosing) -> Dict:
+def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
+
     """Create dictionary for pk calculation from timecourse.
 
     :return: dict
@@ -110,13 +111,13 @@ def _timecourse_to_pkdict(tc: pd.DataFrame, dosing) -> Dict:
     # concentratio
     values = None
     ctype = None
-    if any(np.array(tc["mean"])):
+    if tc["mean"]:
         values = np.array(tc["mean"])
         ctype = "mean"
-    elif any(tc["median"]):
+    elif tc["median"]:
         values = tc["median"]
         ctype = "median"
-    elif any(np.array(tc["value"])):
+    elif tc["value"]:
         values = np.array(tc["value"])
         ctype = "value"
     if ctype is not None:

@@ -28,7 +28,8 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
 GROUP_FIELDS = ['name', 'count']
 GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map', 'parent_map']
-EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'source_map', 'image', 'image_map']
+EXTERN_FILE_FIELDS = ['source', 'subset_map', 'source_map','image', 'image_map']
+EXTERN_FILE_FIELDS_CHRACTERISTCA = EXTERN_FILE_FIELDS + ['groupby']
 
 
 # todo: move datafile from subjects module
@@ -187,7 +188,7 @@ class GroupExSerializer(ExSerializer):
     class Meta:
         model = GroupEx
         fields = (
-                EXTERN_FILE_FIELDS +['characteristica_ex', 'groups', 'comments', 'descriptions']
+                EXTERN_FILE_FIELDS_CHRACTERISTCA +['characteristica_ex', 'groups', 'comments', 'descriptions']
         )
 
     def to_internal_value(self, data):
@@ -449,7 +450,7 @@ class IndividualExSerializer(ExSerializer):
 
     class Meta:
         model = IndividualEx
-        fields = EXTERN_FILE_FIELDS + [
+        fields = EXTERN_FILE_FIELDS_CHRACTERISTCA + [
             'characteristica_ex',
             'individuals',
             'comments',

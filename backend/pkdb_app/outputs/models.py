@@ -251,6 +251,7 @@ class OutputIntervention(Accessible, models.Model):
         if self.output.tissue:
             return self.output.tissue.info_node.name
 
+
     @property
     def method(self):
         if self.output.method:
@@ -264,6 +265,10 @@ class OutputIntervention(Accessible, models.Model):
     def choice(self):
         if self.output.choice:
             return self.output.choice.info_node.name
+
+    @property
+    def label(self):
+        return self.output.label
 
     @property
     def substance(self):

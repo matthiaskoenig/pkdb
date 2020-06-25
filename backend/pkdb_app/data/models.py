@@ -20,13 +20,15 @@ class Data(models.Model):
     """
     A Data  These are mostly scatterplots or timecourses.
     """
+
     class DataTypes(models.TextChoices):
         """ Data Types. """
         Scatter = 'scatter', _('scatter')
         Timecourse = 'timecourse', _('timecourse')
 
-    name = models.CharField(max_length=CHAR_MAX_LENGTH) # e.g. Fig3
-    data_type = models.CharField(max_length=CHAR_MAX_LENGTH, choices=DataTypes.choices)  # options are scatter, timecourse, ...
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)  # e.g. Fig3
+    data_type = models.CharField(max_length=CHAR_MAX_LENGTH,
+                                 choices=DataTypes.choices)  # options are scatter, timecourse, ...
     image = models.ForeignKey('subjects.DataFile', related_name="data", on_delete=models.CASCADE, null=True)
     dataset = models.ForeignKey(DataSet, related_name="data", on_delete=models.CASCADE, null=True)
 
@@ -82,13 +84,14 @@ class SubSet(models.Model):
             'time_unit': 'outputs__time_unit',
             'unit': 'outputs__unit',
         }
+
     def _timecourse_extra(self):
         return {
             **self.timecourse_extra_no_intervention(),
             'label': 'outputs__label',
             'application': 'outputs__interventions__application',
             'application_name': 'outputs__interventions__application__info_node__name',
-            'interventions':'outputs__interventions__pk',
+            'interventions': 'outputs__interventions__pk',
             'interventions_measurement_type': 'outputs__interventions__measurement_type',
             'interventions_substance': 'outputs__interventions__substance',
 
@@ -102,12 +105,8 @@ class SubSet(models.Model):
             else:
                 return tuple(values)
 
-
-
         def to_list(tdf):
-            this = tdf.apply(none_tuple).to_dict()
-            return pd.Series(this).apply(tuple_or_value)
-
+            return tdf.apply(none_tuple).apply(tuple_or_value)
 
         def tuple_or_value(values):
             if len(set(values)) == 1:
@@ -115,64 +114,59 @@ class SubSet(models.Model):
 
             return values
 
-
-
-        merged_dict = pd.DataFrame(values).groupby(["outputs__pk"],as_index=False).apply(to_list).to_dict("list")
-
-
+        merged_dict = pd.DataFrame(values).groupby(["outputs__pk"], as_index=False).apply(to_list).to_dict("list")
 
         for key, values in merged_dict.items():
-            if key not in ['outputs__time','outputs__value', 'outputs__mean','outputs__median','outputs__cv','outputs__sd' 'outputs__se']:
+            if key not in ['outputs__time', 'outputs__value', 'outputs__mean', 'outputs__median', 'outputs__cv',
+                           'outputs__sd' 'outputs__se']:
                 merged_dict[key] = tuple_or_value(values)
 
             if all(v is None for v in values):
-                    merged_dict[key] = None
+                merged_dict[key] = None
 
         return merged_dict
 
-
     def get_name(self, values, Model):
-        if isinstance(values,int):
+        if isinstance(values, int):
             return Model.objects.get(pk=values).name
         else:
-            return [self.get_name(value,Model)for value in values]
+            return [self.get_name(value, Model) for value in values]
 
     def validate_timecourse(self, timecourse):
         unique_values = {
-            "interventions":Intervention,
-            "application_name":None,
-            "measurement_type_name":None,
-            "tissue_name":None,
-            "method_name":None,
-            "substance_name":None,
+            "interventions": Intervention,
+            "application_name": None,
+            "measurement_type_name": None,
+            "tissue_name": None,
+            "method_name": None,
+            "substance_name": None,
             "group": apps.get_model("subjects.Group"),
             "individual": apps.get_model("subjects.Individual"),
             "unit": None,
-            "time_unit":None,
+            "time_unit": None,
         }
         for key, value in unique_values.items():
             if isinstance(timecourse[key], list):
                 if value:
-                    name = self.get_name(timecourse[key],value)
+                    name = self.get_name(timecourse[key], value)
                 else:
                     name = list(timecourse[key])
                 raise Exception(f"subset used for timecourse is not unique on {key}. Values are {name} ")
 
-
     def timecourse(self):
-        timecourse = self.merge_values(self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
-        self.reformat_timecourse(timecourse,self._timecourse_extra())
+        timecourse = self.merge_values(
+            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
+        self.reformat_timecourse(timecourse, self._timecourse_extra())
         self.validate_timecourse(timecourse)
-        from pprint import pprint
-        pprint(timecourse)
         return timecourse
 
-    def reformat_timecourse(self,timecourse, mapping):
+    def reformat_timecourse(self, timecourse, mapping):
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
             if new_key == "interventions":
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
+
 
 class DataPoint(models.Model):
     """
@@ -203,7 +197,6 @@ class Dimension(Accessible):
     def data_type(self):
         return self.data_point.subset.data.data_type
 
-
     @property
     def subset_pk(self):
         return self.data_point.subset.pk
@@ -219,5 +212,3 @@ class Dimension(Accessible):
     @property
     def output_pk(self):
         return self.output.pk
-
-

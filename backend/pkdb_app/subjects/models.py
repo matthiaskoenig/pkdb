@@ -17,7 +17,7 @@ from .managers import (
 from ..behaviours import (
     Externable, Accessible)
 from ..storage import OverwriteStorage
-from ..utils import CHAR_MAX_LENGTH
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
@@ -75,6 +75,7 @@ class GroupEx(Externable):
     Groups are defined via their characteristica.
     A group can be a subgroup of another group via the parent field.
     """
+    groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     source = models.ForeignKey(
         DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
@@ -176,7 +177,7 @@ class IndividualEx(Externable):
     This contains maps and splittings.
     Individuals are defined via their characteristics, analogue to groups.
     """
-
+    groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
     image = models.ForeignKey(DataFile, related_name="i_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
