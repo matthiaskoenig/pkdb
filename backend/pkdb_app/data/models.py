@@ -95,8 +95,17 @@ class SubSet(models.Model):
         }
 
     def merge_values(self, values):
+
+        def none_tuple(values):
+            if all(pd.isna(v) for v in values):
+                return (None,)
+            else:
+                return tuple(values)
+
+
+
         def to_list(tdf):
-            this = tdf.apply(tuple).to_dict()
+            this = tdf.apply(none_tuple).to_dict()
             return pd.Series(this).apply(tuple_or_value)
 
 
@@ -154,6 +163,8 @@ class SubSet(models.Model):
         timecourse = self.merge_values(self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
         self.reformat_timecourse(timecourse,self._timecourse_extra())
         self.validate_timecourse(timecourse)
+        from pprint import pprint
+        pprint(timecourse)
         return timecourse
 
     def reformat_timecourse(self,timecourse, mapping):
