@@ -162,7 +162,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return max(n_values)
 
     @staticmethod
-    def interventions_from_string(value):
+    def string_to_list(value):
         if value:
             return [v.strip() for v in str(value).split(",")]
         else:
@@ -182,7 +182,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # create entries by splitting separators
         entries = [dict() for k in range(n)]
 
-        split_by_figure = False
+        split_by_image = False
         number_spit_fields = 0
         for field in entry.keys():
             value = entry[field]
@@ -195,11 +195,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                 if isinstance(value, str):
                     values[k] = value.strip()
-                    if field == "interventions":
-                        values[k] = self.interventions_from_string(value)
+                    if field in ["interventions", "dimensions", "shared"]:
+                        values[k] = self.string_to_list(value)
 
-                    elif field == "figure" and len(values) > 1:
-                        split_by_figure = True
+                    elif field == "image" and len(values) > 1:
+                        split_by_image = True
 
                     if values[k] in NA_VALUES:
                         values[k] = None
@@ -239,9 +239,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
             for k in range(n):
                 entries[k][field] = values[k]
 
-        if split_by_figure and number_spit_fields == 1:
+        if split_by_image and number_spit_fields == 1:
             raise serializers.ValidationError(
-                ["Splitting only on figure is not allowed.", entries]
+                ["Splitting only on image is not allowed.", entries]
             )
 
         return entries
@@ -371,14 +371,29 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if isinstance(entry_value, str):
                         entry_value = entry_value.strip()
 
-                    if keys[0] == "interventions":
-                        entry_value = self.interventions_from_string(entry_value)
+                    if keys[0] in ["interventions","dimensions", "shared"]:
+                        entry_value = self.string_to_list(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
 
 
                     else:
                         set_keys(entry_dict, entry_value, *keys)
         return entry_dict
+
+    def _groupby_with_list(self, keys, template, df, data, source, groupby, entries):
+        poped_keys = {key: template.pop(key) for key in keys if key in template}
+        for non_values_keys, group_df in df.groupby(groupby, sort=False):
+            entry_dict = self.make_entry(next(group_df.itertuples()), template, data, source)
+
+            new_values = []
+            for entry in group_df.itertuples():
+                for key, values in poped_keys.items():
+                    for value in values:
+                        value = self.make_entry(entry, value, values, source)
+                        new_values.append(value)
+
+                    entry_dict[key] = new_values
+            entries.append(entry_dict)
 
     def entries_from_file(self, data):
         entries = []
@@ -404,41 +419,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     {"source": "Source is provided but the mapping operator "
                                "'==' is not used in any field"})
 
-            if data.get("groupby"):
-                groupby = template.pop("groupby")
-                if not isinstance(groupby, str):
-                    raise serializers.ValidationError(
-                        {"groupby": "groupby must be a string"})
-                groupby = [v.strip() for v in groupby.split("&")]
-
+            if template.get("name", "").startswith("col=="):
+                groupby = [template.get("name")[5:]]
                 try:
-                    if "characteristica" in template:
-                        characteristica = template.pop("characteristica")
-                        for non_characteristica_keys, group_df in df.groupby(groupby, sort=False):
-                            entry_dict = self.make_entry(next(group_df.itertuples()), template, data, source)
-
-                            charcteristica = []
-
-                            for entry in group_df.itertuples():
-                                for characteristica_single in characteristica:
-                                    characteristica_single = self.make_entry(entry, characteristica_single,
-                                                                             characteristica,
-                                                                             source)
-
-                                    charcteristica.append(characteristica_single)
-
-                            entry_dict["characteristica"] = charcteristica
-                            entries.append(entry_dict)
-
-                    else:
-                        for group_name, group_df in df.groupby(groupby, sort=False):
-                            for entry in group_df.itertuples():
-                                entry_dict = self.make_entry(entry, template, data, source)
-                                entries.append(entry_dict)
+                  self._groupby_with_list(["characteristica", "subsets"], template, df, data, source, groupby, entries)
                 except KeyError:
                     raise serializers.ValidationError(
                         [
-                            f"Some keys in groupby <{groupby}> are missing in "
+                            f"The key <{groupby[0]}> is missing in"
                             f"file <{DataFile.objects.get(pk=source).file}> ",
                             data
                         ]
@@ -526,7 +514,7 @@ class ExSerializer(MappingSerializer):
             if data["interventions"]:
                 interventions = []
                 if isinstance(data["interventions"], str):
-                    data["interventions"] = self.interventions_from_string(data["interventions"])
+                    data["interventions"] = self.string_to_list(data["interventions"])
 
                 for intervention in data["interventions"]:
                     try:

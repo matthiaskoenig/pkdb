@@ -224,10 +224,10 @@ class DataSerializer(ExSerializer):
         subsets = []
         self.validate_wrong_keys(data)
         for subset in data.get('subsets', []):
-            temp_subset = self.split_entry(subset)
-            for splitted_subset in temp_subset:
-                subsets.extend(self.entries_from_file(splitted_subset))
-        data['subsets'] = subsets
+            temp_subsets = self.split_entry(subset)
+            #for splitted_subset in temp_subsets:
+            #    subsets.extend(self.entries_from_file(splitted_subset))
+        data['subsets'] = temp_subsets
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def create(self, validated_data):
