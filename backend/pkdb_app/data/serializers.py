@@ -1,13 +1,14 @@
 import traceback
 
-from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer
+from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
+    DescriptionElasticSerializer
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
 from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.subjects.models import DataFile
-from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_normalized
+from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_normalized, list_of_pk
 from rest_framework import serializers
 import pandas as pd
 import numpy as np
@@ -295,6 +296,18 @@ class DataSetSerializer(ExSerializer):
 ################################
 # Read Serializer
 ################################
+class DataSetElasticSmallSerializer(serializers.ModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    data = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DataSet
+        fields = ["pk", "descriptions", "comments", "data"]
+        read_only_fields = fields
+
+    def get_data(self, obj):
+        return list_of_pk("data", obj)
 
 class DataAnalysisSerializer(serializers.ModelSerializer):
     class Meta:

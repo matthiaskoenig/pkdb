@@ -414,10 +414,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if "==" in value:
                         mappings.append(value)
 
-            if len(mappings) == 0:
-                raise serializers.ValidationError(
-                    {"source": "Source is provided but the mapping operator "
-                               "'==' is not used in any field"})
+
 
             if template.get("name", "").startswith("col=="):
                 groupby = [template.get("name")[5:]]
@@ -435,6 +432,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 for entry in df.itertuples():
                     entry_dict = self.make_entry(entry, template, data, source)
                     entries.append(entry_dict)
+
+            if len(mappings) == 0 and len(entries) == 0:
+                raise serializers.ValidationError(
+                    {"source": "Source is provided but the mapping operator "
+                               "'==' is not used in any field"})
 
 
 

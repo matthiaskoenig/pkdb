@@ -19,7 +19,7 @@ class DataAnalysisViewSet(AccessView):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('study_sid','study_name', 'output_pk',)
+    search_fields = ('study_sid','study_name', 'output_pk',"data_pk")
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'

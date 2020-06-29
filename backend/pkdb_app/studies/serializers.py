@@ -4,7 +4,7 @@ Studies serializers.
 from collections import OrderedDict
 
 from pkdb_app.data.models import DataSet
-from pkdb_app.data.serializers import DataSetSerializer
+from pkdb_app.data.serializers import DataSetSerializer, DataSetElasticSmallSerializer
 from rest_framework import serializers
 
 
@@ -498,6 +498,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
     individualset = IndividualSetElasticSmallSerializer()
     interventionset = InterventionSetElasticSmallSerializer()
     outputset = OutputSetElasticSmallSerializer()
+    dataset = DataSetElasticSmallSerializer()
 
     class Meta:
         model = Study
@@ -532,6 +533,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             "individualset",
             "interventionset",
             "outputset",
+            "dataset"
         ]
 
         read_only_fields = fields

@@ -178,6 +178,8 @@ class StudyDocument(Document):
             )
         }
     )
+    dataset = common_setfields("data")
+
 
     class Django:
         model = Study

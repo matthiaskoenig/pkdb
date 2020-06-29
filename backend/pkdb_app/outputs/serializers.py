@@ -3,6 +3,7 @@ Serializers for outputs.
 """
 
 import warnings
+
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -271,6 +272,7 @@ class OutputSetSerializer(ExSerializer):
 # -----------------------
 # Elastic Serializer
 # -----------------------
+
 class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
