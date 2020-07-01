@@ -56,7 +56,7 @@ class SubSetSerializer(ExSerializer):
             kwargs = {**poped_data, 'subset_instance': subset_instance}
             self.create_scatter(**kwargs)
         elif subset_instance.data.data_type == "timecourse":
-            kwargs = {'subset_instance': subset_instance}
+            kwargs = {'dimensions': poped_data["dimensions"], 'subset_instance': subset_instance}
             self.create_timecourse(**kwargs)
         # subset_instance.save()
         return subset_instance
@@ -176,13 +176,16 @@ class SubSetSerializer(ExSerializer):
 
 
 
-    def create_timecourse(self, subset_instance):
+    def create_timecourse(self, subset_instance, dimensions):
         study = self.context["study"]
-        subset_outputs = study.outputs.filter(normed=True,label=subset_instance.name)
+        if len(dimensions) != 1:
+            raise serializers.ValidationError(
+                f"Timcourses have to be one dimensional. Dimensions: <{dimensions}> has a len of <{len(dimensions)}.> ")
+        subset_outputs = study.outputs.filter(normed=True,label=dimensions[0])
         if not subset_outputs.exists():
             raise serializers.ValidationError(
                 {"dataset": {"data": [
-                    {"subsets": {"name": f" Outputs with label <{subset_instance.name}> do not exist."}}]}})
+                    {"subsets": {"name": f" Outputs with label <{dimensions}> do not exist."}}]}})
 
         dimensions = []
         for output in subset_outputs.iterator():
