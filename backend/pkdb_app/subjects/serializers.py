@@ -220,6 +220,7 @@ class GroupExSerializer(ExSerializer):
 
 
         data['groups'] = groups
+
         # ----------------------------------
         # finished
         # ----------------------------------
@@ -499,6 +500,7 @@ class IndividualExSerializer(ExSerializer):
         data = self.transform_map_fields(data)
 
         data['individuals'] = individuals
+
         study_sid = self.context['request'].path.split('/')[-2]
 
         if 'group' in data:

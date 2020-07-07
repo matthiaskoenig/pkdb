@@ -1,3 +1,4 @@
+import collections
 import traceback
 
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
@@ -52,7 +53,7 @@ class SubSetSerializer(ExSerializer):
                                               create_multiple_keys=['comments', 'descriptions'],
                                               pop=['dimensions', 'shared'])
 
-        if subset_instance.data.data_type in  ["scatter","fictve_scatter"]:
+        if subset_instance.data.data_type in ["scatter"]:
             kwargs = {**poped_data, 'subset_instance': subset_instance}
             self.create_scatter(**kwargs)
         elif subset_instance.data.data_type == "timecourse":
@@ -61,12 +62,6 @@ class SubSetSerializer(ExSerializer):
         # subset_instance.save()
         return subset_instance
 
-    def validate_timecourse(self):
-        raise NotImplementedError
-
-    def _validate_interventions(self, data):
-        # all outputs of an timecourse have to share the same interventions.
-        raise NotImplementedError
 
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
@@ -127,6 +122,10 @@ class SubSetSerializer(ExSerializer):
         if len(dimensions) != 2:
             raise serializers.ValidationError(
                 f"Scatter plots have to be two dimensional. Dimensions: <{dimensions}> has a len of <{len(dimensions)}.> ")
+
+        if not shared:
+            raise serializers.ValidationError(
+                f"The <shared> field is required for scatter plots.")
         outputs_pd = pd.DataFrame(study_outputs.values())
 
         data_set = outputs_pd[outputs_pd['label'].isin(dimensions)]
@@ -225,13 +224,7 @@ class DataSerializer(ExSerializer):
         # ----------------------------------
         # finished
         # ----------------------------------
-        subsets = []
         self.validate_wrong_keys(data)
-        for subset in data.get('subsets', []):
-            temp_subsets = self.split_entry(subset)
-            #for splitted_subset in temp_subsets:
-            #    subsets.extend(self.entries_from_file(splitted_subset))
-        data['subsets'] = temp_subsets
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def create(self, validated_data):
@@ -263,18 +256,50 @@ class DataSetSerializer(ExSerializer):
         model = DataSet
         fields = ['data', "comments", "descriptions"]
 
+    def _validate_unique_names(self, data_container):
+        names = []
+        for data_single in data_container:
+            if data_single.get("name") in names:
+                raise serializers.ValidationError(
+                    {"name": f"Duplicated name <{data_single.get('name')}>. Consider writing the name "
+                             f"in the to the excel sheet. By mapping the name field {{'name':'col==*'}} the instances are"
+                             f" automatically groupby the name."})
+
+            else:
+                names.append(data_single.get("name"))
+            subset_names = []
+            for subset in data_single.get("subsets", []):
+                if subset.get("name") in subset_names:
+                    raise serializers.ValidationError(
+                        f"Subsets with same names are not allowed within one data instance. "
+                        f"Data instance <{data_single.get('name')}> contains multiple subsets with name <{subset.get('name')}>.")
+                else:
+                    subset_names.append(subset.get("name"))
+
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
 
         # parse special formatting:
         data_container = []
-        for data_single in data.get('data', []):
-            temp_data = self.split_entry(data_single)
-            for splitted_data in temp_data:
-                data_container.extend(self.entries_from_file(splitted_data))
+        for data_unsplitted in data.get('data', []):
+            temp_data = self.split_entry(data_unsplitted)
+            for data_single in temp_data:
+                subsets = data_single.get('subsets')
+                if subsets:
+                    temp_subsets = []
+                    for subset in subsets:
+                        temp_subsets.extend(
+                            self.split_entry(subset)
+                        )
+                    data_single['subsets'] = temp_subsets
+                data_container.extend(self.entries_from_file(data_single))
         data['data'] = data_container
-
         return super().to_internal_value(data)
+
+    def validate(self, attrs):
+        self._validate_unique_names(attrs["data"])
+        return super().validate(attrs)
+
 
 
     def create(self, validated_data):
@@ -289,6 +314,7 @@ class DataSetSerializer(ExSerializer):
                 model_serializer=DataSerializer(context=self.context),
                 validated_data=data_single,
             )
+
             data_instance_container.append(data_instance)
 
         dataset_instance.data.add(*data_instance_container)

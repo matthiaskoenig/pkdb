@@ -196,6 +196,7 @@ def recursive_iter(obj, keys=()):
 
 def set_keys(d, value, *keys):
     """ Changes keys in nested dictionary. """
+    #print(value, *keys)
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value

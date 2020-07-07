@@ -371,10 +371,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if isinstance(entry_value, str):
                         entry_value = entry_value.strip()
 
-                    if keys[0] in ["interventions","dimensions", "shared"]:
+                    if keys[0] in ["interventions", "dimensions", "shared"]:
                         entry_value = self.string_to_list(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
-
 
                     else:
                         set_keys(entry_dict, entry_value, *keys)

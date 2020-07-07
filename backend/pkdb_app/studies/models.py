@@ -270,6 +270,8 @@ class Study(Sidable, models.Model):
     def delete(self, *args, **kwargs):
         if self.outputset:
             self.outputset.delete()
+        if self.dataset:
+            self.dataset.delete()
         if self.interventionset:
             self.interventionset.delete()
         if self.individualset:
