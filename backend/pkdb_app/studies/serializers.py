@@ -18,14 +18,15 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
     DescriptionElasticSerializer
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
-from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameSerializer, \
+    PkStringSerializer, PkSerializer
 from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from ..users.serializers import UserElasticSerializer
 from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_requried_key, \
-    _validate_not_allowed_key
+    _validate_not_allowed_key, list_of_pk
 
 
 class AuthorSerializer(WrongKeyValidationSerializer):
@@ -475,6 +476,7 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
         read_only_fields = fields
 
 
+
 class StudyElasticSerializer(serializers.ModelSerializer):
     pk = serializers.CharField()
     reference = ReferenceSmallElasticSerializer()
@@ -554,3 +556,32 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
         else:
             return []
+
+class PKDataSerializer(serializers.Serializer):
+
+    studies = serializers.SerializerMethodField()
+    groups = serializers.SerializerMethodField()
+    individuals = serializers.SerializerMethodField()
+    interventions = serializers.SerializerMethodField()
+    outputs =  serializers.SerializerMethodField()
+    #data = serializers.SerializerMethodField()
+    def _to_list(self, field, obj):
+        return getattr(obj,field)
+
+    def get_studies(self, obj):
+        return self._to_list('studies_data', obj)
+
+    def get_groups(self, obj):
+        return self._to_list('groups_data', obj)
+
+    def get_individuals(self, obj):
+        return self._to_list('individuals_data', obj)
+
+    def get_interventions(self, obj):
+        return self._to_list('interventions_data', obj)
+
+    def get_outputs(self, obj):
+        return self._to_list('outputs_data', obj)
+
+    def get_data(self, obj):
+        return self._to_list('data_data', obj)

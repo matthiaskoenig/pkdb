@@ -68,7 +68,6 @@ def list_of_pk(field, obj):
         relevant_field = obj.to_dict().get(field)
     except AttributeError:
         relevant_field = obj.get(field)
-
     if relevant_field:
         result = [int(field_list["pk"]) for field_list in relevant_field]
     return result

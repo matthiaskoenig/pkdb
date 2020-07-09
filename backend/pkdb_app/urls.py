@@ -27,7 +27,7 @@ from .studies.views import (
     StudyViewSet,
     ElasticReferenceViewSet,
     ElasticStudyViewSet,
-    update_index_study,
+    update_index_study, PKDataView,
 )
 from .subjects.views import (
     DataFileViewSet,
@@ -83,8 +83,10 @@ router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups
 router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
 router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
 router.register("data_analysis", DataAnalysisViewSet, basename="data_analysis")
+#router.register("pkdata", PKDataView, basename="pkdata")
 
 
+urlpattern_views = []
 urlpatterns = [
     # authentification
     path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
@@ -92,6 +94,7 @@ urlpatterns = [
 
     # api
     path("api/v1/", include(router.urls)),
+    path('api/v1/pkdata/', PKDataView.as_view()),
     path("api/v1/update_index/", update_index_study),
 
     # media files

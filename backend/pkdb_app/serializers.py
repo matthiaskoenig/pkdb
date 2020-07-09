@@ -726,10 +726,17 @@ class ReadSerializer(serializers.ModelSerializer):
 
 class PkSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
+    study_sid = serializers.CharField()
 
     class Meta:
-        fields = ["pk", ]
+        fields = ["pk","study_sid"]
 
+
+class PkStringSerializer(serializers.Serializer):
+    pk = serializers.CharField()
+
+    class Meta:
+        fields = ["pk"]
 
 class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)

@@ -10,7 +10,7 @@ from ..documents import string_field, elastic_settings, ObjectField, study_field
 # ------------------------------------
 @registry.register_document
 class OutputDocument(Document):
-    pk = fields.IntegerField('pk')
+    pk = fields.IntegerField()
     study = study_field
     group = ObjectField(properties={
         'pk': fields.IntegerField(),

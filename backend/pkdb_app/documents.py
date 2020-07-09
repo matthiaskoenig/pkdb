@@ -1,3 +1,6 @@
+import operator
+from functools import reduce
+
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
@@ -146,33 +149,22 @@ class ObjectField(DEDField, Object):
 class AccessView(DocumentViewSet):
 
     def get_queryset(self):
-        search = self.search  # .query()
-        # qs = super().get_queryset()
-        # return qs
         group = user_group(self.request.user)
 
-        if group in ["admin", "reviewer"]:
-            return search.query()
+        if hasattr(self, "initial_data"):
+            id_queries = [Q('term', pk=pk) for pk in self.initial_data]
+            if len(id_queries) > 0:
+                self.search=self.search.query(reduce(operator.ior,id_queries))
 
-        elif group == "basic":
-
-            qs = search.query(
-                Q('term', access__raw=PUBLIC) |
-                Q('term', allowed_users__raw=self.request.user.username)
-            )
-
-            # )
-            # qs = qs.filter(
-            #    'term',
-            #   **{"access": PUBLIC, "creator":self.request.user}
-            # )
-            return qs
+        if group == "basic":
+            return self.search.query(Q('term', access__raw=PUBLIC) |  Q('term', allowed_users__raw=self.request.user.username))
 
         elif group == "anonymous":
+            return self.search.query(Q('term', access__raw=PUBLIC))
 
-            qs = search.query(
-                'match',
-                **{"access__raw": PUBLIC}
-            )
+        elif group in ["admin", "reviewer"]:
+            return self.search.query()
 
-            return qs
+        else:
+            raise AssertionError("wrong group name")
+

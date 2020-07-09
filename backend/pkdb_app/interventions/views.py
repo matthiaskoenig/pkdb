@@ -57,7 +57,7 @@ class ElasticInterventionViewSet(AccessView):
         'sd': 'sd',
         'cv': 'cv',
         'unit': 'unit.raw',
-        'substance': 'substance.raw',
+        'substance': 'substance.name',
 
     }
     ordering_fields = {'name': 'name.raw',

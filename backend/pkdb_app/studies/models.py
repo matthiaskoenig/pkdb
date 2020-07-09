@@ -281,3 +281,4 @@ class Study(Sidable, models.Model):
         if self.reference:
             self.reference.delete()
         super().delete(*args, **kwargs)
+
