@@ -29,12 +29,12 @@ from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica, Individual, Group
+from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.views import APIView
 
-from .models import Reference, Study
+from .models import Reference
 from .serializers import (
     ReferenceSerializer,
     StudySerializer,
@@ -242,37 +242,40 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
         'sid': 'sid',
     }
 
+
     def get_queryset(self):
-
         group = user_group(self.request.user)
-        print("*"*303)
-        print(self.search)
-        print("*"*303)
-
         if hasattr(self, "initial_data"):
-            print(self.initial_data)
-             #for sid in self.initial_data:
-                    #self.search = self.search.query('match', sid__raw=sid)
+            if len(self.initial_data) == 0:
+                # create an search that results in empty result
+                return self.search.query('match', sid__raw="NOTHING")
+
+            for sid in self.initial_data:
+                self.search = self.search.query('match', sid__raw=sid)
+
+        if group in ["admin", "reviewer"]:
+            return self.search.query()
 
         elif group == "basic":
-            return self.search.query(
+
+            qs = self.search.query(
                 Q('match', access__raw=PUBLIC) |
                 Q('match', creator__username__raw=self.request.user.username) |
                 Q('match', curators__username__raw=self.request.user.username) |
                 Q('match', collaborators__username__raw=self.request.user.username)
+
             )
+
+            return qs
 
         elif group == "anonymous":
 
-            return self.search.query(
+            qs = self.search.query(
                 'match',
                 **{"access__raw": PUBLIC}
             )
-        elif group in ["admin", "reviewer"]:
-            return self.search.query()
-        else:
-            raise AssertionError("Group for user has to be provided.")
 
+            return qs
 
 
 class ElasticReferenceViewSet(BaseDocumentViewSet):
@@ -316,18 +319,20 @@ class PKData(object):
                  # data_query: dict = None,
                  studies_query: dict = None
                  ):
-        self.groups_query = groups_query
-        self.individuals_query = individuals_query
-        self.interventions_query = interventions_query
-        self.outputs_query = outputs_query
+        self.groups_query = {k:v for k,v in groups_query.items() if k in GroupViewSet.filter_fields}
+        self.individuals_query = {k:v for k,v in individuals_query.items() if k in IndividualViewSet.filter_fields }
+        self.interventions_query = {k:v for k,v in interventions_query.items() if k in ElasticInterventionViewSet.filter_fields }
+        self.outputs_query =  {k:v for k,v in outputs_query.items() if k in ElasticOutputViewSet.filter_fields }
         # self.data_query = data_query
-        self.studies_query = studies_query
+        self.studies_query = {k:v for k,v in studies_query.items() if k in ElasticStudyViewSet.filter_fields }
 
         self.studies = Study.objects.filter(**self.studies_query)
         self.groups = Group.objects.filter(**self.groups_query)
         self.individuals = Individual.objects.filter(**self.individuals_query)
-        self.interventions = Intervention.objects.filter(**self.interventions_query)
-        self.outputs = Output.objects.filter(**self.outputs_query)
+        self.interventions = Intervention.objects.filter(**self.interventions_query, normed=True)
+        self.outputs = Output.objects.filter(**self.outputs_query,  normed=True)
+
+
 
     def _update_outputs(self):
         outputs = self.outputs.filter(
@@ -339,6 +344,8 @@ class PKData(object):
             self.outputs = outputs
 
     def concise(self):
+        print("Study number")
+        print(len(self.studies))
         self.keep_concising = True
         while self.keep_concising:
             self.keep_concising = False
@@ -347,7 +354,7 @@ class PKData(object):
                 self.interventions = self.interventions.filter(outputs__in=self.outputs)
                 self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual__pk")))
                 self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk")))
-                self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study")))
+                self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study__pk")))
 
     @property
     def intervention_view(self):

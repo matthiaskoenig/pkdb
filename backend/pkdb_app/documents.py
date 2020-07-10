@@ -152,9 +152,14 @@ class AccessView(DocumentViewSet):
         group = user_group(self.request.user)
 
         if hasattr(self, "initial_data"):
+
             id_queries = [Q('term', pk=pk) for pk in self.initial_data]
             if len(id_queries) > 0:
                 self.search=self.search.query(reduce(operator.ior,id_queries))
+            else:
+                #create search that returns empty query
+                return self.search.query('match', access__raw="NOTHING")
+
 
         if group == "basic":
             return self.search.query(Q('term', access__raw=PUBLIC) | Q('term', allowed_users__raw=self.request.user.username))
