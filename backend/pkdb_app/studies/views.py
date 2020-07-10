@@ -12,6 +12,7 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch import helpers
+from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import Q
 from rest_framework import serializers
 from pkdb_app.data.documents import DataAnalysisDocument
@@ -197,13 +198,13 @@ def related_elastic_dict(study):
 
 
 class ElasticStudyViewSet(BaseDocumentViewSet):
-    document_uid_field = "sid__raw"
-    lookup_field = "sid"
+    #document_uid_field = "sid__raw"
+    #lookup_field = "sid"
     document = StudyDocument
-    pagination_class = CustomPagination
     serializer_class = StudyElasticSerializer
+    pagination_class = CustomPagination
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    permission_classes = (StudyPermission,)
+    #permission_classes = (StudyPermission,)
     search_fields = (
         'sid',
         'pk_version',
@@ -245,13 +246,26 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
     def get_queryset(self):
         group = user_group(self.request.user)
+        #group = "basic"
         if hasattr(self, "initial_data"):
             if len(self.initial_data) == 0:
                 # create an search that results in empty result
                 return self.search.query('match', sid__raw="NOTHING")
+            else:
+                id_queries = [Q('term', pk=pk) for pk in self.initial_data]
+                #if len(id_queries) > 0:
+                #    self.search = self.search.query(reduce(operator.ior, id_queries))
 
-            for sid in self.initial_data:
-                self.search = self.search.query('match', sid__raw=sid)
+        #    group = "basic"
+
+            #self.search = self.search.query(reduce(operator.ior, id_queries))
+            #self.search = self.search.query(
+            #    Q('match', access__raw=PUBLIC) |
+            #    Q('match', creator__username__raw=self.request.user.username)
+            #)
+
+            #for sid in self.initial_data:
+            #    self.search = self.search.query('match', sid__raw=sid)
 
         if group in ["admin", "reviewer"]:
             return self.search.query()
@@ -354,7 +368,7 @@ class PKData(object):
                 self.interventions = self.interventions.filter(outputs__in=self.outputs)
                 self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual__pk")))
                 self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk")))
-                self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study__pk")))
+                self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid")))
 
     @property
     def intervention_view(self):

@@ -81,8 +81,8 @@ class ReferenceDocument(Document):
 
 @registry.register_document
 class StudyDocument(Document):
-    id = fields.TextField(attr='sid')
-    pk = fields.TextField(attr='sid')
+    #id = fields.TextField(attr='sid')
+    pk = fields.IntegerField()
     sid = string_field(attr='sid')
     name = string_field("name")
     licence = string_field("licence")
