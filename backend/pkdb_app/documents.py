@@ -157,7 +157,7 @@ class AccessView(DocumentViewSet):
                 self.search=self.search.query(reduce(operator.ior,id_queries))
 
         if group == "basic":
-            return self.search.query(Q('term', access__raw=PUBLIC) |  Q('term', allowed_users__raw=self.request.user.username))
+            return self.search.query(Q('term', access__raw=PUBLIC) | Q('term', allowed_users__raw=self.request.user.username))
 
         elif group == "anonymous":
             return self.search.query(Q('term', access__raw=PUBLIC))

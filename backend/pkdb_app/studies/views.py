@@ -243,23 +243,19 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
     }
 
     def get_queryset(self):
-        search = self.search
+
         group = user_group(self.request.user)
+        print("*"*303)
+        print(self.search)
+        print("*"*303)
+
         if hasattr(self, "initial_data"):
-
-            id_queries = [Q('term', access__raw=pk) for pk in self.initial_data]
-
-            if len(id_queries) == 1:
-                search = search.query('match', sid__raw=self.initial_data[0])
-            elif len(id_queries) > 1:
-                search = search.query(reduce(operator.ior, id_queries))
-
-        if group in ["admin", "reviewer"]:
-            qs = search.query()
+            print(self.initial_data)
+             #for sid in self.initial_data:
+                    #self.search = self.search.query('match', sid__raw=sid)
 
         elif group == "basic":
-
-            qs = search.query(
+            return self.search.query(
                 Q('match', access__raw=PUBLIC) |
                 Q('match', creator__username__raw=self.request.user.username) |
                 Q('match', curators__username__raw=self.request.user.username) |
@@ -268,15 +264,15 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
         elif group == "anonymous":
 
-            qs = search.query(
+            return self.search.query(
                 'match',
                 **{"access__raw": PUBLIC}
             )
-
+        elif group in ["admin", "reviewer"]:
+            return self.search.query()
         else:
             raise AssertionError("Group for user has to be provided.")
 
-        return qs
 
 
 class ElasticReferenceViewSet(BaseDocumentViewSet):
@@ -335,7 +331,7 @@ class PKData(object):
 
     def _update_outputs(self):
         outputs = self.outputs.filter(
-            Q(group__in=Subquery(self.groups.values('pk'))) | Q(individual__in=Subquery(self.individuals.values('pk'))))
+            DQ(group__in=Subquery(self.groups.values('pk'))) | DQ(individual__in=Subquery(self.individuals.values('pk'))))
         outputs = outputs.filter(study__in=Subquery(self.studies.values('pk')))
 
         if len(outputs) < len(self.outputs):
@@ -391,8 +387,8 @@ class PKDataView(APIView):
     study_search = [f"study__{field}" for field in ElasticStudyViewSet.search_fields]
     intervention_search = [f"intervention__{field}" for field in ElasticInterventionViewSet.search_fields]
 
-    #filter_fields = study_filter + intervention_filter
-    #search_fields = study_search + intervention_search
+    filter_fields = study_filter + intervention_filter
+    search_fields = study_search + intervention_search
 
     EXTRA = {
         "study": "studies__",
