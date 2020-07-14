@@ -14,7 +14,7 @@ from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import Q
 from rest_framework import serializers
 from pkdb_app.data.documents import DataAnalysisDocument
-from pkdb_app.serializers import PkSerializer, PkStringSerializer
+from pkdb_app.serializers import PkSerializer, PkStringSerializer, StudySmallElasticSerializer, NameSerializer
 from rest_framework.response import Response
 from rest_framework import filters, status
 from rest_framework import viewsets
@@ -38,7 +38,7 @@ from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer, PKDataSerializer,
+    StudyElasticSerializer,
 )
 
 from django.db.models import Subquery
@@ -49,7 +49,8 @@ from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.views import ElasticOutputViewSet
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet
+from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, IndividualCharacteristicaViewSet
+
 
 class ReferencesViewSet(viewsets.ModelViewSet):
     """ ReferenceViewSet """
@@ -331,9 +332,8 @@ class PKData(object):
         return RequestFactory().get("/").GET.copy()
 
     def _update_outputs(self):
-        outputs = self.outputs.filter(
-            DQ(group__in=Subquery(self.groups.values('pk'))) | DQ(individual__in=Subquery(self.individuals.values('pk'))))
-        outputs = outputs.filter(study__in=Subquery(self.studies.values('pk')))
+        outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals))
+        outputs = outputs.filter(study__in=self.studies,interventions__in=self.interventions)
 
         if len(outputs) < len(self.outputs):
             self.keep_concising = True
@@ -348,10 +348,10 @@ class PKData(object):
             self.keep_concising = False
             self._update_outputs()
             if self.keep_concising:
-                self.interventions = self.interventions.filter(outputs__in=self.outputs)
-                self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual__pk")))
-                self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk")))
-                self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid")))
+                self.interventions = self.interventions.filter(outputs__in=self.outputs).distinct()
+                self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual__pk"))).distinct()
+                self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk"))).distinct()
+                self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid"))).distinct()
 
 
     def intervention_pks(self):
@@ -379,6 +379,36 @@ class PKData(object):
         count = queryset.count()
         response = queryset.extra(size=count).execute()
         return [instance[pk_field] for instance in response]
+
+
+class ICVS(IndividualCharacteristicaViewSet):
+    def list(self, request, *args, **kwargs):
+        queryset = self.this_queryset
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class PKDataSerializer(serializers.Serializer):
+    studies = StudySmallElasticSerializer(many=True)
+    groups = NameSerializer(many=True)
+
+    individuals = serializers.SerializerMethodField()
+    interventions = NameSerializer(many=True)
+    outputs = PkSerializer(many=True)
+
+    def get_individuals(self, pkdata):
+
+        queryset = IndividualCharacteristica.objects.filter(individual__in=pkdata.individuals)
+        view = ICVS()
+        view.this_queryset=queryset
+        return view.as_view({'get': 'list'})(pkdata.request._request).data
+
 
 class PKDataView(APIView):
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
@@ -422,6 +452,7 @@ class PKDataView(APIView):
         )
 
         pkdata.concise()
+
         data = PKDataSerializer(pkdata).data
         response = Response(data, status=status.HTTP_200_OK)
         return response

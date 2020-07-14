@@ -19,8 +19,8 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
 from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameSerializer, \
-    PkStringSerializer, PkSerializer
-from ..subjects.models import GroupSet, IndividualSet
+    PkStringSerializer, PkSerializer, NameSerializer
+from ..subjects.models import GroupSet, IndividualSet, IndividualCharacteristica
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer, GroupSerializer, \
     GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
@@ -558,10 +558,3 @@ class StudyElasticSerializer(serializers.ModelSerializer):
         else:
             return []
 
-class PKDataSerializer(serializers.Serializer):
-
-    studies = StudySmallElasticSerializer(many=True)
-    groups = PkSerializer(many=True)
-    individuals = PkSerializer(many=True)
-    interventions = PkSerializer(many=True)
-    outputs = PkSerializer(many=True)
