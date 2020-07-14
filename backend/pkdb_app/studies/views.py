@@ -1,9 +1,7 @@
-import operator
-from copy import copy
-from functools import reduce
+
+from django.test.client import RequestFactory
 
 import django_filters.rest_framework
-from attr import dataclass
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q as DQ
 from django.http import JsonResponse
@@ -40,7 +38,7 @@ from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer,
+    StudyElasticSerializer, PKDataSerializer,
 )
 
 from django.db.models import Subquery
@@ -246,27 +244,6 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
     def get_queryset(self):
         group = user_group(self.request.user)
-        #group = "basic"
-        if hasattr(self, "initial_data"):
-            if len(self.initial_data) == 0:
-                # create an search that results in empty result
-                return self.search.query('match', sid__raw="NOTHING")
-            else:
-                id_queries = [Q('term', pk=pk) for pk in self.initial_data]
-                #if len(id_queries) > 0:
-                #    self.search = self.search.query(reduce(operator.ior, id_queries))
-
-        #    group = "basic"
-
-            #self.search = self.search.query(reduce(operator.ior, id_queries))
-            #self.search = self.search.query(
-            #    Q('match', access__raw=PUBLIC) |
-            #    Q('match', creator__username__raw=self.request.user.username)
-            #)
-
-            #for sid in self.initial_data:
-            #    self.search = self.search.query('match', sid__raw=sid)
-
         if group in ["admin", "reviewer"]:
             return self.search.query()
 
@@ -326,27 +303,32 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
 
 class PKData(object):
     def __init__(self,
+                 request,
                  interventions_query: dict = None,
                  groups_query: dict = None,
                  individuals_query: dict = None,
                  outputs_query: dict = None,
                  # data_query: dict = None,
-                 studies_query: dict = None
+                 studies_query: dict = None,
                  ):
+        self.request = request
         self.groups_query = {k:v for k,v in groups_query.items() if k in GroupViewSet.filter_fields}
         self.individuals_query = {k:v for k,v in individuals_query.items() if k in IndividualViewSet.filter_fields }
         self.interventions_query = {k:v for k,v in interventions_query.items() if k in ElasticInterventionViewSet.filter_fields }
-        self.outputs_query =  {k:v for k,v in outputs_query.items() if k in ElasticOutputViewSet.filter_fields }
+        self.outputs_query = {k:v for k,v in outputs_query.items() if k in ElasticOutputViewSet.filter_fields }
         # self.data_query = data_query
-        self.studies_query = {k:v for k,v in studies_query.items() if k in ElasticStudyViewSet.filter_fields }
-
-        self.studies = Study.objects.filter(**self.studies_query)
-        self.groups = Group.objects.filter(**self.groups_query)
-        self.individuals = Individual.objects.filter(**self.individuals_query)
-        self.interventions = Intervention.objects.filter(**self.interventions_query, normed=True)
-        self.outputs = Output.objects.filter(**self.outputs_query,  normed=True)
+        self.studies_query = {k:v for k,v in studies_query.items() if k in ElasticStudyViewSet.filter_fields}
 
 
+        self.studies = Study.objects.filter(sid__in=self.study_pks())
+        self.groups = Group.objects.filter(pk__in=self.group_pks())
+        self.individuals = Individual.objects.filter(pk__in=self.individual_pks())
+        self.interventions = Intervention.objects.filter(pk__in=self.intervention_pks())
+        self.outputs = Output.objects.filter(pk__in=self.output_pks())
+
+
+    def empty_get(self):
+        return RequestFactory().get("/").GET.copy()
 
     def _update_outputs(self):
         outputs = self.outputs.filter(
@@ -358,10 +340,11 @@ class PKData(object):
             self.outputs = outputs
 
     def concise(self):
-        print("Study number")
-        print(len(self.studies))
+
         self.keep_concising = True
         while self.keep_concising:
+            print("Study number")
+            print(len(self.studies))
             self.keep_concising = False
             self._update_outputs()
             if self.keep_concising:
@@ -370,36 +353,32 @@ class PKData(object):
                 self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk")))
                 self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid")))
 
-    @property
-    def intervention_view(self):
-        view = ElasticInterventionViewSet
-        view.initial_data = self.interventions.distinct().values_list('pk', flat=True)
-        return view
 
-    @property
-    def group_view(self):
-        view = GroupViewSet
-        view.initial_data = self.groups.distinct().values_list('pk', flat=True)
-        return view
+    def intervention_pks(self):
+        return self._pks(ElasticInterventionViewSet,self.interventions_query)
 
-    @property
-    def individual_view(self):
-        view = IndividualViewSet
-        view.initial_data = self.interventions.distinct().values_list('pk', flat=True)
-        return view
+    def group_pks(self):
+        return self._pks(GroupViewSet, self.groups_query)
 
-    @property
-    def output_view(self):
-        view = ElasticOutputViewSet
-        view.initial_data = self.interventions.distinct().values_list('pk', flat=True)
-        return view
+    def individual_pks(self):
+        return self._pks(IndividualViewSet, self.individuals_query)
 
-    @property
-    def study_view(self):
-        view = ElasticStudyViewSet
-        view.initial_data = self.studies.distinct().values_list('sid', flat=True)
-        return view
+    def output_pks(self):
+        return self._pks(ElasticOutputViewSet, self.outputs_query)
 
+    def study_pks(self):
+        return self._pks(ElasticStudyViewSet,self.studies_query, "sid")
+
+    def _pks(self, View, query_dict, pk_field="pk"):
+        get = self.empty_get()
+        for k, v in query_dict.items():
+            get[k] = v
+        self.request._request.GET = get
+        view = View(request=self.request)
+        queryset = view.filter_queryset(view.get_queryset())
+        count = queryset.count()
+        response = queryset.extra(size=count).execute()
+        return [instance[pk_field] for instance in response]
 
 class PKDataView(APIView):
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
@@ -428,26 +407,22 @@ class PKDataView(APIView):
         return param
 
 
+
+
     def get(self, request, *args, **kw):
+        request.GET = request.GET.copy()
 
         pkdata = PKData(
+            request=request,
             studies_query=self._get_param("study",request),
             groups_query=self._get_param("group",request),
             individuals_query=self._get_param("individual",request),
             interventions_query=self._get_param("intervention",request),
             outputs_query=self._get_param("output", request),
-
         )
-        pkdata.concise()
-        request.GET = {}
 
-        data = {
-            "studies": pkdata.study_view.as_view({'get': 'list'})(request=request._request).data,
-            "interventions": pkdata.intervention_view.as_view({'get': 'list'})(request=request._request).data,
-            "groups": pkdata.group_view.as_view({'get': 'list'})(request=request._request).data,
-            "individual": pkdata.individual_view.as_view({'get': 'list'})(request=request._request).data,
-            "output": pkdata.output_view.as_view({'get': 'list'})(request=request._request).data,
-        }
+        pkdata.concise()
+        data = PKDataSerializer(pkdata).data
         response = Response(data, status=status.HTTP_200_OK)
         return response
 

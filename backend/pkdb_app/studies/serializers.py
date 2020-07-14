@@ -10,7 +10,7 @@ from rest_framework import serializers
 
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
-from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
+from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer, OutputElasticSerializer
 from pkdb_app.users.permissions import get_study_file_permission
 from .models import Reference, Author, Study, Rating
 from ..comments.models import Description, Comment
@@ -22,7 +22,8 @@ from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmal
     PkStringSerializer, PkSerializer
 from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
-    GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
+    GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer, GroupSerializer, \
+    GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
 from ..users.models import User
 from ..users.serializers import UserElasticSerializer
 from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_requried_key, \
@@ -559,29 +560,8 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
 class PKDataSerializer(serializers.Serializer):
 
-    studies = serializers.SerializerMethodField()
-    groups = serializers.SerializerMethodField()
-    individuals = serializers.SerializerMethodField()
-    interventions = serializers.SerializerMethodField()
-    outputs =  serializers.SerializerMethodField()
-    #data = serializers.SerializerMethodField()
-    def _to_list(self, field, obj):
-        return getattr(obj,field)
-
-    def get_studies(self, obj):
-        return self._to_list('studies_data', obj)
-
-    def get_groups(self, obj):
-        return self._to_list('groups_data', obj)
-
-    def get_individuals(self, obj):
-        return self._to_list('individuals_data', obj)
-
-    def get_interventions(self, obj):
-        return self._to_list('interventions_data', obj)
-
-    def get_outputs(self, obj):
-        return self._to_list('outputs_data', obj)
-
-    def get_data(self, obj):
-        return self._to_list('data_data', obj)
+    studies = StudySmallElasticSerializer(many=True)
+    groups = PkSerializer(many=True)
+    individuals = PkSerializer(many=True)
+    interventions = PkSerializer(many=True)
+    outputs = PkSerializer(many=True)
