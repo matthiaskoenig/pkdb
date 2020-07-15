@@ -393,34 +393,6 @@ class PKData(object):
                          }}
 
 
-class ICVS(IndividualCharacteristicaViewSet):
-    def list(self, request, *args, **kwargs):
-        queryset = self.this_queryset
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class PKDataSerializer(serializers.Serializer):
-    studies = StudySmallElasticSerializer(many=True)
-    groups = NameSerializer(many=True)
-
-    individuals = serializers.SerializerMethodField()
-    interventions = NameSerializer(many=True)
-    outputs = PkSerializer(many=True)
-
-    def get_individuals(self, pkdata):
-        queryset = IndividualCharacteristica.objects.filter(individual__in=pkdata.individuals)
-        view = ICVS()
-        view.this_queryset = queryset
-        return view.as_view({'get': 'list'})(pkdata.request._request).data
-
-
 class PKDataView(APIView):
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     study_filter = [f"study__{field}" for field in ElasticStudyViewSet.filter_fields]
@@ -458,6 +430,7 @@ class PKDataView(APIView):
             outputs_query=self._get_param("output", request),
         )
         pkdata.concise()
+
         data = {
             "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies),
             "groups": pkdata._paginated_data(GroupCharacteristicaSerializer,
@@ -467,7 +440,7 @@ class PKDataView(APIView):
                                                       individual__in=pkdata.individuals)),
             "interventions": pkdata._paginated_data(InterventionElasticSerializerAnalysis, pkdata.interventions),
             "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs)
-
         }
+
         response = Response(data, status=status.HTTP_200_OK)
         return response

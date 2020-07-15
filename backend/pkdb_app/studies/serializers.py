@@ -561,8 +561,9 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 class StudyAnalysisSerializer(serializers.ModelSerializer):
     reference = ReferenceSmallElasticSerializer()
     reference_date = serializers.CharField()
+    study_sid = serializers.CharField(source="sid")
+    study_name= serializers.CharField(source="name")
 
-    name = serializers.CharField()
     licence = serializers.CharField()
     access = serializers.CharField()
 
@@ -575,22 +576,18 @@ class StudyAnalysisSerializer(serializers.ModelSerializer):
         model = Study
 
         fields = [
-            "sid",
-            "name",
+            "study_sid",
+            "study_name",
             "licence",
             "access",
             "date",
 
-
-
             "reference",
             "reference_date",
             "creator",
-         
 
             "comments",
             "descriptions",
-
 
         ]
 
