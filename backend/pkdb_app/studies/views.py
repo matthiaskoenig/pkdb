@@ -307,14 +307,15 @@ class PKData(object):
                  # data_query: dict = None,
                  studies_query: dict = None,
                  ):
+
+
         self.request = request
-        self.groups_query = {k: v for k, v in groups_query.items() if k in GroupViewSet.filter_fields}
-        self.individuals_query = {k: v for k, v in individuals_query.items() if k in IndividualViewSet.filter_fields}
-        self.interventions_query = {k: v for k, v in interventions_query.items() if
-                                    k in ElasticInterventionViewSet.filter_fields}
-        self.outputs_query = {k: v for k, v in outputs_query.items() if k in ElasticOutputViewSet.filter_fields}
+        self.groups_query = groups_query
+        self.individuals_query = individuals_query
+        self.interventions_query = interventions_query
+        self.outputs_query = outputs_query
         # self.data_query = data_query
-        self.studies_query = {k: v for k, v in studies_query.items() if k in ElasticStudyViewSet.filter_fields}
+        self.studies_query = studies_query
 
         self.studies = Study.objects.filter(sid__in=self.study_pks())
         self.groups = Group.objects.filter(pk__in=self.group_pks())
@@ -363,19 +364,27 @@ class PKData(object):
     def study_pks(self):
         return self._pks(ElasticStudyViewSet, self.studies_query, "sid")
 
-    def _pks(self, View, query_dict, pk_field="pk"):
+
+    def set_request_get(self, query_dict):
         get = self.empty_get()
         for k, v in query_dict.items():
             get[k] = v
         self.request._request.GET = get
+
+    def _pks(self, View, query_dict, pk_field="pk"):
+        self.set_request_get(query_dict)
         view = View(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
         count = queryset.count()
         response = queryset.extra(size=count).execute()
         return [instance[pk_field] for instance in response]
 
-    def _paginated_data(self, serializer, queryset):
+    def _paginated_data(self, serializer, queryset, query_dict):
         paginator = CustomPagination()
+        self.set_request_get(query_dict)
+        print(self.request.query_params)
+        print(query_dict)
+
         page = paginator.paginate_queryset(queryset, self.request)
         if page is not None:
             return {
@@ -394,14 +403,7 @@ class PKData(object):
 
 
 class PKDataView(APIView):
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    study_filter = [f"study__{field}" for field in ElasticStudyViewSet.filter_fields]
-    intervention_filter = [f"intervention__{field}" for field in ElasticInterventionViewSet.filter_fields]
-    study_search = [f"study__{field}" for field in ElasticStudyViewSet.search_fields]
-    intervention_search = [f"intervention__{field}" for field in ElasticInterventionViewSet.search_fields]
 
-    filter_fields = study_filter + intervention_filter
-    search_fields = study_search + intervention_search
 
     EXTRA = {
         "study": "studies__",
@@ -432,14 +434,14 @@ class PKDataView(APIView):
         pkdata.concise()
 
         data = {
-            "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies),
+            "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies, pkdata.studies_query),
             "groups": pkdata._paginated_data(GroupCharacteristicaSerializer,
-                                             GroupCharacteristica.objects.filter(group__in=pkdata.groups)),
+                                             GroupCharacteristica.objects.filter(group__in=pkdata.groups), pkdata.groups_query),
             "individuals": pkdata._paginated_data(IndividualCharacteristicaSerializer,
                                                   IndividualCharacteristica.objects.filter(
-                                                      individual__in=pkdata.individuals)),
-            "interventions": pkdata._paginated_data(InterventionElasticSerializerAnalysis, pkdata.interventions),
-            "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs)
+                                                      individual__in=pkdata.individuals), pkdata.individuals_query),
+            "interventions": pkdata._paginated_data(InterventionElasticSerializerAnalysis, pkdata.interventions,pkdata.interventions_query),
+            "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs, pkdata.outputs_query)
         }
 
         response = Response(data, status=status.HTTP_200_OK)
