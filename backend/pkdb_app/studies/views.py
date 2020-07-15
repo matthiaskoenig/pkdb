@@ -1,4 +1,3 @@
-
 from django.test.client import RequestFactory
 
 import django_filters.rest_framework
@@ -10,11 +9,13 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch import helpers
-from elasticsearch_dsl import Search
 from elasticsearch_dsl.query import Q
+from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
+from pkdb_app.outputs.serializers import OutputElasticSerializer
+from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
 from rest_framework import serializers
 from pkdb_app.data.documents import DataAnalysisDocument
-from pkdb_app.serializers import PkSerializer, PkStringSerializer, StudySmallElasticSerializer, NameSerializer
+from pkdb_app.serializers import PkSerializer, StudySmallElasticSerializer, NameSerializer
 from rest_framework.response import Response
 from rest_framework import filters, status
 from rest_framework import viewsets
@@ -38,7 +39,7 @@ from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer,
+    StudyElasticSerializer, StudyAnalysisSerializer,
 )
 
 from django.db.models import Subquery
@@ -80,7 +81,6 @@ class StudyViewSet(viewsets.ModelViewSet):
     lookup_field = "sid"
     permission_classes = (StudyPermission,)
 
-
     def get_queryset(self):
         queryset = super().get_queryset()
         group = user_group(self.request.user)
@@ -106,7 +106,6 @@ class StudyViewSet(viewsets.ModelViewSet):
         related_elastic = related_elastic_dict(instance)
         delete_elastic_study(related_elastic)
         return super().destroy(request, *args, **kwargs)
-
 
 
 ###############################################################################################
@@ -136,8 +135,6 @@ def update_index_study(request):
             except helpers.BulkIndexError:
                 raise helpers.BulkIndexError
 
-
-
         return JsonResponse({"success": "True"})
 
 
@@ -160,7 +157,6 @@ def related_elastic_dict(study):
     individuals = study.individuals.all()
     dimensions = study.dimensions.all()
 
-
     related_outputs_intervention = [
         'intervention',
         'output',
@@ -170,7 +166,6 @@ def related_elastic_dict(study):
         'output__tissue__info_node',
         'output__substance__info_node',
     ]
-
 
     related_outputs = [
         'individual',
@@ -184,11 +179,15 @@ def related_elastic_dict(study):
         StudyDocument: study,
         GroupDocument: groups,
         IndividualDocument: individuals,
-        GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(group__in=groups),
-        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual', 'characteristica').filter(individual__in=individuals),
+        GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(
+            group__in=groups),
+        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual',
+                                                                                            'characteristica').filter(
+            individual__in=individuals),
         InterventionDocument: interventions,
-        OutputDocument:  study.outputs.select_related(*related_outputs).prefetch_related('interventions'),
-        OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(intervention__in=interventions),
+        OutputDocument: study.outputs.select_related(*related_outputs).prefetch_related('interventions'),
+        OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(
+            intervention__in=interventions),
         DataAnalysisDocument: dimensions,
     }
     if study.reference:
@@ -197,20 +196,19 @@ def related_elastic_dict(study):
 
 
 class ElasticStudyViewSet(BaseDocumentViewSet):
-    #document_uid_field = "sid__raw"
-    #lookup_field = "sid"
+    # document_uid_field = "sid__raw"
+    # lookup_field = "sid"
     document = StudyDocument
     serializer_class = StudyElasticSerializer
     pagination_class = CustomPagination
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    #permission_classes = (StudyPermission,)
+    # permission_classes = (StudyPermission,)
     search_fields = (
         'sid',
         'pk_version',
         'creator.first_name',
         'creator.last_name',
         'creator.user',
-
 
         'curators.first_name',
         'curators.last_name',
@@ -241,7 +239,6 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
     }
-
 
     def get_queryset(self):
         group = user_group(self.request.user)
@@ -300,8 +297,6 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     }
 
 
-
-
 class PKData(object):
     def __init__(self,
                  request,
@@ -313,13 +308,13 @@ class PKData(object):
                  studies_query: dict = None,
                  ):
         self.request = request
-        self.groups_query = {k:v for k,v in groups_query.items() if k in GroupViewSet.filter_fields}
-        self.individuals_query = {k:v for k,v in individuals_query.items() if k in IndividualViewSet.filter_fields }
-        self.interventions_query = {k:v for k,v in interventions_query.items() if k in ElasticInterventionViewSet.filter_fields }
-        self.outputs_query = {k:v for k,v in outputs_query.items() if k in ElasticOutputViewSet.filter_fields }
+        self.groups_query = {k: v for k, v in groups_query.items() if k in GroupViewSet.filter_fields}
+        self.individuals_query = {k: v for k, v in individuals_query.items() if k in IndividualViewSet.filter_fields}
+        self.interventions_query = {k: v for k, v in interventions_query.items() if
+                                    k in ElasticInterventionViewSet.filter_fields}
+        self.outputs_query = {k: v for k, v in outputs_query.items() if k in ElasticOutputViewSet.filter_fields}
         # self.data_query = data_query
-        self.studies_query = {k:v for k,v in studies_query.items() if k in ElasticStudyViewSet.filter_fields}
-
+        self.studies_query = {k: v for k, v in studies_query.items() if k in ElasticStudyViewSet.filter_fields}
 
         self.studies = Study.objects.filter(sid__in=self.study_pks())
         self.groups = Group.objects.filter(pk__in=self.group_pks())
@@ -327,13 +322,12 @@ class PKData(object):
         self.interventions = Intervention.objects.filter(pk__in=self.intervention_pks())
         self.outputs = Output.objects.filter(pk__in=self.output_pks())
 
-
     def empty_get(self):
         return RequestFactory().get("/").GET.copy()
 
     def _update_outputs(self):
         outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals))
-        outputs = outputs.filter(study__in=self.studies,interventions__in=self.interventions)
+        outputs = outputs.filter(study__in=self.studies, interventions__in=self.interventions)
 
         if len(outputs) < len(self.outputs):
             self.keep_concising = True
@@ -349,13 +343,13 @@ class PKData(object):
             self._update_outputs()
             if self.keep_concising:
                 self.interventions = self.interventions.filter(outputs__in=self.outputs).distinct()
-                self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual__pk"))).distinct()
+                self.individuals = self.individuals.filter(
+                    pk__in=Subquery(self.outputs.values("individual__pk"))).distinct()
                 self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk"))).distinct()
                 self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid"))).distinct()
 
-
     def intervention_pks(self):
-        return self._pks(ElasticInterventionViewSet,self.interventions_query)
+        return self._pks(ElasticInterventionViewSet, self.interventions_query)
 
     def group_pks(self):
         return self._pks(GroupViewSet, self.groups_query)
@@ -367,7 +361,7 @@ class PKData(object):
         return self._pks(ElasticOutputViewSet, self.outputs_query)
 
     def study_pks(self):
-        return self._pks(ElasticStudyViewSet,self.studies_query, "sid")
+        return self._pks(ElasticStudyViewSet, self.studies_query, "sid")
 
     def _pks(self, View, query_dict, pk_field="pk"):
         get = self.empty_get()
@@ -379,6 +373,24 @@ class PKData(object):
         count = queryset.count()
         response = queryset.extra(size=count).execute()
         return [instance[pk_field] for instance in response]
+
+    def _paginated_data(self, serializer, queryset):
+        paginator = CustomPagination()
+        page = paginator.paginate_queryset(queryset, self.request)
+        if page is not None:
+            return {
+                "current_page": paginator.page.number,
+                "last_page": paginator.page.paginator.num_pages,
+                "data": {"count": paginator.page.paginator.count,
+                         "data": serializer(page, many=True).data},
+            }
+        else:
+            return {
+                "current_page": 1,
+                "last_page": 1,
+                "data": {"count": 0,
+                         "data": [],
+                         }}
 
 
 class ICVS(IndividualCharacteristicaViewSet):
@@ -403,10 +415,9 @@ class PKDataSerializer(serializers.Serializer):
     outputs = PkSerializer(many=True)
 
     def get_individuals(self, pkdata):
-
         queryset = IndividualCharacteristica.objects.filter(individual__in=pkdata.individuals)
         view = ICVS()
-        view.this_queryset=queryset
+        view.this_queryset = queryset
         return view.as_view({'get': 'list'})(pkdata.request._request).data
 
 
@@ -436,24 +447,27 @@ class PKDataView(APIView):
                 param[key_request[string_len:]] = value
         return param
 
-
-
-
     def get(self, request, *args, **kw):
         request.GET = request.GET.copy()
-
         pkdata = PKData(
             request=request,
-            studies_query=self._get_param("study",request),
-            groups_query=self._get_param("group",request),
-            individuals_query=self._get_param("individual",request),
-            interventions_query=self._get_param("intervention",request),
+            studies_query=self._get_param("study", request),
+            groups_query=self._get_param("group", request),
+            individuals_query=self._get_param("individual", request),
+            interventions_query=self._get_param("intervention", request),
             outputs_query=self._get_param("output", request),
         )
-
         pkdata.concise()
+        data = {
+            "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies),
+            "groups": pkdata._paginated_data(GroupCharacteristicaSerializer,
+                                             GroupCharacteristica.objects.filter(group__in=pkdata.groups)),
+            "individuals": pkdata._paginated_data(IndividualCharacteristicaSerializer,
+                                                  IndividualCharacteristica.objects.filter(
+                                                      individual__in=pkdata.individuals)),
+            "interventions": pkdata._paginated_data(InterventionElasticSerializerAnalysis, pkdata.interventions),
+            "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs)
 
-        data = PKDataSerializer(pkdata).data
+        }
         response = Response(data, status=status.HTTP_200_OK)
         return response
-
