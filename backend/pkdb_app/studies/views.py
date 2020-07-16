@@ -298,6 +298,10 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
 
 
 class PKData(object):
+    """
+   PKData represents a consistent set of pharmacokinetical data.
+
+    """
     def __init__(self,
                  request,
                  interventions_query: dict = None,
@@ -335,7 +339,6 @@ class PKData(object):
             self.outputs = outputs
 
     def concise(self):
-
         self.keep_concising = True
         while self.keep_concising:
             print("Study number")
@@ -403,7 +406,6 @@ class PKData(object):
 
 
 class PKDataView(APIView):
-
 
     EXTRA = {
         "study": "studies__",
