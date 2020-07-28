@@ -10,9 +10,10 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
-from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
+from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis, InterventionElasticSerializer
 from pkdb_app.outputs.serializers import OutputElasticSerializer
-from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
+from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer, \
+    GroupElasticSerializer, IndividualElasticSerializer
 from rest_framework import serializers
 from pkdb_app.data.documents import DataAnalysisDocument
 from pkdb_app.serializers import PkSerializer, StudySmallElasticSerializer, NameSerializer
@@ -316,8 +317,8 @@ class PKData(object):
         self.request = request
         self.groups_query = groups_query
         self.individuals_query = individuals_query
-        self.interventions_query = interventions_query
-        self.outputs_query = outputs_query
+        self.interventions_query = {"normed":"true", **interventions_query}
+        self.outputs_query = {"normed":"true",**outputs_query}
         # self.data_query = data_query
         self.studies_query = studies_query
 
@@ -362,7 +363,7 @@ class PKData(object):
         return self._pks(IndividualViewSet, self.individuals_query)
 
     def output_pks(self):
-        return self._pks(ElasticOutputViewSet, self.outputs_query)
+        return self._pks(ElasticOutputViewSet, self.outputs_query )
 
     def study_pks(self):
         return self._pks(ElasticStudyViewSet, self.studies_query, "sid")
@@ -437,12 +438,9 @@ class PKDataView(APIView):
 
         data = {
             "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies, pkdata.studies_query),
-            "groups": pkdata._paginated_data(GroupCharacteristicaSerializer,
-                                             GroupCharacteristica.objects.filter(group__in=pkdata.groups), pkdata.groups_query),
-            "individuals": pkdata._paginated_data(IndividualCharacteristicaSerializer,
-                                                  IndividualCharacteristica.objects.filter(
-                                                      individual__in=pkdata.individuals), pkdata.individuals_query),
-            "interventions": pkdata._paginated_data(InterventionElasticSerializerAnalysis, pkdata.interventions,pkdata.interventions_query),
+            "groups": pkdata._paginated_data(GroupElasticSerializer,pkdata.groups, pkdata.groups_query),
+            "individuals": pkdata._paginated_data(IndividualElasticSerializer,pkdata.individuals, pkdata.individuals_query),
+            "interventions": pkdata._paginated_data(InterventionElasticSerializer, pkdata.interventions,pkdata.interventions_query),
             "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs, pkdata.outputs_query)
         }
 

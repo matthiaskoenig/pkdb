@@ -560,30 +560,25 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
 class StudyAnalysisSerializer(serializers.ModelSerializer):
     reference = ReferenceSmallElasticSerializer()
-    reference_date = serializers.CharField()
-    study_sid = serializers.CharField(source="sid")
-    study_name= serializers.CharField(source="name")
-
+    sid = serializers.CharField()
+    name= serializers.CharField()
     licence = serializers.CharField()
     access = serializers.CharField()
-
     creator = UserElasticSerializer()
-
-    comments = CommentElasticSerializer(many=True, )
-    descriptions = DescriptionElasticSerializer(many=True, )
+    comments = CommentElasticSerializer(many=True )
+    descriptions = DescriptionElasticSerializer(many=True)
 
     class Meta:
         model = Study
 
         fields = [
-            "study_sid",
-            "study_name",
+            "sid",
+            "name",
             "licence",
             "access",
             "date",
 
             "reference",
-            "reference_date",
             "creator",
 
             "comments",

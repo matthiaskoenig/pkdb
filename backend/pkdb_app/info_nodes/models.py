@@ -88,6 +88,12 @@ class AbstractInfoNode(models.Model):
     class Meta:
         abstract = True
 
+    def sid(self):
+        return self.info_node.sid
+
+    def name(self):
+        return self.info_node.name
+
 
 class Tissue(AbstractInfoNode):
     """ Tissue Model """
