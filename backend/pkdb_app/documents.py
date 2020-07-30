@@ -150,7 +150,6 @@ class AccessView(DocumentViewSet):
 
     def get_queryset(self):
         group = user_group(self.request.user)
-        print(self.search)
         if hasattr(self, "initial_data"):
 
             id_queries = [Q('term', pk=pk) for pk in self.initial_data]
