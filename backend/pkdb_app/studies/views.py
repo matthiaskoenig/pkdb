@@ -1,3 +1,5 @@
+from typing import Dict
+import time
 from django.test.client import RequestFactory
 
 import django_filters.rest_framework
@@ -7,7 +9,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
-from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis, InterventionElasticSerializer
@@ -322,16 +324,31 @@ class PKData(object):
         # self.data_query = data_query
         self.studies_query = studies_query
 
-        self.studies = Study.objects.filter(sid__in=self.study_pks())
-        self.groups = Group.objects.filter(pk__in=self.group_pks())
-        self.individuals = Individual.objects.filter(pk__in=self.individual_pks())
-        self.interventions = Intervention.objects.filter(pk__in=self.intervention_pks())
-        self.outputs = Output.objects.filter(pk__in=self.output_pks())
+        start_time = time.time()
+        studies_pks = self.study_pks()
+        groups_pks = self.group_pks()
+        individuals_pks = self.individual_pks()
+        interventions_pks = self.intervention_pks()
+        outputs_pks = self.output_pks()
+
+        elastic_time = time.time() - start_time
+        print("Elastic Time")
+        print(elastic_time)
+        self.studies = Study.objects.filter(sid__in=studies_pks)
+        self.groups = Group.objects.filter(pk__in=groups_pks)
+        self.individuals = Individual.objects.filter(pk__in=individuals_pks)
+        self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
+        self.outputs = Output.objects.filter(pk__in=outputs_pks)
+        django_time = time.time() - start_time - elastic_time
+        print("Django Time")
+        print(django_time)
 
     def empty_get(self):
+        """create an get request with no parameters in the url."""
         return RequestFactory().get("/").GET.copy()
 
     def _update_outputs(self):
+        """ """
         outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals))
         outputs = outputs.filter(study__in=self.studies, interventions__in=self.interventions)
 
@@ -342,8 +359,6 @@ class PKData(object):
     def concise(self):
         self.keep_concising = True
         while self.keep_concising:
-            print("Study number")
-            print(len(self.studies))
             self.keep_concising = False
             self._update_outputs()
             if self.keep_concising:
@@ -354,30 +369,39 @@ class PKData(object):
                 self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid"))).distinct()
 
     def intervention_pks(self):
-        return self._pks(ElasticInterventionViewSet, self.interventions_query)
+        return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
 
     def group_pks(self):
-        return self._pks(GroupViewSet, self.groups_query)
+        return self._pks(view_class=GroupViewSet, query_dict=self.groups_query)
 
     def individual_pks(self):
-        return self._pks(IndividualViewSet, self.individuals_query)
+        return self._pks(view_class=IndividualViewSet, query_dict=self.individuals_query)
 
     def output_pks(self):
-        return self._pks(ElasticOutputViewSet, self.outputs_query )
+        return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query )
 
     def study_pks(self):
-        return self._pks(ElasticStudyViewSet, self.studies_query, "sid")
+        return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="sid")
 
 
-    def set_request_get(self, query_dict):
+    def set_request_get(self, query_dict:Dict):
+        """
+
+        :param query_dict:
+        :return:
+        """
         get = self.empty_get()
         for k, v in query_dict.items():
             get[k] = v
         self.request._request.GET = get
 
-    def _pks(self, View, query_dict, pk_field="pk"):
+    def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str="pk"):
+        """
+        query elastic search for pks.
+
+        """
         self.set_request_get(query_dict)
-        view = View(request=self.request)
+        view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
         count = queryset.count()
         response = queryset.extra(size=count).execute()
@@ -386,9 +410,6 @@ class PKData(object):
     def _paginated_data(self, serializer, queryset, query_dict):
         paginator = CustomPagination()
         self.set_request_get(query_dict)
-        print(self.request.query_params)
-        print(query_dict)
-
         page = paginator.paginate_queryset(queryset, self.request)
         if page is not None:
             return {
@@ -434,7 +455,11 @@ class PKDataView(APIView):
             interventions_query=self._get_param("intervention", request),
             outputs_query=self._get_param("output", request),
         )
+        start_time = time.time()
         pkdata.concise()
+        concise_time =   time.time() - start_time
+        print("Concise time")
+        print(concise_time)
 
         data = {
             "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies, pkdata.studies_query),
