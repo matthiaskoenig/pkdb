@@ -48,6 +48,7 @@ const icons_table = {
     measurement_types: 'fas fa-heartbeat',
     tissue: 'fas fa-map-marker-alt',
     tissues: 'fas fa-map-marker-alt',
+    search: 'fas fa-search',
 };
 
 /**

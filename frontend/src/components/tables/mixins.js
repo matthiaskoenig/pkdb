@@ -69,10 +69,14 @@ var searchTableMixin = {
             return this.$store.state.endpoints.api  + this.otype + '/?format=json'
         },
         url() {
+
             var url = this.resource_url
-                + '&page=' + this.options.page
-                + '&page_size=' + this.options.itemsPerPage
-                + '&ordering=' + this.options.sortDesc + this.options.sortBy;
+            if(this.options.itemsPerPage) {
+                url = url
+                    + '&page=' + this.options.page
+                    + '&page_size=' + this.options.itemsPerPage
+                    + '&ordering=' + this.options.sortDesc + this.options.sortBy;
+            }
             if (this.search) {
                 url += '&search_multi_match=' + this.search
             }

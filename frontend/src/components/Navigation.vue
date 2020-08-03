@@ -8,13 +8,16 @@
 
         <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
         <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
-        <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
-        <v-btn icon to="/groups" title="Groups" color="white"><v-icon>{{ faIcon('groups') }}</v-icon></v-btn>
-        <v-btn icon to="/individuals" title="Individuals" color="white"><v-icon>{{ faIcon('individuals') }}</v-icon></v-btn>
-        <v-btn icon to="/interventions" title="Interventions" color="white"><v-icon>{{ faIcon('interventions') }}</v-icon></v-btn>
-        <v-btn icon to="/outputs" title="Outputs" color="white"><v-icon>{{ faIcon('outputs') }}</v-icon></v-btn>
-        <v-btn icon to="/timecourses" title="Timecourses" color="white"><v-icon>{{ faIcon('timecourses') }}</v-icon></v-btn>
+        <v-btn icon to="/search" title="Search" color="white"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
 
+      <!--
+      <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
+      <v-btn icon to="/groups" title="Groups" color="white"><v-icon>{{ faIcon('groups') }}</v-icon></v-btn>
+      <v-btn icon to="/individuals" title="Individuals" color="white"><v-icon>{{ faIcon('individuals') }}</v-icon></v-btn>
+      <v-btn icon to="/interventions" title="Interventions" color="white"><v-icon>{{ faIcon('interventions') }}</v-icon></v-btn>
+      <v-btn icon to="/outputs" title="Outputs" color="white"><v-icon>{{ faIcon('outputs') }}</v-icon></v-btn>
+      <v-btn icon to="/timecourses" title="Timecourses" color="white"><v-icon>{{ faIcon('timecourses') }}</v-icon></v-btn>
+      -->
         <v-spacer></v-spacer>
 
         <!-- account -->

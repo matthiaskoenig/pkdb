@@ -4,6 +4,9 @@ import Router from 'vue-router';
 /* Home */
 import Home from './components/Home';
 
+/* Search */
+import Search from './components/Search';
+
 /* TableViews */
 import Studies from './components/Studies';
 import Groups from './components/Groups';
@@ -12,6 +15,8 @@ import Interventions from './components/Interventions';
 import Outputs from './components/Outputs';
 import Timecourses from './components/Timecourses';
 import References from './components/References';
+
+
 
 /* DetailViews */
 import Study from './components/Study';
@@ -50,6 +55,11 @@ export default new Router({
             path: '/studies',
             name: 'Studies',
             component: Studies
+        },
+        {
+            path: '/search',
+            name: 'Search',
+            component: Search
         },
         {
             path: '/groups',

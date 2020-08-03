@@ -358,6 +358,7 @@ class PKData(object):
 
     def concise(self):
         self.keep_concising = True
+
         while self.keep_concising:
             self.keep_concising = False
             self._update_outputs()
