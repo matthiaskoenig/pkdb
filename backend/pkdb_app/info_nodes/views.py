@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
-    OrderingFilterBackend, MultiMatchSearchFilterBackend
+    OrderingFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 
@@ -41,7 +41,7 @@ class InfoNodeElasticViewSet(DocumentViewSet):
     serializer_class = InfoNodeElasticSerializer
     document_uid_field = "url_slug__raw"
     lookup_field = 'url_slug'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, SearchFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         "sid",
         "name",
@@ -57,7 +57,8 @@ class InfoNodeElasticViewSet(DocumentViewSet):
         "measurement_type.choices.description",
         "measurement_type.choices.annotations.name",
         "measurement_type.choices.annotations.description",
-        "measurement_type.choices.annotations.label"
+        "measurement_type.choices.annotations.label",
+        "synonyms.name",
         "substance.mass",
         "substance.formula",
         "substance.charge",

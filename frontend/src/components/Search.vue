@@ -14,9 +14,7 @@
               <output-form/>
             </v-flex>
             <v-flex xs12>
-            <v-btn
-                depressed
-            >
+            <v-btn depressed >
               Query Now
             </v-btn>
             </v-flex>
