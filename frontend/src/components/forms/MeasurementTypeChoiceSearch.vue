@@ -5,14 +5,14 @@
       :loading="isLoading"
       :items="entries"
       :search-input.sync="search"
-      cache-items
-      filled
       chips
       dense
       :label="label()"
       item-text="name"
       item-value="name"
+      no-filter
       multiple
+      :v-click-outside="nothing"
   >
     <template v-slot:selection="data">
       <v-chip
@@ -52,6 +52,7 @@ export default {
     }
   },
   methods: {
+    nothing(){},
     remove (item) {
       const index = this.selected_entries.indexOf(item.name)
       if (index >= 0) this.selected_entries.splice(index, 1)

@@ -1,17 +1,14 @@
 <template>
   <v-autocomplete
       v-model="selected_entries"
-      :disabled="isUpdating"
       :items="entries"
-      :loading="isLoading"
       :search-input.sync="search"
-      cache-items
-      filled
       chips
       dense
       :label="label()"
       item-text="name"
       item-value="name"
+      no-filter
       multiple
   >
     <template v-slot:selection="data">
@@ -24,7 +21,6 @@
       </v-chip>
     </template>
     <template v-slot:item="data">
-
 
       <v-list-item-content>
         <text-highlight :queries="search.split(/[ ,]+/)">{{ data.item.name }}</text-highlight>
@@ -43,10 +39,11 @@ import {searchTableMixin} from "../tables/mixins";
 
 export default {
   name: "InfoNodeSearch",
-  props: {
-    ntype:"",
-  },
   mixins: [searchTableMixin],
+  props:{
+    ntype:String
+  },
+
   data () {
 
     return {

@@ -7,8 +7,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q as DQ
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
@@ -66,7 +67,13 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         django_filters.rest_framework.DjangoFilterBackend,
         filters.SearchFilter,
     )
-    filter_fields = ("sid",)
+    filter_fields = (
+        "sid",
+        "name",
+        "pmid",
+        "title",
+        "abstract",
+        "journal")
     search_fields = filter_fields
     permission_classes = (IsAdminOrCreatorOrCurator,)
 
@@ -231,7 +238,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
     filter_fields = {
         'sid': 'sid.raw',
-        'name': 'name.raw',
+        'name': {'field': 'name.raw',
+                 'lookups':[ LOOKUP_QUERY_IN, ],},
+        'reference_name': {'field': 'reference.name.raw',
+                 'lookups': [LOOKUP_QUERY_IN, ], },
         'creator': 'creator.username.raw',
         'curator': 'curators.username.raw',
         'collaborator': 'collaborators.name.raw',
@@ -278,8 +288,13 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     pagination_class = CustomPagination
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ('sid', 'pmid', 'title', 'abstract', 'name', 'journal')
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, SearchFilterBackend, MultiMatchSearchFilterBackend]
+    search_fields = [
+        'sid',
+        'pmid',
+        'name',
+        'title',
+        'abstract',]
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -370,6 +385,7 @@ class PKData(object):
                 self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid"))).distinct()
 
     def intervention_pks(self):
+
         return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
 
     def group_pks(self):
@@ -462,13 +478,23 @@ class PKDataView(APIView):
         print("Concise time")
         print(concise_time)
 
+        start_time = time.time()
         data = {
-            "studies": pkdata._paginated_data(StudyAnalysisSerializer, pkdata.studies, pkdata.studies_query),
-            "groups": pkdata._paginated_data(GroupElasticSerializer,pkdata.groups, pkdata.groups_query),
-            "individuals": pkdata._paginated_data(IndividualElasticSerializer,pkdata.individuals, pkdata.individuals_query),
-            "interventions": pkdata._paginated_data(InterventionElasticSerializer, pkdata.interventions,pkdata.interventions_query),
-            "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs, pkdata.outputs_query)
+            "studies": pkdata._paginated_data(PkSerializer, pkdata.studies, pkdata.studies_query),
+            "groups": pkdata._paginated_data(PkSerializer,pkdata.groups, pkdata.groups_query),
+            "individuals": pkdata._paginated_data(PkSerializer,pkdata.individuals, pkdata.individuals_query),
+            "interventions": pkdata._paginated_data(PkSerializer, pkdata.interventions,pkdata.interventions_query),
+            "outputs": pkdata._paginated_data(PkSerializer, pkdata.outputs, pkdata.outputs_query)
         }
+        rest_time = time.time() - start_time
+        print("Pagination time")
+        print(rest_time)
+
+        start_time = time.time()
 
         response = Response(data, status=status.HTTP_200_OK)
+        rest_time =   time.time() - start_time
+        print("Rest time")
+        print(rest_time)
+
         return response

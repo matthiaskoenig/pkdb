@@ -52,7 +52,6 @@ export default new Vuex.Store({
             request_password_reset: backend_domain + '/accounts/request-password-reset/',
             password_reset: backend_domain + '/accounts/reset-password/',
         },
-
         username: localStorage.getItem('username'),
         token: localStorage.getItem('token'),
     },

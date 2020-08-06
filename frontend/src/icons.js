@@ -49,6 +49,8 @@ const icons_table = {
     tissue: 'fas fa-map-marker-alt',
     tissues: 'fas fa-map-marker-alt',
     search: 'fas fa-search',
+    info: 'fas fa-info-circle',
+
 };
 
 /**

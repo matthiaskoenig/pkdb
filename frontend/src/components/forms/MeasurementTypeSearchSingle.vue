@@ -19,13 +19,11 @@
              solo
              dense
              multiple
+             v-click-outside="nothing"
          >
-    </v-autocomplete>
+        </v-autocomplete>
       </span>
-
-
     </v-flex>
-
   </v-list-item-content>
 
 </template>
@@ -34,7 +32,7 @@
 export default {
   props: {
     measurement_type : null,
-    search_measurement_type: "",
+    search_measurement_type: String,
   },
   name: "MeasurementTypeSearchSingle",
   data () {
@@ -53,6 +51,4 @@ export default {
     }
   }
 }
-
-
 </script>

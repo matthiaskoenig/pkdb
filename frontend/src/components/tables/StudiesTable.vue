@@ -35,7 +35,9 @@
                 <count-chip :count=item.individual_count icon="individual" name="individual"></count-chip>
                 <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
                 <count-chip :count=item.output_count icon="output" name="output"></count-chip >
+              <!--
                 <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse"></count-chip>
+              -->
             </template>
 
             <template v-slot:item.substances="{ item }">

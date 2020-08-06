@@ -726,7 +726,7 @@ class ReadSerializer(serializers.ModelSerializer):
 
 class PkSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
-    study_sid = serializers.CharField()
+    #study_sid = serializers.CharField()
 
     class Meta:
         fields = ["pk","study_sid"]

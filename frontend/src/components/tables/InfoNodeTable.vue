@@ -33,7 +33,7 @@
             <template v-slot:item.description="{ item }"><text-highlight :queries="search.split(/[ ,]+/)">{{item.description}} </text-highlight> </template>
             <template v-slot:item.synonyms="{ item }">
                 <ul>
-                    <v-chip v-for="synonym in item.synonyms" :key="synonym">
+                    <v-chip v-for="synonym in item.synonyms" :key="synonym.pk">
                         {{synonym}}
                     </v-chip>
                 </ul>

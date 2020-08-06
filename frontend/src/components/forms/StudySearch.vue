@@ -3,15 +3,14 @@
       v-model="selected_entries"
       :disabled="isUpdating"
       :items="entries"
-      :loading="isLoading"
+      :loading="loading"
       :search-input.sync="search"
-      cache-items
-      filled
       chips
       dense
       label="Names"
       item-text="name"
       item-value="name"
+      no-filter
       multiple
   >
     <template v-slot:selection="data">
@@ -56,7 +55,11 @@ export default {
       autoUpdate: true,
       selected_entries: [],
       isUpdating: false,
-      isLoading: false,
+    }
+  },
+  watch:{
+    selected_entries() {
+      this.$emit('selected_entries',{"studies__name__in":this.selected_entries})
     }
   },
   methods: {
@@ -68,7 +71,3 @@ export default {
 
 }
 </script>
-
-<style scoped>
-
-</style>
