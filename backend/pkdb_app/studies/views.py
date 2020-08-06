@@ -349,11 +349,11 @@ class PKData(object):
         elastic_time = time.time() - start_time
         print("Elastic Time")
         print(elastic_time)
-        self.studies = Study.objects.filter(sid__in=studies_pks)
-        self.groups = Group.objects.filter(pk__in=groups_pks)
-        self.individuals = Individual.objects.filter(pk__in=individuals_pks)
+        self.studies = Study.objects.filter(sid__in=studies_pks).only('sid','pk')
+        self.groups = Group.objects.filter(pk__in=groups_pks).only('pk')
+        self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
         self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.filter(pk__in=outputs_pks)
+        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group','individual','interventions','study')
         django_time = time.time() - start_time - elastic_time
         print("Django Time")
         print(django_time)
@@ -364,25 +364,36 @@ class PKData(object):
 
     def _update_outputs(self):
         """ """
-        outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals))
-        outputs = outputs.filter(study__in=self.studies, interventions__in=self.interventions)
 
-        if len(outputs) < len(self.outputs):
+        outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals),
+                                      study__in=self.studies,
+                                      interventions__in=self.interventions)
+
+
+        start_time = time.time()
+
+        if outputs.count() < self.outputs.count():
             self.keep_concising = True
             self.outputs = outputs
+
+        update_outputs_time = time.time() - start_time
+        print("Update Outputs Time")
+        print(update_outputs_time)
 
     def concise(self):
         self.keep_concising = True
 
         while self.keep_concising:
             self.keep_concising = False
+
             self._update_outputs()
+
+
             if self.keep_concising:
                 self.interventions = self.interventions.filter(outputs__in=self.outputs).distinct()
-                self.individuals = self.individuals.filter(
-                    pk__in=Subquery(self.outputs.values("individual__pk"))).distinct()
-                self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group__pk"))).distinct()
-                self.studies = self.studies.filter(sid__in=Subquery(self.outputs.values("study__sid"))).distinct()
+                self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
+                self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group_id").distinct()))
+                self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
 
     def intervention_pks(self):
 
