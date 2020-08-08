@@ -7,10 +7,10 @@
         <v-layout wrap>
 
           <v-flex xs12>
-            <info-node-search ntype="substance"/>
-            <info-node-search ntype="route"/>
-            <info-node-search ntype="application"/>
-            <info-node-search ntype="form"/>
+            <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
+            <info-node-search ntype="route"  @selected_entries="emit_selected_entries"/>
+            <info-node-search ntype="application"  @selected_entries="emit_selected_entries"/>
+            <info-node-search ntype="form"  @selected_entries="emit_selected_entries"/>
 
           </v-flex>
 
@@ -32,5 +32,18 @@ export default {
     InfoNodeSearch,
     StudySearch,
   },
+  methods: {
+    emit_selected_entries(emitted_object){
+      for ( const [key,value] of Object.entries(emitted_object)) {
+
+        const label = "interventions__" + key
+        var this_object = {}
+        this_object[label] = value
+        this.$emit(label, this_object)
+      }
+    }
+  },
 }
+
+
 </script>

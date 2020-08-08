@@ -11,17 +11,23 @@
               <subjects-form/>
             </v-flex>
             <v-flex xs6>
-              <intervention-form/>
+              <intervention-form
+                  @interventions__substance_name__in="update_search_query"
+                  @interventions__route_name__in="update_search_query"
+                  @interventions__application_name__in="update_search_query"
+                  @interventions__form_name_in="update_search_query"
+
+              />
             </v-flex>
             <v-flex xs6>
               <output-form/>
             </v-flex>
-          <v-flex xs1>studies:{{study_count}}</v-flex>
-          <v-flex xs1>interventions: {{intervention_count}}</v-flex>
-          <v-flex xs1>groups: {{group_count}}</v-flex>
-          <v-flex xs1>individuals: {{individual_count}}</v-flex>
-          <v-flex xs1>outputs: {{output_count}}</v-flex>
-          <v-flex xs1>
+          <v-flex xs2>studies:{{study_count}}</v-flex>
+          <v-flex xs2>interventions: {{intervention_count}}</v-flex>
+          <v-flex xs2>groups: {{group_count}}</v-flex>
+          <v-flex xs2>individuals: {{individual_count}}</v-flex>
+          <v-flex xs2>outputs: {{output_count}}</v-flex>
+          <v-flex xs2>
             <v-progress-circular
               indeterminate
               color="primary"
@@ -59,10 +65,11 @@
       computed: {
         url() {
           var url = this.resource_url
-          if(this.queries.studies__name__in.length > 0){
-          url = url + "&studies__name__in=" + this.queries.studies__name__in.join("__")}
-          if(this.queries.studies__reference_name__in.length > 0) {
-            url = url + "&studies__reference_name__in=" + this.queries.studies__reference_name__in.join("__")
+
+          for ( const [key, value]  of Object.entries(this.queries)){
+            if (value.length > 0){
+              url = url + "&"+ key +"=" +value.join("__")
+            }
           }
           return url
         },
@@ -70,6 +77,7 @@
       methods: {
         update_search_query(emitted_object){
           for (const [key, value] of Object.entries(emitted_object)){
+
             this.queries[key] = value
           }
         },
@@ -109,22 +117,13 @@
       otype_single: "pkdata",
       queries :{
         studies__name__in:[],
-        studies__reference_name__in:[],
-      },
-      search_params: {
-        interventions: {
-        },
-        groups: {
-        },
-        individuals: {
-        },
-        outputs: {
-        },
-        studies: {
-          names: [],
-          references: [],
-        },
-      },
+        studies__reference_name__in: [],
+        interventions__substance_name__in: [],
+        interventions__route_name__in:[],
+        interventions__application_name__in:[],
+        interventions__form_name__in:[],
+
+      }
     }
     }
 

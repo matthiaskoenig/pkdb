@@ -1,60 +1,53 @@
 <template>
-
-  <v-autocomplete
+  <multiselect
       v-model="selected_entries"
-      :items.sync="entries"
+      :options="entries"
+      :close-on-select="false"
+      :clear-on-select="false"
+      :preserve-search="true"
+      placeholder="Search for Reference"
+      label="name"
+      track-by="name"
+      :multiple="true"
       :loading="loading"
-      :search-input.sync="search"
-      allow-overflow
-      dense
-      label="References"
-      item-text="name"
-      item-value="name"
-      no-filter
-      multiple
-  >
-    <template v-slot:selection="data">
+      :searchable="true"
+      :internal-search="false"
+      @search-change=sync_search>
+
+    <template slot="tag" slot-scope="{ option, remove }">
       <v-chip
           close
-          @click:close="remove(data.item)"
+          @click:close="remove(option)"
           class="chip--select-multi"
       >
-        {{ data.item.name }}
+        {{ option.name }}
       </v-chip>
     </template>
-    <template v-slot:item="data">
-      <reference-dialog v-if="showReferenceDialog" :data="data"/>
-      <v-list-item-content>
-        <v-list-item-title v-if="data.item.title">  <text-highlight :queries="search.split(/[ ,]+/)">{{ truncated(data.item.title) }}</text-highlight> </v-list-item-title>
-        <v-list-item-title v-html="data.item.name">  </v-list-item-title>
-        <v-list-item-title v-html="data.item.sid"></v-list-item-title>
-        <v-list-item-subtitle v-if="data.item.abstract"> {{ truncated(data.item.abstract) }}</v-list-item-subtitle>
-        <v-list-item-action>
 
-          <v-btn icon>
-            <v-icon color="grey lighten-1"  @click="showReferenceDialog=true">{{ faIcon('info') }}</v-icon>
-          </v-btn>
-        </v-list-item-action>
+    <template slot="clear" slot-scope="props">
+      <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
+    </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
 
-      </v-list-item-content>
-    </template>
-  </v-autocomplete>
+  </multiselect>
+
+
 </template>
 
 
 <script>
 
-import {searchTableMixin} from "../tables/mixins";
+import {searchTableMixin} from "../tables/mixins.js";
 import ReferenceDialog from "../dialogs/ReferenceDialog";
+import Multiselect from 'vue-multiselect'
 
 export default {
   name: "ReferenceSearch",
-  components: {ReferenceDialog},
+  components: {ReferenceDialog, Multiselect},
   mixins: [searchTableMixin],
+
   data () {
     return {
       otype: "references",
-      autoUpdate: true,
       otype_single: "reference",
       selected_entries: [],
       abstractLimit: 100,
@@ -63,13 +56,16 @@ export default {
   },
   watch:{
     selected_entries() {
-      this.$emit('selected_entries',{"studies__reference_name__in":this.selected_entries})
+      this.$emit('selected_entries',{"studies__reference_name__in":this.selected_entries.map(x => x.name)})
     }
   },
   methods: {
-    remove (item) {
-      const index = this.selected_entries.indexOf(item.name)
-      if (index >= 0) this.selected_entries.splice(index, 1)
+    sync_search(search)
+    {
+      this.search = search
+    },
+    clearAll () {
+      this.selected_entries = []
     },
     truncated(item){
       return item.length > this.abstractLimit ? item.slice(0, this.abstractLimit) + '...'

@@ -6,7 +6,7 @@
       <v-container>
         <v-layout wrap>
           <v-flex xs12>
-            <measurement-type-choice-search/>
+            <measurement-type-choice-search ntype="measurement_type"/>
           </v-flex>
 
           <v-flex xs12>

@@ -25,7 +25,7 @@
     "vuetify": "^2.2.9",
     "vuex": "^3.1.0",
     "vuex-persist": "^2.0.0",
-    "vee-validate": "^3.3.7"
+    "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",

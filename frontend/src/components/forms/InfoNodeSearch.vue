@@ -1,65 +1,75 @@
 <template>
-  <v-autocomplete
+  <multiselect
       v-model="selected_entries"
-      :items="entries"
-      :search-input.sync="search"
-      chips
-      dense
-      :label="label()"
-      item-text="name"
-      item-value="name"
-      no-filter
-      multiple
-  >
-    <template v-slot:selection="data">
+      :options="entries"
+      :close-on-select="false"
+      :clear-on-select="false"
+      :preserve-search="true"
+      :placeholder="'Search for ' + label()"
+      label="name"
+      track-by="name"
+      :multiple="true"
+      :loading="loading"
+      :searchable="true"
+      :internal-search="false"
+      @search-change=sync_search>
+
+    <template slot="tag" slot-scope="{ option, remove }">
       <v-chip
           close
-          @click:close="remove(data.item)"
+          @click:close="remove(option)"
           class="chip--select-multi"
       >
-        {{ data.item.name }}
+        {{ option.name }}
       </v-chip>
     </template>
-    <template v-slot:item="data">
 
-      <v-list-item-content>
-        <text-highlight :queries="search.split(/[ ,]+/)">{{ data.item.name }}</text-highlight>
-        <!-- <v-list-item-title v-html="data.item.name"></v-list-item-title> -->
-        <v-list-item-subtitle v-html="data.item.description"></v-list-item-subtitle>
-      </v-list-item-content>
+    <template slot="clear" slot-scope="props">
+      <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
+    </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
 
-
-    </template>
-  </v-autocomplete>
+  </multiselect>
 </template>
 
 <script>
 
 import {searchTableMixin} from "../tables/mixins";
+import Multiselect from 'vue-multiselect'
 
 export default {
   name: "InfoNodeSearch",
-  mixins: [searchTableMixin],
-  props:{
-    ntype:String
+  components: {
+    Multiselect
   },
-
+  mixins: [searchTableMixin],
   data () {
 
     return {
       otype: "info_nodes",
-      otype_single: "info_nodes",
+      otype_single: "info_node",
       autoUpdate: true,
       selected_entries: [],
       isUpdating: false,
       isLoading: false,
     }
   },
+  watch:{
+    selected_entries() {
+      var emit_object = {}
+      emit_object[this.$props.ntype + "_name__in"] = this.selected_entries.map(x => x.name)
+      this.$emit('selected_entries',emit_object)
+    }
+  },
   methods: {
-    remove (item) {
-      const index = this.selected_entries.indexOf(item.name)
-      if (index >= 0) this.selected_entries.splice(index, 1)
+    clearAll () {
+      this.selected_entries = []
     },
+    sync_search(search)
+    {
+      this.search = search
+    },
+
+
     label(){
       const labels = {
         "substance": "Substances",
@@ -74,12 +84,8 @@ export default {
       }
       return labels[this.ntype]
     }
-  },
-  serverPrefetch () {
-    // return the Promise from the action
-    // so that the component waits before rendering
-    return this.getData()
-  },
+
+  }
 
 
 }

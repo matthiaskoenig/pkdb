@@ -1,52 +1,46 @@
 <template>
-  <v-autocomplete
+  <multiselect
       v-model="selected_entries"
-      :disabled="isUpdating"
-      :items="entries"
+      :options="entries"
+      :close-on-select="false"
+      :clear-on-select="false"
+      :preserve-search="true"
+      placeholder="Search for Studies"
+      label="name"
+      track-by="name"
+      :multiple="true"
       :loading="loading"
-      :search-input.sync="search"
-      chips
-      dense
-      label="Names"
-      item-text="name"
-      item-value="name"
-      no-filter
-      multiple
-  >
-    <template v-slot:selection="data">
+      :searchable="true"
+      :internal-search="false"
+      @search-change=sync_search>
+
+    <template slot="tag" slot-scope="{ option, remove }">
       <v-chip
           close
-          @click:close="remove(data.item)"
+          @click:close="remove(option)"
           class="chip--select-multi"
       >
-        {{ data.item.name }}
+        {{ option.name }}
       </v-chip>
     </template>
-    <template v-slot:item="data">
 
+    <template slot="clear" slot-scope="props">
+      <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
+    </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
 
-      <v-list-item-content>
-
-        <text-highlight :queries="search.split(/[ ,]+/)">{{ data.item.name }}</text-highlight>
-        <!-- <v-list-item-title v-html="data.item.name"></v-list-item-title> -->
-        <v-list-item-subtitle v-html="data.item.sid"></v-list-item-subtitle>
-      </v-list-item-content>
-
-      <user-avatar :user="data.item.creator"
-                   :search="search"
-      />
-
-    </template>
-  </v-autocomplete>
+  </multiselect>
 </template>
 
 <script>
-
+import Multiselect from 'vue-multiselect'
 import {searchTableMixin} from "../tables/mixins";
 
 export default {
   name: "StudySearch",
   mixins: [searchTableMixin],
+  components: {
+  Multiselect
+  },
   data () {
 
     return {
@@ -54,18 +48,21 @@ export default {
       otype_single: "study",
       autoUpdate: true,
       selected_entries: [],
-      isUpdating: false,
     }
   },
   watch:{
     selected_entries() {
-      this.$emit('selected_entries',{"studies__name__in":this.selected_entries})
+      this.$emit('selected_entries',{"studies__name__in":this.selected_entries.map(x => x.name)})
     }
   },
   methods: {
-    remove (item) {
-      const index = this.selected_entries.indexOf(item.name)
-      if (index >= 0) this.selected_entries.splice(index, 1)
+    clearAll () {
+      this.selected_entries = []
+    },
+
+    sync_search(search)
+    {
+      this.search = search
     }
   }
 

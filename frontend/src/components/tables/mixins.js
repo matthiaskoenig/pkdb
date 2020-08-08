@@ -7,7 +7,6 @@ var searchTableMixin = {
             count: 0,
             entries: [],
             search: "",
-            ntype: "all",
             loading: true,
             options: {},
             footer_options:{
@@ -25,6 +24,10 @@ var searchTableMixin = {
         autofocus: {
             type: Boolean,
             default: true
+        },
+        ntype: {
+            type: String,
+            default: () => "all"
         }
 
     },
@@ -38,12 +41,9 @@ var searchTableMixin = {
             },
             deep: true
         },
-        search: {
-            handler() {
-                this.getData();
-            },
-            deep: true
-        },
+        search(){
+                    this.getData();
+                },
         ntype: {
             handler() {
                 this.getData();
