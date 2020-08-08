@@ -12,17 +12,21 @@ from pint import UndefinedUnitError
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.users.models import User
-from pkdb_app.utils import CHAR_MAX_LENGTH, _validate_requried_key
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_requried_key
 
 
 class Annotation(models.Model):
-    """ Annotation Model
-    """
+    """ Annotation Model"""
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
-    relation = models.CharField(max_length=CHAR_MAX_LENGTH, )
+    relation = models.CharField(max_length=CHAR_MAX_LENGTH)
     collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    description = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    description = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
+# TODO: add cross reference
+class Xref(models.Model):
+    """ CrossReference. """
+    pass
 
 
 class InfoNode(Sidable):
@@ -58,7 +62,6 @@ class InfoNode(Sidable):
     ntype = models.CharField(null=False, blank=False, choices=NTypes.choices, max_length=20)
     dtype = models.CharField(null=False, blank=False, choices=DTypes.choices, max_length=20)
 
-
     def annotations_strings(self):
         return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
 
@@ -77,9 +80,8 @@ class InfoNode(Sidable):
         return self.creator.username
 
 
-
 class Synonym(models.Model):
-    """Synonyms Model"""
+    """Synonym Model"""
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     info_node = models.ForeignKey(InfoNode, on_delete=models.CASCADE, related_name="synonyms", null=True)
 
