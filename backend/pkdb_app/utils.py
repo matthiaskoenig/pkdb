@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 CHAR_MAX_LENGTH = 200
-CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
+CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 5
 
 
 class SlugRelatedField(serializers.SlugRelatedField):
