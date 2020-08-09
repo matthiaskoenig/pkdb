@@ -25,6 +25,7 @@ import Individual from './components/Individual';
 import Intervention from './components/Intervention';
 import Output from './components/Output';
 import Timecourse from './components/Timecourse';
+import InfoNode from './components/InfoNode';
 import Reference from './components/Reference';
 
 /* 404 */
@@ -163,6 +164,12 @@ export default new Router({
             path: "/references/:id",
             name: "Reference",
             component: Reference,
+            props: true
+        },
+        {
+            path: "/info_nodes/:id",
+            name: "InfoNode",
+            component: InfoNode,
             props: true
         },
         {
