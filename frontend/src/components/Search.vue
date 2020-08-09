@@ -6,29 +6,21 @@
             @studies__name__in="update_search_query"
             @studies__reference_name__in="update_search_query"
         />
-      </v-flex>
-      <v-flex xs6>
         <subjects-form/>
-      </v-flex>
-      <v-flex xs6>
         <intervention-form
             @interventions__substance_name__in="update_search_query"
             @interventions__route_name__in="update_search_query"
             @interventions__application_name__in="update_search_query"
             @interventions__form_name_in="update_search_query"
         />
-      </v-flex>
-      <v-flex xs6>
         <output-form/>
       </v-flex>
-
-      <v-flex xs2>studies: {{ study_count }}</v-flex>
-      <v-flex xs2>interventions: {{ intervention_count }}</v-flex>
-      <v-flex xs2>groups: {{ group_count }}</v-flex>
-      <v-flex xs2>individuals: {{ individual_count }}</v-flex>
-      <v-flex xs2>outputs: {{ output_count }}</v-flex>
-      <v-flex xs2>
-
+      <v-flex xs6>
+        studies: {{ study_count }}<br />
+        interventions: {{ intervention_count }}<br />
+        groups: {{ group_count }}<br />
+        individuals: {{ individual_count }}<br />
+        outputs: {{ output_count }}<br />
         <v-progress-circular
             indeterminate
             color="primary"
@@ -75,7 +67,6 @@ export default {
   methods: {
     update_search_query(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {
-
         this.queries[key] = value
       }
     },

@@ -13,11 +13,13 @@
                     </v-flex>
                 </v-layout>
 
+              <!--
                 <v-layout row>
                     <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
                         <footer-f></footer-f>
                     </v-flex>
                 </v-layout>
+                -->
             </v-container>
         </v-app>
     </div>
