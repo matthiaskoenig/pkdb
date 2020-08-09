@@ -1,6 +1,8 @@
 # ------------------
 # alpha.pk-db.com
 # ------------------
+#    sudo ln -s /etc/nginx/sites-available/alpha.pk-db.com /etc/nginx/sites-enabled/
+# ------------------
 access_log /var/www/logs/alpha.pk-db.com_access.log;
 error_log /var/www/logs/alpha.pk-db.com_error.log;
 
@@ -26,7 +28,7 @@ server {
 
         location / {
                 # return 200 "ssl on proxy";
-                proxy_pass http://172.107.0.1:8887;
+                proxy_pass http://172.107.0.10:8888;
                 proxy_set_header HOST $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-for $remote_addr;
