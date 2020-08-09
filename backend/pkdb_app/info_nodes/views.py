@@ -9,7 +9,7 @@ from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer, InfoNodeSerializer
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.users.permissions import IsAdminOrCreator
+from rest_framework.permissions import IsAdminUser
 
 NT = namedtuple("NodeType", ["model", "serializer", "fields"])
 
@@ -22,7 +22,7 @@ MEASUREMENT_TYPE_EXTRA = ["units"]
 
 
 class InfoNodeViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrCreator,)
+    permission_classes = (IsAdminUser,)
     lookup_field = "url_slug"
     serializer_class = InfoNodeSerializer
     queryset = InfoNode.objects.all()

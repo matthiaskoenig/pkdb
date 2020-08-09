@@ -3,7 +3,7 @@ from rest_framework import serializers
 from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
-    Form, Tissue, Application, Method
+    Form, Tissue, Application, Method, CrossReference
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework.fields import empty
@@ -52,6 +52,16 @@ class AnnotationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Annotation
         fields = ["term", "relation", "collection", "description", "label"]
+
+
+class CrossReferenceSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(allow_null=False, required=True)
+    accession = serializers.CharField(allow_null=False, required=True)
+    url = serializers.URLField(allow_null=False, required=True)
+
+    class Meta:
+        model = CrossReference
+        fields = ["name", "accession", "url"]
 
 
 class UnitSerializer(serializers.ModelSerializer):
@@ -134,12 +144,13 @@ class InfoNodeSerializer(serializers.ModelSerializer):
     measurement_type = MeasurementTypeExtraSerializer(allow_null=True, required=False)
     substance = SubstanceExtraSerializer(allow_null=True, required=False)
     choice = ChoiceExtraSerializer(allow_null=True, required=False)
+    xrefs = CrossReferenceSerializer(many=True, allow_null=True)
 
     class Meta:
         model = InfoNode
         list_serializer_class = InfoNodeListSerializer
-        fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description", "synonyms", "creator",
-                  "annotations", "measurement_type", "substance", "choice"]
+        fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description", "synonyms",
+                  "annotations", "measurement_type", "substance", "choice", "deprecated", "label", "xrefs"]
 
     @staticmethod
     def NTypes():

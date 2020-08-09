@@ -24,9 +24,11 @@ class Annotation(models.Model):
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
 # TODO: add cross reference
-class Xref(models.Model):
+class CrossReference(models.Model):
     """ CrossReference. """
-    pass
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
+    accession = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
+    url = models.URLField(null=False)
 
 
 class InfoNode(Sidable):
@@ -54,10 +56,12 @@ class InfoNode(Sidable):
         NumericCategorical = 'numeric_categorical', _('numeric_categorical')
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    label = models.CharField(max_length=CHAR_MAX_LENGTH)
+    deprecated = models.BooleanField()
     url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     description = models.TextField(blank=True, null=True)
-    creator = models.ForeignKey(User, related_name="info_nodes", on_delete=models.CASCADE)
-    annotations = models.ManyToManyField(Annotation, "info_nodes")
+    annotations = models.ManyToManyField(Annotation, "annotations")
+    xrefs = models.ManyToManyField(CrossReference, "info_nodes")
     parents = models.ManyToManyField("InfoNode", related_name="children")
     ntype = models.CharField(null=False, blank=False, choices=NTypes.choices, max_length=20)
     dtype = models.CharField(null=False, blank=False, choices=DTypes.choices, max_length=20)
