@@ -80,7 +80,6 @@ export default {
         "tissue":"Tissues",
         "method":"Methods",
         "application":"Applications",
-
       }
       return labels[this.ntype]
     }
