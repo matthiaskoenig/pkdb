@@ -109,7 +109,7 @@
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Sid', value: 'sid'},
                     {text: 'Name', value: 'name'},
-                    {text: 'Note Type', value: 'ntype'},
+                    {text: 'Node Type', value: 'ntype'},
                     {text: 'Data Type', value: 'dtype'},
                     {text: 'Description', value: 'description'},
                     {text: 'Synonyms', value: 'synonyms'},
