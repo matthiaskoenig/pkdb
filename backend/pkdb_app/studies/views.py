@@ -206,13 +206,13 @@ def related_elastic_dict(study):
 
 
 class ElasticStudyViewSet(BaseDocumentViewSet):
-    # document_uid_field = "sid__raw"
-    # lookup_field = "sid"
+    document_uid_field = "sid__raw"
+    lookup_field = "sid"
     document = StudyDocument
     serializer_class = StudyElasticSerializer
     pagination_class = CustomPagination
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
-    # permission_classes = (StudyPermission,)
+    permission_classes = (StudyPermission,)
     search_fields = (
         'sid',
         'pk_version',
