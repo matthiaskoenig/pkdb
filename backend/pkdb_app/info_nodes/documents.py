@@ -28,15 +28,25 @@ small_info_node_properties = {
 class InfoNodeDocument(Document):
     sid = string_field('sid')
     name = string_field('name')
+    label = string_field('label')
+    deprecated = fields.BooleanField()
     url_slug = string_field('url_slug')
     description = string_field('description')
-    creator = string_field("creator_username")
     annotations = annotation_field
     synonyms = basic_object("synonyms", multi=True)
     #synonyms = string_field('synonym_names', multi=True)  # todo: this might be wrong
     parents = ObjectField(properties=small_info_node_properties, multi=True)
     ntype = string_field('ntype')
     dtype = string_field('dtype')
+    xrefs = ObjectField(
+        properties=
+                          {
+                              "name": string_field("name"),
+                              "accession":string_field("accession"),
+                              "url":string_field("url")
+
+                          }, multi=True)
+
 
     # measurement type
     measurement_type = ObjectField(

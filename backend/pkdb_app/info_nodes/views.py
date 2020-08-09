@@ -50,14 +50,21 @@ class InfoNodeElasticViewSet(DocumentViewSet):
         "dtype",
         "ntype",
         "units",
+
         "annotations.name",
         "annotations.description",
         "annotations.label",
+
+        "xrefs.name",
+        "xrefs.accession",
+        "xrefs.url",
+
         "measurement_type.choices.name",
         "measurement_type.choices.description",
         "measurement_type.choices.annotations.name",
         "measurement_type.choices.annotations.description",
         "measurement_type.choices.annotations.label",
+
         "synonyms.name",
         "substance.mass",
         "substance.formula",

@@ -28,7 +28,7 @@ class CrossReference(models.Model):
     """ CrossReference. """
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
     accession = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
-    url = models.URLField(null=False)
+    url = models.URLField(max_length=CHAR_MAX_LENGTH_LONG, null=False)
 
 
 class InfoNode(Sidable):
