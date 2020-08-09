@@ -21,6 +21,8 @@ pkdb.dump
 # Environments
 # ----------------------------
 .env
+.env.alpha
+.env.develop
 .env.production
 frontend/.env.production
 
