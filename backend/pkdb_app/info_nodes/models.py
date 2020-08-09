@@ -20,7 +20,7 @@ class Annotation(models.Model):
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
     relation = models.CharField(max_length=CHAR_MAX_LENGTH)
     collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    description = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    description = models.TextField(blank=True, null=True)
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 
 # TODO: add cross reference

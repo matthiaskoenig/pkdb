@@ -70,7 +70,6 @@ class UnitSerializer(serializers.ModelSerializer):
             return instance.name
 
 
-
 class SubstanceExtraSerializer(serializers.ModelSerializer):
     derived = serializers.BooleanField(read_only=True)
 
@@ -101,7 +100,6 @@ class InfoNodeListSerializer(serializers.ListSerializer):
 
     def run_validation(self, data=empty):
         return data
-
 
     def update(self, instance, validated_data):
         return self.create(validated_data)
