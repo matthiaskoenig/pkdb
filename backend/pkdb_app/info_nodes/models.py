@@ -82,7 +82,7 @@ class InfoNode(Sidable):
 
 class Synonym(models.Model):
     """Synonym Model"""
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, unique=True)
     info_node = models.ForeignKey(InfoNode, on_delete=models.CASCADE, related_name="synonyms", null=True)
 
 
