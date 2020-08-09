@@ -39,7 +39,7 @@ services:
 
   elasticsearch:
     restart: always
-    image: elasticsearch:7.7.1
+    image: elasticsearch:7.8.1
     environment:
       - "ES_JAVA_OPTS=-Xms6g -Xmx6g"
       - bootstrap.memory_lock=true
@@ -90,7 +90,7 @@ services:
 
   nginx:
     restart: always
-    image: nginx:1.18.0
+    image: nginx:1.19.1
     ports:
       - 8888:80
     volumes:
