@@ -44,7 +44,7 @@ services:
       - bootstrap.memory_lock=true
       - discovery.type=single-node
       - cluster.name=elasticsearch
-      - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+      - "ES_JAVA_OPTS=-Xms3g -Xmx3g"
       - cluster.routing.allocation.disk.threshold_enabled=false
       - xpack.license.self_generated.type=trial
     ulimits:
