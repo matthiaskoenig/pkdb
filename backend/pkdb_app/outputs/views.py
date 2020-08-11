@@ -121,7 +121,15 @@ common_filter_fields = {
         'calculated': 'calculated',
         'unit': 'unit.raw',
         'substance': 'substance.name.raw',
+        'substance_name': {'field': 'substance.name.raw',
+                           'lookups': [LOOKUP_QUERY_IN, ], },
         'measurement_type': 'measurement_type.name.raw',
+        'measurement_type_name': {'field': 'measurement_type.name.raw',
+                              'lookups': [LOOKUP_QUERY_IN, ], },
+        'method_name': {'field': 'method.name.raw',
+                              'lookups': [LOOKUP_QUERY_IN, ], },
+        'tissue_name': {'field': 'tissue.name.raw',
+                              'lookups': [LOOKUP_QUERY_IN, ], },
     }
 
 common_ordering_fields = {

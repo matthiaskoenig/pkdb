@@ -372,6 +372,10 @@ class Choice(AbstractInfoNode):
     def annotations(self):
         return self.info_node.annotations
 
+    @property
+    def label(self):
+        return self.info_node.label
+
 
 class Substance(AbstractInfoNode):
     """ Substances.

@@ -2,18 +2,32 @@
   <div id="Search">
     <v-layout row wrap>
       <v-flex xs6>
+
         <study-form
             @studies__name__in="update_search_query"
             @studies__reference_name__in="update_search_query"
         />
-        <subjects-form/>
+
+        <subjects-form
+            @subjects__type="update_search_query"
+            @subject_queries="update_search_query"
+
+
+        />
+
         <intervention-form
             @interventions__substance_name__in="update_search_query"
             @interventions__route_name__in="update_search_query"
             @interventions__application_name__in="update_search_query"
-            @interventions__form_name_in="update_search_query"
+            @interventions__measurement_type_name__in="update_search_query"
+            @interventions__form_name__in="update_search_query"
         />
-        <output-form/>
+        <output-form
+            @outputs__substance_name__in="update_search_query"
+            @outputs__tissue_name__in="update_search_query"
+            @outputs__measurement_type_name__in="update_search_query"
+            @outputs__method_name__in="update_search_query"
+        />
       </v-flex>
       <v-flex xs6>
         studies: {{ study_count }}<br />
@@ -104,12 +118,27 @@ export default {
       otype: "pkdata",
       otype_single: "pkdata",
       queries: {
+        // studies
         studies__name__in: [],
         studies__reference_name__in: [],
+
+        //subjects
+        subjects_types:[],
+        subjects_measurement_types:[],
+
+        // interventions
         interventions__substance_name__in: [],
         interventions__route_name__in: [],
         interventions__application_name__in: [],
         interventions__form_name__in: [],
+
+        // outputs
+        outputs__substance_name__in:[],
+        outputs__tissue_name__in:[],
+        outputs__measurement_type_name__in:[],
+        outputs__method_name__in:[],
+
+
       }
     }
   }

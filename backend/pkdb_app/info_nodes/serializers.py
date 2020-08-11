@@ -87,9 +87,14 @@ class SubstanceExtraSerializer(serializers.ModelSerializer):
         model = Substance
         fields = ["mass", "charge", "formula", "derived"]
 
+class LabelSerializer(serializers.Serializer):
+    label = serializers.CharField()
+    sid = serializers.CharField()
+    class Meta:
+        fields = ["sid", "label"]
 
 class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
-    choices = serializers.SlugRelatedField("name", many=True, read_only=True)
+    choices = LabelSerializer(many=True, read_only=True)
     units = UnitSerializer(many=True, allow_null=True, required=False)
 
     class Meta:

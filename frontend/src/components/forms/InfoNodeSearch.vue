@@ -6,7 +6,7 @@
       :clear-on-select="false"
       :preserve-search="true"
       :placeholder="'Search for ' + label()"
-      label="name"
+      label="label"
       track-by="name"
       :multiple="true"
       :loading="loading"
@@ -15,13 +15,12 @@
       @search-change=sync_search>
 
     <template slot="tag" slot-scope="{ option, remove }">
-      <v-chip
-          close
-          @click:close="remove(option)"
-          class="chip--select-multi"
-      >
-        {{ option.name }}
-      </v-chip>
+        <span class="multiselect__tag">
+          {{ option.label }}
+          <span  @click="remove(option)">
+            <i class="multiselect__tag-icon"></i>
+          </span>
+        </span>
     </template>
 
     <template slot="clear" slot-scope="props">

@@ -51,6 +51,8 @@ const icons_table = {
     tissues: 'fas fa-map-marker-alt',
     search: 'fas fa-search',
     info: 'fas fa-info-circle',
+    plus: 'fas fa-plus',
+    minus: 'fas fa-minus',
 
 };
 

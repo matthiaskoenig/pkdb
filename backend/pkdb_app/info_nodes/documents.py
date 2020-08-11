@@ -18,6 +18,7 @@ annotation_field = ObjectField(
 
 small_info_node_properties = {
     'sid': string_field('sid'),
+    'label': string_field('label'),
     'name': string_field('name'),
     "description": text_field('description'),
     "annotations": annotation_field,

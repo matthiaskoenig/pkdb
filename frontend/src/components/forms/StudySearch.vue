@@ -1,4 +1,5 @@
 <template>
+
   <multiselect
       v-model="selected_entries"
       :options="entries"
@@ -15,14 +16,14 @@
       @search-change=sync_search>
 
     <template slot="tag" slot-scope="{ option, remove }">
-      <v-chip
-          close
-          @click:close="remove(option)"
-          class="chip--select-multi"
-      >
-        {{ option.name }}
-      </v-chip>
+        <span class="multiselect__tag">
+          {{ option.name }}
+          <span  @click="remove(option)">
+            <i class="multiselect__tag-icon"></i>
+          </span>
+        </span>
     </template>
+
 
     <template slot="clear" slot-scope="props">
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
