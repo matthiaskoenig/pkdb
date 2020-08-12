@@ -749,6 +749,9 @@ class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
 
+class SidLabelSerializer(serializers.Serializer):
+    sid = serializers.CharField()
+    label = serializers.CharField()
 
 def validate_dict(dic):
     if not isinstance(dic, dict):

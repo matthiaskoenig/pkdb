@@ -8,6 +8,7 @@
 
 ## Janek
 - [x] replace url_slug with sid
+- [x] fixed bug in frontend (loading property).
 - [ ] use label for 'name' in info node serializer
 - [ ] Fix 404 reference links;
 - [ ] Update studies serializer to include reference information
