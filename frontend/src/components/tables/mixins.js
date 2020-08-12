@@ -8,6 +8,7 @@ var searchTableMixin = {
             entries: [],
             search: "",
             options: {},
+            loading: false,
             footer_options:{
                 itemsPerPageOptions:[5, 10, 20, 50, 100]
             },
@@ -32,11 +33,8 @@ var searchTableMixin = {
             type: String,
             default: () => "all"
 
-        },
-        loading: {
-            type: Boolean,
-            default: true
-        },
+        }
+
 
 
     },
