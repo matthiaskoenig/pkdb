@@ -39,8 +39,8 @@ class InfoNodeElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     document = InfoNodeDocument
     serializer_class = InfoNodeElasticSerializer
-    document_uid_field = "url_slug__raw"
-    lookup_field = 'url_slug'
+    document_uid_field = "sid__raw"
+    lookup_field = 'sid'
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, SearchFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         "sid",

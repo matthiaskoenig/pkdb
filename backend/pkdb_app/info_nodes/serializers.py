@@ -260,7 +260,7 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
         fields = ["sid", "name", "label", "deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance",  ]
 
     def get_parents(self, obj):
-        return [parent.sid for parent in obj.parents]
+        return [parent["sid"] for parent in obj.parents]
 
     def get_synonyms(self, obj):
-        return [synonym.name for synonym in obj.synonyms]
+        return [synonym["name"] for synonym in obj.synonyms]
