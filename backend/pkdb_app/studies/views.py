@@ -390,10 +390,11 @@ class PKData(object):
 
 
             if self.keep_concising:
-                self.interventions = self.interventions.filter(outputs__in=self.outputs).distinct()
-                self.individuals = self.individuals.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
-                self.groups = self.groups.filter(pk__in=Subquery(self.outputs.values("group_id").distinct()))
-                self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
+
+                self.interventions = Intervention.objects.filter(outputs__in=self.outputs).distinct()
+                self.individuals = Individual.objects.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
+                self.groups = Group.objects.filter(pk__in=Subquery(self.outputs.values("group_id").distinct()))
+                self.studies = Study.objects.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
 
     def intervention_pks(self):
 

@@ -19,7 +19,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
 from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidLabelSerializer
-from ..subjects.models import GroupSet, IndividualSet,
+from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
