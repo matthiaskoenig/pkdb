@@ -20,7 +20,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, StudySmallElasticSerializer, SidNameSerializer)
+    ExSerializer, StudySmallElasticSerializer, SidLabelSerializer)
 from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
@@ -303,11 +303,11 @@ class OutputElasticSerializer(serializers.ModelSerializer):
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
 
-    substance = SidNameSerializer( allow_null=True)
-    measurement_type = SidNameSerializer( allow_null=True)
-    tissue = SidNameSerializer( allow_null=True)
-    method = SidNameSerializer( allow_null=True)
-    choice = SidNameSerializer( allow_null=True)
+    substance = SidLabelSerializer(allow_null=True)
+    measurement_type = SidLabelSerializer(allow_null=True)
+    tissue = SidLabelSerializer(allow_null=True)
+    method = SidLabelSerializer(allow_null=True)
+    choice = SidLabelSerializer(allow_null=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)

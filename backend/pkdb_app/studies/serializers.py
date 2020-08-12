@@ -10,7 +10,7 @@ from rest_framework import serializers
 
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
-from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer, OutputElasticSerializer
+from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
 from pkdb_app.users.permissions import get_study_file_permission
 from .models import Reference, Author, Study, Rating
 from ..comments.models import Description, Comment
@@ -18,16 +18,14 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
     DescriptionElasticSerializer
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
-from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameSerializer, \
-    PkStringSerializer, PkSerializer, NameSerializer
-from ..subjects.models import GroupSet, IndividualSet, IndividualCharacteristica
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidLabelSerializer
+from ..subjects.models import GroupSet, IndividualSet,
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
-    GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer, GroupSerializer, \
-    GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
+    GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from ..users.serializers import UserElasticSerializer
 from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_requried_key, \
-    _validate_not_allowed_key, list_of_pk
+    _validate_not_allowed_key
 
 
 class AuthorSerializer(WrongKeyValidationSerializer):
@@ -491,7 +489,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
     creator = UserElasticSerializer()
     collaborators = UserElasticSerializer(many=True, )
 
-    substances = SidNameSerializer(many=True, )
+    substances = SidLabelSerializer(many=True, )
 
     files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, )
 
