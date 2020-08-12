@@ -19,7 +19,7 @@
             :options="option_parent.measurement_type.choices"
             :close-on-select="false"
             :clear-on-select="false"
-            :preserve-search="true"
+            :preserve-searchpul="true"
             placeholder="Search for Choices"
             label="label"
             track-by="label"

@@ -28,6 +28,23 @@
         />
       </v-flex>
       <v-flex xs6>
+        <v-flex>
+        The following Info Node is currently hovered over in the Search field:<br />
+
+          GIVE ME THE INFORMATION
+
+        </v-flex>
+
+
+      <v-flex>
+        The current search selection gives the following results:<br />
+        Counts
+      </v-flex>
+
+      </v-flex>
+
+
+      <v-flex xs12>
         <!-- Groups -->
         <v-flex ref="studies" xs12 >
           <studies-table
