@@ -31,9 +31,15 @@
             <template v-slot:item.substance="{ item }">
                 <object-chip :object="item.substance"
                              otype="substance"
+                             :search="search"
                 />
             </template>
             <template v-slot:item.application="{ item }">
+              <object-chip :object="item.application"
+                           otype="application"
+                           :search="search"
+              />
+
                 <text-highlight :queries="[search]">{{ item.application }}</text-highlight><br />
                 <text-highlight :queries="[search]">{{ item.time }}</text-highlight>
                     <span v-if="item.time_unit"> [<text-highlight :queries="[search]">{{ item.time_unit }}</text-highlight>]</span><br />
