@@ -18,11 +18,11 @@
 
 
 <script>
-import MeasurementTypeChoiceSearch from "./MeasurementTypeChoiceSearch";
+import MeasurementTypeChoiceSearch from "./MeasurementTypeSearchChoice";
 import {lookupIcon} from "@/icons"
 
 export default {
-  name: "SubjectForm",
+  name: "SubjectSearchForm",
   components: {
     MeasurementTypeChoiceSearch
   },

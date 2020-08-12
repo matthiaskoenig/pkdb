@@ -3,9 +3,8 @@
     <v-layout row wrap>
       <v-flex xs6>
 
-        <study-form
+        <study-search-form
             @studies__name__in="update_search_query"
-            @studies__reference_name__in="update_search_query"
         />
 
         <subjects-form
@@ -84,10 +83,10 @@
 </template>
 
 <script>
-import StudyForm from "./forms/StudyForm";
-import InterventionForm from "./forms/InterventionForm";
-import SubjectsForm from "./forms/SubjectsForm";
-import OutputForm from "./forms/OutputForm";
+import StudySearchForm from "./search/StudySearchForm";
+import InterventionForm from "./search/InterventionSearchForm";
+import SubjectsForm from "./search/SubjectSearchForm";
+import OutputForm from "./search/OutputSearchForm";
 import {searchTableMixin} from "./tables/mixins";
 
 import StudiesTable from './tables/StudiesTable';
@@ -103,7 +102,7 @@ export default {
 
   name: 'Search',
   components: {
-    StudyForm,
+    StudySearchForm,
     InterventionForm,
     SubjectsForm,
     OutputForm,

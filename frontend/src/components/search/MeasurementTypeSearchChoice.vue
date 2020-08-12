@@ -41,7 +41,7 @@ import MeasurementTypeSearchSingle from "./MeasurementTypeSearchSingle"
 import Multiselect from 'vue-multiselect'
 
 export default {
-  name: "InfoNodeSearch",
+  name: "MeasurementTypeSearchChoice",
   components: {
     MeasurementTypeSearchSingle,
     Multiselect},
