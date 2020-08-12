@@ -3,9 +3,9 @@
 - [x] remove search for reference
 - [x] fix urlslug issue
 - [x] Fix the application display bug
-- [ ] documentation of search (info buttons)
-- [ ] Build component for InfoNode
+- [x] Build component for InfoNode
 - [ ] Fix dead buttons in frontend (link to InfoNode component)
+- [ ] documentation of search (info buttons)
 
 ## Janek
 - [x] replace url_slug with sid

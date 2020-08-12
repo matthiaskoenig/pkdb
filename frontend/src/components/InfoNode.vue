@@ -1,20 +1,56 @@
 <template>
 
-  <div v-if="data" id="info-node-detail">
-    <json-button :resource_url="url()" />
-    <!--{{ data }}<br />-->
-    <span class="label">sid</span>: {{ data.sid }}<br />
-    <span class="label">name</span> {{ data.name }}<br />
-    <span class="label">label</span> {{ data.label }}<br />
-    <span class="label">deprecated</span> {{ data.deprecated }}<br />
-    <span class="label">node type</span> {{ data.ntype }}<br />
-    <span class="label">data type</span> {{ data.dtype }}<br />
-    <span class="label">description</span> {{ data.description }}<br />
-    <span class="label">synonyms</span> {{ data.synonyms }}<br />
-    <span class="label">parents</span> {{ data.parents }}<br />
-    <span class="label">annotations</span> {{ data.annotations }}<br />
-    <span class="label">xrefs</span> {{ data.xrefs }}<br />
-  </div>
+  <v-card v-if="exists"
+      class="mx-auto"
+      max-width="1000"
+      outlined
+  >
+    <v-list-item three-line>
+      <v-list-item-content>
+        <div class="overline mb-4"><json-button :resource_url="url()"></json-button> {{ data.ntype.toUpperCase() }} <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span></div>
+        <v-list-item-title class="headline mb-1">{{ data.label }}</v-list-item-title>
+        <v-list-item-subtitle>Parents: {{ data.parents.length>0 ? data.parents.join(', ') : "-" }}</v-list-item-subtitle>
+      </v-list-item-content>
+
+
+    </v-list-item>
+
+    {{ data.description }}<br />
+
+    <span v-for="annotation in data.annotations" :key="annotation.term">
+          <v-chip
+              class="ma-1"
+              color="black"
+              dark
+              pill
+              small
+          >
+            {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
+          </v-chip> <span v-if="annotation.label"><strong>{{annotation.label}}</strong></span> {{annotation.description ? annotation.description: ""}}<br />
+    </span>
+
+    <span class="label">Database links</span><br />
+    <span v-for="xref in data.xrefs" :key="xref.url">
+      <v-chip
+          class="ma-1"
+          color="black"
+          outlined
+          pill
+          small
+          :href="xref.url"
+      >
+      <strong>{{ xref.name }}</strong>|{{ xref.accession}}
+      </v-chip>
+    </span>
+    <br />
+    <span class="label">Synonyms</span><br />
+    <ul>
+      <li v-for="synonym in data.synonyms" :key="synonym">
+        {{ synonym }}
+      </li>
+    </ul>
+  </v-card>
+
 </template>
 
 <script>
@@ -26,6 +62,7 @@ export default {
   data() {
     return {
       data: null,
+      exists: false,
     }
   },
   computed: {},
@@ -39,9 +76,11 @@ export default {
     axios.get(this.url())
         .then(response => {
           this.data = response.data;
+          this.exists = true;
         })
         .catch(err => {
           console.log(err.response.data);
+          this.exists = false;
         })
         .finally(() => this.loading = false);
   },
@@ -50,7 +89,6 @@ export default {
 <style>
   .label {
     font-weight: bold;
-    background-color: yellow;
     padding: 5px;
   }
 </style>
