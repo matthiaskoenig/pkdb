@@ -26,20 +26,13 @@
         slot-scope="{option, search}"
 
      >
-      <v-btn  @mouseover="detail_display = true"
-             @mouseleave="detail_display = false">
-        {{option.label}}
+      <v-btn icon
+             v-on:click.native="mouseover(option)">
+        <v-icon color="white">{{ faIcon('about') }}</v-icon>
       </v-btn>
 
-      <v-overlay
-          :value="detail_display"
-          :absolute="true"
-          max-width="290"
-      >
-        <v-card-text>
-        Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-        </v-card-text>
-      </v-overlay>
+       {{option.label}}
+
 
 
     </template>
@@ -47,7 +40,22 @@
     <template slot="clear" slot-scope="props">
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
     </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+
+    <v-overlay
+        :value="detail_display"
+        :absolute="true"
+        max-width="290"
+    >
+      <v-card-text>
+        Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+      </v-card-text>
+
+    </v-overlay>
+
   </multiselect>
+
+
+
 
 </template>
 
@@ -72,6 +80,7 @@ export default {
       selected_entries: [],
       isUpdating: false,
       isLoading: false,
+      option: {}
     }
   },
   watch:{
@@ -82,6 +91,13 @@ export default {
     }
   },
   methods: {
+    mouseover(option) {
+      this.option = option
+      this.detail_display = true
+    },
+    mouseleave() {
+      this.detail_display = false
+    },
     clearAll () {
       this.selected_entries = []
     },
