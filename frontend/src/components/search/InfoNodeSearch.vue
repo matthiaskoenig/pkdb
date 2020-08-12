@@ -6,7 +6,6 @@
       :clear-on-select="false"
       :preserve-search="true"
       :placeholder="'Search for ' + label()"
-      label="label"
       track-by="sid"
       :multiple="true"
       :loading="loading"
@@ -22,12 +21,34 @@
           </span>
         </span>
     </template>
+    <template
+        slot="option"
+        slot-scope="{option, search}"
+
+     >
+      <v-btn  @mouseover="detail_display = true"
+             @mouseleave="detail_display = false">
+        {{option.label}}
+      </v-btn>
+
+      <v-overlay
+          :value="detail_display"
+          :absolute="true"
+          max-width="290"
+      >
+        <v-card-text>
+        Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+        </v-card-text>
+      </v-overlay>
+
+
+    </template>
 
     <template slot="clear" slot-scope="props">
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
     </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
-
   </multiselect>
+
 </template>
 
 <script>
@@ -44,6 +65,7 @@ export default {
   data () {
 
     return {
+      detail_display: false,
       otype: "info_nodes",
       otype_single: "info_node",
       autoUpdate: true,
@@ -67,8 +89,6 @@ export default {
     {
       this.search = search
     },
-
-
     label(){
       const labels = {
         "substance": "Substances",
@@ -90,5 +110,8 @@ export default {
 </script>
 
 <style scoped>
+ .detail {
+   position:absolute
 
+ }
 </style>

@@ -4,7 +4,7 @@ from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
     Form, Tissue, Application, Method, CrossReference
-from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
+from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidLabelSerializer
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework.fields import empty
 
@@ -248,7 +248,7 @@ class SmallInfoNodeElasticSerializer(serializers.ModelSerializer):
 
 
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
-    parents = serializers.SerializerMethodField()
+    parents = SidLabelSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
     synonyms = serializers.SerializerMethodField()
     substance = SubstanceExtraSerializer(required=False, allow_null=True)

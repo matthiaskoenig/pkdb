@@ -7,11 +7,10 @@
           v-model="drawer"
           absolute
           temporary
-          :width="325"
+          :width="525"
       >
 
-        <v-sheet
-            height="100"
+        <v-sheet height="500"
 
         >
 
