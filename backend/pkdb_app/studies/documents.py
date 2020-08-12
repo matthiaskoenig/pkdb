@@ -38,7 +38,6 @@ def common_setfields(model, attr=None):
         }
     )
 
-
 # ------------------------------------
 # Elastic Reference Document
 # ------------------------------------
@@ -48,19 +47,19 @@ class ReferenceDocument(Document):
     pk = fields.IntegerField(attr='pk')
     sid = string_field(attr='sid')
     pmid = string_field(attr='pmid')
-    study = study_field
+    study = study_field,
     name = string_field("name")
     doi = string_field("doi")
     title = string_field("title")
     abstract = text_field("abstract")
     journal = text_field("journal")
     date = fields.DateField()
-
-    authors = ObjectField(properties={
-        'pk': fields.IntegerField(),
-        'first_name': string_field("first_name"),
-        'last_name': string_field("last_name"),
-    })
+    authors = ObjectField(
+        properties={
+                       'pk': fields.IntegerField(),
+                       'first_name': string_field("first_name"),
+                       'last_name': string_field("last_name"),
+                   })
 
     class Django:
         model = Reference
@@ -108,9 +107,23 @@ class StudyDocument(Document):
     )
     reference = ObjectField(
         properties={
-            'pk': fields.IntegerField(attr='pk'),
-            'sid': string_field(attr='sid'),
-            'name': string_field(attr="name"),
+            "pk": fields.IntegerField(attr='pk'),
+            "sid": string_field(attr='sid'),
+            "pmid": string_field(attr='pmid'),
+            "study": study_field,
+            "name": string_field("name"),
+            "doi": string_field("doi"),
+            "title": string_field("title"),
+            "abstract": text_field("abstract"),
+            "journal": text_field("journal"),
+            "date": fields.DateField(),
+
+            "authors": ObjectField(
+                properties={
+                               'pk': fields.IntegerField(),
+                               'first_name': string_field("first_name"),
+                               'last_name': string_field("last_name"),
+                           })
         }
     )
     reference_date = fields.DateField()

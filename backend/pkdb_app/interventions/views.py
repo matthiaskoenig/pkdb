@@ -60,16 +60,16 @@ class ElasticInterventionViewSet(AccessView):
         'application': 'application.name.raw',
         'measurement_type': 'measurement_type.name.raw',
 
-        'substance_name': {'field': 'substance.name.raw',
+        'substance_sid': {'field': 'substance.sid.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
-        'form_name': {'field': 'form.name.raw',
+        'form_sid': {'field': 'form.sid.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
-        'route_name': {'field': 'route.name.raw',
+        'route_sid': {'field': 'route.sid.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
-        'application_name': {'field': 'application.name.raw',
+        'application_sid': {'field': 'application.sid.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
 
-        'measurement_type_name': {'field': 'measurement_type.name.raw',
+        'measurement_type_sid': {'field': 'measurement_type.sid.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
     }
     ordering_fields = {'name': 'name.raw',

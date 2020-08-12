@@ -69,9 +69,8 @@ def info_node(attr, **kwargs):
         attr=attr,
         properties={
            'sid': string_field('sid'),
-           'name': string_field('name'),
+           'label': string_field('label'),
        },
-
         **kwargs
     )
 
