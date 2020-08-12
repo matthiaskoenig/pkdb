@@ -490,12 +490,19 @@ class PKDataView(APIView):
         print(concise_time)
 
         start_time = time.time()
+        #data = {
+        #    "studies": pkdata._paginated_data(PkSerializer, pkdata.studies, pkdata.studies_query),
+        #    "groups": pkdata._paginated_data(GroupElasticSerializer,pkdata.groups, pkdata.groups_query),
+        #    "individuals": pkdata._paginated_data(IndividualElasticSerializer,pkdata.individuals, pkdata.individuals_query),
+        #    "interventions": pkdata._paginated_data(InterventionElasticSerializer, pkdata.interventions,pkdata.interventions_query),
+        #    "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs, pkdata.outputs_query)
+        #}
         data = {
-            "studies": pkdata._paginated_data(PkSerializer, pkdata.studies, pkdata.studies_query),
-            "groups": pkdata._paginated_data(PkSerializer,pkdata.groups, pkdata.groups_query),
-            "individuals": pkdata._paginated_data(PkSerializer,pkdata.individuals, pkdata.individuals_query),
-            "interventions": pkdata._paginated_data(PkSerializer, pkdata.interventions,pkdata.interventions_query),
-            "outputs": pkdata._paginated_data(PkSerializer, pkdata.outputs, pkdata.outputs_query)
+            "studies": pkdata.studies.values_list("id", flat=True),
+            "groups":  pkdata.groups.values_list("id", flat=True),
+            "individuals":  pkdata.individuals.values_list("id", flat=True),
+            "interventions":  pkdata.interventions.values_list("id", flat=True),
+            "outputs": pkdata.outputs.values_list("id", flat=True),
         }
         rest_time = time.time() - start_time
         print("Pagination time")

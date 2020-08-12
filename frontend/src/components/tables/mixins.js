@@ -7,7 +7,6 @@ var searchTableMixin = {
             count: 0,
             entries: [],
             search: "",
-            loading: true,
             options: {},
             footer_options:{
                 itemsPerPageOptions:[5, 10, 20, 50, 100]
@@ -16,9 +15,13 @@ var searchTableMixin = {
         }
     },
     props: {
+        search_ids: {
+            type: Boolean,
+            default: false
+        },
         ids: {
             type: Array,
-            default: () => []
+            default: () => ["noIdSearch"]
 
         },
         autofocus: {
@@ -28,7 +31,13 @@ var searchTableMixin = {
         ntype: {
             type: String,
             default: () => "all"
-        }
+
+        },
+        loading: {
+            type: Boolean,
+            default: true
+        },
+
 
     },
     mounted() {
@@ -75,7 +84,7 @@ var searchTableMixin = {
                 url = url
                     + '&page=' + this.options.page
                     + '&page_size=' + this.options.itemsPerPage
-                    + '&ordering=' + this.options.sortDesc + this.options.sortBy;
+                    //+ '&ordering=' + this.options.sortDesc + this.options.sortBy;
             }
             if (this.search) {
                 url += '&search_multi_match=' + this.search
@@ -86,7 +95,7 @@ var searchTableMixin = {
             if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
             }
-            if (this.ids.length > 0) {
+            if (this.search_ids) {
                 url += '&ids=' + this.ids.join("__")
             }
             return url

@@ -28,11 +28,21 @@
         />
       </v-flex>
       <v-flex xs6>
-        studies: {{ study_count }}<br />
-        interventions: {{ intervention_count }}<br />
-        groups: {{ group_count }}<br />
-        individuals: {{ individual_count }}<br />
-        outputs: {{ output_count }}<br />
+        <!-- Groups -->
+        <v-flex ref="groups" xs12 >
+          <groups-table  :loading="loading" :search_ids="true" :ids="group_data" :autofocus="false"/>
+        </v-flex>
+
+        <!-- Individuals -->
+        <v-flex  ref="individuals" xs12 >
+          <individuals-table :loading="loading" :search_ids="true" :ids="individual_data" :autofocus="false"/>
+        </v-flex>
+
+        <!-- Interventions -->
+        <v-flex  ref="interventions" xs12 >
+          <interventions-table  :loading="loading" :search_ids="true" :ids="intervention_data" :autofocus="false"/>
+        </v-flex>
+
         <v-progress-circular
             indeterminate
             color="primary"
@@ -52,6 +62,11 @@ import SubjectsForm from "./forms/SubjectsForm";
 import OutputForm from "./forms/OutputForm";
 import {searchTableMixin} from "./tables/mixins";
 
+import IndividualsTable from './tables/IndividualsTable';
+import InterventionsTable from "./tables/InterventionsTable";
+import OutputsTable from "./tables/OutputsTable";
+import GroupsTable from "./tables/GroupsTable";
+
 import axios from 'axios'
 
 export default {
@@ -62,7 +77,11 @@ export default {
     StudyForm,
     InterventionForm,
     SubjectsForm,
-    OutputForm
+    OutputForm,
+    GroupsTable: GroupsTable,
+    IndividualsTable: IndividualsTable,
+    InterventionsTable: InterventionsTable,
+    OutputsTable: OutputsTable,
   },
   computed: {
     url() {
@@ -98,11 +117,11 @@ export default {
       }
       axios.get(this.url, {headers: headers})
           .then(res => {
-            this.study_count = res.data.studies.data.count;
-            this.intervention_count = res.data.interventions.data.count;
-            this.group_count = res.data.groups.data.count;
-            this.individual_count = res.data.individuals.data.count;
-            this.output_count = res.data.outputs.data.count;
+            this.study_data = res.data.studies;
+            this.intervention_data = res.data.interventions;
+            this.group_data = res.data.groups;
+            this.individual_data = res.data.individuals;
+            this.output_data = res.data.outputs;
           })
           .catch(err => {
             console.log(err.response.data);
@@ -115,11 +134,11 @@ export default {
 
   data() {
     return {
-      study_count: 0,
-      intervention_count: 0,
-      group_count: 0,
-      individual_count: 0,
-      output_count: 0,
+      study_data: [],
+      intervention_data: [],
+      group_data: [],
+      individual_data: [],
+      output_data: [],
 
       otype: "pkdata",
       otype_single: "pkdata",
