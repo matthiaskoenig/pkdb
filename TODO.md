@@ -5,6 +5,7 @@
 - [ ] Fix the application display bug
 - [ ] documentation of search (info buttons)
 - [ ] Build component for InfoNode
+- [ ] Fix dead buttons in frontend (link to InfoNode component)
 
 ## Janek
 - [x] replace url_slug with sid
