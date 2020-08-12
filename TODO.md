@@ -1,6 +1,7 @@
 # TODO
 ## Matthias
 - [x] remove search for reference
+- [x] fix urlslug issue
 - [ ] Fix the application display bug
 - [ ] documentation of search (info buttons)
 - [ ] Build component for InfoNode
