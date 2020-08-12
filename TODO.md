@@ -1,8 +1,8 @@
 # TODO
 ## Matthias
 - [x] remove search for reference
-- [ ] documentation of search (info buttons)
 - [ ] Fix the application display bug
+- [ ] documentation of search (info buttons)
 - [ ] Build component for InfoNode
 
 ## Janek
