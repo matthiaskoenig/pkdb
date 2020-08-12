@@ -47,22 +47,22 @@
         <!-- Groups -->
         <v-flex ref="studies" xs12 >
           <studies-table
-          :loading="loading" :search_ids="true" :ids="study_data" :autofocus="false"/>
+          :search_ids="true" :ids="study_data" :autofocus="false"/>
         </v-flex>
 
         <!-- Groups -->
         <v-flex ref="groups" xs12 >
-          <groups-table  :loading="loading" :search_ids="true" :ids="group_data" :autofocus="false"/>
+          <groups-table  :search_ids="true" :ids="group_data" :autofocus="false"/>
         </v-flex>
 
         <!-- Individuals -->
         <v-flex  ref="individuals" xs12 >
-          <individuals-table :loading="loading" :search_ids="true" :ids="individual_data" :autofocus="false"/>
+          <individuals-table :search_ids="true" :ids="individual_data" :autofocus="false"/>
         </v-flex>
 
         <!-- Interventions -->
         <v-flex  ref="interventions" xs12 >
-          <interventions-table  :loading="loading" :search_ids="true" :ids="intervention_data" :autofocus="false"/>
+          <interventions-table  :search_ids="true" :ids="intervention_data" :autofocus="false"/>
         </v-flex>
 
         <!-- Groups -->

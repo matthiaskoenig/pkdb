@@ -6,7 +6,7 @@
 - [ ] Build component for InfoNode
 
 ## Janek
-- [ ] replace url_slug with sid
+- [x] replace url_slug with sid
 - [ ] use label for 'name' in info node serializer
 - [ ] Fix 404 reference links;
 - [ ] Update studies serializer to include reference information
