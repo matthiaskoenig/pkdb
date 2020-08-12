@@ -31,7 +31,6 @@ class InfoNodeDocument(Document):
     name = string_field('name')
     label = string_field('label')
     deprecated = fields.BooleanField()
-    url_slug = string_field('url_slug')
     description = string_field('description')
     annotations = annotation_field
     synonyms = basic_object("synonyms", multi=True)

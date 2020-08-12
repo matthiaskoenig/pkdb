@@ -123,7 +123,7 @@ class InfoNodeListSerializer(serializers.ListSerializer):
         info_nodes_pks = []
         for validated_data_single in validated_data:
             try:
-                instance = InfoNode.objects.get(url_slug=validated_data_single.get("url_slug"))
+                instance = InfoNode.objects.get(sid=validated_data_single.get("sid"))
             except InfoNode.DoesNotExist:
                 instance = None
 
@@ -154,7 +154,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = InfoNode
         list_serializer_class = InfoNodeListSerializer
-        fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description", "synonyms",
+        fields = ["sid", "name", "ntype", "dtype", "parents", "description", "synonyms",
                   "annotations", "measurement_type", "substance", "choice", "deprecated", "label", "xrefs"]
 
     @staticmethod
@@ -257,10 +257,10 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfoNode
-        fields = ["sid", "name", "label", 'url_slug',"deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance",  ]
+        fields = ["sid", "name", "label", "deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance",  ]
 
     def get_parents(self, obj):
-        return [parent.sid for parent in obj.parents]
+        return [parent["sid"] for parent in obj.parents]
 
     def get_synonyms(self, obj):
-        return [synonym.name for synonym in obj.synonyms]
+        return [synonym["name"] for synonym in obj.synonyms]

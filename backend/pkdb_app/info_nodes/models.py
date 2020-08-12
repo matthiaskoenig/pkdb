@@ -58,7 +58,6 @@ class InfoNode(Sidable):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     label = models.CharField(max_length=CHAR_MAX_LENGTH)
     deprecated = models.BooleanField()
-    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     description = models.TextField(blank=True, null=True)
     annotations = models.ManyToManyField(Annotation, "annotations")
     xrefs = models.ManyToManyField(CrossReference, "info_nodes")
