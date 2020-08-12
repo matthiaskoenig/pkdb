@@ -168,7 +168,9 @@ export default {
         // interventions
         interventions__substance_name__in: [],
         interventions__route_name__in: [],
+        interventions__measurement_type_name__in: [],
         interventions__application_name__in: [],
+
         interventions__form_name__in: [],
 
         // outputs
