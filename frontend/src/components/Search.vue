@@ -29,6 +29,12 @@
       </v-flex>
       <v-flex xs6>
         <!-- Groups -->
+        <v-flex ref="studies" xs12 >
+          <studies-table
+          :loading="loading" :search_ids="true" :ids="study_data" :autofocus="false"/>
+        </v-flex>
+
+        <!-- Groups -->
         <v-flex ref="groups" xs12 >
           <groups-table  :loading="loading" :search_ids="true" :ids="group_data" :autofocus="false"/>
         </v-flex>
@@ -41,6 +47,11 @@
         <!-- Interventions -->
         <v-flex  ref="interventions" xs12 >
           <interventions-table  :loading="loading" :search_ids="true" :ids="intervention_data" :autofocus="false"/>
+        </v-flex>
+
+        <!-- Groups -->
+        <v-flex  ref="outputs" xs12 >
+          <outputs-table :search_ids="true" :ids="output_data" :autofocus="false"/>
         </v-flex>
 
         <v-progress-circular
@@ -62,6 +73,7 @@ import SubjectsForm from "./forms/SubjectsForm";
 import OutputForm from "./forms/OutputForm";
 import {searchTableMixin} from "./tables/mixins";
 
+import StudiesTable from './tables/StudiesTable';
 import IndividualsTable from './tables/IndividualsTable';
 import InterventionsTable from "./tables/InterventionsTable";
 import OutputsTable from "./tables/OutputsTable";
@@ -78,10 +90,12 @@ export default {
     InterventionForm,
     SubjectsForm,
     OutputForm,
-    GroupsTable: GroupsTable,
-    IndividualsTable: IndividualsTable,
-    InterventionsTable: InterventionsTable,
-    OutputsTable: OutputsTable,
+
+    StudiesTable,
+    GroupsTable,
+    IndividualsTable,
+    InterventionsTable,
+    OutputsTable,
   },
   computed: {
     url() {
