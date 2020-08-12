@@ -1,7 +1,7 @@
 import axios from 'axios'
 import {lookupIcon} from "@/icons"
 
-var searchTableMixin = {
+let searchTableMixin = {
     data() {
         return {
             count: 0,
