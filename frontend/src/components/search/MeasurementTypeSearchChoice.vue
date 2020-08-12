@@ -8,7 +8,7 @@
     :preserve-search="true"
     placeholder="Search for Measurement Types"
     label="name"
-    track-by="name"
+    track-by="sid"
     :multiple="true"
     :loading="loading"
     :searchable="true"

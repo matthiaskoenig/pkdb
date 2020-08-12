@@ -13,17 +13,17 @@
         />
 
         <intervention-form
-            @interventions__substance_name__in="update_search_query"
-            @interventions__route_name__in="update_search_query"
-            @interventions__application_name__in="update_search_query"
-            @interventions__measurement_type_name__in="update_search_query"
-            @interventions__form_name__in="update_search_query"
+            @interventions__substance_sid__in="update_search_query"
+            @interventions__route_sid__in="update_search_query"
+            @interventions__application_sid__in="update_search_query"
+            @interventions__measurement_type_sid__in="update_search_query"
+            @interventions__form_sid__in="update_search_query"
         />
         <output-form
-            @outputs__substance_name__in="update_search_query"
-            @outputs__tissue_name__in="update_search_query"
-            @outputs__measurement_type_name__in="update_search_query"
-            @outputs__method_name__in="update_search_query"
+            @outputs__substance_sid__in="update_search_query"
+            @outputs__tissue_sid__in="update_search_query"
+            @outputs__measurement_type_sid__in="update_search_query"
+            @outputs__method_sid__in="update_search_query"
         />
       </v-flex>
       <v-flex xs6>
@@ -37,7 +37,17 @@
 
       <v-flex>
         The current search selection gives the following results:<br />
-        Counts
+        Studies: {{study_data.length}}
+        Groups: {{group_data.length}}
+        Individuals: {{individual_data.length}}
+        Interventions: {{intervention_data.length}}
+        Outputs: {{output_data.length}}
+        <v-progress-circular
+            indeterminate
+            color="primary"
+            v-if="loading"
+        >
+        </v-progress-circular>
       </v-flex>
 
       </v-flex>
@@ -70,12 +80,7 @@
           <outputs-table :search_ids="true" :ids="output_data" :autofocus="false"/>
         </v-flex>
 
-        <v-progress-circular
-            indeterminate
-            color="primary"
-            v-if="loading"
-        >
-        </v-progress-circular>
+
       </v-flex>
 
     </v-layout>
@@ -182,18 +187,18 @@ export default {
         subjects_measurement_types:[],
 
         // interventions
-        interventions__substance_name__in: [],
-        interventions__route_name__in: [],
-        interventions__measurement_type_name__in: [],
-        interventions__application_name__in: [],
+        interventions__substance_sid__in: [],
+        interventions__route_sid__in: [],
+        interventions__measurement_type_sid__in: [],
+        interventions__application_sid__in: [],
 
-        interventions__form_name__in: [],
+        interventions__form_sid__in: [],
 
         // outputs
-        outputs__substance_name__in:[],
-        outputs__tissue_name__in:[],
-        outputs__measurement_type_name__in:[],
-        outputs__method_name__in:[],
+        outputs__substance_sid__in:[],
+        outputs__tissue_sid__in:[],
+        outputs__measurement_type_sid__in:[],
+        outputs__method_sid__in:[],
       },
       subject_queries: []
     }

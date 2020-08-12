@@ -7,7 +7,7 @@
       :preserve-search="true"
       :placeholder="'Search for ' + label()"
       label="label"
-      track-by="name"
+      track-by="sid"
       :multiple="true"
       :loading="loading"
       :searchable="true"
@@ -55,7 +55,7 @@ export default {
   watch:{
     selected_entries() {
       var emit_object = {}
-      emit_object[this.$props.ntype + "_name__in"] = this.selected_entries.map(x => x.name)
+      emit_object[this.$props.ntype + "_sid__in"] = this.selected_entries.map(x => x.sid)
       this.$emit('selected_entries',emit_object)
     }
   },

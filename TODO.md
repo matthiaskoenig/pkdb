@@ -10,7 +10,8 @@
 - [x] fixed bug in frontend (loading property).
 - [x] use label for 'name' in info node serializer
 - [x] Fix 404 reference links;
-- [ ] Update studies serializer to include reference information
-- [ ] Search frontend: display information count (high level overview of results)
+- [x] Update studies serializer to include reference information
+- [x] Search frontend: display information count (high level overview of results)
 - [ ] Show study & info node information on search hover
-- [ ] fix the group & individual checkbox behavior (concise view)
+- [x] fix the group & individual checkbox behavior (concise view)
+- [x] fix mistake on pkdata calucalation related to 0 outputs.

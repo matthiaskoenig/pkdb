@@ -22,7 +22,7 @@
             :preserve-searchpul="true"
             placeholder="Search for Choices"
             label="label"
-            track-by="label"
+            track-by="sid"
             :multiple="true"
             :searchable="true"
             tagPosition="bottom"

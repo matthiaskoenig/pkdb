@@ -371,8 +371,8 @@ class PKData(object):
 
 
         start_time = time.time()
-
-        if outputs.count() < self.outputs.count():
+        outputs_count = outputs.count()
+        if outputs_count < self.outputs.count():
             self.keep_concising = True
             self.outputs = outputs
 
@@ -388,13 +388,13 @@ class PKData(object):
 
             self._update_outputs()
 
+            self.interventions = Intervention.objects.filter(outputs__in=self.outputs).distinct()
+            self.individuals = Individual.objects.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
+            group_ids1 = Subquery(self.outputs.values("group_id"))
+            group_ids2 = Subquery(self.individuals.values("group_id"))
+            self.groups = Group.objects.filter(Q(pk__in=group_ids1) | Q(pk__in=group_ids2))
+            self.studies = Study.objects.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
 
-            if self.keep_concising:
-
-                self.interventions = Intervention.objects.filter(outputs__in=self.outputs).distinct()
-                self.individuals = Individual.objects.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
-                self.groups = Group.objects.filter(pk__in=Subquery(self.outputs.values("group_id").distinct()))
-                self.studies = Study.objects.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
 
     def intervention_pks(self):
 
