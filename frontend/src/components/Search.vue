@@ -1,8 +1,26 @@
 <template>
   <div id="Search">
     <v-layout row wrap>
-      <v-flex xs6>
 
+
+      <v-navigation-drawer
+          v-model="drawer"
+          absolute
+          temporary
+          :width="325"
+      >
+
+        <v-sheet
+            height="100"
+
+        >
+
+
+
+
+        </v-sheet>
+        <div
+            class="mousescroll">
         <study-search-form
             @studies__name__in="update_search_query"
         />
@@ -25,8 +43,9 @@
             @outputs__measurement_type_sid__in="update_search_query"
             @outputs__method_sid__in="update_search_query"
         />
-      </v-flex>
-      <v-flex xs6>
+          </div>
+
+      <v-flex xs12>
         <v-flex>
         The following Info Node is currently hovered over in the Search field:<br />
 
@@ -52,8 +71,17 @@
 
       </v-flex>
 
+      </v-navigation-drawer>
+
 
       <v-flex xs12>
+        <v-btn
+            color="pink"
+            dark
+            @click.stop="drawer = !drawer"
+        >
+          Search
+        </v-btn>
         <!-- Groups -->
         <v-flex ref="studies" xs12 >
           <studies-table
@@ -169,6 +197,7 @@ export default {
 
   data() {
     return {
+      drawer: true,
       study_data: [],
       intervention_data: [],
       group_data: [],
@@ -209,4 +238,11 @@ export default {
 </script>
 
 <style>
+.mousescroll {
+  overflow-y: scroll;
+  height:100%;
+}
+.mousescroll:hover {
+  overflow-y: scroll;
+}
 </style>

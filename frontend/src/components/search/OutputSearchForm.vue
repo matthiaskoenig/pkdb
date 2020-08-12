@@ -1,11 +1,13 @@
 <template>
-  <v-form>
-    <label>Outputs</label>
-    <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
-    <info-node-search ntype="tissue" @selected_entries="emit_selected_entries"/>
-    <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
-    <info-node-search ntype="method" @selected_entries="emit_selected_entries"/>
-  </v-form>
+  <v-card>
+    <v-form>
+      <v-card-title>Outputs</v-card-title>
+      <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
+      <info-node-search ntype="tissue" @selected_entries="emit_selected_entries"/>
+      <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
+      <info-node-search ntype="method" @selected_entries="emit_selected_entries"/>
+    </v-form>
+  </v-card>
 </template>
 
 <script>

@@ -1,19 +1,20 @@
 <template>
+  <v-card>
   <v-form>
-    <label>Subjects</label>
+    <v-card-title>Subjects</v-card-title>
         <v-container fluid>
           <v-row>
-            <v-col cols="6">
+            <v-col cols="12">
               <v-switch color="#41b883" v-model="individuals"  label="Individuals"  hide-details></v-switch>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="12">
               <v-switch  color="#41b883" v-model="groups" label="Groups" hide-details></v-switch>
             </v-col>
           </v-row>
-
         </v-container>
         <measurement-type-choice-search ntype="measurement_type" @selected_entries="emit_search_query"/>
   </v-form>
+  </v-card>
 </template>
 
 

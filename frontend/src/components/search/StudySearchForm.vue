@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <v-card>
     <v-form>
-      <label>Studies</label>
-      <study-search @selected_entries="emit_selected_entries"/>
-
+      <v-card-title>Studies</v-card-title>
+        <study-search @selected_entries="emit_selected_entries"/>
     </v-form>
-  </div>
+  </v-card>
 </template>
 
 
