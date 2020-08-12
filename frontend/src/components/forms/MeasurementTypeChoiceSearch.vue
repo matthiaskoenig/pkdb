@@ -52,10 +52,8 @@ export default {
       otype: "info_nodes",
       otype_single: "info_node",
       autoUpdate: true,
-
       selected_entries: [],
       child_choices : {},
-      query_dict: {},
 
       search:""
     }
@@ -74,14 +72,14 @@ export default {
       for (var selected of this.selected_entries) {
         if (selected.sid in child_choices){
           if( child_choices[selected.sid].length > 0){
-            query_dict.push({"choices_sid__in":child_choices[selected.sid]})
+            query_dict.push({"choice_sid__in":child_choices[selected.sid]})
           }
           else{
-            query_dict.push({"measurement_type__sid":selected.sid})
+            query_dict.push({"measurement_type_sid":[selected.sid]})
           }
         }
         else {
-          query_dict.push({"measurement_type__sid":selected.sid})
+          query_dict.push({"measurement_type_sid":[selected.sid]})
         }
       }
       return query_dict

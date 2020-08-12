@@ -23,7 +23,24 @@ from pkdb_app.subjects.serializers import (
 )
 from pkdb_app.users.permissions import StudyPermission
 
-
+common_subject_fields = {
+    'study': 'study.raw',
+    'name': 'name.raw',
+    'choice_sid': {
+        'field': 'characteristica_all_normed.choice.sid.raw',
+        'lookups': [
+            LOOKUP_QUERY_IN,
+            LOOKUP_QUERY_EXCLUDE,
+        ],
+    },
+    'measurement_type_sid': {
+        'field': 'characteristica_all_normed.measurement_type.sid.raw',
+        'lookups': [
+            LOOKUP_QUERY_IN,
+            LOOKUP_QUERY_EXCLUDE,
+        ],
+        },
+}
 class GroupViewSet(AccessView):
     document = GroupDocument
     serializer_class = GroupElasticSerializer
@@ -51,10 +68,8 @@ class GroupViewSet(AccessView):
     filter_fields = {
         'id': 'id',
         'pk': 'pk',
-        'name': 'name.raw',
         'parent': 'group.name.raw',
-        'study': 'study.raw',
-        'ctype': 'ctype.raw'
+        **common_subject_fields
 
     }
 
@@ -94,19 +109,68 @@ class IndividualViewSet(AccessView):
         'id': 'id',
         'name': 'name.raw',
         'group_name': 'group.name.raw',
-        'study': 'study.raw',
+        **common_subject_fields
 
     }
 
     # Define ordering fields
     ordering_fields = {
         'id': 'id',
-        'study': 'study.raw',
         'group': 'group.raw',
-        'name': 'name.raw',
     }
 
 
+common_filter_fields = {
+    'study_sid': {'field': 'study_sid.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+
+                      ],
+                      },
+    'study_name': {'field': 'study_name.raw',
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
+
+                       ],
+                       },
+    'characteristica_pk': {
+            'field': 'characteristica_pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+    },
+
+    'count': 'count',
+    'measurement_type': 'measurement_type.raw',
+    'measurement_type_sid': {
+     'field': 'measurement_type.sid.raw',
+     'lookups': [
+         LOOKUP_QUERY_IN,
+         LOOKUP_QUERY_EXCLUDE,
+     ],
+    },
+    'choice': 'choice.raw',
+    'choice_sid': {
+     'field': 'choice.sid.raw',
+     'lookups': [
+         LOOKUP_QUERY_IN,
+         LOOKUP_QUERY_EXCLUDE,
+     ],
+    },
+    'substance': 'substance.raw',
+    'value': 'value',
+    'mean': 'mean',
+    'median': 'median',
+    'min': 'min',
+    'max': 'max',
+    'se': 'se',
+    'sd': 'sd',
+    'cv': 'cv',
+    'unit': 'unit.raw',
+                         }
 class GroupCharacteristicaViewSet(AccessView):
     document = GroupCharacteristicaDocument
     serializer_class = GroupCharacteristicaSerializer
@@ -124,20 +188,7 @@ class GroupCharacteristicaViewSet(AccessView):
 
     filter_fields = {
 
-        'study_sid': {'field': 'study_sid.raw',
-                      'lookups': [
-                          LOOKUP_QUERY_IN,
-                          LOOKUP_QUERY_EXCLUDE,
 
-                      ],
-                      },
-        'study_name': {'field': 'study_name.raw',
-                       'lookups': [
-                           LOOKUP_QUERY_IN,
-                           LOOKUP_QUERY_EXCLUDE,
-
-                       ],
-                       },
         'group_name': {'field': 'group_name',
                        'lookups': [
                            LOOKUP_QUERY_IN,
@@ -160,28 +211,11 @@ class GroupCharacteristicaViewSet(AccessView):
 
                             ],
                             },
-        'characteristica_pk': {'field': 'characteristica_pk',
-                               'lookups': [
-                                   LOOKUP_QUERY_IN,
-                                   LOOKUP_QUERY_EXCLUDE,
-
-                               ],
-                               },
 
         'group_count': 'group_count',
-        'count': 'count',
-        'measurement_type': 'measurement_type.raw',
-        'choice': 'choice.raw',
-        'substance': 'substance.raw',
-        'value': 'value',
-        'mean': 'mean',
-        'median': 'median',
-        'min': 'min',
-        'max': 'max',
-        'se': 'se',
-        'sd': 'sd',
-        'cv': 'cv',
-        'unit': 'unit.raw',
+
+        **common_filter_fields
+
     }
     ordering_fields = {
         'choice': 'choice.raw',
@@ -205,21 +239,7 @@ class IndividualCharacteristicaViewSet(AccessView):
     }
 
     filter_fields = {
-        'study_sid': {
-            'field': 'study_sid.raw',
-            'lookups': [
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_EXCLUDE,
-            ],
-        },
-        'study_name': {
-            'field': 'study_name.raw',
-            'lookups': [
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_EXCLUDE,
 
-            ],
-        },
         'individual_name': {
             'field': 'individual_name',
             'lookups': [
@@ -241,26 +261,8 @@ class IndividualCharacteristicaViewSet(AccessView):
                 LOOKUP_QUERY_EXCLUDE,
             ],
         },
-        'characteristica_pk': {
-            'field': 'characteristica_pk',
-            'lookups': [
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_EXCLUDE,
-            ],
-        },
-        'count': 'count',
-        'measurement_type': 'measurement_type.raw',
-        'choice': 'choice.raw',
-        'substance': 'substance.raw',
-        'value': 'value',
-        'mean': 'mean',
-        'median': 'median',
-        'min': 'min',
-        'max': 'max',
-        'se': 'se',
-        'sd': 'sd',
-        'cv': 'cv',
-        'unit': 'unit.raw',
+        **common_filter_fields
+
     }
     ordering_fields = {
         'choice': 'choice.raw',

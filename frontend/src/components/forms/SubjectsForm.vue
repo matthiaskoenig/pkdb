@@ -26,34 +26,57 @@ export default {
   components: {
     MeasurementTypeChoiceSearch
   },
+  watch: {
+    individuals: {
+      handler() {
+        this.emit_search_query(this.all_searches)
+      }
+    },
+    groups: {
+      handler() {
+        this.emit_search_query(this.all_searches)
+      }
+    }
+  },
   methods: {
     faIcon: function (key) {
       return lookupIcon(key)
     },
     emit_search_query(all_searches){
-      var query_dict = {}
-
-      for (var [this_key, value] of all_searches) {
-        if(this.individuals){
-          query_dict["individuals__"+this_key] = value
+      var subject_queries = []
+      var this_object = {}
+      var new_key = ""
+      this.all_searches = all_searches
+      if (! this.individuals){
+          subject_queries.push({"individuals__ids":["0"]})
         }
-        if(this.groups){
-          query_dict["groups__"+this_key] = value
+      if (! this.groups){
+        subject_queries.push({"groups__ids":["0"]})
       }
-    }
-      console.log(query_dict)
-      this.$emit('subject_queries',query_dict)
+      for (const this_query of all_searches) {
+        for (const [key, value] of Object.entries(this_query)){
+         if(this.individuals){
+           this_object = {}
+           new_key = "individuals__" + key
+           this_object[new_key] = value
+           subject_queries.push(this_object)}
+          if(this.groups){
+            this_object = {}
+            new_key = "groups__" + key
+            this_object[new_key] = value
+            subject_queries.push(this_object)
+          }
+        }
+      }
 
-
-
-
-
+      this.$emit('subject_queries',subject_queries)
     }
   },
   data() {
     return {
       individuals: true,
       groups: true,
+      all_searches : []
     }
   }
 

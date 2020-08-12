@@ -10,9 +10,7 @@
 
         <subjects-form
             @subjects__type="update_search_query"
-            @subject_queries="update_search_query"
-
-
+            @subject_queries="update_subject_query"
         />
 
         <intervention-form
@@ -75,10 +73,18 @@ export default {
           url = url + "&" + key + "=" + value.join("__")
         }
       }
+      for (const query of this.subject_queries){
+        for (const [key, value] of Object.entries(query)) {
+          url = url + "&" + key + "=" + value.join("__")
+        }
+      }
       return url
     },
   },
   methods: {
+    update_subject_query(emitted_object){
+      this.subject_queries = emitted_object;
+    },
     update_search_query(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {
         this.queries[key] = value
@@ -137,9 +143,8 @@ export default {
         outputs__tissue_name__in:[],
         outputs__measurement_type_name__in:[],
         outputs__method_name__in:[],
-
-
-      }
+      },
+      subject_queries: []
     }
   }
 
