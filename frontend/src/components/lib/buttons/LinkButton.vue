@@ -17,7 +17,7 @@
     import {lookupIcon} from "@/icons"
 
     export default {
-        name: "DetailButton",
+        name: "LinkButton",
         props: {
             to: {
                 type: String,

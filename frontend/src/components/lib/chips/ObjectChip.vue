@@ -55,7 +55,13 @@
         },
         computed: {
             name: function (){
+              if ('name' in this.object){
                 return this.object.name;
+              } else {
+                return this.object.label;
+              }
+
+
             },
             color: function () {
                 if (this.otype.startsWith('group')) {
