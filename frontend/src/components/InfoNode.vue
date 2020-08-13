@@ -17,17 +17,17 @@
 
     {{ data.description }}<br />
 
-    <span v-for="annotation in data.annotations" :key="annotation.term">
-          <v-chip
-              class="ma-1"
-              color="black"
-              dark
-              pill
-              small
-          >
-            {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
-          </v-chip> <span v-if="annotation.label"><strong>{{annotation.label}}</strong></span> {{annotation.description ? annotation.description: ""}}<br />
-    </span>
+    <v-chip v-for="annotation in data.annotations" :key="annotation.term">
+        class="ma-1"
+        color="black"
+        dark
+        pill
+        small
+    >
+      {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
+    </v-chip>
+    <span v-if="annotation.label"><strong>{{annotation.label}}</strong></span> {{annotation.description ? annotation.description: ""}}<br />
+
 
     <span class="label">Database links</span><br />
     <span v-for="xref in data.xrefs" :key="xref.url">

@@ -10,7 +10,7 @@ let searchTableMixin = {
             options: {},
             loading: false,
             footer_options:{
-                itemsPerPageOptions:[5, 10, 20, 50, 100]
+                itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
             table_class: "elevation-1",
         }
@@ -34,9 +34,6 @@ let searchTableMixin = {
             default: () => "all"
 
         }
-
-
-
     },
     mounted() {
         this.getData()
