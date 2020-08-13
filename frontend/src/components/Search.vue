@@ -60,6 +60,7 @@
               <study-search-form
                   :count="study_data.length"
                   @studies__name__in="update_search_query"
+                  @studies__creator__in="update_search_query"
               />
             </v-row>
 
@@ -100,10 +101,10 @@
                   v-model="display_detail"
                   v-if="show_type==='info_node'"
                   :data="detail_info" />
-              <search-help
-                v-model="display_detail"
-                v-if="show_type==='help'"
-              :data="detail_info" />
+
+              <search-help v-if="show_type==='help'" />
+
+              <study-overview  v-if="show_type==='study'" :study="detail_info"/>
         </v-col>
         </v-row>
 
@@ -177,12 +178,14 @@ import axios from 'axios'
 import InfoNode from "./InfoNode";
 import InfoNodeDetail from "./detail/InfoNodeDetail";
 import SearchHelp from "./search/SearchHelp";
+import StudyOverview from "./detail/StudyOverview";
 
 export default {
   mixins: [searchTableMixin],
 
   name: 'Search',
   components: {
+    StudyOverview,
     SearchHelp,
     InfoNodeDetail,
     InfoNode,
@@ -276,7 +279,7 @@ export default {
       queries: {
         // studies
         studies__name__in: [],
-        studies__reference_name__in: [],
+        studies__creator__in: [],
 
         //subjects
         subjects_types:[],

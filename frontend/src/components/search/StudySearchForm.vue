@@ -9,8 +9,9 @@
           Studies
         </v-badge>
       </v-card-title>
-
         <study-search @selected_entries="emit_selected_entries"/>
+        <user-search @selected_entries="emit_selected_entries"/>
+
     </v-form>
   </v-card>
 </template>
@@ -18,6 +19,7 @@
 
 <script>
   import StudySearch from "./StudySearch";
+  import UserSearch from "./UserSearch";
 
   export default {
     props:{count:0},
@@ -25,6 +27,7 @@
     components: {
 
       StudySearch,
+      UserSearch,
     },
     methods: {
       emit_selected_entries(emitted_object) {

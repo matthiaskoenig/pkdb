@@ -69,7 +69,17 @@ export default {
     }
   },
   methods: {
-    clearAll () {
+    mouseover(option) {
+      this.$store.state.show_type = "study"
+      this.$store.state.detail_info = option
+      this.$store.state.detail_display = true
+    },
+    mouseleave() {
+      this.$store.state.detail_display = false
+      this.$store.state.detail_info = {}
+    },
+
+      clearAll () {
       this.selected_entries = []
     },
 

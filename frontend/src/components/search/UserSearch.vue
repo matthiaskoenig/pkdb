@@ -5,39 +5,40 @@ not yet implemented.
 
   <multiselect
       v-model="selected_entries"
-      :options="entries"
+      :options="users"
       :close-on-select="false"
       :clear-on-select="false"
       :preserve-search="true"
-      placeholder="Search for Studies"
-      label="name"
-      track-by="name"
+      placeholder="Search for Creator"
+      track-by="username"
       :multiple="true"
-      :loading="loading"
-      :searchable="true"
-      :internal-search="false"
-      @search-change=sync_search>
+      :custom-label="customLabel"
+      :searchable="true">
 
     <template slot="tag" slot-scope="{ option, remove }">
         <span class="multiselect__tag">
-          {{ option.name }}
+           <user-avatar :user="option"
+           />
           <span  @click="remove(option)">
             <i class="multiselect__tag-icon"></i>
           </span>
         </span>
     </template>
-
-
-    <template slot="clear" slot-scope="props">
-      <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
-    </template><span slot="noResult">No results found.</span>
+    <template
+        slot="option"
+        slot-scope="props"
+    >
+           <user-avatar :user="props.option"
+           ></user-avatar>
+      {{props.option.first_name}}  {{props.option.last_name}}
+    </template>
+   <span slot="noResult">No results found.</span>
 
   </multiselect>
 </template>
 
 <script>
 import Multiselect from 'vue-multiselect'
-import {searchTableMixin} from "../tables/mixins";
 
 export default {
   name: "CreatorSearch",
@@ -49,8 +50,16 @@ export default {
     return {
       users : [
         {"username":"mkoenig","first_name":"Matthias","last_name":"König"},
+        {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski",},
         {"username":"dimitra","first_name":"Dimitra","last_name":"Eleftheriadou"},
-        {"username": "janekg","first_name": "Jan","last_name": "Grzegorzewski"},
+        {"username": "kgreen","first_name": "Kathleen","last_name": "Green",},
+        {"username": "jbrandhorst","first_name": "Janosch",  "last_name": "Brandhorst",},
+        {"username": "FlorBar","first_name": "Florian", "last_name": "Bartsch",},
+        {"username": "deepa", "first_name": "Deepa", "last_name": "Maheshvare",},
+        {"username": "yduport", "first_name": "Yannick","last_name": "Duport",},
+        {"username": "adriankl", "first_name": "Adrian", "last_name": "Koeller",},
+        {"username": "dannythekey", "first_name": "Danny", "last_name": "Ke",},
+        {"username": "SaraD-hub",  "first_name": "Sara","last_name": "De Angelis",},
 
       ],
       selected_entries: [],
@@ -58,19 +67,16 @@ export default {
   },
   watch:{
     selected_entries() {
-      this.$emit('selected_entries',{"studies__creator__in":this.selected_entries.map(x => x.name)})
+      this.$emit('selected_entries',{"studies__creator__in":this.selected_entries.map(x => x.username)})
     }
   },
   methods: {
-    clearAll () {
+    clearAll() {
       this.selected_entries = []
     },
-
-    sync_search(search)
-    {
-      this.search = search
+    customLabel({first_name, last_name}) {
+      return `${first_name} – ${last_name}`
     }
   }
-
 }
 </script>
