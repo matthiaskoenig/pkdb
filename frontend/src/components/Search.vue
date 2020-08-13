@@ -5,19 +5,32 @@
         v-model="drawer"
         temporary
         absolute
-        style=" width: 100%"
+        width="100%"
     >
-      <v-container>
+      <v-container >
 
           <v-row
-              :height="250"
           >
+            <v-sheet height="50">
+
+            </v-sheet>
           </v-row>
 
-        <v-col>
-          <v-btn v-on:click="drawer=false">
-
+        <v-row >
+          <v-btn
+              color="pink"
+              dark
+              @click.stop="drawer = !drawer"
+          >
+            Results
           </v-btn>
+
+        </v-row>
+
+
+        <v-row>
+
+        <v-col cols="4">
             <v-row>
 
               <study-search-form
@@ -51,12 +64,15 @@
               />
             </v-row>
 
-        </v-col>
-        <v-col>
+        </v-col
+            >
+        <v-col cols="8">
               <info-node-detail
                   v-model="display_detail"
                   :data="detail_info" />
         </v-col>
+        </v-row>
+
       </v-container>
 
 
