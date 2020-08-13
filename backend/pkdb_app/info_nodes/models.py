@@ -22,6 +22,7 @@ class Annotation(models.Model):
     collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     description = models.TextField(blank=True, null=True)
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    url = models.URLField(max_length=CHAR_MAX_LENGTH_LONG, null=False)
 
 # TODO: add cross reference
 class CrossReference(models.Model):

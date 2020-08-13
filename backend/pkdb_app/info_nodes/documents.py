@@ -12,7 +12,9 @@ annotation_field = ObjectField(
         "relation": string_field("relation"),
         "collection": string_field("collection"),
         "description": text_field("description"),
-        "label": string_field("label")
+        "label": string_field("label"),
+        "url": string_field("url")
+
     }
 )
 

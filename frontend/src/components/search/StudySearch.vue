@@ -24,6 +24,18 @@
         </span>
     </template>
 
+    <template
+        slot="option"
+        slot-scope="props"
+    >
+      <v-btn icon
+             v-on:mouseover.native="mouseover(props.option)"
+             v-on:mouseleave.native="mouseleave()">
+
+        <v-icon color="white">{{ faIcon('about') }}</v-icon>
+      </v-btn>
+      {{props.option.name}}
+    </template>
 
     <template slot="clear" slot-scope="props">
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
