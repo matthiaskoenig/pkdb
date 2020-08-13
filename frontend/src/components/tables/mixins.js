@@ -9,7 +9,7 @@ let searchTableMixin = {
             search: "",
             options: {},
             loading: false,
-            exclude_abstract:true,
+            exclude_abstract: false,
             footer_options:{
                 itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
