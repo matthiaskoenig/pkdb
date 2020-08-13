@@ -55,37 +55,34 @@
 </template>
 
 <script>
-import axios from 'axios'
-
+import {searchTableMixin, UrlMixin} from "../tables/mixins";
+import TableToolbar from '../tables/TableToolbar';
+import NoData from '../tables/NoData';
 export default {
-  name: 'InfoNode',
-  components: {},
+  name: "InfoNodeTable",
+  components: {
+    NoData,
+    TableToolbar,
+  },
+  mixins: [searchTableMixin, UrlMixin],
   data() {
     return {
-
-      data: null,
-      ntype:"all",
-      exists: false,
+      otype: "info_nodes",
+      ntypes: ["all", "info_node", "choice", "measurement_type", "application", "tissue", "method", "route", "form", "substance"],
+      otype_single: "info_nodes",
+      headers: [
+        {text: '', value: 'buttons', sortable: false},
+        {text: 'Label (Name)', value: 'label'},
+        {text: 'Type', value: 'type'},
+        {text: 'Description', value: 'description'},
+        {text: 'Synonyms', value: 'synonyms'},
+        {text: 'Parents', value: 'parents'},
+        {text: 'Extra', value: "extras"},
+        {text: 'Annotations', value: 'annotations', sortable: false},
+        {text: 'Cross references', value: 'xrefs', sortable: false},
+      ]
     }
-  },
-  computed: {},
-  methods: {
-    url() {
-      return `${this.$store.state.endpoints.api}info_nodes/?format=json`;
-    },
-  },
-  mounted() {
-    axios.get(this.url())
-        .then(response => {
-          this.data = response.data;
-          this.exists = true;
-        })
-        .catch(err => {
-          console.log(err.response.data);
-          this.exists = false;
-        })
-        .finally(() => this.loading = false);
-  },
+  }
 }
 </script>
 <style>
