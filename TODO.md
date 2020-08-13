@@ -4,6 +4,7 @@
 - [x] fix urlslug issue
 - [x] Fix the application display bug
 - [x] Build component for InfoNode
+- [x] Update info node information
 - [ ] Fix missing url for annotations
 - [ ] Fix dead buttons in frontend (link to InfoNode component)
 
