@@ -244,7 +244,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
                  'lookups': [LOOKUP_QUERY_IN, ], },
         'creator': {'field': 'creator.username.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
-        'curator': {'field': 'curator.username.raw',
+        'curators': {'field': 'curators.username.raw',
                     'lookups': [LOOKUP_QUERY_IN, ], },
         'collaborator': 'collaborators.name.raw',
         'licence': 'licence.raw',

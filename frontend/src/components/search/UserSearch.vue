@@ -9,7 +9,7 @@ not yet implemented.
       :close-on-select="false"
       :clear-on-select="false"
       :preserve-search="true"
-      placeholder="Search for Creator"
+      :placeholder="placeholder"
       track-by="username"
       :multiple="true"
       :custom-label="customLabel"
@@ -65,9 +65,26 @@ export default {
       selected_entries: [],
     }
   },
+  props:{
+    on: {
+      type: String,
+      required:true
+    }},
+
+  computed: {
+    placeholder: function () {
+      return  "Search for " + this.on.charAt(0).toUpperCase() + this.on.slice(1)
+    },
+    query_key : function () {
+      return   "studies__" + this.on+"__in"
+    }
+  },
+
   watch:{
     selected_entries() {
-      this.$emit('selected_entries',{"studies__creator__in":this.selected_entries.map(x => x.username)})
+      var query_dict = {}
+      query_dict[this.query_key] = this.selected_entries.map(x => x.username)
+      this.$emit('selected_entries',query_dict)
     }
   },
   methods: {

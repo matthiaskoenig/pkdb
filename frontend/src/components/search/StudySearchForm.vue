@@ -10,7 +10,8 @@
         </v-badge>
       </v-card-title>
         <study-search @selected_entries="emit_selected_entries"/>
-        <user-search @selected_entries="emit_selected_entries"/>
+        <user-search  on="creator" @selected_entries="emit_selected_entries"/>
+        <user-search  on="curators" @selected_entries="emit_selected_entries"/>
 
     </v-form>
   </v-card>

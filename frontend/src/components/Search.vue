@@ -61,6 +61,8 @@
                   :count="study_data.length"
                   @studies__name__in="update_search_query"
                   @studies__creator__in="update_search_query"
+                  @studies__curators__in="update_search_query"
+
               />
             </v-row>
 
@@ -280,6 +282,7 @@ export default {
         // studies
         studies__name__in: [],
         studies__creator__in: [],
+        studies__curators__in: [],
 
         //subjects
         subjects_types:[],
