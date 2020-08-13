@@ -1,11 +1,18 @@
 <template>
     <v-chip color="black"
             :disabled="!count"
-            label
+
             outlined
+            small
             :to="to"
     >
-        <v-icon color="black" :title="'Number of ' + name + 's'">{{ faIcon }}</v-icon>
+      <v-avatar left>
+        <v-icon
+                small
+                :title="'Number of ' + name + 's'">
+          {{ faIcon }}
+        </v-icon>
+      </v-avatar>
         {{ count }}
     </v-chip>
 </template>
