@@ -7,7 +7,8 @@
   >
     <v-list-item three-line>
       <v-list-item-content>
-        <div class="overline mb-4"><json-button :resource_url="url()"></json-button> {{ data.ntype.toUpperCase() }} <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span></div>
+        <div class="overline mb-4">
+          <json-button :resource_url="url()"></json-button> {{ data.ntype.toUpperCase() }} <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span></div>
         <v-list-item-title class="headline mb-1">{{ data.label }}</v-list-item-title>
         <v-list-item-subtitle>Parents: {{ data.parents.length>0 ? data.parents.join(', ') : "-" }}</v-list-item-subtitle>
       </v-list-item-content>
@@ -61,15 +62,16 @@ export default {
   components: {},
   data() {
     return {
+
       data: null,
+      ntype:"all",
       exists: false,
     }
   },
   computed: {},
   methods: {
     url() {
-      let entry_id = (this.$route.path).split('/').slice(-1)[0];
-      return `${this.$store.state.endpoints.api}info_nodes/${entry_id}/?format=json`;
+      return `${this.$store.state.endpoints.api}info_nodes/?format=json`;
     },
   },
   mounted() {

@@ -5,53 +5,58 @@
         v-model="drawer"
         temporary
         absolute
-        :width="1030"
+        style=" width: 100%"
     >
-      <v-container  class="mousescroll">
+      <v-container>
+
           <v-row
               :height="250"
           >
-          test
           </v-row>
-          <v-row>
-          <v-col>
 
-          <study-search-form
-              @studies__name__in="update_search_query"
-          />
-          </v-col>
-
-          <v-col>
-
-          <subjects-form
-              @subjects__type="update_search_query"
-              @subject_queries="update_subject_query"
-          />
-          </v-col>
         <v-col>
+          <v-btn v-on:click="drawer=false">
 
-          <intervention-form
-              @interventions__substance_sid__in="update_search_query"
-              @interventions__route_sid__in="update_search_query"
-              @interventions__application_sid__in="update_search_query"
-              @interventions__measurement_type_sid__in="update_search_query"
-              @interventions__form_sid__in="update_search_query"
-          />
+          </v-btn>
+            <v-row>
+
+              <study-search-form
+                  @studies__name__in="update_search_query"
+              />
+            </v-row>
+
+            <v-row>
+
+              <subjects-form
+                  @subjects__type="update_search_query"
+                  @subject_queries="update_subject_query"
+              />
+            </v-row>
+            <v-row>
+
+              <intervention-form
+                  @interventions__substance_sid__in="update_search_query"
+                  @interventions__route_sid__in="update_search_query"
+                  @interventions__application_sid__in="update_search_query"
+                  @interventions__measurement_type_sid__in="update_search_query"
+                  @interventions__form_sid__in="update_search_query"
+              />
+            </v-row>
+            <v-row>
+              <output-form
+                  @outputs__substance_sid__in="update_search_query"
+                  @outputs__tissue_sid__in="update_search_query"
+                  @outputs__measurement_type_sid__in="update_search_query"
+                  @outputs__method_sid__in="update_search_query"
+              />
+            </v-row>
+
         </v-col>
         <v-col>
-        <output-form
-              @outputs__substance_sid__in="update_search_query"
-              @outputs__tissue_sid__in="update_search_query"
-              @outputs__measurement_type_sid__in="update_search_query"
-              @outputs__method_sid__in="update_search_query"
-          />
-        </v-col></v-row>
-
-          <v-row>
               <info-node-detail
                   v-model="display_detail"
                   :data="detail_info" />
-          </v-row>
+        </v-col>
       </v-container>
 
 
