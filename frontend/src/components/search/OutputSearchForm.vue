@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card height="100%">
     <v-form>
       <v-card-title>Outputs</v-card-title>
       <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>

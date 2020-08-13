@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card height="100%">
   <v-form>
     <v-card-title>Subjects</v-card-title>
         <v-container fluid>

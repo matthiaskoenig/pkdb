@@ -5,36 +5,58 @@
         v-model="drawer"
         temporary
         absolute
-        :width="525"
+        :width="1030"
     >
-      <div class="mousescroll">
-        <study-search-form
-            @studies__name__in="update_search_query"
-        />
+      <v-container  class="mousescroll">
+          <v-row
+              :height="250"
+          >
+          test
+          </v-row>
+          <v-row>
+          <v-col>
 
-        <subjects-form
-            @subjects__type="update_search_query"
-            @subject_queries="update_subject_query"
-        />
+          <study-search-form
+              @studies__name__in="update_search_query"
+          />
+          </v-col>
 
-        <intervention-form
-            @interventions__substance_sid__in="update_search_query"
-            @interventions__route_sid__in="update_search_query"
-            @interventions__application_sid__in="update_search_query"
-            @interventions__measurement_type_sid__in="update_search_query"
-            @interventions__form_sid__in="update_search_query"
-        />
+          <v-col>
+
+          <subjects-form
+              @subjects__type="update_search_query"
+              @subject_queries="update_subject_query"
+          />
+          </v-col>
+        <v-col>
+
+          <intervention-form
+              @interventions__substance_sid__in="update_search_query"
+              @interventions__route_sid__in="update_search_query"
+              @interventions__application_sid__in="update_search_query"
+              @interventions__measurement_type_sid__in="update_search_query"
+              @interventions__form_sid__in="update_search_query"
+          />
+        </v-col>
+        <v-col>
         <output-form
-            @outputs__substance_sid__in="update_search_query"
-            @outputs__tissue_sid__in="update_search_query"
-            @outputs__measurement_type_sid__in="update_search_query"
-            @outputs__method_sid__in="update_search_query"
-        />
-      </div>
+              @outputs__substance_sid__in="update_search_query"
+              @outputs__tissue_sid__in="update_search_query"
+              @outputs__measurement_type_sid__in="update_search_query"
+              @outputs__method_sid__in="update_search_query"
+          />
+        </v-col></v-row>
+
+          <v-row>
+              <info-node-detail
+                  v-model="display_detail"
+                  :data="detail_info" />
+          </v-row>
+      </v-container>
 
 
 
-
+        <!--
         <v-flex>
           The current search selection gives the following results:<br />
           Studies: {{study_data.length}}
@@ -49,17 +71,14 @@
           >
           </v-progress-circular>
         </v-flex>
+        -->
+
+
+
 
     </v-navigation-drawer>
 
-    <v-navigation-drawer
-        v-model="display_detail"
-        temporary
-        absolute
-        right
-    >
-      <info-node-detail :data="detail_info" />
-    </v-navigation-drawer>
+
 
 
     <v-layout row wrap>
