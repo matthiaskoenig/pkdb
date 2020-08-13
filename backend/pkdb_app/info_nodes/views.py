@@ -57,6 +57,7 @@ class InfoNodeElasticViewSet(DocumentViewSet):
         "annotations.name",
         "annotations.description",
         "annotations.label",
+        "annotations.url",
 
         "xrefs.name",
         "xrefs.accession",
