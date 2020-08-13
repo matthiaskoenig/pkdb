@@ -1,5 +1,5 @@
 <template>
-  <v-card height="100%">
+  <v-card outlined height="100%">
     <v-form>
       <v-card-title>Studies</v-card-title>
         <study-search @selected_entries="emit_selected_entries"/>
