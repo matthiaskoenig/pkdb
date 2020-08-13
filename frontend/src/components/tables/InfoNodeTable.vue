@@ -1,96 +1,184 @@
 <template>
 
-  <v-card v-if="exists"
-          class="mx-auto"
-          max-width="1000"
-          outlined
-  >
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="overline mb-4">
-          <json-button :resource_url="url()"></json-button> {{ data.ntype.toUpperCase() }} <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span></div>
-        <v-list-item-title class="headline mb-1">{{ data.label }}</v-list-item-title>
-        <v-list-item-subtitle>Parents: {{ data.parents.length>0 ? data.parents.join(', ') : "-" }}</v-list-item-subtitle>
-      </v-list-item-content>
+  <div>
+    <v-col class="d-flex" cols="12" sm="6">
+      <!--
+      <v-select
+          :items="ntypes"
+          label="Solo field"
+          v-model="ntype"
+          dense
+          solo
+      ></v-select>
+      -->
+    </v-col>
+    <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
+
+    <v-data-table
+        :headers="headers"
+        :items="entries"
+        :options.sync="options"
+        :server-items-length="count"
+        :loading="loading"
+        :class="table_class"
+        :footer-props="footer_options"
+    >
+      <template v-slot:item.buttons="{ item }">
+        <JsonButton :resource_url="api + 'info_nodes/'+ item.sid+ '/?format=json' "/>
+      </template>
+      <template v-slot:item.label="{ item }">
+        <v-chip
+            class="ma-1"
+            color="black"
+            outlined
+            pill
+            small
+        >
+          <text-highlight :queries="search.split(/[ ,]+/)">{{ item.label }}</text-highlight>
+          <span v-if="item.label != item.name">
+                  (<text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight>)
+              </span>
+        </v-chip>
+      </template>
+
+      <template v-slot:item.type="{ item }">
+        <text-highlight :queries="search.split(/[ ,]+/)">{{ item.ntype }}</text-highlight>
+        <br/>
+        <text-highlight :queries="search.split(/[ ,]+/)">
+          <span v-if="item.dtype!='undefined'">{{ item.dtype }}</span></text-highlight>
+      </template>
+
+      <template v-slot:item.description="{ item }">
+        <text-highlight :queries="search.split(/[ ,]+/)">{{ item.description }}</text-highlight>
+      </template>
+      <template v-slot:item.synonyms="{ item }">
+        <ul>
+          <span v-for="synonym in item.synonyms" :key="synonym">
+            <li><text-highlight :queries="search.split(/[ ,]+/)">{{ synonym }}</text-highlight></li>
+          </span>
+        </ul>
+      </template>
+
+      <template v-slot:item.parents="{ item }">
+        <ul>
+           <span v-for="(parent, index) in item.parents" :key="index">
+             <li>
+             <text-highlight :queries="search.split(/[ ,]+/)">{{ parent.label }}</text-highlight>
+             </li>
+          </span>
+        </ul>
+      </template>
 
 
-    </v-list-item>
+      <!-- extras -->
+      <template v-slot:item.extras="{ item }">
 
-    {{ data.description }}<br />
+        <span v-if="item.ntype === 'measurement_type'">
+            <span v-if="item.measurement_type.units.length > 0">
+              Units<br/>
+               <v-chip v-for="unit in item.measurement_type.units" :key="unit"
+                       small
+                       outlined
+                       color="black"
+               >
+                  {{ unit }}
+              </v-chip>
+            </span>
+            <span v-if="item.measurement_type.choices.length > 0">
+                Choices<br/>
+                <v-chip v-for="choice in item.measurement_type.choices" :key="choice"
+                        small
+                        outlined
+                        color="black"
+                >
+                    <text-highlight :queries="search.split(/[ ,]+/)">
+                        {{ choice.label }}
+                    </text-highlight>
+                </v-chip>
+            </span>
+        </span>
 
-    <v-chip v-for="annotation in data.annotations" :key="annotation.term">
-      class="ma-1"
-      color="black"
-      dark
-      pill
-      small
-      >
-      {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
-    </v-chip>
-    <span v-if="annotation.label"><strong>{{annotation.label}}</strong></span> {{annotation.description ? annotation.description: ""}}<br />
+        <span v-if="item.ntype === 'substance'">
+            <span v-if="item.substance.mass">
+              Mass: <text-highlight :queries="search.split(/[ ,]+/)">{{
+                item.substance.mass
+              }}</text-highlight><br/>
+            </span>
+            <span v-if="item.substance.charge">
+              Charge: <text-highlight
+                :queries="search.split(/[ ,]+/)">{{ item.substance.charge }}</text-highlight><br/>
+            </span>
+            <span v-if="item.substance.formula">
+              Formula: <text-highlight
+                :queries="search.split(/[ ,]+/)">{{ item.substance.formula }}</text-highlight><br/>
+            </span>
+        </span>
+      </template>
 
+      <template v-slot:item.annotations="{ item }">
+        <v-chip v-for="annotation in item.annotations" :key="annotation.term"
+                class="ma-1"
+                color="black"
+                dark
+                pill
+                small
+        >
+          {{ annotation.relation }}|<strong>{{ annotation.collection }}</strong>|<text-highlight
+            :queries="search.split(/[ ,]+/)">{{ annotation.term }}</text-highlight>
+        </v-chip>
+      </template>
 
-    <span class="label">Database links</span><br />
-    <span v-for="xref in data.xrefs" :key="xref.url">
-      <v-chip
-          class="ma-1"
-          color="black"
-          outlined
-          pill
-          small
-          :href="xref.url"
-      >
-      <strong>{{ xref.name }}</strong>|{{ xref.accession}}
-      </v-chip>
-    </span>
-    <br />
-    <span class="label">Synonyms</span><br />
-    <ul>
-      <li v-for="synonym in data.synonyms" :key="synonym">
-        {{ synonym }}
-      </li>
-    </ul>
-  </v-card>
+      <template v-slot:item.xrefs="{ item }">
+        <v-chip v-for="xref in item.xrefs" :key="xref.url"
+                :href="xref.url"
+                class="ma-1"
+                color="black"
+                outlined
+                pill
+                x-small
+        >
+          <strong>{{ xref.name }}</strong>|<text-highlight
+            :queries="search.split(/[ ,]+/)">{{ xref.accession}}</text-highlight>
+        </v-chip>
+      </template>
 
+      <no-data/>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
+import {searchTableMixin, UrlMixin} from "../tables/mixins";
+import TableToolbar from '../tables/TableToolbar';
+import NoData from '../tables/NoData';
 
 export default {
-  name: 'InfoNode',
-  components: {},
+  name: "InfoNodeTable",
+  components: {
+    NoData,
+    TableToolbar,
+  },
+  mixins: [searchTableMixin, UrlMixin],
   data() {
     return {
-
-      data: null,
-      ntype:"all",
-      exists: false,
+      otype: "info_nodes",
+      ntypes: ["all", "info_node", "choice", "measurement_type", "application", "tissue", "method", "route", "form", "substance"],
+      otype_single: "info_nodes",
+      headers: [
+        {text: '', value: 'buttons', sortable: false},
+        {text: 'Label (Name)', value: 'label'},
+        {text: 'Type', value: 'type'},
+        {text: 'Description', value: 'description'},
+        {text: 'Synonyms', value: 'synonyms'},
+        {text: 'Parents', value: 'parents'},
+        {text: 'Extra', value: "extras"},
+        {text: 'Annotations', value: 'annotations', sortable: false},
+        {text: 'Cross references', value: 'xrefs', sortable: false},
+      ]
     }
-  },
-  computed: {},
-  methods: {
-    url() {
-      return `${this.$store.state.endpoints.api}info_nodes/?format=json`;
-    },
-  },
-  mounted() {
-    axios.get(this.url())
-        .then(response => {
-          this.data = response.data;
-          this.exists = true;
-        })
-        .catch(err => {
-          console.log(err.response.data);
-          this.exists = false;
-        })
-        .finally(() => this.loading = false);
-  },
+  }
+
 }
 </script>
-<style>
-.label {
-  font-weight: bold;
-  padding: 5px;
-}
-</style>
+
+<style scoped></style>
