@@ -1,7 +1,14 @@
 <template>
   <v-card outlined  width="100%" >
     <v-form>
-      <v-card-title>Outputs</v-card-title>
+      <v-card-title>
+        <v-badge
+            color="red"
+            :content="count"
+        >
+          Outputs
+        </v-badge>
+      </v-card-title>
       <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
       <info-node-search ntype="tissue" @selected_entries="emit_selected_entries"/>
       <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
@@ -14,6 +21,7 @@
 import InfoNodeSearch from "./InfoNodeSearch";
 
 export default {
+  props:{count:0},
   name: "OutputSearchForm",
   components: {
     InfoNodeSearch,

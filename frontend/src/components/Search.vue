@@ -10,30 +10,48 @@
       <v-container >
 
           <v-row
+
           >
             <v-sheet height="50">
 
             </v-sheet>
           </v-row>
 
-        <v-row >
-          <v-btn
-              color="pink"
-              dark
-              @click.stop="drawer = !drawer"
-          >
-            Results
-          </v-btn>
 
-        </v-row>
 
 
         <v-row>
 
         <v-col cols="4">
+          <v-row
+              justify='space-between'
+          >
+            <v-col>
+              <v-btn
+                  color="pink"
+                  dark
+                  @click.stop="drawer = !drawer"
+              >
+                Results
+              </v-btn>
+
+            </v-col>
+
+            <v-col>
+
+            <v-progress-circular
+                indeterminate
+                color="primary"
+                v-if="loading"
+            ></v-progress-circular>
+            </v-col>
+
+          </v-row>
+
             <v-row>
 
               <study-search-form
+                  :count="study_data.length"
                   @studies__name__in="update_search_query"
               />
             </v-row>
@@ -41,6 +59,8 @@
             <v-row>
 
               <subjects-form
+                  :individual_count="individual_data.length"
+                  :group_count="group_data.length"
                   @subjects__type="update_search_query"
                   @subject_queries="update_subject_query"
               />
@@ -48,6 +68,7 @@
             <v-row>
 
               <intervention-form
+                  :count="intervention_data.length"
                   @interventions__substance_sid__in="update_search_query"
                   @interventions__route_sid__in="update_search_query"
                   @interventions__application_sid__in="update_search_query"
@@ -56,7 +77,7 @@
               />
             </v-row>
             <v-row>
-              <output-form
+              <output-form :count="output_data.length"
                   @outputs__substance_sid__in="update_search_query"
                   @outputs__tissue_sid__in="update_search_query"
                   @outputs__measurement_type_sid__in="update_search_query"

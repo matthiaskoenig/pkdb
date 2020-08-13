@@ -1,7 +1,15 @@
 <template>
   <v-card outlined  width="100%">
     <v-form>
-      <v-card-title>Studies</v-card-title>
+      <v-card-title>
+        <v-badge
+            color="red"
+            :content="count"
+        >
+          Studies
+        </v-badge>
+      </v-card-title>
+
         <study-search @selected_entries="emit_selected_entries"/>
     </v-form>
   </v-card>
@@ -12,6 +20,7 @@
   import StudySearch from "./StudySearch";
 
   export default {
+    props:{count:0},
     name: "StudySearchForm",
     components: {
 

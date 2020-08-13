@@ -1,7 +1,27 @@
 <template>
   <v-card  outlined width="100%">
   <v-form>
-    <v-card-title>Subjects</v-card-title>
+
+    <v-card-title>
+      <v-badge
+          color="red"
+          :content="individual_count"
+      >
+        Individuals
+      </v-badge>
+      <v-spacer></v-spacer>
+      &
+      <v-spacer></v-spacer>
+
+        <v-badge
+            color="red"
+            :content="group_count"
+        >
+          Groups
+        </v-badge>
+      <v-spacer></v-spacer>
+
+    </v-card-title>
         <v-container fluid>
           <v-row>
             <v-col cols="12">
@@ -24,6 +44,10 @@ import {lookupIcon} from "@/icons"
 
 export default {
   name: "SubjectSearchForm",
+  props:{
+    group_count:0,
+    individual_count:0,
+  },
   components: {
     MeasurementTypeChoiceSearch
   },
