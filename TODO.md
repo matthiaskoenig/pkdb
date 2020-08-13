@@ -10,7 +10,7 @@
 - [ ] Create annotation & xref components
 - [ ] Fix dead buttons in frontend (link to InfoNode component)
 - [ ] documentation of search (info buttons)
-- [ ] Fix database statistics
+- [ ] Fix database statistics (better view)
 - [ ] Fix landing page
 
 
