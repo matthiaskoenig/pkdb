@@ -4,6 +4,7 @@
 - [x] fix urlslug issue
 - [x] Fix the application display bug
 - [x] Build component for InfoNode
+- [ ] Fix missing url for annotations
 - [ ] Fix dead buttons in frontend (link to InfoNode component)
 
 - [ ] documentation of search (info buttons)
@@ -20,6 +21,7 @@
 - [ ] Show study & info node information on search hover
 - [x] fix the group & individual checkbox behavior (concise view)
 - [x] fix mistake on pkdata calucalation related to 0 outputs.
+- [ ] remove abstract info nodes from search
 - [ ] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
 
 
