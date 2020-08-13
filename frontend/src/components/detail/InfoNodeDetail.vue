@@ -23,35 +23,21 @@
 
     <div v-if="data.annotations && data.annotations.length>0">
       <span  v-for="annotation in data.annotations" :key="annotation.term">
-      <v-chip
-          class="ma-1"
-          color="black"
-          dark
-          pill
-          small
-          :href="annotation.url"
-      >
-        {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
-      </v-chip>
-
-      <span v-if="annotation.label"><strong>{{annotation.label}}</strong></span> {{annotation.description ? annotation.description: ""}}<br />
+          <annotation :annotation="annotation" />
+          <span v-if="annotation.label"><strong>{{ annotation.label }}</strong></span>
+          {{ annotation.description ? annotation.description: "" }}
+        <br />
       </span>
     </div>
 
     <div v-if="data.xrefs && data.xrefs.length>0">
       <span class="label">Database links</span><br />
-        <v-chip  v-for="xref in data.xrefs" :key="xref.url"
-            class="ma-1"
-            color="black"
-            outlined
-            pill
-            small
-            :href="xref.url"
-        >
-        <strong>{{ xref.name }}</strong>|{{ xref.accession}}
-        </v-chip>
-      <br />
+      <span v-for="xref in data.xrefs" :key="xref.url">
+        <xref :xref="xref"/>
+      </span>
     </div>
+
+    <br />
 
     <div v-if="data.synonyms && data.synonyms.length>0">
       <span class="label">Synonyms</span><br />
@@ -67,9 +53,15 @@
 
 <script>
 
+import Annotation from "../info_node/Annotation";
+import Xref from "../info_node/Xref";
+
 export default {
   name: 'InfoNodeDetail',
-  components: {},
+  components: {
+    Annotation,
+    Xref,
+  },
   props: {
     data: {
       type: Object,

@@ -116,30 +116,16 @@
       </template>
 
       <template v-slot:item.annotations="{ item }">
-        <v-chip v-for="annotation in item.annotations" :key="annotation.term"
-                class="ma-1"
-                color="black"
-                dark
-                pill
-                small
-        >
-          {{ annotation.relation }}|<strong>{{ annotation.collection }}</strong>|<text-highlight
-            :queries="search.split(/[ ,]+/)">{{ annotation.term }}</text-highlight>
-        </v-chip>
+        <span v-for="annotation in item.annotations" :key="annotation.term">
+          <annotation :annotation="annotation" />
+        </span>
+
       </template>
 
       <template v-slot:item.xrefs="{ item }">
-        <v-chip v-for="xref in item.xrefs" :key="xref.url"
-                :href="xref.url"
-                class="ma-1"
-                color="black"
-                outlined
-                pill
-                x-small
-        >
-          <strong>{{ xref.name }}</strong>|<text-highlight
-            :queries="search.split(/[ ,]+/)">{{ xref.accession}}</text-highlight>
-        </v-chip>
+        <span v-for="xref in item.xrefs" :key="xref.url">
+          <xref :xref="xref" />
+        </span>
       </template>
 
       <no-data/>
@@ -151,12 +137,16 @@
 import {searchTableMixin, UrlMixin} from "../tables/mixins";
 import TableToolbar from '../tables/TableToolbar';
 import NoData from '../tables/NoData';
+import Annotation from "../info_node/Annotation";
+import Xref from "../info_node/Xref";
 
 export default {
   name: "InfoNodeTable",
   components: {
     NoData,
     TableToolbar,
+    Annotation,
+    Xref,
   },
   mixins: [searchTableMixin, UrlMixin],
   data() {
