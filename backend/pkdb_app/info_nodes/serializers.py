@@ -45,13 +45,13 @@ class SynonymSerializer(WrongKeyValidationSerializer):
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
-    term = serializers.CharField()
     description = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
+    url = serializers.URLField(allow_null=False, required=True)
 
     class Meta:
         model = Annotation
-        fields = ["label", "relation", "term", "collection", "description"]
+        fields = ["label", "relation", "term", "collection", "description", "url"]
 
 
 class CrossReferenceSerializer(serializers.ModelSerializer):
@@ -237,14 +237,6 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 ###############################################################################################
 # Elastic Serializer
 ###############################################################################################
-
-
-class SmallInfoNodeElasticSerializer(serializers.ModelSerializer):
-    annotations = AnnotationSerializer(many=True, allow_null=True)
-
-    class Meta:
-        model = InfoNode
-        fields = ["sid", "name", "description", "annotations"]
 
 
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
