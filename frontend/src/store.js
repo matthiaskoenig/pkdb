@@ -44,6 +44,7 @@ export default new Vuex.Store({
         //for search
         detail_display: false,
         detail_info: {},
+        show_type: "help",
 
         django_domain: backend_domain,
 

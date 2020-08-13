@@ -84,6 +84,7 @@ export default {
   },
   methods: {
     mouseover(option) {
+      this.$store.state.show_type = "info_node"
       this.$store.state.detail_info = option
       this.$store.state.detail_display = true
     },

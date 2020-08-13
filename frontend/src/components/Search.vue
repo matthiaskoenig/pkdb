@@ -45,6 +45,13 @@
                 v-if="loading"
             ></v-progress-circular>
             </v-col>
+            <v-col>
+              <v-btn
+                  @click.stop="show_help"
+              >
+                Help
+              </v-btn>
+            </v-col>
 
           </v-row>
 
@@ -88,33 +95,19 @@
         </v-col
             >
         <v-col cols="8">
+
               <info-node-detail
                   v-model="display_detail"
+                  v-if="show_type==='info_node'"
                   :data="detail_info" />
+              <search-help
+                v-model="display_detail"
+                v-if="show_type==='help'"
+              :data="detail_info" />
         </v-col>
         </v-row>
 
       </v-container>
-
-
-
-        <!--
-        <v-flex>
-          The current search selection gives the following results:<br />
-          Studies: {{study_data.length}}
-          Groups: {{group_data.length}}
-          Individuals: {{individual_data.length}}
-          Interventions: {{intervention_data.length}}
-          Outputs: {{output_data.length}}
-          <v-progress-circular
-              indeterminate
-              color="primary"
-              v-if="loading"
-          >
-          </v-progress-circular>
-        </v-flex>
-        -->
-
 
 
 
@@ -183,12 +176,14 @@ import GroupsTable from "./tables/GroupsTable";
 import axios from 'axios'
 import InfoNode from "./InfoNode";
 import InfoNodeDetail from "./detail/InfoNodeDetail";
+import SearchHelp from "./search/SearchHelp";
 
 export default {
   mixins: [searchTableMixin],
 
   name: 'Search',
   components: {
+    SearchHelp,
     InfoNodeDetail,
     InfoNode,
     StudySearchForm,
@@ -223,12 +218,21 @@ export default {
     },
     detail_info(){
       return this.$store.state.detail_info
+    },
+
+    show_type(){
+      return this.$store.state.show_type
     }
   },
 
   methods: {
     update_subject_query(emitted_object){
       this.subject_queries = emitted_object;
+    },
+    show_help(){
+      this.$store.state.show_type = 'help'
+      this.$store.state.detail_display = true
+
     },
     update_search_query(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {
