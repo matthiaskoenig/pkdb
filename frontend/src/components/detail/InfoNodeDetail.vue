@@ -3,6 +3,7 @@
   <v-card
       class="mx-auto"
       max-width="1000"
+      width="100%"
       outlined
   >
     <v-list-item three-line>

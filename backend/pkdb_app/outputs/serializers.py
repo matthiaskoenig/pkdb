@@ -84,10 +84,11 @@ class OutputSerializer(MeasurementTypeableSerializer):
         read_only=False,
         required=False
     )
+    output_type = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = Output
-        fields = OUTPUT_FIELDS + ['label'] + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
+        fields = OUTPUT_FIELDS + ['label'] + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions", "output_type"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -103,7 +104,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self.validate_group_individual_output(attrs)
 
         _validate_requried_key(attrs, "measurement_type")
-
 
         _validate_requried_key(attrs, "substance")
         _validate_requried_key(attrs, "tissue")

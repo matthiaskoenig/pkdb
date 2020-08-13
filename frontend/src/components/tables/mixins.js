@@ -9,6 +9,7 @@ let searchTableMixin = {
             search: "",
             options: {},
             loading: false,
+            exclude_abstract:true,
             footer_options:{
                 itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
@@ -80,6 +81,10 @@ let searchTableMixin = {
                     + '&page=' + this.options.page
                     + '&page_size=' + this.options.itemsPerPage
                     //+ '&ordering=' + this.options.sortDesc + this.options.sortBy;
+            }
+            if(this.exclude_abstract){
+                url += '&dtype__exclude=abstract'
+
             }
             if (this.search) {
                 url += '&search_multi_match=' + this.search

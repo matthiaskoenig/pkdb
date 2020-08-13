@@ -1,5 +1,6 @@
 from collections import namedtuple
 
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
@@ -48,6 +49,8 @@ class InfoNodeElasticViewSet(DocumentViewSet):
         "description",
         "url_slug",
         "dtype",
+
+
         "ntype",
         "units",
 
@@ -74,5 +77,10 @@ class InfoNodeElasticViewSet(DocumentViewSet):
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw', "ntype": "ntype.raw"}
+    filter_fields = {
+        'name': 'name.raw',
+        "ntype": "ntype.raw",
+        'dtype': {'field': 'dtype.raw',
+                                 'lookups': [LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE], },
+    }
     ordering_fields = {'name': 'name', "dtype": "dtype"}

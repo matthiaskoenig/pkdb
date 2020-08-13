@@ -67,6 +67,7 @@ export default {
       detail_display: false,
       otype: "info_nodes",
       otype_single: "info_node",
+      exclude_abstract:true,
       autoUpdate: true,
       selected_entries: [],
       isUpdating: false,
