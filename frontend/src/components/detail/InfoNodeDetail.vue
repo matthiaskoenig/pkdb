@@ -29,6 +29,7 @@
           dark
           pill
           small
+          :href="annotation.url"
       >
         {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
       </v-chip>
