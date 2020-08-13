@@ -1,6 +1,9 @@
 <template>
-    <v-toolbar id="navigation"
+    <v-app-bar id="navigation"
                class="fixed-nav-bar"
+               clipped
+               app
+               permanent
                flat
                dense
                color="#000000"
@@ -38,7 +41,7 @@
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository" color="white">
             <v-icon>{{ faIcon('github')}}</v-icon>
         </v-btn>
-    </v-toolbar>
+    </v-app-bar>
 </template>
 
 <script>

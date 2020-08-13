@@ -16,7 +16,7 @@
       </v-list-item-content>
     </v-list-item>
 
-    <div v-if="data.description & data.description.length>0">
+    <div v-if="data.description && data.description.length>0">
       {{ data.description }}<br />
     </div>
 

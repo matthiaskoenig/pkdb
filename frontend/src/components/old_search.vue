@@ -1,13 +1,23 @@
 <template>
   <div id="Search">
+    <v-navigation-drawer
+        v-model="display_detail"
+        temporary
+
+    >
+      <info-node-detail :data="detail_info" />
+    </v-navigation-drawer>
 
     <v-navigation-drawer
         v-model="drawer"
         temporary
         absolute
         :width="525"
+        right
     >
-      <div class="mousescroll">
+      <div
+          class="mousescroll">
+
         <study-search-form
             @studies__name__in="update_search_query"
         />
@@ -32,7 +42,13 @@
         />
       </div>
 
+      <v-flex xs12>
+        <v-flex>
+          The following Info Node is currently hovered over in the Search field:<br />
 
+          GIVE ME THE INFORMATION
+
+        </v-flex>
 
 
         <v-flex>
@@ -50,15 +66,8 @@
           </v-progress-circular>
         </v-flex>
 
-    </v-navigation-drawer>
+      </v-flex>
 
-    <v-navigation-drawer
-        v-model="display_detail"
-        temporary
-        absolute
-        right
-    >
-      <info-node-detail :data="detail_info" />
     </v-navigation-drawer>
 
 
@@ -240,11 +249,5 @@ export default {
 </script>
 
 <style>
-.mousescroll {
-  overflow-y: scroll;
-  height:100%;
-}
-.mousescroll:hover {
-  overflow-y: scroll;
-}
+
 </style>

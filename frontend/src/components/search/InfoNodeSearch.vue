@@ -23,15 +23,16 @@
     </template>
     <template
         slot="option"
-        slot-scope="{option, search}"
-
-     >
+        slot-scope="props"
+    >
       <v-btn icon
-             v-on:click.native="mouseover(option)">
+             v-on:mouseover.native="mouseover(props.option)"
+             v-on:mouseleave.native="mouseleave()">
+
         <v-icon color="white">{{ faIcon('about') }}</v-icon>
       </v-btn>
 
-       {{option.label}}
+       {{props.option.label}}
 
 
 
@@ -41,16 +42,6 @@
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
     </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
 
-    <v-overlay
-        :value="detail_display"
-        :absolute="true"
-        max-width="290"
-    >
-      <v-card-text>
-        Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
-      </v-card-text>
-
-    </v-overlay>
 
   </multiselect>
 
@@ -92,11 +83,13 @@ export default {
   },
   methods: {
     mouseover(option) {
-      this.option = option
-      this.detail_display = true
+      this.$store.state.detail_info = option
+      this.$store.state.detail_display = true
     },
     mouseleave() {
-      this.detail_display = false
+      this.$store.state.detail_display = false
+      this.$store.state.detail_info = {}
+
     },
     clearAll () {
       this.selected_entries = []
@@ -123,6 +116,7 @@ export default {
 
 
 }
+
 </script>
 
 <style scoped>

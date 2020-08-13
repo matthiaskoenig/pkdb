@@ -41,7 +41,12 @@ const vuexLocalStorage = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
+        //for search
+        detail_display: false,
+        detail_info: {},
+
         django_domain: backend_domain,
+
 
         endpoints: {
             api: backend_domain + '/api/v1/',
