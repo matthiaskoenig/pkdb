@@ -32,7 +32,7 @@ from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create
 
 EXTRA_FIELDS = ["tissue", "method","label",]
 TIME_FIELDS = ["time", "time_unit"]
-OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
+OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS + ["output_type"]
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 OUTPUT_FOREIGN_KEYS = [
@@ -88,11 +88,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
     class Meta:
         model = Output
-        fields = OUTPUT_FIELDS + ['label'] + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions", "output_type"]
+        fields = OUTPUT_FIELDS + ['label'] + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
 
     def to_internal_value(self, data):
         data.pop("comments", None)
         data.pop("descriptions", None)
+
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
         self.validate_wrong_keys(data, additional_fields=OutputExSerializer.Meta.fields)
@@ -109,6 +110,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
         _validate_requried_key(attrs, "output_type")
+        attrs.pop("output_type", None)
+
 
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
@@ -179,6 +182,7 @@ class OutputExSerializer(ExSerializer):
                       EX_MEASUREMENTTYPE_FIELDS+ \
                       ["group", "individual", "interventions"] + \
                       ["group_map","individual_map", "interventions_map"]
+
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
