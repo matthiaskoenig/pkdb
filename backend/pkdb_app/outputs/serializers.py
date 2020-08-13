@@ -108,6 +108,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "substance")
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
+        _validate_requried_key(attrs, "output_type")
 
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
