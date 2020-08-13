@@ -5,7 +5,7 @@
     <v-card-title>
       <v-badge
           color="red"
-          :content="individual_count"
+          :content="individual_count.toString()"
       >
         Individuals
       </v-badge>
@@ -15,7 +15,7 @@
 
         <v-badge
             color="red"
-            :content="group_count"
+            :content="group_count.toString()"
         >
           Groups
         </v-badge>

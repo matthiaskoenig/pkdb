@@ -4,7 +4,7 @@
       <v-card-title>
         <v-badge
             color="red"
-            :content="count"
+            :content="count.toString()"
         >
           Outputs
         </v-badge>
