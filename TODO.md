@@ -6,13 +6,12 @@
 - [x] Build component for InfoNode
 - [x] Update info node information
 - [x] Fix missing url for annotations
-
-- [ ] Create annotation & xref components
+- [x] Create annotation & xref components
 - [ ] Fix dead buttons in frontend (link to InfoNode component)
 - [ ] documentation of search (info buttons)
 - [ ] Fix database statistics (better view)
 - [ ] Fix landing page
-
+- [ ] Add datasets automatically for timecourses
 
 ## Janek
 - [x] replace url_slug with sid
@@ -28,6 +27,13 @@
 - [ ] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
 - [ ] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
 - [ ] Calculate timecourses from database
+- [ ] issues sort
+    - [ ]
+- [ ] download button
+    - [ ] download results button -> JSON PKDBdata (-> zip) 
 
 # General @all
 - [ ] Update studies in new format
+(- [ ] Tree how info nodes are connected)
+
+- [ ] manuscript updates
