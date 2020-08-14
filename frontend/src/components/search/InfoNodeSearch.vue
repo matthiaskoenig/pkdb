@@ -15,7 +15,9 @@
 
     <template slot="tag" slot-scope="{ option, remove }">
         <span class="multiselect__tag">
-          {{ option.label }}
+
+           { option.label }}
+
           <span  @click="remove(option)">
             <i class="multiselect__tag-icon"></i>
           </span>
@@ -31,10 +33,9 @@
 
         <v-icon color="white">{{ faIcon('about') }}</v-icon>
       </v-btn>
-
-       {{props.option.label}}
-
-
+      <text-highlight :queries="highlight">
+        {{props.option.label}}
+      </text-highlight>
 
     </template>
 

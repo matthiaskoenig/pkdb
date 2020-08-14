@@ -33,12 +33,14 @@ class Data(models.Model):
     dataset = models.ForeignKey(DataSet, related_name="data", on_delete=models.CASCADE, null=True)
 
 
+
 class SubSet(models.Model):
     """
 
     """
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
+
 
     def get_single_dosing(self) -> Intervention:
         """Returns a single intervention of type dosing if existing.
@@ -158,6 +160,8 @@ class SubSet(models.Model):
             self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
         self.reformat_timecourse(timecourse, self._timecourse_extra())
         self.validate_timecourse(timecourse)
+        from pprint import pprint
+        pprint(timecourse)
         return timecourse
 
     def reformat_timecourse(self, timecourse, mapping):

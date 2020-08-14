@@ -41,10 +41,13 @@ const vuexLocalStorage = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
-        //for search
+        //for search component
         detail_display: false,
         detail_info: {},
         show_type: "help",
+        // *******
+
+        highlight:"",
 
         django_domain: backend_domain,
 

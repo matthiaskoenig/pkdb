@@ -103,6 +103,9 @@
         mixins: [UrlMixin],
 
         computed: {
+          highlight(){
+            return this.$store.state.highlight
+          },
             images() {
                 let list = [];
                 for (let k = 0; k < this.study.files.length; k++) {

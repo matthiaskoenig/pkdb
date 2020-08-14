@@ -48,6 +48,7 @@ let searchTableMixin = {
         },
         search(){
                     this.getData();
+                    this.$store.state.highlight = this.search
                 },
         ntype: {
             handler() {
@@ -63,6 +64,9 @@ let searchTableMixin = {
         }
     },
     computed: {
+        highlight(){
+            return this.$store.state.highlight
+        },
         backend() {
             return this.$store.state.django_domain;
         },

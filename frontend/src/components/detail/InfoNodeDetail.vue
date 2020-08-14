@@ -12,20 +12,24 @@
           <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
           <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
         </div>
-        <v-list-item-title class="headline mb-1">{{ data.label }}</v-list-item-title>
+        <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight></v-list-item-title>
         <v-list-item-subtitle>Parents: {{ parents_labels.length>0 ? parents_labels.join(', ') : "-" }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
     <div v-if="data.description && data.description.length>0">
+      <text-highlight :queries="highlight">
       {{ data.description }}<br />
+      </text-highlight>
     </div>
 
     <div v-if="data.annotations && data.annotations.length>0">
       <span  v-for="annotation in data.annotations" :key="annotation.term">
           <annotation :annotation="annotation" />
           <span v-if="annotation.label"><strong>{{ annotation.label }}</strong></span>
-          {{ annotation.description ? annotation.description: "" }}
+          <text-highlight :queries="highlight">
+            {{ annotation.description ? annotation.description: "" }}
+          </text-highlight>
         <br />
       </span>
     </div>
@@ -43,7 +47,9 @@
       <span class="label">Synonyms</span><br />
       <ul>
         <li v-for="synonym in data.synonyms" :key="synonym">
+          <text-highlight :queries="highlight">
           {{ synonym }}
+          </text-highlight>
         </li>
       </ul>
     </div>
@@ -73,6 +79,9 @@ export default {
     }
   },
   computed: {
+    highlight(){
+      return this.$store.state.highlight
+    },
     parents_labels: function () {
       let labels = []
       let parents = this.data.parents
