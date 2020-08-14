@@ -24,17 +24,17 @@
 - [x] fix the group & individual checkbox behavior (concise view)
 - [x] fix mistake on pkdata calucalation related to 0 outputs.
 - [x] remove abstract info nodes from search
+- [x] add validation on label column (only "col==" allowed) 
 - [x] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
 - [x] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
 - [ ] Calculate timecourses from database
 - [ ] bug in concise on curators
-- [ ] issues sort
-    - [ ]
+- [x] issues sort
+- [ ] issues search
+    - [ ] update information on full selection (not only info button)
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
 
 # General @all
 - [ ] Update studies in new format
-(- [ ] Tree how info nodes are connected)
-
 - [ ] manuscript updates

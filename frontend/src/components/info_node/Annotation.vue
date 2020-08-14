@@ -1,5 +1,4 @@
 <template>
-  <!-- FIXME: add search highlight -->
   <v-chip
       class="ma-1"
       color="black"
@@ -9,11 +8,11 @@
       :href="annotation.url"
   >
     <text-highlight :queries="highlight">
-        {{annotation.relation}}
+        {{ annotation.relation }}
     </text-highlight> |
     <strong>
       <text-highlight :queries="highlight">
-        {{annotation.collection}}
+        {{ annotation.collection }}
       </text-highlight>
     </strong>|
     <text-highlight :queries="highlight">
