@@ -33,7 +33,12 @@
 - [x] issues sort
 - [ ] issues search
     - [ ] update information on full selection (not only info button)
-    - [ ] selection of choices not working (not visible, not selectable)
+    - [ ] selection of choices not working (not visible and not selectable easily)
+    - [ ] empty search should give all results, but currently the results are empty
+    - [ ] bug in search for form {option.label }} added
+    - [ ] no info node details on Individuals & Groups search
+    - [ ] search form is too high/large, not visible on normal display
+    - [ ] many console errors on search (`TypeError: t.response is undefined`)
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
 - [x] Add datasets automatically for timecourses
