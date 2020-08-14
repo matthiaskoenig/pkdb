@@ -27,6 +27,7 @@
 - [x] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
 - [x] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
 - [ ] Calculate timecourses from database
+- [ ] bug in concise on curators
 - [ ] issues sort
     - [ ]
 - [ ] download button

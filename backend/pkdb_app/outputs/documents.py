@@ -49,6 +49,7 @@ class OutputDocument(Document):
     substance = info_node('i_substance')
     choice = info_node('i_choice')
     label = string_field('label')
+    output_type = string_field('output_type')
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",

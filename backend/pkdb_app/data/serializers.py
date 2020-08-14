@@ -293,8 +293,23 @@ class DataSetSerializer(ExSerializer):
                         )
                     data_single['subsets'] = temp_subsets
                 data_container.extend(self.entries_from_file(data_single))
+
+        data_container.append(self.autogenerate_timecourses())
+
         data['data'] = data_container
         return super().to_internal_value(data)
+
+    def autogenerate_timecourses(self,):
+        timecourse_labels = self.context.study.outputs.filter(output_type=Output.OutputTypes.Timecourse, normed=True).values_list("label")
+        if len(timecourse_labels) > 0:
+            auto_generated_data = {
+                "name": "AutoGenerate",
+                "data_type": "timecourse",
+                "subsets":
+                    [{"name": label, "dimensions": label} for label in timecourse_labels]
+            }
+            return auto_generated_data
+
 
     def validate(self, attrs):
         self._validate_unique_names(attrs["data"])

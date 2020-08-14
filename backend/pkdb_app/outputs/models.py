@@ -11,6 +11,8 @@ from pkdb_app.behaviours import Normalizable
 from pkdb_app.info_nodes.models import Tissue, Method
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.subjects.models import Group, DataFile, Individual
+from django.utils.translation import gettext_lazy as _
+
 from .managers import (
     OutputManager
 )
@@ -90,9 +92,21 @@ class Outputable(Normalizable, models.Model):
             return self.method.info_node.name
 
 
+
+
+
 class Output(AbstractOutput, Outputable, Accessible):
+
+    class OutputTypes(models.TextChoices):
+        """ Data Types. """
+        Scatter = 'scatter', _('scatter')
+        Timecourse = 'timecourse', _('timecourse')
+        Output = 'outputs', _('output')
+
     """ Storage of data sets. """
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
+    output_type = models.CharField(max_length=CHAR_MAX_LENGTH,  choices=OutputTypes.choices)
+
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention, through="OutputIntervention", related_name="outputs")
