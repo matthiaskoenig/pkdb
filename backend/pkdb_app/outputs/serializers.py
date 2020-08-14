@@ -192,10 +192,11 @@ class OutputExSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
-    def validate_label_map(self, value):
+    def validate_label_map(self, value) -> None:
+        """Validate the label key."""
         if isinstance(value, str):
-            if "col==" not in value:
-                msg = "The label field has to be a mapping and thereby contain the string 'col=='."
+            if not value.startswith("col=="):
+                msg = "The 'label' must be a mapping and therefore start with 'col=='."
                 raise serializers.ValidationError(msg)
 
     def validate_image(self, value):
