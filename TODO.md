@@ -24,11 +24,13 @@
 - [x] fix the group & individual checkbox behavior (concise view)
 - [x] fix mistake on pkdata calucalation related to 0 outputs.
 - [x] remove abstract info nodes from search
-- [ ] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
-- [ ] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
+
+- [ ] add validation on label column (only "col==" allowed) 
+- [x] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
+- [x] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
 - [ ] Calculate timecourses from database
-- [ ] issues sort
-    - [ ]
+- [ ] issues search
+    - [ ] update information on full selection (not only info button)
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
 
