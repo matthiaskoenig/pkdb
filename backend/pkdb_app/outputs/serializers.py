@@ -4,6 +4,7 @@ Serializers for outputs.
 
 import warnings
 
+from django.db.models import Count
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -30,9 +31,9 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-EXTRA_FIELDS = ["tissue", "method","label",]
+EXTRA_FIELDS = ["tissue", "method", "label","output_type"]
 TIME_FIELDS = ["time", "time_unit"]
-OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS + ["output_type"]
+OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 OUTPUT_FOREIGN_KEYS = [
@@ -84,7 +85,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         read_only=False,
         required=False
     )
-    output_type = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = Output
@@ -110,7 +110,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
         _validate_requried_key(attrs, "output_type")
-        attrs.pop("output_type", None)
 
 
 
@@ -184,8 +183,10 @@ class OutputExSerializer(ExSerializer):
                       ["group", "individual", "interventions"] + \
                       ["group_map", "individual_map", "interventions_map"]
 
+        # label validation
         label = data.pop("label", None)
         self.validate_label_map(label)
+
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
@@ -273,9 +274,12 @@ class OutputSetSerializer(ExSerializer):
                     model_serializer=OutputExSerializer(context=self.context),
                     validated_data=output_ex,
                 )
+
                 outputs_exs.append(output_ex_instance)
             outputset.output_exs.add(*outputs_exs)
             outputset.save()
+
+
             # create warning messages
             if len(ws) > 0:
 

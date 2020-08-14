@@ -337,12 +337,14 @@ class PKData(object):
         self.groups_query = groups_query
         self.individuals_query = individuals_query
         self.interventions_query = {"normed":"true", **interventions_query}
-        self.outputs_query = {"normed":"true",**outputs_query}
+        self.outputs_query = {"normed":"true", **outputs_query}
         # self.data_query = data_query
         self.studies_query = studies_query
 
         start_time = time.time()
         studies_pks = self.study_pks()
+
+
         groups_pks = self.group_pks()
         individuals_pks = self.individual_pks()
         interventions_pks = self.intervention_pks()
@@ -367,9 +369,7 @@ class PKData(object):
     def _update_outputs(self):
         """ """
 
-        outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals),
-                                      study__in=self.studies,
-                                      interventions__in=self.interventions)
+        outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals) ,study__in=self.studies, interventions__in=self.interventions)
 
 
         start_time = time.time()
