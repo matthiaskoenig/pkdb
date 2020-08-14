@@ -8,7 +8,9 @@
           small
           :href="xref.url"
   >
-    <strong>{{ xref.name }}</strong>|{{ xref.accession}}
+
+    <strong><text-highlight :queries="highlight">{{ xref.name }}</text-highlight> </strong>| <text-highlight :queries="highlight">{{ xref.accession}}</text-highlight>
+
   </v-chip>
 </template>
 
@@ -20,8 +22,13 @@ export default {
       type: Object,
       required: true,
     }
+  },
+  computed:
+      {
+    highlight(){
+      return this.$store.state.highlight
+    },
   }
-
 }
 </script>
 

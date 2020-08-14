@@ -26,7 +26,12 @@
     <div v-if="data.annotations && data.annotations.length>0">
       <span  v-for="annotation in data.annotations" :key="annotation.term">
           <annotation :annotation="annotation" />
-          <span v-if="annotation.label"><strong>{{ annotation.label }}</strong></span>
+          <span v-if="annotation.label"><strong>
+                  <text-highlight :queries="highlight">
+            {{ annotation.label }}
+                </text-highlight>
+
+            </strong></span>
           <text-highlight :queries="highlight">
             {{ annotation.description ? annotation.description: "" }}
           </text-highlight>

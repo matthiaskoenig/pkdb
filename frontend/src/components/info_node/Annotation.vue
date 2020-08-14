@@ -8,7 +8,17 @@
       small
       :href="annotation.url"
   >
-    {{annotation.relation}}|<strong>{{annotation.collection}}</strong>|{{ annotation.term }}
+    <text-highlight :queries="highlight">
+        {{annotation.relation}}
+    </text-highlight> |
+    <strong>
+      <text-highlight :queries="highlight">
+        {{annotation.collection}}
+      </text-highlight>
+    </strong>|
+    <text-highlight :queries="highlight">
+      {{ annotation.term }}
+    </text-highlight>
   </v-chip>
 </template>
 
@@ -20,6 +30,11 @@ export default {
       type: Object,
       required: true,
     }
+  },
+  computed:{
+    highlight(){
+      return this.$store.state.highlight
+    },
   }
 
 }
