@@ -99,9 +99,9 @@ class Output(AbstractOutput, Outputable, Accessible):
 
     class OutputTypes(models.TextChoices):
         """ Data Types. """
-        Scatter = 'scatter', _('scatter')
+        Array = 'array', _('array')
         Timecourse = 'timecourse', _('timecourse')
-        Output = 'outputs', _('output')
+        Output = 'output', _('output')
 
     """ Storage of data sets. """
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)

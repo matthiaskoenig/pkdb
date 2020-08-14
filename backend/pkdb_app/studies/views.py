@@ -344,8 +344,6 @@ class PKData(object):
         start_time = time.time()
         studies_pks = self.study_pks()
 
-        print("Number of studies")
-        print(len(print(studies_pks)))
 
         groups_pks = self.group_pks()
         individuals_pks = self.individual_pks()

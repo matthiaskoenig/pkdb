@@ -31,9 +31,9 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-EXTRA_FIELDS = ["tissue", "method", "label",]
+EXTRA_FIELDS = ["tissue", "method", "label","output_type"]
 TIME_FIELDS = ["time", "time_unit"]
-OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS + ["output_type"]
+OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 OUTPUT_FOREIGN_KEYS = [
@@ -85,7 +85,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         read_only=False,
         required=False
     )
-    output_type = serializers.CharField(required=True)
 
     class Meta:
         model = Output
@@ -111,7 +110,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
         _validate_requried_key(attrs, "output_type")
-        attrs.pop("output_type", None)
 
 
 

@@ -328,6 +328,8 @@ class StudySerializer(SidSerializer):
         :param related:
         :return:
         """
+        context = self.context
+        context["study"] = study
 
         for name, serializer in self.related_serializer().items():
 
@@ -335,13 +337,14 @@ class StudySerializer(SidSerializer):
                 if getattr(study, name):
                     getattr(study, name).delete()
 
-                context = self.context
-                context["study"] = study
-                instance = serializer(context=context).create(validated_data={**related[name]})
+
+                this_serializer = serializer(context=context)
+                instance = this_serializer.create(validated_data={**related[name]})
 
 
                 setattr(study, name, instance)
-            study.save()
+
+                study.save()
 
 
         if "curators" in related:

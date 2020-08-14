@@ -13,6 +13,8 @@ from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_n
 from rest_framework import serializers
 import pandas as pd
 import numpy as np
+from django.apps import apps
+
 
 class DimensionSerializer(WrongKeyValidationSerializer):
     output = serializers.CharField(write_only=True, allow_null=False, allow_blank=False)
@@ -293,20 +295,26 @@ class DataSetSerializer(ExSerializer):
                         )
                     data_single['subsets'] = temp_subsets
                 data_container.extend(self.entries_from_file(data_single))
-
-        data_container.append(self.autogenerate_timecourses())
+        autogenerate_timecourses = self.autogenerate_timecourses()
+        if autogenerate_timecourses:
+            data_container.append(self.autogenerate_timecourses())
 
         data['data'] = data_container
         return super().to_internal_value(data)
 
-    def autogenerate_timecourses(self,):
-        timecourse_labels = self.context.study.outputs.filter(output_type=Output.OutputTypes.Timecourse, normed=True).values_list("label")
+    def autogenerate_timecourses(self):
+        #Study = apps.get_model('studies', 'Study')
+
+        study_sid = self.context["request"].path.split("/")[-2]
+        outputs = Output.objects.filter(study__sid=study_sid, normed=True, output_type=Output.OutputTypes.Timecourse)
+        timecourse_labels = outputs.values_list("label",flat=True).distinct()
         if len(timecourse_labels) > 0:
+
             auto_generated_data = {
                 "name": "AutoGenerate",
                 "data_type": "timecourse",
                 "subsets":
-                    [{"name": label, "dimensions": label} for label in timecourse_labels]
+                    [{"name": label, "dimensions": [label]} for label in timecourse_labels]
             }
             return auto_generated_data
 
