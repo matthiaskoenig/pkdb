@@ -1,14 +1,18 @@
 <template>
     <div id="home">
         <v-layout row wrap>
-            <v-flex xs6>
+          <v-row>
+
+            <v-col cols="6">
                 <count-table />
                 <br />
-                <statistics-vega-plot></statistics-vega-plot>
-            </v-flex>
-            <v-flex xs6>
+                <statistics-vega-plot ></statistics-vega-plot>
+            </v-col>
+            <v-col cols="6">
                 <about-information />
-            </v-flex>
+            </v-col>
+          </v-row>
+
         </v-layout>
     </div>
 </template>
