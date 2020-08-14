@@ -13,7 +13,7 @@
           <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
         </div>
         <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight></v-list-item-title>
-        <v-list-item-subtitle>Parents: {{ parents_labels.length>0 ? parents_labels.join(', ') : "-" }}</v-list-item-subtitle>
+        <v-list-item-subtitle v-if="parents_labels.length>0">Parents: {{ parents_labels.join(', ') }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
@@ -35,6 +35,9 @@
           <text-highlight :queries="highlight">
             {{ annotation.description ? annotation.description: "" }}
           </text-highlight>
+          <span v-if="annotation.collection==='chebi'">
+            <v-img :src="'https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=' + annotation.term.substring(6)" max-width="200"/>
+          </span>
         <br />
       </span>
     </div>
