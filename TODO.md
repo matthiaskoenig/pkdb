@@ -7,11 +7,12 @@
 - [x] Update info node information
 - [x] Fix missing url for annotations
 - [x] Create annotation & xref components
-- [ ] Fix dead buttons in frontend (link to InfoNode component)
+- [ ] Fix dead buttons in frontend (link to InfoNode component, https://github.com/matthiaskoenig/pkdb/issues/517)
 - [ ] documentation of search (info buttons)
-- [ ] Fix database statistics (better view)
+- [ ] Fix database statistics (better view, https://github.com/matthiaskoenig/pkdb/issues/486)
+- [ ] Cleanup/reduction of all tables
 - [ ] Fix landing page
-- [ ] Add datasets automatically for timecourses
+
 
 ## Janek
 - [x] replace url_slug with sid
@@ -32,8 +33,10 @@
 - [x] issues sort
 - [ ] issues search
     - [ ] update information on full selection (not only info button)
+    - [ ] selection of choices not working (not visible, not selectable)
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
+- [x] Add datasets automatically for timecourses
 
 # General @all
 - [ ] Update studies in new format
