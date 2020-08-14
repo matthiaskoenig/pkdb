@@ -156,12 +156,12 @@ export default {
       otype_single: "info_nodes",
       headers: [
         {text: '', value: 'buttons', sortable: false},
-        {text: 'Label (Name)', value: 'label'},
-        {text: 'Type', value: 'type'},
-        {text: 'Description', value: 'description'},
-        {text: 'Synonyms', value: 'synonyms'},
-        {text: 'Parents', value: 'parents'},
-        {text: 'Extra', value: "extras"},
+        {text: 'Label (Name)', value: 'label', sortable: false},
+        {text: 'Type', value: 'type', sortable: false},
+        {text: 'Description', value: 'description', sortable: false},
+        {text: 'Synonyms', value: 'synonyms', sortable: false},
+        {text: 'Parents', value: 'parents', sortable: false},
+        {text: 'Extra', value: "extras",sortable: false},
         {text: 'Annotations', value: 'annotations', sortable: false},
         {text: 'Cross references', value: 'xrefs', sortable: false},
       ]

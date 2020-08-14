@@ -108,13 +108,13 @@
                 otype_single: "output",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Measured', value: 'calculated'},
-                    {text: 'Measurement Type', value: 'measurement_type'},
-                    {text: 'Subjects', value: 'subject'},
+                    {text: 'Measured', value: 'calculated',sortable: false},
+                    {text: 'Measurement Type', value: 'measurement_type',sortable: false},
+                    {text: 'Subjects', value: 'subject',sortable: false},
                     {text: 'Interventions', value: 'interventions',sortable: false},
-                    {text: 'Tissue', value: 'tissue'},
-                    {text: 'Time', value: 'time'},
-                    {text: 'Value', value: 'value'},
+                    {text: 'Tissue', value: 'tissue',sortable: false},
+                    {text: 'Time', value: 'time',sortable: false},
+                    {text: 'Value', value: 'value',sortable: false},
 
 
                 ]

@@ -70,10 +70,10 @@
                 otype_single: "intervention",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Name', value: 'name'},
-                    {text: 'Substance', value: 'substance'},
-                    {text: 'Application', value: 'application'},
-                    {text: 'Measurement', value: 'value'},
+                    {text: 'Name', value: 'name', sortable: false},
+                    {text: 'Substance', value: 'substance', sortable: false},
+                    {text: 'Application', value: 'application', sortable: false},
+                    {text: 'Measurement', value: 'value', sortable: false},
                 ],
             }
         },

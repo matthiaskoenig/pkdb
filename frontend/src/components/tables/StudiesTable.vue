@@ -88,12 +88,12 @@
                 otype_single: "study",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Sid', value: 'sid'},
-                    {text: 'Name', value: 'name'},
-                    {text: 'Date', value: 'date'},
+                    {text: 'Sid', value: 'sid',sortable: false},
+                    {text: 'Name', value: 'name',sortable: false},
+                    {text: 'Date', value: 'date',sortable: false},
                     {text: 'Counts', value: 'counts', sortable: false},
                     {text: 'Substances', value: 'substances', sortable: false},
-                    {text: 'Creator', value: 'creator',},
+                    {text: 'Creator', value: 'creator',sortable: false},
                     {text: 'Curators', value: 'curators', sortable: false},
                 ],
             }

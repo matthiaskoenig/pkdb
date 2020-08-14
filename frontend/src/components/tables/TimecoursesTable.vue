@@ -102,12 +102,12 @@
                 otype_single: "timecourse",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Measurement Type', value: 'measurement_type'},
-                    {text: 'Subjects', value: 'subject'},
+                    {text: 'Measurement Type', value: 'measurement_type',sortable: false},
+                    {text: 'Subjects', value: 'subject',sortable: false},
                     {text: 'Interventions', value: 'interventions', sortable: false},
-                    {text: 'Tissue', value: 'tissue'},
-                    {text: 'Substance', value: 'substance'},
-                    {text: 'Timecourse', value: 'timecourse'},
+                    {text: 'Tissue', value: 'tissue',sortable: false},
+                    {text: 'Substance', value: 'substance',sortable: false},
+                    {text: 'Timecourse', value: 'timecourse',sortable: false},
                 ]
             }
         },
