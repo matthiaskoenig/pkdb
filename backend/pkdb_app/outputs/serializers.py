@@ -182,7 +182,7 @@ class OutputExSerializer(ExSerializer):
                       OUTPUT_MAP_FIELDS + \
                       EX_MEASUREMENTTYPE_FIELDS+ \
                       ["group", "individual", "interventions"] + \
-                      ["group_map","individual_map", "interventions_map"]
+                      ["group_map", "individual_map", "interventions_map"]
 
         label = data.pop("label", None)
         self.validate_label_map(label)
@@ -195,8 +195,8 @@ class OutputExSerializer(ExSerializer):
     def validate_label_map(self, value) -> None:
         """Validate the label key."""
         if isinstance(value, str):
-            if not value.startswith("col=="):
-                msg = "The 'label' must be a mapping and therefore start with 'col=='."
+            if not value.startswith("col==") and "||" not in value:
+                msg = f"The 'label' must be a mapping start with 'col==' or contain a split '||', but label is '{value}'"
                 raise serializers.ValidationError(msg)
 
     def validate_image(self, value):
@@ -204,10 +204,12 @@ class OutputExSerializer(ExSerializer):
         return value
 
     def create(self, validated_data):
-        output_ex, poped_data = _create(model_manager=self.Meta.model.objects,
-                               validated_data=validated_data,
-                               create_multiple_keys=['comments', 'descriptions'],
-                               pop=['outputs'])
+        output_ex, poped_data = _create(
+            model_manager=self.Meta.model.objects,
+            validated_data=validated_data,
+            create_multiple_keys=['comments', 'descriptions'],
+            pop=['outputs']
+        )
 
         outputs = poped_data["outputs"]
         outputs_interventions = []
@@ -216,7 +218,7 @@ class OutputExSerializer(ExSerializer):
             outputs_interventions.append(output.pop('interventions', []))
 
         outputs_dj = create_multiple_bulk(output_ex, 'ex', outputs, Output)
-        for output, interventions  in zip(outputs_dj, outputs_interventions):
+        for output, interventions in zip(outputs_dj, outputs_interventions):
             output.interventions.add(*interventions)
 
         outputs_normed = create_multiple_bulk_normalized(outputs_dj, Output)
