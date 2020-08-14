@@ -20,11 +20,10 @@
 - [x] Fix 404 reference links;
 - [x] Update studies serializer to include reference information
 - [x] Search frontend: display information count (high level overview of results)
-- [ ] Show study & info node information on search hover
+- [x] Show study & info node information on search hover
 - [x] fix the group & individual checkbox behavior (concise view)
 - [x] fix mistake on pkdata calucalation related to 0 outputs.
 - [x] remove abstract info nodes from search
-
 - [ ] add validation on label column (only "col==" allowed) 
 - [x] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
 - [x] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
@@ -36,6 +35,4 @@
 
 # General @all
 - [ ] Update studies in new format
-(- [ ] Tree how info nodes are connected)
-
 - [ ] manuscript updates

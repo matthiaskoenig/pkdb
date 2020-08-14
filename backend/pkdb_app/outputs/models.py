@@ -114,6 +114,13 @@ class Output(AbstractOutput, Outputable, Accessible):
         if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):
             return value
 
+    def is_timecourse(self):
+        if self.timecourse:
+            if self.timecourse.data.data_type=="timecourse":
+                return True
+        return False
+
+
     def null_value(self):
         return self.null_attr('value')
 

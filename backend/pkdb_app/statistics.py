@@ -1,6 +1,7 @@
 """
 Basic information and statistics about data base content.
 """
+from pkdb_app.data.models import SubSet, Data
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -27,6 +28,8 @@ class Statistics(object):
         self.intervention_count = Intervention.objects.filter(normed=True).count()
         self.output_count = Output.objects.filter(normed=True).count()
         self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
+        self.timecourse_count = SubSet.objects.filter(data__data_type=Data.DataTypes.Timecourse).count()
+
         self.studies = StudyElasticStatisticsSerializer(StudyDocument().get_queryset()).data
 
 
@@ -56,6 +59,7 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "intervention_count",
                 "output_count",
                 "output_calculated_count",
+                'timecourse_count',
                 "studies",
             ]
         }

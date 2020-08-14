@@ -113,6 +113,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         attrs.pop("output_type", None)
 
 
+
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
 
@@ -183,11 +184,19 @@ class OutputExSerializer(ExSerializer):
                       ["group", "individual", "interventions"] + \
                       ["group_map","individual_map", "interventions_map"]
 
+        label = data.pop("label", None)
+        self.validate_label_map(label)
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
         self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
+
+    def validate_label_map(self, value):
+        if isinstance(value, str):
+            if "col==" not in value:
+                msg = "The label field has to be a mapping and thereby contain the string 'col=='."
+                raise serializers.ValidationError(msg)
 
     def validate_image(self, value):
         self._validate_image(value)
