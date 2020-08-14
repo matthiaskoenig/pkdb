@@ -184,8 +184,8 @@ class OutputExSerializer(ExSerializer):
                       ["group", "individual", "interventions"] + \
                       ["group_map","individual_map", "interventions_map"]
 
-        label_map = data.pop("label_map", None)
-        self.validated_label_map(label_map)
+        label = data.pop("label", None)
+        self.validate_label_map(label)
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
@@ -193,9 +193,10 @@ class OutputExSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_label_map(self, value):
-        if "col==" not in value:
-            msg = "The label field has to be a mapping and therby contain the string 'col=='."
-            raise serializers.ValidationError(msg)
+        if isinstance(value, str):
+            if "col==" not in value:
+                msg = "The label field has to be a mapping and thereby contain the string 'col=='."
+                raise serializers.ValidationError(msg)
 
     def validate_image(self, value):
         self._validate_image(value)
