@@ -32,7 +32,7 @@
                     <div>
                         <span class="attr">Curators</span><br />
                         <user-rating v-for="curator in study.curators"
-                                     :key="curator.pk"
+                                     :key="curator.username"
                                      :user="curator"
                         />
                     </div>
@@ -49,7 +49,7 @@
                 <v-card flat>
                     <div v-if="study.substances && study.substances.length!=0">
                         <span class="attr">Substances</span><br />
-                        <span v-for="substance in study.substances" v-bind:key="substance">
+                        <span v-for="substance in study.substances" v-bind:key="substance.sid">
                             <object-chip :object="substance"
                                          otype="substance"
                             />

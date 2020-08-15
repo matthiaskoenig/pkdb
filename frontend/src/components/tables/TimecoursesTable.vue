@@ -16,21 +16,16 @@
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
-                <LinkButton :to="'/timecourses/'+ item.pk"
-                            :title="'Timecourse: '+item.pk"
-                            icon="timecourse"
-                />
-                <JsonButton :resource_url="api + 'timecourses/'+ item.pk +'/?format=json'"/>
             </template>
 
             <template v-slot:item.measurement_type="{ item }">
-                <object-chip :object="item.measurement_type"
+                <object-chip :object="f(item).measurement_type"
                              otype="measurement_type"
                              :search="search"
                 />
             </template>
             <template v-slot:item.subject="{ item }">
-                <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
+                <get-data v-if="f(item).group" :resource_url="group_url(f(item).group.pk)">
                         <span slot-scope="data">
                             <object-chip :object="data.data"
                                          otype="group"
@@ -38,7 +33,7 @@
                             />
                         </span>
                 </get-data>
-                <get-data v-if="item.individual" :resource_url="individual_url(item.individual.pk)">
+                <get-data v-if="f(item).individual" :resource_url="individual_url(f(item).individual.pk)">
                         <span slot-scope="data">
                             <object-chip :object="data.data"
                                          otype="individual"
@@ -48,7 +43,7 @@
                 </get-data>
             </template>
             <template v-slot:item.interventions="{ item }">
-                    <span v-if="item.interventions" v-for="(intervention, index2) in item.interventions" :key="index2">
+                    <span v-if="f(item).interventions" v-for="(intervention, index2) in f(item).interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
                             <span slot-scope="data">
                                 <object-chip :object="data.data"
@@ -60,21 +55,23 @@
                     </span>
             </template>
             <template v-slot:item.tissue="{ item }">
-                <object-chip :object="item.tissue"
+                <object-chip :object="f(item).tissue"
                              otype="tissue"
                              :search="search"
                 />
             </template>
 
             <template v-slot:item.substance="{ item }">
-                <object-chip :object="item.substance"
+                <object-chip :object="f(item).substance"
                              otype="substance"
                              :search="search"
                 />
             </template>
 
             <template v-slot:item.timecourse="{ item }">
-                <timecourse-plot :timecourse="item"/>
+              <!--
+                <timecourse-plot :timecourse="f(item)"/>
+                -->
             </template>
             <no-data/>
 
@@ -95,11 +92,17 @@
             TableToolbar,
             TimecoursePlot,
         },
+      method:{
+          f(item){
+            return item[0][0]
+          }
+      },
+
         mixins: [searchTableMixin, UrlMixin],
         data() {
             return {
-                otype: "timecourses",
-                otype_single: "timecourse",
+                otype: "subsets",
+                otype_single: "subset",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Measurement Type', value: 'measurement_type',sortable: false},
