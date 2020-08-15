@@ -110,6 +110,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
         _validate_requried_key(attrs, "output_type")
+        self._validate_timecourse(attrs)
 
 
 
@@ -128,6 +129,15 @@ class OutputSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
+
+    def _validate_timecourse(self, attrs):
+        if attrs["output_type"] == Output.OutputTypes.Timecourse:
+            _validate_requried_key(attrs,"label")
+            if not attrs.get("label",None):
+                msg = "Label is required on on output_type=timecourse"
+                raise serializers.ValidationError(msg)
+
+
 
 
 

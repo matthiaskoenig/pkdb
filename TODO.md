@@ -38,7 +38,7 @@
     - [ ] selection of choices not working (not visible and not selectable easily)
     - [ ] empty search should give all results, but currently the results are empty
     - [x] bug in search for form {option.label }} added
-    - [ ] no info node details on Individuals & Groups search
+    - [x] no info node details on Individuals & Groups search
     - [ ] search form is too high/large, not visible on normal display
     - [ ] many console errors on search (`TypeError: t.response is undefined`)
 - [ ] download button
