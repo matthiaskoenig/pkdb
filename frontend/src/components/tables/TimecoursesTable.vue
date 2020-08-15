@@ -69,9 +69,8 @@
             </template>
 
             <template v-slot:item.timecourse="{ item }">
-              <!--
-                <timecourse-plot :timecourse="item.array[0][0]"/>
-                -->
+
+                <timecourse-plot :array="item.array"/>
             </template>
             <no-data/>
 
@@ -92,11 +91,11 @@
             TableToolbar,
             TimecoursePlot,
         },
-      method:{
-
+      method: {
       },
 
         mixins: [searchTableMixin, UrlMixin],
+
         data() {
             return {
                 otype: "subsets",
