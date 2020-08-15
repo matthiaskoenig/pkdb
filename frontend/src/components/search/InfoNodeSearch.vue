@@ -5,8 +5,9 @@
       :close-on-select="false"
       :clear-on-select="false"
       :preserve-search="true"
-      :option-height="30"
       select-label=""
+      deselectLabel=""
+
       :placeholder="'Search for ' + label()"
       track-by="sid"
       :multiple="true"

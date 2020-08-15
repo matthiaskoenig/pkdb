@@ -8,6 +8,7 @@
       :preserve-search="true"
       placeholder="Search for Studies"
       select-label=""
+      deselectLabel=""
       label="name"
       track-by="name"
       :multiple="true"

@@ -14,6 +14,8 @@
     :searchable="true"
     tagPosition="bottom"
     :internal-search="false"
+    select-label=""
+    deselect-label=""
     @search-change=sync_search
   >
 
@@ -30,6 +32,24 @@
         </v-container>
 
       </template>
+    <template
+        slot="option"
+        slot-scope="props"
+    >
+      <v-btn
+          block
+          text
+          large
+
+          v-on:mouseover.native="mouseover(props.option)"
+          v-on:mouseleave.native="mouseleave()">
+
+        <text-highlight :queries="highlight">
+          {{props.option.label}}
+        </text-highlight>
+      </v-btn>
+
+    </template>
 
   </multiselect>
 </template>
@@ -54,6 +74,8 @@ export default {
       autoUpdate: true,
       selected_entries: [],
       child_choices : {},
+      exclude_abstract: true,
+
 
       search:""
     }
@@ -67,6 +89,16 @@ export default {
     }
   },
   methods: {
+    mouseover(option) {
+      this.$store.state.show_type = "info_node"
+      this.$store.state.detail_info = option
+      this.$store.state.detail_display = true
+    },
+    mouseleave() {
+      this.$store.state.detail_display = false
+      this.$store.state.detail_info = {}
+
+    },
     q(child_choices) {
       var query_dict = []
       for (var selected of this.selected_entries) {
