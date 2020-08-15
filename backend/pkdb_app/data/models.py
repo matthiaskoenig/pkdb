@@ -16,7 +16,7 @@ class DataSet(models.Model):
     """
     @property
     def subsets(self):
-        return self.study.outputs
+        return self.study.subsets
 
 
 class Data(models.Model):

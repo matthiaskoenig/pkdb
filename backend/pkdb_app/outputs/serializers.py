@@ -318,9 +318,9 @@ class OutputInterventionSerializer(serializers.ModelSerializer):
 
 class SmallOutputSerializer(serializers.ModelSerializer):
 
-    #group = GroupSmallElasticSerializer()
-    #individual = IndividualSmallElasticSerializer()
-    #interventions = InterventionSmallElasticSerializer(many=True)
+    group = GroupSmallElasticSerializer()
+    individual = IndividualSmallElasticSerializer()
+    interventions = InterventionSmallElasticSerializer(many=True)
 
     substance = SidLabelSerializer(allow_null=True)
     measurement_type = SidLabelSerializer(allow_null=True)
@@ -342,7 +342,7 @@ class SmallOutputSerializer(serializers.ModelSerializer):
         fields = (
                 ["pk", "normed"]
                 + EXTRA_FIELDS
-                #+ ["group", "individual", "interventions"]
+                + ["group", "individual", "interventions"]
                 + MEASUREMENTTYPE_FIELDS
                 + TIME_FIELDS
                 + VALUE_FIELDS

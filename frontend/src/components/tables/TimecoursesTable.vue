@@ -19,13 +19,13 @@
             </template>
 
             <template v-slot:item.measurement_type="{ item }">
-                <object-chip :object="f(item).measurement_type"
+                <object-chip :object="item.array[0][0].measurement_type"
                              otype="measurement_type"
                              :search="search"
                 />
             </template>
             <template v-slot:item.subject="{ item }">
-                <get-data v-if="f(item).group" :resource_url="group_url(f(item).group.pk)">
+                <get-data v-if="Object.keys(item.array[0][0].group).length !== 0" :resource_url="group_url(item.array[0][0].group.pk)">
                         <span slot-scope="data">
                             <object-chip :object="data.data"
                                          otype="group"
@@ -33,7 +33,7 @@
                             />
                         </span>
                 </get-data>
-                <get-data v-if="f(item).individual" :resource_url="individual_url(f(item).individual.pk)">
+                <get-data v-if="Object.keys(item.array[0][0].individual).length !== 0" :resource_url="individual_url(item.array[0][0].individual.pk)">
                         <span slot-scope="data">
                             <object-chip :object="data.data"
                                          otype="individual"
@@ -43,7 +43,7 @@
                 </get-data>
             </template>
             <template v-slot:item.interventions="{ item }">
-                    <span v-if="f(item).interventions" v-for="(intervention, index2) in f(item).interventions" :key="index2">
+                    <span v-if="item.array[0][0].interventions" v-for="(intervention, index2) in item.array[0][0].interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
                             <span slot-scope="data">
                                 <object-chip :object="data.data"
@@ -55,14 +55,14 @@
                     </span>
             </template>
             <template v-slot:item.tissue="{ item }">
-                <object-chip :object="f(item).tissue"
+                <object-chip :object="item.array[0][0].tissue"
                              otype="tissue"
                              :search="search"
                 />
             </template>
 
             <template v-slot:item.substance="{ item }">
-                <object-chip :object="f(item).substance"
+                <object-chip :object="item.array[0][0].substance"
                              otype="substance"
                              :search="search"
                 />
@@ -70,7 +70,7 @@
 
             <template v-slot:item.timecourse="{ item }">
               <!--
-                <timecourse-plot :timecourse="f(item)"/>
+                <timecourse-plot :timecourse="item.array[0][0]"/>
                 -->
             </template>
             <no-data/>
@@ -93,9 +93,7 @@
             TimecoursePlot,
         },
       method:{
-          f(item){
-            return item[0][0]
-          }
+
       },
 
         mixins: [searchTableMixin, UrlMixin],

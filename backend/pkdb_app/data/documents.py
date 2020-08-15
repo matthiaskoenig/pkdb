@@ -87,7 +87,7 @@ output_field = dict(
 
 @registry.register_document
 class SubSetDocument(Document):
-
+    pk = fields.IntegerField()
     array = fields.ObjectField(
         attr="data_points",
         properties={

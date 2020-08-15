@@ -353,6 +353,7 @@ class DataSetSerializer(ExSerializer):
 
 
 class SubSetElasticSerializer(serializers.ModelSerializer):
+
     study = StudySmallElasticSerializer(read_only=True)
     name = serializers.CharField()
     data_type = serializers.CharField()
@@ -360,14 +361,14 @@ class SubSetElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubSet
-        fields = ["study",
+        fields = ["pk","study",
                   "name",
                   "data_type",
                   "array"]
 
     def get_array(self,object):
-        return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
-
+        #return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
+        return [[p.to_dict() for p in point.point] for point in object["array"]]
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
