@@ -34,12 +34,13 @@ class Data(models.Model):
 
 
 
-class SubSet(models.Model):
+class SubSet(Accessible):
     """
 
     """
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="subsets")
 
 
     def get_single_dosing(self) -> Intervention:
@@ -54,6 +55,15 @@ class SubSet(models.Model):
 
         except (ObjectDoesNotExist, MultipleObjectsReturned):
             return None
+
+    @property
+    def array(self):
+        [point.values_list("output") for point in self.data_points]
+        return self.data.data_type
+
+    @property
+    def data_type(self):
+        return self.data.data_type
 
     @property
     def outputs(self):
@@ -160,8 +170,6 @@ class SubSet(models.Model):
             self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
         self.reformat_timecourse(timecourse, self._timecourse_extra())
         self.validate_timecourse(timecourse)
-        from pprint import pprint
-        pprint(timecourse)
         return timecourse
 
     def reformat_timecourse(self, timecourse, mapping):

@@ -18,7 +18,7 @@ from pkdb_app.outputs.serializers import OutputElasticSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer, \
     GroupElasticSerializer, IndividualElasticSerializer
 from rest_framework import serializers
-from pkdb_app.data.documents import DataAnalysisDocument
+from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
 from pkdb_app.serializers import PkSerializer, StudySmallElasticSerializer, NameSerializer
 from rest_framework.response import Response
 from rest_framework import filters, status
@@ -156,6 +156,8 @@ def delete_elastic_study(related_elastic):
             return False, "BulkIndexError"
 
 
+
+
 def related_elastic_dict(study):
     """ Dictionary of elastic documents for given study.
 
@@ -166,6 +168,7 @@ def related_elastic_dict(study):
     groups = study.groups.all()
     individuals = study.individuals.all()
     dimensions = study.dimensions.all()
+    subsets = study.subsets.all()
 
     related_outputs_intervention = [
         'intervention',
@@ -199,6 +202,7 @@ def related_elastic_dict(study):
         OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(
             intervention__in=interventions),
         DataAnalysisDocument: dimensions,
+        SubSetDocument: subsets,
     }
     if study.reference:
         docs_dict[ReferenceDocument] = study.reference

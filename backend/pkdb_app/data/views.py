@@ -1,8 +1,8 @@
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
 from pkdb_app.documents import AccessView
-from pkdb_app.data.documents import DataAnalysisDocument
-from pkdb_app.data.serializers import DataAnalysisSerializer
+from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
+from pkdb_app.data.serializers import DataAnalysisSerializer, SubSetElasticSerializer
 
 from pkdb_app.pagination import CustomPagination
 
@@ -48,3 +48,14 @@ class DataAnalysisViewSet(AccessView):
 
     }
 
+
+class SubSetViewSet(AccessView):
+    document = SubSetDocument
+    serializer_class = SubSetElasticSerializer
+    pagination_class = CustomPagination
+    lookup_field = "id"
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend]
+    search_fields = ("name", "data_type")
+    multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
+    multi_match_options = {'operator': 'and'}
+    filter_fields = { "name": "name.raw", "data_type":"data_type.raw"}
