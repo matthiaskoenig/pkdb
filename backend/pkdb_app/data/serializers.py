@@ -375,7 +375,7 @@ class DataSetElasticSmallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DataSet
-        fields = ["pk", "descriptions", "comments", "data"]
+        fields = ["pk", "descriptions", "comments", "subsets"]
         read_only_fields = fields
 
     def get_subsets(self, obj):
