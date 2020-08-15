@@ -4,7 +4,7 @@ Django model for Study.
 import datetime
 
 from django.db import models
-from pkdb_app.data.models import DataSet
+from pkdb_app.data.models import DataSet, Data
 
 from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
@@ -258,15 +258,23 @@ class Study(Sidable, models.Model):
 
     @property
     def output_count(self):
-        if self.outputset:
-            return self.outputset.outputs.filter(normed=True).count()
-        return 0
+        return self.outputs.filter(normed=True).count()
 
     @property
     def output_calculated_count(self):
-        if self.outputset:
-            return self.outputset.outputs.filter(normed=True, calculated=True).count()
-        return 0
+        return self.outputs.filter(normed=True, calculated=True).count()
+
+    @property
+    def subset_count(self):
+        return self.subsets.count()
+
+    @property
+    def timecourse_count(self):
+        return self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).count()
+
+    @property
+    def scatter_count(self):
+        return self.subsets.filter(data__data_type=Data.DataTypes.Scatter).count()
 
     def delete(self, *args, **kwargs):
         if self.outputset:

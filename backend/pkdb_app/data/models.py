@@ -14,6 +14,9 @@ class DataSet(models.Model):
     DataSet adds context to the outputs. Here, already uploaded outputs can be grouped to datasets and subsets. These subsets respresent
     e.g. the data points of a timecourse, or the data points of a scatter plot.
     """
+    @property
+    def subsets(self):
+        return self.study.outputs
 
 
 class Data(models.Model):

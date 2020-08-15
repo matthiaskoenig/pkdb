@@ -350,18 +350,7 @@ class DataSetSerializer(ExSerializer):
 ################################
 # Read Serializer
 ################################
-class DataSetElasticSmallSerializer(serializers.ModelSerializer):
-    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
-    comments = CommentElasticSerializer(many=True, read_only=True)
-    data = serializers.SerializerMethodField()
 
-    class Meta:
-        model = DataSet
-        fields = ["pk", "descriptions", "comments", "data"]
-        read_only_fields = fields
-
-    def get_data(self, obj):
-        return list_of_pk("data", obj)
 
 class SubSetElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
@@ -379,6 +368,18 @@ class SubSetElasticSerializer(serializers.ModelSerializer):
     def get_array(self,object):
         return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
 
+class DataSetElasticSmallSerializer(serializers.ModelSerializer):
+    descriptions = DescriptionElasticSerializer(many=True, read_only=True)
+    comments = CommentElasticSerializer(many=True, read_only=True)
+    subsets = serializers.SerializerMethodField()
+
+    class Meta:
+        model = DataSet
+        fields = ["pk", "descriptions", "comments", "data"]
+        read_only_fields = fields
+
+    def get_subsets(self, obj):
+        return list_of_pk("subsets", obj)
 
 class DataAnalysisSerializer(serializers.ModelSerializer):
     class Meta:
