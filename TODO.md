@@ -38,7 +38,8 @@
     - [ ] bug in search for form {option.label }} added
     - [ ] no info node details on Individuals & Groups search
     - [ ] search form is too high/large, not visible on normal display
-    - [ ] many console errors on search (`TypeError: t.response is undefined`)
+    - [ ] many console errors on search (`TypeError: t.response is undefined)
+    - [ ] add overall search field
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
 - [x] Add datasets automatically for timecourses
