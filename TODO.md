@@ -13,6 +13,8 @@
 - [ ] Cleanup/reduction of all tables
 - [ ] Fix landing page
 
+- [ ] small values are not displayed. example: "http://0.0.0.0:8081/studies/PKDB00300". This library might help pretty print values "https://github.com/gentooboontoo/js-quantities". (Janek: I added it here not shure if I should do it.)
+    
 
 ## Janek
 - [x] replace url_slug with sid
@@ -28,15 +30,15 @@
 - [x] add validation on label column (only "col==" allowed) 
 - [x] fix search highlight (simple solution to apply to components without need fro explicitly stating highlight)
 - [x] Fix table sorting! This is currently not working, so remove sorting on all tables or fix the sorting behavior
-- [ ] Calculate timecourses from database
-- [ ] bug in concise on curators
+- [x] Calculate timecourses from database
+- [x] bug in concise on curators
 - [x] issues sort
 - [ ] issues search
-    - [ ] update information on full selection (not only info button)
+    - [x] update information on full selection (not only info button)
     - [ ] selection of choices not working (not visible and not selectable easily)
     - [ ] empty search should give all results, but currently the results are empty
-    - [ ] bug in search for form {option.label }} added
-    - [ ] no info node details on Individuals & Groups search
+    - [x] bug in search for form {option.label }} added
+    - [x] no info node details on Individuals & Groups search
     - [ ] search form is too high/large, not visible on normal display
     - [ ] many console errors on search (`TypeError: t.response is undefined)
     - [ ] add overall search field

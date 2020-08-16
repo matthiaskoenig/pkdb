@@ -519,6 +519,9 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             "intervention_count",
             "output_count",
             "output_calculated_count",
+            "subset_count",
+            "timecourse_count",
+            "scatter_count",
 
             "reference",
             "reference_date",

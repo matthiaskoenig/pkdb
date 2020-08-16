@@ -7,6 +7,8 @@
       :clear-on-select="false"
       :preserve-search="true"
       placeholder="Search for Studies"
+      select-label=""
+      deselectLabel=""
       label="name"
       track-by="name"
       :multiple="true"
@@ -28,14 +30,21 @@
         slot="option"
         slot-scope="props"
     >
-      <v-btn icon
-             v-on:mouseover.native="mouseover(props.option)"
-             v-on:mouseleave.native="mouseleave()">
+      <v-btn
+          block
+          text
+          large
 
-        <v-icon color="white">{{ faIcon('about') }}</v-icon>
+          v-on:mouseover.native="mouseover(props.option)"
+          v-on:mouseleave.native="mouseleave()">
+
+        <text-highlight :queries="highlight">
+          {{props.option.name}}
+        </text-highlight>
       </v-btn>
-      {{props.option.name}}
+
     </template>
+
 
     <template slot="clear" slot-scope="props">
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>

@@ -96,6 +96,9 @@ class StudyDocument(Document):
     intervention_count = fields.IntegerField()
     output_count = fields.IntegerField()
     output_calculated_count = fields.IntegerField()
+    subset_count = fields.IntegerField()
+    timecourse_count = fields.IntegerField()
+    scatter_count = fields.IntegerField()
 
     creator = fields.ObjectField(
         properties={
@@ -191,7 +194,7 @@ class StudyDocument(Document):
             )
         }
     )
-    dataset = common_setfields("data")
+    dataset = common_setfields("subsets")
 
 
     class Django:

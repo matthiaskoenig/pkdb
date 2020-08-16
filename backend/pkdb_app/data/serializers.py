@@ -6,8 +6,8 @@ from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializ
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
-from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS
-from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
+from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS, SmallOutputSerializer
+from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, StudySmallElasticSerializer
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_normalized, list_of_pk
 from rest_framework import serializers
@@ -50,6 +50,8 @@ class SubSetSerializer(ExSerializer):
 
 
     def create(self, validated_data):
+        validated_data["study"] = self.context["study"]
+
         subset_instance, poped_data = _create(model_manager=self.Meta.model.objects,
                                               validated_data=validated_data,
                                               create_multiple_keys=['comments', 'descriptions'],
@@ -348,18 +350,37 @@ class DataSetSerializer(ExSerializer):
 ################################
 # Read Serializer
 ################################
+
+
+class SubSetElasticSerializer(serializers.ModelSerializer):
+
+    study = StudySmallElasticSerializer(read_only=True)
+    name = serializers.CharField()
+    data_type = serializers.CharField()
+    array = serializers.SerializerMethodField()
+
+    class Meta:
+        model = SubSet
+        fields = ["pk","study",
+                  "name",
+                  "data_type",
+                  "array"]
+
+    def get_array(self,object):
+        #return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
+        return [[p.to_dict() for p in point.point] for point in object["array"]]
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
-    data = serializers.SerializerMethodField()
+    subsets = serializers.SerializerMethodField()
 
     class Meta:
         model = DataSet
-        fields = ["pk", "descriptions", "comments", "data"]
+        fields = ["pk", "descriptions", "comments", "subsets"]
         read_only_fields = fields
 
-    def get_data(self, obj):
-        return list_of_pk("data", obj)
+    def get_subsets(self, obj):
+        return list_of_pk("subsets", obj)
 
 class DataAnalysisSerializer(serializers.ModelSerializer):
     class Meta:

@@ -72,7 +72,7 @@
                     <br />
                     <span ref="timecourses"></span>
                     <count-chip :count="study.timecourse_count" icon="timecourse" name="timecourse"></count-chip>
-                    <timecourses-table v-if="study.timecourse_count>0" v-show="visible.timecourses" :search_ids="true" :ids="study.outputset.timecourses" :autofocus="false"/>
+                    <timecourses-table v-if="study.timecourse_count>0" v-show="visible.timecourses" :search_ids="true" :ids="study.dataset.subsets" :autofocus="false"/>
                 </v-flex>
             </v-layout>
         </div>

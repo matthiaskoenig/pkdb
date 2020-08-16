@@ -5,6 +5,9 @@
       :close-on-select="false"
       :clear-on-select="false"
       :preserve-search="true"
+      select-label=""
+      deselectLabel=""
+
       :placeholder="'Search for ' + label()"
       track-by="sid"
       :multiple="true"
@@ -16,7 +19,7 @@
     <template slot="tag" slot-scope="{ option, remove }">
         <span class="multiselect__tag">
 
-           { option.label }}
+           {{ option.label }}
 
           <span  @click="remove(option)">
             <i class="multiselect__tag-icon"></i>
@@ -27,15 +30,18 @@
         slot="option"
         slot-scope="props"
     >
-      <v-btn icon
-             v-on:mouseover.native="mouseover(props.option)"
-             v-on:mouseleave.native="mouseleave()">
+      <v-btn
+          block
+          text
+          large
 
-        <v-icon color="white">{{ faIcon('about') }}</v-icon>
-      </v-btn>
+        v-on:mouseover.native="mouseover(props.option)"
+        v-on:mouseleave.native="mouseleave()">
+
       <text-highlight :queries="highlight">
         {{props.option.label}}
       </text-highlight>
+      </v-btn>
 
     </template>
 

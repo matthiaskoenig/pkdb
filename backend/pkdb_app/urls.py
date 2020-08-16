@@ -3,7 +3,7 @@ Django URLs
 """
 from django.conf.urls import url
 from django.urls import path, include
-from pkdb_app.data.views import DataAnalysisViewSet
+from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -63,6 +63,7 @@ router.register("individuals", IndividualViewSet, basename="individuals")
 router.register("interventions", ElasticInterventionViewSet, basename="interventions")
 router.register("outputs", ElasticOutputViewSet, basename="outputs")
 router.register("info_nodes", InfoNodeElasticViewSet, basename="info_nodes")
+router.register("subsets", SubSetViewSet, basename="subsets")
 
 # -----------------------------------------------------------------------------
 # Django URLs
@@ -83,6 +84,7 @@ router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups
 router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
 router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
 router.register("data_analysis", DataAnalysisViewSet, basename="data_analysis")
+
 #router.register("pkdata", PKDataView, basename="pkdata")
 
 

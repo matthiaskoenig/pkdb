@@ -54,7 +54,7 @@
                     <v-icon v-else
                             small
                             color="black"
-                            :title="'Calculated from timecourse: ' + item.timecourse.pk">fas fa-times-circle
+                            title="Calculated from timecourse.">fas fa-times-circle
                     </v-icon>
 
                 </template>

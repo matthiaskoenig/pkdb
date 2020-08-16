@@ -10,7 +10,8 @@
       <v-col>
         {{ option_parent.label }}
       </v-col>
-
+    </v-row>
+    <v-row>
       <v-col>
 
         <multiselect
@@ -20,6 +21,8 @@
             :close-on-select="false"
             :clear-on-select="false"
             :preserve-searchpul="true"
+            select-label=""
+            deselect-label=""
             placeholder="Search for Choices"
             label="label"
             track-by="sid"
@@ -29,13 +32,37 @@
             @search-change=sync_search>
 
           <template slot="tag" slot-scope="{ option, remove }">
-        <span class="multiselect__tag">
-          {{ option.label }}
-          <span  @click="remove(option)">
-            <i class="multiselect__tag-icon"></i>
-          </span>
-        </span>
+            <span class="multiselect__tag">
+
+              {{ option.label }}
+
+                <span  @click="remove(option)">
+                  <i class="multiselect__tag-icon"></i>
+                </span>
+            </span>
           </template>
+          <!--
+          <template
+              slot="option"
+              slot-scope="prop"
+          >
+            <v-btn
+                block
+                text
+                large
+
+                v-on:mouseover.native="mouseover(prop.option)"
+                v-on:mouseleave.native="mouseleave()">
+
+              <text-highlight :queries="highlight">
+                {{prop.option.label}}
+              </text-highlight>
+            </v-btn>
+
+          </template>
+            -->
+
+
 
           <template slot="clear" slot-scope="props">
             <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
@@ -78,6 +105,16 @@ export default {
     }
   },
   methods: {
+    mouseover(option) {
+      this.$store.state.show_type = "info_node"
+      this.$store.state.detail_info = option
+      this.$store.state.detail_display = true
+    },
+    mouseleave() {
+      this.$store.state.detail_display = false
+      this.$store.state.detail_info = {}
+
+    },
     faIcon: function (key) {
       return lookupIcon(key)
     },

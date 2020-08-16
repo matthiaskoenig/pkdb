@@ -110,6 +110,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_requried_key(attrs, "tissue")
         _validate_requried_key(attrs, "interventions")
         _validate_requried_key(attrs, "output_type")
+        self._validate_timecourse(attrs)
 
 
 
@@ -128,6 +129,15 @@ class OutputSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError(err)
 
         return super().validate(attrs)
+
+    def _validate_timecourse(self, attrs):
+        if attrs["output_type"] == Output.OutputTypes.Timecourse:
+            _validate_requried_key(attrs,"label")
+            if not attrs.get("label",None):
+                msg = "Label is required on on output_type=timecourse"
+                raise serializers.ValidationError(msg)
+
+
 
 
 
@@ -315,6 +325,40 @@ class OutputInterventionSerializer(serializers.ModelSerializer):
         fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
                   "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
         read_only_fields = fields
+
+class SmallOutputSerializer(serializers.ModelSerializer):
+
+    group = GroupSmallElasticSerializer()
+    individual = IndividualSmallElasticSerializer()
+    interventions = InterventionSmallElasticSerializer(many=True)
+
+    substance = SidLabelSerializer(allow_null=True)
+    measurement_type = SidLabelSerializer(allow_null=True)
+    tissue = SidLabelSerializer(allow_null=True)
+    method = SidLabelSerializer(allow_null=True)
+    choice = SidLabelSerializer(allow_null=True)
+
+    value = serializers.FloatField(allow_null=True)
+    mean = serializers.FloatField(allow_null=True)
+    median = serializers.FloatField(allow_null=True)
+    min = serializers.FloatField(allow_null=True)
+    max = serializers.FloatField(allow_null=True)
+    sd = serializers.FloatField(allow_null=True)
+    se = serializers.FloatField(allow_null=True)
+    cv = serializers.FloatField(allow_null=True)
+
+    class Meta:
+        model = Output
+        fields = (
+                ["pk", "normed"]
+                + EXTRA_FIELDS
+                + ["group", "individual", "interventions"]
+                + MEASUREMENTTYPE_FIELDS
+                + TIME_FIELDS
+                + VALUE_FIELDS
+        )
+        read_only_fields = fields
+
 
 
 class OutputElasticSerializer(serializers.ModelSerializer):
