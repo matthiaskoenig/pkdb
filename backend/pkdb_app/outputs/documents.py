@@ -88,6 +88,8 @@ class OutputInterventionDocument(Document):
     group_pk = fields.IntegerField('group_pk')
     individual_pk = fields.IntegerField('individual_pk')
 
+    label = string_field('label')
+    output_type = string_field('output_type')
     measurement_type = string_field("measurement_type")
     substance = string_field("substance")
     normed = fields.BooleanField()

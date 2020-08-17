@@ -204,6 +204,14 @@ class OutputIntervention(Accessible, models.Model):
         return self.output.pk
 
     @property
+    def output_label(self):
+        return self.output.label
+
+    @property
+    def output_type(self):
+        return self.output.output_type
+
+    @property
     def group_name(self):
         if self.output.group:
             return self.output.group.name

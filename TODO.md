@@ -46,6 +46,8 @@
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
 - [x] Add datasets automatically for timecourses
+- [ ] repair analysis serializer
+- [x] create a hash for search queries to avoid very long urls  
 
 # General @all
 - [ ] Update studies in new format
