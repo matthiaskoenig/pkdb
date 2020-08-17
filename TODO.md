@@ -42,6 +42,7 @@
     - [ ] search form is too high/large, not visible on normal display
     - [ ] many console errors on search (`TypeError: t.response is undefined)
     - [ ] add overall search field
+    - [ ] timecourses not depicted in search results
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
 - [x] Add datasets automatically for timecourses
