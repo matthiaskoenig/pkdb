@@ -1,40 +1,11 @@
 <template>
-  <v-card  outlined width="100%">
-  <v-form>
+  <div>
+    <measurement-type-choice-search ntype="measurement_type" @selected_entries="emit_search_query"/>
 
-    <v-card-title>
-      <v-badge
-          color="red"
-          :content="individual_count.toString()"
-      >
-        Individuals
-      </v-badge>
-      <v-spacer></v-spacer>
-      &
-      <v-spacer></v-spacer>
+    <v-checkbox color="#41b883" v-model="groups" label="Groups" hide-details></v-checkbox>
+    <v-checkbox color="#41b883" v-model="individuals" label="Individuals" hide-details></v-checkbox>
 
-        <v-badge
-            color="red"
-            :content="group_count.toString()"
-        >
-          Groups
-        </v-badge>
-      <v-spacer></v-spacer>
-
-    </v-card-title>
-        <v-container fluid>
-          <v-row>
-            <v-col cols="12">
-              <v-switch color="#41b883" v-model="individuals"  label="Individuals"  hide-details></v-switch>
-            </v-col>
-            <v-col cols="12">
-              <v-switch  color="#41b883" v-model="groups" label="Groups" hide-details></v-switch>
-            </v-col>
-          </v-row>
-        </v-container>
-        <measurement-type-choice-search ntype="measurement_type" @selected_entries="emit_search_query"/>
-  </v-form>
-  </v-card>
+  </div>
 </template>
 
 
@@ -44,10 +15,6 @@ import {lookupIcon} from "@/icons"
 
 export default {
   name: "SubjectSearchForm",
-  props:{
-    group_count:0,
-    individual_count:0,
-  },
   components: {
     MeasurementTypeChoiceSearch
   },

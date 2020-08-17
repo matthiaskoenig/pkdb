@@ -1,22 +1,11 @@
 <template>
-  <v-card  outlined  width="100%">
-    <v-form>
-      <v-card-title>
-        <v-badge
-            color="red"
-            :content="count.toString()"
-        >
-          Interventions
-        </v-badge>
-      </v-card-title>
-      <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
-      <info-node-search ntype="route" @selected_entries="emit_selected_entries"/>
-      <info-node-search ntype="application" @selected_entries="emit_selected_entries"/>
-      <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
-      <info-node-search ntype="form" @selected_entries="emit_selected_entries"/>
-    </v-form>
-  </v-card>
-
+  <div>
+    <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
+    <info-node-search ntype="route" @selected_entries="emit_selected_entries"/>
+    <info-node-search ntype="application" @selected_entries="emit_selected_entries"/>
+    <info-node-search ntype="form" @selected_entries="emit_selected_entries"/>
+    <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
+  </div>
 </template>
 
 
@@ -25,7 +14,6 @@ import StudySearch from "./StudySearch";
 import InfoNodeSearch from "./InfoNodeSearch";
 
 export default {
-  props:{count:0},
   name: "InterventionSearchForm",
   components: {
     InfoNodeSearch,

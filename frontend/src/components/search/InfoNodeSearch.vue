@@ -21,7 +21,7 @@
 
            {{ option.label }}
 
-          <span  @click="remove(option)">
+          <span @click="remove(option)">
             <i class="multiselect__tag-icon"></i>
           </span>
         </span>
@@ -34,25 +34,21 @@
           block
           text
           large
-        v-on:mouseover.native="mouseover(props.option)">
+          v-on:mouseover.native="mouseover(props.option)">
 
-      <text-highlight :queries="highlight">
-        {{props.option.label}}
-      </text-highlight>
+        <text-highlight :queries="highlight">
+          {{ props.option.label }}
+        </text-highlight>
       </v-btn>
 
     </template>
 
     <template slot="clear" slot-scope="props">
-      <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
-    </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
-
-
+      <div class="multiselect__clear" v-if="selected_entries.length"
+           @mousedown.prevent.stop="clearAll(props.search)"></div>
+    </template>
+    <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
   </multiselect>
-
-
-
-
 </template>
 
 <script>
@@ -66,7 +62,7 @@ export default {
     Multiselect
   },
   mixins: [searchTableMixin],
-  data () {
+  data() {
 
     return {
       detail_display: false,
@@ -80,11 +76,11 @@ export default {
       option: {}
     }
   },
-  watch:{
+  watch: {
     selected_entries() {
-      var emit_object = {}
+      let emit_object = {}
       emit_object[this.$props.ntype + "_sid__in"] = this.selected_entries.map(x => x.sid)
-      this.$emit('selected_entries',emit_object)
+      this.$emit('selected_entries', emit_object)
     }
   },
   methods: {
@@ -94,23 +90,22 @@ export default {
       this.$store.state.detail_display = true
     },
 
-    clearAll () {
+    clearAll() {
       this.selected_entries = []
     },
-    sync_search(search)
-    {
+    sync_search(search) {
       this.search = search
     },
-    label(){
+    label() {
       const labels = {
-        "substance": "Substances",
-        "measurement_type": "Measurement Types",
-        "form": "Forms",
-        "route": "Routes",
+        "substance": "Substance",
+        "measurement_type": "Measurement Type",
+        "form": "Application Form",
+        "route": "Application Route",
         "choice": "Choices",
-        "tissue":"Tissues",
-        "method":"Methods",
-        "application":"Applications",
+        "tissue": "Tissue",
+        "method": "Method",
+        "application": "Application Type",
       }
       return labels[this.ntype]
     }
@@ -123,8 +118,8 @@ export default {
 </script>
 
 <style scoped>
- .detail {
-   position:absolute
+.detail {
+  position: absolute
 
- }
+}
 </style>

@@ -6,7 +6,7 @@
       :close-on-select="false"
       :clear-on-select="false"
       :preserve-search="true"
-      placeholder="Search for Studies"
+      placeholder="Select Studies"
       select-label=""
       deselectLabel=""
       label="name"
@@ -72,7 +72,7 @@ export default {
   },
   watch:{
     selected_entries() {
-      this.$emit('selected_entries',{"studies__name__in":this.selected_entries.map(x => x.name)})
+      this.$emit('selected_entries', {"studies__name__in": this.selected_entries.map(x => x.name)})
     }
   },
   methods: {

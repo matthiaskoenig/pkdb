@@ -4,14 +4,7 @@
         <!-- navigation bar -->
         <div class="study-navbar">
             <a @click="scrollMeTo('overview')">
-            <v-chip color="black"
-                    label
-                    outlined
-            >
-                <v-icon color="black">{{ faIcon('study') }}</v-icon>
-                <span class="heading-title">&nbsp;{{ study.sid }}</span>
-
-            </v-chip>
+              <count-chip :count="study.study_count ? study.study_count: 1" icon="study" name="study"></count-chip>
             </a>
 
             <a @click="scrollMeTo('groups')">
@@ -29,7 +22,7 @@
             <a @click="scrollMeTo('timecourses')">
                 <count-chip :count="study.timecourse_count" icon="timecourse" name="timecourse"></count-chip>
             </a>
-            <JsonButton :resource_url="resource_url"/>
+
         </div>
 
         <!-- study content -->

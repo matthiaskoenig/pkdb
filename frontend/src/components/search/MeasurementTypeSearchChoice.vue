@@ -75,7 +75,6 @@ export default {
       child_choices : {},
       exclude_abstract: true,
 
-
       search:""
     }
   },
@@ -94,7 +93,7 @@ export default {
       this.$store.state.detail_display = true
     },
     q(child_choices) {
-      var query_dict = []
+      let query_dict = []
       for (var selected of this.selected_entries) {
         if (selected.sid in child_choices){
           if( child_choices[selected.sid].length > 0){
