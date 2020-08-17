@@ -35,12 +35,12 @@
 - [x] issues sort
 - [ ] issues search
     - [x] update information on full selection (not only info button)
-    - [ ] selection of choices not working (not visible and not selectable easily)
-    - [ ] empty search should give all results, but currently the results are empty
+    - [o] selection of choices not working (not visible and not selectable easily)
+    - [o] empty search should give all results, but currently the results are empty
     - [x] bug in search for form {option.label }} added
     - [x] no info node details on Individuals & Groups search
     - [ ] search form is too high/large, not visible on normal display
-    - [ ] many console errors on search (`TypeError: t.response is undefined)
+    - [x] many console errors on search (`TypeError: t.response is undefined)
     - [ ] add overall search field
     - [ ] timecourses not depicted in search results
 - [ ] download button
