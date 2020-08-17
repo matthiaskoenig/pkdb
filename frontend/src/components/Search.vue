@@ -26,9 +26,12 @@
           <v-row
               justify='space-between'
           >
-            <v-col>
+            <v-col class="pl-0 ml-0">
               <v-btn
+                  :loading="loading"
+                  absolute
                   color="pink"
+                  outlined
                   dark
                   @click.stop="drawer = !drawer"
               >
@@ -36,17 +39,20 @@
               </v-btn>
 
             </v-col>
-
+            <!--
             <v-col>
-
             <v-progress-circular
                 indeterminate
                 color="primary"
                 v-if="loading"
             ></v-progress-circular>
             </v-col>
-            <v-col>
+            -->
+            <v-col
+                class="text-right pr-0 mr-0"
+            >
               <v-btn
+                  outlined
                   @click.stop="show_help"
               >
                 Help
@@ -98,6 +104,13 @@
         </v-col
             >
         <v-col cols="8">
+          <v-row
+
+          >
+            <v-sheet height="60">
+
+            </v-sheet>
+          </v-row>
 
               <info-node-detail
                   v-model="display_detail"

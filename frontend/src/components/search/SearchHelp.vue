@@ -1,5 +1,8 @@
 <template>
-  <v-card>
+  <v-card
+      outlined
+
+  >
     <v-card-title>
       How to Search in PKDB
     </v-card-title>
