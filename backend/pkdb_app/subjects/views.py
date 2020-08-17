@@ -82,6 +82,7 @@ class GroupViewSet(AccessView):
     }
 
 
+
 class IndividualViewSet(AccessView):
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer

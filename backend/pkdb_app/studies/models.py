@@ -2,6 +2,7 @@
 Django model for Study.
 """
 import datetime
+import uuid
 
 from django.db import models
 from pkdb_app.data.models import DataSet, Data
@@ -14,6 +15,7 @@ from ..outputs.models import OutputSet, Output, OutputIntervention
 from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from django.utils.translation import gettext_lazy as _
 
 
 CURRENT_VERSION = [1.0]
@@ -291,3 +293,23 @@ class Study(Sidable, models.Model):
             self.reference.delete()
         super().delete(*args, **kwargs)
 
+
+
+
+class Query(models.Model):
+    class Recourses(models.TextChoices):
+        """ Recourse Types"""
+        Studies = 'studies', _('studies')
+        Groups = 'groups', _('groups')
+        Individuals = 'individuals', _('individuals')
+        Interventions = 'interventions', _('interventions')
+        Outputs = 'outputs', _('outputs')
+
+
+    resource =  models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
+    hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+
+class IdMulti(models.Model):
+    query = models.ForeignKey(Query, related_name="ids",on_delete=models.CASCADE, null=False)
+    value = models.IntegerField(primary_key=False)

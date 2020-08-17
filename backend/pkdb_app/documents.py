@@ -4,6 +4,7 @@ from functools import reduce
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
+from pkdb_app.studies.models import IdMulti, Query
 
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import user_group
@@ -159,6 +160,16 @@ class AccessView(DocumentViewSet):
                 return self.search.query('match', access__raw="NOTHING")
 
 
+        _hash = self.request.query_params.get("hash",[])
+        if _hash:
+            print(len(list(IdMulti.objects.filter(query__hash=_hash).values_list("value", flat=True))))
+
+            _qs_kwargs = {'values': list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))}
+
+            self.search = self.search.query(
+                'ids',
+                **_qs_kwargs
+            )
 
         if group == "basic":
             return self.search.query(Q('term', access__raw=PUBLIC) | Q('term', allowed_users__raw=self.request.user.username))

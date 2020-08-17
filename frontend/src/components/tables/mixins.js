@@ -17,6 +17,15 @@ let searchTableMixin = {
         }
     },
     props: {
+        search_hash: {
+            type: Boolean,
+            default: false
+        },
+        hash: {
+            type: String,
+            default: () => "BoHash"
+
+        },
         search_ids: {
             type: Boolean,
             default: false
@@ -101,6 +110,9 @@ let searchTableMixin = {
             }
             if (this.search_ids) {
                 url += '&ids=' + this.ids.join("__")
+            }
+            if (this.search_hash) {
+                url += '&hash=' + this.hash
             }
             return url
         },

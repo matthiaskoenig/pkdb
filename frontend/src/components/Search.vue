@@ -58,7 +58,7 @@
             <v-row>
 
               <study-search-form
-                  :count="study_data.length"
+                  :count="study_data.count"
                   @studies__name__in="update_search_query"
                   @studies__creator__in="update_search_query"
                   @studies__curators__in="update_search_query"
@@ -69,8 +69,8 @@
             <v-row>
 
               <subjects-form
-                  :individual_count="individual_data.length"
-                  :group_count="group_data.length"
+                  :individual_count="individual_data.count"
+                  :group_count="group_data.count"
                   @subjects__type="update_search_query"
                   @subject_queries="update_subject_query"
               />
@@ -78,7 +78,7 @@
             <v-row>
 
               <intervention-form
-                  :count="intervention_data.length"
+                  :count="intervention_data.count"
                   @interventions__substance_sid__in="update_search_query"
                   @interventions__route_sid__in="update_search_query"
                   @interventions__application_sid__in="update_search_query"
@@ -87,7 +87,7 @@
               />
             </v-row>
             <v-row>
-              <output-form :count="output_data.length"
+              <output-form :count="output_data.count"
                   @outputs__substance_sid__in="update_search_query"
                   @outputs__tissue_sid__in="update_search_query"
                   @outputs__measurement_type_sid__in="update_search_query"
@@ -132,28 +132,27 @@
         </v-btn>
         <!-- Groups -->
         <v-flex ref="studies" xs12 >
-          <studies-table
-              :search_ids="true" :ids="study_data" :autofocus="false"/>
+          <studies-table :search_hash="true" :hash="study_data.hash" :autofocus="false" />
         </v-flex>
 
         <!-- Groups -->
         <v-flex ref="groups" xs12 >
-          <groups-table  :search_ids="true" :ids="group_data" :autofocus="false"/>
+          <groups-table  :search_hash="true" :hash="group_data.hash" :autofocus="false"/>
         </v-flex>
 
         <!-- Individuals -->
         <v-flex  ref="individuals" xs12 >
-          <individuals-table :search_ids="true" :ids="individual_data" :autofocus="false"/>
+          <individuals-table :search_hash="true" :hash="individual_data.hash" :autofocus="false"/>
         </v-flex>
 
         <!-- Interventions -->
         <v-flex  ref="interventions" xs12 >
-          <interventions-table  :search_ids="true" :ids="intervention_data" :autofocus="false"/>
+          <interventions-table  :search_hash="true" :hash="intervention_data.hash" :autofocus="false"/>
         </v-flex>
 
         <!-- Groups -->
         <v-flex  ref="outputs" xs12 >
-          <outputs-table :search_ids="true" :ids="output_data" :autofocus="false"/>
+          <outputs-table :search_hash="true" :hash="output_data.hash" :autofocus="false"/>
         </v-flex>
 
 
@@ -270,11 +269,11 @@ export default {
   data() {
     return {
       drawer: true,
-      study_data: [],
-      intervention_data: [],
-      group_data: [],
-      individual_data: [],
-      output_data: [],
+      study_data: " ",
+      intervention_data: " ",
+      group_data: " ",
+      individual_data: " ",
+      output_data: " ",
 
       otype: "pkdata",
       otype_single: "pkdata",

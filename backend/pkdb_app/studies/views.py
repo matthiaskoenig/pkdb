@@ -13,13 +13,9 @@ from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend,
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
-from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis, InterventionElasticSerializer
-from pkdb_app.outputs.serializers import OutputElasticSerializer
-from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer, \
-    GroupElasticSerializer, IndividualElasticSerializer
-from rest_framework import serializers
+
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.serializers import PkSerializer, StudySmallElasticSerializer, NameSerializer
+from pkdb_app.utils import create_multiple_bulk
 from rest_framework.response import Response
 from rest_framework import filters, status
 from rest_framework import viewsets
@@ -38,12 +34,11 @@ from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.views import APIView
 
-from .models import Reference
 from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer, StudyAnalysisSerializer,
+    StudyElasticSerializer,
 )
 
 from django.db.models import Subquery
@@ -52,9 +47,9 @@ from pkdb_app.interventions.views import ElasticInterventionViewSet
 from pkdb_app.outputs.models import Output
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.views import ElasticOutputViewSet
-from pkdb_app.studies.models import Study
+from pkdb_app.studies.models import Study, Query, IdMulti, Reference
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, IndividualCharacteristicaViewSet
+from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -261,6 +256,18 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
     def get_queryset(self):
         group = user_group(self.request.user)
+
+        _hash = self.request.query_params.get("hash", [])
+        if _hash:
+            print(len(list(IdMulti.objects.filter(query__hash=_hash).values_list("value", flat=True))))
+
+            _qs_kwargs = {'values': list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))}
+
+            self.search = self.search.query(
+                'ids',
+                **_qs_kwargs
+            )
+
         if group in ["admin", "reviewer"]:
             return self.search.query()
 
@@ -492,18 +499,11 @@ class PKDataView(APIView):
         )
         start_time = time.time()
         pkdata.concise()
-        concise_time =   time.time() - start_time
+        concise_time = time.time() - start_time
         print("Concise time")
         print(concise_time)
 
-        start_time = time.time()
-        #data = {
-        #    "studies": pkdata._paginated_data(PkSerializer, pkdata.studies, pkdata.studies_query),
-        #    "groups": pkdata._paginated_data(GroupElasticSerializer,pkdata.groups, pkdata.groups_query),
-        #    "individuals": pkdata._paginated_data(IndividualElasticSerializer,pkdata.individuals, pkdata.individuals_query),
-        #    "interventions": pkdata._paginated_data(InterventionElasticSerializer, pkdata.interventions,pkdata.interventions_query),
-        #    "outputs": pkdata._paginated_data(OutputElasticSerializer, pkdata.outputs, pkdata.outputs_query)
-        #}
+
         data = {
             "studies": pkdata.studies.values_list("id", flat=True),
             "groups":  pkdata.groups.values_list("id", flat=True),
@@ -511,15 +511,14 @@ class PKDataView(APIView):
             "interventions":  pkdata.interventions.values_list("id", flat=True),
             "outputs": pkdata.outputs.values_list("id", flat=True),
         }
-        rest_time = time.time() - start_time
-        print("Pagination time")
-        print(rest_time)
+        resources = {}
+        for resource, ids in data.items():
+            query = Query.objects.create(resource=resource)
+            query.save()
+            create_multiple_bulk(query,"query", [{"value":id} for id in ids], IdMulti)
+            resources[resource] = {"hash": query.hash, "count":len(ids)}
 
-        start_time = time.time()
+        response = Response(resources, status=status.HTTP_200_OK)
 
-        response = Response(data, status=status.HTTP_200_OK)
-        rest_time =   time.time() - start_time
-        print("Rest time")
-        print(rest_time)
 
         return response
