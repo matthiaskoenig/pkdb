@@ -51,8 +51,7 @@
                 text
                 large
 
-                v-on:mouseover.native="mouseover(prop.option)"
-                v-on:mouseleave.native="mouseleave()">
+                v-on:mouseover.native="mouseover(prop.option)">
 
               <text-highlight :queries="highlight">
                 {{prop.option.label}}
@@ -109,11 +108,6 @@ export default {
       this.$store.state.show_type = "info_node"
       this.$store.state.detail_info = option
       this.$store.state.detail_display = true
-    },
-    mouseleave() {
-      this.$store.state.detail_display = false
-      this.$store.state.detail_info = {}
-
     },
     faIcon: function (key) {
       return lookupIcon(key)

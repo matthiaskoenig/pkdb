@@ -41,8 +41,7 @@
           text
           large
 
-          v-on:mouseover.native="mouseover(props.option)"
-          v-on:mouseleave.native="mouseleave()">
+          v-on:mouseover.native="mouseover(props.option)">
 
         <text-highlight :queries="highlight">
           {{props.option.label}}
@@ -93,11 +92,6 @@ export default {
       this.$store.state.show_type = "info_node"
       this.$store.state.detail_info = option
       this.$store.state.detail_display = true
-    },
-    mouseleave() {
-      this.$store.state.detail_display = false
-      this.$store.state.detail_info = {}
-
     },
     q(child_choices) {
       var query_dict = []

@@ -269,11 +269,11 @@ export default {
   data() {
     return {
       drawer: true,
-      study_data: " ",
-      intervention_data: " ",
-      group_data: " ",
-      individual_data: " ",
-      output_data: " ",
+      study_data: {"hash":"", "count":0},
+      intervention_data: {"hash":"", "count":0},
+      group_data:{"hash":"", "count":0},
+      individual_data: {"hash":"", "count":0},
+      output_data: {"hash":"", "count":0},
 
       otype: "pkdata",
       otype_single: "pkdata",

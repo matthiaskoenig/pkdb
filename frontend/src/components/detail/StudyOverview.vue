@@ -49,7 +49,7 @@
                 <v-card flat>
                     <div v-if="study.substances && study.substances.length!=0">
                         <span class="attr">Substances</span><br />
-                        <span v-for="substance in study.substances" v-bind:key="substance.sid">
+                        <span v-for="substance in study.substances" :key="substance.sid">
                             <object-chip :object="substance"
                                          otype="substance"
                             />
@@ -72,11 +72,7 @@
         </v-layout>
         <v-layout wrap>
             <v-flex md7>
-                <get-data v-if="study.reference" :resource_url="reference_url(study.reference.sid)">
-                    <template slot-scope="reference">
-                        <reference-detail :reference="reference.data" :resource_url="reference_url(study.reference.sid)"/>
-                    </template>
-                </get-data>
+                        <reference-detail :reference="study.reference" :resource_url="reference_url(study.reference.sid)"/>
             </v-flex>
         </v-layout>
     </div>
