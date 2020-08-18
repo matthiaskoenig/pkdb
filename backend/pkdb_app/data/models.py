@@ -189,7 +189,7 @@ class DataPoint(models.Model):
     A DataSetPoint can have multiple dimensions. These dimensions are spanned by outputs.
     """
     subset = models.ForeignKey(SubSet, related_name="data_points", on_delete=models.CASCADE)
-    outputs = models.ManyToManyField('outputs.Output', through="Dimension")
+    outputs = models.ManyToManyField('outputs.Output', through="Dimension", related_name="data_points")
 
 
 class Dimension(Accessible):
