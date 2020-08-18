@@ -1,5 +1,5 @@
 <template>
-    <v-card id="count-table">
+    <v-card flat id="count-table">
         <v-data-table :headers="headers"
                       :items="items"
                       hide-default-footer

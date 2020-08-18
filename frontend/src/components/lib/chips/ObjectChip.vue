@@ -1,31 +1,27 @@
 <template>
     <span>
+      <v-chip
+              flat
+              color="#FFFFFF"
+              small
+              :title="'Show ' + name + ' details'"
+      >
+        <v-avatar left>
+
      <v-badge v-if="count" left dark overlap color="#000000">
         <span slot="badge">{{ count }}</span>
-        <v-btn :color="color"
-               fab
-               x-small
-               dark
-               elevation="0"
-               :link="false"
-        >
             <v-icon small
-                    color="black"
-            >{{ icon }}</v-icon>&nbsp;
-        </v-btn>
-     </v-badge>    &nbsp;
+                    :color="color"
+            >
+              {{ icon }}
+            </v-icon>&nbsp;
+     </v-badge>
 
-    <v-btn v-if="!count"
-           :color="color"
-           fab
-           x-small
-           dark
-           elevation="0"
-           :link="false"
-    >
-        <v-icon small color="black">{{ icon }}</v-icon>&nbsp;
-    </v-btn>&nbsp;
-    <text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight>
+        <v-icon v-if="!count" small :color="color">{{ icon }}</v-icon>&nbsp;
+
+                 </v-avatar>
+    <span style="{color: black;}"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
+        </v-chip>
     </span>
 </template>
 

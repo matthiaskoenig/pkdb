@@ -9,7 +9,7 @@
     <v-text-field
             v-model="search"
             append-icon="fa-search"
-            label="Search"
+            label="Search table"
             single-line
             color="white"
             hide-details

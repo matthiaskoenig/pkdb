@@ -1,7 +1,7 @@
 <template>
     <span class="link-button">
         <v-btn fab
-               small
+               x-small
                text
                :color="color"
                :to="to"
