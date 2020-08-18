@@ -1,11 +1,10 @@
 <template>
-  <div>
+  <span>
       <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
       <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
       <info-node-search ntype="tissue" @selected_entries="emit_selected_entries"/>
-
       <!--<info-node-search ntype="method" @selected_entries="emit_selected_entries"/>-->
-  </div>
+  </span>
 </template>
 
 <script>

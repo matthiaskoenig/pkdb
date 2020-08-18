@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <span>
     <info-node-search ntype="substance" @selected_entries="emit_selected_entries"/>
     <info-node-search ntype="route" @selected_entries="emit_selected_entries"/>
     <info-node-search ntype="application" @selected_entries="emit_selected_entries"/>
     <info-node-search ntype="form" @selected_entries="emit_selected_entries"/>
     <info-node-search ntype="measurement_type" @selected_entries="emit_selected_entries"/>
-  </div>
+  </span>
 </template>
 
 

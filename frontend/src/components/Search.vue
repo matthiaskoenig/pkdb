@@ -8,86 +8,52 @@
         width="100%"
     >
       <v-flex>
-        <v-row>
-          <v-sheet height="50">
-          </v-sheet>
-        </v-row>
 
         <v-row>
           <v-col cols="4">
             <v-row justify='space-between'>
-              <v-col class="pl-0 ml-0">
+              <v-col class="pl-0 ml-0"/>
+            </v-row>
+
+            <v-row>
+              <!--- Start Search Component -->
+              <v-card flat tile width="100%">
+
                 <v-btn
                     :loading="loading"
-                    absolute
-                    color="pink"
-                    outlined
+                    color="#41b883"
                     dark
                     @click.stop="drawer = !drawer"
                 >
                   Results
                 </v-btn>
 
-              </v-col>
-              <!--
-              <v-col>
-              <v-progress-circular
-                  indeterminate
-                  color="primary"
-                  v-if="loading"
-              ></v-progress-circular>
-              </v-col>
-              -->
-              <v-col
-                  class="text-right pr-0 mr-0"
-              >
-                <v-btn
-                    outlined
-                    @click.stop="show_help"
-                >
-                  Help
-                </v-btn>
-              </v-col>
-            </v-row>
-
-            <v-row>
-
-              <!--- Start Search Component -->
-              <v-card flat
-                      tile
-                      width="100%">
-                <v-form>
-                <v-card-title>
+                <label title="Search and filter data by study information">
                   <count-badge text="Studies" :count="study_data.count"/>
-                </v-card-title>
-                <v-card-subtitle>Search and filter data by study information</v-card-subtitle>
-                <v-card-text>
+                  <v-spacer/>
+                  <v-btn color="black" fab x-small dark outlined @click.stop="show_help">
+                    <v-icon>fas fa fa-question</v-icon>
+                  </v-btn>
+                </label>
                   <study-search-form
                       @studies__name__in="update_search_query"
                       @studies__creator__in="update_search_query"
                       @studies__curators__in="update_search_query"
                   />
-                </v-card-text>
 
-                <v-card-title>
+                  <label title="Search and filter data by subjects">
                   <count-badge text="Groups" :count="group_data.count"/>
                   <span style="padding-left: 20px; padding-right: 20px;">&</span>
                   <count-badge text="Individuals" :count="individual_data.count"/>
-                </v-card-title>
-                <v-card-subtitle>Search and filter data by subjects</v-card-subtitle>
-                <v-card-text>
+                  </label>
                   <subjects-form
                       @subjects__type="update_search_query"
                       @subject_queries="update_subject_query"
                   />
-                </v-card-text>
 
-                <v-card-title>
+                <label title="Search and filter data by intervention">
                   <count-badge text="Interventions" :count="intervention_data.count"/>
-                </v-card-title>
-                <v-card-subtitle>Search and filter data by intervention</v-card-subtitle>
-
-                <v-card-text>
+                </label>
                   <intervention-form
                       @interventions__substance_sid__in="update_search_query"
                       @interventions__route_sid__in="update_search_query"
@@ -95,23 +61,22 @@
                       @interventions__measurement_type_sid__in="update_search_query"
                       @interventions__form_sid__in="update_search_query"
                   />
-                </v-card-text>
-                <v-card-title>
+
+                <label title="Search and filter data by outputs">
                   <count-badge text="Outputs" :count="output_data.count"/>
-                </v-card-title>
-                <v-card-subtitle>Search and filter data by outputs</v-card-subtitle>
+                </label>
                 <output-form
                     @outputs__substance_sid__in="update_search_query"
                     @outputs__tissue_sid__in="update_search_query"
                     @outputs__measurement_type_sid__in="update_search_query"
                     @outputs__method_sid__in="update_search_query"
                 />
-                </v-form>
+
               </v-card>
               <!--- End Search Component -->
             </v-row>
-
           </v-col>
+
           <v-col cols="8">
             <v-row>
               <v-sheet height="60">
@@ -166,7 +131,6 @@
         <v-flex ref="outputs" xs12>
           <outputs-table :search_hash="true" :hash="output_data.hash" :autofocus="false"/>
         </v-flex>
-
 
       </v-flex>
 
@@ -324,6 +288,15 @@ export default {
 </script>
 
 <style>
+.rot-neg-90 {
+  -moz-transform:rotate(-270deg);
+  -moz-transform-origin: bottom left;
+  -webkit-transform: rotate(-270deg);
+  -webkit-transform-origin: bottom left;
+  -o-transform: rotate(-270deg);
+  -o-transform-origin:  bottom left;
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+}
 .mousescroll {
   overflow-y: scroll;
   height: 100%;
