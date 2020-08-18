@@ -64,7 +64,12 @@
 
                 <label title="Search and filter data by outputs">
                   <count-badge text="Outputs" :count="output_data.count"/>
+                  <span style="padding-left: 20px; padding-right: 20px;">&</span>
+                  <count-badge text="Timecourses" :count="timecourse_data.count"/>
+                  <span style="padding-left: 20px; padding-right: 20px;">&</span>
+                  <count-badge text="Scatters" :count="scatter_data.count"/>
                 </label>
+
                 <output-form
                     @outputs__substance_sid__in="update_search_query"
                     @outputs__tissue_sid__in="update_search_query"
@@ -132,6 +137,9 @@
           <outputs-table :search_hash="true" :hash="output_data.hash" :autofocus="false"/>
         </v-flex>
 
+        <v-flex ref="timecourses" xs12>
+          <timecourses-table :search_hash="true" :hash="timecourse_data.hash" :autofocus="false"/>
+        </v-flex>
       </v-flex>
 
     </v-layout>
@@ -148,9 +156,11 @@ import {searchTableMixin} from "./tables/mixins";
 
 import StudiesTable from './tables/StudiesTable';
 import IndividualsTable from './tables/IndividualsTable';
+import GroupsTable from "./tables/GroupsTable";
+
 import InterventionsTable from "./tables/InterventionsTable";
 import OutputsTable from "./tables/OutputsTable";
-import GroupsTable from "./tables/GroupsTable";
+import TimecoursesTable from "./tables/TimecoursesTable";
 
 import axios from 'axios'
 import InfoNode from "./InfoNode";
@@ -178,6 +188,7 @@ export default {
     IndividualsTable,
     InterventionsTable,
     OutputsTable,
+    TimecoursesTable
   },
   computed: {
     url() {
@@ -234,6 +245,9 @@ export default {
             this.group_data = res.data.groups;
             this.individual_data = res.data.individuals;
             this.output_data = res.data.outputs;
+            this.timecourse_data = res.data.timecourses;
+            this.scatter_data = res.data.scatters;
+
           })
           .catch(err => {
             console.log(err.response.data);
@@ -252,6 +266,8 @@ export default {
       group_data: {"hash": "", "count": 0},
       individual_data: {"hash": "", "count": 0},
       output_data: {"hash": "", "count": 0},
+      timecourse_data: {"hash": "", "count": 0},
+      scatter_data: {"hash": "", "count": 0},
 
       otype: "pkdata",
       otype_single: "pkdata",

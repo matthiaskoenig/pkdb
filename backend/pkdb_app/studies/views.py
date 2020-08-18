@@ -435,7 +435,7 @@ class PKData(object):
             group_ids2 = Subquery(self.individuals.values("group_id"))
             self.groups = Group.objects.filter(Q(pk__in=group_ids1) | Q(pk__in=group_ids2))
             self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
-            self.subsets = self.subsets.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct()))
+            self.subsets = self.subsets.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct())).distinct()
 
 
     def intervention_pks(self):
@@ -488,7 +488,7 @@ class PKDataView(APIView):
         "group": "groups__",
         "individual": "individuals__",
         "output": "outputs__",
-        "data": "data__",
+        "subsets": "subsets__",
 
     }
 
@@ -525,16 +525,14 @@ class PKDataView(APIView):
             "individuals":  list(pkdata.individuals.values_list("id", flat=True)),
             "interventions":  list(pkdata.interventions.values_list("id", flat=True)),
             "outputs": list(pkdata.outputs.values_list("id", flat=True)),
-            "subsets": list(pkdata.subsets.values_list("id", flat=True)),
+            "timecourses": list(pkdata.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
+            "scatters": list(pkdata.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
         }
         start_time = time.time()
 
         resources = {}
         queries = []
         for resource, ids in data.items():
-
-
-            #query = Query.objects.create(resource=resource, ids=ids)
             query = Query(resource=resource, ids=ids)
             queries.append(query)
             resources[resource] = {"hash": query.hash, "count":len(ids)}
