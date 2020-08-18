@@ -15,7 +15,6 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.utils import create_multiple_bulk
 from rest_framework.response import Response
 from rest_framework import filters, status
 from rest_framework import viewsets
@@ -47,7 +46,7 @@ from pkdb_app.interventions.views import ElasticInterventionViewSet
 from pkdb_app.outputs.models import Output
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.views import ElasticOutputViewSet
-from pkdb_app.studies.models import Study, Query, IdMulti, Reference
+from pkdb_app.studies.models import Study, Query, Reference
 from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet
 
@@ -259,9 +258,8 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
         _hash = self.request.query_params.get("hash", [])
         if _hash:
-            print(len(list(IdMulti.objects.filter(query__hash=_hash).values_list("value", flat=True))))
-
-            _qs_kwargs = {'values': list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))}
+            ids = list(Query.objects.get(hash=_hash).ids)
+            _qs_kwargs = {'values': ids}
 
             self.search = self.search.query(
                 'ids',
@@ -357,9 +355,27 @@ class PKData(object):
 
 
         groups_pks = self.group_pks()
+        elastic_time = time.time() - start_time
+        print("Elastic Time Groups")
+        print(elastic_time)
+
         individuals_pks = self.individual_pks()
+
+        elastic_time = time.time() - elastic_time - start_time
+        print("Elastic Time Individuals")
+        print(elastic_time)
+
         interventions_pks = self.intervention_pks()
+
+        elastic_time = time.time() - elastic_time - start_time
+        print("Elastic Time Interventions")
+        print(elastic_time)
+
         outputs_pks = self.output_pks()
+
+        elastic_time = time.time() - elastic_time - start_time
+        print("Elastic Time Outputs")
+        print(elastic_time)
 
         elastic_time = time.time() - start_time
         print("Elastic Time")
@@ -442,11 +458,11 @@ class PKData(object):
         query elastic search for pks.
 
         """
+
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
-        count = queryset.count()
-        response = queryset.extra(size=count).execute()
+        response = queryset.source([pk_field]).scan()
         return [instance[pk_field] for instance in response]
 
     def _paginated_data(self, serializer, queryset, query_dict):
@@ -505,18 +521,28 @@ class PKDataView(APIView):
 
 
         data = {
-            "studies": pkdata.studies.values_list("id", flat=True),
-            "groups":  pkdata.groups.values_list("id", flat=True),
-            "individuals":  pkdata.individuals.values_list("id", flat=True),
-            "interventions":  pkdata.interventions.values_list("id", flat=True),
-            "outputs": pkdata.outputs.values_list("id", flat=True),
+            "studies": list(pkdata.studies.values_list("id", flat=True)),
+            "groups":  list(pkdata.groups.values_list("id", flat=True)),
+            "individuals":  list(pkdata.individuals.values_list("id", flat=True)),
+            "interventions":  list(pkdata.interventions.values_list("id", flat=True)),
+            "outputs": list(pkdata.outputs.values_list("id", flat=True)),
         }
+        start_time = time.time()
+
         resources = {}
+        queries = []
         for resource, ids in data.items():
-            query = Query.objects.create(resource=resource)
-            query.save()
-            create_multiple_bulk(query,"query", [{"value":id} for id in ids], IdMulti)
+
+
+            #query = Query.objects.create(resource=resource, ids=ids)
+            query = Query(resource=resource, ids=ids)
+            queries.append(query)
             resources[resource] = {"hash": query.hash, "count":len(ids)}
+        Query.objects.bulk_create(queries)
+
+        concise_time = time.time() - start_time
+        print("Save Ids")
+        print(concise_time)
 
         response = Response(resources, status=status.HTTP_200_OK)
 

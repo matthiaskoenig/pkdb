@@ -4,6 +4,7 @@ Django model for Study.
 import datetime
 import uuid
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from pkdb_app.data.models import DataSet, Data
 
@@ -11,7 +12,7 @@ from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..behaviours import Sidable
 from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..outputs.models import OutputSet, Output, OutputIntervention
+from ..outputs.models import OutputSet, OutputIntervention
 from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
@@ -308,8 +309,8 @@ class Query(models.Model):
 
     resource =  models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
     hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ids = ArrayField(models.IntegerField(), null=True, blank=True)
 
-
-class IdMulti(models.Model):
-    query = models.ForeignKey(Query, related_name="ids",on_delete=models.CASCADE, null=False)
-    value = models.IntegerField(primary_key=False)
+#class IdMulti(models.Model):
+#    query = models.ForeignKey(Query, related_name="ids",on_delete=models.CASCADE, null=False)
+#    value = models.IntegerField(primary_key=False)
