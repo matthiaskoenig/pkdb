@@ -10,7 +10,19 @@
       <v-flex>
 
         <v-row>
-          <v-col cols="4">
+          <v-col cols="1">
+            <v-btn
+                :loading="loading"
+                color="#41b883"
+                height="100%"
+                dark
+                @click.stop="drawer = !drawer"
+            >
+              Results
+            </v-btn>
+
+          </v-col>
+          <v-col cols="3">
             <v-row justify='space-between'>
               <v-col class="pl-0 ml-0"/>
             </v-row>
@@ -18,23 +30,13 @@
             <v-row>
               <!--- Start Search Component -->
               <v-card flat tile width="100%">
-
-                <v-btn
-                    :loading="loading"
-                    color="#41b883"
-                    dark
-                    @click.stop="drawer = !drawer"
-                >
-                  Results
-                </v-btn>
-
-                <label title="Search and filter data by study information">
+                <v-card-title title="Search and filter data by study information">
                   <count-badge text="Studies" :count="study_data.count"/>
                   <v-spacer/>
                   <v-btn color="black" fab x-small dark outlined @click.stop="show_help">
                     <v-icon>fas fa fa-question</v-icon>
                   </v-btn>
-                </label>
+                </v-card-title>
                   <study-search-form
                       @studies__name__in="update_search_query"
                       @studies__creator__in="update_search_query"
@@ -71,7 +73,7 @@
                     @outputs__measurement_type_sid__in="update_search_query"
                     @outputs__method_sid__in="update_search_query"
                 />
-
+                </>
               </v-card>
               <!--- End Search Component -->
             </v-row>
