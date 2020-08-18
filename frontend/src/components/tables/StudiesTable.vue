@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"

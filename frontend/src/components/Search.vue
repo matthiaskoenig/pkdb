@@ -1,49 +1,45 @@
 <template>
   <div id="Search">
+    <div class="search-navbar">
+      <v-btn
+          :title="drawer ? 'Go to search results' : 'Go to search form'"
+          color="#41b883"
+          width="100%"
+          dark
+          @click.stop="drawer = !drawer"
+      >
+        {{ drawer ? 'Show Results': 'Show Search' }}
+      </v-btn>
+    </div>
+
 
     <v-navigation-drawer
         v-model="drawer"
         temporary
         absolute
         width="100%"
+        class="search-content"
     >
       <v-flex>
 
         <v-row>
-          <v-col cols="1">
-            <v-btn
-                :loading="loading"
-                color="#41b883"
-                height="100%"
-                dark
-                @click.stop="drawer = !drawer"
-            >
-              Results
-            </v-btn>
-
-          </v-col>
-          <v-col cols="3">
-            <v-row justify='space-between'>
-              <v-col class="pl-0 ml-0"/>
-            </v-row>
-
-            <v-row>
+          <v-col cols="4">
               <!--- Start Search Component -->
               <v-card flat tile width="100%">
-                <v-card-title title="Search and filter data by study information">
+                <label class="form-label" title="Search and filter data by study information">
                   <count-badge text="Studies" :count="study_data.count"/>
                   <v-spacer/>
                   <v-btn color="black" fab x-small dark outlined @click.stop="show_help">
                     <v-icon>fas fa fa-question</v-icon>
                   </v-btn>
-                </v-card-title>
+                </label>
                   <study-search-form
                       @studies__name__in="update_search_query"
                       @studies__creator__in="update_search_query"
                       @studies__curators__in="update_search_query"
                   />
 
-                  <label title="Search and filter data by subjects">
+                  <label class="form-label" title="Search and filter data by subjects">
                   <count-badge text="Groups" :count="group_data.count"/>
                   <span style="padding-left: 20px; padding-right: 20px;">&</span>
                   <count-badge text="Individuals" :count="individual_data.count"/>
@@ -53,7 +49,7 @@
                       @subject_queries="update_subject_query"
                   />
 
-                <label title="Search and filter data by intervention">
+                <label class="form-label" title="Search and filter data by intervention">
                   <count-badge text="Interventions" :count="intervention_data.count"/>
                 </label>
                   <intervention-form
@@ -64,7 +60,7 @@
                       @interventions__form_sid__in="update_search_query"
                   />
 
-                <label title="Search and filter data by outputs">
+                <label class="form-label" title="Search and filter data by outputs">
                   <count-badge text="Outputs" :count="output_data.count"/>
                   <span style="padding-left: 20px; padding-right: 20px;">&</span>
                   <count-badge text="Timecourses" :count="timecourse_data.count"/>
@@ -78,18 +74,10 @@
                     @outputs__measurement_type_sid__in="update_search_query"
                     @outputs__method_sid__in="update_search_query"
                 />
-                </>
               </v-card>
               <!--- End Search Component -->
-            </v-row>
           </v-col>
-
           <v-col cols="8">
-            <v-row>
-              <v-sheet height="60">
-              </v-sheet>
-            </v-row>
-
             <info-node-detail
                 v-model="display_detail"
                 v-if="show_type === 'info_node'"
@@ -100,41 +88,28 @@
           </v-col>
         </v-row>
       </v-flex>
-
-
     </v-navigation-drawer>
 
 
+    <div class="results-content">
     <v-layout row wrap>
-      <v-flex xs12>
-        <v-btn
-            color="pink"
-            dark
-            @click.stop="drawer = !drawer"
-        >
-          Search
-        </v-btn>
-        <!-- Groups -->
+
         <v-flex ref="studies" xs12>
           <studies-table :search_hash="true" :hash="study_data.hash" :autofocus="false"/>
         </v-flex>
 
-        <!-- Groups -->
         <v-flex ref="groups" xs12>
           <groups-table :search_hash="true" :hash="group_data.hash" :autofocus="false"/>
         </v-flex>
 
-        <!-- Individuals -->
         <v-flex ref="individuals" xs12>
           <individuals-table :search_hash="true" :hash="individual_data.hash" :autofocus="false"/>
         </v-flex>
 
-        <!-- Interventions -->
         <v-flex ref="interventions" xs12>
           <interventions-table :search_hash="true" :hash="intervention_data.hash" :autofocus="false"/>
         </v-flex>
 
-        <!-- Groups -->
         <v-flex ref="outputs" xs12>
           <outputs-table :search_hash="true" :hash="output_data.hash" :autofocus="false"/>
         </v-flex>
@@ -142,10 +117,10 @@
         <v-flex ref="timecourses" xs12>
           <timecourses-table :search_hash="true" :hash="timecourse_data.hash" :autofocus="false"/>
         </v-flex>
-      </v-flex>
 
     </v-layout>
-  </div>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -306,15 +281,24 @@ export default {
 </script>
 
 <style>
-.rot-neg-90 {
-  -moz-transform:rotate(-270deg);
-  -moz-transform-origin: bottom left;
-  -webkit-transform: rotate(-270deg);
-  -webkit-transform-origin: bottom left;
-  -o-transform: rotate(-270deg);
-  -o-transform-origin:  bottom left;
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+.form-label {
 }
+.search-navbar {
+  position: fixed;
+  top: 48px;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 32px;
+  background-color: #CCCCCC;
+}
+.search-content {
+  margin-top: 80px;
+}
+.results-content {
+  margin-top: 50px;
+}
+
 .mousescroll {
   overflow-y: scroll;
   height: 100%;
