@@ -15,6 +15,9 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
+from pkdb_app.data.models import Data
+from pkdb_app.data.views import SubSetViewSet
+from pkdb_app.outputs.pk_calculation import Subset
 from rest_framework.response import Response
 from rest_framework import filters, status
 from rest_framework import viewsets
@@ -337,7 +340,7 @@ class PKData(object):
                  groups_query: dict = None,
                  individuals_query: dict = None,
                  outputs_query: dict = None,
-                 # data_query: dict = None,
+                 subsets_query: dict = None,
                  studies_query: dict = None,
                  ):
 
@@ -347,12 +350,11 @@ class PKData(object):
         self.individuals_query = individuals_query
         self.interventions_query = {"normed":"true", **interventions_query}
         self.outputs_query = {"normed":"true", **outputs_query}
-        # self.data_query = data_query
+        self.subsets_query = subsets_query
         self.studies_query = studies_query
 
         start_time = time.time()
         studies_pks = self.study_pks()
-
 
         groups_pks = self.group_pks()
         elastic_time = time.time() - start_time
@@ -377,14 +379,24 @@ class PKData(object):
         print("Elastic Time Outputs")
         print(elastic_time)
 
+
+
+        subset_pks = self.subset_pks()
+
+
         elastic_time = time.time() - start_time
         print("Elastic Time")
         print(elastic_time)
+
+
+
+
         self.studies = Study.objects.filter(sid__in=studies_pks).only('sid','pk')
         self.groups = Group.objects.filter(pk__in=groups_pks).only('pk')
         self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
         self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group','individual','interventions','study')
+        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group','individual','interventions','study','data_points')
+        self.subsets = Subset.objects.filter(pk__in=subset_pks)
         django_time = time.time() - start_time - elastic_time
         print("Django Time")
         print(django_time)
@@ -423,10 +435,10 @@ class PKData(object):
             group_ids2 = Subquery(self.individuals.values("group_id"))
             self.groups = Group.objects.filter(Q(pk__in=group_ids1) | Q(pk__in=group_ids2))
             self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
+            self.subsets = self.subsets.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct()))
 
 
     def intervention_pks(self):
-
         return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
 
     def group_pks(self):
@@ -437,6 +449,9 @@ class PKData(object):
 
     def output_pks(self):
         return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query )
+
+    def subset_pks(self):
+        return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
 
     def study_pks(self):
         return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="sid")
@@ -458,31 +473,11 @@ class PKData(object):
         query elastic search for pks.
 
         """
-
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
         response = queryset.source([pk_field]).scan()
         return [instance[pk_field] for instance in response]
-
-    def _paginated_data(self, serializer, queryset, query_dict):
-        paginator = CustomPagination()
-        self.set_request_get(query_dict)
-        page = paginator.paginate_queryset(queryset, self.request)
-        if page is not None:
-            return {
-                "current_page": paginator.page.number,
-                "last_page": paginator.page.paginator.num_pages,
-                "data": {"count": paginator.page.paginator.count,
-                         "data": serializer(page, many=True).data},
-            }
-        else:
-            return {
-                "current_page": 1,
-                "last_page": 1,
-                "data": {"count": 0,
-                         "data": [],
-                         }}
 
 
 class PKDataView(APIView):
@@ -493,6 +488,8 @@ class PKDataView(APIView):
         "group": "groups__",
         "individual": "individuals__",
         "output": "outputs__",
+        "data": "data__",
+
     }
 
     def _get_param(self, key, request):
@@ -512,6 +509,8 @@ class PKDataView(APIView):
             individuals_query=self._get_param("individual", request),
             interventions_query=self._get_param("intervention", request),
             outputs_query=self._get_param("output", request),
+            subsets_query=self._get_param("subsets", request),
+
         )
         start_time = time.time()
         pkdata.concise()
@@ -526,6 +525,7 @@ class PKDataView(APIView):
             "individuals":  list(pkdata.individuals.values_list("id", flat=True)),
             "interventions":  list(pkdata.interventions.values_list("id", flat=True)),
             "outputs": list(pkdata.outputs.values_list("id", flat=True)),
+            "subsets": list(pkdata.subsets.values_list("id", flat=True)),
         }
         start_time = time.time()
 

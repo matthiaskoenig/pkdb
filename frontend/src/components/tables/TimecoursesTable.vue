@@ -18,6 +18,11 @@
                 />
             </template>
 
+          <template v-slot:item.name="{ item }">
+            {{item.name}}
+
+          </template>
+
             <template v-slot:item.measurement_type="{ item }">
                 <object-chip :object="item.array[0][0].measurement_type"
                              otype="measurement_type"
@@ -102,6 +107,7 @@
                 otype_single: "subset",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
+                    {text: 'Name', value: 'name',sortable: false},
                     {text: 'Measurement Type', value: 'measurement_type',sortable: false},
                     {text: 'Subjects', value: 'subject',sortable: false},
                     {text: 'Interventions', value: 'interventions', sortable: false},
