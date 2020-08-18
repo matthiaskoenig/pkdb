@@ -9,9 +9,11 @@
                color="#000000"
     >
 
-        <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
-        <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
-        <v-btn icon to="/search" title="Search" color="white"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
+      <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
+      <v-btn icon to="/search" title="Search" color="white"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
+      <v-btn icon to="/studies" title="Studies" color="white"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
+      <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
+
 
       <!--
       <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
@@ -29,17 +31,16 @@
             {{ username }}
         </v-chip>
         <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true">
-            <v-icon color="white">{{ faIcon('account') }}</v-icon>
+            <v-icon small color="white">{{ faIcon('account') }}</v-icon>
         </v-btn>
         <v-dialog v-model="dialog" max-width="500">
             <user-login></user-login>
         </v-dialog>
 
         <!-- links -->
-        <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
-        <v-btn icon :href="api_url" title="REST API" color="white"><v-icon>{{ faIcon('api') }}</v-icon></v-btn>
+        <v-btn icon :href="api_url" title="REST API" color="white"><v-icon small>{{ faIcon('api') }}</v-icon></v-btn>
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository" color="white">
-            <v-icon>{{ faIcon('github')}}</v-icon>
+            <v-icon small>{{ faIcon('github')}}</v-icon>
         </v-btn>
     </v-app-bar>
 </template>

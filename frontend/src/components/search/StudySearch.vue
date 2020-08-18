@@ -3,7 +3,7 @@
   <multiselect
       v-model="selected_entries"
       :options="entries"
-      :close-on-select="false"
+      :close-on-select="true"
       :clear-on-select="false"
       :preserve-search="true"
       placeholder="Select Studies"
@@ -20,7 +20,7 @@
     <template slot="tag" slot-scope="{ option, remove }">
         <span class="multiselect__tag">
           {{ option.name }}
-          <span  @click="remove(option)">
+          <span @click="remove(option)">
             <i class="multiselect__tag-icon"></i>
           </span>
         </span>
@@ -34,15 +34,13 @@
           block
           text
           large
-          v-on:mouseover.native="mouseover(props.option)">
+          @mouseover.native="mouseover(props.option)">
 
         <text-highlight :queries="highlight">
           {{props.option.name}}
         </text-highlight>
       </v-btn>
-
     </template>
-
 
     <template slot="clear" slot-scope="props">
       <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
@@ -62,7 +60,6 @@ export default {
   Multiselect
   },
   data () {
-
     return {
       otype: "studies",
       otype_single: "study",
@@ -72,7 +69,9 @@ export default {
   },
   watch:{
     selected_entries() {
-      this.$emit('selected_entries', {"studies__name__in": this.selected_entries.map(x => x.name)})
+      this.$emit('selected_entries', {
+        "studies__name__in": this.selected_entries.map(x => x.name)
+      })
     }
   },
   methods: {
@@ -84,12 +83,10 @@ export default {
       clearAll () {
       this.selected_entries = []
     },
-
     sync_search(search)
     {
       this.search = search
     }
   }
-
 }
 </script>

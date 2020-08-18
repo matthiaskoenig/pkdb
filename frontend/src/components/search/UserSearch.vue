@@ -1,12 +1,12 @@
 <!--
-not yet implemented.
+vue-multiselect element
 -->
 <template>
 
   <multiselect
       v-model="selected_entries"
       :options="users"
-      :close-on-select="false"
+      :close-on-select="true"
       :clear-on-select="false"
       :preserve-search="true"
       :placeholder="placeholder"

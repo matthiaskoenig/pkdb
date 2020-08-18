@@ -12,10 +12,12 @@
 - [ ] Fix database statistics (better view, https://github.com/matthiaskoenig/pkdb/issues/486)
 - [ ] Cleanup/reduction of all tables
 - [ ] Fix landing page
-
+- [ ] tables in tab component for results
 - [ ] small values are not displayed. example: "http://0.0.0.0:8081/studies/PKDB00300". This library might help pretty print values "https://github.com/gentooboontoo/js-quantities". (Janek: I added it here not shure if I should do it.)
-    
-
+- [ ] search
+     - [ ] more complex option component with select
+     - [ ] repair loading spinner
+- [ ] How to handle excel sheets & file download
 ## Janek
 - [x] replace url_slug with sid
 - [x] fixed bug in frontend (loading property).
@@ -34,6 +36,9 @@
 - [x] bug in concise on curators
 - [x] issues sort
 - [ ] issues search
+    - [ ] no nested components, select choices and measurement types;
+    - [ ] display info node information for choices
+    - [ ] example for filling the search component with data (Intervention: substance=midazolam; Group: homo sapiens; )
     - [x] update information on full selection (not only info button)
     - [o] selection of choices not working (not visible and not selectable easily)
     - [o] empty search should give all results, but currently the results are empty
@@ -43,12 +48,19 @@
     - [x] many console errors on search (`TypeError: t.response is undefined)
     - [ ] add overall search field
     - [ ] timecourses not depicted in search results
+    - [ ] search component is not scrollable (results & search independent)
+    - [ ] table with scatter
 - [ ] download button
     - [ ] download results button -> JSON PKDBdata (-> zip) 
+
 - [x] Add datasets automatically for timecourses
 - [ ] repair analysis serializer
 - [x] create a hash for search queries to avoid very long urls  
 
 # General @all
+- [ ] REST API 
+     - [ ] better REST documentation () 
+
+- [ ] Logo & Name in Navigation menu
 - [ ] Update studies in new format
 - [ ] manuscript updates

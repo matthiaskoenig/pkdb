@@ -17,6 +17,7 @@
       </v-list-item-content>
     </v-list-item>
 
+    <v-card-text>
     <div v-if="data.description && data.description.length>0">
       <text-highlight :queries="highlight">
       {{ data.description }}<br />
@@ -61,6 +62,7 @@
         </li>
       </ul>
     </div>
+    </v-card-text>
   </v-card>
 
 </template>
