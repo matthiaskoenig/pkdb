@@ -166,7 +166,7 @@ class SubSet(Accessible):
                     name = self.get_name(timecourse[key], value)
                 else:
                     name = list(timecourse[key])
-                raise Exception(f"Subset used for timecourse is not unique on '{key}'. Values are {set(name)}. "
+                raise Exception(f"Subset used for timecourse is not unique on '{key}'. Values are {name}. "
                                 f"Check uniqueness of labels for timecourses.")
 
     def timecourse(self):
