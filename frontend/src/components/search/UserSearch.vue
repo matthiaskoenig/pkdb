@@ -79,9 +79,7 @@ export default {
   },
   watch: {
     selected_entries() {
-      let query_dict = {}
-      query_dict[this.query_key] = this.selected_entries.map(x => x.username)
-      this.$emit('selected_entries', query_dict)
+      this.$store.state.queries[this.query_key] = this.selected_entries.map(x => x.username)
     }
   },
   methods: {

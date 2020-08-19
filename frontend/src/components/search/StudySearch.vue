@@ -69,9 +69,7 @@ export default {
   },
   watch:{
     selected_entries() {
-      this.$emit('selected_entries', {
-        "studies__name__in": this.selected_entries.map(x => x.name)
-      })
+      this.$store.state.queries.studies__name__in = this.selected_entries.map(x => x.name)
     }
   },
   methods: {

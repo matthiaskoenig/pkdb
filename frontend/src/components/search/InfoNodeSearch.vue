@@ -62,6 +62,9 @@ export default {
     Multiselect
   },
   mixins: [searchTableMixin],
+  props:{
+    _label:String
+  },
   data() {
 
     return {
@@ -79,7 +82,8 @@ export default {
   watch: {
     selected_entries() {
       let emit_object = {}
-      emit_object[this.$props.ntype + "_sid__in"] = this.selected_entries.map(x => x.sid)
+      const key = this.$props.ntype + "_sid__in"
+      emit_object[key] = this.selected_entries.map(x => x.sid)
       this.$emit('selected_entries', emit_object)
     }
   },
@@ -107,9 +111,11 @@ export default {
         "method": "Method",
         "application": "Application Type",
       }
+      if(this._label){
+        return this._label
+      }
       return labels[this.ntype]
-    }
-
+    },
   }
 
 

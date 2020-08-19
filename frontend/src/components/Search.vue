@@ -32,12 +32,13 @@
                   <v-btn color="black" fab x-small dark outlined @click.stop="show_help">
                     <v-icon>fas fa fa-question</v-icon>
                   </v-btn>
+                  <v-progress-circular
+                      indeterminate
+                      color="primary"
+                      v-if="loading"
+                  ></v-progress-circular>
                 </label>
-                  <study-search-form
-                      @studies__name__in="update_search_query"
-                      @studies__creator__in="update_search_query"
-                      @studies__curators__in="update_search_query"
-                  />
+                  <study-search-form />
 
                   <label class="form-label" title="Search and filter data by subjects">
                   <count-badge text="Groups" :count="group_data.count"/>
@@ -52,13 +53,7 @@
                 <label class="form-label" title="Search and filter data by intervention">
                   <count-badge text="Interventions" :count="intervention_data.count"/>
                 </label>
-                  <intervention-form
-                      @interventions__substance_sid__in="update_search_query"
-                      @interventions__route_sid__in="update_search_query"
-                      @interventions__application_sid__in="update_search_query"
-                      @interventions__measurement_type_sid__in="update_search_query"
-                      @interventions__form_sid__in="update_search_query"
-                  />
+                  <intervention-form/>
 
                 <label class="form-label" title="Search and filter data by outputs">
                   <count-badge text="Outputs" :count="output_data.count"/>
@@ -68,12 +63,7 @@
                   <count-badge text="Scatters" :count="scatter_data.count"/>
                 </label>
 
-                <output-form
-                    @outputs__substance_sid__in="update_search_query"
-                    @outputs__tissue_sid__in="update_search_query"
-                    @outputs__measurement_type_sid__in="update_search_query"
-                    @outputs__method_sid__in="update_search_query"
-                />
+                <output-form/>
               </v-card>
               <!--- End Search Component -->
           </v-col>
@@ -171,15 +161,24 @@ export default {
     url() {
       let url = this.resource_url
 
-      for (const [key, value] of Object.entries(this.queries)) {
+      for (const [key, value] of Object.entries(this.$store.state.queries)) {
         if (value.length > 0) {
+          console.log(key)
+          console.log(value)
+
           url = url + "&" + key + "=" + value.join("__")
         }
       }
-      for (const query of this.subject_queries) {
-        for (const [key, value] of Object.entries(query)) {
-          url = url + "&" + key + "=" + value.join("__")
-        }
+      for (const  [key, value] of Object.entries(this.$store.state.subjects_queries)) {
+        if (this.$store.state.groups_query){
+          if (value.length < 0) {
+          url = url + "&" + "groups__"+key + "=" + value.join("__")
+        }}
+        if (this.$store.state.individuals_query){
+            if (value.length < 0) {
+              url = url + "&" + "individuals__" + key + "=" + value.join("__")
+            }
+          }
       }
       return url
     },
@@ -248,31 +247,6 @@ export default {
 
       otype: "pkdata",
       otype_single: "pkdata",
-      queries: {
-        // studies
-        studies__name__in: [],
-        studies__creator__in: [],
-        studies__curators__in: [],
-
-        //subjects
-        subjects_types: [],
-        subjects_measurement_types: [],
-
-        // interventions
-        interventions__substance_sid__in: [],
-        interventions__route_sid__in: [],
-        interventions__measurement_type_sid__in: [],
-        interventions__application_sid__in: [],
-
-        interventions__form_sid__in: [],
-
-        // outputs
-        outputs__substance_sid__in: [],
-        outputs__tissue_sid__in: [],
-        outputs__measurement_type_sid__in: [],
-        outputs__method_sid__in: [],
-      },
-      subject_queries: []
     }
   }
 

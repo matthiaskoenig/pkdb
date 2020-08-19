@@ -41,16 +41,46 @@ const vuexLocalStorage = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
+
         //for search component
         detail_display: false,
         detail_info: {},
         show_type: "help",
-        // *******
 
+
+        subjects_queries:{
+            choices_sid__in: [],
+            measurement_type_sid__in: []
+        },
+        groups_query: true,
+        individuals_query: true,
+
+        queries:{
+            studies__name__in: [],
+            studies__creator__in: [],
+            studies__curators__in: [],
+
+
+            // interventions
+            interventions__substance_sid__in: [],
+            interventions__route_sid__in: [],
+            interventions__measurement_type_sid__in: [],
+            interventions__application_sid__in: [],
+            interventions__form_sid__in: [],
+
+            // outputs
+            outputs__substance_sid__in: [],
+            outputs__tissue_sid__in: [],
+            outputs__measurement_type_sid__in: [],
+            outputs__method_sid__in: [],
+        },
+
+        // global highlighting
         highlight:"",
 
-        django_domain: backend_domain,
 
+        //Api
+        django_domain: backend_domain,
 
         endpoints: {
             api: backend_domain + '/api/v1/',

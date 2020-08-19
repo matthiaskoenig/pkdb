@@ -1,6 +1,11 @@
 <template>
   <div>
-    <measurement-type-choice-search ntype="measurement_type" @selected_entries="emit_search_query"/>
+    <!--
+    <measurement-type-choice-search ntype="measurement_type" @selected_entries="update_store"/>
+    -->
+    <info-node-search ntype='measurement_type' @selected_entries="update_store"/>
+    <info-node-search ntype='choice' @selected_entries="update_store"/>
+
 
     <v-checkbox color="#41b883" v-model="groups" label="Groups" hide-details></v-checkbox>
     <v-checkbox color="#41b883" v-model="individuals" label="Individuals" hide-details></v-checkbox>
@@ -10,23 +15,24 @@
 
 
 <script>
-import MeasurementTypeChoiceSearch from "./MeasurementTypeSearchChoice";
+import InfoNodeSearch from "./InfoNodeSearch";
+
 import {lookupIcon} from "@/icons"
 
 export default {
   name: "SubjectSearchForm",
   components: {
-    MeasurementTypeChoiceSearch
+    InfoNodeSearch
   },
   watch: {
     individuals: {
       handler() {
-        this.emit_search_query(this.all_searches)
+        this.$store.state.individuals_query = this.individuals
       }
     },
     groups: {
       handler() {
-        this.emit_search_query(this.all_searches)
+        this.$store.state.groups_query = this.groups
       }
     }
   },
@@ -34,35 +40,11 @@ export default {
     faIcon: function (key) {
       return lookupIcon(key)
     },
-    emit_search_query(all_searches){
-      var subject_queries = []
-      var this_object = {}
-      var new_key = ""
-      this.all_searches = all_searches
-      if (! this.individuals){
-          subject_queries.push({"individuals__ids":["0"]})
-        }
-      if (! this.groups){
-        subject_queries.push({"groups__ids":["0"]})
-      }
-      for (const this_query of all_searches) {
-        for (const [key, value] of Object.entries(this_query)){
-         if(this.individuals){
-           this_object = {}
-           new_key = "individuals__" + key
-           this_object[new_key] = value
-           subject_queries.push(this_object)}
-          if(this.groups){
-            this_object = {}
-            new_key = "groups__" + key
-            this_object[new_key] = value
-            subject_queries.push(this_object)
-          }
-        }
-      }
 
-      this.$emit('subject_queries',subject_queries)
-    }
+    update_store(emitted_object) {
+      for (const [key, value] of Object.entries(emitted_object)) {
+        this.$store.state.subjects_queries[key] = value
+      }}
   },
   data() {
     return {

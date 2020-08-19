@@ -43,7 +43,13 @@ let searchTableMixin = {
             type: String,
             default: () => "all"
 
+        },
+        ntypes: {
+            type: Array,
+            default: () => []
+
         }
+
     },
     mounted() {
         this.getData()
@@ -104,6 +110,9 @@ let searchTableMixin = {
             }
             if (this.ntype !== "all" ){
                 url += '&ntype=' + this.ntype
+            }
+            if (this.ntypes.length > 0 ){
+                url += '&ntype__in=' + this.ntypes.join("__")
             }
             if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
