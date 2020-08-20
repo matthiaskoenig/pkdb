@@ -34,10 +34,14 @@
             pill
             small
         >
-          <text-highlight :queries="search.split(/[ ,]+/)">{{ item.label }}</text-highlight>
+          <!-- highlight name for curation -->
+          <span v-if="item.label === item.name">
+            <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ item.label }}</text-highlight></strong>
+          </span>
           <span v-if="item.label != item.name">
-                  (<text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight>)
-              </span>
+            <text-highlight :queries="search.split(/[ ,]+/)">{{ item.label }}</text-highlight> |
+            <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight></strong>
+          </span>
         </v-chip>
       </template>
 

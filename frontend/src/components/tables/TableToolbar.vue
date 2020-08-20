@@ -1,5 +1,5 @@
 <template>
-<v-toolbar id="heading-toolbar" color="#CCCCCC" dense>
+<v-toolbar id="heading-toolbar" dense flat>
     <heading :count="count"
              :icon="faIcon(otype)"
              :title="capitalizeFirstLetter(otype)"

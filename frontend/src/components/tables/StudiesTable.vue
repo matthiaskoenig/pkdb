@@ -1,8 +1,11 @@
 <template>
-    <v-card flat>
+    <v-card>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
+                dense
+                disable-sort
+
                 :items="entries"
                 :options.sync="options"
                 :server-items-length="count"
