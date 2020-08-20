@@ -47,7 +47,6 @@ let searchTableMixin = {
         ntypes: {
             type: Array,
             default: () => []
-
         }
 
     },
@@ -89,7 +88,6 @@ let searchTableMixin = {
             return this.$store.state.endpoints.api;
         },
         resource_url() {
-
             return this.$store.state.endpoints.api  + this.otype + '/?format=json'
         },
         url() {
