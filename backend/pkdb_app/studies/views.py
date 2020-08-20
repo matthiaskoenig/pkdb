@@ -4,7 +4,7 @@ from django.test.client import RequestFactory
 
 import django_filters.rest_framework
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q as DQ
+from django.db.models import Q as DQ, Prefetch
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
@@ -380,8 +380,38 @@ class PKData(object):
         # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
         # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
         # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group', 'individual', 'study')
-        len(self.outputs)
+        self.outputs = Output.objects.select_related("study__sid").prefetch_related(
+            Prefetch(
+            'interventions',
+            queryset=Intervention.objects.only('id')),Prefetch(
+            'data_points',
+            queryset=Intervention.objects.only('id'))).only(
+            'group_id', 'individual_id', 'study_id', "id", 'interventions').filter(
+            DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks),
+                                      study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)
+
+        self.subsets = Subset.objects.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct())).distinct()
+
+        self.ids = {
+             "studies": list(self.outputs.values_list("study__id", flat=True).distinct()),
+             "groups":  list(self.outputs.exclude(group__id__isnull=True).values_list("group__id", flat=True).distinct()),
+             "individuals":  list(self.outputs.exclude(individual__id__isnull=True).values_list("individual__id", flat=True).distinct()),
+             "interventions": list(self.outputs.values_list("interventions__id", flat=True).distinct()),
+             "outputs": list(self.outputs.values_list("id", flat=True)),
+             "timecourses": list(self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
+             "scatters": list(self.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
+         }
+
+
+
+        #self.studies = Study.objects.filter(sid__in=studies_pks).only('sid', 'pk')
+        # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
+        # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
+        # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
+
+
+
+        #pks = self.outputs
         # self.subsets = Subset.objects.filter(pk__in=subsets_pks)
 
         # self.concise()
@@ -390,15 +420,6 @@ class PKData(object):
         # 2. get ids for subset of outputs (study, individual, group, intervention, ...)
         # 3. return sets of ids
         # (possible issue with individual -> group connection)
-        self.ids = {
-            "studies": [],
-            "groups":  [],
-            "individuals":  [],
-            "interventions": [],
-            "outputs": [],
-            "timecourses": [],
-            "scatters": [],
-        }
 
         # self.ids = {
         #     "studies": list(self.studies.values_list("id", flat=True)),
@@ -469,7 +490,7 @@ class PKData(object):
         return self._pks(view_class=IndividualViewSet, query_dict=self.individuals_query)
 
     def output_pks(self):
-        return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query )
+        return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query,scan_size=20000)
 
     def subset_pks(self):
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
@@ -488,7 +509,7 @@ class PKData(object):
             get[k] = v
         self.request._request.GET = get
 
-    def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str="pk"):
+    def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str="pk", scan_size=10000):
         """
         query elastic search for pks.
 
@@ -496,7 +517,7 @@ class PKData(object):
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
-        response = queryset.source([pk_field]).scan()
+        response = queryset.source([pk_field]).params(size=scan_size).scan()
         return [instance[pk_field] for instance in response]
 
 
@@ -550,7 +571,7 @@ class PKDataView(APIView):
 
         print("-" * 80)
         print("pkdata:", time_pkdata - time_start_request)
-        print("hash:", time_hash - time_hash)
+        print("hash:", time_hash - time_pkdata)
         print("-" * 80)
         print("total:", time_response - time_start_request)
         print("-" * 80)
