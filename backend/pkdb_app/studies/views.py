@@ -370,8 +370,6 @@ class PKData(object):
         outputs_pks = self.output_pks()
         time_elastic_outputs = time.time()
 
-        subsets_pks = self.subset_pks()
-        time_elastic_subsets = time.time()
         time_elastic = time.time()
 
         # --- Django & concise ---
@@ -386,7 +384,7 @@ class PKData(object):
             queryset=Intervention.objects.only('id')),Prefetch(
             'data_points',
             queryset=Intervention.objects.only('id'))).only(
-            'group_id', 'individual_id', 'study_id', "id", 'interventions').filter(
+            'group_id', 'individual_id', "id").filter(
             DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks),
                                       study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)
 
