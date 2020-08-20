@@ -1,5 +1,7 @@
 from typing import Dict
 import time
+
+from django.db import connection
 from django.test.client import RequestFactory
 
 import django_filters.rest_framework
@@ -378,7 +380,7 @@ class PKData(object):
         # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
         # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
         # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.select_related("study__sid").prefetch_related(
+        self.outputs = Output.objects.prefetch_related(
             Prefetch(
             'interventions',
             queryset=Intervention.objects.only('id')),Prefetch(
@@ -386,52 +388,47 @@ class PKData(object):
             queryset=Intervention.objects.only('id'))).only(
             'group_id', 'individual_id', "id").filter(
             DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks),
-                                      study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)
+                                      study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)#.all()
 
-        self.subsets = Subset.objects.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct())).distinct()
+
+        self.subsets = Subset.objects.filter(data_points__in=Subquery(self.outputs.values("data_points"))).distinct()
+
+        studies = list()
+        groups = list()
+        individuals = list()
+        interventions = list()
+        outputs =list()
+        data_points = list()
+
+        for output in self.outputs.values("study_id","group_id", "individual_id", "interventions__id", "data_points__id", "id"):
+            studies.append(output["study_id"])
+            if output["group_id"]:
+                groups.append(output["group_id"])
+            else:
+                individuals.append(output["individual_id"])
+            outputs.append(output["id"])
+            interventions.append(output["interventions__id"])
+            data_points.append(output["data_points__id"])
+
+        subsets = Subset.objects.filter(data_points__in=data_points)
 
         self.ids = {
-             "studies": list(self.outputs.values_list("study__id", flat=True).distinct()),
-             "groups":  list(self.outputs.exclude(group__id__isnull=True).values_list("group__id", flat=True).distinct()),
-             "individuals":  list(self.outputs.exclude(individual__id__isnull=True).values_list("individual__id", flat=True).distinct()),
-             "interventions": list(self.outputs.values_list("interventions__id", flat=True).distinct()),
-             "outputs": list(self.outputs.values_list("id", flat=True)),
-             "timecourses": list(self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
-             "scatters": list(self.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
-         }
+            "studies": list(set(studies)),
+            "groups": list(set(groups)),
+            "individuals": list(set(individuals)),
+            "interventions": list(set(interventions)),
+            "outputs": list(set(outputs)),
+            "timecourses":list(subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
+            "scatters": list(subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
+        }
 
-
-
-        #self.studies = Study.objects.filter(sid__in=studies_pks).only('sid', 'pk')
-        # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
-        # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
-        # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-
-
-
-        #pks = self.outputs
-        # self.subsets = Subset.objects.filter(pk__in=subsets_pks)
-
-        # self.concise()
-        # 0. load all outputs by initial filter (DJANGO QUERY, prefetch interventions(multi))
-        # 1. filter outputs by existing other ids from elastic (studies, groups, ....)
-        # 2. get ids for subset of outputs (study, individual, group, intervention, ...)
-        # 3. return sets of ids
-        # (possible issue with individual -> group connection)
-
-        # self.ids = {
-        #     "studies": list(self.studies.values_list("id", flat=True)),
-        #     "groups":  list(self.groups.values_list("id", flat=True)),
-        #     "individuals":  list(self.individuals.values_list("id", flat=True)),
-        #     "interventions":  list(self.interventions.values_list("id", flat=True)),
-        #     "outputs": list(self.outputs.values_list("id", flat=True)),
-        #     "timecourses": list(self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
-        #     "scatters": list(self.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
-        # }
 
         time_django = time.time()
 
         print("-" * 80)
+        for q in connection.queries:
+            print("db query:", q["time"])
+
         print("init:", time_init - time_start)
         print("elastic:", time_elastic - time_init)
         print("django:", time_django - time_elastic)
@@ -573,5 +570,7 @@ class PKDataView(APIView):
         print("-" * 80)
         print("total:", time_response - time_start_request)
         print("-" * 80)
+
+
 
         return response
