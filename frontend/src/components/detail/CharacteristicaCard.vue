@@ -1,9 +1,10 @@
 <template>
     <div :class="card_class">
 
-        <v-badge inline left light overlap color="#BBBBBB">
+        <v-badge inline right light overlap color="#BBBBBB">
             <span slot="badge">{{ data.count }}</span>
             <node-element :data="data.measurement_type"/>
+
         </v-badge>
         <br />
 
@@ -11,14 +12,13 @@
         <strong>{{ data.measurement_type }}</strong><br />
         -->
         <span v-if="data.choice && data.choice.sid">
+          <!--
             <span v-if="data.choice.sid=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
             <span v-if="data.choice.sid=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
-            <span v-if="(data.choice.sid=='F') || (data.choice.sid =='homo sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
-            <span v-if="(data.choice.sid=='M') || (data.choice.sid =='homo sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
-            {{ data.choice.name }}
-        </span>
-        <span v-else>
-            <span><v-icon small color="black">fa fa-bolt</v-icon></span>
+            -->
+            <span v-if="(data.choice.sid=='female') || (data.choice.sid =='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
+            <span v-if="(data.choice.sid=='male') || (data.choice.sid =='homo-sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
+            {{ data.choice.label }}
         </span>
         <span v-if="value || error">
             {{ value }} <span v-if="error">{{ error }}</span><br />
@@ -27,7 +27,6 @@
         <span v-else-if="!value & !error & !data.choice & !data.substance">
             <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
         </span>
-
     </div>
 </template>
 
@@ -48,14 +47,14 @@
                 }
             },
             error() {
-                var value = null;
+                let value = null;
 
                 // min, max
                 if (this.data.min || this.data.max){
-                    value = '(' + (this.data.min ? this.toNumber(this.data.min) : '')  + ' - ' + (this.data.max ? this.toNumber(this.data.max) : '') + ')'
+                    value = '(' + (this.data.min ? this.toNumber(this.data.min) : '')  + '-' + (this.data.max ? this.toNumber(this.data.max) : '') + ')'
                 }
                 // sd, se, cv, unit
-                var error_fields = ['sd', 'se', 'cv'];
+                let error_fields = ['sd', 'se', 'cv'];
                 for (var i=0; i<error_fields.length; i++){
                     var field = error_fields[i];
                     if (this.data[field]){
