@@ -118,8 +118,6 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
-import timeit
-
 
 @csrf_exempt
 def update_index_study(request):
@@ -151,8 +149,6 @@ def delete_elastic_study(related_elastic):
             doc().update(thing=instances, action="delete")
         except helpers.BulkIndexError:
             return False, "BulkIndexError"
-
-
 
 
 def related_elastic_dict(study):
@@ -331,8 +327,9 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
 
 class PKData(object):
     """
-   PKData represents a consistent set of pharmacokinetical data.
+    PKData represents a consistent set of pharmacokinetical data.
 
+    returns a concise PKData
     """
     def __init__(self,
                  request,
@@ -344,62 +341,67 @@ class PKData(object):
                  studies_query: dict = None,
                  ):
 
+        #  --- Init ---
+        time_start = time.time()
 
         self.request = request
         self.groups_query = groups_query
         self.individuals_query = individuals_query
-        self.interventions_query = {"normed":"true", **interventions_query}
-        self.outputs_query = {"normed":"true", **outputs_query}
+        self.interventions_query = {"normed": "true", **interventions_query}
+        self.outputs_query = {"normed": "true", **outputs_query}
         self.subsets_query = subsets_query
         self.studies_query = studies_query
 
-        start_time = time.time()
+        time_init = time.time()
+
+        #  --- Elastic ---
         studies_pks = self.study_pks()
+        time_elastic_studies = time.time()
 
         groups_pks = self.group_pks()
-        elastic_time = time.time() - start_time
-        print("Elastic Time Groups")
-        print(elastic_time)
+        time_elastic_groups = time.time()
 
         individuals_pks = self.individual_pks()
-
-        elastic_time = time.time() - elastic_time - start_time
-        print("Elastic Time Individuals")
-        print(elastic_time)
+        time_elastic_individuals = time.time()
 
         interventions_pks = self.intervention_pks()
-
-        elastic_time = time.time() - elastic_time - start_time
-        print("Elastic Time Interventions")
-        print(elastic_time)
+        time_elastic_interventions = time.time()
 
         outputs_pks = self.output_pks()
+        time_elastic_outputs = time.time()
 
-        elastic_time = time.time() - elastic_time - start_time
-        print("Elastic Time Outputs")
-        print(elastic_time)
+        subsets_pks = self.subset_pks()
+        time_elastic_subsets = time.time()
+        time_elastic = time.time()
 
+        # --- Django & concise ---
 
-
-        subset_pks = self.subset_pks()
-
-
-        elastic_time = time.time() - start_time
-        print("Elastic Time")
-        print(elastic_time)
-
-
-
-
-        self.studies = Study.objects.filter(sid__in=studies_pks).only('sid','pk')
-        self.groups = Group.objects.filter(pk__in=groups_pks).only('pk')
+        self.studies = Study.objects.filter(sid__in=studies_pks).only('sid', 'pk')
+        self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
         self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
         self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group','individual','interventions','study','data_points')
-        self.subsets = Subset.objects.filter(pk__in=subset_pks)
-        django_time = time.time() - start_time - elastic_time
-        print("Django Time")
-        print(django_time)
+        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group', 'individual', 'interventions', 'study', 'data_points')
+        self.subsets = Subset.objects.filter(pk__in=subsets_pks)
+
+        self.concise()
+
+        self.ids = {
+            "studies": list(self.studies.values_list("id", flat=True)),
+            "groups":  list(self.groups.values_list("id", flat=True)),
+            "individuals":  list(self.individuals.values_list("id", flat=True)),
+            "interventions":  list(self.interventions.values_list("id", flat=True)),
+            "outputs": list(self.outputs.values_list("id", flat=True)),
+            "timecourses": list(self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
+            "scatters": list(self.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
+        }
+
+        time_django = time.time()
+
+        print("-" * 80)
+        print("init:", time_init - time_start)
+        print("elastic:", time_elastic - time_init)
+        print("django:", time_django - time_elastic)
+        print("-" * 80)
 
     def empty_get(self):
         """create an get request with no parameters in the url."""
@@ -407,19 +409,12 @@ class PKData(object):
 
     def _update_outputs(self):
         """ """
-
         outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals) ,study__in=self.studies, interventions__in=self.interventions)
-
-
         start_time = time.time()
         outputs_count = outputs.count()
         if outputs_count < self.outputs.count():
             self.keep_concising = True
             self.outputs = outputs
-
-        update_outputs_time = time.time() - start_time
-        print("Update Outputs Time")
-        print(update_outputs_time)
 
     def concise(self):
         self.keep_concising = True
@@ -428,7 +423,6 @@ class PKData(object):
             self.keep_concising = False
 
             self._update_outputs()
-
             self.interventions = Intervention.objects.filter(outputs__in=self.outputs).distinct()
             self.individuals = Individual.objects.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
             group_ids1 = Subquery(self.outputs.values("group_id"))
@@ -436,7 +430,6 @@ class PKData(object):
             self.groups = Group.objects.filter(Q(pk__in=group_ids1) | Q(pk__in=group_ids2))
             self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
             self.subsets = self.subsets.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct())).distinct()
-
 
     def intervention_pks(self):
         return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
@@ -455,7 +448,6 @@ class PKData(object):
 
     def study_pks(self):
         return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="sid")
-
 
     def set_request_get(self, query_dict:Dict):
         """
@@ -501,6 +493,8 @@ class PKDataView(APIView):
         return param
 
     def get(self, request, *args, **kw):
+        time_start_request = time.time()
+
         request.GET = request.GET.copy()
         pkdata = PKData(
             request=request,
@@ -510,39 +504,27 @@ class PKDataView(APIView):
             interventions_query=self._get_param("intervention", request),
             outputs_query=self._get_param("output", request),
             subsets_query=self._get_param("subsets", request),
-
         )
-        start_time = time.time()
-        pkdata.concise()
-        concise_time = time.time() - start_time
-        print("Concise time")
-        print(concise_time)
-
-
-        data = {
-            "studies": list(pkdata.studies.values_list("id", flat=True)),
-            "groups":  list(pkdata.groups.values_list("id", flat=True)),
-            "individuals":  list(pkdata.individuals.values_list("id", flat=True)),
-            "interventions":  list(pkdata.interventions.values_list("id", flat=True)),
-            "outputs": list(pkdata.outputs.values_list("id", flat=True)),
-            "timecourses": list(pkdata.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
-            "scatters": list(pkdata.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
-        }
-        start_time = time.time()
+        time_pkdata = time.time()
 
         resources = {}
         queries = []
-        for resource, ids in data.items():
+        for resource, ids in pkdata.ids.items():
             query = Query(resource=resource, ids=ids)
             queries.append(query)
-            resources[resource] = {"hash": query.hash, "count":len(ids)}
+            resources[resource] = {"hash": query.hash, "count": len(ids)}
         Query.objects.bulk_create(queries)
 
-        concise_time = time.time() - start_time
-        print("Save Ids")
-        print(concise_time)
+        time_hash = time.time()
 
         response = Response(resources, status=status.HTTP_200_OK)
+        time_response = time.time()
 
+        print("-" * 80)
+        print("pkdata:", time_pkdata - time_start_request)
+        print("hash:", time_hash - time_hash)
+        print("-" * 80)
+        print("total:", time_response - time_start_request)
+        print("-" * 80)
 
         return response
