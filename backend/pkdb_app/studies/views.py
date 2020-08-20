@@ -17,7 +17,6 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.data.models import Data
 from pkdb_app.data.views import SubSetViewSet
 from pkdb_app.outputs.pk_calculation import Subset
 from rest_framework.response import Response
@@ -339,7 +338,6 @@ class PKData(object):
                  groups_query: dict = None,
                  individuals_query: dict = None,
                  outputs_query: dict = None,
-                 subsets_query: dict = None,
                  studies_query: dict = None,
                  ):
 
@@ -347,30 +345,47 @@ class PKData(object):
         time_start = time.time()
 
         self.request = request
-        self.groups_query = groups_query
-        self.individuals_query = individuals_query
-        self.interventions_query = {"normed": "true", **interventions_query}
-        self.outputs_query = {"normed": "true", **outputs_query}
-        self.subsets_query = subsets_query
-        self.studies_query = studies_query
+
 
         time_init = time.time()
 
+        self.outputs = Output.objects.select_related("study__sid").prefetch_related(
+            Prefetch(
+                'interventions',
+                queryset=Intervention.objects.only('id'))).only(
+            'group_id', 'individual_id', "id", "interventions__id", "timecourse__id", "output_type")
+
         #  --- Elastic ---
-        studies_pks = self.study_pks()
-        time_elastic_studies = time.time()
+        if studies_query:
+            self.studies_query = studies_query
+            studies_pks = self.study_pks()
+            time_elastic_studies = time.time()
+            self.outputs = self.outputs.filter(study__sid__in=studies_pks)
 
-        groups_pks = self.group_pks()
-        time_elastic_groups = time.time()
+        if groups_query or individuals_query:
+            self.groups_query = groups_query
+            groups_pks = self.group_pks()
+            time_elastic_groups = time.time()
 
-        individuals_pks = self.individual_pks()
-        time_elastic_individuals = time.time()
+            self.individuals_query = individuals_query
+            individuals_pks = self.individual_pks()
+            time_elastic_individuals = time.time()
 
-        interventions_pks = self.intervention_pks()
-        time_elastic_interventions = time.time()
+            self.outputs = self.outputs.filter(
+            DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks))
 
-        outputs_pks = self.output_pks()
-        time_elastic_outputs = time.time()
+
+        if interventions_query:
+            self.interventions_query = {"normed": "true", **interventions_query}
+            interventions_pks = self.intervention_pks()
+            time_elastic_interventions = time.time()
+            self.outputs = self.outputs.filter(interventions__id__in=interventions_pks)
+
+        if outputs_query:
+            self.outputs_query = {"normed": "true", **outputs_query}
+            outputs_pks = self.output_pks()
+            time_elastic_outputs = time.time()
+            self.outputs = self.outputs.filter(id__in=outputs_pks)
 
         time_elastic = time.time()
 
@@ -380,58 +395,67 @@ class PKData(object):
         # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
         # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
         # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.prefetch_related(
-            Prefetch(
-            'interventions',
-            queryset=Intervention.objects.only('id')),Prefetch(
-            'data_points',
-            queryset=Intervention.objects.only('id'))).only(
-            'group_id', 'individual_id', "id").filter(
-            DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks),
-                                      study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)#.all()
+        #self.outputs = Output.objects.select_related("study__sid").prefetch_related(
+        #    Prefetch(
+        #    'interventions',
+        #    queryset=Intervention.objects.only('id'))).only(
+        #    'group_id', 'individual_id', "id", "interventions__id").filter(
+        #    DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks),
+        #                              study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)
 
 
-        self.subsets = Subset.objects.filter(data_points__in=Subquery(self.outputs.values("data_points"))).distinct()
+        studies = set()
+        groups = set()
+        individuals = set()
+        interventions = set()
+        outputs =set()
+        timecourses =set()
 
-        studies = list()
-        groups = list()
-        individuals = list()
-        interventions = list()
-        outputs =list()
-        data_points = list()
+        time_loop_start = time.time()
 
-        for output in self.outputs.values("study_id","group_id", "individual_id", "interventions__id", "data_points__id", "id"):
-            studies.append(output["study_id"])
+        for output in self.outputs.filter(normed=True).values("study_id","group_id", "individual_id", "id", "interventions__id", "output_type", "timecourse__id"):
+            studies.add(output["study_id"])
             if output["group_id"]:
-                groups.append(output["group_id"])
+                groups.add(output["group_id"])
             else:
-                individuals.append(output["individual_id"])
-            outputs.append(output["id"])
-            interventions.append(output["interventions__id"])
-            data_points.append(output["data_points__id"])
+                individuals.add(output["individual_id"])
+            outputs.add(output["id"])
 
-        subsets = Subset.objects.filter(data_points__in=data_points)
+            if output["output_type"] == Output.OutputTypes.Timecourse:
+                timecourses.add(output["timecourse__id"])
+
+            interventions.add(output["interventions__id"])
+
+
+
+
+        time_loop_end = time.time()
+
+
+
 
         self.ids = {
-            "studies": list(set(studies)),
-            "groups": list(set(groups)),
-            "individuals": list(set(individuals)),
-            "interventions": list(set(interventions)),
-            "outputs": list(set(outputs)),
-            "timecourses":list(subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
-            "scatters": list(subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
+            "studies": list(studies),
+            "groups": list(groups),
+            "individuals": list(individuals),
+            "interventions": list(interventions),
+            "outputs": list(outputs),
+            "timecourses": list(timecourses),
+            "scatters": [],#list(subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True).distinct()),
         }
 
 
         time_django = time.time()
 
-        print("-" * 80)
+        ("-" * 80)
         for q in connection.queries:
             print("db query:", q["time"])
 
         print("init:", time_init - time_start)
         print("elastic:", time_elastic - time_init)
         print("django:", time_django - time_elastic)
+        print("Loop:", time_loop_end- time_loop_start)
+
         print("-" * 80)
 
     def empty_get(self):
@@ -547,7 +571,6 @@ class PKDataView(APIView):
             individuals_query=self._get_param("individual", request),
             interventions_query=self._get_param("intervention", request),
             outputs_query=self._get_param("output", request),
-            subsets_query=self._get_param("subsets", request),
         )
         time_pkdata = time.time()
 

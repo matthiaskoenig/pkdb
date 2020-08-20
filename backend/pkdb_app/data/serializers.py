@@ -185,6 +185,7 @@ class SubSetSerializer(ExSerializer):
             raise serializers.ValidationError(
                 f"Timcourses have to be one dimensional. Dimensions: <{dimensions}> has a len of <{len(dimensions)}.> ")
         subset_outputs = study.outputs.filter(normed=True,label=dimensions[0])
+        subset_instance.pks.add(*subset_outputs)
         if not subset_outputs.exists():
             raise serializers.ValidationError(
                 {"dataset": {"data": [
@@ -193,6 +194,7 @@ class SubSetSerializer(ExSerializer):
         dimensions = []
         for output in subset_outputs.iterator():
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
+
             dimension = Dimension(dimension=0,study=study, output=output,data_point=data_point_instance)
             dimensions.append(dimension)
         Dimension.objects.bulk_create(dimensions)
