@@ -43,6 +43,8 @@ export default {
 
     update_store(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {
+        console.log(key)
+        console.log(value)
         this.$store.state.subjects_queries[key] = value
       }}
   },

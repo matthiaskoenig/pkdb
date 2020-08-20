@@ -49,7 +49,7 @@ export default new Vuex.Store({
 
 
         subjects_queries:{
-            choices_sid__in: [],
+            choice_sid__in: [],
             measurement_type_sid__in: []
         },
         groups_query: true,

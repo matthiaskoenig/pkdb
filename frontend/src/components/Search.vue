@@ -131,8 +131,10 @@ export default {
       }
       for (const [key, value] of Object.entries(this.$store.state.subjects_queries)) {
         // handle groups
+        console.log(value)
+
         if (this.$store.state.groups_query) {
-          if (value.length < 0) {
+          if (value.length > 0) {
             url = url + "&" + "groups__" + key + "=" + value.join("__")
           }
         } else {
@@ -141,7 +143,7 @@ export default {
 
         // handle individuals
         if (this.$store.state.individuals_query) {
-          if (value.length < 0) {
+          if (value.length > 0) {
             url = url + "&" + "individuals__" + key + "=" + value.join("__")
           }
         } else {
