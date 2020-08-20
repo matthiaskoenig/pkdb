@@ -376,24 +376,39 @@ class PKData(object):
 
         # --- Django & concise ---
 
-        self.studies = Study.objects.filter(sid__in=studies_pks).only('sid', 'pk')
-        self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
-        self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
-        self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group', 'individual', 'interventions', 'study', 'data_points')
-        self.subsets = Subset.objects.filter(pk__in=subsets_pks)
+        # self.studies = Study.objects.filter(sid__in=studies_pks).only('sid', 'pk')
+        # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
+        # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
+        # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
+        self.outputs = Output.objects.filter(pk__in=outputs_pks).only('group', 'individual', 'study')
+        len(self.outputs)
+        # self.subsets = Subset.objects.filter(pk__in=subsets_pks)
 
-        self.concise()
-
+        # self.concise()
+        # 0. load all outputs by initial filter (DJANGO QUERY, prefetch interventions(multi))
+        # 1. filter outputs by existing other ids from elastic (studies, groups, ....)
+        # 2. get ids for subset of outputs (study, individual, group, intervention, ...)
+        # 3. return sets of ids
+        # (possible issue with individual -> group connection)
         self.ids = {
-            "studies": list(self.studies.values_list("id", flat=True)),
-            "groups":  list(self.groups.values_list("id", flat=True)),
-            "individuals":  list(self.individuals.values_list("id", flat=True)),
-            "interventions":  list(self.interventions.values_list("id", flat=True)),
-            "outputs": list(self.outputs.values_list("id", flat=True)),
-            "timecourses": list(self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
-            "scatters": list(self.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
+            "studies": [],
+            "groups":  [],
+            "individuals":  [],
+            "interventions": [],
+            "outputs": [],
+            "timecourses": [],
+            "scatters": [],
         }
+
+        # self.ids = {
+        #     "studies": list(self.studies.values_list("id", flat=True)),
+        #     "groups":  list(self.groups.values_list("id", flat=True)),
+        #     "individuals":  list(self.individuals.values_list("id", flat=True)),
+        #     "interventions":  list(self.interventions.values_list("id", flat=True)),
+        #     "outputs": list(self.outputs.values_list("id", flat=True)),
+        #     "timecourses": list(self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).values_list("id", flat=True)),
+        #     "scatters": list(self.subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True)),
+        # }
 
         time_django = time.time()
 
@@ -428,10 +443,6 @@ class PKData(object):
         :return:
         """
 
-        # 0. load all objects/ids by initial filter
-        # 1. filter outputs by existing other ids (studies, groups, ....)
-        # 2. query additional intervention ids
-        # 3. return sets of ids
 
 
         self.keep_concising = True
