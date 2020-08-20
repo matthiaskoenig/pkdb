@@ -410,13 +410,30 @@ class PKData(object):
     def _update_outputs(self):
         """ """
         outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals) ,study__in=self.studies, interventions__in=self.interventions)
-        start_time = time.time()
         outputs_count = outputs.count()
         if outputs_count < self.outputs.count():
             self.keep_concising = True
             self.outputs = outputs
 
     def concise(self):
+        """
+        A PKDBData object consists of sets of consistent ids for
+        - studies [study_sid]
+        - groups  [study_sid]
+        - individuals
+        - interventions
+        - outputs [study, interventions (MxM), individual, group
+        - subsets
+
+        :return:
+        """
+
+        # 0. load all objects/ids by initial filter
+        # 1. filter outputs by existing other ids (studies, groups, ....)
+        # 2. query additional intervention ids
+        # 3. return sets of ids
+
+
         self.keep_concising = True
 
         while self.keep_concising:
