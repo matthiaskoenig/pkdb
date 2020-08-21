@@ -35,7 +35,7 @@
 - [x] bug in concise on curators
 - [x] issues sort
 - [ ] issues search
-    - [ ] no nested components, select choices and measurement types;
+    - [x] no nested components, select choices and measurement types;
     - [ ] display info node information for choices
     - [ ] example for filling the search component with data (Intervention: substance=midazolam; Group: homo sapiens; )
     - [x] update information on full selection (not only info button)
@@ -46,14 +46,14 @@
     - [ ] search form is too high/large, not visible on normal display
     - [x] many console errors on search (`TypeError: t.response is undefined)
     - [ ] add overall search field
-    - [ ] timecourses not depicted in search results
+    - [x] timecourses not depicted in search results
     - [ ] search component is not scrollable (results & search independent)
     - [ ] table with scatter
-- [ ] download button
-    - [ ] download results button -> JSON PKDBdata (-> zip) 
+- [x] download button
+    - [x] download results button -> JSON PKDBdata (-> zip) 
 
 - [x] Add datasets automatically for timecourses
-- [ ] repair analysis serializer
+- [x] repair analysis serializer
 - [x] create a hash for search queries to avoid very long urls  
 
 # General @all
@@ -63,3 +63,4 @@
 - [ ] Logo & Name in Navigation menu
 - [ ] Update studies in new format
 - [ ] manuscript updates
+    -[ ] add contributions of all authors

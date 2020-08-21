@@ -15,6 +15,17 @@
                 required: true
             },
         },
+      methods:{
+        compare( a, b ) {
+          if ( a.time < b.time ){
+            return -1;
+          }
+          if ( a.time > b.time ){
+            return 1;
+          }
+          return 0;
+        }
+      },
         components: {
             VuePlotly,
         },
@@ -34,6 +45,8 @@
 
               }
             })
+            timecourse = timecourse.sort(this.compare)
+
             var out = {};
             for (var i = 0; i < timecourse.length; i++) {
               for (var key in timecourse[i]) {

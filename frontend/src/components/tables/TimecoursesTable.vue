@@ -97,7 +97,9 @@
             TimecoursePlot,
         },
       method: {
-      },
+
+
+    },
 
         mixins: [searchTableMixin, UrlMixin],
 
