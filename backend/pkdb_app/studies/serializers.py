@@ -588,7 +588,6 @@ class StudyAnalysisSerializer(serializers.ModelSerializer):
             "reference_pmid",
             "reference_title",
             "reference_date",
-
         ]
 
         read_only_fields = fields
