@@ -32,6 +32,10 @@
                 <v-btn color="black" fab x-small dark outlined @click.stop="show_help">
                   <v-icon>fas fa fa-question</v-icon>
                 </v-btn>
+
+                <v-btn :href=url_download>
+                  Download
+                </v-btn>
                 <v-progress-circular
                     indeterminate
                     color="primary"
@@ -118,6 +122,9 @@ export default {
     OutputForm,
   },
   computed: {
+    url_download(){
+      return this.url + "&" + "download=true"
+    },
     url() {
       /* Create the search query url.*/
       let url = this.resource_url

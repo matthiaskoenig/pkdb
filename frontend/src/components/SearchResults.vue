@@ -2,6 +2,7 @@
     <v-card flat>
       <!--<v-card-title>Search results</v-card-title>-->
 
+
       <v-tabs
           v-model="tab"
           background-color="transparent"
@@ -11,7 +12,7 @@
             :key="item.tab"
         >
           {{ item.tab }}
-          <count-chip name="studies" :count="studies.count"></count-chip>
+          <!--<count-chip name="studies" :count="studies.count" icon:></count-chip> -->
 
         </v-tab>
       </v-tabs>

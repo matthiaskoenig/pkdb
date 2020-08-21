@@ -562,14 +562,16 @@ class StudyElasticSerializer(serializers.ModelSerializer):
             return []
 
 class StudyAnalysisSerializer(serializers.ModelSerializer):
-    reference = ReferenceSmallElasticSerializer()
     sid = serializers.CharField()
     name= serializers.CharField()
     licence = serializers.CharField()
     access = serializers.CharField()
-    creator = UserElasticSerializer()
-    comments = CommentElasticSerializer(many=True )
-    descriptions = DescriptionElasticSerializer(many=True)
+    substances = serializers.SerializerMethodField()
+    reference_pmid = serializers.SerializerMethodField()
+    reference_title = serializers.SerializerMethodField()
+    creator = serializers.SerializerMethodField()
+    curators = serializers.SerializerMethodField()
+
 
     class Meta:
         model = Study
@@ -580,13 +582,28 @@ class StudyAnalysisSerializer(serializers.ModelSerializer):
             "licence",
             "access",
             "date",
-
-            "reference",
             "creator",
-
-            "comments",
-            "descriptions",
+            "curators",
+            "substances",
+            "reference_pmid",
+            "reference_title",
+            "reference_date",
 
         ]
 
         read_only_fields = fields
+
+    def get_substances(self, obj):
+        return [s["label"] for s in obj.substances]
+
+    def get_reference_pmid(self, obj):
+        return obj.reference["pmid"]
+
+    def get_reference_title(self, obj):
+        return obj.reference["title"]
+
+    def get_creator(self, obj):
+        return obj.creator["username"]
+
+    def get_curators(self, obj):
+        return [s["username"] for s in obj.curators]
