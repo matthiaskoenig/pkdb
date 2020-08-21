@@ -1,6 +1,7 @@
 import operator
 from functools import reduce
 
+from rest_framework.generics import get_object_or_404
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
@@ -163,7 +164,8 @@ class AccessView(DocumentViewSet):
         _hash = self.request.query_params.get("hash",[])
         if _hash:
 
-            ids = list(Query.objects.get(hash=_hash).ids)
+            ids = list(get_object_or_404(Query,hash=_hash).ids)
+
             #ids = list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))
             _qs_kwargs = {'values': ids}
 

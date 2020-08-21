@@ -4,6 +4,8 @@ Generic utility functions.
 import copy
 import os
 
+from django.http import Http404
+from django.shortcuts import _get_queryset
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 

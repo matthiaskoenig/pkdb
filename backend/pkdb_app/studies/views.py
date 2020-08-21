@@ -18,7 +18,7 @@ from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
 from pkdb_app.data.views import SubSetViewSet
-from pkdb_app.outputs.pk_calculation import Subset
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import filters, status
 from rest_framework import viewsets
@@ -263,7 +263,8 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
         _hash = self.request.query_params.get("hash", [])
         if _hash:
-            ids = list(Query.objects.get(hash=_hash).ids)
+
+            ids = list(get_object_or_404(Query,hash=_hash).ids)
             _qs_kwargs = {'values': ids}
 
             self.search = self.search.query(
