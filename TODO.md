@@ -14,10 +14,9 @@
 - [ ] Fix landing page
 - [ ] tables in tab component for results
 - [ ] small values are not displayed. example: "http://0.0.0.0:8081/studies/PKDB00300". This library might help pretty print values "https://github.com/gentooboontoo/js-quantities". (Janek: I added it here not shure if I should do it.)
-- [ ] search
-     - [ ] more complex option component with select
-     - [ ] repair loading spinner
+- [ ] search component upate in select
 - [ ] How to handle excel sheets & file download
+
 ## Janek
 - [x] replace url_slug with sid
 - [x] fixed bug in frontend (loading property).
