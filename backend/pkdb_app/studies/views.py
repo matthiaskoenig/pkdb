@@ -89,21 +89,26 @@ class StudyViewSet(viewsets.ModelViewSet):
     lookup_field = "sid"
     permission_classes = (StudyPermission,)
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        group = user_group(self.request.user)
+
+    @staticmethod
+    def filter_on_permissions(user, queryset):
+
+        group = user_group(user)
         if group in ["admin", "reviewer"]:
             return queryset
 
         elif group == "basic":
-
             return queryset.filter(DQ(access=PUBLIC) |
-                                   DQ(creator=self.request.user) |
-                                   DQ(collaborators=self.request.user) |
-                                   DQ(curators=self.request.user)).distinct()
+                                   DQ(creator=user) |
+                                   DQ(collaborators=user) |
+                                   DQ(curators=user)).distinct()
 
         elif group == "anonymous":
             return queryset.filter(access=PUBLIC)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filter_on_permissions(self.request.user, queryset)
 
     def destroy(self, request, *args, **kwargs):
 
@@ -362,6 +367,10 @@ class PKData(object):
             time_elastic_studies = time.time()
             self.outputs = self.outputs.filter(study__sid__in=studies_pks)
 
+        else:
+            self.outputs = self.outputs.filter(study_id__in=Subquery(StudyViewSet.filter_on_permissions(request.user,Study.objects).values_list("id", flat=True)))
+
+
         if groups_query or individuals_query:
             self.groups_query = groups_query
             groups_pks = self.group_pks()
@@ -388,21 +397,6 @@ class PKData(object):
             self.outputs = self.outputs.filter(id__in=outputs_pks)
 
         time_elastic = time.time()
-
-        # --- Django & concise ---
-
-        # self.studies = Study.objects.filter(sid__in=studies_pks).only('sid', 'pk')
-        # self.groups = Group.objects.filter(pk__in=groups_pks).only('pk').all()
-        # self.individuals = Individual.objects.filter(pk__in=individuals_pks).only('pk')
-        # self.interventions = Intervention.objects.filter(pk__in=interventions_pks)
-        #self.outputs = Output.objects.select_related("study__sid").prefetch_related(
-        #    Prefetch(
-        #    'interventions',
-        #    queryset=Intervention.objects.only('id'))).only(
-        #    'group_id', 'individual_id', "id", "interventions__id").filter(
-        #    DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks),
-        #                              study__sid__in=studies_pks, interventions__id__in=interventions_pks,id__in=outputs_pks)
-
 
         studies = set()
         groups = set()
