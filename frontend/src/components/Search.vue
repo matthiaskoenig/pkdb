@@ -59,8 +59,6 @@
                 <count-badge text="Outputs" :count="results.outputs.count"/>
                 <span style="padding-left: 20px; padding-right: 20px;">&</span>
                 <count-badge text="Timecourses" :count="results.timecourses.count"/>
-                <span style="padding-left: 20px; padding-right: 20px;">&</span>
-                <count-badge text="Scatters" :count="results.scatters.count"/>
               </label>
 
               <output-form/>
@@ -206,7 +204,6 @@ export default {
         individuals: {"hash": "", "count": 0},
         outputs: {"hash": "", "count": 0},
         timecourses: {"hash": "", "count": 0},
-        scatters: {"hash": "", "count": 0},
       },
       otype: "pkdata",
       otype_single: "pkdata",

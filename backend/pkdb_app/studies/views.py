@@ -423,8 +423,8 @@ class PKData(object):
 
             if output["output_type"] == Output.OutputTypes.Timecourse:
                 timecourses.add(output["timecourse__id"])
-
-            interventions.add(output["interventions__id"])
+            if output["interventions__id"]:
+                interventions.add(output["interventions__id"])
 
 
 
@@ -441,13 +441,12 @@ class PKData(object):
             "interventions": list(interventions),
             "outputs": list(outputs),
             "timecourses": list(timecourses),
-            "scatters": [],#list(subsets.filter(data__data_type=Data.DataTypes.Scatter).values_list("id", flat=True).distinct()),
         }
 
 
         time_django = time.time()
 
-        ("-" * 80)
+        print("-" * 80)
         for q in connection.queries:
             print("db query:", q["time"])
 
