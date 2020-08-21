@@ -43,13 +43,6 @@ STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
 
 
 # ---------------------------------------------------
-class Author(models.Model):
-    """ Author in reference. """
-    first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
-    last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
-
-    def __str__(self):
-        return "%s %s" % (self.first_name, self.last_name)
 
 from django.core.validators import RegexValidator
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
@@ -68,7 +61,6 @@ class Reference(models.Model):
     abstract = models.TextField(null=True)
     journal = models.TextField(null=True)
     date = models.DateField()
-    authors = models.ManyToManyField(Author, related_name="references")
 
     def __str__(self):
         return self.title
@@ -85,6 +77,14 @@ class Reference(models.Model):
         if self.study:
             return self.study.name
         return ""
+
+class Author(models.Model):
+    """ Author in reference. """
+    first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
+    last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
+    reference = models.ForeignKey(Reference, related_name="authors", on_delete=models.CASCADE)
+    def __str__(self):
+        return "%s %s" % (self.first_name, self.last_name)
 
 
 class Rating(models.Model):

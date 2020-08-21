@@ -185,7 +185,7 @@ class SubSetSerializer(ExSerializer):
             raise serializers.ValidationError(
                 f"Timcourses have to be one dimensional. Dimensions: <{dimensions}> has a len of <{len(dimensions)}.> ")
         subset_outputs = study.outputs.filter(normed=True,label=dimensions[0])
-        if len(subset_outputs) < 1:
+        if len(subset_outputs) < 2:
             raise serializers.ValidationError(
                 f"Timcourses have to consist at least from two outputs. Consider saving the the outputs with the label <{dimensions[0]}> as output_type:output.")
         subset_instance.pks.add(*subset_outputs)

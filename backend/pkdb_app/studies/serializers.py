@@ -65,7 +65,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
     def create(self, validated_data):
         authors_data = validated_data.pop("authors", [])
         reference = Reference.objects.create(**validated_data)
-        update_or_create_multiple(reference, authors_data, "authors")
+        create_multiple(reference, authors_data, "authors")
         reference.save()
         return reference
 

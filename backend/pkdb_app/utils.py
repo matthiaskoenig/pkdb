@@ -113,13 +113,14 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
 
 
         except instance_child.model.DoesNotExist:
-
             instance_dict = {**lookup_dict, **child}
             instance_child.create(**instance_dict)
 
 
+
 def create_multiple(parent, children, related_name):
     instance_child = getattr(parent, related_name)
+
     return [instance_child.create(**child) for child in children]
 
 
