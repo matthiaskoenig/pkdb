@@ -24,7 +24,7 @@ from elasticsearch_dsl.query import Q
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
 from pkdb_app.data.serializers import DataAnalysisSerializer
 from pkdb_app.data.views import SubSetViewSet, DataAnalysisViewSet
-from pkdb_app.interventions.serializers import InterventionElasticSerializer, InterventionElasticSerializerAnalysis
+from pkdb_app.interventions.serializers import  InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
 from rest_framework.generics import get_object_or_404
@@ -60,7 +60,6 @@ from pkdb_app.outputs.models import Output
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.views import ElasticOutputViewSet, OutputInterventionViewSet
 from pkdb_app.studies.models import Study, Query, Reference
-from pkdb_app.subjects.models import Group, Individual
 from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, GroupCharacteristicaViewSet, \
     IndividualCharacteristicaViewSet
 
@@ -118,7 +117,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        self.filter_on_permissions(self.request.user, queryset)
+        return self.filter_on_permissions(self.request.user, queryset)
 
     def destroy(self, request, *args, **kwargs):
 
@@ -273,7 +272,6 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
 
         _hash = self.request.query_params.get("hash", [])
         if _hash:
-
             ids = list(get_object_or_404(Query,hash=_hash).ids)
             _qs_kwargs = {'values': ids}
 
