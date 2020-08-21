@@ -1,13 +1,18 @@
+
+import tempfile
+import zipfile
+from collections import namedtuple
+from io import StringIO
 from typing import Dict
 import time
-
+import pandas as pd
 from django.db import connection
 from django.test.client import RequestFactory
 
 import django_filters.rest_framework
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q as DQ, Prefetch
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
@@ -17,7 +22,11 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.data.views import SubSetViewSet
+from pkdb_app.data.serializers import DataAnalysisSerializer
+from pkdb_app.data.views import SubSetViewSet, DataAnalysisViewSet
+from pkdb_app.interventions.serializers import InterventionElasticSerializer, InterventionElasticSerializerAnalysis
+from pkdb_app.outputs.serializers import OutputInterventionSerializer
+from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import filters, status
@@ -41,18 +50,19 @@ from .serializers import (
     ReferenceSerializer,
     StudySerializer,
     ReferenceElasticSerializer,
-    StudyElasticSerializer,
+    StudyElasticSerializer, StudyAnalysisSerializer,
 )
 
 from django.db.models import Subquery
 from django.db.models import Q
-from pkdb_app.interventions.views import ElasticInterventionViewSet
+from pkdb_app.interventions.views import ElasticInterventionViewSet, ElasticInterventionAnalysisViewSet
 from pkdb_app.outputs.models import Output
 from pkdb_app.interventions.models import Intervention
-from pkdb_app.outputs.views import ElasticOutputViewSet
+from pkdb_app.outputs.views import ElasticOutputViewSet, OutputInterventionViewSet
 from pkdb_app.studies.models import Study, Query, Reference
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet
+from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, GroupCharacteristicaViewSet, \
+    IndividualCharacteristicaViewSet
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
@@ -456,42 +466,6 @@ class PKData(object):
         """create an get request with no parameters in the url."""
         return RequestFactory().get("/").GET.copy()
 
-    def _update_outputs(self):
-        """ """
-        outputs = self.outputs.filter(DQ(group__in=self.groups) | DQ(individual__in=self.individuals) ,study__in=self.studies, interventions__in=self.interventions)
-        outputs_count = outputs.count()
-        if outputs_count < self.outputs.count():
-            self.keep_concising = True
-            self.outputs = outputs
-
-    def concise(self):
-        """
-        A PKDBData object consists of sets of consistent ids for
-        - studies [study_sid]
-        - groups  [study_sid]
-        - individuals
-        - interventions
-        - outputs [study, interventions (MxM), individual, group
-        - subsets
-
-        :return:
-        """
-
-
-
-        self.keep_concising = True
-
-        while self.keep_concising:
-            self.keep_concising = False
-
-            self._update_outputs()
-            self.interventions = Intervention.objects.filter(outputs__in=self.outputs).distinct()
-            self.individuals = Individual.objects.filter(pk__in=Subquery(self.outputs.values("individual_id").distinct()))
-            group_ids1 = Subquery(self.outputs.values("group_id"))
-            group_ids2 = Subquery(self.individuals.values("group_id"))
-            self.groups = Group.objects.filter(Q(pk__in=group_ids1) | Q(pk__in=group_ids2))
-            self.studies = self.studies.filter(pk__in=Subquery(self.outputs.values("study_id").distinct()))
-            self.subsets = self.subsets.filter(data_points__in=Subquery(self.outputs.values("data_points").distinct())).distinct()
 
     def intervention_pks(self):
         return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
@@ -530,8 +504,16 @@ class PKData(object):
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
+
         response = queryset.source([pk_field]).params(size=scan_size).scan()
         return [instance[pk_field] for instance in response]
+
+    def data_by_query_dict(self,query_dict, viewset, serializer):
+        view = viewset(request=self.request)
+        queryset = view.filter_queryset(view.get_queryset())
+        queryset = queryset.filter("terms",**query_dict)
+        return serializer(queryset.scan(), many=True).data
+
 
 
 class PKDataView(APIView):
@@ -566,6 +548,13 @@ class PKDataView(APIView):
             interventions_query=self._get_param("intervention", request),
             outputs_query=self._get_param("output", request),
         )
+
+
+
+
+
+
+
         time_pkdata = time.time()
 
         resources = {}
@@ -577,6 +566,33 @@ class PKDataView(APIView):
         Query.objects.bulk_create(queries)
 
         time_hash = time.time()
+
+
+        if request.GET.get("download"):
+
+            Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer"])
+            table_content = {
+                "studies": Sheet("Studies", {"pk":pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer),
+                "groups": Sheet("Groups", {"group_pk":pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer),
+                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer),
+                "interventions": Sheet("Interventions",{"pk":pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis),
+                "outputs": Sheet("Outputs",{"output_pk":pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer),
+                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet,DataAnalysisSerializer),
+
+            }
+            with tempfile.SpooledTemporaryFile() as tmp:
+                with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
+                    for key, sheet in table_content.items():
+                        print(key)
+                        string_buffer = StringIO()
+                        data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
+                        pd.DataFrame(data).to_csv(string_buffer)
+                        archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                tmp.seek(0)
+                resp = HttpResponse(tmp.read(), content_type='application/x-zip-compressed')
+                resp['Content-Disposition'] = "attachment; filename=%s" % "pkdata.zip"
+                return resp
+
 
         response = Response(resources, status=status.HTTP_200_OK)
         time_response = time.time()

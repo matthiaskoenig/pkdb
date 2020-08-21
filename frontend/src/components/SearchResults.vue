@@ -75,7 +75,6 @@ export default {
         { tab: 'Interventions'},
         { tab: 'Outputs'},
         { tab: 'Timecourses'},
-        { tab: 'Scatter'},
       ],
     }
   }
