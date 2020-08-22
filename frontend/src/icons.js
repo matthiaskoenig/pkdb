@@ -69,4 +69,12 @@ function lookupIcon(key) {
     }
 }
 
-export {lookupIcon};
+let IconsMixin = {
+    methods: {
+        faIcon: function (key) {
+            return lookupIcon(key)
+        },
+    },
+};
+
+export {lookupIcon, IconsMixin};

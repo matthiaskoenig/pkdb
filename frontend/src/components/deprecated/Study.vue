@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import StudyDetail from './detail/StudyDetail'
+    import StudyDetail from '../detail/StudyDetail'
 
     export default {
         name: 'Study',

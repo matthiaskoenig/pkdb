@@ -55,7 +55,7 @@
         text-align: left;
     }
     .main {
-      padding: 20px;
+      padding: 0px;
       text-align: left;
     }
 
