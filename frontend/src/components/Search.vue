@@ -26,51 +26,84 @@
           <v-col cols="4">
             <!--- Start Search Component -->
             <v-card flat tile width="100%">
-              <label class="form-label" title="Search and filter data by study information">
-                <count-badge text="Studies" :count="results.studies.count"/>
-                <v-spacer/>
-                <v-btn color="black" fab x-small dark outlined @click.stop="show_help">
-                  <v-icon>fas fa fa-question</v-icon>
+              <v-row justify="end">
+                <v-btn color="black"
+                       class="ma-2"
+                       small
+                       dark
+                       outlined
+                       @click.stop="show_help">
+                  Help
+                  <v-icon small>fas fa fa-question</v-icon>
                 </v-btn>
 
-
-                <v-btn :href=url_download>
+                <v-btn
+                    @click="downloadData"
+                    :loading="loadingDownload"
+                    :disabled="loadingDownload"
+                    small
+                    outlined
+                    class="ma-2"
+                >
                   Download
+                  <v-icon small right dark>{{faIcon('download')}}</v-icon>
                 </v-btn>
 
-                <v-btn  v-on:click="reset">
+
+        <v-btn
+                    small
+                    class="ma-2"
+                    outlined
+                    v-on:click="reset">
                   Clear Search
                 </v-btn>
+              </v-row>
 
+              <v-row justify="end">
                 <v-progress-circular
                     indeterminate
                     color="primary"
                     v-if="loading"
                 ></v-progress-circular>
-              </label>
-              <study-search-form/>
 
-              <label class="form-label" title="Search and filter data by subjects">
+              </v-row>
+
+              <v-row class="mt-4 ml-3">
+                <label class="text-h5 form-label" title="Search and filter data by study information">
+                  <count-badge text="Studies" :count="results.studies.count"/>
+                </label>
+                <v-spacer/>
+              </v-row>
+
+
+              <study-search-form/>
+              <v-row class="mt-4 ml-3">
+
+              <label class=" text-h5 form-label" title="Search and filter data by subjects">
                 <count-badge text="Groups" :count="results.groups.count"/>
                 <span style="padding-left: 20px; padding-right: 20px;">&</span>
                 <count-badge text="Individuals" :count="results.individuals.count"/>
               </label>
+              </v-row>
               <subjects-form
                   @subjects__type="update_search_query"
                   @subject_queries="update_subject_query"
               />
+              <v-row class="mt-4 ml-3">
 
-              <label class="form-label" title="Search and filter data by intervention">
+              <label class="text-h5 form-label" title="Search and filter data by intervention">
                 <count-badge text="Interventions" :count="results.interventions.count"/>
               </label>
-              <intervention-form/>
+              </v-row>
 
-              <label class="form-label" title="Search and filter data by outputs">
+                <intervention-form/>
+              <v-row class="mt-4 ml-3">
+              <label class="text-h5 form-label" title="Search and filter data by outputs">
                 <count-badge text="Outputs" :count="results.outputs.count"/>
                 <span style="padding-left: 20px; padding-right: 20px;">&</span>
                 <count-badge text="Timecourses" :count="results.timecourses.count"/>
               </label>
-
+              </v-row>
               <output-form/>
             </v-card>
             <!--- End Search Component -->
@@ -214,10 +247,29 @@ export default {
           })
           .finally(() => this.loading = false);
     },
-  },
+    downloadData() {
+      this.loadingDownload = true
+      let headers = {};
+      if (localStorage.getItem('token')) {
+        headers = {Authorization: 'Token ' + localStorage.getItem('token')}
+      }
 
+        axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
+            .then(response => {
+              let blob = new Blob([response.data], {type: 'application/zip'}),
+                  url = window.URL.createObjectURL(blob)
+              window.open(url)
+            })
+            .catch(err => {
+              console.log(err.response.data);
+              this.loadingDownload = false
+            })
+            .finally(() => this.loadingDownload = false);
+      }
+  },
   data() {
     return {
+      loadingDownload:false,
       drawer: true,
       results: {
         studies: {"hash": "", "count": 0},
