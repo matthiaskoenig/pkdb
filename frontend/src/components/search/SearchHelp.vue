@@ -28,8 +28,7 @@ export default {
     return {
       example1: [
         {"query_type": "subjects_boolean", "key": "groups_query", "value": false},
-        {"query_type": "subjects_queries", "key": "choice_sid__in", "value": [{"sid":"healthy", "label"	:"healthy"}]},
-
+        {"query_type": "subjects_queries", "key": "choice_sid__in", "value": [{"sid":"healthy-yes", "label"	:"healthy"}]},
         {"query_type": "queries_users", "key": "studies__curators__in", "value": [
             {"username": "mkoenig", "first_name": "Matthias", "last_name": "König"},
             {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski"}]},
