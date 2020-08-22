@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import InterventionsTable from './tables/InterventionsTable';
+    import InterventionsTable from '../tables/InterventionsTable';
 
     export default {
     name: 'Interventions',

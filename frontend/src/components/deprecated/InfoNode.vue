@@ -4,7 +4,7 @@
 
 <script>
 import axios from 'axios'
-import InfoNodeDetail from './detail/InfoNodeDetail'
+import InfoNodeDetail from '../detail/InfoNodeDetail'
 
 export default {
   components: {

@@ -1,0 +1,1 @@
+<template>    <individuals-table/></template><script>    import IndividualsTable from '../tables/IndividualsTable';    export default {        name: 'Individuals',        components: {            IndividualsTable,        },    }</script><style></style>

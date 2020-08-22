@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import TimecourseDetail from './detail/TimecourseDetail'
+    import TimecourseDetail from '../detail/TimecourseDetail'
 
     export default {
         name: 'Timecourse',

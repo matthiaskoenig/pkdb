@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import TimecoursesTable from "./tables/TimecoursesTable";
+    import TimecoursesTable from "../tables/TimecoursesTable";
 
     export default {
         name: 'Timecourses',

@@ -1,42 +1,30 @@
 <template>
-    <div id="app">
-        <v-app class="app">
-            <v-container fluid grid-list-xl>
-                <v-layout row>
-                    <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
-                        <navigation></navigation>
-                    </v-flex>
-                </v-layout>
-                <v-layout row style="padding-top: 30px;">
-                    <v-flex xs12>
-                        <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
-                    </v-flex>
-                </v-layout>
-
-              <!--
-                <v-layout row>
-                    <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
-                        <footer-f></footer-f>
-                    </v-flex>
-                </v-layout>
-                -->
-            </v-container>
-        </v-app>
-    </div>
+  <div id="app">
+    <v-app class="app">
+      <v-container fluid>
+        <v-row>
+          <navigation></navigation>
+        </v-row>
+        <v-row style="padding-top: 30px;">
+          <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
+        </v-row>
+        <v-row>
+          <footer-bar></footer-bar>
+        </v-row>
+      </v-container>
+    </v-app>
+  </div>
 </template>
 
 <script>
     import Navigation from './components/Navigation.vue';
-    import FooterF from './components/Footer.vue';
+    import FooterBar from './components/FooterBar.vue';
 
     export default {
         name: 'app',
         components: {
             'Navigation': Navigation,
-            'FooterF': FooterF
-        },
-        data() {
-            return {}
+            'FooterBar': FooterBar
         },
         computed: {
             domain() {

@@ -1,5 +1,7 @@
 <template>
     <v-card flat id="count-table">
+        <strong>Version</strong>: {{ data.version }}
+
         <v-data-table :headers="headers"
                       :items="items"
                       hide-default-footer
@@ -40,6 +42,7 @@
                     { text: 'Description', value: 'description', sortable: false},
                 ],
                 data: {
+                    version: "-",
                     study_count: 0,
                     group_count: 0,
                     individual_count: 0,

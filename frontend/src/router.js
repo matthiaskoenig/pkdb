@@ -9,24 +9,27 @@ import Search from './components/Search';
 
 /* TableViews */
 import Studies from './components/Studies';
-import Groups from './components/Groups';
-import Individuals from './components/Individuals';
-import Interventions from './components/Interventions';
-import Outputs from './components/Outputs';
-import Timecourses from './components/Timecourses';
-import References from './components/References';
-
+/*
+import Groups from './components/deprecated/Groups';
+import Individuals from './components/deprecated/Individuals';
+import Interventions from './components/deprecated/Interventions';
+import Outputs from './components/deprecated/Outputs';
+import Timecourses from './components/deprecated/Timecourses';
+import References from './components/deprecated/References';
+*/
 
 
 /* DetailViews */
 import Study from './components/Study';
-import Group from './components/Group';
-import Individual from './components/Individual';
-import Intervention from './components/Intervention';
-import Output from './components/Output';
-import Timecourse from './components/Timecourse';
+/*
+import Group from './components/deprecated/Group';
+import Individual from './components/deprecated/Individual';
+import Intervention from './components/deprecated/Intervention';
+import Output from './components/deprecated/Output';
+import Timecourse from './components/deprecated/Timecourse';
 import InfoNode from './components/InfoNode';
-import Reference from './components/Reference';
+import Reference from './components/deprecated/Reference';
+*/
 
 /* 404 */
 import Page404 from './components/Page404';
@@ -58,11 +61,57 @@ export default new Router({
             component: Studies
         },
         {
+            path: "/studies/:id",
+            name: "Study",
+            component: Study,
+            props: true
+        },
+        {
             path: '/search',
             name: 'Search',
             component: Search
         },
         {
+            path: '/curation',
+            name: 'Curation',
+            component: Curation
+        },
+        {
+            path: '/account',
+            name: 'Account',
+            component: Account
+        },
+        {
+            path: '/verification/:id',
+            name: 'Verification',
+            component: Verification,
+            props: true
+        },
+        {
+            path: '/registration',
+            name: 'Registration',
+            component: Registration
+        },
+        {
+            path: '/request-password-reset',
+            name: 'RequestPasswordReset',
+            component: RequestPasswordReset
+        },
+        {
+            path: '/reset-password/:id',
+            name: 'PasswordReset',
+            component: PasswordReset,
+        },
+        {
+            path: '/404',
+            name: '404',
+            component: Page404
+        },
+        {
+            path: '*',
+            redirect: '/404'
+        },
+        /*{
             path: '/groups',
             name: 'Groups',
             component: Groups
@@ -91,44 +140,6 @@ export default new Router({
             path: '/references',
             name: 'References',
             component: References
-        },
-        {
-            path: '/curation',
-            name: 'Curation',
-            component: Curation
-        },
-        {
-            path: '/account',
-            name: 'Account',
-            component: Account
-        },
-        {
-            path: '/verification/:id',
-            name: 'Verification',
-            component: Verification,
-            props: true
-
-        },
-        {
-            path: '/registration',
-            name: 'Registration',
-            component: Registration
-        },
-        {
-            path: '/request-password-reset',
-            name: 'RequestPasswordReset',
-            component: RequestPasswordReset
-        },
-        {
-            path: '/reset-password/:id',
-            name: 'PasswordReset',
-            component: PasswordReset,
-        },
-        {
-            path: "/studies/:id",
-            name: "Study",
-            component: Study,
-            props: true
         },
         {
             path: "/groups/:id",
@@ -171,16 +182,7 @@ export default new Router({
             name: "InfoNode",
             component: InfoNode,
             props: true
-        },
-        {
-            path: '/404',
-            name: '404',
-            component: Page404
-        },
-        {
-            path: '*',
-            redirect: '/404'
-        },
+        },*/
     ],
 
 

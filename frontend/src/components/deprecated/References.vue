@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import ReferencesTable from './tables/ReferencesTable';
+    import ReferencesTable from '../tables/ReferencesTable';
 
     export default {
         name: 'References',

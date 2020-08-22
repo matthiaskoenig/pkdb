@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import ReferenceDetail from './detail/ReferenceDetail'
+    import ReferenceDetail from '../detail/ReferenceDetail'
 
     export default {
         name: 'Reference',
