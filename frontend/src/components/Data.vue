@@ -1,6 +1,16 @@
 <template>
-    <v-card flat>
+    <v-card flat width="100%">
       <!--<v-card-title>Search results</v-card-title>-->
+
+      <v-row>
+        <v-btn title="Go to search"
+               color="#41b883"
+               width="100%"
+               to="/search"
+        >
+          <v-icon left small>{{ faIcon('search') }}</v-icon> {{ 'Search' }}
+        </v-btn>
+      </v-row>
 
       <v-tabs
           v-model="tab"
@@ -45,9 +55,10 @@ import GroupsTable from "./tables/GroupsTable";
 import InterventionsTable from "./tables/InterventionsTable";
 import OutputsTable from "./tables/OutputsTable";
 import TimecoursesTable from "./tables/TimecoursesTable";
+import {IconsMixin} from "../icons";
 
 export default {
-  mixins: [searchTableMixin],
+  mixins: [searchTableMixin, IconsMixin],
   name: "Data",
   components: {
     StudiesTable,
@@ -56,6 +67,11 @@ export default {
     InterventionsTable,
     OutputsTable,
     TimecoursesTable
+  },
+  computed: {
+    results () {
+      return this.$store.state.results
+    }
   },
   data(){
     return {
@@ -68,6 +84,7 @@ export default {
         { tab: 'Outputs'},
         { tab: 'Timecourses'},
       ],
+      /*
       results: {
         studies: {"hash": "", "count": 0},
         interventions: {"hash": "", "count": 0},
@@ -76,6 +93,7 @@ export default {
         outputs: {"hash": "", "count": 0},
         timecourses: {"hash": "", "count": 0},
       },
+      */
     }
   },
   methods: {
@@ -96,9 +114,11 @@ export default {
       this.results = this.$store.state.results
     }
   },
+  /*
   created() {
     this.fetch_data(this.resource_url);
   }
+   */
 }
 </script>
 

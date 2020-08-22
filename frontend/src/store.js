@@ -88,8 +88,15 @@ export default new Vuex.Store({
         subjects_queries:initial_subjects_queries,
         queries_users:initial_queries_users,
 
-        // search results
-        results: {},
+        // search results (synchronization between search & results)
+        results: {
+            studies: {"hash": "", "count": 0},
+            interventions: {"hash": "", "count": 0},
+            groups: {"hash": "", "count": 0},
+            individuals: {"hash": "", "count": 0},
+            outputs: {"hash": "", "count": 0},
+            timecourses: {"hash": "", "count": 0},
+        },
 
         // global highlighting
         highlight:  "",

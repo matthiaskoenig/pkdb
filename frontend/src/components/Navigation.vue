@@ -1,34 +1,36 @@
 <template>
   <span id="navigation">
     <v-app-bar
+               class="fixed-nav-bar1"
 
-               app
                permanent
-               flat
-               fixed
+               floating
                dark
                dense
-               :collapse="!collapse"
-               :collapse-on-scroll="collapse"
                color="#222222"
     >
+      <!--
       <v-app-bar-nav-icon @click="collapse = !collapse"></v-app-bar-nav-icon>
-      <!--<v-toolbar-title color="white">PK-DB</v-toolbar-title>-->
+      -->
+
+      <v-toolbar-title to="/" title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
 
 
       <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
       <v-btn icon to="/data" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
       <v-btn icon to="/search" title="Search" color="#41b883"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
-      <v-btn icon to="/curation" title="Curation information" color="grey"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
-      <v-btn icon :href="api_url" title="REST API" color="grey"><v-icon>{{ faIcon('api') }}</v-icon></v-btn>
+
+      <v-spacer></v-spacer>
+      <v-btn icon to="/curation" title="Curation information" color="grey" small><v-icon small>{{ faIcon('curation') }}</v-icon></v-btn>
+      <v-btn icon :href="api_url" title="REST API" color="grey" small><v-icon small>{{ faIcon('api') }}</v-icon></v-btn>
 
       <!-- account -->
-        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" color="grey">
+        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" color="grey" small>
             <user-avatar :username="username"></user-avatar>
             {{ username }}
         </v-chip>
-        <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true" color="grey">
-            <v-icon >{{ faIcon('account') }}</v-icon>
+        <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true" color="grey" small>
+            <v-icon small>{{ faIcon('account') }}</v-icon>
         </v-btn>
 
         <v-dialog v-model="dialog" max-width="500">
@@ -100,15 +102,18 @@
 </script>
 
 <style scoped>
-    .fixed-nav-bar {
-       /*
+    .fixed-nav-bar1 {
         position: fixed;
         top: 0;
         left: 0;
         z-index: 9999;
         width: 100%;
         height: 50px;
+    }
 
-        */
+    .logo {
+      padding-right: 25px;
+      font-family: "Roboto Light";
+      font-size: 30px;
     }
 </style>

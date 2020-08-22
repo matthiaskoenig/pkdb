@@ -1,21 +1,23 @@
 <template>
-  <div id="Search" class="main">
+  <v-card flat width="100%">
 
-    <v-row >
-      <v-btn title="Go to search results"
+    <v-row>
+      <v-btn title="Go to results"
              color="#1E90FF"
              :disabled="results.studies.count==0"
              width="100%"
-             dark
              to="/data"
       >
         <span v-if="results.studies.count!=0">
-          {{ 'Show Results' }}
+          <v-icon left small>{{ faIcon('data') }}</v-icon> {{ 'Results' }}
         </span>
       </v-btn>
     </v-row>
-    <v-row>
-      <v-col class="pl-10" cols="4">
+
+
+      <v-row align="start" justify="center">
+        <v-col xs="12" sm="6" md="4" lg="4">
+
         <!--- Start Search Component -->
         <v-card flat tile width="100%">
           <v-row class="mt-3 mb-4" justify="end">
@@ -96,9 +98,11 @@
           </v-row>
           <output-form/>
         </v-card>
+
         <!--- End Search Component -->
       </v-col>
-      <v-col cols="8" class="pr-6 mt-6">
+        <v-col xs="12" sm="6" md="8" lg="8">
+
         <info-node-detail
             v-model="display_detail"
             v-if="show_type === 'info_node'"
@@ -108,7 +112,7 @@
         <study-overview v-if="show_type === 'study'" :study="detail_info"/>
       </v-col>
     </v-row>
-  </div>
+  </v-card>
 </template>
 
 <script>
@@ -273,15 +277,7 @@ export default {
 .form-label {
 }
 
-.search-navbar {
-  position: fixed;
-  top: 48px;
-  left: 0;
-  z-index: 9999;
-  width: 100%;
-  height: 32px;
-  background-color: #CCCCCC;
-}
+
 .main {  width: 100%;}
 .search-content {
   margin-top: 80px;

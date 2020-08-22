@@ -77,14 +77,14 @@ export default {
         {
           name: 'Study',
           name_plural: 'Studies',
-          to: '/studies',
+          to: '/data',
           icon: this.faIcon('studies'),
           count: this.study_count,
           description: "Clinical or experimental study measuring data in groups and/or individuals."
         },
         {
           name: 'Group',
-          to: '/groups',
+          to: '/data',
           icon: this.faIcon('groups'),
           count: this.group_count,
           description: "Group of individuals for which data was measured, e.g., the control group and the group which received " +
@@ -92,7 +92,7 @@ export default {
         },
         {
           name: 'Individual',
-          to: '/individuals',
+          to: '/data',
           icon: this.faIcon('individuals'),
           count: this.individual_count,
           description: "A single subject in the study. A subject is characterized by the group it belongs to " +
@@ -101,7 +101,7 @@ export default {
         },
         {
           name: 'Intervention',
-          to: '/interventions',
+          to: '/data',
           icon: this.faIcon('interventions'),
           count: this.intervention_count,
           description: "Intervention which was performed in the study. Often interventions consist of application of a " +
@@ -109,7 +109,7 @@ export default {
         },
         {
           name: 'Output',
-          to: '/outputs',
+          to: '/data',
           icon: this.faIcon('outputs'),
           count: this.output_count,
           description: "Clinical or experimental output. These can be single parameters or variables, e.g. pharmacokinetic " +
@@ -118,7 +118,7 @@ export default {
         },
         {
           name: 'Timecourse',
-          to: '/timecourses',
+          to: '/data',
           icon: this.faIcon('timecourses'),
           count: this.timecourse_count,
           description: "Clinical or experimental time course measurements. Often timecourses are concentration measurements." +
