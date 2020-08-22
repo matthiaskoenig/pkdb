@@ -1,27 +1,27 @@
 <template>
-    <span id="intervention">
+    <span id="output">
         <get-data :resource_url="resource_url">
-            <div slot-scope="intervention">
-                <intervention-detail :intervention="intervention.data" :resource_url="resource_url" />
+            <div slot-scope="output">
+                <output-detail :output="output.data" :resource_url="resource_url" />
             </div>
         </get-data>
     </span>
 </template>
 
 <script>
-    import InterventionDetail from './detail/InterventionDetail'
+    import OutputDetail from '../detail/OutputDetail'
 
     export default {
-        name: 'Intervention',
+        name: 'Output',
         components: {
-            InterventionDetail
+            OutputDetail
         },
         computed: {
             resource_url() {
                 var path = this.$route.path;
                 var tokens = path.split('/');
                 var entry_id = tokens[tokens.length-1];
-                return this.$store.state.endpoints.api + 'interventions/'+ entry_id +'/?format=json';
+                return this.$store.state.endpoints.api + 'outputs/'+ entry_id +'/?format=json';
             }
         },
     }

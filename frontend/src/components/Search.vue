@@ -100,7 +100,7 @@ import SubjectsForm from "./search/SubjectSearchForm";
 import OutputForm from "./search/OutputSearchForm";
 import SearchResults from "./SearchResults";
 
-import InfoNode from "./InfoNode";
+import InfoNode from "./deprecated/InfoNode";
 import InfoNodeDetail from "./detail/InfoNodeDetail";
 import SearchHelp from "./search/SearchHelp";
 import StudyOverview from "./detail/StudyOverview";

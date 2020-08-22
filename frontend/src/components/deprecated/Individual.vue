@@ -11,7 +11,7 @@
 </template>
 
 <script>
-    import IndividualDetail from './detail/IndividualDetail'
+    import IndividualDetail from '../detail/IndividualDetail'
 
     export default {
         name: 'Individual',

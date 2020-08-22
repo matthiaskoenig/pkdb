@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import OutputsTable from './tables/OutputsTable';
+    import OutputsTable from '../tables/OutputsTable';
 
     export default {
         name: 'Outputs',

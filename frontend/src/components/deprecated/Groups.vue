@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import GroupsTable from "./tables/GroupsTable";
+    import GroupsTable from "../tables/GroupsTable";
 
     export default {
         name: 'Groups',

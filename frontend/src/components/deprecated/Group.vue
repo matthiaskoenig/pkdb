@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import GroupDetail from './detail/GroupDetail'
+    import GroupDetail from '../detail/GroupDetail'
 
     export default {
         name: 'Group',
