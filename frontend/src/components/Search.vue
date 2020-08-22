@@ -63,7 +63,7 @@
           </v-row>
 
           <v-row class="mt-4 ml-3">
-            <label class="text-h5 form-label" title="Search and filter data by study information">
+            <label class="text-h7 form-label" title="Search and filter data by study information">
               <count-badge text="Studies" :count="results.studies.count"/>
             </label>
             <v-spacer/>
@@ -72,7 +72,7 @@
           <study-search-form/>
           <v-row class="mt-4 ml-3">
 
-            <label class=" text-h5 form-label" title="Search and filter data by subjects">
+            <label class=" text-h7 form-label" title="Search and filter data by subjects">
               <count-badge text="Groups" :count="results.groups.count"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
               <count-badge text="Individuals" :count="results.individuals.count"/>
@@ -84,14 +84,14 @@
           />
           <v-row class="mt-4 ml-3">
 
-            <label class="text-h5 form-label" title="Search and filter data by intervention">
+            <label class="text-h7 form-label" title="Search and filter data by intervention">
               <count-badge text="Interventions" :count="results.interventions.count"/>
             </label>
           </v-row>
 
           <intervention-form/>
           <v-row class="mt-4 ml-3">
-            <label class="text-h5 form-label" title="Search and filter data by outputs">
+            <label class="text-h7 form-label" title="Search and filter data by outputs">
               <count-badge text="Outputs" :count="results.outputs.count"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
               <count-badge text="Timecourses" :count="results.timecourses.count"/>
@@ -102,9 +102,8 @@
 
         <!--- End Search Component -->
       </v-col>
-
-
         <v-col sm="8" md="8" lg="8">
+
         <info-node-detail
             v-model="display_detail"
             v-if="show_type === 'info_node'"
@@ -288,7 +287,7 @@ export default {
   height: 32px;
   background-color: #CCCCCC;
 }
-
+.main {  width: 100%;}
 .search-content {
   margin-top: 80px;
 }

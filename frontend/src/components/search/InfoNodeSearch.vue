@@ -29,15 +29,17 @@
     <template
         slot="option"
         slot-scope="props"
+        class="v-btn"
     >
       <v-btn
           block
           text
           large
+          text-left
+          class="v-btn-multiselect"
           v-on:mouseover.native="mouseover(props.option)">
-
         <text-highlight :queries="highlight">
-          {{ props.option.label }}
+            {{ props.option.label }}
         </text-highlight>
       </v-btn>
 
@@ -129,6 +131,16 @@ export default {
 <style scoped>
 .detail {
   position: absolute
-
 }
+</style>
+<style>
+.multiselect__option {
+  padding: 0 !important;
+}
+.v-btn-multiselect {
+  text-transform: none;
+  white-space: nowrap;
+  justify-content: left;
+}
+
 </style>
