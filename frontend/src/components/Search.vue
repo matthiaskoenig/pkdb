@@ -26,7 +26,7 @@
           <v-col cols="4">
             <!--- Start Search Component -->
             <v-card flat tile width="100%">
-              <v-row justify="end">
+              <v-row class="mt-3 mb-4" justify="end">
                 <v-btn color="black"
                        class="ma-2"
                        small
@@ -108,7 +108,7 @@
             </v-card>
             <!--- End Search Component -->
           </v-col>
-          <v-col cols="8">
+          <v-col cols="8" class="pr-10 mt-6">
             <info-node-detail
                 v-model="display_detail"
                 v-if="show_type === 'info_node'"
