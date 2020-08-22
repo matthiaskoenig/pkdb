@@ -8,9 +8,7 @@
                width="100%"
                to="/search"
         >
-        <span v-if="results.studies.count!=0">
-          <v-icon left>{{ faIcon('search') }}</v-icon> {{ 'Search' }}
-        </span>
+          <v-icon left small>{{ faIcon('search') }}</v-icon> {{ 'Search' }}
         </v-btn>
       </v-row>
 

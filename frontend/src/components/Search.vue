@@ -9,14 +9,14 @@
              to="/data"
       >
         <span v-if="results.studies.count!=0">
-          <v-icon left>{{ faIcon('data') }}</v-icon> {{ 'Results' }}
+          <v-icon left small>{{ faIcon('data') }}</v-icon> {{ 'Results' }}
         </span>
       </v-btn>
     </v-row>
 
 
       <v-row align="start" justify="center">
-        <v-col sm="6" md="5" lg="4">
+        <v-col xs="12" sm="6" md="4" lg="4">
 
         <!--- Start Search Component -->
         <v-card flat tile width="100%">
@@ -101,7 +101,7 @@
 
         <!--- End Search Component -->
       </v-col>
-        <v-col sm="8" md="8" lg="8">
+        <v-col xs="12" sm="6" md="8" lg="8">
 
         <info-node-detail
             v-model="display_detail"

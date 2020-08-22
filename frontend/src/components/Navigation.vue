@@ -1,11 +1,10 @@
 <template>
   <span id="navigation">
     <v-app-bar
-               class="fixed-nav-bar"
-               app
+               class="fixed-nav-bar1"
+
                permanent
-               flat
-               fixed
+               floating
                dark
                dense
                color="#222222"
@@ -14,7 +13,7 @@
       <v-app-bar-nav-icon @click="collapse = !collapse"></v-app-bar-nav-icon>
       -->
 
-      <v-toolbar-title color="white"><span class="logo">PK-DB</span></v-toolbar-title>
+      <v-toolbar-title to="/" title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
 
 
       <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
@@ -103,7 +102,7 @@
 </script>
 
 <style scoped>
-    .fixed-nav-bar {
+    .fixed-nav-bar1 {
         position: fixed;
         top: 0;
         left: 0;
