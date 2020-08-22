@@ -40,7 +40,6 @@ export default {
   methods:{
     query(example){
       for (var q of example){
-        console.log(q)
         this.update_store(q)
       }
     },

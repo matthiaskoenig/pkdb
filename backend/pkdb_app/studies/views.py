@@ -511,7 +511,7 @@ class PKData(object):
         view = viewset(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
         queryset = queryset.filter("terms",**query_dict)
-        return serializer(queryset.scan(), many=True).data
+        return serializer(queryset.params(size=10000).scan(), many=True).data
 
 
 

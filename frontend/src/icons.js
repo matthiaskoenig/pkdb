@@ -54,6 +54,7 @@ const icons_table = {
     info: 'fas fa-info-circle',
     plus: 'fas fa-plus',
     minus: 'fas fa-minus',
+    download: 'fas fa-file-download',
 
 };
 
