@@ -4,6 +4,7 @@
                app
                permanent
                flat
+               dark
                dense
                color="#222222"
     >
@@ -13,36 +14,26 @@
 
       <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
 
-      <v-btn icon to="/studies" title="Data" color="#1E90FF"><v-icon>{{ faIcon('studies') }}</v-icon></v-btn>
+      <v-btn icon to="/studies" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
       <v-btn icon to="/search" title="Search" color="#41b883"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
 
-      <v-btn icon to="/curation" title="Curation information" color="white"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
+      <v-btn icon to="/curation" title="Curation information" color="grey"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
 
-
-      <!--
-      <v-btn icon to="/references" title="References" color="white"><v-icon>{{ faIcon('references') }}</v-icon></v-btn>
-      <v-btn icon to="/groups" title="Groups" color="white"><v-icon>{{ faIcon('groups') }}</v-icon></v-btn>
-      <v-btn icon to="/individuals" title="Individuals" color="white"><v-icon>{{ faIcon('individuals') }}</v-icon></v-btn>
-      <v-btn icon to="/interventions" title="Interventions" color="white"><v-icon>{{ faIcon('interventions') }}</v-icon></v-btn>
-      <v-btn icon to="/outputs" title="Outputs" color="white"><v-icon>{{ faIcon('outputs') }}</v-icon></v-btn>
-      <v-btn icon to="/timecourses" title="Timecourses" color="white"><v-icon>{{ faIcon('timecourses') }}</v-icon></v-btn>
-      -->
-        <v-spacer></v-spacer>
-
-        <!-- account -->
-        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true">
+      <v-btn icon :href="api_url" title="REST API" color="grey"><v-icon>{{ faIcon('api') }}</v-icon></v-btn>
+      <!-- account -->
+        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" color="grey">
             <user-avatar :username="username"></user-avatar>
             {{ username }}
         </v-chip>
-        <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true">
-            <v-icon small color="white">{{ faIcon('account') }}</v-icon>
+        <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true" color="grey">
+            <v-icon >{{ faIcon('account') }}</v-icon>
         </v-btn>
+
         <v-dialog v-model="dialog" max-width="500">
             <user-login></user-login>
         </v-dialog>
 
-        <!-- links -->
-        <v-btn icon :href="api_url" title="REST API" color="white"><v-icon small>{{ faIcon('api') }}</v-icon></v-btn>
+
 
       <!--
         <v-btn icon href="https://www.github.com/matthiaskoenig/pkdb" title="GitHub code repository" color="white">

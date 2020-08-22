@@ -34,6 +34,7 @@ const icons_table = {
     characteristicas: 'fas fa-ticket-alt',
     characteristica: 'fas fa-ticket-alt',
     curation: 'fas fa-book-reader',
+    data: 'fas fa-database',
     previous: 'fas fa-arrow-left',
     next: 'fas fa-arrow-right',
     star: 'fas fa fa-star',

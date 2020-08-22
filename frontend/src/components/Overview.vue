@@ -1,6 +1,6 @@
 <template>
-  <span id="overview">
-    <h1>PK-DB
+  <div class="main" id="overview">
+    <h1>PK-DB - pharmacokinetics database
       <!--
     <v-chip v-if="data.version"
             flat
@@ -13,7 +13,8 @@
     </h1>
     <p>
       PK-DB is an open database for pharmacokinetics information from clinical trials including pre-clinical research.
-      Data in PK-DB consists of outputs and timecourses linked to their respective study, group/individual and intervention.
+      Data in PK-DB consists of outputs and timecourses linked to their respective study, group/individual and
+      intervention.
     </p>
     <count-table v-bind="data"/>
     <!--<statistics-vega-plot />-->
@@ -21,20 +22,20 @@
       <v-col>
 
         <v-btn color="#1E90FF"
-                         width="100%"
-                  >
-            Browse data
-          </v-btn>
-        </v-col>
+               width="100%"
+        >
+          Browse data
+        </v-btn>
+      </v-col>
       <v-col>
-<v-btn color="#41b883"
-       width="100%"
->
-            Search data
-          </v-btn>
-        </v-col>
+        <v-btn color="#41b883"
+               width="100%"
+        >
+          Search data
+        </v-btn>
+      </v-col>
     </v-row>
-  </span>
+  </div>
 
 
 </template>
@@ -53,9 +54,9 @@ export default {
   data() {
     return {
       headers: [
-        { text: 'Count', value: 'count', sortable: false},
-        { text: 'Data', value: 'name', sortable: false},
-        { text: 'Description', value: 'description', sortable: false},
+        {text: 'Count', value: 'count', sortable: false},
+        {text: 'Data', value: 'name', sortable: false},
+        {text: 'Description', value: 'description', sortable: false},
       ],
       data: {
         version: "",
@@ -133,12 +134,12 @@ export default {
     }
   },
   methods: {
-    fetch_data(url){
+    fetch_data(url) {
       axios.get(url)
           .then(response => {
             this.data = response.data;
           })
-          .catch((error)=>{
+          .catch((error) => {
             this.data = null;
             console.error(this.resource_url);
             console.error(error);
