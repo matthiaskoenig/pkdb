@@ -1,20 +1,5 @@
 <template>
   <div id="Search" class="main">
-    <!--
-    <div class="search-navbar">
-      <v-btn
-          :title="drawer ? 'Go to search results' : 'Go to search form'"
-          color="#41b883"
-          :disabled="results.studies.count==0"
-          width="100%"
-          dark
-          @click.stop="drawer = !drawer"
-      >
-        <span v-if="results.studies.count!=0">{{ drawer ? 'Show Results' : 'Show Search' }}</span>
-      </v-btn>
-    </div>
-    -->
-
 
     <v-row >
       <v-btn title="Go to search results"

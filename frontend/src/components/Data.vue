@@ -2,7 +2,6 @@
     <v-card flat>
       <!--<v-card-title>Search results</v-card-title>-->
 
-
       <v-tabs
           v-model="tab"
           background-color="transparent"
