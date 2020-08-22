@@ -138,9 +138,6 @@ export default {
   padding: 0 !important;
 }
 .v-btn-multiselect {
-  font-weight: 200;
-  letter-spacing: .0892857143em;
-  text-indent: .0892857143em;
   text-transform: none;
   white-space: nowrap;
   justify-content: left;
