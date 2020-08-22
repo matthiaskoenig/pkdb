@@ -44,7 +44,7 @@
       </v-btn>
 
     </template>
-    <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+    <span slot="noResult">No results found.</span>
   </multiselect>
 </template>
 

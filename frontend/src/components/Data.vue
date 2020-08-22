@@ -8,7 +8,7 @@
                width="100%"
                to="/search"
         >
-          <v-icon left small>{{ faIcon('search') }}</v-icon> {{ 'Search' }}
+          <v-icon left small>{{ faIcon('search') }}</v-icon> Search
         </v-btn>
       </v-row>
 

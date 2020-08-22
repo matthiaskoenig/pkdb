@@ -1,12 +1,43 @@
 <template>
-  <v-card
-      outlined
-  >
+  <v-card flat outlined>
     <v-card-title>
-      How to Search in PKDB
+      How to search data in PK-DB?
     </v-card-title>
     <v-card-text>
-      <v-btn text small v-on:click="query(example1)">Example 1</v-btn> shows a filter on the data for:
+    <p>
+    Data in PK-DB is represented as entries, with every single <code>Entry</code> having information
+    on the
+      <ul>
+        <li>Study in which it was recorded,</li>
+        <li>Individual or Group it was measured on,</li>
+        <li>Intervention or Interventions which were applied,</li>
+        <li>and the Output or Timecourse which was measured.</li>
+      </ul>
+    </p>
+    <p>
+    The resulting data entry has the form<br />
+      <code>Entry(study, group/individual, intervention(s), output/timecourse)</code>
+    </p>
+    <p>
+    To filter database entries filters can be applied individually or in combination on Studies, Groups/Individuals,
+      Interventions, Outputs/Timecourses. To apply a filter on one of the categories select the search form and start
+      typing. The available options for the query are displayed. When moving the mouse over an option the
+      description of the respective information is shown.
+      The search examples below show some typical filter queries.
+    </p>
+    </v-card-text>
+
+    <v-card-title>
+      Search examples
+    </v-card-title>
+    <v-card-text>
+      <v-btn text
+             small
+             v-on:click="query(example2)"
+      >
+        <v-icon left small color="#41b883">{{ faIcon('search') }}</v-icon>  Example 1
+      </v-btn>
+      shows a filter on the data for:
       <ul>
         <li> only individuals (no groups) </li>
         <li> (and) all subjects under investigation are potentially healthy. Either they are healthy or they belong to a
@@ -15,15 +46,18 @@
         <li> (and) substance used in any of the interventions is caffeine </li>
         <li> (and) outputs measurement types are auc_inf or auc_end </li>
       </ul>
-
-
     </v-card-text>
+
+
   </v-card>
 </template>
 
 <script>
+import {IconsMixin} from "../../icons";
+
 export default {
   name: "SearchHelp",
+  mixins: [IconsMixin],
   data() {
     return {
       example1: [

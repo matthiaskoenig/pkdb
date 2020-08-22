@@ -9,7 +9,7 @@
              to="/data"
       >
         <span v-if="results.studies.count!=0">
-          <v-icon left small>{{ faIcon('data') }}</v-icon> {{ 'Results' }}
+          <v-icon left small>{{ faIcon('data') }}</v-icon> Results
         </span>
       </v-btn>
     </v-row>
