@@ -78,7 +78,10 @@ export default {
       autoUpdate: true,
       isUpdating: false,
       isLoading: false,
-      option: {}
+      options: {
+        itemsPerPage:50,
+        page:1
+      }
     }
   },
   computed: {

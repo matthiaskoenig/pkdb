@@ -23,7 +23,7 @@
       <v-flex>
 
         <v-row>
-          <v-col cols="4">
+          <v-col class="pl-10" cols="4">
             <!--- Start Search Component -->
             <v-card flat tile width="100%">
               <v-row class="mt-3 mb-4" justify="end">
