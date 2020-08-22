@@ -72,6 +72,11 @@ export default new Router({
             component: Search
         },
         {
+            path: '/data',
+            name: 'Data',
+            component: Search
+        },
+        {
             path: '/curation',
             name: 'Curation',
             component: Curation

@@ -17,7 +17,7 @@
 
 
       <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
-      <v-btn icon to="/studies" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
+      <v-btn icon to="/data" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
       <v-btn icon to="/search" title="Search" color="#41b883"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
       <v-btn icon to="/curation" title="Curation information" color="grey"><v-icon>{{ faIcon('curation') }}</v-icon></v-btn>
       <v-btn icon :href="api_url" title="REST API" color="grey"><v-icon>{{ faIcon('api') }}</v-icon></v-btn>

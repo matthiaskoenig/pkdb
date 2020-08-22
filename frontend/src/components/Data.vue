@@ -49,7 +49,7 @@ import TimecoursesTable from "./tables/TimecoursesTable";
 
 export default {
   mixins: [searchTableMixin],
-  name: "SearchResults",
+  name: "Data",
   props: {
     studies: Object,
     groups: Object,

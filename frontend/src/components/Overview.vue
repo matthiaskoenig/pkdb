@@ -23,6 +23,7 @@
 
         <v-btn color="#1E90FF"
                width="100%"
+               to="/data"
         >
           <v-icon>{{ faIcon('data') }}</v-icon>
           Browse data
@@ -31,6 +32,7 @@
       <v-col>
         <v-btn color="#41b883"
                width="100%"
+               to="/search"
         >
           <v-icon>{{ faIcon('search') }}</v-icon>
           Search data

@@ -1,5 +1,6 @@
 <template>
-  <div id="Search">
+  <div id="Search" class="main">
+    <!--
     <div class="search-navbar">
       <v-btn
           :title="drawer ? 'Go to search results' : 'Go to search form'"
@@ -12,120 +13,117 @@
         <span v-if="results.studies.count!=0">{{ drawer ? 'Show Results' : 'Show Search' }}</span>
       </v-btn>
     </div>
-
-    <v-navigation-drawer
-        v-model="drawer"
-        temporary
-        absolute
-        width="100%"
-        class="search-content"
-    >
-      <v-flex>
-
-        <v-row>
-          <v-col class="pl-10" cols="4">
-            <!--- Start Search Component -->
-            <v-card flat tile width="100%">
-              <v-row class="mt-3 mb-4" justify="end">
-                <v-btn color="black"
-                       class="ma-2"
-                       small
-                       dark
-                       outlined
-                       @click.stop="show_help">
-                  Help
-                  <v-icon small>fas fa fa-question</v-icon>
-                </v-btn>
-
-                <v-btn
-                    @click="downloadData"
-                    :loading="loadingDownload"
-                    :disabled="loadingDownload"
-                    small
-                    outlined
-                    class="ma-2"
-                >
-                  Download
-                  <v-icon small right dark>{{faIcon('download')}}</v-icon>
-                </v-btn>
+    -->
 
 
-        <v-btn
-                    small
-                    class="ma-2"
-                    outlined
-                    v-on:click="reset">
-                  Clear Search
-                </v-btn>
-              </v-row>
+    <v-row >
+      <v-btn title="Go to search results"
+             color="#1E90FF"
+             :disabled="results.studies.count==0"
+             width="100%"
+             dark
+             to="/data"
+      >
+        <span v-if="results.studies.count!=0">
+          {{ 'Show Results' }}
+        </span>
+      </v-btn>
+    </v-row>
+    <v-row>
+      <v-col class="pl-10" cols="4">
+        <!--- Start Search Component -->
+        <v-card flat tile width="100%">
+          <v-row class="mt-3 mb-4" justify="end">
+            <v-btn color="black"
+                   class="ma-2"
+                   small
+                   dark
+                   outlined
+                   @click.stop="show_help">
+              Help
+              <v-icon small>fas fa fa-question</v-icon>
+            </v-btn>
 
-              <v-row justify="end">
-                <v-progress-circular
-                    indeterminate
-                    color="primary"
-                    v-if="loading"
-                ></v-progress-circular>
-
-              </v-row>
-
-              <v-row class="mt-4 ml-3">
-                <label class="text-h5 form-label" title="Search and filter data by study information">
-                  <count-badge text="Studies" :count="results.studies.count"/>
-                </label>
-                <v-spacer/>
-              </v-row>
+            <v-btn
+                @click="downloadData"
+                :loading="loadingDownload"
+                :disabled="loadingDownload"
+                small
+                outlined
+                class="ma-2"
+            >
+              Download
+              <v-icon small right dark>{{ faIcon('download') }}</v-icon>
+            </v-btn>
 
 
-              <study-search-form/>
-              <v-row class="mt-4 ml-3">
+            <v-btn
+                small
+                class="ma-2"
+                outlined
+                v-on:click="reset">
+              Clear Search
+            </v-btn>
+          </v-row>
 
-              <label class=" text-h5 form-label" title="Search and filter data by subjects">
-                <count-badge text="Groups" :count="results.groups.count"/>
-                <span style="padding-left: 20px; padding-right: 20px;">&</span>
-                <count-badge text="Individuals" :count="results.individuals.count"/>
-              </label>
-              </v-row>
-              <subjects-form
-                  @subjects__type="update_search_query"
-                  @subject_queries="update_subject_query"
-              />
-              <v-row class="mt-4 ml-3">
+          <v-row justify="end">
+            <v-progress-circular
+                indeterminate
+                color="primary"
+                v-if="loading"
+            ></v-progress-circular>
 
-              <label class="text-h5 form-label" title="Search and filter data by intervention">
-                <count-badge text="Interventions" :count="results.interventions.count"/>
-              </label>
-              </v-row>
+          </v-row>
 
-                <intervention-form/>
-              <v-row class="mt-4 ml-3">
-              <label class="text-h5 form-label" title="Search and filter data by outputs">
-                <count-badge text="Outputs" :count="results.outputs.count"/>
-                <span style="padding-left: 20px; padding-right: 20px;">&</span>
-                <count-badge text="Timecourses" :count="results.timecourses.count"/>
-              </label>
-              </v-row>
-              <output-form/>
-            </v-card>
-            <!--- End Search Component -->
-          </v-col>
-          <v-col cols="8" class="pr-10 mt-6">
-            <info-node-detail
-                v-model="display_detail"
-                v-if="show_type === 'info_node'"
-                :data="detail_info"
-            />
-            <search-help v-if="show_type === 'help'"/>
-            <study-overview v-if="show_type === 'study'" :study="detail_info"/>
-          </v-col>
-        </v-row>
-      </v-flex>
-    </v-navigation-drawer>
+          <v-row class="mt-4 ml-3">
+            <label class="text-h5 form-label" title="Search and filter data by study information">
+              <count-badge text="Studies" :count="results.studies.count"/>
+            </label>
+            <v-spacer/>
+          </v-row>
 
-    <div class="results-content">
-      <v-layout row wrap>
-        <search-results v-bind="results"></search-results>
-      </v-layout>
-    </div>
+          <study-search-form/>
+          <v-row class="mt-4 ml-3">
+
+            <label class=" text-h5 form-label" title="Search and filter data by subjects">
+              <count-badge text="Groups" :count="results.groups.count"/>
+              <span style="padding-left: 20px; padding-right: 20px;">&</span>
+              <count-badge text="Individuals" :count="results.individuals.count"/>
+            </label>
+          </v-row>
+          <subjects-form
+              @subjects__type="update_search_query"
+              @subject_queries="update_subject_query"
+          />
+          <v-row class="mt-4 ml-3">
+
+            <label class="text-h5 form-label" title="Search and filter data by intervention">
+              <count-badge text="Interventions" :count="results.interventions.count"/>
+            </label>
+          </v-row>
+
+          <intervention-form/>
+          <v-row class="mt-4 ml-3">
+            <label class="text-h5 form-label" title="Search and filter data by outputs">
+              <count-badge text="Outputs" :count="results.outputs.count"/>
+              <span style="padding-left: 20px; padding-right: 20px;">&</span>
+              <count-badge text="Timecourses" :count="results.timecourses.count"/>
+            </label>
+          </v-row>
+          <output-form/>
+        </v-card>
+        <!--- End Search Component -->
+      </v-col>
+      <v-col cols="8" class="pr-10 mt-6">
+        <info-node-detail
+            v-model="display_detail"
+            v-if="show_type === 'info_node'"
+            :data="detail_info"
+        />
+        <search-help v-if="show_type === 'help'"/>
+        <study-overview v-if="show_type === 'study'" :study="detail_info"/>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -137,7 +135,6 @@ import StudySearchForm from "./search/StudySearchForm";
 import InterventionForm from "./search/InterventionSearchForm";
 import SubjectsForm from "./search/SubjectSearchForm";
 import OutputForm from "./search/OutputSearchForm";
-import SearchResults from "./SearchResults";
 
 import InfoNode from "./deprecated/InfoNode";
 import InfoNodeDetail from "./detail/InfoNodeDetail";
@@ -149,7 +146,6 @@ export default {
   mixins: [searchTableMixin],
   name: 'Search',
   components: {
-    SearchResults,
     CountBadge,
     StudyOverview,
     SearchHelp,
@@ -161,7 +157,7 @@ export default {
     OutputForm,
   },
   computed: {
-    url_download(){
+    url_download() {
       return this.url + "&" + "download=true"
     },
     url() {
@@ -254,23 +250,22 @@ export default {
         headers = {Authorization: 'Token ' + localStorage.getItem('token')}
       }
 
-        axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
-            .then(response => {
-              let blob = new Blob([response.data], {type: 'application/zip'}),
-                  url = window.URL.createObjectURL(blob)
-              window.open(url)
-            })
-            .catch(err => {
-              console.log(err.response.data);
-              this.loadingDownload = false
-            })
-            .finally(() => this.loadingDownload = false);
-      }
+      axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
+          .then(response => {
+            let blob = new Blob([response.data], {type: 'application/zip'}),
+                url = window.URL.createObjectURL(blob)
+            window.open(url)
+          })
+          .catch(err => {
+            console.log(err.response.data);
+            this.loadingDownload = false
+          })
+          .finally(() => this.loadingDownload = false);
+    }
   },
   data() {
     return {
-      loadingDownload:false,
-      drawer: true,
+      loadingDownload: false,
       results: {
         studies: {"hash": "", "count": 0},
         interventions: {"hash": "", "count": 0},
