@@ -1,19 +1,19 @@
 <template>
   <multiselect
-      v-model="selected_entries"
+      :value="selected_entries"
       :options="entries"
-      :close-on-select="false"
+      :close-on-select="true"
       :clear-on-select="false"
       :preserve-search="true"
       select-label=""
       deselectLabel=""
-
       :placeholder="'Search for ' + label()"
       track-by="sid"
       :multiple="true"
       :loading="loading"
       :searchable="true"
       :internal-search="false"
+      @input = update_store
       @search-change=sync_search>
 
     <template slot="tag" slot-scope="{ option, remove }">
@@ -63,7 +63,11 @@ export default {
   },
   mixins: [searchTableMixin],
   props:{
-    _label:String
+    _label:String,
+    on: {
+      type: String,
+      required: true
+    }
   },
   data() {
 
@@ -73,27 +77,34 @@ export default {
       otype_single: "info_node",
       exclude_abstract: true,
       autoUpdate: true,
-      selected_entries: [],
       isUpdating: false,
       isLoading: false,
       option: {}
     }
   },
-  watch: {
+  computed: {
     selected_entries() {
-      let emit_object = {}
-      const key = this.$props.ntype + "_sid__in"
-      emit_object[key] = this.selected_entries.map(x => x.sid)
-      this.$emit('selected_entries', emit_object)
-    }
+      return this.$store.state.queries[this.query_key]
+    },
+    query_key: function () {
+      return this.on + "__" +this.$props.ntype + "_sid__in"
+    },
   },
+
+
   methods: {
     mouseover(option) {
       this.$store.state.show_type = "info_node"
       this.$store.state.detail_info = option
       this.$store.state.detail_display = true
     },
-
+    update_store(value){
+      this.$store.dispatch('updateQueryAction', {
+        query_type:"queries",
+        key: this.query_key,
+        value: value,
+      })
+    },
     clearAll() {
       this.selected_entries = []
     },

@@ -1,10 +1,10 @@
 <template>
   <span>
-    <info-node-search ntype="substance" @selected_entries="update_store"/>
-    <info-node-search ntype="route" @selected_entries="update_store"/>
-    <info-node-search ntype="application" @selected_entries="update_store"/>
-    <info-node-search ntype="form" @selected_entries="update_store"/>
-    <info-node-search ntype="measurement_type" @selected_entries="update_store"/>
+    <info-node-search ntype="substance" on="interventions" />
+    <info-node-search ntype="route"  on="interventions"/>
+    <info-node-search ntype="application"  on="interventions" />
+    <info-node-search ntype="form" on="interventions" />
+    <info-node-search ntype="measurement_type"  on="interventions"/>
   </span>
 </template>
 

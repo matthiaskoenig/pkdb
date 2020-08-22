@@ -4,7 +4,7 @@ vue-multiselect element
 <template>
 
   <multiselect
-      v-model="selected_entries"
+      :value="selected_entries"
       :options="users"
       :close-on-select="true"
       :clear-on-select="false"
@@ -13,6 +13,7 @@ vue-multiselect element
       track-by="username"
       :multiple="true"
       :custom-label="customLabel"
+      @input = update_store
       :searchable="true">
 
     <template slot="tag" slot-scope="{ option, remove }">
@@ -60,7 +61,6 @@ export default {
         {"username": "dannythekey", "first_name": "Danny", "last_name": "Ke",},
         {"username": "SaraD-hub", "first_name": "Sara", "last_name": "De Angelis",},
       ],
-      selected_entries: [],
     }
   },
   props: {
@@ -75,17 +75,21 @@ export default {
     },
     query_key: function () {
       return "studies__" + this.on + "__in"
-    }
-  },
-  watch: {
-    selected_entries() {
-      this.$store.state.queries[this.query_key] = this.selected_entries.map(x => x.username)
-    }
-  },
-  methods: {
-    clearAll() {
-      this.selected_entries = []
     },
+    selected_entries() {
+      return this.$store.state.queries_users[this.query_key]
+    }
+  },
+
+  methods: {
+    update_store(value){
+      this.$store.dispatch('updateQueryAction', {
+        query_type:"queries_users",
+        key: this.query_key,
+        value: value,
+      })
+    },
+
     customLabel({first_name, last_name}) {
       return `${first_name} – ${last_name}`
     }

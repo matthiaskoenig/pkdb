@@ -1,7 +1,7 @@
 <template>
 
   <multiselect
-      v-model="selected_entries"
+      :value="studies__sid__in"
       :options="entries"
       :close-on-select="true"
       :clear-on-select="false"
@@ -15,6 +15,7 @@
       :loading="loading"
       :searchable="true"
       :internal-search="false"
+      @input = update_store
       @search-change=sync_search>
 
     <template slot="tag" slot-scope="{ option, remove }">
@@ -42,9 +43,7 @@
       </v-btn>
     </template>
 
-    <template slot="clear" slot-scope="props">
-      <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
-    </template><span slot="noResult">No results found.</span>
+  <span slot="noResult">No results found.</span>
 
   </multiselect>
 </template>
@@ -64,27 +63,36 @@ export default {
       otype: "studies",
       otype_single: "study",
       autoUpdate: true,
-      selected_entries: [],
     }
   },
-  watch:{
-    selected_entries() {
-      this.$store.state.queries.studies__name__in = this.selected_entries.map(x => x.name)
-    }
+
+  computed: {
+    studies__sid__in(){
+      return this.$store.state.queries.studies__sid__in
+    },
   },
+
   methods: {
+
+    update_store(value){
+      this.$store.dispatch('updateQueryAction', {
+        query_type:"queries",
+        key: "studies__sid__in",
+        value: value,
+      })
+    },
     mouseover(option) {
       this.$store.state.show_type = "study"
       this.$store.state.detail_info = option
       this.$store.state.detail_display = true
     },
-      clearAll () {
-      this.selected_entries = []
-    },
+
+
     sync_search(search)
     {
       this.search = search
     }
-  }
+  },
+
 }
 </script>

@@ -54,11 +54,12 @@ export default new Vuex.Store({
         },
         groups_query: true,
         individuals_query: true,
-
-        queries:{
-            studies__name__in: [],
+        queries_users:{
             studies__creator__in: [],
             studies__curators__in: [],
+        },
+        queries:{
+            studies__sid__in: [],
 
 
             // interventions
@@ -95,6 +96,11 @@ export default new Vuex.Store({
         token: localStorage.getItem('token'),
     },
     mutations: {
+        // update search
+        updateQuery (state, obj) {
+            state[obj.query_type][obj.key] = obj.value
+        },
+
         setToken(state, token) {
             localStorage.setItem('token', token);
             state.token = token;
@@ -122,5 +128,10 @@ export default new Vuex.Store({
             this.commit('clearToken');
             this.commit('clearUsername');
         },
+        updateQueryAction (context, obj) {
+            this.commit('updateQuery',obj);
+
+        }
+
     }
 })

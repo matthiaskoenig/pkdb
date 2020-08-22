@@ -131,7 +131,14 @@ export default {
 
       for (const [key, value] of Object.entries(this.$store.state.queries)) {
         if (value.length > 0) {
-          url = url + "&" + key + "=" + value.join("__")
+
+          url = url + "&" + key + "=" + value.map(i => i.sid).join("__")
+        }
+      }
+      for (const [key, value] of Object.entries(this.$store.state.queries_users)) {
+        if (value.length > 0) {
+
+          url = url + "&" + key + "=" + value.map(i => i.username).join("__")
         }
       }
       for (const [key, value] of Object.entries(this.$store.state.subjects_queries)) {
