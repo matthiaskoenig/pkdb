@@ -1,10 +1,10 @@
 <template>
   <span>
-    <info-node-search ntype="substance" on="interventions" />
-    <info-node-search ntype="route"  on="interventions"/>
-    <info-node-search ntype="application"  on="interventions" />
-    <info-node-search ntype="form" on="interventions" />
-    <info-node-search ntype="measurement_type"  on="interventions"/>
+    <info-node-search query_type="queries" ntype="substance" query_key="interventions__substance_sid__in" />
+    <info-node-search query_type="queries" ntype="route"  query_key="interventions__route_sid__in"/>
+    <info-node-search query_type="queries" ntype="application"  query_key="interventions__application_sid__in" />
+    <info-node-search query_type="queries" ntype="form" query_key="interventions__form_sid__in" />
+    <info-node-search query_type="queries" ntype="measurement_type"  query_key="interventions__measurement_type_sid__in"/>
   </span>
 </template>
 
@@ -18,15 +18,6 @@ export default {
   components: {
     InfoNodeSearch,
     StudySearch,
-  },
-  methods: {
-    update_store(emitted_object) {
-      for (const [key, value] of Object.entries(emitted_object)) {
-        const label = "interventions__" + key
-        this.$store.state.queries[label] = value
-
-      }
-    }
-  },
+  }
 }
 </script>

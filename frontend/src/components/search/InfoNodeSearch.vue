@@ -42,11 +42,6 @@
       </v-btn>
 
     </template>
-
-    <template slot="clear" slot-scope="props">
-      <div class="multiselect__clear" v-if="selected_entries.length"
-           @mousedown.prevent.stop="clearAll(props.search)"></div>
-    </template>
     <span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
   </multiselect>
 </template>
@@ -63,10 +58,15 @@ export default {
   },
   mixins: [searchTableMixin],
   props:{
-    _label:String,
-    on: {
+
+    query_key:{
       type: String,
-      required: true
+      required: true,
+    },
+    query_type:{
+      type: String,
+      required: false,
+      default:() =>  "queries"
     }
   },
   data() {
@@ -84,14 +84,10 @@ export default {
   },
   computed: {
     selected_entries() {
-      return this.$store.state.queries[this.query_key]
-    },
-    query_key: function () {
-      return this.on + "__" +this.$props.ntype + "_sid__in"
-    },
+
+      return this.$store.state[this.query_type][this.query_key]
+    }
   },
-
-
   methods: {
     mouseover(option) {
       this.$store.state.show_type = "info_node"
@@ -100,13 +96,10 @@ export default {
     },
     update_store(value){
       this.$store.dispatch('updateQueryAction', {
-        query_type:"queries",
+        query_type:this.query_type,
         key: this.query_key,
         value: value,
       })
-    },
-    clearAll() {
-      this.selected_entries = []
     },
     sync_search(search) {
       this.search = search
@@ -121,9 +114,6 @@ export default {
         "tissue": "Tissue",
         "method": "Method",
         "application": "Application Type",
-      }
-      if(this._label){
-        return this._label
       }
       return labels[this.ntype]
     },
