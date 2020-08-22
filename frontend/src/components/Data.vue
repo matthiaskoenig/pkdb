@@ -22,12 +22,12 @@
             :key="item.tab"
         >
           <v-flex xs12 >
-            <studies-table v-if="item.tab === 'Studies'" :search_hash="true" :hash="studies.hash" :autofocus="false"/>
-            <groups-table v-if="item.tab === 'Groups'" :search_hash="true" :hash="groups.hash" :autofocus="false"/>
-            <individuals-table v-if="item.tab === 'Individuals'" :search_hash="true" :hash="individuals.hash" :autofocus="false"/>
-            <interventions-table v-if="item.tab === 'Interventions'" :search_hash="true" :hash="interventions.hash" :autofocus="false"/>
-            <outputs-table v-if="item.tab === 'Outputs'" :search_hash="true" :hash="outputs.hash" :autofocus="false"/>
-            <timecourses-table v-if="item.tab === 'Timecourses'" :search_hash="true" :hash="timecourses.hash" :autofocus="false"/>
+            <studies-table v-if="item.tab === 'Studies'" :search_hash="true" :hash="results.studies.hash" :autofocus="false"/>
+            <groups-table v-if="item.tab === 'Groups'" :search_hash="true" :hash="results.groups.hash" :autofocus="false"/>
+            <individuals-table v-if="item.tab === 'Individuals'" :search_hash="true" :hash="results.individuals.hash" :autofocus="false"/>
+            <interventions-table v-if="item.tab === 'Interventions'" :search_hash="true" :hash="results.interventions.hash" :autofocus="false"/>
+            <outputs-table v-if="item.tab === 'Outputs'" :search_hash="true" :hash="results.outputs.hash" :autofocus="false"/>
+            <timecourses-table v-if="item.tab === 'Timecourses'" :search_hash="true" :hash="results.timecourses.hash" :autofocus="false"/>
           </v-flex>
 
         </v-tab-item>
@@ -49,14 +49,6 @@ import TimecoursesTable from "./tables/TimecoursesTable";
 export default {
   mixins: [searchTableMixin],
   name: "Data",
-  props: {
-    studies: Object,
-    groups: Object,
-    individuals: Object,
-    interventions: Object,
-    outputs: Object,
-    timecourses: Object,
-  },
   components: {
     StudiesTable,
     GroupsTable,
@@ -76,7 +68,36 @@ export default {
         { tab: 'Outputs'},
         { tab: 'Timecourses'},
       ],
+      results: {
+        studies: {"hash": "", "count": 0},
+        interventions: {"hash": "", "count": 0},
+        groups: {"hash": "", "count": 0},
+        individuals: {"hash": "", "count": 0},
+        outputs: {"hash": "", "count": 0},
+        timecourses: {"hash": "", "count": 0},
+      },
     }
+  },
+  methods: {
+    fetch_results() {
+      /*
+      axios.get(url)
+          .then(response => {
+            this.data = response.data;
+          })
+          .catch((error) => {
+            this.data = null;
+            console.error(this.resource_url);
+            console.error(error);
+            this.errors = error.response.data;
+          })
+
+       */
+      this.results = this.$store.state.results
+    }
+  },
+  created() {
+    this.fetch_data(this.resource_url);
   }
 }
 </script>

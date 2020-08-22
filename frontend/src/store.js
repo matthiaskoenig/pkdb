@@ -83,16 +83,18 @@ export default new Vuex.Store({
         show_type: "help",
 
         // search queries
-
-        queries:initial_queries,
+        queries: initial_queries,
         subjects_boolean:initial_subjects_boolean,
         subjects_queries:initial_subjects_queries,
         queries_users:initial_queries_users,
+
+        // search results
+        results: {},
+
         // global highlighting
-        highlight:"",
+        highlight:  "",
 
-
-        //Api
+        // API
         django_domain: backend_domain,
 
         endpoints: {

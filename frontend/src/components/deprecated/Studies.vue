@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import StudiesTable from "./tables/StudiesTable";
+    import StudiesTable from "../tables/StudiesTable";
 
     export default {
         name: 'Studies',

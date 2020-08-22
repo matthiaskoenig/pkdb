@@ -41,7 +41,6 @@
               <v-icon small right dark>{{ faIcon('download') }}</v-icon>
             </v-btn>
 
-
             <v-btn
                 small
                 class="ma-2"
@@ -221,6 +220,8 @@ export default {
       axios.get(this.url, {headers: headers})
           .then(res => {
             this.results = res.data
+            // store results in store
+            this.$store.state.results = this.results
           })
           .catch(err => {
             console.log(err.response.data);
