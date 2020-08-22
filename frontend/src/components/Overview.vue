@@ -1,6 +1,7 @@
 <template>
   <span id="overview">
     <h1>PK-DB
+      <!--
     <v-chip v-if="data.version"
             flat
             small
@@ -8,6 +9,7 @@
     >
       Version: {{ data.version }}
     </v-chip>
+    -->
     </h1>
     <p>
       PK-DB is an open database for pharmacokinetics information from clinical trials including pre-clinical research.
@@ -17,17 +19,18 @@
     <!--<statistics-vega-plot />-->
     <v-row>
       <v-col>
-          <v-btn color="#41b883"
-                 width="100%"
-          >
-            Search data
+
+        <v-btn color="#1E90FF"
+                         width="100%"
+                  >
+            Browse data
           </v-btn>
         </v-col>
       <v-col>
-          <v-btn color="#1E90FF"
-                 width="100%"
-          >
-            Browse data
+<v-btn color="#41b883"
+       width="100%"
+>
+            Search data
           </v-btn>
         </v-col>
     </v-row>
