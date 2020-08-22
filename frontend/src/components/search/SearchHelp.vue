@@ -28,11 +28,12 @@ export default {
     return {
       example1: [
         {"query_type": "subjects_boolean", "key": "groups_query", "value": false},
-        {"query_type": "queries_users", "key": "studies__curators__in", "value": [{"username": "mkoenig", "first_name": "Matthias", "last_name": "König"}]},
+        {"query_type": "subjects_queries", "key": "choice_sid__in", "value": [{"sid":"healthy-yes", "label"	:"healthy"}]},
+        {"query_type": "queries_users", "key": "studies__curators__in", "value": [
+            {"username": "mkoenig", "first_name": "Matthias", "last_name": "König"},
+            {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski"}]},
         {"query_type": "queries", "key": "interventions__substance_sid__in", "value": [{"sid":"caf", "label"	:"caffeine"}]},
         {"query_type": "queries", "key": "outputs__measurement_type_sid__in", "value": [{"sid":"auc-inf", "label"	:"area under curve (AUC) infinity"},{"sid":"auc-end", "label"	:"area under curve (AUC) end"}]},
-
-
       ],
     }
   },
