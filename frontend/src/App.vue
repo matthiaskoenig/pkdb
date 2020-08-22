@@ -8,9 +8,11 @@
         <v-row style="padding-top: 30px;">
           <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
         </v-row>
+        <!--
         <v-row>
           <footer-bar></footer-bar>
         </v-row>
+        -->
       </v-container>
     </v-app>
   </div>
@@ -18,13 +20,13 @@
 
 <script>
     import Navigation from './components/Navigation.vue';
-    import FooterBar from './components/FooterBar.vue';
+    // import FooterBar from './components/FooterBar.vue';
 
     export default {
         name: 'app',
         components: {
             'Navigation': Navigation,
-            'FooterBar': FooterBar
+            // 'FooterBar': FooterBar
         },
         computed: {
             domain() {
@@ -51,6 +53,13 @@
     .v-card {
         padding: 5px;
         text-align: left;
+    }
+
+    .search {
+      color: #41b883;
+    }
+    .data {
+      color: #1e90ff;
     }
 
     /* attributes */
