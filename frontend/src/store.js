@@ -35,6 +35,40 @@ const vuexLocalStorage = new VuexPersist({
     })
 });
 
+// Initial search values
+const initial_queries = {
+    //studies
+    studies__sid__in: [],
+
+    // interventions
+    interventions__substance_sid__in: [],
+    interventions__route_sid__in: [],
+    interventions__measurement_type_sid__in: [],
+    interventions__application_sid__in: [],
+    interventions__form_sid__in: [],
+
+    // outputs
+    outputs__substance_sid__in: [],
+    outputs__tissue_sid__in: [],
+    outputs__measurement_type_sid__in: [],
+    outputs__method_sid__in: [],
+}
+const initial_queries_users =
+    {
+    studies__creator__in: [],
+    studies__curators__in: [],
+    }
+const initial_subjects_boolean =
+    {
+        groups_query: true,
+        individuals_query: true,
+    }
+
+const initial_subjects_queries = {
+    choice_sid__in: [],
+    measurement_type_sid__in: [],
+}
+
 /** --------------------------------------------------------------
  *  Vuex store
  *  -------------------------------------------------------------- */
@@ -42,41 +76,18 @@ export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
 
-        //for search component
+        //for search detail display
+
         detail_display: false,
         detail_info: {},
         show_type: "help",
 
-        subjects_boolean:{
-            groups_query: true,
-            individuals_query: true,
-        },
-        subjects_queries:{
-            choice_sid__in: [],
-            measurement_type_sid__in: []
-        },
-        queries_users:{
-            studies__creator__in: [],
-            studies__curators__in: [],
-        },
-        queries:{
-            studies__sid__in: [],
+        // search queries
 
-
-            // interventions
-            interventions__substance_sid__in: [],
-            interventions__route_sid__in: [],
-            interventions__measurement_type_sid__in: [],
-            interventions__application_sid__in: [],
-            interventions__form_sid__in: [],
-
-            // outputs
-            outputs__substance_sid__in: [],
-            outputs__tissue_sid__in: [],
-            outputs__measurement_type_sid__in: [],
-            outputs__method_sid__in: [],
-        },
-
+        queries:initial_queries,
+        subjects_boolean:initial_subjects_boolean,
+        subjects_queries:initial_subjects_queries,
+        queries_users:initial_queries_users,
         // global highlighting
         highlight:"",
 
@@ -97,6 +108,12 @@ export default new Vuex.Store({
         token: localStorage.getItem('token'),
     },
     mutations: {
+        resetQuery(state){
+            Object.assign(state.queries,  initial_queries)
+            Object.assign(state.subjects_boolean,  initial_subjects_boolean)
+            Object.assign(state.subjects_queries,  initial_subjects_queries)
+            Object.assign(state.queries_users,  initial_queries_users)
+        },
         // update search
         updateQuery (state, obj) {
             state[obj.query_type][obj.key] = obj.value

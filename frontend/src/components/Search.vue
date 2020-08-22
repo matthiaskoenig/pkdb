@@ -33,9 +33,15 @@
                   <v-icon>fas fa fa-question</v-icon>
                 </v-btn>
 
+
                 <v-btn :href=url_download>
                   Download
                 </v-btn>
+
+                <v-btn  v-on:click="reset">
+                  Clear Search
+                </v-btn>
+
                 <v-progress-circular
                     indeterminate
                     color="primary"
@@ -176,6 +182,9 @@ export default {
   },
 
   methods: {
+    reset() {
+      this.$store.commit('resetQuery');
+    },
     update_subject_query(emitted_object) {
       this.subject_queries = emitted_object;
     },

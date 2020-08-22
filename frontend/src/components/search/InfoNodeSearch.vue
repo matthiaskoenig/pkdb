@@ -72,7 +72,6 @@ export default {
   data() {
 
     return {
-      detail_display: false,
       otype: "info_nodes",
       otype_single: "info_node",
       exclude_abstract: true,
