@@ -74,7 +74,7 @@
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
+    import {IconsMixin} from "@/icons"
     import  UserLogin from "./auth/UserLogin"
 
     export default {
@@ -82,6 +82,7 @@
         components: {
             UserLogin,
         },
+        mixins: [IconsMixin],
         data: () => ({
             dialog: false,
             drawer: false,
@@ -94,11 +95,6 @@
             username(){
                 return this.$store.state.username
             }
-        },
-        methods: {
-            faIcon: function (key) {
-                return lookupIcon(key)
-            },
         }
     }
 </script>

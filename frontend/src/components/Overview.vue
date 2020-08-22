@@ -24,6 +24,7 @@
         <v-btn color="#1E90FF"
                width="100%"
         >
+          <v-icon>{{ faIcon('data') }}</v-icon>
           Browse data
         </v-btn>
       </v-col>
@@ -31,6 +32,7 @@
         <v-btn color="#41b883"
                width="100%"
         >
+          <v-icon>{{ faIcon('search') }}</v-icon>
           Search data
         </v-btn>
       </v-col>
@@ -44,6 +46,7 @@
 import axios from 'axios'
 // import StatisticsVegaPlot from "./plots/StatisticsVegaPlot";
 import CountTable from "./tables/CountTable";
+import {IconsMixin} from "@/icons";
 
 export default {
   name: "Overview",
@@ -51,6 +54,7 @@ export default {
     // StatisticsVegaPlot,
     CountTable,
   },
+  mixins: [IconsMixin],
   data() {
     return {
       headers: [
