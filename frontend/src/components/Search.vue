@@ -1,8 +1,8 @@
 <template>
-  <div id="Search" class="main">
+  <v-card flat>
 
-    <v-row >
-      <v-btn title="Go to search results"
+    <v-row>
+      <v-btn title="Go to results"
              color="#1E90FF"
              :disabled="results.studies.count==0"
              width="100%"
@@ -14,8 +14,11 @@
         </span>
       </v-btn>
     </v-row>
-    <v-row>
-      <v-col class="pl-10" cols="4">
+
+
+      <v-row align="start" justify="center">
+        <v-col sm="6" md="5" lg="4">
+
         <!--- Start Search Component -->
         <v-card flat tile width="100%">
           <v-row class="mt-3 mb-4" justify="end">
@@ -96,9 +99,12 @@
           </v-row>
           <output-form/>
         </v-card>
+
         <!--- End Search Component -->
       </v-col>
-      <v-col cols="8" class="pr-10 mt-6">
+
+
+        <v-col sm="8" md="8" lg="8">
         <info-node-detail
             v-model="display_detail"
             v-if="show_type === 'info_node'"
@@ -108,7 +114,7 @@
         <study-overview v-if="show_type === 'study'" :study="detail_info"/>
       </v-col>
     </v-row>
-  </div>
+  </v-card>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <template>
   <span id="navigation">
     <v-app-bar
-
+               class="fixed-nav-bar"
                app
                permanent
                flat
@@ -101,14 +101,11 @@
 
 <style scoped>
     .fixed-nav-bar {
-       /*
         position: fixed;
         top: 0;
         left: 0;
         z-index: 9999;
         width: 100%;
         height: 50px;
-
-        */
     }
 </style>

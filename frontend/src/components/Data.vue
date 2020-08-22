@@ -1,6 +1,19 @@
 <template>
-    <v-card flat>
+    <v-card flat width="100%">
       <!--<v-card-title>Search results</v-card-title>-->
+
+      <v-row>
+        <v-btn title="Go to search"
+               color="#41b883"
+               width="100%"
+               dark
+               to="/search"
+        >
+        <span v-if="results.studies.count!=0">
+          {{ 'Show Search' }}
+        </span>
+        </v-btn>
+      </v-row>
 
       <v-tabs
           v-model="tab"
@@ -57,6 +70,11 @@ export default {
     OutputsTable,
     TimecoursesTable
   },
+  computed: {
+    results () {
+      return this.$store.state.results
+    }
+  },
   data(){
     return {
       tab: null,
@@ -68,6 +86,7 @@ export default {
         { tab: 'Outputs'},
         { tab: 'Timecourses'},
       ],
+      /*
       results: {
         studies: {"hash": "", "count": 0},
         interventions: {"hash": "", "count": 0},
@@ -76,6 +95,7 @@ export default {
         outputs: {"hash": "", "count": 0},
         timecourses: {"hash": "", "count": 0},
       },
+      */
     }
   },
   methods: {
@@ -96,9 +116,11 @@ export default {
       this.results = this.$store.state.results
     }
   },
+  /*
   created() {
     this.fetch_data(this.resource_url);
   }
+   */
 }
 </script>
 
