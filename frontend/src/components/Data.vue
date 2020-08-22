@@ -6,11 +6,10 @@
         <v-btn title="Go to search"
                color="#41b883"
                width="100%"
-               dark
                to="/search"
         >
         <span v-if="results.studies.count!=0">
-          {{ 'Show Search' }}
+          <v-icon left>{{ faIcon('search') }}</v-icon> {{ 'Search' }}
         </span>
         </v-btn>
       </v-row>
@@ -58,9 +57,10 @@ import GroupsTable from "./tables/GroupsTable";
 import InterventionsTable from "./tables/InterventionsTable";
 import OutputsTable from "./tables/OutputsTable";
 import TimecoursesTable from "./tables/TimecoursesTable";
+import {IconsMixin} from "../icons";
 
 export default {
-  mixins: [searchTableMixin],
+  mixins: [searchTableMixin, IconsMixin],
   name: "Data",
   components: {
     StudiesTable,

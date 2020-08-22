@@ -59,6 +59,16 @@
       text-align: left;
     }
 
+    .search-navbar {
+      position: fixed;
+      top: 48px;
+      left: 0;
+      z-index: 9999;
+      width: 100%;
+      height: 32px;
+      background-color: #CCCCCC;
+    }
+
 
     .search {
       color: #41b883;

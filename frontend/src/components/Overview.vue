@@ -25,8 +25,8 @@
                width="100%"
                to="/data"
         >
-          <v-icon>{{ faIcon('data') }}</v-icon>
-          Browse data
+          <v-icon left>{{ faIcon('data') }}</v-icon>
+          Data
         </v-btn>
       </v-col>
       <v-col>
@@ -34,8 +34,8 @@
                width="100%"
                to="/search"
         >
-          <v-icon>{{ faIcon('search') }}</v-icon>
-          Search data
+          <v-icon left>{{ faIcon('search') }}</v-icon>
+          Search
         </v-btn>
       </v-col>
     </v-row>

@@ -1,16 +1,15 @@
 <template>
-  <v-card flat>
+  <v-card flat width="100%">
 
     <v-row>
       <v-btn title="Go to results"
              color="#1E90FF"
              :disabled="results.studies.count==0"
              width="100%"
-             dark
              to="/data"
       >
         <span v-if="results.studies.count!=0">
-          {{ 'Show Results' }}
+          <v-icon left>{{ faIcon('data') }}</v-icon> {{ 'Results' }}
         </span>
       </v-btn>
     </v-row>
@@ -278,15 +277,7 @@ export default {
 .form-label {
 }
 
-.search-navbar {
-  position: fixed;
-  top: 48px;
-  left: 0;
-  z-index: 9999;
-  width: 100%;
-  height: 32px;
-  background-color: #CCCCCC;
-}
+
 .main {  width: 100%;}
 .search-content {
   margin-top: 80px;
