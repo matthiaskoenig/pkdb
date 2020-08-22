@@ -54,6 +54,11 @@
         padding: 5px;
         text-align: left;
     }
+    .main {
+      padding: 20px;
+      text-align: left;
+    }
+
 
     .search {
       color: #41b883;

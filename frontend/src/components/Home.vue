@@ -1,12 +1,14 @@
 <template>
   <div id="home">
-    <v-row>
-      <v-col>
+    <v-row align="center"
+           justify="center">
+      <v-col sm="12" md="10" lg="8">
         <overview/>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col>
+    <v-row align="center"
+           justify="center">
+      <v-col sm="12" md="10" lg="8">
         <about/>
       </v-col>
     </v-row>
