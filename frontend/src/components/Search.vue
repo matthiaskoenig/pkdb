@@ -19,14 +19,14 @@
         <!--- Start Search Component -->
         <v-card flat tile width="100%">
           <v-row class="mt-3 mb-4" justify="end">
-            <v-btn color="black"
-                   class="ma-2"
+            <v-btn
                    small
-                   dark
-                   outlined
+                   text
+                   class="ma-2"
+
                    @click.stop="show_help">
               Help
-              <v-icon small>fas fa fa-question</v-icon>
+              <v-icon small right dark>fas fa fa-question</v-icon>
             </v-btn>
 
             <v-btn
@@ -34,7 +34,7 @@
                 :loading="loadingDownload"
                 :disabled="loadingDownload"
                 small
-                outlined
+                text
                 class="ma-2"
             >
               Download
@@ -43,8 +43,8 @@
 
             <v-btn
                 small
+                text
                 class="ma-2"
-                outlined
                 v-on:click="reset">
               Clear Search
             </v-btn>
@@ -60,7 +60,7 @@
           </v-row>
 
           <v-row class="mt-4 ml-3">
-            <label class="text-h7 form-label" title="Search and filter data by study information">
+            <label class="text-subtitle-1 form-label" title="Search and filter data by study information">
               <count-badge text="Studies" :count="results.studies.count"/>
             </label>
             <v-spacer/>
@@ -69,7 +69,7 @@
           <study-search-form/>
           <v-row class="mt-4 ml-3">
 
-            <label class=" text-h7 form-label" title="Search and filter data by subjects">
+            <label class=" text-subtitle-1 form-label" title="Search and filter data by subjects">
               <count-badge text="Groups" :count="results.groups.count"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
               <count-badge text="Individuals" :count="results.individuals.count"/>
@@ -81,14 +81,14 @@
           />
           <v-row class="mt-4 ml-3">
 
-            <label class="text-h7 form-label" title="Search and filter data by intervention">
+            <label class="text-subtitle-1 form-label" title="Search and filter data by intervention">
               <count-badge text="Interventions" :count="results.interventions.count"/>
             </label>
           </v-row>
 
           <intervention-form/>
           <v-row class="mt-4 ml-3">
-            <label class="text-h7 form-label" title="Search and filter data by outputs">
+            <label class="text-subtitle-1 form-label" title="Search and filter data by outputs">
               <count-badge text="Outputs" :count="results.outputs.count"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
               <count-badge text="Timecourses" :count="results.timecourses.count"/>

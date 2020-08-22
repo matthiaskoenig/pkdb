@@ -40,7 +40,10 @@
           v-on:mouseover.native="mouseover(props.option)">
         <text-highlight :queries="highlight">
             {{ props.option.label }}
+          <!-- <template v-if="props.option.description" > {{props.option.description}}</template> -->
         </text-highlight>
+        <span class="text--disabled text-ellipse pl-2">{{props.option.description}}</span>
+
       </v-btn>
 
     </template>
@@ -132,15 +135,37 @@ export default {
 .detail {
   position: absolute
 }
+.text-ellipse{
+  text-align: left;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-rendering: optimizelegibility;
+  white-space: nowrap;
+  word-break: normal;
+
+  font-size: 12px;
+}
 </style>
 <style>
 .multiselect__option {
   padding: 0 !important;
 }
+.multiselect__option {
+  width: 100% !important;
+
+}
+.multiselect__content-wrapper {
+  overflow-x: -moz-hidden-unscrollable !important;
+  overflow-y: auto !important;
+  width: 100% !important;
+
+}
 .v-btn-multiselect {
   text-transform: none;
   white-space: nowrap;
   justify-content: left;
+  text-overflow: ellipsis;
+  width:100%
 }
 
 </style>
