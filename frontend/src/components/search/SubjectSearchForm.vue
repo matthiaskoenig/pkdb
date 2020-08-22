@@ -3,12 +3,12 @@
     <!--
     <measurement-type-choice-search ntype="measurement_type" @selected_entries="update_store"/>
     -->
-    <info-node-search ntype='measurement_type' @selected_entries="update_store"/>
-    <info-node-search ntype='choice' @selected_entries="update_store"/>
+    <info-node-search ntype='choice' query_key="choice_sid__in" query_type="subjects_queries" />
+    <info-node-search ntype='measurement_type' query_key="measurement_type_sid__in" query_type="subjects_queries"/>
 
 
-    <v-checkbox color="#41b883" v-model="groups" label="Groups" hide-details></v-checkbox>
-    <v-checkbox color="#41b883" v-model="individuals" label="Individuals" hide-details></v-checkbox>
+    <v-checkbox color="#41b883" v-model="groups_query" label="Groups"  hide-details></v-checkbox>
+    <v-checkbox color="#41b883" v-model="individuals_query" label="Individuals"  hide-details></v-checkbox>
 
   </div>
 </template>
@@ -24,37 +24,41 @@ export default {
   components: {
     InfoNodeSearch
   },
-  watch: {
-    individuals: {
-      handler() {
-        this.$store.state.individuals_query = this.individuals
-      }
-    },
-    groups: {
-      handler() {
-        this.$store.state.groups_query = this.groups
-      }
-    }
-  },
   methods: {
     faIcon: function (key) {
       return lookupIcon(key)
     },
-
-    update_store(emitted_object) {
-      for (const [key, value] of Object.entries(emitted_object)) {
-        console.log(key)
-        console.log(value)
-        this.$store.state.subjects_queries[key] = value
-      }}
+  },
+  computed: {
+    individuals_query: {
+      get(){
+        return this.$store.state.subjects_boolean.individuals_query
+      },
+      set (value) {
+        this.$store.dispatch('updateQueryAction', {
+          query_type: "subjects_boolean",
+          key: "individuals_query",
+          value: value,      })
+    }
+    },
+    groups_query: {
+      get(){
+        return this.$store.state.subjects_boolean.groups_query
+      },
+      set (value) {
+        this.$store.dispatch('updateQueryAction', {
+          query_type: "subjects_boolean",
+          key: "groups_query",
+          value: value,      })
+      },
+    },
   },
   data() {
     return {
-      individuals: true,
-      groups: true,
       all_searches : []
     }
   }
+
 
 }
 </script>

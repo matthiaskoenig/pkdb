@@ -143,20 +143,19 @@ export default {
       }
       for (const [key, value] of Object.entries(this.$store.state.subjects_queries)) {
         // handle groups
-        console.log(value)
 
-        if (this.$store.state.groups_query) {
+        if (this.$store.state.subjects_boolean.groups_query) {
           if (value.length > 0) {
-            url = url + "&" + "groups__" + key + "=" + value.join("__")
+            url = url + "&" + "groups__" + key + "=" + value.map(i => i.sid).join("__")
           }
         } else {
           url = url + "&" + "groups__" + key + "=0"
         }
 
         // handle individuals
-        if (this.$store.state.individuals_query) {
+        if (this.$store.state.subjects_boolean.individuals_query) {
           if (value.length > 0) {
-            url = url + "&" + "individuals__" + key + "=" + value.join("__")
+            url = url + "&" + "individuals__" + key + "=" + value.map(i => i.sid).join("__")
           }
         } else {
           url = url + "&" + "individuals__" + key + "=0"

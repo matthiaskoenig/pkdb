@@ -47,13 +47,14 @@ export default new Vuex.Store({
         detail_info: {},
         show_type: "help",
 
-
+        subjects_boolean:{
+            groups_query: true,
+            individuals_query: true,
+        },
         subjects_queries:{
             choice_sid__in: [],
             measurement_type_sid__in: []
         },
-        groups_query: true,
-        individuals_query: true,
         queries_users:{
             studies__creator__in: [],
             studies__curators__in: [],
