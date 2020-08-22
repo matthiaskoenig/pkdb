@@ -55,6 +55,13 @@
         text-align: left;
     }
 
+    .search {
+      color: #41b883;
+    }
+    .data {
+      color: #1e90ff;
+    }
+
     /* attributes */
     .attr {
         font-weight: bold;

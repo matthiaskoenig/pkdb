@@ -10,24 +10,27 @@
     </v-chip>
     </h1>
     <p>
-      PK-DB - an open database for pharmacokinetics information from clinical trials including pre-clinical research.
+      PK-DB is an open database for pharmacokinetics information from clinical trials including pre-clinical research.
       Data in PK-DB consists of outputs and timecourses linked to their respective study, group/individual and intervention.
     </p>
     <count-table v-bind="data"/>
     <!--<statistics-vega-plot />-->
     <v-row>
       <v-col>
-    <v-card>
-      Search
-    </v-card>
+          <v-btn color="#41b883"
+                 width="100%"
+          >
+            Search data
+          </v-btn>
         </v-col>
       <v-col>
-    <v-card>
-      Browse data
-    </v-card>
+          <v-btn color="#1E90FF"
+                 width="100%"
+          >
+            Browse data
+          </v-btn>
         </v-col>
     </v-row>
-
   </span>
 
 
