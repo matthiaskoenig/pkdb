@@ -63,7 +63,11 @@ const initial_subjects_boolean =
         groups_query: true,
         individuals_query: true,
     }
-
+const initial_output_types =
+    {
+        timecourse_query :true,
+        output_query:true,
+    }
 const initial_subjects_queries = {
     choice_sid__in: [],
     measurement_type_sid__in: [],
@@ -87,6 +91,7 @@ export default new Vuex.Store({
         subjects_boolean: initial_subjects_boolean,
         subjects_queries: initial_subjects_queries,
         queries_users: initial_queries_users,
+        queries_output_types: initial_output_types,
 
         // search results (synchronization between search & results)
         results: {
@@ -122,6 +127,7 @@ export default new Vuex.Store({
             Object.assign(state.subjects_boolean,  initial_subjects_boolean)
             Object.assign(state.subjects_queries,  initial_subjects_queries)
             Object.assign(state.queries_users,  initial_queries_users)
+            Object.assign(state.queries_output_types, initial_output_types)
         },
         // update search
         updateQuery (state, obj) {

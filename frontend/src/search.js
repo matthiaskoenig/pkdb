@@ -58,6 +58,12 @@ let SearchMixin = {
                     url = url + "&" + "individuals__" + key + "=0"
                 }
             }
+            if (! this.$store.state.queries_output_types.timecourse_query) {
+                    url = url + "&" + "outputs__output_type__exclude=timecourse"
+                }
+            if (! this.$store.state.queries_output_types.output_query) {
+                url = url + "&outputs__output_type__exclude=output&outputs__output_type__exclude=array"
+            }
             return url
         },
     },
