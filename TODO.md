@@ -10,13 +10,16 @@
 - [x] Fix database statistics (better view, https://github.com/matthiaskoenig/pkdb/issues/486)
 - [x] Fix landing page
 - [x] tables in tab component for results
-- [ ] Cleanup/reduction of all tables
-- [ ] Cleanup Study Detail view
+- [x] Cleanup/reduction of all tables
+- [x] documentation of search (info buttons)
+- [x] small values are not displayed. example: "http://0.0.0.0:8081/studies/PKDB00300". This library might help pretty print values "https://github.com/gentooboontoo/js-quantities". (Janek: I added it here not shure if I should do it.)
+- [x] Substance missing in output table
+
 - [ ] Fix dead buttons in frontend (link to InfoNode component, https://github.com/matthiaskoenig/pkdb/issues/517)
-- [ ] documentation of search (info buttons)
-- [ ] small values are not displayed. example: "http://0.0.0.0:8081/studies/PKDB00300". This library might help pretty print values "https://github.com/gentooboontoo/js-quantities". (Janek: I added it here not shure if I should do it.)
+- [ ] Cleanup Study Detail view
+
+- [ ] Fix API url
 - [ ] fix study and reference link button
-- [ ] Substance missing in output table
 
 ## Janek
 - [ ] Search
@@ -63,7 +66,7 @@
     - [x] timecourses not depicted in search results
 - [x] download button
     - [x] download results button -> JSON PKDBdata (-> zip) 
-
+    - [ ] better name for zip file, e.g. pkdb_data_2020-08-23.zip
 - [x] Add datasets automatically for timecourses
 - [x] repair analysis serializer
 - [x] create a hash for search queries to avoid very long urls  
