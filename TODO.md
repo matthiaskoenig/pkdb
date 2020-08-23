@@ -25,7 +25,7 @@
     - [ ] Fix: select study options are all uppercase
     - [ ] Fix: align groups and individuals button next to each other (to save space)
     - [ ] Fix: add filter for outputs/timecourses analoque to groups/individuals
-    - [ ] selection of single study is not working (example1 of help)
+    - [x] selection of single study is not working (example1 of help)
     - [ ] why do I get timecourses in search example 2 and 3 (i.e. selection half-life or AUC as output,
     but timecourse results are given)
 - [ ] REST API 

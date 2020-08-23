@@ -70,7 +70,7 @@ export default {
             {
               "query_type": "queries",
               "key": "studies__sid__in",
-              "value": [{"sid": "Abernethy1982"}]
+              "value": [{"name": "Abernethy1982", "sid": "PKDB00198",}]
             },
           ]
         },
