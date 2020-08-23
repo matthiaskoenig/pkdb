@@ -12,17 +12,24 @@ from pint import UndefinedUnitError
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.users.models import User
-from pkdb_app.utils import CHAR_MAX_LENGTH, _validate_requried_key
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_requried_key
 
 
 class Annotation(models.Model):
-    """ Annotation Model
-    """
+    """ Annotation Model"""
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
-    relation = models.CharField(max_length=CHAR_MAX_LENGTH, )
+    relation = models.CharField(max_length=CHAR_MAX_LENGTH)
     collection = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    description = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    description = models.TextField(blank=True, null=True)
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+    url = models.URLField(max_length=CHAR_MAX_LENGTH_LONG, null=False)
+
+# TODO: add cross reference
+class CrossReference(models.Model):
+    """ CrossReference. """
+    name = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
+    accession = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
+    url = models.URLField(max_length=CHAR_MAX_LENGTH_LONG, null=False)
 
 
 class InfoNode(Sidable):
@@ -50,14 +57,14 @@ class InfoNode(Sidable):
         NumericCategorical = 'numeric_categorical', _('numeric_categorical')
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    url_slug = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    label = models.CharField(max_length=CHAR_MAX_LENGTH)
+    deprecated = models.BooleanField()
     description = models.TextField(blank=True, null=True)
-    creator = models.ForeignKey(User, related_name="info_nodes", on_delete=models.CASCADE)
-    annotations = models.ManyToManyField(Annotation, "info_nodes")
+    annotations = models.ManyToManyField(Annotation, "annotations")
+    xrefs = models.ManyToManyField(CrossReference, "info_nodes")
     parents = models.ManyToManyField("InfoNode", related_name="children")
     ntype = models.CharField(null=False, blank=False, choices=NTypes.choices, max_length=20)
     dtype = models.CharField(null=False, blank=False, choices=DTypes.choices, max_length=20)
-
 
     def annotations_strings(self):
         return [f"relation <{annotation.relation}>:, {annotation.term}" for annotation in self.annotations.all()]
@@ -77,16 +84,21 @@ class InfoNode(Sidable):
         return self.creator.username
 
 
-
 class Synonym(models.Model):
-    """Synonyms Model"""
-    name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
+    """Synonym Model"""
+    name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, unique=True)
     info_node = models.ForeignKey(InfoNode, on_delete=models.CASCADE, related_name="synonyms", null=True)
 
 
 class AbstractInfoNode(models.Model):
     class Meta:
         abstract = True
+
+    def sid(self):
+        return self.info_node.sid
+
+    def name(self):
+        return self.info_node.name
 
 
 class Tissue(AbstractInfoNode):
@@ -305,7 +317,7 @@ class MeasurementType(AbstractInfoNode):
                     if isinstance(value, Number):
                         rule = value < 0
                     # for timecourses
-
+                    # todo: remove?
                     elif isinstance(value, list):
                         rule = any(v < 0 for v in value)
 
@@ -360,6 +372,10 @@ class Choice(AbstractInfoNode):
     def annotations(self):
         return self.info_node.annotations
 
+    @property
+    def label(self):
+        return self.info_node.label
+
 
 class Substance(AbstractInfoNode):
     """ Substances.
@@ -400,10 +416,6 @@ class Substance(AbstractInfoNode):
     @property
     def outputs_calculated(self):
         return self.output_set.filter(normed=True, calculated=True)
-
-    @property
-    def timecourses_normed(self):
-        return self.timecourse_set.filter(normed=True)
 
     @property
     def interventions_normed(self):

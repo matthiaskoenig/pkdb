@@ -1,5 +1,5 @@
 <template>
-<v-toolbar id="heading-toolbar" color="#CCCCCC" dense>
+<v-toolbar id="heading-toolbar" dense flat>
     <heading :count="count"
              :icon="faIcon(otype)"
              :title="capitalizeFirstLetter(otype)"
@@ -9,9 +9,9 @@
     <v-text-field
             v-model="search"
             append-icon="fa-search"
-            label="Search"
+            label="Search table"
             single-line
-            color="white"
+            color="#1E90FF"
             hide-details
             :autofocus="autofocus"
     />

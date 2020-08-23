@@ -3,6 +3,9 @@
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
+                dense
+                disable-sort
+
                 :items="entries"
                 :options.sync="options"
                 :server-items-length="count"
@@ -15,35 +18,41 @@
                             :title="'Study: '+item.pk"
                             icon="study"
                 />
-                <LinkButton v-if="item.reference"
-                            :to="'/references/'+ item.reference.sid"
-                            :title="'Reference: '+item.reference.sid"
-                            icon="reference"
-                />
                 <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
             </template>
-            <template v-slot:item.sid="{ item }">
-                <text-highlight :queries="search.split(/[ ,]+/)"> {{ item.sid }}</text-highlight>
-            </template>
-
-
-            <template v-slot:item.name="{ item }">
-                <text-highlight :queries="search.split(/[ ,]+/)"> {{ item.name }}</text-highlight>
+            <template v-slot:item.study="{ item }">
+                <text-highlight :queries="search.split(/[ ,]+/)">{{ item.sid }}</text-highlight><br />
+                <text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight><br />
+                {{ item.date }}<br />
             </template>
             <template v-slot:item.counts="{ item }">
                 <count-chip :count=item.group_count icon="group" name="group"></count-chip>
                 <count-chip :count=item.individual_count icon="individual" name="individual"></count-chip>
                 <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
                 <count-chip :count=item.output_count icon="output" name="output"></count-chip >
-                <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse"></count-chip>
+                <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse" />
             </template>
+
+          <template v-slot:item.reference="{ item }">
+            <!--
+            <LinkButton v-if="item.reference"
+                        :to="'/references/'+ item.reference.sid"
+                        :title="'Reference: '+item.reference.sid"
+                        icon="reference"
+            />
+            -->
+                <span v-if="item.reference">
+                  <xref v-if="item.reference.pmid" name="pubmed" :accession="item.reference.pmid" :url="'https://pubmed.ncbi.nlm.nih.gov/' + item.reference.pmid"></xref>
+                  <span class="font-weight-thin"><text-highlight :queries="search.split(/[ ,]+/)">{{ item.reference.title }}</text-highlight></span>
+                </span>
+          </template>
 
             <template v-slot:item.substances="{ item }">
                 <span v-for="substance in item.substances" :key="substance.sid">
                     <object-chip :object="substance"
                                  otype="substance"
                                  :search="search"
-                    /><br />
+                    />
                 </span>
             </template>
 
@@ -55,8 +64,7 @@
 
             <template v-slot:item.curators="{ item }">
                 <span v-for="(curator, index2) in item.curators" :key="index2">
-                    <user-rating :user="curator"
-                                 :search="search"/>
+                    <user-rating :user="curator" :search="search"/>
                 </span>
             </template>
 
@@ -68,9 +76,9 @@
 <script>
     import {searchTableMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
+    import Xref from "../info_node/Xref";
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
-
 
     export default {
         name: "StudiesTable",
@@ -78,6 +86,7 @@
             NoData,
             TableToolbar,
             CharacteristicaCard,
+            Xref,
         },
         mixins: [searchTableMixin],
         data () {
@@ -86,13 +95,13 @@
                 otype_single: "study",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Sid', value: 'sid'},
-                    {text: 'Name', value: 'name'},
-                    {text: 'Date', value: 'date'},
+                    {text: 'Study', value: 'study', sortable: false},
                     {text: 'Counts', value: 'counts', sortable: false},
-                    {text: 'Substances', value: 'substances', sortable: false},
-                    {text: 'Creator', value: 'creator',},
-                    {text: 'Curators', value: 'curators', sortable: false},
+                    {text: 'Reference', value: 'reference', sortable: false},
+                  {text: 'Curators', value: 'curators', sortable: false},
+                  {text: 'Substances', value: 'substances', sortable: false},
+                    // {text: 'Creator', value: 'creator',sortable: false},
+
                 ],
             }
         },

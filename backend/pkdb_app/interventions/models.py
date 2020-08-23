@@ -4,11 +4,11 @@ group or individual).
 """
 from django.db import models
 
-from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.behaviours import Normalizable
 from pkdb_app.info_nodes.models import Application, Form, Route
 from ..behaviours import Externable, Accessible
 from ..subjects.models import DataFile
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from ..utils import CHAR_MAX_LENGTH
 
 
 # -------------------------------------------------
@@ -61,9 +61,9 @@ class InterventionEx(Externable):
         null=True,
         on_delete=models.CASCADE,
     )
-    figure = models.ForeignKey(
+    image = models.ForeignKey(
         DataFile,
-        related_name="f_intervention_exs",
+        related_name="i_intervention_exs",
         null=True,
         on_delete=models.CASCADE,
     )

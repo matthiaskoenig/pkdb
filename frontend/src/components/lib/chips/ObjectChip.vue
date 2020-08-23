@@ -1,90 +1,128 @@
 <template>
-    <span>
-     <v-badge v-if="count" left dark overlap color="#000000">
-        <span slot="badge">{{ count }}</span>
-        <v-btn :color="color"
-               fab
-               x-small
-               dark
-               elevation="0"
-               :link="false"
-        >
-            <v-icon small
-                    color="black"
-            >{{ icon }}</v-icon>&nbsp;
-        </v-btn>
-     </v-badge>    &nbsp;
+  <span>
+  <v-chip v-if="!count"
+          class="ma-1"
+          color="#FFFFFF"
+          flat
+          pill
+          small
+          :title="'Show ' + name + ' details'"
+          @mouseover="mousover"
+  >
+    <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
+    <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
+  </v-chip>
 
-    <v-btn v-if="!count"
-           :color="color"
-           fab
-           x-small
-           dark
-           elevation="0"
-           :link="false"
-    >
-        <v-icon small color="black">{{ icon }}</v-icon>&nbsp;
-    </v-btn>&nbsp;
-    <text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight>
-    </span>
+    <v-badge v-if="count" left dark overlap color="#000000">
+      <span slot="badge">{{ count }}</span>
+      <v-chip
+              class="ma-1"
+              color="#FFFFFF"
+              flat
+              pill
+              small
+              :title="'Show ' + name + ' details'"
+      >
+        <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
+        <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
+      </v-chip>
+    </v-badge>
+</span>
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
+import axios from 'axios'
+import {lookupIcon} from "@/icons"
 
-    export default {
-        name: "ObjectChip",
-        components: {
-        },
-        props: {
-            object: {
-                required: true
-            },
-            otype: {
-                type: String,
-                required:true
-            },
-            count: {
-                type: Number,
-                default: 0
-            },
-            search: {
-                type: String,
-                default: ''
-            },
-        },
-        computed: {
-            name: function (){
-                return this.object.name;
-            },
-            color: function () {
-                if (this.otype.startsWith('group')) {
-                    return "#fdae61";
-                } else if (this.otype.startsWith('individual')){
-                    return "blue";
-                } else if (this.otype.startsWith('substance')){
-                    return "#00a087";
-                } else if (this.otype.startsWith('intervention')){
-                    return "red";
-                } else if (this.otype.startsWith('output')){
-                    return "white";
-                } else if (this.otype.startsWith('timecourse')){
-                    return "white";
-                } else if (this.otype.startsWith('measurement_type')){
-                    return "white";
-                } else if (this.otype.startsWith('tissue')){
-                    return "#DDDDDD";
-                }
+export default {
+  name: "ObjectChip",
+  components: {},
+  props: {
+    object: {
+      required: true
+    },
+    otype: {
+      type: String,
+      required: true
+    },
+    count: {
+      type: Number,
+      default: 0
+    },
+    search: {
+      type: String,
+      default: ''
+    },
+  },
+  computed: {
+    name: function () {
+      if ('name' in this.object) {
+        return this.object.name;
+      } else {
+        return this.object.label;
+      }
+    },
+    color: function () {
+      if (this.otype.startsWith('group')) {
+        return "#fdae61";
+      } else if (this.otype.startsWith('individual')) {
+        return "blue";
+      } else if (this.otype.startsWith('substance')) {
+        return "#00a087";
+      } else if (this.otype.startsWith('intervention')) {
+        return "red";
+      } else if (this.otype.startsWith('output')) {
+        return "black";
+      } else if (this.otype.startsWith('timecourse')) {
+        return "black";
+      } else if (this.otype.startsWith('measurement_type')) {
+        return "black";
+      } else if (this.otype.startsWith('tissue')) {
+        return "magenta";
+      }
 
-                return "#00a087";
-            },
-            icon: function () {
-                return lookupIcon(this.otype)
-            },
-        },
-        methods: {
-        }
+      return "#00a087";
+    },
+    icon: function () {
+      return lookupIcon(this.otype)
+    },
+  },
+  data() {
+    return {
+      data: null,
+      exists: false,
     }
+  },
+  methods: {
+    mousover(){
+      this.getData()
+      console.log("Mouseover info node:" + this.object)
+    },
+    getData() {
+      if ("sid" in this.object && "label" in this.object){
+        // object is an InfoNode
+        let url = `${this.$store.state.endpoints.api}info_nodes/${this.object.sid}/?format=json`;
+
+        // get data (FIXME: caching of InfoNodes in store)
+        axios.get(url)
+            .then(response => {
+              this.data = response.data;
+              this.exists = true;
+              this.$store.state.data_info = this.data
+              this.$store.state.data_info_type = "info_node"
+            })
+            .catch(err => {
+              console.log(err.response.data);
+              this.exists = false;
+            })
+            .finally(() => this.loading = false);
+      }
+    },
+  },
+  mounted() {
+
+  },
+}
 </script>
 
 <style scoped>

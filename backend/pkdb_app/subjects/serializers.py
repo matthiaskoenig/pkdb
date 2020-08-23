@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
-from pkdb_app.serializers import StudySmallElasticSerializer, SidNameSerializer
+from pkdb_app.serializers import StudySmallElasticSerializer, SidLabelSerializer
 from .models import (
     Group,
     GroupSet,
@@ -28,8 +28,7 @@ SUBJECT_MAP_FIELDS = map_field(SUBJECT_FIELDS)
 
 GROUP_FIELDS = ['name', 'count']
 GROUP_MAP_FIELDS = ['name_map', 'count_map', 'parent_ex_map', 'parent_map']
-
-EXTERN_FILE_FIELDS = ['source', 'subset_map', 'groupby', 'figure', 'source_map', 'figure_map']
+EXTERN_FILE_FIELDS = ['source', 'subset_map', 'source_map','image', 'image_map']
 
 
 # todo: move datafile from subjects module
@@ -164,16 +163,16 @@ class GroupSerializer(ExSerializer):
 
 
 class GroupExSerializer(ExSerializer):
+
     characteristica_ex = CharacteristicaExSerializer(
         many=True, read_only=False, required=False
     )
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-    figure = serializers.PrimaryKeyRelatedField(
+    image = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -221,6 +220,7 @@ class GroupExSerializer(ExSerializer):
 
 
         data['groups'] = groups
+
         # ----------------------------------
         # finished
         # ----------------------------------
@@ -248,6 +248,11 @@ class GroupExSerializer(ExSerializer):
 
         group_ex.save()
         return group_ex
+
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
+
 
 
 class GroupSetSerializer(ExSerializer):
@@ -423,10 +428,9 @@ class IndividualExSerializer(ExSerializer):
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-    figure = serializers.PrimaryKeyRelatedField(
+    image = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -438,6 +442,11 @@ class IndividualExSerializer(ExSerializer):
     individuals = IndividualSerializer(
         many=True, write_only=True, required=False, allow_null=True
     )
+
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
+
 
     class Meta:
         model = IndividualEx
@@ -491,6 +500,7 @@ class IndividualExSerializer(ExSerializer):
         data = self.transform_map_fields(data)
 
         data['individuals'] = individuals
+
         study_sid = self.context['request'].path.split('/')[-2]
 
         if 'group' in data:
@@ -599,9 +609,9 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    measurement_type = SidNameSerializer()
-    substance = SidNameSerializer(allow_null=True)
-    choice = SidNameSerializer(allow_null=True)
+    measurement_type = SidLabelSerializer()
+    substance = SidLabelSerializer(allow_null=True)
+    choice = SidLabelSerializer(allow_null=True)
 
     class Meta:
         model = Characteristica

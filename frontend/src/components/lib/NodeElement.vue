@@ -1,12 +1,14 @@
 <template>
     <span>
-        <strong>{{ data.sid }}</strong>
+      <strong>
+        <text-highlight :queries="highlight">
+        {{ data.label }}
+        </text-highlight>
+        </strong>
     </span>
 </template>
 
 <script>
-    // TODO: load additional information and provide access to it, e.g., synonmys or annotations
-
     export default {
         name: "NodeElement",
         components: {
@@ -19,6 +21,9 @@
             }
         },
         computed: {
+            highlight(){
+              return this.$store.state.highlight
+            },
         },
         methods: {
         }

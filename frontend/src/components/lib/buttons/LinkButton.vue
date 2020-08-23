@@ -1,7 +1,7 @@
 <template>
     <span class="link-button">
         <v-btn fab
-               small
+               x-small
                text
                :color="color"
                :to="to"
@@ -17,7 +17,7 @@
     import {lookupIcon} from "@/icons"
 
     export default {
-        name: "DetailButton",
+        name: "LinkButton",
         props: {
             to: {
                 type: String,

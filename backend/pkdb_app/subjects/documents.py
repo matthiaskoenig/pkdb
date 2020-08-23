@@ -40,7 +40,7 @@ characteristica_object_field = fields.ObjectField(
 @registry.register_document
 class IndividualDocument(Document):
     """Individual elastic search document"""
-    pk = fields.IntegerField(attr='pk')
+    pk = fields.IntegerField()
     name = string_field('name')
     group = fields.ObjectField(
         properties={

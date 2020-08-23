@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-sbmlutils pip package
+pkdb_app pip package
 """
 import io
 import re
@@ -70,7 +70,7 @@ setup(
         '': ['requirements.txt'],
     },
     include_package_data=True,
-    python_requires='>=3.7',
+    python_requires='>=3.7, <3.8',
     zip_safe=False,
     install_requires=required,
     extras_require={},

@@ -20,7 +20,7 @@ from ..interventions.models import (
     InterventionEx)
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer, SidNameSerializer, MappingSerializer)
+    NA_VALUES, StudySmallElasticSerializer, SidLabelSerializer, MappingSerializer)
 from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
@@ -123,9 +123,11 @@ class InterventionExSerializer(MappingSerializer):
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
-    figure = serializers.PrimaryKeyRelatedField(
+
+    image = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
+
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -143,6 +145,9 @@ class InterventionExSerializer(MappingSerializer):
                 EXTERN_FILE_FIELDS
                 + ["interventions", "comments", "descriptions"]
         )
+    def validate_image(self, value):
+        self._validate_image(value)
+        return value
 
     def to_internal_value(self, data):
         # ----------------------------------
@@ -273,12 +278,12 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
 
-    measurement_type = SidNameSerializer(read_only=True)
-    route = SidNameSerializer(allow_null=True, read_only=True)
-    application = SidNameSerializer(allow_null=True, read_only=True)
-    form = SidNameSerializer(allow_null=True, read_only=True)
-    substance = SidNameSerializer(allow_null=True, read_only=True)
-    choice = SidNameSerializer(allow_null=True, read_only=True)
+    measurement_type = SidLabelSerializer(read_only=True)
+    route = SidLabelSerializer(allow_null=True, read_only=True)
+    application = SidLabelSerializer(allow_null=True, read_only=True)
+    form = SidLabelSerializer(allow_null=True, read_only=True)
+    substance = SidLabelSerializer(allow_null=True, read_only=True)
+    choice = SidLabelSerializer(allow_null=True, read_only=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)

@@ -1,18 +1,18 @@
 <template>
-    <div id="page404">
-        <h1>404</h1>
+  <v-row align="start"
+         justify="center">
+    <v-col sm="12" md="10" lg="8">
+
+        <h1>404 <code><strong v-if="this.prevRoute">{{ this.prevRoute.path }}</strong></code></h1>
         <p>
-            Page <strong v-if="this.prevRoute">{{ this.prevRoute.path }}</strong> not found or no access to information as user
+            Page <code><strong v-if="this.prevRoute">{{ this.prevRoute.path }}</strong></code> not found or no access to page as
+          <code>
             <strong v-if="this.$store.state.username">{{ this.$store.state.username }}</strong>
-            <strong v-if="!this.$store.state.username">anonymous</strong>.
+            <strong v-else>anonymous</strong>
+          </code> user.
         </p>
-        <p>
-            Please try to login or change user to access the page.
-        </p>
-        <p>
-            <user-login ></user-login>
-        </p>
-    </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 import '@fortawesome/fontawesome-free/css/all.css'
-
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -60,7 +60,6 @@ Vue.component('GetData', GetData);
 Vue.component('GetPaginatedData', GetPaginatedData);
 
 Vue.component('text-highlight', TextHighlight);
-
 
 Vue.config.productionTip = false;
 

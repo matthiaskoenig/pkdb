@@ -1,30 +1,52 @@
 import axios from 'axios'
 import {lookupIcon} from "@/icons"
 
-var searchTableMixin = {
+let searchTableMixin = {
     data() {
         return {
             count: 0,
             entries: [],
             search: "",
-            ntype: "all",
-            loading: true,
             options: {},
+            loading: false,
+            exclude_abstract: false,
             footer_options:{
-                itemsPerPageOptions:[5, 10, 20, 50, 100]
+                itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
             table_class: "elevation-1",
         }
     },
     props: {
+        search_hash: {
+            type: Boolean,
+            default: false
+        },
+        hash: {
+            type: String,
+            default: () => "BoHash"
+
+        },
+        search_ids: {
+            type: Boolean,
+            default: false
+        },
         ids: {
             type: Array,
-            default: () => []
+            default: () => ["noIdSearch"]
 
         },
         autofocus: {
             type: Boolean,
             default: true
+        },
+        ntype: {
+            type: String,
+            default: () => "all"
+
+        },
+        ntypes: {
+            type: Array,
+            default: () => []
         }
 
     },
@@ -38,11 +60,9 @@ var searchTableMixin = {
             },
             deep: true
         },
-        search: {
-            handler() {
-                this.getData();
-            },
-            deep: true
+        search(){
+            this.getData();
+            this.$store.state.highlight = this.search
         },
         ntype: {
             handler() {
@@ -58,6 +78,9 @@ var searchTableMixin = {
         }
     },
     computed: {
+        highlight(){
+            return this.$store.state.highlight
+        },
         backend() {
             return this.$store.state.django_domain;
         },
@@ -65,25 +88,37 @@ var searchTableMixin = {
             return this.$store.state.endpoints.api;
         },
         resource_url() {
-
             return this.$store.state.endpoints.api  + this.otype + '/?format=json'
         },
         url() {
-            var url = this.resource_url
-                + '&page=' + this.options.page
-                + '&page_size=' + this.options.itemsPerPage
-                + '&ordering=' + this.options.sortDesc + this.options.sortBy;
+            let url = this.resource_url
+            if(this.options.itemsPerPage) {
+                url = url
+                    + '&page=' + this.options.page
+                    + '&page_size=' + this.options.itemsPerPage
+                    //+ '&ordering=' + this.options.sortDesc + this.options.sortBy;
+            }
+            if(this.exclude_abstract){
+                url += '&dtype__exclude=abstract'
+
+            }
             if (this.search) {
                 url += '&search_multi_match=' + this.search
             }
             if (this.ntype !== "all" ){
                 url += '&ntype=' + this.ntype
             }
+            if (this.ntypes.length > 0 ){
+                url += '&ntype__in=' + this.ntypes.join("__")
+            }
             if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
             }
-            if (this.ids.length > 0) {
+            if (this.search_ids) {
                 url += '&ids=' + this.ids.join("__")
+            }
+            if (this.search_hash) {
+                url += '&hash=' + this.hash
             }
             return url
         },
@@ -103,19 +138,18 @@ var searchTableMixin = {
         },
 
         getData() {
+            let headers = {};
             if (localStorage.getItem('token')) {
-                var headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-            } else {
-                headers = {}
+                headers = {Authorization: 'Token ' + localStorage.getItem('token')}
             }
             axios.get(this.url, {headers: headers})
-                .then(res => {
-                    this.entries = res.data.data.data;
-                    this.count = res.data.data.count;
-
+                .then(response => {
+                    this.entries = response.data.data.data;
+                    this.count = response.data.data.count;
                 })
                 .catch(err => {
-                    console.log(err.response.data);
+                    console.log(this.url);
+                    console.log(err);
                 })
                 .finally(() => this.loading = false);
         },

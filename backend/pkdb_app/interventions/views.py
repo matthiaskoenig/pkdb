@@ -20,14 +20,14 @@ class ElasticInterventionViewSet(AccessView):
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         'name',
-        'study',
-        'access',
-        'measurement_type.name',
-        'substance.name',
-        "form.name",
-        "tissue.name",
-        "application.name",
-        'route.name',
+        'study.sid',
+        'study.name',
+        'measurement_type.label',
+        'substance.label',
+        "form.label",
+        "tissue.label",
+        "application.label",
+        'route.label',
         'time_unit')
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     filter_fields = {
@@ -41,11 +41,8 @@ class ElasticInterventionViewSet(AccessView):
                },
         'normed': 'normed',
         'name': 'name.raw',
-        'measurement_type': 'measurement_type.raw',
         'choice': 'choice.raw',
-        'route': 'route.raw',
-        'form': 'form.raw',
-        'application': 'application.raw',
+
         'time_unit': 'time_unit.raw',
         'time': 'time',
         'value': 'value',
@@ -57,8 +54,23 @@ class ElasticInterventionViewSet(AccessView):
         'sd': 'sd',
         'cv': 'cv',
         'unit': 'unit.raw',
-        'substance': 'substance.raw',
+        'substance': 'substance.name.raw',
+        'form': 'form.name.raw',
+        'route': 'route.name.raw',
+        'application': 'application.name.raw',
+        'measurement_type': 'measurement_type.name.raw',
 
+        'substance_sid': {'field': 'substance.sid.raw',
+                           'lookups': [LOOKUP_QUERY_IN, ], },
+        'form_sid': {'field': 'form.sid.raw',
+                           'lookups': [LOOKUP_QUERY_IN, ], },
+        'route_sid': {'field': 'route.sid.raw',
+                           'lookups': [LOOKUP_QUERY_IN, ], },
+        'application_sid': {'field': 'application.sid.raw',
+                           'lookups': [LOOKUP_QUERY_IN, ], },
+
+        'measurement_type_sid': {'field': 'measurement_type.sid.raw',
+                           'lookups': [LOOKUP_QUERY_IN, ], },
     }
     ordering_fields = {'name': 'name.raw',
                        'measurement_type': 'measurement_type.raw',

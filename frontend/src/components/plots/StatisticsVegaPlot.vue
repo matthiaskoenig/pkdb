@@ -1,13 +1,15 @@
 <template>
-    <v-card id="about-information">
-        <v-container fluid>
+    <v-card
+        id="about-information"
+        class="d-flex align-stretch mb-6"
+    >
+
             <div id="viz"></div>
             <!--<div class="edit">
                 <textarea v-model="def"></textarea>
             </div>
             -->
             <!--<div>{{ def }}</div>-->
-        </v-container>
     </v-card>
 </template>
 

@@ -6,6 +6,5 @@ from ..utils import _create
 
 class OutputManager(models.Manager):
     def create(self, *args, **kwargs):
-        kwargs["_interventions"] = kwargs.pop('interventions', [])
-        output, _ = _create(model_manager=super(), validated_data=kwargs, add_multiple_keys=['_interventions'])
+        output, _ = _create(model_manager=super(), validated_data=kwargs, add_multiple_keys=['interventions'])
         return output

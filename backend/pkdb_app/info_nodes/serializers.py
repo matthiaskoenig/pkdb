@@ -3,8 +3,8 @@ from rest_framework import serializers
 from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
-    Form, Tissue, Application, Method
-from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer
+    Form, Tissue, Application, Method, CrossReference
+from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidLabelSerializer
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework.fields import empty
 
@@ -45,13 +45,23 @@ class SynonymSerializer(WrongKeyValidationSerializer):
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
-    term = serializers.CharField()
     description = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
+    url = serializers.URLField(allow_null=False, required=True)
 
     class Meta:
         model = Annotation
-        fields = ["term", "relation", "collection", "description", "label"]
+        fields = ["label", "relation", "term", "collection", "description", "url"]
+
+
+class CrossReferenceSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(allow_null=False, required=True)
+    accession = serializers.CharField(allow_null=False, required=True)
+    url = serializers.URLField(allow_null=False, required=True)
+
+    class Meta:
+        model = CrossReference
+        fields = ["name", "accession", "url"]
 
 
 class UnitSerializer(serializers.ModelSerializer):
@@ -70,7 +80,6 @@ class UnitSerializer(serializers.ModelSerializer):
             return instance.name
 
 
-
 class SubstanceExtraSerializer(serializers.ModelSerializer):
     derived = serializers.BooleanField(read_only=True)
 
@@ -78,9 +87,14 @@ class SubstanceExtraSerializer(serializers.ModelSerializer):
         model = Substance
         fields = ["mass", "charge", "formula", "derived"]
 
+class LabelSerializer(serializers.Serializer):
+    label = serializers.CharField()
+    sid = serializers.CharField()
+    class Meta:
+        fields = ["sid", "label"]
 
 class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
-    choices = serializers.SlugRelatedField("name", many=True, read_only=True)
+    choices = LabelSerializer(many=True, read_only=True)
     units = UnitSerializer(many=True, allow_null=True, required=False)
 
     class Meta:
@@ -102,7 +116,6 @@ class InfoNodeListSerializer(serializers.ListSerializer):
     def run_validation(self, data=empty):
         return data
 
-
     def update(self, instance, validated_data):
         return self.create(validated_data)
 
@@ -110,7 +123,7 @@ class InfoNodeListSerializer(serializers.ListSerializer):
         info_nodes_pks = []
         for validated_data_single in validated_data:
             try:
-                instance = InfoNode.objects.get(url_slug=validated_data_single.get("url_slug"))
+                instance = InfoNode.objects.get(sid=validated_data_single.get("sid"))
             except InfoNode.DoesNotExist:
                 instance = None
 
@@ -136,12 +149,13 @@ class InfoNodeSerializer(serializers.ModelSerializer):
     measurement_type = MeasurementTypeExtraSerializer(allow_null=True, required=False)
     substance = SubstanceExtraSerializer(allow_null=True, required=False)
     choice = ChoiceExtraSerializer(allow_null=True, required=False)
+    xrefs = CrossReferenceSerializer(many=True, allow_null=True)
 
     class Meta:
         model = InfoNode
         list_serializer_class = InfoNodeListSerializer
-        fields = ["sid", "url_slug", "name", "ntype", "dtype", "parents", "description", "synonyms", "creator",
-                  "annotations", "measurement_type", "substance", "choice"]
+        fields = ["sid", "name", "ntype", "dtype", "parents", "description", "synonyms",
+                  "annotations", "measurement_type", "substance", "choice", "deprecated", "label", "xrefs"]
 
     @staticmethod
     def NTypes():
@@ -162,6 +176,8 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
         annotations_data = validated_data.pop("annotations", [])
+        xrefs_data = validated_data.pop("xrefs", [])
+
         ntype = validated_data.get('ntype')
         extra_fields = validated_data.pop(ntype, {})
         Model = self.NTypes()[ntype]
@@ -171,6 +187,8 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
         update_or_create_multiple(instance, annotations_data, 'annotations', lookup_fields=["term", "relation"])
         update_or_create_multiple(instance, synonyms_data, 'synonyms', lookup_fields=["name"])
+        update_or_create_multiple(instance, xrefs_data, 'xrefs')
+
         instance.parents.clear()
         instance.parents.add(*parents_data)
         instance.save()
@@ -213,7 +231,6 @@ class InfoNodeSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
 
         data = super().to_representation(instance)
-        data["creator"] = instance.creator.username
         return data
 
 
@@ -222,23 +239,20 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 ###############################################################################################
 
 
-class SmallInfoNodeElasticSerializer(serializers.ModelSerializer):
-    annotations = AnnotationSerializer(many=True, allow_null=True)
-
-    class Meta:
-        model = InfoNode
-        fields = ["sid", "name", "description", "annotations"]
-
-
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
-    parents = SmallInfoNodeElasticSerializer(many=True)
+    parents = SidLabelSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
-    synonyms = SynonymSerializer(many=True, allow_null=True)
+    synonyms = serializers.SerializerMethodField()
     substance = SubstanceExtraSerializer(required=False, allow_null=True)
     measurement_type = MeasurementTypeExtraSerializer(required=False, allow_null=True)
+    xrefs = CrossReferenceSerializer(many=True, allow_null=True)
 
     class Meta:
         model = InfoNode
-        fields = ["sid", "name", 'url_slug', "ntype", "dtype", "description", "synonyms", "parents", "annotations",
-                  "measurement_type", "substance"]
+        fields = ["sid", "name", "label", "deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance",  ]
 
+    def get_parents(self, obj):
+        return [parent["sid"] for parent in obj.parents]
+
+    def get_synonyms(self, obj):
+        return [synonym["name"] for synonym in obj.synonyms]

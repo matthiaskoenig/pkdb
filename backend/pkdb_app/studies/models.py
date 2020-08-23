@@ -2,17 +2,21 @@
 Django model for Study.
 """
 import datetime
+import uuid
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from pkdb_app.data.models import DataSet, Data
 
 from pkdb_app.info_nodes.models import Substance, InfoNode
 from pkdb_app.users.models import PUBLIC, PRIVATE
 from ..behaviours import Sidable
 from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..outputs.models import OutputSet, Output, Timecourse, OutputIntervention, TimecourseIntervention
+from ..outputs.models import OutputSet, OutputIntervention
 from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
 from ..users.models import User
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from django.utils.translation import gettext_lazy as _
 
 
 CURRENT_VERSION = [1.0]
@@ -39,16 +43,10 @@ STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
 
 
 # ---------------------------------------------------
-class Author(models.Model):
-    """ Author in reference. """
-    first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
-    last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
-
-    def __str__(self):
-        return "%s %s" % (self.first_name, self.last_name)
 
 from django.core.validators import RegexValidator
 alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+
 
 class Reference(models.Model):
     """
@@ -63,7 +61,6 @@ class Reference(models.Model):
     abstract = models.TextField(null=True)
     journal = models.TextField(null=True)
     date = models.DateField()
-    authors = models.ManyToManyField(Author, related_name="references")
 
     def __str__(self):
         return self.title
@@ -80,6 +77,14 @@ class Reference(models.Model):
         if self.study:
             return self.study.name
         return ""
+
+class Author(models.Model):
+    """ Author in reference. """
+    first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
+    last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
+    reference = models.ForeignKey(Reference, related_name="authors", on_delete=models.CASCADE)
+    def __str__(self):
+        return "%s %s" % (self.first_name, self.last_name)
 
 
 class Rating(models.Model):
@@ -127,6 +132,11 @@ class Study(Sidable, models.Model):
     outputset = models.OneToOneField(
         OutputSet, related_name="study", on_delete=models.SET_NULL, null=True
     )
+
+    dataset = models.OneToOneField(
+        DataSet, related_name="study", on_delete=models.SET_NULL, null=True
+    )
+
     files = models.ManyToManyField(DataFile)
 
 
@@ -174,12 +184,6 @@ class Study(Sidable, models.Model):
         except AttributeError:
             return Intervention.objects.none()
 
-    @property
-    def outputs(self):
-        try:
-            return self.outputset.outputs.all()
-        except AttributeError:
-            return Output.objects.none()
 
     @property
     def outputs_interventions(self):
@@ -187,20 +191,6 @@ class Study(Sidable, models.Model):
             return self.outputs.outputs_interventions.all()
         except AttributeError:
             return OutputIntervention.objects.none()
-
-    @property
-    def timecourses(self):
-        try:
-            return self.outputset.timecourses.all()
-        except AttributeError:
-            return Timecourse.objects.none()
-
-    @property
-    def timecourses_interventions(self):
-        try:
-            return self.outputset.timecourses_interventions.all()
-        except AttributeError:
-            return TimecourseIntervention.objects.none()
 
     @property
     def get_substances(self):
@@ -219,11 +209,6 @@ class Study(Sidable, models.Model):
         if self.outputs:
             all_substances.extend(
                 list(self.outputs.filter(substance__isnull=False).values_list("substance__pk", flat=True))
-            )
-
-        if self.timecourses:
-            all_substances.extend(
-                list(self.timecourses.filter(substance__isnull=False).values_list("substance__pk", flat=True))
             )
 
         substances_dj = Substance.objects.filter(pk__in=set(all_substances))
@@ -263,12 +248,6 @@ class Study(Sidable, models.Model):
         return 0
 
     @property
-    def timecourse_count(self):
-        if self.outputset:
-            return self.outputset.timecourses.filter(normed=True).count()
-        return 0
-
-    @property
     def individual_count(self):
         if self.individualset:
             return self.individualset.individuals.count()
@@ -282,20 +261,29 @@ class Study(Sidable, models.Model):
 
     @property
     def output_count(self):
-        if self.outputset:
-            return self.outputset.outputs.filter(normed=True).count()
-
-        return 0
+        return self.outputs.filter(normed=True).count()
 
     @property
     def output_calculated_count(self):
-        if self.outputset:
-            return self.outputset.outputs.filter(normed=True, calculated=True).count()
-        return 0
+        return self.outputs.filter(normed=True, calculated=True).count()
+
+    @property
+    def subset_count(self):
+        return self.subsets.count()
+
+    @property
+    def timecourse_count(self):
+        return self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).count()
+
+    @property
+    def scatter_count(self):
+        return self.subsets.filter(data__data_type=Data.DataTypes.Scatter).count()
 
     def delete(self, *args, **kwargs):
         if self.outputset:
             self.outputset.delete()
+        if self.dataset:
+            self.dataset.delete()
         if self.interventionset:
             self.interventionset.delete()
         if self.individualset:
@@ -305,3 +293,24 @@ class Study(Sidable, models.Model):
         if self.reference:
             self.reference.delete()
         super().delete(*args, **kwargs)
+
+
+
+
+class Query(models.Model):
+    class Recourses(models.TextChoices):
+        """ Recourse Types"""
+        Studies = 'studies', _('studies')
+        Groups = 'groups', _('groups')
+        Individuals = 'individuals', _('individuals')
+        Interventions = 'interventions', _('interventions')
+        Outputs = 'outputs', _('outputs')
+
+
+    resource =  models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
+    hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ids = ArrayField(models.IntegerField(), null=True, blank=True)
+
+#class IdMulti(models.Model):
+#    query = models.ForeignKey(Query, related_name="ids",on_delete=models.CASCADE, null=False)
+#    value = models.IntegerField(primary_key=False)
