@@ -61,9 +61,9 @@ let searchTableMixin = {
             deep: true
         },
         search(){
-                    this.getData();
-                    this.$store.state.highlight = this.search
-                },
+            this.getData();
+            this.$store.state.highlight = this.search
+        },
         ntype: {
             handler() {
                 this.getData();
@@ -139,15 +139,14 @@ let searchTableMixin = {
         },
 
         getData() {
+            let headers = {};
             if (localStorage.getItem('token')) {
-                var headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-            } else {
-                headers = {}
+                headers = {Authorization: 'Token ' + localStorage.getItem('token')}
             }
             axios.get(this.url, {headers: headers})
-                .then(res => {
-                    this.entries = res.data.data.data;
-                    this.count = res.data.data.count;
+                .then(response => {
+                    this.entries = response.data.data.data;
+                    this.count = response.data.data.count;
 
                 })
                 .catch(err => {

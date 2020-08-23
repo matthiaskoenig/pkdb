@@ -18,8 +18,8 @@
               @click="downloadData"
               :loading="loadingDownload"
               :disabled="loadingDownload"
-              width="100%"
               text
+              width="100%"
               title="Download current results"
           >
             <v-icon small left>{{ faIcon('download') }}</v-icon> Download

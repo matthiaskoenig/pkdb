@@ -44,7 +44,7 @@
     <div v-if="data.xrefs && data.xrefs.length>0">
       <span class="label">Database links</span><br />
       <span v-for="xref in data.xrefs" :key="xref.url">
-        <xref :xref="xref"/>
+        <xref v-bind="xref"/>
       </span>
     </div>
 

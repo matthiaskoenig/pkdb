@@ -1,28 +1,39 @@
 <template>
     <div :class="card_class">
 
+      <span v-if="!(data.choice && data.choice.sid)">
         <v-badge inline right light overlap color="#BBBBBB">
             <span slot="badge">{{ data.count }}</span>
             <node-element :data="data.measurement_type"/>
-
         </v-badge>
-        <br />
+      </span>
 
-        <!--
-        <strong>{{ data.measurement_type }}</strong><br />
-        -->
+      <br />
+
         <span v-if="data.choice && data.choice.sid">
           <!--
             <span v-if="data.choice.sid=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
             <span v-if="data.choice.sid=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
             -->
+          <v-badge inline right light overlap color="#BBBBBB">
+            <span slot="badge">{{ data.count }}</span>
+            <node-element :data="data.choice"/>
+        </v-badge>
+
             <span v-if="(data.choice.sid=='female') || (data.choice.sid =='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
             <span v-if="(data.choice.sid=='male') || (data.choice.sid =='homo-sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
-            {{ data.choice.label }}
+            <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small color="red">fa fa-smoking</v-icon></span>
+            <span v-if="(data.choice.sid=='smoking-no')"><v-icon small color="green">fa fa-smoking-ban</v-icon></span>
+            <span v-if="(data.choice.sid=='medication-yes')"><v-icon small color="red">fa fa-tablets</v-icon></span>
+            <span v-if="(data.choice.sid=='medication-no')"><v-icon small color="green">fa fa-tablets</v-icon></span>
+
+            <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small color="green">fa fa-check-circle</v-icon></span>
+            <span v-if="(data.choice.sid=='healthy-no')"><v-icon small color="red">fa fa-times-circle</v-icon></span>
+
         </span>
         <span v-if="value || error">
             {{ value }} <span v-if="error">{{ error }}</span><br />
-            <span v-if="data.unit">[{{ data.unit }}]</span>
+            <span v-if="data.unit" class="font-weight-italics">{{ data.unit }}</span>
         </span>
         <span v-else-if="!value & !error & !data.choice & !data.substance">
             <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
@@ -51,7 +62,15 @@
 
                 // min, max
                 if (this.data.min || this.data.max){
-                    value = '(' + (this.data.min ? this.toNumber(this.data.min) : '')  + '-' + (this.data.max ? this.toNumber(this.data.max) : '') + ')'
+                  if (this.data.min && this.data.max) {
+                    value = '[' + this.toNumber(this.data.min) + '-' + this.toNumber(this.data.max) + ']';
+                  }
+                  if (this.data.min && !this.data.max){
+                    value = '[>' + this.toNumber(this.data.min) + ']';
+                  }
+                  if (!this.data.min && this.data.max){
+                    value = '[<' + this.toNumber(this.data.max) + ']';
+                  }
                 }
                 // sd, se, cv, unit
                 let error_fields = ['sd', 'se', 'cv'];

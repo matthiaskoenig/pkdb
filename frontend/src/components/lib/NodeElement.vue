@@ -1,12 +1,10 @@
 <template>
     <span>
-        <strong>{{ data.sid }}</strong>
+        <strong>{{ data.label }}</strong>
     </span>
 </template>
 
 <script>
-    // TODO: load additional information and provide access to it, e.g., synonmys or annotations
-
     export default {
         name: "NodeElement",
         components: {
