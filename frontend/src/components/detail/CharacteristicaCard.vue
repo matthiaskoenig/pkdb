@@ -123,8 +123,22 @@
                 return lookupIcon(key)
             },
             toNumber: function(num){
-                // round to two numbers
-                return +(Math.round(num + "e+2")  + "e-2");
+                // round to two digits
+              let number = num
+              if (num > 0.1){
+                number = +(Math.round(num + "e+2")  + "e-2");
+              } else {
+                number = num.toExponential(2);
+              }
+
+              /*
+              if (!number){
+                number = num;
+                number = Number.toExponential(num)
+              }
+              */
+              console.log(number);
+              return number
             },
         },
         calculated: {

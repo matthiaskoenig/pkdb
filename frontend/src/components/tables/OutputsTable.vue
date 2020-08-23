@@ -22,14 +22,26 @@
                     />
                     <JsonButton :resource_url="api + 'outputs/'+ item.pk +'/?format=json'"/>
                 </template>
-                <template v-slot:item.measurement_type="{ item }">
-                    <object-chip :object="item.measurement_type"
-                                 otype="measurement_type"
-                                 :search="search"
-                    />
+                <template v-slot:item.calculated="{ item }">
+                  <v-icon v-if="!item.calculated"
+                          small
+                          color="success">fas fa-check-circle
+                  </v-icon>
+                  <v-icon v-else
+                          small
+                          color="black"
+                          title="Calculated from timecourse.">fas fa-times-circle
+                  </v-icon>
                 </template>
 
-                <template v-slot:item.subject="{ item }">
+          <template v-slot:item.measurement="{ item }">
+            <object-chip :object="item.measurement_type"
+                         otype="measurement_type"
+                         :search="search"
+            />
+          </template>
+
+                <template v-slot:item.details="{ item }">
                     <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
                             <object-chip :object="data.data"
@@ -46,20 +58,7 @@
                             />
                         </span>
                     </get-data>
-                </template>
-                <template v-slot:item.calculated="{ item }">
-                    <v-icon v-if="!item.calculated"
-                            small
-                            color="success">fas fa-check-circle
-                    </v-icon>
-                    <v-icon v-else
-                            small
-                            color="black"
-                            title="Calculated from timecourse.">fas fa-times-circle
-                    </v-icon>
-
-                </template>
-                <template v-slot:item.interventions="{ item }">
+                  <br />
                     <span v-if="item.interventions" v-for="(intervention, index2) in item.interventions" :key="index2">
                         <get-data :resource_url="intervention_url(intervention.pk)">
                             <span slot-scope="data">
@@ -70,12 +69,16 @@
                             </span>
                         </get-data>&nbsp;
                     </span>
-                </template>
-                <template v-slot:item.tissue="{ item }">
+                  <br />
                     <object-chip :object="item.tissue"
                                  otype="tissue"
                                  :search="search"
                     />
+                  <br />
+                  <object-chip :object="item.substance"
+                     otype="substance"
+                     :search="search"
+                />
                 </template>
 
                 <template v-slot:item.time="{ item }">
@@ -110,11 +113,9 @@
                 otype_single: "output",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-
-                    {text: 'Measurement Type', value: 'measurement_type',sortable: false},
                     {text: 'Measured', value: 'calculated', sortable: false},
-                    {text: 'Subjects', value: 'subject',sortable: false},
-                    {text: 'Interventions', value: 'interventions',sortable: false},
+                    {text: 'Measurement', value: 'measurement', sortable: false},
+                    {text: 'Details', value: 'details',sortable: false},
                     {text: 'Output', value: 'output', sortable: false},
 
                 ]
