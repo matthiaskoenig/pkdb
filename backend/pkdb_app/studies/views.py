@@ -237,10 +237,12 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
         'curators.user',
 
         'name',
-        'reference',
-        'files',
+        'reference.pmid',
+        'reference.title',
 
-        'substances.name'
+        'files',
+        'substances.sid'
+        'substances.label'
 
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
