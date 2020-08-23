@@ -6,7 +6,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     IdsFilterBackend,
-    MultiMatchSearchFilterBackend)
+    MultiMatchSearchFilterBackend, SearchFilterBackend)
 from rest_framework import viewsets
 
 from pkdb_app.documents import AccessView
@@ -50,13 +50,12 @@ class GroupViewSet(AccessView):
 
     # Define search fields
     search_fields = (
+        'characteristica_all_normed.measurement_type.label',
+        'characteristica_all_normed.choice.label',
+        'characteristica_all_normed.substance.label',
         'name',
-        'study',
-        'parent.name',
-        'characteristica_all_normed.measurement_type.',
-        'characteristica_all_normed.substance',
-        'characteristica_all_normed.choice',
-        'characteristica_all_normed.ctype',
+        'study.name',
+        'study.sid',
 
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
@@ -92,11 +91,13 @@ class IndividualViewSet(AccessView):
 
     # Define search fields
     search_fields = (
+        'characteristica_all_normed.measurement_type.label',
+        'characteristica_all_normed.choice.label',
+        'characteristica_all_normed.substance.label',
         'name',
         'study.name',
+        'study.sid',
         'group.name',
-        'characteristica_all_normed.measurement_type.name',
-        'characteristica_all_normed.choice',
 
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
@@ -177,11 +178,10 @@ class GroupCharacteristicaViewSet(AccessView):
     serializer_class = GroupCharacteristicaSerializer
     pagination_class = CustomPagination
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend,SearchFilterBackend, MultiMatchSearchFilterBackend]
 
     search_fields = (
-        'choice',
-    )
+        )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
@@ -232,7 +232,14 @@ class IndividualCharacteristicaViewSet(AccessView):
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
 
     search_fields = (
-        'choice',
+        'characteristica_all_normed.measurement_type.label',
+        'characteristica_all_normed.choice.label',
+        'characteristica_all_normed.substance.label',
+        'name',
+        'group.name',
+        'study.name',
+        'study.sid',
+
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
