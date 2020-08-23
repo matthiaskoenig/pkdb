@@ -8,15 +8,13 @@
           small
           :title="'Show ' + name + ' details'"
   >
-    <v-avatar left>
-      <v-icon v-if="!count" small :color="color">{{ icon }}</v-icon>&nbsp;
-    </v-avatar>
-    <span style="{color: black;}"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
+    <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
+    <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
   </v-chip>
 
     <v-badge v-if="count" left dark overlap color="#000000">
       <span slot="badge">{{ count }}</span>
-      <v-chip v-if="!count"
+      <v-chip
               class="ma-1"
               color="#FFFFFF"
               flat
@@ -24,12 +22,8 @@
               small
               :title="'Show ' + name + ' details'"
       >
-        <v-avatar left>
-          <v-icon v-if="!count" small :color="color">{{ icon }}</v-icon>&nbsp;
-        </v-avatar>
-        <span style="{color: black;}"><text-highlight :queries="search.split(/[ ,]+/)">{{
-            name
-          }}</text-highlight></span>
+        <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
+        <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
       </v-chip>
     </v-badge>
 </span>

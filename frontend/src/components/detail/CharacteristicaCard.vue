@@ -1,5 +1,6 @@
 <template>
-    <div class="characteristica_card">
+    <div flat class="characteristica_card"
+            align="start" justify="start">
 
       <span v-if="!(data.choice && data.choice.sid)">
 
@@ -132,7 +133,7 @@
 
 <style scoped lang="css">
     .characteristica_card {
-        padding-left: 10px;
-        padding-right: 10px;
+      padding-right: 10px;
+      font-size: smaller;
     }
 </style>
