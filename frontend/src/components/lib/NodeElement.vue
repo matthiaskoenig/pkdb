@@ -1,6 +1,10 @@
 <template>
     <span>
-        <strong>{{ data.label }}</strong>
+      <strong>
+        <text-highlight :queries="highlight">
+        {{ data.label }}
+        </text-highlight>
+        </strong>
     </span>
 </template>
 
@@ -17,6 +21,9 @@
             }
         },
         computed: {
+            highlight(){
+              return this.$store.state.highlight
+            },
         },
         methods: {
         }
