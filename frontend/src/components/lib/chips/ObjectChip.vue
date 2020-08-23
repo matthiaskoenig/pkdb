@@ -1,8 +1,10 @@
 <template>
   <span>
   <v-chip v-if="!count"
-          flat
+          class="ma-1"
           color="#FFFFFF"
+          flat
+          pill
           small
           :title="'Show ' + name + ' details'"
   >
@@ -15,8 +17,10 @@
     <v-badge v-if="count" left dark overlap color="#000000">
       <span slot="badge">{{ count }}</span>
       <v-chip v-if="!count"
-              flat
+              class="ma-1"
               color="#FFFFFF"
+              flat
+              pill
               small
               :title="'Show ' + name + ' details'"
       >

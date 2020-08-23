@@ -34,11 +34,13 @@
             </template>
 
           <template v-slot:item.reference="{ item }">
+            <!--
             <LinkButton v-if="item.reference"
                         :to="'/references/'+ item.reference.sid"
                         :title="'Reference: '+item.reference.sid"
                         icon="reference"
             />
+            -->
                 <span v-if="item.reference">
                   <xref v-if="item.reference.pmid" name="pubmed" :accession="item.reference.pmid" :url="'https://pubmed.ncbi.nlm.nih.gov/' + item.reference.pmid"></xref>
                   <span class="font-weight-thin"><text-highlight :queries="search.split(/[ ,]+/)">{{ item.reference.title }}</text-highlight></span>

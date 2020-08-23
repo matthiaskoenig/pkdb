@@ -1,35 +1,35 @@
 <template>
-    <div :class="card_class">
+    <div class="characteristica_card">
 
       <span v-if="!(data.choice && data.choice.sid)">
-        <v-badge inline right light overlap color="#BBBBBB">
-            <span slot="badge">{{ data.count }}</span>
-            <node-element :data="data.measurement_type"/>
-        </v-badge>
+
+        <span v-if="value || error">
+          <v-badge inline right overlap color="#BBBBBB" dark>
+              <span slot="badge">{{ data.count }}</span>
+              <node-element :data="data.measurement_type"/>
+          </v-badge>
+        </span>
+
       </span>
 
       <br />
 
         <span v-if="data.choice && data.choice.sid">
-          <!--
-            <span v-if="data.choice.sid=='Y'"><v-icon small color="success">fa fa-check-circle</v-icon></span>
-            <span v-if="data.choice.sid=='N'"><v-icon small color="error">fa fa-times-circle</v-icon></span>
-            -->
-          <v-badge inline right light overlap color="#BBBBBB">
+            <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
+            <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
+            <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
+            <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small left color="red">fa fa-smoking</v-icon></span>
+            <span v-if="(data.choice.sid=='smoking-no')"><v-icon small left color="green">fa fa-smoking-ban</v-icon></span>
+            <span v-if="(data.choice.sid=='medication-yes')"><v-icon small left color="red">fa fa-tablets</v-icon></span>
+            <span v-if="(data.choice.sid=='medication-no')"><v-icon small left color="green">fa fa-tablets</v-icon></span>
+
+            <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
+            <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
+
+            <v-badge inline right dark overlap color="#BBBBBB">
             <span slot="badge">{{ data.count }}</span>
             <node-element :data="data.choice"/>
         </v-badge>
-
-            <span v-if="(data.choice.sid=='female') || (data.choice.sid =='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon></span>
-            <span v-if="(data.choice.sid=='male') || (data.choice.sid =='homo-sapiens')"><v-icon small color="primary">fa fa-male</v-icon></span>
-            <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small color="red">fa fa-smoking</v-icon></span>
-            <span v-if="(data.choice.sid=='smoking-no')"><v-icon small color="green">fa fa-smoking-ban</v-icon></span>
-            <span v-if="(data.choice.sid=='medication-yes')"><v-icon small color="red">fa fa-tablets</v-icon></span>
-            <span v-if="(data.choice.sid=='medication-no')"><v-icon small color="green">fa fa-tablets</v-icon></span>
-
-            <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small color="green">fa fa-check-circle</v-icon></span>
-            <span v-if="(data.choice.sid=='healthy-no')"><v-icon small color="red">fa fa-times-circle</v-icon></span>
-
         </span>
         <span v-if="value || error">
             {{ value }} <span v-if="error">{{ error }}</span><br />
@@ -74,8 +74,8 @@
                 }
                 // sd, se, cv, unit
                 let error_fields = ['sd', 'se', 'cv'];
-                for (var i=0; i<error_fields.length; i++){
-                    var field = error_fields[i];
+                for (let i=0; i<error_fields.length; i++){
+                    let field = error_fields[i];
                     if (this.data[field]){
                         const token = ' ± ' + this.toNumber(this.data[field]) + ' ' + field.toUpperCase() + '';
                         if (value){
@@ -83,13 +83,14 @@
                         } else {
                             value = token
                         }
+                        continue;
                     }
                 }
                 return value;
             },
 
             value() {
-                var value = null;
+                let value = null;
                 // value, mean, median
 
                 if (this.data.value){
@@ -98,9 +99,7 @@
                     value = this.toNumber(this.data.mean);
                 }
                 if (this.data.median){
-                    if (value){
-                        value += '(median ' + this.toNumber(this.data.median) + ')'
-                    } else {
+                    if (!value){
                         value = 'median ' + this.toNumber(this.data.median)
                     }
                 }
@@ -109,7 +108,7 @@
 
             card_class() {
                 if (this.value){
-                    return "characteristica_card_wide"
+                    return "characteristica_card"
                 }
                 else {
                     return "characteristica_card"
@@ -132,33 +131,8 @@
 </script>
 
 <style scoped lang="css">
-    .attr-characteristica {
-        background-color: lightgray;
-    }
-
     .characteristica_card {
-        padding-top: 20px;
-        padding-right: 10px;
         padding-left: 10px;
-        margin-bottom: 10px;
-        width: 110px;
-        height: 85px;
-
-        border-style: none;
-        border-width: thin;
-        border-color: gray;
-    }
-
-    .characteristica_card_wide {
-        padding-top: 20px;
         padding-right: 10px;
-        padding-left: 10px;
-        margin-bottom: 10px;
-        width: 200px;
-        height: 85px;
-
-        border-style: none;
-        border-width: thin;
-        border-color: gray;
     }
 </style>

@@ -2,8 +2,8 @@
   <!-- FIXME: add search highlight -->
   <v-chip
           class="ma-1"
-          color="black"
-          outlined
+          color="#FFFFFF"
+          flat
           pill
           small
           :href="url"

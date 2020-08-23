@@ -91,8 +91,7 @@ let searchTableMixin = {
             return this.$store.state.endpoints.api  + this.otype + '/?format=json'
         },
         url() {
-
-            var url = this.resource_url
+            let url = this.resource_url
             if(this.options.itemsPerPage) {
                 url = url
                     + '&page=' + this.options.page
@@ -147,10 +146,10 @@ let searchTableMixin = {
                 .then(response => {
                     this.entries = response.data.data.data;
                     this.count = response.data.data.count;
-
                 })
                 .catch(err => {
-                    console.log(err.response.data);
+                    console.log(this.url);
+                    console.log(err);
                 })
                 .finally(() => this.loading = false);
         },
