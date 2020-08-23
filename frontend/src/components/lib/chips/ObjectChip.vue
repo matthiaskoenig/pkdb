@@ -76,7 +76,7 @@ export default {
       } else if (this.otype.startsWith('measurement_type')) {
         return "black";
       } else if (this.otype.startsWith('tissue')) {
-        return "#00FF00";
+        return "magenta";
       }
 
       return "#00a087";
