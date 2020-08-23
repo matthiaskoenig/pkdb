@@ -156,7 +156,7 @@ export default new Vuex.Store({
             this.commit('clearUsername');
         },
         updateQueryAction (context, obj) {
-            this.commit('updateQuery',obj);
+            this.commit('updateQuery', obj);
 
         }
 
