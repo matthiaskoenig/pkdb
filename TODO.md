@@ -22,7 +22,7 @@
 - [ ] Search
     - [x] Fix: search selection must be cleared before applying search examples (if things are 
     already selected in other fields examples are not working)
-    - [ ] Fix: select study options are all uppercase
+    - [x] Fix: select study options are all uppercase
     - [x] Fix: align groups and individuals button next to each other (to save space)
     - [ ] Fix: add filter for outputs/timecourses analoque to groups/individuals
     - [x] selection of single study is not working (example1 of help)

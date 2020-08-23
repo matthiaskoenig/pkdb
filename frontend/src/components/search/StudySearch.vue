@@ -35,12 +35,17 @@
           block
           text
           large
-          @mouseover.native="mouseover(props.option)">
-
+          text-left
+          class="v-btn-multiselect"
+          v-on:mouseover.native="mouseover(props.option)">
         <text-highlight :queries="highlight">
-          {{props.option.name}}
+          {{ props.option.name }}
+          <!-- <template v-if="props.option.description" > {{props.option.description}}</template> -->
         </text-highlight>
+        <span class="text--disabled text-ellipse pl-2">{{props.option.reference.title}}</span>
+
       </v-btn>
+
     </template>
 
   <span slot="noResult">No results found.</span>
