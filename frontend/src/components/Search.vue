@@ -22,7 +22,6 @@
             :disabled="loadingDownload"
             width="100%"
             text
-            flat
             title="Download current results"
         >
           <v-icon small left>{{ faIcon('download') }}</v-icon>
@@ -44,7 +43,7 @@
             <v-col cols="3">
               <v-btn
                   x-small
-                  fab flat text
+                  fab text
                   title="Clear search"
                   v-on:click="reset"
               >
@@ -52,7 +51,7 @@
               </v-btn>
               <v-btn
                   x-small
-                  fab flat text
+                  fab text
                   title="Search help with examples"
                   @click.stop="show_help"
               >

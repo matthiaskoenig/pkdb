@@ -56,7 +56,7 @@ export default {
   name: "StudySearch",
   mixins: [searchTableMixin],
   components: {
-  Multiselect
+    Multiselect
   },
   data () {
     return {
@@ -65,15 +65,12 @@ export default {
       autoUpdate: true,
     }
   },
-
   computed: {
     studies__sid__in(){
       return this.$store.state.queries.studies__sid__in
     },
   },
-
   methods: {
-
     update_store(value){
       this.$store.dispatch('updateQueryAction', {
         query_type:"queries",
@@ -86,8 +83,6 @@ export default {
       this.$store.state.detail_info = option
       this.$store.state.detail_display = true
     },
-
-
     sync_search(search)
     {
       this.search = search

@@ -1,10 +1,38 @@
 <template>
+  <!--
+  <v-card
+      width="100%"
+      flat
+  >
+    <v-list-item three-line>
+      <v-list-item-content>
+        <div class="overline mb-4">
+          <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
+          STUDY
+        </div>
+
+        <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight></v-list-item-title>
+        <v-list-item-subtitle v-if="parents_labels.length>0">Parents: {{ parents_labels.join(', ') }}</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-card-text>
+      <div v-if="data.description && data.description.length>0">
+        <text-highlight :queries="highlight">
+          {{ data.description }}<br />
+        </text-highlight>
+      </div>
+  -->
+
+
+
     <div class="study-info">
         <v-layout wrap>
             <v-flex md3>
                 <v-card flat>
                 <v-icon color="black">{{ faIcon('study') }}</v-icon>
                 <span class="heading-title">&nbsp;{{ study.name }} ({{ study.sid }})</span><br />
+
                 <v-btn icon>
                     <v-icon small
                             :title="'Study is '+ study.access"

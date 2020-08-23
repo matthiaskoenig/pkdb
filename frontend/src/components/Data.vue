@@ -20,7 +20,6 @@
               :disabled="loadingDownload"
               width="100%"
               text
-              flat
               title="Download current results"
           >
             <v-icon small left>{{ faIcon('download') }}</v-icon> Download
