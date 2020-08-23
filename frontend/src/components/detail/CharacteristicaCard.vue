@@ -5,10 +5,11 @@
       <span v-if="!(data.choice && data.choice.sid)">
 
         <span v-if="value || error">
-          <v-badge inline right overlap color="#BBBBBB" dark>
+          <v-badge v-if="data.count" inline right overlap color="#BBBBBB" dark>
               <span slot="badge">{{ data.count }}</span>
               <node-element :data="data.measurement_type"/>
           </v-badge>
+          <node-element v-if="!data.count" :data="data.measurement_type"/>
         </span>
 
       </span>
@@ -33,8 +34,8 @@
         </v-badge>
         </span>
         <span v-if="value || error">
-            {{ value }} <span v-if="error">{{ error }}</span><br />
-            <span v-if="data.unit" class="font-weight-italics">{{ data.unit }}</span>
+            {{ value }} <span v-if="error">{{ error }}</span>
+            <span v-if="data.unit"> {{ data.unit }}</span>
         </span>
         <span v-else-if="!value & !error & !data.choice & !data.substance">
             <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
@@ -134,6 +135,6 @@
 <style scoped lang="css">
     .characteristica_card {
       padding-right: 10px;
-      font-size: smaller;
+      font-size: small;
     }
 </style>

@@ -22,27 +22,43 @@
                 />
                 <JsonButton :resource_url="api + 'interventions/'+ item.pk +'/?format=json'"/>
             </template>
-            <template v-slot:item.name="{ item }">
+
+            <template v-slot:item.intervention="{ item }">
+
                 <object-chip :object="item"
                              otype="intervention"
                              :search="search"
                 />
+
             </template>
-            <template v-slot:item.substance="{ item }">
-                <object-chip :object="item.substance"
-                             otype="substance"
-                             :search="search"
-                />
-            </template>
-            <template v-slot:item.application="{ item }">
-                <text-highlight :queries="[search]">{{ item.application.label }}</text-highlight><br />
-                <text-highlight :queries="[search]">{{ item.time }}</text-highlight>
-                    <span v-if="item.time_unit"> [<text-highlight :queries="[search]">{{ item.time_unit }}</text-highlight>]</span><br />
-                <text-highlight :queries="[search]">{{ item.route.label }}</text-highlight><br />
-                <text-highlight :queries="[search]">{{ item.form.label }}</text-highlight>
-            </template>
-            <template v-slot:item.value="{ item }">
-                <characteristica-card :data="item" />
+
+          <template v-slot:item.substance="{ item }">
+            <characteristica-card :data="item" :count="1" />
+            <object-chip :object="item.substance"
+                         otype="substance"
+                         :search="search"
+            />
+
+          </template>
+
+            <template v-slot:item.details="{ item }">
+              <object-chip :object="item.application"
+                           otype="application"
+                           :search="search"
+              />
+              <object-chip :object="item.route"
+                           otype="route"
+                           :search="search"
+              />
+              <object-chip :object="item.form"
+                           otype="form"
+                           :search="search"
+              />
+
+              <object-chip :object="timeObject(item)"
+                           otype="time"
+                           :search="search"
+              />
             </template>
 
             <no-data/>
@@ -70,13 +86,26 @@
                 otype_single: "intervention",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Name', value: 'name', sortable: false},
+                    {text: 'Intervention', value: 'intervention', sortable: false},
                     {text: 'Substance', value: 'substance', sortable: false},
-                    {text: 'Application', value: 'application', sortable: false},
-                    {text: 'Measurement', value: 'value', sortable: false},
+                    {text: 'Details', value: 'details', sortable: false},
                 ],
             }
         },
+      methods: {
+        toNumber: function(num){
+          // round to two numbers
+          return +(Math.round(num + "e+2")  + "e-2");
+        },
+        timeObject: function(item){
+          return{
+            name: "t = " + this.toNumber(item.time) + ' ' + item.time_unit,
+            otype: "time",
+          }
+        },
+
+      }
+
     }
 </script>
 
