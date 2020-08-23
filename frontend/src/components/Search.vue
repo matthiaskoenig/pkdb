@@ -2,7 +2,7 @@
   <v-card flat width="100%">
 
     <v-row no-gutters>
-      <v-col cols="10">
+      <v-col cols="8">
         <!-- Top search bar (see also data bar) -->
         <v-btn title="Go to results"
                color="#1E90FF"
@@ -15,6 +15,7 @@
         </span>
         </v-btn>
       </v-col>
+
       <v-col cols="2">
         <v-btn
             @click="downloadData"
@@ -24,16 +25,16 @@
             text
             title="Download current results"
         >
-          <v-icon small left>{{ faIcon('download') }}</v-icon>
+          <v-icon small left color="#1E90FF">{{ faIcon('download') }}</v-icon>
           Download
         </v-btn>
       </v-col>
+
     </v-row>
 
 
     <v-row align="start" justify="center">
-      <v-col xs="12" sm="6" md="4" lg="4">
-
+        <v-col xs="12" sm="6" md="8" lg="8">
         <!--- Search Component -->
         <v-card tile width="100%">
           <v-row no-glutter>
@@ -105,8 +106,28 @@
 
         <!--- End Search Component -->
       </v-col>
-      <v-col xs="12" sm="6" md="8" lg="8">
+        <v-col xs="12" sm="6" md="4" lg="4">
+          <v-navigation-drawer
+              floating
+              permanent
+              fixed
+              right
+              width="35%"
+              height="100%"
+          >
+            <v-card flat style="padding-top: 50px">
 
+              <v-btn
+                  @click="downloadData"
+                  :loading="loadingDownload"
+                  :disabled="loadingDownload"
+                  text
+                  width="100%"
+                  title="Download current results"
+              >
+                <v-icon small left color="#1E90FF">{{ faIcon('download') }}</v-icon>
+                Download
+              </v-btn>
         <info-node-detail
             v-model="display_detail"
             v-if="show_type === 'info_node'"
@@ -114,6 +135,8 @@
         />
         <search-help v-if="show_type === 'help'"/>
         <study-overview v-if="show_type === 'study'" :study="detail_info"/>
+            </v-card>
+              </v-navigation-drawer>
       </v-col>
     </v-row>
   </v-card>

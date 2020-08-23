@@ -95,14 +95,13 @@ export default {
   },
   methods: {
     mousover(){
-      //this.getData()
-      console.log("Mouseover info node")
+      this.getData()
+      console.log("Mouseover info node:" + this.object)
     },
     getData() {
       if ("sid" in this.object && "label" in this.object){
         // object is an InfoNode
-        let entry_id = (this.$route.path).split('/').slice(-1)[0];
-        let url = `${this.$store.state.endpoints.api}info_nodes/${entry_id}/?format=json`;
+        let url = `${this.$store.state.endpoints.api}info_nodes/${this.object.sid}/?format=json`;
 
         // get data (FIXME: caching of InfoNodes in store)
         axios.get(url)
@@ -117,9 +116,7 @@ export default {
               this.exists = false;
             })
             .finally(() => this.loading = false);
-
       }
-
     },
   },
   mounted() {
