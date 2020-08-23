@@ -65,7 +65,7 @@
 
           <template slot="clear" slot-scope="props">
             <div class="multiselect__clear" v-if="selected_entries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
-          </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
+          </template><span slot="noResult">No results found.</span>
         </multiselect>
       </v-col>
     </v-row>

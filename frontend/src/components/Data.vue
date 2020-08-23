@@ -2,14 +2,30 @@
     <v-card flat width="100%">
       <!--<v-card-title>Search results</v-card-title>-->
 
-      <v-row>
+      <v-row no-gutters>
+        <v-col cols="10">
         <v-btn title="Go to search"
                color="#41b883"
                width="100%"
                to="/search"
         >
-          <v-icon left small>{{ faIcon('search') }}</v-icon> {{ 'Search' }}
+          <v-icon left small>{{ faIcon('search') }}</v-icon> Search
         </v-btn>
+        </v-col>
+
+        <v-col cols="2">
+          <v-btn
+              @click="downloadData"
+              :loading="loadingDownload"
+              :disabled="loadingDownload"
+              text
+              width="100%"
+              title="Download current results"
+          >
+            <v-icon small left>{{ faIcon('download') }}</v-icon> Download
+          </v-btn>
+        </v-col>
+
       </v-row>
 
       <v-tabs
@@ -56,9 +72,10 @@ import InterventionsTable from "./tables/InterventionsTable";
 import OutputsTable from "./tables/OutputsTable";
 import TimecoursesTable from "./tables/TimecoursesTable";
 import {IconsMixin} from "../icons";
+import {SearchMixin} from "../search";
 
 export default {
-  mixins: [searchTableMixin, IconsMixin],
+  mixins: [searchTableMixin, IconsMixin, SearchMixin],
   name: "Data",
   components: {
     StudiesTable,
@@ -75,6 +92,7 @@ export default {
   },
   data(){
     return {
+      loadingDownload: false,
       tab: null,
       items: [
         { tab: 'Studies'},

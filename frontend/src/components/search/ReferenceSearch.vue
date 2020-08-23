@@ -29,8 +29,6 @@
     </template><span slot="noResult">No results found.</span>
 
   </multiselect>
-
-
 </template>
 
 

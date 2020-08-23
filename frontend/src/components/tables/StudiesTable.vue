@@ -18,11 +18,6 @@
                             :title="'Study: '+item.pk"
                             icon="study"
                 />
-                <LinkButton v-if="item.reference"
-                            :to="'/references/'+ item.reference.sid"
-                            :title="'Reference: '+item.reference.sid"
-                            icon="reference"
-                />
                 <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
             </template>
             <template v-slot:item.study="{ item }">
@@ -36,10 +31,21 @@
                 <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
                 <count-chip :count=item.output_count icon="output" name="output"></count-chip >
                 <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse" />
-              <!--
-                <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse"></count-chip>
-              -->
             </template>
+
+          <template v-slot:item.reference="{ item }">
+            <!--
+            <LinkButton v-if="item.reference"
+                        :to="'/references/'+ item.reference.sid"
+                        :title="'Reference: '+item.reference.sid"
+                        icon="reference"
+            />
+            -->
+                <span v-if="item.reference">
+                  <xref v-if="item.reference.pmid" name="pubmed" :accession="item.reference.pmid" :url="'https://pubmed.ncbi.nlm.nih.gov/' + item.reference.pmid"></xref>
+                  <span class="font-weight-thin"><text-highlight :queries="search.split(/[ ,]+/)">{{ item.reference.title }}</text-highlight></span>
+                </span>
+          </template>
 
             <template v-slot:item.substances="{ item }">
                 <span v-for="substance in item.substances" :key="substance.sid">
@@ -70,6 +76,7 @@
 <script>
     import {searchTableMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
+    import Xref from "../info_node/Xref";
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
 
@@ -79,6 +86,7 @@
             NoData,
             TableToolbar,
             CharacteristicaCard,
+            Xref,
         },
         mixins: [searchTableMixin],
         data () {
@@ -89,9 +97,11 @@
                     {text: '', value: 'buttons', sortable: false},
                     {text: 'Study', value: 'study', sortable: false},
                     {text: 'Counts', value: 'counts', sortable: false},
+                    {text: 'Reference', value: 'reference', sortable: false},
                     {text: 'Substances', value: 'substances', sortable: false},
                     {text: 'Creator', value: 'creator',sortable: false},
                     {text: 'Curators', value: 'curators', sortable: false},
+
                 ],
             }
         },

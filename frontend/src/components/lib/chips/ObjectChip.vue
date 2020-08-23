@@ -1,29 +1,29 @@
 <template>
   <span>
   <v-chip v-if="!count"
-      flat
-      color="#FFFFFF"
-      small
-      :title="'Show ' + name + ' details'"
+          class="ma-1"
+          color="#FFFFFF"
+          flat
+          pill
+          small
+          :title="'Show ' + name + ' details'"
   >
-    <v-avatar left>
-      <v-icon v-if="!count" small :color="color">{{ icon }}</v-icon>&nbsp;
-    </v-avatar>
-    <span style="{color: black;}"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
+    <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
+    <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
   </v-chip>
 
     <v-badge v-if="count" left dark overlap color="#000000">
       <span slot="badge">{{ count }}</span>
-      <v-chip v-if="!count"
-        flat
-        color="#FFFFFF"
-        small
-        :title="'Show ' + name + ' details'"
-        >
-        <v-avatar left>
-          <v-icon v-if="!count" small :color="color">{{ icon }}</v-icon>&nbsp;
-        </v-avatar>
-        <span style="{color: black;}"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
+      <v-chip
+              class="ma-1"
+              color="#FFFFFF"
+              flat
+              pill
+              small
+              :title="'Show ' + name + ' details'"
+      >
+        <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
+        <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
       </v-chip>
     </v-badge>
 </span>
@@ -59,8 +59,6 @@ export default {
       } else {
         return this.object.label;
       }
-
-
     },
     color: function () {
       if (this.otype.startsWith('group')) {
@@ -72,13 +70,13 @@ export default {
       } else if (this.otype.startsWith('intervention')) {
         return "red";
       } else if (this.otype.startsWith('output')) {
-        return "white";
+        return "black";
       } else if (this.otype.startsWith('timecourse')) {
-        return "white";
+        return "black";
       } else if (this.otype.startsWith('measurement_type')) {
-        return "white";
+        return "black";
       } else if (this.otype.startsWith('tissue')) {
-        return "#DDDDDD";
+        return "#00FF00";
       }
 
       return "#00a087";

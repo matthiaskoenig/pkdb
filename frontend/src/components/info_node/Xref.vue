@@ -2,14 +2,14 @@
   <!-- FIXME: add search highlight -->
   <v-chip
           class="ma-1"
-          color="black"
-          outlined
+          color="#FFFFFF"
+          flat
           pill
           small
-          :href="xref.url"
+          :href="url"
   >
 
-    <strong><text-highlight :queries="highlight">{{ xref.name }}</text-highlight> </strong>| <text-highlight :queries="highlight">{{ xref.accession}}</text-highlight>
+    <strong><text-highlight :queries="highlight">{{ name }}</text-highlight> </strong>| <text-highlight :queries="highlight">{{ accession}}</text-highlight>
 
   </v-chip>
 </template>
@@ -18,8 +18,16 @@
 export default {
   name: "Xref",
   props: {
-    xref: {
-      type: Object,
+    name: {
+      type: String,
+      required: true,
+    },
+    accession: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
       required: true,
     }
   },

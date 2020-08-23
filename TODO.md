@@ -7,17 +7,30 @@
 - [x] Update info node information
 - [x] Fix missing url for annotations
 - [x] Create annotation & xref components
+- [x] Fix database statistics (better view, https://github.com/matthiaskoenig/pkdb/issues/486)
+- [x] Fix landing page
+- [x] tables in tab component for results
+- [ ] Cleanup/reduction of all tables
+- [ ] Cleanup Study Detail view
 - [ ] Fix dead buttons in frontend (link to InfoNode component, https://github.com/matthiaskoenig/pkdb/issues/517)
 - [ ] documentation of search (info buttons)
-- [ ] Fix database statistics (better view, https://github.com/matthiaskoenig/pkdb/issues/486)
-- [ ] Cleanup/reduction of all tables
-- [ ] Fix landing page
-- [ ] tables in tab component for results
 - [ ] small values are not displayed. example: "http://0.0.0.0:8081/studies/PKDB00300". This library might help pretty print values "https://github.com/gentooboontoo/js-quantities". (Janek: I added it here not shure if I should do it.)
-- [ ] search component upate in select
-- [ ] How to handle excel sheets & file download
+- [ ] fix study and reference link button
+- [ ] Substance missing in output table
 
 ## Janek
+- [ ] Search
+    - [ ] Fix: search selection must be cleared before applying search examples (if things are 
+    already selected in other fields examples are not working)
+    - [ ] Fix: select study options are all uppercase
+    - [ ] Fix: align groups and individuals button next to each other (to save space)
+    - [ ] Fix: add filter for outputs/timecourses analoque to groups/individuals
+    - [ ] selection of single study is not working (example1 of help)
+    - [ ] why do I get timecourses in search example 2 and 3 (i.e. selection half-life or AUC as output,
+    but timecourse results are given)
+- [ ] REST API 
+     - [ ] better REST documentation ()
+
 - [x] replace url_slug with sid
 - [x] fixed bug in frontend (loading property).
 - [x] use label for 'name' in info node serializer
@@ -34,21 +47,18 @@
 - [x] Calculate timecourses from database
 - [x] bug in concise on curators
 - [x] issues sort
-- [ ] issues search
+- [x] issues search
     - [x] no nested components, select choices and measurement types;
     - [ ] display info node information for choices
-    - [ ] example for filling the search component with data (Intervention: substance=midazolam; Group: homo sapiens; )
+    - [x] example for filling the search component with data (Intervention: substance=midazolam; Group: homo sapiens; )
     - [x] update information on full selection (not only info button)
-    - [o] selection of choices not working (not visible and not selectable easily)
-    - [o] empty search should give all results, but currently the results are empty
+    - [x] selection of choices not working (not visible and not selectable easily)
+    - [x] empty search should give all results, but currently the results are empty
     - [x] bug in search for form {option.label }} added
     - [x] no info node details on Individuals & Groups search
-    - [ ] search form is too high/large, not visible on normal display
+    - [x] search form is too high/large, not visible on normal display
     - [x] many console errors on search (`TypeError: t.response is undefined)
-    - [ ] add overall search field
     - [x] timecourses not depicted in search results
-    - [ ] search component is not scrollable (results & search independent)
-    - [ ] table with scatter
 - [x] download button
     - [x] download results button -> JSON PKDBdata (-> zip) 
 
@@ -57,10 +67,7 @@
 - [x] create a hash for search queries to avoid very long urls  
 
 # General @all
-- [ ] REST API 
-     - [ ] better REST documentation () 
-
-- [ ] Logo & Name in Navigation menu
-- [ ] Update studies in new format
+- [x] Logo & Name in Navigation menu
+- [x] Update studies in new format
 - [ ] manuscript updates
-    -[ ] add contributions of all authors
+    -[x] add contributions of all authors

@@ -98,7 +98,7 @@
         },
         mixins :[UrlMixin],
         props: {
-            study_pks:{
+            study_pks: {
                 type: Array,
             },
             study: {

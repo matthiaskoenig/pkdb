@@ -11,7 +11,7 @@
             append-icon="fa-search"
             label="Search table"
             single-line
-            color="white"
+            color="#1E90FF"
             hide-details
             :autofocus="autofocus"
     />

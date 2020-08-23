@@ -28,6 +28,7 @@
                                  :search="search"
                     />
                 </template>
+
                 <template v-slot:item.subject="{ item }">
                     <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
@@ -78,10 +79,11 @@
                 </template>
 
                 <template v-slot:item.time="{ item }">
-                    {{item.time}}
-                    <span v-if="item.time_unit">[{{ item.time_unit }}]</span>
+
                 </template>
-                <template v-slot:item.value="{ item }"><characteristica-card :data="item"/></template>
+                <template v-slot:item.output="{ item }">
+                  <characteristica-card :data="item"/>
+                </template>
 
             <no-data/>
         </v-data-table>
@@ -108,14 +110,12 @@
                 otype_single: "output",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Measured', value: 'calculated',sortable: false},
+
                     {text: 'Measurement Type', value: 'measurement_type',sortable: false},
+                    {text: 'Measured', value: 'calculated', sortable: false},
                     {text: 'Subjects', value: 'subject',sortable: false},
                     {text: 'Interventions', value: 'interventions',sortable: false},
-                    {text: 'Tissue', value: 'tissue',sortable: false},
-                    {text: 'Time', value: 'time',sortable: false},
-                    {text: 'Value', value: 'value',sortable: false},
-
+                    {text: 'Output', value: 'output', sortable: false},
 
                 ]
             }
