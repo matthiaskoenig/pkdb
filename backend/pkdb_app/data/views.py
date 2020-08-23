@@ -61,7 +61,18 @@ class SubSetViewSet(AccessView):
     pagination_class = CustomPagination
     lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = ("name", "data_type")
+    search_fields = ("name",
+                     "data_type",
+                     "study.sid",
+                     "study.name",
+                     "array.data_points.point.outputs.group.name",
+                     "array.data_points.point.outputs.individual.name",
+                     "array.data_points.point.outputs.interventions.name",
+                     "array.data_points.point.outputs.measurement_type.label",
+                     "array.data_points.point.outputs.choice.label",
+                     "array.data_points.point.outputs.substance.label",
+                     "array.data_points.point.outputs.tissue.label",
+                     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {'operator': 'and'}
     filter_fields = { "name": "name.raw", "data_type":"data_type.raw"}
