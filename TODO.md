@@ -33,7 +33,7 @@
     - [x] selection of single study is not working (example1 of help)
     - [x] why do I get timecourses in search example 2 and 3 (i.e. selection half-life or AUC as output,
     but timecourse results are given) ( the timecourses, which were used to calculate the half-lifes were shown. Now they are not displayed anymore.)
-    - [ ] timcourses cannot be search. add important information to document
+    - [x] timcourses cannot be search. add important information to document
 - [ ] REST API 
      - [ ] better REST documentation ()
 
