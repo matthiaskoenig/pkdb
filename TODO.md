@@ -54,7 +54,7 @@
 - [x] issues sort
 - [x] issues search
     - [x] no nested components, select choices and measurement types;
-    - [ ] display info node information for choices
+    - [x] display info node information for choices
     - [x] example for filling the search component with data (Intervention: substance=midazolam; Group: homo sapiens; )
     - [x] update information on full selection (not only info button)
     - [x] selection of choices not working (not visible and not selectable easily)
