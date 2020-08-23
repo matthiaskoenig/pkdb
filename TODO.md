@@ -25,6 +25,8 @@
     - [x] Fix: select study options are all uppercase
     - [x] Fix: align groups and individuals button next to each other (to save space)
     - [ ] Fix: add filter for outputs/timecourses analoque to groups/individuals
+    - [ ] Fix: donwload button not working
+    - [ ] Fix: spinning wheel while download is displayed at a wrong place
     - [x] selection of single study is not working (example1 of help)
     - [x] why do I get timecourses in search example 2 and 3 (i.e. selection half-life or AUC as output,
     but timecourse results are given) ( the timecourses, which were used to calculate the half-lifes were shown. Now they are not displayed anymore.)

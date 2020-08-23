@@ -122,7 +122,7 @@ common_filter_fields = {
         'unit': 'unit.raw',
         'substance': 'substance.name.raw',
         'output_type': {'field': 'output_type.raw',
-                   'lookups': [LOOKUP_QUERY_IN, ], },
+                   'lookups': [LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE], },
         'substance_sid': {'field': 'substance.sid.raw',
                            'lookups': [LOOKUP_QUERY_IN, ], },
         'measurement_type': 'measurement_type.sid.raw',
