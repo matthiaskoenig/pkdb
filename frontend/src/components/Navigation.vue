@@ -2,7 +2,6 @@
   <span id="navigation">
     <v-app-bar
                class="fixed-nav-bar1"
-
                permanent
                floating
                dark
@@ -109,6 +108,8 @@
         z-index: 9999;
         width: 100%;
         height: 50px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     .logo {

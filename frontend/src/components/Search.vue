@@ -36,26 +36,31 @@
       <v-col xs="12" sm="6" md="4" lg="4">
 
         <!--- Start Search Component -->
-        <v-card flat tile width="100%">
-          <v-row class="mt-3 mb-4" justify="end">
-            <v-btn color="black"
-                   class="ma-2"
-                   small
-                   dark
-                   outlined
-                   @click.stop="show_help">
-              Help
-              <v-icon small>fas fa fa-question</v-icon>
-            </v-btn>
+        <v-card tile width="100%">
+          <v-row no-glutter>
+            <v-col cols="9">
+              <h1>Search</h1>
+            </v-col>
+            <v-col cols="3">
+              <v-btn
+                  x-small
+                  fab flat text
+                  title="Clear search"
+                  v-on:click="reset"
+              >
+                <v-icon small>fas fa fa-trash-alt</v-icon>
+              </v-btn>
+              <v-btn
+                  x-small
+                  fab flat text
+                  title="Search help with examples"
+                  @click.stop="show_help"
+              >
+                <v-icon small>fas fa fa-question</v-icon>
+              </v-btn>
+            </v-col>
 
 
-            <v-btn
-                small
-                class="ma-2"
-                outlined
-                v-on:click="reset">
-              Clear Search
-            </v-btn>
           </v-row>
 
           <v-row justify="end">
@@ -68,10 +73,10 @@
           </v-row>
 
           <v-row class="mt-4 ml-3">
+
             <label class="text-h7 form-label" title="Search and filter data by study information">
               <count-badge text="Studies" :count="results.studies.count"/>
             </label>
-            <v-spacer/>
           </v-row>
 
           <study-search-form/>

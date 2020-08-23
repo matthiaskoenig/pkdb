@@ -1,10 +1,8 @@
 <template>
 
   <v-card
-      class="mx-auto"
-      max-width="1000"
       width="100%"
-      outlined
+      flat
   >
     <v-list-item three-line>
       <v-list-item-content>
