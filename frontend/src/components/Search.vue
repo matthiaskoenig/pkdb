@@ -15,11 +15,11 @@
 
     <v-row><v-col><!-- spacing --></v-col></v-row>
 
-    <v-row align="start" justify="center">
-        <v-col xs="12" sm="6" md="8" lg="8">
+    <v-row align="start" justify="left">
+        <v-col xs="8" sm="8" md="8" lg="8">
 
         <!--- Search Component -->
-        <v-card tile width="100%">
+        <v-card tile flat width="100%">
           <v-row no-glutter>
             <v-col cols="9">
               <h1>Search</h1>
