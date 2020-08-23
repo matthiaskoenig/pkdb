@@ -70,6 +70,9 @@ export default new Router({
             component: Page404
         },
         {
+            path: '/api', redirect: '/api/v1'
+        },
+        {
             path: '*',
             redirect: '/404'
         },
