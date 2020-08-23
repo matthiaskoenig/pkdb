@@ -367,7 +367,7 @@ class PKData(object):
             Prefetch(
                 'interventions',
                 queryset=Intervention.objects.only('id'))).only(
-            'group_id', 'individual_id', "id", "interventions__id", "timecourse__id")
+            'group_id', 'individual_id', "id", "interventions__id", "timecourse__id", "output_type")
 
         #  --- Elastic ---
         if studies_query:
@@ -416,7 +416,7 @@ class PKData(object):
 
         time_loop_start = time.time()
 
-        for output in self.outputs.filter(normed=True).values("study_id","group_id", "individual_id", "id", "interventions__id", "timecourse__id"):
+        for output in self.outputs.filter(normed=True).values("study_id","group_id", "individual_id", "id", "interventions__id", "timecourse__id", "output_type"):
             studies.add(output["study_id"])
             if output["group_id"]:
                 groups.add(output["group_id"])
@@ -424,7 +424,7 @@ class PKData(object):
                 individuals.add(output["individual_id"])
             outputs.add(output["id"])
 
-            if output["timecourse__id"]:
+            if (output["timecourse__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
                 timecourses.add(output["timecourse__id"])
 
             if output["interventions__id"]:
