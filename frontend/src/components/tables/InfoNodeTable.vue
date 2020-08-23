@@ -128,7 +128,7 @@
 
       <template v-slot:item.xrefs="{ item }">
         <span v-for="xref in item.xrefs" :key="xref.url">
-          <xref :xref="xref" />
+          <xref v-bind="xref" />
         </span>
       </template>
 
