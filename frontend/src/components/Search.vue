@@ -72,8 +72,7 @@
           </v-row>
 
           <v-row class="mt-4 ml-3">
-
-            <label class="text-h7 form-label" title="Search and filter data by study information">
+            <label class="text-subtitle-1 form-label" title="Search and filter data by study information">
               <count-badge text="Studies" :count="results.studies.count"/>
             </label>
           </v-row>
@@ -81,7 +80,7 @@
           <study-search-form/>
           <v-row class="mt-4 ml-3">
 
-            <label class=" text-h7 form-label" title="Search and filter data by subjects">
+            <label class=" text-subtitle-1 form-label" title="Search and filter data by subjects">
               <count-badge text="Groups" :count="results.groups.count"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
               <count-badge text="Individuals" :count="results.individuals.count"/>
@@ -93,14 +92,14 @@
           />
           <v-row class="mt-4 ml-3">
 
-            <label class="text-h7 form-label" title="Search and filter data by intervention">
+            <label class="text-subtitle-1 form-label" title="Search and filter data by intervention">
               <count-badge text="Interventions" :count="results.interventions.count"/>
             </label>
           </v-row>
 
           <intervention-form/>
           <v-row class="mt-4 ml-3">
-            <label class="text-h7 form-label" title="Search and filter data by outputs">
+            <label class="text-subtitle-1 form-label" title="Search and filter data by outputs">
               <count-badge text="Outputs" :count="results.outputs.count"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
               <count-badge text="Timecourses" :count="results.timecourses.count"/>
