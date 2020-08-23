@@ -40,7 +40,8 @@
             <v-col cols="9">
               <h1>Search</h1>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="3" justify="end">
+
               <v-btn
                   x-small
                   fab text
@@ -57,18 +58,12 @@
               >
                 <v-icon small>fas fa fa-question</v-icon>
               </v-btn>
+              <v-progress-circular
+                  indeterminate
+                  color="primary"
+                  v-if="loading"
+              ></v-progress-circular>
             </v-col>
-
-
-          </v-row>
-
-          <v-row justify="end">
-            <v-progress-circular
-                indeterminate
-                color="primary"
-                v-if="loading"
-            ></v-progress-circular>
-
           </v-row>
 
           <v-row class="mt-4 ml-3">
