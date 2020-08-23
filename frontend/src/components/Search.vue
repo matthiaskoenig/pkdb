@@ -1,22 +1,39 @@
 <template>
   <v-card flat width="100%">
 
-    <v-row>
-      <v-btn title="Go to results"
-             color="#1E90FF"
-             :disabled="results.studies.count==0"
-             width="100%"
-             to="/data"
-      >
+    <v-row no-gutters>
+      <v-col cols="10">
+
+        <v-btn title="Go to results"
+               color="#1E90FF"
+               :disabled="results.studies.count==0"
+               width="100%"
+               to="/data"
+        >
         <span v-if="results.studies.count!=0">
           <v-icon left small>{{ faIcon('data') }}</v-icon> Results
         </span>
-      </v-btn>
+        </v-btn>
+      </v-col>
+      <v-col cols="2">
+        <v-btn
+            @click="downloadData"
+            :loading="loadingDownload"
+            :disabled="loadingDownload"
+            width="100%"
+            text
+            flat
+            title="Download current results"
+        >
+          <v-icon small left>{{ faIcon('download') }}</v-icon>
+          Download
+        </v-btn>
+      </v-col>
     </v-row>
 
 
-      <v-row align="start" justify="center">
-        <v-col xs="12" sm="6" md="4" lg="4">
+    <v-row align="start" justify="center">
+      <v-col xs="12" sm="6" md="4" lg="4">
 
         <!--- Start Search Component -->
         <v-card flat tile width="100%">
@@ -31,17 +48,6 @@
               <v-icon small>fas fa fa-question</v-icon>
             </v-btn>
 
-            <v-btn
-                @click="downloadData"
-                :loading="loadingDownload"
-                :disabled="loadingDownload"
-                small
-                outlined
-                class="ma-2"
-            >
-              Download
-              <v-icon small right dark>{{ faIcon('download') }}</v-icon>
-            </v-btn>
 
             <v-btn
                 small
@@ -101,7 +107,7 @@
 
         <!--- End Search Component -->
       </v-col>
-        <v-col xs="12" sm="6" md="8" lg="8">
+      <v-col xs="12" sm="6" md="8" lg="8">
 
         <info-node-detail
             v-model="display_detail"
@@ -129,9 +135,10 @@ import InfoNodeDetail from "./detail/InfoNodeDetail";
 import SearchHelp from "./search/SearchHelp";
 import StudyOverview from "./detail/StudyOverview";
 import {searchTableMixin} from "./tables/mixins";
+import {SearchMixin} from "../search";
 
 export default {
-  mixins: [searchTableMixin],
+  mixins: [searchTableMixin, SearchMixin],
   name: 'Search',
   components: {
     CountBadge,
@@ -145,47 +152,6 @@ export default {
     OutputForm,
   },
   computed: {
-    url_download() {
-      return this.url + "&" + "download=true"
-    },
-    url() {
-      /* Create the search query url.*/
-      let url = this.resource_url
-
-      for (const [key, value] of Object.entries(this.$store.state.queries)) {
-        if (value.length > 0) {
-
-          url = url + "&" + key + "=" + value.map(i => i.sid).join("__")
-        }
-      }
-      for (const [key, value] of Object.entries(this.$store.state.queries_users)) {
-        if (value.length > 0) {
-
-          url = url + "&" + key + "=" + value.map(i => i.username).join("__")
-        }
-      }
-      for (const [key, value] of Object.entries(this.$store.state.subjects_queries)) {
-        // handle groups
-
-        if (this.$store.state.subjects_boolean.groups_query) {
-          if (value.length > 0) {
-            url = url + "&" + "groups__" + key + "=" + value.map(i => i.sid).join("__")
-          }
-        } else {
-          url = url + "&" + "groups__" + key + "=0"
-        }
-
-        // handle individuals
-        if (this.$store.state.subjects_boolean.individuals_query) {
-          if (value.length > 0) {
-            url = url + "&" + "individuals__" + key + "=" + value.map(i => i.sid).join("__")
-          }
-        } else {
-          url = url + "&" + "individuals__" + key + "=0"
-        }
-      }
-      return url
-    },
     display_detail() {
       return this.$store.state.detail_display
     },
@@ -197,7 +163,6 @@ export default {
       return this.$store.state.show_type
     }
   },
-
   methods: {
     reset() {
       this.$store.commit('resetQuery');
@@ -221,7 +186,7 @@ export default {
       if (localStorage.getItem('token')) {
         headers = {Authorization: 'Token ' + localStorage.getItem('token')}
       }
-      axios.get(this.url, {headers: headers})
+      axios.get(this.search_url, {headers: headers})
           .then(res => {
             this.results = res.data
             // store results in store
@@ -233,25 +198,6 @@ export default {
           })
           .finally(() => this.loading = false);
     },
-    downloadData() {
-      this.loadingDownload = true
-      let headers = {};
-      if (localStorage.getItem('token')) {
-        headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-      }
-
-      axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
-          .then(response => {
-            let blob = new Blob([response.data], {type: 'application/zip'}),
-                url = window.URL.createObjectURL(blob)
-            window.open(url)
-          })
-          .catch(err => {
-            console.log(err.response.data);
-            this.loadingDownload = false
-          })
-          .finally(() => this.loadingDownload = false);
-    }
   },
   data() {
     return {
@@ -268,31 +214,8 @@ export default {
       otype_single: "pkdata",
     }
   }
-
 }
-
 </script>
 
-<style>
-.form-label {
-}
-
-
-.main {  width: 100%;}
-.search-content {
-  margin-top: 80px;
-}
-
-.results-content {
-  margin-top: 50px;
-}
-
-.mousescroll {
-  overflow-y: scroll;
-  height: 100%;
-}
-
-.mousescroll:hover {
-  overflow-y: scroll;
-}
+<style scoped>
 </style>

@@ -84,9 +84,9 @@ export default new Vuex.Store({
 
         // search queries
         queries: initial_queries,
-        subjects_boolean:initial_subjects_boolean,
-        subjects_queries:initial_subjects_queries,
-        queries_users:initial_queries_users,
+        subjects_boolean: initial_subjects_boolean,
+        subjects_queries: initial_subjects_queries,
+        queries_users: initial_queries_users,
 
         // search results (synchronization between search & results)
         results: {
