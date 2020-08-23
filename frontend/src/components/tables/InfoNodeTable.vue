@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <v-card flat width="100%">
     <v-col class="d-flex" cols="12" sm="6">
       <!--
       <v-select
@@ -134,7 +134,7 @@
 
       <no-data/>
     </v-data-table>
-  </div>
+  </v-card>
 </template>
 
 <script>
