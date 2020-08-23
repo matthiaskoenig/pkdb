@@ -26,6 +26,8 @@ let SearchMixin = {
             /** Calculates the search url based on current state in store.. */
             let url = this.$store.state.endpoints.api  + 'pkdata/?format=json'
 
+            var output_type__in = new Set(["output", "timecourse", "array"]);
+            var filter_output_type = false
             for (const [key, value] of Object.entries(this.$store.state.queries)) {
                 if (value.length > 0) {
 
@@ -58,11 +60,25 @@ let SearchMixin = {
                     url = url + "&" + "individuals__" + key + "=0"
                 }
             }
+
             if (! this.$store.state.queries_output_types.timecourse_query) {
-                    url = url + "&" + "outputs__output_type__exclude=timecourse"
+                filter_output_type =true
+                output_type__in.delete("timecourse")
+
+
                 }
             if (! this.$store.state.queries_output_types.output_query) {
-                url = url + "&outputs__output_type__exclude=output&outputs__output_type__exclude=array"
+                filter_output_type =true
+                output_type__in.delete("output")
+                output_type__in.delete("array")
+
+            }
+            if(filter_output_type) {
+                if ([...output_type__in].length === 0) {
+                    url = url + "&" + "outputs__output_type__in=0"
+                } else {
+                    url = url + "&" + "outputs__output_type__in=" + [...output_type__in].join("__")
+                }
             }
             return url
         },

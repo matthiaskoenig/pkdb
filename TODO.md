@@ -24,7 +24,7 @@
     already selected in other fields examples are not working)
     - [x] Fix: select study options are all uppercase
     - [x] Fix: align groups and individuals button next to each other (to save space)
-    - [ ] Fix: add filter for outputs/timecourses analoque to groups/individuals
+    - [x] Fix: add filter for outputs/timecourses analoque to groups/individuals
     - [ ] Fix: donwload button not working
     - [ ] Fix: spinning wheel while download is displayed at a wrong place
     - [x] selection of single study is not working (example1 of help)
