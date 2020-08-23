@@ -141,9 +141,13 @@ export default {
   },
   methods: {
     query(example) {
+      this.reset()
       for (let q of example) {
         this.update_store(q)
       }
+    },
+    reset() {
+      this.$store.commit('resetQuery');
     },
     update_store(q) {
       this.$store.dispatch('updateQueryAction', {
