@@ -8,7 +8,7 @@ let SearchMixin = {
             if (localStorage.getItem('token')) {
                 headers = {Authorization: 'Token ' + localStorage.getItem('token')}
             }
-            axios.get(this.search_url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
+            axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
                 .then(response => {
                     let blob = new Blob([response.data], {type: 'application/zip'}),
                         url = window.URL.createObjectURL(blob)
