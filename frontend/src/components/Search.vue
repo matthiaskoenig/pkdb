@@ -3,7 +3,7 @@
 
     <v-row no-gutters>
       <v-col cols="10">
-
+        <!-- Top search bar (see also data bar) -->
         <v-btn title="Go to results"
                color="#1E90FF"
                :disabled="results.studies.count==0"
@@ -34,7 +34,7 @@
     <v-row align="start" justify="center">
       <v-col xs="12" sm="6" md="4" lg="4">
 
-        <!--- Start Search Component -->
+        <!--- Search Component -->
         <v-card tile width="100%">
           <v-row no-glutter>
             <v-col cols="9">
@@ -161,7 +161,6 @@ export default {
     detail_info() {
       return this.$store.state.detail_info
     },
-
     show_type() {
       return this.$store.state.show_type
     }
@@ -176,7 +175,6 @@ export default {
     show_help() {
       this.$store.state.show_type = 'help'
       this.$store.state.detail_display = true
-
     },
     update_search_query(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {

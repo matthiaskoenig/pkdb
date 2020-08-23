@@ -7,6 +7,7 @@
           pill
           small
           :title="'Show ' + name + ' details'"
+          @mouseover="mousover"
   >
     <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
     <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
@@ -30,6 +31,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {lookupIcon} from "@/icons"
 
 export default {
@@ -85,7 +87,43 @@ export default {
       return lookupIcon(this.otype)
     },
   },
-  methods: {}
+  data() {
+    return {
+      data: null,
+      exists: false,
+    }
+  },
+  methods: {
+    mousover(){
+      this.getData()
+    },
+    getData() {
+      if ("sid" in this.object && "label" in this.object){
+        // object is an InfoNode
+        let entry_id = (this.$route.path).split('/').slice(-1)[0];
+        let url = `${this.$store.state.endpoints.api}info_nodes/${entry_id}/?format=json`;
+
+        // get data (FIXME: caching of InfoNodes in store)
+        axios.get(url)
+            .then(response => {
+              this.data = response.data;
+              this.exists = true;
+              this.$store.state.data_info = this.data
+              this.$store.state.data_info_type = "info_node"
+            })
+            .catch(err => {
+              console.log(err.response.data);
+              this.exists = false;
+            })
+            .finally(() => this.loading = false);
+
+      }
+
+    },
+  },
+  mounted() {
+
+  },
 }
 </script>
 

@@ -98,9 +98,9 @@
                     {text: 'Study', value: 'study', sortable: false},
                     {text: 'Counts', value: 'counts', sortable: false},
                     {text: 'Reference', value: 'reference', sortable: false},
-                    {text: 'Substances', value: 'substances', sortable: false},
-                    {text: 'Creator', value: 'creator',sortable: false},
-                    {text: 'Curators', value: 'curators', sortable: false},
+                  {text: 'Curators', value: 'curators', sortable: false},
+                  {text: 'Substances', value: 'substances', sortable: false},
+                    // {text: 'Creator', value: 'creator',sortable: false},
 
                 ],
             }

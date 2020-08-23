@@ -77,10 +77,13 @@ export default new Vuex.Store({
     state: {
 
         //for search detail display
-
         detail_display: false,
         detail_info: {},
         show_type: "help",
+
+        // for data detail display
+        data_info: {},
+        data_info_type: "study",
 
         // search queries
         queries: initial_queries,
