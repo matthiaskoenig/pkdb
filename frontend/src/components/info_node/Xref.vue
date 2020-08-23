@@ -2,7 +2,6 @@
   <!-- FIXME: add search highlight -->
   <v-chip
           class="ma-1"
-          color="#FFFFFF"
           flat
           pill
           small
