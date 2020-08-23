@@ -95,7 +95,8 @@ export default {
   },
   methods: {
     mousover(){
-      this.getData()
+      //this.getData()
+      console.log("Mouseover info node")
     },
     getData() {
       if ("sid" in this.object && "label" in this.object){
