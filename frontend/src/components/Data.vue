@@ -1,9 +1,7 @@
 <template>
   <v-card flat width="100%">
 
-    <v-row no-gutters>
-      <!-- Top data bar (see also search bar) -->
-      <v-col cols="8">
+    <div class="search-navbar" style="left:0px; width: 65%">
         <v-btn title="Go to search"
                color="#41b883"
                width="100%"
@@ -12,9 +10,9 @@
           <v-icon left small>{{ faIcon('search') }}</v-icon>
           Search
         </v-btn>
-      </v-col>
-    </v-row>
+    </div>
 
+    <v-row><v-col><!-- spacing --></v-col></v-row>
 
     <v-row align="start" justify="center">
 
@@ -63,19 +61,23 @@
             width="35%"
             height="100%"
         >
-          <v-card flat style="padding-top: 50px">
+          <v-card flat style="padding-top: 100px">
+            <div class="search-navbar" style="left:0; width:95%; background-color: white;">
 
-            <v-btn
+            <v-btn v-if="results.studies.count>0"
                 @click="downloadData"
                 :loading="loadingDownload"
                 :disabled="loadingDownload"
+                color="#000000"
                 text
+
                 width="100%"
                 title="Download current results"
             >
-              <v-icon small left color="#1E90FF">{{ faIcon('download') }}</v-icon>
+              <v-icon small left>{{ faIcon('download') }}</v-icon>
               Download
             </v-btn>
+            </div>
             <info-node-detail
                 v-model="data_info"
                 v-if="data_info_type === 'info_node'"
