@@ -30,10 +30,11 @@
     <v-card-title>
       Search examples
     </v-card-title>
+
     <v-card-text>
       <v-btn text
              small
-             v-on:click="query(example2)"
+             v-on:click="query(example1)"
       >
         <v-icon left small color="#41b883">{{ faIcon('search') }}</v-icon>  Example 1
       </v-btn>
@@ -73,19 +74,18 @@ export default {
   },
   methods:{
     query(example){
-      for (var q of example){
+      for (let q of example){
         this.update_store(q)
       }
     },
     update_store(q){
       this.$store.dispatch('updateQueryAction', {
-        query_type:q.query_type,
+        query_type: q.query_type,
         key: q.key,
         value: q.value,
       })
     }
-    },
-
+  },
 }
 
 </script>

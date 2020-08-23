@@ -22,7 +22,7 @@ let SearchMixin = {
         }
     },
     computed: {
-        search_url() {
+        url() {
             /** Calculates the search url based on current state in store.. */
             let url = this.$store.state.endpoints.api  + 'pkdata/?format=json'
 

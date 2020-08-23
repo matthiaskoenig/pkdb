@@ -190,7 +190,7 @@ export default {
       if (localStorage.getItem('token')) {
         headers = {Authorization: 'Token ' + localStorage.getItem('token')}
       }
-      axios.get(this.search_url, {headers: headers})
+      axios.get(this.url, {headers: headers})
           .then(res => {
             this.results = res.data
             // store results in store
