@@ -29,12 +29,25 @@
         },
         methods: {
             f_sort : function(a, b) {
-                if (a.measurement_type > b.measurement_type) {
+                if (a.choice.label && !b.choice.label){
+                  return 1
+                } else if (!a.choice.label && b.choice.label) {
+                  return -1
+                } else if (a.choice.label && b.choice.label) {
+                  if (a.choice.label > b.choice.label) {
                     return 1;
-                } else if (a.measurement_type < b.measurement_type) {
+                  } else if (a.choice.label < b.choice.label) {
                     return -1;
+                  }
+                } else if (!a.choice.label && !b.choice.label){
+                if (a.measurement_type.label > b.measurement_type.label) {
+                  return 1;
+                } else if (a.measurement_type.label < b.measurement_type.label) {
+                  return -1;
                 }
                 return 0;
+              }
+
             },
         },
         computed: {

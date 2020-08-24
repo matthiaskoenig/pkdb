@@ -1,7 +1,8 @@
 from collections import namedtuple
 
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
-    OrderingFilterBackend, MultiMatchSearchFilterBackend
+    OrderingFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from rest_framework import viewsets
 
@@ -9,7 +10,7 @@ from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer, InfoNodeSerializer
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.users.permissions import IsAdminOrCreator
+from rest_framework.permissions import IsAdminUser
 
 NT = namedtuple("NodeType", ["model", "serializer", "fields"])
 
@@ -22,7 +23,7 @@ MEASUREMENT_TYPE_EXTRA = ["units"]
 
 
 class InfoNodeViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAdminOrCreator,)
+    permission_classes = (IsAdminUser,)
     lookup_field = "url_slug"
     serializer_class = InfoNodeSerializer
     queryset = InfoNode.objects.all()
@@ -39,25 +40,36 @@ class InfoNodeElasticViewSet(DocumentViewSet):
     pagination_class = CustomPagination
     document = InfoNodeDocument
     serializer_class = InfoNodeElasticSerializer
-    document_uid_field = "url_slug__raw"
-    lookup_field = 'url_slug'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    document_uid_field = "sid__raw"
+    lookup_field = 'sid'
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, SearchFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         "sid",
         "name",
         "description",
         "url_slug",
         "dtype",
+
+
         "ntype",
         "units",
+
         "annotations.name",
         "annotations.description",
         "annotations.label",
+        "annotations.url",
+
+        "xrefs.name",
+        "xrefs.accession",
+        "xrefs.url",
+
         "measurement_type.choices.name",
         "measurement_type.choices.description",
         "measurement_type.choices.annotations.name",
         "measurement_type.choices.annotations.description",
-        "measurement_type.choices.annotations.label"
+        "measurement_type.choices.annotations.label",
+
+        "synonyms.name",
         "substance.mass",
         "substance.formula",
         "substance.charge",
@@ -66,5 +78,10 @@ class InfoNodeElasticViewSet(DocumentViewSet):
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw', "ntype": "ntype.raw"}
+    filter_fields = {
+        'name': 'name.raw',
+        "ntype": "ntype.raw",
+        'dtype': {'field': 'dtype.raw',
+                                 'lookups': [LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE], },
+    }
     ordering_fields = {'name': 'name', "dtype": "dtype"}

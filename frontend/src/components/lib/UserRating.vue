@@ -1,6 +1,6 @@
 <template>
     <span id="user-rating">
-         <v-chip outlined
+         <v-chip flat
                  color="white"
          >
           <user-avatar :user="user"/>
@@ -10,7 +10,7 @@
                        dense
                        half-increments
                        value
-                       small
+                       x-small
                        readonly
              />
         </v-chip>

@@ -4,14 +4,7 @@
         <!-- navigation bar -->
         <div class="study-navbar">
             <a @click="scrollMeTo('overview')">
-            <v-chip color="black"
-                    label
-                    outlined
-            >
-                <v-icon color="black">{{ faIcon('study') }}</v-icon>
-                <span class="heading-title">&nbsp;{{ study.sid }}</span>
-
-            </v-chip>
+              <count-chip :count="study.study_count ? study.study_count: 1" icon="study" name="study"></count-chip>
             </a>
 
             <a @click="scrollMeTo('groups')">
@@ -29,7 +22,7 @@
             <a @click="scrollMeTo('timecourses')">
                 <count-chip :count="study.timecourse_count" icon="timecourse" name="timecourse"></count-chip>
             </a>
-            <JsonButton :resource_url="resource_url"/>
+
         </div>
 
         <!-- study content -->
@@ -46,21 +39,21 @@
                 <v-flex ref="groups" xs12 v-show="visible.groups">
                     <count-chip :count="study.group_count" icon="group" name="group"></count-chip>
                     <annotations  v-if="study.groupset" :item="study.groupset"/>
-                    <groups-table  v-if="study.group_count>0" :ids="study.groupset.groups" :autofocus="false"/>
+                    <groups-table  v-if="study.group_count>0" :search_ids="true" :ids="study.groupset.groups" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Individuals -->
                 <v-flex  ref="individuals" xs12 v-show="visible.individuals">
                     <count-chip :count="study.individual_count" icon="individual" name="individual"></count-chip>
                     <annotations v-if="study.individualset" :item="study.individualset"/>
-                    <individuals-table v-if="study.individual_count>0" :ids="study.individualset.individuals" :autofocus="false"/>
+                    <individuals-table v-if="study.individual_count>0" :search_ids="true" :ids="study.individualset.individuals" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Interventions -->
                 <v-flex  ref="interventions" xs12 v-show="visible.interventions">
                     <count-chip :count="study.intervention_count" icon="intervention" name="intervention"></count-chip>
                     <annotations v-if="study.interventionset" :item="study.interventionset"/>
-                    <interventions-table v-if="study.intervention_count>0" :ids="study.interventionset.interventions" :autofocus="false"/>
+                    <interventions-table v-if="study.intervention_count>0"  :search_ids="true" :ids="study.interventionset.interventions" :autofocus="false"/>
                 </v-flex>
 
                 <!-- Outputs -->
@@ -68,11 +61,11 @@
                     <annotations  v-if="study.outputset" :item="study.outputset"/>
                     <span ref="outputs"></span>
                     <count-chip :count="study.output_count" icon="output" name="output"></count-chip>
-                    <outputs-table v-if="study.output_count>0" v-show="visible.outputs" :ids="study.outputset.outputs" :autofocus="false"/>
+                    <outputs-table v-if="study.output_count>0" v-show="visible.outputs"  :search_ids="true" :ids="study.outputset.outputs" :autofocus="false"/>
                     <br />
                     <span ref="timecourses"></span>
                     <count-chip :count="study.timecourse_count" icon="timecourse" name="timecourse"></count-chip>
-                    <timecourses-table v-if="study.timecourse_count>0" v-show="visible.timecourses" :ids="study.outputset.timecourses" :autofocus="false"/>
+                    <timecourses-table v-if="study.timecourse_count>0" v-show="visible.timecourses" :search_ids="true" :ids="study.dataset.subsets" :autofocus="false"/>
                 </v-flex>
             </v-layout>
         </div>
@@ -105,7 +98,7 @@
         },
         mixins :[UrlMixin],
         props: {
-            study_pks:{
+            study_pks: {
                 type: Array,
             },
             study: {

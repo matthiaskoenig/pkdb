@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
@@ -66,10 +66,10 @@
                 otype_single: "group",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Name', value: 'name'},
+                    {text: 'Name', value: 'name',  sortable: false},
 
                     // {text: 'Parent', value: 'parent'},
-                    {text: 'Characteristica', value: 'characteristica'},
+                    {text: 'Characteristica', value: 'characteristica', sortable: false},
                 ]
             }
         },

@@ -5,7 +5,7 @@
            dark
            x-small
            text
-           color="black"
+           color="blue"
            :href="resource_url"
            :disabled="resource_url ? false : true"
            title="JSON for query"

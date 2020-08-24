@@ -29,5 +29,3 @@ npm run lint
 ```
 npm run test:unit
 ```
-
-&copy; 2017-2019 Jan Grzegorzewski & Matthias König.

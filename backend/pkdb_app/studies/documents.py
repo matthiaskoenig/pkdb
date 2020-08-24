@@ -38,7 +38,6 @@ def common_setfields(model, attr=None):
         }
     )
 
-
 # ------------------------------------
 # Elastic Reference Document
 # ------------------------------------
@@ -48,19 +47,19 @@ class ReferenceDocument(Document):
     pk = fields.IntegerField(attr='pk')
     sid = string_field(attr='sid')
     pmid = string_field(attr='pmid')
-    study = study_field
+    study = study_field,
     name = string_field("name")
     doi = string_field("doi")
     title = string_field("title")
     abstract = text_field("abstract")
     journal = text_field("journal")
     date = fields.DateField()
-
-    authors = ObjectField(properties={
-        'pk': fields.IntegerField(),
-        'first_name': string_field("first_name"),
-        'last_name': string_field("last_name"),
-    })
+    authors = ObjectField(
+        properties={
+                       'pk': fields.IntegerField(),
+                       'first_name': string_field("first_name"),
+                       'last_name': string_field("last_name"),
+                   })
 
     class Django:
         model = Reference
@@ -81,8 +80,8 @@ class ReferenceDocument(Document):
 
 @registry.register_document
 class StudyDocument(Document):
-    id = fields.TextField(attr='sid')
-    pk = fields.TextField(attr='sid')
+    #id = fields.TextField(attr='sid')
+    pk = fields.IntegerField()
     sid = string_field(attr='sid')
     name = string_field("name")
     licence = string_field("licence")
@@ -97,7 +96,9 @@ class StudyDocument(Document):
     intervention_count = fields.IntegerField()
     output_count = fields.IntegerField()
     output_calculated_count = fields.IntegerField()
+    subset_count = fields.IntegerField()
     timecourse_count = fields.IntegerField()
+    scatter_count = fields.IntegerField()
 
     creator = fields.ObjectField(
         properties={
@@ -109,9 +110,23 @@ class StudyDocument(Document):
     )
     reference = ObjectField(
         properties={
-            'pk': fields.IntegerField(attr='pk'),
-            'sid': string_field(attr='sid'),
-            'name': string_field(attr="name"),
+            "pk": fields.IntegerField(attr='pk'),
+            "sid": string_field(attr='sid'),
+            "pmid": string_field(attr='pmid'),
+            "study": study_field,
+            "name": string_field("name"),
+            "doi": string_field("doi"),
+            "title": string_field("title"),
+            "abstract": text_field("abstract"),
+            "journal": text_field("journal"),
+            "date": fields.DateField(),
+
+            "authors": ObjectField(
+                properties={
+                               'pk': fields.IntegerField(),
+                               'first_name': string_field("first_name"),
+                               'last_name': string_field("last_name"),
+                           })
         }
     )
     reference_date = fields.DateField()
@@ -158,12 +173,6 @@ class StudyDocument(Document):
                 fields={
                     'raw': fields.KeywordField(),
                 }
-            ),
-            'timecourses': ObjectField(
-                properties={
-                    'pk': fields.IntegerField(multi=True),
-                },
-                multi=True
             )
         },
         multi=True
@@ -182,15 +191,11 @@ class StudyDocument(Document):
                 properties={
                     "pk": fields.FloatField(),
                 }
-            ),
-            "timecourses": ObjectField(
-                attr="timecourses_normed",
-                properties={
-                    "pk": fields.FloatField(),
-                }
-            ),
+            )
         }
     )
+    dataset = common_setfields("subsets")
+
 
     class Django:
         model = Study

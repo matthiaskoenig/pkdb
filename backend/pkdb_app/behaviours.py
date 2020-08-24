@@ -19,12 +19,12 @@ class Sidable(models.Model):
 class Externable(models.Model):
     # format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     subset_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     source_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    figure_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+    image_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True
+
 
 class Accessible(models.Model):
     class Meta:
@@ -93,19 +93,6 @@ class ValueableNotBlank(models.Model):
     se = models.FloatField(null=True)
     cv = models.FloatField(null=True)
     unit = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    class Meta:
-        abstract = True
-
-
-class ExMeasurementTypeable(ValueableNotBlank, ValueableMapNotBlank):
-    measurement_type = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    measurement_type_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-
-    choice = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    choice_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    substance = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
-    substance_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     class Meta:
         abstract = True

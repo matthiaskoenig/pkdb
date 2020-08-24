@@ -1,5 +1,5 @@
 <template>
-    <v-card>
+    <v-card flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 :headers="headers"
@@ -52,13 +52,13 @@
                 otype_single: "reference",
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
-                    {text: 'Sid', value: 'sid'},
-                    {text: 'Pmid', value: 'pmid'},
-                    {text: 'Name', value: 'name'},
-                    {text: 'Title', value: 'title'},
-                    {text: 'Journal', value: 'journal'},
-                    {text: 'Date', value: 'date'},
-                    {text: 'Abstract', value: 'abstract'},
+                    {text: 'Sid', value: 'sid',sortable: false},
+                    {text: 'Pmid', value: 'pmid',sortable: false},
+                    {text: 'Name', value: 'name',sortable: false},
+                    {text: 'Title', value: 'title',sortable: false},
+                    {text: 'Journal', value: 'journal',sortable: false},
+                    {text: 'Date', value: 'date',sortable: false},
+                    {text: 'Abstract', value: 'abstract',sortable: false},
                 ]
             }
         },

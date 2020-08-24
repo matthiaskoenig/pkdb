@@ -6,10 +6,9 @@ How is different from things which will be measured?
 From the data structure this has to be handled very similar.
 """
 
-from django.apps import apps
 from django.db import models
 
-from pkdb_app.behaviours import Normalizable, ExMeasurementTypeable
+from pkdb_app.behaviours import Normalizable
 from .managers import (
     IndividualManager,
     GroupManager,
@@ -46,12 +45,6 @@ class DataFile(models.Model):
     def name(self):
         return self.file.name
 
-    @property
-    def timecourses(self):
-        Timecourse = apps.get_model('outputs', 'Timecourse')
-        tc = Timecourse.objects.filter(ex__in=self.f_timecourse_exs.all()).filter(normed=True)
-        return tc
-
     def __str__(self):
         return self.file.name
 
@@ -82,13 +75,15 @@ class GroupEx(Externable):
     Groups are defined via their characteristica.
     A group can be a subgroup of another group via the parent field.
     """
+    groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     source = models.ForeignKey(
         DataFile, related_name="s_group_exs", null=True, on_delete=models.SET_NULL
     )
-    figure = models.ForeignKey(
-        DataFile, related_name="f_group_exs", null=True, on_delete=models.SET_NULL
+    image = models.ForeignKey(
+        DataFile, related_name="i_group_exs", null=True, on_delete=models.SET_NULL
     )
+
     groupset = models.ForeignKey(
         GroupSet, on_delete=models.CASCADE, null=True, related_name="group_exs"
     )
@@ -127,8 +122,8 @@ class Group(Accessible):
         return self.ex.source
 
     @property
-    def figure(self):
-        return self.ex.figure
+    def image(self):
+        return self.ex.image
 
     @property
     def parents(self):
@@ -182,9 +177,9 @@ class IndividualEx(Externable):
     This contains maps and splittings.
     Individuals are defined via their characteristics, analogue to groups.
     """
-
+    groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
-    figure = models.ForeignKey(DataFile, related_name="f_individual_exs", null=True, on_delete=models.SET_NULL)
+    image = models.ForeignKey(DataFile, related_name="i_individual_exs", null=True, on_delete=models.SET_NULL)
     individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
 
     @property
@@ -224,8 +219,8 @@ class Individual(AbstractIndividual, Accessible):
         return self.ex.source
 
     @property
-    def figure(self):
-        return self.ex.figure
+    def image(self):
+        return self.ex.image
 
     @property
     def _characteristica_normed(self):

@@ -5,7 +5,7 @@
         >
             {{ icon }}
         </v-icon>&nbsp;
-        <v-badge v-if="count" right color="red">
+        <v-badge v-if="count" right color="black">
             <span slot="badge">{{ count }}</span>
             <span class="heading-title">{{ title }}</span>
         </v-badge>&nbsp;

@@ -35,12 +35,81 @@ const vuexLocalStorage = new VuexPersist({
     })
 });
 
+// Initial search values
+const initial_queries = {
+    //studies
+    studies__sid__in: [],
+
+    // interventions
+    interventions__substance_sid__in: [],
+    interventions__route_sid__in: [],
+    interventions__measurement_type_sid__in: [],
+    interventions__application_sid__in: [],
+    interventions__form_sid__in: [],
+
+    // outputs
+    outputs__substance_sid__in: [],
+    outputs__tissue_sid__in: [],
+    outputs__measurement_type_sid__in: [],
+    outputs__method_sid__in: [],
+}
+const initial_queries_users =
+    {
+    studies__creator__in: [],
+    studies__curators__in: [],
+    }
+const initial_subjects_boolean =
+    {
+        groups_query: true,
+        individuals_query: true,
+    }
+const initial_output_types =
+    {
+        timecourse_query :true,
+        output_query:true,
+    }
+const initial_subjects_queries = {
+    choice_sid__in: [],
+    measurement_type_sid__in: [],
+}
+
 /** --------------------------------------------------------------
  *  Vuex store
  *  -------------------------------------------------------------- */
 export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
+
+        //for search detail display
+        detail_display: false,
+        detail_info: {},
+        show_type: "help",
+
+        // for data detail display
+        data_info: {},
+        data_info_type: "study",
+
+        // search queries
+        queries: initial_queries,
+        subjects_boolean: initial_subjects_boolean,
+        subjects_queries: initial_subjects_queries,
+        queries_users: initial_queries_users,
+        queries_output_types: initial_output_types,
+
+        // search results (synchronization between search & results)
+        results: {
+            studies: {"hash": "", "count": 0},
+            interventions: {"hash": "", "count": 0},
+            groups: {"hash": "", "count": 0},
+            individuals: {"hash": "", "count": 0},
+            outputs: {"hash": "", "count": 0},
+            timecourses: {"hash": "", "count": 0},
+        },
+
+        // global highlighting
+        highlight:  "",
+
+        // API
         django_domain: backend_domain,
 
         endpoints: {
@@ -52,11 +121,22 @@ export default new Vuex.Store({
             request_password_reset: backend_domain + '/accounts/request-password-reset/',
             password_reset: backend_domain + '/accounts/reset-password/',
         },
-
         username: localStorage.getItem('username'),
         token: localStorage.getItem('token'),
     },
     mutations: {
+        resetQuery(state){
+            Object.assign(state.queries,  initial_queries)
+            Object.assign(state.subjects_boolean,  initial_subjects_boolean)
+            Object.assign(state.subjects_queries,  initial_subjects_queries)
+            Object.assign(state.queries_users,  initial_queries_users)
+            Object.assign(state.queries_output_types, initial_output_types)
+        },
+        // update search
+        updateQuery (state, obj) {
+            state[obj.query_type][obj.key] = obj.value
+        },
+
         setToken(state, token) {
             localStorage.setItem('token', token);
             state.token = token;
@@ -84,5 +164,10 @@ export default new Vuex.Store({
             this.commit('clearToken');
             this.commit('clearUsername');
         },
+        updateQueryAction (context, obj) {
+            this.commit('updateQuery', obj);
+
+        }
+
     }
 })

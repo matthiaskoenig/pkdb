@@ -5,7 +5,9 @@
             <v-chip>
                 <v-icon color="orange" v-if="filetype(file)=='image'" small>{{ faIcon('file_image') }}</v-icon>
                 <v-icon color="blue" v-if="filetype(file)=='data'" small>{{ faIcon('file') }}</v-icon>
+
                 <v-icon color="green" v-if="filetype(file)=='spreadsheet'" small>{{ faIcon('file_excel') }}</v-icon>
+
                 <v-icon color="red" v-if="filetype(file)=='pdf'" small>{{ faIcon('file_pdf') }}</v-icon>
                 <v-icon color="white" v-if="filetype(file)=='other'" small>{{ faIcon('file') }}</v-icon>
                 &nbsp;

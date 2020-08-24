@@ -34,6 +34,7 @@ const icons_table = {
     characteristicas: 'fas fa-ticket-alt',
     characteristica: 'fas fa-ticket-alt',
     curation: 'fas fa-book-reader',
+    data: 'fas fa-database',
     previous: 'fas fa-arrow-left',
     next: 'fas fa-arrow-right',
     star: 'fas fa fa-star',
@@ -43,11 +44,18 @@ const icons_table = {
     closed: 'fab fa-creative-commons-pd',
     open: 'fab fa-creative-commons-pd-alt',
     na: 'fas fa-ban',
+    delete: 'fas fa-times-circle',
     success: 'fas fa-check-circle',
     measurement_type: 'fas fa-heartbeat',
     measurement_types: 'fas fa-heartbeat',
     tissue: 'fas fa-map-marker-alt',
     tissues: 'fas fa-map-marker-alt',
+    search: 'fas fa-search',
+    info: 'fas fa-info-circle',
+    plus: 'fas fa-plus',
+    minus: 'fas fa-minus',
+    download: 'fas fa-file-download',
+
 };
 
 /**
@@ -61,4 +69,12 @@ function lookupIcon(key) {
     }
 }
 
-export {lookupIcon};
+let IconsMixin = {
+    methods: {
+        faIcon: function (key) {
+            return lookupIcon(key)
+        },
+    },
+};
+
+export {lookupIcon, IconsMixin};

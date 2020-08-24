@@ -16,7 +16,7 @@ from pkdb_app.interventions.models import DataFile, Intervention
 from pkdb_app.error_measures import calculate_se, calculate_sd, calculate_cv
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import Group, Individual
-from pkdb_app.utils import recursive_iter, set_keys, create_multiple
+from pkdb_app.utils import recursive_iter, set_keys
 
 ITEM_SEPARATOR = "||"
 ITEM_MAPPER = "=="
@@ -162,7 +162,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return max(n_values)
 
     @staticmethod
-    def interventions_from_string(value):
+    def string_to_list(value):
         if value:
             return [v.strip() for v in str(value).split(",")]
         else:
@@ -182,7 +182,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # create entries by splitting separators
         entries = [dict() for k in range(n)]
 
-        split_by_figure = False
+        split_by_image = False
         number_spit_fields = 0
         for field in entry.keys():
             value = entry[field]
@@ -195,11 +195,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                 if isinstance(value, str):
                     values[k] = value.strip()
-                    if field == "interventions":
-                        values[k] = self.interventions_from_string(value)
+                    if field in ["interventions", "dimensions", "shared"]:
+                        values[k] = self.string_to_list(value)
 
-                    elif field == "figure" and len(values) > 1:
-                        split_by_figure = True
+                    elif field == "image" and len(values) > 1:
+                        split_by_image = True
 
                     if values[k] in NA_VALUES:
                         values[k] = None
@@ -239,9 +239,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
             for k in range(n):
                 entries[k][field] = values[k]
 
-        if split_by_figure and number_spit_fields == 1:
+        if split_by_image and number_spit_fields == 1:
             raise serializers.ValidationError(
-                ["Splitting only on figure is not allowed.", entries]
+                ["Splitting only on image is not allowed.", entries]
             )
 
         return entries
@@ -371,14 +371,28 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if isinstance(entry_value, str):
                         entry_value = entry_value.strip()
 
-                    if keys[0] == "interventions":
-                        entry_value = self.interventions_from_string(entry_value)
+                    if keys[0] in ["interventions", "dimensions", "shared"]:
+                        entry_value = self.string_to_list(entry_value)
                         set_keys(entry_dict, entry_value, *keys[:1])
-
 
                     else:
                         set_keys(entry_dict, entry_value, *keys)
         return entry_dict
+
+    def _groupby_with_list(self, keys, template, df, data, source, groupby, entries):
+        poped_keys = {key: template.pop(key) for key in keys if key in template}
+        for non_values_keys, group_df in df.groupby(groupby, sort=False):
+            entry_dict = self.make_entry(next(group_df.itertuples()), template, data, source)
+
+            new_values = []
+            for entry in group_df.itertuples():
+                for key, values in poped_keys.items():
+                    for value in values:
+                        value = self.make_entry(entry, value, values, source)
+                        new_values.append(value)
+
+                    entry_dict[key] = new_values
+            entries.append(entry_dict)
 
     def entries_from_file(self, data):
         entries = []
@@ -399,46 +413,16 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     if "==" in value:
                         mappings.append(value)
 
-            if len(mappings) == 0:
-                raise serializers.ValidationError(
-                    {"source": "Source is provided but the mapping operator "
-                               "'==' is not used in any field"})
 
-            if data.get("groupby"):
-                groupby = template.pop("groupby")
-                if not isinstance(groupby, str):
-                    raise serializers.ValidationError(
-                        {"groupby": "groupby must be a string"})
-                groupby = [v.strip() for v in groupby.split("&")]
 
+            if template.get("name", "").startswith("col=="):
+                groupby = [template.get("name")[5:]]
                 try:
-                    if "characteristica" in template:
-                        characteristica = template.pop("characteristica")
-                        for non_characteristica_keys, group_df in df.groupby(groupby, sort=False):
-                            entry_dict = self.make_entry(next(group_df.itertuples()), template, data, source)
-
-                            charcteristica = []
-
-                            for entry in group_df.itertuples():
-                                for characteristica_single in characteristica:
-                                    characteristica_single = self.make_entry(entry, characteristica_single,
-                                                                             characteristica,
-                                                                             source)
-
-                                    charcteristica.append(characteristica_single)
-
-                            entry_dict["characteristica"] = charcteristica
-                            entries.append(entry_dict)
-
-                    else:
-                        for group_name, group_df in df.groupby(groupby, sort=False):
-                            for entry in group_df.itertuples():
-                                entry_dict = self.make_entry(entry, template, data, source)
-                                entries.append(entry_dict)
+                  self._groupby_with_list(["characteristica", "subsets"], template, df, data, source, groupby, entries)
                 except KeyError:
                     raise serializers.ValidationError(
                         [
-                            f"Some keys in groupby <{groupby}> are missing in "
+                            f"The key <{groupby[0]}> is missing in"
                             f"file <{DataFile.objects.get(pk=source).file}> ",
                             data
                         ]
@@ -448,6 +432,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     entry_dict = self.make_entry(entry, template, data, source)
                     entries.append(entry_dict)
 
+            if len(mappings) == 0 and len(entries) == 0:
+                raise serializers.ValidationError(
+                    {"source": "Source is provided but the mapping operator "
+                               "'==' is not used in any field"})
+
 
 
         else:
@@ -455,121 +444,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         return entries
 
-    def array_from_file(self, data):
-        """ Handle conversion of time course data.
-
-        :param data:
-        :return:
-        """
-        source = data.get("source")
-        if source:
-            template = copy.deepcopy(data)
-
-            # get data
-            template.pop("source")
-            template.pop("figure", None)
-            subset = template.pop("subset", None)
-
-            # read dataframe subset
-            df = self.df_from_file(source, subset)
-            template = copy.deepcopy(template)
-            if data.get("groupby"):
-                groupby = template.pop("groupby")
-                if not isinstance(groupby, str):
-                    raise serializers.ValidationError(
-                        {"groupby": "groupby must be a string"}
-                    )
-                groupby = [v.strip() for v in groupby.split("&")]
-                array_dicts = []
-                try:
-                    if df[groupby].dropna().empty:
-                        raise serializers.ValidationError(
-                            {
-                                "groupby":
-                                    f"The values in the columns <{groupby}> used for groupby are not allowed to be 'na'."
-                            }
-                        )
-
-                except KeyError:
-                    extra_msg = ""
-                    if any("col==" in g for g in groupby):
-                        extra_msg = "'col==*' is the wrong syntax for the key 'groupby'. Just use the column name. "
-
-                    raise serializers.ValidationError(
-                        {
-                            "groupby":
-                                extra_msg +
-                                f"Keys <{groupby}> used for groupby are "
-                                f"missing in source file "
-                                f"<{DataFile.objects.get(pk=source).file.name}>. "
-                                f"To group by more then one column the '&' "
-                                f"operator can be used. E.g. 'col1 & col2 & col3'"
-                        })
-
-                for group_name, group_df in df.groupby(groupby):
-                    array_dict = copy.deepcopy(template)
-                    self.dict_from_array(array_dict, group_df, data, source)
-
-                    array_dicts.append(array_dict)
-
-            else:
-                array_dict = copy.deepcopy(template)
-                self.dict_from_array(array_dict, df, data, source)
-                array_dicts = [array_dict]
-
-        else:
-            raise serializers.ValidationError(
-                "For timecourse data a 'source' file must be provided."
-            )
-        return array_dicts
-
-    def dict_from_array(self, array_dict, df, data, source):
-        recursive_array_dict = list(recursive_iter(array_dict))
-
-        for keys, value in recursive_array_dict:
-            if isinstance(value, str):
-                if ITEM_MAPPER in value:
-                    values = value.split(ITEM_MAPPER)
-                    values = [v.strip() for v in values]
-
-                    if len(values) != 2 or values[0] != "col":
-                        raise serializers.ValidationError(
-                            ["field has wrong pattern col=='col_value'", data]
-                        )
-
-                    try:
-                        value_array = df[values[1]]
-
-                    except KeyError:
-                        raise serializers.ValidationError(
-                            [
-                                f"header key <{values[1]}> is missing in file "
-                                f"<{DataFile.objects.get(pk=source).file}>",
-                                data,
-                            ]
-                        )
-
-                    # get rid of dict
-                    if keys[0] in ["individual", "group", "interventions",
-                                   "substance", "tissue", "method", "time_unit", "unit",
-                                   "measurement_type"]:
-                        unique_values = value_array.unique()
-                        if len(unique_values) != 1:
-                            raise serializers.ValidationError(
-                                [f"{values[1]} has to be unique for a single "
-                                 f"timecourse, but: <{unique_values}>. To "
-                                 f"define multiple timecourses in a single "
-                                 f"table use 'groupby' to define subsets.",
-                                 data]
-                            )
-                        if keys[0] == "interventions":
-                            entry_value = self.interventions_from_string(unique_values[0])
-                            set_keys(array_dict, entry_value, *keys[:1])
-                        else:
-                            set_keys(array_dict, unique_values[0], *keys)
-
-                    else:
-                        set_keys(array_dict, value_array.values.tolist(), *keys)
+    @staticmethod
+    def _validate_image(datafile):
+        if datafile:
+            allowed_endings = ['png', 'jpg', 'jpeg', 'tif', 'tiff']
+            if not any([datafile.file.name.endswith(ending)
+                        for ending in allowed_endings]):
+                raise serializers.ValidationError(
+                    {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
 
     def to_internal_value(self, data):
         data = self.transform_map_fields(data)
@@ -582,7 +464,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         request = self.context.get('request')
 
         # url representation of file
-        for file in ["source", "figure"]:
+        for file in ["source","image"]:
             if file in rep:
                 if "||" not in str(rep[file]):
                     rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
@@ -591,6 +473,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
+
 
     def to_internal_related_fields(self, data):
         study_sid = self.context["request"].path.split("/")[-2]
@@ -632,7 +515,7 @@ class ExSerializer(MappingSerializer):
             if data["interventions"]:
                 interventions = []
                 if isinstance(data["interventions"], str):
-                    data["interventions"] = self.interventions_from_string(data["interventions"])
+                    data["interventions"] = self.string_to_list(data["interventions"])
 
                 for intervention in data["interventions"]:
                     try:
@@ -649,14 +532,6 @@ class ExSerializer(MappingSerializer):
                 data["interventions"] = interventions
         return data
 
-    @staticmethod
-    def _validate_figure(datafile):
-        if datafile:
-            allowed_endings = ['png', 'jpg', 'jpeg', 'tif', 'tiff']
-            if not any([datafile.file.name.endswith(ending)
-                        for ending in allowed_endings]):
-                raise serializers.ValidationError(
-                    {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
 
     def _validate_disabled_data(self, data_dict, disabled):
         disabled = set(disabled)
@@ -770,7 +645,6 @@ class ExSerializer(MappingSerializer):
             "characteristica_ex": "characteristica",
             "parent_ex": "parent",
             "output_exs": "outputs",
-            "timecourse_exs": "timecourses",
         }
 
     @classmethod
@@ -852,14 +726,32 @@ class ReadSerializer(serializers.ModelSerializer):
 
 class PkSerializer(serializers.Serializer):
     pk = serializers.IntegerField()
+    #study_sid = serializers.CharField()
 
     class Meta:
-        fields = ["pk", ]
+        fields = ["pk","study_sid"]
 
+class NameSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    name = serializers.CharField()
+    study_sid = serializers.CharField()
+
+    class Meta:
+        fields = ["pk","name", "study_sid"]
+
+class PkStringSerializer(serializers.Serializer):
+    pk = serializers.CharField()
+
+    class Meta:
+        fields = ["pk"]
 
 class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
+
+class SidLabelSerializer(serializers.Serializer):
+    sid = serializers.CharField(allow_null=True)
+    label = serializers.CharField(allow_null=True)
 
 
 def validate_dict(dic):

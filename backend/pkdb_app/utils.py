@@ -4,11 +4,13 @@ Generic utility functions.
 import copy
 import os
 
+from django.http import Http404
+from django.shortcuts import _get_queryset
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 CHAR_MAX_LENGTH = 200
-CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 3
+CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 5
 
 
 class SlugRelatedField(serializers.SlugRelatedField):
@@ -68,7 +70,6 @@ def list_of_pk(field, obj):
         relevant_field = obj.to_dict().get(field)
     except AttributeError:
         relevant_field = obj.get(field)
-
     if relevant_field:
         result = [int(field_list["pk"]) for field_list in relevant_field]
     return result
@@ -112,13 +113,14 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
 
 
         except instance_child.model.DoesNotExist:
-
             instance_dict = {**lookup_dict, **child}
             instance_child.create(**instance_dict)
 
 
+
 def create_multiple(parent, children, related_name):
     instance_child = getattr(parent, related_name)
+
     return [instance_child.create(**child) for child in children]
 
 

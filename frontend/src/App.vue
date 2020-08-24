@@ -1,40 +1,32 @@
 <template>
-    <div id="app">
-        <v-app class="app">
-            <v-container fluid grid-list-xl>
-                <v-layout row>
-                    <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
-                        <navigation></navigation>
-                    </v-flex>
-                </v-layout>
-                <v-layout row style="padding-top: 30px;">
-                    <v-flex xs12>
-                        <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
-                    </v-flex>
-                </v-layout>
-
-                <v-layout row>
-                    <v-flex xs12 style="padding-top: 0; padding-bottom: 0;">
-                        <footer-f></footer-f>
-                    </v-flex>
-                </v-layout>
-            </v-container>
-        </v-app>
-    </div>
+  <div id="app">
+    <v-app class="app">
+      <v-container fluid>
+        <v-row>
+          <navigation></navigation>
+        </v-row>
+        <v-row style="padding-top: 30px;">
+          <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
+        </v-row>
+        <!--
+        <v-row>
+          <footer-bar></footer-bar>
+        </v-row>
+        -->
+      </v-container>
+    </v-app>
+  </div>
 </template>
 
 <script>
     import Navigation from './components/Navigation.vue';
-    import FooterF from './components/Footer.vue';
+    // import FooterBar from './components/FooterBar.vue';
 
     export default {
         name: 'app',
         components: {
             'Navigation': Navigation,
-            'FooterF': FooterF
-        },
-        data() {
-            return {}
+            // 'FooterBar': FooterBar
         },
         computed: {
             domain() {
@@ -52,7 +44,7 @@
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-align: center;
+        // text-align: center;
     }
 
     .app {
@@ -61,6 +53,28 @@
     .v-card {
         padding: 5px;
         text-align: left;
+    }
+    .main {
+      padding: 0px;
+      text-align: left;
+    }
+
+    .search-navbar {
+      position: fixed;
+      top: 48px;
+      left: 0;
+      z-index: 9999;
+      margin-left: 5px;
+      margin-right: 5px;
+      height: 32px;
+    }
+
+
+    .search {
+      color: #41b883;
+    }
+    .data {
+      color: #1e90ff;
     }
 
     /* attributes */

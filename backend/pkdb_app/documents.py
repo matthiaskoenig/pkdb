@@ -1,6 +1,11 @@
+import operator
+from functools import reduce
+
+from rest_framework.generics import get_object_or_404
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
+from pkdb_app.studies.models import Query
 
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import user_group
@@ -66,9 +71,8 @@ def info_node(attr, **kwargs):
         attr=attr,
         properties={
            'sid': string_field('sid'),
-           'name': string_field('name'),
+           'label': string_field('label'),
        },
-
         **kwargs
     )
 
@@ -146,33 +150,39 @@ class ObjectField(DEDField, Object):
 class AccessView(DocumentViewSet):
 
     def get_queryset(self):
-        search = self.search  # .query()
-        # qs = super().get_queryset()
-        # return qs
         group = user_group(self.request.user)
+        if hasattr(self, "initial_data"):
 
-        if group in ["admin", "reviewer"]:
-            return search.query()
+            id_queries = [Q('term', pk=pk) for pk in self.initial_data]
+            if len(id_queries) > 0:
+                self.search=self.search.query(reduce(operator.ior,id_queries))
+            else:
+                #create search that returns empty query
+                return self.search.query('match', access__raw="NOTHING")
 
-        elif group == "basic":
 
-            qs = search.query(
-                Q('term', access__raw=PUBLIC) |
-                Q('term', allowed_users__raw=self.request.user.username)
+        _hash = self.request.query_params.get("hash",[])
+        if _hash:
+
+            ids = list(get_object_or_404(Query,hash=_hash).ids)
+
+            #ids = list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))
+            _qs_kwargs = {'values': ids}
+
+            self.search = self.search.query(
+                'ids',
+                **_qs_kwargs
             )
 
-            # )
-            # qs = qs.filter(
-            #    'term',
-            #   **{"access": PUBLIC, "creator":self.request.user}
-            # )
-            return qs
+        if group == "basic":
+            return self.search.query(Q('term', access__raw=PUBLIC) | Q('term', allowed_users__raw=self.request.user.username))
 
         elif group == "anonymous":
+            return self.search.query(Q('term', access__raw=PUBLIC))
 
-            qs = search.query(
-                'match',
-                **{"access__raw": PUBLIC}
-            )
+        elif group in ["admin", "reviewer"]:
+            return self.search.query()
 
-            return qs
+        else:
+            raise AssertionError("wrong group name")
+
