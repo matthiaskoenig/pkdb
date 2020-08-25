@@ -1,82 +1,69 @@
 <template>
-  <span id="navigation">
     <v-app-bar
-               class="fixed-nav-bar1"
-               permanent
-               floating
+               fixed
                dark
                dense
-               color="#222222"
+               class="fixed-nav-bar1"
+
     >
       <v-toolbar-title to="/" title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
+      <v-toolbar-items>
+          <v-btn  to="/data" title="Data" >
+            <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
+            Data
+          </v-btn>
 
-      <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
-      <v-btn icon to="/data" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
-      <v-btn icon to="/search" title="Search" color="#41b883"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
+        <v-btn to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
+      </v-toolbar-items>
 
       <v-spacer></v-spacer>
-      <v-btn icon to="/curation" title="Curation information" color="grey" small><v-icon small>{{ faIcon('curation') }}</v-icon></v-btn>
-      <v-btn icon :href="api_url" title="REST API" color="grey" small><v-icon small>{{ faIcon('api') }}</v-icon></v-btn>
-
-      <!-- account -->
-        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" color="grey" small>
-            <user-avatar :username="username"></user-avatar>
-            {{ username }}
+        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" dark  >
+                 <user-avatar :username="username"></user-avatar>
+                 {{ username }}
         </v-chip>
-        <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true" color="grey" small>
-            <v-icon small>{{ faIcon('account') }}</v-icon>
-        </v-btn>
-
-        <v-dialog v-model="dialog" max-width="500">
-            <user-login></user-login>
-        </v-dialog>
-
-    </v-app-bar>
-
-    </span>
+       <drop-down-menu/>
+   </v-app-bar>
 </template>
 
 <script>
-    import {IconsMixin} from "@/icons"
-    import  UserLogin from "../auth/UserLogin"
+   import {IconsMixin} from "@/icons"
+   import DropDownMenu from "./DropDownMenu";
+   import Account from "./Account";
 
-    export default {
-        name: 'Navigation',
-        components: {
-            UserLogin,
-        },
-        mixins: [IconsMixin],
-        data: () => ({
-            dialog: false,
-            drawer: false,
-            collapse: true,
-        }),
-        computed: {
-            api_url() {
-                return this.$store.state.endpoints.api;
-            },
-            username(){
-                return this.$store.state.username
-            }
-        }
-    }
+   export default {
+       name: 'Navigation',
+       components: {
+         Account,
+         DropDownMenu,
+       },
+       mixins: [IconsMixin],
+       data: () => ({
+           dialog: false,
+       }),
+       computed: {
+         api_url() {
+             return this.$store.state.endpoints.api;
+           },
+         username(){
+           return this.$store.state.username
+         }
+       }
+   }
 </script>
 
 <style scoped>
-    .fixed-nav-bar1 {
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 9999;
-        width: 100%;
-        height: 50px;
-        margin-left: 5px;
-        margin-right: 5px;
-    }
+   .fixed-nav-bar1 {
+       position: fixed;
+       top: 0;
+       left: 0;
+       z-index: 9999;
+       width: 100%;
+       height: 50px;
+   }
 
-    .logo {
-      padding-right: 25px;
-      font-family: "Roboto Light";
-      font-size: 30px;
-    }
+   .logo {
+     padding-right: 25px;
+     font-family: "Roboto Light";
+     font-size: 30px;
+   }
 </style>
