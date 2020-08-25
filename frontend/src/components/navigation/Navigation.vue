@@ -10,7 +10,7 @@
     </router-link>
       <v-toolbar-items>
 
-        <v-btn  to="/data" title="Data" >
+        <v-btn  to="/data" :title="tables_label" >
             <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
           {{ tables_label }}
           </v-btn>
