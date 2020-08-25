@@ -8,12 +8,7 @@
                dense
                color="#222222"
     >
-      <!--
-      <v-app-bar-nav-icon @click="collapse = !collapse"></v-app-bar-nav-icon>
-      -->
-
       <v-toolbar-title to="/" title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
-
 
       <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
       <v-btn icon to="/data" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
@@ -38,45 +33,12 @@
 
     </v-app-bar>
 
-    <!--
-  <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      temporary
-  >
-    <v-list
-        nav
-        dense
-    >
-      <v-list-item-group
-          v-model="group"
-          active-class="deep-purple--text text--accent-4"
-      >
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>{{ faIcon('home') }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title to="/">Home</v-list-item-title>
-        </v-list-item>
-
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon color="#41b883">{{ faIcon('search') }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title to="/search">Search</v-list-item-title>
-        </v-list-item>
-
-
-      </v-list-item-group>
-    </v-list>
-  </v-navigation-drawer>
-  -->
     </span>
 </template>
 
 <script>
     import {IconsMixin} from "@/icons"
-    import  UserLogin from "./auth/UserLogin"
+    import  UserLogin from "../auth/UserLogin"
 
     export default {
         name: 'Navigation',
