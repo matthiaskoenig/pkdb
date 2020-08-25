@@ -11,8 +11,8 @@
       <v-toolbar-title to="/" title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
 
       <v-btn icon to="/" title="Home" color="white"><v-icon>{{ faIcon('home') }}</v-icon></v-btn>
-      <v-btn icon to="/data" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon></v-btn>
-      <v-btn icon to="/search" title="Search" color="#41b883"><v-icon>{{ faIcon('search') }}</v-icon></v-btn>
+      <v-btn icon to="/data" title="Data" color="#1E90FF"><v-icon>{{ faIcon('data') }}</v-icon> RESULTS</v-btn>
+      <v-btn icon to="/search" title="Search" color="#41b883"><v-icon>{{ faIcon('search') }}</v-icon> SEARCH</v-btn>
 
       <v-spacer></v-spacer>
       <v-btn icon to="/curation" title="Curation information" color="grey" small><v-icon small>{{ faIcon('curation') }}</v-icon></v-btn>

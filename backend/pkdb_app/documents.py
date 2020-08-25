@@ -14,7 +14,6 @@ elastic_settings = {
     'number_of_shards': 1,
     'number_of_replicas': 1,
     'max_ngram_diff': 15
-
 }
 
 edge_ngram_filter = token_filter(
@@ -56,6 +55,7 @@ def string_field(attr, **kwargs):
         **kwargs
     )
 
+
 def basic_object(attr, **kwargs):
     return ObjectField(
         attr=attr,
@@ -65,6 +65,7 @@ def basic_object(attr, **kwargs):
         },
         **kwargs
     )
+
 
 def info_node(attr, **kwargs):
     return fields.ObjectField(
@@ -76,6 +77,7 @@ def info_node(attr, **kwargs):
         **kwargs
     )
 
+
 study_field = fields.ObjectField(
     attr="study",
     properties={
@@ -83,6 +85,7 @@ study_field = fields.ObjectField(
         'name': string_field('name'),
     }
 )
+
 
 def text_field(attr):
     return fields.TextField(
@@ -146,27 +149,22 @@ class ObjectField(DEDField, Object):
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
 
-
 class AccessView(DocumentViewSet):
+    """Permissions on views."""
 
     def get_queryset(self):
         group = user_group(self.request.user)
         if hasattr(self, "initial_data"):
-
             id_queries = [Q('term', pk=pk) for pk in self.initial_data]
             if len(id_queries) > 0:
-                self.search=self.search.query(reduce(operator.ior,id_queries))
+                self.search = self.search.query(reduce(operator.ior, id_queries))
             else:
-                #create search that returns empty query
+                # empty query
                 return self.search.query('match', access__raw="NOTHING")
 
-
-        _hash = self.request.query_params.get("hash",[])
+        _hash = self.request.query_params.get("hash", [])
         if _hash:
-
-            ids = list(get_object_or_404(Query,hash=_hash).ids)
-
-            #ids = list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))
+            ids = list(get_object_or_404(Query, hash=_hash).ids)
             _qs_kwargs = {'values': ids}
 
             self.search = self.search.query(
@@ -176,13 +174,9 @@ class AccessView(DocumentViewSet):
 
         if group == "basic":
             return self.search.query(Q('term', access__raw=PUBLIC) | Q('term', allowed_users__raw=self.request.user.username))
-
         elif group == "anonymous":
             return self.search.query(Q('term', access__raw=PUBLIC))
-
         elif group in ["admin", "reviewer"]:
             return self.search.query()
-
         else:
             raise AssertionError("wrong group name")
-
