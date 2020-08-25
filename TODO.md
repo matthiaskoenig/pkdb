@@ -9,6 +9,5 @@
 
 ---
 - [ ] cache info nodes in store
-- [ ] implement additional validation rules
 - [ ] filter by access or license
 - [ ] make scatters available
