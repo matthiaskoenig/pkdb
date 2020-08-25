@@ -124,6 +124,26 @@ export default new Vuex.Store({
         username: localStorage.getItem('username'),
         token: localStorage.getItem('token'),
     },
+    getters:{
+        isInitial(state){
+            if(JSON.stringify(state.queries) !== JSON.stringify(initial_queries)){
+                return false
+            }
+            if(JSON.stringify(state.subjects_boolean) !== JSON.stringify(initial_subjects_boolean)){
+                return false
+            }
+            if(JSON.stringify(state.subjects_queries) !== JSON.stringify(initial_subjects_queries)){
+                return false
+            }
+            if(JSON.stringify(state.queries_users) !== JSON.stringify(initial_queries_users)){
+                return false
+            }
+            if(JSON.stringify(state.queries_output_types) !== JSON.stringify(initial_output_types)){
+                return false
+            }
+            return true
+        }
+    },
     mutations: {
         resetQuery(state){
             Object.assign(state.queries,  initial_queries)

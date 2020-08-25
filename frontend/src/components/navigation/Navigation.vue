@@ -12,7 +12,7 @@
 
         <v-btn  to="/data" title="Data" >
             <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
-            Data
+          {{ tables_label }}
           </v-btn>
 
         <v-btn to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
@@ -54,6 +54,13 @@
            },
          username(){
            return this.$store.state.username
+         },
+         tables_label(){
+           if(this.$store.getters.isInitial){
+             return "Data"
+           }else{
+             return "Results"
+           }
          }
        }
    }
