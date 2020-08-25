@@ -19,7 +19,7 @@
 </template>
 
 <script>
-    import Navigation from './components/Navigation.vue';
+    import Navigation from './components/navigation/Navigation.vue';
     // import FooterBar from './components/FooterBar.vue';
 
     export default {
