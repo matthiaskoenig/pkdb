@@ -5,10 +5,12 @@
                dense
                class="fixed-nav-bar1"
 
-    >
-      <v-toolbar-title to="/" title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
+    ><router-link tag="button" to="/" >
+      <v-toolbar-title  title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
+    </router-link>
       <v-toolbar-items>
-          <v-btn  to="/data" title="Data" >
+
+        <v-btn  to="/data" title="Data" >
             <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
             Data
           </v-btn>
@@ -16,11 +18,15 @@
         <v-btn to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
       </v-toolbar-items>
 
+
       <v-spacer></v-spacer>
         <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" dark  >
                  <user-avatar :username="username"></user-avatar>
                  {{ username }}
         </v-chip>
+        <v-dialog v-model="dialog" max-width="500">
+        <user-login></user-login>
+        </v-dialog>
        <drop-down-menu/>
    </v-app-bar>
 </template>
@@ -29,10 +35,12 @@
    import {IconsMixin} from "@/icons"
    import DropDownMenu from "./DropDownMenu";
    import Account from "./Account";
+   import  UserLogin from "../auth/UserLogin"
 
    export default {
        name: 'Navigation',
        components: {
+         UserLogin,
          Account,
          DropDownMenu,
        },

@@ -552,12 +552,9 @@ class PKDataView(APIView):
 
 
 
-
-
-
-
         time_pkdata = time.time()
 
+        # calculation of hash
         resources = {}
         queries = []
         for resource, ids in pkdata.ids.items():
@@ -594,7 +591,6 @@ class PKDataView(APIView):
                 resp['Content-Disposition'] = "attachment; filename=%s" % "pkdata.zip"
                 return resp
 
-
         response = Response(resources, status=status.HTTP_200_OK)
         time_response = time.time()
 
@@ -604,7 +600,5 @@ class PKDataView(APIView):
         print("-" * 80)
         print("total:", time_response - time_start_request)
         print("-" * 80)
-
-
 
         return response

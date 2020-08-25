@@ -295,9 +295,15 @@ class Study(Sidable, models.Model):
         super().delete(*args, **kwargs)
 
 
-
-
+# FIXME: rename to something what it is (FilterQuery, IdCollection ?)
 class Query(models.Model):
+    """
+    DOCUMENT ME
+    """
+
+    # FIXME: delete me again please !!!! (currently just filling up the database until problems)
+    # -> on_create: if > 1000 entries; delete first 500 resourses sorted by pk (first entries)
+
     class Recourses(models.TextChoices):
         """ Recourse Types"""
         Studies = 'studies', _('studies')
@@ -306,11 +312,7 @@ class Query(models.Model):
         Interventions = 'interventions', _('interventions')
         Outputs = 'outputs', _('outputs')
 
-
-    resource =  models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
+    resource = models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
+    # the hash is not a hash, but just a pseudo-random number (FIXME: rename to uuid)
     hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ids = ArrayField(models.IntegerField(), null=True, blank=True)
-
-#class IdMulti(models.Model):
-#    query = models.ForeignKey(Query, related_name="ids",on_delete=models.CASCADE, null=False)
-#    value = models.IntegerField(primary_key=False)
