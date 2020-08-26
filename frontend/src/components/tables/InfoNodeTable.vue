@@ -15,6 +15,9 @@
     <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
 
     <v-data-table
+        fill-height
+        fixed-header
+        :height="windowHeight"
         :headers="headers"
         :items="entries"
         :options.sync="options"

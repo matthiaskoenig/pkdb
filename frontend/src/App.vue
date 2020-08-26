@@ -58,7 +58,7 @@
       padding: 0px;
       text-align: left;
     }
-
+    html { overflow-y: auto !important; }
     .search-navbar {
       position: fixed;
       top: 48px;

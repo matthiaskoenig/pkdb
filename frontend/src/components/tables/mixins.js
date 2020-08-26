@@ -13,7 +13,9 @@ let searchTableMixin = {
             footer_options:{
                 itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
-            table_class: "elevation-1",
+            table_class: "elevation-0",
+            windowHeight: window.innerHeight-230,
+
         }
     },
     props: {
@@ -51,9 +53,17 @@ let searchTableMixin = {
 
     },
     mounted() {
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+        })
         this.getData()
     },
+
+    beforeDestroy() {
+        window.removeEventListener('resize', this.onResize);
+    },
     watch: {
+
         pagination: {
             handler() {
                 this.getData()
@@ -127,6 +137,9 @@ let searchTableMixin = {
         }
     },
     methods: {
+        onResize() {
+            this.windowHeight = window.innerHeight-230
+        },
         faIcon(key) {
             return lookupIcon(key)
         },

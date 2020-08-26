@@ -2,11 +2,10 @@
     <v-sheet flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
-            class="elevation-0"
             fill-height
             fixed-header
-            dense
             :height="windowHeight"
+            dense
             :headers="headers"
             disable-sort
             :items="entries"
@@ -92,23 +91,9 @@
             Xref,
         },
         mixins: [searchTableMixin],
-        mounted() {
-          this.$nextTick(() => {
-            window.addEventListener('resize', this.onResize);
-          })
-        },
 
-        beforeDestroy() {
-          window.removeEventListener('resize', this.onResize);
-        },
-        methods: {
-          onResize() {
-            this.windowHeight = window.innerHeight-250
-          }
-        },
         data () {
             return {
-                windowHeight: window.innerHeight-250,
                 otype: "studies",
                 otype_single: "study",
                 headers: [
