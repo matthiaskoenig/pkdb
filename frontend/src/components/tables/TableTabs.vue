@@ -1,5 +1,6 @@
 <template>
   <v-sheet flat width="100%">
+
     <v-tabs
         v-model="tab"
         background-color="transparent"
