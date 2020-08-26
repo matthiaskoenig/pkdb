@@ -137,7 +137,6 @@
                 number = Number.toExponential(num)
               }
               */
-              console.log(number);
               return number
             },
         },

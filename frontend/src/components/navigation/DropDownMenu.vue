@@ -12,16 +12,17 @@
     </template>
 
     <v-list dense>
-      <v-list-item>
+      <v-list-item to="/curation">
         <!-- Curation -->
-        <v-list-item-icon><v-icon>{{ faIcon('curation') }}</v-icon></v-list-item-icon>
-        <!--<v-btn icon to="/curation" title="Curation information" color="grey" small></v-btn> -->
+        <v-list-item-icon ><v-icon>{{ faIcon('curation') }}</v-icon>
+
+        </v-list-item-icon>
         <v-list-item-title>
           Curation
         </v-list-item-title>
       </v-list-item>
 
-      <v-list-item>
+      <v-list-item :href="api_url">
         <!-- Rest API -->
         <v-list-item-icon><v-icon>{{ faIcon('api') }}</v-icon></v-list-item-icon>
         <v-list-item-title>
@@ -31,13 +32,6 @@
      </v-list-item>
 
       <v-list-item v-if="username" @click.stop="dialog=true">
-        <!-- User -->
-        <!--
-          <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" color="grey" small>
-            <user-avatar :username="username"></user-avatar>
-            {{ username }}
-          </v-chip>
-        -->
 
         <v-list-item-icon> <user-avatar :username="username"></user-avatar> </v-list-item-icon>
 
@@ -47,12 +41,6 @@
 
      </v-list-item >
       <v-list-item v-if="username==null"  @click.stop="dialog=true">
-        <!-- User -->
-        <!--
-          <v-btn icon v-if="username==null" title="Login" @click.stop="dialog=true" color="grey" small>
-            <v-icon small>{{ faIcon('account') }}</v-icon>
-          </v-btn>
-        -->
 
         <v-list-item-icon> <v-icon>{{  faIcon('account')  }}</v-icon></v-list-item-icon>
 
@@ -79,6 +67,9 @@ export default {
     dialog: false,
   }),
   computed:{
+      api_url() {
+        return this.$store.state.endpoints.api;
+      },
     username(){
       return this.$store.state.username
     }

@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Home from './components/Home';
-import Data from './components/Data'
+import Data from './components/Data';
+import Results from './components/Results'
 import Search from './components/Search';
 import Page404 from './components/Page404';
 import Curation from './components/Curation';
@@ -32,6 +33,11 @@ export default new Router({
             path: '/data',
             name: 'Data',
             component: Data
+        },
+        {
+            path: '/results',
+            name: 'Results',
+            component: Results
         },
         {
             path: '/curation',

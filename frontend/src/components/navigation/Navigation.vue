@@ -10,12 +10,12 @@
     </router-link>
       <v-toolbar-items>
 
-        <v-btn to="/data" :title="tables_label" >
+        <v-btn  flat text to="/data" :title="tables_label" >
             <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
           {{ tables_label }}
           </v-btn>
 
-        <v-btn to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
+        <v-btn flat text to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
       </v-toolbar-items>
 
 

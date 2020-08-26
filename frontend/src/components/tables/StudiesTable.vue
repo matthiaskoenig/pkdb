@@ -1,37 +1,42 @@
 <template>
-    <v-card>
+    <v-sheet height="100%" flat>
+      <v-layout column fill-height>
+      <v-col max-height="100%" class="d-flex flex-column">
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
-                :headers="headers"
-                dense
-                disable-sort
-
-                :items="entries"
-                :options.sync="options"
-                :server-items-length="count"
-                :loading="loading"
-                :class="table_class"
-                :footer-props="footer_options"
+            class="elevation-0"
+            fill-height
+            fixed-header
+            dense
+            height="100%"
+            :headers="headers"
+            disable-sort
+            :items="entries"
+            :options.sync="options"
+            :server-items-length="count"
+            :loading="loading"
+            :class="table_class"
+            :footer-props="footer_options"
         >
-            <template v-slot:item.buttons="{ item }">
-                <LinkButton :to="'/studies/'+ item.sid"
-                            :title="'Study: '+item.pk"
-                            icon="study"
-                />
-                <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
-            </template>
-            <template v-slot:item.study="{ item }">
-                <text-highlight :queries="search.split(/[ ,]+/)">{{ item.sid }}</text-highlight><br />
-                <text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight><br />
-                {{ item.date }}<br />
-            </template>
-            <template v-slot:item.counts="{ item }">
-                <count-chip :count=item.group_count icon="group" name="group"></count-chip>
-                <count-chip :count=item.individual_count icon="individual" name="individual"></count-chip>
-                <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
-                <count-chip :count=item.output_count icon="output" name="output"></count-chip >
-                <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse" />
-            </template>
+          <template v-slot:item.buttons="{ item }">
+            <LinkButton :to="'/studies/'+ item.sid"
+                        :title="'Study: '+item.pk"
+                        icon="study"
+            />
+            <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>
+          </template>
+          <template v-slot:item.study="{ item }">
+            <text-highlight :queries="search.split(/[ ,]+/)">{{ item.sid }}</text-highlight><br />
+            <text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight><br />
+            {{ item.date }}<br />
+          </template>
+          <template v-slot:item.counts="{ item }">
+            <count-chip :count=item.group_count icon="group" name="group"></count-chip>
+            <count-chip :count=item.individual_count icon="individual" name="individual"></count-chip>
+            <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
+            <count-chip :count=item.output_count icon="output" name="output"></count-chip >
+            <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse" />
+          </template>
 
           <template v-slot:item.reference="{ item }">
             <!--
@@ -41,36 +46,39 @@
                         icon="reference"
             />
             -->
-                <span v-if="item.reference">
+            <span v-if="item.reference">
                   <xref v-if="item.reference.pmid" name="pubmed" :accession="item.reference.pmid" :url="'https://pubmed.ncbi.nlm.nih.gov/' + item.reference.pmid"></xref>
                   <span class="font-weight-thin"><text-highlight :queries="search.split(/[ ,]+/)">{{ item.reference.title }}</text-highlight></span>
                 </span>
           </template>
 
-            <template v-slot:item.substances="{ item }">
+          <template v-slot:item.substances="{ item }">
                 <span v-for="substance in item.substances" :key="substance.sid">
                     <object-chip :object="substance"
                                  otype="substance"
                                  :search="search"
                     />
                 </span>
-            </template>
+          </template>
 
-            <template v-slot:item.creator="{ item }">
-                <user-avatar :user="item.creator"
-                             :search="search"
-                />
-            </template>
+          <template v-slot:item.creator="{ item }">
+            <user-avatar :user="item.creator"
+                         :search="search"
+            />
+          </template>
 
-            <template v-slot:item.curators="{ item }">
+          <template v-slot:item.curators="{ item }">
                 <span v-for="(curator, index2) in item.curators" :key="index2">
                     <user-rating :user="curator" :search="search"/>
                 </span>
-            </template>
+          </template>
 
-            <no-data/>
+          <no-data/>
         </v-data-table>
-    </v-card>
+      </v-col>
+      </v-layout>
+
+    </v-sheet>
 </template>
 
 <script>
@@ -109,3 +117,10 @@
 </script>
 
 <style scoped></style>
+<style>
+.theme--light.v-datatable.v-datatable__actions {
+  position: fixed !important;
+  bottom: 0 !important;
+  width: 100% !important;
+}
+</style>
