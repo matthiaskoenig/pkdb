@@ -1,14 +1,12 @@
 <template>
-    <v-sheet height="100%" flat>
-      <v-layout column fill-height>
-      <v-col max-height="100%" class="d-flex flex-column">
+    <v-sheet flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
             class="elevation-0"
             fill-height
             fixed-header
             dense
-            height="100%"
+            :height="windowHeight"
             :headers="headers"
             disable-sort
             :items="entries"
@@ -75,9 +73,6 @@
 
           <no-data/>
         </v-data-table>
-      </v-col>
-      </v-layout>
-
     </v-sheet>
 </template>
 
@@ -97,8 +92,23 @@
             Xref,
         },
         mixins: [searchTableMixin],
+        mounted() {
+          this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+          })
+        },
+
+        beforeDestroy() {
+          window.removeEventListener('resize', this.onResize);
+        },
+        methods: {
+          onResize() {
+            this.windowHeight = window.innerHeight-250
+          }
+        },
         data () {
             return {
+                windowHeight: window.innerHeight-250,
                 otype: "studies",
                 otype_single: "study",
                 headers: [
