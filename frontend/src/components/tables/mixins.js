@@ -14,7 +14,7 @@ let searchTableMixin = {
                 itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
             table_class: "elevation-0",
-            windowHeight: window.innerHeight-230,
+            windowHeight: window.innerHeight-240,
 
         }
     },
@@ -138,7 +138,7 @@ let searchTableMixin = {
     },
     methods: {
         onResize() {
-            this.windowHeight = window.innerHeight-230
+            this.windowHeight = window.innerHeight-240
         },
         faIcon(key) {
             return lookupIcon(key)

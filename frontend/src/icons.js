@@ -55,6 +55,7 @@ const icons_table = {
     plus: 'fas fa-plus',
     minus: 'fas fa-minus',
     download: 'fas fa-file-download',
+    left_arrow: 'fas fa-arrow-left',
 
 };
 

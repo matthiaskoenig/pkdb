@@ -1,5 +1,6 @@
 <template>
-  <v-sheet flat width="100%">
+  <v-content>
+    <detail-drawer/>
 
     <v-tabs
         v-model="tab"
@@ -34,11 +35,12 @@
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>
-  </v-sheet>
+  </v-content>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import DetailDrawer from "../navigation/DetailDrawer";
 
 import {searchTableMixin} from "./mixins";
 
@@ -50,14 +52,15 @@ import GroupsTable from "./GroupsTable";
 import InterventionsTable from "./InterventionsTable";
 import OutputsTable from "./OutputsTable";
 import TimecoursesTable from "./TimecoursesTable";
-import {IconsMixin} from "../../icons";
+
 import {SearchMixin} from "../../search";
 
 
 export default {
-  mixins: [searchTableMixin, IconsMixin, SearchMixin],
+  mixins: [searchTableMixin, SearchMixin],
   name: "TableTabs",
   components: {
+    DetailDrawer,
     StudyOverview,
     StudiesTable,
     GroupsTable,

@@ -3,24 +3,25 @@
                fixed
                dark
                dense
-               class="fixed-nav-bar1"
+               app
+               clipped-left
 
     ><router-link tag="button" to="/" >
       <v-toolbar-title  title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
     </router-link>
       <v-toolbar-items>
 
-        <v-btn  flat text to="/data" :title="tables_label" >
+        <v-btn  text to="/data" :title="tables_label" >
             <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
           {{ tables_label }}
           </v-btn>
 
-        <v-btn flat text to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
+        <v-btn text to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
       </v-toolbar-items>
 
 
       <v-spacer></v-spacer>
-        <v-chip v-if="username" flat title="Logout" @click.stop="dialog=true" dark  >
+        <v-chip v-if="username" text title="Logout" @click.stop="dialog=true" dark  >
                  <user-avatar :username="username"></user-avatar>
                  {{ username }}
         </v-chip>

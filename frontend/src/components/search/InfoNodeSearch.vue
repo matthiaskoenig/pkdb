@@ -157,6 +157,7 @@ export default {
 .multiselect__content-wrapper {
   overflow-x: -moz-hidden-unscrollable !important;
   overflow-y: auto !important;
+  z-index: 100;
   width: 100% !important;
 
 }

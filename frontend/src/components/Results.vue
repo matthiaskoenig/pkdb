@@ -1,12 +1,9 @@
 <template>
-  <v-row>
-    <v-col>
-     <search-navigation />
-    </v-col>
-    <v-col>
-      <table-tabs/>
-    </v-col>
-  </v-row>
+  <v-container fluid>
+    <search-navigation />
+    <table-tabs/>
+  </v-container>
+
 </template>
 
 <script>

@@ -1,11 +1,8 @@
 <template>
   <div id="app">
     <v-app class="app">
-      <v-container fluid>
-        <v-row>
           <navigation></navigation>
-        </v-row>
-        <v-row style="padding-top: 30px;">
+        <v-row>
           <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
         </v-row>
         <!--
@@ -13,7 +10,6 @@
           <footer-bar></footer-bar>
         </v-row>
         -->
-      </v-container>
     </v-app>
   </div>
 </template>
