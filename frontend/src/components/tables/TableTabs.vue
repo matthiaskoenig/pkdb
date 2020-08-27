@@ -1,5 +1,5 @@
 <template>
-  <v-content>
+  <v-main>
     <detail-drawer/>
 
     <v-tabs
@@ -35,7 +35,7 @@
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>
-  </v-content>
+  </v-main>
 </template>
 
 <script>

@@ -1,9 +1,10 @@
 <template>
   <v-container fluid>
+
     <search-navigation />
     <table-tabs/>
-  </v-container>
 
+  </v-container>
 </template>
 
 <script>

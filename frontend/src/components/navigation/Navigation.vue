@@ -5,6 +5,7 @@
                dense
                app
                clipped-left
+               clipped-right
 
     ><router-link tag="button" to="/" >
       <v-toolbar-title  title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
