@@ -5,7 +5,6 @@
         clipped
         permanent
         app
-
         width="400"
     >
       <v-list-item class="px-2">
@@ -20,7 +19,19 @@
               v-if="loading"
           ></v-progress-circular>
 
-          <v-btn
+        <v-btn v-if="results.studies.count>0"
+               fab
+               x-small
+               text
+               @click="downloadData"
+               :loading="loadingDownload"
+               :disabled="loadingDownload"
+               title="Download current results"
+        >
+          <v-icon small>{{ faIcon('download') }}</v-icon>
+
+        </v-btn>
+        <v-btn
               x-small
               fab text
               title="Clear search"
@@ -50,9 +61,9 @@
       <v-divider></v-divider>
 
 
-      <v-list>
+      <v-list >
 
-        <v-list-item >
+        <v-list-item>
           <v-list-item-icon>
               <v-icon>{{faIcon("studies")}}
               </v-icon>
@@ -210,7 +221,7 @@ export default {
 </script>
 
 <style>
-.v-list-item{
-  overflow-y: visible !important;
+.v-list-item__content{
+  overflow:visible !important;
 }
 </style>
