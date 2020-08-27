@@ -49,16 +49,17 @@
           </v-btn>
 
           <v-btn
+              class="ml-4"
               icon
               @click.stop="mini = !mini"
           >
-            <v-icon>{{faIcon("left_arrow")}}</v-icon>
+            <v-icon >{{faIcon("left_arrow")}}</v-icon>
           </v-btn>
 
 
       </v-list-item>
 
-      <v-divider></v-divider>
+      <v-divider/>
 
 
       <v-list >
