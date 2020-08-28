@@ -5,6 +5,7 @@
         clipped
         permanent
         app
+        dark
         width="400"
     >
       <v-list-item class="px-2">
@@ -149,14 +150,38 @@ export default {
     OutputForm,
   },
   computed: {
-    display_detail() {
-      return this.$store.state.detail_display
+    display_detail:  {
+      get() {
+        return this.$store.state.display_detail
+      },
+      set(value) {
+        this.$store.dispatch('updateAction', {
+          key: "display_detail",
+          value: value,
+        })
+      }
     },
-    detail_info() {
-      return this.$store.state.detail_info
+    detail_info: {
+      get() {
+        return this.$store.state.detail_info
+      },
+      set(value) {
+        this.$store.dispatch('updateAction', {
+          key: "detail_info",
+          value: value,
+        })
+      }
     },
-    show_type() {
-      return this.$store.state.show_type
+    show_type: {
+      get() {
+        return this.$store.state.show_type
+      },
+      set(value) {
+        this.$store.dispatch('updateAction', {
+          key: "show_type",
+          value: value,
+        })
+      }
     }
   },
   methods: {
@@ -167,8 +192,8 @@ export default {
       this.subject_queries = emitted_object;
     },
     show_help() {
-      this.$store.state.show_type = 'help'
-      this.$store.state.detail_display = true
+      this.show_type = 'help'
+      this.display_detail = !this.display_detail
     },
     update_search_query(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {

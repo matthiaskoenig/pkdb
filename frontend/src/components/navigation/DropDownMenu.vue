@@ -2,12 +2,12 @@
   <v-menu left transition="slide-y-transition" offset-y>
     <template v-slot:activator="{ on, attrs }">
       <v-btn
-          dark
+          text
           icon
           v-bind="attrs"
           v-on="on"
       >
-        <v-icon>fas fa-ellipsis-v</v-icon>
+        <v-icon >fas fa-ellipsis-v</v-icon>
       </v-btn>
     </template>
 

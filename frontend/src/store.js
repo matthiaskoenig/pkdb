@@ -81,7 +81,7 @@ export default new Vuex.Store({
     state: {
 
         //for search detail display
-        detail_display: false,
+        display_detail: true,
         detail_info: {},
         show_type: "help",
 
@@ -156,6 +156,9 @@ export default new Vuex.Store({
         updateQuery (state, obj) {
             state[obj.query_type][obj.key] = obj.value
         },
+        update (state, obj) {
+            state[obj.key] = obj.value
+        },
 
         setToken(state, token) {
             localStorage.setItem('token', token);
@@ -186,6 +189,10 @@ export default new Vuex.Store({
         },
         updateQueryAction (context, obj) {
             this.commit('updateQuery', obj);
+
+        },
+        updateAction (context, obj) {
+            this.commit('update', obj);
 
         }
 

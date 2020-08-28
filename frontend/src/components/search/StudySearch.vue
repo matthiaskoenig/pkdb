@@ -35,6 +35,7 @@
           block
           text
           large
+          color="black"
           text-left
           class="v-btn-multiselect"
           v-on:mouseover.native="mouseover(props.option)">

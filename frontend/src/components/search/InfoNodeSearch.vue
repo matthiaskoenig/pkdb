@@ -34,6 +34,7 @@
       <v-btn
           block
           text
+          color="black"
           large
           text-left
           class="v-btn-multiselect"

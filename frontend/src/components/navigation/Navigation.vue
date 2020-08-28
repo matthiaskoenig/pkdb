@@ -1,7 +1,7 @@
 <template>
     <v-app-bar
                fixed
-               dark
+
                dense
                app
                clipped-left
@@ -13,11 +13,11 @@
       <v-toolbar-items>
 
         <v-btn  text to="/data" :title="tables_label" >
-            <v-icon left dark color="#1E90FF">{{ faIcon('data') }}</v-icon>
+            <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
           {{ tables_label }}
           </v-btn>
 
-        <v-btn text to="/search" title="Search" ><v-icon left dark color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
+        <v-btn text to="/search" title="Search" ><v-icon left  color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
       </v-toolbar-items>
 
 
