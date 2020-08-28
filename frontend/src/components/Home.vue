@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <v-main id="home">
     <v-row align="start"
            justify="center">
       <v-col sm="12" md="10" lg="8">
@@ -12,7 +12,7 @@
         <about/>
       </v-col>
     </v-row>
-  </div>
+  </v-main>
 </template>
 
 <script>

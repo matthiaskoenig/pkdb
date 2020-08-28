@@ -1,12 +1,10 @@
 <template>
   <v-navigation-drawer
-      v-model="drawer"
+      v-model="display_detail"
       clipped
       app
 
       right
-      permanent
-      :mini-variant.sync="display_detail"
 
 
       width="400"
@@ -27,7 +25,7 @@
     </v-list-item>
 
     <v-divider></v-divider>
-    <div v-if="!display_detail">
+    <div v-if="display_detail">
 
     <info-node-detail
         v-model="display_detail"
