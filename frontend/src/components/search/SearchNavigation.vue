@@ -78,7 +78,7 @@
           <v-list-item-content>
 
             <v-list-item-title>
-              <count-badge   color="red" :count="results.studies.count" text="Studies"/>
+              <count-badge color="blue" :count="results.studies.count" text="Studies"/>
             </v-list-item-title>
             <study-search-form/>
           </v-list-item-content>
@@ -91,7 +91,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>    <count-badge   color="red" :count="results.groups.count" text="Groups "/> <v-spacer/> <count-badge   color="red" :count="results.individuals.count" text="Individuals "/>
+            <v-list-item-title>    <count-badge   color="blue" :count="results.groups.count" text="Groups "/> <v-spacer/> <count-badge   color="blue" :count="results.individuals.count" text="Individuals "/>
               </v-list-item-title>
             <subjects-form
                 @subjects__type="update_search_query"
@@ -105,7 +105,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>              <count-badge   color="red" :count="results.interventions.count" text="Interventions"/>
+            <v-list-item-title>              <count-badge   color="blue" :count="results.interventions.count" text="Interventions"/>
               </v-list-item-title>
             <intervention-form/>
           </v-list-item-content>
@@ -117,8 +117,8 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>  <count-badge   color="red" :count="results.outputs.count" text="Outputs"/>
-              <v-spacer/><count-badge   color="red" :count="results.timecourses.count" text="Timecourses "/>
+            <v-list-item-title>  <count-badge   color="blue" :count="results.outputs.count" text="Outputs"/>
+              <v-spacer/><count-badge   color="blue" :count="results.timecourses.count" text="Timecourses "/>
             </v-list-item-title>
             <output-form/>
           </v-list-item-content>

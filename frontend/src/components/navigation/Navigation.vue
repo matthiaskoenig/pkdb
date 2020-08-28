@@ -12,17 +12,15 @@
     </router-link>
       <v-toolbar-items>
 
-        <v-btn  text to="/data" :title="tables_label" >
+        <v-btn  text to="/results" :title="tables_label" >
             <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
           {{ tables_label }}
           </v-btn>
-
-        <v-btn text to="/search" title="Search" ><v-icon left  color="#41b883">{{ faIcon('search') }}</v-icon> Search </v-btn>
       </v-toolbar-items>
 
 
       <v-spacer></v-spacer>
-        <v-chip v-if="username" text title="Logout" @click.stop="dialog=true" dark  >
+        <v-chip v-if="username" text title="Logout" @click.stop="dialog=true" dark>
                  <user-avatar :username="username"></user-avatar>
                  {{ username }}
         </v-chip>

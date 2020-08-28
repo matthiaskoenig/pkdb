@@ -21,21 +21,12 @@
     <v-row>
       <v-col>
 
-        <v-btn color="#1E90FF"
+        <v-btn
                width="100%"
-               to="/data"
+               to="/results"
         >
-          <v-icon left>{{ faIcon('data') }}</v-icon>
+          <v-icon color="#1E90FF" left>{{ faIcon('data') }}</v-icon>
           Data
-        </v-btn>
-      </v-col>
-      <v-col>
-        <v-btn color="#41b883"
-               width="100%"
-               to="/search"
-        >
-          <v-icon left>{{ faIcon('search') }}</v-icon>
-          Search
         </v-btn>
       </v-col>
     </v-row>
