@@ -3,10 +3,8 @@
       v-model="display_detail"
       clipped
       app
-
       right
-
-
+      mobile-breakpoint="0"
       width="400"
   >
     <v-list-item class="px-2" >
