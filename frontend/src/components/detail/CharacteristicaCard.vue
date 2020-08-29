@@ -5,11 +5,11 @@
       <span v-if="!(data.choice && data.choice.sid)">
 
         <span v-if="value || error">
-          <v-badge v-if="data.count" inline right overlap color="#BBBBBB" dark>
-              <span slot="badge">{{ this.count_label }}</span>
+          <v-badge v-if="data.count" inline right color="#BBBBBB" dark>
+              <span slot="badge">{{ this.count }}/{{this.subject_count}}</span>
               <node-element :data="data.measurement_type"/>
           </v-badge>
-          <node-element v-if="!this.count_label" :data="data.measurement_type"/>
+          <node-element v-if="!this.count" :data="data.measurement_type"/>
         </span>
 
       </span>
@@ -28,8 +28,8 @@
             <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
             <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
 
-            <v-badge inline right dark overlap color="#BBBBBB">
-            <span slot="badge">{{ this.count_label }}</span>
+            <v-badge inline right dark color="#BBBBBB">
+              <span slot="badge" >{{ this.count }}/{{this.subject_count}}</span>
             <node-element :data="data.choice"/>
         </v-badge>
         </span>
@@ -59,12 +59,18 @@
                     return this.data.count
                 }
             },
+            subject_count(){
+              if (this.data.group_count){
+                return this.data.group_count.toString()
+              }
+              return this.count.toString()
+            },
             count_label(){
                 if (this.data.group_count){
                     return this.count.toString() + "/" + this.data.group_count.toString()
 
                 }
-                return this.count.toString()
+                return this.count.toString() + "/" + this.count.toString()
             },
             error() {
                 let value = null;
