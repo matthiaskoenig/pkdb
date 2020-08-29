@@ -29,6 +29,7 @@ characteristica_object_field = fields.ObjectField(
         'cv': fields.FloatField(),
         'unit': string_field('unit'),
         'count': fields.IntegerField('count'),
+        'group_count':fields.IntegerField('group_count')
     },
     multi=True
 )

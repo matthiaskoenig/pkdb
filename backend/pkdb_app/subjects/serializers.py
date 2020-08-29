@@ -612,10 +612,10 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     measurement_type = SidLabelSerializer()
     substance = SidLabelSerializer(allow_null=True)
     choice = SidLabelSerializer(allow_null=True)
-
+    group_count = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Characteristica
-        fields = ['pk'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['normed']  # + ['access','allowed_users']
+        fields = ['pk'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['group_count']+['normed']  # + ['access','allowed_users']
 
 
 # Group related Serializer

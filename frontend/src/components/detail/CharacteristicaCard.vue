@@ -6,10 +6,10 @@
 
         <span v-if="value || error">
           <v-badge v-if="data.count" inline right overlap color="#BBBBBB" dark>
-              <span slot="badge">{{ data.count }}</span>
+              <span slot="badge">{{ this.count_label }}</span>
               <node-element :data="data.measurement_type"/>
           </v-badge>
-          <node-element v-if="!data.count" :data="data.measurement_type"/>
+          <node-element v-if="!this.count_label" :data="data.measurement_type"/>
         </span>
 
       </span>
@@ -29,7 +29,7 @@
             <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
 
             <v-badge inline right dark overlap color="#BBBBBB">
-            <span slot="badge">{{ data.count }}</span>
+            <span slot="badge">{{ this.count_label }}</span>
             <node-element :data="data.choice"/>
         </v-badge>
         </span>
@@ -58,6 +58,13 @@
                 } else {
                     return this.data.count
                 }
+            },
+            count_label(){
+                if (this.data.group_count){
+                    return this.count.toString() + "/" + this.data.group_count.toString()
+
+                }
+                return this.count.toString()
             },
             error() {
                 let value = null;
