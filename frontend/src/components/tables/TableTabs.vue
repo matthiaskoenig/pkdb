@@ -11,6 +11,7 @@
       <v-tab
           v-for="item in items"
           :key="item.tab"
+          :href="'#'+ item.tab"
       >
         {{ item.tab }}
       </v-tab>
@@ -20,6 +21,7 @@
       <v-tab-item
           v-for="item in items"
           :key="item.tab"
+          :value="item.tab"
       >
         <studies-table v-if="item.tab === 'Studies'" :search_hash="true" :hash="results.studies.hash"
                        :autofocus="false"/>
@@ -70,6 +72,14 @@ export default {
     TimecoursesTable
   },
   computed: {
+    tab: {
+      set (tab) {
+        this.$router.replace({ query: { ...this.$route.query, tab } })
+      },
+      get () {
+        return this.$route.query.tab
+      }
+    },
     results: {
       get(){
         return this.$store.state.results
@@ -97,7 +107,6 @@ export default {
   data() {
     return {
       loadingDownload: false,
-      tab: null,
       items: [
         {tab: 'Studies'},
         {tab: 'Groups'},
