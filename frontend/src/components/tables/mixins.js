@@ -167,6 +167,7 @@ let searchTableMixin = {
                 .finally(() => this.loading = false);
         },
 
+
     }
 };
 

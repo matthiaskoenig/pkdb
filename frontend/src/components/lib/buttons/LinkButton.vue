@@ -16,6 +16,7 @@
 
 <script>
     import {lookupIcon} from "@/icons"
+    import axios from 'axios'
 
     export default {
         computed:{
@@ -26,13 +27,14 @@
                 }
             }
         },
-
         name: "LinkButton",
         props: {
             show_type: {
                 type: String,
             },
-
+            sid: {
+                type: String
+            },
             detail_info: {
                 type: Object,
             },
@@ -53,11 +55,34 @@
             },
         },
         methods: {
+            getStudy(sid) {
+                // object is an InfoNode
+                let url = `${this.$store.state.endpoints.api}studies/${sid}/?format=json`;
+
+                // get data (FIXME: caching of InfoNodes in store)
+                axios.get(url)
+                    .then(response => {
+                        this.$store.state.show_type = this.show_type;
+                        this.$store.state.detail_info =  response.data;
+                        this.$store.state.display_detail = true;
+                    })
+                    .catch(err => {
+                        this.exists = false;
+                        console.log(err)
+                    })
+                    .finally(() => this.loading = false);
+
+            },
             update_details(){
                 if (this.show_type){
-                this.$store.state.show_type = this.show_type;
-                this.$store.state.detail_info = this.detail_info;
-                this.$store.state.display_detail = true }
+                    if (this.sid){
+                        this.getStudy(this.sid);
+                    }else{
+                        this.$store.state.show_type = this.show_type;
+                        this.$store.state.detail_info = this.detail_info;
+                        this.$store.state.display_detail = true;
+                    }
+                   }
                 },
             faIcon(key) {
                 return lookupIcon(key)
