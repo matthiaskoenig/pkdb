@@ -7,7 +7,7 @@
           pill
           small
           :title="'Show ' + name + ' details'"
-          @mouseover="mousover"
+          @click="update_details"
   >
     <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
     <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
@@ -82,6 +82,25 @@ export default {
       }
 
       return "#00a087";
+
+    },
+    show_type: function(){
+
+      if (this.otype.startsWith('substance')) {
+        return "info_node";
+      } else if (this.otype.startsWith('measurement_type')) {
+        return "info_node";
+      } else if (this.otype.startsWith('tissue')) {
+        return "info_node";
+      }else if (this.otype.startsWith('application')) {
+        return "info_node";
+      }else if (this.otype.startsWith('route')) {
+        return "info_node";
+      }else if (this.otype.startsWith('form')) {
+        return "info_node";
+      }
+      return null;
+
     },
     icon: function () {
       return lookupIcon(this.otype)
@@ -94,9 +113,10 @@ export default {
     }
   },
   methods: {
-    mousover(){
-      this.getData()
-      console.log("Mouseover info node:" + this.object)
+    update_details(){
+      if (this.show_type) {
+        this.getData();
+      }
     },
     getData() {
       if ("sid" in this.object && "label" in this.object){
@@ -108,8 +128,9 @@ export default {
             .then(response => {
               this.data = response.data;
               this.exists = true;
-              this.$store.state.data_info = this.data
-              this.$store.state.data_info_type = "info_node"
+              this.$store.state.show_type = this.show_type;
+              this.$store.state.detail_info = this.data;
+              this.$store.state.display_detail = true ;
             })
             .catch(err => {
               console.log(err.response.data);

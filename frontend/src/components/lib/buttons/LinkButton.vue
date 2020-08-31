@@ -6,7 +6,8 @@
                :color="color"
                :to="to"
                :title="title"
-               :disabled="to ? false : true"
+               @click="update_details"
+               :disabled="disabled"
         >
             <v-icon>{{ faIcon(icon) }}</v-icon>
         </v-btn>
@@ -17,8 +18,24 @@
     import {lookupIcon} from "@/icons"
 
     export default {
+        computed:{
+            disabled(){
+                if (this.to | (this.detail_info & this.show_type)){
+                    return true} else {
+                    return false
+                }
+            }
+        },
+
         name: "LinkButton",
         props: {
+            show_type: {
+                type: String,
+            },
+
+            detail_info: {
+                type: Object,
+            },
             to: {
                 type: String,
             },
@@ -36,6 +53,12 @@
             },
         },
         methods: {
+            update_details(){
+                if (this.show_type){
+                this.$store.state.show_type = this.show_type;
+                this.$store.state.detail_info = this.detail_info;
+                this.$store.state.display_detail = true }
+                },
             faIcon(key) {
                 return lookupIcon(key)
             },

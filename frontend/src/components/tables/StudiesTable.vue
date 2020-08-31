@@ -16,7 +16,8 @@
             :footer-props="footer_options"
         >
           <template v-slot:item.buttons="{ item }">
-            <LinkButton :to="'/studies/'+ item.sid"
+            <LinkButton :detail_info="item"
+                        show_type="study"
                         :title="'Study: '+item.pk"
                         icon="study"
             />
@@ -91,7 +92,6 @@
             Xref,
         },
         mixins: [searchTableMixin],
-
         data () {
             return {
                 otype: "studies",
