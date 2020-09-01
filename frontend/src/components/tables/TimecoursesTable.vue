@@ -1,6 +1,6 @@
 <template>
     <v-card flat>
-        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
+        <table-toolbar otype="timecourse" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
                 fill-height
                 fixed-header
