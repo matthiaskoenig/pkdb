@@ -64,13 +64,14 @@ let SearchMixin = {
             if (! this.$store.state.queries_output_types.timecourse_query) {
                 filter_output_type =true
                 output_type__in.delete("timecourse")
-
-
                 }
+            if (! this.$store.state.queries_output_types.scatter_query) {
+                filter_output_type = true
+                output_type__in.delete("array")
+            }
             if (! this.$store.state.queries_output_types.output_query) {
                 filter_output_type =true
                 output_type__in.delete("output")
-                output_type__in.delete("array")
 
             }
             if(filter_output_type) {

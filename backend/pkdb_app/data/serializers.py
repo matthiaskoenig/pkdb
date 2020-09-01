@@ -95,7 +95,7 @@ class SubSetSerializer(ExSerializer):
             )
         interventions = [o.pop("interventions") for o in outputs]
 
-        outputs_dj = create_multiple_bulk(subset, "timecourse", outputs, Output)
+        outputs_dj = create_multiple_bulk(subset, "subset", outputs, Output)
 
         for intervention, output in zip(interventions,outputs_dj):
             output.interventions.add(*intervention)
@@ -154,6 +154,7 @@ class SubSetSerializer(ExSerializer):
             raise serializers.ValidationError(
                 f"Outputs have no values on shared field")
 
+        subset_outputs = []
         for shared_values, shared_data in data_set.groupby(shared_reformated):
             x_data = shared_data[shared_data["dimension"] == 0]
             y_data = shared_data[shared_data["dimension"] == 1]
@@ -167,15 +168,22 @@ class SubSetSerializer(ExSerializer):
                 f"<{dimensions[0]}> has <{len(x_data)}> outputs. <{dimensions[1]}> has <{len(y_data)}> outputs."
                 )
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
+            x_output = study_outputs.get(pk=x_data["id"])
+            y_output = study_outputs.get(pk=y_data["id"])
+            subset_outputs.append(x_output)
+            subset_outputs.append(y_output)
 
             Dimension.objects.create(dimension=0,
                                      study=study,
-                                     output=study_outputs.get(pk=x_data["id"]),
+                                     output=x_output,
                                      data_point=data_point_instance)
             Dimension.objects.create(dimension=1,
                                      study=study,
-                                     output=study_outputs.get(pk=y_data["id"]),
+                                     output=y_output,
                                      data_point=data_point_instance)
+
+        subset_instance.pks.add(*subset_outputs)
+
 
 
 
@@ -198,7 +206,7 @@ class SubSetSerializer(ExSerializer):
         for output in subset_outputs.iterator():
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
 
-            dimension = Dimension(dimension=0,study=study, output=output,data_point=data_point_instance)
+            dimension = Dimension(dimension=0, study=study, output=output,data_point=data_point_instance)
             dimensions.append(dimension)
         Dimension.objects.bulk_create(dimensions)
 

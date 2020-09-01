@@ -6,8 +6,9 @@
 
       <v-row class="pl-4 pr-4 pb-4">
       <v-checkbox color="#41b883" v-model="output_query" label="Outputs"  hide-details></v-checkbox>
+      <v-checkbox class="pl-4 pr-4" color="#41b883" v-model="timecourse_query" label="Timecourse"  hide-details></v-checkbox>
+        <v-checkbox color="#41b883" v-model="scatter_query" label="Scatter"  hide-details></v-checkbox>
 
-      <v-checkbox class="pl-4" color="#41b883" v-model="timecourse_query" label="Timecourse"  hide-details></v-checkbox>
     </v-row>
   </span>
 </template>
@@ -40,6 +41,17 @@ export default {
         this.$store.dispatch('updateQueryAction', {
           query_type: "queries_output_types",
           key: "timecourse_query",
+          value: value })
+      },
+    },
+    scatter_query: {
+      get(){
+        return this.$store.state.queries_output_types.scatter_query
+      },
+      set (value) {
+        this.$store.dispatch('updateQueryAction', {
+          query_type: "queries_output_types",
+          key: "scatter_query",
           value: value })
       },
     },

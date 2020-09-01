@@ -66,6 +66,7 @@ const initial_subjects_boolean =
 const initial_output_types =
     {
         timecourse_query :true,
+        scatter_query :true,
         output_query:true,
     }
 const initial_subjects_queries = {

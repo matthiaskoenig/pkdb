@@ -119,6 +119,8 @@
           <v-list-item-content>
             <v-list-item-title>  <count-badge   color="blue" :count="results.outputs.count" text="Outputs"/>
               <v-spacer/><count-badge   color="blue" :count="results.timecourses.count" text="Timecourses "/>
+              <v-spacer/><count-badge   color="blue" :count="results.scatter.count" text="Scatter "/>
+
             </v-list-item-title>
             <output-form/>
           </v-list-item-content>
@@ -247,6 +249,8 @@ export default {
         individuals: {"hash": "", "count": 0},
         outputs: {"hash": "", "count": 0},
         timecourses: {"hash": "", "count": 0},
+        scatter: {"hash": "", "count": 0},
+
       },
       otype: "pkdata",
       otype_single: "pkdata",

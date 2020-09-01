@@ -369,7 +369,7 @@ class PKData(object):
             Prefetch(
                 'interventions',
                 queryset=Intervention.objects.only('id'))).only(
-            'group_id', 'individual_id', "id", "interventions__id", "timecourse__id", "output_type")
+            'group_id', 'individual_id', "id", "interventions__id", "subset__id", "output_type")
 
         #  --- Elastic ---
         if studies_query:
@@ -415,10 +415,11 @@ class PKData(object):
         interventions = set()
         outputs =set()
         timecourses =set()
+        scatter =set()
 
         time_loop_start = time.time()
 
-        for output in self.outputs.filter(normed=True).values("study_id","group_id", "individual_id", "id", "interventions__id", "timecourse__id", "output_type"):
+        for output in self.outputs.filter(normed=True).values("study_id","group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
             studies.add(output["study_id"])
             if output["group_id"]:
                 groups.add(output["group_id"])
@@ -426,11 +427,14 @@ class PKData(object):
                 individuals.add(output["individual_id"])
             outputs.add(output["id"])
 
-            if (output["timecourse__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
-                timecourses.add(output["timecourse__id"])
-
             if output["interventions__id"]:
                 interventions.add(output["interventions__id"])
+
+            if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
+                timecourses.add(output["subset__id"])
+
+            if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
+                scatter.add(output["subset__id"])
 
 
 
@@ -447,6 +451,8 @@ class PKData(object):
             "interventions": list(interventions),
             "outputs": list(outputs),
             "timecourses": list(timecourses),
+            "scatter": list(scatter),
+
         }
 
 
@@ -576,6 +582,7 @@ class PKDataView(APIView):
                 "interventions": Sheet("Interventions",{"pk":pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis),
                 "outputs": Sheet("Outputs",{"output_pk":pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer),
                 "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet,DataAnalysisSerializer),
+                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, DataAnalysisSerializer),
 
             }
             with tempfile.SpooledTemporaryFile() as tmp:
