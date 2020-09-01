@@ -20,10 +20,6 @@
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
-                <link-button :to="'/groups/' + item.pk"
-                             :title="'Group: ' + item.pk"
-                             icon="group"
-                />
                 <json-button :resource_url="api + 'groups/' + item.pk + '/?format=json'"/>
             </template>
             <template v-slot:item.name="{ item }">

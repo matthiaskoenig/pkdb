@@ -1,12 +1,11 @@
 <template>
     <v-card class="detail-card">
-        <heading-toolbar :title="'Group: '+group.pk" :count="group.count" icon="group" :resource_url="resource_url"/>
         <v-layout>
             <v-flex>
                 <v-btn small color="black" fab dark title="Group Size">{{ group.count }}</v-btn>
             </v-flex>
             <v-flex>
-                <characteristica-card-deck :characteristica="group.characteristica_all_normed" />
+                <characteristica-card-deck :characteristica="group.characteristica" />
             </v-flex>
         </v-layout>
     </v-card>
@@ -26,9 +25,13 @@
             },
             resource_url: {
                 type: String
-            }
+            },
+          pk: {
+            type: String
+          }
         },
         methods: {
+
         }
     }
 </script>

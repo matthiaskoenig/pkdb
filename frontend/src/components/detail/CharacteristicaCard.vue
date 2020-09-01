@@ -1,5 +1,5 @@
 <template>
-    <div flat class="characteristica_card"
+    <v-card flat @click="update_details"  outlined class="characteristica_card"
             align="start" justify="start">
 
       <span v-if="!(data.choice && data.choice.sid)">
@@ -14,7 +14,6 @@
 
       </span>
 
-      <br />
 
         <span v-if="data.choice && data.choice.sid">
             <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
@@ -33,18 +32,21 @@
             <node-element :data="data.choice"/>
         </v-badge>
         </span>
-        <span v-if="value || error">
+      <br />
+
+      <span v-if="value || error">
             {{ value }} <span v-if="error">{{ error }}</span>
             <span v-if="data.unit"> {{ data.unit }}</span>
         </span>
         <span v-else-if="!value & !error & !data.choice & !data.substance">
             <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
         </span>
-    </div>
+    </v-card>
 </template>
 
 <script>
     import {lookupIcon} from "@/icons"
+    import axios from 'axios'
 
     export default {
         name: "CharacteristicaCard",
@@ -132,6 +134,27 @@
             }
         },
         methods: {
+          getInfoNode(sid) {
+            // object is an InfoNode
+            let url = `${this.$store.state.endpoints.api}info_nodes/${sid}/?format=json`;
+
+            // get data (FIXME: caching of InfoNodes in store)
+            axios.get(url)
+                .then(response => {
+                  this.$store.state.show_type = "info_node";
+                  this.$store.state.detail_info =  response.data;
+                  this.$store.state.display_detail = true;
+                })
+                .catch(err => {
+                  this.exists = false;
+                  console.log(err)
+                })
+                .finally(() => this.loading = false);
+
+          },
+          update_details(){
+            this.getInfoNode(this.data.measurement_type.sid)
+          },
             faIcon: function (key) {
                 return lookupIcon(key)
             },

@@ -22,6 +22,8 @@
               pill
               small
               :title="'Show ' + name + ' details'"
+              @click="update_details"
+
       >
         <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
         <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
@@ -98,6 +100,8 @@ export default {
         return "info_node";
       }else if (this.otype.startsWith('form')) {
         return "info_node";
+      }else if (this.otype.startsWith('group')) {
+        return "group";
       }
       return null;
 
@@ -114,11 +118,20 @@ export default {
   },
   methods: {
     update_details(){
-      if (this.show_type) {
-        this.getData();
+      if (this.show_type === "info_node") {
+        this.getInfoNode();
+      }else if(this.show_type === "group"){
+        //this.updateGroup();
+
       }
     },
-    getData() {
+    updateGroup() {
+      // object is an InfoNode
+            this.$store.state.show_type = "group";
+            this.$store.state.detail_info = this.object;
+            this.$store.state.display_detail = true;
+    },
+    getInfoNode() {
       if ("sid" in this.object && "label" in this.object){
         // object is an InfoNode
         let url = `${this.$store.state.endpoints.api}info_nodes/${this.object.sid}/?format=json`;

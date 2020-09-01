@@ -21,10 +21,7 @@
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
-                <link-button :to="'/individuals/'+ item.pk"
-                             :title="'Individual: '+item.pk"
-                             icon="individual"
-                />
+
                 <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.individual="{ item }">
@@ -78,6 +75,9 @@
                 ]
             }
         },
+      methods:{
+
+      }
     }
 </script>
 

@@ -32,6 +32,7 @@
     />
     <search-help v-if="show_type === 'help'"/>
     <study-overview v-if="show_type === 'study'" :study="detail_info"/>
+    <!-- <group-detail v-if="show_type === 'group'" :group="detail_info"/> -->
 
     </div>
 
@@ -45,10 +46,11 @@ import {IconsMixin} from "../../icons";
 import SearchHelp from "../search/SearchHelp";
 import InfoNodeDetail from "../detail/InfoNodeDetail";
 import StudyOverview from "../detail/StudyOverview";
+import GroupDetail from "../detail/GroupDetail";
 
 export default {
   name: 'DetailDrawer',
-  components: {SearchHelp, StudyOverview,InfoNodeDetail},
+  components: {GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
   mixins: [IconsMixin],
   data: () => ({
     drawer: false,
