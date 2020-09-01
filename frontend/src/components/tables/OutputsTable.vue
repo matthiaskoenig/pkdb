@@ -20,10 +20,6 @@
                                 :title="'Study: '+item.study.name"
                                 icon="study"
                     />
-                    <LinkButton :to="'/outputs/'+ item.pk"
-                                :title="'Output: '+item.pk"
-                                :icon="otype"
-                    />
                     <JsonButton :resource_url="api + 'outputs/'+ item.pk +'/?format=json'"/>
                 </template>
                 <template v-slot:item.calculated="{ item }">
