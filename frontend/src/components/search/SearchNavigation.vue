@@ -204,7 +204,7 @@ export default {
     },
     show_help() {
       this.show_type = 'help'
-      this.display_detail = !this.display_detail
+      this.display_detail = true
     },
     update_search_query(emitted_object) {
       for (const [key, value] of Object.entries(emitted_object)) {

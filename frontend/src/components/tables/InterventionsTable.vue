@@ -20,10 +20,7 @@
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
-                <LinkButton :to="'/interventions/'+ item.pk"
-                            :title="'Intervention: '+ item.pk"
-                            icon="intervention"
-                />
+
                 <JsonButton :resource_url="api + 'interventions/'+ item.pk +'/?format=json'"/>
             </template>
 
