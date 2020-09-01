@@ -107,8 +107,7 @@
                 otype_single: "subset",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Measurement Type', value: 'measurement_type',sortable: false},
-                    {text: 'Measurement', value: 'measurement', sortable: false},
+                    {text: 'Measurement', value: 'measurement_type', sortable: false},
                     {text: 'Details', value: 'details',sortable: false},
                     {text: 'Timecourse', value: 'timecourse',sortable: false},
                 ]
