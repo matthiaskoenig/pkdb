@@ -24,7 +24,7 @@
 
 
         <v-row>
-          <v-col cols="4">
+          <v-col cols="6">
         <div v-if="study.substances && study.substances.length!=0">
           <span class="attr">Substances</span><br />
           <span v-for="substance in study.substances" :key="substance.sid">
@@ -35,19 +35,22 @@
         </div>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="6">
+
             <div>
               <span class="attr">Creator</span><br />
               <user-avatar :user="study.creator"/>
             </div>
-          </v-col>
-          <v-col cols="4">
+            <div class="mt-4">
+              <span class="attr">Curators</span><br />
+              <user-rating v-for="curator in study.curators"
+                           :key="curator.username"
+                           :user="curator"
+              />
 
-          <span class="attr">Curators</span><br />
-          <user-rating v-for="curator in study.curators"
-                       :key="curator.username"
-                       :user="curator"
-          />
+            </div>
+
+
           </v-col>
         </v-row>
 
