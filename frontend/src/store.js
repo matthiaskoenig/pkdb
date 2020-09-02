@@ -105,6 +105,8 @@ export default new Vuex.Store({
             individuals: {"hash": "", "count": 0},
             outputs: {"hash": "", "count": 0},
             timecourses: {"hash": "", "count": 0},
+            scatter: {"hash": "", "count": 0},
+
         },
 
         // global highlighting

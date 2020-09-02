@@ -49,6 +49,9 @@ let searchTableMixin = {
         ntypes: {
             type: Array,
             default: () => []
+        },
+        data_type: {
+            type: String,
         }
 
     },
@@ -64,21 +67,14 @@ let searchTableMixin = {
     },
     watch: {
 
-        pagination: {
-            handler() {
-                this.getData()
-            },
-            deep: true
-        },
         search(){
+            this.options.page = 1
             this.getData();
             this.$store.state.highlight = this.search
         },
-        ntype: {
-            handler() {
-                this.getData();
-            },
-            deep: true
+        hash(){
+            this.options.page = 1
+            this.getData();
         },
         url: {
             handler() {
@@ -121,11 +117,14 @@ let searchTableMixin = {
             if (this.ntypes.length > 0 ){
                 url += '&ntype__in=' + this.ntypes.join("__")
             }
-            if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
+            if (["outputs", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
             }
             if (this.search_ids) {
                 url += '&ids=' + this.ids.join("__")
+            }
+            if (this.data_type) {
+                url += '&data_type=' + this.data_type
             }
             if (this.search_hash) {
                 url += '&hash=' + this.hash

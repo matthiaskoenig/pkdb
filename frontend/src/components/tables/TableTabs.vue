@@ -33,7 +33,9 @@
                              :hash="results.interventions.hash" :autofocus="false"/>
         <outputs-table v-if="item.tab === 'Outputs'" :search_hash="true" :hash="results.outputs.hash"
                        :autofocus="false"/>
-        <timecourses-table v-if="item.tab === 'Timecourses'" :search_hash="true" :hash="results.timecourses.hash"
+        <timecourses-table v-if="item.tab === 'Timecourses'" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
+                           :autofocus="false"/>
+        <scatter-table v-if="item.tab === 'Scatter'" :search_hash="true" :hash="results.scatter.hash" data_type="scatter"
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>
@@ -54,6 +56,7 @@ import GroupsTable from "./GroupsTable";
 import InterventionsTable from "./InterventionsTable";
 import OutputsTable from "./OutputsTable";
 import TimecoursesTable from "./TimecoursesTable";
+import ScatterTable from "./ScatterTable";
 
 import {SearchMixin} from "../../search";
 
@@ -69,7 +72,8 @@ export default {
     IndividualsTable,
     InterventionsTable,
     OutputsTable,
-    TimecoursesTable
+    TimecoursesTable,
+    ScatterTable
   },
   computed: {
     tab: {
@@ -114,6 +118,7 @@ export default {
         {tab: 'Interventions'},
         {tab: 'Outputs'},
         {tab: 'Timecourses'},
+        {tab: 'Scatter'},
       ],
     }
   },

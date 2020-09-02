@@ -27,55 +27,15 @@
 
           </template>
 
-            <template v-slot:item.measurement_type="{ item }">
-                <object-chip :object="item.array[0][0].measurement_type"
-                             otype="measurement_type"
-                             :search="search"
-                />
+            <template v-slot:item.details_x="{ item }">
+              <scatter-details :details="scatter_x(item.array)"/>
             </template>
-            <template v-slot:item.details="{ item }">
-                <get-data v-if="Object.keys(item.array[0][0].group).length !== 0" :resource_url="group_url(item.array[0][0].group.pk)">
-                        <span slot-scope="data">
-                            <object-chip :object="data.data"
-                                         otype="group"
-                                         :search="search"
-                            />
-                        </span>
-                </get-data>
-                <get-data v-if="Object.keys(item.array[0][0].individual).length !== 0" :resource_url="individual_url(item.array[0][0].individual.pk)">
-                        <span slot-scope="data">
-                            <object-chip :object="data.data"
-                                         otype="individual"
-                                         :search="search"
-                            />
-                        </span>
-                </get-data>
-              <br />
-                    <span v-if="item.array[0][0].interventions" v-for="(intervention, index2) in item.array[0][0].interventions" :key="index2">
-                        <get-data :resource_url="intervention_url(intervention.pk)">
-                            <span slot-scope="data">
-                                <object-chip :object="data.data"
-                                             otype="intervention"
-                                             :search="search"
-                                />
-                            </span>
-                        </get-data>&nbsp;
-                    </span>
-               <br />
-                <object-chip :object="item.array[0][0].tissue"
-                             otype="tissue"
-                             :search="search"
-                />
-                <br />
-                <object-chip :object="item.array[0][0].substance"
-                             otype="substance"
-                             :search="search"
-                />
-            </template>
+          <template v-slot:item.details_y="{ item }">
+            <scatter-details :details="scatter_y(item.array)"/>
+          </template>
 
-            <template v-slot:item.timecourse="{ item }">
-
-                <timecourse-plot :array="item.array"/>
+            <template v-slot:item.scatter="{ item }">
+              <scatter-plot :scatter_x="scatter_x(item.array)" :scatter_y="scatter_y(item.array)"/>
             </template>
             <no-data/>
 
@@ -87,19 +47,72 @@
     import {searchTableMixin, UrlMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
-    import TimecoursePlot from '../plots/TimecoursePlot'
+    import ScatterDetails from "../detail/ScatterDetails";
+    import ScatterPlot from "../plots/ScatterPlot";
 
     export default {
-        name: "TimecoursesTable",
+        name: "ScatterTable",
         components: {
+          ScatterPlot,
             NoData,
             TableToolbar,
-            TimecoursePlot,
+            ScatterDetails
         },
-      method: {
-    },
+        methods: {
+          scatter: function(array, dimension) {
+            let scatter = array.map(function (point) {
+              if (point.length === 2){
+              return {
+                "time": point[dimension].time,
+                "unit": point[dimension].unit,
+                "time_unit": point[dimension].time_unit,
+                "sd": point[dimension].sd,
+                "se": point[dimension].se,
+                "cv": point[dimension].cv,
+                "mean": point[dimension].mean,
+                "median": point[dimension].median,
+                "value": point[dimension].value,
+                "individual": point[dimension].individual,
+                "group": point[dimension].group,
+                "interventions": point[dimension].interventions,
+                "tissue": point[dimension].tissue,
+                "substance": point[dimension].substance,
+                "measurement_type": point[dimension].measurement_type,
 
+              }}else{
+                console.log(point)
+                return {}
+              }
+            })
+            var out = {};
+            for (var i = 0; i < scatter.length; i++) {
+              for (var key in scatter[i]) {
+                if (out[key] === undefined) {
+                  out[key] = new Set();
+                }
+                const value = scatter[i][key]
+                if (value) {
+                  out[key].add(JSON.stringify(value))
+                }
+              }
+            }
+            var result = {}
+            for (const [key, value] of Object.entries(out)) {
+              result[key] = Array.from(value).map(JSON.parse)
+            }
+            return result
+          },
+          scatter_x: function(array){
+          return this.scatter(array,0)
+        },
+          scatter_y: function(array){
+            return this.scatter(array,1)
+          },
+        },
+        computed:{
+          },
         mixins: [searchTableMixin, UrlMixin],
+
 
         data() {
             return {
@@ -107,9 +120,9 @@
                 otype_single: "subset",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Measurement', value: 'measurement_type', sortable: false},
-                    {text: 'Details', value: 'details',sortable: false},
-                    {text: 'Timecourse', value: 'timecourse',sortable: false},
+                    {text: 'Details X', value: 'details_x',sortable: false},
+                    {text: 'Details Y', value: 'details_y',sortable: false},
+                    {text: 'Scatter', value: 'scatter',sortable: false},
                 ]
             }
         },
