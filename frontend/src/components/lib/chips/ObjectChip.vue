@@ -104,10 +104,13 @@ export default {
       }else if (this.otype.startsWith('route')) {
         return "info_node";
       }else if (this.otype.startsWith('form')) {
-        return "info_node";
+        return "info_node";}
+      else if (this.otype.startsWith('info_node')) {
+          return "info_node";
       }else if (this.otype.startsWith('group')) {
         return "group";
       }
+
       return null;
 
     },

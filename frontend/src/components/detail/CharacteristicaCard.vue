@@ -175,8 +175,13 @@
                 .finally(() => this.loading = false);
 
           },
-          update_details(){
+          update_details() {
+            if (this.data.choice.sid) {
+              this.getInfoNode(this.data.choice.sid)
+
+            } else {
             this.getInfoNode(this.data.measurement_type.sid)
+          }
           },
             faIcon: function (key) {
                 return lookupIcon(key)

@@ -11,7 +11,14 @@
           <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
         </div>
         <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight></v-list-item-title>
-        <v-list-item-subtitle v-if="parents_labels.length>0">Parents: {{ parents_labels.join(', ') }}</v-list-item-subtitle>
+        <v-list-item-subtitle v-if="parents_labels.length>0">Parents:
+          <object-chip :object="parent"
+                       otype="info_node"
+                       v-for="parent in data.parents"
+                       :key="parent.sid"
+                       :search="highlight"
+          />
+        </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
