@@ -1,13 +1,14 @@
 <template>
   <span>
-  <v-chip v-if="!count"
-          class="ma-1"
+  <v-chip
+      v-if="!count"
+          :class= margin
           color="#FFFFFF"
           flat
           pill
           small
           :title="'Show ' + name + ' details'"
-          @click="update_details"
+          @click.stop="update_details"
   >
     <v-icon small left :color="color">{{ icon }}</v-icon>&nbsp;
     <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ name }}</text-highlight></span>
@@ -40,6 +41,10 @@ export default {
   name: "ObjectChip",
   components: {},
   props: {
+    margin: {
+      type: String,
+      default: 'ma-1'
+    } ,
     object: {
       required: true
     },

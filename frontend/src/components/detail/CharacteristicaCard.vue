@@ -1,21 +1,21 @@
 <template>
-    <v-card flat @click="update_details"  outlined class="characteristica_card"
-            align="start" justify="start">
 
-      <span v-if="!(data.choice && data.choice.sid)">
+    <v-card
+        flat
+        @click="update_details"
+        outlined
+        class="characteristica_card"
+        align="start"
+        justify="start">
+      <v-container fluid class="pt-1 pb-1">
 
-        <span v-if="value || error">
-          <v-badge v-if="data.count" inline right color="#BBBBBB" dark>
-              <span slot="badge">{{ this.count }}/{{this.subject_count}}</span>
-              <node-element :data="data.measurement_type"/>
-          </v-badge>
-          <node-element v-if="!this.count" :data="data.measurement_type"/>
-        </span>
+      <v-row>
 
-      </span>
+      <v-badge v-if="data.count" inline color="#BBBBBB" right>
+        <span slot="badge">{{ this.count }}/{{this.subject_count}}</span>
+          <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
 
-
-        <span v-if="data.choice && data.choice.sid">
+        <span v-if="data.choice.sid">
             <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
             <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
             <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
@@ -27,20 +27,41 @@
             <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
             <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
 
-            <v-badge inline right dark color="#BBBBBB">
-              <span slot="badge" >{{ this.count }}/{{this.subject_count}}</span>
             <node-element :data="data.choice"/>
-        </v-badge>
         </span>
-      <br />
+      </v-badge>
+      </v-row>
 
-      <span v-if="value || error">
+      <v-row>
+        <span v-if="data.measurement_type.sid==='abstinence'">
+          <object-chip
+              v-if="data.substance.sid !== null"
+              :object="data.substance"
+              otype="substance"
+              :search="search"
+              margin="ma-0 pb-0"
+          />
+        </span>
+
+        <span v-if="value || error">
+        <object-chip
+            v-if="(data.substance.sid !== null) & (!data.measurement_type.sid==='abstinence')"
+            :object="data.substance"
+            otype="substance"
+            :search="search"
+            margin="ma-0 pb-0"
+        />
+
             {{ value }} <span v-if="error">{{ error }}</span>
             <span v-if="data.unit"> {{ data.unit }}</span>
+
         </span>
-        <span v-else-if="!value & !error & !data.choice & !data.substance">
-            <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
+        <span v-if="!value & !error & !data.choice.sid & !data.substance.sid">
+            <v-icon small  title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
         </span>
+      </v-row>
+      </v-container>
+
     </v-card>
 </template>
 
