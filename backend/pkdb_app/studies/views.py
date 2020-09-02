@@ -261,8 +261,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
         'curators': {'field': 'curators.username.raw',
                     'lookups': [LOOKUP_QUERY_IN, ], },
         'collaborator': 'collaborators.name.raw',
-        'licence': 'licence.raw',
-        'access': 'access.raw',
+        'licence': {'field': 'licence.raw',
+                   'lookups': [LOOKUP_QUERY_IN, ], },
+        'access': {'field': 'access.raw',
+                 'lookups': [LOOKUP_QUERY_IN, ], },
         'substance': 'substances.name.raw',
     }
     ordering_fields = {

@@ -28,6 +28,10 @@ let SearchMixin = {
 
             var output_type__in = new Set(["output", "timecourse", "array"]);
             var filter_output_type = false
+
+            var licence__in = new Set(["closed", "open"]);
+            var filter_licence = false
+
             for (const [key, value] of Object.entries(this.$store.state.queries)) {
                 if (value.length > 0) {
 
@@ -79,6 +83,23 @@ let SearchMixin = {
                     url = url + "&" + "outputs__output_type__in=0"
                 } else {
                     url = url + "&" + "outputs__output_type__in=" + [...output_type__in].join("__")
+                }
+            }
+
+            if (! this.$store.state.licence_boolean.open) {
+                filter_licence =true
+                licence__in.delete("open")
+            }
+            if (! this.$store.state.licence_boolean.closed) {
+                filter_licence = true
+                licence__in.delete("closed")
+            }
+
+            if(filter_licence) {
+                if ([...licence__in].length === 0) {
+                    url = url + "&" + "licence__in=0"
+                } else {
+                    url = url + "&" + "studies__licence__in=" + [...licence__in].join("__")
                 }
             }
             return url

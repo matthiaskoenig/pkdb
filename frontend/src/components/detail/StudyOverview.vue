@@ -15,7 +15,7 @@
 
           <v-btn icon>
             <v-icon small
-                    :title="'Publication is '+ study.licence + ' access'"
+                    :title="'Publication is '+ study.licence + ' licence'"
                     :color="study.licence =='open' ? 'green' : 'red'"
             >{{ faIcon(study.licence) }}</v-icon>
           </v-btn>

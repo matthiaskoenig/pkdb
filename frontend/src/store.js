@@ -63,6 +63,11 @@ const initial_subjects_boolean =
         groups_query: true,
         individuals_query: true,
     }
+const initial_licence_boolean =
+    {
+        open: true,
+        closed: true,
+    }
 const initial_output_types =
     {
         timecourse_query :true,
@@ -92,6 +97,7 @@ export default new Vuex.Store({
 
         // search queries
         queries: initial_queries,
+        licence_boolean:initial_licence_boolean,
         subjects_boolean: initial_subjects_boolean,
         subjects_queries: initial_subjects_queries,
         queries_users: initial_queries_users,
