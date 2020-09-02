@@ -1,6 +1,6 @@
 <template>
     <span>
-        <v-layout wrap >
+        <v-layout d-flex flex-wrap >
             <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
                 <characteristica-card :data="item" />
 

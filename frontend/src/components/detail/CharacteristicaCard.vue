@@ -2,6 +2,8 @@
 
     <v-card
         flat
+        tile
+        height="100%"
         @click="update_details"
         outlined
         class="characteristica_card"
