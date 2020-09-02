@@ -54,6 +54,10 @@ export default {
     timecourse_count: {
       type: Number,
       required: true
+    },
+    scatter_count: {
+      type: Number,
+      required: true
     }
   },
   data() {
@@ -124,15 +128,13 @@ export default {
           description: "Clinical or experimental time course measurements. Often timecourses are concentration measurements." +
               "A timecourse is always linked to the respective intervention and group or individual."
         },
-        /*
-            {
-                name: 'Reference',
-                to: '/references',
-                icon: this.faIcon('references'),
-                count: this.reference_count,
-                description: "Literature references from which the data was digitized and curated."
-            },
-             */
+        {
+                name: 'Scatter',
+                to: '/results?tab=Scatter',
+                icon: 'scatter',
+                count: this.scatter_count,
+                description: "Scatter plots."
+        },
       ]
     }
   },

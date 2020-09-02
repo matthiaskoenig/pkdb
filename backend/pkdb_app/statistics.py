@@ -29,6 +29,7 @@ class Statistics(object):
         self.output_count = Output.objects.filter(normed=True).count()
         self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
         self.timecourse_count = SubSet.objects.filter(data__data_type=Data.DataTypes.Timecourse).count()
+        self.scatter_count = SubSet.objects.filter(data__data_type=Data.DataTypes.Scatter).count()
 
         self.studies = StudyElasticStatisticsSerializer(StudyDocument().get_queryset()).data
 
@@ -60,6 +61,7 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "output_count",
                 "output_calculated_count",
                 'timecourse_count',
+                'scatter_count',
                 "studies",
             ]
         }

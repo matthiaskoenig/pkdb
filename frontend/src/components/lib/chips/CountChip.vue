@@ -9,22 +9,25 @@
 
             :to="to"
     >
-        <v-icon
-                small
-                left
-                :title="'Number of ' + name + 's'">
-          {{ faIcon }}
-        </v-icon>
+      <scatter-icon v-if="icon==='scatter'" class="v-icon--left"/>
+      <v-icon  v-else
+              small
+              left
+              :title="'Number of ' + name + 's'">
+      {{ faIcon }}
+      </v-icon>
 
       <strong>{{ count }}</strong>
     </v-chip>
 </template>
 
 <script>
+    import ScatterIcon from "../../detail/ScatterIcon";
     import {lookupIcon} from "@/icons"
 
     export default {
         name: "CountChip",
+      components:{ScatterIcon},
         props: {
             to: {
                 type: String,

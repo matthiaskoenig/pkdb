@@ -63,6 +63,8 @@ export default {
         intervention_count: 0,
         output_count: 0,
         timecourse_count: 0,
+        scatter_count: 0,
+
         reference_count: 0,
       },
     }

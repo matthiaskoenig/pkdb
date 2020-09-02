@@ -34,6 +34,8 @@
             <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
             <count-chip :count=item.output_count icon="output" name="output"></count-chip >
             <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse" />
+            <count-chip :count=item.scatter_count icon="scatter" name="scatter" />
+
           </template>
 
           <template v-slot:item.reference="{ item }">
@@ -101,8 +103,8 @@
                     {text: 'Study', value: 'study', sortable: false},
                     {text: 'Counts', value: 'counts', sortable: false},
                     {text: 'Reference', value: 'reference', sortable: false},
-                  {text: 'Curators', value: 'curators', sortable: false},
-                  {text: 'Substances', value: 'substances', sortable: false},
+                    {text: 'Curators', value: 'curators', sortable: false},
+                    {text: 'Substances', value: 'substances', sortable: false},
                     // {text: 'Creator', value: 'creator',sortable: false},
 
                 ],
