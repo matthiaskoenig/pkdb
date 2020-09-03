@@ -20,6 +20,8 @@
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
+              <JsonButton :resource_url="api + 'subsets/'+ item.pk +'/?format=json'"/>
+
             </template>
 
           <template v-slot:item.name="{ item }">

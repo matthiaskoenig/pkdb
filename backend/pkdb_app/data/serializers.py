@@ -381,7 +381,7 @@ class SubSetElasticSerializer(serializers.ModelSerializer):
 
     def get_array(self,object):
         #return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
-        return [[p.to_dict() for p in point.point] for point in object["array"]]
+        return [point["point"] for point in object.to_dict()["array"]]
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
