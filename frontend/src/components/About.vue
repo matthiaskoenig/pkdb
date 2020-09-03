@@ -1,7 +1,7 @@
 <template>
   <div id="about" class="main">
-    <h1>About</h1>
-    <h2>Team</h2>
+    <h2>About</h2>
+    <h3>Team</h3>
     <p>
       PK-DB is developed from the <a href="https://livermetabolism.com">Systems Medicine of the Liver Group</a> at the Humboldt-University Berlin.
     </p>
@@ -32,20 +32,20 @@
       </a> <a href="https://github.com/matthiaskoenig/pkdb/issues/new" title="Report an issue" target="_blank">https://github.com/matthiaskoenig/pkdb/issues/new</a>
     </p>
 
-    <h2>How to cite</h2>
+    <h3>How to cite</h3>
     <p>
       <i>PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling</i><br/>
       Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König<br/>
       bioRxiv 760884; doi: <a href="https://doi.org/10.1101/760884">https://doi.org/10.1101/760884</a>
     </p>
 
-    <h2>Licensing</h2>
+    <h3>Licensing</h3>
     <p>
       All data is governed by the PK-DB's <a
         href="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md">Terms of use</a>
     </p>
 
-    <h2>Funding</h2>
+    <h3>Funding</h3>
     <p>
       This project is supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research
       network Systems Medicine of the Liver (LiSyM, grant number 031L0054).

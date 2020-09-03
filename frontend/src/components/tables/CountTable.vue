@@ -91,7 +91,7 @@ export default {
           to: '/results?tab=Groups',
           icon: this.faIcon('groups'),
           count: this.group_count,
-          description: "Group of individuals for which data was measured, e.g., the control group and the group which received " +
+          description: "Group of individuals for which data was reported, e.g., the control group and the group which received " +
               "an intervention. A group is described by certain characteristica, e.g., bodyweight, health status, smoking status or medication."
         },
         {
@@ -126,14 +126,15 @@ export default {
           icon: this.faIcon('timecourses'),
           count: this.timecourse_count,
           description: "Clinical or experimental time course measurements. Often timecourses are concentration measurements." +
-              "A timecourse is always linked to the respective intervention and group or individual."
+              " A timecourse is always linked to the respective intervention and group or individual."
         },
         {
-                name: 'Scatter',
-                to: '/results?tab=Scatter',
-                icon: 'scatter',
-                count: this.scatter_count,
-                description: "Scatter plots."
+          name: 'Scatter',
+          to: '/results?tab=Scatter',
+          icon: 'scatter',
+          count: this.scatter_count,
+          description: "Correlations between outputs are often shown by scatter plots (e.g. age " +
+              "versus clearance). "
         },
       ]
     }
