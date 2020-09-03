@@ -33,14 +33,6 @@
                           title="Calculated from timecourse.">fas fa-times-circle
                   </v-icon>
                 </template>
-
-          <template v-slot:item.measurement="{ item }">
-            <object-chip :object="item.measurement_type"
-                         otype="measurement_type"
-                         :search="search"
-            />
-          </template>
-
                 <template v-slot:item.details="{ item }">
                     <get-data v-if="item.group" :resource_url="group_url(item.group.pk)">
                         <span slot-scope="data">
@@ -74,18 +66,16 @@
                                  otype="tissue"
                                  :search="search"
                     />
-                  <br />
-                  <object-chip :object="item.substance"
-                     otype="substance"
-                     :search="search"
-                />
+
                 </template>
 
                 <template v-slot:item.time="{ item }">
 
                 </template>
                 <template v-slot:item.output="{ item }">
-                  <characteristica-card :data="item"/>
+                  <v-layout d-flex flex-wrap >
+                    <characteristica-card :data="item"/>
+                  </v-layout>
                 </template>
 
             <no-data/>
@@ -114,7 +104,6 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Measured', value: 'calculated', sortable: false},
-                    {text: 'Measurement', value: 'measurement', sortable: false},
                     {text: 'Details', value: 'details',sortable: false},
                     {text: 'Output', value: 'output', sortable: false},
 

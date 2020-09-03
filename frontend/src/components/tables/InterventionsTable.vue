@@ -34,11 +34,10 @@
             </template>
 
           <template v-slot:item.substance="{ item }">
-            <characteristica-card :data="item" :count="1" />
-            <object-chip :object="item.substance"
-                         otype="substance"
-                         :search="search"
-            />
+            <v-layout d-flex flex-wrap >
+
+            <characteristica-card :data="item" />
+            </v-layout>
 
           </template>
 

@@ -4,64 +4,62 @@
         flat
         tile
         height="100%"
+        width="100%"
         @click="update_details"
         outlined
         class="characteristica_card"
-        align="start"
-        justify="start">
+        align="start">
       <v-container fluid class="pt-1 pb-1">
+        <v-row>
+          <v-badge v-if="data.count" inline color="#BBBBBB" right>
+            <span slot="badge">{{ this.count }}/{{this.subject_count}}</span>
+            <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
+            <span v-if="data.choice.sid">
+                <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
+                <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
+                <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
+                <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small left color="red">fa fa-smoking</v-icon></span>
+                <span v-if="(data.choice.sid=='smoking-no')"><v-icon small left color="green">fa fa-smoking-ban</v-icon></span>
+                <span v-if="(data.choice.sid=='medication-yes')"><v-icon small left color="red">fa fa-tablets</v-icon></span>
+                <span v-if="(data.choice.sid=='medication-no')"><v-icon small left color="green">fa fa-tablets</v-icon></span>
 
-      <v-row>
+                <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
+                <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
 
-      <v-badge v-if="data.count" inline color="#BBBBBB" right>
-        <span slot="badge">{{ this.count }}/{{this.subject_count}}</span>
-          <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
+                <node-element :data="data.choice"/>
+            </span>
+          </v-badge>
+          <span v-else>
+            <node-element   :data="data.measurement_type"/>
+          </span>
+        </v-row>
 
-        <span v-if="data.choice.sid">
-            <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
-            <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
-            <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
-            <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small left color="red">fa fa-smoking</v-icon></span>
-            <span v-if="(data.choice.sid=='smoking-no')"><v-icon small left color="green">fa fa-smoking-ban</v-icon></span>
-            <span v-if="(data.choice.sid=='medication-yes')"><v-icon small left color="red">fa fa-tablets</v-icon></span>
-            <span v-if="(data.choice.sid=='medication-no')"><v-icon small left color="green">fa fa-tablets</v-icon></span>
+        <v-row>
+            <object-chip
+                v-if="data.substance.sid"
+                :object="data.substance"
+                otype="substance"
+                :search="search"
+                margin="ma-0 pb-0 mr-2"
+            />
 
-            <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
-            <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
-
-            <node-element :data="data.choice"/>
-        </span>
-      </v-badge>
-      </v-row>
-
-      <v-row>
-        <span v-if="data.measurement_type.sid==='abstinence'">
+          <span v-if="value || error">
           <object-chip
-              v-if="data.substance.sid !== null"
+              v-if="(data.substance.sid !== null) & (!data.measurement_type.sid==='abstinence')"
               :object="data.substance"
               otype="substance"
               :search="search"
               margin="ma-0 pb-0"
           />
-        </span>
 
-        <span v-if="value || error">
-        <object-chip
-            v-if="(data.substance.sid !== null) & (!data.measurement_type.sid==='abstinence')"
-            :object="data.substance"
-            otype="substance"
-            :search="search"
-            margin="ma-0 pb-0"
-        />
+              {{ value }} <span v-if="error">{{ error }}</span>
+              <span v-if="data.unit"> {{ data.unit }}</span>
 
-            {{ value }} <span v-if="error">{{ error }}</span>
-            <span v-if="data.unit"> {{ data.unit }}</span>
-
-        </span>
-        <span v-if="!value & !error & !data.choice.sid & !data.substance.sid">
-            <v-icon small  title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
-        </span>
-      </v-row>
+          </span>
+          <span v-if="!value & !error & !data.choice.sid & !data.substance.sid">
+              <v-icon small  title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
+          </span>
+        </v-row>
       </v-container>
 
     </v-card>
@@ -70,6 +68,7 @@
 <script>
     import {lookupIcon} from "@/icons"
     import axios from 'axios'
+    import store from "../../store";
 
     export default {
         name: "CharacteristicaCard",
@@ -77,6 +76,9 @@
             data: Object,
         },
         computed: {
+            search(){
+              return store.state.highlight
+            },
             count() {
                 if (!this.data.count){
                     return 1;  // individual has no count ? FIXME bug
@@ -211,7 +213,6 @@
 
 <style scoped lang="css">
     .characteristica_card {
-      padding-right: 10px;
       font-size: small;
     }
 </style>
