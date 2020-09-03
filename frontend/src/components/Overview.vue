@@ -26,7 +26,7 @@
 
     <p align="justify">
 
-      Any pharmacokinetics study consist of subjects under investigation. These subjects are characterised by properties
+      Any pharmacokinetics study contains subjects under investigation. These subjects are characterised by properties
       like their sex, age, body weight, health status, and further accessible pharmacokinetics influencing characteristica.
       In PK-DB this data is saved as groups and individuals.
       Next, some kind of interventions are performed on the subjects, which is mostly a dosing of a substance to the body
