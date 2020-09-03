@@ -107,44 +107,6 @@ export default {
               "value": [{"sid": "homo-sapiens", "label": "Homo sapiens"},{"sid": "healthy-yes", "label": "healthy"}]
             },
           ]
-        },
-        {
-          title: "Complex query",
-          description: "shows a filter on the data for:\n" +
-              "      <ul>\n" +
-              "        <li> only individuals (no groups) </li>\n" +
-              "        <li> (and) all subjects under investigation are potentially healthy. Either they are healthy or they belong to a\n" +
-              "          group which contains healthy subjects. </li>\n" +
-              "        <li> (and) curators are mkoenig or janekg </li>\n" +
-              "        <li> (and) substance used in any of the interventions is caffeine </li>\n" +
-              "        <li> (and) outputs measurement types are auc_inf or auc_end </li>\n" +
-              "      </ul>",
-          query: [
-            {"query_type": "subjects_boolean", "key": "groups_query", "value": false},
-            {
-              "query_type": "subjects_queries",
-              "key": "choice_sid__in",
-              "value": [{"sid": "healthy-yes", "label": "healthy"}]
-            },
-            {
-              "query_type": "queries_users", "key": "studies__curators__in", "value": [
-                {"username": "mkoenig", "first_name": "Matthias", "last_name": "König"},
-                {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski"}]
-            },
-            {
-              "query_type": "queries",
-              "key": "interventions__substance_sid__in",
-              "value": [{"sid": "caf", "label": "caffeine"}]
-            },
-            {
-              "query_type": "queries",
-              "key": "outputs__measurement_type_sid__in",
-              "value": [{"sid": "auc-inf", "label": "area under curve (AUC) infinity"}, {
-                "sid": "auc-end",
-                "label": "area under curve (AUC) end"
-              }]
-            },
-          ],
         }
       ]
     }
