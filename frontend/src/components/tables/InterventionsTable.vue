@@ -42,22 +42,30 @@
           </template>
 
             <template v-slot:item.details="{ item }">
-              <object-chip :object="item.application"
-                           otype="application"
-                           :search="search"
+              <object-chip
+                  v-if="item.application.sid"
+                  :object="item.application"
+                  otype="application"
+                  :search="search"
               />
-              <object-chip :object="item.route"
-                           otype="route"
-                           :search="search"
+              <object-chip
+                  v-if="item.route.sid"
+                  :object="item.route"
+                  otype="route"
+                  :search="search"
               />
-              <object-chip :object="item.form"
-                           otype="form"
-                           :search="search"
+              <object-chip
+                  v-if="item.form.sid"
+                  :object="item.form"
+                  otype="form"
+                  :search="search"
               />
 
-              <object-chip :object="timeObject(item)"
-                           otype="time"
-                           :search="search"
+              <object-chip
+                  v-if="item.time_unit"
+                  :object="timeObject(item)"
+                  otype="time"
+                  :search="search"
               />
             </template>
 
