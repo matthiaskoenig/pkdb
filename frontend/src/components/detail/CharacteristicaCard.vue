@@ -30,7 +30,8 @@
             </span>
           </v-badge>
           <span v-else>
-            <node-element   :data="data.measurement_type"/>
+            <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
+            <node-element v-if="data.choice.sid" :data="data.choice"/>
           </span>
         </v-row>
 
@@ -42,6 +43,7 @@
                 :search="search"
                 margin="ma-0 pb-0 mr-2"
             />
+
 
           <span v-if="value || error">
           <object-chip
