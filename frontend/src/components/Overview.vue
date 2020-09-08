@@ -39,6 +39,7 @@
 
     </p>
     <count-table v-bind="data"/>
+    <h2>Curation Example</h2>
 
     <v-img src="/assets/images/pkexample2.png" width="100%" class="mb-2">
 
