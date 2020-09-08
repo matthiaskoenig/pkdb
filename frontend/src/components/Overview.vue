@@ -44,7 +44,6 @@
     <v-img src="/assets/images/pkexample2.png" width="100%" class="mb-2">
 
       <v-sheet  color="rgb(255,255,255, 0.9)"  rounded class="text-on-image text-caption text-right pl-2 pr-2" >
-        <strong> Curation Example</strong>
         <v-spacer/>
         RV Patwardhan, P V Desmond, R F Johnson, S Schenker
         <v-spacer/>
