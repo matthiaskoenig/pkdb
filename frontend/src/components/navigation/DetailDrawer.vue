@@ -70,7 +70,7 @@ export default {
   components: {GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
   mixins: [IconsMixin],
   data: () => ({
-    mini: true,
+    mini: false,
   }),
   computed:{
     display_detail:  {
