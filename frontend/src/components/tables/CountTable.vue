@@ -74,14 +74,14 @@ export default {
         {
           name: 'Study',
           name_plural: 'Studies',
-          to: '/results?tab=Studies',
+          to: '/data?tab=studies',
           icon: this.faIcon('studies'),
           count: this.data.study_count,
           description: "Clinical or experimental study measuring data in groups and/or individuals."
         },
         {
           name: 'Group',
-          to: '/results?tab=Groups',
+          to: '/data?tab=groups',
           icon: this.faIcon('groups'),
           count: this.data.group_count,
           description: "Group of individuals for which data was reported, e.g., the control group and the group which received " +
@@ -89,7 +89,7 @@ export default {
         },
         {
           name: 'Individual',
-          to: '/results?tab=Individuals',
+          to: '/data?tab=individuals',
           icon: this.faIcon('individuals'),
           count: this.data.individual_count,
           description: "A single subject in the study. A subject is characterized by the group it belongs to " +
@@ -98,7 +98,7 @@ export default {
         },
         {
           name: 'Intervention',
-          to: '/results?tab=Interventions',
+          to: '/data?tab=interventions',
           icon: this.faIcon('interventions'),
           count: this.data.intervention_count,
           description: "Intervention which was performed in the study. Often interventions consist of application of a " +
@@ -106,7 +106,7 @@ export default {
         },
         {
           name: 'Output',
-          to: '/results?tab=Outputs',
+          to: '/data?tab=outputs',
           icon: this.faIcon('outputs'),
           count: this.data.output_count,
           description: "Clinical or experimental output. These can be single parameters or variables, e.g. pharmacokinetic " +
@@ -115,7 +115,7 @@ export default {
         },
         {
           name: 'Timecourse',
-          to: '/results?tab=Timecourses',
+          to: '/data?tab=timecourses',
           icon: this.faIcon('timecourses'),
           count: this.data.timecourse_count,
           description: "Clinical or experimental time course measurements. Often timecourses are concentration measurements." +
@@ -123,7 +123,7 @@ export default {
         },
         {
           name: 'Scatter',
-          to: '/results?tab=Scatter',
+          to: '/data?tab=scatter',
           icon: 'scatter',
           count: this.data.scatter_count,
           description: "Correlations between outputs are often shown by scatter plots (e.g. age " +

@@ -262,4 +262,7 @@ export default {
 .v-list-item__content {
   overflow: visible !important;
 }
+.scrollbar-flipped {
+  direction: rtl;
+}
 </style>
