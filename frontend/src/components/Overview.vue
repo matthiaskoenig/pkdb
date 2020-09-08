@@ -1,16 +1,6 @@
 <template>
   <div class="main" id="overview">
-    <h1>PK-DB - pharmacokinetics database
-      <!--
-    <v-chip v-if="data.version"
-            flat
-            small
-            color="white"
-    >
-      Version: {{ data.version }}
-    </v-chip>
-    -->
-    </h1>
+    <h1>PK-DB - pharmacokinetics database</h1>
 
     <p align="justify">
       An open issue in the field of pharmacokinetics is the reproducible and reusable storage of data from
@@ -21,8 +11,6 @@
     </p>
 
     <h2>Data</h2>
-
-
 
     <p align="justify">
 
@@ -36,137 +24,64 @@
       These are often some kind of concentration profiles in some tissue of the subject.
       Additionally, derived pharmacokinetics parameters e.g. AUC, clearance, or half-lives are commonly reported.
       Correlations between theses outputs are often shown in form of scatter plots.
-
     </p>
-    <count-table v-bind="data"/>
-    <h2>Curation Example</h2>
 
-    <v-img src="/assets/images/pkexample2.png" width="100%" class="mb-2">
+    <v-btn color="black"
+           text
+           width="100%"
+           to="/data"
+           title="Browse PK-DB data"
+    >
+      <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
+      data
+    </v-btn>
 
-      <v-sheet  color="rgb(255,255,255, 0.9)"  rounded class="text-on-image text-caption text-right pl-2 pr-2" >
-        <v-spacer/>
-        RV Patwardhan, P V Desmond, R F Johnson, S Schenker
-        <v-spacer/>
-        <span class="font-italic text">
-          The Journal of Laboratory and clinical medicine, 1980-05-30
-        </span>
+    <p>
+    <count-table/>
+    </p>
 
+    <curation-example />
 
-      </v-sheet>
-    </v-img>
-
-
-    <div>
-
-    </div>
-
-    <h2>Features</h2>
-    <v-chip class="ma-1">  Experimental errors and variation
-    </v-chip>
-    <v-chip class="ma-1">  Normalisation of units
-    </v-chip>
-    <v-chip class="ma-1">  Automatic calculation of PKs from timecourses
-  </v-chip>
-    <v-chip class="ma-1">  Annotations to biological Ontologies
-  </v-chip>
-    <v-chip class="ma-1">  REST API
-    </v-chip>
-    <v-chip class="ma-1">  Simple curation workflow
-    </v-chip>
-    <v-chip class="ma-1">  Strong validation rules during curation
-    </v-chip>
-
-
-
-    <!--<statistics-vega-plot />-->
     <!--
-    <v-row>
-      <v-col>
-        <v-btn
-          width="100%"
-          to="/results"
-          >
-          <v-icon color="#1E90FF" left>{{ faIcon('data') }}</v-icon>
-          Data
-        </v-btn>
-      </v-col>
-    </v-row>
+    <h2>Features</h2>
+    <p>
+    <ul>
+      <li>Experimental errors and variation</li>
+      <li>Normalisation of units</li>
+      <li>Automatic calculation of PKs from timecourses</li>
+      <li>Annotations to biological Ontologies</li>
+      <li>REST API</li>
+      <li>Simple curation workflow</li>
+      <li>Strong validation rules during curation</li>
+    </ul>
+    </p>
     -->
 
+    <about />
   </div>
 
 
-        </template>
 
-        <script>
-        import axios from 'axios'
-        // import StatisticsVegaPlot from "./plots/StatisticsVegaPlot";
-        import CountTable from "./tables/CountTable";
-        import {IconsMixin} from "@/icons";
+</template>
 
-        export default {
-          name: "Overview",
-          components: {
-            // StatisticsVegaPlot,
-            CountTable,
-          },
-          mixins: [IconsMixin],
-          data() {
-            return {
-              headers: [
-                {text: 'Count', value: 'count', sortable: false},
-                {text: 'Data', value: 'name', sortable: false},
-                {text: 'Description', value: 'description', sortable: false},
-              ],
-              data: {
-                version: "",
-                study_count: 0,
-                group_count: 0,
-                individual_count: 0,
-                intervention_count: 0,
-                output_count: 0,
-                timecourse_count: 0,
-                scatter_count: 0,
-                reference_count: 0,
-              },
-            }
-          },
-          computed: {
-            resource_url() {
-              return this.api + 'statistics/?format=json'
-            },
-            api() {
-              return this.$store.state.endpoints.api;
-            }
+<script>
+import CurationExample from "./CurationExample";
+import CountTable from "./tables/CountTable";
+import About from './About';
+import {IconsMixin} from "@/icons";
 
-          },
-          methods: {
-            fetch_data(url) {
-              axios.get(url)
-                  .then(response => {
-                    this.data = response.data;
-                  })
-                  .catch((error) => {
-                    this.data = null;
-                    console.error(this.resource_url);
-                    console.error(error);
-                    this.errors = error.response.data;
-                  })
-            }
-          },
-          created() {
-            this.fetch_data(this.resource_url);
-          }
-        }
-        </script>
+export default {
+  name: "Overview",
+  components: {
+    // StatisticsVegaPlot,
+    CountTable,
+    CurationExample,
+    About
+  },
+  mixins: [IconsMixin],
+}
+</script>
 
-        <style scoped>
-        .text-on-image {
-          margin-right: 0;
-          float: right;
-          position:absolute;
-          bottom: 0;
-          right: 0;
-        }
+<style scoped>
 
-        </style>
+</style>

@@ -1,21 +1,17 @@
 <template>
-    <v-app-bar
-               fixed
-
+    <v-app-bar fixed
                dense
                app
                clipped-left
                clipped-right
-
-    ><router-link tag="button" to="/" >
+    >
+      <router-link tag="button" to="/" >
       <v-toolbar-title  title="Home" color="white"><span class="logo">PK-DB</span></v-toolbar-title>
     </router-link>
       <v-toolbar-items>
-
-        <v-btn  text to="/results" :title="tables_label" >
-            <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
-          {{ tables_label }}
-          </v-btn>
+        <v-btn text to="/data" title="Data">
+            <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>Data
+        </v-btn>
       </v-toolbar-items>
 
 
@@ -55,27 +51,11 @@
          username(){
            return this.$store.state.username
          },
-         tables_label(){
-           if(this.$store.getters.isInitial){
-             return "Data"
-           }else{
-             return "Results"
-           }
-         }
        }
    }
 </script>
 
 <style scoped>
-   .fixed-nav-bar1 {
-       position: fixed;
-       top: 0;
-       left: 0;
-       z-index: 9999;
-       width: 100%;
-       height: 50px;
-   }
-
    .logo {
      padding-right: 25px;
      font-family: "Roboto Light";

@@ -7,25 +7,18 @@
           <overview/>
         </v-col>
       </v-row>
-      <v-row align="start"
-             justify="center">
-        <v-col sm="11" md="10" lg="8">
-          <about/>
-        </v-col>
-      </v-row>
     </v-container>
   </v-main>
 </template>
 
 <script>
 import Overview from "./Overview";
-import About from './About'
+
 
 export default {
   name: 'Home',
   components: {
     Overview,
-    About,
   }
 }
 </script>

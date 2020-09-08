@@ -54,11 +54,7 @@
           <div v-html="example.description"></div>
         </v-card-text>
       </v-card>
-
-
-
     </v-card-text>
-
   </v-card>
 </template>
 
