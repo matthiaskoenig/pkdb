@@ -1,22 +1,20 @@
 <template>
-  <v-card flat outlined>
+  <v-card flat>
     <v-card-title>
-      How to search data in PK-DB?
+      How to search in PK-DB?
     </v-card-title>
     <v-card-text>
       <p align="justify">
         Data in PK-DB is represented as entries, with every single <code>Entry</code> having information
         on the
       </p>
+      <p>
       <ul>
           <li>Study in which it was recorded,</li>
           <li>Individual or Group it was measured on,</li>
-          <li>Intervention or Interventions which were applied,</li>
-          <li>and the Output or Timecourse which was measured.</li>
+          <li>Intervention(s) which were applied,</li>
+          <li>and the Output(s), Timecourse(s) or Scatter(s) which were measured.</li>
         </ul>
-      <p>
-        The resulting data entry has the form<br/>
-        <code>Entry(study, group/individual, intervention(s), output/timecourse)</code>
       </p>
       <p align="justify">
         To filter database entries filters can be applied individually or in combination on Studies, Groups/Individuals,
@@ -30,31 +28,27 @@
         Results can be downloaded by clicking on the download button.
       </p>
 
-
     </v-card-text>
 
     <v-card-title class="mt-0 pt-0 mb-2 pb-0">
       Search examples
     </v-card-title>
 
-    <v-card-text class="mt-0 pt-0">
-      <v-card  class="mt-0 pt-0" flat v-for="example in examples" :key="example.title">
-
+      <span class="mt-0 pt-0" flat v-for="example in examples" :key="example.title">
         <v-card-title class="ml-0 pl-0">
           <v-btn
               class="mt-0 pt-0"
+              width="100%"
               small
               v-on:click="query(example.query)"
           >
-            <v-icon left small color="#41b883">{{ faIcon('search') }}</v-icon>
+            <v-icon left small color="black">{{ faIcon('search') }}</v-icon>
             <div  class="pa-1" v-html="example.title"></div>
           </v-btn>
         </v-card-title>
-        <v-card-text align="justify">
-          <div v-html="example.description"></div>
-        </v-card-text>
-      </v-card>
-    </v-card-text>
+        <v-card-text align="justify" v-html="example.description" />
+      </span>
+
   </v-card>
 </template>
 

@@ -9,11 +9,11 @@
       width="400"
   >
     <v-list-item class="px-2">
-      <v-list-item-avatar>
-        <v-icon> {{ faIcon('search') }}</v-icon>
+      <v-list-item-avatar title="Search panel">
+        <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
 
-      <v-list-item-title>Search</v-list-item-title>
+      <v-list-item-title><v-card-title>Search</v-card-title></v-list-item-title>
       <v-progress-circular
           indeterminate
           color="primary"
@@ -51,10 +51,11 @@
 
       <v-btn
           class="ml-4"
+          x-small
           icon
           @click.stop="mini = !mini"
       >
-        <v-icon>{{ faIcon("left_arrow") }}</v-icon>
+        <v-icon title="Hide search panel">{{ faIcon("left_arrow") }}</v-icon>
       </v-btn>
     </v-list-item>
     <v-divider/>

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-    import GetPaginatedData from './api/GetPaginatedData';
+    import GetPaginatedData from '../api/GetPaginatedData';
     export default {
         name: 'ListView',
         components: {

@@ -129,18 +129,18 @@
 <script>
 import axios from 'axios'
 
-import CountBadge from "./lib/CountBadge";
-import StudySearchForm from "./search/StudySearchForm";
-import InterventionForm from "./search/InterventionSearchForm";
-import SubjectsForm from "./search/SubjectSearchForm";
-import OutputForm from "./search/OutputSearchForm";
+import CountBadge from "../lib/CountBadge";
+import StudySearchForm from "../search/StudySearchForm";
+import InterventionForm from "../search/InterventionSearchForm";
+import SubjectsForm from "../search/SubjectSearchForm";
+import OutputForm from "../search/OutputSearchForm";
 
-import InfoNode from "./deprecated/InfoNode";
-import InfoNodeDetail from "./detail/InfoNodeDetail";
-import SearchHelp from "./search/SearchHelp";
-import StudyOverview from "./detail/StudyOverview";
-import {searchTableMixin} from "./tables/mixins";
-import {SearchMixin} from "../search";
+import InfoNode from "./InfoNode";
+import InfoNodeDetail from "../detail/InfoNodeDetail";
+import SearchHelp from "../search/SearchHelp";
+import StudyOverview from "../detail/StudyOverview";
+import {searchTableMixin} from "../tables/mixins";
+import {SearchMixin} from "../../search";
 
 export default {
   mixins: [searchTableMixin, SearchMixin],
