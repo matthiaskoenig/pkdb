@@ -61,19 +61,19 @@
     </div>
 
     <h2>Features</h2>
-    <v-chip class="ma-1">  Experimental Errors and Variation
+    <v-chip class="ma-1">  Experimental errors and variation
     </v-chip>
-    <v-chip class="ma-1">  Normalisation of Units
+    <v-chip class="ma-1">  Normalisation of units
     </v-chip>
-    <v-chip class="ma-1">  Automatic Calculation of PKs from Timecourses
+    <v-chip class="ma-1">  Automatic calculation of PKs from timecourses
   </v-chip>
-    <v-chip class="ma-1">  Annotations to Biological Ontologies
+    <v-chip class="ma-1">  Annotations to biological Ontologies
   </v-chip>
     <v-chip class="ma-1">  REST API
     </v-chip>
-    <v-chip class="ma-1">  Simple Curation Workflow
+    <v-chip class="ma-1">  Simple curation workflow
     </v-chip>
-    <v-chip class="ma-1">  Strong Validation Rules During Curation
+    <v-chip class="ma-1">  Strong validation rules during curation
     </v-chip>
 
 

@@ -3,6 +3,7 @@ Django model for Study.
 """
 import datetime
 import uuid
+from django.utils.timezone import make_aware
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -295,6 +296,11 @@ class Study(Sidable, models.Model):
         super().delete(*args, **kwargs)
 
 
+def expire():
+    expire_datetime = datetime.datetime.now() + datetime.timedelta(days=1)
+    return make_aware(expire_datetime)
+
+
 # FIXME: rename to something what it is (FilterQuery, IdCollection ?)
 class Query(models.Model):
     """
@@ -302,7 +308,8 @@ class Query(models.Model):
     """
 
     # FIXME: delete me again please !!!! (currently just filling up the database until problems)
-    # -> on_create: if > 1000 entries; delete first 500 resourses sorted by pk (first entries)
+    # -> on_create: if > 1000 entries; delete first 500 resourses sorted by pk
+
 
     class Recourses(models.TextChoices):
         """ Recourse Types"""
@@ -316,3 +323,4 @@ class Query(models.Model):
     # the hash is not a hash, but just a pseudo-random number (FIXME: rename to uuid)
     hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ids = ArrayField(models.IntegerField(), null=True, blank=True)
+    expire = models.DateTimeField(default=expire(), blank=True, editable=False)

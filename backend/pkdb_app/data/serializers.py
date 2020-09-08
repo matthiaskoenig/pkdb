@@ -374,7 +374,7 @@ class SubSetElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubSet
-        fields = ["pk","study",
+        fields = ["pk", "study",
                   "name",
                   "data_type",
                   "array"]

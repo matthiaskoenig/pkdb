@@ -2,6 +2,7 @@
 import tempfile
 import zipfile
 from collections import namedtuple
+from datetime import datetime
 from io import StringIO
 from typing import Dict
 import time
@@ -565,6 +566,11 @@ class PKDataView(APIView):
         # calculation of hash
         resources = {}
         queries = []
+        delete_queries = Query.objects.filter(expire__lte=datetime.now())
+        print("Deleted Queries")
+        print(delete_queries.count())
+
+        delete_queries.delete()
         for resource, ids in pkdata.ids.items():
             query = Query(resource=resource, ids=ids)
             queries.append(query)

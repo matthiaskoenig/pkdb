@@ -33,7 +33,7 @@
 
             </template>
 
-          <template v-slot:item.substance="{ item }">
+          <template v-slot:item.details="{ item }">
             <v-layout d-flex flex-wrap >
 
             <characteristica-card :data="item" />
@@ -41,7 +41,7 @@
 
           </template>
 
-            <template v-slot:item.details="{ item }">
+            <template v-slot:item.details2="{ item }">
               <object-chip
                   v-if="item.application.sid"
                   :object="item.application"
@@ -95,8 +95,8 @@
                 headers: [
                     {text: '', value: 'buttons',sortable: false},
                     {text: 'Intervention', value: 'intervention', sortable: false},
-                    {text: 'Substance', value: 'substance', sortable: false},
                     {text: 'Details', value: 'details', sortable: false},
+                    {text: '', value: 'details2', sortable: false},
                 ],
             }
         },
