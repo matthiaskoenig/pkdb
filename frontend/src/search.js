@@ -10,9 +10,12 @@ let SearchMixin = {
             }
             axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
                 .then(response => {
-                    let blob = new Blob([response.data], {type: 'application/zip'}),
-                        url = window.URL.createObjectURL(blob)
-                    window.open(url)
+                    const a_ = document.createElement("a");
+                    a_.href = URL.createObjectURL(new Blob([response.data], {type: 'application/x-zip-compressed'}))
+                    a_.setAttribute("download", "pkdb_data.zip");
+                    document.body.appendChild(a_);
+                    a_.click();
+                    document.body.removeChild(a_);
                 })
                 .catch(err => {
                     console.log(err.response.data);

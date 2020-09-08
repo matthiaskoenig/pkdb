@@ -567,9 +567,6 @@ class PKDataView(APIView):
         resources = {}
         queries = []
         delete_queries = Query.objects.filter(expire__lte=datetime.now())
-        print("Deleted Queries")
-        print(delete_queries.count())
-
         delete_queries.delete()
         for resource, ids in pkdata.ids.items():
             query = Query(resource=resource, ids=ids)
@@ -596,7 +593,6 @@ class PKDataView(APIView):
             with tempfile.SpooledTemporaryFile() as tmp:
                 with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
                     for key, sheet in table_content.items():
-                        print(key)
                         string_buffer = StringIO()
                         data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
                         pd.DataFrame(data).to_csv(string_buffer)
