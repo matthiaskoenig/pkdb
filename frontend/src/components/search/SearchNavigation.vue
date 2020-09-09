@@ -58,10 +58,9 @@
         <v-icon title="Hide search panel">{{ faIcon("left_arrow") }}</v-icon>
       </v-btn>
     </v-list-item>
-    <v-divider/>
 
-
-    <v-list>
+    <v-list v-if="!hide_search">
+      <v-divider/>
 
       <v-list-item>
 
