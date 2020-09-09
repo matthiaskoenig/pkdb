@@ -1,5 +1,6 @@
 <template>
-  <v-container fluid>
+  <v-container v-if="!loading" fluid>
+
     <search-navigation />
     <table-tabs/>
   </v-container>
@@ -16,6 +17,10 @@ export default {
     SearchNavigation,
     TableTabs
   },
+  data () {
+    return {
+    loading:true,
+  }},
   computed: {
     sid(){
       return this.$route.params.sid
@@ -34,9 +39,10 @@ export default {
   },
   created() {
     if(this.sid){
-      this.reset()
       this.getStudy(this.sid)
-      this.hide_search = false
+      this.hide_search=false
+    }else{
+      this.loading = false
     }
   },
   methods: {
@@ -50,7 +56,6 @@ export default {
       // get data (FIXME: caching of InfoNodes in store)
       axios.get(url, {headers: headers})
           .then(response => {
-
             this.updateSearch(response.data)
             this.$store.state.show_type = "study";
             this.$store.state.detail_info =  response.data;
