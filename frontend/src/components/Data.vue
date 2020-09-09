@@ -8,6 +8,7 @@
 <script>
 import TableTabs from './tables/TableTabs';
 import SearchNavigation from './search/SearchNavigation'
+import axios from 'axios'
 
 export default {
   name: "Data",
@@ -16,6 +17,9 @@ export default {
     TableTabs
   },
   computed: {
+    sid(){
+      return this.$route.params.sid
+    },
     hide_search:  {
       get() {
         return this.$store.state.hide_search
@@ -29,17 +33,47 @@ export default {
     },
   },
   created() {
-    if(this.$route.params.sid){
-      this.load_study(this.$route.params.sid)
+    if(this.sid){
+      this.getStudy(this.sid)
+      this.updateSearch(this.$store.state.detail_info)
       this.hide_search = false
     }
   },
   methods: {
-    load_study(sid) {
+    getStudy(sid) {
+      // object is an InfoNode
+      let url = `${this.$store.state.endpoints.api}studies/${sid}/?format=json`;
+
+      // get data (FIXME: caching of InfoNodes in store)
+      axios.get(url)
+          .then(response => {
+            this.$store.state.show_type = "study";
+            this.$store.state.detail_info =  response.data;
+            this.$store.state.display_detail = true;
+          })
+          .catch(err => {
+            this.exists = false;
+            console.log(err)
+          })
+          .finally(() => this.loading = false);
+
+    },
+    update_details(){
+      if (this.show_type){
+        if (this.sid){
+          this.getStudy(this.sid);
+        }else{
+          this.$store.state.show_type = this.show_type;
+          this.$store.state.detail_info = this.detail_info;
+          this.$store.state.display_detail = true;
+        }
+      }
+    },
+    updateSearch(study_info) {
       let study = {
           "query_type": "queries",
           "key": "studies__sid__in",
-          "value": [{"sid": sid,"name":"Seng2009"}]}
+          "value": [study_info]}
       this.reset()
       this.update_store(study)
     },
@@ -53,7 +87,7 @@ export default {
         value: q.value,
       })
     }
-  },}
+  }}
 </script>
 
 <style scoped>
