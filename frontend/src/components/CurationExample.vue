@@ -21,7 +21,7 @@
            text
            width="100%"
            title="Show PK-DB data for example study"
-           v-on:click="load_example"
+           to="/data/PKDB00057/"
     >
       <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
       Example study
@@ -36,33 +36,6 @@ import {IconsMixin} from "@/icons";
 export default {
   name: "CurationExample",
   mixins: [IconsMixin],
-  methods: {
-    load_example() {
-      console.error("query !!!")
-      let example = [
-        {
-          "query_type": "queries",
-          "key": "studies__sid__in",
-          "value": [{"name": "Patwarddhan1980", "sid": "PKDB00057",}]
-        },
-      ]
-      this.reset()
-      for (let q of example) {
-        this.update_store(q)
-      }
-      this.$router.push("/data")
-    },
-    reset() {
-      this.$store.commit('resetQuery');
-    },
-    update_store(q) {
-      this.$store.dispatch('updateQueryAction', {
-        query_type: q.query_type,
-        key: q.key,
-        value: q.value,
-      })
-    }
-  },
 }
 </script>
 
