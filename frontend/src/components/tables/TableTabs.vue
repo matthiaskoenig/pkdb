@@ -13,6 +13,7 @@
           :key="item.tab"
           :href="'#'+ item.tab"
       >
+
         {{ item.tab }} ({{results[item.tab].count}})
         <scatter-icon v-if="item.tab === 'scatter'"/>
         <v-icon small v-else>{{ faIcon(item.tab) }}</v-icon>
@@ -26,19 +27,20 @@
           :key="item.tab"
           :value="item.tab"
       >
-        <studies-table v-if="item.tab === 'studies'" :search_hash="true" :hash="results.studies.hash"
+        <v-divider/>
+        <studies-table v-if="item.tab === 'studies' && results[item.tab].count" :search_hash="true" :hash="results.studies.hash"
                        :autofocus="false"/>
         <groups-table v-if="item.tab === 'groups'" :search_hash="true" :hash="results.groups.hash"
                       :autofocus="false"/>
-        <individuals-table v-if="item.tab === 'individuals'" :search_hash="true" :hash="results.individuals.hash"
+        <individuals-table v-if="item.tab === 'individuals' && results[item.tab].count" :search_hash="true" :hash="results.individuals.hash"
                            :autofocus="false"/>
-        <interventions-table v-if="item.tab === 'interventions'" :search_hash="true"
+        <interventions-table v-if="item.tab === 'interventions' && results[item.tab].count" :search_hash="true"
                              :hash="results.interventions.hash" :autofocus="false"/>
         <outputs-table v-if="item.tab === 'outputs'" :search_hash="true" :hash="results.outputs.hash"
                        :autofocus="false"/>
-        <timecourses-table v-if="item.tab === 'timecourses'" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
+        <timecourses-table v-if="item.tab === 'timecourses' && results[item.tab].count" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
                            :autofocus="false"/>
-        <scatter-table v-if="item.tab === 'scatter'" :search_hash="true" :hash="results.scatter.hash" data_type="scatter"
+        <scatter-table v-if="item.tab === 'scatter' && results[item.tab].count" :search_hash="true" :hash="results.scatter.hash" data_type="scatter"
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>

@@ -1,12 +1,11 @@
 <template>
-
   <v-card
       width="100%"
       flat
   >
-    <v-list-item three-line>
+    <v-list-item three-line >
       <v-list-item-content>
-        <div class="overline mb-4">
+        <div class="overline">
           <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
           <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
         </div>

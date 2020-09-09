@@ -6,24 +6,25 @@
       app
       right
       :dark="mini"
-      mini-variant-width="30"
+      mini-variant-width="40"
       width="450"
   >
-    <v-list-item @click.stop="mini = !mini">
+    <v-list-item @click.stop="mini = !mini" title="Hide details panel">
       <v-btn
           x-small
           icon
           v-if="!mini"
       >
-        <v-icon  title="Hide details panel">{{ faIcon("right_arrow") }}</v-icon>
+        <v-icon>{{ faIcon("right_arrow") }}</v-icon>
       </v-btn>
 
-      <v-list-item-avatar v-if="mini" title="Detail panel">
-        <v-icon small>{{ faIcon('info') }}</v-icon>
+      <v-list-item-avatar v-if="mini" title="Show details panel">
+        <v-icon>{{ faIcon('info') }}</v-icon>
       </v-list-item-avatar>
+
     </v-list-item>
 
-    <v-divider v-if="!mini"/>
+    <!--<v-divider v-if="!mini"/>-->
     <div v-if="!mini">
     <v-list-item>
     <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>

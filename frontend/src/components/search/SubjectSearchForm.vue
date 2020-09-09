@@ -3,12 +3,10 @@
     <info-node-search ntype='choice' query_key="choice_sid__in" query_type="subjects_queries" />
     <info-node-search ntype='measurement_type' query_key="measurement_type_sid__in" query_type="subjects_queries"/>
 
-    <v-row class="pl-4 pr-4 pb-4">
-      <v-checkbox v-model="groups_query" label="Groups" hide-details></v-checkbox>
-      <v-checkbox class="pl-4" v-model="individuals_query" label="Individuals" hide-details></v-checkbox>
+    <v-row>
+      <v-checkbox class="ma-0 pa-1 pl-4" v-model="groups_query" label="Groups" hide-details></v-checkbox>
+      <v-checkbox class="ma-0 pa-1 pl-4" v-model="individuals_query" label="Individuals" hide-details></v-checkbox>
     </v-row>
-
-
   </div>
 </template>
 

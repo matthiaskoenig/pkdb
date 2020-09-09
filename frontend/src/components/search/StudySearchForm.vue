@@ -5,8 +5,8 @@
     <user-search on="curators" />
 
     <v-row>
-      <v-checkbox class="pl-4" v-model="licence_open" label="Open" hide-details></v-checkbox>
-      <v-checkbox class="pl-4" v-model="licence_closed" label="Closed" hide-details></v-checkbox>
+      <v-checkbox class="ma-0 pa-1 pl-4" v-model="licence_open" label="Open" hide-details></v-checkbox>
+      <v-checkbox class="ma-0 pa-1 pl-4" v-model="licence_closed" label="Closed" hide-details></v-checkbox>
     </v-row>
  </div>
 </template>

@@ -6,21 +6,19 @@
       permanent
       app
       dark
-      mini-variant-width="30"
-      width="400"
+      mini-variant-width="40"
+      width="420"
   >
-    <v-list-item class="px-2">
-      <v-list-item-avatar title="Search panel">
-        <v-icon small>{{ faIcon('search') }}</v-icon>
+    <v-list-item @click.stop="hide_search = !hide_search" title="Hide details panel">
+      <v-list-item-avatar title="Show search panel">
+        <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
-
-      <v-list-item-title >   <v-row> <v-col><h3>Search</h3></v-col> </v-row></v-list-item-title>
-
+      <v-spacer/>
       <v-progress-circular
           indeterminate
           color="primary"
           v-if="loading"
-      ></v-progress-circular>
+      />
 
       <v-btn v-if="results.studies.count>0"
              fab
@@ -29,7 +27,7 @@
              @click="downloadData"
              :loading="loadingDownload"
              :disabled="loadingDownload"
-             title="Download current results"
+             title="Download selected data"
       >
         <v-icon small>{{ faIcon('download') }}</v-icon>
 
@@ -37,11 +35,12 @@
       <v-btn
           x-small
           fab text
-          title="Clear search"
+          title="Clear current search"
           v-on:click="reset"
       >
         <v-icon small>fas fa fa-trash-alt</v-icon>
       </v-btn>
+
       <v-btn
           x-small
           fab text
@@ -55,35 +54,39 @@
           class="ml-4"
           x-small
           icon
+          title="Hide search panel"
           @click.stop="hide_search = !hide_search"
       >
-        <v-icon title="Hide search panel">{{ faIcon("left_arrow") }}</v-icon>
+        <v-icon>{{ faIcon("left_arrow") }}</v-icon>
       </v-btn>
     </v-list-item>
+    <v-divider v-if="!hide_search"/>
 
-    <v-list v-if="!hide_search">
-      <v-divider/>
+
+    <div v-if="!hide_search">
 
       <v-list-item>
-
-
-
         <v-list-item-content>
           <v-list-item-title>
-            <count-badge color="blue" :count="results.studies.count" text="Studies"/>
+            <span class="ma-1"><v-icon left small>{{faIcon("studies")}}</v-icon>Studies ({{results.studies.count}})</span>
           </v-list-item-title>
           <study-search-form/>
         </v-list-item-content>
       </v-list-item>
 
+      <v-divider/>
+
       <v-list-item>
-
-
         <v-list-item-content>
           <v-list-item-title>
+            <span class="ma-1"><v-icon left small>{{faIcon("groups")}}</v-icon>Groups ({{ results.groups.count }})</span>|
+            <span class="ma-1"><v-icon left small>{{faIcon("individuals")}}</v-icon>Individuals ({{results.individuals.count}})</span>
+
+            <!--
             <count-badge color="blue" :count="results.groups.count" text="Groups "/>
             <v-spacer/>
             <count-badge color="blue" :count="results.individuals.count" text="Individuals "/>
+            -->
           </v-list-item-title>
           <subjects-form
               @subjects__type="update_search_query"
@@ -91,31 +94,39 @@
           />
         </v-list-item-content>
       </v-list-item>
+      <v-divider/>
+
       <v-list-item>
-
-
         <v-list-item-content>
           <v-list-item-title>
+            <span class="ma-1"><v-icon left small>{{faIcon("interventions")}}</v-icon>Interventions ({{results.interventions.count}})</span>
+            <!--
             <count-badge color="blue" :count="results.interventions.count" text="Interventions"/>
+            -->
           </v-list-item-title>
           <intervention-form/>
         </v-list-item-content>
       </v-list-item>
+      <v-divider/>
+
       <v-list-item>
-
-
         <v-list-item-content>
           <v-list-item-title>
+            <span class="ma-1"><v-icon left small>{{faIcon("outputs")}}</v-icon>Outputs ({{results.outputs.count}})</span>|
+            <span class="ma-1"><v-icon left small>{{faIcon("timecourses")}}</v-icon>Timecourses ({{results.timecourses.count}})</span>|
+            <span class="ma-1">Scatter ({{results.scatter.count}})</span>
+            <!--
             <count-badge color="blue" :count="results.outputs.count" text="Outputs"/>
             <v-spacer/>
             <count-badge color="blue" :count="results.timecourses.count" text="Timecourses "/>
             <v-spacer/>
             <count-badge color="blue" :count="results.scatter.count" text="Scatter "/>
+            -->
           </v-list-item-title>
           <output-form/>
         </v-list-item-content>
       </v-list-item>
-    </v-list>
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -258,11 +269,5 @@ export default {
 }
 </script>
 
-<style>
-.v-list-item__content {
-  overflow: visible !important;
-}
-.scrollbar-flipped {
-  direction: rtl;
-}
+<style scoped>
 </style>
