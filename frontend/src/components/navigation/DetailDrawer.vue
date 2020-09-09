@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
       v-model="display_detail"
-      :mini-variant.sync="mini"
+      :mini-variant.sync="display_detail"
       mini-variant-width="30"
       clipped
       app
