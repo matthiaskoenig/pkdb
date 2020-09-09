@@ -1,12 +1,14 @@
 <template>
 
     <v-card
+
         flat
         tile
         height="100%"
         width="100%"
         @click="update_details"
-        outlined
+
+
         class="characteristica_card"
         align="start">
       <v-container fluid class="pt-1 pb-1">
@@ -55,7 +57,7 @@
           />
 
               {{ value }} <span v-if="error">{{ error }}</span>
-              <span v-if="data.unit"> {{ data.unit }}</span>
+              <span v-if="data.unit"> [{{ data.unit }}]</span>
 
           </span>
           <span v-if="!value & !error & !data.choice.sid & !data.substance.sid">
@@ -216,5 +218,6 @@
 <style scoped lang="css">
     .characteristica_card {
       font-size: small;
+      padding-left: 10px;
     }
 </style>
