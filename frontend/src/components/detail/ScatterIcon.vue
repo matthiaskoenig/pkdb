@@ -117,7 +117,7 @@
 
 <script>
 export default {
-name: "ScatterIcon"
+  name: "ScatterIcon"
 }
 </script>
 

@@ -126,8 +126,7 @@ export default {
           to: '/data?tab=scatter',
           icon: 'scatter',
           count: this.data.scatter_count,
-          description: "Correlations between outputs are often shown by scatter plots (e.g. age " +
-              "versus clearance). "
+          description: "Correlations between outputs are often provided as scatter plots (e.g. age ~ clearance)."
         },
       ]
     }

@@ -7,13 +7,17 @@
         background-color="transparent"
         show-arrows
         class="fixed-tabs-bar"
+        icons-and-text
     >
       <v-tab
           v-for="item in items"
           :key="item.tab"
           :href="'#'+ item.tab"
       >
-        {{ item.tab }}
+        {{ item.tab }} ({{results[item.tab].count}})
+        <scatter-icon v-if="item.tab === 'scatter'"/>
+        <v-icon small v-else>{{ faIcon(item.tab) }}</v-icon>
+
       </v-tab>
     </v-tabs>
 
@@ -59,10 +63,12 @@ import TimecoursesTable from "./TimecoursesTable";
 import ScatterTable from "./ScatterTable";
 
 import {SearchMixin} from "../../search";
+import {IconsMixin} from "../../icons";
+import ScatterIcon from "../detail/ScatterIcon";
 
 
 export default {
-  mixins: [searchTableMixin, SearchMixin],
+  mixins: [searchTableMixin, SearchMixin, IconsMixin],
   name: "TableTabs",
   components: {
     DetailDrawer,
@@ -73,7 +79,8 @@ export default {
     InterventionsTable,
     OutputsTable,
     TimecoursesTable,
-    ScatterTable
+    ScatterTable,
+    ScatterIcon,
   },
   computed: {
     tab: {
@@ -95,7 +102,6 @@ export default {
             key: key,
             value: value[key] })
         }
-
       },
     },
     data_info_type() {
@@ -123,7 +129,6 @@ export default {
     }
   },
   methods: {
-
     getData() {
       this.loading = true
       let headers = {};

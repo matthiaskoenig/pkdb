@@ -10,7 +10,7 @@
             :to="to"
     >
       <scatter-icon v-if="icon==='scatter'" class="v-icon--left"/>
-      <v-icon  v-else
+      <v-icon v-else
               small
               left
               :title="'Number of ' + name + 's'">
@@ -26,33 +26,32 @@
     import {lookupIcon} from "@/icons"
 
     export default {
-        name: "CountChip",
-      components:{ScatterIcon},
-        props: {
-            to: {
-                type: String,
-            },
-            count: {
-                type: Number,
-                required: true
-            },
-            name: {
-                type: String,
-                required: true
-            },
-            icon:{
-                type:String,
-                required: true
-            }
-        },
-        computed: {
-            faIcon: function(){
-                return lookupIcon(this.icon)
-            }
-        },
-        methods: {
-
-        }
+      name: "CountChip",
+      components: {
+        ScatterIcon
+      },
+      props: {
+          to: {
+              type: String,
+          },
+          count: {
+              type: Number,
+              required: true
+          },
+          name: {
+              type: String,
+              required: true
+          },
+          icon:{
+              type:String,
+              required: true
+          }
+      },
+      computed: {
+          faIcon: function(){
+              return lookupIcon(this.icon)
+          }
+      }
     }
 </script>
 

@@ -106,13 +106,13 @@ export default new Vuex.Store({
 
         // search results (synchronization between search & results)
         results: {
-            studies: {"hash": "", "count": 0},
-            interventions: {"hash": "", "count": 0},
-            groups: {"hash": "", "count": 0},
-            individuals: {"hash": "", "count": 0},
-            outputs: {"hash": "", "count": 0},
-            timecourses: {"hash": "", "count": 0},
-            scatter: {"hash": "", "count": 0},
+            studies: {hash: "", count: 0},
+            interventions: {hash: "", count: 0},
+            groups: {hash: "", count: 0},
+            individuals: {hash: "", count: 0},
+            outputs: {hash: "", count: 0},
+            timecourses: {hash: "", count: 0},
+            scatter: {hash: "", count: 0},
 
         },
 
