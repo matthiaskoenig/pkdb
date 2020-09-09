@@ -41,6 +41,8 @@ export default {
     if(this.sid){
       this.getStudy(this.sid)
       this.hide_search=false
+    }else{
+      this.loading = false
     }
   },
   methods: {

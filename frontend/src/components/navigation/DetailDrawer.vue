@@ -1,7 +1,6 @@
 <template>
   <v-navigation-drawer
-      v-model="display_detail"
-      :mini-variant.sync="display_detail"
+      :mini-variant.sync="mini"
       mini-variant-width="30"
       clipped
       app
@@ -40,13 +39,9 @@
   </v-list-item>
 
     <v-divider v-if="!mini"/>
-    <div v-if="display_detail && !mini">
+    <div v-if="!mini">
     <v-list-item>
-    <info-node-detail
-        v-model="display_detail"
-        v-if="show_type === 'info_node'"
-        :data="detail_info"
-    />
+    <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
     <search-help v-if="show_type === 'help'"/>
     <study-overview v-if="show_type === 'study'" :study="detail_info"/>
     <!-- <group-detail v-if="show_type === 'group'" :group="detail_info"/> -->
@@ -70,17 +65,16 @@ export default {
   components: {GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
   mixins: [IconsMixin],
   data: () => ({
-    mini: false,
   }),
   computed:{
-    display_detail:  {
+    mini:  {
       get() {
-        return this.$store.state.display_detail
+        return !this.$store.state.display_detail
       },
       set(value) {
         this.$store.dispatch('updateAction', {
           key: "display_detail",
-          value: value,
+          value: !value,
         })
       }
     },
