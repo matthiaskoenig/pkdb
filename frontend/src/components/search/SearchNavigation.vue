@@ -58,16 +58,13 @@
         <v-icon title="Hide search panel">{{ faIcon("left_arrow") }}</v-icon>
       </v-btn>
     </v-list-item>
-    <v-divider/>
 
-
-    <v-list>
+    <v-list v-if="!hide_search">
+      <v-divider/>
 
       <v-list-item>
 
-        <v-list-item-icon>
-          <v-icon>{{ faIcon("studies") }}</v-icon>
-        </v-list-item-icon>
+
 
         <v-list-item-content>
           <v-list-item-title>
@@ -78,10 +75,7 @@
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-icon>
-          <v-icon>{{ faIcon("groups") }}
-          </v-icon>
-        </v-list-item-icon>
+
 
         <v-list-item-content>
           <v-list-item-title>
@@ -96,10 +90,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
-        <v-list-item-icon>
-          <v-icon>{{ faIcon("interventions") }}
-          </v-icon>
-        </v-list-item-icon>
+
 
         <v-list-item-content>
           <v-list-item-title>
@@ -109,10 +100,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
-        <v-list-item-icon>
-          <v-icon>{{ faIcon("outputs") }}
-          </v-icon>
-        </v-list-item-icon>
+        
 
         <v-list-item-content>
           <v-list-item-title>

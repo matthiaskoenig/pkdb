@@ -7,7 +7,7 @@
       right
       :dark="mini"
       mobile-breakpoint="0"
-      width="400"
+      width="450"
   >
     <!--
     <v-list-item class="px-2" >
