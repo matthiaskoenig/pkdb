@@ -4,7 +4,6 @@
 
     <v-tabs
         v-model="tab"
-        background-color="transparent"
         show-arrows
         class="fixed-tabs-bar"
         icons-and-text

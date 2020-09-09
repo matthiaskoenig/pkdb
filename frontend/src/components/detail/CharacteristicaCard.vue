@@ -12,7 +12,7 @@
       <v-container fluid class="pt-1 pb-1">
         <v-row>
           <v-badge v-if="data.count" inline color="#BBBBBB" right>
-            <span slot="badge">{{ this.count }}/{{this.subject_count}}</span>
+            <span slot="badge">{{ count_label }}</span>
             <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
             <span v-if="data.choice.sid">
                 <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
@@ -47,7 +47,7 @@
 
           <span v-if="value || error">
           <object-chip
-              v-if="(data.substance.sid !== null) & (!data.measurement_type.sid==='abstinence')"
+              v-if="(data.substance.sid !== null) & (!data.measurement_type.sid === 'abstinence')"
               :object="data.substance"
               otype="substance"
               :search="search"
@@ -95,11 +95,11 @@
               return this.count.toString()
             },
             count_label(){
-                if (this.data.group_count){
-                    return this.count.toString() + "/" + this.data.group_count.toString()
-
+                if (this.count == this.subject_count){
+                  return this.count.toString()
+                } else {
+                  return this.count.toString() + "/" + this.subject_count
                 }
-                return this.count.toString() + "/" + this.count.toString()
             },
             error() {
                 let value = null;
