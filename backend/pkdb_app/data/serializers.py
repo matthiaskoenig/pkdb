@@ -184,23 +184,28 @@ class SubSetSerializer(ExSerializer):
 
         subset_instance.pks.add(*subset_outputs)
 
-
-
-
     def create_timecourse(self, subset_instance, dimensions):
         study = self.context["study"]
         if len(dimensions) != 1:
             raise serializers.ValidationError(
-                f"Timcourses have to be one dimensional. Dimensions: <{dimensions}> has a len of <{len(dimensions)}>.")
-        subset_outputs = study.outputs.filter(normed=True,label=dimensions[0])
-        if len(subset_outputs) < 2:
+                f"Timecourses have to be one-dimensional, but '{len(dimensions)}' dimensions found <{dimensions}>.")
+        subset_outputs = study.outputs.filter(normed=True, label=dimensions[0])
+        if len(subset_outputs) == 0:
             raise serializers.ValidationError(
-                f"Timcourses have to consist at least of two outputs. Consider saving the the outputs with the label <{dimensions[0]}> as output_type=output.")
+                f"Timecourses cannot be empty. No outputs found <{dimensions[0]}>.")
+        if len(subset_outputs) == 1:
+            raise serializers.ValidationError(
+                f"Timecourses require at least two outputs, but only a single output exists in timecourse. "
+                f"Encode the label <{dimensions[0]}> as 'output_type=output' instead of 'output_type=timecourse'.")
         subset_instance.pks.add(*subset_outputs)
         if not subset_outputs.exists():
             raise serializers.ValidationError(
-                {"dataset": {"data": [
-                    {"subsets": {"name": f" Outputs with label <{dimensions}> do not exist."}}]}})
+                {"dataset": {
+                    "data": [
+                        {"subsets": {"name": f"Outputs with label <{dimensions}> do not exist."}}
+                    ]
+                }}
+            )
 
         dimensions = []
         for output in subset_outputs.iterator():
@@ -211,7 +216,6 @@ class SubSetSerializer(ExSerializer):
         Dimension.objects.bulk_create(dimensions)
 
         self.calculate_pks_from_timecourses(subset_instance)
-
 
 
 class DataSerializer(ExSerializer):
