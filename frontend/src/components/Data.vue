@@ -35,7 +35,6 @@ export default {
   created() {
     if(this.sid){
       this.getStudy(this.sid)
-      this.updateSearch(this.$store.state.detail_info)
       this.hide_search = false
     }
   },
@@ -47,6 +46,7 @@ export default {
       // get data (FIXME: caching of InfoNodes in store)
       axios.get(url)
           .then(response => {
+            this.updateSearch(response.data)
             this.$store.state.show_type = "study";
             this.$store.state.detail_info =  response.data;
             this.$store.state.display_detail = true;
@@ -56,18 +56,6 @@ export default {
             console.log(err)
           })
           .finally(() => this.loading = false);
-
-    },
-    update_details(){
-      if (this.show_type){
-        if (this.sid){
-          this.getStudy(this.sid);
-        }else{
-          this.$store.state.show_type = this.show_type;
-          this.$store.state.detail_info = this.detail_info;
-          this.$store.state.display_detail = true;
-        }
-      }
     },
     updateSearch(study_info) {
       let study = {
