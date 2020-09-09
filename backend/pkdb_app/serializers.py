@@ -749,8 +749,9 @@ class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
 
-class SidLabelSerializer(serializers.Serializer):
+class SidNameLabelSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
+    name = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
 
 
