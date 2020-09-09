@@ -28,6 +28,12 @@ export default new Router({
             component: Data
         },
         {
+            path: '/data/:sid',
+            name: 'Data',
+            component: Data,
+            props: true
+        },
+        {
             path: '/curation',
             name: 'Curation',
             component: Curation
