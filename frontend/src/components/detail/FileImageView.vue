@@ -1,5 +1,4 @@
 <template>
-<span>
     <v-tabs
             v-model="active"
             color="#999999"
@@ -13,12 +12,11 @@
             {{ id_from_name(item.name) }}
         </v-tab>
         <v-tab-item v-for="item in files" :key="item.name">
-            <v-card flat>
                 <get-file :resource_url="backend+item.file">
                     <template slot-scope="data">
                         <v-img :src="data.data"
-                               max-height="500"
-                               max-width="500"
+                               class="mt-1"
+                               width="392"
                                :alt="item.name"
                                :contain="true"
                                @click="next"
@@ -27,11 +25,9 @@
 
                 </get-file>
 
-            </v-card>
         </v-tab-item>
     </v-tabs>
 
-    </span>
 </template>
 
 <script>

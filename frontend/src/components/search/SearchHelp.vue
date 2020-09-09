@@ -9,11 +9,11 @@
         on the
       </p>
       <p>
-      <ul>
-          <li>Study in which it was recorded,</li>
-          <li>Individual or Group it was measured on,</li>
-          <li>Intervention(s) which were applied,</li>
-          <li>and the Output(s), Timecourse(s) or Scatter(s) which were measured.</li>
+        <ul>
+            <li>Study in which it was recorded,</li>
+            <li>Individual or Group it was measured on,</li>
+            <li>Intervention(s) which were applied,</li>
+            <li>and the Output(s), Timecourse(s) or Scatter(s) which were measured.</li>
         </ul>
       </p>
       <p align="justify">

@@ -11,7 +11,7 @@
             <p v-if="reference.pmid && reference.pmid.length>0">
                 <a :href="'https://www.ncbi.nlm.nih.gov/pubmed/'+reference.pmid" title="PubMed" target="_blank">PMID:{{reference.pmid }}</a>
             </p>
-            <p>{{ reference.abstract }}</p>
+            <p align="justify">{{ reference.abstract }}</p>
             </v-card>
     </div>
 </template>

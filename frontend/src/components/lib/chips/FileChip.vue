@@ -1,5 +1,5 @@
 <template>
-    <span id="file-chip" class="text-xs-center" @mouseover="showText=true" @mouseleave="showText=true">
+    <div  id="file-chip" class="text-xs-center" @mouseover="showText=true" @mouseleave="showText=true">
 
         <a  @click.prevent="downloadItem(file_url)" :href="file_url" :title="file_url">
             <v-chip class="ma-1" small>
@@ -16,7 +16,7 @@
                 </span>
             </v-chip>
         </a>
-    </span>
+    </div>
 </template>
 
 <script>
