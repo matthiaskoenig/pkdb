@@ -88,6 +88,7 @@ export default new Vuex.Store({
 
         //for search detail display
         display_detail: true,
+        hide_search: true,
         detail_info: {},
         show_type: "help",
 

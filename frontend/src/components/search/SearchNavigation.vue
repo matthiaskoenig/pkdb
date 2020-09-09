@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer
         v-model="drawer"
-        :mini-variant.sync="mini"
+        :mini-variant.sync="hide_search"
         clipped
         permanent
         app
@@ -52,7 +52,7 @@
           <v-btn
               class="ml-4"
               icon
-              @click.stop="mini = !mini"
+              @click.stop="hide_search = !hide_search"
           >
             <v-icon >{{faIcon("left_arrow")}}</v-icon>
           </v-btn>
@@ -174,6 +174,17 @@ export default {
         })
       }
     },
+    hide_search:  {
+      get() {
+        return this.$store.state.hide_search
+      },
+      set(value) {
+        this.$store.dispatch('updateAction', {
+          key: "hide_search",
+          value: value,
+        })
+      }
+    },
     detail_info: {
       get() {
         return this.$store.state.detail_info
@@ -240,7 +251,6 @@ export default {
         { title: 'Subjects', icon:this.faIcon('groups') },
         { title: 'Interventions', icon:this.faIcon('interventions') },
       ],
-      mini: true,
       loadingDownload: false,
       results: {
         studies: {"hash": "", "count": 0},

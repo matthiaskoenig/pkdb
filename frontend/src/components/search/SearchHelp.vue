@@ -117,6 +117,10 @@ export default {
       for (let q of example) {
         this.update_store(q)
       }
+      this.$store.dispatch('updateAction', {
+        key: "hide_search",
+        value: false,
+      })
     },
     reset() {
       this.$store.commit('resetQuery');
