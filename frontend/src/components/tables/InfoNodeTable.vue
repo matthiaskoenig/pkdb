@@ -67,13 +67,21 @@
       </template>
 
       <template v-slot:item.parents="{ item }">
-        <ul>
-           <span v-for="(parent, index) in item.parents" :key="index">
-             <li>
-             <text-highlight :queries="search.split(/[ ,]+/)">{{ parent.label }}</text-highlight>
-             </li>
-          </span>
-        </ul>
+        <v-chip v-for="(parent, index) in item.parents" :key="index"
+                small
+                outlined
+                color="black"
+        >
+
+                  <span v-if="parent.label === parent.name">
+                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ parent.label }}</text-highlight></strong>
+                  </span>
+                  <span v-if="parent.label != parent.name">
+                    <text-highlight :queries="search.split(/[ ,]+/)">{{ parent.label }}</text-highlight> |
+                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ parent.name }}</text-highlight></strong>
+                  </span>
+
+        </v-chip>
       </template>
 
 
@@ -98,9 +106,14 @@
                         outlined
                         color="black"
                 >
-                    <text-highlight :queries="search.split(/[ ,]+/)">
-                        {{ choice.label }}
-                    </text-highlight>
+                  <span v-if="choice.label === choice.name">
+                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ choice.label }}</text-highlight></strong>
+                  </span>
+                  <span v-if="choice.label != choice.name">
+                    <text-highlight :queries="search.split(/[ ,]+/)">{{ choice.label }}</text-highlight> |
+                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ choice.name }}</text-highlight></strong>
+                  </span>
+
                 </v-chip>
             </span>
         </span>
