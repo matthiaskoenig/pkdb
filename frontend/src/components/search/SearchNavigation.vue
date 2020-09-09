@@ -9,7 +9,7 @@
       mini-variant-width="40"
       width="420"
   >
-    <v-list-item @click.stop="hide_search = !hide_search" title="Hide details panel">
+    <v-list-item @click.stop="hide_search = !hide_search" title="Hide search panel">
       <v-list-item-avatar title="Show search panel">
         <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
@@ -64,66 +64,60 @@
 
 
     <div v-if="!hide_search">
-
-      <v-list-item>
+      <v-list-item class="ma-0 pl-1 pr-1">
         <v-list-item-content>
-          <v-list-item-title>
-            <span class="ma-1"><v-icon left small>{{faIcon("studies")}}</v-icon>Studies ({{results.studies.count}})</span>
+          <v-list-item-title class="mt-0 ml-2 mr-2">
+            <v-icon left small>{{faIcon("studies")}}</v-icon>
+            <v-badge color="black" :content="results.studies.count.toString()" right inline >
+              Studies
+            </v-badge>
           </v-list-item-title>
+
           <study-search-form/>
-        </v-list-item-content>
-      </v-list-item>
 
-      <v-divider/>
-
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>
-            <span class="ma-1"><v-icon left small>{{faIcon("groups")}}</v-icon>Groups ({{ results.groups.count }})</span>|
-            <span class="ma-1"><v-icon left small>{{faIcon("individuals")}}</v-icon>Individuals ({{results.individuals.count}})</span>
-
-            <!--
-            <count-badge color="blue" :count="results.groups.count" text="Groups "/>
-            <v-spacer/>
-            <count-badge color="blue" :count="results.individuals.count" text="Individuals "/>
-            -->
+          <v-list-item-title class="ml-2 mr-2">
+            <v-icon left small>{{faIcon("groups")}}</v-icon>
+            <v-badge color="black" :content="results.groups.count.toString()" right inline >
+              Groups
+            </v-badge>
+            |
+            <v-icon left small>{{faIcon("individuals")}}</v-icon>
+            <v-badge color="black" :content="results.individuals.count.toString()" right inline >
+              Individuals
+            </v-badge>
           </v-list-item-title>
+
           <subjects-form
               @subjects__type="update_search_query"
               @subject_queries="update_subject_query"
           />
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider/>
 
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>
-            <span class="ma-1"><v-icon left small>{{faIcon("interventions")}}</v-icon>Interventions ({{results.interventions.count}})</span>
-            <!--
-            <count-badge color="blue" :count="results.interventions.count" text="Interventions"/>
-            -->
+          <v-list-item-title class="ml-2 mr-2">
+            <v-icon left small>{{faIcon("interventions")}}</v-icon>
+            <v-badge color="black" :content="results.interventions.count.toString()" right inline >
+              Interventions
+            </v-badge>
           </v-list-item-title>
-          <intervention-form/>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider/>
 
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title>
-            <span class="ma-1"><v-icon left small>{{faIcon("outputs")}}</v-icon>Outputs ({{results.outputs.count}})</span>|
-            <span class="ma-1"><v-icon left small>{{faIcon("timecourses")}}</v-icon>Timecourses ({{results.timecourses.count}})</span>|
-            <span class="ma-1">Scatter ({{results.scatter.count}})</span>
-            <!--
-            <count-badge color="blue" :count="results.outputs.count" text="Outputs"/>
-            <v-spacer/>
-            <count-badge color="blue" :count="results.timecourses.count" text="Timecourses "/>
-            <v-spacer/>
-            <count-badge color="blue" :count="results.scatter.count" text="Scatter "/>
-            -->
+          <intervention-form/>
+
+          <v-list-item-title class="ml-2 mr-2">
+            <v-icon left small>{{faIcon("outputs")}}</v-icon>
+            <v-badge color="black" :content="results.outputs.count.toString()" right inline >
+              Outputs
+            </v-badge>
+            |
+            <v-icon left small>{{faIcon("timecourses")}}</v-icon>
+            <v-badge color="black" :content="results.timecourses.count.toString()" right inline >
+              Timecourses
+            </v-badge>
+            |
+            <v-badge color="black" :content="results.scatter.count.toString()" right inline >
+              Scatter
+            </v-badge>
           </v-list-item-title>
           <output-form/>
+
         </v-list-item-content>
       </v-list-item>
     </div>
