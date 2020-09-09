@@ -56,13 +56,18 @@ export default {
       // get data (FIXME: caching of InfoNodes in store)
       axios.get(url, {headers: headers})
           .then(response => {
-            this.updateSearch(response.data)
-            this.$store.state.show_type = "study";
-            this.$store.state.detail_info =  response.data;
-            this.$store.state.display_detail = true;
+            if(response.data.sid) {
+              this.updateSearch(response.data)
+              this.$store.state.show_type = "study";
+              this.$store.state.detail_info = response.data;
+              this.$store.state.display_detail = true;
+            }else{
+              this.$route.push('/404')
+            }
           })
           .catch(err => {
             this.exists = false;
+            this.$router.push('/404')
             console.log(err)
           })
           .finally(() => this.loading = false);

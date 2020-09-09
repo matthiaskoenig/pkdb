@@ -1,12 +1,12 @@
 <template>
   <v-navigation-drawer
       :mini-variant.sync="mini"
-      mini-variant-width="30"
       clipped
+      permanent
       app
       right
       :dark="mini"
-      mobile-breakpoint="0"
+      mini-variant-width="30"
       width="450"
   >
     <!--
@@ -26,7 +26,11 @@
     </v-list-item>
     <v-divider></v-divider>
     -->
-  <v-list-item>
+
+    <v-list-item>
+      <v-list-item-avatar>
+        <v-icon small> fas fa fa-question</v-icon>
+      </v-list-item-avatar>
       <v-btn
           icon
           x-small

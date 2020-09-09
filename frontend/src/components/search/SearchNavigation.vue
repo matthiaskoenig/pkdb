@@ -6,14 +6,16 @@
       permanent
       app
       dark
+      mini-variant-width="30"
       width="400"
   >
     <v-list-item class="px-2">
       <v-list-item-avatar title="Search panel">
-        <v-icon>{{ faIcon('search') }}</v-icon>
+        <v-icon small>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
 
-      <v-list-item-title><v-card-title>Search</v-card-title></v-list-item-title>
+      <v-list-item-title >   <v-row> <v-col><h3>Search</h3></v-col> </v-row></v-list-item-title>
+
       <v-progress-circular
           indeterminate
           color="primary"
@@ -100,7 +102,7 @@
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
-        
+
 
         <v-list-item-content>
           <v-list-item-title>
