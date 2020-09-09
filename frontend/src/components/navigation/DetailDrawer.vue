@@ -9,38 +9,19 @@
       mini-variant-width="30"
       width="450"
   >
-    <!--
-    <v-list-item class="px-2" >
-      <v-list-item-avatar color="#41b883">
-        <v-icon > fas fa fa-question</v-icon>
-      </v-list-item-avatar>
-
-      <v-list-item-title>Details</v-list-item-title>
-
+    <v-list-item @click.stop="mini = !mini">
       <v-btn
-          icon
-          @click.stop="display_detail = !display_detail"
-      >
-        <v-icon>{{faIcon("right_arrow")}}</v-icon>
-      </v-btn>
-    </v-list-item>
-    <v-divider></v-divider>
-    -->
-
-    <v-list-item>
-      <v-list-item-avatar>
-        <v-icon small> fas fa fa-question</v-icon>
-      </v-list-item-avatar>
-      <v-btn
-          icon
           x-small
-          @click.stop="mini = !mini"
+          icon
+          v-if="!mini"
       >
-        <v-icon v-if="!mini" title="Hide details panel">{{ faIcon("right_arrow") }}</v-icon>
-        <v-icon v-if="mini" title="Show details panel">{{ faIcon("left_arrow") }}</v-icon>
+        <v-icon  title="Hide details panel">{{ faIcon("right_arrow") }}</v-icon>
       </v-btn>
 
-  </v-list-item>
+      <v-list-item-avatar v-if="mini" title="Detail panel">
+        <v-icon small>{{ faIcon('info') }}</v-icon>
+      </v-list-item-avatar>
+    </v-list-item>
 
     <v-divider v-if="!mini"/>
     <div v-if="!mini">
