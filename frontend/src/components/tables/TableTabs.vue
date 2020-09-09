@@ -30,13 +30,13 @@
         <v-divider/>
         <studies-table v-if="item.tab === 'studies' && results[item.tab].count" :search_hash="true" :hash="results.studies.hash"
                        :autofocus="false"/>
-        <groups-table v-if="item.tab === 'groups'" :search_hash="true" :hash="results.groups.hash"
+        <groups-table v-if="item.tab === 'groups' && results[item.tab].count" :search_hash="true" :hash="results.groups.hash"
                       :autofocus="false"/>
         <individuals-table v-if="item.tab === 'individuals' && results[item.tab].count" :search_hash="true" :hash="results.individuals.hash"
                            :autofocus="false"/>
         <interventions-table v-if="item.tab === 'interventions' && results[item.tab].count" :search_hash="true"
                              :hash="results.interventions.hash" :autofocus="false"/>
-        <outputs-table v-if="item.tab === 'outputs'" :search_hash="true" :hash="results.outputs.hash"
+        <outputs-table v-if="item.tab === 'outputs' && results[item.tab].count" :search_hash="true" :hash="results.outputs.hash"
                        :autofocus="false"/>
         <timecourses-table v-if="item.tab === 'timecourses' && results[item.tab].count" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
                            :autofocus="false"/>
