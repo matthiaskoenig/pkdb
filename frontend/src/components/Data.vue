@@ -34,6 +34,7 @@ export default {
   },
   created() {
     if(this.sid){
+      this.reset()
       this.getStudy(this.sid)
       this.hide_search = false
     }
@@ -42,10 +43,14 @@ export default {
     getStudy(sid) {
       // object is an InfoNode
       let url = `${this.$store.state.endpoints.api}studies/${sid}/?format=json`;
-
+      let headers = {};
+      if (localStorage.getItem('token')) {
+        headers = {Authorization: 'Token ' + localStorage.getItem('token')}
+      }
       // get data (FIXME: caching of InfoNodes in store)
-      axios.get(url)
+      axios.get(url, {headers: headers})
           .then(response => {
+
             this.updateSearch(response.data)
             this.$store.state.show_type = "study";
             this.$store.state.detail_info =  response.data;
@@ -62,7 +67,6 @@ export default {
           "query_type": "queries",
           "key": "studies__sid__in",
           "value": [study_info]}
-      this.reset()
       this.update_store(study)
     },
     reset() {
