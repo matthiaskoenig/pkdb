@@ -20,7 +20,7 @@ from ..interventions.models import (
     InterventionEx)
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer, SidLabelSerializer, MappingSerializer)
+    NA_VALUES, StudySmallElasticSerializer, SidNameLabelSerializer, MappingSerializer)
 from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
@@ -278,12 +278,12 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
 
-    measurement_type = SidLabelSerializer(read_only=True)
-    route = SidLabelSerializer(allow_null=True, read_only=True)
-    application = SidLabelSerializer(allow_null=True, read_only=True)
-    form = SidLabelSerializer(allow_null=True, read_only=True)
-    substance = SidLabelSerializer(allow_null=True, read_only=True)
-    choice = SidLabelSerializer(allow_null=True, read_only=True)
+    measurement_type = SidNameLabelSerializer(read_only=True)
+    route = SidNameLabelSerializer(allow_null=True, read_only=True)
+    application = SidNameLabelSerializer(allow_null=True, read_only=True)
+    form = SidNameLabelSerializer(allow_null=True, read_only=True)
+    substance = SidNameLabelSerializer(allow_null=True, read_only=True)
+    choice = SidNameLabelSerializer(allow_null=True, read_only=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)

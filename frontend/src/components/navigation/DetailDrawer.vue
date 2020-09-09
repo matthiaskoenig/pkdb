@@ -1,5 +1,6 @@
 <template>
   <v-navigation-drawer
+      v-model="drawer"
       :mini-variant.sync="mini"
       clipped
       permanent
@@ -14,6 +15,7 @@
           x-small
           icon
           v-if="!mini"
+          @click.stop="mini = !mini"
       >
         <v-icon>{{ faIcon("right_arrow") }}</v-icon>
       </v-btn>
@@ -26,12 +28,12 @@
 
     <!--<v-divider v-if="!mini"/>-->
     <div v-if="!mini">
-    <v-list-item>
-    <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
-    <search-help v-if="show_type === 'help'"/>
-    <study-overview v-if="show_type === 'study'" :study="detail_info"/>
-    <!-- <group-detail v-if="show_type === 'group'" :group="detail_info"/> -->
-    </v-list-item>
+      <v-list-item>
+      <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
+      <search-help v-if="show_type === 'help'"/>
+      <study-overview v-if="show_type === 'study'" :study="detail_info"/>
+      <!-- <group-detail v-if="show_type === 'group'" :group="detail_info"/> -->
+      </v-list-item>
     </div>
 
   </v-navigation-drawer>
@@ -51,6 +53,7 @@ export default {
   components: {GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
   mixins: [IconsMixin],
   data: () => ({
+    drawer:true
   }),
   computed:{
     mini:  {

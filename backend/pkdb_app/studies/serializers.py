@@ -18,7 +18,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
     DescriptionElasticSerializer
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
-from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidLabelSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameLabelSerializer
 from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
@@ -491,7 +491,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
     creator = UserElasticSerializer()
     collaborators = UserElasticSerializer(many=True, )
 
-    substances = SidLabelSerializer(many=True, )
+    substances = SidNameLabelSerializer(many=True, )
 
     files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, )
 

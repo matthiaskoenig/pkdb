@@ -29,7 +29,7 @@ export default new Router({
         },
         {
             path: '/data/:sid',
-            name: 'Data',
+            name: 'DataSingle',
             component: Data,
             props: true
         },

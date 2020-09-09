@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
-from pkdb_app.serializers import StudySmallElasticSerializer, SidLabelSerializer
+from pkdb_app.serializers import StudySmallElasticSerializer, SidNameLabelSerializer
 from .models import (
     Group,
     GroupSet,
@@ -609,9 +609,9 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    measurement_type = SidLabelSerializer()
-    substance = SidLabelSerializer(allow_null=True)
-    choice = SidLabelSerializer(allow_null=True)
+    measurement_type = SidNameLabelSerializer()
+    substance = SidNameLabelSerializer(allow_null=True)
+    choice = SidNameLabelSerializer(allow_null=True)
     group_count = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Characteristica
