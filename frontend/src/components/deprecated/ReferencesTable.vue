@@ -38,9 +38,9 @@
 </template>
 
 <script>
-    import {searchTableMixin} from "./mixins";
-    import TableToolbar from './TableToolbar';
-    import NoData from './NoData';
+    import {searchTableMixin} from "../tables/mixins";
+    import TableToolbar from '../tables/TableToolbar';
+    import NoData from '../tables/NoData';
 
     export default {
         name: "ReferencesTable3",

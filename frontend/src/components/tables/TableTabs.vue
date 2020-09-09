@@ -23,19 +23,19 @@
           :key="item.tab"
           :value="item.tab"
       >
-        <studies-table v-if="item.tab === 'Studies'" :search_hash="true" :hash="results.studies.hash"
+        <studies-table v-if="item.tab === 'studies'" :search_hash="true" :hash="results.studies.hash"
                        :autofocus="false"/>
-        <groups-table v-if="item.tab === 'Groups'" :search_hash="true" :hash="results.groups.hash"
+        <groups-table v-if="item.tab === 'groups'" :search_hash="true" :hash="results.groups.hash"
                       :autofocus="false"/>
-        <individuals-table v-if="item.tab === 'Individuals'" :search_hash="true" :hash="results.individuals.hash"
+        <individuals-table v-if="item.tab === 'individuals'" :search_hash="true" :hash="results.individuals.hash"
                            :autofocus="false"/>
-        <interventions-table v-if="item.tab === 'Interventions'" :search_hash="true"
+        <interventions-table v-if="item.tab === 'interventions'" :search_hash="true"
                              :hash="results.interventions.hash" :autofocus="false"/>
-        <outputs-table v-if="item.tab === 'Outputs'" :search_hash="true" :hash="results.outputs.hash"
+        <outputs-table v-if="item.tab === 'outputs'" :search_hash="true" :hash="results.outputs.hash"
                        :autofocus="false"/>
-        <timecourses-table v-if="item.tab === 'Timecourses'" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
+        <timecourses-table v-if="item.tab === 'timecourses'" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
                            :autofocus="false"/>
-        <scatter-table v-if="item.tab === 'Scatter'" :search_hash="true" :hash="results.scatter.hash" data_type="scatter"
+        <scatter-table v-if="item.tab === 'scatter'" :search_hash="true" :hash="results.scatter.hash" data_type="scatter"
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>
@@ -112,13 +112,13 @@ export default {
     return {
       loadingDownload: false,
       items: [
-        {tab: 'Studies'},
-        {tab: 'Groups'},
-        {tab: 'Individuals'},
-        {tab: 'Interventions'},
-        {tab: 'Outputs'},
-        {tab: 'Timecourses'},
-        {tab: 'Scatter'},
+        {tab: 'studies'},
+        {tab: 'groups'},
+        {tab: 'individuals'},
+        {tab: 'interventions'},
+        {tab: 'outputs'},
+        {tab: 'timecourses'},
+        {tab: 'scatter'},
       ],
     }
   },
