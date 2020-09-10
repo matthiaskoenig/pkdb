@@ -1,4 +1,3 @@
-import collections
 import traceback
 
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
@@ -13,7 +12,6 @@ from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_n
 from rest_framework import serializers
 import pandas as pd
 import numpy as np
-from django.apps import apps
 
 
 class DimensionSerializer(WrongKeyValidationSerializer):
@@ -48,7 +46,6 @@ class SubSetSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return data
 
-
     def create(self, validated_data):
         validated_data["study"] = self.context["study"]
 
@@ -66,15 +63,12 @@ class SubSetSerializer(ExSerializer):
         # subset_instance.save()
         return subset_instance
 
-
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
             raise serializers.ValidationError({"time": "no time points are allowed to be nan", "detail": time})
 
 
-
     def calculate_pks_from_timecourses(self, subset):
-
         # calculate pharmacokinetics outputs
         try:
             outputs = pkoutputs_from_timecourse(subset)
@@ -159,13 +153,12 @@ class SubSetSerializer(ExSerializer):
             x_data = shared_data[shared_data["dimension"] == 0]
             y_data = shared_data[shared_data["dimension"] == 1]
 
-
             if len(x_data) != 1 or len(y_data) != 1:
                 raise serializers.ValidationError(
-                f"Dimensions <{dimensions}> do not match in respect to the shared fields."
-                f"The shared field <{shared}> with values <{shared_values}>"
-                f" do not uniquely assign 1 x output to 1 y output. "
-                f"<{dimensions[0]}> has <{len(x_data)}> outputs. <{dimensions[1]}> has <{len(y_data)}> outputs."
+                    f"Dimensions <{dimensions}> do not match in respect to the shared fields."
+                    f"The shared field <{shared}> with values <{shared_values}>"
+                    f" do not uniquely assign 1 x output to 1 y output. "
+                    f"<{dimensions[0]}> has <{len(x_data)}> outputs. <{dimensions[1]}> has <{len(y_data)}> outputs."
                 )
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
             x_output = study_outputs.get(pk=x_data["id"])
@@ -260,8 +253,6 @@ class DataSerializer(ExSerializer):
                     validated_data={**subset, "data": data_instance},
                     create_multiple_keys=['comments', 'descriptions'])
         return data_instance
-
-
 
 class DataSetSerializer(ExSerializer):
 

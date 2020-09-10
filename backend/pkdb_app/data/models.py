@@ -21,9 +21,8 @@ class DataSet(models.Model):
 
 class Data(models.Model):
     """
-    A Data  These are mostly scatterplots or timecourses.
+    These are mostly scatter or timecourses.
     """
-
     class DataTypes(models.TextChoices):
         """ Data Types. """
         Scatter = 'scatter', _('scatter')
@@ -36,15 +35,10 @@ class Data(models.Model):
     dataset = models.ForeignKey(DataSet, related_name="data", on_delete=models.CASCADE, null=True)
 
 
-
 class SubSet(Accessible):
-    """
-
-    """
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
     study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="subsets")
-
 
     def get_single_dosing(self) -> Intervention:
         """Returns a single intervention of type dosing if existing.
