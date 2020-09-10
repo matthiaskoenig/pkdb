@@ -19,7 +19,7 @@ from .models import (
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
-from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create
+from ..utils import list_of_pk, _validate_required_key, create_multiple, _create
 
 CHARACTERISTICA_FIELDS = ['count']
 CHARACTERISTICA_MAP_FIELDS = map_field(CHARACTERISTICA_FIELDS)
@@ -122,7 +122,7 @@ class GroupSerializer(ExSerializer):
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data, additional_fields=GroupExSerializer.Meta.fields)
 
-        _validate_requried_key(data, 'count')
+        _validate_required_key(data, 'count')
 
         for characteristica_single in data.get('characteristica', []):
             disabled = ['value']

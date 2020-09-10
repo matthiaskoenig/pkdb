@@ -25,7 +25,7 @@ from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates, _validate_requried_key, _create, create_multiple_bulk, \
+from ..utils import list_of_pk, list_duplicates, _validate_required_key, _create, create_multiple_bulk, \
     create_multiple_bulk_normalized
 
 MEDICATION = "medication"
@@ -81,20 +81,20 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data, additional_fields=InterventionExSerializer.Meta.fields)
 
-        _validate_requried_key(data, "measurement_type")
+        _validate_required_key(data, "measurement_type")
         measurement_type = data.get("measurement_type")
 
         if any([measurement_type == MEDICATION, measurement_type == DOSING]):
-            _validate_requried_key(data, "substance")
-            _validate_requried_key(data, "route")
-            _validate_requried_key(data, "value")
-            _validate_requried_key(data, "unit")
+            _validate_required_key(data, "substance")
+            _validate_required_key(data, "route")
+            _validate_required_key(data, "value")
+            _validate_required_key(data, "unit")
 
             if measurement_type == DOSING:
-                _validate_requried_key(data, "form")
-                _validate_requried_key(data, "application")
-                _validate_requried_key(data, "time")
-                _validate_requried_key(data, "time_unit")
+                _validate_required_key(data, "form")
+                _validate_required_key(data, "application")
+                _validate_required_key(data, "time")
+                _validate_required_key(data, "time_unit")
                 application = data["application"]
                 allowed_applications = ["constant infusion", "single dose"]
                 if not application in allowed_applications:
