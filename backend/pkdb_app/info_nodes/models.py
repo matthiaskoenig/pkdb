@@ -6,7 +6,6 @@ from numbers import Number
 import pint
 
 from django.db import models
-from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 from pint import UndefinedUnitError
 
