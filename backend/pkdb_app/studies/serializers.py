@@ -121,8 +121,7 @@ class StudySerializer(SidSerializer):
                                        queryset=Reference.objects.all(), required=True, allow_null=False
                                        )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
-    curators = CuratorRatingSerializer(many=True, required=False,
-                                       allow_null=True)
+    curators = CuratorRatingSerializer(many=True)
     collaborators = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
@@ -133,8 +132,6 @@ class StudySerializer(SidSerializer):
     creator = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
-        required=False,
-        allow_null=True,
     )
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -188,7 +185,12 @@ class StudySerializer(SidSerializer):
             data["creator"] = self.get_or_val_error(User, username=creator)
 
         # curators to internal
-        if "curators" in data:
+        if hasattr(data,"curators"):
+            if len(data.get("curators",[])) == 0:
+                    raise serializers.ValidationError(
+                        {"curators": "At least One curator is required"}
+                    )
+        else:
             ratings = []
             for curator_and_rating in data.get("curators", []):
                 rating_dict = {}
@@ -407,7 +409,7 @@ class StudySerializer(SidSerializer):
 
         if "curators" in attrs and "creator" in attrs:
             if attrs["creator"] not in [curator["user"] for curator in attrs["curators"]]:
-                error_json = {"creator": "Creator must be in curator."}
+                error_json = {"curators": "Creator must be in curators."}
                 raise serializers.ValidationError(error_json)
         return super().validate(attrs)
 

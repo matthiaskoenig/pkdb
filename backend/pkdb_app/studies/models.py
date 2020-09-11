@@ -113,7 +113,7 @@ class Study(Sidable, models.Model):
     )
     licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
     creator = models.ForeignKey(
-        User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
+        User, related_name="creator_of_studies", on_delete=models.CASCADE
     )
     curators = models.ManyToManyField(
         User, related_name="curator_of_studies", through=Rating
