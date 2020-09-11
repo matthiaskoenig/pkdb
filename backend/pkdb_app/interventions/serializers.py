@@ -26,7 +26,7 @@ from ..subjects.models import DataFile
 # Serializer FIELDS
 # ----------------------------------
 from ..utils import list_of_pk, list_duplicates, _validate_required_key, _create, create_multiple_bulk, \
-    create_multiple_bulk_normalized
+    create_multiple_bulk_normalized, _validate_required_key_and_value
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -85,16 +85,16 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         measurement_type = data.get("measurement_type")
 
         if any([measurement_type == MEDICATION, measurement_type == DOSING]):
-            _validate_required_key(data, "substance")
-            _validate_required_key(data, "route")
-            _validate_required_key(data, "value")
-            _validate_required_key(data, "unit")
+            _validate_required_key_and_value(data, "substance")
+            _validate_required_key_and_value(data, "route")
+            _validate_required_key_and_value(data, "value")
+            _validate_required_key_and_value(data, "unit")
 
             if measurement_type == DOSING:
-                _validate_required_key(data, "form")
-                _validate_required_key(data, "application")
-                _validate_required_key(data, "time")
-                _validate_required_key(data, "time_unit")
+                _validate_required_key_and_value(data, "form")
+                _validate_required_key_and_value(data, "application")
+                _validate_required_key_and_value(data, "time")
+                _validate_required_key_and_value(data, "time_unit")
                 application = data["application"]
                 allowed_applications = ["constant infusion", "single dose"]
                 if not application in allowed_applications:
