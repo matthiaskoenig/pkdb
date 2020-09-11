@@ -3,7 +3,7 @@ Generic utility functions.
 """
 import copy
 import os
-
+import pandas as pd
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -196,6 +196,13 @@ def set_keys(d, value, *keys):
         d = d[key]
     d[keys[-1]] = value
 
+def _validate_required_key_and_value(attrs, key, details=None, extra_message: str = ""):
+    print(attrs.get(key,None))
+    if pd.isnull(attrs.get(key,None)) or pd.isna(attrs.get(key,None)):
+        error_json = {key: f"The key <{key}> is required. {extra_message}"}
+        if details:
+            error_json["details"] = details
+        raise serializers.ValidationError(error_json)
 
 def _validate_required_key(attrs, key, details=None, extra_message: str = ""):
     if key not in attrs:
