@@ -46,6 +46,7 @@ class AuthorSerializer(WrongKeyValidationSerializer):
     def validate(self, attrs):
         if ((attrs.get("first_name") =="Max") and (attrs.get("last_name") == "Musterman")):
             raise serializers.ValidationError("Replace 'Max Musternamn' with th correct author in <reference.json>")
+        return super().validate(attrs)
 
 
 class ReferenceSerializer(WrongKeyValidationSerializer):
@@ -92,6 +93,8 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
             raise serializers.ValidationError("Add a title to <reference.json>.")
         if ((attrs.get("date") == "1000-10-10")):
                     raise serializers.ValidationError("Replace '1000-10-10' with the correct date in <reference.json>.")
+        return super().validate(attrs)
+
 
 class CuratorRatingSerializer(serializers.ModelSerializer):
     rating = serializers.FloatField(min_value=0, max_value=5)
