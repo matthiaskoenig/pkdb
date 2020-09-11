@@ -2,6 +2,7 @@
 Model for the InfoNodes.
 
 """
+import re
 from numbers import Number
 import pint
 
@@ -209,6 +210,11 @@ class MeasurementType(AbstractInfoNode):
             raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
     def is_valid_unit(self, unit):
+        if not re.match("^[\/^.[:space:]*a-zA-Z0-9]*$", unit):
+            msg = f"Characters used in unit field are not allowed. " \
+                  f"Allowed special characters are '[\/^.[:space:]]' allowed normal characters are '[a-zA-Z0-9]'."
+            raise ValueError(
+                {"unit": msg})
         try:
             p_unit = self.p_unit(unit)
 
