@@ -1,6 +1,5 @@
 """
 Model for the InfoNodes.
-
 """
 import re
 from numbers import Number
@@ -12,8 +11,7 @@ from pint import UndefinedUnitError
 
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
-from pkdb_app.users.models import User
-from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_requried_key
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key
 
 
 class Annotation(models.Model):
@@ -25,7 +23,7 @@ class Annotation(models.Model):
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     url = models.URLField(max_length=CHAR_MAX_LENGTH_LONG, null=False)
 
-# TODO: add cross reference
+
 class CrossReference(models.Model):
     """ CrossReference. """
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
@@ -118,7 +116,6 @@ class Method(AbstractInfoNode):
 
 class Route(AbstractInfoNode):
     """ Route Model """
-
     info_node = models.OneToOneField(
         InfoNode, related_name="route", on_delete=models.CASCADE, null=True
     )
@@ -201,11 +198,11 @@ class MeasurementType(AbstractInfoNode):
     def p_unit(unit):
         try:
             p_unit = ureg(unit)
-            p_unit.u
+            p_unit.u  # check if pint unit can be accessed
             return p_unit
         except (UndefinedUnitError, AttributeError):
             if unit == "%":
-                raise ValueError(f"unit: [{unit}] has to written as 'percent'")
+                raise ValueError(f"unit: [{unit}] has to be encoded as 'percent'")
 
             raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
@@ -351,8 +348,8 @@ class MeasurementType(AbstractInfoNode):
 
         if self.time_required:
             details = f"for measurement type `{self.info_node.name}`"
-            _validate_requried_key(data, "time", details=details)
-            _validate_requried_key(data, "time_unit", details=details)
+            _validate_required_key(data, "time", details=details)
+            _validate_required_key(data, "time_unit", details=details)
 
         return {"choice":d_choice}
 

@@ -2,12 +2,15 @@
 Calculate pharmacokinetics
 """
 from typing import List, Dict
+from rest_framework import serializers
+import logging
 import warnings
 import numpy as np
-import pandas as pd
 from django.apps import apps
 from pkdb_app.info_nodes.units import ureg
 from pkdb_analysis.pk import pharmacokinetics
+
+logger = logging.getLogger(__name__)
 
 MeasurementType = apps.get_model('info_nodes.MeasurementType')
 Substance = apps.get_model('info_nodes.Substance')
@@ -28,27 +31,23 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
     """
     outputs = []
     dosing = subset.get_single_dosing()
+    # dosing information must exist
     if not dosing:
-        # dosing information must exist
         return outputs
+
     # pharmacokinetics are only calculated on normalized concentrations
     timecourse = subset.timecourse()
 
-
-
-    if  timecourse["measurement_type_name"] == "concentration":
-
+    if timecourse["measurement_type_name"] == "concentration":
         variables = _timecourse_to_pkdict(timecourse, dosing)
         ctype = variables.pop("ctype", None)
+
         if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
             pkinf = pharmacokinetics.TimecoursePK(**variables)
-
         else:
             _ = variables.pop("dosing", None)
             _ = variables.pop("intervention_time", None)
             pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
-
-
 
         pk = pkinf.pk
 

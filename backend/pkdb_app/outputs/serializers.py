@@ -28,7 +28,7 @@ from ..subjects.serializers import (
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
+from ..utils import list_of_pk, _validate_required_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
 EXTRA_FIELDS = ["tissue", "method", "label","output_type"]
@@ -104,12 +104,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self._validate_group_output(attrs)
         self.validate_group_individual_output(attrs)
 
-        _validate_requried_key(attrs, "measurement_type")
+        _validate_required_key(attrs, "measurement_type")
 
-        _validate_requried_key(attrs, "substance")
-        _validate_requried_key(attrs, "tissue")
-        _validate_requried_key(attrs, "interventions")
-        _validate_requried_key(attrs, "output_type")
+        _validate_required_key(attrs, "substance")
+        _validate_required_key(attrs, "tissue")
+        _validate_required_key(attrs, "interventions")
+        _validate_required_key(attrs, "output_type")
         self._validate_timecourse(attrs)
 
 
@@ -132,7 +132,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
     def _validate_timecourse(self, attrs):
         if attrs["output_type"] == Output.OutputTypes.Timecourse:
-            _validate_requried_key(attrs,"label")
+            _validate_required_key(attrs, "label")
             if not attrs.get("label",None):
                 msg = "Label is required on on output_type=timecourse"
                 raise serializers.ValidationError(msg)
