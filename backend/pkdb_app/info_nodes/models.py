@@ -6,12 +6,14 @@ from numbers import Number
 import pint
 
 from django.db import models
+from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 from pint import UndefinedUnitError
 
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
 from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key
+from rest_framework import serializers
 
 
 class Annotation(models.Model):
@@ -208,16 +210,17 @@ class MeasurementType(AbstractInfoNode):
 
     def is_valid_unit(self, unit):
         #if not re.match("[ \/\^\.[:space:]\*a-zA-Z0-9_$ ]", str(unit)):
-        #if not re.match("^[\/α-ωΑ-Ωa-zA-Z0-9]*$", unit.decode("utf-8", "strict")):
-        #    msg = f"Unit value <{str(unit)}> contains not allowed characters. " \
-        #          f"Allowed special characters are '[/^.[:space:]]' allowed normal characters are '[a-zA-Z0-9]'."
-        #    raise ValueError({"unit": msg})
+
+        if not re.match("^[\/^. µα-ωΑ-Ωa-zA-Z0-9]*$", str(unit)):
+            msg = f"Unit value <{unit}> contains not allowed characters. " \
+                  f"Allowed  characters are '[\/^. µα-ωΑ-Ωa-zA-Z0-9]'."
+            raise serializers.ValidationError({"unit":msg})
         try:
             p_unit = self.p_unit(unit)
 
         except pint.DefinitionSyntaxError:
             msg = f"The unit [{unit}] has a wrong syntax."
-            raise ValueError(
+            raise serializers.ValidationError(
                 {"unit": msg})
 
         if len(self.n_units) != 0:
