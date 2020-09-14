@@ -121,12 +121,8 @@ class GroupSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data, additional_fields=GroupExSerializer.Meta.fields)
-
         _validate_required_key(data, 'count')
 
-        for characteristica_single in data.get('characteristica', []):
-            disabled = ['value']
-            self._validate_disabled_data(characteristica_single, disabled)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -143,6 +139,19 @@ class GroupSerializer(ExSerializer):
                                        f"on the `all` group.",
                     'details': characteristica}
             )
+    @staticmethod
+    def _validate_characteristica_count(characteristica, group_count):
+
+        if int(characteristica.get("count",group_count)) > int(group_count):
+            raise serializers.ValidationError(
+                {
+                    'characteristica': f"A characteristica count has to be smaller or equal to its group 'count'.",
+                    'details': {
+                        "characteristica":characteristica,
+                        "group_count": group_count,
+                    }
+                }
+            )
 
     def validate(self, attrs):
         ''' validates species information on group with name all
@@ -153,6 +162,11 @@ class GroupSerializer(ExSerializer):
             characteristica = attrs.get('characteristica', [])
             for measurement_type in ['species', 'healthy', 'sex']:
                 self._validate_required_measurement_type(measurement_type, characteristica)
+
+        for characteristica_single in attrs.get('characteristica', []):
+            disabled = ['value']
+            self._validate_disabled_data(characteristica_single, disabled)
+            self._validate_characteristica_count(characteristica_single, attrs.get("count"))
 
         return super().validate(attrs)
 
