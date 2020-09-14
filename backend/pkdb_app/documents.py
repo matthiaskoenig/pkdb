@@ -3,7 +3,7 @@ from functools import reduce
 
 from rest_framework.generics import get_object_or_404
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
 from pkdb_app.studies.models import Query
 
@@ -151,7 +151,7 @@ class ObjectField(DEDField, Object):
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
 
-class AccessView(DocumentViewSet):
+class AccessView(BaseDocumentViewSet):
     """Permissions on views."""
 
     def get_queryset(self):

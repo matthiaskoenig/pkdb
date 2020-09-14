@@ -282,6 +282,7 @@ class IndividualCharacteristicaViewSet(AccessView):
 # Views queried not from elastic search
 ###########################################################
 class DataFileViewSet(viewsets.ModelViewSet):
+    swagger_schema = None
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
     permission_classes = (StudyPermission,)

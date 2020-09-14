@@ -7,6 +7,10 @@ from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
 from .statistics import (
     StatisticsViewSet,
 )
@@ -85,26 +89,47 @@ router.register("individuals_analysis", IndividualCharacteristicaViewSet, basena
 router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
 router.register("data_analysis", DataAnalysisViewSet, basename="data_analysis")
 
-#router.register("pkdata", PKDataView, basename="pkdata")
 
 
-urlpattern_views = []
 urlpatterns = [
-    # authentification
-    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
-    path('api-auth/', include("rest_framework.urls", namespace="rest_framework")),
 
     # api
     path("api/v1/", include(router.urls)),
     path('api/v1/pkdata/', PKDataView.as_view()),
+
+]
+#router.register("pkdata", PKDataView, basename="pkdata")
+schema_view = get_schema_view(
+   openapi.Info(
+      title="PKDB API",
+      default_version='v1',
+      description="The is the REST API of PKDB.",
+      terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
+      contact=openapi.Contact(email="koenigmx@hu-berlin.de"),
+      license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
+   ),
+   public=False,
+   patterns=urlpatterns,
+
+)
+
+urlpatterns = urlpatterns + [
     path("api/v1/update_index/", update_index_study),
 
     # media files
     url(r'^media/(?P<file>.*)$', serve_protected_document,
         name='serve_protected_document'),
 
+    # authentification
+    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
+    path('api-auth/', include("rest_framework.urls", namespace="rest_framework")),
+
     url(r'^accounts/', include('rest_email_auth.urls')),
 
     path('verify/?P<key>[-\w]+)', obtain_auth_token),
     path('reset/?P<key>[-\w]+)', obtain_auth_token),
+
+   url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+   url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

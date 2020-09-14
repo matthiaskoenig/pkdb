@@ -67,6 +67,7 @@ from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, GroupCharac
 
 class ReferencesViewSet(viewsets.ModelViewSet):
     """ ReferenceViewSet """
+    swagger_schema = None
     queryset = Reference.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
     serializer_class = ReferenceSerializer
@@ -88,6 +89,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
 class StudyViewSet(viewsets.ModelViewSet):
     """ StudyViewSet """
+    swagger_schema = None
     queryset = Study.objects.all()
     serializer_class = StudySerializer
     filter_backends = (

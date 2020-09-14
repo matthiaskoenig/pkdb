@@ -3,7 +3,7 @@ from collections import namedtuple
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
     OrderingFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import viewsets
 
 from pkdb_app.info_nodes.documents import InfoNodeDocument
@@ -23,6 +23,7 @@ MEASUREMENT_TYPE_EXTRA = ["units"]
 
 
 class InfoNodeViewSet(viewsets.ModelViewSet):
+    swagger_schema = None
     permission_classes = (IsAdminUser,)
     lookup_field = "url_slug"
     serializer_class = InfoNodeSerializer
@@ -36,7 +37,7 @@ class InfoNodeViewSet(viewsets.ModelViewSet):
         return super().get_serializer(*args, **kwargs)
 
 
-class InfoNodeElasticViewSet(DocumentViewSet):
+class InfoNodeElasticViewSet(BaseDocumentViewSet):
     pagination_class = CustomPagination
     document = InfoNodeDocument
     serializer_class = InfoNodeElasticSerializer

@@ -15,6 +15,7 @@ django-rest-email-auth>=2.1.0
 
 # REST API
 djangorestframework>=3.11.1
+drf-yasg >= 1.17.1
 elasticsearch-dsl==7.2.1
 django-elasticsearch-dsl==7.1.4
 django-elasticsearch-dsl-drf>=0.20.8

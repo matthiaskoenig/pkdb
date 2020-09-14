@@ -22,6 +22,7 @@ INSTALLED_APPS = (
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
+    'drf_yasg',  # swapper api
     "django_filters",  # for filtering rest endpoints
     "corsheaders",
 
@@ -191,11 +192,19 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
     ),
 }
+
+SWAGGER_SETTINGS = {
+   'USE_SESSION_AUTH': False,
+
+}
+
 
 DATABASES = {
     "default": {
