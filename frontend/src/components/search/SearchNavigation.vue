@@ -24,7 +24,7 @@
              fab
              x-small
              text
-             @click="downloadData"
+             @click.stop="downloadData"
              :loading="loadingDownload"
              :disabled="loadingDownload"
              title="Download selected data"
