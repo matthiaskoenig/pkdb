@@ -1,6 +1,5 @@
 <template>
-
-    <div class="study-info">
+    <v-container fluid class="study-info">
       <v-card flat>
       <v-row>
         <v-col col="12">
@@ -91,20 +90,7 @@
       </v-card>
 
 
-
-
-
-              <!--
-
-                -->
-
-
-
-
-
-
-
-    </div>
+    </v-container>
 </template>
 
 <script>
