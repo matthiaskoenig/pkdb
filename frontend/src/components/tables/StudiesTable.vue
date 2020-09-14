@@ -7,8 +7,8 @@
             :height="windowHeight"
             dense
             :headers="headers"
-            disable-sort
             :items="entries"
+            disable-sort
             :options.sync="options"
             :server-items-length="count"
             :loading="loading"

@@ -1,5 +1,5 @@
 <template>
-    <v-card flat>
+    <v-sheet flat>
         <table-toolbar otype="timecourse" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
             fill-height
@@ -82,7 +82,7 @@
             <no-data/>
 
         </v-data-table>
-    </v-card>
+    </v-sheet>
 </template>
 
 <script>
