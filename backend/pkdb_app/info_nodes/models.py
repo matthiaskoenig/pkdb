@@ -211,9 +211,9 @@ class MeasurementType(AbstractInfoNode):
     def is_valid_unit(self, unit):
         #if not re.match("[ \/\^\.[:space:]\*a-zA-Z0-9_$ ]", str(unit)):
 
-        if not re.match("^[\/^. µα-ωΑ-Ωa-zA-Z0-9]*$", str(unit)):
+        if not re.match("^[\/^*. µα-ωΑ-Ωa-zA-Z0-9]*$", str(unit)):
             msg = f"Unit value <{unit}> contains not allowed characters. " \
-                  f"Allowed  characters are '[\/^. µα-ωΑ-Ωa-zA-Z0-9]'."
+                  f"Allowed  characters are '[\/^*. µα-ωΑ-Ωa-zA-Z0-9]'."
             raise serializers.ValidationError({"unit":msg})
         try:
             p_unit = self.p_unit(unit)
