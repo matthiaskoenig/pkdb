@@ -14,46 +14,24 @@
       <v-list-item-avatar title="Show search panel">
         <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
+
+      <!-- Checkbox for consing the results -->
       <concise-check-box/>
 
-
       <v-spacer/>
+      <!-- Query progression spinner -->
+      <v-progress-circular indeterminate color="primary"  v-if="loading"/>
 
-      <v-progress-circular
-          indeterminate
-          color="primary"
-          v-if="loading"
-      />
+      <!-- Download button -->
+      <download-button :study_count="results.studies.count"/>
 
-      <v-btn v-if="results.studies.count>0"
-             fab
-             x-small
-             text
-             @click.stop="downloadData"
-             :loading="loadingDownload"
-             :disabled="loadingDownload"
-             title="Download selected data"
-      >
-        <v-icon small>{{ faIcon('download') }}</v-icon>
+      <!-- Clear current search filter -->
+      <clear-search-button/>
 
-      </v-btn>
-      <v-btn
-          x-small
-          fab text
-          title="Clear current search"
-          v-on:click="reset"
-      >
-        <v-icon small>fas fa fa-trash-alt</v-icon>
-      </v-btn>
+      <!-- Open search help in right detail drawer -->
+      <search-help-button/>
 
-      <v-btn
-          x-small
-          fab text
-          title="Search help with examples"
-          @click.stop="show_help"
-      >
-        <v-icon small>fas fa fa-question</v-icon>
-      </v-btn>
+
 
       <v-btn
           class="ml-4"
@@ -151,12 +129,18 @@ import StudyOverview from "../detail/StudyOverview";
 import {searchTableMixin} from "../tables/mixins";
 import {SearchMixin} from "../../search";
 import ConciseCheckBox from "./ConciseCheckBox";
-
+import ClearSearchButton from "../lib/buttons/ClearSearchButton";
+import DownloadButton from "../lib/buttons/DownloadButton";
+import SearchHelpButton from "../lib/buttons/SearchHelpButton";
+import {StoreInteractionMixin} from "../../storeInteraction";
 
 export default {
-  mixins: [searchTableMixin, SearchMixin],
+  mixins: [searchTableMixin, SearchMixin, StoreInteractionMixin],
   name: "SearchNavigation",
   components: {
+    SearchHelpButton,
+    DownloadButton,
+    ClearSearchButton,
     ConciseCheckBox,
     CountBadge,
     StudyOverview,
@@ -167,52 +151,6 @@ export default {
     InterventionForm,
     SubjectsForm,
     OutputForm,
-  },
-  computed: {
-    display_detail: {
-      get() {
-        return this.$store.state.display_detail
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "display_detail",
-          value: value,
-        })
-      }
-    },
-    hide_search:  {
-      get() {
-        return this.$store.state.hide_search
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "hide_search",
-          value: value,
-        })
-      }
-    },
-    detail_info: {
-      get() {
-        return this.$store.state.detail_info
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "detail_info",
-          value: value,
-        })
-      }
-    },
-    show_type: {
-      get() {
-        return this.$store.state.show_type
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "show_type",
-          value: value,
-        })
-      }
-    }
   },
   methods: {
     reset() {
@@ -257,7 +195,6 @@ export default {
         {title: 'Subjects', icon: this.faIcon('groups')},
         {title: 'Interventions', icon: this.faIcon('interventions')},
       ],
-      loadingDownload: false,
       results: {
         studies: {"hash": "", "count": 0},
         interventions: {"hash": "", "count": 0},
