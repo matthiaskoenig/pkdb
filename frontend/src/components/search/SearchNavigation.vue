@@ -31,25 +31,11 @@
       <!-- Open search help in right detail drawer -->
       <search-help-button/>
 
-
-
-      <v-btn
-          class="ml-4"
-          x-small
-          icon
-          title="Hide search panel"
-          @click.stop="hide_search = !hide_search"
-      >
-        <v-icon>{{ faIcon("left_arrow") }}</v-icon>
-      </v-btn>
+      <!-- Hide search -->
+      <hide-search-button/>
     </v-list-item>
     <v-divider v-if="!hide_search"/>
-
-
-    <span
-
-        v-if="!hide_search"
-        >
+    <span v-if="!hide_search">
 
       <v-list-item  class=" ma-0 pl-1 pr-1">
         <v-list-item-content>
@@ -64,20 +50,17 @@
 
           <v-list-item-title class="ml-2 mr-2">
             <v-icon left small>{{faIcon("groups")}}</v-icon>
-            <v-badge color="black" :content="results.groups.count.toString()" right inline >
-              Groups
-            </v-badge>
-            |
-            <v-icon left small>{{faIcon("individuals")}}</v-icon>
-            <v-badge color="black" :content="results.individuals.count.toString()" right inline >
-              Individuals
-            </v-badge>
+              <v-badge color="black" :content="results.groups.count.toString()" right inline >
+                Groups
+              </v-badge>
+              |
+              <v-icon left small>{{faIcon("individuals")}}</v-icon>
+              <v-badge color="black" :content="results.individuals.count.toString()" right inline >
+                Individuals
+              </v-badge>
           </v-list-item-title>
 
-          <subjects-form
-              @subjects__type="update_search_query"
-              @subject_queries="update_subject_query"
-          />
+          <subjects-form @subjects__type="update_search_query" @subject_queries="update_subject_query" />
 
           <v-list-item-title class="ml-2 mr-2">
             <v-icon left small>{{faIcon("interventions")}}</v-icon>
@@ -133,11 +116,13 @@ import ClearSearchButton from "../lib/buttons/ClearSearchButton";
 import DownloadButton from "../lib/buttons/DownloadButton";
 import SearchHelpButton from "../lib/buttons/SearchHelpButton";
 import {StoreInteractionMixin} from "../../storeInteraction";
+import HideSearchButton from "../lib/buttons/HideSearchButton";
 
 export default {
   mixins: [searchTableMixin, SearchMixin, StoreInteractionMixin],
   name: "SearchNavigation",
   components: {
+    HideSearchButton,
     SearchHelpButton,
     DownloadButton,
     ClearSearchButton,
@@ -153,9 +138,6 @@ export default {
     OutputForm,
   },
   methods: {
-    reset() {
-      this.$store.commit('resetQuery');
-    },
     update_subject_query(emitted_object) {
       this.subject_queries = emitted_object;
     },
