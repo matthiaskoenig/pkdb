@@ -1,6 +1,5 @@
 <template>
   <v-container v-if="!loading" fluid>
-
     <search-navigation />
     <table-tabs/>
   </v-container>

@@ -30,16 +30,7 @@
               Additionally, derived pharmacokinetics parameters e.g. AUC, clearance, or half-lives are commonly reported.
               Correlations between theses outputs are often shown in form of scatter plots.
             </p>
-
-            <v-btn color="black"
-                   text
-                   width="100%"
-                   to="/data"
-                   title="Browse PK-DB data"
-            >
-              <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
-              data
-            </v-btn>
+            <data-button/>
 
             <p>
               <count-table/>
@@ -75,10 +66,12 @@ import CurationExample from "./CurationExample";
 import CountTable from "./tables/CountTable";
 import About from './About';
 import {IconsMixin} from "@/icons";
+import DataButton from "./lib/buttons/DataButton";
 
 export default {
   name: "Home",
   components: {
+    DataButton,
     // StatisticsVegaPlot,
     CountTable,
     CurationExample,
