@@ -15,12 +15,11 @@
 </template>
 
 <script>
-    import axios from 'axios'
     import {IconsMixin} from "../../../icons";
-    import {StoreInteractionMixin} from "../../../storeInteraction";
+    import {ApiInteractionMixin} from "../../../apiInteraction";
 
     export default {
-      mixins: [IconsMixin, StoreInteractionMixin],
+      mixins: [IconsMixin, ApiInteractionMixin],
         computed:{
             disabled(){
                 if (this.to | (this.detail_info_input & this.show_type_input)){
@@ -57,24 +56,6 @@
             },
         },
         methods: {
-            getStudy(sid) {
-                // object is an InfoNode
-                let url = `${this.$store.state.endpoints.api}studies/${sid}/?format=json`;
-
-                // get data (FIXME: caching of InfoNodes in store)
-                axios.get(url)
-                    .then(response => {
-                        this.show_type = this.show_type_input;
-                        this.detail_info =  response.data;
-                        this.display_detail = true;
-                    })
-                    .catch(err => {
-                        this.exists = false;
-                        console.log(err)
-                    })
-                    .finally(() => this.loading = false);
-
-            },
             update_details(){
                 if (this.show_type){
                     if (this.sid){
