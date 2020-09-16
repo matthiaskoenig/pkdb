@@ -8,12 +8,17 @@
       dark
       mini-variant-width="40"
       width="420"
+      height="100%"
   >
     <v-list-item @click.stop="hide_search = !hide_search" title="Hide search panel">
       <v-list-item-avatar title="Show search panel">
         <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
+      <concise-check-box/>
+
+
       <v-spacer/>
+
       <v-progress-circular
           indeterminate
           color="primary"
@@ -63,8 +68,12 @@
     <v-divider v-if="!hide_search"/>
 
 
-    <div v-if="!hide_search">
-      <v-list-item class="ma-0 pl-1 pr-1">
+    <span
+
+        v-if="!hide_search"
+        >
+
+      <v-list-item  class=" ma-0 pl-1 pr-1">
         <v-list-item-content>
           <v-list-item-title class="mt-0 ml-2 mr-2">
             <v-icon left small>{{faIcon("studies")}}</v-icon>
@@ -120,7 +129,8 @@
 
         </v-list-item-content>
       </v-list-item>
-    </div>
+
+    </span>
   </v-navigation-drawer>
 </template>
 
@@ -140,12 +150,14 @@ import SearchHelp from "../search/SearchHelp";
 import StudyOverview from "../detail/StudyOverview";
 import {searchTableMixin} from "../tables/mixins";
 import {SearchMixin} from "../../search";
+import ConciseCheckBox from "./ConciseCheckBox";
 
 
 export default {
   mixins: [searchTableMixin, SearchMixin],
   name: "SearchNavigation",
   components: {
+    ConciseCheckBox,
     CountBadge,
     StudyOverview,
     SearchHelp,
@@ -264,4 +276,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

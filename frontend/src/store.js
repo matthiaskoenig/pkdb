@@ -36,7 +36,9 @@ const vuexLocalStorage = new VuexPersist({
 });
 
 // Initial search values
+const initial_concise = true
 const initial_queries = {
+
     //studies
     studies__sid__in: [],
 
@@ -97,6 +99,7 @@ export default new Vuex.Store({
         data_info_type: "study",
 
         // search queries
+        concise: initial_concise,
         queries: initial_queries,
         licence_boolean:initial_licence_boolean,
         subjects_boolean: initial_subjects_boolean,
@@ -156,6 +159,7 @@ export default new Vuex.Store({
     },
     mutations: {
         resetQuery(state){
+            Object.assign(state.concise,  initial_concise)
             Object.assign(state.queries,  initial_queries)
             Object.assign(state.subjects_boolean,  initial_subjects_boolean)
             Object.assign(state.subjects_queries,  initial_subjects_queries)

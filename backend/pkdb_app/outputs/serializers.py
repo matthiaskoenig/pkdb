@@ -4,7 +4,6 @@ Serializers for outputs.
 
 import warnings
 
-from django.db.models import Count
 from rest_framework import serializers
 
 from pkdb_app import utils

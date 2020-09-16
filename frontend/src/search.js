@@ -105,6 +105,9 @@ let SearchMixin = {
                     url = url + "&" + "studies__licence__in=" + [...licence__in].join("__")
                 }
             }
+            if(!this.$store.state.concise){
+                url = url + "&" + "concise=false"
+            }
             return url
         },
     },

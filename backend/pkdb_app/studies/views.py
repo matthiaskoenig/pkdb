@@ -23,6 +23,7 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
+from pkdb_app.data.models import SubSet, Data
 from pkdb_app.data.serializers import DataAnalysisSerializer
 from pkdb_app.data.views import SubSetViewSet, DataAnalysisViewSet
 from pkdb_app.interventions.serializers import  InterventionElasticSerializerAnalysis
@@ -42,7 +43,7 @@ from pkdb_app.pagination import CustomPagination
 from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
 from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica
+from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica, Group, Individual
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
 from rest_framework.views import APIView
@@ -355,6 +356,7 @@ class PKData(object):
     """
     def __init__(self,
                  request,
+                 concise: bool = True,
                  interventions_query: dict = None,
                  groups_query: dict = None,
                  individuals_query: dict = None,
@@ -363,6 +365,7 @@ class PKData(object):
                  ):
 
         #  --- Init ---
+
         time_start = time.time()
 
         self.request = request
@@ -370,21 +373,25 @@ class PKData(object):
 
         time_init = time.time()
 
-        self.outputs = Output.objects.select_related("study__sid").prefetch_related(
+        self.outputs = Output.objects.filter(normed=True).select_related("study__sid").prefetch_related(
             Prefetch(
                 'interventions',
                 queryset=Intervention.objects.only('id'))).only(
             'group_id', 'individual_id', "id", "interventions__id", "subset__id", "output_type")
+
 
         #  --- Elastic ---
         if studies_query:
             self.studies_query = studies_query
             studies_pks = self.study_pks()
             time_elastic_studies = time.time()
-            self.outputs = self.outputs.filter(study__sid__in=studies_pks)
+            self.outputs = self.outputs.filter(study_id__in=studies_pks)
 
         else:
-            self.outputs = self.outputs.filter(study_id__in=Subquery(StudyViewSet.filter_on_permissions(request.user,Study.objects).values_list("id", flat=True)))
+            studies_pks = StudyViewSet.filter_on_permissions(request.user,Study.objects).values_list("id", flat=True)
+            self.outputs = self.outputs.filter(study_id__in=Subquery(studies_pks))
+
+        self.studies = Study.objects.filter(id__in=studies_pks)
 
 
         if groups_query or individuals_query:
@@ -395,51 +402,91 @@ class PKData(object):
             self.individuals_query = individuals_query
             individuals_pks = self.individual_pks()
             time_elastic_individuals = time.time()
+            if concise:
+                self.outputs = self.outputs.filter(
+                DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks))
+            else:
+                self.studies = self.studies.filter(DQ(groups__id__in=groups_pks) | DQ(individuals__id__in=individuals_pks))
 
-            self.outputs = self.outputs.filter(
-            DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks))
 
 
         if interventions_query:
             self.interventions_query = {"normed": "true", **interventions_query}
             interventions_pks = self.intervention_pks()
             time_elastic_interventions = time.time()
-            self.outputs = self.outputs.filter(interventions__id__in=interventions_pks)
+            if concise:
+                self.outputs = self.outputs.filter(interventions__id__in=interventions_pks)
+            else:
+                self.studies = self.studies.filter(interventions__id__in=interventions_pks)
 
         if outputs_query:
             self.outputs_query = {"normed": "true", **outputs_query}
             outputs_pks = self.output_pks()
             time_elastic_outputs = time.time()
-            self.outputs = self.outputs.filter(id__in=outputs_pks)
+            if concise:
+                self.outputs = self.outputs.filter(id__in=outputs_pks)
+            else:
+                self.studies = self.studies.filter(outputs__id__in=outputs_pks)
 
         time_elastic = time.time()
 
-        studies = set()
-        groups = set()
-        individuals = set()
-        interventions = set()
-        outputs =set()
-        timecourses =set()
-        scatter =set()
-
         time_loop_start = time.time()
+        if concise:
+            studies = set()
+            groups = set()
+            individuals = set()
+            interventions = set()
+            outputs = set()
+            timecourses = set()
+            scatter = set()
 
-        for output in self.outputs.filter(normed=True).values("study_id","group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
-            studies.add(output["study_id"])
-            if output["group_id"]:
-                groups.add(output["group_id"])
-            else:
-                individuals.add(output["individual_id"])
-            outputs.add(output["id"])
+            for output in self.outputs.values("study_id","group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
+                studies.add(output["study_id"])
+                if output["group_id"]:
+                    groups.add(output["group_id"])
+                else:
+                    individuals.add(output["individual_id"])
+                outputs.add(output["id"])
 
-            if output["interventions__id"]:
-                interventions.add(output["interventions__id"])
+                if output["interventions__id"]:
+                    interventions.add(output["interventions__id"])
 
-            if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
-                timecourses.add(output["subset__id"])
+                if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
+                    timecourses.add(output["subset__id"])
 
-            if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
-                scatter.add(output["subset__id"])
+                if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
+                    scatter.add(output["subset__id"])
+
+            self.ids = {
+                "studies": list(studies),
+                "groups": list(groups),
+                "individuals": list(individuals),
+                "interventions": list(interventions),
+                "outputs": list(outputs),
+                "timecourses": list(timecourses),
+                "scatter": list(scatter),
+
+            }
+
+        else:
+            study_pks = self.studies.values_list("pk", flat=True)
+
+            self.interventions = Intervention.objects.filter(study_id__in=study_pks)
+            self.groups = Group.objects.filter(study_id__in=study_pks)
+            self.individuals = Individual.objects.filter(study_id__in=study_pks)
+            self.outputs = Output.objects.filter(study_id__in=study_pks)
+            self.subset = SubSet.objects.filter(study_id__in=study_pks)
+
+            self.ids = {
+                "studies": list(study_pks),
+                "groups": list(self.groups.values_list("pk", flat=True)),
+                "individuals": list(self.individuals.values_list("pk", flat=True)),
+                "interventions": list(self.interventions.values_list("pk", flat=True)),
+                "outputs": list(self.outputs.values_list("pk", flat=True)),
+                "timecourses": list(self.subset.filter(data__data_type=Data.DataTypes.Timecourse).values_list("pk", flat=True)),
+                "scatter": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
+            }
+
 
 
 
@@ -449,16 +496,7 @@ class PKData(object):
 
 
 
-        self.ids = {
-            "studies": list(studies),
-            "groups": list(groups),
-            "individuals": list(individuals),
-            "interventions": list(interventions),
-            "outputs": list(outputs),
-            "timecourses": list(timecourses),
-            "scatter": list(scatter),
 
-        }
 
 
         time_django = time.time()
@@ -495,7 +533,7 @@ class PKData(object):
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
 
     def study_pks(self):
-        return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="sid")
+        return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="pk")
 
     def set_request_get(self, query_dict:Dict):
         """
@@ -554,6 +592,7 @@ class PKDataView(APIView):
         request.GET = request.GET.copy()
         pkdata = PKData(
             request=request,
+            concise="false" != request.GET.get("concise", True),
             studies_query=self._get_param("study", request),
             groups_query=self._get_param("group", request),
             individuals_query=self._get_param("individual", request),
