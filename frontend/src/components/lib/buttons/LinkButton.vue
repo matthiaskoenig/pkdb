@@ -15,13 +15,15 @@
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
     import axios from 'axios'
+    import {IconsMixin} from "../../../icons";
+    import {StoreInteractionMixin} from "../../../storeInteraction";
 
     export default {
+      mixins: [IconsMixin, StoreInteractionMixin],
         computed:{
             disabled(){
-                if (this.to | (this.detail_info & this.show_type)){
+                if (this.to | (this.detail_info_input & this.show_type_input)){
                     return true} else {
                     return false
                 }
@@ -29,13 +31,13 @@
         },
         name: "LinkButton",
         props: {
-            show_type: {
+          show_type_input: {
                 type: String,
             },
             sid: {
                 type: String
             },
-            detail_info: {
+            detail_info_input: {
                 type: Object,
             },
             to: {
@@ -62,9 +64,9 @@
                 // get data (FIXME: caching of InfoNodes in store)
                 axios.get(url)
                     .then(response => {
-                        this.$store.state.show_type = this.show_type;
-                        this.$store.state.detail_info =  response.data;
-                        this.$store.state.display_detail = true;
+                        this.show_type = this.show_type_input;
+                        this.detail_info =  response.data;
+                        this.display_detail = true;
                     })
                     .catch(err => {
                         this.exists = false;
@@ -78,15 +80,13 @@
                     if (this.sid){
                         this.getStudy(this.sid);
                     }else{
-                        this.$store.state.show_type = this.show_type;
-                        this.$store.state.detail_info = this.detail_info;
-                        this.$store.state.display_detail = true;
+                        this.show_type = this.show_type_input;
+                        this.detail_info = this.detail_info_input;
+                        this.display_detail = true;
                     }
                    }
-                },
-            faIcon(key) {
-                return lookupIcon(key)
-            },
+            }
+
         }
     }
 </script>

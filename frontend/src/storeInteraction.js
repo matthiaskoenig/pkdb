@@ -76,6 +76,17 @@ let StoreInteractionMixin = {
                 })
             }
         },
+        highlight:  {
+            get() {
+                return this.$store.state.highlight
+            },
+            set(value) {
+                this.$store.dispatch('updateAction', {
+                    key: "highlight",
+                    value: value,
+                })
+            }
+        },
         detail_info: {
             get() {
                 return this.$store.state.detail_info

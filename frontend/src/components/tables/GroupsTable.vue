@@ -16,9 +16,9 @@
                 :footer-props="footer_options"
         >
             <template v-slot:item.buttons="{ item }">
-                <LinkButton v-if="item.study"
+                <link-button v-if="item.study"
                             :sid="item.study.sid"
-                            show_type="study"
+                            show_type_input="study"
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />

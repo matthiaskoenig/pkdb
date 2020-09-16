@@ -141,9 +141,10 @@ import SearchHelp from "../search/SearchHelp";
 import StudyOverview from "../detail/StudyOverview";
 import {searchTableMixin} from "../tables/mixins";
 import {SearchMixin} from "../../search";
+import {StoreInteractionMixin} from "../../storeInteraction";
 
 export default {
-  mixins: [searchTableMixin, SearchMixin],
+  mixins: [searchTableMixin, SearchMixin, StoreInteractionMixin],
   name: 'Search',
   components: {
     CountBadge,

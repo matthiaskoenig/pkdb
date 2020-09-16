@@ -22,19 +22,18 @@
 </template>
 
 <script>
+import {StoreInteractionMixin} from "../../storeInteraction";
+
 export default {
   name: "Annotation",
+  mixins: [StoreInteractionMixin],
   props: {
     annotation: {
       type: Object,
       required: true,
     }
-  },
-  computed:{
-    highlight(){
-      return this.$store.state.highlight
-    },
   }
+
 
 }
 </script>

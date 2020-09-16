@@ -75,9 +75,11 @@
 
 import Annotation from "../info_node/Annotation";
 import Xref from "../info_node/Xref";
+import {StoreInteractionMixin} from "../../storeInteraction";
 
 export default {
   name: 'InfoNodeDetail',
+  mixins: [StoreInteractionMixin],
   components: {
     Annotation,
     Xref,
@@ -93,9 +95,7 @@ export default {
     }
   },
   computed: {
-    highlight(){
-      return this.$store.state.highlight
-    },
+
     parents_labels: function () {
       let labels = []
       let parents = this.data.parents

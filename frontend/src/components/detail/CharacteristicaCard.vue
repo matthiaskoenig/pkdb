@@ -72,16 +72,18 @@
 <script>
     import {lookupIcon} from "@/icons"
     import axios from 'axios'
-    import store from "../../store";
+    import {StoreInteractionMixin} from "../../storeInteraction";
+
 
     export default {
         name: "CharacteristicaCard",
+        mixins: [StoreInteractionMixin],
         props: {
             data: Object,
         },
         computed: {
             search(){
-              return store.state.highlight
+              return this.highlight
             },
             count() {
                 if (!this.data.count){
@@ -170,9 +172,9 @@
             // get data (FIXME: caching of InfoNodes in store)
             axios.get(url)
                 .then(response => {
-                  this.$store.state.show_type = "info_node";
-                  this.$store.state.detail_info =  response.data;
-                  this.$store.state.display_detail = true;
+                  this.show_type = "info_node";
+                  this.detail_info =  response.data;
+                  this.display_detail = true;
                 })
                 .catch(err => {
                   this.exists = false;

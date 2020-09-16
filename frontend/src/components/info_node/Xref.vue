@@ -14,8 +14,11 @@
 </template>
 
 <script>
+import {StoreInteractionMixin} from "../../storeInteraction";
+
 export default {
   name: "Xref",
+  mixins: [StoreInteractionMixin],
   props: {
     name: {
       type: String,
@@ -29,12 +32,6 @@ export default {
       type: String,
       required: true,
     }
-  },
-  computed:
-      {
-    highlight(){
-      return this.$store.state.highlight
-    },
   }
 }
 </script>

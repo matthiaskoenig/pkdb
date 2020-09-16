@@ -50,9 +50,9 @@ export default {
           .then(response => {
             if(response.data.sid) {
               this.updateSearch(response.data)
-              this.$store.state.show_type = "study";
-              this.$store.state.detail_info = response.data;
-              this.$store.state.display_detail = true;
+              this.show_type = "study";
+              this.detail_info = response.data;
+              this.display_detail = true;
             }else{
               this.$route.push('/404')
             }

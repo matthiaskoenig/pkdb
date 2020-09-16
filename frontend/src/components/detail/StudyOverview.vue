@@ -98,6 +98,7 @@
     import ReferenceDetail from "./ReferenceDetail"
     import FileImageView from "./FileImageView"
     import {UrlMixin} from "../tables/mixins";
+    import {StoreInteractionMixin} from "../../storeInteraction";
 
     export default {
         name: "StudyOverview",
@@ -111,12 +112,9 @@
                 required: true,
             }
         },
-        mixins: [UrlMixin],
+        mixins: [UrlMixin, StoreInteractionMixin],
 
         computed: {
-          highlight(){
-            return this.$store.state.highlight
-          },
             images() {
                 let list = [];
                 for (let k = 0; k < this.study.files.length; k++) {
