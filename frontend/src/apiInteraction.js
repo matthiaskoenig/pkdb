@@ -33,6 +33,8 @@ let ApiInteractionMixin = {
                     this.$router.push('/404')
                     console.log(err)
                 })
+                .finally(() => this.loading = false);
+
 
         },
         fetch_data(url) {
@@ -50,6 +52,7 @@ let ApiInteractionMixin = {
                     console.error(this.resource_url);
                     console.error(error);
                 })
+
         }
 
     }
