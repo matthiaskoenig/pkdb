@@ -78,7 +78,11 @@ export default {
           "key": "studies__sid__in",
           "value": [study_info]}
       this.update_store(study)
-    },
+
+      this.$store.dispatch('updateAction', {
+        "key": "concise",
+        "value": false})
+      },
     reset() {
       this.$store.commit('resetQuery');
     },
