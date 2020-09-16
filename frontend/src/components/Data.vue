@@ -10,9 +10,11 @@
 import TableTabs from './tables/TableTabs';
 import SearchNavigation from './search/SearchNavigation'
 import axios from 'axios'
+import {StoreInteractionMixin} from "../storeInteraction";
 
 export default {
   name: "Data",
+  mixins: [StoreInteractionMixin],
   components: {
     SearchNavigation,
     TableTabs
@@ -25,17 +27,7 @@ export default {
     sid(){
       return this.$route.params.sid
     },
-    hide_search:  {
-      get() {
-        return this.$store.state.hide_search
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "hide_search",
-          value: value,
-        })
-      }
-    },
+
   },
   created() {
     if(this.sid){
@@ -72,27 +64,7 @@ export default {
           })
           .finally(() => this.loading = false);
     },
-    updateSearch(study_info) {
-      let study = {
-          "query_type": "queries",
-          "key": "studies__sid__in",
-          "value": [study_info]}
-      this.update_store(study)
 
-      this.$store.dispatch('updateAction', {
-        "key": "concise",
-        "value": false})
-      },
-    reset() {
-      this.$store.commit('resetQuery');
-    },
-    update_store(q) {
-      this.$store.dispatch('updateQueryAction', {
-        query_type: q.query_type,
-        key: q.key,
-        value: q.value,
-      })
-    }
   }}
 </script>
 

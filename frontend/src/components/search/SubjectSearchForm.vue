@@ -13,49 +13,16 @@
 
 <script>
 import InfoNodeSearch from "./InfoNodeSearch";
-
-import {lookupIcon} from "@/icons"
+import {StoreInteractionMixin} from "../../storeInteraction";
+import {IconsMixin} from "../../icons";
 
 export default {
   name: "SubjectSearchForm",
+  mixins: [StoreInteractionMixin, IconsMixin],
   components: {
     InfoNodeSearch
-  },
-  methods: {
-    faIcon: function (key) {
-      return lookupIcon(key)
-    },
-  },
-  computed: {
-    individuals_query: {
-      get(){
-        return this.$store.state.subjects_boolean.individuals_query
-      },
-      set (value) {
-        this.$store.dispatch('updateQueryAction', {
-          query_type: "subjects_boolean",
-          key: "individuals_query",
-          value: value,      })
-    }
-    },
-    groups_query: {
-      get(){
-        return this.$store.state.subjects_boolean.groups_query
-      },
-      set (value) {
-        this.$store.dispatch('updateQueryAction', {
-          query_type: "subjects_boolean",
-          key: "groups_query",
-          value: value,      })
-      },
-    },
-  },
-  data() {
-    return {
-      all_searches : []
     }
   }
 
 
-}
 </script>

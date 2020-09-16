@@ -10,21 +10,11 @@
   ></v-checkbox>
 </template>
 <script>
+import {StoreInteractionMixin} from "../../storeInteraction";
+
 export default {
   name: "ConciseCheckBox",
-  computed: {
-    concise: {
-      get(){
-        return this.$store.state.concise
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "concise",
-          value: value,
-        })
-      }
-    }
-  }
+  mixins: [StoreInteractionMixin]
 }
 </script>
 
