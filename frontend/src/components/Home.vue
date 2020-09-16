@@ -62,9 +62,9 @@
 </template>
 
 <script>
-import CurationExample from "./CurationExample";
+import CurationExample from "./home/CurationExample";
 import CountTable from "./tables/CountTable";
-import About from './About';
+import About from './home/About';
 import {IconsMixin} from "@/icons";
 import DataButton from "./lib/buttons/DataButton";
 

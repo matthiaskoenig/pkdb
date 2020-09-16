@@ -2,11 +2,11 @@
   <v-btn color="black"
          text
          width="100%"
-         to="/data"
-         title="Browse PK-DB data"
+         title="Show PK-DB data for example study"
+         to="/data/PKDB00057/"
   >
     <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
-    data
+    {{text}}
   </v-btn>
 </template>
 
@@ -14,8 +14,14 @@
 import {IconsMixin} from "../../../icons";
 
 export default {
-  name: "DataButton",
-  mixins: [IconsMixin]
+  name: "SingleStudyButton",
+  mixins: [IconsMixin],
+  props: {
+    text: {
+      type:String,
+      default:"Example study"
+    },
+  }
 
 }
 </script>

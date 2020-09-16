@@ -3,6 +3,11 @@ import {StoreInteractionMixin} from "./storeInteraction";
 
 let ApiInteractionMixin = {
     mixins: [StoreInteractionMixin],
+    computed: {
+        api() {
+            return this.$store.state.endpoints.api;
+        },
+    },
     methods: {
         getStudy(sid) {
             // object is an InfoNode
@@ -28,8 +33,25 @@ let ApiInteractionMixin = {
                     this.$router.push('/404')
                     console.log(err)
                 })
-                .finally(() => this.loading = false);
+
         },
+        fetch_data(url) {
+            let headers = {};
+            if (localStorage.getItem('token')) {
+                headers = {Authorization: 'Token ' + localStorage.getItem('token')}
+            }
+            // get data (FIXME: caching of InfoNodes in store)
+            axios.get(url, {headers: headers})
+                .then(response => {
+                    this.data = response.data;
+                })
+                .catch((error) => {
+                    this.data = null;
+                    console.error(this.resource_url);
+                    console.error(error);
+                })
+        }
+
     }
 }
 export {ApiInteractionMixin}

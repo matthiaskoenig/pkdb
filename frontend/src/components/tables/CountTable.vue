@@ -21,12 +21,12 @@
 </template>
 
 <script>
-import axios from 'axios'
 import {IconsMixin} from "@/icons";
+import {ApiInteractionMixin} from "../../apiInteraction";
 
 export default {
   name: 'CountTable',
-  mixins: [IconsMixin],
+  mixins: [IconsMixin, ApiInteractionMixin],
   components: {},
   data() {
     return {
@@ -48,26 +48,14 @@ export default {
       ],
     }
   },
-  methods: {
-    fetch_data(url) {
-      axios.get(url)
-          .then(response => {
-            this.data = response.data;
-          })
-          .catch((error) => {
-            this.data = null;
-            console.error(this.resource_url);
-            console.error(error);
-            this.errors = error.response.data;
-          })
-    }
+
+  created() {
+    this.fetch_data(this.resource_url);
   },
+
   computed: {
     resource_url() {
       return this.api + 'statistics/?format=json'
-    },
-    api() {
-      return this.$store.state.endpoints.api;
     },
     items() {
       return [
@@ -130,9 +118,6 @@ export default {
         },
       ]
     }
-  },
-  created() {
-    this.fetch_data(this.resource_url);
   }
 }
 </script>

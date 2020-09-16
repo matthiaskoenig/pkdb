@@ -1,19 +1,7 @@
 <template>
 
   <v-card flat width="100%">
-    <v-col class="d-flex" cols="12" sm="6">
-      <!--
-      <v-select
-          :items="ntypes"
-          label="Solo field"
-          v-model="ntype"
-          dense
-          solo
-      ></v-select>
-      -->
-    </v-col>
     <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
-
     <v-data-table
         fill-height
         fixed-header
@@ -30,38 +18,23 @@
         <JsonButton :resource_url="api + 'info_nodes/'+ item.sid+ '/?format=json' "/>
       </template>
       <template v-slot:item.label="{ item }">
-        <v-chip
-            class="ma-1"
-            color="black"
-            outlined
-            pill
-            small
-        >
-          <!-- highlight name for curation -->
-          <span v-if="item.label === item.name">
-            <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ item.label }}</text-highlight></strong>
-          </span>
-          <span v-if="item.label != item.name">
-            <text-highlight :queries="search.split(/[ ,]+/)">{{ item.label }}</text-highlight> |
-            <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ item.name }}</text-highlight></strong>
-          </span>
-        </v-chip>
+        <info-node-chip :item="item"/>
       </template>
 
       <template v-slot:item.type="{ item }">
-        <text-highlight :queries="search.split(/[ ,]+/)">{{ item.ntype }}</text-highlight>
+        <text-highlight :queries="highlight.split(/[ ,]+/)">{{ item.ntype }}</text-highlight>
         <br/>
-        <text-highlight :queries="search.split(/[ ,]+/)">
+        <text-highlight :queries="highlight.split(/[ ,]+/)">
           <span v-if="item.dtype!='undefined'">{{ item.dtype }}</span></text-highlight>
       </template>
 
       <template v-slot:item.description="{ item }">
-        <text-highlight :queries="search.split(/[ ,]+/)">{{ item.description }}</text-highlight>
+        <text-highlight :queries="highlight.split(/[ ,]+/)">{{ item.description }}</text-highlight>
       </template>
       <template v-slot:item.synonyms="{ item }">
         <ul>
           <span v-for="synonym in item.synonyms" :key="synonym">
-            <li><text-highlight :queries="search.split(/[ ,]+/)">{{ synonym }}</text-highlight></li>
+            <li><text-highlight :queries="highlight.split(/[ ,]+/)">{{ synonym }}</text-highlight></li>
           </span>
         </ul>
       </template>
@@ -74,11 +47,11 @@
         >
 
                   <span v-if="parent.label === parent.name">
-                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ parent.label }}</text-highlight></strong>
+                    <strong><text-highlight :queries="highlight.split(/[ ,]+/)">{{ parent.label }}</text-highlight></strong>
                   </span>
                   <span v-if="parent.label != parent.name">
-                    <text-highlight :queries="search.split(/[ ,]+/)">{{ parent.label }}</text-highlight> |
-                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ parent.name }}</text-highlight></strong>
+                    <text-highlight :queries="highlight.split(/[ ,]+/)">{{ parent.label }}</text-highlight> |
+                    <strong><text-highlight :queries="highlight.split(/[ ,]+/)">{{ parent.name }}</text-highlight></strong>
                   </span>
 
         </v-chip>
@@ -101,17 +74,17 @@
             </span>
             <span v-if="item.measurement_type.choices.length > 0">
                 Choices<br/>
-                <v-chip v-for="choice in item.measurement_type.choices" :key="choice"
+                <v-chip v-for="choice in item.measurement_type.choices" :key="choice.sid"
                         small
                         outlined
                         color="black"
                 >
                   <span v-if="choice.label === choice.name">
-                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ choice.label }}</text-highlight></strong>
+                    <strong><text-highlight :queries="highlight.split(/[ ,]+/)">{{ choice.label }}</text-highlight></strong>
                   </span>
                   <span v-if="choice.label != choice.name">
-                    <text-highlight :queries="search.split(/[ ,]+/)">{{ choice.label }}</text-highlight> |
-                    <strong><text-highlight :queries="search.split(/[ ,]+/)">{{ choice.name }}</text-highlight></strong>
+                    <text-highlight :queries="highlight.split(/[ ,]+/)">{{ choice.label }}</text-highlight> |
+                    <strong><text-highlight :queries="highlight.split(/[ ,]+/)">{{ choice.name }}</text-highlight></strong>
                   </span>
 
                 </v-chip>
@@ -120,17 +93,17 @@
 
         <span v-if="item.ntype === 'substance'">
             <span v-if="item.substance.mass">
-              Mass: <text-highlight :queries="search.split(/[ ,]+/)">{{
+              Mass: <text-highlight :queries="highlight.split(/[ ,]+/)">{{
                 item.substance.mass
               }}</text-highlight><br/>
             </span>
             <span v-if="item.substance.charge">
               Charge: <text-highlight
-                :queries="search.split(/[ ,]+/)">{{ item.substance.charge }}</text-highlight><br/>
+                :queries="highlight.split(/[ ,]+/)">{{ item.substance.charge }}</text-highlight><br/>
             </span>
             <span v-if="item.substance.formula">
               Formula: <text-highlight
-                :queries="search.split(/[ ,]+/)">{{ item.substance.formula }}</text-highlight><br/>
+                :queries="highlight.split(/[ ,]+/)">{{ item.substance.formula }}</text-highlight><br/>
             </span>
         </span>
       </template>
@@ -159,20 +132,22 @@ import TableToolbar from '../tables/TableToolbar';
 import NoData from '../tables/NoData';
 import Annotation from "../info_node/Annotation";
 import Xref from "../info_node/Xref";
+import InfoNodeChip from "../lib/chips/InfoNodeChip";
+import {StoreInteractionMixin} from "../../storeInteraction";
 
 export default {
   name: "InfoNodeTable",
   components: {
+    InfoNodeChip,
     NoData,
     TableToolbar,
     Annotation,
     Xref,
   },
-  mixins: [searchTableMixin, UrlMixin],
+  mixins: [searchTableMixin, UrlMixin, StoreInteractionMixin],
   data() {
     return {
       otype: "info_nodes",
-      ntypes: ["all", "info_node", "choice", "measurement_type", "application", "tissue", "method", "route", "form", "substance"],
       otype_single: "info_nodes",
       headers: [
         {text: '', value: 'buttons', sortable: false},
