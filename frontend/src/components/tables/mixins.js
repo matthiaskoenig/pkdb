@@ -148,7 +148,6 @@ let searchTableMixin = {
         get_ids(array_of_obj) {
             return array_of_obj.map(i => i.pk)
         },
-
         getData() {
             let headers = {};
             if (localStorage.getItem('token')) {
@@ -165,8 +164,6 @@ let searchTableMixin = {
                 })
                 .finally(() => this.loading = false);
         },
-
-
     }
 };
 
