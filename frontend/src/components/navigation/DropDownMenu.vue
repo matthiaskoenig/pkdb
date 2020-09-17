@@ -22,14 +22,28 @@
         </v-list-item-title>
       </v-list-item>
 
-      <v-list-item :href="api_url">
+      <v-list-item :href="api">
         <!-- Rest API -->
         <v-list-item-icon><v-icon>{{ faIcon('api') }}</v-icon></v-list-item-icon>
         <v-list-item-title>
           API
         </v-list-item-title>
-        <!--<v-btn icon :href="api_url" title="REST API" color="grey" small><v-icon small>{{ faIcon('api') }}</v-icon></v-btn> -->
      </v-list-item>
+      <v-list-item :href="api_swagger">
+        <!-- Rest API -->
+        <v-list-item-icon><v-icon>{{ faIcon('api') }}</v-icon></v-list-item-icon>
+        <v-list-item-title>
+          Swagger API
+        </v-list-item-title>
+      </v-list-item>
+
+      <v-list-item :href="api_redoc">
+        <!-- Rest API -->
+        <v-list-item-icon><v-icon>{{ faIcon('api') }}</v-icon></v-list-item-icon>
+        <v-list-item-title>
+          Redoc API
+        </v-list-item-title>
+      </v-list-item>
 
       <v-list-item v-if="username" @click.stop="dialog=true">
 
@@ -58,18 +72,16 @@
 <script>
 import {IconsMixin} from "@/icons"
 import  UserLogin from "../auth/UserLogin"
+import {ApiInteractionMixin} from "../../apiInteraction";
 
 export default {
  name: 'DropDownMenu',
  components: {UserLogin},
- mixins: [IconsMixin],
+ mixins: [IconsMixin, ApiInteractionMixin],
   data: () => ({
     dialog: false,
   }),
   computed:{
-      api_url() {
-        return this.$store.state.endpoints.api;
-      },
     username(){
       return this.$store.state.username
     }

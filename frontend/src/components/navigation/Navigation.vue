@@ -45,9 +45,6 @@
            dialog: false,
        }),
        computed: {
-         api_url() {
-             return this.$store.state.endpoints.api;
-           },
          username(){
            return this.$store.state.username
          },

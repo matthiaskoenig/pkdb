@@ -127,6 +127,9 @@ export default new Vuex.Store({
 
         endpoints: {
             api: backend_domain + '/api/v1/',
+            api_swagger: backend_domain + '/api/v1/swagger/',
+            api_redoc: backend_domain + '/api/v1/redoc/',
+
             obtainAuthToken: backend_domain + '/api-token-auth/',
             // FIXME: are these endpoints used?
             register: backend_domain + '/accounts/register/',

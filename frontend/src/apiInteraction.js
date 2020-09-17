@@ -7,6 +7,12 @@ let ApiInteractionMixin = {
         api() {
             return this.$store.state.endpoints.api;
         },
+        api_swagger() {
+            return this.$store.state.endpoints.api_swagger;
+        },
+        api_redoc() {
+            return this.$store.state.endpoints.api_redoc;
+        },
     },
     methods: {
         getStudy(sid) {
