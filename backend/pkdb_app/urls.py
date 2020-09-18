@@ -103,7 +103,7 @@ schema_view = get_schema_view(
    openapi.Info(
       title="PKDB API",
       default_version='v1',
-      description="The is the REST API of PKDB.",
+      description="This is the REST API of PKDB.",
       terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
       contact=openapi.Contact(email="koenigmx@hu-berlin.de"),
       license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
