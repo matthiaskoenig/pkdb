@@ -313,11 +313,14 @@ class MeasurementType(AbstractInfoNode):
     def numeric_fields(self):
         return ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
 
-    @property
-    def can_be_negative(self):
-        return
-
     def validate_numeric(self, data):
+        """ Validates the numerics of the data.
+
+        This ensures that measurements are not-negative.
+        Raises ValueError
+        :param data:
+        :return:
+        """
         if self.info_node.dtype in [self.info_node.DTypes.NumericCategorical, self.info_node.DTypes.Numeric]:
             for field in self.numeric_fields:
                 value = data.get(field)
@@ -337,13 +340,14 @@ class MeasurementType(AbstractInfoNode):
                                     f"<{self.CAN_NEGATIVE}>.", "detail": data})
 
     def validate_complete(self, data):
+        """Complete validation."""
+
         # check unit
         self.validate_unit(data.get("unit", None))
         self.validate_numeric(data)
 
         choice = data.get("choice", None)
         d_choice = self.validate_choice(choice)
-
 
         time_unit = data.get("time_unit", None)
         if time_unit:
