@@ -14,7 +14,7 @@
           :href="'#'+ item.tab"
       >
 
-        {{ item.tab }} ({{results[item.tab].count}})
+        {{ item.tab }} ({{results[item.tab]}})
         <scatter-icon v-if="item.tab === 'scatter'"/>
         <v-icon small v-else>{{ faIcon(item.tab) }}</v-icon>
 
@@ -28,19 +28,19 @@
           :value="item.tab"
       >
         <v-divider/>
-        <studies-table v-if="item.tab === 'studies' && results[item.tab].count" :search_hash="true" :hash="results.studies.hash"
+        <studies-table v-if="item.tab === 'studies' && results[item.tab]" :search_uuid="true" :uuid="results.uuid"
                        :autofocus="false"/>
-        <groups-table v-if="item.tab === 'groups' && results[item.tab].count" :search_hash="true" :hash="results.groups.hash"
+        <groups-table v-if="item.tab === 'groups' && results[item.tab]" :search_uuid="true" :uuid="results.uuid"
                       :autofocus="false"/>
-        <individuals-table v-if="item.tab === 'individuals' && results[item.tab].count" :search_hash="true" :hash="results.individuals.hash"
+        <individuals-table v-if="item.tab === 'individuals' && results[item.tab]" :search_uuid="true" :uuid="results.uuid"
                            :autofocus="false"/>
-        <interventions-table v-if="item.tab === 'interventions' && results[item.tab].count" :search_hash="true"
-                             :hash="results.interventions.hash" :autofocus="false"/>
-        <outputs-table v-if="item.tab === 'outputs' && results[item.tab].count" :search_hash="true" :hash="results.outputs.hash"
+        <interventions-table v-if="item.tab === 'interventions' && results[item.tab]" :search_uuid="true"
+                             :uuid="results.uuid" :autofocus="false"/>
+        <outputs-table v-if="item.tab === 'outputs' && results[item.tab]" :search_uuid="true" :uuid="results.uuid"
                        :autofocus="false"/>
-        <timecourses-table v-if="item.tab === 'timecourses' && results[item.tab].count" :search_hash="true" :hash="results.timecourses.hash" data_type="timecourse"
+        <timecourses-table v-if="item.tab === 'timecourses' && results[item.tab]" :search_uuid="true" :uuid="results.uuid" data_type="timecourse"
                            :autofocus="false"/>
-        <scatter-table v-if="item.tab === 'scatter' && results[item.tab].count" :search_hash="true" :hash="results.scatter.hash" data_type="scatter"
+        <scatter-table v-if="item.tab === 'scatter' && results[item.tab]" :search_uuid="true" :uuid="results.uuid" data_type="scatter"
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>
@@ -66,10 +66,11 @@ import ScatterTable from "./ScatterTable";
 import {SearchMixin} from "../../search";
 import {IconsMixin} from "../../icons";
 import ScatterIcon from "../detail/ScatterIcon";
+import {StoreInteractionMixin} from "../../storeInteraction";
 
 
 export default {
-  mixins: [searchTableMixin, SearchMixin, IconsMixin],
+  mixins: [searchTableMixin, SearchMixin, IconsMixin, StoreInteractionMixin],
   name: "TableTabs",
   components: {
     DetailDrawer,
@@ -92,28 +93,6 @@ export default {
         return this.$route.query.tab
       }
     },
-    results: {
-      get(){
-        return this.$store.state.results
-      },
-      set (value) {
-        for (const key of Object.keys(this.$store.state.results)){
-          this.$store.dispatch('updateQueryAction', {
-            query_type: "results",
-            key: key,
-            value: value[key] })
-        }
-      },
-    },
-    data_info_type() {
-      /** Type of information to display */
-      return this.$store.state.data_info_type
-    },
-    data_info() {
-      /** actual information to display */
-      return this.$store.state.data_info
-    },
-
   },
   data() {
     return {

@@ -1,5 +1,6 @@
 
 import tempfile
+import uuid
 import zipfile
 from collections import namedtuple
 from datetime import datetime
@@ -17,7 +18,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
+    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
@@ -61,7 +62,7 @@ from pkdb_app.interventions.views import ElasticInterventionViewSet, ElasticInte
 from pkdb_app.outputs.models import Output
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.views import ElasticOutputViewSet, OutputInterventionViewSet
-from pkdb_app.studies.models import Study, Query, Reference
+from pkdb_app.studies.models import Study, IdCollection, Reference
 from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, GroupCharacteristicaViewSet, \
     IndividualCharacteristicaViewSet
 
@@ -278,9 +279,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
     def get_queryset(self):
         group = user_group(self.request.user)
 
-        _hash = self.request.query_params.get("hash", [])
-        if _hash:
-            ids = list(get_object_or_404(Query,hash=_hash).ids)
+        _uuid = self.request.query_params.get("uuid", [])
+        if _uuid:
+            ids = list(get_object_or_404(IdCollection, uuid=_uuid, resource=self.document.Index.name).ids)
+
             _qs_kwargs = {'values': ids}
 
             self.search = self.search.query(
@@ -321,7 +323,7 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     pagination_class = CustomPagination
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, SearchFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = [
         'sid',
         'pmid',
@@ -471,10 +473,10 @@ class PKData(object):
         else:
             study_pks = self.studies.values_list("pk", flat=True)
 
-            self.interventions = Intervention.objects.filter(study_id__in=study_pks)
+            self.interventions = Intervention.objects.filter(study_id__in=study_pks, normed=True)
             self.groups = Group.objects.filter(study_id__in=study_pks)
             self.individuals = Individual.objects.filter(study_id__in=study_pks)
-            self.outputs = Output.objects.filter(study_id__in=study_pks)
+            self.outputs = Output.objects.filter(study_id__in=study_pks, normed=True)
             self.subset = SubSet.objects.filter(study_id__in=study_pks)
 
             self.ids = {
@@ -604,18 +606,19 @@ class PKDataView(APIView):
 
         time_pkdata = time.time()
 
-        # calculation of hash
-        resources = {}
+        # calculation of uuid
         queries = []
-        delete_queries = Query.objects.filter(expire__lte=datetime.now())
+        delete_queries = IdCollection.objects.filter(expire__lte=datetime.now())
         delete_queries.delete()
+        _uuid = uuid.uuid4()
+        resources = {"uuid": _uuid}
         for resource, ids in pkdata.ids.items():
-            query = Query(resource=resource, ids=ids)
+            query = IdCollection(resource=resource, ids=ids, uuid=_uuid)
             queries.append(query)
-            resources[resource] = {"hash": query.hash, "count": len(ids)}
-        Query.objects.bulk_create(queries)
+            resources[resource] = len(ids)
+        IdCollection.objects.bulk_create(queries)
 
-        time_hash = time.time()
+        time_uuid = time.time()
 
 
         if request.GET.get("download"):
@@ -648,7 +651,7 @@ class PKDataView(APIView):
 
         print("-" * 80)
         print("pkdata:", time_pkdata - time_start_request)
-        print("hash:", time_hash - time_pkdata)
+        print("uuid:", time_uuid - time_pkdata)
         print("-" * 80)
         print("total:", time_response - time_start_request)
         print("-" * 80)

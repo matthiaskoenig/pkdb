@@ -23,7 +23,7 @@
       <v-progress-circular indeterminate color="primary"  v-if="loading"/>
 
       <!-- Download button -->
-      <download-button :study_count="results.studies.count"/>
+      <download-button :study_count="results.studies"/>
 
       <!-- Clear current search filter -->
       <clear-search-button/>
@@ -41,7 +41,7 @@
         <v-list-item-content>
           <v-list-item-title class="mt-0 ml-2 mr-2">
             <v-icon left small>{{faIcon("studies")}}</v-icon>
-            <v-badge color="black" :content="results.studies.count.toString()" right inline >
+            <v-badge color="black" :content="results.studies.toString()" right inline >
               Studies
             </v-badge>
           </v-list-item-title>
@@ -50,12 +50,12 @@
 
           <v-list-item-title class="ml-2 mr-2">
             <v-icon left small>{{faIcon("groups")}}</v-icon>
-              <v-badge color="black" :content="results.groups.count.toString()" right inline >
+              <v-badge color="black" :content="results.groups.toString()" right inline >
                 Groups
               </v-badge>
               |
               <v-icon left small>{{faIcon("individuals")}}</v-icon>
-              <v-badge color="black" :content="results.individuals.count.toString()" right inline >
+              <v-badge color="black" :content="results.individuals.toString()" right inline >
                 Individuals
               </v-badge>
           </v-list-item-title>
@@ -64,7 +64,7 @@
 
           <v-list-item-title class="ml-2 mr-2">
             <v-icon left small>{{faIcon("interventions")}}</v-icon>
-            <v-badge color="black" :content="results.interventions.count.toString()" right inline >
+            <v-badge color="black" :content="results.interventions.toString()" right inline >
               Interventions
             </v-badge>
           </v-list-item-title>
@@ -73,16 +73,16 @@
 
           <v-list-item-title class="ml-2 mr-2">
             <v-icon left small>{{faIcon("outputs")}}</v-icon>
-            <v-badge color="black" :content="results.outputs.count.toString()" right inline >
+            <v-badge color="black" :content="results.outputs.toString()" right inline >
               Outputs
             </v-badge>
             |
             <v-icon left small>{{faIcon("timecourses")}}</v-icon>
-            <v-badge color="black" :content="results.timecourses.count.toString()" right inline >
+            <v-badge color="black" :content="results.timecourses.toString()" right inline >
               Timecourses
             </v-badge>
             |
-            <v-badge color="black" :content="results.scatter.count.toString()" right inline >
+            <v-badge color="black" :content="results.scatter.toString()" right inline >
               Scatter
             </v-badge>
           </v-list-item-title>
@@ -177,16 +177,6 @@ export default {
         {title: 'Subjects', icon: this.faIcon('groups')},
         {title: 'Interventions', icon: this.faIcon('interventions')},
       ],
-      results: {
-        studies: {"hash": "", "count": 0},
-        interventions: {"hash": "", "count": 0},
-        groups: {"hash": "", "count": 0},
-        individuals: {"hash": "", "count": 0},
-        outputs: {"hash": "", "count": 0},
-        timecourses: {"hash": "", "count": 0},
-        scatter: {"hash": "", "count": 0},
-
-      },
       otype: "pkdata",
       otype_single: "pkdata",
     }

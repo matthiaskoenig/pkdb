@@ -109,13 +109,14 @@ export default new Vuex.Store({
 
         // search results (synchronization between search & results)
         results: {
-            studies: {hash: "", count: 0},
-            interventions: {hash: "", count: 0},
-            groups: {hash: "", count: 0},
-            individuals: {hash: "", count: 0},
-            outputs: {hash: "", count: 0},
-            timecourses: {hash: "", count: 0},
-            scatter: {hash: "", count: 0},
+            uuid: "",
+            studies:0,
+            interventions:  0,
+            groups: 0,
+            individuals: 0,
+            outputs: 0,
+            timecourses: 0,
+            scatter: 0,
 
         },
 

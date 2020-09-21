@@ -5,7 +5,7 @@ from rest_framework.generics import get_object_or_404
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
-from pkdb_app.studies.models import Query
+from pkdb_app.studies.models import IdCollection
 
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import user_group
@@ -154,6 +154,13 @@ class ObjectField(DEDField, Object):
 class AccessView(BaseDocumentViewSet):
     """Permissions on views."""
 
+    def _get_resource(self):
+        resource = self.request.query_params.get("data_type", self.document.Index.name)
+        if resource == "timecourse":
+            return "timecourses"
+        return resource
+
+
     def get_queryset(self):
         group = user_group(self.request.user)
         if hasattr(self, "initial_data"):
@@ -164,9 +171,10 @@ class AccessView(BaseDocumentViewSet):
                 # empty query
                 return self.search.query('match', access__raw="NOTHING")
 
-        _hash = self.request.query_params.get("hash", [])
-        if _hash:
-            ids = list(get_object_or_404(Query, hash=_hash).ids)
+        _uuid = self.request.query_params.get("uuid", [])
+
+        if _uuid:
+            ids = list(get_object_or_404(IdCollection, uuid=_uuid, resource=self._get_resource()).ids)
             _qs_kwargs = {'values': ids}
 
             self.search = self.search.query(

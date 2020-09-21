@@ -16,7 +16,7 @@
             :footer-props="footer_options"
         >
           <template v-slot:item.buttons="{ item }">
-            <link-button :detail_info="item"
+            <link-button :detail_info_input="item"
                         show_type_input="study"
                         :title="'Study: '+item.pk"
                         icon="study"

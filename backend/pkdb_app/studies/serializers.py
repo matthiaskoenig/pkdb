@@ -364,8 +364,9 @@ class StudySerializer(SidSerializer):
 
 
         if "curators" in related:
-            study.ratings.all().delete()
+
             if related["curators"]:
+                study.ratings.all().delete()
                 for curator in related["curators"]:
                     curator["study"] = study
                     Rating.objects.create(**curator)
@@ -488,6 +489,7 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
             "output_calculated_count",
 
             "creator",
+            "curators",
             "substances",
         ]
 

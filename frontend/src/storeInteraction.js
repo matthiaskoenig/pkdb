@@ -21,6 +21,25 @@ let StoreInteractionMixin = {
         }
     },
     computed: {
+        results: {
+            get(){
+                return this.$store.state.results
+            },
+            set(value) {
+                this.$store.dispatch('updateAction', {
+                    key: "results",
+                    value: value,
+                })
+            }
+        },
+        data_info_type() {
+            /** Type of information to display */
+            return this.$store.state.data_info_type
+        },
+        data_info() {
+            /** actual information to display */
+            return this.$store.state.data_info
+        },
         individuals_query: {
             get(){
                 return this.$store.state.subjects_boolean.individuals_query
