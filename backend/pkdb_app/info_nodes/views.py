@@ -2,7 +2,7 @@ from collections import namedtuple
 
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, IdsFilterBackend, \
-    OrderingFilterBackend, MultiMatchSearchFilterBackend, SearchFilterBackend
+    OrderingFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from rest_framework import viewsets
 
@@ -43,7 +43,7 @@ class InfoNodeElasticViewSet(BaseDocumentViewSet):
     serializer_class = InfoNodeElasticSerializer
     document_uid_field = "sid__raw"
     lookup_field = 'sid'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, SearchFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         "sid",
         "name",

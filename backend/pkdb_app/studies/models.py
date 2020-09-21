@@ -2,7 +2,6 @@
 Django model for Study.
 """
 import datetime
-import uuid
 from django.utils.timezone import make_aware
 
 from django.contrib.postgres.fields import ArrayField
@@ -302,14 +301,10 @@ def expire():
 
 
 # FIXME: rename to something what it is (FilterQuery, IdCollection ?)
-class Query(models.Model):
+class IdCollection(models.Model):
     """
     DOCUMENT ME
     """
-
-    # FIXME: delete me again please !!!! (currently just filling up the database until problems)
-    # -> on_create: if > 1000 entries; delete first 500 resourses sorted by pk
-
 
     class Recourses(models.TextChoices):
         """ Recourse Types"""
@@ -318,9 +313,15 @@ class Query(models.Model):
         Individuals = 'individuals', _('individuals')
         Interventions = 'interventions', _('interventions')
         Outputs = 'outputs', _('outputs')
+        Scatter = 'scatter', _('scatter')
+        Timecourses = 'timecourses', _('timecourses')
+
 
     resource = models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
-    # the hash is not a hash, but just a pseudo-random number (FIXME: rename to uuid)
-    hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(null=False, blank=False, editable=False)
     ids = ArrayField(models.IntegerField(), null=True, blank=True)
     expire = models.DateTimeField(default=expire(), blank=True, editable=False)
+
+    class Meta:
+        unique_together = ['uuid', 'resource']
+

@@ -2,12 +2,12 @@
 
   <v-card flat width="100%">
     <div class="search-navbar" style="left:0px; width: 65%">
-      <v-btn v-if="results.studies.count>0" title="Go to results"
+      <v-btn v-if="results.studies>0" title="Go to results"
              color="#1E90FF"
              width="100%"
              to="/data"
       >
-        <span v-if="results.studies.count!=0">
+        <span v-if="results.studies!=0">
           <v-icon left small>{{ faIcon('data') }}</v-icon> Results
         </span>
       </v-btn>
@@ -52,7 +52,7 @@
 
           <v-row class="mt-4 ml-3">
             <label class="text-subtitle-1 form-label" title="Search and filter data by study information">
-              <count-badge text="Studies" :count="results.studies.count"/>
+              <count-badge text="Studies" :count="results.studies"/>
             </label>
           </v-row>
 
@@ -60,9 +60,9 @@
           <v-row class="mt-4 ml-3">
 
             <label class=" text-subtitle-1 form-label" title="Search and filter data by subjects">
-              <count-badge text="Groups" :count="results.groups.count"/>
+              <count-badge text="Groups" :count="results.groups"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
-              <count-badge text="Individuals" :count="results.individuals.count"/>
+              <count-badge text="Individuals" :count="results.individuals"/>
             </label>
           </v-row>
           <subjects-form
@@ -72,16 +72,16 @@
           <v-row class="mt-4 ml-3">
 
             <label class="text-subtitle-1 form-label" title="Search and filter data by intervention">
-              <count-badge text="Interventions" :count="results.interventions.count"/>
+              <count-badge text="Interventions" :count="results.interventions"/>
             </label>
           </v-row>
 
           <intervention-form/>
           <v-row class="mt-4 ml-3">
             <label class="text-subtitle-1 form-label" title="Search and filter data by outputs">
-              <count-badge text="Outputs" :count="results.outputs.count"/>
+              <count-badge text="Outputs" :count="results.outputs"/>
               <span style="padding-left: 20px; padding-right: 20px;">&</span>
-              <count-badge text="Timecourses" :count="results.timecourses.count"/>
+              <count-badge text="Timecourses" :count="results.timecourses"/>
             </label>
           </v-row>
           <output-form/>
@@ -100,7 +100,7 @@
           >
             <v-card flat style="padding-top: 100px">
               <div class="search-navbar" style="left:0; width:95%; background-color: white;">
-              <v-btn v-if="results.studies.count>0"
+              <v-btn v-if="results.studies>0"
                   @click="downloadData"
                   :loading="loadingDownload"
                   :disabled="loadingDownload"
@@ -157,21 +157,8 @@ export default {
     SubjectsForm,
     OutputForm,
   },
-  computed: {
-    display_detail() {
-      return this.$store.state.detail_display
-    },
-    detail_info() {
-      return this.$store.state.detail_info
-    },
-    show_type() {
-      return this.$store.state.show_type
-    }
-  },
+
   methods: {
-    reset() {
-      this.$store.commit('resetQuery');
-    },
     update_subject_query(emitted_object) {
       this.subject_queries = emitted_object;
     },
@@ -207,12 +194,13 @@ export default {
     return {
       loadingDownload: false,
       results: {
-        studies: {"hash": "", "count": 0},
-        interventions: {"hash": "", "count": 0},
-        groups: {"hash": "", "count": 0},
-        individuals: {"hash": "", "count": 0},
-        outputs: {"hash": "", "count": 0},
-        timecourses: {"hash": "", "count": 0},
+        uuid: "",
+        studies:0,
+        interventions:  0,
+        groups: 0,
+        individuals: 0,
+        outputs: 0,
+        timecourses: 0,
       },
       otype: "pkdata",
       otype_single: "pkdata",

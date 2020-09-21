@@ -19,13 +19,13 @@ let searchTableMixin = {
         }
     },
     props: {
-        search_hash: {
+        search_uuid: {
             type: Boolean,
             default: false
         },
-        hash: {
+        uuid: {
             type: String,
-            default: () => "BoHash"
+            default: () => "NOUUID"
 
         },
         search_ids: {
@@ -72,7 +72,7 @@ let searchTableMixin = {
             this.getData();
             this.$store.state.highlight = this.search
         },
-        hash(){
+        uuid(){
             this.options.page = 1
             this.getData();
         },
@@ -126,8 +126,8 @@ let searchTableMixin = {
             if (this.data_type) {
                 url += '&data_type=' + this.data_type
             }
-            if (this.search_hash) {
-                url += '&hash=' + this.hash
+            if (this.search_uuid) {
+                url += '&uuid=' + this.uuid
             }
             return url
         },

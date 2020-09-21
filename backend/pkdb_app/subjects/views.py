@@ -6,7 +6,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
     IdsFilterBackend,
-    MultiMatchSearchFilterBackend, SearchFilterBackend)
+    MultiMatchSearchFilterBackend, CompoundSearchFilterBackend)
 from rest_framework import viewsets
 
 from pkdb_app.documents import AccessView
@@ -178,7 +178,7 @@ class GroupCharacteristicaViewSet(AccessView):
     serializer_class = GroupCharacteristicaSerializer
     pagination_class = CustomPagination
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend,SearchFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend,CompoundSearchFilterBackend, MultiMatchSearchFilterBackend]
 
     search_fields = (
         )
