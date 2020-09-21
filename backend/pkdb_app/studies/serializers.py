@@ -44,14 +44,14 @@ class AuthorSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
     def validate(self, attrs):
-        if ((attrs.get("first_name") =="Max") and (attrs.get("last_name") == "Musterman")):
-            raise serializers.ValidationError("Replace 'Max Musternamn' with th correct author in <reference.json>")
+        """Validate author."""
+        if attrs.get("first_name") == "Max" and attrs.get("last_name").startswith("Musterman"):
+            raise serializers.ValidationError("Replace 'Max Mustermann' with the correct authors in <reference.json>")
         return super().validate(attrs)
 
 
 class ReferenceSerializer(WrongKeyValidationSerializer):
     authors = AuthorSerializer(many=True, read_only=False)
-
 
     class Meta:
         model = Reference
@@ -87,12 +87,13 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
     def validate(self, attrs):
-        if ((attrs.get("journal") == "Add your title")):
+        """Validate reference information."""
+        if attrs.get("journal").startswith("Add your title"):
             raise serializers.ValidationError("Add a journal to <reference.json>.")
-        if ((attrs.get("title") == "Add your title ")):
+        if attrs.get("title").startswith("Add your title"):
             raise serializers.ValidationError("Add a title to <reference.json>.")
-        if ((attrs.get("date") == "1000-10-10")):
-                    raise serializers.ValidationError("Replace '1000-10-10' with the correct date in <reference.json>.")
+        if attrs.get("date") == "1000-10-10":
+            raise serializers.ValidationError("Replace '1000-10-10' with the correct date in <reference.json>.")
         return super().validate(attrs)
 
 
