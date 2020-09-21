@@ -473,10 +473,10 @@ class PKData(object):
         else:
             study_pks = self.studies.values_list("pk", flat=True)
 
-            self.interventions = Intervention.objects.filter(study_id__in=study_pks)
+            self.interventions = Intervention.objects.filter(study_id__in=study_pks, normed=True)
             self.groups = Group.objects.filter(study_id__in=study_pks)
             self.individuals = Individual.objects.filter(study_id__in=study_pks)
-            self.outputs = Output.objects.filter(study_id__in=study_pks)
+            self.outputs = Output.objects.filter(study_id__in=study_pks, normed=True)
             self.subset = SubSet.objects.filter(study_id__in=study_pks)
 
             self.ids = {
