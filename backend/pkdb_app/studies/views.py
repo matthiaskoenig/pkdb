@@ -34,7 +34,7 @@ from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import filters, status
+from rest_framework import filters, status, serializers
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
@@ -588,6 +588,17 @@ class PKData(object):
         return serializer(queryset.params(size=10000).scan(), many=True).data
 
 
+class ResonseSerializer(serializers.Serializer):
+        uuid = serializers.UUIDField(required=True,
+                                     allow_null=False,
+                                     help_text="The resulting queries can be accessed by adding this uuid as "
+                                               "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /scatter/.")
+        studies = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting studies.")
+        groups = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting groups.")
+        individuals = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting individuals.")
+        outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
+        timecourses = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting timecourses.")
+        scatter = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatter.")
 
 class PKDataView(APIView):
     """
@@ -668,24 +679,18 @@ class PKDataView(APIView):
                          "As a consumer of the api, you are probably mostly interested in the whole set of tables "
                          "(studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a "
                          "given query. This Endpoint gives you the option of filtering on any of the tables mentioned "
-                         "early.",
-        responses={200:openapi.Response(
-            description="Returns a 'uuid' and the number of entries for each table. "
-                                         "This 'uuid' can be used as an argument in the endpoints of the "
-                                         "tables (studies, groups, individuals, interventions, outputs, subsets). "
-                                         "For subsets the 'data_type'['timecourse', 'scatter'] "
-                                         "has to be provided.",
-            #examples={
-            #    "uuid": "e68721d1-7cee-4231-b8c2-1a0b276a4318",
-            #    "studies": 207,
-            #    "groups": 403,
-            #    "individuals": 2740,
-            #    "interventions": 618,
-            #    "outputs": 29055,
-            #     "timecourses": 1178,
-            #     "scatter": 16}
-            )}
+                         "early. Arguments can be provided with the prefixes ['studies__*' , 'groups__*', 'individuals__*',"
+                         " 'interventions__*', 'outputs__*'] for the respective tables.",
+        responses={
+            200:openapi.Response(
+                description="Returns a 'uuid' and the number of entries for each table. "
+                            "This 'uuid' can be used as an argument in the endpoints of the "
+                            "tables (studies, groups, individuals, interventions, outputs, subsets). "
+                            "For subsets endpoint the 'data_type'['timecourse', 'scatter'] "
+                            "has to be provided.",schema=ResonseSerializer)}
+
     )
+
     def get(self, request, *args, **kw):
         time_start_request = time.time()
 

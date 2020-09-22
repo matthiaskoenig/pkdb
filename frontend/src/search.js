@@ -27,7 +27,7 @@ let SearchMixin = {
     computed: {
         url() {
             /** Calculates the search url based on current state in store.. */
-            let url = this.$store.state.endpoints.api  + 'pkdata/?format=json'
+            let url = this.$store.state.endpoints.api  + 'filter/?format=json'
 
             var output_type__in = new Set(["output", "timecourse", "array"]);
             var filter_output_type = false

@@ -92,18 +92,29 @@ router.register("flat/data", DataAnalysisViewSet, basename="data_analysis")
 
 
 urlpatterns = [
-
     # api
     path("api/v1/", include(router.urls)),
-    path('api/v1/pkdata/', PKDataView.as_view()),
-
+    path('api/v1/filter/', PKDataView.as_view()),
 ]
 #router.register("pkdata", PKDataView, basename="pkdata")
 schema_view = get_schema_view(
    openapi.Info(
     title="PKDB API",
     default_version='v1',
-    description="This is the REST API of PKDB.",
+    description="""
+    ![PKDB logo](http://0.0.0.0:8081/assets/images/logo-PKDB.png)
+    ## Background Information
+    This is the REST API of PKDB. Any pharmacokinetics study contains subjects under investigation. 
+    These subjects are characterised by properties like their *sex*, *age*, *body weight*, *health status*, 
+    and further accessible pharmacokinetics influencing characteristica. Depending on the reporting, this data is saved 
+    as **groups** and **individuals**. Next, some kind of **interventions** are performed on the subjects,  
+    which is mostly a dosing of a substance to the body of the subject. Finally, pharmacokinetics   
+    measurements are performed on the subject. These are often some kind of *concentration* profiles in some  
+    tissue of the subject. Additionally, derived pharmacokinetics parameters e.g. *AUC*, *clearance*,   
+    or *half-lives* are commonly reported. Correlations between theses outputs are often shown in form    
+    of **scatter** plots.   
+
+    """,
     terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
     contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),
     license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
