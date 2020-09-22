@@ -14,6 +14,7 @@ from pkdb_app.pagination import CustomPagination
 
 
 class DataAnalysisViewSet(AccessView):
+    swagger_schema = None
     document = DataAnalysisDocument
     serializer_class = DataAnalysisSerializer
     pagination_class = CustomPagination

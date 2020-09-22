@@ -174,6 +174,7 @@ common_filter_fields = {
     'unit': 'unit.raw',
                          }
 class GroupCharacteristicaViewSet(AccessView):
+    swagger_schema = None
     document = GroupCharacteristicaDocument
     serializer_class = GroupCharacteristicaSerializer
     pagination_class = CustomPagination
@@ -225,6 +226,7 @@ class GroupCharacteristicaViewSet(AccessView):
 
 
 class IndividualCharacteristicaViewSet(AccessView):
+    swagger_schema = None
     document = IndividualCharacteristicaDocument
     serializer_class = IndividualCharacteristicaSerializer
     pagination_class = CustomPagination

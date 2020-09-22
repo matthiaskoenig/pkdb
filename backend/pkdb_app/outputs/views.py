@@ -14,6 +14,7 @@ from ..pagination import CustomPagination
 
 
 class OutputInterventionViewSet(AccessView):
+    swagger_schema = None
     document = OutputInterventionDocument
     serializer_class = OutputInterventionSerializer
     pagination_class = CustomPagination

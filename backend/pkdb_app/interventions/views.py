@@ -82,6 +82,7 @@ class ElasticInterventionViewSet(AccessView):
 
 
 class ElasticInterventionAnalysisViewSet(AccessView):
+    swagger_schema = None
     document = InterventionDocument
     serializer_class = InterventionElasticSerializerAnalysis
     pagination_class = CustomPagination

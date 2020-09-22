@@ -106,7 +106,6 @@ let searchTableMixin = {
             }
             if(this.exclude_abstract){
                 url += '&dtype__exclude=abstract'
-
             }
             if (this.search) {
                 url += '&search_multi_match=' + this.search

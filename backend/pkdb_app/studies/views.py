@@ -20,6 +20,7 @@ from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
@@ -336,6 +337,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
 
 class ElasticReferenceViewSet(BaseDocumentViewSet):
     """Read/query/search references. """
+    swagger_schema = None
     document_uid_field = "sid__raw"
     lookup_field = "sid"
     document = ReferenceDocument
@@ -588,6 +590,34 @@ class PKData(object):
 
 
 class PKDataView(APIView):
+    """
+    The filter endpoint is the main endpoint for complex queries.
+    As a consumer of the api, you are probably mostly interested in the whole set of tables (studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a given query. This Endpoint gives you the option of filtering on any of the tables mentioned early.
+
+    Param:
+        studies__*:
+    The prefix for all filters based on the study information. All parameters described in the studies endpoint can be used to  substituted the placeholder “*”.
+    groups__*:
+    The prefix for all filters based on the group characteristica. All parameters described in the groups endpoint can be used to  substituted the placeholder “*”.
+    individuals__*:
+    The prefix for all filters based on the individual characteristica. All parameters described in the individuals endpoint can be used to  substituted the placeholder “*”.
+    interventions__*:
+    The prefix for all filters based on the intervention information. All parameters described in the intervention endpoint can be used to  substituted the placeholder “*”.
+    outputs__*:
+    The prefix for all filters based on the output information. All parameters described in the outputs endpoint can be used to  substituted the placeholder “*”.
+
+
+
+    consize:
+    Thereby you have the option via the concise parameter to reduce the set to the most concise amount of instances in each table or to return studies which meet the filtered criteria and all the content (related set tables) of the studies.
+    E.g.
+    FIltering for “thalf -- elimination half life” with “concise:true” will return all studies containing “thalf” outputs, all interventions which have been applied before measuring thalf, and all groups and individuals for which half has been measured.
+     FIltering for “thalf -- elimination half life” with “concise:false” will return all studies containing “thalf” outputs, all interventions which have been applied in these studies, and all groups and individuals in these studies.
+    download:
+    The download argument controls the return format. If set, a zip archive is returned with “.csv” files for each table.
+
+
+    """
 
     EXTRA = {
         "study": "studies__",
@@ -607,6 +637,55 @@ class PKDataView(APIView):
                 param[key_request[string_len:]] = value
         return param
 
+    concise__param = openapi.Parameter('concise',
+                                        openapi.TYPE_STRING,
+                                        description="The concise parameter to reduce the set to the most concise amount "
+                                                    "of instances in each table or to return studies which meet the "
+                                                    "filtered criteria and all the content (related set tables) of the "
+                                                    "studies. E.g. FIltering for “thalf -- elimination half life” with “"
+                                                    "concise:true” will return all studies containing “thalf” outputs, "
+                                                    "all interventions which have been applied before measuring thalf, "
+                                                    "and all groups and individuals for which half has been measured. "
+                                                    "Filtertering for “thalf -- elimination half life” with “concise:false” "
+                                                    "will return all studies containing “thalf” outputs, all interventions "
+                                                    "which have been applied in these studies, and all groups and individuals "
+                                                    "in these studies.",
+                                        type=openapi.TYPE_BOOLEAN,
+                                       default=True)
+
+    download__param = openapi.Parameter('download',
+                                       openapi.TYPE_STRING,
+                                       description="The download argument controls the return format. "
+                                                   "If set, a zip archive is returned with “.csv” files for each table.",
+                                       type=openapi.TYPE_BOOLEAN,
+                                       default=False)
+
+
+
+    @swagger_auto_schema(
+        manual_parameters=[concise__param, download__param],
+        operation_description="The filter endpoint is the main endpoint for complex queries. "
+                         "As a consumer of the api, you are probably mostly interested in the whole set of tables "
+                         "(studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a "
+                         "given query. This Endpoint gives you the option of filtering on any of the tables mentioned "
+                         "early.",
+        responses={200:openapi.Response(
+            description="Returns a 'uuid' and the number of entries for each table. "
+                                         "This 'uuid' can be used as an argument in the endpoints of the "
+                                         "tables (studies, groups, individuals, interventions, outputs, subsets). "
+                                         "For subsets the 'data_type'['timecourse', 'scatter'] "
+                                         "has to be provided.",
+            #examples={
+            #    "uuid": "e68721d1-7cee-4231-b8c2-1a0b276a4318",
+            #    "studies": 207,
+            #    "groups": 403,
+            #    "individuals": 2740,
+            #    "interventions": 618,
+            #    "outputs": 29055,
+            #     "timecourses": 1178,
+            #     "scatter": 16}
+            )}
+    )
     def get(self, request, *args, **kw):
         time_start_request = time.time()
 
