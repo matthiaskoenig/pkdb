@@ -3,12 +3,12 @@ Django URLs
 """
 from django.conf.urls import url
 from django.urls import path, include
+from drf_yasg.views import get_schema_view
 from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+from .views import CustomOpenAPISchemaGenerator
 from drf_yasg import openapi
 
 from .statistics import (
@@ -83,11 +83,11 @@ router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
-router.register("interventions_analysis", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
-router.register("groups_analysis", GroupCharacteristicaViewSet, basename="groups_analysis")
-router.register("individuals_analysis", IndividualCharacteristicaViewSet, basename="individuals_analysis")
-router.register("output_analysis", OutputInterventionViewSet, basename="output_analysis")
-router.register("data_analysis", DataAnalysisViewSet, basename="data_analysis")
+router.register("flat/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
+router.register("flat/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
+router.register("flat/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
+router.register("flat/output", OutputInterventionViewSet, basename="output_analysis")
+router.register("flat/data", DataAnalysisViewSet, basename="data_analysis")
 
 
 
@@ -101,13 +101,16 @@ urlpatterns = [
 #router.register("pkdata", PKDataView, basename="pkdata")
 schema_view = get_schema_view(
    openapi.Info(
-      title="PKDB API",
-      default_version='v1',
-      description="This is the REST API of PKDB.",
-      terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
-      contact=openapi.Contact(email="koenigmx@hu-berlin.de"),
-      license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
-   ),
+    title="PKDB API",
+    default_version='v1',
+    description="This is the REST API of PKDB.",
+    terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
+    contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),
+    license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
+    logo={"url":'http://0.0.0.0:8081/assets/images/logo-PKDB.png', "altText": 'PKDB Logo'}
+
+),
+   generator_class=CustomOpenAPISchemaGenerator,
    public=False,
    patterns=urlpatterns,
 

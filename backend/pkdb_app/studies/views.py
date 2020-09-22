@@ -20,6 +20,7 @@ from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
+from drf_yasg.utils import swagger_auto_schema
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
@@ -222,7 +223,10 @@ def related_elastic_dict(study):
     return docs_dict
 
 
-class ElasticStudyViewSet(BaseDocumentViewSet):
+class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
+    """
+    This is a read only view for studies based on Elasticsearch.
+    """
     document_uid_field = "sid__raw"
     lookup_field = "sid"
     document = StudyDocument
@@ -275,8 +279,23 @@ class ElasticStudyViewSet(BaseDocumentViewSet):
     ordering_fields = {
         'sid': 'sid',
     }
+    @swagger_auto_schema(responses={200: StudyElasticSerializer(many=False)})
+    def get_object(self):
+        """
+        Test
+        :return:
+        """
+        return super().get_object()
 
+
+
+    @swagger_auto_schema(responses={200: StudyElasticSerializer(many=True)})
     def get_queryset(self):
+
+        """
+        Test
+
+        """
         group = user_group(self.request.user)
 
         _uuid = self.request.query_params.get("uuid", [])

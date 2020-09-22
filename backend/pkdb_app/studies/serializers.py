@@ -3,6 +3,7 @@ Studies serializers.
 """
 from collections import OrderedDict
 
+from drf_yasg.utils import swagger_auto_schema
 from pkdb_app.data.models import DataSet
 from pkdb_app.data.serializers import DataSetSerializer, DataSetElasticSmallSerializer
 from rest_framework import serializers
@@ -496,13 +497,20 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
         read_only_fields = fields
 
 
-
+@swagger_auto_schema(tags=['Studies'])
 class StudyElasticSerializer(serializers.ModelSerializer):
+    """
+    Study serializer.
+    """
+
     pk = serializers.CharField()
+    sid = serializers.CharField(help_text="This is the string id.")
     reference = ReferenceElasticSerializer()
 
-    name = serializers.CharField()
-    licence = serializers.CharField()
+    name = serializers.CharField(help_text="Name of the study. The convention is to deduce the name from the "
+                                           "refererence with the following pattern "
+                                           "'[Author][PublicationYear][A-Z(optional)]'." )
+    licence = serializers.CharField(help_text="Licence",)
     access = serializers.CharField()
 
     curators = CuratorRatingElasticSerializer(many=True, )

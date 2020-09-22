@@ -9,6 +9,8 @@ from rest_framework.authentication import TokenAuthentication
 from pkdb_app.users.permissions import get_study_file_permission
 from .subjects.models import DataFile
 
+from drf_yasg.generators import OpenAPISchemaGenerator
+
 
 def serve_protected_document(request, file):
     try:
@@ -28,3 +30,20 @@ def serve_protected_document(request, file):
 
     else:
         return HttpResponseForbidden()
+
+
+class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
+    def get_schema(self, request=None, public=False):
+        """Generate a :class:`.Swagger` object with custom tags"""
+
+        swagger = super().get_schema(request, public)
+        swagger.tags = [
+            {
+                "name": "flat",
+                "description": "Under 'flat' all endpoints are grouped which have a flat representation "
+                               "of the data."
+            }
+
+        ]
+
+        return swagger
