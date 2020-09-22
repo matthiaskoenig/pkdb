@@ -155,7 +155,10 @@ class MeasurementType(AbstractInfoNode):
     NO_UNIT = 'NO_UNIT'  # todo: remove NO_UNIT and add extra keyword or add an extra measurement_type with optional no units.
     TIME_REQUIRED_MEASUREMENT_TYPES = ["cumulative amount", "cumulative metabolic ratio", "recovery",
                                        "auc_end"]  # todo: remove and add extra keyword.
-    CAN_NEGATIVE = []  # todo remove
+    CAN_NEGATIVE = [
+        "tmax"  # tmax can be negative due to time offsets, i.e. pre-simulation with subsequent fall after intervention
+                # this often happens in placebo simulations
+    ]
     ADDITIVE = []  # todo remove
 
     units = models.ManyToManyField(Unit, related_name="measurement_types")
@@ -310,40 +313,41 @@ class MeasurementType(AbstractInfoNode):
     def numeric_fields(self):
         return ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
 
-    @property
-    def can_be_negative(self):
-        return self.info_node.name in self.CAN_NEGATIVE
-
     def validate_numeric(self, data):
+        """ Validates the numerics of the data.
+
+        This ensures that measurements are not-negative.
+        Raises ValueError
+        :param data:
+        :return:
+        """
         if self.info_node.dtype in [self.info_node.DTypes.NumericCategorical, self.info_node.DTypes.Numeric]:
             for field in self.numeric_fields:
                 value = data.get(field)
-                if not self.can_be_negative:
 
+                # validate that not negative
+                if self.info_node.name not in self.CAN_NEGATIVE:
+                    valid = True
                     if isinstance(value, Number):
-                        rule = value < 0
-                    # for timecourses
-                    # todo: remove?
+                        valid = not (value < 0)
                     elif isinstance(value, list):
-                        rule = any(v < 0 for v in value)
+                        valid = not any(v < 0 for v in value)
 
-                    else:
-                        rule = False
-
-                    if rule:
+                    if not valid:
                         raise ValueError(
                             {field: f"Numeric values need to be positive (>=0) "
                                     f"for all measurement types except "
                                     f"<{self.CAN_NEGATIVE}>.", "detail": data})
 
     def validate_complete(self, data):
+        """Complete validation."""
+
         # check unit
         self.validate_unit(data.get("unit", None))
         self.validate_numeric(data)
 
         choice = data.get("choice", None)
         d_choice = self.validate_choice(choice)
-
 
         time_unit = data.get("time_unit", None)
         if time_unit:
