@@ -1,5 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
+from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
@@ -668,8 +669,7 @@ class GroupElasticSerializer(serializers.ModelSerializer):
             'characteristica',
         )
 
-    # FIXME: Remove this.
-
+    @swagger_serializer_method(CharacteristicaElasticSerializer(many=True))
     def get_characteristica(self, instance):
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
@@ -701,6 +701,12 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica = serializers.SerializerMethodField()
 
+    @swagger_serializer_method(serializer_or_field=CharacteristicaElasticSerializer)
+    def get_characteristica(self, instance):
+        if instance.characteristica_all_normed:
+            return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
+        return []
+
     class Meta:
         model = Individual
         fields = (
@@ -710,12 +716,6 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
             'group',
             'characteristica',
         )
-
-    # FIXME: Remove this.
-    def get_characteristica(self, instance):
-        if instance.characteristica_all_normed:
-            return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
-        return []
 
 
 class GroupCharacteristicaSerializer(serializers.ModelSerializer):

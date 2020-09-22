@@ -6,8 +6,6 @@ from copy import copy
 
 from django.http import  FileResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-from drf_yasg import openapi
-from drf_yasg.openapi import SchemaRef, ReferenceResolver
 from rest_framework.authentication import TokenAuthentication
 from pkdb_app.users.permissions import get_study_file_permission
 from .subjects.models import DataFile
@@ -41,7 +39,6 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
         if swagger.paths.get(f'/{table}/'):
             _params = []
             params = swagger.paths.get(f'/{table}/').get('get').get("parameters").copy()
-            print(params)
 
             for p in params:
                 _p = copy(p)
@@ -56,6 +53,18 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
         swagger = super().get_schema(request, public)
         swagger.tags = [
+            {
+                "name": "filter",
+                #"description": "The filter endpoint is the main endpoint for complex queries. "
+                #               "As a consumer of the api, you are probably mostly interested "
+                #               "in the whole set of tables (studies, groups, individuals and "
+                #               "interventions, outputs, timecourses, and scatter) for a given "
+                #               "query. This Endpoint gives you the option of filtering on any "
+                #              "of the tables mentioned early. Arguments can be provided with "
+                #               "the prefixes ['studies__' , 'groups__', 'individuals__', "
+                #               "'interventions__', 'outputs__*'] for the respective tables."
+            },
+
 
 
         ]

@@ -601,33 +601,7 @@ class ResonseSerializer(serializers.Serializer):
         scatter = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatter.")
 
 class PKDataView(APIView):
-    """
-    The filter endpoint is the main endpoint for complex queries.
-    As a consumer of the api, you are probably mostly interested in the whole set of tables (studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a given query. This Endpoint gives you the option of filtering on any of the tables mentioned early.
-
-    Param:
-        studies__*:
-    The prefix for all filters based on the study information. All parameters described in the studies endpoint can be used to  substituted the placeholder “*”.
-    groups__*:
-    The prefix for all filters based on the group characteristica. All parameters described in the groups endpoint can be used to  substituted the placeholder “*”.
-    individuals__*:
-    The prefix for all filters based on the individual characteristica. All parameters described in the individuals endpoint can be used to  substituted the placeholder “*”.
-    interventions__*:
-    The prefix for all filters based on the intervention information. All parameters described in the intervention endpoint can be used to  substituted the placeholder “*”.
-    outputs__*:
-    The prefix for all filters based on the output information. All parameters described in the outputs endpoint can be used to  substituted the placeholder “*”.
-
-
-
-    consize:
-    Thereby you have the option via the concise parameter to reduce the set to the most concise amount of instances in each table or to return studies which meet the filtered criteria and all the content (related set tables) of the studies.
-    E.g.
-    FIltering for “thalf -- elimination half life” with “concise:true” will return all studies containing “thalf” outputs, all interventions which have been applied before measuring thalf, and all groups and individuals for which half has been measured.
-     FIltering for “thalf -- elimination half life” with “concise:false” will return all studies containing “thalf” outputs, all interventions which have been applied in these studies, and all groups and individuals in these studies.
-    download:
-    The download argument controls the return format. If set, a zip archive is returned with “.csv” files for each table.
-
-
+    """ The filter endpoint is the main endpoint for complex queries. As a consumer of the api, you are probably mostly interested in the whole set of tables (studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a given query. This Endpoint gives you the option of filtering on any of the tables mentioned early. Arguments can be provided with the prefixes ['studies__' , 'groups__', 'individuals__', 'interventions__', 'outputs__*'] for the respective tables.
     """
 
     EXTRA = {
@@ -675,12 +649,12 @@ class PKDataView(APIView):
 
     @swagger_auto_schema(
         manual_parameters=[concise__param, download__param],
-        operation_description="The filter endpoint is the main endpoint for complex queries. "
-                         "As a consumer of the api, you are probably mostly interested in the whole set of tables "
-                         "(studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a "
-                         "given query. This Endpoint gives you the option of filtering on any of the tables mentioned "
-                         "early. Arguments can be provided with the prefixes ['studies__*' , 'groups__*', 'individuals__*',"
-                         " 'interventions__*', 'outputs__*'] for the respective tables.",
+        #operation_description="The filter endpoint is the main endpoint for complex queries. "
+        #                 "As a consumer of the api, you are probably mostly interested in the whole set of tables "
+        #                 "(studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a "
+        #                 "given query. This Endpoint gives you the option of filtering on any of the tables mentioned "
+        #                 "early. Arguments can be provided with the prefixes ['studies__*' , 'groups__*', 'individuals__*',"
+        #                 " 'interventions__*', 'outputs__*'] for the respective tables.",
         responses={
             200:openapi.Response(
                 description="Returns a 'uuid' and the number of entries for each table. "
