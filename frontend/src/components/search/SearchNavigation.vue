@@ -10,7 +10,7 @@
       width="420"
       height="100%"
   >
-    <v-list-item @click.stop="hide_search = !hide_search" title="Hide search panel">
+    <v-list-item @click.stop="hide_search = !hide_search">
       <v-list-item-avatar title="Show search panel">
         <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
