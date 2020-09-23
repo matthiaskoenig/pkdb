@@ -55,7 +55,6 @@ class DataAnalysisViewSet(AccessView):
 
     }
 
-
 class SubSetViewSet(AccessView):
     """
     The studies endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a

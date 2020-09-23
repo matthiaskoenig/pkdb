@@ -700,22 +700,32 @@ class PKDataView(APIView):
 
         if request.GET.get("download"):
 
-            Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer"])
+            def serialize_timecourses(ids):
+                timecourse_subsets = SubSet.objects.filter(id__in=ids)
+                return [ t.timecourse_representation() for t in timecourse_subsets]
+
+            Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function"])
             table_content = {
-                "studies": Sheet("Studies", {"pk":pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer),
-                "groups": Sheet("Groups", {"group_pk":pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer),
-                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer),
-                "interventions": Sheet("Interventions",{"pk":pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis),
-                "outputs": Sheet("Outputs",{"output_pk":pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer),
-                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet,DataAnalysisSerializer),
-                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, DataAnalysisSerializer),
+                "studies": Sheet("Studies", {"pk":pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None),
+                "groups": Sheet("Groups", {"group_pk":pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer, None),
+                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None),
+                "interventions": Sheet("Interventions",{"pk":pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
+                "outputs": Sheet("Outputs",{"output_pk":pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
+                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet, None, serialize_timecourses),
+                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, DataAnalysisSerializer, None),
 
             }
+
+
             with tempfile.SpooledTemporaryFile() as tmp:
                 with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
                     for key, sheet in table_content.items():
                         string_buffer = StringIO()
-                        data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
+                        if sheet.function:
+                            data = sheet.function(sheet.query_dict["subset_pk"])
+                        else:
+                            data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
+
                         pd.DataFrame(data).to_csv(string_buffer)
                         archive.writestr(f'{key}.csv', string_buffer.getvalue())
                 tmp.seek(0)

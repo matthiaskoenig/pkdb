@@ -128,6 +128,7 @@ class SubSet(Accessible):
         for key, values in merged_dict.items():
             if key not in ['outputs__time', 'outputs__value', 'outputs__mean', 'outputs__median', 'outputs__cv',
                            'outputs__sd' 'outputs__se']:
+
                 merged_dict[key] = tuple_or_value(values)
 
             if all(v is None for v in values):
@@ -166,6 +167,7 @@ class SubSet(Accessible):
     def timecourse(self):
         timecourse = self.merge_values(
             self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
+
         self.reformat_timecourse(timecourse, self._timecourse_extra())
         self.validate_timecourse(timecourse)
         return timecourse
@@ -176,6 +178,12 @@ class SubSet(Accessible):
             if new_key == "interventions":
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
+
+    def timecourse_representation(self):
+        return self.merge_values(
+            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
+
+
 
 
 class DataPoint(models.Model):

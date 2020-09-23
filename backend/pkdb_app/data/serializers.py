@@ -5,7 +5,7 @@ from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializ
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
-from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS, SmallOutputSerializer
+from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, StudySmallElasticSerializer
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_normalized, list_of_pk
@@ -377,6 +377,8 @@ class SubSetElasticSerializer(serializers.ModelSerializer):
     def get_array(self,object):
         #return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
         return [point["point"] for point in object.to_dict()["array"]]
+
+
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)

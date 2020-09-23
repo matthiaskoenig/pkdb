@@ -31,12 +31,12 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
     """
     outputs = []
     dosing = subset.get_single_dosing()
+    timecourse = subset.timecourse()
     # dosing information must exist
     if not dosing:
         return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
-    timecourse = subset.timecourse()
 
     if timecourse["measurement_type_name"] == "concentration":
         variables = _timecourse_to_pkdict(timecourse, dosing)
