@@ -85,6 +85,11 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
                 "name": "interventions",
                 "description": "Query interventions"
             },
+            {
+                "name": "subsets",
+                "description": "Query subsets (timecourses and scatters)"
+            },
+
         ]
 
         for table in ["individuals", "groups", "interventions", "outputs", "subsets"]:

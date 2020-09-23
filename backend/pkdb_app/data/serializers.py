@@ -67,7 +67,6 @@ class SubSetSerializer(ExSerializer):
         if any(np.isnan(np.array(time))):
             raise serializers.ValidationError({"time": "no time points are allowed to be nan", "detail": time})
 
-
     def calculate_pks_from_timecourses(self, subset):
         # calculate pharmacokinetics outputs
         try:
@@ -253,6 +252,7 @@ class DataSerializer(ExSerializer):
                     validated_data={**subset, "data": data_instance},
                     create_multiple_keys=['comments', 'descriptions'])
         return data_instance
+
 
 class DataSetSerializer(ExSerializer):
 
