@@ -93,6 +93,36 @@ class SubSet(Accessible):
             'time_unit': 'outputs__time_unit',
             'unit': 'outputs__unit',
         }
+    def keys_timecourse_representation(self):
+        return {
+            "study_sid":"outputs__study__sid",
+            "study_name": "outputs__study__name",
+            "outputs_pk": "outputs__pk",
+            "interventions": "outputs__interventions__pk",
+            "group_pk": "outputs__group_id",
+            "individual_pk": "outputs__individual_id",
+            "normed": 'outputs__normed',
+            "calculated": 'outputs__calculated',
+            "tissue": 'outputs__tissue__info_node__name',
+            "method": 'outputs__method__info_node__name',
+            "label": 'outputs__label',
+            "output_type": 'outputs__output_type',
+            "time": 'outputs__time',
+            'time_unit': 'outputs__time_unit',
+            "measurement_type":	"outputs__measurement_type__info_node__name",
+            "choice":	"outputs__choice__info_node__name",
+            "substance": "outputs__substance__info_node__name",
+            "value": 'outputs__value',
+            "mean": 'outputs__mean',
+            "median": 'outputs__median',
+            "min": 'outputs__min',
+            "max": 'outputs__max',
+            'sd': 'outputs__sd',
+            'se': 'outputs__se',
+            'cv': 'outputs__cv',
+            'unit': 'outputs__unit',
+        }
+
 
     def _timecourse_extra(self):
         return {
@@ -179,9 +209,14 @@ class SubSet(Accessible):
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
 
+
     def timecourse_representation(self):
-        return self.merge_values(
-            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
+        timecourse = self.merge_values(
+            self.data_points.prefetch_related('outputs').values(*self.keys_timecourse_representation().values()))
+
+        self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
+        return timecourse
+
 
 
 
