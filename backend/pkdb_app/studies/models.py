@@ -53,7 +53,7 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric])
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric], )
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, validators=[alphanumeric])  # optional
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True)  # optional
@@ -102,7 +102,7 @@ class Study(Sidable, models.Model):
 
     Mainly reported as a single publication.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric])
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric], help_text="Study Identifer")
     date = models.DateField(default=datetime.date.today)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)

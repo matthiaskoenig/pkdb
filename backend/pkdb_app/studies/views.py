@@ -581,7 +581,7 @@ class ResponseSerializer(serializers.Serializer):
         required=True,
         allow_null=False,
         help_text="The resulting queries can be accessed by adding this uuid as "
-               "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /scatter/."
+               "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /subsets/."
     )
     studies = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting studies.")
     groups = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting groups.")
@@ -616,7 +616,7 @@ class PKDataView(APIView):
 
     The filter endpoint provides the option of filtering on any of the tables mentioned
     early. Arguments can be provided with the prefixes `['studies__' , 'groups__', 'individuals__', 'interventions__',
-    'outputs__']` for the respective tables.
+    'outputs__', 'subsets__']` for the respective tables.
     """
 
     EXTRA = {

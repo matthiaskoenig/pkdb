@@ -92,7 +92,7 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
         ]
 
-        for table in ["individuals", "groups", "interventions", "outputs", "subsets"]:
+        for table in ["studies", "individuals", "groups", "interventions", "outputs", "subsets"]:
             if self._params(table, swagger):
                 swagger.paths.get('/filter/').get('get')["parameters"] += self._params(table, swagger)
 
