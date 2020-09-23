@@ -6,6 +6,7 @@ from copy import copy
 
 from django.http import  FileResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+from drf_yasg.inspectors import PaginatorInspector
 from rest_framework.authentication import TokenAuthentication
 from pkdb_app.users.permissions import get_study_file_permission
 from .subjects.models import DataFile
@@ -35,6 +36,7 @@ def serve_protected_document(request, file):
 
 class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
+
     def _params(self,table, swagger):
         if swagger.paths.get(f'/{table}/'):
             _params = []
@@ -50,6 +52,7 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
     def get_schema(self, request=None, public=False):
         """Generate a :class:`.Swagger` object with custom tags"""
+
 
         swagger = super().get_schema(request, public)
         swagger.tags = [

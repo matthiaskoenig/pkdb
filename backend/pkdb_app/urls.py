@@ -116,6 +116,7 @@ schema_view = get_schema_view(
    public=False,
    patterns=urlpatterns,
 
+
 )
 
 urlpatterns = urlpatterns + [

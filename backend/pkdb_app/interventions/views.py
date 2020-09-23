@@ -82,6 +82,10 @@ class ElasticInterventionViewSet(AccessView):
 
 
 class ElasticInterventionAnalysisViewSet(AccessView):
+    """
+    The intervention endpoint gives access to the intervention data. This is mostly a dosing of a substance to the body
+    of the subject but can also be more vague interventions like a meal uptake or exercise.
+    """
     swagger_schema = None
     document = InterventionDocument
     serializer_class = InterventionElasticSerializerAnalysis

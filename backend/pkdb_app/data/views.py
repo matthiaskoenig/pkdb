@@ -57,6 +57,11 @@ class DataAnalysisViewSet(AccessView):
 
 
 class SubSetViewSet(AccessView):
+    """
+    The studies endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a
+    timecourse or scatter. A timecourse subset consists of outputs measured at different time points. A scatter subset
+    contains correlated data which commonly are displayed as scatter plots.
+    """
     document = SubSetDocument
     serializer_class = SubSetElasticSerializer
     pagination_class = CustomPagination

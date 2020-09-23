@@ -226,8 +226,10 @@ def related_elastic_dict(study):
 
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
     """
-    This is a read only view for studies based on Elasticsearch.
+    The studies endpoint gives access to the studies data. Studies is generally a container of consistent
+    pharmacokinetical data. This container mostly contains data reported in a single scientific paper.
     """
+
     document_uid_field = "sid__raw"
     lookup_field = "sid"
     document = StudyDocument
@@ -374,8 +376,6 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
 class PKData(object):
     """
     PKData represents a consistent set of pharmacokinetical data.
-
-    returns a concise PKData
     """
     def __init__(self,
                  request,

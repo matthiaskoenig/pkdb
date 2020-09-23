@@ -42,6 +42,10 @@ common_subject_fields = {
         },
 }
 class GroupViewSet(AccessView):
+    """
+    The groups endpoint gives access to the groups data. A group is a collection of individuals for which data was
+    reported collectively.
+    """
     document = GroupDocument
     serializer_class = GroupElasticSerializer
     lookup_field = 'id'
@@ -83,6 +87,10 @@ class GroupViewSet(AccessView):
 
 
 class IndividualViewSet(AccessView):
+    """
+    The individual endpoint gives access to the individual subjects data. Individuals are subjects for which data
+    was reported individually.
+    """
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
