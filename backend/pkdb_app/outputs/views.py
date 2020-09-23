@@ -100,7 +100,8 @@ common_search_fields = (
 
 common_filter_fields = {
         'study_name': 'study.name.raw',
-        'study_sid': 'study.sid.raw',
+        'study_sid': {'field': 'study.sid.raw',
+                      'help_text':"test"},
         'group_pk': {'field': 'group.pk',
                      'lookups': [
                          LOOKUP_QUERY_IN,
