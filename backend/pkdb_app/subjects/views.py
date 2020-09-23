@@ -1,7 +1,4 @@
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
-############################################################
-# Elastic Search Views
-###########################################################
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     OrderingFilterBackend,
@@ -11,8 +8,12 @@ from rest_framework import viewsets
 
 from pkdb_app.documents import AccessView
 from pkdb_app.pagination import CustomPagination
-from pkdb_app.subjects.documents import IndividualDocument, GroupDocument, \
-    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
+from pkdb_app.subjects.documents import (
+    IndividualDocument,
+    GroupDocument,
+    GroupCharacteristicaDocument,
+    IndividualCharacteristicaDocument
+)
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.subjects.serializers import (
     DataFileSerializer,
@@ -23,7 +24,7 @@ from pkdb_app.subjects.serializers import (
 )
 from pkdb_app.users.permissions import StudyPermission
 
-common_subject_fields = {
+subject_filter_fields = {
     'study': 'study.raw',
     'name': 'name.raw',
     'choice_sid': {
@@ -39,7 +40,7 @@ common_subject_fields = {
             LOOKUP_QUERY_IN,
             LOOKUP_QUERY_EXCLUDE,
         ],
-        },
+    },
 }
 
 
@@ -54,8 +55,6 @@ class GroupViewSet(AccessView):
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
-
-    # Define search fields
     search_fields = (
         'characteristica_all_normed.measurement_type.label',
         'characteristica_all_normed.choice.label',
@@ -63,23 +62,17 @@ class GroupViewSet(AccessView):
         'name',
         'study.name',
         'study.sid',
-
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-
-    # Filter fields
     filter_fields = {
         'id': 'id',
         'pk': 'pk',
         'parent': 'group.name.raw',
-        **common_subject_fields
-
+        **subject_filter_fields
     }
-
-    # Define ordering fields
     ordering_fields = {
         'id': 'id',
         'study': 'study.raw',
@@ -98,8 +91,6 @@ class IndividualViewSet(AccessView):
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
-
-    # Define search fields
     search_fields = (
         'characteristica_all_normed.measurement_type.label',
         'characteristica_all_normed.choice.label',
@@ -113,25 +104,21 @@ class IndividualViewSet(AccessView):
     multi_match_options = {
         'operator': 'and'
     }
-
-    # Filter fields
     filter_fields = {
         'pk': 'pk',
         'id': 'id',
         'name': 'name.raw',
         'group_name': 'group.name.raw',
-        **common_subject_fields
+        **subject_filter_fields
 
     }
-
-    # Define ordering fields
     ordering_fields = {
         'id': 'id',
         'group': 'group.raw',
     }
 
 
-common_characteristica_filter_fields = {
+characteristica_filter_fields = {
     'study_sid': {
         'field': 'study_sid.raw',
         'lookups': [
@@ -147,29 +134,28 @@ common_characteristica_filter_fields = {
         ],
     },
     'characteristica_pk': {
-            'field': 'characteristica_pk',
-            'lookups': [
-                LOOKUP_QUERY_IN,
-                LOOKUP_QUERY_EXCLUDE,
-            ],
+        'field': 'characteristica_pk',
+        'lookups': [
+            LOOKUP_QUERY_IN,
+            LOOKUP_QUERY_EXCLUDE,
+        ],
     },
-
     'count': 'count',
     'measurement_type': 'measurement_type.raw',
     'measurement_type_sid': {
-     'field': 'measurement_type.sid.raw',
-     'lookups': [
+        'field': 'measurement_type.sid.raw',
+        'lookups': [
          LOOKUP_QUERY_IN,
          LOOKUP_QUERY_EXCLUDE,
-     ],
+        ],
     },
     'choice': 'choice.raw',
     'choice_sid': {
-     'field': 'choice.sid.raw',
-     'lookups': [
-         LOOKUP_QUERY_IN,
-         LOOKUP_QUERY_EXCLUDE,
-     ],
+        'field': 'choice.sid.raw',
+        'lookups': [
+             LOOKUP_QUERY_IN,
+             LOOKUP_QUERY_EXCLUDE,
+        ],
     },
     'substance': 'substance.raw',
     'value': 'value',
@@ -183,48 +169,53 @@ common_characteristica_filter_fields = {
     'unit': 'unit.raw',
 }
 
+
 class GroupCharacteristicaViewSet(AccessView):
+    """ Endpoint to query group characteristica
+
+    The endpoint gives access to characteristica information for groups.
+    """
     swagger_schema = None
     document = GroupCharacteristicaDocument
     serializer_class = GroupCharacteristicaSerializer
     pagination_class = CustomPagination
     lookup_field = 'id'
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend,CompoundSearchFilterBackend, MultiMatchSearchFilterBackend]
-
-    search_fields = (
-        )
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        CompoundSearchFilterBackend,
+        MultiMatchSearchFilterBackend
+    ]
+    search_fields = ()
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-
     filter_fields = {
-        'group_name': {'field': 'group_name',
-                       'lookups': [
-                           LOOKUP_QUERY_IN,
-                           LOOKUP_QUERY_EXCLUDE,
-
-                       ],
-                       },
-
-        'group_pk': {'field': 'group_pk',
-                     'lookups': [
-                         LOOKUP_QUERY_IN,
-                         LOOKUP_QUERY_EXCLUDE,
-
-                     ],
-                     },
-        'group_parent_pk': {'field': 'group_parent_pk',
-                            'lookups': [
-                                LOOKUP_QUERY_IN,
-                                LOOKUP_QUERY_EXCLUDE,
-
-                            ],
-                            },
-
+        'group_name': {
+            'field': 'group_name',
+            'lookups': [
+               LOOKUP_QUERY_IN,
+               LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        'group_pk': {
+            'field': 'group_pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        'group_parent_pk': {
+            'field': 'group_parent_pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
         'group_count': 'group_count',
-        **common_characteristica_filter_fields
-
+        **characteristica_filter_fields
     }
     ordering_fields = {
         'choice': 'choice.raw',
@@ -233,6 +224,10 @@ class GroupCharacteristicaViewSet(AccessView):
 
 
 class IndividualCharacteristicaViewSet(AccessView):
+    """ Endpoint to query individual characteristica
+
+    The endpoint gives access to characteristica information for individuals.
+    """
     swagger_schema = None
     document = IndividualCharacteristicaDocument
     serializer_class = IndividualCharacteristicaSerializer
@@ -248,15 +243,12 @@ class IndividualCharacteristicaViewSet(AccessView):
         'group.name',
         'study.name',
         'study.sid',
-
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-
     filter_fields = {
-
         'individual_name': {
             'field': 'individual_name',
             'lookups': [
@@ -278,7 +270,7 @@ class IndividualCharacteristicaViewSet(AccessView):
                 LOOKUP_QUERY_EXCLUDE,
             ],
         },
-        **common_characteristica_filter_fields
+        **characteristica_filter_fields
 
     }
     ordering_fields = {
