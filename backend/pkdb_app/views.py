@@ -35,9 +35,9 @@ def serve_protected_document(request, file):
 
 
 class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
+    """Definition of additional API parameters."""
 
-
-    def _params(self,table, swagger):
+    def _params(self, table, swagger):
         if swagger.paths.get(f'/{table}/'):
             _params = []
             params = swagger.paths.get(f'/{table}/').get('get').get("parameters").copy()
@@ -53,29 +53,24 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
     def get_schema(self, request=None, public=False):
         """Generate a :class:`.Swagger` object with custom tags"""
 
-
         swagger = super().get_schema(request, public)
+        # FIXME: add short description tags
         swagger.tags = [
             {
                 "name": "filter",
-                #"description": "The filter endpoint is the main endpoint for complex queries. "
-                #               "As a consumer of the api, you are probably mostly interested "
-                #               "in the whole set of tables (studies, groups, individuals and "
-                #               "interventions, outputs, timecourses, and scatter) for a given "
-                #               "query. This Endpoint gives you the option of filtering on any "
-                #              "of the tables mentioned early. Arguments can be provided with "
-                #               "the prefixes ['studies__' , 'groups__', 'individuals__', "
-                #               "'interventions__', 'outputs__*'] for the respective tables."
+                "description": "The filter endpoint is the main endpoint for complex queries. "
+                              "As a consumer of the api, you are probably mostly interested "
+                              "in the whole set of tables (studies, groups, individuals and "
+                              "interventions, outputs, timecourses, and scatter) for a given "
+                              "query. This Endpoint gives you the option of filtering on any "
+                             "of the tables mentioned early. Arguments can be provided with "
+                              "the prefixes ['studies__' , 'groups__', 'individuals__', "
+                              "'interventions__', 'outputs__*'] for the respective tables."
             },
-
-
-
         ]
 
         for table in ["individuals", "groups", "interventions", "outputs", "subsets"]:
             if self._params(table, swagger):
                 swagger.paths.get('/filter/').get('get')["parameters"] += self._params(table,swagger)
 
-
         return swagger
-

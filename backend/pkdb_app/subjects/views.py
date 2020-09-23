@@ -85,9 +85,9 @@ class GroupViewSet(AccessView):
     }
 
 
-
 class IndividualViewSet(AccessView):
-    """
+    """ Endpoint to query individuals.
+
     The individual endpoint gives access to the individual subjects data. Individuals are subjects for which data
     was reported individually.
     """

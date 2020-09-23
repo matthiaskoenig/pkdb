@@ -137,9 +137,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
                 raise serializers.ValidationError(msg)
 
 
-
-
-
 class OutputExSerializer(ExSerializer):
 
     source = serializers.PrimaryKeyRelatedField(
@@ -325,8 +322,8 @@ class OutputInterventionSerializer(serializers.ModelSerializer):
                   "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
         read_only_fields = fields
 
-class SmallOutputSerializer(serializers.ModelSerializer):
 
+class SmallOutputSerializer(serializers.ModelSerializer):
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
@@ -359,8 +356,8 @@ class SmallOutputSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-
 class OutputElasticSerializer(serializers.ModelSerializer):
+    """Main serializer for outputs."""
     study = StudySmallElasticSerializer()
 
     group = GroupSmallElasticSerializer()

@@ -105,7 +105,6 @@ class StudyViewSet(viewsets.ModelViewSet):
     lookup_field = "sid"
     permission_classes = (StudyPermission,)
 
-
     @staticmethod
     def filter_on_permissions(user, queryset):
 
@@ -225,7 +224,8 @@ def related_elastic_dict(study):
 
 
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
-    """
+    """ Endpoint to query studies.
+
     The studies endpoint gives access to the studies data. Studies is generally a container of consistent
     pharmacokinetical data. This container mostly contains data reported in a single scientific paper.
     """
@@ -282,21 +282,17 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
     ordering_fields = {
         'sid': 'sid',
     }
+
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=False)})
     def get_object(self):
-        """
-        Test
+        """ Test
         :return:
         """
         return super().get_object()
 
-
-
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=True)})
     def get_queryset(self):
-
-        """
-        Test
+        """ Test.
 
         """
         group = user_group(self.request.user)
@@ -374,9 +370,7 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
 
 
 class PKData(object):
-    """
-    PKData represents a consistent set of pharmacokinetical data.
-    """
+    """ PKData represents a consistent set of pharmacokinetic data. """
     def __init__(self,
                  request,
                  concise: bool = True,
@@ -510,20 +504,9 @@ class PKData(object):
                 "scatter": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
             }
 
-
-
-
-
         time_loop_end = time.time()
 
-
-
-
-
-
-
         time_django = time.time()
-
         print("-" * 80)
         for q in connection.queries:
             print("db query:", q["time"])
@@ -538,7 +521,6 @@ class PKData(object):
     def empty_get(self):
         """create an get request with no parameters in the url."""
         return RequestFactory().get("/").GET.copy()
-
 
     def intervention_pks(self):
         return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
@@ -588,20 +570,30 @@ class PKData(object):
         return serializer(queryset.params(size=10000).scan(), many=True).data
 
 
-class ResonseSerializer(serializers.Serializer):
-        uuid = serializers.UUIDField(required=True,
-                                     allow_null=False,
-                                     help_text="The resulting queries can be accessed by adding this uuid as "
-                                               "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /scatter/.")
-        studies = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting studies.")
-        groups = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting groups.")
-        individuals = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting individuals.")
-        outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
-        timecourses = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting timecourses.")
-        scatter = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatter.")
+class ResponseSerializer(serializers.Serializer):
+    """Documentation of response schema."""
+    uuid = serializers.UUIDField(
+        required=True,
+        allow_null=False,
+        help_text="The resulting queries can be accessed by adding this uuid as "
+               "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /scatter/."
+    )
+    studies = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting studies.")
+    groups = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting groups.")
+    individuals = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting individuals.")
+    outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
+    timecourses = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting timecourses.")
+    scatter = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatter.")
+
 
 class PKDataView(APIView):
-    """ The filter endpoint is the main endpoint for complex queries. As a consumer of the api, you are probably mostly interested in the whole set of tables (studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a given query. This Endpoint gives you the option of filtering on any of the tables mentioned early. Arguments can be provided with the prefixes ['studies__' , 'groups__', 'individuals__', 'interventions__', 'outputs__*'] for the respective tables.
+    """Endpoint to filter and query data.
+
+    The filter endpoint is the main endpoint for complex queries. As a consumer of the api, you are probably mostly
+    interested in the whole set of tables (studies, groups, individuals and interventions, outputs, timecourses,
+    and scatter) for a given query. This Endpoint gives you the option of filtering on any of the tables mentioned
+    early. Arguments can be provided with the prefixes `['studies__' , 'groups__', 'individuals__', 'interventions__',
+    'outputs__*']` for the respective tables.
     """
 
     EXTRA = {
@@ -611,7 +603,6 @@ class PKDataView(APIView):
         "individual": "individuals__",
         "output": "outputs__",
         "subsets": "subsets__",
-
     }
 
     def _get_param(self, key, request):
@@ -622,46 +613,45 @@ class PKDataView(APIView):
                 param[key_request[string_len:]] = value
         return param
 
-    concise__param = openapi.Parameter('concise',
-                                        openapi.TYPE_STRING,
-                                        description="The concise parameter to reduce the set to the most concise amount "
-                                                    "of instances in each table or to return studies which meet the "
-                                                    "filtered criteria and all the content (related set tables) of the "
-                                                    "studies. E.g. FIltering for “thalf -- elimination half life” with “"
-                                                    "concise:true” will return all studies containing “thalf” outputs, "
-                                                    "all interventions which have been applied before measuring thalf, "
-                                                    "and all groups and individuals for which half has been measured. "
-                                                    "Filtertering for “thalf -- elimination half life” with “concise:false” "
-                                                    "will return all studies containing “thalf” outputs, all interventions "
-                                                    "which have been applied in these studies, and all groups and individuals "
-                                                    "in these studies.",
-                                        type=openapi.TYPE_BOOLEAN,
-                                       default=True)
+    # additional parameters
+    concise__param = openapi.Parameter(
+        'concise',
+        openapi.TYPE_STRING,
+        description="The concise parameter to reduce the set to the most concise amount "
+                    "of instances in each table or to return studies which meet the "
+                    "filtered criteria and all the content (related set tables) of the "
+                    "studies. E.g. FIltering for “thalf -- elimination half life” with “"
+                    "concise:true” will return all studies containing “thalf” outputs, "
+                    "all interventions which have been applied before measuring thalf, "
+                    "and all groups and individuals for which half has been measured. "
+                    "Filtertering for “thalf -- elimination half life” with “concise:false” "
+                    "will return all studies containing “thalf” outputs, all interventions "
+                    "which have been applied in these studies, and all groups and individuals "
+                    "in these studies.",
+        type=openapi.TYPE_BOOLEAN,
+        default=True
+    )
 
-    download__param = openapi.Parameter('download',
-                                       openapi.TYPE_STRING,
-                                       description="The download argument controls the return format. "
-                                                   "If set, a zip archive is returned with “.csv” files for each table.",
-                                       type=openapi.TYPE_BOOLEAN,
-                                       default=False)
-
-
+    download__param = openapi.Parameter(
+        'download',
+        openapi.TYPE_STRING,
+        description="The download argument controls the return format. "
+                    "If set, a zip archive is returned with “.csv” files for each table.",
+        type=openapi.TYPE_BOOLEAN,
+        default=False
+    )
 
     @swagger_auto_schema(
         manual_parameters=[concise__param, download__param],
-        #operation_description="The filter endpoint is the main endpoint for complex queries. "
-        #                 "As a consumer of the api, you are probably mostly interested in the whole set of tables "
-        #                 "(studies, groups, individuals and interventions, outputs, timecourses, and scatter) for a "
-        #                 "given query. This Endpoint gives you the option of filtering on any of the tables mentioned "
-        #                 "early. Arguments can be provided with the prefixes ['studies__*' , 'groups__*', 'individuals__*',"
-        #                 " 'interventions__*', 'outputs__*'] for the respective tables.",
         responses={
-            200:openapi.Response(
+            200: openapi.Response(
                 description="Returns a 'uuid' and the number of entries for each table. "
                             "This 'uuid' can be used as an argument in the endpoints of the "
                             "tables (studies, groups, individuals, interventions, outputs, subsets). "
                             "For subsets endpoint the 'data_type'['timecourse', 'scatter'] "
-                            "has to be provided.",schema=ResonseSerializer)}
+                            "has to be provided.",
+                schema=ResponseSerializer)
+        }
 
     )
 
