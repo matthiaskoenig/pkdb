@@ -41,8 +41,11 @@ common_subject_fields = {
         ],
         },
 }
+
+
 class GroupViewSet(AccessView):
-    """
+    """ Endpoint to query groups
+
     The groups endpoint gives access to the groups data. A group is a collection of individuals for which data was
     reported collectively.
     """
@@ -86,10 +89,9 @@ class GroupViewSet(AccessView):
 
 
 class IndividualViewSet(AccessView):
-    """ Endpoint to query individuals.
+    """ Endpoint to query individuals
 
-    The individual endpoint gives access to the individual subjects data. Individuals are subjects for which data
-    was reported individually.
+    The individual endpoint gives access to the individual subjects data.
     """
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
@@ -106,7 +108,6 @@ class IndividualViewSet(AccessView):
         'study.name',
         'study.sid',
         'group.name',
-
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
@@ -130,21 +131,21 @@ class IndividualViewSet(AccessView):
     }
 
 
-common_filter_fields = {
-    'study_sid': {'field': 'study_sid.raw',
-                      'lookups': [
-                          LOOKUP_QUERY_IN,
-                          LOOKUP_QUERY_EXCLUDE,
-
-                      ],
-                      },
-    'study_name': {'field': 'study_name.raw',
-                       'lookups': [
-                           LOOKUP_QUERY_IN,
-                           LOOKUP_QUERY_EXCLUDE,
-
-                       ],
-                       },
+common_characteristica_filter_fields = {
+    'study_sid': {
+        'field': 'study_sid.raw',
+        'lookups': [
+            LOOKUP_QUERY_IN,
+            LOOKUP_QUERY_EXCLUDE,
+        ],
+    },
+    'study_name': {
+        'field': 'study_name.raw',
+        'lookups': [
+           LOOKUP_QUERY_IN,
+           LOOKUP_QUERY_EXCLUDE,
+        ],
+    },
     'characteristica_pk': {
             'field': 'characteristica_pk',
             'lookups': [
@@ -180,7 +181,8 @@ common_filter_fields = {
     'sd': 'sd',
     'cv': 'cv',
     'unit': 'unit.raw',
-                         }
+}
+
 class GroupCharacteristicaViewSet(AccessView):
     swagger_schema = None
     document = GroupCharacteristicaDocument
@@ -197,8 +199,6 @@ class GroupCharacteristicaViewSet(AccessView):
     }
 
     filter_fields = {
-
-
         'group_name': {'field': 'group_name',
                        'lookups': [
                            LOOKUP_QUERY_IN,
@@ -223,8 +223,7 @@ class GroupCharacteristicaViewSet(AccessView):
                             },
 
         'group_count': 'group_count',
-
-        **common_filter_fields
+        **common_characteristica_filter_fields
 
     }
     ordering_fields = {
@@ -279,7 +278,7 @@ class IndividualCharacteristicaViewSet(AccessView):
                 LOOKUP_QUERY_EXCLUDE,
             ],
         },
-        **common_filter_fields
+        **common_characteristica_filter_fields
 
     }
     ordering_fields = {

@@ -9,10 +9,7 @@ from rest_framework.response import Response
 from pkdb_app._version import __version__
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.models import Output
-from pkdb_app.studies.documents import StudyDocument
 from pkdb_app.studies.models import Study, Reference
-from pkdb_app.studies.serializers import StudyElasticStatisticsSerializer
-from pkdb_app.studies.views import ElasticStudyViewSet
 from pkdb_app.subjects.models import Group, Individual
 
 
@@ -33,10 +30,10 @@ class Statistics(object):
 
 
 class StatisticsViewSet(viewsets.ViewSet):
-    """
-    Get database statistics including version.
-    """
+    """ Endpoint to query PK-DB statistics
 
+    Get database statistics consisting of count and version information.
+    """
     def list(self, request):
         instance = Statistics()
         serializer = StatisticsSerializer(instance)
