@@ -7,12 +7,11 @@ from ..interventions.documents import InterventionDocument
 from ..interventions.serializers import InterventionElasticSerializer, InterventionElasticSerializerAnalysis
 from ..pagination import CustomPagination
 
-
-###############################################################################################
-# Elastic Views
-###############################################################################################
-
 class ElasticInterventionViewSet(AccessView):
+    """ Endpoint to query interventions
+
+    Intervention encode what was performed on the subjects. E.g. which dose of a certain substance was applied.
+    """
     document = InterventionDocument
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
@@ -28,7 +27,8 @@ class ElasticInterventionViewSet(AccessView):
         "tissue.label",
         "application.label",
         'route.label',
-        'time_unit')
+        'time_unit'
+    )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     filter_fields = {
 

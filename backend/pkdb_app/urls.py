@@ -102,11 +102,29 @@ schema_view = get_schema_view(
     title="PKDB API",
     default_version='v1',
     description="""
-    ![PKDB logo](http://0.0.0.0:8081/assets/images/logo-PKDB.png)  
-    ## Background Information
-    This is the REST API of PKDB. Any pharmacokinetics study contains subjects under investigation. These subjects are characterised by properties like their *sex*, *age*, *body weight*, *health status*, and further accessible pharmacokinetics influencing characteristica. Depending on the reporting, this data is saved as **groups** and **individuals**. Next, some kind of **interventions** are performed on the subjects, which is mostly a dosing of a substance to the body of the subject. Finally, pharmacokinetics measurements are performed on the subject. These are often some kind of *concentration* profiles in some tissue of the subject. Additionally, derived pharmacokinetics parameters e.g. *AUC*, *clearance*, or *half-lives* are commonly reported. Correlations between theses outputs are often shown in form of **scatter** plots.
+    ## Overview
+    This is the REST API of PK-DB. The API provides web services for querying data from PKDB. 
+     
+    The data in PK-DB is structured based on **studies**, with a single study corresponding to a single source of information. In most cases such a study corresponds to a single publication or a single clinical trial. 
     
-    Publicly only the read serializers are available. We have a dedicated python package for uploading and updating data. If you are interested in contributing to the database please contact Matthias König for more details.
+    A study in PK-DB reports pharmacokinetics information for the subjects under investigation in the study. These subjects are characterised by properties such as their *sex*, *age*, *body weight*, *ethnicity* or *health status*. Depending on the reported information, subject information is stored for **groups** and/or **individuals**. 
+    
+    A second class of information are the **interventions** which were performed on the subjects. Most of the interventions in pharmacokinetics studies is application of a certain dose of a substance (e.g. 1 mg paracetamol orally as tablet). In addition interventions can also consist of other things changed between the studied subjects or groups, such as food which was applied. 
+    
+    Finally, pharmacokinetics measurements are performed on the subject. These are often *concentration* measurements in certain tissue of the subject. These can either be single measurements (**outputs**) or time profiles (**time courses**). Additionally, derived pharmacokinetics parameters such as *AUC*, *clearance*, or *half-lives* are commonly reported. Correlations between theses outputs are often shown in form of **scatter** plots.
+    
+  Meta-information is encoded in the form of an **info nodes** which for a given field encodes meta-data such as description, synonyms, annotations and database cross-references.
+    
+    The REST API provides endpoints for
+    * overview of PK-DB statistics (`statistics`)  
+    * searching and filtering of data (`filter`)
+    * accessing study information (`studies`)
+    * accessing groups (`groups`) and individuals (`individuals`)
+    * accessing interventions (`interventions`)
+    * accessing outputs (`outputs`) and subsets (`subsets`) 
+    * accessing info_nodes information (`info_nodes`)
+    
+    The public REST API only exposes read serializers. In addition to the API a dedicated python package for the upload and download of data exists. If you are interested in contributing to the database please contact Matthias König.
     """,
     terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
     contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),

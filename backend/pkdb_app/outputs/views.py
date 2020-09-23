@@ -76,7 +76,7 @@ class OutputInterventionViewSet(AccessView):
 
 
 class ElasticOutputViewSet(AccessView):
-    """ Elastic view for Output.
+    """ Endpoint to query outputs
 
     The outputs endpoint gives access to the output data. Outputs generally describe what has been measured.
     This includes more complex results which cannot be directly measured but are calculated from the measured data.
