@@ -86,7 +86,8 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         "pmid",
         "title",
         "abstract",
-        "journal")
+        "journal"
+    )
     search_fields = filter_fields
     permission_classes = (IsAdminOrCreatorOrCurator,)
 
@@ -224,12 +225,11 @@ def related_elastic_dict(study):
 
 
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
-    """ Endpoint to query studies.
+    """ Endpoint to query studies
 
-    The studies endpoint gives access to the studies data. Studies is generally a container of consistent
-    pharmacokinetical data. This container mostly contains data reported in a single scientific paper.
+    The studies endpoint gives access to the studies data. A study is a container of consistent
+    pharmacokinetics data. This container mostly contains data reported in a single scientific paper.
     """
-
     document_uid_field = "sid__raw"
     lookup_field = "sid"
     document = StudyDocument
@@ -255,28 +255,38 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
         'files',
         'substances.sid'
         'substances.label'
-
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-
     filter_fields = {
         'sid': 'sid.raw',
-        'name': {'field': 'name.raw',
-                 'lookups':[ LOOKUP_QUERY_IN, ],},
-        'reference_name': {'field': 'reference.name.raw',
-                 'lookups': [LOOKUP_QUERY_IN, ], },
-        'creator': {'field': 'creator.username.raw',
-                           'lookups': [LOOKUP_QUERY_IN, ], },
-        'curators': {'field': 'curators.username.raw',
-                    'lookups': [LOOKUP_QUERY_IN, ], },
+        'name': {
+            'field': 'name.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'reference_name': {
+            'field': 'reference.name.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'creator': {
+            'field': 'creator.username.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'curators': {
+            'field': 'curators.username.raw',
+            'lookups': [LOOKUP_QUERY_IN]
+        },
         'collaborator': 'collaborators.name.raw',
-        'licence': {'field': 'licence.raw',
-                   'lookups': [LOOKUP_QUERY_IN, ], },
-        'access': {'field': 'access.raw',
-                 'lookups': [LOOKUP_QUERY_IN, ], },
+        'licence': {
+            'field': 'licence.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'access': {
+            'field': 'access.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
         'substance': 'substances.name.raw',
     }
     ordering_fields = {
@@ -285,16 +295,12 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
 
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=False)})
     def get_object(self):
-        """ Test
-        :return:
-        """
+        """ Test """
         return super().get_object()
 
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=True)})
     def get_queryset(self):
-        """ Test.
-
-        """
+        """ Test """
         group = user_group(self.request.user)
 
         _uuid = self.request.query_params.get("uuid", [])
@@ -312,7 +318,6 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
             return self.search.query()
 
         elif group == "basic":
-
             qs = self.search.query(
                 Q('match', access__raw=PUBLIC) |
                 Q('match', creator__username__raw=self.request.user.username) |
@@ -320,16 +325,13 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
                 Q('match', collaborators__username__raw=self.request.user.username)
 
             )
-
             return qs
 
         elif group == "anonymous":
-
             qs = self.search.query(
                 'match',
                 **{"access__raw": PUBLIC}
             )
-
             return qs
 
 
@@ -343,17 +345,20 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend]
-    search_fields = [
+    search_fields = (
         'sid',
         'pmid',
         'name',
         'title',
-        'abstract',]
+        'abstract',
+    )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {
         'operator': 'and'
     }
-    filter_fields = {'name': 'name.raw', }
+    filter_fields = {
+        'name': 'name.raw'
+    }
     ordering_fields = {
         'sid': 'sid',
         "pk": 'pk',
@@ -589,18 +594,36 @@ class ResponseSerializer(serializers.Serializer):
 class PKDataView(APIView):
     """Endpoint to filter and query data.
 
-    The filter endpoint is the main endpoint for complex queries. As a consumer of the api, you are probably mostly
-    interested in the whole set of tables (studies, groups, individuals and interventions, outputs, timecourses,
-    and scatter) for a given query. This Endpoint gives you the option of filtering on any of the tables mentioned
+    The filter endpoint is the main endpoint for complex queries, such as searches and filtering. A filter query returns
+    a unique id corresponding to the query, which allows to access the complete set of tables
+    (studies, groups, individuals and interventions, outputs, timecourses, and scatters) for the search.
+    In addition an overview of the counts in the tables is provided.
+    ```
+    {
+      "uuid": "6a15733e-0659-4224-985a-9c71120911d5",
+      "studies": 430,
+      "groups": 887,
+      "individuals": 5748,
+      "interventions": 1291,
+      "outputs": 70636,
+      "timecourses": 2946,
+      "scatter": 37
+    }
+    ```
+    Two main parameters control the output of the filter query:
+    * `download`: which allows to download the results as zip archive
+    * `concise`: switching between concise and non-concise data
+
+    The filter endpoint provides the option of filtering on any of the tables mentioned
     early. Arguments can be provided with the prefixes `['studies__' , 'groups__', 'individuals__', 'interventions__',
-    'outputs__*']` for the respective tables.
+    'outputs__']` for the respective tables.
     """
 
     EXTRA = {
         "study": "studies__",
-        "intervention": "interventions__",
         "group": "groups__",
         "individual": "individuals__",
+        "intervention": "interventions__",
         "output": "outputs__",
         "subsets": "subsets__",
     }
@@ -614,31 +637,31 @@ class PKDataView(APIView):
         return param
 
     # additional parameters
+    download__param = openapi.Parameter(
+        'download',
+        openapi.TYPE_STRING,
+        description="The download parameter allows to download the results of the filter query. "
+                    "If set to True, a zip archive is returned containing '.csv' files for all tables.",
+        type=openapi.TYPE_BOOLEAN,
+        default=False
+    )
+
     concise__param = openapi.Parameter(
         'concise',
         openapi.TYPE_STRING,
         description="The concise parameter to reduce the set to the most concise amount "
                     "of instances in each table or to return studies which meet the "
                     "filtered criteria and all the content (related set tables) of the "
-                    "studies. E.g. FIltering for “thalf -- elimination half life” with “"
+                    "studies. E.g. Filtering for “thalf -- elimination half life” with “"
                     "concise:true” will return all studies containing “thalf” outputs, "
                     "all interventions which have been applied before measuring thalf, "
                     "and all groups and individuals for which half has been measured. "
-                    "Filtertering for “thalf -- elimination half life” with “concise:false” "
+                    "Filtering for “thalf -- elimination half life” with “concise:false” "
                     "will return all studies containing “thalf” outputs, all interventions "
                     "which have been applied in these studies, and all groups and individuals "
                     "in these studies.",
         type=openapi.TYPE_BOOLEAN,
         default=True
-    )
-
-    download__param = openapi.Parameter(
-        'download',
-        openapi.TYPE_STRING,
-        description="The download argument controls the return format. "
-                    "If set, a zip archive is returned with “.csv” files for each table.",
-        type=openapi.TYPE_BOOLEAN,
-        default=False
     )
 
     @swagger_auto_schema(
@@ -669,8 +692,6 @@ class PKDataView(APIView):
             outputs_query=self._get_param("output", request),
         )
 
-
-
         time_pkdata = time.time()
 
         # calculation of uuid
@@ -687,20 +708,19 @@ class PKDataView(APIView):
 
         time_uuid = time.time()
 
-
         if request.GET.get("download"):
 
             def serialize_timecourses(ids):
                 timecourse_subsets = SubSet.objects.filter(id__in=ids)
-                return [ t.timecourse_representation() for t in timecourse_subsets]
+                return [t.timecourse_representation() for t in timecourse_subsets]
 
             Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function"])
             table_content = {
-                "studies": Sheet("Studies", {"pk":pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None),
-                "groups": Sheet("Groups", {"group_pk":pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer, None),
+                "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None),
+                "groups": Sheet("Groups", {"group_pk": pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer, None),
                 "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None),
-                "interventions": Sheet("Interventions",{"pk":pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
-                "outputs": Sheet("Outputs",{"output_pk":pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
+                "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
+                "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
                 "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet, None, serialize_timecourses),
                 "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, DataAnalysisSerializer, None),
 

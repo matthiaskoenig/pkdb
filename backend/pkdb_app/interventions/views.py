@@ -7,6 +7,7 @@ from ..interventions.documents import InterventionDocument
 from ..interventions.serializers import InterventionElasticSerializer, InterventionElasticSerializerAnalysis
 from ..pagination import CustomPagination
 
+
 class ElasticInterventionViewSet(AccessView):
     """ Endpoint to query interventions
 
@@ -31,18 +32,16 @@ class ElasticInterventionViewSet(AccessView):
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     filter_fields = {
-
-        'pk': {'field': 'pk',
-               'lookups': [
-                   LOOKUP_QUERY_IN,
-                   LOOKUP_QUERY_EXCLUDE,
-
-               ],
-               },
+        'pk': {
+            'field': 'pk',
+            'lookups': [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
         'normed': 'normed',
         'name': 'name.raw',
         'choice': 'choice.raw',
-
         'time_unit': 'time_unit.raw',
         'time': 'time',
         'value': 'value',
@@ -59,26 +58,36 @@ class ElasticInterventionViewSet(AccessView):
         'route': 'route.name.raw',
         'application': 'application.name.raw',
         'measurement_type': 'measurement_type.name.raw',
-
-        'substance_sid': {'field': 'substance.sid.raw',
-                           'lookups': [LOOKUP_QUERY_IN, ], },
-        'form_sid': {'field': 'form.sid.raw',
-                           'lookups': [LOOKUP_QUERY_IN, ], },
-        'route_sid': {'field': 'route.sid.raw',
-                           'lookups': [LOOKUP_QUERY_IN, ], },
-        'application_sid': {'field': 'application.sid.raw',
-                           'lookups': [LOOKUP_QUERY_IN, ], },
-
-        'measurement_type_sid': {'field': 'measurement_type.sid.raw',
-                           'lookups': [LOOKUP_QUERY_IN, ], },
+        'substance_sid': {
+            'field': 'substance.sid.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'form_sid': {
+            'field': 'form.sid.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'route_sid': {
+            'field': 'route.sid.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'application_sid': {
+            'field': 'application.sid.raw',
+            'lookups': [LOOKUP_QUERY_IN],
+        },
+        'measurement_type_sid': {
+            'field': 'measurement_type.sid.raw',
+            'lookups': [LOOKUP_QUERY_IN]
+        },
     }
-    ordering_fields = {'name': 'name.raw',
-                       'measurement_type': 'measurement_type.raw',
-                       'choice': 'choice.raw',
-                       'normed': 'normed',
-                       'application': 'application.raw',
-                       'substance': 'substance.raw',
-                       'value': 'value'}
+    ordering_fields = {
+        'name': 'name.raw',
+        'measurement_type': 'measurement_type.raw',
+        'choice': 'choice.raw',
+        'normed': 'normed',
+        'application': 'application.raw',
+        'substance': 'substance.raw',
+        'value': 'value'
+    }
 
 
 class ElasticInterventionAnalysisViewSet(AccessView):
