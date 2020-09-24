@@ -20,38 +20,44 @@
 
       <v-spacer></v-spacer>
 
-        <!-- If logged in -->
-        <span v-if="username">
+        <div class="buttons-cell">
+
+          <!-- If logged in -->
+
+          <div v-if="username">
           <v-chip  text title="Logout" @click.stop="dialog=true" dark>
                  <user-avatar :username="username"></user-avatar>
                  {{ username }}
 
         </v-chip>
         <drop-down-menu />
-        </span>
+        </div>
 
-      <!-- If logged out -->
-      <span v-else>
+        <!-- If logged out -->
+        <div v-else>
+            <v-btn
+                text
+                icon
+                title="Login"
+                @click.stop="dialog=true">
+          <v-icon>{{faIcon('account')}}</v-icon>
+          </v-btn>
           <v-btn
               text
               icon
-              title="Login"
-              @click.stop="dialog=true">
-        <v-icon>{{faIcon('account')}}</v-icon>
-        </v-btn>
-        <v-btn
-            text
-            icon
-            :href="api_swagger"
-            title="Api"
-        >
-          <v-icon >{{ faIcon('api') }}</v-icon>
-        </v-btn>
-        </span>
+              :href="api_swagger"
+              title="Api"
+          >
+            <v-icon >{{ faIcon('api') }}</v-icon>
+          </v-btn>
+        </div>
+      </div>
 
 
 
-        <v-dialog v-model="dialog" max-width="500">
+
+
+      <v-dialog v-model="dialog" max-width="500">
         <user-login></user-login>
         </v-dialog>
 
@@ -80,9 +86,14 @@
 </script>
 
 <style scoped>
+  .buttons-cell {
+    min-width: 100px;
+
+  }
    .logo {
      padding-right: 25px;
      font-family: "Roboto Light";
      font-size: 30px;
    }
+
 </style>
