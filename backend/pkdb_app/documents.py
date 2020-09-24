@@ -155,7 +155,7 @@ class ObjectField(DEDField, Object):
 
 UUID_PARAM = openapi.Parameter(
         'uuid',
-        openapi.TYPE_STRING,
+        openapi.IN_QUERY,
         description="The '/filter/' endpoint returns a UUID. Via the UUID the resulting query can be access.",
         type=openapi.TYPE_STRING,
 
@@ -169,17 +169,6 @@ class AccessView(BaseDocumentViewSet):
         if resource == "timecourse":
             return "timecourses"
         return resource
-
-
-    UUID_PARAM = openapi.Parameter(
-        'uuid',
-        openapi.TYPE_STRING,
-        description="The '/filter/' endpoint returns a unique id corresponding to the query (uuid). "
-                    "Via the uuid the resulting query can be access.",
-        type=openapi.FORMAT_UUID,
-
-    )
-
 
     def get_queryset(self):
         group = user_group(self.request.user)
