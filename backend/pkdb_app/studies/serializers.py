@@ -67,6 +67,12 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
             "date",
             "authors",
         )
+        extra_kwargs = {
+            "name": {"error_messages": {"required": "add name to reference.json"}},
+            "pmid": {"error_messages": {"required": "add pmid to reference.json"}},
+            "sid": {"error_messages": {"required": "add sid to reference.json"}},
+
+        }
 
     def create(self, validated_data):
         authors_data = validated_data.pop("authors", [])
