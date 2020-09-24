@@ -714,6 +714,10 @@ class PKDataView(APIView):
                 timecourse_subsets = SubSet.objects.filter(id__in=ids)
                 return [t.timecourse_representation() for t in timecourse_subsets]
 
+            def serialize_scatter(ids):
+                scatter_subsets = SubSet.objects.filter(id__in=ids)
+                return [t.scatter_representation() for t in scatter_subsets]
+
             Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function"])
             table_content = {
                 "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None),
@@ -722,7 +726,7 @@ class PKDataView(APIView):
                 "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
                 "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
                 "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet, None, serialize_timecourses),
-                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, DataAnalysisSerializer, None),
+                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, None, serialize_scatter),
 
             }
 

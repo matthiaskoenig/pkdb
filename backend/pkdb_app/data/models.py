@@ -98,20 +98,27 @@ class SubSet(Accessible):
             "study_sid":"outputs__study__sid",
             "study_name": "outputs__study__name",
             "outputs_pk": "outputs__pk",
+            "subset_pk": "subset_id",
+            "subset_name": "subset__name",
             "interventions": "outputs__interventions__pk",
             "group_pk": "outputs__group_id",
             "individual_pk": "outputs__individual_id",
             "normed": 'outputs__normed',
             "calculated": 'outputs__calculated',
             "tissue": 'outputs__tissue__info_node__sid',
+            "tissue_label": 'outputs__tissue__info_node__label',
             "method": 'outputs__method__info_node__sid',
+            "method_label": 'outputs__method__info_node__label',
             "label": 'outputs__label',
             "output_type": 'outputs__output_type',
             "time": 'outputs__time',
             'time_unit': 'outputs__time_unit',
             "measurement_type":	"outputs__measurement_type__info_node__sid",
+            "measurement__label": "outputs__measurement_type__info_node__label",
             "choice":	"outputs__choice__info_node__sid",
+            "choice_label": "outputs__choice__info_node__label",
             "substance": "outputs__substance__info_node__sid",
+            "substance_label": "outputs__substance__info_node__label",
             "value": 'outputs__value',
             "mean": 'outputs__mean',
             "median": 'outputs__median',
@@ -217,7 +224,34 @@ class SubSet(Accessible):
         self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
         return timecourse
 
+    def keys_scatter_representation(self):
+        return {**self.keys_timecourse_representation(),
+                "dimension": "dimensions__dimension",
+                "data_point": "pk"
 
+        }
+
+    def reformat_scatter(self):
+
+        pass
+
+
+    def scatter_representation(self):
+
+        scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).prefetch_related('outputs').values(*self.keys_scatter_representation().values()))
+        self.reformat_timecourse(scatter_x, self.keys_scatter_representation())
+
+        scatter_y = self.merge_values(self.data_points.filter(dimensions__dimension=1).prefetch_related('outputs').values(*self.keys_scatter_representation().values()))
+        self.reformat_timecourse(scatter_y, self.keys_scatter_representation())
+
+        identical_keys = ["study_sid", "study_name", "subset_pk", "subset_name"]
+
+        return {**{k: v for k, v in scatter_x.items() if k in identical_keys},
+                **{f"x_{k}": v for k, v in scatter_x.items() if k not in identical_keys},
+                **{f"y_{k}": v for k, v in scatter_y.items() if k not in identical_keys}}
+
+        pprint(scatter_x)
+        pprint(scatter_y)
 
 
 
