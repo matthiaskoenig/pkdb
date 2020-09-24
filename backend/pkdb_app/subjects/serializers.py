@@ -87,7 +87,15 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         self.validate_wrong_keys(data, additional_fields=CharacteristicaExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    @staticmethod
+    def validate_count(count):
+        if count < 1:
+            raise serializers.ValidationError(f"count <{count}> has to be greater or equal to 1. ")
+        return count
+
+
     def validate(self, attrs):
+
         try:
             # perform via dedicated function on categorials
             for info_node in ['substance', 'measurement_type']:
@@ -141,8 +149,7 @@ class GroupSerializer(ExSerializer):
                     'details': characteristica}
             )
     @staticmethod
-    def _validate_characteristica_count(characteristica, group_count):
-
+    def _validate_group_characteristica_count(characteristica, group_count):
         if int(characteristica.get("count",group_count)) > int(group_count):
             raise serializers.ValidationError(
                 {
@@ -153,6 +160,8 @@ class GroupSerializer(ExSerializer):
                     }
                 }
             )
+
+
 
     def validate(self, attrs):
         ''' validates species information on group with name all
@@ -167,7 +176,7 @@ class GroupSerializer(ExSerializer):
         for characteristica_single in attrs.get('characteristica', []):
             disabled = ['value']
             self._validate_disabled_data(characteristica_single, disabled)
-            self._validate_characteristica_count(characteristica_single, attrs.get("count"))
+            self._validate_group_characteristica_count(characteristica_single, attrs.get("count"))
 
         return super().validate(attrs)
 
