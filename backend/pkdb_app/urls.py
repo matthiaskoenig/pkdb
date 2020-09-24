@@ -123,9 +123,12 @@ schema_view = get_schema_view(
     * accessing outputs (`outputs`) and subsets (`subsets`) 
     * accessing info_nodes information (`info_nodes`)
     
-    Data can be downloaded using the fitler and search endpoint.
+    Data can be downloaded using the filter and search endpoint.
     
-    The public REST API only exposes read serializers. In addition to the API a dedicated python package for the upload and download of data exists. If you are interested in contributing to the database please contact Matthias König.
+    Python examples demonstrating the use of the API are available at 
+    https://github.com/matthiaskoenig/pkdb/blob/develop/docs/pkdb_api.ipynb
+     
+    If you are interested in contributing to the database please contact Matthias König.
     """,
     terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
     contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),
