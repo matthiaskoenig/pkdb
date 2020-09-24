@@ -224,7 +224,7 @@ def related_elastic_dict(study):
         docs_dict[ReferenceDocument] = study.reference
     return docs_dict
 
-@method_decorator(name='list', decorator=swagger_auto_schema( manual_parameters=[UUID_PARAM]))
+@method_decorator(name='list', decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM]))
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
     """ Endpoint to query studies
 
@@ -299,7 +299,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
         """ Test """
         return super().get_object()
 
-    @swagger_auto_schema(responses={200: StudyElasticSerializer(many=True)})
+    @swagger_auto_schema(responses={200: StudyElasticSerializer(many=True)}, manual_parameters=[UUID_PARAM])
     def get_queryset(self):
         """ Test """
         group = user_group(self.request.user)
@@ -640,7 +640,7 @@ class PKDataView(APIView):
     # additional parameters
     download__param = openapi.Parameter(
         'download',
-        openapi.TYPE_STRING,
+        openapi.IN_QUERY,
         description="The download parameter allows to download the results of the filter query. "
                     "If set to True, a zip archive is returned containing '.csv' files for all tables.",
         type=openapi.TYPE_BOOLEAN,
@@ -649,7 +649,7 @@ class PKDataView(APIView):
 
     concise__param = openapi.Parameter(
         'concise',
-        openapi.TYPE_STRING,
+        openapi.IN_QUERY,
         description="The concise parameter to reduce the set to the most concise amount "
                     "of instances in each table or to return studies which meet the "
                     "filtered criteria and all the content (related set tables) of the "
@@ -709,7 +709,7 @@ class PKDataView(APIView):
 
         time_uuid = time.time()
 
-        if request.GET.get("download"):
+        if request.GET.get("download") == "true":
 
             def serialize_timecourses(ids):
                 timecourse_subsets = SubSet.objects.filter(id__in=ids)
