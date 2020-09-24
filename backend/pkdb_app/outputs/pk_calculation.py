@@ -131,7 +131,7 @@ def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
             # pharmacokinetics is only calculated for single dose experiments
             # where the applied substance is the measured substance!
 
-            if MeasurementType.objects.get(info_node__name="restricted dosing").is_valid_unit(dosing.unit):
+            if MeasurementType.objects.get(info_node__name="restricted dosing")._is_valid_unit(dosing.unit):
                 if dosing.value is not None:
                     pk_dict["dose"] = Q_(dosing.value, dosing.unit)
                 else:

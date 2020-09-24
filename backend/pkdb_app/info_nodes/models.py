@@ -11,7 +11,7 @@ from pint import UndefinedUnitError
 
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
-from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key, \
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, \
     _validate_required_key_and_value
 from rest_framework import serializers
 
@@ -211,13 +211,31 @@ class MeasurementType(AbstractInfoNode):
 
             raise ValueError(f"unit [{unit}] is not defined in unit registry or not allowed.")
 
-    def is_valid_unit(self, unit):
-        #if not re.match("[ \/\^\.[:space:]\*a-zA-Z0-9_$ ]", str(unit)):
+    def is_valid_unit(self, data):
+        unit = data.get("unit", None)
+        is_valid = self._is_valid_unit(unit)
+        if is_valid:
+            is_valid = self._validate_special(data)
+        return is_valid
 
+    def _validate_special(self, data):
+        unit = data.get("unit", None)
+        if self.info_node.sid == "recovery":
+            factor = self.p_unit(unit).to("dimensionless")
+            for key in ["value", "mean", "median"]:
+                    if data.get(key):
+                        if factor.m*data[key] > 2:
+                            msg = f"<{key}> with value <{data[key]}> and unit <{unit}> cannot be greater than " \
+                                  f"<{2/factor.m}>. Note that the unit 'dimensionless'= 'none' = 'percent'/100."
+                            raise serializers.ValidationError({"unit": msg})
+
+        return True
+
+    def _is_valid_unit(self,unit):
         if not re.match("^[\/^*.() µα-ωΑ-Ωa-zA-Z0-9]*$", str(unit)):
             msg = f"Unit value <{unit}> contains not allowed characters. " \
                   f"Allowed  characters are '[\/^*.() µα-ωΑ-Ωa-zA-Z0-9]'."
-            raise serializers.ValidationError({"unit":msg})
+            raise serializers.ValidationError({"unit": msg})
         try:
             p_unit = self.p_unit(unit)
 
@@ -241,8 +259,9 @@ class MeasurementType(AbstractInfoNode):
             else:
                 return True
 
-    def validate_unit(self, unit):
-        if not self.is_valid_unit(unit):
+    def validate_unit(self, data):
+        unit = data.get("unit", None)
+        if not self.is_valid_unit(data):
             msg = f"For measurement type `{self.info_node.name}` the unit [{unit}] with dimension {self.unit_dimension(unit)} " \
                   f"is not allowed."
             raise ValueError(
@@ -343,7 +362,7 @@ class MeasurementType(AbstractInfoNode):
         """Complete validation."""
 
         # check unit
-        self.validate_unit(data.get("unit", None))
+        self.validate_unit(data)
         self.validate_numeric(data)
 
         choice = data.get("choice", None)
