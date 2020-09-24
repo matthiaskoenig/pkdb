@@ -1,10 +1,10 @@
 # cd docs
-# mkvirtualenv pkdb_api --python=python3.7
+# mkvirtualenv pkdb_api --python=python3.8
 # (pkdb_api) pip install -r requirements_api.txt
 # (pkdb_api) ipython kernel install --name "pkdb_api" --user
 # jupyter lab pkdb_api.ipynb
 
 
-
 requests
+pandas
 jupyterlab
