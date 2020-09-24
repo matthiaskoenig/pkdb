@@ -96,14 +96,13 @@ urlpatterns = [
     path('api/v1/filter/', PKDataView.as_view()),
 ]
 #router.register("pkdata", PKDataView, basename="pkdata")
-# FIXME: urls will not work !!!
+
 schema_view = get_schema_view(
    openapi.Info(
-    title="PKDB API",
+    title="PK-DB REST API",
     default_version='v1',
     description="""
-    ## Overview
-    This is the REST API of PK-DB. The API provides web services for querying data from PKDB. 
+    PK-DB provides web services based on REST to search, filter, retrieve and download data. 
      
     The data in PK-DB is structured based on **studies**, with a single study corresponding to a single source of information. In most cases such a study corresponds to a single publication or a single clinical trial. 
     
@@ -131,7 +130,6 @@ schema_view = get_schema_view(
     terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
     contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),
     license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
-    logo={"url": 'http://0.0.0.0:8081/assets/images/logo-PKDB.png', "altText": 'PKDB Logo'}
     ),
    generator_class=CustomOpenAPISchemaGenerator,
    public=False,
