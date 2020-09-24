@@ -15,6 +15,7 @@ import django_filters.rest_framework
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q as DQ, Prefetch
 from django.http import JsonResponse, HttpResponse
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
@@ -27,8 +28,8 @@ from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
 from pkdb_app.data.models import SubSet, Data
-from pkdb_app.data.serializers import DataAnalysisSerializer
 from pkdb_app.data.views import SubSetViewSet, DataAnalysisViewSet
+from pkdb_app.documents import AccessView, UUID_PARAM
 from pkdb_app.interventions.serializers import  InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
@@ -223,7 +224,7 @@ def related_elastic_dict(study):
         docs_dict[ReferenceDocument] = study.reference
     return docs_dict
 
-
+@method_decorator(name='list', decorator=swagger_auto_schema( manual_parameters=[UUID_PARAM]))
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
     """ Endpoint to query studies
 

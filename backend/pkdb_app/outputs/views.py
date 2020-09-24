@@ -1,6 +1,7 @@
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend
+from drf_yasg.utils import swagger_auto_schema
 
 from pkdb_app.documents import AccessView
 from .documents import OutputDocument, OutputInterventionDocument

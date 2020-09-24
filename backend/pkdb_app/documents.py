@@ -1,6 +1,9 @@
 import operator
 from functools import reduce
 
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import get_object_or_404
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
@@ -150,7 +153,14 @@ class ObjectField(DEDField, Object):
 
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
+UUID_PARAM = openapi.Parameter(
+        'uuid',
+        openapi.TYPE_STRING,
+        description="The '/filter/' endpoint returns a UUID. Via the UUID the resulting query can be access.",
+        type=openapi.TYPE_STRING,
 
+    )
+@method_decorator(name='list', decorator=swagger_auto_schema( manual_parameters=[UUID_PARAM]))
 class AccessView(BaseDocumentViewSet):
     """Permissions on views."""
 
@@ -159,6 +169,16 @@ class AccessView(BaseDocumentViewSet):
         if resource == "timecourse":
             return "timecourses"
         return resource
+
+
+    UUID_PARAM = openapi.Parameter(
+        'uuid',
+        openapi.TYPE_STRING,
+        description="The '/filter/' endpoint returns a unique id corresponding to the query (uuid). "
+                    "Via the uuid the resulting query can be access.",
+        type=openapi.FORMAT_UUID,
+
+    )
 
 
     def get_queryset(self):
