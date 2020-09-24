@@ -13,6 +13,9 @@ let ApiInteractionMixin = {
         api_redoc() {
             return this.$store.state.endpoints.api_redoc;
         },
+        username(){
+            return this.$store.state.username
+        }
     },
     methods: {
         getStudy(sid) {

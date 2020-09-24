@@ -12,18 +12,49 @@
         <v-btn text to="/data" title="Data">
             <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>Data
         </v-btn>
+        <v-btn text to="/curation" title="Info Nodes">
+          <v-icon left color="#1E90FF">{{ faIcon('curation') }}</v-icon>Info Nodes
+        </v-btn>
       </v-toolbar-items>
 
 
       <v-spacer></v-spacer>
-        <v-chip v-if="username" text title="Logout" @click.stop="dialog=true" dark>
+
+        <!-- If logged in -->
+        <span v-if="username">
+          <v-chip  text title="Logout" @click.stop="dialog=true" dark>
                  <user-avatar :username="username"></user-avatar>
                  {{ username }}
+
         </v-chip>
+        <drop-down-menu />
+        </span>
+
+      <!-- If logged out -->
+      <span v-else>
+          <v-btn
+              text
+              icon
+              title="Login"
+              @click.stop="dialog=true">
+        <v-icon>{{faIcon('account')}}</v-icon>
+        </v-btn>
+        <v-btn
+            text
+            icon
+            :href="api_swagger"
+            title="Api"
+        >
+          <v-icon >{{ faIcon('api') }}</v-icon>
+        </v-btn>
+        </span>
+
+
+
         <v-dialog v-model="dialog" max-width="500">
         <user-login></user-login>
         </v-dialog>
-       <drop-down-menu/>
+
    </v-app-bar>
 </template>
 
@@ -32,6 +63,7 @@
    import DropDownMenu from "./DropDownMenu";
    import Account from "./Account";
    import  UserLogin from "../auth/UserLogin"
+   import {ApiInteractionMixin} from "../../apiInteraction";
 
    export default {
        name: 'Navigation',
@@ -40,15 +72,10 @@
          Account,
          DropDownMenu,
        },
-       mixins: [IconsMixin],
+       mixins: [IconsMixin, ApiInteractionMixin],
        data: () => ({
            dialog: false,
        }),
-       computed: {
-         username(){
-           return this.$store.state.username
-         },
-       }
    }
 </script>
 
