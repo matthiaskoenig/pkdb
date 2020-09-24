@@ -2,6 +2,7 @@
   <v-card
       width="100%"
       flat
+      dark
   >
     <v-list-item three-line >
       <v-list-item-content>
@@ -9,7 +10,16 @@
           <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
           <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
         </div>
-        <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight></v-list-item-title>
+        <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight>
+          <v-chip v-if="data.ntype === 'substance'"
+                  outlined
+                  small
+                  class="ml-2"
+                  :title="substance_class==='generic' ? 'Generic substance classwithout chemical structure': 'Specific substance with chemical structure'"
+          >
+            {{ substance_class.toUpperCase() }}
+          </v-chip>
+        </v-list-item-title>
         <v-list-item-subtitle v-if="parents_labels.length>0">Parents:
           <object-chip :object="parent"
                        otype="info_node"
@@ -21,6 +31,10 @@
       </v-list-item-content>
     </v-list-item>
 
+
+
+
+
     <v-card-text>
     <div v-if="data.description && data.description.length>0">
       <text-highlight :queries="highlight">
@@ -29,7 +43,7 @@
     </div>
 
     <div v-if="data.annotations && data.annotations.length>0">
-      <span  v-for="annotation in data.annotations" :key="annotation.term">
+      <span v-for="annotation in data.annotations" :key="annotation.term">
           <annotation :annotation="annotation" />
           <span v-if="annotation.label"><strong>
                   <text-highlight :queries="highlight">
@@ -41,7 +55,7 @@
             {{ annotation.description ? annotation.description: "" }}
           </text-highlight>
           <span v-if="annotation.collection==='chebi'">
-            <v-img :src="'https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=' + annotation.term.substring(6)" max-width="200"/>
+            <v-img :title="annotation.term" :src="'https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=' + annotation.term.substring(6)" max-width="200"/>
           </span>
         <br />
       </span>
@@ -95,6 +109,17 @@ export default {
     }
   },
   computed: {
+    substance_class: function (){
+      let label = "generic";
+      let annotations = this.data.annotations
+      for (const annotation of annotations){
+        if (annotation.collection == "inchikey"){
+          label = "specific";
+          break;
+        }
+      }
+      return label
+    },
 
     parents_labels: function () {
       let labels = []
