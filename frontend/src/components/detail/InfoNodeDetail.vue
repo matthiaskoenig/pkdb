@@ -15,7 +15,7 @@
                   outlined
                   small
                   class="ml-2"
-                  :title="substance_class==='generic' ? 'Generic substance classwithout chemical structure': 'Specific substance with chemical structure'"
+                  :title="substance_class==='generic' ? 'Generic substance class without chemical structure': 'Specific substance with chemical structure'"
           >
             {{ substance_class.toUpperCase() }}
           </v-chip>

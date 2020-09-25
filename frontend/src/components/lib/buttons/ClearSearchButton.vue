@@ -1,11 +1,11 @@
 <template>
   <v-btn
-      x-small
+      small
       fab text
       title="Clear current search"
       @click.stop="reset"
   >
-    <v-icon small>fas fa fa-trash-alt</v-icon>
+    <v-icon>fas fa fa-trash-alt</v-icon>
   </v-btn>
 </template>
 

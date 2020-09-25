@@ -14,16 +14,27 @@
       <v-list-item-avatar title="Show search panel">
         <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
-
       <!-- Checkbox for consing the results -->
       <concise-check-box/>
+      <v-spacer/>
+
+      <!-- Hide search -->
+      <hide-search-button/>
+
+
+    </v-list-item>
+    <v-divider v-if="!hide_search"/>
+    <v-list-item>
+      <!-- Download button -->
+      <v-list-item-avatar title="Download Data">
+        <download-button :study_count="results.studies"/>
+      </v-list-item-avatar>
+
 
       <v-spacer/>
       <!-- Query progression spinner -->
       <v-progress-circular indeterminate color="primary"  v-if="loading"/>
 
-      <!-- Download button -->
-      <download-button :study_count="results.studies"/>
 
       <!-- Clear current search filter -->
       <clear-search-button/>
@@ -31,10 +42,8 @@
       <!-- Open search help in right detail drawer -->
       <search-help-button/>
 
-      <!-- Hide search -->
-      <hide-search-button/>
     </v-list-item>
-    <v-divider v-if="!hide_search"/>
+
     <span v-if="!hide_search">
 
       <v-list-item  class=" ma-0 pl-1 pr-1">

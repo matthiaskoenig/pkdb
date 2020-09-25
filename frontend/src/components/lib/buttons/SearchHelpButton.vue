@@ -1,12 +1,12 @@
 <template>
   <v-btn
-      x-small
+      small
       fab
       text
       title="Search help with examples"
       @click.stop="show_help"
   >
-    <v-icon small>fas fa fa-question</v-icon>
+    <v-icon >fas fa fa-question</v-icon>
 
   </v-btn>
 </template>
