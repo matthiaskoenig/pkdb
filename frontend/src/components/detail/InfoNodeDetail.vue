@@ -2,7 +2,7 @@
   <v-card
       width="100%"
       flat
-      dark
+
   >
     <v-list-item three-line >
       <v-list-item-content>

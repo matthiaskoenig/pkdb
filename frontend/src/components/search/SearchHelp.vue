@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card  dark flat>
     <v-card-title>
       How to search in PK-DB?
     </v-card-title>
