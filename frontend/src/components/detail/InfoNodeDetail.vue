@@ -1,9 +1,12 @@
 <template>
+  <!--
   <v-card
       width="100%"
       flat
       dark
   >
+  -->
+  <div>
     <v-list-item three-line >
       <v-list-item-content>
         <div class="overline">
@@ -30,10 +33,6 @@
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
-
-
-
-
 
     <v-card-text>
     <div v-if="data.description && data.description.length>0">
@@ -81,7 +80,8 @@
       </ul>
     </div>
     </v-card-text>
-  </v-card>
+  <!--</v-card>-->
+  </div>
 
 </template>
 

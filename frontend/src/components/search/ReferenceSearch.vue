@@ -35,7 +35,7 @@
 <script>
 
 import {searchTableMixin} from "../tables/mixins.js";
-import ReferenceDialog from "../dialogs/ReferenceDialog";
+import ReferenceDialog from "../deprecated/ReferenceDialog";
 import Multiselect from 'vue-multiselect'
 
 export default {

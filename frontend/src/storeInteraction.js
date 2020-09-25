@@ -11,7 +11,6 @@ let StoreInteractionMixin = {
             this.update_store(study)
             this.concise = false
         },
-
         update_store(q) {
             this.$store.dispatch('updateQueryAction', {
                 query_type: q.query_type,

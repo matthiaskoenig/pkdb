@@ -24,7 +24,7 @@
 
     </v-list-item>
     <v-divider v-if="!hide_search"/>
-    <v-list-item>
+    <v-list-item class="ma-0 pa-0">
       <!-- Download button -->
       <v-list-item-avatar title="Download Data">
         <download-button :study_count="results.studies"/>
@@ -44,9 +44,16 @@
 
     </v-list-item>
 
+
     <span v-if="!hide_search">
 
       <v-list-item  class=" ma-0 pl-1 pr-1">
+            <v-card
+                width="100%"
+                flat
+                dark
+            >
+
         <v-list-item-content>
           <v-list-item-title class="mt-0 ml-2 mr-2">
             <v-icon left small>{{faIcon("studies")}}</v-icon>
@@ -98,6 +105,7 @@
           <output-form/>
 
         </v-list-item-content>
+        </v-card>
       </v-list-item>
 
     </span>

@@ -57,6 +57,7 @@ const icons_table = {
     download: 'fas fa-file-download',
     left_arrow: 'fas fa-arrow-left',
     right_arrow: 'fas fa-arrow-right',
+    cancel: 'fas fa-arrow-right',  // FIXME
 
 };
 
