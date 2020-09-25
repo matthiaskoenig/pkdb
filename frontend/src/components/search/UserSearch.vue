@@ -14,7 +14,8 @@ vue-multiselect element
       :multiple="true"
       :custom-label="customLabel"
       @input = update_store
-      :searchable="true">
+      :searchable="true"
+  >
 
     <template slot="tag" slot-scope="{ option, remove }">
         <span class="multiselect__tag">

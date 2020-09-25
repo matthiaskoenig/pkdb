@@ -195,8 +195,8 @@ export default {
       loadingDownload: false,
       results: {
         uuid: "",
-        studies:0,
-        interventions:  0,
+        studies: 0,
+        interventions: 0,
         groups: 0,
         individuals: 0,
         outputs: 0,
