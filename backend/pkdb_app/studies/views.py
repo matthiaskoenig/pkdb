@@ -743,8 +743,8 @@ class PKDataView(APIView):
 
                         pd.DataFrame(data).to_csv(string_buffer)
                         archive.writestr(f'{key}.csv', string_buffer.getvalue())
-                    archive.write('README.md')
-                    #archive.write('../TERMS_OF_USE.md')
+                    archive.write('download_extra/README.md', 'README.md')
+                    archive.write('download_extra/TERMS_OF_USE.md', 'TERMS_OF_USE.md')
 
 
 
