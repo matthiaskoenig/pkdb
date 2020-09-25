@@ -11,7 +11,7 @@
   >
     <v-icon small>{{ faIcon('download') }}</v-icon>
 
-    <v-dialog v-model="loadingDownload" max-width="500">
+    <v-dialog v-model="loadingDownload" max-width="600">
       <download-dialog></download-dialog>
     </v-dialog>
   </v-btn>

@@ -4,73 +4,52 @@
               Download
             </v-card-title>
             <v-card-text>
-              Download can take a very long (5 min) if you do not filter for a small amount of data.
+              During the download a lot of data processing has to performed. For large datasets this can take up to several minutes.
               <v-spacer></v-spacer>
             </v-card-text>
-            <v-list dense>
-              <v-subheader> You are downloading:</v-subheader>
+            <v-list dense >
+              <v-header class="pl-6"> You are downloading:</v-header>
 
               <v-list-item>
-                <v-subheader>UUID</v-subheader>
-                <v-list-item-content>
+                <v-list-item-subtitle>UUID</v-list-item-subtitle>
                 <v-list-item-title>{{results.uuid}}</v-list-item-title>
-                </v-list-item-content>
 
               </v-list-item>
               <v-list-item>
-                <v-subheader>Studies</v-subheader>
-                <v-list-item-content>
+                <v-list-item-subtitle>Studies</v-list-item-subtitle>
                 <v-list-item-title>{{results.studies}}</v-list-item-title>
-                </v-list-item-content>
 
               </v-list-item>
               <v-list-item>
-                <v-subheader>Groups</v-subheader>
-                <v-list-item-content>
+                <v-list-item-subtitle>Groups</v-list-item-subtitle>
                 <v-list-item-title>{{results.groups}}</v-list-item-title>
-                </v-list-item-content>
 
               </v-list-item>
               <v-list-item>
-                <v-subheader>Individuals</v-subheader>
-                <v-list-item-content>
+                <v-list-item-subtitle>Individuals</v-list-item-subtitle>
                 <v-list-item-title>{{results.individuals}}</v-list-item-title>
-                </v-list-item-content>
-
               </v-list-item>
               <v-list-item>
-                <v-subheader>Interventions</v-subheader>
-
-                <v-list-item-content>
+                <v-list-item-subtitle>Interventions</v-list-item-subtitle>
                 <v-list-item-title>{{results.interventions}}</v-list-item-title>
-                </v-list-item-content>
-
               </v-list-item>
 
               <v-list-item>
-                <v-subheader>Outputs</v-subheader>
+                <v-list-item-subtitle>Outputs</v-list-item-subtitle>
 
-                <v-list-item-content>
                 <v-list-item-title>{{results.outputs}}</v-list-item-title>
-                </v-list-item-content>
 
               </v-list-item>
 
               <v-list-item>
-                <v-subheader>Timecourse</v-subheader>
+                <v-list-item-subtitle>Timecourse</v-list-item-subtitle>
 
-                <v-list-item-content>
                 <v-list-item-title>{{results.timecourses}}</v-list-item-title>
-                </v-list-item-content>
 
               </v-list-item>
               <v-list-item>
-                <v-subheader>Scatter</v-subheader>
-
-                <v-list-item-content>
+                <v-list-item-subtitle>Scatter</v-list-item-subtitle>
                 <v-list-item-title>{{results.scatter}}</v-list-item-title>
-                </v-list-item-content>
-
               </v-list-item>
             </v-list>
 
