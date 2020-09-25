@@ -4,6 +4,7 @@ let SearchMixin = {
     methods: {
         downloadData() {
             this.loadingDownload = true
+            const filename = "pkdb_data"+ this.$store.state.results.uuid +".zip"
             let headers = {};
             if (localStorage.getItem('token')) {
                 headers = {Authorization: 'Token ' + localStorage.getItem('token')}
@@ -12,7 +13,7 @@ let SearchMixin = {
                 .then(response => {
                     const a_ = document.createElement("a");
                     a_.href = URL.createObjectURL(new Blob([response.data], {type: 'application/x-zip-compressed'}))
-                    a_.setAttribute("download", "pkdb_data.zip");
+                    a_.setAttribute("download", filename);
                     document.body.appendChild(a_);
                     a_.click();
                     document.body.removeChild(a_);
@@ -21,7 +22,10 @@ let SearchMixin = {
                     console.log(err.response.data);
                     this.loadingDownload = false
                 })
-                .finally(() => this.loadingDownload = false);
+                .finally(() =>
+
+                    this.loadingDownload = false
+                );
         }
     },
     computed: {

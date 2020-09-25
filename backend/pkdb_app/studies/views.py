@@ -743,6 +743,11 @@ class PKDataView(APIView):
 
                         pd.DataFrame(data).to_csv(string_buffer)
                         archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                    archive.write('README.md')
+                    #archive.write('../TERMS_OF_USE.md')
+
+
+
                 tmp.seek(0)
                 resp = HttpResponse(tmp.read(), content_type='application/x-zip-compressed')
                 resp['Content-Disposition'] = "attachment; filename=%s" % "pkdata.zip"

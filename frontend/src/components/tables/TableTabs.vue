@@ -96,7 +96,6 @@ export default {
   },
   data() {
     return {
-      loadingDownload: false,
       items: [
         {tab: 'studies'},
         {tab: 'groups'},

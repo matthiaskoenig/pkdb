@@ -32,6 +32,17 @@ let StoreInteractionMixin = {
                 })
             }
         },
+        loadingDownload: {
+            get(){
+                return this.$store.state.loadingDownload
+            },
+            set(value) {
+                this.$store.dispatch('updateAction', {
+                    key: "loadingDownload",
+                    value: value,
+                })
+            }
+        },
         data_info_type() {
             /** Type of information to display */
             return this.$store.state.data_info_type
