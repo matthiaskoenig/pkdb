@@ -130,7 +130,6 @@ class SubSet(Accessible):
             'unit': 'outputs__unit',
         }
 
-
     def _timecourse_extra(self):
         return {
             **self.timecourse_extra_no_intervention(),
@@ -198,26 +197,28 @@ class SubSet(Accessible):
                     name = self.get_name(timecourse[key], value)
                 else:
                     name = list(timecourse[key])
-                raise Exception(f"Subset used for timecourse is not unique on '{key}'. Values are {name}. "
-                                f"Check uniqueness of labels for timecourses.")
+                raise ValueError(f"Subset used for timecourse is not unique on '{key}'. Values are '{name}'. "
+                                 f"Check uniqueness of labels for timecourses.")
 
     def timecourse(self):
-        timecourse = self.merge_values(
-            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
-
-        self.reformat_timecourse(timecourse, self._timecourse_extra())
-        self.validate_timecourse(timecourse)
-        return timecourse
+        """ FIXME: Documentation """
+        tc = self.merge_values(
+            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values())
+        )
+        self.reformat_timecourse(tc, self._timecourse_extra())
+        self.validate_timecourse(tc)
+        return tc
 
     def reformat_timecourse(self, timecourse, mapping):
+        """ FIXME: Documentation & type hinting """
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
             if new_key == "interventions":
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
 
-
     def timecourse_representation(self):
+        """ FIXME: Documentation """
         timecourse = self.merge_values(
             self.data_points.prefetch_related('outputs').values(*self.keys_timecourse_representation().values()))
 
@@ -225,19 +226,17 @@ class SubSet(Accessible):
         return timecourse
 
     def keys_scatter_representation(self):
+        """ FIXME: Documentation """
         return {**self.keys_timecourse_representation(),
                 "dimension": "dimensions__dimension",
                 "data_point": "pk"
-
         }
 
     def reformat_scatter(self):
-
+        """ FIXME: Documentation """
         pass
 
-
     def scatter_representation(self):
-
         scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).prefetch_related('outputs').values(*self.keys_scatter_representation().values()))
         self.reformat_timecourse(scatter_x, self.keys_scatter_representation())
 

@@ -6,7 +6,7 @@
       permanent
       app
       right
-      :dark="mini"
+      dark
       mini-variant-width="40"
       width="450"
   >
@@ -28,10 +28,10 @@
 
     <!--<v-divider v-if="!mini"/>-->
     <div v-if="!mini">
-      <v-list-item>
-      <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
-      <search-help v-if="show_type === 'help'"/>
-      <study-overview v-if="show_type === 'study'" :study="detail_info"/>
+      <v-list-item class="ma-0 pa-0">
+        <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
+        <search-help v-if="show_type === 'help'"/>
+        <study-overview v-if="show_type === 'study'" :study="detail_info"/>
       <!-- <group-detail v-if="show_type === 'group'" :group="detail_info"/> -->
       </v-list-item>
     </div>
