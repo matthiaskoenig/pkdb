@@ -27,7 +27,7 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.data.models import SubSet, Data
+from pkdb_app.data.models import SubSet, Data, DataPoint
 from pkdb_app.data.views import SubSetViewSet, DataAnalysisViewSet
 from pkdb_app.documents import AccessView, UUID_PARAM
 from pkdb_app.interventions.serializers import  InterventionElasticSerializerAnalysis
@@ -560,7 +560,6 @@ class PKData(object):
     def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str="pk", scan_size=10000):
         """
         query elastic search for pks.
-
         """
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
@@ -572,8 +571,8 @@ class PKData(object):
     def data_by_query_dict(self,query_dict, viewset, serializer):
         view = viewset(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
-        queryset = queryset.filter("terms",**query_dict)
-        return serializer(queryset.params(size=10000).scan(), many=True).data
+        queryset = queryset.filter("terms",**query_dict).source(serializer.Meta.fields)
+        return [hit.to_dict() for hit in queryset.params(size=10000).scan()]
 
 
 class ResponseSerializer(serializers.Serializer):
@@ -712,11 +711,28 @@ class PKDataView(APIView):
         if request.GET.get("download") == "true":
 
             def serialize_timecourses(ids):
-                timecourse_subsets = SubSet.objects.filter(id__in=ids)
+
+
+
+                timecourse_prefetch = Prefetch(
+                    'data_points',
+                    queryset= DataPoint.objects.prefetch_related(
+                    Prefetch(
+                        'outputs',
+                        queryset=Output.objects.select_related('study',
+                                                                 'tissue__info_node',
+                                                                 'method__info_node',
+                                                                 'measurement_type__info_node',
+                                                                 'choice__info_node',
+                                                                 'substance__info_node'
+                                                                 )
+                    )))
+
+                timecourse_subsets = SubSet.objects.filter(id__in=ids).prefetch_related(timecourse_prefetch)
                 return [t.timecourse_representation() for t in timecourse_subsets]
 
             def serialize_scatter(ids):
-                scatter_subsets = SubSet.objects.filter(id__in=ids)
+                scatter_subsets = SubSet.objects.filter(id__in=ids).prefetch_related('data_points')
                 return [t.scatter_representation() for t in scatter_subsets]
 
             Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function"])
@@ -726,15 +742,18 @@ class PKDataView(APIView):
                 "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None),
                 "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
                 "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
-                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, DataAnalysisViewSet, None, serialize_timecourses),
-                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, DataAnalysisViewSet, None, serialize_scatter),
-
+                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses),
+                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, None, None, serialize_scatter),
             }
 
 
             with tempfile.SpooledTemporaryFile() as tmp:
                 with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
+                    download_times = {}
+
                     for key, sheet in table_content.items():
+                        download_time_start =  time.time()
+
                         string_buffer = StringIO()
                         if sheet.function:
                             data = sheet.function(sheet.query_dict["subset_pk"])
@@ -743,6 +762,7 @@ class PKDataView(APIView):
 
                         pd.DataFrame(data).to_csv(string_buffer)
                         archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                        download_times[key] = time.time()-download_time_start
                     archive.write('download_extra/README.md', 'README.md')
                     archive.write('download_extra/TERMS_OF_USE.md', 'TERMS_OF_USE.md')
 
@@ -751,6 +771,11 @@ class PKDataView(APIView):
                 tmp.seek(0)
                 resp = HttpResponse(tmp.read(), content_type='application/x-zip-compressed')
                 resp['Content-Disposition'] = "attachment; filename=%s" % "pkdata.zip"
+                print("-" * 80)
+                print("File Creation")
+                for k, v in download_times.items():
+                    print(k, v)
+
                 return resp
 
         response = Response(resources, status=status.HTTP_200_OK)

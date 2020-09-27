@@ -141,8 +141,8 @@ class SubSet(Accessible):
             'interventions_substance': 'outputs__interventions__substance',
 
         }
-
-    def merge_values(self, values):
+    @staticmethod
+    def merge_values(values):
 
         def none_tuple(values):
             if all(pd.isna(v) for v in values):
@@ -220,8 +220,7 @@ class SubSet(Accessible):
     def timecourse_representation(self):
         """ FIXME: Documentation """
         timecourse = self.merge_values(
-            self.data_points.prefetch_related('outputs').values(*self.keys_timecourse_representation().values()))
-
+            self.data_points.values(*self.keys_timecourse_representation().values()))
         self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
         return timecourse
 
@@ -232,12 +231,8 @@ class SubSet(Accessible):
                 "data_point": "pk"
         }
 
-    def reformat_scatter(self):
-        """ FIXME: Documentation """
-        pass
-
     def scatter_representation(self):
-        scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).prefetch_related('outputs').values(*self.keys_scatter_representation().values()))
+        scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).values(*self.keys_scatter_representation().values()))
         self.reformat_timecourse(scatter_x, self.keys_scatter_representation())
 
         scatter_y = self.merge_values(self.data_points.filter(dimensions__dimension=1).prefetch_related('outputs').values(*self.keys_scatter_representation().values()))
@@ -248,11 +243,6 @@ class SubSet(Accessible):
         return {**{k: v for k, v in scatter_x.items() if k in identical_keys},
                 **{f"x_{k}": v for k, v in scatter_x.items() if k not in identical_keys},
                 **{f"y_{k}": v for k, v in scatter_y.items() if k not in identical_keys}}
-
-        pprint(scatter_x)
-        pprint(scatter_y)
-
-
 
 class DataPoint(models.Model):
     """
