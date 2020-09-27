@@ -13,7 +13,6 @@
         <v-icon left color="#1E90FF">{{ faIcon('data') }}</v-icon>
         Data
       </v-btn>
-
     </v-toolbar-items>
 
 
@@ -30,7 +29,7 @@
       </div>
 
       <!-- If logged out -->
-      <div v-else>
+      <div v-else class="buttons-cell">
         <v-btn
             text
             icon
@@ -87,7 +86,7 @@ export default {
 
 <style scoped>
 .buttons-cell {
-  min-width: 100px;
+  min-width: 150px;
 
 }
 
