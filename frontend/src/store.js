@@ -92,6 +92,7 @@ export default new Vuex.Store({
         display_detail: true,
         hide_search: true,
         loadingDownload: false,
+        cancelSource: null,
         detail_info: {},
         show_type: "help",
 
