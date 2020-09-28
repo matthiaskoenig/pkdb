@@ -59,7 +59,6 @@
       position: fixed;
       top: 48px;
       left: 0;
-      z-index: 9999;
       margin-left: 5px;
       margin-right: 5px;
       height: 32px;

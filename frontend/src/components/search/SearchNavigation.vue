@@ -5,10 +5,10 @@
       clipped
       permanent
       app
-      dark
       mini-variant-width="40"
       width="420"
       height="100%"
+      dark
   >
     <v-list-item @click.stop="hide_search = !hide_search">
       <v-list-item-avatar title="Show search panel">

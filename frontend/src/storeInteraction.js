@@ -42,6 +42,17 @@ let StoreInteractionMixin = {
                 })
             }
         },
+        cancelSource: {
+            get(){
+                return this.$store.state.cancelSource
+            },
+            set(value) {
+                this.$store.dispatch('updateAction', {
+                    key: "cancelSource",
+                    value: value,
+                })
+            }
+        },
         data_info_type() {
             /** Type of information to display */
             return this.$store.state.data_info_type

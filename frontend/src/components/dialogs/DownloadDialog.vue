@@ -8,15 +8,17 @@
           class="mr-2"
           title="Download in progress, please be patient"
       />
-      Download in progress
+      <h3> Download in progress </h3>
     </v-card-title>
 
     <v-card-text>
+
       Data processing for download can take up to several minutes for large datasets.
       Please be patient.
 
+
+      <h4 class="pt-5">Data content</h4 >
     <v-list dense>
-      <v-header>Data content</v-header>
       <v-list-item v-for="(item, key) in results" :key="key">
         <v-list-item-subtitle>{{ key }}</v-list-item-subtitle>
         <v-list-item-title>{{ item }}</v-list-item-title>
@@ -35,16 +37,18 @@
 <script>
 import {StoreInteractionMixin} from "../../storeInteraction";
 import {IconsMixin} from "../../icons";
+import {SearchMixin} from "../../search";
 
 export default {
   name: "DownloadDialog",
   methods: {
     cancel() {
-      // FIXME: stop download server side
+      this.cancelDownload()
       this.loadingDownload = false
+      // FIXME: stop download server side
     }
   },
-  mixins: [StoreInteractionMixin, IconsMixin],
+  mixins: [StoreInteractionMixin, SearchMixin, IconsMixin],
 }
 </script>
 

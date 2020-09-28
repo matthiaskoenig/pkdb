@@ -1,16 +1,33 @@
 import axios from 'axios'
+import {StoreInteractionMixin} from "./storeInteraction";
 
 let SearchMixin = {
+    mixins: [StoreInteractionMixin],
     methods: {
+        cancelDownload() {
+            if (this.cancelSource) {
+                this.cancelSource.cancel('Start new search, stop active search');
+                console.log('cancel request done');
+            }
+        },
         downloadData() {
             this.loadingDownload = true
             const filename = "pkdb_data"+ this.$store.state.results.uuid +".zip"
             let headers = {};
+
+            this.cancelDownload();
+            this.cancelSource = axios.CancelToken.source();
             if (localStorage.getItem('token')) {
                 headers = {Authorization: 'Token ' + localStorage.getItem('token')}
             }
-            axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
+            axios.get(this.url + "&download=true",
+                {
+                    headers: headers,
+                    responseType: 'arraybuffer',
+                    cancelToken: this.cancelSource.token
+                })
                 .then(response => {
+                    this.cancelSource = null;
                     const a_ = document.createElement("a");
                     a_.href = URL.createObjectURL(new Blob([response.data], {type: 'application/x-zip-compressed'}))
                     a_.setAttribute("download", filename);
@@ -19,8 +36,9 @@ let SearchMixin = {
                     document.body.removeChild(a_);
                 })
                 .catch(err => {
+                    if(err.response){
                     console.log(err.response.data);
-                    this.loadingDownload = false
+                    this.loadingDownload = false}
                 })
                 .finally(() =>
 

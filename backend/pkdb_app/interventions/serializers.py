@@ -321,6 +321,9 @@ class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
         fields = ["study_sid", "study_name", "intervention_pk", "raw_pk",
                   "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
+
+
+
     def to_representation(self, instance):
         rep = super().to_representation(instance)
         for field in VALUE_FIELDS_NO_UNIT + ["time"]:

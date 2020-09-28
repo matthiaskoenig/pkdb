@@ -3,7 +3,7 @@
   <v-card
       width="100%"
       flat
-      dark
+
   >
   -->
   <div>
