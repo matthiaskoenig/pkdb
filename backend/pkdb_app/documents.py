@@ -72,8 +72,7 @@ def basic_object(attr, **kwargs):
 
 
 def info_node(attr, **kwargs):
-    return fields.ObjectField(
-        required=True,
+    return ObjectField(
         attr=attr,
         properties={
            'sid': string_field('sid'),
