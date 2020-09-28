@@ -72,5 +72,4 @@ class InterventionDocument(Document):
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(InterventionDocument, self).get_queryset().select_related(
-            'study')
+        return super(InterventionDocument, self).get_queryset().select_related('study')

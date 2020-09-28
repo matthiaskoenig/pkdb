@@ -105,7 +105,8 @@ def text_field(attr):
 
 class ObjectField(DEDField, Object):
     """
-    This document Object fields returns a null for any empty field  and not an empty dictionary.
+
+    This document Object fields returns a null for any empty field and not an empty dictionary.
     """
 
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):
@@ -151,13 +152,16 @@ class ObjectField(DEDField, Object):
 
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
-UUID_PARAM = openapi.Parameter(
-        'uuid',
-        openapi.IN_QUERY,
-        description="The '/filter/' endpoint returns a UUID. Via the UUID the resulting query can be access.",
-        type=openapi.TYPE_STRING,
 
-    )
+UUID_PARAM = openapi.Parameter(
+    'uuid',
+    openapi.IN_QUERY,
+    description="The '/filter/' endpoint returns a UUID. Via the UUID the resulting query can be access.",
+    type=openapi.TYPE_STRING,
+
+)
+
+
 @method_decorator(name='list', decorator=swagger_auto_schema( manual_parameters=[UUID_PARAM]))
 class AccessView(BaseDocumentViewSet):
     """Permissions on views."""

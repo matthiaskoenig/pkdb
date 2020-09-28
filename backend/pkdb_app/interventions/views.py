@@ -9,9 +9,10 @@ from ..pagination import CustomPagination
 
 
 class ElasticInterventionViewSet(AccessView):
-    """ Endpoint to query interventions
+    """Endpoint to query interventions.
 
-    Intervention encode what was performed on the subjects. E.g. which dose of a certain substance was applied.
+    Intervention encode what was performed on the subjects. E.g. which dose of a
+    substance was applied.
     """
     document = InterventionDocument
     serializer_class = InterventionElasticSerializer
@@ -92,6 +93,7 @@ class ElasticInterventionViewSet(AccessView):
 
 class ElasticInterventionAnalysisViewSet(AccessView):
     """
+
     The intervention endpoint gives access to the intervention data. This is mostly a dosing of a substance to the body
     of the subject but can also be more vague interventions like a meal uptake or exercise.
     """

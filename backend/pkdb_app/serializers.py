@@ -755,7 +755,6 @@ class SidNameLabelSerializer(serializers.Serializer):
     name = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
 
-
 def validate_dict(dic):
     if not isinstance(dic, dict):
         raise serializers.ValidationError(
