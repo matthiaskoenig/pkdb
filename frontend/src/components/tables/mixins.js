@@ -66,7 +66,6 @@ let searchTableMixin = {
         window.removeEventListener('resize', this.onResize);
     },
     watch: {
-
         search(){
             this.options.page = 1
             this.getData();
@@ -169,7 +168,7 @@ let searchTableMixin = {
 const UrlMixin = {
     methods: {
         group_url(pk) {
-            return this.$store.state.endpoints.api + 'groups/' + pk + '/'
+            return this.$store.state.endpoints.api + 'groups/' + pk + '/?format=json'
         },
         individual_url(pk) {
             return this.$store.state.endpoints.api + 'individuals/' + pk + '/'

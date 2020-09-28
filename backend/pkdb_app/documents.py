@@ -73,6 +73,7 @@ def basic_object(attr, **kwargs):
 
 def info_node(attr, **kwargs):
     return fields.ObjectField(
+        required=True,
         attr=attr,
         properties={
            'sid': string_field('sid'),
@@ -104,10 +105,7 @@ def text_field(attr):
 
 class ObjectField(DEDField, Object):
     """
-    FIXME: DOCUMENT ME
-    What is this for? I assume to solve some issue with nested ObjectFields.
-    This looks copy-pasted from some solution. Please provide short description
-    and link to solution.
+    This document Object fields returns a null for any empty field  and not an empty dictionary.
     """
 
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):

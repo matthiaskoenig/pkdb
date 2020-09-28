@@ -2,12 +2,15 @@
   <v-btn
       small
       fab
+      icon
       text
       title="Search help with examples"
       @click.stop="show_help"
-  >
-    <v-icon >fas fa fa-question</v-icon>
+      class="mr-4"
 
+  >
+
+    <v-icon >fas fa fa-question</v-icon>
   </v-btn>
 </template>
 

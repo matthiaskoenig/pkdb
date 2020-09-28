@@ -640,6 +640,7 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Characteristica
         fields = ['pk'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['group_count']+['normed']  # + ['access','allowed_users']
+        read_only_fields = fields
 
 
 # Group related Serializer

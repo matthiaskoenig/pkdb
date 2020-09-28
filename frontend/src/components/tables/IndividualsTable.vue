@@ -31,15 +31,11 @@
                 />
             </template>
             <template v-slot:item.group="{ item }">
-                <get-data :resource_url="group_url(item.group.pk)">
-                    <span slot-scope="group">
-                    <object-chip :object="group.data"
+                    <object-chip :object="item.group"
                                  otype="group"
-                                 :count="group.data.count"
+                                 :count="item.group.count"
                                  :search="search"
                     />
-                    </span>
-                </get-data>
             </template>
             <template v-slot:item.characteristica="{ item }">
                 <characteristica-card-deck :characteristica="item.characteristica" />

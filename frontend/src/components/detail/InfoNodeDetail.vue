@@ -1,11 +1,4 @@
 <template>
-  <!--
-  <v-card
-      width="100%"
-      flat
-
-  >
-  -->
   <div>
     <v-list-item three-line >
       <v-list-item-content>
@@ -40,7 +33,6 @@
       {{ data.description }}<br />
       </text-highlight>
     </div>
-
     <div v-if="data.annotations && data.annotations.length>0">
       <span v-for="annotation in data.annotations" :key="annotation.term">
           <annotation :annotation="annotation" />

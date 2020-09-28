@@ -52,6 +52,18 @@ const getNestedValue = (obj, path) => {
     return res
 };
 
+function toNumber(num){
+    // round to two numbers
+    return +(Math.round(num + "e+2")  + "e-2");
+}
 
-export const utils = {merge_objects, getNestedValue};
+function timeObject(item) {
+    return{
+        name: "t = " + toNumber(item.time) + ' ' + item.time_unit,
+        otype: "time",
+    }
+}
+
+
+export const utils = {merge_objects, getNestedValue, timeObject};
 

@@ -3,6 +3,7 @@
   <v-btn v-if="study_count>0"
          fab
          text
+         icon
          @click.stop="downloadData"
          :loading="loadingDownload"
          :disabled="loadingDownload"
