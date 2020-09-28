@@ -79,6 +79,7 @@
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import {utils} from "../../utils";
 
     export default {
         name: "InterventionsTable",
@@ -101,17 +102,7 @@
             }
         },
       methods: {
-        toNumber: function(num){
-          // round to two numbers
-          return +(Math.round(num + "e+2")  + "e-2");
-        },
-        timeObject: function(item){
-          return{
-            name: "t = " + this.toNumber(item.time) + ' ' + item.time_unit,
-            otype: "time",
-          }
-        },
-
+        timeObject: function (o){return utils.timeObject(o)},
       }
 
     }

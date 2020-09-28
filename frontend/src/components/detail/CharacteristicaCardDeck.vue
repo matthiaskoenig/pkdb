@@ -2,10 +2,13 @@
     <span>
         <v-layout d-flex flex-wrap >
             <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
+              {{item}}
                 <characteristica-card :data="item" />
 
             </span>
             <span v-for="item in sortedCharacteristica.values" :key="item.pk">
+              {{item}}
+
                 <characteristica-card :data="item" />
             </span>
         </v-layout>

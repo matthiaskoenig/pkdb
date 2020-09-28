@@ -10,7 +10,7 @@
       height="100%"
       dark
   >
-    <v-list-item @click.stop="hide_search = !hide_search">
+    <v-list-item  class="ma-0 pa-0" @click.stop="hide_search = !hide_search">
       <v-list-item-avatar title="Show search panel">
         <v-icon>{{ faIcon('search') }}</v-icon>
       </v-list-item-avatar>
@@ -20,10 +20,10 @@
 
       <!-- Hide search -->
       <hide-search-button/>
-
-
     </v-list-item>
+
     <v-divider v-if="!hide_search"/>
+
     <v-list-item class="ma-0 pa-0">
       <!-- Download button -->
       <v-list-item-avatar title="Download Data">

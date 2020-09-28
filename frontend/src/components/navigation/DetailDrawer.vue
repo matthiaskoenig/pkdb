@@ -32,7 +32,10 @@
         <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
         <search-help v-if="show_type === 'help'"/>
         <study-overview v-if="show_type === 'study'" :study="detail_info"/>
-      <!-- <group-detail v-if="show_type === 'group'" :group="detail_info"/> -->
+        <individual-detail v-if="show_type === 'individual'" :individual="detail_info"/>
+        <group-detail v-if="show_type === 'group'" :group="detail_info"/>
+        <intervention-detail v-if="show_type === 'intervention'" :intervention="detail_info"/>
+
       </v-list-item>
     </div>
 
@@ -47,10 +50,12 @@ import SearchHelp from "../search/SearchHelp";
 import InfoNodeDetail from "../detail/InfoNodeDetail";
 import StudyOverview from "../detail/StudyOverview";
 import GroupDetail from "../detail/GroupDetail";
+import IndividualDetail from "../detail/IndividualDetail";
+import InterventionDetail from "../detail/InterventionDetail";
 
 export default {
   name: 'DetailDrawer',
-  components: {GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
+  components: {InterventionDetail, IndividualDetail, GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
   mixins: [IconsMixin],
   data: () => ({
     drawer:true

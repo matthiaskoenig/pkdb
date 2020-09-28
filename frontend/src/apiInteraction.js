@@ -46,6 +46,24 @@ let ApiInteractionMixin = {
 
 
         },
+        getInfo(pk, show_type) {
+            // object is an InfoNode
+            let url = `${this.$store.state.endpoints.api}${show_type}s/${pk}/?format=json`;
+
+            // get data (FIXME: caching of InfoNodes in store)
+            axios.get(url)
+                .then(response => {
+                    this.show_type = show_type;
+                    this.detail_info =  response.data;
+                    this.display_detail = true;
+                })
+                .catch(err => {
+                    this.exists = false;
+                    console.log(err)
+                })
+                .finally(() => this.loading = false);
+
+        },
         fetch_data(url) {
             let headers = {};
             if (localStorage.getItem('token')) {
@@ -58,7 +76,7 @@ let ApiInteractionMixin = {
                 })
                 .catch((error) => {
                     this.data = null;
-                    console.error(this.resource_url);
+                    console.error(url);
                     console.error(error);
                 })
 

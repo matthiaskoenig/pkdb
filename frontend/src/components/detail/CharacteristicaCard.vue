@@ -24,7 +24,6 @@
                 <span v-if="(data.choice.sid=='smoking-no')"><v-icon small left color="green">fa fa-smoking-ban</v-icon></span>
                 <span v-if="(data.choice.sid=='medication-yes')"><v-icon small left color="red">fa fa-tablets</v-icon></span>
                 <span v-if="(data.choice.sid=='medication-no')"><v-icon small left color="green">fa fa-tablets</v-icon></span>
-
                 <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
                 <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
 
@@ -48,19 +47,21 @@
 
 
           <span v-if="value || error">
-          <object-chip
-              v-if="(data.substance.sid !== null) & (!data.measurement_type.sid === 'abstinence')"
-              :object="data.substance"
-              otype="substance"
-              :search="search"
-              margin="ma-0 pb-0"
-          />
-
-              {{ value }} <span v-if="error">{{ error }}</span>
-              <span v-if="data.unit"> [{{ data.unit }}]</span>
+          <span  v-if="(data.substance !== null)">
+            <object-chip
+                v-if="(data.substance.sid !== null) & (!data.measurement_type.sid === 'abstinence')"
+                :object="data.substance"
+                otype="substance"
+                :search="search"
+                margin="ma-0 pb-0"
+            />
+          </span>
+            {{ value }} <span v-if="error">{{ error }}</span>
+            <span v-if="data.unit"> [{{ data.unit }}]</span>
 
           </span>
-          <span v-if="!value & !error & !data.choice.sid & !data.substance.sid">
+
+          <span v-if="!value & !error & (!data.choice.sid) & !data.substance.sid">
               <v-icon small  title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
           </span>
         </v-row>
@@ -70,14 +71,13 @@
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
-    import axios from 'axios'
-    import {StoreInteractionMixin} from "../../storeInteraction";
+    import {ApiInteractionMixin} from "../../apiInteraction";
+    import {IconsMixin} from "../../icons";
 
 
     export default {
         name: "CharacteristicaCard",
-        mixins: [StoreInteractionMixin],
+        mixins: [ApiInteractionMixin, IconsMixin],
         props: {
             data: Object,
         },
@@ -165,36 +165,16 @@
             }
         },
         methods: {
-          getInfoNode(sid) {
-            // object is an InfoNode
-            let url = `${this.$store.state.endpoints.api}info_nodes/${sid}/?format=json`;
 
-            // get data (FIXME: caching of InfoNodes in store)
-            axios.get(url)
-                .then(response => {
-                  this.show_type = "info_node";
-                  this.detail_info =  response.data;
-                  this.display_detail = true;
-                })
-                .catch(err => {
-                  this.exists = false;
-                  console.log(err)
-                })
-                .finally(() => this.loading = false);
-
-          },
           update_details() {
             if (this.data.choice.sid) {
-              this.getInfoNode(this.data.choice.sid)
+              this.getInfo(this.data.choice.sid, "info_node")
 
             } else {
-            this.getInfoNode(this.data.measurement_type.sid)
-          }
+            this.getInfo(this.data.measurement_type.sid, "info_node")
+            }
           },
-            faIcon: function (key) {
-                return lookupIcon(key)
-            },
-            toNumber: function(num){
+          toNumber: function(num){
                 // round to two digits
               let number = num
               if (num > 0.1){
