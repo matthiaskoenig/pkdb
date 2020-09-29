@@ -31,7 +31,7 @@ volumes:
 services:
   postgres:
     restart: always
-    image: postgres:12.3
+    image: postgres:13.0
     ports:
       - "5433:5432"
     volumes:
@@ -43,7 +43,7 @@ services:
 
   elasticsearch:
     restart: always
-    image: elasticsearch:7.8.1
+    image: elasticsearch:7.9.2
     environment:
       - "ES_JAVA_OPTS=-Xms3g -Xmx3g"
       - bootstrap.memory_lock=true
@@ -94,7 +94,7 @@ services:
 
   nginx:
     restart: always
-    image: nginx:1.19.1
+    image: nginx:1.19.2
     ports:
       - 8888:80
     volumes:
