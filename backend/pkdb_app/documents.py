@@ -169,6 +169,8 @@ class AccessView(BaseDocumentViewSet):
         resource = self.request.query_params.get("data_type", self.document.Index.name)
         if resource == "timecourse":
             return "timecourses"
+        if resource == "scatter":
+            return "scatters"
         return resource
 
     def get_queryset(self):

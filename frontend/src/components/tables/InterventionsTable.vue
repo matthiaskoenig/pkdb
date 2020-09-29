@@ -43,19 +43,19 @@
 
             <template v-slot:item.details2="{ item }">
               <object-chip
-                  v-if="item.application.sid"
+                  v-if="item.application"
                   :object="item.application"
                   otype="application"
                   :search="search"
               />
               <object-chip
-                  v-if="item.route.sid"
+                  v-if="item.route"
                   :object="item.route"
                   otype="route"
                   :search="search"
               />
               <object-chip
-                  v-if="item.form.sid"
+                  v-if="item.form"
                   :object="item.form"
                   otype="form"
                   :search="search"
