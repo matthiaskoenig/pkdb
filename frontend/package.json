@@ -9,6 +9,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "color-normalize": "^1.5.1",
     "@statnett/vue-plotly": "^0.3.2",
     "acorn": "^7.1.0",
     "axios": "^0.19.1",
@@ -18,7 +19,6 @@
     "vega-lite": "^4.0.2",
     "vue": "^2.6.11",
     "vue-auth-image": "0.0.3",
-    "vue-plotly": "^1.0.1",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.6",
     "vue-text-highlight": "^2.0.10",

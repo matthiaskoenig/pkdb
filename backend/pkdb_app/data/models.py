@@ -142,8 +142,7 @@ class SubSet(Accessible):
 
         }
     @staticmethod
-    def merge_values(values):
-
+    def merge_values(values=None ,df=None, groupby=("outputs__pk",), sort_values=["outputs__interventions__pk","outputs__time"]):
         def none_tuple(values):
             if all(pd.isna(v) for v in values):
                 return (None,)
@@ -158,8 +157,11 @@ class SubSet(Accessible):
                 return list(values)[0]
 
             return values
-
-        merged_dict = pd.DataFrame(values).groupby(["outputs__pk"], as_index=False).apply(to_list).to_dict("list")
+        if values:
+            df =pd.DataFrame(values)
+        if sort_values:
+            df = df.sort_values(sort_values)
+        merged_dict = df.groupby(list(groupby), as_index=False).apply(to_list).to_dict("list")
 
         for key, values in merged_dict.items():
             if key not in ['outputs__time', 'outputs__value', 'outputs__mean', 'outputs__median', 'outputs__cv',
@@ -203,7 +205,8 @@ class SubSet(Accessible):
     def timecourse(self):
         """ FIXME: Documentation """
         tc = self.merge_values(
-            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values())
+            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()),
+            sort_values=["outputs__interventions__pk", "outputs__time"]
         )
         self.reformat_timecourse(tc, self._timecourse_extra())
         self.validate_timecourse(tc)
@@ -220,7 +223,7 @@ class SubSet(Accessible):
     def timecourse_representation(self):
         """ FIXME: Documentation """
         timecourse = self.merge_values(
-            self.data_points.values(*self.keys_timecourse_representation().values()))
+            self.data_points.values(*self.keys_timecourse_representation().values()),)
         self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
         return timecourse
 
@@ -232,10 +235,10 @@ class SubSet(Accessible):
         }
 
     def scatter_representation(self):
-        scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).values(*self.keys_scatter_representation().values()))
+        scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).values(*self.keys_scatter_representation().values()), sort_values=None)
         self.reformat_timecourse(scatter_x, self.keys_scatter_representation())
 
-        scatter_y = self.merge_values(self.data_points.filter(dimensions__dimension=1).prefetch_related('outputs').values(*self.keys_scatter_representation().values()))
+        scatter_y = self.merge_values(self.data_points.filter(dimensions__dimension=1).prefetch_related('outputs').values(*self.keys_scatter_representation().values()),sort_values=None)
         self.reformat_timecourse(scatter_y, self.keys_scatter_representation())
 
         identical_keys = ["study_sid", "study_name", "subset_pk", "subset_name"]
