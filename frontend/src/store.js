@@ -118,7 +118,7 @@ export default new Vuex.Store({
             individuals: 0,
             outputs: 0,
             timecourses: 0,
-            scatter: 0,
+            scatters: 0,
 
         },
 

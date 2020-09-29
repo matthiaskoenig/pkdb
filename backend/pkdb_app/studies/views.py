@@ -507,7 +507,7 @@ class PKData(object):
                 "interventions": list(self.interventions.values_list("pk", flat=True)),
                 "outputs": list(self.outputs.values_list("pk", flat=True)),
                 "timecourses": list(self.subset.filter(data__data_type=Data.DataTypes.Timecourse).values_list("pk", flat=True)),
-                "scatter": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
+                "scatters": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
             }
 
         time_loop_end = time.time()
@@ -588,7 +588,7 @@ class ResponseSerializer(serializers.Serializer):
     individuals = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting individuals.")
     outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
     timecourses = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting timecourses.")
-    scatter = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatter.")
+    scatters = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatters.")
 
 
 class PKDataView(APIView):
@@ -710,26 +710,7 @@ class PKDataView(APIView):
 
         if request.GET.get("download") == "true":
 
-            def serialize_timecourses(ids):
 
-
-
-                timecourse_prefetch = Prefetch(
-                    'data_points',
-                    queryset= DataPoint.objects.prefetch_related(
-                    Prefetch(
-                        'outputs',
-                        queryset=Output.objects.select_related('study',
-                                                                 'tissue__info_node',
-                                                                 'method__info_node',
-                                                                 'measurement_type__info_node',
-                                                                 'choice__info_node',
-                                                                 'substance__info_node'
-                                                                 )
-                    )))
-
-                timecourse_subsets = SubSet.objects.filter(id__in=ids).prefetch_related(timecourse_prefetch)
-                return [t.timecourse_representation() for t in timecourse_subsets]
 
             def serialize_scatter(ids):
                 scatter_subsets = SubSet.objects.filter(id__in=ids).prefetch_related('data_points')
@@ -742,8 +723,8 @@ class PKDataView(APIView):
                 "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None),
                 "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
                 "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
-                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses),
-                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, None, None, serialize_scatter),
+                #"timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses),
+                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatter),
             }
 
 
@@ -756,11 +737,25 @@ class PKDataView(APIView):
 
                         string_buffer = StringIO()
                         if sheet.function:
-                            data = sheet.function(sheet.query_dict["subset_pk"])
+                            df = pd.DataFrame(sheet.function(sheet.query_dict["subset_pk"]))
+
                         else:
                             data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
+                            df = pd.DataFrame(data)
+                            if key=="outputs":
+                                timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
+                                timecourse_data = []
+                                for (n, df_t) in timecourse_df.groupby(["label"]):
+                                    timecourse = SubSet.merge_values(
+                                        df=df_t,
+                                        groupby=("output_pk",),
+                                        sort_values=["time","intervention_pk"])
+                                    timecourse_data.append(timecourse)
+                                df = pd.DataFrame(timecourse_data)
+                                df.to_csv(string_buffer)
+                                archive.writestr(f'timecourse.csv', string_buffer.getvalue())
 
-                        pd.DataFrame(data).to_csv(string_buffer)
+                        df.to_csv(string_buffer)
                         archive.writestr(f'{key}.csv', string_buffer.getvalue())
                         download_times[key] = time.time()-download_time_start
                     archive.write('download_extra/README.md', 'README.md')

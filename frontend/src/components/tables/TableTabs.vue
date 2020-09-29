@@ -40,7 +40,7 @@
                        :autofocus="false"/>
         <timecourses-table v-if="item.tab === 'timecourses' && results[item.tab]" :search_uuid="true" :uuid="results.uuid" data_type="timecourse"
                            :autofocus="false"/>
-        <scatter-table v-if="item.tab === 'scatter' && results[item.tab]" :search_uuid="true" :uuid="results.uuid" data_type="scatter"
+        <scatter-table v-if="item.tab === 'scatters' && results[item.tab]" :search_uuid="true" :uuid="results.uuid" data_type="scatter"
                            :autofocus="false"/>
       </v-tab-item>
     </v-tabs-items>
@@ -103,7 +103,7 @@ export default {
         {tab: 'interventions'},
         {tab: 'outputs'},
         {tab: 'timecourses'},
-        {tab: 'scatter'},
+        {tab: 'scatters'},
       ],
     }
   },
