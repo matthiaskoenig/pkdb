@@ -588,7 +588,7 @@ class ResponseSerializer(serializers.Serializer):
     individuals = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting individuals.")
     outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
     timecourses = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting timecourses.")
-    scatter = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatter.")
+    scatters = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatters.")
 
 
 class PKDataView(APIView):
