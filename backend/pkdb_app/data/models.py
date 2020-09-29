@@ -141,33 +141,38 @@ class SubSet(Accessible):
             'interventions_substance': 'outputs__interventions__substance',
 
         }
+
+    @staticmethod
+    def none_tuple(values):
+        if all(pd.isna(v) for v in values):
+            return (None,)
+        else:
+            return tuple(values)
+
+    @staticmethod
+    def to_list(tdf):
+        return tdf.apply(SubSet.none_tuple).apply(SubSet.tuple_or_value)
+
+    @staticmethod
+    def tuple_or_value(values):
+        if len(set(values)) == 1:
+            return list(values)[0]
+        return values
+
     @staticmethod
     def merge_values(values=None ,df=None, groupby=("outputs__pk",), sort_values=["outputs__interventions__pk","outputs__time"]):
-        def none_tuple(values):
-            if all(pd.isna(v) for v in values):
-                return (None,)
-            else:
-                return tuple(values)
 
-        def to_list(tdf):
-            return tdf.apply(none_tuple).apply(tuple_or_value)
-
-        def tuple_or_value(values):
-            if len(set(values)) == 1:
-                return list(values)[0]
-
-            return values
         if values:
             df =pd.DataFrame(values)
         if sort_values:
             df = df.sort_values(sort_values)
-        merged_dict = df.groupby(list(groupby), as_index=False).apply(to_list).to_dict("list")
+        merged_dict = df.groupby(list(groupby), as_index=False).apply(SubSet.to_list).to_dict("list")
 
         for key, values in merged_dict.items():
             if key not in ['outputs__time', 'outputs__value', 'outputs__mean', 'outputs__median', 'outputs__cv',
                            'outputs__sd' 'outputs__se']:
 
-                merged_dict[key] = tuple_or_value(values)
+                merged_dict[key] = SubSet.tuple_or_value(values)
 
             if all(v is None for v in values):
                 merged_dict[key] = None

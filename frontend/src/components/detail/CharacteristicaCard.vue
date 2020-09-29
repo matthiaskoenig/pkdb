@@ -15,8 +15,8 @@
         <v-row>
           <v-badge v-if="data.count" inline color="#BBBBBB" right>
             <span slot="badge">{{ count_label }}</span>
-            <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
-            <span v-if="data.choice.sid">
+            <node-element  v-if="!data.choice" :data="data.measurement_type"/>
+            <span v-if="data.choice">
                 <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
                 <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
                 <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
@@ -31,14 +31,14 @@
             </span>
           </v-badge>
           <span v-else>
-            <node-element  v-if="!data.choice.sid" :data="data.measurement_type"/>
-            <node-element v-if="data.choice.sid" :data="data.choice"/>
+            <node-element  v-if="!data.choice" :data="data.measurement_type"/>
+            <node-element v-if="data.choice" :data="data.choice"/>
           </span>
         </v-row>
 
         <v-row>
             <object-chip
-                v-if="data.substance.sid"
+                v-if="data.substance"
                 :object="data.substance"
                 otype="substance"
                 :search="search"
@@ -47,9 +47,9 @@
 
 
           <span v-if="value || error">
-          <span  v-if="(data.substance !== null)">
+          <span>
             <object-chip
-                v-if="(data.substance.sid !== null) & (!data.measurement_type.sid === 'abstinence')"
+                v-if="(data.substance !== null) & (!data.measurement_type.sid === 'abstinence')"
                 :object="data.substance"
                 otype="substance"
                 :search="search"
@@ -61,7 +61,7 @@
 
           </span>
 
-          <span v-if="!value & !error & (!data.choice.sid) & !data.substance.sid">
+          <span v-if="!value & !error & (!data.choice) & !data.substance">
               <v-icon small  title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
           </span>
         </v-row>
@@ -167,7 +167,7 @@
         methods: {
 
           update_details() {
-            if (this.data.choice.sid) {
+            if (this.data.choice) {
               this.getInfo(this.data.choice.sid, "info_node")
 
             } else {

@@ -60,12 +60,6 @@
 
       <v-row>
         <v-col>
-          <Annotations :item="study"/>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col>
           <v-alert v-if="study.files.length == 0"
                    dense
                    text
@@ -88,6 +82,7 @@
       </v-row>
 
       <v-row>
+        <Annotations :item="study" title="Study"/>
         <annotations  v-if="study.groupset" title="Groups" :item="study.groupset"/>
         <annotations v-if="study.individualset" title="Individuals" :item="study.individualset"/>
         <annotations v-if="study.interventionset" title="Interventions" :item="study.interventionset"/>

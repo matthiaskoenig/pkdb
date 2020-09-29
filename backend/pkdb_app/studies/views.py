@@ -461,7 +461,7 @@ class PKData(object):
             interventions = set()
             outputs = set()
             timecourses = set()
-            scatter = set()
+            scatters = set()
 
             for output in self.outputs.values("study_id","group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
                 studies.add(output["study_id"])
@@ -478,7 +478,7 @@ class PKData(object):
                     timecourses.add(output["subset__id"])
 
                 if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
-                    scatter.add(output["subset__id"])
+                    scatters.add(output["subset__id"])
 
             self.ids = {
                 "studies": list(studies),
@@ -487,7 +487,7 @@ class PKData(object):
                 "interventions": list(interventions),
                 "outputs": list(outputs),
                 "timecourses": list(timecourses),
-                "scatter": list(scatter),
+                "scatters": list(scatters),
 
             }
 
@@ -607,7 +607,7 @@ class PKDataView(APIView):
       "interventions": 1291,
       "outputs": 70636,
       "timecourses": 2946,
-      "scatter": 37
+      "scatters": 37
     }
     ```
     Two main parameters control the output of the filter query:
@@ -743,16 +743,27 @@ class PKDataView(APIView):
                             data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
                             df = pd.DataFrame(data)
                             if key=="outputs":
+
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
-                                timecourse_data = []
-                                for (n, df_t) in timecourse_df.groupby(["label"]):
-                                    timecourse = SubSet.merge_values(
-                                        df=df_t,
-                                        groupby=("output_pk",),
-                                        sort_values=["time","intervention_pk"])
-                                    timecourse_data.append(timecourse)
-                                df = pd.DataFrame(timecourse_data)
-                                df.to_csv(string_buffer)
+                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple)
+                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=SubSet.to_list)
+                                timecourse_df = SubSet.merge_values(df=timecourse_df,groupby=("output_pk",),sort_values=["time", "intervention_pk"])
+
+                                #df = timecourse_df.groupby(["label","study_name"],as_index=False).apply(lambda df_t: pd.Series(SubSet.merge_values(
+                                #    df=df_t,
+                                #    groupby=("output_pk",),
+                                #    sort_values=["time","intervention_pk"])))
+
+                                #timecourse_data = []
+                                #for (n, df_t) in timecourse_df.groupby(["label","study_name"]):
+                                #    timecourse = SubSet.merge_values(
+                                #        df=df_t,
+                                #        groupby=("output_pk",),
+                                #        sort_values=["time","intervention_pk"])
+                                #    timecourse_data.append(timecourse)
+                                #df = pd.DataFrame(timecourse_data)
+
+                                timecourse_df.to_csv(string_buffer)
                                 archive.writestr(f'timecourse.csv', string_buffer.getvalue())
 
                         df.to_csv(string_buffer)

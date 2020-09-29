@@ -98,7 +98,7 @@
               Timecourses
             </v-badge>
             |
-            <v-badge color="black" :content="results.scatter.toString()" right inline >
+            <v-badge color="black" :content="results.scatters.toString()" right inline >
               Scatter
             </v-badge>
           </v-list-item-title>
