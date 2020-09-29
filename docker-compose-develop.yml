@@ -28,7 +28,7 @@ services:
 
   postgres:
     restart: always
-    image: postgres:12.3
+    image: postgres:13.0
     ports:
       - "5433:5432"
     volumes:
@@ -51,7 +51,7 @@ services:
       memlock:
         soft: -1
         hard: -1
-    image: elasticsearch:7.8.1
+    image: elasticsearch:7.9.2
     ports:
       - "9123:9200"
     volumes:
