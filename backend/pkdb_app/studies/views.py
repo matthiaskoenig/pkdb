@@ -507,7 +507,7 @@ class PKData(object):
                 "interventions": list(self.interventions.values_list("pk", flat=True)),
                 "outputs": list(self.outputs.values_list("pk", flat=True)),
                 "timecourses": list(self.subset.filter(data__data_type=Data.DataTypes.Timecourse).values_list("pk", flat=True)),
-                "scatter": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
+                "scatters": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
             }
 
         time_loop_end = time.time()
@@ -724,7 +724,7 @@ class PKDataView(APIView):
                 "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
                 "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
                 #"timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses),
-                "scatter": Sheet("Scatter", {"subset_pk": pkdata.ids["scatter"]}, None, None, serialize_scatter),
+                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatter),
             }
 
 
