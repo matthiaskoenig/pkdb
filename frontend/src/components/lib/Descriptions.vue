@@ -5,7 +5,7 @@
 
               <p align="justify">
                 <v-avatar title="description" :size="32">
-                  <v-icon small color="black">fas fa-align-left</v-icon>&nbsp;&nbsp;
+                  <v-icon small>fas fa-align-left</v-icon>&nbsp;&nbsp;
                 </v-avatar>
 
                 {{ description.text }} </p>

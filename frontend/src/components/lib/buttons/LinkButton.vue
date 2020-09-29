@@ -52,18 +52,18 @@
             },
             color: {
                 type: String,
-                default: "black"
+                default: null
             },
         },
         methods: {
             update_details(){
-                if (this.show_type){
+                if (this.show_type_input){
                     if (this.sid){
                         this.getStudy(this.sid);
                     }else{
-                        this.show_type = this.show_type_input;
-                        this.detail_info = this.detail_info_input;
-                        this.display_detail = true;
+                        this.show_type = this.show_type_input
+                        this.detail_info = this.detail_info_input
+                        this.display_detail = true
                     }
                    }
             }

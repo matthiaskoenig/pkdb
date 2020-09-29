@@ -87,7 +87,7 @@ const initial_subjects_queries = {
 export default new Vuex.Store({
     plugins: [vuexLocalStorage.plugin],
     state: {
-
+        theme: "dark",
         //for search detail display
         display_detail: true,
         hide_search: true,

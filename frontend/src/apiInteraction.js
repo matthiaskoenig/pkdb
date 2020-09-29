@@ -18,7 +18,7 @@ let ApiInteractionMixin = {
         }
     },
     methods: {
-        getStudy(sid) {
+        getStudy(sid, update_search=false) {
             // object is an InfoNode
             let url = `${this.$store.state.endpoints.api}studies/${sid}/?format=json`;
             let headers = {};
@@ -29,7 +29,9 @@ let ApiInteractionMixin = {
             axios.get(url, {headers: headers})
                 .then(response => {
                     if (response.data.sid) {
-                        this.updateSearch(response.data)
+                        if(update_search){
+                            this.updateSearch(response.data)
+                        }
                         this.show_type = "study";
                         this.detail_info = response.data;
                         this.display_detail = true;

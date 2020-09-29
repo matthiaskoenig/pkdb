@@ -1,27 +1,36 @@
 <template>
     <v-card flat class="ma-0 pa-0">
 
-      <v-row>
-        <v-col col="12">
-          <v-icon color="black">{{ faIcon('study') }}</v-icon>
-          <span class="heading-title">&nbsp;{{ study.name }} ({{ study.sid }})</span>
-          <v-btn icon>
-            <v-icon small
-                    :title="'Study is '+ study.access"
-                    :color="study.access =='public' ? 'green' : 'red'"
-            >{{ faIcon(study.access) }}
-            </v-icon>
-          </v-btn>
 
-          <v-btn icon>
-            <v-icon small
-                    :title="'Publication is '+ study.licence + ' licence'"
-                    :color="study.licence =='open' ? 'green' : 'red'"
-            >{{ faIcon(study.licence) }}
-            </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+      <v-card-title>
+        <v-list-item three-line >
+          <v-list-item-content>
+            <div class="overline">
+              <v-icon class="mr-4">{{ faIcon('study') }}</v-icon> Study
+              <text-highlight :queries="highlight">
+              {{ study.name }} ({{ study.sid }})
+              </text-highlight>
+              <JsonButton :resource_url="api + 'studies/'+ study.sid +'/?format=json'"/>
+            </div>
+            <v-list-item-title class="headline mb-1">
+                <v-icon small
+                        :title="'Study is '+ study.access"
+                        :color="study.access =='public' ? 'green' : 'red'"
+                >{{ faIcon(study.access) }}
+                </v-icon>
+
+                <v-icon small class="ma-2"
+                        :title="'Publication is '+ study.licence + ' licence'"
+                        :color="study.licence =='open' ? 'green' : 'red'"
+                >{{ faIcon(study.licence) }}
+                </v-icon>
+
+            </v-list-item-title>
+
+
+          </v-list-item-content>
+        </v-list-item>
+      </v-card-title>
 
 
       <v-row>
@@ -98,7 +107,7 @@ import {lookupIcon} from "@/icons"
 import ReferenceDetail from "./ReferenceDetail"
 import FileImageView from "./FileImageView"
 import {UrlMixin} from "../tables/mixins";
-import {StoreInteractionMixin} from "../../storeInteraction";
+import {ApiInteractionMixin} from "../../apiInteraction";
 
 export default {
   name: "StudyOverview",
@@ -112,7 +121,7 @@ export default {
       required: true,
     }
   },
-  mixins: [UrlMixin, StoreInteractionMixin],
+  mixins: [UrlMixin, ApiInteractionMixin],
 
   computed: {
     images() {
