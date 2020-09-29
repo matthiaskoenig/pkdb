@@ -31,6 +31,9 @@
           </v-list-item-content>
         </v-list-item>
       </v-card-title>
+      <v-card-text>
+
+
 
 
       <v-row>
@@ -66,13 +69,12 @@
           <reference-detail :reference="study.reference" :resource_url="reference_url(study.reference.sid)"/>
         </v-col>
       </v-row>
-
       <v-row>
         <v-col>
           <v-alert v-if="study.files.length == 0"
-                   dense
-                   text
-                   type="info"
+            dense
+            text
+            type="info"
           >
             No images or no permission
           </v-alert>
@@ -84,21 +86,20 @@
           <div v-if="study.files.length > 0">
             <span class="attr">Files</span><br/>
             <span v-for="file in study.files" :key="file.pk">
-                            <file-chip :file="file.file"/>
-              </span>
+              <file-chip :file="file.file"/>
+            </span>
           </div>
         </v-col>
       </v-row>
-
       <v-row>
-        <Annotations :item="study" title="Study"/>
+        <annotations :item="study" title="Study"/>
         <annotations  v-if="study.groupset" title="Groups" :item="study.groupset"/>
         <annotations v-if="study.individualset" title="Individuals" :item="study.individualset"/>
         <annotations v-if="study.interventionset" title="Interventions" :item="study.interventionset"/>
         <annotations v-if="study.outputset" title="Outputs" :item="study.outputset"/>
-
-
       </v-row>
+      </v-card-text>
+
     </v-card>
 </template>
 

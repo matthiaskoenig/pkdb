@@ -1,22 +1,8 @@
 <template>
   <span >
-  <v-chip
-      v-if="!object.count"
-      :class= margin
-      color="#FFFFFF"
-      flat
-      pill
-      small
-      :title="'Show ' + label + ' details'"
-      @click.stop="update_details"
-  >
-    <v-icon small left :color="detail.color">{{faIcon(otype)}}</v-icon>&nbsp;
-    <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ label }}</text-highlight></span>
-  </v-chip>
-  <v-badge v-else left dark overlap color="#000000">
-    <span slot="badge">{{ object.count }}</span>
     <v-chip
-        class="ma-1"
+        v-if="!object.count"
+        :class= margin
         color="#FFFFFF"
         flat
         pill
@@ -27,11 +13,23 @@
       <v-icon small left :color="detail.color">{{faIcon(otype)}}</v-icon>&nbsp;
       <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ label }}</text-highlight></span>
     </v-chip>
-  </v-badge>
-</span>
+    <v-badge v-else left dark overlap color="#000000">
+      <span slot="badge">{{ object.count }}</span>
+      <v-chip
+          class="ma-1"
+          color="#FFFFFF"
+          flat
+          pill
+          small
+          :title="'Show ' + label + ' details'"
+          @click.stop="update_details"
+      >
+        <v-icon small left :color="detail.color">{{faIcon(otype)}}</v-icon>&nbsp;
+        <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ label }}</text-highlight></span>
+      </v-chip>
+    </v-badge>
+  </span>
 </template>
-
-
 <script>
 import {ApiInteractionMixin} from "../../../apiInteraction";
 import {IconsMixin} from "../../../icons";

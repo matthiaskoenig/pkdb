@@ -6,7 +6,6 @@
             flat
             pill
             small
-
             :to="to"
     >
       <scatter-icon v-if="icon==='scatter'" class="v-icon--left"/>
