@@ -743,20 +743,18 @@ class PKDataView(APIView):
                         else:
                             data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
                             df = pd.DataFrame(data)
+                            def sorted_tuple(v):
+                                return sorted(tuple(v))
+
                             if key=="outputs":
 
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
 
-                                def tuple_or_value(values):
-                                    unique = values.unique()
-                                    if len(unique) == 1:
-                                      return unique[0]
-                                    return  tuple(values)
+                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple).apply(SubSet.to_list)
 
-
-                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=tuple_or_value)
-
-                                #timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name",],aggfunc=tuple_or_value)
+                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name",],aggfunc=tuple).apply(SubSet.to_list)
+                                print("here I am")
+                                #print(set(timecourse_df.iloc[1]["intervention_pk"]))
                                 #from pprint import pprint
                                 #pprint(timecourse_df)
 

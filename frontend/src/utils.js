@@ -48,7 +48,6 @@ const getNestedValue = (obj, path) => {
     for (let i = 0; i < path.length; i++) {
         res = res[path[i]]
     }
-
     return res
 };
 
