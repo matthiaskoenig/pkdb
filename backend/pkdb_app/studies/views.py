@@ -415,8 +415,6 @@ class PKData(object):
             self.outputs = self.outputs.filter(study_id__in=Subquery(studies_pks))
 
         self.studies = Study.objects.filter(id__in=studies_pks)
-        print("2 studies count")
-        print(self.studies.count())
 
         if groups_query or individuals_query:
             self.groups_query = groups_query
@@ -452,8 +450,6 @@ class PKData(object):
             else:
 
                 self.studies = self.studies.filter(outputs__id__in=outputs_pks)
-                print("studies count")
-                print(self.studies.count())
 
 
         time_elastic = time.time()
