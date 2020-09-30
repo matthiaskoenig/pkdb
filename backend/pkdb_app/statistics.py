@@ -1,7 +1,9 @@
 """
 Basic information and statistics about data base content.
 """
+from django.db.models import Count, F, Q
 from pkdb_app.data.models import SubSet, Data
+from pkdb_app.info_nodes.models import  Substance
 from rest_framework import serializers
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -42,7 +44,21 @@ Substance statistics: /statistics/substances/
 
 
 '''
+class SubstanceStatisticsViewSet(viewsets.ViewSet):
+    def list(self,request):
+        substances_interventions = Substance.objects.annotate(label=F('info_node__label'),intervention_count=Count("intervention", filter=Q(intervention__normed=True)))
+        substances_outputs = Substance.objects.annotate(label=F('info_node__label'),output_count=Count("output", filter=Q(output__normed=True)))
 
+
+        return Response({"output":SubstanceStatisticsSerializer(substances_outputs, many=True).data,
+                         "output": SubstanceStatisticsSerializer(substances_interventions, many=True).data,
+                         })
+
+
+class SubstanceStatisticsSerializer(serializers.Serializer):
+    label = serializers.CharField()
+    intervention_count = serializers.IntegerField(allow_null=True)
+    output_count = serializers.IntegerField(allow_null=True)
 
 
 class Statistics(object):

@@ -12,7 +12,7 @@ from .views import CustomOpenAPISchemaGenerator
 from drf_yasg import openapi
 
 from .statistics import (
-    StatisticsViewSet,
+    StatisticsViewSet, SubstanceStatisticsViewSet,
 )
 
 from .info_nodes.views import (
@@ -55,6 +55,7 @@ router = DefaultRouter()
 # Misc URLs
 # -----------------------------------------------------------------------------
 router.register("statistics", StatisticsViewSet, basename="statistics")
+router.register("statistics/substances", SubstanceStatisticsViewSet, basename="statistics")
 
 # -----------------------------------------------------------------------------
 # Elastic URLs

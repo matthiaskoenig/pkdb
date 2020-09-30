@@ -749,31 +749,8 @@ class PKDataView(APIView):
                             if key=="outputs":
 
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
-
                                 timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple).apply(SubSet.to_list)
-
-                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name",],aggfunc=tuple).apply(SubSet.to_list)
-                                print("here I am")
-                                #print(set(timecourse_df.iloc[1]["intervention_pk"]))
-                                #from pprint import pprint
-                                #pprint(timecourse_df)
-
-                                #timecourse_df = SubSet.merge_values(df=timecourse_df,groupby=("output_pk",),sort_values=["time", "intervention_pk"])
-
-                                #df = timecourse_df.groupby(["label","study_name"],as_index=False).apply(lambda df_t: pd.Series(SubSet.merge_values(
-                                #    df=df_t,
-                                #    groupby=("output_pk",),
-                                #    sort_values=["time","intervention_pk"])))
-
-                                #timecourse_data = []
-                                #for (n, df_t) in timecourse_df.groupby(["label","study_name"]):
-                                #    timecourse = SubSet.merge_values(
-                                #        df=df_t,
-                                #        groupby=("output_pk",),
-                                #        sort_values=["time","intervention_pk"])
-                                #    timecourse_data.append(timecourse)
-                                #df = pd.DataFrame(timecourse_data)
-
+                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple).apply(SubSet.to_list)
                                 timecourse_df.to_csv(string_buffer)
                                 archive.writestr(f'timecourse.csv', string_buffer.getvalue())
 
