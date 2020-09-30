@@ -10,6 +10,7 @@
            :disabled="resource_url ? false : true"
            title="JSON for query"
            icon
+           target="_blank"
     >
         <v-icon dark>fas fa-code</v-icon>
     </v-btn>

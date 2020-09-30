@@ -85,11 +85,13 @@
           </v-col>
         </v-row>
         <v-row>
-          <annotations :item="study" title="Study"/>
-          <annotations  v-if="study.groupset" title="Groups" :item="study.groupset"/>
+          <v-col>
+          <annotations title="Study" :item="study" />
+          <annotations v-if="study.groupset" title="Groups" :item="study.groupset"/>
           <annotations v-if="study.individualset" title="Individuals" :item="study.individualset"/>
           <annotations v-if="study.interventionset" title="Interventions" :item="study.interventionset"/>
           <annotations v-if="study.outputset" title="Outputs" :item="study.outputset"/>
+          </v-col>
         </v-row>
     </div>
 </template>

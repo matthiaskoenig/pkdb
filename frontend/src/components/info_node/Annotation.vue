@@ -6,6 +6,8 @@
       pill
       small
       :href="annotation.url"
+      target="_blank"
+      :title="'Open ' + annotation.collection + '|' + annotation.term"
   >
     <text-highlight :queries="highlight">
         {{ annotation.relation }}
