@@ -39,9 +39,8 @@
           </template>
 
           <template v-slot:item.reference="{ item }">
-
             <span v-if="item.reference">
-                  <xref v-if="item.reference.pmid" name="pubmed" :accession="item.reference.pmid" :url="'https://pubmed.ncbi.nlm.nih.gov/' + item.reference.pmid"></xref>
+                  <pubmed :pmid="item.reference.pmid"/>
                   <span class="font-weight-thin"><text-highlight :queries="search.split(/[ ,]+/)">{{ item.reference.title }}</text-highlight></span>
                 </span>
           </template>
@@ -76,6 +75,7 @@
     import {searchTableMixin} from "./mixins";
     import TableToolbar from './TableToolbar';
     import Xref from "../info_node/Xref";
+    import Pubmed from "../info_node/Pubmed";
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
 
@@ -86,6 +86,7 @@
             TableToolbar,
             CharacteristicaCard,
             Xref,
+            Pubmed,
         },
         mixins: [searchTableMixin],
         data () {
