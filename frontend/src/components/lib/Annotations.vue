@@ -1,6 +1,6 @@
 <template>
 
-  <v-card class="parent_color pa-0 ma-0"
+  <v-card class="pa-0 ma-4"
       v-if="(item.comments && item.comments.length>0) || (item.descriptions && item.descriptions.length>0)"
       flat
       dark
