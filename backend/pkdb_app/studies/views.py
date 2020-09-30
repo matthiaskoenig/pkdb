@@ -749,8 +749,11 @@ class PKDataView(APIView):
                             if key=="outputs":
 
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
-                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple).apply(SubSet.to_list)
-                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple).apply(SubSet.to_list)
+                                if len(timecourse_df) !=0:
+                                    timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple).apply(SubSet.to_list)
+                                    timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple).apply(SubSet.to_list)
+                                else:
+                                    timecourse_df = pd.DataFrame([])
                                 timecourse_df.to_csv(string_buffer)
                                 archive.writestr(f'timecourse.csv', string_buffer.getvalue())
 
