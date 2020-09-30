@@ -15,7 +15,7 @@
       >
 
         {{ item.tab }} ({{results[item.tab]}})
-        <scatter-icon v-if="item.tab === 'scatter'"/>
+        <scatter-icon v-if="item.tab === 'scatters'"/>
         <v-icon small v-else>{{ faIcon(item.tab) }}</v-icon>
 
       </v-tab>

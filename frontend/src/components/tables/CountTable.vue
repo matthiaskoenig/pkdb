@@ -112,7 +112,7 @@ export default {
         {
           name: 'Scatter',
           to: '/data?tab=scatter',
-          icon: 'scatter',
+          icon: 'scatters',
           count: this.data.scatter_count,
           description: "Correlations between outputs are often provided as scatter plots (e.g. age ~ clearance)."
         },

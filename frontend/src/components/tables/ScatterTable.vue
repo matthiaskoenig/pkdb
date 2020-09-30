@@ -1,6 +1,6 @@
 <template>
     <v-sheet flat>
-        <table-toolbar otype="scatter" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
+        <table-toolbar otype="scatters" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
             fill-height
                 fixed-header

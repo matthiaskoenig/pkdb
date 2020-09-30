@@ -8,7 +8,7 @@
             small
             :to="to"
     >
-      <scatter-icon v-if="icon==='scatter'" class="v-icon--left"/>
+      <scatter-icon v-if="icon==='scatters'" class="v-icon--left"/>
       <v-icon v-else
               small
               left

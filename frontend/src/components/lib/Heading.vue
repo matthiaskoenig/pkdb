@@ -1,6 +1,7 @@
 <template>
     <span id="heading">
-        <v-icon :title="title"
+        <scatter-icon v-if="icon==='scatters'" class="v-icon--left"/>
+        <v-icon v-else :title="title"
                 color="black"
         >
             {{ icon }}
@@ -15,8 +16,12 @@
 </template>
 
 <script>
+
+import ScatterIcon from "../detail/ScatterIcon";
+
     export default {
         name: "Heading",
+        components:{ScatterIcon},
         props: {
             title: {
                 type: String,

@@ -19,9 +19,10 @@
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
+    import {IconsMixin} from "../../icons";
 
     export default {
+      mixins: [IconsMixin],
         name: "TableToolbar",
         data () {
             return {
@@ -45,9 +46,7 @@
             }
         },
         methods: {
-            faIcon(key) {
-                return lookupIcon(key)
-            },
+
             capitalizeFirstLetter(string) {
                 return string.charAt(0).toUpperCase() + string.slice(1);
             },

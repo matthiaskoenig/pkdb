@@ -66,7 +66,7 @@ Vue.config.productionTip = false;
 
 const opts = {
     icons: {
-        iconfont: 'fa'
+        iconfont: 'fa',
     }
 };
 Vue.use(Vuetify)
