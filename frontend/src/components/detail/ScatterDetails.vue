@@ -19,6 +19,15 @@
                :key="substance.sid"
                otype="substance"
               />
+    <!--
+    <object-chip
+        v-if="Object.keys(time_unit).length !== 0"
+        :object="timeObject(item)"
+        otype="time"
+        :search="search"
+    />
+    -->
+
     <span v-if="details.interventions.length > 0" v-for="(interventions , index2) in details.interventions" :key="index2">
       <object-chip
           v-for="intervention in interventions"
@@ -31,8 +40,6 @@
     <!--
 
     <object-chip
-
-
         otype="group"
         v-if="Object.keys(group).length !== 0"
         v-for="group in details.group"
@@ -54,8 +61,13 @@
 
 <script>
 
+import {utils} from "../../utils";
+
 export default {
   name: "ScatterDetails",
+  methods: {
+    timeObject: function (o){return utils.timeObject(o)},
+  },
   props: {
     details: {
       type: Object,
