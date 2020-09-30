@@ -160,6 +160,12 @@ class SubSet(Accessible):
         return values
 
     @staticmethod
+    def _tuple_or_value(values):
+        if len(set(values)) == 1:
+            return list(values)[0]
+        return tuple(values)
+
+    @staticmethod
     def merge_values(values=None ,df=None, groupby=("outputs__pk",), sort_values=["outputs__interventions__pk","outputs__time"]):
 
         if values:

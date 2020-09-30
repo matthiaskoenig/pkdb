@@ -415,7 +415,8 @@ class PKData(object):
             self.outputs = self.outputs.filter(study_id__in=Subquery(studies_pks))
 
         self.studies = Study.objects.filter(id__in=studies_pks)
-
+        print("2 studies count")
+        print(self.studies.count())
 
         if groups_query or individuals_query:
             self.groups_query = groups_query
@@ -449,7 +450,11 @@ class PKData(object):
             if concise:
                 self.outputs = self.outputs.filter(id__in=outputs_pks)
             else:
+
                 self.studies = self.studies.filter(outputs__id__in=outputs_pks)
+                print("studies count")
+                print(self.studies.count())
+
 
         time_elastic = time.time()
 
@@ -492,7 +497,7 @@ class PKData(object):
             }
 
         else:
-            study_pks = self.studies.values_list("pk", flat=True)
+            study_pks = self.studies.distinct().values_list("pk", flat=True)
 
             self.interventions = Intervention.objects.filter(study_id__in=study_pks, normed=True)
             self.groups = Group.objects.filter(study_id__in=study_pks)
@@ -745,9 +750,21 @@ class PKDataView(APIView):
                             if key=="outputs":
 
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
-                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple)
-                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=SubSet.to_list)
-                                timecourse_df = SubSet.merge_values(df=timecourse_df,groupby=("output_pk",),sort_values=["time", "intervention_pk"])
+
+                                def tuple_or_value(values):
+                                    unique = values.unique()
+                                    if len(unique) == 1:
+                                      return unique[0]
+                                    return  tuple(values)
+
+
+                                timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=tuple_or_value)
+
+                                #timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name",],aggfunc=tuple_or_value)
+                                #from pprint import pprint
+                                #pprint(timecourse_df)
+
+                                #timecourse_df = SubSet.merge_values(df=timecourse_df,groupby=("output_pk",),sort_values=["time", "intervention_pk"])
 
                                 #df = timecourse_df.groupby(["label","study_name"],as_index=False).apply(lambda df_t: pd.Series(SubSet.merge_values(
                                 #    df=df_t,
