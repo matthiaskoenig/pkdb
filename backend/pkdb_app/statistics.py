@@ -13,6 +13,38 @@ from pkdb_app.studies.models import Study, Reference
 from pkdb_app.subjects.models import Group, Individual
 
 
+'''
+Substance statistics: /statistics/substances/
+{
+    version: 0.9.2,
+    substances: {
+        caffeine: {
+            studies: {
+                count: 20, 
+            },
+            interventions: {
+                count: 20,
+            },
+            outputs: {
+                count: 20
+            },
+            timecourses: {
+                count: 40
+            },
+            scatters: {
+                count: 30
+            }
+        },
+        ...
+    }
+
+}
+
+
+'''
+
+
+
 class Statistics(object):
     """ Basic database statistics. """
 
