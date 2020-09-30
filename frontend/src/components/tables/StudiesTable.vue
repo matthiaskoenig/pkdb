@@ -34,7 +34,7 @@
             <count-chip :count=item.intervention_count icon="intervention" name="intervention"></count-chip>
             <count-chip :count=item.output_count icon="output" name="output"></count-chip >
             <count-chip :count=item.timecourse_count icon="timecourse" name="timecourse" />
-            <count-chip :count=item.scatter_count icon="scatter" name="scatter" />
+            <count-chip :count=item.scatter_count icon="scatters" name="scatter" />
 
           </template>
 
