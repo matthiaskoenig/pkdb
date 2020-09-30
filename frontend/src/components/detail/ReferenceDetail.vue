@@ -2,8 +2,7 @@
   <div id="reference-detail">
     <v-card flat>
       <p>
-        <span class="font-weight-black">{{ reference.title }}</span>
-        <br/>
+        <span class="font-weight-black">{{ reference.title }}</span><br/>
         <span class="font-weight-light" v-for="(author, index) in reference.authors" :key="index">
                     {{ author.first_name }} {{ author.last_name }},
         </span>
@@ -12,6 +11,7 @@
       </p>
 
       <p align="justify">{{ reference.abstract }}</p>
+
     </v-card>
   </div>
 </template>
