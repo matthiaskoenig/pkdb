@@ -66,6 +66,12 @@
                                  otype="tissue"
                                  :search="search"
                     />
+                    <object-chip
+                        v-if="item.time_unit"
+                        :object="timeObject(item)"
+                        otype="time"
+                        :search="search"
+                    />
 
                 </template>
 
@@ -88,6 +94,7 @@
     import TableToolbar from './TableToolbar';
     import NoData from './NoData';
     import CharacteristicaCard from '../detail/CharacteristicaCard'
+    import {utils} from "../../utils";
 
     export default {
         name: "OutputsTable",
@@ -96,6 +103,9 @@
             TableToolbar,
             CharacteristicaCard
         },
+      methods: {
+        timeObject: function (o){return utils.timeObject(o)},
+      },
         mixins: [searchTableMixin, UrlMixin],
         data () {
             return {
