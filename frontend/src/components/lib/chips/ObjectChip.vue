@@ -11,10 +11,10 @@
         @click.stop="update_details"
     >
       <v-icon small left :color="detail.color">{{faIcon(otype)}}</v-icon>&nbsp;
-      <span style="color: black; font-weight: bold;"><text-highlight :queries="search.split(/[ ,]+/)">{{ label }}</text-highlight></span>
+      <span style="color: black; font-weight: bold"><text-highlight :queries="search.split(/[ ,]+/)">{{ label }}</text-highlight></span>
     </v-chip>
-    <v-badge v-else left dark overlap color="#000000">
-      <span slot="badge">{{ object.count }}</span>
+    <v-badge style="z-index: 9999" v-else left dark overlap color="#000000">
+      <span  slot="badge">{{ object.count }}</span>
       <v-chip
           class="ma-1"
           color="#FFFFFF"

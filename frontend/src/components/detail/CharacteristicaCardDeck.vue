@@ -1,6 +1,6 @@
 <template>
     <span>
-        <v-layout d-flex flex-wrap >
+        <v-layout v-if="layout" d-flex flex-wrap>
             <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
                 <characteristica-card :data="item" />
 
@@ -10,6 +10,17 @@
                 <characteristica-card :data="item" />
             </span>
         </v-layout>
+
+        <span v-else d-flex flex-wrap>
+            <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
+                <characteristica-card :data="item" />
+
+            </span>
+            <span v-for="item in sortedCharacteristica.values" :key="item.pk">
+
+                <characteristica-card :data="item" />
+            </span>
+        </span>
     </span>
 
 </template>
@@ -27,6 +38,11 @@
                 type: Array,
                 required: true
             },
+          layout: {
+            type: Boolean,
+            default: true
+          },
+
         },
         methods: {
             f_sort : function(a, b) {

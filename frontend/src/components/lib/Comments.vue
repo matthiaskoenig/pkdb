@@ -1,12 +1,10 @@
 <template>
     <div id="comments" v-if="comments && comments.length>0">
 
-        <span v-for="comment in comments" :key="comment.pk">
-                <p  align="justify" xs11>
+        <div v-for="comment in comments" :key="comment.pk" style="text-align: justify; color: white">
                   <user-avatar :username="comment.username" />
                     {{comment.text}}
-                </p>
-        </span>
+        </div>
     </div>
 </template>
 

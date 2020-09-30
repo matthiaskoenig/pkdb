@@ -50,6 +50,7 @@
       <v-list-item  class=" ma-0 pl-1 pr-1">
             <v-card
                 width="100%"
+                class="parent_color"
                 flat
                 dark
             >
@@ -203,5 +204,7 @@ export default {
 </script>
 
 <style scoped>
-
+.parent_color{
+  background-color: inherit;
+}
 </style>

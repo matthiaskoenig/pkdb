@@ -1,9 +1,8 @@
 <template>
 
-  <v-card
+  <v-card class="parent_color pa-0 ma-0"
       v-if="(item.comments && item.comments.length>0) || (item.descriptions && item.descriptions.length>0)"
       flat
-      class="ma-0 pa-0"
       dark
   >
     <v-card-title>{{ title }}</v-card-title>

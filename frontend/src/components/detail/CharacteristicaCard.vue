@@ -9,7 +9,7 @@
         @click="update_details"
 
 
-        class="characteristica_card"
+        class="characteristica_card parent_color"
         align="start">
       <v-container fluid class="pt-1 pb-1">
         <v-row>
@@ -201,5 +201,8 @@
     .characteristica_card {
       font-size: small;
       padding-left: 10px;
+    }
+    .parent_color{
+      background-color: inherit;
     }
 </style>

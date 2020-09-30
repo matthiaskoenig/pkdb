@@ -1,16 +1,12 @@
 <template>
     <div id="descriptions" v-if="descriptions && descriptions.length>0">
-        <template v-for="description in descriptions">
-            <span :key="description.pk">
+        <div v-for="description in descriptions" :key="description.pk" style="text-align: justify; color: white">
 
-              <p align="justify">
                 <v-avatar title="description" :size="32">
                   <v-icon small>fas fa-align-left</v-icon>&nbsp;&nbsp;
                 </v-avatar>
-
-                {{ description.text }} </p>
-            </span>
-        </template>
+                {{ description.text }}
+        </div>
     </div>
 </template>
 
@@ -26,5 +22,7 @@
 </script>
 
 <style scoped>
+ .white_text{
+   color: white; }
 
 </style>

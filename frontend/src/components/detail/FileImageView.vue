@@ -1,5 +1,5 @@
 <template>
-  <v-container max-width="200">
+  <v-container max-width="410">
     <v-tabs
         v-model="active"
         show-arrows
@@ -19,7 +19,7 @@
           <template slot-scope="data">
             <v-img :src="data.data"
                    class="mt-1"
-                   width="392"
+                   width="410"
                    :alt="item.name"
                    :contain="true"
                    @click="next"
