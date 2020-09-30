@@ -46,13 +46,19 @@ Substance statistics: /statistics/substances/
 '''
 class SubstanceStatisticsViewSet(viewsets.ViewSet):
     def list(self,request):
-        substances_interventions = Substance.objects.annotate(label=F('info_node__label'),intervention_count=Count("intervention", filter=Q(intervention__normed=True)))
-        substances_outputs = Substance.objects.annotate(label=F('info_node__label'),output_count=Count("output", filter=Q(output__normed=True)))
+        substances_interventions = Substance.objects.annotate(label=F('info_node__label'),intervention_count=Count("intervention", filter=Q(intervention__normed=True))).order_by('info_node__label')
+        substances_outputs = Substance.objects.annotate(label=F('info_node__label'),output_count=Count("output", filter=Q(output__normed=True))).order_by('info_node__label')
 
+        data = zip(substances_outputs.values("info_node__label"),substances_outputs.values("output_count"), substances_interventions.values("intervention_count"))
 
-        return Response({"output":SubstanceStatisticsSerializer(substances_outputs, many=True).data,
-                         "output": SubstanceStatisticsSerializer(substances_interventions, many=True).data,
-                         })
+        result = []
+        for x in data:
+            res = {}
+            for v in x:
+                res = {**res, **v}
+            result.append(res)
+
+        return Response(result)
 
 
 class SubstanceStatisticsSerializer(serializers.Serializer):
