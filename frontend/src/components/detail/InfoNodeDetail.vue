@@ -4,7 +4,7 @@
       <v-list-item three-line >
         <v-list-item-content>
           <div class="overline">
-            <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
+            <span v-if="data.ntype != 'undefined'">{{ data.ntype.toUpperCase() }}</span>
             <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
           </div>
           <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight>
@@ -16,6 +16,8 @@
             >
               {{ substance_class.toUpperCase() }}
             </v-chip>
+            <json-button :resource_url="api + 'info_nodes/'+ data.sid +'/?format=json'"/>
+
           </v-list-item-title>
           <v-list-item-subtitle v-if="parents_labels.length>0">Parents:
             <object-chip :object="parent"
@@ -80,11 +82,11 @@
 
 import Annotation from "../info_node/Annotation";
 import Xref from "../info_node/Xref";
-import {StoreInteractionMixin} from "../../storeInteraction";
+import {ApiInteractionMixin} from "../../apiInteraction";
 
 export default {
   name: 'InfoNodeDetail',
-  mixins: [StoreInteractionMixin],
+  mixins: [ApiInteractionMixin],
   components: {
     Annotation,
     Xref,
