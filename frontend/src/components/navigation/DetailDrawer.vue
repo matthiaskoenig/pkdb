@@ -24,19 +24,7 @@
       </v-list-item-avatar>
 
     </v-list-item>
-
-    <!--<v-divider v-if="!mini"/>-->
-    <div v-if="!mini">
-      <v-list-item class="ma-0 pa-0">
-        <info-node-detail v-if="show_type === 'info_node'" :data="detail_info"/>
-        <search-help v-if="show_type === 'help'"/>
-        <study-overview v-if="show_type === 'study'" :study="detail_info"/>
-        <individual-detail v-if="show_type === 'individual'" :individual="detail_info"/>
-        <group-detail v-if="show_type === 'group'" :group="detail_info"/>
-        <intervention-detail v-if="show_type === 'intervention'" :intervention="detail_info"/>
-
-      </v-list-item>
-    </div>
+    <detail-content/>
 
   </v-navigation-drawer>
 </template>
@@ -45,55 +33,17 @@
 
 
 import {IconsMixin} from "../../icons";
-import SearchHelp from "../search/SearchHelp";
-import InfoNodeDetail from "../detail/InfoNodeDetail";
-import StudyOverview from "../detail/StudyOverview";
-import GroupDetail from "../detail/GroupDetail";
-import IndividualDetail from "../detail/IndividualDetail";
-import InterventionDetail from "../detail/InterventionDetail";
+import DetailContent from "../detail/DetailContent";
+import {StoreInteractionMixin} from "../../storeInteraction";
 
 export default {
   name: 'DetailDrawer',
-  components: {InterventionDetail, IndividualDetail, GroupDetail, SearchHelp, StudyOverview,InfoNodeDetail},
-  mixins: [IconsMixin],
+  components: {
+    DetailContent},
+  mixins: [IconsMixin, StoreInteractionMixin],
   data: () => ({
     drawer:true
   }),
-  computed:{
-    mini:  {
-      get() {
-        return !this.$store.state.display_detail
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "display_detail",
-          value: !value,
-        })
-      }
-    },
-    detail_info: {
-      get() {
-        return this.$store.state.detail_info
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "detail_info",
-          value: value,
-        })
-      }
-    },
-    show_type: {
-      get() {
-        return this.$store.state.show_type
-      },
-      set(value) {
-        this.$store.dispatch('updateAction', {
-          key: "show_type",
-          value: value,
-        })
-      }
-    }
-  }
 }
 </script>
 

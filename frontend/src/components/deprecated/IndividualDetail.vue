@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import CharacteristicaCardDeck from './CharacteristicaCardDeck';
+    import CharacteristicaCardDeck from '../detail/CharacteristicaCardDeck';
     import {ApiInteractionMixin} from "../../apiInteraction";
 
     export default {

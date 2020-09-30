@@ -1,33 +1,34 @@
 <template>
   <div>
-    <v-list-item three-line >
-      <v-list-item-content>
-        <div class="overline">
-          <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
-          <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
-        </div>
-        <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight>
-          <v-chip v-if="data.ntype === 'substance'"
-                  outlined
-                  small
-                  class="ml-2"
-                  :title="substance_class==='generic' ? 'Generic substance class without chemical structure': 'Specific substance with chemical structure'"
-          >
-            {{ substance_class.toUpperCase() }}
-          </v-chip>
-        </v-list-item-title>
-        <v-list-item-subtitle v-if="parents_labels.length>0">Parents:
-          <object-chip :object="parent"
-                       otype="info_node"
-                       v-for="parent in data.parents"
-                       :key="parent.sid"
-                       :search="highlight"
-          />
-        </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
+    <v-list>
+      <v-list-item three-line >
+        <v-list-item-content>
+          <div class="overline">
+            <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
+            <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
+          </div>
+          <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight>
+            <v-chip v-if="data.ntype === 'substance'"
+                    outlined
+                    small
+                    class="ml-2"
+                    :title="substance_class==='generic' ? 'Generic substance class without chemical structure': 'Specific substance with chemical structure'"
+            >
+              {{ substance_class.toUpperCase() }}
+            </v-chip>
+          </v-list-item-title>
+          <v-list-item-subtitle v-if="parents_labels.length>0">Parents:
+            <object-chip :object="parent"
+                         otype="info_node"
+                         v-for="parent in data.parents"
+                         :key="parent.sid"
+                         :search="highlight"
+            />
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
 
-    <v-card-text>
     <div v-if="data.description && data.description.length>0">
       <text-highlight :queries="highlight">
       {{ data.description }}<br />
@@ -71,8 +72,6 @@
         </li>
       </ul>
     </div>
-    </v-card-text>
-  <!--</v-card>-->
   </div>
 
 </template>

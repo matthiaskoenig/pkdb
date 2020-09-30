@@ -1,21 +1,21 @@
 <template>
-  <v-card  dark flat>
-    <v-card-title>
-      How to search in PK-DB?
-    </v-card-title>
-    <v-card-text>
-      <p align="justify">
+  <div style="color: white">
+
+      <div class="overline">
+        <h2> How to search in PK-DB? </h2>
+      </div>
+
+
+     <p align="justify">
         Data in PK-DB is represented as entries, with every single <code>Entry</code> having information
         on the
       </p>
-      <p>
-        <ul>
-            <li>Study in which it was recorded,</li>
-            <li>Individual or Group it was measured on,</li>
-            <li>Intervention(s) which were applied,</li>
-            <li>and the Output(s), Timecourse(s) or Scatter(s) which were measured.</li>
-        </ul>
-      </p>
+      <ul>
+          <li>Study in which it was recorded,</li>
+          <li>Individual or Group it was measured on,</li>
+          <li>Intervention(s) which were applied,</li>
+          <li>and the Output(s), Timecourse(s) or Scatter(s) which were measured.</li>
+      </ul>
       <p align="justify">
         To filter database entries filters can be applied individually or in combination on Studies, Groups/Individuals,
         Interventions, Outputs/Timecourses. To apply a filter on one of the categories select the search form and start
@@ -28,16 +28,12 @@
         Results can be downloaded by clicking on the download button.
       </p>
 
-    </v-card-text>
-
-    <v-card-title class="mt-0 pt-0 mb-2 pb-0">
-      Search examples
-    </v-card-title>
-
-      <span class="mt-0 pt-0" flat v-for="example in examples" :key="example.title">
-        <v-card-title class="ml-0 pl-0">
+    <div class="overline">
+      <h3> Search examples</h3>
+    </div>
+      <div class="mt-4 pt-0" flat v-for="example in examples" :key="example.title">
           <v-btn
-              class="mt-0 pt-0"
+              class="pt-2"
               width="100%"
               small
               v-on:click="query(example.query)"
@@ -45,11 +41,10 @@
             <v-icon left small >{{ faIcon('search') }}</v-icon>
             <div  class="pa-1" v-html="example.title"></div>
           </v-btn>
-        </v-card-title>
-        <v-card-text align="justify" v-html="example.description" />
-      </span>
+        <div class="pt-2" align="justify" v-html="example.description" />
+      </div>
+  </div>
 
-  </v-card>
 </template>
 
 <script>

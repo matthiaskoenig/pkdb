@@ -1,22 +1,18 @@
 <template>
-    <v-card flat class="ma-0 pa-0 parent_color">
+    <div>
 
-
-      <v-card-title>
-        <v-list-item>
-          <v-list-item-content>
-            <div class="overline">
-              <v-icon class="mr-4">{{ faIcon('study') }}</v-icon>
-              <text-highlight :queries="highlight">
+        <div class="overline" style="color: white">
+          <h2>
+            <v-icon class="mr-4">{{ faIcon('study') }}</v-icon>
+            <text-highlight :queries="highlight">
               {{ study.name }} ({{ study.sid }})
-              </text-highlight>
-              <JsonButton :resource_url="api + 'studies/'+ study.sid +'/?format=json'"/>
-            </div>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card-title>
+            </text-highlight>
+            <JsonButton :resource_url="api + 'studies/'+ study.sid +'/?format=json'"/>
+          </h2>
 
-      <v-card-text>
+        </div>
+
+
         <v-row>
           <v-col cols="6">
             <div class="mb-4">
@@ -67,7 +63,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col class="pa-0">
+          <v-col>
             <v-alert v-if="study.files.length == 0"
                      dense
                      text
@@ -95,14 +91,7 @@
           <annotations v-if="study.interventionset" title="Interventions" :item="study.interventionset"/>
           <annotations v-if="study.outputset" title="Outputs" :item="study.outputset"/>
         </v-row>
-
-
-
-
-
-      </v-card-text>
-
-    </v-card>
+    </div>
 </template>
 
 <script>

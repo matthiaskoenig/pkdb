@@ -20,6 +20,17 @@ let StoreInteractionMixin = {
         }
     },
     computed: {
+        mini:  {
+            get() {
+                return !this.$store.state.display_detail
+            },
+            set(value) {
+                this.$store.dispatch('updateAction', {
+                    key: "display_detail",
+                    value: !value,
+                })
+            }
+        },
         results: {
             get(){
                 return this.$store.state.results
