@@ -7,7 +7,11 @@
             <span v-if="data.ntype != 'undefined'">{{ data.ntype.toUpperCase() }}</span>
             <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
           </div>
-          <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight>
+          <v-list-item-title class="headline mb-1">
+            <v-icon class="mr-4">{{ faIcon(data.ntype) }}</v-icon>
+            <text-highlight :queries="highlight">{{ data.label }}
+            </text-highlight>
+
             <v-chip v-if="data.ntype === 'substance'"
                     outlined
                     small
@@ -83,10 +87,11 @@
 import Annotation from "../info_node/Annotation";
 import Xref from "../info_node/Xref";
 import {ApiInteractionMixin} from "../../apiInteraction";
+import {IconsMixin} from "../../icons";
 
 export default {
   name: 'InfoNodeDetail',
-  mixins: [ApiInteractionMixin],
+  mixins: [ApiInteractionMixin, IconsMixin],
   components: {
     Annotation,
     Xref,

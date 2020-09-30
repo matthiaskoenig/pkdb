@@ -124,7 +124,6 @@ import InterventionForm from "../search/InterventionSearchForm";
 import SubjectsForm from "../search/SubjectSearchForm";
 import OutputForm from "../search/OutputSearchForm";
 
-import InfoNode from "../deprecated/InfoNode";
 import InfoNodeDetail from "../detail/InfoNodeDetail";
 import SearchHelp from "../search/SearchHelp";
 import StudyOverview from "../detail/StudyOverview";
@@ -150,7 +149,6 @@ export default {
     StudyOverview,
     SearchHelp,
     InfoNodeDetail,
-    InfoNode,
     StudySearchForm,
     InterventionForm,
     SubjectsForm,
