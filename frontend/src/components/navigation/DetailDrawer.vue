@@ -12,7 +12,6 @@
   >
     <v-list-item @click.stop="mini = !mini" title="Hide details panel">
       <v-btn
-          x-small
           icon
           v-if="!mini"
           @click.stop="mini = !mini"
