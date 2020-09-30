@@ -1,47 +1,29 @@
 <template>
-  <div>
-    <v-list-item three-line >
-      <v-list-item-content>
-        <div class="overline">
-          Intervention
-          <JsonButton :resource_url="api + 'interventions/'+ intervention.pk +'/?format=json'"/>
-        </div>
-        <v-list-item-title class="headline mb-1">
-          <text-highlight :queries="highlight">{{ intervention.name }}</text-highlight>
-        </v-list-item-title>
-        <v-layout d-flex flex-wrap >
+  <div width="100%" style="color: white">
+    <div class="overline">
+      <h2>
+        <v-icon class="mr-4">{{ faIcon("intervention") }}</v-icon>
+        <text-highlight :queries="highlight">{{ intervention.name }}</text-highlight>
+        <JsonButton :resource_url="api + 'interventions/'+ intervention.pk +'/?format=json'"/>
+      </h2>
+    </div>
+    <v-list  subheader dense>
 
-          <characteristica-card :data="intervention" />
-        </v-layout>
-
-        <object-chip
-            v-if="intervention.application"
-            :object="intervention.application"
-            otype="application"
-            :search="highlight"
-        />
-        <object-chip
-            v-if="intervention.route"
-            :object="intervention.route"
-            otype="route"
-            :search="highlight"
-        />
-        <object-chip
-            v-if="intervention.form"
-            :object="intervention.form"
-            otype="form"
-            :search="highlight"
-        />
-
-        <object-chip
-            v-if="intervention.time_unit"
-            :object="timeObject(intervention)"
-            otype="time"
-            :search="highlight"
-        />
-      </v-list-item-content>
-
+    </v-list>
+    <v-subheader>Measurement</v-subheader>
+    <v-list-item>
+      <characteristica-card :data="intervention" />
     </v-list-item>
+
+    <v-list-item v-for="(item, key) in data" :key="key" v-if="item.if_is">
+      <v-subheader >{{key}}</v-subheader>
+
+      <object-chip
+          :object="item.value"
+          :otype="key.toLowerCase()"
+          :search="highlight"/>
+    </v-list-item>
+
   </div>
 
 </template>
@@ -50,26 +32,30 @@
     import CharacteristicaCard from './CharacteristicaCard';
     import {utils} from "../../utils";
     import {ApiInteractionMixin} from "../../apiInteraction";
+    import {IconsMixin} from "../../icons";
 
     export default {
         name: "InterventionDetail",
-      mixins:[utils, ApiInteractionMixin],
+      mixins:[utils, ApiInteractionMixin, IconsMixin],
+      computed:{
+            data(){return {
+              "Application": {value:this.intervention.application, if_is: this.intervention.application},
+              "Route": {value:this.intervention.route, if_is: this.intervention.route},
+              "Form":  {value:this.intervention.form, if_is: this.intervention.form},
+              "Time":  {value:this.timeObject(this.intervention), if_is: this.intervention.time_unit},
+            }
+          }
+      },
         components: {
             CharacteristicaCard
         },
         props: {
             intervention: {
                 type: Object,
-            },
-            resource_url: {
-                type: String
             }
-        },
-        computed: {
         },
         methods: {
           timeObject: function (o){return utils.timeObject(o)},
-
         }
     }
 </script>

@@ -6,7 +6,7 @@
         <study-overview v-if="show_type === 'study'" :study="detail_info"/>
         <subject-detail v-if="show_type === 'individual'" :subject="detail_info"  subject_type="individual"/>
         <subject-detail v-if="show_type === 'group'" :subject="detail_info" subject_type="group"/>
-        <intervention-detail v-if="show_type === 'intervention'" :subject="detail_info"/>
+        <intervention-detail v-if="show_type === 'intervention'" :intervention="detail_info"/>
     </v-card-text>
   </v-card>
 </template>
