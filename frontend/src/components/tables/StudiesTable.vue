@@ -18,7 +18,7 @@
           <template v-slot:item.buttons="{ item }">
             <link-button :detail_info_input="item"
                         show_type_input="study"
-                        :title="'Study: '+item.pk"
+                        :title="'Study: '+item.name"
                         icon="study"
             />
             <JsonButton :resource_url="api + 'studies/'+ item.sid +'/?format=json'"/>

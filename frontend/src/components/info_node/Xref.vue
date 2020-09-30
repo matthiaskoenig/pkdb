@@ -6,6 +6,7 @@
           small
           :href="url"
           target="_blank"
+          :title="'Open ' + name + '|' + accession"
   >
     <strong><text-highlight :queries="highlight">{{ name }}</text-highlight> </strong>| <text-highlight :queries="highlight">{{ accession}}</text-highlight>
   </v-chip>
