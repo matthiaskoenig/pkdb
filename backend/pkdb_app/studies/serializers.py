@@ -3,6 +3,7 @@ Studies serializers.
 """
 from collections import OrderedDict
 
+from drf_yasg.utils import swagger_auto_schema
 from pkdb_app.data.models import DataSet
 from pkdb_app.data.serializers import DataSetSerializer, DataSetElasticSmallSerializer
 from rest_framework import serializers
@@ -18,13 +19,13 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
     DescriptionElasticSerializer
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
-from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidLabelSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameLabelSerializer
 from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
 from ..users.models import User
 from ..users.serializers import UserElasticSerializer
-from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_requried_key, \
+from ..utils import update_or_create_multiple, create_multiple, list_duplicates, _validate_required_key, \
     _validate_not_allowed_key
 
 
@@ -43,10 +44,15 @@ class AuthorSerializer(WrongKeyValidationSerializer):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
+    def validate(self, attrs):
+        """Validate author."""
+        if attrs.get("first_name") == "Max" and attrs.get("last_name").startswith("Musterman"):
+            raise serializers.ValidationError("Replace 'Max Mustermann' with the correct authors in <reference.json>")
+        return super().validate(attrs)
+
 
 class ReferenceSerializer(WrongKeyValidationSerializer):
     authors = AuthorSerializer(many=True, read_only=False)
-
 
     class Meta:
         model = Reference
@@ -61,6 +67,12 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
             "date",
             "authors",
         )
+        extra_kwargs = {
+            "name": {"error_messages": {"required": "add name to reference.json"}},
+            "pmid": {"error_messages": {"required": "add pmid to reference.json"}},
+            "sid": {"error_messages": {"required": "add sid to reference.json"}},
+
+        }
 
     def create(self, validated_data):
         authors_data = validated_data.pop("authors", [])
@@ -80,6 +92,16 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
+
+    def validate(self, attrs):
+        """Validate reference information."""
+        if attrs.get("journal").startswith("Add your title"):
+            raise serializers.ValidationError("Add a journal to <reference.json>.")
+        if attrs.get("title").startswith("Add your title"):
+            raise serializers.ValidationError("Add a title to <reference.json>.")
+        if attrs.get("date") == "1000-10-10":
+            raise serializers.ValidationError("Replace '1000-10-10' with the correct date in <reference.json>.")
+        return super().validate(attrs)
 
 
 class CuratorRatingSerializer(serializers.ModelSerializer):
@@ -107,8 +129,7 @@ class StudySerializer(SidSerializer):
                                        queryset=Reference.objects.all(), required=True, allow_null=False
                                        )
     groupset = GroupSetSerializer(read_only=False, required=False, allow_null=True)
-    curators = CuratorRatingSerializer(many=True, required=False,
-                                       allow_null=True)
+    curators = CuratorRatingSerializer(many=True)
     collaborators = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
@@ -119,8 +140,6 @@ class StudySerializer(SidSerializer):
     creator = utils.SlugRelatedField(
         queryset=User.objects.all(),
         slug_field="username",
-        required=False,
-        allow_null=True,
     )
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -174,7 +193,12 @@ class StudySerializer(SidSerializer):
             data["creator"] = self.get_or_val_error(User, username=creator)
 
         # curators to internal
-        if "curators" in data:
+        if hasattr(data,"curators"):
+            if len(data.get("curators",[])) == 0:
+                    raise serializers.ValidationError(
+                        {"curators": "At least One curator is required"}
+                    )
+        else:
             ratings = []
             for curator_and_rating in data.get("curators", []):
                 rating_dict = {}
@@ -348,8 +372,9 @@ class StudySerializer(SidSerializer):
 
 
         if "curators" in related:
-            study.ratings.all().delete()
+
             if related["curators"]:
+                study.ratings.all().delete()
                 for curator in related["curators"]:
                     curator["study"] = study
                     Rating.objects.create(**curator)
@@ -384,7 +409,7 @@ class StudySerializer(SidSerializer):
     def validate(self, attrs):
 
         if str(attrs.get("sid")).startswith("PKDB"):
-            _validate_requried_key(attrs, "date", extra_message="For a study with a '^PKDB\d+$' identifier "
+            _validate_required_key(attrs, "date", extra_message="For a study with a '^PKDB\d+$' identifier "
                                                                 "the date must be set in the study.json.")
         else:
             if attrs.get("date", None) is not None:
@@ -393,7 +418,7 @@ class StudySerializer(SidSerializer):
 
         if "curators" in attrs and "creator" in attrs:
             if attrs["creator"] not in [curator["user"] for curator in attrs["curators"]]:
-                error_json = {"creator": "Creator must be in curator."}
+                error_json = {"curators": "Creator must be in curators."}
                 raise serializers.ValidationError(error_json)
         return super().validate(attrs)
 
@@ -472,26 +497,34 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
             "output_calculated_count",
 
             "creator",
+            "curators",
             "substances",
         ]
 
         read_only_fields = fields
 
 
-
+@swagger_auto_schema(tags=['Studies'])
 class StudyElasticSerializer(serializers.ModelSerializer):
+    """
+    Study serializer.
+    """
+
     pk = serializers.CharField()
+    sid = serializers.CharField(help_text="This is the string id.")
     reference = ReferenceElasticSerializer()
 
-    name = serializers.CharField()
-    licence = serializers.CharField()
+    name = serializers.CharField(help_text="Name of the study. The convention is to deduce the name from the "
+                                           "refererence with the following pattern "
+                                           "'[Author][PublicationYear][A-Z(optional)]'." )
+    licence = serializers.CharField(help_text="Licence",)
     access = serializers.CharField()
 
     curators = CuratorRatingElasticSerializer(many=True, )
     creator = UserElasticSerializer()
     collaborators = UserElasticSerializer(many=True, )
 
-    substances = SidLabelSerializer(many=True, )
+    substances = SidNameLabelSerializer(many=True, )
 
     files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, )
 

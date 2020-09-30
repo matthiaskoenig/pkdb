@@ -9,9 +9,12 @@
 </template>
 
 <script>
+    import {StoreInteractionMixin} from "../../storeInteraction";
+
     export default {
         name: "NodeElement",
-        components: {
+      mixins: [StoreInteractionMixin],
+      components: {
 
         },
         props: {
@@ -19,14 +22,8 @@
                 type: Object,
                 required: true
             }
-        },
-        computed: {
-            highlight(){
-              return this.$store.state.highlight
-            },
-        },
-        methods: {
         }
+
     }
 
 </script>

@@ -97,17 +97,18 @@
                     x: this.timecourse.time,
                     y: this.values.y,
                     type: 'scatter',
+                    mode: 'markers+lines',
                     error_y: {
-                        type: 'data',
-                        array: this.errors.y,
-                        visible: true,
-                        color: '#555555',
-                    },
-                    marker: {
-                        color: '#000000',
-                        size: 8
-                    },
-                }]
+                          type: 'data',
+                          array: this.errors.y,
+                          visible: true,
+                          color: '#555555',
+                      },
+                      marker: {
+                          color: '#000000',
+                          size: 8
+                      },
+                  }]
             },
             layout(){
                 var xaxis = {

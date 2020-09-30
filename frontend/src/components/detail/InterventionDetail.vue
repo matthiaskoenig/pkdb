@@ -1,58 +1,61 @@
 <template>
-    <v-card>
-        <heading-toolbar :title="'Intervention: '+intervention.pk" icon="intervention" :resource_url="resource_url"/>
+  <div width="100%" style="color: white">
+    <div class="overline">
+      <h2>
+        <v-icon class="mr-4">{{ faIcon("intervention") }}</v-icon>
+        <text-highlight :queries="highlight">{{ intervention.name }}</text-highlight>
+        <JsonButton :resource_url="api + 'interventions/'+ intervention.pk +'/?format=json'"/>
+      </h2>
+    </div>
+    <v-list  subheader dense>
 
-        <v-layout wrap>
-            <v-flex xs4>
-                <characteristica-card :data="intervention" />
-            </v-flex>
-            <v-flex xs4>
-                <span class="attr">Name</span><br /> {{intervention.name }}<br />
-                <span class="attr">Category</span><br /> {{intervention.category }}<br />
-                <span class="attr">Choice</span><br /> {{intervention.choice }}<br />
-                <span class="attr">Route</span><br /> {{intervention.route }}<br />
-                <span class="attr">Form</span><br /> {{intervention.form}}<br />
-                <span class="attr">Application</span><br /> {{intervention.application}}<br />
-                <span class="attr">Substance</span><br /> {{intervention.substance}}<br />
+    </v-list>
+    <v-subheader>Measurement</v-subheader>
+    <v-list-item>
+      <characteristica-card :data="intervention" />
+    </v-list-item>
 
-                <span class="attr">Time</span><br /> {{intervention.time}} <br />
-                <span class="attr">Time Unit</span><br /> {{intervention.time_unit }} <br />
-            </v-flex>
-            <v-flex xs4>
-                <span class="attr">Unit</span><br /> {{intervention.unit}} <br />
-                <span class="attr">Value</span><br /> {{intervention.value }} <br />
-                <span class="attr">Mean</span><br /> {{intervention.mean }}<br />
-                <span class="attr">Median</span><br /> {{intervention.median }}<br />
-                <span class="attr">Min</span><br /> {{intervention.min }}<br />
-                <span class="attr">Max</span><br /> {{intervention.max }}<br />
-                <span class="attr">Sd</span><br /> {{intervention.sd }}<br />
-                <span class="attr">Se</span><br /> {{intervention.se }}<br />
-                <span class="attr">Cv</span><br /> {{intervention.cv }}<br />
-            </v-flex>
+    <v-list-item v-for="(item, key) in data" :key="key" v-if="item.if_is">
+      <v-subheader >{{key}}</v-subheader>
 
-        </v-layout>
-    </v-card>
+      <object-chip
+          :object="item.value"
+          :otype="key.toLowerCase()"
+          :search="highlight"/>
+    </v-list-item>
+
+  </div>
+
 </template>
 
 <script>
     import CharacteristicaCard from './CharacteristicaCard';
+    import {utils} from "../../utils";
+    import {ApiInteractionMixin} from "../../apiInteraction";
+    import {IconsMixin} from "../../icons";
 
     export default {
         name: "InterventionDetail",
+      mixins:[utils, ApiInteractionMixin, IconsMixin],
+      computed:{
+            data(){return {
+              "Application": {value:this.intervention.application, if_is: this.intervention.application},
+              "Route": {value:this.intervention.route, if_is: this.intervention.route},
+              "Form":  {value:this.intervention.form, if_is: this.intervention.form},
+              "Time":  {value:this.timeObject(this.intervention), if_is: this.intervention.time_unit},
+            }
+          }
+      },
         components: {
             CharacteristicaCard
         },
         props: {
             intervention: {
                 type: Object,
-            },
-            resource_url: {
-                type: String
             }
         },
-        computed: {
-        },
         methods: {
+          timeObject: function (o){return utils.timeObject(o)},
         }
     }
 </script>

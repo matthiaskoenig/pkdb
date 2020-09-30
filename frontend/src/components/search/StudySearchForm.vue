@@ -1,8 +1,13 @@
 <template>
  <div>
-      <study-search/>
-      <user-search on="creator"/>
-      <user-search on="curators" />
+    <study-search/>
+    <user-search on="creator"/>
+    <user-search on="curators" />
+
+    <v-row>
+      <v-checkbox class="ma-0 pa-1 pl-4" v-model="licence_open" label="Open" hide-details></v-checkbox>
+      <v-checkbox class="ma-0 pa-1 pl-4" v-model="licence_closed" label="Closed" hide-details></v-checkbox>
+    </v-row>
  </div>
 </template>
 
@@ -15,6 +20,31 @@ export default {
   components: {
     StudySearch,
     UserSearch,
-  }
+  },
+  computed: {
+    licence_open: {
+      get(){
+        return this.$store.state.licence_boolean.open
+      },
+      set (value) {
+        this.$store.dispatch('updateQueryAction', {
+          query_type: "licence_boolean",
+          key: "open",
+          value: value,      })
+      }
+    },
+    licence_closed: {
+      get(){
+        return this.$store.state.licence_boolean.closed
+      },
+      set (value) {
+        this.$store.dispatch('updateQueryAction', {
+          query_type: "licence_boolean",
+          key: "closed",
+          value: value,      })
+      },
+    },
+  },
 }
+
 </script>

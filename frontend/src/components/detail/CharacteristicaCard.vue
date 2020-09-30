@@ -1,62 +1,108 @@
 <template>
-    <div flat class="characteristica_card"
-            align="start" justify="start">
 
-      <span v-if="!(data.choice && data.choice.sid)">
+    <v-card
 
-        <span v-if="value || error">
-          <v-badge v-if="data.count" inline right overlap color="#BBBBBB" dark>
-              <span slot="badge">{{ data.count }}</span>
-              <node-element :data="data.measurement_type"/>
+        flat
+        tile
+        height="100%"
+        width="100%"
+        @click="update_details"
+
+
+        class="characteristica_card parent_color"
+        align="start">
+      <v-container fluid class="pt-1 pb-1">
+        <v-row>
+          <v-badge v-if="data.count" inline color="#BBBBBB" right>
+            <span slot="badge">{{ count_label }}</span>
+            <node-element  v-if="!data.choice" :data="data.measurement_type"/>
+            <span v-if="data.choice">
+                <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
+                <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
+                <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
+                <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small left color="red">fa fa-smoking</v-icon></span>
+                <span v-if="(data.choice.sid=='smoking-no')"><v-icon small left color="green">fa fa-smoking-ban</v-icon></span>
+                <span v-if="(data.choice.sid=='medication-yes')"><v-icon small left color="red">fa fa-tablets</v-icon></span>
+                <span v-if="(data.choice.sid=='medication-no')"><v-icon small left color="green">fa fa-tablets</v-icon></span>
+                <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
+                <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
+
+                <node-element :data="data.choice"/>
+            </span>
           </v-badge>
-          <node-element v-if="!data.count" :data="data.measurement_type"/>
-        </span>
+          <span v-else>
+            <node-element  v-if="!data.choice" :data="data.measurement_type"/>
+            <node-element v-if="data.choice" :data="data.choice"/>
+          </span>
+        </v-row>
 
-      </span>
+        <v-row>
+            <object-chip
+                v-if="data.substance"
+                :object="data.substance"
+                otype="substance"
+                :search="search"
+                margin="ma-0 pb-0 mr-2"
+            />
 
-      <br />
 
-        <span v-if="data.choice && data.choice.sid">
-            <span v-if="(data.choice.sid=='female')"><v-icon small left color="primary">fa fa-female</v-icon></span>
-            <span v-if="(data.choice.sid=='male')"><v-icon small left color="primary">fa fa-male</v-icon></span>
-            <span v-if="(data.choice.sid=='homo-sapiens')"><v-icon small color="primary">fa fa-female</v-icon><v-icon small left color="primary">fa fa-male</v-icon></span>
-            <span v-if="(data.choice.sid=='smoking-yes')"><v-icon small left color="red">fa fa-smoking</v-icon></span>
-            <span v-if="(data.choice.sid=='smoking-no')"><v-icon small left color="green">fa fa-smoking-ban</v-icon></span>
-            <span v-if="(data.choice.sid=='medication-yes')"><v-icon small left color="red">fa fa-tablets</v-icon></span>
-            <span v-if="(data.choice.sid=='medication-no')"><v-icon small left color="green">fa fa-tablets</v-icon></span>
-
-            <span v-if="(data.choice.sid=='healthy-yes')"><v-icon small left color="green">fa fa-check-circle</v-icon></span>
-            <span v-if="(data.choice.sid=='healthy-no')"><v-icon small left color="red">fa fa-times-circle</v-icon></span>
-
-            <v-badge inline right dark overlap color="#BBBBBB">
-            <span slot="badge">{{ data.count }}</span>
-            <node-element :data="data.choice"/>
-        </v-badge>
-        </span>
-        <span v-if="value || error">
+          <span v-if="value || error">
+          <span>
+            <object-chip
+                v-if="(data.substance !== null) & (!data.measurement_type.sid === 'abstinence')"
+                :object="data.substance"
+                otype="substance"
+                :search="search"
+                margin="ma-0 pb-0"
+            />
+          </span>
             {{ value }} <span v-if="error">{{ error }}</span>
-            <span v-if="data.unit"> {{ data.unit }}</span>
-        </span>
-        <span v-else-if="!value & !error & !data.choice & !data.substance">
-            <v-icon small title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
-        </span>
-    </div>
+            <span v-if="data.unit"> [{{ data.unit }}]</span>
+
+          </span>
+
+          <span v-if="!value & !error & (!data.choice) & !data.substance">
+              <v-icon small  title='missing information for characteristica'>{{ faIcon("na") }}</v-icon>
+          </span>
+        </v-row>
+      </v-container>
+
+    </v-card>
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
+    import {ApiInteractionMixin} from "../../apiInteraction";
+    import {IconsMixin} from "../../icons";
+
 
     export default {
         name: "CharacteristicaCard",
+        mixins: [ApiInteractionMixin, IconsMixin],
         props: {
             data: Object,
         },
         computed: {
+            search(){
+              return this.highlight
+            },
             count() {
                 if (!this.data.count){
                     return 1;  // individual has no count ? FIXME bug
                 } else {
                     return this.data.count
+                }
+            },
+            subject_count(){
+              if (this.data.group_count){
+                return this.data.group_count.toString()
+              }
+              return this.count.toString()
+            },
+            count_label(){
+                if (this.count == this.subject_count){
+                  return this.count.toString()
+                } else {
+                  return this.count.toString() + "/" + this.subject_count
                 }
             },
             error() {
@@ -119,10 +165,16 @@
             }
         },
         methods: {
-            faIcon: function (key) {
-                return lookupIcon(key)
-            },
-            toNumber: function(num){
+
+          update_details() {
+            if (this.data.choice) {
+              this.getInfo(this.data.choice.sid, "info_node")
+
+            } else {
+            this.getInfo(this.data.measurement_type.sid, "info_node")
+            }
+          },
+          toNumber: function(num){
                 // round to two digits
               let number = num
               if (num > 0.1){
@@ -137,7 +189,6 @@
                 number = Number.toExponential(num)
               }
               */
-              console.log(number);
               return number
             },
         },
@@ -148,7 +199,10 @@
 
 <style scoped lang="css">
     .characteristica_card {
-      padding-right: 10px;
       font-size: small;
+      padding-left: 10px;
+    }
+    .parent_color{
+      background-color: inherit;
     }
 </style>

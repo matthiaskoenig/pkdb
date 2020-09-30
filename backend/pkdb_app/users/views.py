@@ -14,13 +14,14 @@ class UserViewSet(
     """
     Updates and retrieves user accounts
     """
-
+    swagger_schema = None
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAdminUser,)
 
 
 class UserGroupViewSet(viewsets.ModelViewSet):
+    swagger_schema = None
     queryset = Group.objects.all()
     serializer_class = UserGroupSerializer
     permission_classes = (IsAdminUser,)
@@ -30,7 +31,7 @@ class UserCreateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewse
     """
     Creates user accounts
     """
-
+    swagger_schema = None
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
     permission_classes = (IsAdminUser,)
@@ -40,4 +41,5 @@ class UserCreateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewse
 
 
 class ObtainAuthTokenCustom(ObtainAuthToken):
+    swagger_schema = None
     serializer_class = AuthTokenSerializerCostum

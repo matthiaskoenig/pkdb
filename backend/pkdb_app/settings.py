@@ -22,6 +22,7 @@ INSTALLED_APPS = (
 
     # Third party apps
     "rest_framework",  # utilities for rest apis
+    'drf_yasg',  # swapper api
     "django_filters",  # for filtering rest endpoints
     "corsheaders",
 
@@ -172,6 +173,24 @@ LOGGING = {
         "django.db.backends": {"handlers": ["console"], "level": "INFO"},
     },
 }
+SWAGGER_SETTINGS = {
+   'USE_SESSION_AUTH': False,
+
+    'DEFAULT_FIELD_INSPECTORS': [
+        'drf_yasg.inspectors.CamelCaseJSONFilter',
+        'drf_yasg.inspectors.InlineSerializerInspector',
+        'drf_yasg.inspectors.RelatedFieldInspector',
+        'drf_yasg.inspectors.ChoiceFieldInspector',
+        'drf_yasg.inspectors.FileFieldInspector',
+        'drf_yasg.inspectors.DictFieldInspector',
+        'drf_yasg.inspectors.SimpleFieldInspector',
+        'drf_yasg.inspectors.StringDefaultFieldInspector',
+    ],
+    'DEFAULT_PAGINATOR_INSPECTORS': [
+        'pkdb_app.response_pagination.ResponsePagination',
+        'drf_yasg.inspectors.CoreAPICompatInspector',
+    ],
+}
 
 # Django Rest Framework
 REST_FRAMEWORK = {
@@ -191,11 +210,16 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
     ),
 }
+
+
+
 
 DATABASES = {
     "default": {

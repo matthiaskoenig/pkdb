@@ -21,9 +21,8 @@ class DataSet(models.Model):
 
 class Data(models.Model):
     """
-    A Data  These are mostly scatterplots or timecourses.
+    These are mostly scatter or timecourses.
     """
-
     class DataTypes(models.TextChoices):
         """ Data Types. """
         Scatter = 'scatter', _('scatter')
@@ -36,15 +35,10 @@ class Data(models.Model):
     dataset = models.ForeignKey(DataSet, related_name="data", on_delete=models.CASCADE, null=True)
 
 
-
 class SubSet(Accessible):
-    """
-
-    """
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
     study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="subsets")
-
 
     def get_single_dosing(self) -> Intervention:
         """Returns a single intervention of type dosing if existing.
@@ -99,6 +93,42 @@ class SubSet(Accessible):
             'time_unit': 'outputs__time_unit',
             'unit': 'outputs__unit',
         }
+    def keys_timecourse_representation(self):
+        return {
+            "study_sid":"outputs__study__sid",
+            "study_name": "outputs__study__name",
+            "outputs_pk": "outputs__pk",
+            "subset_pk": "subset_id",
+            "subset_name": "subset__name",
+            "interventions": "outputs__interventions__pk",
+            "group_pk": "outputs__group_id",
+            "individual_pk": "outputs__individual_id",
+            "normed": 'outputs__normed',
+            "calculated": 'outputs__calculated',
+            "tissue": 'outputs__tissue__info_node__sid',
+            "tissue_label": 'outputs__tissue__info_node__label',
+            "method": 'outputs__method__info_node__sid',
+            "method_label": 'outputs__method__info_node__label',
+            "label": 'outputs__label',
+            "output_type": 'outputs__output_type',
+            "time": 'outputs__time',
+            'time_unit': 'outputs__time_unit',
+            "measurement_type":	"outputs__measurement_type__info_node__sid",
+            "measurement__label": "outputs__measurement_type__info_node__label",
+            "choice":	"outputs__choice__info_node__sid",
+            "choice_label": "outputs__choice__info_node__label",
+            "substance": "outputs__substance__info_node__sid",
+            "substance_label": "outputs__substance__info_node__label",
+            "value": 'outputs__value',
+            "mean": 'outputs__mean',
+            "median": 'outputs__median',
+            "min": 'outputs__min',
+            "max": 'outputs__max',
+            'sd': 'outputs__sd',
+            'se': 'outputs__se',
+            'cv': 'outputs__cv',
+            'unit': 'outputs__unit',
+        }
 
     def _timecourse_extra(self):
         return {
@@ -112,29 +142,43 @@ class SubSet(Accessible):
 
         }
 
-    def merge_values(self, values):
+    @staticmethod
+    def none_tuple(values):
+        if all(pd.isna(v) for v in values):
+            return (None,)
+        else:
+            return tuple(values)
 
-        def none_tuple(values):
-            if all(pd.isna(v) for v in values):
-                return (None,)
-            else:
-                return tuple(values)
+    @staticmethod
+    def to_list(tdf):
+        return tdf.apply(SubSet.none_tuple).apply(SubSet.tuple_or_value)
 
-        def to_list(tdf):
-            return tdf.apply(none_tuple).apply(tuple_or_value)
+    @staticmethod
+    def tuple_or_value(values):
+        if len(set(values)) == 1:
+            return list(values)[0]
+        return values
 
-        def tuple_or_value(values):
-            if len(set(values)) == 1:
-                return list(values)[0]
+    @staticmethod
+    def _tuple_or_value(values):
+        if len(set(values)) == 1:
+            return list(values)[0]
+        return tuple(values)
 
-            return values
+    @staticmethod
+    def merge_values(values=None ,df=None, groupby=("outputs__pk",), sort_values=["outputs__interventions__pk","outputs__time"]):
 
-        merged_dict = pd.DataFrame(values).groupby(["outputs__pk"], as_index=False).apply(to_list).to_dict("list")
+        if values:
+            df =pd.DataFrame(values)
+        if sort_values:
+            df = df.sort_values(sort_values)
+        merged_dict = df.groupby(list(groupby), as_index=False).apply(SubSet.to_list).to_dict("list")
 
         for key, values in merged_dict.items():
             if key not in ['outputs__time', 'outputs__value', 'outputs__mean', 'outputs__median', 'outputs__cv',
                            'outputs__sd' 'outputs__se']:
-                merged_dict[key] = tuple_or_value(values)
+
+                merged_dict[key] = SubSet.tuple_or_value(values)
 
             if all(v is None for v in values):
                 merged_dict[key] = None
@@ -166,23 +210,53 @@ class SubSet(Accessible):
                     name = self.get_name(timecourse[key], value)
                 else:
                     name = list(timecourse[key])
-                raise Exception(f"Subset used for timecourse is not unique on '{key}'. Values are {name}. "
-                                f"Check uniqueness of labels for timecourses.")
+                raise ValueError(f"Subset used for timecourse is not unique on '{key}'. Values are '{name}'. "
+                                 f"Check uniqueness of labels for timecourses.")
 
     def timecourse(self):
-        timecourse = self.merge_values(
-            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()))
-        self.reformat_timecourse(timecourse, self._timecourse_extra())
-        self.validate_timecourse(timecourse)
-        return timecourse
+        """ FIXME: Documentation """
+        tc = self.merge_values(
+            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()),
+            sort_values=["outputs__interventions__pk", "outputs__time"]
+        )
+        self.reformat_timecourse(tc, self._timecourse_extra())
+        self.validate_timecourse(tc)
+        return tc
 
     def reformat_timecourse(self, timecourse, mapping):
+        """ FIXME: Documentation & type hinting """
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
             if new_key == "interventions":
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
 
+    def timecourse_representation(self):
+        """ FIXME: Documentation """
+        timecourse = self.merge_values(
+            self.data_points.values(*self.keys_timecourse_representation().values()),)
+        self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
+        return timecourse
+
+    def keys_scatter_representation(self):
+        """ FIXME: Documentation """
+        return {**self.keys_timecourse_representation(),
+                "dimension": "dimensions__dimension",
+                "data_point": "pk"
+        }
+
+    def scatter_representation(self):
+        scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).values(*self.keys_scatter_representation().values()), sort_values=None)
+        self.reformat_timecourse(scatter_x, self.keys_scatter_representation())
+
+        scatter_y = self.merge_values(self.data_points.filter(dimensions__dimension=1).prefetch_related('outputs').values(*self.keys_scatter_representation().values()),sort_values=None)
+        self.reformat_timecourse(scatter_y, self.keys_scatter_representation())
+
+        identical_keys = ["study_sid", "study_name", "subset_pk", "subset_name"]
+
+        return {**{k: v for k, v in scatter_x.items() if k in identical_keys},
+                **{f"x_{k}": v for k, v in scatter_x.items() if k not in identical_keys},
+                **{f"y_{k}": v for k, v in scatter_y.items() if k not in identical_keys}}
 
 class DataPoint(models.Model):
     """

@@ -1,5 +1,5 @@
 # build stage
-FROM node:14.6.0 as build-stage
+FROM node:14.11.0 as build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install
@@ -7,7 +7,7 @@ COPY . /app/
 RUN npm run build
 
 # production stage
-FROM alpine:3.9 as production-stage
+FROM alpine:3.12 as production-stage
 RUN mkdir -p /vue
 COPY --from=build-stage /app/dist /vue
 

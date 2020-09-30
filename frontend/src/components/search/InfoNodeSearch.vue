@@ -18,9 +18,7 @@
 
     <template slot="tag" slot-scope="{ option, remove }">
         <span class="multiselect__tag">
-
            {{ option.label }}
-
           <span @click="remove(option)">
             <i class="multiselect__tag-icon"></i>
           </span>
@@ -34,6 +32,7 @@
       <v-btn
           block
           text
+          color="black"
           large
           text-left
           class="v-btn-multiselect"
@@ -43,7 +42,6 @@
           <!-- <template v-if="props.option.description" > {{props.option.description}}</template> -->
         </text-highlight>
         <span class="text--disabled text-ellipse pl-2">{{props.option.description}}</span>
-
       </v-btn>
 
     </template>
@@ -157,6 +155,7 @@ export default {
 .multiselect__content-wrapper {
   overflow-x: -moz-hidden-unscrollable !important;
   overflow-y: auto !important;
+  z-index: 100;
   width: 100% !important;
 
 }

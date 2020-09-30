@@ -13,17 +13,19 @@ let searchTableMixin = {
             footer_options:{
                 itemsPerPageOptions: [5, 10, 20, 50, 100]
             },
-            table_class: "elevation-1",
+            table_class: "elevation-0",
+            windowHeight: window.innerHeight-260,
+
         }
     },
     props: {
-        search_hash: {
+        search_uuid: {
             type: Boolean,
             default: false
         },
-        hash: {
+        uuid: {
             type: String,
-            default: () => "BoHash"
+            default: () => "NOUUID"
 
         },
         search_ids: {
@@ -47,28 +49,31 @@ let searchTableMixin = {
         ntypes: {
             type: Array,
             default: () => []
+        },
+        data_type: {
+            type: String,
         }
 
     },
     mounted() {
+        this.$nextTick(() => {
+            window.addEventListener('resize', this.onResize);
+        })
         this.getData()
     },
+
+    beforeDestroy() {
+        window.removeEventListener('resize', this.onResize);
+    },
     watch: {
-        pagination: {
-            handler() {
-                this.getData()
-            },
-            deep: true
-        },
         search(){
+            this.options.page = 1
             this.getData();
             this.$store.state.highlight = this.search
         },
-        ntype: {
-            handler() {
-                this.getData();
-            },
-            deep: true
+        uuid(){
+            this.options.page = 1
+            this.getData();
         },
         url: {
             handler() {
@@ -100,7 +105,6 @@ let searchTableMixin = {
             }
             if(this.exclude_abstract){
                 url += '&dtype__exclude=abstract'
-
             }
             if (this.search) {
                 url += '&search_multi_match=' + this.search
@@ -111,14 +115,17 @@ let searchTableMixin = {
             if (this.ntypes.length > 0 ){
                 url += '&ntype__in=' + this.ntypes.join("__")
             }
-            if (["outputs", "timecourses", "interventions"].includes(this.otype)) {
+            if (["outputs", "interventions"].includes(this.otype)) {
                 url += '&normed=true'
             }
             if (this.search_ids) {
                 url += '&ids=' + this.ids.join("__")
             }
-            if (this.search_hash) {
-                url += '&hash=' + this.hash
+            if (this.data_type) {
+                url += '&data_type=' + this.data_type
+            }
+            if (this.search_uuid) {
+                url += '&uuid=' + this.uuid
             }
             return url
         },
@@ -127,6 +134,9 @@ let searchTableMixin = {
         }
     },
     methods: {
+        onResize() {
+            this.windowHeight = window.innerHeight-260
+        },
         faIcon(key) {
             return lookupIcon(key)
         },
@@ -136,7 +146,6 @@ let searchTableMixin = {
         get_ids(array_of_obj) {
             return array_of_obj.map(i => i.pk)
         },
-
         getData() {
             let headers = {};
             if (localStorage.getItem('token')) {
@@ -153,14 +162,13 @@ let searchTableMixin = {
                 })
                 .finally(() => this.loading = false);
         },
-
     }
 };
 
 const UrlMixin = {
     methods: {
         group_url(pk) {
-            return this.$store.state.endpoints.api + 'groups/' + pk + '/'
+            return this.$store.state.endpoints.api + 'groups/' + pk + '/?format=json'
         },
         individual_url(pk) {
             return this.$store.state.endpoints.api + 'individuals/' + pk + '/'

@@ -1,11 +1,8 @@
 <template>
   <div id="app">
     <v-app class="app">
-      <v-container fluid>
-        <v-row>
           <navigation></navigation>
-        </v-row>
-        <v-row style="padding-top: 30px;">
+        <v-row>
           <router-view v-bind:api="api" v-bind:domain="domain"></router-view>
         </v-row>
         <!--
@@ -13,13 +10,12 @@
           <footer-bar></footer-bar>
         </v-row>
         -->
-      </v-container>
     </v-app>
   </div>
 </template>
 
 <script>
-    import Navigation from './components/Navigation.vue';
+    import Navigation from './components/navigation/Navigation.vue';
     // import FooterBar from './components/FooterBar.vue';
 
     export default {
@@ -58,12 +54,11 @@
       padding: 0px;
       text-align: left;
     }
-
+    html { overflow-y: auto !important; }
     .search-navbar {
       position: fixed;
       top: 48px;
       left: 0;
-      z-index: 9999;
       margin-left: 5px;
       margin-right: 5px;
       height: 32px;

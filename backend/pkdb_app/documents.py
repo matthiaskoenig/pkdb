@@ -1,11 +1,14 @@
 import operator
 from functools import reduce
 
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.generics import get_object_or_404
 from django_elasticsearch_dsl import fields, DEDField, Object, collections
-from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from elasticsearch_dsl import analyzer, token_filter, Q
-from pkdb_app.studies.models import Query
+from pkdb_app.studies.models import IdCollection
 
 from pkdb_app.users.models import PUBLIC
 from pkdb_app.users.permissions import user_group
@@ -13,8 +16,8 @@ from pkdb_app.users.permissions import user_group
 elastic_settings = {
     'number_of_shards': 1,
     'number_of_replicas': 1,
-    'max_ngram_diff': 15
-
+    'max_ngram_diff': 15,
+    'max_terms_count':65536*4,
 }
 
 edge_ngram_filter = token_filter(
@@ -56,6 +59,7 @@ def string_field(attr, **kwargs):
         **kwargs
     )
 
+
 def basic_object(attr, **kwargs):
     return ObjectField(
         attr=attr,
@@ -66,15 +70,18 @@ def basic_object(attr, **kwargs):
         **kwargs
     )
 
+
 def info_node(attr, **kwargs):
-    return fields.ObjectField(
+    return ObjectField(
         attr=attr,
         properties={
            'sid': string_field('sid'),
+           'name': string_field('name'),
            'label': string_field('label'),
        },
         **kwargs
     )
+
 
 study_field = fields.ObjectField(
     attr="study",
@@ -83,6 +90,7 @@ study_field = fields.ObjectField(
         'name': string_field('name'),
     }
 )
+
 
 def text_field(attr):
     return fields.TextField(
@@ -96,10 +104,8 @@ def text_field(attr):
 
 class ObjectField(DEDField, Object):
     """
-    FIXME: DOCUMENT ME
-    What is this for? I assume to solve some issue with nested ObjectFields.
-    This looks copy-pasted from some solution. Please provide short description
-    and link to solution.
+
+    This document Object fields returns a null for any empty field and not an empty dictionary.
     """
 
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):
@@ -146,27 +152,41 @@ class ObjectField(DEDField, Object):
         return self._get_inner_field_data(objs, field_value_to_ignore)
 
 
+UUID_PARAM = openapi.Parameter(
+    'uuid',
+    openapi.IN_QUERY,
+    description="The '/filter/' endpoint returns a UUID. Via the UUID the resulting query can be access.",
+    type=openapi.TYPE_STRING,
 
-class AccessView(DocumentViewSet):
+)
+
+
+@method_decorator(name='list', decorator=swagger_auto_schema( manual_parameters=[UUID_PARAM]))
+class AccessView(BaseDocumentViewSet):
+    """Permissions on views."""
+
+    def _get_resource(self):
+        resource = self.request.query_params.get("data_type", self.document.Index.name)
+        if resource == "timecourse":
+            return "timecourses"
+        if resource == "scatter":
+            return "scatters"
+        return resource
 
     def get_queryset(self):
         group = user_group(self.request.user)
         if hasattr(self, "initial_data"):
-
             id_queries = [Q('term', pk=pk) for pk in self.initial_data]
             if len(id_queries) > 0:
-                self.search=self.search.query(reduce(operator.ior,id_queries))
+                self.search = self.search.query(reduce(operator.ior, id_queries))
             else:
-                #create search that returns empty query
+                # empty query
                 return self.search.query('match', access__raw="NOTHING")
 
+        _uuid = self.request.query_params.get("uuid", [])
 
-        _hash = self.request.query_params.get("hash",[])
-        if _hash:
-
-            ids = list(get_object_or_404(Query,hash=_hash).ids)
-
-            #ids = list(IdMulti.objects.filter(query=_hash).values_list("value", flat=True))
+        if _uuid:
+            ids = list(get_object_or_404(IdCollection, uuid=_uuid, resource=self._get_resource()).ids)
             _qs_kwargs = {'values': ids}
 
             self.search = self.search.query(
@@ -176,13 +196,9 @@ class AccessView(DocumentViewSet):
 
         if group == "basic":
             return self.search.query(Q('term', access__raw=PUBLIC) | Q('term', allowed_users__raw=self.request.user.username))
-
         elif group == "anonymous":
             return self.search.query(Q('term', access__raw=PUBLIC))
-
         elif group in ["admin", "reviewer"]:
             return self.search.query()
-
         else:
             raise AssertionError("wrong group name")
-

@@ -6,6 +6,8 @@
       pill
       small
       :href="annotation.url"
+      target="_blank"
+      :title="'Open ' + annotation.collection + '|' + annotation.term"
   >
     <text-highlight :queries="highlight">
         {{ annotation.relation }}
@@ -22,19 +24,18 @@
 </template>
 
 <script>
+import {StoreInteractionMixin} from "../../storeInteraction";
+
 export default {
   name: "Annotation",
+  mixins: [StoreInteractionMixin],
   props: {
     annotation: {
       type: Object,
       required: true,
     }
-  },
-  computed:{
-    highlight(){
-      return this.$store.state.highlight
-    },
   }
+
 
 }
 </script>

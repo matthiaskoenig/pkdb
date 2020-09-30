@@ -5,7 +5,7 @@ json-logging>=1.2.6
 psycopg2-binary>=2.8.5
 
 # django
-Django == 3.1
+Django == 3.1.1
 django-model-utils>=4.0.0
 django-extra-fields>=3.0.0
 django-storages>=1.9.1
@@ -14,7 +14,8 @@ django-cors-headers>=3.4.0
 django-rest-email-auth>=2.1.0
 
 # REST API
-djangorestframework>=3.11.1
+djangorestframework==3.11.1
+drf-yasg >= 1.17.1
 elasticsearch-dsl==7.2.1
 django-elasticsearch-dsl==7.1.4
 django-elasticsearch-dsl-drf>=0.20.8
@@ -25,7 +26,7 @@ pandas>=1.1.0
 numpy>=1.19.1
 scipy>=1.5.2
 matplotlib>=3.3.0
-pint>=0.14
+pint>=0.16.1
 
 pkdb-analysis>=0.1.5
 

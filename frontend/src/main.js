@@ -37,6 +37,7 @@ import Heading from './components/lib/Heading';
 
 import GetData from './components/api/GetData';
 import GetPaginatedData from './components/api/GetPaginatedData';
+import ScatterIcon from "./components/detail/ScatterIcon";
 
 Vue.component('ExportFormatButton', ExportFormatButton);
 Vue.component('JsonButton', JsonButton);
@@ -65,7 +66,7 @@ Vue.config.productionTip = false;
 
 const opts = {
     icons: {
-        iconfont: 'fa'
+        iconfont: 'fa',
     }
 };
 Vue.use(Vuetify)
@@ -75,6 +76,13 @@ Vue.use(VueResource);
 new Vue({
     router,
     store,
+    icons: {
+        values: {
+            scatter: { // name of our custom icon
+                component: ScatterIcon, // our custom component
+            },
+        },
+    },
     vuetify: new Vuetify(opts),
     render: h => h(App)
 }).$mount('#app');

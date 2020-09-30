@@ -1,4 +1,3 @@
-import collections
 import traceback
 
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
@@ -6,14 +5,13 @@ from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializ
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
-from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS, SmallOutputSerializer
+from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, StudySmallElasticSerializer
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_normalized, list_of_pk
 from rest_framework import serializers
 import pandas as pd
 import numpy as np
-from django.apps import apps
 
 
 class DimensionSerializer(WrongKeyValidationSerializer):
@@ -48,7 +46,6 @@ class SubSetSerializer(ExSerializer):
         self.validate_wrong_keys(data)
         return data
 
-
     def create(self, validated_data):
         validated_data["study"] = self.context["study"]
 
@@ -66,15 +63,11 @@ class SubSetSerializer(ExSerializer):
         # subset_instance.save()
         return subset_instance
 
-
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
             raise serializers.ValidationError({"time": "no time points are allowed to be nan", "detail": time})
 
-
-
     def calculate_pks_from_timecourses(self, subset):
-
         # calculate pharmacokinetics outputs
         try:
             outputs = pkoutputs_from_timecourse(subset)
@@ -95,7 +88,7 @@ class SubSetSerializer(ExSerializer):
             )
         interventions = [o.pop("interventions") for o in outputs]
 
-        outputs_dj = create_multiple_bulk(subset, "timecourse", outputs, Output)
+        outputs_dj = create_multiple_bulk(subset, "subset", outputs, Output)
 
         for intervention, output in zip(interventions,outputs_dj):
             output.interventions.add(*intervention)
@@ -154,56 +147,67 @@ class SubSetSerializer(ExSerializer):
             raise serializers.ValidationError(
                 f"Outputs have no values on shared field")
 
+        subset_outputs = []
         for shared_values, shared_data in data_set.groupby(shared_reformated):
             x_data = shared_data[shared_data["dimension"] == 0]
             y_data = shared_data[shared_data["dimension"] == 1]
 
-
             if len(x_data) != 1 or len(y_data) != 1:
                 raise serializers.ValidationError(
-                f"Dimensions <{dimensions}> do not match in respect to the shared fields."
-                f"The shared field <{shared}> with values <{shared_values}>"
-                f" do not uniquely assign 1 x output to 1 y output. "
-                f"<{dimensions[0]}> has <{len(x_data)}> outputs. <{dimensions[1]}> has <{len(y_data)}> outputs."
+                    f"Dimensions <{dimensions}> do not match in respect to the shared fields."
+                    f"The shared field <{shared}> with values <{shared_values}>"
+                    f" do not uniquely assign 1 x output to 1 y output. "
+                    f"<{dimensions[0]}> has <{len(x_data)}> outputs. <{dimensions[1]}> has <{len(y_data)}> outputs."
                 )
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
+            x_output = study_outputs.get(pk=x_data["id"])
+            y_output = study_outputs.get(pk=y_data["id"])
+            subset_outputs.append(x_output)
+            subset_outputs.append(y_output)
 
             Dimension.objects.create(dimension=0,
                                      study=study,
-                                     output=study_outputs.get(pk=x_data["id"]),
+                                     output=x_output,
                                      data_point=data_point_instance)
             Dimension.objects.create(dimension=1,
                                      study=study,
-                                     output=study_outputs.get(pk=y_data["id"]),
+                                     output=y_output,
                                      data_point=data_point_instance)
 
-
+        subset_instance.pks.add(*subset_outputs)
 
     def create_timecourse(self, subset_instance, dimensions):
         study = self.context["study"]
         if len(dimensions) != 1:
             raise serializers.ValidationError(
-                f"Timcourses have to be one dimensional. Dimensions: <{dimensions}> has a len of <{len(dimensions)}>.")
-        subset_outputs = study.outputs.filter(normed=True,label=dimensions[0])
-        if len(subset_outputs) < 2:
+                f"Timecourses have to be one-dimensional, but '{len(dimensions)}' dimensions found <{dimensions}>.")
+        subset_outputs = study.outputs.filter(normed=True, label=dimensions[0])
+        if len(subset_outputs) == 0:
             raise serializers.ValidationError(
-                f"Timcourses have to consist at least of two outputs. Consider saving the the outputs with the label <{dimensions[0]}> as output_type=output.")
+                f"Timecourses cannot be empty. No outputs found <{dimensions[0]}>.")
+        if len(subset_outputs) == 1:
+            raise serializers.ValidationError(
+                f"Timecourses require at least two outputs, but only a single output exists in timecourse. "
+                f"Encode the label <{dimensions[0]}> as 'output_type=output' instead of 'output_type=timecourse'.")
         subset_instance.pks.add(*subset_outputs)
         if not subset_outputs.exists():
             raise serializers.ValidationError(
-                {"dataset": {"data": [
-                    {"subsets": {"name": f" Outputs with label <{dimensions}> do not exist."}}]}})
+                {"dataset": {
+                    "data": [
+                        {"subsets": {"name": f"Outputs with label <{dimensions}> do not exist."}}
+                    ]
+                }}
+            )
 
         dimensions = []
         for output in subset_outputs.iterator():
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
 
-            dimension = Dimension(dimension=0,study=study, output=output,data_point=data_point_instance)
+            dimension = Dimension(dimension=0, study=study, output=output,data_point=data_point_instance)
             dimensions.append(dimension)
         Dimension.objects.bulk_create(dimensions)
 
         self.calculate_pks_from_timecourses(subset_instance)
-
 
 
 class DataSerializer(ExSerializer):
@@ -248,7 +252,6 @@ class DataSerializer(ExSerializer):
                     validated_data={**subset, "data": data_instance},
                     create_multiple_keys=['comments', 'descriptions'])
         return data_instance
-
 
 
 class DataSetSerializer(ExSerializer):
@@ -366,14 +369,16 @@ class SubSetElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubSet
-        fields = ["pk","study",
+        fields = ["pk", "study",
                   "name",
                   "data_type",
                   "array"]
 
     def get_array(self,object):
         #return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
-        return [[p.to_dict() for p in point.point] for point in object["array"]]
+        return [point["point"] for point in object.to_dict()["array"]]
+
+
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)

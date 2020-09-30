@@ -2,6 +2,8 @@
     <span id="user-rating">
          <v-chip flat
                  color="white"
+                 class="ma-1"
+
          >
           <user-avatar :user="user"/>
              <v-rating v-if="user.rating != null"

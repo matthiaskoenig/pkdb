@@ -55,6 +55,11 @@ const icons_table = {
     plus: 'fas fa-plus',
     minus: 'fas fa-minus',
     download: 'fas fa-file-download',
+    left_arrow: 'fas fa-arrow-left',
+    right_arrow: 'fas fa-arrow-right',
+    cancel: 'far fa-stop-circle',
+    scatters: 'scatters',
+    scatter: 'scatters',
 
 };
 
@@ -64,7 +69,8 @@ const icons_table = {
 function lookupIcon(key) {
     if (key.startsWith("fa")){
         return key
-    } else {
+    }
+    else {
         return icons_table[key]
     }
 }

@@ -35,6 +35,7 @@
           block
           text
           large
+          color="black"
           text-left
           class="v-btn-multiselect"
           v-on:mouseover.native="mouseover(props.option)">
@@ -84,8 +85,8 @@ export default {
       })
     },
     mouseover(option) {
-      this.$store.state.show_type = "study"
-      this.$store.state.detail_info = option
+      this.$store.state.show_type = "study";
+      this.$store.state.detail_info = option;
       this.$store.state.detail_display = true
     },
     sync_search(search)

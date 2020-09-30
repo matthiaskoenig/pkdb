@@ -1,14 +1,26 @@
 <template>
     <span>
-        <v-layout wrap>
+        <v-layout v-if="layout" d-flex flex-wrap>
             <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
                 <characteristica-card :data="item" />
 
             </span>
             <span v-for="item in sortedCharacteristica.values" :key="item.pk">
+
                 <characteristica-card :data="item" />
             </span>
         </v-layout>
+
+        <span v-else d-flex flex-wrap>
+            <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
+                <characteristica-card :data="item" />
+
+            </span>
+            <span v-for="item in sortedCharacteristica.values" :key="item.pk">
+
+                <characteristica-card :data="item" />
+            </span>
+        </span>
     </span>
 
 </template>
@@ -26,23 +38,28 @@
                 type: Array,
                 required: true
             },
+          layout: {
+            type: Boolean,
+            default: true
+          },
+
         },
         methods: {
             f_sort : function(a, b) {
-                if (a.choice.label && !b.choice.label){
+                if (a.choice && !b.choice){
                   return 1
-                } else if (!a.choice.label && b.choice.label) {
+                } else if (!a.choice && b.choice) {
                   return -1
-                } else if (a.choice.label && b.choice.label) {
-                  if (a.choice.label > b.choice.label) {
+                } else if (a.choice && b.choice) {
+                  if (a.choice > b.choice) {
                     return 1;
-                  } else if (a.choice.label < b.choice.label) {
+                  } else if (a.choice < b.choice) {
                     return -1;
                   }
-                } else if (!a.choice.label && !b.choice.label){
-                if (a.measurement_type.label > b.measurement_type.label) {
+                } else if (!a.choice && !b.choice){
+                if (a.measurement_type > b.measurement_type) {
                   return 1;
-                } else if (a.measurement_type.label < b.measurement_type.label) {
+                } else if (a.measurement_type < b.measurement_type) {
                   return -1;
                 }
                 return 0;

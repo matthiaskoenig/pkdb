@@ -1,7 +1,8 @@
 <template>
   <v-badge
-      color="black"
+      :color="color"
       :content="count.toString()"
+      :bottom="bottom"
   >
     {{ text }}
   </v-badge>
@@ -16,8 +17,17 @@ export default {
       type: String,
       required: true
     },
+    color: {
+      type: String,
+      default: "black"
+    },
+    bottom: {
+      type: Boolean,
+      default: false
+    },
     count: 0
   },
+
 }
 </script>
 

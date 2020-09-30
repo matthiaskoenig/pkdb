@@ -1,5 +1,5 @@
 <template>
-    <div id="about">
+    <v-main id="about">
       <!--
         <h1>Curation of pharmacokinetics data for PK-DB</h1>
         <p>
@@ -8,7 +8,7 @@
         </p>
         -->
         <info-node-table/>
-    </div>
+    </v-main>
 </template>
 
 <script>

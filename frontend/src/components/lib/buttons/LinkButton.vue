@@ -6,7 +6,8 @@
                :color="color"
                :to="to"
                :title="title"
-               :disabled="to ? false : true"
+               @click="update_details"
+               :disabled="disabled"
         >
             <v-icon>{{ faIcon(icon) }}</v-icon>
         </v-btn>
@@ -14,11 +15,30 @@
 </template>
 
 <script>
-    import {lookupIcon} from "@/icons"
+    import {IconsMixin} from "../../../icons";
+    import {ApiInteractionMixin} from "../../../apiInteraction";
 
     export default {
+      mixins: [IconsMixin, ApiInteractionMixin],
+        computed:{
+            disabled(){
+                if (this.to | (this.detail_info_input & this.show_type_input)){
+                    return true} else {
+                    return false
+                }
+            }
+        },
         name: "LinkButton",
         props: {
+          show_type_input: {
+                type: String,
+            },
+            sid: {
+                type: String
+            },
+            detail_info_input: {
+                type: Object,
+            },
             to: {
                 type: String,
             },
@@ -32,13 +52,22 @@
             },
             color: {
                 type: String,
-                default: "black"
+                default: null
             },
         },
         methods: {
-            faIcon(key) {
-                return lookupIcon(key)
-            },
+            update_details(){
+                if (this.show_type_input){
+                    if (this.sid){
+                        this.getStudy(this.sid);
+                    }else{
+                        this.show_type = this.show_type_input
+                        this.detail_info = this.detail_info_input
+                        this.display_detail = true
+                    }
+                   }
+            }
+
         }
     }
 </script>

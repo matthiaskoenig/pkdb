@@ -1,7 +1,10 @@
 <template>
-    <v-card flat>
-        <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
+    <v-sheet flat>
+        <table-toolbar otype="timecourse" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
+            fill-height
+                fixed-header
+                :height="windowHeight"
                 :headers="headers"
                 :items="entries"
                 :options.sync="options"
@@ -11,11 +14,14 @@
                 :footer-props="footer_options"
         >
             <template v-slot:item.buttons="{ item }">
-                <LinkButton v-if="item.study"
-                            :to="'/studies/'+ item.study.sid"
+                <link-button v-if="item.study"
+                            :sid="item.study.sid"
+                            show_type_input="study"
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
+              <JsonButton :resource_url="api + 'subsets/'+ item.pk +'/?format=json'"/>
+
             </template>
 
           <template v-slot:item.name="{ item }">
@@ -76,7 +82,7 @@
             <no-data/>
 
         </v-data-table>
-    </v-card>
+    </v-sheet>
 </template>
 
 <script>
@@ -103,8 +109,7 @@
                 otype_single: "subset",
                 headers: [
                     {text: '', value: 'buttons', sortable: false},
-                    {text: 'Measurement Type', value: 'measurement_type',sortable: false},
-                    {text: 'Measurement', value: 'measurement', sortable: false},
+                    {text: 'Measurement', value: 'measurement_type', sortable: false},
                     {text: 'Details', value: 'details',sortable: false},
                     {text: 'Timecourse', value: 'timecourse',sortable: false},
                 ]

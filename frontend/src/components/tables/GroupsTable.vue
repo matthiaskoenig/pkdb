@@ -1,9 +1,14 @@
 <template>
-    <v-card flat>
+    <v-sheet flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
+                fill-height
+                fixed-header
+                :height="windowHeight"
+                dense
                 :headers="headers"
                 :items="entries"
+                disable-sort
                 :options.sync="options"
                 :server-items-length="count"
                 :loading="loading"
@@ -11,14 +16,11 @@
                 :footer-props="footer_options"
         >
             <template v-slot:item.buttons="{ item }">
-                <LinkButton v-if="item.study"
-                            :to="'/studies/'+ item.study.sid"
+                <link-button v-if="item.study"
+                            :sid="item.study.sid"
+                            show_type_input="study"
                             :title="'Study: '+item.study.name"
                             icon="study"
-                />
-                <link-button :to="'/groups/' + item.pk"
-                             :title="'Group: ' + item.pk"
-                             icon="group"
                 />
                 <json-button :resource_url="api + 'groups/' + item.pk + '/?format=json'"/>
             </template>
@@ -43,7 +45,7 @@
             </template>
             <no-data/>
         </v-data-table>
-    </v-card>
+    </v-sheet>
 </template>
 
 <script>

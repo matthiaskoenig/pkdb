@@ -1,10 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
+from drf_yasg.utils import swagger_serializer_method
 from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
-from pkdb_app.serializers import StudySmallElasticSerializer, SidLabelSerializer
+from pkdb_app.serializers import StudySmallElasticSerializer, SidNameLabelSerializer
 from .models import (
     Group,
     GroupSet,
@@ -19,7 +20,7 @@ from .models import (
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
-from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create
+from ..utils import list_of_pk, _validate_required_key, create_multiple, _create
 
 CHARACTERISTICA_FIELDS = ['count']
 CHARACTERISTICA_MAP_FIELDS = map_field(CHARACTERISTICA_FIELDS)
@@ -86,7 +87,15 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         self.validate_wrong_keys(data, additional_fields=CharacteristicaExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
+    @staticmethod
+    def validate_count(count):
+        if count < 1:
+            raise serializers.ValidationError(f"count <{count}> has to be greater or equal to 1. ")
+        return count
+
+
     def validate(self, attrs):
+
         try:
             # perform via dedicated function on categorials
             for info_node in ['substance', 'measurement_type']:
@@ -121,12 +130,8 @@ class GroupSerializer(ExSerializer):
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data, additional_fields=GroupExSerializer.Meta.fields)
+        _validate_required_key(data, 'count')
 
-        _validate_requried_key(data, 'count')
-
-        for characteristica_single in data.get('characteristica', []):
-            disabled = ['value']
-            self._validate_disabled_data(characteristica_single, disabled)
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
@@ -143,6 +148,20 @@ class GroupSerializer(ExSerializer):
                                        f"on the `all` group.",
                     'details': characteristica}
             )
+    @staticmethod
+    def _validate_group_characteristica_count(characteristica, group_count):
+        if int(characteristica.get("count",group_count)) > int(group_count):
+            raise serializers.ValidationError(
+                {
+                    'characteristica': f"A characteristica count has to be smaller or equal to its group 'count'.",
+                    'details': {
+                        "characteristica":characteristica,
+                        "group_count": group_count,
+                    }
+                }
+            )
+
+
 
     def validate(self, attrs):
         ''' validates species information on group with name all
@@ -153,6 +172,11 @@ class GroupSerializer(ExSerializer):
             characteristica = attrs.get('characteristica', [])
             for measurement_type in ['species', 'healthy', 'sex']:
                 self._validate_required_measurement_type(measurement_type, characteristica)
+
+        for characteristica_single in attrs.get('characteristica', []):
+            disabled = ['value']
+            self._validate_disabled_data(characteristica_single, disabled)
+            self._validate_group_characteristica_count(characteristica_single, attrs.get("count"))
 
         return super().validate(attrs)
 
@@ -609,13 +633,14 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     sd = serializers.FloatField(allow_null=True)
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
-    measurement_type = SidLabelSerializer()
-    substance = SidLabelSerializer(allow_null=True)
-    choice = SidLabelSerializer(allow_null=True)
-
+    measurement_type = SidNameLabelSerializer()
+    substance = SidNameLabelSerializer(allow_null=True)
+    choice = SidNameLabelSerializer(allow_null=True)
+    group_count = serializers.IntegerField(allow_null=True)
     class Meta:
         model = Characteristica
-        fields = ['pk'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['normed']  # + ['access','allowed_users']
+        fields = ['pk'] + CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS + ['group_count']+['normed']  # + ['access','allowed_users']
+        read_only_fields = fields
 
 
 # Group related Serializer
@@ -654,8 +679,7 @@ class GroupElasticSerializer(serializers.ModelSerializer):
             'characteristica',
         )
 
-    # FIXME: Remove this.
-
+    @swagger_serializer_method(CharacteristicaElasticSerializer(many=True))
     def get_characteristica(self, instance):
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
@@ -687,6 +711,12 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica = serializers.SerializerMethodField()
 
+    @swagger_serializer_method(serializer_or_field=CharacteristicaElasticSerializer)
+    def get_characteristica(self, instance):
+        if instance.characteristica_all_normed:
+            return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
+        return []
+
     class Meta:
         model = Individual
         fields = (
@@ -696,12 +726,6 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
             'group',
             'characteristica',
         )
-
-    # FIXME: Remove this.
-    def get_characteristica(self, instance):
-        if instance.characteristica_all_normed:
-            return CharacteristicaElasticSerializer(instance.characteristica_all_normed, many=True, read_only=True).data
-        return []
 
 
 class GroupCharacteristicaSerializer(serializers.ModelSerializer):

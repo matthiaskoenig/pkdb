@@ -549,7 +549,8 @@ class ExSerializer(MappingSerializer):
             )
 
     def _validate_individual_characteristica(self, data_dict):
-        disabled = ["sd", "se", "min", "max", "cv", "mean", "median"]
+        disabled = ["sd", "se", "min", "cv", "mean", "median"]
+        # max is allowed and represents the detection limit.
         disabled += map_field(disabled)
         self._validate_disabled_data(data_dict, disabled)
 
@@ -749,10 +750,10 @@ class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
 
-class SidLabelSerializer(serializers.Serializer):
+class SidNameLabelSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
+    name = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
-
 
 def validate_dict(dic):
     if not isinstance(dic, dict):

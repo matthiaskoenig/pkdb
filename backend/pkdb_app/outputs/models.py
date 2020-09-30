@@ -110,7 +110,7 @@ class Output(AbstractOutput, Outputable, Accessible):
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
     interventions = models.ManyToManyField(Intervention, through="OutputIntervention", related_name="outputs")
-    timecourse = models.ForeignKey('data.Subset', on_delete=models.CASCADE, null=True, blank=True, related_name="pks")
+    subset = models.ForeignKey('data.Subset', on_delete=models.CASCADE, null=True, blank=True, related_name="pks")
 
     tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
     method = models.ForeignKey(Method, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)

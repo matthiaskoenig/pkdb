@@ -4,7 +4,6 @@ Serializers for outputs.
 
 import warnings
 
-from django.db.models import Count
 from rest_framework import serializers
 
 from pkdb_app import utils
@@ -21,14 +20,14 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, StudySmallElasticSerializer, SidLabelSerializer, SidNameSerializer)
+    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer, SidNameSerializer)
 from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, _validate_requried_key, create_multiple, _create, create_multiple_bulk_normalized, \
+from ..utils import list_of_pk, _validate_required_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
 EXTRA_FIELDS = ["tissue", "method", "label","output_type"]
@@ -104,12 +103,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self._validate_group_output(attrs)
         self.validate_group_individual_output(attrs)
 
-        _validate_requried_key(attrs, "measurement_type")
+        _validate_required_key(attrs, "measurement_type")
 
-        _validate_requried_key(attrs, "substance")
-        _validate_requried_key(attrs, "tissue")
-        _validate_requried_key(attrs, "interventions")
-        _validate_requried_key(attrs, "output_type")
+        _validate_required_key(attrs, "substance")
+        _validate_required_key(attrs, "tissue")
+        _validate_required_key(attrs, "interventions")
+        _validate_required_key(attrs, "output_type")
         self._validate_timecourse(attrs)
 
 
@@ -132,13 +131,10 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
     def _validate_timecourse(self, attrs):
         if attrs["output_type"] == Output.OutputTypes.Timecourse:
-            _validate_requried_key(attrs,"label")
+            _validate_required_key(attrs, "label")
             if not attrs.get("label",None):
                 msg = "Label is required on on output_type=timecourse"
                 raise serializers.ValidationError(msg)
-
-
-
 
 
 class OutputExSerializer(ExSerializer):
@@ -326,17 +322,17 @@ class OutputInterventionSerializer(serializers.ModelSerializer):
                   "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
         read_only_fields = fields
 
-class SmallOutputSerializer(serializers.ModelSerializer):
 
+class SmallOutputSerializer(serializers.ModelSerializer):
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
 
-    substance = SidLabelSerializer(allow_null=True)
-    measurement_type = SidLabelSerializer(allow_null=True)
-    tissue = SidLabelSerializer(allow_null=True)
-    method = SidLabelSerializer(allow_null=True)
-    choice = SidLabelSerializer(allow_null=True)
+    substance = SidNameLabelSerializer(allow_null=True)
+    measurement_type = SidNameLabelSerializer(allow_null=True)
+    tissue = SidNameLabelSerializer(allow_null=True)
+    method = SidNameLabelSerializer(allow_null=True)
+    choice = SidNameLabelSerializer(allow_null=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -360,19 +356,19 @@ class SmallOutputSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-
 class OutputElasticSerializer(serializers.ModelSerializer):
+    """Main serializer for outputs."""
     study = StudySmallElasticSerializer()
 
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
 
-    substance = SidLabelSerializer(allow_null=True)
-    measurement_type = SidLabelSerializer(allow_null=True)
-    tissue = SidLabelSerializer(allow_null=True)
-    method = SidLabelSerializer(allow_null=True)
-    choice = SidLabelSerializer(allow_null=True)
+    substance = SidNameLabelSerializer(allow_null=True)
+    measurement_type = SidNameLabelSerializer(allow_null=True)
+    tissue = SidNameLabelSerializer(allow_null=True)
+    method = SidNameLabelSerializer(allow_null=True)
+    choice = SidNameLabelSerializer(allow_null=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)

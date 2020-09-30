@@ -3,9 +3,7 @@ Generic utility functions.
 """
 import copy
 import os
-
-from django.http import Http404
-from django.shortcuts import _get_queryset
+import pandas as pd
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -21,6 +19,7 @@ class SlugRelatedField(serializers.SlugRelatedField):
 
 
 def list_duplicates(seq):
+    # FIXME: use colletions.Counter
     seen = set()
     seen_add = seen.add
     # adds all elements it doesn't know yet to seen and all other to seen_twice
@@ -82,7 +81,7 @@ def ensure_dir(file_path):
         os.makedirs(directory)
 
 
-def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
+def update_or_create_multiple(parent, children, related_name, lookup_fields=None):
     for child in children:
         lookup_dict = {}
         instance_child = getattr(parent, related_name)
@@ -92,8 +91,6 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
                 lookup_dict[lookup_field] = child.pop(lookup_field, None)
         else:
             lookup_dict = child
-
-        # instance_child.update_or_create(**lookup_dict, defaults=child)
 
         try:
             if instance_child.model.__name__ in ["Choice", "Unit"]:
@@ -110,17 +107,13 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=[]):
 
             obj.save()
 
-
-
         except instance_child.model.DoesNotExist:
             instance_dict = {**lookup_dict, **child}
             instance_child.create(**instance_dict)
 
 
-
 def create_multiple(parent, children, related_name):
     instance_child = getattr(parent, related_name)
-
     return [instance_child.create(**child) for child in children]
 
 
@@ -134,8 +127,10 @@ def create_multiple_bulk_normalized(notnormalized_instances, model_class):
         return model_class.objects.bulk_create(
             [initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
 
-def _create(validated_data, model_manager=None, model_serializer= None,  create_multiple_keys=[], add_multiple_keys=[], pop=[]):
-    poped_data = {related: validated_data.pop(related, []) for related in pop}
+
+def _create(validated_data, model_manager=None, model_serializer=None,
+            create_multiple_keys=[], add_multiple_keys=[], pop=[]):
+    popped_data = {related: validated_data.pop(related, []) for related in pop}
     related_data_create = {related: validated_data.pop(related, []) for related in create_multiple_keys}
     related_data_add = {related: validated_data.pop(related, []) for related in add_multiple_keys}
     if model_manager is not None:
@@ -149,9 +144,10 @@ def _create(validated_data, model_manager=None, model_serializer= None,  create_
         create_multiple(instance, item, key)
 
     for key, item in related_data_add.items():
-        getattr(instance,key).add(*item)
+        getattr(instance, key).add(*item)
 
-    return instance, poped_data
+    return instance, popped_data
+
 
 def initialize_normed(notnorm_instance):
     norm = copy.copy(notnorm_instance)
@@ -162,13 +158,11 @@ def initialize_normed(notnorm_instance):
 
     try:
         norm.individual_id = notnorm_instance.individual.pk
-
     except AttributeError:
         pass
 
     try:
         norm.group_id = notnorm_instance.group.pk
-
     except AttributeError:
         pass
 
@@ -202,13 +196,20 @@ def set_keys(d, value, *keys):
         d = d[key]
     d[keys[-1]] = value
 
+def _validate_required_key_and_value(attrs, key, details=None, extra_message: str = ""):
+    if pd.isnull(attrs.get(key,None)) or pd.isna(attrs.get(key,None)):
+        error_json = {key: f"The key <{key}> is required. {extra_message}"}
+        if details:
+            error_json["details"] = details
+        raise serializers.ValidationError(error_json)
 
-def _validate_requried_key(attrs, key, details=None, extra_message=""):
+def _validate_required_key(attrs, key, details=None, extra_message: str = ""):
     if key not in attrs:
         error_json = {key: f"The key <{key}> is required. {extra_message}"}
         if details:
             error_json["details"] = details
         raise serializers.ValidationError(error_json)
+
 
 def _validate_not_allowed_key(attrs, key, details=None, extra_message=""):
     if key in attrs:

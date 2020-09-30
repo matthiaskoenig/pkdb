@@ -1,37 +1,36 @@
 <template>
-<span>
+  <v-container max-width="410">
     <v-tabs
-            v-model="active"
-            color="#999999"
-            dark
-            slider-color="yellow">
-        <v-tab
-                v-for="(item, i) in files"
-                :key="i"
-                ripple
-        >
-            {{ id_from_name(item.name) }}
-        </v-tab>
-        <v-tab-item v-for="item in files" :key="item.name">
-            <v-card flat>
-                <get-file :resource_url="backend+item.file">
-                    <template slot-scope="data">
-                        <v-img :src="data.data"
-                               max-height="500"
-                               max-width="500"
-                               :alt="item.name"
-                               :contain="true"
-                               @click="next"
-                        />
-                    </template>
-
-                </get-file>
-
-            </v-card>
-        </v-tab-item>
+        v-model="active"
+        show-arrows
+        color="#999999"
+        dark
+        slider-size ="width"
+    >
+      <v-tab
+          v-for="(item, i) in files"
+          :key="i"
+          ripple
+      >
+        {{ id_from_name(item.name) }}
+      </v-tab>
+      <v-tab-item v-for="item in files" :key="item.name">
+        <get-file :resource_url="backend+item.file">
+          <template slot-scope="data">
+            <v-img :src="data.data"
+                   class="mt-1"
+                   width="410"
+                   :alt="item.name"
+                   :contain="true"
+                   @click="next"
+            />
+          </template>
+        </get-file>
+      </v-tab-item>
     </v-tabs>
 
-    </span>
+  </v-container>
+
 </template>
 
 <script>
@@ -90,9 +89,5 @@
         }
     }
 </script>
-
 <style scoped>
-    .v-card {
-        padding: 10px;
-    }
 </style>

@@ -1,10 +1,17 @@
 <template>
-    <div id="annotations">
-        <v-card flat v-if="(item.comments && item.comments.length>0) || (item.descriptions && item.descriptions.length>0)">
-            <descriptions v-if="item.descriptions" :descriptions="item.descriptions"/>
-            <comments v-if="item.comments" :comments="item.comments"/>
-        </v-card>
-    </div>
+
+  <v-card class="pa-0 ma-0"
+      v-if="(item.comments && item.comments.length>0) || (item.descriptions && item.descriptions.length>0)"
+      flat
+      dark
+  >
+    <v-card-title>{{ title }}</v-card-title>
+    <v-card-text>
+      <descriptions v-if="item.descriptions" :descriptions="item.descriptions"/>
+      <comments v-if="item.comments" :comments="item.comments"/>
+    </v-card-text>
+  </v-card>
+
 </template>
 
 <script>
@@ -13,7 +20,12 @@
         props: {
             item: {
                 type: Object,
-            }
+                required: true
+            },
+            title: {
+              type: String,
+              required: true
+            },
         }
     }
 </script>

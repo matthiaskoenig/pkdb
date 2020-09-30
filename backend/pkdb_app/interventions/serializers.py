@@ -20,13 +20,13 @@ from ..interventions.models import (
     InterventionEx)
 from ..serializers import (
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer, SidLabelSerializer, MappingSerializer)
+    NA_VALUES, StudySmallElasticSerializer, SidNameLabelSerializer, MappingSerializer)
 from ..subjects.models import DataFile
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates, _validate_requried_key, _create, create_multiple_bulk, \
-    create_multiple_bulk_normalized
+from ..utils import list_of_pk, list_duplicates, _validate_required_key, _create, create_multiple_bulk, \
+    create_multiple_bulk_normalized, _validate_required_key_and_value
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -81,20 +81,20 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         data = self.retransform_ex_fields(data)
         self.validate_wrong_keys(data, additional_fields=InterventionExSerializer.Meta.fields)
 
-        _validate_requried_key(data, "measurement_type")
+        _validate_required_key(data, "measurement_type")
         measurement_type = data.get("measurement_type")
 
         if any([measurement_type == MEDICATION, measurement_type == DOSING]):
-            _validate_requried_key(data, "substance")
-            _validate_requried_key(data, "route")
-            _validate_requried_key(data, "value")
-            _validate_requried_key(data, "unit")
+            _validate_required_key_and_value(data, "substance")
+            _validate_required_key_and_value(data, "route")
+            _validate_required_key_and_value(data, "value")
+            _validate_required_key_and_value(data, "unit")
 
             if measurement_type == DOSING:
-                _validate_requried_key(data, "form")
-                _validate_requried_key(data, "application")
-                _validate_requried_key(data, "time")
-                _validate_requried_key(data, "time_unit")
+                _validate_required_key_and_value(data, "form")
+                _validate_required_key_and_value(data, "application")
+                _validate_required_key_and_value(data, "time")
+                _validate_required_key_and_value(data, "time_unit")
                 application = data["application"]
                 allowed_applications = ["constant infusion", "single dose"]
                 if not application in allowed_applications:
@@ -119,7 +119,6 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
 
 class InterventionExSerializer(MappingSerializer):
-    ######
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -145,6 +144,7 @@ class InterventionExSerializer(MappingSerializer):
                 EXTERN_FILE_FIELDS
                 + ["interventions", "comments", "descriptions"]
         )
+
     def validate_image(self, value):
         self._validate_image(value)
         return value
@@ -249,11 +249,9 @@ class InterventionSetSerializer(ExSerializer):
         return interventionset
 
 
-###############################################################################################
+# ##############################################################################################
 # Elastic Serializer
-###############################################################################################
-
-
+# ##############################################################################################
 class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
@@ -278,12 +276,12 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
 
-    measurement_type = SidLabelSerializer(read_only=True)
-    route = SidLabelSerializer(allow_null=True, read_only=True)
-    application = SidLabelSerializer(allow_null=True, read_only=True)
-    form = SidLabelSerializer(allow_null=True, read_only=True)
-    substance = SidLabelSerializer(allow_null=True, read_only=True)
-    choice = SidLabelSerializer(allow_null=True, read_only=True)
+    measurement_type = SidNameLabelSerializer(read_only=True)
+    route = SidNameLabelSerializer(allow_null=True, read_only=True)
+    application = SidNameLabelSerializer(allow_null=True, read_only=True)
+    form = SidNameLabelSerializer(allow_null=True, read_only=True)
+    substance = SidNameLabelSerializer(allow_null=True, read_only=True)
+    choice = SidNameLabelSerializer(allow_null=True, read_only=True)
 
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
@@ -320,6 +318,9 @@ class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
         model = Intervention
         fields = ["study_sid", "study_name", "intervention_pk", "raw_pk",
                   "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
+
+
+
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

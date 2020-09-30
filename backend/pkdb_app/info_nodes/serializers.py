@@ -4,7 +4,7 @@ from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
     Form, Tissue, Application, Method, CrossReference
-from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidLabelSerializer
+from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidNameLabelSerializer
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework.fields import empty
 
@@ -87,14 +87,9 @@ class SubstanceExtraSerializer(serializers.ModelSerializer):
         model = Substance
         fields = ["mass", "charge", "formula", "derived"]
 
-class LabelSerializer(serializers.Serializer):
-    label = serializers.CharField()
-    sid = serializers.CharField()
-    class Meta:
-        fields = ["sid", "label"]
 
 class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
-    choices = LabelSerializer(many=True, read_only=True)
+    choices = SidNameLabelSerializer(many=True, read_only=True)
     units = UnitSerializer(many=True, allow_null=True, required=False)
 
     class Meta:
@@ -240,7 +235,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
 
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
-    parents = SidLabelSerializer(many=True, allow_null=True)
+    parents = SidNameLabelSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
     synonyms = serializers.SerializerMethodField()
     substance = SubstanceExtraSerializer(required=False, allow_null=True)
@@ -250,9 +245,6 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = InfoNode
         fields = ["sid", "name", "label", "deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance",  ]
-
-    def get_parents(self, obj):
-        return [parent["sid"] for parent in obj.parents]
 
     def get_synonyms(self, obj):
         return [synonym["name"] for synonym in obj.synonyms]

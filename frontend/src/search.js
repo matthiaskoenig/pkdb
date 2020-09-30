@@ -1,33 +1,62 @@
 import axios from 'axios'
+import {StoreInteractionMixin} from "./storeInteraction";
 
 let SearchMixin = {
+    mixins: [StoreInteractionMixin],
     methods: {
+        cancelDownload() {
+            if (this.cancelSource) {
+                this.cancelSource.cancel('Start new search, stop active search');
+                console.log('cancel request done');
+            }
+        },
         downloadData() {
             this.loadingDownload = true
+            const filename = "pkdb_data"+ this.$store.state.results.uuid +".zip"
             let headers = {};
+
+            this.cancelDownload();
+            this.cancelSource = axios.CancelToken.source();
             if (localStorage.getItem('token')) {
                 headers = {Authorization: 'Token ' + localStorage.getItem('token')}
             }
-            axios.get(this.url + "&download=true", {headers: headers, responseType: 'arraybuffer',})
+            axios.get(this.url + "&download=true",
+                {
+                    headers: headers,
+                    responseType: 'arraybuffer',
+                    cancelToken: this.cancelSource.token
+                })
                 .then(response => {
-                    let blob = new Blob([response.data], {type: 'application/zip'}),
-                        url = window.URL.createObjectURL(blob)
-                    window.open(url)
+                    this.cancelSource = null;
+                    const a_ = document.createElement("a");
+                    a_.href = URL.createObjectURL(new Blob([response.data], {type: 'application/x-zip-compressed'}))
+                    a_.setAttribute("download", filename);
+                    document.body.appendChild(a_);
+                    a_.click();
+                    document.body.removeChild(a_);
                 })
                 .catch(err => {
+                    if(err.response){
                     console.log(err.response.data);
-                    this.loadingDownload = false
+                    this.loadingDownload = false}
                 })
-                .finally(() => this.loadingDownload = false);
+                .finally(() =>
+
+                    this.loadingDownload = false
+                );
         }
     },
     computed: {
         url() {
             /** Calculates the search url based on current state in store.. */
-            let url = this.$store.state.endpoints.api  + 'pkdata/?format=json'
+            let url = this.$store.state.endpoints.api  + 'filter/?format=json'
 
             var output_type__in = new Set(["output", "timecourse", "array"]);
             var filter_output_type = false
+
+            var licence__in = new Set(["closed", "open"]);
+            var filter_licence = false
+
             for (const [key, value] of Object.entries(this.$store.state.queries)) {
                 if (value.length > 0) {
 
@@ -64,13 +93,14 @@ let SearchMixin = {
             if (! this.$store.state.queries_output_types.timecourse_query) {
                 filter_output_type =true
                 output_type__in.delete("timecourse")
-
-
                 }
+            if (! this.$store.state.queries_output_types.scatter_query) {
+                filter_output_type = true
+                output_type__in.delete("array")
+            }
             if (! this.$store.state.queries_output_types.output_query) {
                 filter_output_type =true
                 output_type__in.delete("output")
-                output_type__in.delete("array")
 
             }
             if(filter_output_type) {
@@ -79,6 +109,26 @@ let SearchMixin = {
                 } else {
                     url = url + "&" + "outputs__output_type__in=" + [...output_type__in].join("__")
                 }
+            }
+
+            if (! this.$store.state.licence_boolean.open) {
+                filter_licence =true
+                licence__in.delete("open")
+            }
+            if (! this.$store.state.licence_boolean.closed) {
+                filter_licence = true
+                licence__in.delete("closed")
+            }
+
+            if(filter_licence) {
+                if ([...licence__in].length === 0) {
+                    url = url + "&" + "licence__in=0"
+                } else {
+                    url = url + "&" + "studies__licence__in=" + [...licence__in].join("__")
+                }
+            }
+            if(!this.$store.state.concise){
+                url = url + "&" + "concise=false"
             }
             return url
         },

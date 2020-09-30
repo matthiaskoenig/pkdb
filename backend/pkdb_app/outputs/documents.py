@@ -68,8 +68,7 @@ class OutputDocument(Document):
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(OutputDocument, self).get_queryset().select_related(
-            'study', 'individual', 'group',).prefetch_related('interventions')
+        return super(OutputDocument, self).get_queryset()#.prefetch_related("interventions").select_related('study', 'individual__name', 'group').
 
     class Index:
         name = 'outputs'
@@ -138,5 +137,4 @@ class OutputInterventionDocument(Document):
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(OutputInterventionDocument, self).get_queryset().select_related(
-            'intervention', 'output')
+        return super(OutputInterventionDocument, self).get_queryset().select_related('intervention', 'output')

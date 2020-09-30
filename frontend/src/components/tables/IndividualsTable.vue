@@ -1,7 +1,10 @@
 <template>
-    <v-card flat>
+    <v-sheet flat>
         <table-toolbar :otype="otype" :count="count" :autofocus="autofocus" :url="url" @update="searchUpdate"/>
         <v-data-table
+                fill-height
+                fixed-header
+                :height="windowHeight"
                 :headers="headers"
                 :items="entries"
                 :options.sync="options"
@@ -12,15 +15,13 @@
         >
 
             <template v-slot:item.buttons="{ item }">
-                <LinkButton v-if="item.study"
-                            :to="'/studies/'+ item.study.sid"
+                <link-button v-if="item.study"
+                            :sid="item.study.sid"
+                            show_type_input="study"
                             :title="'Study: '+item.study.name"
                             icon="study"
                 />
-                <link-button :to="'/individuals/'+ item.pk"
-                             :title="'Individual: '+item.pk"
-                             icon="individual"
-                />
+
                 <json-button :resource_url="api + 'individuals/'+ item.pk +'/?format=json'"/>
             </template>
             <template v-slot:item.individual="{ item }">
@@ -30,22 +31,18 @@
                 />
             </template>
             <template v-slot:item.group="{ item }">
-                <get-data :resource_url="group_url(item.group.pk)">
-                    <span slot-scope="group">
-                    <object-chip :object="group.data"
+                    <object-chip :object="item.group"
                                  otype="group"
-                                 :count="group.data.count"
+                                 :count="item.group.count"
                                  :search="search"
                     />
-                    </span>
-                </get-data>
             </template>
             <template v-slot:item.characteristica="{ item }">
                 <characteristica-card-deck :characteristica="item.characteristica" />
             </template>
             <no-data/>
         </v-data-table>
-    </v-card>
+    </v-sheet>
 </template>
 
 <script>
@@ -74,6 +71,9 @@
                 ]
             }
         },
+      methods:{
+
+      }
     }
 </script>
 

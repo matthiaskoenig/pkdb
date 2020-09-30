@@ -21,43 +21,26 @@
 </template>
 
 <script>
-import {lookupIcon} from "@/icons"
+import {IconsMixin} from "@/icons";
+import {ApiInteractionMixin} from "../../apiInteraction";
 
 export default {
   name: 'CountTable',
+  mixins: [IconsMixin, ApiInteractionMixin],
   components: {},
-  props: {
-    version: {
-      type: String,
-      required: true,
-    },
-    study_count: {
-      type: Number,
-      required: true,
-    },
-    group_count: {
-      type: Number,
-      required: true,
-    },
-    individual_count: {
-      type: Number,
-      required: true,
-    },
-    intervention_count: {
-      type: Number,
-      required: true,
-    },
-    output_count: {
-      type: Number,
-      required: true
-    },
-    timecourse_count: {
-      type: Number,
-      required: true
-    }
-  },
   data() {
     return {
+      data: {
+        version: "",
+        study_count: 0,
+        group_count: 0,
+        individual_count: 0,
+        intervention_count: 0,
+        output_count: 0,
+        timecourse_count: 0,
+        scatter_count: 0,
+        reference_count: 0,
+      },
       headers: [
         {text: 'Count', value: 'count', sortable: false},
         {text: 'Data', value: 'name', sortable: false},
@@ -65,77 +48,77 @@ export default {
       ],
     }
   },
-  methods: {
-    faIcon: function (key) {
-      return lookupIcon(key)
-    },
-  },
-  computed: {
 
+  created() {
+    this.fetch_data(this.resource_url);
+  },
+
+  computed: {
+    resource_url() {
+      return this.api + 'statistics/?format=json'
+    },
     items() {
       return [
         {
           name: 'Study',
           name_plural: 'Studies',
-          to: '/data',
+          to: '/data?tab=studies',
           icon: this.faIcon('studies'),
-          count: this.study_count,
+          count: this.data.study_count,
           description: "Clinical or experimental study measuring data in groups and/or individuals."
         },
         {
           name: 'Group',
-          to: '/data',
+          to: '/data?tab=groups',
           icon: this.faIcon('groups'),
-          count: this.group_count,
-          description: "Group of individuals for which data was measured, e.g., the control group and the group which received " +
+          count: this.data.group_count,
+          description: "Group of individuals for which data was reported, e.g., the control group and the group which received " +
               "an intervention. A group is described by certain characteristica, e.g., bodyweight, health status, smoking status or medication."
         },
         {
           name: 'Individual',
-          to: '/data',
+          to: '/data?tab=individuals',
           icon: this.faIcon('individuals'),
-          count: this.individual_count,
+          count: this.data.individual_count,
           description: "A single subject in the study. A subject is characterized by the group it belongs to " +
               "as well as individual characteristica like age, body weight or sex. Individuals are only created if outputs or timecourses have " +
               "been reported on the subject level (not group level)."
         },
         {
           name: 'Intervention',
-          to: '/data',
+          to: '/data?tab=interventions',
           icon: this.faIcon('interventions'),
-          count: this.intervention_count,
+          count: this.data.intervention_count,
           description: "Intervention which was performed in the study. Often interventions consist of application of a " +
               "substance, e.g. caffeine or codeine. Other examples are changes in lifestyle like smoking cessation."
         },
         {
           name: 'Output',
-          to: '/data',
+          to: '/data?tab=outputs',
           icon: this.faIcon('outputs'),
-          count: this.output_count,
+          count: this.data.output_count,
           description: "Clinical or experimental output. These can be single parameters or variables, e.g. pharmacokinetic " +
               "parameters like AUC, clearance or half-life of the applied substances. An output is always linked to the " +
               "respective intervention and group or individual."
         },
         {
           name: 'Timecourse',
-          to: '/data',
+          to: '/data?tab=timecourses',
           icon: this.faIcon('timecourses'),
-          count: this.timecourse_count,
+          count: this.data.timecourse_count,
           description: "Clinical or experimental time course measurements. Often timecourses are concentration measurements." +
-              "A timecourse is always linked to the respective intervention and group or individual."
+              " A timecourse is always linked to the respective intervention and group or individual."
         },
-        /*
-            {
-                name: 'Reference',
-                to: '/references',
-                icon: this.faIcon('references'),
-                count: this.reference_count,
-                description: "Literature references from which the data was digitized and curated."
-            },
-             */
+        {
+          name: 'Scatter',
+          to: '/data?tab=scatter',
+          icon: 'scatters',
+          count: this.data.scatter_count,
+          description: "Correlations between outputs are often provided as scatter plots (e.g. age ~ clearance)."
+        },
       ]
     }
-  },
+  }
 }
 </script>
 

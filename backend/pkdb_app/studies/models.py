@@ -2,7 +2,7 @@
 Django model for Study.
 """
 import datetime
-import uuid
+from django.utils.timezone import make_aware
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -53,7 +53,7 @@ class Reference(models.Model):
     This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric])
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric], )
     pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, validators=[alphanumeric])  # optional
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True)  # optional
@@ -102,7 +102,7 @@ class Study(Sidable, models.Model):
 
     Mainly reported as a single publication.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric])
+    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric], help_text="Study Identifer")
     date = models.DateField(default=datetime.date.today)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
@@ -112,7 +112,7 @@ class Study(Sidable, models.Model):
     )
     licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
     creator = models.ForeignKey(
-        User, related_name="creator_of_studies", on_delete=models.CASCADE, null=True
+        User, related_name="creator_of_studies", on_delete=models.CASCADE
     )
     curators = models.ManyToManyField(
         User, related_name="curator_of_studies", through=Rating
@@ -295,9 +295,17 @@ class Study(Sidable, models.Model):
         super().delete(*args, **kwargs)
 
 
+def expire():
+    expire_datetime = datetime.datetime.now() + datetime.timedelta(days=1)
+    return make_aware(expire_datetime)
 
 
-class Query(models.Model):
+# FIXME: rename to something what it is (FilterQuery, IdCollection ?)
+class IdCollection(models.Model):
+    """
+    DOCUMENT ME
+    """
+
     class Recourses(models.TextChoices):
         """ Recourse Types"""
         Studies = 'studies', _('studies')
@@ -305,12 +313,15 @@ class Query(models.Model):
         Individuals = 'individuals', _('individuals')
         Interventions = 'interventions', _('interventions')
         Outputs = 'outputs', _('outputs')
+        Scatter = 'scatter', _('scatter')
+        Timecourses = 'timecourses', _('timecourses')
 
 
-    resource =  models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
-    hash = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    resource = models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
+    uuid = models.UUIDField(null=False, blank=False, editable=False)
     ids = ArrayField(models.IntegerField(), null=True, blank=True)
+    expire = models.DateTimeField(default=expire(), blank=True, editable=False)
 
-#class IdMulti(models.Model):
-#    query = models.ForeignKey(Query, related_name="ids",on_delete=models.CASCADE, null=False)
-#    value = models.IntegerField(primary_key=False)
+    class Meta:
+        unique_together = ['uuid', 'resource']
+

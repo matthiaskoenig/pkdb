@@ -1,29 +1,47 @@
 <template>
+  <div>
+    <v-list>
+      <v-list-item three-line >
+        <v-list-item-content>
+          <div class="overline">
+            <span v-if="data.ntype != 'undefined'">{{ data.ntype.toUpperCase() }}</span>
+            <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
+          </div>
+          <v-list-item-title class="headline mb-1">
+            <v-icon class="mr-4">{{ faIcon(data.ntype) }}</v-icon>
+            <text-highlight :queries="highlight">{{ data.label }}
+            </text-highlight>
 
-  <v-card
-      width="100%"
-      flat
-  >
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="overline mb-4">
-          <json-button v-if="url" :resource_url="url"></json-button> {{ data.ntype.toUpperCase() }}
-          <span v-if="data.dtype != 'undefined'">({{ data.dtype.toUpperCase() }})</span>
-        </div>
-        <v-list-item-title class="headline mb-1"><text-highlight :queries="highlight">{{ data.label }}</text-highlight></v-list-item-title>
-        <v-list-item-subtitle v-if="parents_labels.length>0">Parents: {{ parents_labels.join(', ') }}</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
+            <v-chip v-if="data.ntype === 'substance'"
+                    outlined
+                    small
+                    class="ml-2"
+                    :title="substance_class==='generic' ? 'Generic substance class without chemical structure': 'Specific substance with chemical structure'"
+            >
+              {{ substance_class.toUpperCase() }}
+            </v-chip>
+            <json-button :resource_url="api + 'info_nodes/'+ data.sid +'/?format=json'"/>
 
-    <v-card-text>
+          </v-list-item-title>
+          <v-list-item-subtitle v-if="parents_labels.length>0">Parents:
+            <object-chip :object="parent"
+                         otype="info_node"
+                         v-for="parent in data.parents"
+                         :key="parent.sid"
+                         :search="highlight"
+            />
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+
     <div v-if="data.description && data.description.length>0">
       <text-highlight :queries="highlight">
       {{ data.description }}<br />
       </text-highlight>
     </div>
-
     <div v-if="data.annotations && data.annotations.length>0">
-      <span  v-for="annotation in data.annotations" :key="annotation.term">
+      <span v-for="annotation in data.annotations" :key="annotation.term">
           <annotation :annotation="annotation" />
           <span v-if="annotation.label"><strong>
                   <text-highlight :queries="highlight">
@@ -35,7 +53,7 @@
             {{ annotation.description ? annotation.description: "" }}
           </text-highlight>
           <span v-if="annotation.collection==='chebi'">
-            <v-img :src="'https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=' + annotation.term.substring(6)" max-width="200"/>
+            <v-img :title="annotation.term" :src="'https://www.ebi.ac.uk/chebi/displayImage.do?defaultImage=true&imageIndex=0&chebiId=' + annotation.term.substring(6)" max-width="200"/>
           </span>
         <br />
       </span>
@@ -60,8 +78,7 @@
         </li>
       </ul>
     </div>
-    </v-card-text>
-  </v-card>
+  </div>
 
 </template>
 
@@ -69,9 +86,12 @@
 
 import Annotation from "../info_node/Annotation";
 import Xref from "../info_node/Xref";
+import {ApiInteractionMixin} from "../../apiInteraction";
+import {IconsMixin} from "../../icons";
 
 export default {
   name: 'InfoNodeDetail',
+  mixins: [ApiInteractionMixin, IconsMixin],
   components: {
     Annotation,
     Xref,
@@ -87,9 +107,18 @@ export default {
     }
   },
   computed: {
-    highlight(){
-      return this.$store.state.highlight
+    substance_class: function (){
+      let label = "generic";
+      let annotations = this.data.annotations
+      for (const annotation of annotations){
+        if (annotation.collection == "inchikey"){
+          label = "specific";
+          break;
+        }
+      }
+      return label
     },
+
     parents_labels: function () {
       let labels = []
       let parents = this.data.parents

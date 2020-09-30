@@ -3,7 +3,6 @@ import Router from 'vue-router';
 
 import Home from './components/Home';
 import Data from './components/Data'
-import Search from './components/Search';
 import Page404 from './components/Page404';
 import Curation from './components/Curation';
 import Account from './components/auth/Account';
@@ -24,14 +23,15 @@ export default new Router({
             component: Home
         },
         {
-            path: '/search',
-            name: 'Search',
-            component: Search
-        },
-        {
             path: '/data',
             name: 'Data',
             component: Data
+        },
+        {
+            path: '/data/:sid',
+            name: 'DataSingle',
+            component: Data,
+            props: true
         },
         {
             path: '/curation',
