@@ -4,7 +4,6 @@
         <span v-for="comment in comments" :key="comment.pk">
                 <p  align="justify" xs11>
                   <user-avatar :username="comment.username" />
-
                     {{comment.text}}
                 </p>
         </span>

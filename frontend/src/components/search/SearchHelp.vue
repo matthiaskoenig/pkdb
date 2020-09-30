@@ -42,7 +42,7 @@
               small
               v-on:click="query(example.query)"
           >
-            <v-icon left small color="black">{{ faIcon('search') }}</v-icon>
+            <v-icon left small >{{ faIcon('search') }}</v-icon>
             <div  class="pa-1" v-html="example.title"></div>
           </v-btn>
         </v-card-title>
