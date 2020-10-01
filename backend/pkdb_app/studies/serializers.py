@@ -19,7 +19,8 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Com
     DescriptionElasticSerializer
 from ..interventions.models import DataFile, InterventionSet
 from ..interventions.serializers import InterventionSetSerializer, InterventionSetElasticSmallSerializer
-from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, SidNameLabelSerializer
+from ..serializers import WrongKeyValidationSerializer, SidSerializer, StudySmallElasticSerializer, \
+    SidNameLabelSerializer
 from ..subjects.models import GroupSet, IndividualSet
 from ..subjects.serializers import GroupSetSerializer, IndividualSetSerializer, DataFileElasticSerializer, \
     GroupSetElasticSmallSerializer, IndividualSetElasticSmallSerializer
@@ -526,7 +527,7 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
     substances = SidNameLabelSerializer(many=True, )
 
-    files = serializers.SerializerMethodField()  # DataFileElasticSerializer(many=True, )
+    files = serializers.SerializerMethodField()
 
     comments = CommentElasticSerializer(many=True, )
     descriptions = DescriptionElasticSerializer(many=True, )
@@ -594,36 +595,22 @@ class StudyElasticSerializer(serializers.ModelSerializer):
         else:
             return []
 
-class StudyAnalysisSerializer(serializers.ModelSerializer):
+class StudyAnalysisSerializer(serializers.Serializer):
     sid = serializers.CharField()
     name= serializers.CharField()
     licence = serializers.CharField()
     access = serializers.CharField()
-    substances = serializers.SerializerMethodField()
-    reference_pmid = serializers.SerializerMethodField()
-    reference_title = serializers.SerializerMethodField()
+    date = serializers.DateField()
+
     creator = serializers.SerializerMethodField()
     curators = serializers.SerializerMethodField()
+    substances = serializers.SerializerMethodField()
+
+    reference_pmid = serializers.SerializerMethodField()
+    reference_title = serializers.SerializerMethodField()
+    reference_date = serializers.DateField()
 
 
-    class Meta:
-        model = Study
-
-        fields = [
-            "sid",
-            "name",
-            "licence",
-            "access",
-            "date",
-            "creator",
-            "curators",
-            "substances",
-            "reference_pmid",
-            "reference_title",
-            "reference_date",
-        ]
-
-        read_only_fields = fields
 
     def get_substances(self, obj):
         return [s["label"] for s in obj.substances]
@@ -639,3 +626,20 @@ class StudyAnalysisSerializer(serializers.ModelSerializer):
 
     def get_curators(self, obj):
         return [s["username"] for s in obj.curators]
+
+    class Meta:
+        fields = [
+            "sid",
+            "name",
+            "licence",
+            "access",
+            "date",
+            "creator",
+            "curators",
+            "substances",
+            "reference_pmid",
+            "reference_title",
+            "reference_date",
+        ]
+
+        read_only_fields = fields

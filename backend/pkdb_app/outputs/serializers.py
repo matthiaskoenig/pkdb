@@ -14,13 +14,12 @@ from pkdb_app.interventions.serializers import InterventionSmallElasticSerialize
 from .models import (
     Output,
     OutputSet,
-    OutputEx,
-    OutputIntervention)
+    OutputEx)
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer, SidNameSerializer)
+    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer)
 from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
@@ -315,12 +314,42 @@ class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
         return list_of_pk("outputs", obj)
 
 
-class OutputInterventionSerializer(serializers.ModelSerializer):
+class OutputInterventionSerializer(serializers.Serializer):
+    study_sid = serializers.CharField()
+    study_name = serializers.CharField()
+    output_pk = serializers.IntegerField()
+    intervention_pk = serializers.IntegerField()
+    group_pk = serializers.IntegerField()
+    individual_pk = serializers.IntegerField()
+    normed = serializers.BooleanField()
+    calculated = serializers.BooleanField()
+
+    tissue = serializers.CharField()
+    method = serializers.CharField()
+    label = serializers.CharField()
+    output_type = serializers.CharField()
+
+    time = serializers.FloatField()
+    time_unit = serializers.CharField()
+
+    measurement_type =serializers.CharField()
+    choice = serializers.CharField()
+    substance =serializers.CharField()
+
+    value = serializers.FloatField()
+    mean = serializers.FloatField()
+    median = serializers.FloatField()
+    min = serializers.FloatField()
+    max = serializers.FloatField()
+    sd = serializers.FloatField()
+    se = serializers.FloatField()
+    cv = serializers.FloatField()
+    unit = serializers.CharField()
+
+
     class Meta:
-        model = OutputIntervention
         fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
                   "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
-        read_only_fields = fields
 
 
 class SmallOutputSerializer(serializers.ModelSerializer):

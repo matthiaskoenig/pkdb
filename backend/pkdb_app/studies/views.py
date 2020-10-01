@@ -2,7 +2,7 @@
 import tempfile
 import uuid
 import zipfile
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 from datetime import datetime
 from io import StringIO
 from typing import Dict
@@ -569,11 +569,19 @@ class PKData(object):
         response = queryset.source([pk_field]).params(size=scan_size).scan()
         return [instance[pk_field] for instance in response]
 
-    def data_by_query_dict(self,query_dict, viewset, serializer):
+    def data_by_query_dict(self,query_dict, viewset, serializer, boost):
         view = viewset(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
-        queryset = queryset.filter("terms",**query_dict).source(serializer.Meta.fields)
-        return [hit.to_dict() for hit in queryset.params(size=10000).scan()]
+        if boost:
+            queryset=queryset.filter("terms", **query_dict).source(serializer.Meta.fields)
+            return [hit.to_dict() for hit in queryset.params(size=5000).scan()]
+
+        else:
+            queryset = queryset.filter("terms", **query_dict)
+
+            return serializer(queryset.params(size=5000).scan(), many=True).data
+
+
 
 
 class ResponseSerializer(serializers.Serializer):
@@ -717,15 +725,15 @@ class PKDataView(APIView):
                 scatter_subsets = SubSet.objects.filter(id__in=ids).prefetch_related('data_points')
                 return [t.scatter_representation() for t in scatter_subsets]
 
-            Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function"])
+            Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function", "boost_performance",])
             table_content = {
-                "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None),
-                "groups": Sheet("Groups", {"group_pk": pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer, None),
-                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None),
-                "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None),
-                "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer, None),
+                "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None, False),
+                "groups": Sheet("Groups", {"group_pk": pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer, None, True,),
+                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None, True),
+                "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None, False),
+                "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer,None, True),
                 #"timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses),
-                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatter),
+                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatter, None),
             }
 
 
@@ -739,15 +747,20 @@ class PKDataView(APIView):
                         string_buffer = StringIO()
                         if sheet.function:
                             df = pd.DataFrame(sheet.function(sheet.query_dict["subset_pk"]))
+                            df.to_csv(string_buffer)
+                            archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                            download_times[key] = time.time() - download_time_start
 
                         else:
-                            data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer)
-                            df = pd.DataFrame(data)
-                            def sorted_tuple(v):
-                                return sorted(tuple(v))
-
-                            if key=="outputs":
-
+                            data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer, sheet.boost_performance)
+                            df = pd.DataFrame(data)[sheet.serializer.Meta.fields]
+                            df.to_csv(string_buffer)
+                            archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                            download_times[key] = time.time() - download_time_start
+                            if key == "outputs":
+                                download_time_start_timecourse = time.time()
+                                def sorted_tuple(v):
+                                    return sorted(tuple(v))
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
                                 if len(timecourse_df) !=0:
                                     timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple).apply(SubSet.to_list)
@@ -756,10 +769,9 @@ class PKDataView(APIView):
                                     timecourse_df = pd.DataFrame([])
                                 timecourse_df.to_csv(string_buffer)
                                 archive.writestr(f'timecourse.csv', string_buffer.getvalue())
+                                download_times["timecourse"] = time.time()-download_time_start_timecourse
 
-                        df.to_csv(string_buffer)
-                        archive.writestr(f'{key}.csv', string_buffer.getvalue())
-                        download_times[key] = time.time()-download_time_start
+
                     archive.write('download_extra/README.md', 'README.md')
                     archive.write('download_extra/TERMS_OF_USE.md', 'TERMS_OF_USE.md')
 

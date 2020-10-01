@@ -55,7 +55,6 @@ def map_field(fields):
     return [f"{field}_map" for field in fields]
 
 VALUE_FIELDS_SAME_SCALE =  ["value", "mean", "median", "min", "max"]
-VALUE_FIELDS_SAME_SCALE =  ["value", "mean", "median", "min", "max"]
 VALUE_FIELDS_NO_UNIT = VALUE_FIELDS_SAME_SCALE + ["sd", "se", "cv"]
 VALUE_FIELDS = VALUE_FIELDS_NO_UNIT + ["unit"]
 VALUE_MAP_FIELDS = map_field(VALUE_FIELDS)

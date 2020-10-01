@@ -15,8 +15,7 @@ from .models import (
     DataFile,
     Individual,
     CharacteristicaEx,
-    GroupEx,
-    GroupCharacteristica, IndividualCharacteristica)
+    GroupEx )
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
@@ -728,15 +727,59 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
         )
 
 
-class GroupCharacteristicaSerializer(serializers.ModelSerializer):
+class GroupCharacteristicaSerializer(serializers.Serializer):
+    study_sid = serializers.CharField()
+    study_name = serializers.CharField()
+    group_pk = serializers.IntegerField()
+    group_name = serializers.CharField()
+    group_count = serializers.IntegerField()
+    group_parent_pk = serializers.IntegerField()
+    characteristica_pk = serializers.IntegerField()
+    count = serializers.IntegerField()
+
+    measurement_type =serializers.CharField()
+    choice = serializers.CharField()
+    substance =serializers.CharField()
+
+    value = serializers.FloatField()
+    mean = serializers.FloatField()
+    median = serializers.FloatField()
+    min = serializers.FloatField()
+    max = serializers.FloatField()
+    sd = serializers.FloatField()
+    se = serializers.FloatField()
+    cv = serializers.FloatField()
+    unit = serializers.CharField()
+
     class Meta:
-        model = GroupCharacteristica
         fields = ['study_sid', 'study_name', 'group_pk', 'group_name', 'group_count', 'group_parent_pk',
                   'characteristica_pk', 'count'] + MEASUREMENTTYPE_FIELDS
 
 
-class IndividualCharacteristicaSerializer(serializers.ModelSerializer):
+class IndividualCharacteristicaSerializer(serializers.Serializer):
+
+    study_sid = serializers.CharField()
+    study_name = serializers.CharField()
+    individual_pk = serializers.IntegerField()
+    individual_name = serializers.CharField()
+    individual_group_pk = serializers.IntegerField()
+    characteristica_pk = serializers.IntegerField()
+    count = serializers.IntegerField()
+
+    measurement_type = serializers.CharField()
+    choice = serializers.CharField()
+    substance = serializers.CharField()
+
+    value = serializers.FloatField()
+    mean = serializers.FloatField()
+    median = serializers.FloatField()
+    min = serializers.FloatField()
+    max = serializers.FloatField()
+    sd = serializers.FloatField()
+    se = serializers.FloatField()
+    cv = serializers.FloatField()
+    unit = serializers.CharField()
+
     class Meta:
-        model = IndividualCharacteristica
         fields = ['study_sid', 'study_name', 'individual_pk', 'individual_name', 'individual_group_pk',
                   'characteristica_pk', 'count'] + MEASUREMENTTYPE_FIELDS
