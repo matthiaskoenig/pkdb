@@ -37,41 +37,37 @@ class Data(models.Model):
     image = models.ForeignKey('subjects.DataFile', related_name="data", on_delete=models.CASCADE, null=True)
     dataset = models.ForeignKey(DataSet, related_name="data", on_delete=models.CASCADE, null=True)
 
+class Timecourseable(models.Model):
+    class Meta:
+        abstract = True
 
-class SubSet(Accessible):
-    name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
-    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="subsets")
+    @cached_property
+    def timecourse(self):
+        """ FIXME: Documentation """
 
-    def get_single_dosing(self) -> Intervention:
-        """Returns a single intervention of type dosing if existing.
-        If multiple dosing interventions exist, no dosing is returned!.
-        """
-        try:
-            dosing_measurement_type = Intervention.objects.filter(id__in=self.interventions).get(
-                normed=True, measurement_type__info_node__name="dosing"
-            )
-            return dosing_measurement_type
+        tc = self.merge_values(
+            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()),
+            sort_values=["outputs__interventions__pk", "outputs__time"]
+        )
+        self.reformat_timecourse(tc, self._timecourse_extra())
+        self.validate_timecourse(tc)
+        return tc
 
-        except (ObjectDoesNotExist, MultipleObjectsReturned):
-            return None
+    def reformat_timecourse(self, timecourse, mapping):
+        """ FIXME: Documentation & type hinting """
+        for new_key, old_key in mapping.items():
+            timecourse[new_key] = timecourse.pop(old_key)
+            if new_key == "interventions":
+                if isinstance(timecourse[new_key], int):
+                    timecourse[new_key] = (timecourse[new_key],)
 
-    @property
-    def array(self):
-        [point.values_list("output") for point in self.data_points]
-        return self.data.data_type
-
-    @property
-    def data_type(self):
-        return self.data.data_type
-
-    @property
-    def outputs(self):
-        return self.data_points.values_list('outputs', flat=True)
-
-    @property
-    def interventions(self):
-        return self.data_points.values_list('outputs__interventions', flat=True)
+    @cached_property
+    def timecourse_representation(self):
+        """ FIXME: Documentation """
+        timecourse = self.merge_values(
+            self.data_points.values(*self.keys_timecourse_representation().values()), )
+        self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
+        return timecourse
 
     def timecourse_extra_no_intervention(self):
         return {
@@ -96,9 +92,10 @@ class SubSet(Accessible):
             'time_unit': 'outputs__time_unit',
             'unit': 'outputs__unit',
         }
+
     def keys_timecourse_representation(self):
         return {
-            "study_sid":"outputs__study__sid",
+            "study_sid": "outputs__study__sid",
             "study_name": "outputs__study__name",
             "outputs_pk": "outputs__pk",
             "subset_pk": "subset_id",
@@ -116,9 +113,9 @@ class SubSet(Accessible):
             "output_type": 'outputs__output_type',
             "time": 'outputs__time',
             'time_unit': 'outputs__time_unit',
-            "measurement_type":	"outputs__measurement_type__info_node__sid",
+            "measurement_type": "outputs__measurement_type__info_node__sid",
             "measurement_type__label": "outputs__measurement_type__info_node__label",
-            "choice":	"outputs__choice__info_node__sid",
+            "choice": "outputs__choice__info_node__sid",
             "choice_label": "outputs__choice__info_node__label",
             "substance": "outputs__substance__info_node__sid",
             "substance_label": "outputs__substance__info_node__label",
@@ -169,10 +166,11 @@ class SubSet(Accessible):
         return tuple(values)
 
     @staticmethod
-    def merge_values(values=None ,df=None, groupby=("outputs__pk",), sort_values=["outputs__interventions__pk","outputs__time"]):
+    def merge_values(values=None, df=None, groupby=("outputs__pk",),
+                     sort_values=["outputs__interventions__pk", "outputs__time"]):
 
         if values:
-            df =pd.DataFrame(values)
+            df = pd.DataFrame(values)
         if sort_values:
             df = df.sort_values(sort_values)
         merged_dict = df.groupby(list(groupby), as_index=False).apply(SubSet.to_list).to_dict("list")
@@ -180,7 +178,6 @@ class SubSet(Accessible):
         for key, values in merged_dict.items():
             if key not in ['outputs__time', 'outputs__value', 'outputs__mean', 'outputs__median', 'outputs__cv',
                            'outputs__sd' 'outputs__se']:
-
                 merged_dict[key] = SubSet.tuple_or_value(values)
 
             if all(v is None for v in values):
@@ -216,32 +213,41 @@ class SubSet(Accessible):
                 raise ValueError(f"Subset used for timecourse is not unique on '{key}'. Values are '{name}'. "
                                  f"Check uniqueness of labels for timecourses.")
 
-    @cached_property
-    def timecourse(self):
-        """ FIXME: Documentation """
-        tc = self.merge_values(
-            self.data_points.prefetch_related('outputs').values(*self._timecourse_extra().values()),
-            sort_values=["outputs__interventions__pk", "outputs__time"]
-        )
-        self.reformat_timecourse(tc, self._timecourse_extra())
-        self.validate_timecourse(tc)
-        return tc
 
-    def reformat_timecourse(self, timecourse, mapping):
-        """ FIXME: Documentation & type hinting """
-        for new_key, old_key in mapping.items():
-            timecourse[new_key] = timecourse.pop(old_key)
-            if new_key == "interventions":
-                if isinstance(timecourse[new_key], int):
-                    timecourse[new_key] = (timecourse[new_key],)
+class SubSet(Accessible, Timecourseable):
+    name = models.CharField(max_length=CHAR_MAX_LENGTH)
+    data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
+    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="subsets")
 
-    @cached_property
-    def timecourse_representation(self):
-        """ FIXME: Documentation """
-        timecourse = self.merge_values(
-            self.data_points.values(*self.keys_timecourse_representation().values()),)
-        self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
-        return timecourse
+    def get_single_dosing(self) -> Intervention:
+        """Returns a single intervention of type dosing if existing.
+        If multiple dosing interventions exist, no dosing is returned!.
+        """
+        try:
+            dosing_measurement_type = Intervention.objects.filter(id__in=self.interventions).get(
+                normed=True, measurement_type__info_node__name="dosing"
+            )
+            return dosing_measurement_type
+
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            return None
+
+    @property
+    def array(self):
+        [point.values_list("output") for point in self.data_points]
+        return self.data.data_type
+
+    @property
+    def data_type(self):
+        return self.data.data_type
+
+    @property
+    def outputs(self):
+        return self.data_points.values_list('outputs', flat=True)
+
+    @property
+    def interventions(self):
+        return self.data_points.values_list('outputs__interventions', flat=True)
 
     def keys_scatter_representation(self):
         """ FIXME: Documentation """

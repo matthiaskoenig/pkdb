@@ -4,7 +4,7 @@
        <h2>
       <v-icon class="mr-4">{{ faIcon(subject_type) }}</v-icon>
       <text-highlight :queries="highlight">{{ subject.name }}</text-highlight>
-      <json-button :resource_url="api + 'subjects/'+ subject.pk +'/?format=json'"/>
+      <json-button :resource_url="api + subject_type +'s/'+ subject.pk +'/?format=json'"/>
     </h2>
     </div>
 

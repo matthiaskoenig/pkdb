@@ -121,11 +121,15 @@ class SubSetDocument(Document):
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
         settings['max_result_window'] = 100000
+
+
 '''
 @registry.register_document
 class TimeCourseDocument(Document):
     study_sid = string_field('study_sid')
     study_name = string_field('study_name')
+    outputs_pk = fields.ListField('timecourse')
+    
     # for permissions
     access = string_field('access')
     allowed_users = fields.ObjectField(
@@ -154,4 +158,5 @@ class TimeCourseDocument(Document):
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
         settings['max_result_window'] = 100000
+
 '''
