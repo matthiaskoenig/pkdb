@@ -16,7 +16,7 @@
     "color-normalize": "1.5.0",
     "color-rgba": "2.1.1",
     "color-parse": "1.3.8",
-    "plotly": "1.55.2",
+    "plotly.js": "1.55.2",
     "vega": "^5.16.1",
     "vega-embed": "^6.12.2",
     "vega-lite": "^4.16.7",
