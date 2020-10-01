@@ -2,7 +2,7 @@
 import tempfile
 import uuid
 import zipfile
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
 from datetime import datetime
 from io import StringIO
 from typing import Dict
@@ -10,6 +10,7 @@ import time
 import pandas as pd
 from django.db import connection
 from django.test.client import RequestFactory
+import numpy as np
 
 import django_filters.rest_framework
 from django.core.exceptions import ObjectDoesNotExist
@@ -721,9 +722,13 @@ class PKDataView(APIView):
 
 
 
-            def serialize_scatter(ids):
-                scatter_subsets = SubSet.objects.filter(id__in=ids).prefetch_related('data_points')
-                return [t.scatter_representation() for t in scatter_subsets]
+            def serialize_scatters(ids):
+                scatter_subsets = SubSet.objects.filter(id__in=ids)
+                return [t.scatter_representation for t in scatter_subsets]
+
+            def serialize_timecourses(ids):
+                scatter_subsets = SubSet.objects.filter(id__in=ids)
+                return [t.timecourse_representation for t in scatter_subsets]
 
             Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function", "boost_performance",])
             table_content = {
@@ -732,8 +737,8 @@ class PKDataView(APIView):
                 "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None, True),
                 "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None, False),
                 "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer,None, True),
-                #"timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses),
-                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatter, None),
+                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses, None),
+                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters, None),
             }
 
 
@@ -752,24 +757,41 @@ class PKDataView(APIView):
                             download_times[key] = time.time() - download_time_start
 
                         else:
-                            data = pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer, sheet.boost_performance)
-                            df = pd.DataFrame(data)[sheet.serializer.Meta.fields]
+                            df = pd.DataFrame(pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer, sheet.boost_performance))
+                            if len(df) < 0:
+                                df = df[sheet.serializer.Meta.fields]
                             df.to_csv(string_buffer)
                             archive.writestr(f'{key}.csv', string_buffer.getvalue())
                             download_times[key] = time.time() - download_time_start
+                            """
                             if key == "outputs":
+                                string_buffer = StringIO()
                                 download_time_start_timecourse = time.time()
                                 def sorted_tuple(v):
                                     return sorted(tuple(v))
                                 timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
+
+                                def unique_or_sorted_list(v):
+                                    values = v.unique()
+                                    if len(values) == 1:
+                                        return values[0]
+                                    return tuple(values)
+
                                 if len(timecourse_df) !=0:
-                                    timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple).apply(SubSet.to_list)
-                                    timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple).apply(SubSet.to_list)
+                                    #timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple, dropna=False).apply(SubSet.to_list)
+                                    #timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple, dropna=False).apply(SubSet.to_list)
+                                    timecourse_df = pd.pivot_table(data=timecourse_df, index=["output_pk"],aggfunc=unique_or_sorted_list,fill_value=np.NAN)#.reset_index()
+                                    timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc= unique_or_sorted_list, fill_value=np.NAN)#.reset_index()
+                                    print(timecourse_df.columns)
+
+                                    #timecourse_df = timecourse_df[table_content["outputs"].serializer.Meta.fields]
                                 else:
                                     timecourse_df = pd.DataFrame([])
                                 timecourse_df.to_csv(string_buffer)
-                                archive.writestr(f'timecourse.csv', string_buffer.getvalue())
+                                archive.writestr('timecourse.csv', string_buffer.getvalue())
                                 download_times["timecourse"] = time.time()-download_time_start_timecourse
+                                """
+
 
 
                     archive.write('download_extra/README.md', 'README.md')

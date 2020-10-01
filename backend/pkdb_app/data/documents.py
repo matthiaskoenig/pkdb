@@ -1,6 +1,6 @@
 from django_elasticsearch_dsl import Document, fields, ObjectField
 from django_elasticsearch_dsl.registries import registry
-from pkdb_app.data.models import Dimension, SubSet
+from pkdb_app.data.models import Dimension, SubSet, Data
 
 from ..documents import string_field, elastic_settings, info_node, study_field
 
@@ -121,3 +121,37 @@ class SubSetDocument(Document):
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
         settings['max_result_window'] = 100000
+'''
+@registry.register_document
+class TimeCourseDocument(Document):
+    study_sid = string_field('study_sid')
+    study_name = string_field('study_name')
+    # for permissions
+    access = string_field('access')
+    allowed_users = fields.ObjectField(
+        attr="allowed_users",
+        properties={
+            'username': string_field("username")
+        },
+        multi=True
+    )
+
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(TimeCourseDocument, self).get_queryset().filter(data__data_type=Data.DataTypes.Timecourse)  # .prefetch_related("interventions").
+
+
+    class Django:
+        model = SubSet
+        # Ignore auto updating of Elasticsearch when a model is saved/deleted
+        ignore_signals = True
+        # Don't perform an index refresh after every update
+        auto_refresh = False
+
+    class Index:
+        name = 'subset'
+        settings = elastic_settings
+        settings['number_of_shards'] = 5
+        settings['number_of_replicas'] = 1
+        settings['max_result_window'] = 100000
+'''

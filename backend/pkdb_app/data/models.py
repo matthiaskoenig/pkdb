@@ -1,6 +1,9 @@
 import itertools
+from collections import Iterable
+
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
+from django.utils.functional import cached_property
 from pkdb_app.behaviours import Accessible
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.utils import CHAR_MAX_LENGTH
@@ -114,7 +117,7 @@ class SubSet(Accessible):
             "time": 'outputs__time',
             'time_unit': 'outputs__time_unit',
             "measurement_type":	"outputs__measurement_type__info_node__sid",
-            "measurement__label": "outputs__measurement_type__info_node__label",
+            "measurement_type__label": "outputs__measurement_type__info_node__label",
             "choice":	"outputs__choice__info_node__sid",
             "choice_label": "outputs__choice__info_node__label",
             "substance": "outputs__substance__info_node__sid",
@@ -144,10 +147,10 @@ class SubSet(Accessible):
 
     @staticmethod
     def none_tuple(values):
-        if all(pd.isna(v) for v in values):
-            return (None,)
-        else:
-            return tuple(values)
+        if isinstance(values, Iterable):
+            if all(pd.isna(v) for v in values):
+                return (None,)
+        return tuple(values)
 
     @staticmethod
     def to_list(tdf):
@@ -213,6 +216,7 @@ class SubSet(Accessible):
                 raise ValueError(f"Subset used for timecourse is not unique on '{key}'. Values are '{name}'. "
                                  f"Check uniqueness of labels for timecourses.")
 
+    @cached_property
     def timecourse(self):
         """ FIXME: Documentation """
         tc = self.merge_values(
@@ -231,6 +235,7 @@ class SubSet(Accessible):
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
 
+    @cached_property
     def timecourse_representation(self):
         """ FIXME: Documentation """
         timecourse = self.merge_values(
@@ -245,6 +250,7 @@ class SubSet(Accessible):
                 "data_point": "pk"
         }
 
+    @cached_property
     def scatter_representation(self):
         scatter_x = self.merge_values(self.data_points.filter(dimensions__dimension=0).values(*self.keys_scatter_representation().values()), sort_values=None)
         self.reformat_timecourse(scatter_x, self.keys_scatter_representation())

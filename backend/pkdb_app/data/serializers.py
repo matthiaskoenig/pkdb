@@ -1,11 +1,12 @@
 import traceback
 
+from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
     DescriptionElasticSerializer
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
-from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS
+from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS, OUTPUT_FIELDS
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, StudySmallElasticSerializer
 from pkdb_app.subjects.models import DataFile
 from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_normalized, list_of_pk
@@ -406,3 +407,51 @@ class DataAnalysisSerializer(serializers.ModelSerializer):
                   "output_pk",
                   "dimension"]
         read_only_fields = fields
+
+
+class TimecourseSerializer(serializers.Serializer):
+    study_sid = serializers.CharField()
+    study_name = serializers.CharField()
+    output_pk =  serializers.ListField(serializers.IntegerField())
+    subset_pk = serializers.IntegerField()
+    subset_name = serializers.CharField()
+    interventions =  serializers.ListField(serializers.IntegerField())
+    group_pk = serializers.IntegerField()
+    individual_pk = serializers.IntegerField()
+    normed = serializers.BooleanField()
+    calculated = serializers.BooleanField()
+
+    tissue = serializers.CharField()
+    tissue_label = serializers.CharField()
+
+    method = serializers.CharField()
+    method_label = serializers.CharField()
+
+
+    label = serializers.CharField()
+    output_type = serializers.CharField()
+
+    time = serializers.FloatField()
+    time_unit = serializers.CharField()
+
+    measurement_type =serializers.CharField()
+    measurement_type__label =serializers.CharField()
+    choice = serializers.CharField()
+    choice_label =serializers.CharField()
+    substance =serializers.CharField()
+    substance_label =serializers.CharField()
+
+    value = serializers.ListField(serializers.IntegerField())
+    mean = serializers.ListField(serializers.IntegerField())
+    median = serializers.ListField(serializers.IntegerField())
+    min = serializers.ListField(serializers.IntegerField())
+    max = serializers.ListField(serializers.IntegerField())
+    sd = serializers.ListField(serializers.IntegerField())
+    se = serializers.ListField(serializers.IntegerField())
+    cv = serializers.ListField(serializers.IntegerField())
+    unit = serializers.CharField()
+
+
+    class Meta:
+        fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
+                  "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
