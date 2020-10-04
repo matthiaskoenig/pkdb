@@ -10,7 +10,6 @@ import time
 import pandas as pd
 from django.db import connection
 from django.test.client import RequestFactory
-import numpy as np
 
 import django_filters.rest_framework
 from django.core.exceptions import ObjectDoesNotExist
@@ -28,10 +27,11 @@ from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
 
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.data.models import SubSet, Data, DataPoint
-from pkdb_app.data.views import SubSetViewSet, DataAnalysisViewSet
-from pkdb_app.documents import AccessView, UUID_PARAM
-from pkdb_app.interventions.serializers import  InterventionElasticSerializerAnalysis
+from pkdb_app.data.models import SubSet, Data
+from pkdb_app.data.serializers import TimecourseSerializer
+from pkdb_app.data.views import SubSetViewSet
+from pkdb_app.documents import  UUID_PARAM
+from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
 from rest_framework.generics import get_object_or_404
@@ -737,7 +737,7 @@ class PKDataView(APIView):
                 "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None, True),
                 "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None, False),
                 "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer,None, True),
-                "timecourses": Sheet("Timecourses", {"subset_pk": pkdata.ids["timecourses"]}, None, None, serialize_timecourses, None),
+                "timecourses": Sheet("Timecourses", {"pk": pkdata.ids["timecourses"]}, SubSetViewSet, TimecourseSerializer, None, False),
                 "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters, None),
             }
 

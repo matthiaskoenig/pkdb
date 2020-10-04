@@ -40,6 +40,8 @@ class Data(models.Model):
 class Timecourseable(models.Model):
     class Meta:
         abstract = True
+    def output_pk(self):
+        return self.data_points.values_list("outputs__pk")
 
     @cached_property
     def timecourse(self):
@@ -64,10 +66,11 @@ class Timecourseable(models.Model):
     @cached_property
     def timecourse_representation(self):
         """ FIXME: Documentation """
-        timecourse = self.merge_values(
-            self.data_points.values(*self.keys_timecourse_representation().values()), )
-        self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
-        return timecourse
+        if self.data.data_type == Data.DataTypes.Timecourse:
+            timecourse = self.merge_values(
+                self.data_points.values(*self.keys_timecourse_representation().values()), )
+            self.reformat_timecourse(timecourse, self.keys_timecourse_representation())
+            return timecourse
 
     def timecourse_extra_no_intervention(self):
         return {

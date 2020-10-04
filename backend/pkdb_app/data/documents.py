@@ -98,16 +98,18 @@ class SubSetDocument(Document):
     study = study_field
     study_sid = string_field('study_sid')
     study_name = string_field('study_name')
-    # for permissions
     access = string_field('access')
     allowed_users = fields.ObjectField(
         attr="allowed_users",
+
         properties={
             'username': string_field("username")
         },
         multi=True
     )
-
+    def get_queryset(self):
+        """Not mandatory but to improve performance we can select related in one sql request"""
+        return super(SubSetDocument, self).get_queryset().prefetch_related("data_points__outputs")
     class Django:
         model = SubSet
         # Ignore auto updating of Elasticsearch when a model is saved/deleted

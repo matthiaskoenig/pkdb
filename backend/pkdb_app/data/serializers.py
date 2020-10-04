@@ -1,8 +1,11 @@
+import json
 import traceback
-
+from cachetools import cached
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
     DescriptionElasticSerializer
+from pkdb_app.data.documents import SubSetDocument
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
@@ -13,6 +16,8 @@ from pkdb_app.utils import _create, create_multiple_bulk, create_multiple_bulk_n
 from rest_framework import serializers
 import pandas as pd
 import numpy as np
+
+from functools import lru_cache
 
 
 class DimensionSerializer(WrongKeyValidationSerializer):
@@ -360,24 +365,194 @@ class DataSetSerializer(ExSerializer):
 # Read Serializer
 ################################
 
+class TimecourseSerializer(serializers.Serializer):
+    study_sid = serializers.CharField()
+    study_name = serializers.CharField()
+    output_pk = serializers.SerializerMethodField()
+    subset_pk = serializers.IntegerField(source="pk")
+    subset_name = serializers.CharField(source="name")
 
-class SubSetElasticSerializer(serializers.ModelSerializer):
+    interventions =  serializers.SerializerMethodField()
+    group_pk = serializers.SerializerMethodField()
+    individual_pk = serializers.SerializerMethodField()
+    normed = serializers.SerializerMethodField()
 
+    tissue = serializers.SerializerMethodField()
+    tissue_label = serializers.SerializerMethodField()
+
+    method = serializers.SerializerMethodField()
+    method_label = serializers.SerializerMethodField()
+
+    label = serializers.SerializerMethodField()
+
+    time = serializers.SerializerMethodField()
+    time_unit = serializers.SerializerMethodField()
+
+    measurement_type =serializers.SerializerMethodField()
+    measurement_type_label =serializers.SerializerMethodField()
+    choice = serializers.SerializerMethodField()
+    choice_label =serializers.SerializerMethodField()
+
+    substance = serializers.SerializerMethodField()
+    substance_label = serializers.SerializerMethodField()
+
+    value = serializers.SerializerMethodField()
+    mean = serializers.SerializerMethodField()
+    median = serializers.SerializerMethodField()
+    min = serializers.SerializerMethodField()
+    max = serializers.SerializerMethodField()
+    sd = serializers.SerializerMethodField()
+    se = serializers.SerializerMethodField()
+    cv = serializers.SerializerMethodField()
+    unit = serializers.SerializerMethodField()
+
+    @lru_cache(maxsize=64)
+    def _get_general(self,obj):
+        obj = [v["point"][0] for v in json.loads(obj)["array"]]
+        result = pd.DataFrame(obj)
+
+        return result
+
+    def _get_field(self, obj, field):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result[field].isnull().all():
+            return None
+        return result[field].values
+
+    def get_output_pk(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["pk"].values
+
+    def get_interventions(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return [i["pk"] for i in result["interventions"].iloc[0]]
+
+    def get_group_pk(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["group"][0]:
+            return result["group"][0]["pk"]
+
+    def get_individual_pk(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["individual"][0]:
+            return result["individual"][0]["pk"]
+
+    def get_normed(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["normed"][0]
+
+
+    def get_tissue(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["tissue"][0]:
+            return result["tissue"][0]["sid"]
+
+    def get_tissue_label(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["tissue"][0]:
+            return result["tissue"][0]["label"]
+
+    def get_method(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["method"][0]:
+            return result["method"][0]["sid"]
+
+    def get_method_label(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["method"][0]:
+            return result["method"][0]["label"]
+
+    def get_label(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["label"][0]
+
+    def get_time(self, obj):
+        return self._get_field(obj, "time")
+
+
+    def get_time_unit(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["time_unit"][0]
+
+    def get_measurement_type(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["measurement_type"][0]["sid"]
+
+    def get_measurement_type_label(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["measurement_type"][0]["label"]
+
+    def get_choice(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["choice"][0]:
+            return result["choice"][0]["sid"]
+
+    def get_choice_label(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["choice"][0]:
+            return result["choice"][0]["label"]
+
+    def get_substance(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["substance"][0]:
+            return result["substance"][0]["sid"]
+
+    def get_substance_label(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        if result["substance"][0]:
+            return result["substance"][0]["label"]
+
+    def get_value(self, obj):
+        return self._get_field(obj, "value")
+
+    def get_mean(self, obj):
+        return self._get_field(obj, "mean")
+
+    def get_median(self, obj):
+        return self._get_field(obj, "median")
+
+    def get_min(self, obj):
+        return self._get_field(obj, "min")
+
+    def get_max(self, obj):
+        return self._get_field(obj, "max")
+
+    def get_sd(self, obj):
+        return self._get_field(obj, "sd")
+
+    def get_se(self, obj):
+        return self._get_field(obj, "se")
+
+    def get_cv(self, obj):
+        return self._get_field(obj, "cv")
+
+    def get_unit(self, obj):
+        result = self._get_general(json.dumps(obj.to_dict()))
+        return result["unit"][0]
+
+    class Meta:
+        fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
+                  "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+
+class SubSetElasticSerializer(DocumentSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     name = serializers.CharField()
     data_type = serializers.CharField()
     array = serializers.SerializerMethodField()
 
+
     class Meta:
-        model = SubSet
-        fields = ["pk", "study",
+        document = SubSetDocument
+        fields = ["pk",
+                  "study",
                   "name",
                   "data_type",
-                  "array"]
+                  "array",
+                  "timecourse"]
 
     def get_array(self,object):
-        #return [[SmallOutputSerializer(point.point,many=True, read_only=True).data] for point in object["array"]]
         return [point["point"] for point in object.to_dict()["array"]]
+
 
 
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
@@ -409,49 +584,3 @@ class DataAnalysisSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class TimecourseSerializer(serializers.Serializer):
-    study_sid = serializers.CharField()
-    study_name = serializers.CharField()
-    output_pk =  serializers.ListField(serializers.IntegerField())
-    subset_pk = serializers.IntegerField()
-    subset_name = serializers.CharField()
-    interventions =  serializers.ListField(serializers.IntegerField())
-    group_pk = serializers.IntegerField()
-    individual_pk = serializers.IntegerField()
-    normed = serializers.BooleanField()
-    calculated = serializers.BooleanField()
-
-    tissue = serializers.CharField()
-    tissue_label = serializers.CharField()
-
-    method = serializers.CharField()
-    method_label = serializers.CharField()
-
-
-    label = serializers.CharField()
-    output_type = serializers.CharField()
-
-    time = serializers.FloatField()
-    time_unit = serializers.CharField()
-
-    measurement_type =serializers.CharField()
-    measurement_type__label =serializers.CharField()
-    choice = serializers.CharField()
-    choice_label =serializers.CharField()
-    substance =serializers.CharField()
-    substance_label =serializers.CharField()
-
-    value = serializers.ListField(serializers.IntegerField())
-    mean = serializers.ListField(serializers.IntegerField())
-    median = serializers.ListField(serializers.IntegerField())
-    min = serializers.ListField(serializers.IntegerField())
-    max = serializers.ListField(serializers.IntegerField())
-    sd = serializers.ListField(serializers.IntegerField())
-    se = serializers.ListField(serializers.IntegerField())
-    cv = serializers.ListField(serializers.IntegerField())
-    unit = serializers.CharField()
-
-
-    class Meta:
-        fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
-                  "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
