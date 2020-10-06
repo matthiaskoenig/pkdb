@@ -31,7 +31,7 @@ from .studies.views import (
     StudyViewSet,
     ElasticReferenceViewSet,
     ElasticStudyViewSet,
-    update_index_study, PKDataView,
+    update_index_study, PKDataView, StudyAnalysisViewSet,
 )
 from .subjects.views import (
     DataFileViewSet,
@@ -83,6 +83,7 @@ router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
+router.register("flat/studies", StudyAnalysisViewSet, basename="studies_analysis")
 router.register("flat/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
 router.register("flat/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
 router.register("flat/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")

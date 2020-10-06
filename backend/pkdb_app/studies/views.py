@@ -336,6 +336,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
             )
             return qs
 
+class StudyAnalysisViewSet(ElasticStudyViewSet):
+    swagger_schema = None
+    serializer_class = StudyAnalysisSerializer
+
 
 class ElasticReferenceViewSet(BaseDocumentViewSet):
     """Read/query/search references. """
