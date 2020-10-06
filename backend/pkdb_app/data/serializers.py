@@ -365,6 +365,7 @@ class DataSetSerializer(ExSerializer):
 ################################
 
 class TimecourseSerializer(serializers.Serializer):
+    """ Timecourse Serializer"""
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
     output_pk = serializers.SerializerMethodField()
@@ -407,6 +408,7 @@ class TimecourseSerializer(serializers.Serializer):
 
     @lru_cache(maxsize=128)
     def _get_general(self,obj):
+        """ This function reshapes and reformats the outputs to a Django DataFrame. """
         obj = [v["point"][0] for v in json.loads(obj)["array"]]
         result = pd.DataFrame(obj)
         return result.where(result.notnull(), None)
