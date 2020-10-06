@@ -1,6 +1,5 @@
 import json
 import traceback
-from cachetools import cached
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
@@ -406,18 +405,19 @@ class TimecourseSerializer(serializers.Serializer):
     cv = serializers.SerializerMethodField()
     unit = serializers.SerializerMethodField()
 
-    @lru_cache(maxsize=64)
+    @lru_cache(maxsize=128)
     def _get_general(self,obj):
         obj = [v["point"][0] for v in json.loads(obj)["array"]]
         result = pd.DataFrame(obj)
-
+        result.where(result.notnull(), None)
         return result
 
     def _get_field(self, obj, field):
         result = self._get_general(json.dumps(obj.to_dict()))
         if result[field].isnull().all():
             return None
-        return result[field].values
+
+        return result[field].replac(.values
 
     def get_output_pk(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))

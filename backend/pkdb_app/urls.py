@@ -4,7 +4,7 @@ Django URLs
 from django.conf.urls import url
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
-from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet
+from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet, TimecourseViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -88,6 +88,7 @@ router.register("flat/groups", GroupCharacteristicaViewSet, basename="groups_ana
 router.register("flat/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
 router.register("flat/output", OutputInterventionViewSet, basename="output_analysis")
 router.register("flat/data", DataAnalysisViewSet, basename="data_analysis")
+router.register("flat/timecourses", TimecourseViewSet, basename="timecourse_analysis")
 
 
 
