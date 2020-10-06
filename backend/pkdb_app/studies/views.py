@@ -17,7 +17,7 @@ from django.db.models import Q as DQ, Prefetch
 from django.http import JsonResponse, HttpResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
@@ -339,6 +339,22 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
 class StudyAnalysisViewSet(ElasticStudyViewSet):
     swagger_schema = None
     serializer_class = StudyAnalysisSerializer
+    filter_fields = {
+        'study_sid': {'field': 'sid.raw',
+                  'lookups': [
+                      LOOKUP_QUERY_IN,
+                      LOOKUP_QUERY_EXCLUDE,
+
+                  ],
+                      },
+        'study_name': {'field': 'name.raw',
+                   'lookups': [
+                       LOOKUP_QUERY_IN,
+                       LOOKUP_QUERY_EXCLUDE,
+
+                   ],
+                       },
+    }
 
 
 class ElasticReferenceViewSet(BaseDocumentViewSet):

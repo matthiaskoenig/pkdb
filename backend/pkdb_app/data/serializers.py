@@ -1,5 +1,7 @@
 import json
 import traceback
+
+from django.utils.functional import cached_property
 from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
 from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS
 from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializer, CommentElasticSerializer, \
@@ -406,9 +408,14 @@ class TimecourseSerializer(serializers.Serializer):
     cv = serializers.SerializerMethodField()
     unit = serializers.SerializerMethodField()
 
+    #@cached_property
+    #def json_object(self):
+    #    return json.dumps(self.instance.to_dict())
+
     @lru_cache(maxsize=128)
     def _get_general(self,obj):
-        """ This function reshapes and reformats the outputs to a Django DataFrame. """
+        """ This function reshapes and reformats the outputs to a Pandas DataFrame. """
+
         obj = [v["point"][0] for v in json.loads(obj)["array"]]
         result = pd.DataFrame(obj)
         return result.where(result.notnull(), None)

@@ -83,13 +83,13 @@ router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
-router.register("flat/studies", StudyAnalysisViewSet, basename="studies_analysis")
-router.register("flat/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
-router.register("flat/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
-router.register("flat/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
-router.register("flat/outputs", OutputInterventionViewSet, basename="output_analysis")
-router.register("flat/data", DataAnalysisViewSet, basename="data_analysis")
-router.register("flat/timecourses", TimecourseViewSet, basename="timecourse_analysis")
+router.register("pkdata/studies", StudyAnalysisViewSet, basename="studies_analysis")
+router.register("pkdata/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
+router.register("pkdata/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
+router.register("pkdata/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
+router.register("pkdata/outputs", OutputInterventionViewSet, basename="output_analysis")
+router.register("pkdata/data", DataAnalysisViewSet, basename="data_analysis")
+router.register("pkdata/timecourses", TimecourseViewSet, basename="timecourse_analysis")
 
 
 

@@ -85,11 +85,9 @@ class SubSetViewSet(AccessView):
         "data_type": "data_type.raw"
     }
 class TimecourseViewSet(AccessView):
-    """ Endpoint to query Timecourses
+    """ Endpoint to query timecourses
 
-    The subets endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a
-    timecourse or scatter. A timecourse subset consists of outputs measured at different time points. A scatter subset
-    contains correlated data which commonly are displayed as scatter plots.
+    The timecourses endpoints gives access to timecourses.
     """
     document = SubSetDocument
     serializer_class = TimecourseSerializer
@@ -112,6 +110,19 @@ class TimecourseViewSet(AccessView):
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
     multi_match_options = {'operator': 'and'}
     filter_fields = {
-        "name": "name.raw",
-        "data_type": "data_type.raw"
+        'study_sid': {'field': 'study_sid.raw',
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
+
+                      ],
+                      },
+        'study_name': {'field': 'study_name.raw',
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
+
+                       ],
+                       },
+
     }
