@@ -409,15 +409,13 @@ class TimecourseSerializer(serializers.Serializer):
     def _get_general(self,obj):
         obj = [v["point"][0] for v in json.loads(obj)["array"]]
         result = pd.DataFrame(obj)
-        result.where(result.notnull(), None)
-        return result
+        return result.where(result.notnull(), None)
 
     def _get_field(self, obj, field):
         result = self._get_general(json.dumps(obj.to_dict()))
         if result[field].isnull().all():
             return None
-
-        return result[field].replac(.values
+        return result[field].values
 
     def get_output_pk(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
