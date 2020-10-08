@@ -5,6 +5,7 @@ import zipfile
 from collections import namedtuple
 from datetime import datetime
 from io import StringIO
+from pathlib import Path
 from typing import Dict
 import time
 import pandas as pd
@@ -761,13 +762,13 @@ class PKDataView(APIView):
                 "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters, None),
             }
 
-
+            # Create archive
             with tempfile.SpooledTemporaryFile() as tmp:
                 with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
                     download_times = {}
 
                     for key, sheet in table_content.items():
-                        download_time_start =  time.time()
+                        download_time_start = time.time()
 
                         string_buffer = StringIO()
                         if sheet.function:
