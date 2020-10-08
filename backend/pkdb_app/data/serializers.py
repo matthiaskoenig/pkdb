@@ -47,7 +47,7 @@ class SubSetSerializer(ExSerializer):
 
     class Meta:
         model = SubSet
-        fields = ['name', "descriptions",  "comments", "dimensions", "shared"]
+        fields = ['name', "descriptions", "comments", "dimensions", "shared"]
 
     def to_internal_value(self, data):
         self.validate_wrong_keys(data)
@@ -97,7 +97,7 @@ class SubSetSerializer(ExSerializer):
 
         outputs_dj = create_multiple_bulk(subset, "subset", outputs, Output)
 
-        for intervention, output in zip(interventions,outputs_dj):
+        for intervention, output in zip(interventions, outputs_dj):
             output.interventions.add(*intervention)
 
         if outputs_dj:
@@ -107,7 +107,7 @@ class SubSetSerializer(ExSerializer):
         subset.save()
 
     @staticmethod
-    def _add_id_to_foreign_keys(value:str):
+    def _add_id_to_foreign_keys(value: str):
         if value in OUTPUT_FOREIGN_KEYS:
             return value + "_id"
         else:
@@ -135,19 +135,20 @@ class SubSetSerializer(ExSerializer):
         data_set = outputs_pd[outputs_pd['label'].isin(dimensions)]
         if len(data_set) == 0:
             raise serializers.ValidationError(
-                {"data_set":{"data":[{"subsets":{"dimensions":f"Outputs with label <{dimensions}> do not exist."}}]}})
+                {"data_set": {
+                    "data": [{"subsets": {"dimensions": f"Outputs with label <{dimensions}> do not exist."}}]}})
 
         data_set["dimension"] = None
-        data_set.loc[data_set['label'] == dimensions[0],'dimension'] = 0
-        data_set.loc[data_set['label'] == dimensions[1],'dimension'] = 1
+        data_set.loc[data_set['label'] == dimensions[0], 'dimension'] = 0
+        data_set.loc[data_set['label'] == dimensions[1], 'dimension'] = 1
 
         shared_reformated = []
         for shared_field in shared:
             shared_field_reformated = self._add_id_to_foreign_keys(shared_field)
             if shared_field_reformated not in data_set:
-
                 p_options = [self._remove_id_to_foreign_keys(c) for c in data_set.columns]
-                raise serializers.ValidationError(f"Shared_field <{shared_field}> not in outputs fields. Options are <{p_options}>")
+                raise serializers.ValidationError(
+                    f"Shared_field <{shared_field}> not in outputs fields. Options are <{p_options}>")
             shared_reformated.append(shared_field_reformated)
 
         if len(data_set.groupby(shared_reformated)) == 0:
@@ -210,7 +211,7 @@ class SubSetSerializer(ExSerializer):
         for output in subset_outputs.iterator():
             data_point_instance = DataPoint.objects.create(subset=subset_instance)
 
-            dimension = Dimension(dimension=0, study=study, output=output,data_point=data_point_instance)
+            dimension = Dimension(dimension=0, study=study, output=output, data_point=data_point_instance)
             dimensions.append(dimension)
         Dimension.objects.bulk_create(dimensions)
 
@@ -218,7 +219,6 @@ class SubSetSerializer(ExSerializer):
 
 
 class DataSerializer(ExSerializer):
-
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -256,13 +256,12 @@ class DataSerializer(ExSerializer):
 
         for subset in poped_data["subsets"]:
             subset_instance, poped_data = _create(model_serializer=SubSetSerializer(context=self.context),
-                    validated_data={**subset, "data": data_instance},
-                    create_multiple_keys=['comments', 'descriptions'])
+                                                  validated_data={**subset, "data": data_instance},
+                                                  create_multiple_keys=['comments', 'descriptions'])
         return data_instance
 
 
 class DataSetSerializer(ExSerializer):
-
     data = DataSerializer(many=True, read_only=False, required=False, allow_null=True)
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -312,21 +311,29 @@ class DataSetSerializer(ExSerializer):
                         )
                     data_single['subsets'] = temp_subsets
                 data_container.extend(self.entries_from_file(data_single))
+        self.validate_no_timeocourses(data_container)
         autogenerate_timecourses = self.autogenerate_timecourses()
         if autogenerate_timecourses:
-            data_container.append(self.autogenerate_timecourses())
+            data_container.append(autogenerate_timecourses)
 
         data['data'] = data_container
         return super().to_internal_value(data)
 
+    def validate_no_timeocourses(self, data):
+        for data_single in data:
+            if data_single.get("data_type") == Data.DataTypes.Timecourse:
+                raise serializers.ValidationError("timecourses are not allowed to be definied explictly in dataset. "
+                                                  "Timecourses are created automatically by adding label "
+                                                  "and output_type='timecourse' to the respective outputs.")
+
+
     def autogenerate_timecourses(self):
-        #Study = apps.get_model('studies', 'Study')
+        # Study = apps.get_model('studies', 'Study')
 
         study_sid = self.context["request"].path.split("/")[-2]
         outputs = Output.objects.filter(study__sid=study_sid, normed=True, output_type=Output.OutputTypes.Timecourse)
-        timecourse_labels = outputs.values_list("label",flat=True).distinct()
+        timecourse_labels = outputs.values_list("label", flat=True).distinct()
         if len(timecourse_labels) > 0:
-
             auto_generated_data = {
                 "name": "AutoGenerate",
                 "data_type": "timecourse",
@@ -335,18 +342,15 @@ class DataSetSerializer(ExSerializer):
             }
             return auto_generated_data
 
-
     def validate(self, attrs):
         self._validate_unique_names(attrs["data"])
         return super().validate(attrs)
 
-
-
     def create(self, validated_data):
         dataset_instance, poped_data = _create(model_manager=self.Meta.model.objects,
-                                        validated_data=validated_data,
-                                        create_multiple_keys=['comments', 'descriptions'],
-                                        pop=['data'])
+                                               validated_data=validated_data,
+                                               create_multiple_keys=['comments', 'descriptions'],
+                                               pop=['data'])
         data_instance_container = []
         for data_single in poped_data['data']:
             data_single["dataset"] = dataset_instance
@@ -374,7 +378,7 @@ class TimecourseSerializer(serializers.Serializer):
     subset_pk = serializers.IntegerField(source="pk")
     subset_name = serializers.CharField(source="name")
 
-    interventions =  serializers.SerializerMethodField()
+    interventions = serializers.SerializerMethodField()
     group_pk = serializers.SerializerMethodField()
     individual_pk = serializers.SerializerMethodField()
     normed = serializers.SerializerMethodField()
@@ -390,10 +394,10 @@ class TimecourseSerializer(serializers.Serializer):
     time = serializers.SerializerMethodField()
     time_unit = serializers.SerializerMethodField()
 
-    measurement_type =serializers.SerializerMethodField()
-    measurement_type_label =serializers.SerializerMethodField()
+    measurement_type = serializers.SerializerMethodField()
+    measurement_type_label = serializers.SerializerMethodField()
     choice = serializers.SerializerMethodField()
-    choice_label =serializers.SerializerMethodField()
+    choice_label = serializers.SerializerMethodField()
 
     substance = serializers.SerializerMethodField()
     substance_label = serializers.SerializerMethodField()
@@ -408,12 +412,12 @@ class TimecourseSerializer(serializers.Serializer):
     cv = serializers.SerializerMethodField()
     unit = serializers.SerializerMethodField()
 
-    #@cached_property
-    #def json_object(self):
+    # @cached_property
+    # def json_object(self):
     #    return json.dumps(self.instance.to_dict())
 
     @lru_cache(maxsize=128)
-    def _get_general(self,obj):
+    def _get_general(self, obj):
         """ This function reshapes and reformats the outputs to a Pandas DataFrame. """
 
         obj = [v["point"][0] for v in json.loads(obj)["array"]]
@@ -424,11 +428,11 @@ class TimecourseSerializer(serializers.Serializer):
         result = self._get_general(json.dumps(obj.to_dict()))
         if result[field].isnull().all():
             return None
-        return result[field].values
+        return list(result[field].values)
 
     def get_output_pk(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
-        return result["pk"].values
+        return self._get_field(obj, "pk")
 
     def get_interventions(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
@@ -447,7 +451,6 @@ class TimecourseSerializer(serializers.Serializer):
     def get_normed(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["normed"][0]
-
 
     def get_tissue(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
@@ -475,7 +478,6 @@ class TimecourseSerializer(serializers.Serializer):
 
     def get_time(self, obj):
         return self._get_field(obj, "time")
-
 
     def get_time_unit(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
@@ -541,12 +543,12 @@ class TimecourseSerializer(serializers.Serializer):
         fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
                   "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
 
+
 class SubSetElasticSerializer(DocumentSerializer):
     study = StudySmallElasticSerializer(read_only=True)
     name = serializers.CharField()
     data_type = serializers.CharField()
     array = serializers.SerializerMethodField()
-
 
     class Meta:
         document = SubSetDocument
@@ -557,9 +559,8 @@ class SubSetElasticSerializer(DocumentSerializer):
                   "array",
                   "timecourse"]
 
-    def get_array(self,object):
+    def get_array(self, object):
         return [point["point"] for point in object.to_dict()["array"]]
-
 
 
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
@@ -575,6 +576,7 @@ class DataSetElasticSmallSerializer(serializers.ModelSerializer):
     def get_subsets(self, obj):
         return list_of_pk("subsets", obj)
 
+
 class DataAnalysisSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dimension
@@ -589,5 +591,3 @@ class DataAnalysisSerializer(serializers.ModelSerializer):
                   "output_pk",
                   "dimension"]
         read_only_fields = fields
-
-

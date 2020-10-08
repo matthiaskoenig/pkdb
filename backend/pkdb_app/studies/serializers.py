@@ -8,7 +8,6 @@ from pkdb_app.data.models import DataSet
 from pkdb_app.data.serializers import DataSetSerializer, DataSetElasticSmallSerializer
 from rest_framework import serializers
 
-
 from pkdb_app import utils
 from pkdb_app.outputs.models import OutputSet
 from pkdb_app.outputs.serializers import OutputSetSerializer, OutputSetElasticSmallSerializer
@@ -194,11 +193,11 @@ class StudySerializer(SidSerializer):
             data["creator"] = self.get_or_val_error(User, username=creator)
 
         # curators to internal
-        if hasattr(data,"curators"):
-            if len(data.get("curators",[])) == 0:
-                    raise serializers.ValidationError(
-                        {"curators": "At least One curator is required"}
-                    )
+        if hasattr(data, "curators"):
+            if len(data.get("curators", [])) == 0:
+                raise serializers.ValidationError(
+                    {"curators": "At least One curator is required"}
+                )
         else:
             ratings = []
             for curator_and_rating in data.get("curators", []):
@@ -314,6 +313,7 @@ class StudySerializer(SidSerializer):
                 ("dataset", DataSet),
             ]
         )
+
     def related_serializer(self):
         return OrderedDict(
             [
@@ -340,9 +340,10 @@ class StudySerializer(SidSerializer):
             "collaborators": User,
             "files": DataFile,
         }
-        related_foreignkeys_dict = OrderedDict([(name, validated_data.pop(name, None)) for name in related_foreignkeys.keys()])
+        related_foreignkeys_dict = OrderedDict(
+            [(name, validated_data.pop(name, None)) for name in related_foreignkeys.keys()])
         related_many2many_dict = OrderedDict([(name, validated_data.pop(name)) for name in related_many2many.keys() if
-                                  name in validated_data])
+                                              name in validated_data])
         related = OrderedDict(list(related_foreignkeys_dict.items()) + list(related_many2many_dict.items()))
         return related
 
@@ -362,15 +363,12 @@ class StudySerializer(SidSerializer):
                 if getattr(study, name):
                     getattr(study, name).delete()
 
-
                 this_serializer = serializer(context=context)
                 instance = this_serializer.create(validated_data={**related[name]})
-
 
                 setattr(study, name, instance)
 
                 study.save()
-
 
         if "curators" in related:
 
@@ -404,7 +402,6 @@ class StudySerializer(SidSerializer):
 
         study.save()
 
-
         return study
 
     def validate(self, attrs):
@@ -415,7 +412,7 @@ class StudySerializer(SidSerializer):
         else:
             if attrs.get("date", None) is not None:
                 _validate_not_allowed_key(attrs, "date", extra_message="For a study without a '^PKDB\d+$' identifier "
-                                                                "the date must not be set in the study.json.")
+                                                                       "the date must not be set in the study.json.")
 
         if "curators" in attrs and "creator" in attrs:
             if attrs["creator"] not in [curator["user"] for curator in attrs["curators"]]:
@@ -517,8 +514,8 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
     name = serializers.CharField(help_text="Name of the study. The convention is to deduce the name from the "
                                            "refererence with the following pattern "
-                                           "'[Author][PublicationYear][A-Z(optional)]'." )
-    licence = serializers.CharField(help_text="Licence",)
+                                           "'[Author][PublicationYear][A-Z(optional)]'.")
+    licence = serializers.CharField(help_text="Licence", )
     access = serializers.CharField()
 
     curators = CuratorRatingElasticSerializer(many=True, )
@@ -595,9 +592,10 @@ class StudyElasticSerializer(serializers.ModelSerializer):
         else:
             return []
 
+
 class StudyAnalysisSerializer(serializers.Serializer):
     sid = serializers.CharField()
-    name= serializers.CharField()
+    name = serializers.CharField()
     licence = serializers.CharField()
     access = serializers.CharField()
     date = serializers.DateField()
@@ -609,8 +607,6 @@ class StudyAnalysisSerializer(serializers.Serializer):
     reference_pmid = serializers.SerializerMethodField()
     reference_title = serializers.SerializerMethodField()
     reference_date = serializers.DateField()
-
-
 
     def get_substances(self, obj):
         return [s["label"] for s in obj.substances]

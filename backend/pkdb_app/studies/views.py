@@ -485,7 +485,7 @@ class PKData(object):
             timecourses = set()
             scatters = set()
 
-            for output in self.outputs.values("study_id","group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
+            for output in self.outputs.values("study_id", "group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
                 studies.add(output["study_id"])
                 if output["group_id"]:
                     groups.add(output["group_id"])
@@ -496,7 +496,7 @@ class PKData(object):
                 if output["interventions__id"]:
                     interventions.add(output["interventions__id"])
 
-                if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
+                if output["output_type"] == Output.OutputTypes.Timecourse:
                     timecourses.add(output["subset__id"])
 
                 if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
@@ -510,7 +510,6 @@ class PKData(object):
                 "outputs": list(outputs),
                 "timecourses": list(timecourses),
                 "scatters": list(scatters),
-
             }
 
         else:
