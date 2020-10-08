@@ -812,12 +812,8 @@ class PKDataView(APIView):
                                 download_times["timecourse"] = time.time()-download_time_start_timecourse
                                 """
 
-
-
                     archive.write('download_extra/README.md', 'README.md')
                     archive.write('download_extra/TERMS_OF_USE.md', 'TERMS_OF_USE.md')
-
-
 
                 tmp.seek(0)
                 resp = HttpResponse(tmp.read(), content_type='application/x-zip-compressed')
