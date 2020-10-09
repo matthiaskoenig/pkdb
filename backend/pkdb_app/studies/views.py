@@ -497,7 +497,7 @@ class PKData(object):
                 if output["interventions__id"]:
                     interventions.add(output["interventions__id"])
 
-                if output["output_type"] == Output.OutputTypes.Timecourse:
+                if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
                     timecourses.add(output["subset__id"])
 
                 if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
