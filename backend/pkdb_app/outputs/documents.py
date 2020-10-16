@@ -75,7 +75,7 @@ class OutputDocument(Document):
         settings = elastic_settings
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
-        settings['max_result_window'] = 100000
+        settings['max_result_window'] = 500000
 
 
 @registry.register_document
@@ -132,7 +132,7 @@ class OutputInterventionDocument(Document):
         settings = elastic_settings
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
-        settings['max_result_window'] = 100000
+        settings['max_result_window'] = 500000
 
 
     def get_queryset(self):

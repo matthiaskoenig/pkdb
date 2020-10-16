@@ -200,7 +200,7 @@ class GroupCharacteristicaDocument(Document):
 
     class Index:
         name = "group_characteristica"
-        settings = {**elastic_settings, 'max_result_window': 50000}
+        settings = {**elastic_settings, 'max_result_window': 100000}
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
@@ -279,7 +279,7 @@ class IndividualCharacteristicaDocument(Document):
 
     class Index:
         name = "individual_characteristica"
-        settings = {**elastic_settings, 'max_result_window': 50000}
+        settings = {**elastic_settings, 'max_result_window': 100000}
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""

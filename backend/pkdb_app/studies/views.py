@@ -1,4 +1,3 @@
-
 import tempfile
 import uuid
 import zipfile
@@ -31,7 +30,7 @@ from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
 from pkdb_app.data.models import SubSet, Data
 from pkdb_app.data.serializers import TimecourseSerializer
 from pkdb_app.data.views import SubSetViewSet
-from pkdb_app.documents import  UUID_PARAM
+from pkdb_app.documents import UUID_PARAM
 from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
@@ -226,6 +225,7 @@ def related_elastic_dict(study):
         docs_dict[ReferenceDocument] = study.reference
     return docs_dict
 
+
 @method_decorator(name='list', decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM]))
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
     """ Endpoint to query studies
@@ -337,23 +337,24 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
             )
             return qs
 
+
 class StudyAnalysisViewSet(ElasticStudyViewSet):
     swagger_schema = None
     serializer_class = StudyAnalysisSerializer
     filter_fields = {
         'study_sid': {'field': 'sid.raw',
-                  'lookups': [
-                      LOOKUP_QUERY_IN,
-                      LOOKUP_QUERY_EXCLUDE,
+                      'lookups': [
+                          LOOKUP_QUERY_IN,
+                          LOOKUP_QUERY_EXCLUDE,
 
-                  ],
+                      ],
                       },
         'study_name': {'field': 'name.raw',
-                   'lookups': [
-                       LOOKUP_QUERY_IN,
-                       LOOKUP_QUERY_EXCLUDE,
+                       'lookups': [
+                           LOOKUP_QUERY_IN,
+                           LOOKUP_QUERY_EXCLUDE,
 
-                   ],
+                       ],
                        },
     }
 
@@ -367,7 +368,8 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     pagination_class = CustomPagination
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, CompoundSearchFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, CompoundSearchFilterBackend,
+                       MultiMatchSearchFilterBackend]
     search_fields = (
         'sid',
         'pmid',
@@ -399,6 +401,7 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
 
 class PKData(object):
     """ PKData represents a consistent set of pharmacokinetic data. """
+
     def __init__(self,
                  request,
                  concise: bool = True,
@@ -415,7 +418,6 @@ class PKData(object):
 
         self.request = request
 
-
         time_init = time.time()
 
         self.outputs = Output.objects.filter(normed=True).select_related("study__sid").prefetch_related(
@@ -423,7 +425,6 @@ class PKData(object):
                 'interventions',
                 queryset=Intervention.objects.only('id'))).only(
             'group_id', 'individual_id', "id", "interventions__id", "subset__id", "output_type")
-
 
         #  --- Elastic ---
         if studies_query:
@@ -433,7 +434,7 @@ class PKData(object):
             self.outputs = self.outputs.filter(study_id__in=studies_pks)
 
         else:
-            studies_pks = StudyViewSet.filter_on_permissions(request.user,Study.objects).values_list("id", flat=True)
+            studies_pks = StudyViewSet.filter_on_permissions(request.user, Study.objects).values_list("id", flat=True)
             self.outputs = self.outputs.filter(study_id__in=Subquery(studies_pks))
 
         self.studies = Study.objects.filter(id__in=studies_pks)
@@ -448,11 +449,10 @@ class PKData(object):
             time_elastic_individuals = time.time()
             if concise:
                 self.outputs = self.outputs.filter(
-                DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks))
+                    DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks))
             else:
-                self.studies = self.studies.filter(DQ(groups__id__in=groups_pks) | DQ(individuals__id__in=individuals_pks))
-
-
+                self.studies = self.studies.filter(
+                    DQ(groups__id__in=groups_pks) | DQ(individuals__id__in=individuals_pks))
 
         if interventions_query:
             self.interventions_query = {"normed": "true", **interventions_query}
@@ -473,7 +473,6 @@ class PKData(object):
 
                 self.studies = self.studies.filter(outputs__id__in=outputs_pks)
 
-
         time_elastic = time.time()
 
         time_loop_start = time.time()
@@ -486,7 +485,8 @@ class PKData(object):
             timecourses = set()
             scatters = set()
 
-            for output in self.outputs.values("study_id", "group_id", "individual_id", "id", "interventions__id", "subset__id", "output_type"):
+            for output in self.outputs.values("study_id", "group_id", "individual_id", "id", "interventions__id",
+                                              "subset__id", "output_type"):
                 studies.add(output["study_id"])
                 if output["group_id"]:
                     groups.add(output["group_id"])
@@ -528,8 +528,10 @@ class PKData(object):
                 "individuals": list(self.individuals.values_list("pk", flat=True)),
                 "interventions": list(self.interventions.values_list("pk", flat=True)),
                 "outputs": list(self.outputs.values_list("pk", flat=True)),
-                "timecourses": list(self.subset.filter(data__data_type=Data.DataTypes.Timecourse).values_list("pk", flat=True)),
-                "scatters": list(self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
+                "timecourses": list(
+                    self.subset.filter(data__data_type=Data.DataTypes.Timecourse).values_list("pk", flat=True)),
+                "scatters": list(
+                    self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
             }
 
         time_loop_end = time.time()
@@ -542,7 +544,7 @@ class PKData(object):
         print("init:", time_init - time_start)
         print("elastic:", time_elastic - time_init)
         print("django:", time_django - time_elastic)
-        print("Loop:", time_loop_end- time_loop_start)
+        print("Loop:", time_loop_end - time_loop_start)
 
         print("-" * 80)
 
@@ -560,7 +562,7 @@ class PKData(object):
         return self._pks(view_class=IndividualViewSet, query_dict=self.individuals_query)
 
     def output_pks(self):
-        return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query,scan_size=20000)
+        return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query, scan_size=20000)
 
     def subset_pks(self):
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
@@ -568,7 +570,7 @@ class PKData(object):
     def study_pks(self):
         return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="pk")
 
-    def set_request_get(self, query_dict:Dict):
+    def set_request_get(self, query_dict: Dict):
         """
 
         :param query_dict:
@@ -579,7 +581,7 @@ class PKData(object):
             get[k] = v
         self.request._request.GET = get
 
-    def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str="pk", scan_size=10000):
+    def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str = "pk", scan_size=10000):
         """
         query elastic search for pks.
         """
@@ -590,11 +592,11 @@ class PKData(object):
         response = queryset.source([pk_field]).params(size=scan_size).scan()
         return [instance[pk_field] for instance in response]
 
-    def data_by_query_dict(self,query_dict, viewset, serializer, boost):
+    def data_by_query_dict(self, query_dict, viewset, serializer, boost):
         view = viewset(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
         if boost:
-            queryset=queryset.filter("terms", **query_dict).source(serializer.Meta.fields)
+            queryset = queryset.filter("terms", **query_dict).source(serializer.Meta.fields)
             return [hit.to_dict() for hit in queryset.params(size=5000).scan()]
 
         else:
@@ -603,21 +605,21 @@ class PKData(object):
             return serializer(queryset.params(size=5000).scan(), many=True).data
 
 
-
-
 class ResponseSerializer(serializers.Serializer):
     """Documentation of response schema."""
     uuid = serializers.UUIDField(
         required=True,
         allow_null=False,
         help_text="The resulting queries can be accessed by adding this uuid as "
-               "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /subsets/."
+                  "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /subsets/."
     )
     studies = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting studies.")
     groups = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting groups.")
-    individuals = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting individuals.")
+    individuals = serializers.IntegerField(required=True, allow_null=False,
+                                           help_text="Number of resulting individuals.")
     outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
-    timecourses = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting timecourses.")
+    timecourses = serializers.IntegerField(required=True, allow_null=False,
+                                           help_text="Number of resulting timecourses.")
     scatters = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatters.")
 
 
@@ -707,7 +709,6 @@ class PKDataView(APIView):
         }
 
     )
-
     def get(self, request, *args, **kw):
         time_start_request = time.time()
 
@@ -740,25 +741,28 @@ class PKDataView(APIView):
 
         if request.GET.get("download") == "true":
 
-
-
             def serialize_scatters(ids):
                 scatter_subsets = SubSet.objects.filter(id__in=ids)
                 return [t.scatter_representation for t in scatter_subsets]
 
-            def serialize_timecourses(ids):
-                scatter_subsets = SubSet.objects.filter(id__in=ids)
-                return [t.timecourse_representation for t in scatter_subsets]
-
-            Sheet = namedtuple("Sheet", ["sheet_name", "query_dict", "viewset", "serializer", "function", "boost_performance",])
+            Sheet = namedtuple("Sheet",
+                               ["sheet_name", "query_dict", "viewset", "serializer", "function", "boost_performance", ])
             table_content = {
-                "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer, None, False),
-                "groups": Sheet("Groups", {"group_pk": pkdata.ids["groups"]}, GroupCharacteristicaViewSet, GroupCharacteristicaSerializer, None, True,),
-                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]}, IndividualCharacteristicaViewSet,IndividualCharacteristicaSerializer, None, True),
-                "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]} ,ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None, False),
-                "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet, OutputInterventionSerializer,None, True),
-                "timecourses": Sheet("Timecourses", {"pk": pkdata.ids["timecourses"]}, SubSetViewSet, TimecourseSerializer, None, False),
-                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters, None),
+                "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer,
+                                 None, False),
+                "groups": Sheet("Groups", {"group_pk": pkdata.ids["groups"]}, GroupCharacteristicaViewSet,
+                                GroupCharacteristicaSerializer, None, True, ),
+                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]},
+                                     IndividualCharacteristicaViewSet, IndividualCharacteristicaSerializer, None, True),
+                "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]},
+                                       ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None,
+                                       False),
+                "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet,
+                                 OutputInterventionSerializer, None, True),
+                "timecourses": Sheet("Timecourses", {"pk": pkdata.ids["timecourses"]}, SubSetViewSet,
+                                     TimecourseSerializer, None, False),
+                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters,
+                                  None),
             }
 
             # Create archive
@@ -777,40 +781,14 @@ class PKDataView(APIView):
                             download_times[key] = time.time() - download_time_start
 
                         else:
-                            df = pd.DataFrame(pkdata.data_by_query_dict(sheet.query_dict,sheet.viewset,sheet.serializer, sheet.boost_performance))
+                            df = pd.DataFrame(
+                                pkdata.data_by_query_dict(sheet.query_dict, sheet.viewset, sheet.serializer,
+                                                          sheet.boost_performance))
                             if len(df) < 0:
                                 df = df[sheet.serializer.Meta.fields]
                             df.to_csv(string_buffer)
                             archive.writestr(f'{key}.csv', string_buffer.getvalue())
                             download_times[key] = time.time() - download_time_start
-                            """
-                            if key == "outputs":
-                                string_buffer = StringIO()
-                                download_time_start_timecourse = time.time()
-                                def sorted_tuple(v):
-                                    return sorted(tuple(v))
-                                timecourse_df = df[df["output_type"] == Output.OutputTypes.Timecourse]
-
-                                def unique_or_sorted_list(v):
-                                    values = v.unique()
-                                    if len(values) == 1:
-                                        return values[0]
-                                    return tuple(values)
-
-                                if len(timecourse_df) !=0:
-                                    #timecourse_df = pd.pivot_table(data=timecourse_df,index=["output_pk"], aggfunc=sorted_tuple, dropna=False).apply(SubSet.to_list)
-                                    #timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc=tuple, dropna=False).apply(SubSet.to_list)
-                                    timecourse_df = pd.pivot_table(data=timecourse_df, index=["output_pk"],aggfunc=unique_or_sorted_list,fill_value=np.NAN)#.reset_index()
-                                    timecourse_df = pd.pivot_table(data=timecourse_df,index=["label","study_name"], aggfunc= unique_or_sorted_list, fill_value=np.NAN)#.reset_index()
-                                    print(timecourse_df.columns)
-
-                                    #timecourse_df = timecourse_df[table_content["outputs"].serializer.Meta.fields]
-                                else:
-                                    timecourse_df = pd.DataFrame([])
-                                timecourse_df.to_csv(string_buffer)
-                                archive.writestr('timecourse.csv', string_buffer.getvalue())
-                                download_times["timecourse"] = time.time()-download_time_start_timecourse
-                                """
 
                     archive.write('download_extra/README.md', 'README.md')
                     archive.write('download_extra/TERMS_OF_USE.md', 'TERMS_OF_USE.md')

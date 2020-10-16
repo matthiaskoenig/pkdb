@@ -17,7 +17,7 @@ elastic_settings = {
     'number_of_shards': 1,
     'number_of_replicas': 1,
     'max_ngram_diff': 15,
-    'max_terms_count':65536*4,
+    'max_terms_count': 65536*4,
 }
 
 edge_ngram_filter = token_filter(

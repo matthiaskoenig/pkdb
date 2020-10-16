@@ -378,7 +378,7 @@ class TimecourseSerializer(serializers.Serializer):
     subset_pk = serializers.IntegerField(source="pk")
     subset_name = serializers.CharField(source="name")
 
-    interventions = serializers.SerializerMethodField()
+    intervention_pk = serializers.SerializerMethodField()
     group_pk = serializers.SerializerMethodField()
     individual_pk = serializers.SerializerMethodField()
     normed = serializers.SerializerMethodField()
@@ -434,7 +434,7 @@ class TimecourseSerializer(serializers.Serializer):
         result = self._get_general(json.dumps(obj.to_dict()))
         return self._get_field(obj, "pk")
 
-    def get_interventions(self, obj):
+    def get_intervention_pk(self, obj):
         result = self._get_general(json.dumps(obj.to_dict()))
         return [i["pk"] for i in result["interventions"].iloc[0]]
 
