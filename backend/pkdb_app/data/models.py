@@ -60,7 +60,7 @@ class Timecourseable(models.Model):
         """ FIXME: Documentation & type hinting """
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
-            if new_key == "intervention_pk":
+            if new_key in ["intervention_pk", "interventions"]:
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
 
