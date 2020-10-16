@@ -37,6 +37,7 @@ class Data(models.Model):
     image = models.ForeignKey('subjects.DataFile', related_name="data", on_delete=models.CASCADE, null=True)
     dataset = models.ForeignKey(DataSet, related_name="data", on_delete=models.CASCADE, null=True)
 
+
 class Timecourseable(models.Model):
     class Meta:
         abstract = True
@@ -59,7 +60,7 @@ class Timecourseable(models.Model):
         """ FIXME: Documentation & type hinting """
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
-            if new_key == "interventions":
+            if new_key == "intervention_pk":
                 if isinstance(timecourse[new_key], int):
                     timecourse[new_key] = (timecourse[new_key],)
 
@@ -103,7 +104,7 @@ class Timecourseable(models.Model):
             "outputs_pk": "outputs__pk",
             "subset_pk": "subset_id",
             "subset_name": "subset__name",
-            "interventions": "outputs__interventions__pk",
+            "intervention_pk": "outputs__interventions__pk",
             "group_pk": "outputs__group_id",
             "individual_pk": "outputs__individual_id",
             "normed": 'outputs__normed',
