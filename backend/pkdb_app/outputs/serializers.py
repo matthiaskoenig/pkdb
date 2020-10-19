@@ -325,16 +325,26 @@ class OutputInterventionSerializer(serializers.Serializer):
     calculated = serializers.BooleanField()
 
     tissue = serializers.CharField()
+    tissue_label = serializers.CharField()
+
     method = serializers.CharField()
+    method_label = serializers.CharField()
+
     label = serializers.CharField()
     output_type = serializers.CharField()
 
     time = serializers.FloatField()
     time_unit = serializers.CharField()
 
-    measurement_type =serializers.CharField()
+    measurement_type = serializers.CharField()
+    measurement_type_label = serializers.CharField()
+
     choice = serializers.CharField()
-    substance =serializers.CharField()
+    choice_label = serializers.CharField()
+
+    substance = serializers.CharField()
+    substance_label = serializers.CharField()
+
 
     value = serializers.FloatField()
     mean = serializers.FloatField()

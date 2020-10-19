@@ -278,22 +278,40 @@ class OutputIntervention(Accessible, models.Model):
     @property
     def tissue(self):
         if self.output.tissue:
-            return self.output.tissue.info_node.name
+            return self.output.tissue.info_node.sid
 
+    @property
+    def tissue_label(self):
+        if self.output.tissue:
+            return self.output.tissue.info_node.label
 
     @property
     def method(self):
         if self.output.method:
-            return self.output.method.info_node.name
+            return self.output.method.info_node.sid
+
+    @property
+    def method_label(self):
+        if self.output.method:
+            return self.output.method.info_node.label
 
     @property
     def measurement_type(self):
-        return self.output.measurement_type.info_node.name
+        return self.output.measurement_type.info_node.sid
+
+    @property
+    def measurement_type_label(self):
+        return self.output.measurement_type.info_node.label
 
     @property
     def choice(self):
         if self.output.choice:
-            return self.output.choice.info_node.name
+            return self.output.choice.info_node.sid
+
+    @property
+    def choice_label(self):
+        if self.output.choice:
+            return self.output.choice.info_node.label
 
     @property
     def label(self):
@@ -302,7 +320,12 @@ class OutputIntervention(Accessible, models.Model):
     @property
     def substance(self):
         if self.output.substance:
-            return self.output.substance.info_node.name
+            return self.output.substance.info_node.sid
+
+    @property
+    def substance_label(self):
+        if self.output.substance:
+            return self.output.substance.info_node.label
 
     @property
     def normed(self):

@@ -90,15 +90,25 @@ class OutputInterventionDocument(Document):
     label = string_field('label')
     output_type = string_field('output_type')
     measurement_type = string_field("measurement_type")
+    measurement_type_label = string_field("measurement_type_label")
+
     substance = string_field("substance")
+    substance_label = string_field("substance_label")
+
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
     method = string_field('method')
+    method_label = string_field('method_label')
+
     tissue = string_field('tissue')
+    tissue_label = string_field('tissue_label')
+
     time = fields.FloatField('time')
     time_unit = string_field('time_unit')
     unit = string_field('unit')
     choice = string_field('choice')
+    choice_label = string_field('choice_label')
+
 
     # output fields
     value = fields.FloatField('value')
