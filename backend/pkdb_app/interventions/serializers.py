@@ -304,15 +304,26 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     normed = serializers.BooleanField()
 
     name = serializers.CharField()
-    route = serializers.CharField(source="route_name",)
-    form = serializers.CharField(source="form_name",)
-    application = serializers.CharField(source="application_name",)
+    route = serializers.SerializerMethodField()
+    route_label = serializers.SerializerMethodField()
+
+    form = serializers.SerializerMethodField()
+    form_label = serializers.SerializerMethodField()
+
+    application = serializers.SerializerMethodField()
+    application_label = serializers.SerializerMethodField()
+
     time = serializers.FloatField()
     time_end = serializers.FloatField()
     time_unit = serializers.CharField()
-    measurement_type = serializers.CharField(source="measurement_type_name",)
-    choice = serializers.CharField(source="choice_name")
-    substance = serializers.CharField(source="substance_name", )
+    measurement_type = serializers.SerializerMethodField()
+    measurement_type_label = serializers.SerializerMethodField()
+
+    choice = serializers.SerializerMethodField()
+    choice_label =serializers.SerializerMethodField()
+
+    substance = serializers.SerializerMethodField()
+    substance_label = serializers.SerializerMethodField()
 
     value = serializers.FloatField()
     mean = serializers.FloatField()
@@ -323,6 +334,54 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     se = serializers.FloatField()
     cv = serializers.FloatField()
     unit = serializers.CharField()
+
+    def get_choice(self, obj):
+        if obj.choice:
+            return obj.choice.sid
+
+    def get_choice_label(self, obj):
+        if obj.choice:
+            return obj.choice.label
+
+    def get_route(self, obj):
+        if obj.route:
+            return obj.route.sid
+
+    def get_route_label(self, obj):
+        if obj.route:
+            return obj.route.label
+
+    def get_form(self, obj):
+        if obj.form:
+            return obj.form.sid
+
+    def get_form_label(self, obj):
+        if obj.form:
+            return obj.form.label
+
+    def get_application(self, obj):
+        if obj.application:
+            return obj.application.sid
+
+    def get_application_label(self, obj):
+        if obj.application:
+            return obj.application.label
+
+    def get_measurement_type(self, obj):
+        if obj.measurement_type:
+            return obj.measurement_type.sid
+
+    def get_measurement_type_label(self, obj):
+        if obj.measurement_type:
+            return obj.measurement_type.label
+
+    def get_substance(self, obj):
+        if obj.substance:
+            return obj.substance.sid
+
+    def get_substance_label(self, obj):
+        if obj.substance:
+            return obj.substance.label
 
     class Meta:
         fields = ["study_sid", "study_name", "intervention_pk", "raw_pk",
