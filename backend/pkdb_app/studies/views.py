@@ -4,7 +4,6 @@ import zipfile
 from collections import namedtuple
 from datetime import datetime
 from io import StringIO
-from pathlib import Path
 from typing import Dict
 import time
 import pandas as pd
