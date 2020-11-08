@@ -31,7 +31,7 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
     """
     outputs = []
     dosing = subset.get_single_dosing()
-    timecourse = subset.timecourse()
+    timecourse = subset.timecourse
     # dosing information must exist
     if not dosing:
         return outputs

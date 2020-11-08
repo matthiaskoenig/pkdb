@@ -196,7 +196,6 @@ class StudyDocument(Document):
     )
     dataset = common_setfields("subsets")
 
-
     class Django:
         model = Study
         # Ignore auto updating of Elasticsearch when a model is saved/deleted

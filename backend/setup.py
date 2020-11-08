@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- encoding: utf-8 -*-
 """
 pkdb_app pip package
 """
@@ -43,7 +42,7 @@ else:
     raise RuntimeError("Unable to find version string")
 
 # description from markdown
-long_description = read('README.md')
+long_description = read('download_extra/README.md')
 setup_kwargs['long_description'] = long_description
 
 setup(

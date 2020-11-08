@@ -3,14 +3,13 @@ Serializers for interventions.
 """
 import itertools
 
-from django.apps import apps
 from rest_framework import serializers
 
 from pkdb_app import utils
 from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
 from pkdb_app.info_nodes.models import InfoNode
-from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer, EXMeasurementTypeableSerializer
+from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
@@ -297,36 +296,108 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
         fields = ["pk", "normed"] + INTERVENTION_FIELDS + ["study"] + MEASUREMENTTYPE_FIELDS
 
 
-class InterventionElasticSerializerAnalysis(serializers.ModelSerializer):
+class InterventionElasticSerializerAnalysis(serializers.Serializer):
+    study_sid = serializers.CharField()
+    study_name = serializers.CharField()
     intervention_pk = serializers.IntegerField(source="pk")
-    substance = serializers.CharField(source="substance_name", allow_null=True)
-    measurement_type = serializers.CharField(source="measurement_type_name",)
-    route = serializers.CharField(source="route_name",)
-    application = serializers.CharField(source="application_name",)
-    form = serializers.CharField(source="form_name",)
-    choice = serializers.CharField(source="choice_name")
-    value = serializers.FloatField(allow_null=True)
-    mean = serializers.FloatField(allow_null=True)
-    median = serializers.FloatField(allow_null=True)
-    min = serializers.FloatField(allow_null=True)
-    max = serializers.FloatField(allow_null=True)
-    sd = serializers.FloatField(allow_null=True)
-    se = serializers.FloatField(allow_null=True)
-    cv = serializers.FloatField(allow_null=True)
+    raw_pk = serializers.IntegerField()
+    normed = serializers.BooleanField()
+
+    name = serializers.CharField()
+    route = serializers.SerializerMethodField()
+    route_label = serializers.SerializerMethodField()
+
+    form = serializers.SerializerMethodField()
+    form_label = serializers.SerializerMethodField()
+
+    application = serializers.SerializerMethodField()
+    application_label = serializers.SerializerMethodField()
+
+    time = serializers.FloatField()
+    time_end = serializers.FloatField()
+    time_unit = serializers.CharField()
+    measurement_type = serializers.SerializerMethodField()
+    measurement_type_label = serializers.SerializerMethodField()
+
+    choice = serializers.SerializerMethodField()
+    choice_label =serializers.SerializerMethodField()
+
+    substance = serializers.SerializerMethodField()
+    substance_label = serializers.SerializerMethodField()
+
+    value = serializers.FloatField()
+    mean = serializers.FloatField()
+    median = serializers.FloatField()
+    min = serializers.FloatField()
+    max = serializers.FloatField()
+    sd = serializers.FloatField()
+    se = serializers.FloatField()
+    cv = serializers.FloatField()
+    unit = serializers.CharField()
+
+    def get_choice(self, obj):
+        if obj.choice:
+            return obj.choice.sid
+
+    def get_choice_label(self, obj):
+        if obj.choice:
+            return obj.choice.label
+
+    def get_route(self, obj):
+        if obj.route:
+            return obj.route.sid
+
+    def get_route_label(self, obj):
+        if obj.route:
+            return obj.route.label
+
+    def get_form(self, obj):
+        if obj.form:
+            return obj.form.sid
+
+    def get_form_label(self, obj):
+        if obj.form:
+            return obj.form.label
+
+    def get_application(self, obj):
+        if obj.application:
+            return obj.application.sid
+
+    def get_application_label(self, obj):
+        if obj.application:
+            return obj.application.label
+
+    def get_measurement_type(self, obj):
+        if obj.measurement_type:
+            return obj.measurement_type.sid
+
+    def get_measurement_type_label(self, obj):
+        if obj.measurement_type:
+            return obj.measurement_type.label
+
+    def get_substance(self, obj):
+        if obj.substance:
+            return obj.substance.sid
+
+    def get_substance_label(self, obj):
+        if obj.substance:
+            return obj.substance.label
 
     class Meta:
-        model = Intervention
         fields = ["study_sid", "study_name", "intervention_pk", "raw_pk",
                   "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
 
 
 
+    """
     def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        for field in VALUE_FIELDS_NO_UNIT + ["time"]:
-            try:
-                rep[field] = '{:.2e}'.format(rep[field])
-            except (ValueError, TypeError):
-                pass
-        return rep
+    rep = super().to_representation(instance)
+    for field in VALUE_FIELDS_NO_UNIT + ["time"]:
+        try:
+            rep[field] = '{:.2e}'.format(rep[field])
+        except (ValueError, TypeError):
+            pass
+    return rep
+    """
+

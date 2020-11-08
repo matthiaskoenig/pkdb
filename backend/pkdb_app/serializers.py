@@ -762,7 +762,6 @@ def validate_dict(dic):
              "detail": dic}
         )
 
-
 class StudySmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Study

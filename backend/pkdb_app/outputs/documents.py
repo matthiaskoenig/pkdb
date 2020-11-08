@@ -75,7 +75,7 @@ class OutputDocument(Document):
         settings = elastic_settings
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
-        settings['max_result_window'] = 100000
+        settings['max_result_window'] = 500000
 
 
 @registry.register_document
@@ -90,15 +90,25 @@ class OutputInterventionDocument(Document):
     label = string_field('label')
     output_type = string_field('output_type')
     measurement_type = string_field("measurement_type")
+    measurement_type_label = string_field("measurement_type_label")
+
     substance = string_field("substance")
+    substance_label = string_field("substance_label")
+
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
     method = string_field('method')
+    method_label = string_field('method_label')
+
     tissue = string_field('tissue')
+    tissue_label = string_field('tissue_label')
+
     time = fields.FloatField('time')
     time_unit = string_field('time_unit')
     unit = string_field('unit')
     choice = string_field('choice')
+    choice_label = string_field('choice_label')
+
 
     # output fields
     value = fields.FloatField('value')
@@ -132,7 +142,7 @@ class OutputInterventionDocument(Document):
         settings = elastic_settings
         settings['number_of_shards'] = 5
         settings['number_of_replicas'] = 1
-        settings['max_result_window'] = 100000
+        settings['max_result_window'] = 500000
 
 
     def get_queryset(self):

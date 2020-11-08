@@ -10,7 +10,7 @@ from ..interventions.models import Intervention
 # ------------------------------------
 @registry.register_document
 class InterventionDocument(Document):
-    pk = fields.IntegerField()
+    pk = fields.IntegerField("pk")
     measurement_type = info_node("i_measurement_type")
     form = info_node("i_form")
     route = info_node("i_route")

@@ -4,7 +4,7 @@ Django URLs
 from django.conf.urls import url
 from django.urls import path, include
 from drf_yasg.views import get_schema_view
-from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet
+from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet, TimecourseViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
@@ -31,7 +31,7 @@ from .studies.views import (
     StudyViewSet,
     ElasticReferenceViewSet,
     ElasticStudyViewSet,
-    update_index_study, PKDataView,
+    update_index_study, PKDataView, StudyAnalysisViewSet,
 )
 from .subjects.views import (
     DataFileViewSet,
@@ -83,11 +83,13 @@ router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
 router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
 
-router.register("flat/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
-router.register("flat/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
-router.register("flat/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
-router.register("flat/output", OutputInterventionViewSet, basename="output_analysis")
-router.register("flat/data", DataAnalysisViewSet, basename="data_analysis")
+router.register("pkdata/studies", StudyAnalysisViewSet, basename="studies_analysis")
+router.register("pkdata/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
+router.register("pkdata/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
+router.register("pkdata/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
+router.register("pkdata/outputs", OutputInterventionViewSet, basename="output_analysis")
+router.register("pkdata/data", DataAnalysisViewSet, basename="data_analysis")
+router.register("pkdata/timecourses", TimecourseViewSet, basename="timecourse_analysis")
 
 
 
