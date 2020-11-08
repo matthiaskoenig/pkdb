@@ -34,9 +34,10 @@
 
     <h3>How to cite</h3>
     <p>
-      <i>PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling</i><br/>
-      Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König<br/>
+      <i>PK-DB: pharmacokinetics database for individualized and stratified computational modeling</i><br/>
+      Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M.<br/>
       bioRxiv 760884; doi: <a href="https://doi.org/10.1101/760884">https://doi.org/10.1101/760884</a>
+      Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: <a href="https://doi.org/10.1093/nar/gkaa990">10.1093/nar/gkaa990</a>. Epub ahead of print. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/33151297/">33151297</a>
     </p>
 
     <h3>Licensing</h3>

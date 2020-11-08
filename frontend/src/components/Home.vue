@@ -15,6 +15,26 @@
               pharmacokinetics data enriched with the required meta-information for computational modeling and data integration.
             </p>
 
+          <v-row align="center" justify="center">
+            <v-col lg="1">
+              <a href="https://doi.org/10.1093/nar/gkaa990"  target="_blank">
+                <v-badge
+                    color="green"
+                    content="new"
+                >
+                  <v-icon color="black">
+                    fas fa-file-alt
+                  </v-icon>
+                </v-badge>
+              </a>
+            </v-col>
+            <v-col lg="11">
+              <b>PK-DB: pharmacokinetics database for individualized and stratified computational modeling</b><br/>
+              <i>Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M.</i><br/>
+              Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: <a href="https://doi.org/10.1093/nar/gkaa990">10.1093/nar/gkaa990</a>. Epub ahead of print. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/33151297/">33151297</a>
+            </v-col>
+          </v-row>
+
             <h2>Data</h2>
 
             <p align="justify">
