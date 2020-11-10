@@ -593,7 +593,7 @@ class PKData(object):
 
     def data_by_query_dict(self, query_dict, viewset, serializer, boost):
         view = viewset(request=self.request)
-        queryset = view.filter_queryset(view.get_queryset())
+        queryset = view.get_queryset()
         if boost:
             queryset = queryset.filter("terms", **query_dict).source(serializer.Meta.fields)
             return [hit.to_dict() for hit in queryset.params(size=5000).scan()]
