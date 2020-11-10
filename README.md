@@ -31,6 +31,22 @@ Important features are
 
 PK-DB is available at https://pk-db.com
 
+## How to cite
+[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
+If you use PK-DB data or the web interface cite
+
+> *PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling*  
+> Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König   
+> bioRxiv 760884; doi: https://doi.org/10.1101/760884 
+
+> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. 
+> *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. 
+> Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). Epub ahead of print. PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
+
+If you use PK-DB code cite in addition 
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
+
 ## License
 [[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 PK-DB code and documentation is licensed as
@@ -42,16 +58,5 @@ PK-DB code and documentation is licensed as
 Jan Grzegorzewski and Matthias König are supported by the Federal Ministry of Education and Research (BMBF, Germany)
 within the research network Systems Medicine of the Liver ([LiSyM](http://www.lisym.org/), grant number 031L0054).
 
-## How to cite
-[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
-If you use PK-DB data or the web interface cite
-
-> *PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling*  
-> Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König   
-> bioRxiv 760884; doi: https://doi.org/10.1101/760884 
-
-If you use PK-DB code cite in addition 
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 
 &copy; 2017-2020 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.

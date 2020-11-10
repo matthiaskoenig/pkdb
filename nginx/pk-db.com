@@ -9,7 +9,16 @@ server {
     listen [::]:80;
 
     server_name pk-db.com pk-db.de www.pk-db.com www.pk-db.de;
-    return 301 https://pk-db.com$request_uri;
+
+    # letsencrypt webroot authenticator
+    location /.well-known/acme-challenge/ {
+        root /usr/share/nginx/letsencrypt;
+    }
+
+    # https redirects
+    location = / {
+        return 301 https://pk-db.com$request_uri;
+     }
 }
 
 server {
