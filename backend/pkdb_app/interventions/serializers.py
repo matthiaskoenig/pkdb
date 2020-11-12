@@ -2,6 +2,7 @@
 Serializers for interventions.
 """
 import itertools
+from abc import ABC
 
 from rest_framework import serializers
 
@@ -320,7 +321,7 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     measurement_type_label = serializers.SerializerMethodField()
 
     choice = serializers.SerializerMethodField()
-    choice_label =serializers.SerializerMethodField()
+    choice_label = serializers.SerializerMethodField()
 
     substance = serializers.SerializerMethodField()
     substance_label = serializers.SerializerMethodField()
