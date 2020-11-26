@@ -30,7 +30,7 @@ from pkdb_app.data.models import SubSet, Data
 from pkdb_app.data.serializers import TimecourseSerializer
 from pkdb_app.data.views import SubSetViewSet
 from pkdb_app.documents import UUID_PARAM
-from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer
+from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer, IndoNodeFlatSerializer
 from pkdb_app.info_nodes.views import InfoNodeElasticViewSet
 from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
@@ -766,9 +766,9 @@ class PKDataView(APIView):
                                   False),
                 "info_nodes": Sheet("InfoNodes", None,
                                     InfoNodeElasticViewSet,
-                                    InfoNodeElasticSerializer,
+                                    IndoNodeFlatSerializer,
                                     None,
-                                    True),
+                                    False),
             }
 
             # Create archive

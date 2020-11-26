@@ -248,3 +248,12 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
 
     def get_synonyms(self, obj):
         return [synonym["name"] for synonym in obj.synonyms]
+
+
+class IndoNodeFlatSerializer(serializers.Serializer):
+    sid = serializers.CharField()
+    label = serializers.CharField()
+    ntype = serializers.CharField()
+
+    class Meta:
+        fields =["sid", "name", "label", "ntype", "dtype"]
