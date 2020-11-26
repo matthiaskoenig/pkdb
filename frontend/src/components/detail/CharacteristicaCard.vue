@@ -94,15 +94,17 @@
             },
             subject_count(){
               if (this.data.group_count){
-                return this.data.group_count.toString()
+                return this.data.group_count
               }
-              return this.count.toString()
+              return this.count
             },
             count_label(){
-                if (this.count == this.subject_count){
-                  return this.count.toString()
+                if (this.subject_count == this.count) {
+                  return this.subject_count.toString()
+                } else if (this.subject_count < this.count){
+                    return ">" + this.subject_count.toString()
                 } else {
-                  return this.count.toString() + "/" + this.subject_count
+                  return this.count.toString() + "/" + this.subject_count.toString()
                 }
             },
             error() {
@@ -153,15 +155,8 @@
                 }
                 return value;
             },
-
             card_class() {
-                if (this.value){
-                    return "characteristica_card"
-                }
-                else {
-                    return "characteristica_card"
-                }
-
+              return "characteristica_card"
             }
         },
         methods: {

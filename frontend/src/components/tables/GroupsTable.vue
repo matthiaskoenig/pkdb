@@ -41,7 +41,7 @@
             </template>
             -->
             <template v-slot:item.characteristica="{ item }">
-                <characteristica-card-deck :characteristica="item.characteristica" />
+                <characteristica-card-deck :characteristica="item.characteristica" :group_count="item.count" />
             </template>
             <no-data/>
         </v-data-table>

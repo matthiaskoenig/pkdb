@@ -14,10 +14,8 @@
         <span v-else d-flex flex-wrap>
             <span v-for="item in sortedCharacteristica.choices" :key="item.pk">
                 <characteristica-card :data="item" />
-
             </span>
             <span v-for="item in sortedCharacteristica.values" :key="item.pk">
-
                 <characteristica-card :data="item" />
             </span>
         </span>
@@ -38,6 +36,10 @@
                 type: Array,
                 required: true
             },
+          group_count: {
+            type: Number,
+            required: true
+          },
           layout: {
             type: Boolean,
             default: true
@@ -71,10 +73,11 @@
 
             sortedCharacteristica: function () {
                 // split characteristica in choices and values and sort them
-                var choices = []
-                var values = []
-                for (var index in this.characteristica){
-                    var c = this.characteristica[index]
+                let choices = []
+                let values = []
+                for (let index in this.characteristica){
+                    let c = this.characteristica[index]
+                    c.group_count = this.group_count;
                     if (c.choice){
                         choices.push(c);
                     } else {

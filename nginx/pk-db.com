@@ -18,7 +18,7 @@ server {
     # https redirects
     location = / {
         return 301 https://pk-db.com$request_uri;
-     }
+    }
 }
 
 server {
