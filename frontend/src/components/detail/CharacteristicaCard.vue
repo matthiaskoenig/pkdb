@@ -89,7 +89,7 @@
                 if (!this.data.count){
                     return 1;  // individual has no count ? FIXME bug
                 } else {
-                    return this.data.count
+                    return this.data.countO
                 }
             },
             subject_count(){
