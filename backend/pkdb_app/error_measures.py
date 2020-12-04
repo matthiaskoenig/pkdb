@@ -6,16 +6,16 @@ Helper functions for calculation of error measures from other errors.
     cv is coefficient of variation. sd/mean
 """
 import numpy as np
-import warnings
 
-
+def _is(value):
+    return value is not None and value is not np.nan
 def calculate_sd(se, count, cv, mean):
     """Calculates standard deviation from other error measurements."""
     sd = None
-    is_se = sd is not None
-    is_count = count is not None
-    is_mean = mean is not None
-    is_cv = cv is not None
+    is_se = _is(se)
+    is_count = _is(count)
+    is_mean = _is(mean)
+    is_cv = _is(cv)
 
     if is_se and is_count:
         sd = np.multiply(se, np.sqrt(count))
@@ -28,10 +28,10 @@ def calculate_se(sd, count, cv, mean):
     """Calculates SE from given fields."""
 
     se = None
-    is_sd = sd is not None
-    is_count = count is not None
-    is_mean = mean is not None
-    is_cv = cv is not None
+    is_sd = _is(sd)
+    is_count = _is(count)
+    is_mean = _is(mean)
+    is_cv = _is(cv)
 
     if is_sd and is_count:
         se = np.true_divide(sd, np.sqrt(count))
@@ -44,10 +44,10 @@ def calculate_cv(sd, count, se, mean):
     """Calculates CV from given fields"""
 
     cv = None
-    is_sd = sd is not None
-    is_count = count is not None
-    is_mean = mean is not None
-    is_se = se is not None
+    is_sd = _is(sd)
+    is_count = _is(count)
+    is_mean = _is(mean)
+    is_se = _is(se)
 
     # mean can be zero, CV not calculatable, resulting in -inf/inf
     # mean data must be cleaned before calculation
