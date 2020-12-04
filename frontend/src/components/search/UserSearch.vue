@@ -61,6 +61,7 @@ export default {
         {"username": "adriankl", "first_name": "Adrian", "last_name": "Koeller",},
         {"username": "dannythekey", "first_name": "Danny", "last_name": "Ke",},
         {"username": "SaraD-hub", "first_name": "Sara", "last_name": "De Angelis",},
+        {"username": "balcisue", "first_name": "Sükrü", "last_name": "Balci",},
       ],
     }
   },
