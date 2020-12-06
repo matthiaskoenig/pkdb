@@ -7,8 +7,11 @@ Helper functions for calculation of error measures from other errors.
 """
 import numpy as np
 
+
 def _is(value):
     return value is not None and value is not np.nan
+
+
 def calculate_sd(se, count, cv, mean):
     """Calculates standard deviation from other error measurements."""
     sd = None
