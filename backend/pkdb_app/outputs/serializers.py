@@ -94,7 +94,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
-        self.validate_wrong_keys(data, additional_fields=OutputSerializer.Meta.fields)
+        self.validate_wrong_keys(data, additional_fields=OutputExSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
