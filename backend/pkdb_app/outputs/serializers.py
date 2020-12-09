@@ -195,7 +195,7 @@ class OutputExSerializer(ExSerializer):
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
-        self.validate_wrong_keys(data)
+        self.validate_wrong_keys(data, OutputSerializer.Meta.fields)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_label_map(self, value) -> None:
