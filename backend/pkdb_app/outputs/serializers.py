@@ -29,7 +29,7 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_required_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-EXTRA_FIELDS = ["tissue", "method", "label","output_type"]
+EXTRA_FIELDS = ["tissue", "method", "label", "output_type"]
 TIME_FIELDS = ["time", "time_unit"]
 OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 

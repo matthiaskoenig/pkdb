@@ -154,7 +154,7 @@ class MeasurementType(AbstractInfoNode):
 
     NO_UNIT = 'NO_UNIT'  # todo: remove NO_UNIT and add extra keyword or add an extra measurement_type with optional no units.
     TIME_REQUIRED_MEASUREMENT_TYPES = ["cumulative amount", "cumulative metabolic ratio", "recovery",
-                                       "auc_end"]  # todo: remove and add extra keyword.
+                                       "auc_end", "ptf"]  # todo: remove and add extra keyword.
     CAN_NEGATIVE = [
         "tmax"  # tmax can be negative due to time offsets, i.e. pre-simulation with subsequent fall after intervention
                 # this often happens in placebo simulations
