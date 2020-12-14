@@ -315,7 +315,7 @@ class MeasurementType(AbstractInfoNode):
                                         self.info_node.DTypes.NumericCategorical]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
-                          f"Allowed choices are: `{list(self.choices_list())}`."
+                          f"Allowed choices are: `{sorted(self.choices_list())}`."
                     raise ValueError({"choice": msg})
                 return self.choices.get(info_node__name=choice)
             else:
@@ -325,7 +325,7 @@ class MeasurementType(AbstractInfoNode):
                 raise ValueError({"choice": msg})
         elif self.choices.exists():
             msg = f"{choice}. A choice is required for `{self.info_node.name}`." \
-                  f" Allowed choices are: `{list(self.choices_list())}`."
+                  f" Allowed choices are: `{sorted(self.choices_list())}`."
             raise ValueError({"choice": msg})
 
     @property
