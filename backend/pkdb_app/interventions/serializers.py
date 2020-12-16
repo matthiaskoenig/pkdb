@@ -109,7 +109,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
             for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
                 if info_node in attrs:
                     if attrs[info_node] is not None:
-                        attrs[info_node] = getattr(attrs[info_node],info_node)
+                        attrs[info_node] = getattr(attrs[info_node], info_node)
 
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
 
@@ -166,7 +166,7 @@ class InterventionExSerializer(MappingSerializer):
             interventions_from_file = self.entries_from_file(intervention)
             interventions.extend(interventions_from_file)
 
-        drop_fields =  INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
+        drop_fields = INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
         [data.pop(field, None) for field in drop_fields]
         # ----------------------------------
         # finished

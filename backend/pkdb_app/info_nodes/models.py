@@ -11,8 +11,7 @@ from pint import UndefinedUnitError
 
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
-from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, \
-    _validate_required_key_and_value
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key_and_value_or_nr
 from rest_framework import serializers
 
 
@@ -156,12 +155,15 @@ class MeasurementType(AbstractInfoNode):
     TIME_REQUIRED_MEASUREMENT_TYPES = [
         "concentration",
         "cumulative amount",
-        "metabolic_ratio",
+        "metabolic ratio",
         "cumulative metabolic ratio",
         "recovery",
         "auc_end",
         "ptf",
     ]  # todo: remove and add extra keyword.
+    TIME_REQUIRED_MEASUREMENT_TYPES_NR_ALLOWED = [
+
+     ]
     CAN_NEGATIVE = [
         "tmax"  # tmax can be negative due to time offsets, i.e. pre-simulation with subsequent fall after intervention
                 # this often happens in placebo simulations
@@ -376,15 +378,18 @@ class MeasurementType(AbstractInfoNode):
         d_choice = self.validate_choice(choice)
 
         time_unit = data.get("time_unit", None)
-        if time_unit:
+        time = data.get("time", None)
+
+        if time_unit and time_unit != "NR":
             self.validate_time_unit(time_unit)
 
         if self.time_required:
             details = f"for measurement type `{self.info_node.name}`"
-            _validate_required_key_and_value(data, "time", details=details)
-            _validate_required_key_and_value(data, "time_unit", details=details)
+            if time != "NR":
+                _validate_required_key_and_value_or_nr(data, "time_unit", details=details)
+            _validate_required_key_and_value_or_nr(data, "time", details=details)
 
-        return {"choice":d_choice}
+        return {"choice": d_choice}
 
 
 class Choice(AbstractInfoNode):

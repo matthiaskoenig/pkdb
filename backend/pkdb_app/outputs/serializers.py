@@ -110,8 +110,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         _validate_required_key(attrs, "output_type")
         self._validate_timecourse(attrs)
 
-
-
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
 
@@ -119,8 +117,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
                 if key in attrs:
                     if attrs[key] is not None:
                         attrs[key] = getattr(attrs[key], key)
-
-
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
 
         except ValueError as err:

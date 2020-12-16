@@ -740,20 +740,24 @@ class NameSerializer(serializers.Serializer):
     class Meta:
         fields = ["pk","name", "study_sid"]
 
+
 class PkStringSerializer(serializers.Serializer):
     pk = serializers.CharField()
 
     class Meta:
         fields = ["pk"]
 
+
 class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
+
 
 class SidNameLabelSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
+
 
 def validate_dict(dic):
     if not isinstance(dic, dict):
@@ -762,7 +766,22 @@ def validate_dict(dic):
              "detail": dic}
         )
 
+
 class StudySmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Study
         fields = ['pk', 'sid', 'name']  # ,'url']
+
+
+class FloatNRField(serializers.FloatField):
+
+    def to_internal_value(self, data):
+        if data == "NR":
+            return data
+        if isinstance(data, str) and len(data) > self.MAX_STRING_LENGTH:
+            self.fail('max_string_length')
+
+        try:
+            return float(data)
+        except (TypeError, ValueError):
+            self.fail('invalid')
