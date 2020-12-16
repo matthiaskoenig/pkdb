@@ -11,7 +11,8 @@ from pint import UndefinedUnitError
 
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
-from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key_and_value_or_nr
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key_and_value_or_nr, \
+    _validate_required_key_and_value
 from rest_framework import serializers
 
 
@@ -385,9 +386,16 @@ class MeasurementType(AbstractInfoNode):
 
         if self.time_required:
             details = f"for measurement type `{self.info_node.name}`"
+
             if time != "NR":
-                _validate_required_key_and_value_or_nr(data, "time_unit", details=details)
-            _validate_required_key_and_value_or_nr(data, "time", details=details)
+                _validate_required_key_and_value(data, "time", details=details)
+                if time_unit != "NR":
+                    _validate_required_key_and_value(data, "time_unit", details=details)
+
+        if time == "NR":
+            data["time"] = None
+        if time_unit == "NR":
+            data["time_unit"] = None
 
         return {"choice": d_choice}
 
