@@ -149,20 +149,20 @@ def _create(validated_data, model_manager=None, model_serializer=None,
     return instance, popped_data
 
 
-def initialize_normed(notnorm_instance):
-    norm = copy.copy(notnorm_instance)
+def initialize_normed(not_norm_instance):
+    norm = copy.copy(not_norm_instance)
     norm.pk = None
     norm.normed = True
     norm.normalize()
-    norm.raw_id = notnorm_instance.pk
+    norm.raw_id = not_norm_instance.pk
 
     try:
-        norm.individual_id = notnorm_instance.individual.pk
+        norm.individual_id = not_norm_instance.individual.pk
     except AttributeError:
         pass
 
     try:
-        norm.group_id = notnorm_instance.group.pk
+        norm.group_id = not_norm_instance.group.pk
     except AttributeError:
         pass
 

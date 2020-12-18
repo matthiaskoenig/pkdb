@@ -8,6 +8,7 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from rest_framework import serializers
+from rest_framework.fields import empty
 from rest_framework.settings import api_settings
 
 from pkdb_app.behaviours import map_field
@@ -354,8 +355,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     try:
                         entry_value = getattr(entry, values[1])
 
-
-
                     except AttributeError:
 
                         raise serializers.ValidationError(
@@ -464,7 +463,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         request = self.context.get('request')
 
         # url representation of file
-        for file in ["source","image"]:
+        for file in ["source", "image"]:
             if file in rep:
                 if "||" not in str(rep[file]):
                     rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
@@ -530,6 +529,8 @@ class ExSerializer(MappingSerializer):
                             f"intervention <{intervention}> does not exist, check interventions."
                         )
                 data["interventions"] = interventions
+            else:
+                data["interventions"] = []
         return data
 
 

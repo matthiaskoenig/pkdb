@@ -19,7 +19,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer)
+    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer, PKField)
 from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
@@ -51,6 +51,7 @@ OUTPUT_FOREIGN_KEYS = [
 # Outputs
 # ----------------------------------
 
+
 class OutputSerializer(MeasurementTypeableSerializer):
 
     group = serializers.PrimaryKeyRelatedField(
@@ -62,13 +63,10 @@ class OutputSerializer(MeasurementTypeableSerializer):
         required=False,
         allow_null=True,
     )
-    interventions = serializers.PrimaryKeyRelatedField(
+    interventions = PKField(
         queryset=Intervention.objects.all(),
-        many=True,
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
+        many=True, required=True, allow_null=True)
+
     tissue = utils.SlugRelatedField(
         slug_field="name",
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Tissue),
@@ -91,10 +89,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
     def to_internal_value(self, data):
         data.pop("comments", None)
         data.pop("descriptions", None)
+        data.pop("image", None)
+        data.pop("source", None)
 
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
-        self.validate_wrong_keys(data, additional_fields=OutputExSerializer.Meta.fields)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -103,7 +103,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self.validate_group_individual_output(attrs)
 
         _validate_required_key(attrs, "measurement_type")
-
         _validate_required_key(attrs, "substance")
         _validate_required_key(attrs, "tissue")
         _validate_required_key(attrs, "interventions")
@@ -173,7 +172,6 @@ class OutputExSerializer(ExSerializer):
         for output in temp_outputs:
             outputs_from_file = self.entries_from_file(output)
             outputs.extend(outputs_from_file)
-
         # ----------------------------------
         # finished
         # ----------------------------------
@@ -191,7 +189,7 @@ class OutputExSerializer(ExSerializer):
         [data.pop(field, None) for field in drop_fields]
         data["outputs"] = outputs
         data = self.transform_map_fields(data)
-        self.validate_wrong_keys(data, OutputSerializer.Meta.fields)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_label_map(self, value) -> None:

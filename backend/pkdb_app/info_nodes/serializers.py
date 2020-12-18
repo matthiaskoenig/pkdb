@@ -31,11 +31,6 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     time = FloatNRField(allow_null=True)
 
 
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        return rep
-
-
 class SynonymSerializer(WrongKeyValidationSerializer):
     pk = serializers.IntegerField(read_only=True)
     class Meta:

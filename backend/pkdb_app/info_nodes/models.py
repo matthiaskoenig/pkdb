@@ -368,7 +368,7 @@ class MeasurementType(AbstractInfoNode):
                                     f"for all measurement types except "
                                     f"<{self.CAN_NEGATIVE}>.", "detail": data})
 
-    def validate_complete(self, data):
+    def validate_complete(self, data, time_allowed: bool = True):
         """Complete validation."""
 
         # check unit
@@ -378,24 +378,25 @@ class MeasurementType(AbstractInfoNode):
         choice = data.get("choice", None)
         d_choice = self.validate_choice(choice)
 
-        time_unit = data.get("time_unit", None)
-        time = data.get("time", None)
+        if time_allowed:
+            time_unit = data.get("time_unit", None)
+            time = data.get("time", None)
 
-        if time_unit and time_unit != "NR":
-            self.validate_time_unit(time_unit)
+            if time_unit and time_unit != "NR":
+                self.validate_time_unit(time_unit)
 
-        if self.time_required:
-            details = f"for measurement type `{self.info_node.name}`"
+            if self.time_required:
+                details = f"for measurement type `{self.info_node.name}`"
 
-            if time != "NR":
-                _validate_required_key_and_value(data, "time", details=details)
-                if time_unit != "NR":
-                    _validate_required_key_and_value(data, "time_unit", details=details)
+                if time != "NR":
+                    _validate_required_key_and_value(data, "time", details=details)
+                    if time_unit != "NR":
+                        _validate_required_key_and_value(data, "time_unit", details=details)
 
-        if time == "NR":
-            data["time"] = None
-        if time_unit == "NR":
-            data["time_unit"] = None
+            if time == "NR":
+                data["time"] = None
+            if time_unit == "NR":
+                data["time_unit"] = None
 
         return {"choice": d_choice}
 
