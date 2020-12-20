@@ -19,7 +19,7 @@ from ..comments.serializers import DescriptionSerializer, CommentSerializer, Des
     CommentElasticSerializer
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer, PKField)
+    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer)
 from ..subjects.models import Group, DataFile, Individual
 from ..subjects.serializers import (
     EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
@@ -63,7 +63,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         required=False,
         allow_null=True,
     )
-    interventions = PKField(
+    interventions = serializers.PrimaryKeyRelatedField(
         queryset=Intervention.objects.all(),
         many=True, required=True, allow_null=True)
 

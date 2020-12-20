@@ -92,9 +92,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
             raise serializers.ValidationError(f"count <{count}> has to be greater or equal to 1. ")
         return count
 
-
     def validate(self, attrs):
-
         try:
             # perform via dedicated function on categorials
             for info_node in ['substance', 'measurement_type']:
