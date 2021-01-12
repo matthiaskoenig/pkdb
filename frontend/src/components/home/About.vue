@@ -18,6 +18,7 @@
       <user-avatar username="dannythekey"/>
       <user-avatar username="SaraD-hub"/>
       <user-avatar username="balcisue"/>
+      <user-avatar username="paula-ogata"/>
     </p>
     <p>If you have questions or feedback please contact
       <a href="mailto:koenigmx@hu-berlin.de" title="koenigmx@hu-berlin.de">

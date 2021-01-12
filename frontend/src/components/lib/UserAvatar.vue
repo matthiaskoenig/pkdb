@@ -64,6 +64,8 @@
                         image = 'sara_128.png';
                     } else if (this.initials === 'SB'){
                       image = 'balcisue_128.png';
+                    } else if (this.initials === 'PO'){
+                      image = 'paula_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -91,6 +93,8 @@
                         image = 'sara_128.png';
                     } else if (this.username === 'balcisue'){
                       image = 'balcisue_128.png';
+                    } else if (this.username === 'paula-ogata'){
+                      image = 'paula_128.png';
                     }
                 }
                 return img_dir + image
