@@ -17,6 +17,8 @@
       <user-avatar username="adriankl"/>
       <user-avatar username="dannythekey"/>
       <user-avatar username="SaraD-hub"/>
+      <user-avatar username="balcisue"/>
+      <user-avatar username="paula-ogata"/>
     </p>
     <p>If you have questions or feedback please contact
       <a href="mailto:koenigmx@hu-berlin.de" title="koenigmx@hu-berlin.de">
@@ -34,10 +36,11 @@
 
     <h3>How to cite</h3>
     <p>
-      <i>PK-DB: pharmacokinetics database for individualized and stratified computational modeling</i><br/>
-      Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M.<br/>
-      bioRxiv 760884; doi: <a href="https://doi.org/10.1101/760884">https://doi.org/10.1101/760884</a>
+
+      <b>PK-DB: pharmacokinetics database for individualized and stratified computational modeling</b><br/>
+      <i>Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Bartsch F, Köller A, Ke DYJ, De Angelis S, König M.</i><br />
       Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: <a href="https://doi.org/10.1093/nar/gkaa990">10.1093/nar/gkaa990</a>. Epub ahead of print. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/33151297/">33151297</a>
+
     </p>
 
     <h3>Licensing</h3>

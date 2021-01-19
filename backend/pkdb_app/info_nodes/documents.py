@@ -41,16 +41,13 @@ class InfoNodeDocument(Document):
     ntype = string_field('ntype')
     dtype = string_field('dtype')
     xrefs = ObjectField(
-        properties=
-                          {
-                              "name": string_field("name"),
-                              "accession":string_field("accession"),
-                              "url":string_field("url")
-
-                          }, multi=True)
-
-
-    # measurement type
+        properties={
+            "name": string_field("name"),
+            "accession": string_field("accession"),
+            "url": string_field("url")
+        },
+        multi=True
+    )
     measurement_type = ObjectField(
         properties={
             "choices": ObjectField(
@@ -61,15 +58,12 @@ class InfoNodeDocument(Document):
             "units": basic_object("units", multi=True)
         }
     )
-    # substance
     substance = ObjectField(
         properties={
-
             "chebi": string_field('chebi'),
             "mass": string_field('mass'),
             "charge": string_field('charge'),
             "formula": string_field('formula'),
-
         })
 
     class Django:

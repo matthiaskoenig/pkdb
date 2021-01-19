@@ -70,9 +70,14 @@ class SubSetSerializer(ExSerializer):
         # subset_instance.save()
         return subset_instance
 
+    def validate_shared(self, shared):
+        if isinstance(shared,str):
+            raise serializers.ValidationError({"shared": "Shared field has to be a list not a string.", "detail": shared})
+
+
     def _validate_time(self, time):
         if any(np.isnan(np.array(time))):
-            raise serializers.ValidationError({"time": "no time points are allowed to be nan", "detail": time})
+            raise serializers.ValidationError({"time": "No time points are allowed to be nan", "detail": time})
 
     def calculate_pks_from_timecourses(self, subset):
         # calculate pharmacokinetics outputs

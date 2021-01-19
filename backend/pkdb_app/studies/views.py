@@ -30,6 +30,8 @@ from pkdb_app.data.models import SubSet, Data
 from pkdb_app.data.serializers import TimecourseSerializer
 from pkdb_app.data.views import SubSetViewSet
 from pkdb_app.documents import UUID_PARAM
+from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer, IndoNodeFlatSerializer
+from pkdb_app.info_nodes.views import InfoNodeElasticViewSet
 from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
@@ -593,14 +595,14 @@ class PKData(object):
 
     def data_by_query_dict(self, query_dict, viewset, serializer, boost):
         view = viewset(request=self.request)
-        queryset = view.filter_queryset(view.get_queryset())
+        queryset = view.get_queryset()
+        if query_dict is not None:
+            queryset = queryset.filter("terms", **query_dict)
         if boost:
-            queryset = queryset.filter("terms", **query_dict).source(serializer.Meta.fields)
+            queryset = queryset.source(serializer.Meta.fields)
             return [hit.to_dict() for hit in queryset.params(size=5000).scan()]
 
         else:
-            queryset = queryset.filter("terms", **query_dict)
-
             return serializer(queryset.params(size=5000).scan(), many=True).data
 
 
@@ -761,7 +763,12 @@ class PKDataView(APIView):
                 "timecourses": Sheet("Timecourses", {"pk": pkdata.ids["timecourses"]}, SubSetViewSet,
                                      TimecourseSerializer, None, False),
                 "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters,
-                                  None),
+                                  False),
+                "info_nodes": Sheet("InfoNodes", None,
+                                    InfoNodeElasticViewSet,
+                                    IndoNodeFlatSerializer,
+                                    None,
+                                    False),
             }
 
             # Create archive

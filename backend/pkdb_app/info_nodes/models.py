@@ -11,7 +11,7 @@ from pint import UndefinedUnitError
 
 from pkdb_app.behaviours import Sidable
 from pkdb_app.info_nodes.units import ureg
-from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, \
+from pkdb_app.utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG, _validate_required_key_and_value_or_nr, \
     _validate_required_key_and_value
 from rest_framework import serializers
 
@@ -153,8 +153,18 @@ class MeasurementType(AbstractInfoNode):
     )
 
     NO_UNIT = 'NO_UNIT'  # todo: remove NO_UNIT and add extra keyword or add an extra measurement_type with optional no units.
-    TIME_REQUIRED_MEASUREMENT_TYPES = ["cumulative amount", "cumulative metabolic ratio", "recovery",
-                                       "auc_end"]  # todo: remove and add extra keyword.
+    TIME_REQUIRED_MEASUREMENT_TYPES = [
+        "concentration",
+        "cumulative amount",
+        "metabolic ratio",
+        "cumulative metabolic ratio",
+        "recovery",
+        "auc_end",
+        "ptf",
+    ]  # todo: remove and add extra keyword.
+    TIME_REQUIRED_MEASUREMENT_TYPES_NR_ALLOWED = [
+
+     ]
     CAN_NEGATIVE = [
         "tmax"  # tmax can be negative due to time offsets, i.e. pre-simulation with subsequent fall after intervention
                 # this often happens in placebo simulations
@@ -315,7 +325,7 @@ class MeasurementType(AbstractInfoNode):
                                         self.info_node.DTypes.NumericCategorical]:
                 if not self.is_valid_choice(choice):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
-                          f"Allowed choices are: `{list(self.choices_list())}`."
+                          f"Allowed choices are: `{sorted(self.choices_list())}`."
                     raise ValueError({"choice": msg})
                 return self.choices.get(info_node__name=choice)
             else:
@@ -325,7 +335,7 @@ class MeasurementType(AbstractInfoNode):
                 raise ValueError({"choice": msg})
         elif self.choices.exists():
             msg = f"{choice}. A choice is required for `{self.info_node.name}`." \
-                  f" Allowed choices are: `{list(self.choices_list())}`."
+                  f" Allowed choices are: `{sorted(self.choices_list())}`."
             raise ValueError({"choice": msg})
 
     @property
@@ -358,7 +368,7 @@ class MeasurementType(AbstractInfoNode):
                                     f"for all measurement types except "
                                     f"<{self.CAN_NEGATIVE}>.", "detail": data})
 
-    def validate_complete(self, data):
+    def validate_complete(self, data, time_allowed: bool = True):
         """Complete validation."""
 
         # check unit
@@ -368,16 +378,27 @@ class MeasurementType(AbstractInfoNode):
         choice = data.get("choice", None)
         d_choice = self.validate_choice(choice)
 
-        time_unit = data.get("time_unit", None)
-        if time_unit:
-            self.validate_time_unit(time_unit)
+        if time_allowed:
+            time_unit = data.get("time_unit", None)
+            time = data.get("time", None)
 
-        if self.time_required:
-            details = f"for measurement type `{self.info_node.name}`"
-            _validate_required_key_and_value(data, "time", details=details)
-            _validate_required_key_and_value(data, "time_unit", details=details)
+            if time_unit and time_unit != "NR":
+                self.validate_time_unit(time_unit)
 
-        return {"choice":d_choice}
+            if self.time_required:
+                details = f"for measurement type `{self.info_node.name}`"
+
+                if time != "NR":
+                    _validate_required_key_and_value(data, "time", details=details)
+                    if time_unit != "NR":
+                        _validate_required_key_and_value(data, "time_unit", details=details)
+
+            if time == "NR":
+                data["time"] = None
+            if time_unit == "NR":
+                data["time_unit"] = None
+
+        return {"choice": d_choice}
 
 
 class Choice(AbstractInfoNode):

@@ -8,6 +8,7 @@ import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from rest_framework import serializers
+from rest_framework.fields import empty
 from rest_framework.settings import api_settings
 
 from pkdb_app.behaviours import map_field
@@ -354,8 +355,6 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     try:
                         entry_value = getattr(entry, values[1])
 
-
-
                     except AttributeError:
 
                         raise serializers.ValidationError(
@@ -464,7 +463,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         request = self.context.get('request')
 
         # url representation of file
-        for file in ["source","image"]:
+        for file in ["source", "image"]:
             if file in rep:
                 if "||" not in str(rep[file]):
                     rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
@@ -530,6 +529,8 @@ class ExSerializer(MappingSerializer):
                             f"intervention <{intervention}> does not exist, check interventions."
                         )
                 data["interventions"] = interventions
+            else:
+                data["interventions"] = []
         return data
 
 
@@ -740,20 +741,24 @@ class NameSerializer(serializers.Serializer):
     class Meta:
         fields = ["pk","name", "study_sid"]
 
+
 class PkStringSerializer(serializers.Serializer):
     pk = serializers.CharField()
 
     class Meta:
         fields = ["pk"]
 
+
 class SidNameSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
+
 
 class SidNameLabelSerializer(serializers.Serializer):
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
+
 
 def validate_dict(dic):
     if not isinstance(dic, dict):
@@ -762,7 +767,22 @@ def validate_dict(dic):
              "detail": dic}
         )
 
+
 class StudySmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Study
         fields = ['pk', 'sid', 'name']  # ,'url']
+
+
+class FloatNRField(serializers.FloatField):
+
+    def to_internal_value(self, data):
+        if data == "NR":
+            return data
+        if isinstance(data, str) and len(data) > self.MAX_STRING_LENGTH:
+            self.fail('max_string_length')
+
+        try:
+            return float(data)
+        except (TypeError, ValueError):
+            self.fail('invalid')

@@ -109,7 +109,7 @@ class Output(AbstractOutput, Outputable, Accessible):
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
     individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention, through="OutputIntervention", related_name="outputs")
+    interventions = models.ManyToManyField(Intervention, through="OutputIntervention", related_name="outputs", null=True, blank=True)
     subset = models.ForeignKey('data.Subset', on_delete=models.CASCADE, null=True, blank=True, related_name="pks")
 
     tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
@@ -130,7 +130,7 @@ class Output(AbstractOutput, Outputable, Accessible):
 
     def is_timecourse(self):
         if self.timecourse:
-            if self.timecourse.data.data_type=="timecourse":
+            if self.timecourse.data.data_type == "timecourse":
                 return True
         return False
 

@@ -78,6 +78,7 @@ class Reference(models.Model):
             return self.study.name
         return ""
 
+
 class Author(models.Model):
     """ Author in reference. """
     first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)

@@ -29,7 +29,7 @@ export default {
   created() {
     if(this.sid){
       this.getStudy(this.sid, true)
-      this.hide_search=false
+      this.hide_search=true
     }else{
       this.loading = false
     }

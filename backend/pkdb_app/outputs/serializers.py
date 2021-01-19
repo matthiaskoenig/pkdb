@@ -29,7 +29,7 @@ from ..subjects.serializers import (
 from ..utils import list_of_pk, _validate_required_key, create_multiple, _create, create_multiple_bulk_normalized, \
     create_multiple_bulk
 
-EXTRA_FIELDS = ["tissue", "method", "label","output_type"]
+EXTRA_FIELDS = ["tissue", "method", "label", "output_type"]
 TIME_FIELDS = ["time", "time_unit"]
 OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
@@ -51,6 +51,7 @@ OUTPUT_FOREIGN_KEYS = [
 # Outputs
 # ----------------------------------
 
+
 class OutputSerializer(MeasurementTypeableSerializer):
 
     group = serializers.PrimaryKeyRelatedField(
@@ -64,11 +65,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
     )
     interventions = serializers.PrimaryKeyRelatedField(
         queryset=Intervention.objects.all(),
-        many=True,
-        read_only=False,
-        required=False,
-        allow_null=True,
-    )
+        many=True, required=True, allow_null=True)
+
     tissue = utils.SlugRelatedField(
         slug_field="name",
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Tissue),
@@ -91,10 +89,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
     def to_internal_value(self, data):
         data.pop("comments", None)
         data.pop("descriptions", None)
+        data.pop("image", None)
+        data.pop("source", None)
 
         data = self.retransform_map_fields(data)
         data = self.to_internal_related_fields(data)
-        self.validate_wrong_keys(data, additional_fields=OutputExSerializer.Meta.fields)
+        self.validate_wrong_keys(data)
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
@@ -103,14 +103,11 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self.validate_group_individual_output(attrs)
 
         _validate_required_key(attrs, "measurement_type")
-
         _validate_required_key(attrs, "substance")
         _validate_required_key(attrs, "tissue")
         _validate_required_key(attrs, "interventions")
         _validate_required_key(attrs, "output_type")
         self._validate_timecourse(attrs)
-
-
 
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
@@ -119,8 +116,6 @@ class OutputSerializer(MeasurementTypeableSerializer):
                 if key in attrs:
                     if attrs[key] is not None:
                         attrs[key] = getattr(attrs[key], key)
-
-
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
 
         except ValueError as err:
@@ -177,7 +172,6 @@ class OutputExSerializer(ExSerializer):
         for output in temp_outputs:
             outputs_from_file = self.entries_from_file(output)
             outputs.extend(outputs_from_file)
-
         # ----------------------------------
         # finished
         # ----------------------------------

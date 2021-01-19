@@ -149,20 +149,20 @@ def _create(validated_data, model_manager=None, model_serializer=None,
     return instance, popped_data
 
 
-def initialize_normed(notnorm_instance):
-    norm = copy.copy(notnorm_instance)
+def initialize_normed(not_norm_instance):
+    norm = copy.copy(not_norm_instance)
     norm.pk = None
     norm.normed = True
     norm.normalize()
-    norm.raw_id = notnorm_instance.pk
+    norm.raw_id = not_norm_instance.pk
 
     try:
-        norm.individual_id = notnorm_instance.individual.pk
+        norm.individual_id = not_norm_instance.individual.pk
     except AttributeError:
         pass
 
     try:
-        norm.group_id = notnorm_instance.group.pk
+        norm.group_id = not_norm_instance.group.pk
     except AttributeError:
         pass
 
@@ -196,12 +196,22 @@ def set_keys(d, value, *keys):
         d = d[key]
     d[keys[-1]] = value
 
+
 def _validate_required_key_and_value(attrs, key, details=None, extra_message: str = ""):
-    if pd.isnull(attrs.get(key,None)) or pd.isna(attrs.get(key,None)):
+    if pd.isnull(attrs.get(key, None)) or pd.isna(attrs.get(key, None)):
         error_json = {key: f"The key <{key}> is required. {extra_message}"}
         if details:
             error_json["details"] = details
         raise serializers.ValidationError(error_json)
+
+
+def _validate_required_key_and_value_or_nr(attrs, key, details=None, extra_message: str = ""):
+    value = attrs.get(key, None)
+    if value != "NR":
+        _validate_required_key_and_value(attrs, key, details, extra_message)
+    else:
+        attrs[key] = None
+
 
 def _validate_required_key(attrs, key, details=None, extra_message: str = ""):
     if key not in attrs:

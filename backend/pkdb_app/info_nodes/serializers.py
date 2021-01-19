@@ -4,7 +4,7 @@ from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
     Form, Tissue, Application, Method, CrossReference
-from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidNameLabelSerializer
+from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidNameLabelSerializer, FloatNRField
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework.fields import empty
 
@@ -28,17 +28,14 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
     )
 
     choice = serializers.CharField(allow_null=True)
-
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        return rep
+    time = FloatNRField(allow_null=True)
 
 
 class SynonymSerializer(WrongKeyValidationSerializer):
     pk = serializers.IntegerField(read_only=True)
     class Meta:
         model = Synonym
-        fields = ["name","pk"]
+        fields = ["name", "pk"]
 
     def to_internal_value(self, data):
         return {"name": data}
@@ -248,3 +245,12 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
 
     def get_synonyms(self, obj):
         return [synonym["name"] for synonym in obj.synonyms]
+
+
+class IndoNodeFlatSerializer(serializers.Serializer):
+    sid = serializers.CharField()
+    label = serializers.CharField()
+    ntype = serializers.CharField()
+
+    class Meta:
+        fields =["sid", "name", "label", "ntype", "dtype"]
