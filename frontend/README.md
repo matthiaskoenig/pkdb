@@ -15,6 +15,11 @@ npm run serve
 npm run build
 ```
 
+### Find outdated packages
+```
+npm outdated
+```
+
 ### Run your tests
 ```
 npm run test
