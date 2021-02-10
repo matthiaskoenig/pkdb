@@ -50,7 +50,9 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
             pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
         pk = pkinf.pk
-
+        from pprint import pprint
+        pprint(variables)
+        pprint(pk)
         key_mapping = {
             "auc": MeasurementType.objects.get(info_node__name="auc_end"),
             "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),

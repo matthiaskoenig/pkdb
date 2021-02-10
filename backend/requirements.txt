@@ -27,6 +27,7 @@ numpy>=1.19.1
 scipy>=1.5.2
 matplotlib>=3.3.0
 pint>=0.16.1
+#pkdb-analysis>=0.1.7
+git+https://github.com/matthiaskoenig/pkdb_analysis.git
 
-pkdb-analysis>=0.1.5
 

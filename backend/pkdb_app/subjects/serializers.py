@@ -175,6 +175,7 @@ class GroupSerializer(ExSerializer):
             self._validate_disabled_data(characteristica_single, disabled)
             self._validate_group_characteristica_count(characteristica_single, attrs.get("count"))
 
+
         return super().validate(attrs)
 
     def to_representation(self, instance):
