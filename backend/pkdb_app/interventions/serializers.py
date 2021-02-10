@@ -97,9 +97,12 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 _validate_required_key_and_value(data, "time_unit")
                 application = data["application"]
                 allowed_applications = ["constant infusion", "single dose"]
-                if not application in allowed_applications:
+                if application not in allowed_applications:
                     raise serializers.ValidationError(
-                        f"Allowed applications for measurement_type <{DOSING}> are <{allowed_applications}>.You might want to select the measurement_type: qualitative dosing. With no requirements.")
+                        f"Allowed applications for measurement_type <{DOSING}> are "
+                        f"<{allowed_applications}>, but '{application}' used. "
+                        f"You might want to use the measurement_type: "
+                        f"'qualitative dosing' with less restrictive requirements.")
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 

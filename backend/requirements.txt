@@ -5,7 +5,7 @@ json-logging>=1.2.6
 psycopg2-binary>=2.8.5
 
 # django
-Django == 3.1.4
+Django == 3.1.6
 django-model-utils>=4.0.0
 django-extra-fields>=3.0.0
 django-storages>=1.9.1
@@ -28,6 +28,4 @@ scipy>=1.5.2
 matplotlib>=3.3.0
 pint>=0.16.1
 #pkdb-analysis>=0.1.7
-git+https://github.com/matthiaskoenig/pkdb_analysis.git
-
-
+pkdb-analysis>=0.1.5
