@@ -30,9 +30,14 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
     :return:
     """
     outputs = []
-    dosing = subset.get_single_dosing()
     timecourse = subset.timecourse
+    dosing = subset.get_single_dosing(timecourse["substance"])
+
     # dosing information must exist
+    from pprint import pprint
+    #pprint(variables)
+    #pprint(pk)
+
     if not dosing:
         return outputs
 
@@ -50,9 +55,6 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
             pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
         pk = pkinf.pk
-        from pprint import pprint
-        pprint(variables)
-        pprint(pk)
         key_mapping = {
             "auc": MeasurementType.objects.get(info_node__name="auc_end"),
             "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),

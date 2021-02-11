@@ -223,13 +223,13 @@ class SubSet(Accessible, Timecourseable):
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
     study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="subsets")
 
-    def get_single_dosing(self) -> Intervention:
-        """Returns a single intervention of type dosing if existing.
+    def get_single_dosing(self, substance) -> Intervention:
+        """Returns a single intervention of type dosing and with substance if existing.
         If multiple dosing interventions exist, no dosing is returned!.
         """
         try:
             dosing_measurement_type = Intervention.objects.filter(id__in=self.interventions).get(
-                normed=True, measurement_type__info_node__name="dosing"
+                normed=True, measurement_type__info_node__name="dosing", substance=substance
             )
             return dosing_measurement_type
 
