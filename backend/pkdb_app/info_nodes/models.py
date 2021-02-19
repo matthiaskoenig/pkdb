@@ -327,6 +327,7 @@ class MeasurementType(AbstractInfoNode):
                     msg = f"The choice `{choice}` is not a valid choice for measurement type `{self.info_node.name}`. " \
                           f"Allowed choices are: `{sorted(self.choices_list())}`."
                     raise ValueError({"choice": msg})
+
                 return self.choices.get(info_node__name=choice)
             else:
                 msg = f"The field `choice` is not allowed for measurement type `{self.info_node.name}`. " \
