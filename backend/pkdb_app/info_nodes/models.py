@@ -166,8 +166,8 @@ class MeasurementType(AbstractInfoNode):
 
      ]
     CAN_NEGATIVE = [
-        "tmax"  # tmax can be negative due to time offsets, i.e. pre-simulation with subsequent fall after intervention
-                # this often happens in placebo simulations
+        "tmax",  # tmax can be negative due to time offsets, i.e. pre-simulation with subsequent fall after intervention
+         "concentration change",    # this often happens in placebo simulations
     ]
     ADDITIVE = []  # todo remove
 
