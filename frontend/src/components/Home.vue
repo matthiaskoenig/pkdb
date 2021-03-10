@@ -32,7 +32,7 @@
               <span class="ma-6">
               <b>PK-DB: pharmacokinetics database for individualized and stratified computational modeling</b><br/>
               <i>Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Bartsch F, Köller A, Ke DYJ, De Angelis S, König M.</i><br />
-              Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: <a href="https://doi.org/10.1093/nar/gkaa990">10.1093/nar/gkaa990</a>. Epub ahead of print. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/33151297/">33151297</a>
+      Nucleic Acids Res. 2021 Jan 8;49(D1):D1358-D1364. doi: <a href="https://doi.org/10.1093/nar/gkaa990">10.1093/nar/gkaa990</a>. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/33151297/">33151297</a>
               </span>
             </v-sheet>
 
