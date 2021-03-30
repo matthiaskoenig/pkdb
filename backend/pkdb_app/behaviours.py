@@ -80,13 +80,40 @@ class ValueableMapNotBlank(models.Model):
 
 
 class ValueableNotBlank(models.Model):
-    """ Valuable.
+    """Core class for storing numeric information.
 
     Adds fields to store values with their statistics.
+    This is reused to encode outputs, characteristica and interventions.
+
+    FIXME: support geometric means see https://github.com/matthiaskoenig/pkdb/issues/677
+
+    Redesign to:
+    # unit (for measurement type)
+    unit = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+
+    # single measurement
+    value = models.FloatField(null=True)
+
+    # group measurement (averaged over single measurements)
+    ListOfAverages:
+      average = models.FloatField(null=True)
+      average_type  # [mean, median, geometricMean, skewness]
+
+    # range
+    ListOfRanges:
+      min = models.FloatField(null=True)
+      max = models.FloatField(null=True)
+      range_type  # [range, confidenceInterval, interquartileRange]
+
+    # error
+    ListOfErrors
+      error = models.FloatField(null=True)
+      error_type # [sd, se, cv, variance]
     """
     value = models.FloatField(null=True)
     mean = models.FloatField(null=True)
     median = models.FloatField(null=True)
+    # calculation_type [arithmetic, geometric, None]
     min = models.FloatField(null=True)
     max = models.FloatField(null=True)
     sd = models.FloatField(null=True)

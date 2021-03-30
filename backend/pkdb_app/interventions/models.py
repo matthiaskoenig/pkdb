@@ -49,9 +49,6 @@ class AbstractIntervention(models.Model):
         return self.name
 
 
-
-
-
 class InterventionEx(Externable):
     """ Intervention (external curated layer)."""
 
@@ -71,7 +68,6 @@ class InterventionEx(Externable):
     interventionset = models.ForeignKey(
         InterventionSet, related_name="intervention_exs", on_delete=models.CASCADE
     )
-
 
 
 class Intervention(Accessible, Normalizable, AbstractIntervention):
