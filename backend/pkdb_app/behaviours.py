@@ -103,7 +103,7 @@ class ValueableNotBlank(models.Model):
     ListOfRanges:
       min = models.FloatField(null=True)
       max = models.FloatField(null=True)
-      range_type  # [range, confidenceInterval, interquartileRange]
+      range_type  # [range, confidenceInterval, interquartileRange, detectionLimit]
 
     # error
     ListOfErrors
