@@ -12,6 +12,8 @@ from ..interventions.models import Intervention
 class InterventionDocument(Document):
     pk = fields.IntegerField("pk")
     measurement_type = info_node("i_measurement_type")
+    calculation_type = info_node("i_calculation_type")
+
     form = info_node("i_form")
     route = info_node("i_route")
     application = info_node("i_application")
@@ -29,6 +31,8 @@ class InterventionDocument(Document):
             'raw': fields.TextField(analyzer='keyword'),
         }
     )
+    calculation_type_name = string_field('calculation_type_name')
+
     form_name = string_field('form_name')
     route_name = string_field('route_name')
     application_name = string_field('application_name')

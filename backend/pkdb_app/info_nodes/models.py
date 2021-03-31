@@ -44,9 +44,11 @@ class InfoNode(Sidable):
         Application = 'application', _('application')
         Tissue = 'tissue', _('tissue')
         Method = 'method', _('method')
+        CalculationType = 'calculation_type', _('calculation_type')
 
         Choice = 'choice', _('choice')
         Info_Node = 'info_node', _('info_node')
+
 
     class DTypes(models.TextChoices):
         """ Data Types. """
@@ -426,6 +428,18 @@ class Choice(AbstractInfoNode):
     @property
     def label(self):
         return self.info_node.label
+
+
+class CalculationType(AbstractInfoNode):
+    """ CalculationType
+    The way averages are calculated (e.g. mean, median, geometric mean)
+    """
+    info_node = models.OneToOneField(
+        InfoNode, related_name="calculation_type", on_delete=models.CASCADE, null=True
+    )
+
+    def __str__(self):
+        return self.info_node.name
 
 
 class Substance(AbstractInfoNode):

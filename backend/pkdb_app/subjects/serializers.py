@@ -15,7 +15,7 @@ from .models import (
     DataFile,
     Individual,
     CharacteristicaEx,
-    GroupEx )
+    GroupEx)
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer

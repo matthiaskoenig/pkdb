@@ -126,8 +126,8 @@ class ValueableNotBlank(models.Model):
 
 
 class MeasurementTypeable(ValueableNotBlank):
-
     measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.PROTECT)
+    calculation_type = models.ForeignKey('info_nodes.CalculationType', null=True, on_delete=models.PROTECT)
     substance = models.ForeignKey('info_nodes.Substance', null=True, on_delete=models.PROTECT)
     choice = models.ForeignKey('info_nodes.Choice', null=True, on_delete=models.PROTECT)
 
@@ -142,6 +142,10 @@ class MeasurementTypeable(ValueableNotBlank):
         return self.measurement_type.info_node.name
 
     @property
+    def calculation_type_name(self):
+        return self.calculation_type.info_node.name
+
+    @property
     def substance_name(self):
         if self.substance:
             return self.substance.info_node.name
@@ -149,7 +153,6 @@ class MeasurementTypeable(ValueableNotBlank):
     @property
     def choices(self):
         return self.measurement_type.choices_list()
-
 
     def _i(self, info_node):
         related_field = getattr(self, info_node)
@@ -159,6 +162,10 @@ class MeasurementTypeable(ValueableNotBlank):
     @property
     def i_measurement_type(self):
         return self._i("measurement_type")
+
+    @property
+    def i_calculation_type(self):
+        return self._i("calculation_type")
 
     @property
     def i_choice(self):

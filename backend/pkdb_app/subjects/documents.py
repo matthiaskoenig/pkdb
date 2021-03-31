@@ -17,6 +17,8 @@ characteristica_object_field = fields.ObjectField(
     properties={
         'pk': fields.IntegerField(),
         'measurement_type': info_node('i_measurement_type'),
+        'calculation_type': info_node('i_calculation_type'),
+
         'substance': info_node('i_substance'),
         'choice': info_node('i_choice'),
         'value': fields.FloatField('value'),
@@ -157,6 +159,12 @@ class GroupCharacteristicaDocument(Document):
             'raw': fields.TextField(analyzer='keyword'),
         }
     )
+    calculation_type = fields.TextField(
+        attr='calculation_type',
+        fields={
+            'raw': fields.TextField(analyzer='keyword'),
+        }
+    )
     choice = fields.TextField(
         fields={
             'raw': fields.TextField(analyzer='keyword'),
@@ -232,6 +240,12 @@ class IndividualCharacteristicaDocument(Document):
 
     measurement_type = fields.TextField(
         attr='measurement_type',
+        fields={
+            'raw': fields.TextField(analyzer='keyword'),
+        }
+    )
+    calculation_type = fields.TextField(
+        attr='calculation_type',
         fields={
             'raw': fields.TextField(analyzer='keyword'),
         }

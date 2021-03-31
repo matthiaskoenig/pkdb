@@ -46,6 +46,8 @@ class OutputDocument(Document):
     tissue = info_node('i_tissue')
     method = info_node('i_method')
     measurement_type = info_node('i_measurement_type')
+    calculation_type = info_node('i_calculation_type')
+
     substance = info_node('i_substance')
     choice = info_node('i_choice')
     label = string_field('label')
@@ -90,7 +92,11 @@ class OutputInterventionDocument(Document):
     label = string_field('label')
     output_type = string_field('output_type')
     measurement_type = string_field("measurement_type")
+    calculation_type = string_field("calculation_type")
+
     measurement_type_label = string_field("measurement_type_label")
+    calculation_type_label = string_field("calculation_type_label")
+
 
     substance = string_field("substance")
     substance_label = string_field("substance_label")
