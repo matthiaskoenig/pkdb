@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
+from pkdb_app.info_nodes.models import InfoNode
 from rest_framework import serializers
 from rest_framework.fields import empty
 from rest_framework.settings import api_settings
@@ -550,7 +551,7 @@ class ExSerializer(MappingSerializer):
             )
 
     def _validate_individual_characteristica(self, data_dict):
-        disabled = ["sd", "se", "min", "cv", "mean", "median"]
+        disabled = ["sd", "se", "min", "cv", "mean", "median", "calculation_type"]
         # max is allowed and represents the detection limit.
         disabled += map_field(disabled)
         self._validate_disabled_data(data_dict, disabled)
@@ -563,6 +564,8 @@ class ExSerializer(MappingSerializer):
         if data.get("group") or data.get("group_map"):
             disabled = ["value", "value_map"]
             self._validate_disabled_data(data, disabled)
+            if not data.get("calculation_type"):
+                data["calculation_type"] = InfoNode.objects.get(pk="sample-mean")
 
     @staticmethod
     def validate_group_individual_output(output):

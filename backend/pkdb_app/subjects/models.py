@@ -393,7 +393,8 @@ class SubjectCharacteristica(models.Model):
 
     @property
     def calculation_type(self):
-        return self.characteristica.calculation_type.info_node.name
+        if self.characteristica.calculation_type:
+            return self.characteristica.calculation_type.info_node.name
 
     @property
     def choice(self):

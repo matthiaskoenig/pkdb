@@ -29,7 +29,8 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
 
     calculation_type = utils.SlugRelatedField(
         slug_field="name",
-        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.CalculationType)
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.CalculationType),
+        allow_null=True,
     )
 
     choice = serializers.CharField(allow_null=True)

@@ -109,7 +109,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
+            for info_node in ['substance', 'measurement_type', 'calculation_type', 'form', 'application', 'route']:
                 if info_node in attrs:
                     if attrs[info_node] is not None:
                         attrs[info_node] = getattr(attrs[info_node], info_node)
@@ -280,6 +280,8 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
 
     measurement_type = SidNameLabelSerializer(read_only=True)
+    calculation_type = SidNameLabelSerializer(allow_null=True, read_only=True)
+
     route = SidNameLabelSerializer(allow_null=True, read_only=True)
     application = SidNameLabelSerializer(allow_null=True, read_only=True)
     form = SidNameLabelSerializer(allow_null=True, read_only=True)
@@ -322,6 +324,9 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     time_unit = serializers.CharField()
     measurement_type = serializers.SerializerMethodField()
     measurement_type_label = serializers.SerializerMethodField()
+
+    calculation_type = serializers.SerializerMethodField()
+    calculation_type_label = serializers.SerializerMethodField()
 
     choice = serializers.SerializerMethodField()
     choice_label = serializers.SerializerMethodField()
@@ -378,6 +383,14 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     def get_measurement_type_label(self, obj):
         if obj.measurement_type:
             return obj.measurement_type.label
+
+    def get_calculation_type(self, obj):
+        if obj.calculation_type:
+            return obj.calculation_type.sid
+
+    def get_calculation_type_label(self, obj):
+        if obj.calculation_type:
+            return obj.calculation_type.label
 
     def get_substance(self, obj):
         if obj.substance:

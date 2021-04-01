@@ -180,6 +180,7 @@ class Output(AbstractOutput, Outputable, Accessible):
                     se=self.se, count=self.group.count, mean=self.mean, sd=self.sd
                 )
 
+
 class OutputIntervention(Accessible, models.Model):
     output = models.ForeignKey(Output, on_delete=models.CASCADE)
     intervention = models.ForeignKey(Intervention, on_delete=models.CASCADE)
@@ -302,6 +303,18 @@ class OutputIntervention(Accessible, models.Model):
     @property
     def measurement_type_label(self):
         return self.output.measurement_type.info_node.label
+
+
+    @property
+    def calculation_type(self):
+        if self.output.calculation_type:
+            return self.output.calculation_type.info_node.sid
+
+
+    @property
+    def calculation_type_label(self):
+        if self.output.calculation_type:
+            return self.output.calculation_type.info_node.label
 
     @property
     def choice(self):

@@ -18,7 +18,6 @@ characteristica_object_field = fields.ObjectField(
         'pk': fields.IntegerField(),
         'measurement_type': info_node('i_measurement_type'),
         'calculation_type': info_node('i_calculation_type'),
-
         'substance': info_node('i_substance'),
         'choice': info_node('i_choice'),
         'value': fields.FloatField('value'),

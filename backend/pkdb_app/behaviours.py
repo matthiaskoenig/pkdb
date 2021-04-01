@@ -59,7 +59,7 @@ VALUE_FIELDS_NO_UNIT = VALUE_FIELDS_SAME_SCALE + ["sd", "se", "cv"]
 VALUE_FIELDS = VALUE_FIELDS_NO_UNIT + ["unit"]
 VALUE_MAP_FIELDS = map_field(VALUE_FIELDS)
 
-MEASUREMENTTYPE_FIELDS = ["measurement_type", "choice", "substance"] + VALUE_FIELDS
+MEASUREMENTTYPE_FIELDS = ["measurement_type", "calculation_type", "choice", "substance"] + VALUE_FIELDS
 EX_MEASUREMENTTYPE_FIELDS = MEASUREMENTTYPE_FIELDS + map_field(MEASUREMENTTYPE_FIELDS)
 
 
@@ -143,7 +143,8 @@ class MeasurementTypeable(ValueableNotBlank):
 
     @property
     def calculation_type_name(self):
-        return self.calculation_type.info_node.name
+        if self.calculation_type:
+            return self.calculation_type.info_node.name
 
     @property
     def substance_name(self):
