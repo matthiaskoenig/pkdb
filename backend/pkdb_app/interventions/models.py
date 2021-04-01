@@ -8,7 +8,7 @@ from pkdb_app.behaviours import Normalizable
 from pkdb_app.info_nodes.models import Application, Form, Route
 from ..behaviours import Externable, Accessible
 from ..subjects.models import DataFile
-from ..utils import CHAR_MAX_LENGTH
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 
 # -------------------------------------------------
@@ -38,7 +38,7 @@ class InterventionSet(models.Model):
 
 
 class AbstractIntervention(models.Model):
-    time = models.FloatField(null=True)
+    time = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_end = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
 

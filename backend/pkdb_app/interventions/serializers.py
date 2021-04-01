@@ -2,7 +2,7 @@
 Serializers for interventions.
 """
 import itertools
-from abc import ABC
+import re
 
 from rest_framework import serializers
 
@@ -69,6 +69,8 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         required=False,
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form))
 
+    time = serializers.CharField(allow_null=True)
+
     class Meta:
         model = Intervention
         fields = INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
@@ -119,6 +121,63 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         except ValueError as err:
             raise serializers.ValidationError(err)
         return super().validate(attrs)
+
+    def validate_time(self, value):
+        """
+        Check that time has a specific pattern.
+        """
+        validators = [self.validate_single,
+                      self.validate_concise_multiple,
+                      self.validate_multiple,
+                      self.raise_all_errors]
+
+        self._validate_time(value, validators)
+
+    @staticmethod
+    def raise_all_errors(data, error_log):
+        raise serializers.ValidationError(error_log)
+
+    @staticmethod
+    def _validate_time(value, validators):
+        error_log = []
+        valid = False
+        validator_iter = iter(validators)
+        while not valid:
+            validator = next(validator_iter)
+            valid, msg = validator(value, error_log)
+            if not valid:
+                error_log.append(msg)
+
+    @staticmethod
+    def validate_single(data, error_log):
+        try:
+            return True, float(data)
+        except (TypeError, ValueError):
+            return False, {data: "Value is not a valid number."}
+
+    @staticmethod
+    def validate_concise_multiple(data, error_log):
+        reg_match = "S[-+]?[0-9]*\.?[0-9]+T[0-9]*\.?[0-9]+R[0-9]+$"
+        if re.match(reg_match, data):
+            return True, data
+        else:
+            return False, {data: f"Value does not match the following regular expression: '{reg_match}'."}
+
+    @staticmethod
+    def validate_multiple(data, error_log):
+        time_points = [x.strip() for x in data.split('|')]
+        validators = [InterventionSerializer.validate_single,
+                      InterventionSerializer.validate_concise_multiple,
+                      InterventionSerializer.raise_all_errors]
+        if len(time_points) > 1:
+            for time_point in time_points:
+                InterventionSerializer._validate_time(time_point, validators)
+            return True, data
+        else:
+            return False, "Value does not contain |."
+
+
+
 
 
 class InterventionExSerializer(MappingSerializer):

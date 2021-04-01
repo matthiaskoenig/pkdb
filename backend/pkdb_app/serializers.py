@@ -9,7 +9,6 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from pkdb_app.info_nodes.models import InfoNode
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.settings import api_settings
 
 from pkdb_app.behaviours import map_field

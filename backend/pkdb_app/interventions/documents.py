@@ -1,7 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
-from ..documents import string_field, elastic_settings, study_field, basic_object, info_node
+from ..documents import string_field, elastic_settings, study_field, info_node
 from ..interventions.models import Intervention
 
 
@@ -21,8 +21,7 @@ class InterventionDocument(Document):
     substance = info_node("i_substance")
 
     time_unit = string_field('time_unit')
-
-    time = fields.FloatField()
+    time = string_field('time')
     time_end = fields.FloatField()
 
     measurement_type_name = fields.TextField(
