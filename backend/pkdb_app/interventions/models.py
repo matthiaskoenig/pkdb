@@ -125,5 +125,3 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
         if self.form:
             return self.form.info_node.name
         return None
-
-
