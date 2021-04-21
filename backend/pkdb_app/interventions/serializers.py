@@ -98,7 +98,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 _validate_required_key_and_value(data, "time")
                 _validate_required_key_and_value(data, "time_unit")
                 application = data["application"]
-                allowed_applications = ["constant infusion", "single dose"]
+                allowed_applications = ["constant infusion", "single dose", "multiple dose"]
                 if application not in allowed_applications:
                     raise serializers.ValidationError(
                         f"Allowed applications for measurement_type <{DOSING}> are "
