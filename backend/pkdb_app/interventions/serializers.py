@@ -3,9 +3,8 @@ Serializers for interventions.
 """
 import itertools
 import re
-
 from rest_framework import serializers
-
+import numpy as np
 from pkdb_app import utils
 from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
@@ -150,13 +149,28 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def validate_single(data, error_log):
-        try:
-            return True, float(data)
-        except (TypeError, ValueError):
-            return False, {data: "Value is not a valid number."}
+        if data is not None:
+            try:
+                return True, float(data)
+            except (TypeError, ValueError):
+                return False, {data: "Value is not a valid number."}
+        print(data)
+        return True, data
+
+    @staticmethod
+    def is_string(data):
+
+        if not isinstance(data, str):
+            return False, f"<{data}> is not a string."
+        else:
+            return True, ""
 
     @staticmethod
     def validate_concise_multiple(data, error_log):
+        is_string, error = InterventionSerializer.is_string(data)
+        if not is_string:
+            return False, {"time": error}
+
         reg_match = "S[-+]?[0-9]*\.?[0-9]+T[0-9]*\.?[0-9]+R[0-9]+$"
         if re.match(reg_match, data):
             return True, data
@@ -165,6 +179,10 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def validate_multiple(data, error_log):
+        is_string, error = InterventionSerializer.is_string(data)
+        if not is_string:
+            return False, {"time": error}
+
         time_points = [x.strip() for x in data.split('|')]
         validators = [InterventionSerializer.validate_single,
                       InterventionSerializer.validate_concise_multiple,
@@ -174,10 +192,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 InterventionSerializer._validate_time(time_point, validators)
             return True, data
         else:
-            return False, "Value does not contain |."
-
-
-
+            return False, "Value does not contain |"
 
 
 class InterventionExSerializer(MappingSerializer):
