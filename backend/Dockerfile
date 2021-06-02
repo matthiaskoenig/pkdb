@@ -9,7 +9,7 @@ RUN pip install -r requirements.txt
 COPY . /code
 WORKDIR /code
 
-RUN pip install -e . --default-timeout=50
+RUN pip install -e .
 
 EXPOSE 8000
 CMD newrelic-admin run-program gunicorn --bind 0.0.0.0:$PORT --access-logfile - pkdb_app.wsgi:application

@@ -45,7 +45,7 @@ services:
     restart: always
     image: elasticsearch:7.9.2
     environment:
-      - "ES_JAVA_OPTS=-Xms3g -Xmx3g"
+      - "ES_JAVA_OPTS=-Xms3g -Xmx12g"
       - bootstrap.memory_lock=true
       - discovery.type=single-node
       - cluster.name=elasticsearch
