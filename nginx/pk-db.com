@@ -43,10 +43,10 @@ server {
         include /etc/nginx/snippets/ssl.conf;
 
         client_max_body_size 100m;
-        proxy_connect_timeout       600;
-        proxy_send_timeout          600;
-        proxy_read_timeout          600;
-        send_timeout                600;
+        proxy_connect_timeout       900;
+        proxy_send_timeout          900;
+        proxy_read_timeout          900;
+        send_timeout                900;
 
         location / {
                 # return 200 "ssl on proxy";
