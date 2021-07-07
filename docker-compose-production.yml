@@ -80,7 +80,7 @@ services:
     depends_on:
       - postgres
       - elasticsearch
-    command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 --timeout 240 --bind 0.0.0.0:8000"
+    command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 --timeout 900 --bind 0.0.0.0:8000"
 
   frontend:
     build:
