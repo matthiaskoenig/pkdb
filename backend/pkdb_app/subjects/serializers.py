@@ -100,7 +100,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
                 if info_node in attrs:
                     if attrs[info_node] is not None:
                         attrs[info_node] = getattr(attrs[info_node], info_node)
-
+            print(attrs)
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs, time_allowed=False)["choice"]
 
         except ValueError as err:

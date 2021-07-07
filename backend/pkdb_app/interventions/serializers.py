@@ -131,6 +131,8 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                       self.raise_all_errors]
 
         self._validate_time(value, validators)
+        return value
+
 
     @staticmethod
     def raise_all_errors(data, error_log):
@@ -154,7 +156,6 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 return True, float(data)
             except (TypeError, ValueError):
                 return False, {data: "Value is not a valid number."}
-        print(data)
         return True, data
 
     @staticmethod
@@ -361,7 +362,7 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     form = SidNameLabelSerializer(allow_null=True, read_only=True)
     substance = SidNameLabelSerializer(allow_null=True, read_only=True)
     choice = SidNameLabelSerializer(allow_null=True, read_only=True)
-
+    time = serializers.CharField(allow_null=True)
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -393,7 +394,7 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     application = serializers.SerializerMethodField()
     application_label = serializers.SerializerMethodField()
 
-    time = serializers.FloatField()
+    time = serializers.CharField()
     time_end = serializers.FloatField()
     time_unit = serializers.CharField()
     measurement_type = serializers.SerializerMethodField()
