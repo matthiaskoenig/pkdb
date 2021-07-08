@@ -9,6 +9,7 @@ from pkdb_app.comments.serializers import DescriptionSerializer, CommentSerializ
 from pkdb_app.data.documents import SubSetDocument
 from pkdb_app.data.models import DataSet, Data, SubSet, Dimension, DataPoint
 from pkdb_app.outputs.models import Output
+from pkdb_app.subjects.models import Individual
 from pkdb_app.outputs.pk_calculation import pkoutputs_from_timecourse
 from pkdb_app.outputs.serializers import OUTPUT_FOREIGN_KEYS, OUTPUT_FIELDS
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, StudySmallElasticSerializer
@@ -71,7 +72,7 @@ class SubSetSerializer(ExSerializer):
         return subset_instance
 
     def validate_shared(self, shared):
-        if isinstance(shared,str):
+        if isinstance(shared , str):
             raise serializers.ValidationError({"shared": "Shared field has to be a list not a string.", "detail": shared})
 
 
@@ -166,6 +167,9 @@ class SubSetSerializer(ExSerializer):
             y_data = shared_data[shared_data["dimension"] == 1]
 
             if len(x_data) != 1 or len(y_data) != 1:
+                if shared == ['individual']:
+                    print(int(shared_values))
+                    shared_values = Individual.objects.get(pk=int(shared_values)).name
                 raise serializers.ValidationError(
                     f"Dimensions <{dimensions}> do not match in respect to the shared fields."
                     f"The shared field <{shared}> with values <{shared_values}>"
