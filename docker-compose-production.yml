@@ -67,7 +67,8 @@ services:
       - ./backend:/code
       - django_static:/static
       - django_media:/media
-    env_file: .env.production
+    env_file:
+      - .env.production
     expose:
       - "8000"
       - "25"
