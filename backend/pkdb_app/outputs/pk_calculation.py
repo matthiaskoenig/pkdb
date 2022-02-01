@@ -32,30 +32,23 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
     outputs = []
     timecourse = subset.timecourse
     dosing = subset.get_single_dosing(timecourse["substance"])
-
     # dosing information must exist
-    if not dosing:
-        return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
-
+    print("here I am")
     if timecourse["measurement_type_name"] == "concentration":
         variables = _timecourse_to_pkdict(timecourse, dosing)
         ctype = variables.pop("ctype", None)
-        from pprint import pprint
-        pprint(variables)
-        if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
-            pkinf = pharmacokinetics.TimecoursePK(**variables)
-        else:
+        pkinf = None
+        if dosing:
+            if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
+                pkinf = pharmacokinetics.TimecoursePK(**variables)
+        if not pkinf:
             _ = variables.pop("dosing", None)
             _ = variables.pop("intervention_time", None)
             pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
         pk = pkinf.pk
-
-        pprint(variables)
-        pprint(pk)
-
         key_mapping = {
             "auc": MeasurementType.objects.get(info_node__name="auc_end"),
             "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),
@@ -87,7 +80,7 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
                 output_dict["group"] =  get_or_none(id=timecourse["group"],model=Group)
                 output_dict["individual"] = get_or_none(timecourse["individual"], model=Individual)
                 output_dict["interventions"] = timecourse["interventions"]
-                output_dict["study"] = dosing.study
+                output_dict["study"] = subset.study
                 if output_dict["measurement_type"].info_node.name == "auc_end":
                     output_dict["time"] = max(timecourse["time"])
                     output_dict["time_unit"] = str(timecourse["time_unit"])
