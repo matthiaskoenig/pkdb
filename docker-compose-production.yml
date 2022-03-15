@@ -36,6 +36,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.production
     environment:
       - POSTGRES_DB=${PKDB_DB_NAME}
       - POSTGRES_USER=${PKDB_DB_USER}
