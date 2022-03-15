@@ -64,6 +64,10 @@ export default {
         {"username": "SaraD-hub", "first_name": "Sara", "last_name": "De Angelis",},
         {"username": "balcisue", "first_name": "Sükrü", "last_name": "Balci",},
         {"username": "paula-ogata", "first_name": "Paula", "last_name": "Ogata",},
+        {"username": "lepujolh", "first_name": "Helen", "last_name": "Leal",},
+        {"username": "stemllb", "first_name": "Beatrice", "last_name": "Stemmer Mallol",},
+        {"username": "jonaspk98", "first_name": "Jonas", "last_name": "Küttner",},
+
       ],
     }
   },
