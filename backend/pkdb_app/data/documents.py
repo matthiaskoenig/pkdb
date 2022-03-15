@@ -110,6 +110,7 @@ class SubSetDocument(Document):
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
         return super(SubSetDocument, self).get_queryset().prefetch_related("data_points__outputs")
+
     class Django:
         model = SubSet
         # Ignore auto updating of Elasticsearch when a model is saved/deleted

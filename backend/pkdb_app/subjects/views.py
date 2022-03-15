@@ -52,6 +52,7 @@ class GroupViewSet(AccessView):
     """
     document = GroupDocument
     serializer_class = GroupElasticSerializer
+    ignore = [404]
     lookup_field = 'id'
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
@@ -89,6 +90,7 @@ class IndividualViewSet(AccessView):
     document = IndividualDocument
     serializer_class = IndividualElasticSerializer
     lookup_field = 'id'
+    ignore = [404]
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     pagination_class = CustomPagination
     search_fields = (

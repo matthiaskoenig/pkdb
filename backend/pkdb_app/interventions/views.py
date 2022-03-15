@@ -18,6 +18,7 @@ class ElasticInterventionViewSet(AccessView):
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
+    ignore = [404]
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         'name',

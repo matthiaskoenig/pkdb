@@ -1,10 +1,15 @@
+from django.utils.decorators import method_decorator
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
     IdsFilterBackend,
     MultiMatchSearchFilterBackend
 )
-from pkdb_app.documents import AccessView
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.views import APIView
+
+from pkdb_app.documents import AccessView, UUID_PARAM
 from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
 from pkdb_app.data.serializers import DataAnalysisSerializer, SubSetElasticSerializer, TimecourseSerializer
 
@@ -17,6 +22,7 @@ class DataAnalysisViewSet(AccessView):
     serializer_class = DataAnalysisSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
+    ignore = [404]
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         'study_sid',
@@ -52,18 +58,20 @@ class DataAnalysisViewSet(AccessView):
         },
     }
 
-
-class SubSetViewSet(AccessView):
+@method_decorator(name='list', decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM]))
+class SubSetViewSet(BaseDocumentViewSet, APIView):
     """ Endpoint to query subsets (timecourses and scatters)
 
     The subets endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a
     timecourse or scatter. A timecourse subset consists of outputs measured at different time points. A scatter subset
     contains correlated data which commonly are displayed as scatter plots.
     """
+    #document_uid_field = "id"
+    lookup_field = "id"
+    ignore = [404]
     document = SubSetDocument
     serializer_class = SubSetElasticSerializer
     pagination_class = CustomPagination
-    lookup_field = "id"
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
          "name",
@@ -84,6 +92,11 @@ class SubSetViewSet(AccessView):
         "name": "name.raw",
         "data_type": "data_type.raw"
     }
+    @swagger_auto_schema(responses={200: SubSetElasticSerializer(many=False)})
+    def get_object(self):
+        """ Test """
+        return super().get_object()
+
 class TimecourseViewSet(AccessView):
     """ Endpoint to query timecourses
 
