@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
+from pkdb_app.info_nodes.models import InfoNode
 from rest_framework import serializers
-from rest_framework.fields import empty
 from rest_framework.settings import api_settings
 
 from pkdb_app.behaviours import map_field
@@ -213,7 +213,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 if field == "name":
                     if len(values) == 1:
                         raise serializers.ValidationError(
-                            f"names must be split and not left as <{values}>. "
+                            f"Names must be split and not left as <{values}>. "
                             f"Otherwise UniqueConstrain of name is violated."
                         )
             else:
@@ -255,14 +255,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
         values = [v.strip() for v in values]
         if len(values) != 2:
             raise serializers.ValidationError(
-                ["field has wrong pattern 'col_value'=='cell_value'", subset]
+                ["Field has wrong pattern 'col_value'=='cell_value'.", subset]
             )
 
         try:
             df[values[0]]
         except KeyError:
             raise serializers.ValidationError(
-                {"subset": f"your source file has no column <{values[0]}>"}
+                {"subset": f"Your source file has no column <{values[0]}>."}
             )
         try:
             df = df.loc[df[values[0]] == values[1]]
@@ -272,7 +272,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         if len(df) == 0:
             raise serializers.ValidationError(
                 [
-                    f"the cell value <{values[1]}>' is missing in column <{values[0]}>",
+                    f"The cell value <{values[1]}> is missing in column <{values[0]}>.",
                     subset,
                 ]
             )
@@ -324,7 +324,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         except Exception as e:
             raise serializers.ValidationError(
                 {
-                    "source": "cannot read tsv",
+                    "source": "Cannot read tsv.",
                     "detail": {"source": source, "subset": subset},
                 }
             )
@@ -350,7 +350,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                     values = [v.strip() for v in values]
                     if len(values) != 2 or values[0] != "col":
                         raise serializers.ValidationError(
-                            ["field has wrong pattern col=='col_value'", data]
+                            ["Field has wrong pattern col=='col_value'.", data]
                         )
                     try:
                         entry_value = getattr(entry, values[1])
@@ -359,7 +359,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
                         raise serializers.ValidationError(
                             [
-                                f"header key <{values[1]}> does not exist in <{DataFile.objects.get(pk=source).file}>.",
+                                f"Header key <{values[1]}> does not exist in <{DataFile.objects.get(pk=source).file}>.",
                                 data
                             ]
                         )
@@ -434,7 +434,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if len(mappings) == 0 and len(entries) == 0:
                 raise serializers.ValidationError(
                     {"source": "Source is provided but the mapping operator "
-                               "'==' is not used in any field"})
+                               "'==' is not used in any field."})
 
 
 
@@ -450,7 +450,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             if not any([datafile.file.name.endswith(ending)
                         for ending in allowed_endings]):
                 raise serializers.ValidationError(
-                    {"figure": f"{datafile.file.name} must end with {allowed_endings}"})
+                    {"figure": f"{datafile.file.name} must end with {allowed_endings}."})
 
     def to_internal_value(self, data):
         data = self.transform_map_fields(data)
@@ -485,11 +485,11 @@ class ExSerializer(MappingSerializer):
                     ).pk
                 except ObjectDoesNotExist:
                     raise serializers.ValidationError(
-                        f'group <{data.get("group")}> does not exist, check groups.'
+                        f'Group <{data.get("group")}> does not exist, check groups.'
                     )
                 except MultipleObjectsReturned:
                     raise serializers.ValidationError(
-                        f'group <{data.get("group")}> is defined multiple times.'
+                        f'Group <{data.get("group")}> is defined multiple times.'
                     )
 
         if "individual" in data:
@@ -501,13 +501,13 @@ class ExSerializer(MappingSerializer):
 
                 except ObjectDoesNotExist:
                     raise serializers.ValidationError(
-                        f'individual: individual <{data.get("individual")}> does '
+                        f'individual: Individual <{data.get("individual")}> does '
                         f'not exist, check individuals.'
                     )
                 except MultipleObjectsReturned:
                     raise serializers.ValidationError(
-                        f'individual: individual <{data.get("individual")}> is '
-                        f'defined multiple times'
+                        f'individual: Individual <{data.get("individual")}> is '
+                        f'defined multiple times.'
                     )
 
         if "interventions" in data:
@@ -526,7 +526,7 @@ class ExSerializer(MappingSerializer):
                         )
                     except ObjectDoesNotExist:
                         raise serializers.ValidationError(
-                            f"intervention <{intervention}> does not exist, check interventions."
+                            f"Intervention <{intervention}> does not exist, check interventions."
                         )
                 data["interventions"] = interventions
             else:
@@ -550,7 +550,7 @@ class ExSerializer(MappingSerializer):
             )
 
     def _validate_individual_characteristica(self, data_dict):
-        disabled = ["sd", "se", "min", "cv", "mean", "median"]
+        disabled = ["sd", "se", "min", "cv", "mean", "median", "calculation_type"]
         # max is allowed and represents the detection limit.
         disabled += map_field(disabled)
         self._validate_disabled_data(data_dict, disabled)
@@ -563,6 +563,8 @@ class ExSerializer(MappingSerializer):
         if data.get("group") or data.get("group_map"):
             disabled = ["value", "value_map"]
             self._validate_disabled_data(data, disabled)
+            if not data.get("calculation_type"):
+                data["calculation_type"] = InfoNode.objects.get(pk="sample-mean")
 
     @staticmethod
     def validate_group_individual_output(output):

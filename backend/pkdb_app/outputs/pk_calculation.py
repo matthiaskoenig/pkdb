@@ -23,34 +23,32 @@ Individual = apps.get_model('subjects.Individual')
 Group = apps.get_model('subjects.Group')
 
 
-def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
+def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
     """Calculates pharmacokinetics outputs for timecourse.
 
     :param subset: models.SubSet
     :return:
     """
     outputs = []
-    dosing = subset.get_single_dosing()
     timecourse = subset.timecourse
+    dosing = subset.get_single_dosing(timecourse["substance"])
     # dosing information must exist
-    if not dosing:
-        return outputs
 
     # pharmacokinetics are only calculated on normalized concentrations
-
+    print("here I am")
     if timecourse["measurement_type_name"] == "concentration":
         variables = _timecourse_to_pkdict(timecourse, dosing)
         ctype = variables.pop("ctype", None)
-
-        if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
-            pkinf = pharmacokinetics.TimecoursePK(**variables)
-        else:
+        pkinf = None
+        if dosing:
+            if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
+                pkinf = pharmacokinetics.TimecoursePK(**variables)
+        if not pkinf:
             _ = variables.pop("dosing", None)
             _ = variables.pop("intervention_time", None)
             pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
         pk = pkinf.pk
-
         key_mapping = {
             "auc": MeasurementType.objects.get(info_node__name="auc_end"),
             "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),
@@ -82,7 +80,7 @@ def pkoutputs_from_timecourse(subset:Subset) -> List[Dict]:
                 output_dict["group"] =  get_or_none(id=timecourse["group"],model=Group)
                 output_dict["individual"] = get_or_none(timecourse["individual"], model=Individual)
                 output_dict["interventions"] = timecourse["interventions"]
-                output_dict["study"] = dosing.study
+                output_dict["study"] = subset.study
                 if output_dict["measurement_type"].info_node.name == "auc_end":
                     output_dict["time"] = max(timecourse["time"])
                     output_dict["time_unit"] = str(timecourse["time_unit"])
@@ -130,12 +128,17 @@ def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
         if dosing.substance.pk == tc["substance"]:
             # pharmacokinetics is only calculated for single dose experiments
             # where the applied substance is the measured substance!
-
             if MeasurementType.objects.get(info_node__name="restricted dosing")._is_valid_unit(dosing.unit):
                 if dosing.value is not None:
                     pk_dict["dose"] = Q_(dosing.value, dosing.unit)
                 else:
                     warnings.warn(f"restricted dosing requires value: {dosing}")
-                if dosing.time is not None:
-                    pk_dict["intervention_time"] = Q_(dosing.time, dosing.time_unit)
+                try:
+                    dosing_time = float(dosing.time)
+                except (TypeError, ValueError):
+                    dosing_time = None
+                    warnings.warn(f"Intervention time is not used for pk calculation. : {dosing_time}")
+
+                if dosing_time is not None:
+                    pk_dict["intervention_time"] = Q_(dosing_time, dosing.time_unit)
     return pk_dict

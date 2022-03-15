@@ -50,6 +50,7 @@ export default {
   data() {
     return {
       users: [
+          // FIXME: NO HARD-CODING OF USERS
         {"username": "mkoenig", "first_name": "Matthias", "last_name": "König"},
         {"username": "janekg", "first_name": "Jan", "last_name": "Grzegorzewski",},
         {"username": "dimitra", "first_name": "Dimitra", "last_name": "Eleftheriadou"},
@@ -62,6 +63,11 @@ export default {
         {"username": "dannythekey", "first_name": "Danny", "last_name": "Ke",},
         {"username": "SaraD-hub", "first_name": "Sara", "last_name": "De Angelis",},
         {"username": "balcisue", "first_name": "Sükrü", "last_name": "Balci",},
+        {"username": "paula-ogata", "first_name": "Paula", "last_name": "Ogata",},
+        {"username": "lepujolh", "first_name": "Helen", "last_name": "Leal",},
+        {"username": "stemllb", "first_name": "Beatrice", "last_name": "Stemmer Mallol",},
+        {"username": "jonaspk98", "first_name": "Jonas", "last_name": "Küttner",},
+
       ],
     }
   },

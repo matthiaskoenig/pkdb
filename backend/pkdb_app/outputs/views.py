@@ -15,6 +15,7 @@ class OutputInterventionViewSet(AccessView):
     serializer_class = OutputInterventionSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
+    ignore = [404]
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         'study',
@@ -82,6 +83,7 @@ class ElasticOutputViewSet(AccessView):
     This includes more complex results which cannot be directly measured but are calculated from the measured data.
     In the outputs related subjects and interventions are referenced.
     """
+    ignore = [404]
     document = OutputDocument
     serializer_class = OutputElasticSerializer
     pagination_class = CustomPagination

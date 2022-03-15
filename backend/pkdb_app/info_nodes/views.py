@@ -40,6 +40,7 @@ class InfoNodeViewSet(viewsets.ModelViewSet):
 class InfoNodeElasticViewSet(BaseDocumentViewSet):
     pagination_class = CustomPagination
     document = InfoNodeDocument
+    ignore = [404]
     serializer_class = InfoNodeElasticSerializer
     document_uid_field = "sid__raw"
     lookup_field = 'sid'

@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db.models import Q
 from drf_yasg.utils import swagger_serializer_method
+from pkdb_app.info_nodes.models import InfoNode
 from rest_framework import serializers
 
 from pkdb_app.behaviours import map_field, MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS
@@ -15,7 +16,7 @@ from .models import (
     DataFile,
     Individual,
     CharacteristicaEx,
-    GroupEx )
+    GroupEx)
 from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
     CommentElasticSerializer
 from ..serializers import WrongKeyValidationSerializer, ExSerializer, ReadSerializer
@@ -95,11 +96,10 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            for info_node in ['substance', 'measurement_type']:
+            for info_node in ['substance', 'measurement_type', 'calculation_type']:
                 if info_node in attrs:
                     if attrs[info_node] is not None:
                         attrs[info_node] = getattr(attrs[info_node], info_node)
-
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs, time_allowed=False)["choice"]
 
         except ValueError as err:
@@ -147,12 +147,12 @@ class GroupSerializer(ExSerializer):
             )
     @staticmethod
     def _validate_group_characteristica_count(characteristica, group_count):
-        if int(characteristica.get("count",group_count)) > int(group_count):
+        if int(characteristica.get("count", group_count)) > int(group_count):
             raise serializers.ValidationError(
                 {
                     'characteristica': f"A characteristica count has to be smaller or equal to its group 'count'.",
                     'details': {
-                        "characteristica":characteristica,
+                        "characteristica": characteristica,
                         "group_count": group_count,
                     }
                 }
@@ -174,6 +174,8 @@ class GroupSerializer(ExSerializer):
             disabled = ['value']
             self._validate_disabled_data(characteristica_single, disabled)
             self._validate_group_characteristica_count(characteristica_single, attrs.get("count"))
+            if not characteristica_single.get("calculation_type"):
+                characteristica_single["calculation_type"] = InfoNode.objects.get(pk="sample-mean").calculation_type
 
         return super().validate(attrs)
 
@@ -598,6 +600,8 @@ class IndividualSetSerializer(ExSerializer):
 class CharacteristicaElasticBigSerializer(ReadSerializer):
     measurement_type = serializers.CharField()
     substance = serializers.CharField(allow_null=True)
+    calculation_type = serializers.CharField(allow_null=True)
+
     pk = serializers.IntegerField(source='id')
 
     class Meta:
@@ -631,6 +635,7 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
     se = serializers.FloatField(allow_null=True)
     cv = serializers.FloatField(allow_null=True)
     measurement_type = SidNameLabelSerializer()
+    calculation_type = SidNameLabelSerializer(allow_null=True)
     substance = SidNameLabelSerializer(allow_null=True)
     choice = SidNameLabelSerializer(allow_null=True)
     group_count = serializers.IntegerField(allow_null=True)
@@ -735,9 +740,11 @@ class GroupCharacteristicaSerializer(serializers.Serializer):
     characteristica_pk = serializers.IntegerField()
     count = serializers.IntegerField()
 
-    measurement_type =serializers.CharField()
+    measurement_type = serializers.CharField()
+    calculation_type = serializers.CharField()
+
     choice = serializers.CharField()
-    substance =serializers.CharField()
+    substance = serializers.CharField()
 
     value = serializers.FloatField()
     mean = serializers.FloatField()
@@ -765,6 +772,8 @@ class IndividualCharacteristicaSerializer(serializers.Serializer):
     count = serializers.IntegerField()
 
     measurement_type = serializers.CharField()
+    calculation_type = serializers.CharField()
+
     choice = serializers.CharField()
     substance = serializers.CharField()
 

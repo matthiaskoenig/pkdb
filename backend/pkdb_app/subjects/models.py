@@ -392,6 +392,11 @@ class SubjectCharacteristica(models.Model):
         return self.characteristica.measurement_type.info_node.name
 
     @property
+    def calculation_type(self):
+        if self.characteristica.calculation_type:
+            return self.characteristica.calculation_type.info_node.name
+
+    @property
     def choice(self):
         if self.characteristica.choice:
             return self.characteristica.choice.info_node.name

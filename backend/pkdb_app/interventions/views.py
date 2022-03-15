@@ -18,6 +18,7 @@ class ElasticInterventionViewSet(AccessView):
     serializer_class = InterventionElasticSerializer
     pagination_class = CustomPagination
     lookup_field = "id"
+    ignore = [404]
     filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
     search_fields = (
         'name',
@@ -44,7 +45,7 @@ class ElasticInterventionViewSet(AccessView):
         'name': 'name.raw',
         'choice': 'choice.raw',
         'time_unit': 'time_unit.raw',
-        'time': 'time',
+        'time': 'time.raw',
         'value': 'value',
         'mean': 'mean',
         'median': 'median',
@@ -144,7 +145,7 @@ class ElasticInterventionAnalysisViewSet(AccessView):
         'application': 'application.raw',
         'time_unit': 'time_unit.raw',
         'unit': 'unit.raw',
-        'time': 'time',
+        'time': 'time.raw',
         'value': 'value',
         'mean': 'mean',
         'median': 'median',

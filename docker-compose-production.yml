@@ -36,6 +36,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.production
     environment:
       - POSTGRES_DB=${PKDB_DB_NAME}
       - POSTGRES_USER=${PKDB_DB_USER}
@@ -45,7 +47,7 @@ services:
     restart: always
     image: elasticsearch:7.9.2
     environment:
-      - "ES_JAVA_OPTS=-Xms3g -Xmx3g"
+      - "ES_JAVA_OPTS=-Xms3g -Xmx12g"
       - bootstrap.memory_lock=true
       - discovery.type=single-node
       - cluster.name=elasticsearch
@@ -67,7 +69,8 @@ services:
       - ./backend:/code
       - django_static:/static
       - django_media:/media
-    env_file: .env.production
+    env_file:
+      - .env.production
     expose:
       - "8000"
       - "25"
@@ -80,7 +83,7 @@ services:
     depends_on:
       - postgres
       - elasticsearch
-    command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 --timeout 240 --bind 0.0.0.0:8000"
+    command: bash -c "/usr/local/bin/gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 --timeout 900 --bind 0.0.0.0:8000"
 
   frontend:
     build:

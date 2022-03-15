@@ -103,6 +103,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self.validate_group_individual_output(attrs)
 
         _validate_required_key(attrs, "measurement_type")
+        #_validate_required_key(attrs, "calculation_type")
         _validate_required_key(attrs, "substance")
         _validate_required_key(attrs, "tissue")
         _validate_required_key(attrs, "interventions")
@@ -112,7 +113,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         try:
             attrs['measurement_type'] = attrs['measurement_type'].measurement_type
 
-            for key in ['substance', 'tissue', 'method']:
+            for key in ['substance', 'tissue', 'method', "calculation_type"]:
                 if key in attrs:
                     if attrs[key] is not None:
                         attrs[key] = getattr(attrs[key], key)
@@ -333,6 +334,9 @@ class OutputInterventionSerializer(serializers.Serializer):
     measurement_type = serializers.CharField()
     measurement_type_label = serializers.CharField()
 
+    calculation_type = serializers.CharField()
+    calculation_type_label = serializers.CharField()
+
     choice = serializers.CharField()
     choice_label = serializers.CharField()
 
@@ -363,6 +367,7 @@ class SmallOutputSerializer(serializers.ModelSerializer):
 
     substance = SidNameLabelSerializer(allow_null=True)
     measurement_type = SidNameLabelSerializer(allow_null=True)
+    calculation_type = SidNameLabelSerializer(allow_null=True)
     tissue = SidNameLabelSerializer(allow_null=True)
     method = SidNameLabelSerializer(allow_null=True)
     choice = SidNameLabelSerializer(allow_null=True)
@@ -399,6 +404,7 @@ class OutputElasticSerializer(serializers.ModelSerializer):
 
     substance = SidNameLabelSerializer(allow_null=True)
     measurement_type = SidNameLabelSerializer(allow_null=True)
+    calculation_type = SidNameLabelSerializer(allow_null=True)
     tissue = SidNameLabelSerializer(allow_null=True)
     method = SidNameLabelSerializer(allow_null=True)
     choice = SidNameLabelSerializer(allow_null=True)

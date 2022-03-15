@@ -59,7 +59,7 @@ VALUE_FIELDS_NO_UNIT = VALUE_FIELDS_SAME_SCALE + ["sd", "se", "cv"]
 VALUE_FIELDS = VALUE_FIELDS_NO_UNIT + ["unit"]
 VALUE_MAP_FIELDS = map_field(VALUE_FIELDS)
 
-MEASUREMENTTYPE_FIELDS = ["measurement_type", "choice", "substance"] + VALUE_FIELDS
+MEASUREMENTTYPE_FIELDS = ["measurement_type", "calculation_type", "choice", "substance"] + VALUE_FIELDS
 EX_MEASUREMENTTYPE_FIELDS = MEASUREMENTTYPE_FIELDS + map_field(MEASUREMENTTYPE_FIELDS)
 
 
@@ -80,13 +80,40 @@ class ValueableMapNotBlank(models.Model):
 
 
 class ValueableNotBlank(models.Model):
-    """ Valuable.
+    """Core class for storing numeric information.
 
     Adds fields to store values with their statistics.
+    This is reused to encode outputs, characteristica and interventions.
+
+    FIXME: support geometric means see https://github.com/matthiaskoenig/pkdb/issues/677
+
+    Redesign to:
+    # unit (for measurement type)
+    unit = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
+
+    # single measurement
+    value = models.FloatField(null=True)
+
+    # group measurement (averaged over single measurements)
+    ListOfAverages:
+      average = models.FloatField(null=True)
+      average_type  # [mean, median, geometricMean, skewness]
+
+    # range
+    ListOfRanges:
+      min = models.FloatField(null=True)
+      max = models.FloatField(null=True)
+      range_type  # [range, confidenceInterval, interquartileRange, detectionLimit]
+
+    # error
+    ListOfErrors
+      error = models.FloatField(null=True)
+      error_type # [sd, se, cv, variance]
     """
     value = models.FloatField(null=True)
     mean = models.FloatField(null=True)
     median = models.FloatField(null=True)
+    # calculation_type [arithmetic, geometric, None]
     min = models.FloatField(null=True)
     max = models.FloatField(null=True)
     sd = models.FloatField(null=True)
@@ -99,8 +126,8 @@ class ValueableNotBlank(models.Model):
 
 
 class MeasurementTypeable(ValueableNotBlank):
-
     measurement_type = models.ForeignKey('info_nodes.MeasurementType', on_delete=models.PROTECT)
+    calculation_type = models.ForeignKey('info_nodes.CalculationType', null=True, on_delete=models.PROTECT)
     substance = models.ForeignKey('info_nodes.Substance', null=True, on_delete=models.PROTECT)
     choice = models.ForeignKey('info_nodes.Choice', null=True, on_delete=models.PROTECT)
 
@@ -115,6 +142,11 @@ class MeasurementTypeable(ValueableNotBlank):
         return self.measurement_type.info_node.name
 
     @property
+    def calculation_type_name(self):
+        if self.calculation_type:
+            return self.calculation_type.info_node.name
+
+    @property
     def substance_name(self):
         if self.substance:
             return self.substance.info_node.name
@@ -122,7 +154,6 @@ class MeasurementTypeable(ValueableNotBlank):
     @property
     def choices(self):
         return self.measurement_type.choices_list()
-
 
     def _i(self, info_node):
         related_field = getattr(self, info_node)
@@ -132,6 +163,10 @@ class MeasurementTypeable(ValueableNotBlank):
     @property
     def i_measurement_type(self):
         return self._i("measurement_type")
+
+    @property
+    def i_calculation_type(self):
+        return self._i("calculation_type")
 
     @property
     def i_choice(self):

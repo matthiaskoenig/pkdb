@@ -3,7 +3,7 @@ from rest_framework import serializers
 from pkdb_app import utils
 from pkdb_app.info_nodes.documents import InfoNodeDocument
 from pkdb_app.info_nodes.models import InfoNode, Synonym, Annotation, Unit, MeasurementType, Substance, Choice, Route, \
-    Form, Tissue, Application, Method, CrossReference
+    Form, Tissue, Application, Method, CrossReference, CalculationType
 from pkdb_app.serializers import WrongKeyValidationSerializer, ExSerializer, SidNameLabelSerializer, FloatNRField
 from pkdb_app.utils import update_or_create_multiple
 from rest_framework.fields import empty
@@ -27,12 +27,19 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.MeasurementType)
     )
 
+    calculation_type = utils.SlugRelatedField(
+        slug_field="name",
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.CalculationType),
+        allow_null=True,
+    )
+
     choice = serializers.CharField(allow_null=True)
     time = FloatNRField(allow_null=True)
 
 
 class SynonymSerializer(WrongKeyValidationSerializer):
     pk = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Synonym
         fields = ["name", "pk"]
@@ -133,7 +140,7 @@ class InfoNodeListSerializer(serializers.ListSerializer):
 
 
 class InfoNodeSerializer(serializers.ModelSerializer):
-    """ Substance. """
+    """ InfoNodeSerializer. """
     parents = utils.SlugRelatedField(many=True, slug_field="sid", queryset=InfoNode.objects.all(),
                                      required=False, allow_null=True)
     synonyms = SynonymSerializer(many=True, read_only=False, required=False, allow_null=True)
@@ -154,6 +161,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         return {
             "info_node": InfoNode,
             "measurement_type": MeasurementType,
+            "calculation_type": CalculationType,
             "substance": Substance,
             "route": Route,
             "form": Form,
@@ -241,7 +249,7 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfoNode
-        fields = ["sid", "name", "label", "deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance",  ]
+        fields = ["sid", "name", "label", "deprecated", "ntype", "dtype", "description", "synonyms", "parents", "annotations", "xrefs","measurement_type", "substance", ]
 
     def get_synonyms(self, obj):
         return [synonym["name"] for synonym in obj.synonyms]

@@ -2,10 +2,9 @@
 Serializers for interventions.
 """
 import itertools
-from abc import ABC
-
+import re
 from rest_framework import serializers
-
+import numpy as np
 from pkdb_app import utils
 from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
     MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
@@ -69,6 +68,8 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         required=False,
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form))
 
+    time = serializers.CharField(allow_null=True)
+
     class Meta:
         model = Intervention
         fields = INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
@@ -96,17 +97,20 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 _validate_required_key_and_value(data, "time")
                 _validate_required_key_and_value(data, "time_unit")
                 application = data["application"]
-                allowed_applications = ["constant infusion", "single dose"]
-                if not application in allowed_applications:
+                allowed_applications = ["constant infusion", "single dose", "multiple dose"]
+                if application not in allowed_applications:
                     raise serializers.ValidationError(
-                        f"Allowed applications for measurement_type <{DOSING}> are <{allowed_applications}>.You might want to select the measurement_type: qualitative dosing. With no requirements.")
+                        f"Allowed applications for measurement_type <{DOSING}> are "
+                        f"<{allowed_applications}>, but '{application}' used. "
+                        f"You might want to use the measurement_type: "
+                        f"'qualitative dosing' with less restrictive requirements.")
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            for info_node in ['substance', 'measurement_type', 'form', 'application', 'route']:
+            for info_node in ['substance', 'measurement_type', 'calculation_type', 'form', 'application', 'route']:
                 if info_node in attrs:
                     if attrs[info_node] is not None:
                         attrs[info_node] = getattr(attrs[info_node], info_node)
@@ -116,6 +120,80 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         except ValueError as err:
             raise serializers.ValidationError(err)
         return super().validate(attrs)
+
+    def validate_time(self, value):
+        """
+        Check that time has a specific pattern.
+        """
+        validators = [self.validate_single,
+                      self.validate_concise_multiple,
+                      self.validate_multiple,
+                      self.raise_all_errors]
+
+        self._validate_time(value, validators)
+        return value
+
+
+    @staticmethod
+    def raise_all_errors(data, error_log):
+        raise serializers.ValidationError(error_log)
+
+    @staticmethod
+    def _validate_time(value, validators):
+        error_log = []
+        valid = False
+        validator_iter = iter(validators)
+        while not valid:
+            validator = next(validator_iter)
+            valid, msg = validator(value, error_log)
+            if not valid:
+                error_log.append(msg)
+
+    @staticmethod
+    def validate_single(data, error_log):
+        if data is not None:
+            try:
+                return True, float(data)
+            except (TypeError, ValueError):
+                return False, {data: "Value is not a valid number."}
+        return True, data
+
+    @staticmethod
+    def is_string(data):
+
+        if not isinstance(data, str):
+            return False, f"<{data}> is not a string."
+        else:
+            return True, ""
+
+    @staticmethod
+    def validate_concise_multiple(data, error_log):
+        is_string, error = InterventionSerializer.is_string(data)
+        if not is_string:
+            return False, {"time": error}
+
+        reg_match = "S[-+]?[0-9]*\.?[0-9]+T[0-9]*\.?[0-9]+R[0-9]+$"
+        if re.match(reg_match, data):
+            return True, data
+        else:
+            return False, {data: f"Value does not match the following regular expression: '{reg_match}'."}
+
+    @staticmethod
+    def validate_multiple(data, error_log):
+        is_string, error = InterventionSerializer.is_string(data)
+        if not is_string:
+            return False, {"time": error}
+
+        time_points = [x.strip() for x in data.split('|')]
+        validators = [InterventionSerializer.validate_single,
+                      InterventionSerializer.validate_concise_multiple,
+                      InterventionSerializer.raise_all_errors]
+        if len(time_points) > 1:
+            for time_point in time_points:
+                InterventionSerializer._validate_time(time_point, validators)
+            return True, data
+        else:
+            return False, "Value does not contain |"
 
 
 class InterventionExSerializer(MappingSerializer):
@@ -277,12 +355,14 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
     study = StudySmallElasticSerializer(read_only=True)
 
     measurement_type = SidNameLabelSerializer(read_only=True)
+    calculation_type = SidNameLabelSerializer(allow_null=True, read_only=True)
+
     route = SidNameLabelSerializer(allow_null=True, read_only=True)
     application = SidNameLabelSerializer(allow_null=True, read_only=True)
     form = SidNameLabelSerializer(allow_null=True, read_only=True)
     substance = SidNameLabelSerializer(allow_null=True, read_only=True)
     choice = SidNameLabelSerializer(allow_null=True, read_only=True)
-
+    time = serializers.CharField(allow_null=True)
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -314,11 +394,14 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     application = serializers.SerializerMethodField()
     application_label = serializers.SerializerMethodField()
 
-    time = serializers.FloatField()
+    time = serializers.CharField()
     time_end = serializers.FloatField()
     time_unit = serializers.CharField()
     measurement_type = serializers.SerializerMethodField()
     measurement_type_label = serializers.SerializerMethodField()
+
+    calculation_type = serializers.SerializerMethodField()
+    calculation_type_label = serializers.SerializerMethodField()
 
     choice = serializers.SerializerMethodField()
     choice_label = serializers.SerializerMethodField()
@@ -375,6 +458,14 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     def get_measurement_type_label(self, obj):
         if obj.measurement_type:
             return obj.measurement_type.label
+
+    def get_calculation_type(self, obj):
+        if obj.calculation_type:
+            return obj.calculation_type.sid
+
+    def get_calculation_type_label(self, obj):
+        if obj.calculation_type:
+            return obj.calculation_type.label
 
     def get_substance(self, obj):
         if obj.substance:

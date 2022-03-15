@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3.8
 ENV PYTHONUNBUFFERED 1
 
 # Allows docker to cache installed dependencies between builds

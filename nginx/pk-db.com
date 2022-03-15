@@ -43,14 +43,14 @@ server {
         include /etc/nginx/snippets/ssl.conf;
 
         client_max_body_size 100m;
-        proxy_connect_timeout       600;
-        proxy_send_timeout          600;
-        proxy_read_timeout          600;
-        send_timeout                600;
+        proxy_connect_timeout       900;
+        proxy_send_timeout          900;
+        proxy_read_timeout          900;
+        send_timeout                900;
 
         location / {
                 # return 200 "ssl on proxy";
-                proxy_pass http://192.168.0.184:8888;
+                proxy_pass http://192.168.0.168:8888;
                 proxy_set_header HOST $host;
                 proxy_set_header X-Real-IP $remote_addr;
                 proxy_set_header X-Forwarded-for $remote_addr;

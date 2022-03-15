@@ -9,9 +9,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
 from pkdb_app.users.permissions import get_study_file_permission
 from .subjects.models import DataFile
-
 from drf_yasg.generators import OpenAPISchemaGenerator
-
 
 def serve_protected_document(request, file):
     try:
