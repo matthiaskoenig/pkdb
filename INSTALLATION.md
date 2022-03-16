@@ -7,7 +7,7 @@ To setup the development server
 the following minimal requirements must be fulfilled
 - `docker`
 - `docker-compose`
-- `Python3.6`
+- `Python3.8`
 
 For elasticsearch the following system settings are required
 ```

@@ -19,6 +19,10 @@
       <user-avatar username="SaraD-hub"/>
       <user-avatar username="balcisue"/>
       <user-avatar username="paula-ogata"/>
+      <user-avatar username="lepujolh"/>
+      <user-avatar username="stemllb"/>
+      <user-avatar username="jonaspk98"/>
+
     </p>
     <p>If you have questions or feedback please contact
       <a href="mailto:koenigmx@hu-berlin.de" title="koenigmx@hu-berlin.de">

@@ -66,6 +66,12 @@
                       image = 'balcisue_128.png';
                     } else if (this.initials === 'PO'){
                       image = 'paula_128.png';
+                    } else if (this.initials === 'HL'){
+                      image = 'lepujolh_128.png';
+                    } else if (this.initials === 'BS'){
+                      image = 'stemllb_128.png';
+                    } else if (this.initials === 'JK'){
+                      image = 'jonaspk98_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -95,6 +101,12 @@
                       image = 'balcisue_128.png';
                     } else if (this.username === 'paula-ogata'){
                       image = 'paula_128.png';
+                    } else if (this.username === 'lepujolh'){
+                      image = 'lepujolh_128.png';
+                    } else if (this.username === 'stemllb'){
+                      image = 'stemllb_128.png';
+                    } else if (this.username === 'jonaspk98'){
+                      image = 'jonaspk98_128.png';
                     }
                 }
                 return img_dir + image

@@ -13,7 +13,6 @@ and
 * [Funding](https://github.com/matthiaskoenig/pkdb#funding)
 
 ## Overview
-[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 [PK-DB](https://pk-db.com) is a database and web interface for pharmacokinetics data and information from clinical trials 
 as well as pre-clinical research. PK-DB allows to curate pharmacokinetics data integrated with the 
 corresponding meta-information 
@@ -29,15 +28,12 @@ Important features are
 - a workflow for collaborative data curation
 - strong validation rules on data, and simple access via a REST API
 
-PK-DB is available at https://pk-db.com
+PK-DB is available at https://pk-db.com and https://alpha.pk-db.com. The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
+
+![PK-DB overview](./docs/images/data_extraction.png)
 
 ## How to cite
-[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 If you use PK-DB data or the web interface cite
-
-> *PK-DB: PharmacoKinetics DataBase for Individualized and Stratified Computational Modeling*  
-> Jan Grzegorzewski, Janosch Brandhorst, Dimitra Eleftheriadou, Kathleen Green, Matthias König   
-> bioRxiv 760884; doi: https://doi.org/10.1101/760884 
 
 > Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. 
 > *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. 
@@ -48,15 +44,16 @@ If you use PK-DB code cite in addition
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 
 ## License
-[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 PK-DB code and documentation is licensed as
 * Source Code: [LGPLv3](http://opensource.org/licenses/LGPL-3.0)
 * Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 
 ## Funding
-[[^]](https://github.com/matthiaskoenig/pkdb#pk-db---a-pharmacokinetics-database)
 Jan Grzegorzewski and Matthias König are supported by the Federal Ministry of Education and Research (BMBF, Germany)
 within the research network Systems Medicine of the Liver ([LiSyM](http://www.lisym.org/), grant number 031L0054).
+Matthias König is supported by the German Research Foundation (DFG) within the Research Unit Programme FOR 5151 
+[QuaLiPerF](https://qualiperf.de) (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 
+A Systems Medicine Approach) by grant number 436883643 and by grant number 
+465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
-
-&copy; 2017-2020 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.
+&copy; 2017-2022 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.
