@@ -58,8 +58,7 @@ class DataAnalysisViewSet(AccessView):
         },
     }
 
-@method_decorator(name='list', decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM]))
-class SubSetViewSet(BaseDocumentViewSet, APIView):
+class SubSetViewSet(AccessView):
     """ Endpoint to query subsets (timecourses and scatters)
 
     The subets endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a
