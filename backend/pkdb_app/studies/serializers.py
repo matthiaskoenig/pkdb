@@ -95,10 +95,12 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
 
     def validate(self, attrs):
         """Validate reference information."""
-        if attrs.get("journal").startswith("Add your title"):
-            raise serializers.ValidationError("Add a journal to <reference.json>.")
-        if attrs.get("title").startswith("Add your title"):
-            raise serializers.ValidationError("Add a title to <reference.json>.")
+        if attrs.get("journal"):
+            if attrs.get("journal").startswith("Add your title"):
+                raise serializers.ValidationError("Add a journal to <reference.json>.")
+        if attrs.get("title"):
+            if attrs.get("title").startswith("Add your title"):
+                raise serializers.ValidationError("Add a title to <reference.json>.")
         if attrs.get("date") == "1000-10-10":
             raise serializers.ValidationError("Replace '1000-10-10' with the correct date in <reference.json>.")
         return super().validate(attrs)
@@ -358,20 +360,15 @@ class StudySerializer(SidSerializer):
         context["study"] = study
 
         for name, serializer in self.related_serializer().items():
-
             if related[name] is not None:
                 if getattr(study, name):
                     getattr(study, name).delete()
-
                 this_serializer = serializer(context=context)
                 instance = this_serializer.create(validated_data={**related[name]})
-
                 setattr(study, name, instance)
-
                 study.save()
 
         if "curators" in related:
-
             if related["curators"]:
                 study.ratings.all().delete()
                 for curator in related["curators"]:
@@ -394,7 +391,6 @@ class StudySerializer(SidSerializer):
                 create_multiple(study, related["comments"], "comments")
 
         if "files" in related:
-
             study.files.clear()
             if related["files"]:
                 for file_pk in related["files"]:
