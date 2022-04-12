@@ -79,6 +79,7 @@
                 "interventions": point[dimension].interventions,
                 "tissue": point[dimension].tissue,
                 "substance": point[dimension].substance,
+                "choice": point[dimension].choice,
                 "measurement_type": point[dimension].measurement_type,
 
               }}else{

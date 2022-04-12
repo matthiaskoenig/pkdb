@@ -19,6 +19,12 @@
                :key="substance.sid"
                otype="substance"
               />
+    <object-chip v-if="Object.keys(choice).length !== 0"
+                 v-for="choice in details.choice"
+                 :object="choice"
+                 :key="choice.sid"
+                 otype="choice"
+    />
     <!--
     <object-chip
         v-if="Object.keys(time_unit).length !== 0"

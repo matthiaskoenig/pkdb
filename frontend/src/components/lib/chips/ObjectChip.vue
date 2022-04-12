@@ -77,8 +77,14 @@ export default {
           show_type: "info_node",
           pk_key:"sid"
         },
+
         tissue: {
           color: "magenta",
+          show_type: "info_node",
+          pk_key:"sid"
+        },
+        choice: {
+          color: "#00a087",
           show_type: "info_node",
           pk_key:"sid"
         },
