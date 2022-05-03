@@ -37,8 +37,7 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
     # pharmacokinetics are only calculated on normalized concentrations
     if timecourse["measurement_type_name"] == "concentration":
         variables = _timecourse_to_pkdict(timecourse, dosing)
-
-        if "cocnentration" in variables:
+        if "concentration" in variables:
             ctype = variables.pop("ctype", None)
             pkinf = None
             if dosing:
@@ -121,7 +120,6 @@ def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
     if ctype is not None:
         pk_dict["concentration"] = Q_(values, tc["unit"])
         pk_dict['ctype'] = ctype
-
     # dosing
     pk_dict["dose"] = Q_(np.nan, "mg")
 
