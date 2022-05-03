@@ -37,54 +37,56 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
     # pharmacokinetics are only calculated on normalized concentrations
     if timecourse["measurement_type_name"] == "concentration":
         variables = _timecourse_to_pkdict(timecourse, dosing)
-        ctype = variables.pop("ctype", None)
-        pkinf = None
-        if dosing:
-            if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
-                pkinf = pharmacokinetics.TimecoursePK(**variables)
-        if not pkinf:
-            _ = variables.pop("dosing", None)
-            _ = variables.pop("intervention_time", None)
-            pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
-        pk = pkinf.pk
-        key_mapping = {
-            "auc": MeasurementType.objects.get(info_node__name="auc_end"),
-            "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),
-            "cl": MeasurementType.objects.get(info_node__name="clearance"),
-            "cmax": MeasurementType.objects.get(info_node__name="cmax"),
-            "kel": MeasurementType.objects.get(info_node__name="kel"),
-            "thalf": MeasurementType.objects.get(info_node__name="thalf"),
-            "tmax": MeasurementType.objects.get(info_node__name="tmax"),
-            "vd": MeasurementType.objects.get(info_node__name="vd"),
-            "vdss": MeasurementType.objects.get(info_node__name="vd_ss"),
-        }
+        if "cocnentration" in variables:
+            ctype = variables.pop("ctype", None)
+            pkinf = None
+            if dosing:
+                if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
+                    pkinf = pharmacokinetics.TimecoursePK(**variables)
+            if not pkinf:
+                _ = variables.pop("dosing", None)
+                _ = variables.pop("intervention_time", None)
+                pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
-        def get_or_none(id, model):
-            if id:
-                return model.objects.get(id=id)
+            pk = pkinf.pk
+            key_mapping = {
+                "auc": MeasurementType.objects.get(info_node__name="auc_end"),
+                "aucinf": MeasurementType.objects.get(info_node__name="auc_inf"),
+                "cl": MeasurementType.objects.get(info_node__name="clearance"),
+                "cmax": MeasurementType.objects.get(info_node__name="cmax"),
+                "kel": MeasurementType.objects.get(info_node__name="kel"),
+                "thalf": MeasurementType.objects.get(info_node__name="thalf"),
+                "tmax": MeasurementType.objects.get(info_node__name="tmax"),
+                "vd": MeasurementType.objects.get(info_node__name="vd"),
+                "vdss": MeasurementType.objects.get(info_node__name="vd_ss"),
+            }
 
-        for key in key_mapping.keys():
-            pk_par = getattr(pk, key, None)
-            # check that exists
-            if pk_par and not np.isnan(pk_par.magnitude):
-                output_dict = {}
-                output_dict[ctype] = pk_par.magnitude
-                output_dict["unit"] = str(pk_par.units)
-                output_dict["measurement_type"] = key_mapping[key]
-                output_dict["calculated"] = True
-                output_dict["tissue"] = get_or_none(timecourse["tissue"], model=Tissue)
-                output_dict["method"] = get_or_none(timecourse["method"], model=Method)
-                output_dict["substance"] = get_or_none(id=timecourse["substance"], model=Substance)
-                output_dict["group"] =  get_or_none(id=timecourse["group"],model=Group)
-                output_dict["individual"] = get_or_none(timecourse["individual"], model=Individual)
-                output_dict["interventions"] = timecourse["interventions"]
-                output_dict["study"] = subset.study
-                if output_dict["measurement_type"].info_node.name == "auc_end":
-                    output_dict["time"] = max(timecourse["time"])
-                    output_dict["time_unit"] = str(timecourse["time_unit"])
+            def get_or_none(id, model):
+                if id:
+                    return model.objects.get(id=id)
 
-                outputs.append(output_dict)
+            for key in key_mapping.keys():
+                pk_par = getattr(pk, key, None)
+                # check that exists
+                if pk_par and not np.isnan(pk_par.magnitude):
+                    output_dict = {}
+                    output_dict[ctype] = pk_par.magnitude
+                    output_dict["unit"] = str(pk_par.units)
+                    output_dict["measurement_type"] = key_mapping[key]
+                    output_dict["calculated"] = True
+                    output_dict["tissue"] = get_or_none(timecourse["tissue"], model=Tissue)
+                    output_dict["method"] = get_or_none(timecourse["method"], model=Method)
+                    output_dict["substance"] = get_or_none(id=timecourse["substance"], model=Substance)
+                    output_dict["group"] =  get_or_none(id=timecourse["group"],model=Group)
+                    output_dict["individual"] = get_or_none(timecourse["individual"], model=Individual)
+                    output_dict["interventions"] = timecourse["interventions"]
+                    output_dict["study"] = subset.study
+                    if output_dict["measurement_type"].info_node.name == "auc_end":
+                        output_dict["time"] = max(timecourse["time"])
+                        output_dict["time_unit"] = str(timecourse["time_unit"])
+
+                    outputs.append(output_dict)
 
     return outputs
 
