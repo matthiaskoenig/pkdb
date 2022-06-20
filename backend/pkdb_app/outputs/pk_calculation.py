@@ -105,7 +105,7 @@ def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
     # time
     pk_dict["time"] = Q_(np.array(tc["time"]), tc["time_unit"])
 
-    # concentratio
+    # concentration
     values = None
     ctype = None
     if tc["mean"]:

@@ -90,6 +90,9 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
     study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="interventions")
 
+    def __str__(self):
+        return self.name
+
     @property
     def raw_pk(self):
         if self.raw:

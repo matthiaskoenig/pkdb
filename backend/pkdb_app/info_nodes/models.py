@@ -103,6 +103,9 @@ class AbstractInfoNode(models.Model):
     def name(self):
         return self.info_node.name
 
+    def __str__(self):
+        return self.info_node.name
+
 
 class Tissue(AbstractInfoNode):
     """ Tissue Model """
@@ -466,8 +469,6 @@ class Substance(AbstractInfoNode):
     charge = models.FloatField(null=True)
     formula = models.CharField(null=True, max_length=CHAR_MAX_LENGTH)  # chemical formula
 
-    def __str__(self):
-        return self.info_node.name
 
     @property
     def derived(self):
