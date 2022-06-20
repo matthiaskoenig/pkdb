@@ -6,5 +6,6 @@
 - updated backend dependencies
 - better encoding of multiple dosing (#685)  
 - updated acknowledgements (#714)
+- Fix #734, support negative EHR values
 
 
