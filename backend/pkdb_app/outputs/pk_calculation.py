@@ -43,9 +43,11 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
             if dosing:
                 if dosing.application.info_node.name == "single dose" and timecourse["substance"] == dosing.substance.pk:
                     pkinf = pharmacokinetics.TimecoursePK(**variables)
+
             if not pkinf:
                 _ = variables.pop("dosing", None)
                 _ = variables.pop("intervention_time", None)
+                print(variables)
                 pkinf = pharmacokinetics.TimecoursePKNoDosing(**variables)
 
             pk = pkinf.pk

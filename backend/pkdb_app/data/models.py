@@ -214,7 +214,8 @@ class Timecourseable(models.Model):
                     name = self.get_name(timecourse[key], value)
                 else:
                     name = list(timecourse[key])
-                raise ValueError(f"Subset used for timecourse is not unique on '{key}'. Values are '{name}'. "
+                label = timecourse['label']
+                raise ValueError(f"Subset with label '{label}' used for timecourse is not unique on '{key}'. Values are '{name}'. "
                                  f"Check uniqueness of labels for timecourses.")
 
 
