@@ -23,7 +23,7 @@ django-elasticsearch-dsl-drf>=0.22.1
 # analysis
 ipykernel>=5.4
 pandas>=1.2
-numpy==1.19.3
+numpy==1.22.0
 scipy>=1.6
 matplotlib>=3.3
 pint>=0.17.0
