@@ -72,6 +72,8 @@
                       image = 'stemllb_128.png';
                     } else if (this.initials === 'JK'){
                       image = 'jonaspk98_128.png';
+                    } else if (this.initials === 'XG'){
+                      image = 'xresearch_128.png';
                     }
                 } else if (this.username) {
                     image = 'user_128.png';
@@ -107,6 +109,8 @@
                       image = 'stemllb_128.png';
                     } else if (this.username === 'jonaspk98'){
                       image = 'jonaspk98_128.png';
+                    } else if (this.username === 'xresearch'){
+                      image = 'xresearch_128.png';
                     }
                 }
                 return img_dir + image

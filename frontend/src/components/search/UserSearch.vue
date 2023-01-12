@@ -67,7 +67,7 @@ export default {
         {"username": "lepujolh", "first_name": "Helen", "last_name": "Leal",},
         {"username": "stemllb", "first_name": "Beatrice", "last_name": "Stemmer Mallol",},
         {"username": "jonaspk98", "first_name": "Jonas", "last_name": "Küttner",},
-
+        {"username": "xresearch", "first_name": "XResearch", "last_name": "Group",},
       ],
     }
   },
