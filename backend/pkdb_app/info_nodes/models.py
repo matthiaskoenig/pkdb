@@ -175,6 +175,12 @@ class MeasurementType(AbstractInfoNode):
         "concentration change",    # this often happens in placebo simulations
         "concentration change absolute",
         "EHR change",
+        "blood pressure systolic (change)",
+        "blood pressure systolic (change relative)"
+        "blood pressure systolic auc_end (change)",
+        "blood pressure diastolic (change)",
+        "blood pressure diastolic (change relative)",
+        "blood pressure diastolic auc_end (change)",
     ]
     ADDITIVE = []  # todo remove
 
