@@ -34,7 +34,7 @@ dependencies = [
     "psycopg2-binary>=2.9.10",
 
     # django
-    "Django==3.1.14",
+    "Django==4.2.26",
     "django-model-utils==4.2.0",
     "django-extra-fields==3.0.2",
     "django-storages==1.12.3",
