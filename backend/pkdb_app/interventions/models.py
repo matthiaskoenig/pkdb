@@ -1,31 +1,31 @@
-"""
-Describe Interventions and Output (i.e. define the characteristics of the
+"""Describe Interventions and Output (i.e. define the characteristics of the
 group or individual).
 """
+
 from django.db import models
 
 from pkdb_app.behaviours import Normalizable
 from pkdb_app.info_nodes.models import Application, Form, Route
-from ..behaviours import Externable, Accessible
+
+from ..behaviours import Accessible, Externable
 from ..subjects.models import DataFile
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
-
 
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
 
-class InterventionSet(models.Model):
 
+class InterventionSet(models.Model):
     @property
     def interventions(self):
-        """ all interventions """
+        """All interventions"""
         interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all())
         return interventions
 
     @property
     def interventions_normed(self):
-        """ all interventions """
+        """All interventions"""
         interventions = self.interventions.filter(normed=True)
         return interventions
 
@@ -33,8 +33,7 @@ class InterventionSet(models.Model):
     def count(self):
         if self.interventions:
             return self.interventions.count()
-        else:
-            return 0
+        return 0
 
 
 class AbstractIntervention(models.Model):
@@ -50,7 +49,7 @@ class AbstractIntervention(models.Model):
 
 
 class InterventionEx(Externable):
-    """ Intervention (external curated layer)."""
+    """Intervention (external curated layer)."""
 
     source = models.ForeignKey(
         DataFile,
@@ -71,12 +70,13 @@ class InterventionEx(Externable):
 
 
 class Intervention(Accessible, Normalizable, AbstractIntervention):
-    """ A concrete step/thing which is done to the group.
+    """A concrete step/thing which is done to the group.
 
     In case of dosing/medication the actual dosing is stored in the Valueable.
     In case of a step without dosing, e.g., lifestyle intervention only the
     measurement_type is used.
     """
+
     ex = models.ForeignKey(
         InterventionEx,
         related_name="interventions",
@@ -88,7 +88,9 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True)
     application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True)
     form = models.ForeignKey(Form, on_delete=models.CASCADE, null=True)
-    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="interventions")
+    study = models.ForeignKey(
+        "studies.Study", on_delete=models.CASCADE, related_name="interventions"
+    )
 
     def __str__(self):
         return self.name

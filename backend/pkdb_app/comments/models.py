@@ -9,11 +9,11 @@ from pkdb_app.interventions.models import (
 from pkdb_app.outputs.models import OutputEx, OutputSet
 from pkdb_app.studies.models import Study
 from pkdb_app.subjects.models import (
+    CharacteristicaEx,
+    GroupEx,
+    GroupSet,
     IndividualEx,
     IndividualSet,
-    CharacteristicaEx,
-    GroupSet,
-    GroupEx,
 )
 from pkdb_app.users.models import User
 
@@ -80,7 +80,7 @@ class Comment(models.Model):
     )
 
     class Meta:
-        ordering = ['pk']
+        ordering = ["pk"]
 
     @property
     def username(self):
@@ -114,7 +114,6 @@ class Description(models.Model):
         SubSet, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
 
-
     dimensions = models.ForeignKey(
         Dimension, related_name="descriptions", null=True, on_delete=models.CASCADE
     )
@@ -137,7 +136,10 @@ class Description(models.Model):
     )
 
     characteristica_ex = models.ForeignKey(
-        CharacteristicaEx, related_name="descriptions", null=True, on_delete=models.CASCADE
+        CharacteristicaEx,
+        related_name="descriptions",
+        null=True,
+        on_delete=models.CASCADE,
     )
 
     output_ex = models.ForeignKey(
@@ -149,4 +151,4 @@ class Description(models.Model):
     )
 
     class Meta:
-        ordering = ['pk']
+        ordering = ["pk"]

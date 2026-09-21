@@ -1,5 +1,4 @@
-"""
-Describe group of subjects or individual (i.e. define the characteristics of the
+"""Describe group of subjects or individual (i.e. define the characteristics of the
 group or individual).
 
 How is different from things which will be measured?
@@ -9,15 +8,15 @@ From the data structure this has to be handled very similar.
 from django.db import models
 
 from pkdb_app.behaviours import Normalizable
-from .managers import (
-    IndividualManager,
-    GroupManager,
-    CharacteristicaExManager,
-)
-from ..behaviours import (
-    Externable, Accessible)
+
+from ..behaviours import Accessible, Externable
 from ..storage import OverwriteStorage
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from .managers import (
+    CharacteristicaExManager,
+    GroupManager,
+    IndividualManager,
+)
 
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
@@ -29,7 +28,7 @@ ADDITIVE_CHARACTERISTICA = ["disease", "abstinence"]
 # DataFile
 # ----------------------------------
 class DataFile(models.Model):
-    """ Table or figure from where the data comes from (png).
+    """Table or figure from where the data comes from (png).
 
     This should be in a separate class, so that they can be easily displayed/filtered/...
     """
@@ -55,7 +54,6 @@ class DataFile(models.Model):
 
 
 class GroupSet(models.Model):
-
     @property
     def groups(self):
         groups = Group.objects.filter(ex__in=self.group_exs.all())
@@ -65,16 +63,16 @@ class GroupSet(models.Model):
     def count(self):
         if self.groups:
             return self.groups.count()
-        else:
-            return 0
+        return 0
 
 
 class GroupEx(Externable):
-    """ Group (external curated layer).
+    """Group (external curated layer).
 
     Groups are defined via their characteristica.
     A group can be a subgroup of another group via the parent field.
     """
+
     groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
 
     source = models.ForeignKey(
@@ -98,7 +96,7 @@ class GroupEx(Externable):
 
 
 class Group(Accessible):
-    """ Group. """
+    """Group."""
 
     ex = models.ForeignKey(
         GroupEx, related_name="groups", null=True, on_delete=models.CASCADE
@@ -107,10 +105,13 @@ class Group(Accessible):
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     count = models.IntegerField()
     parent = models.ForeignKey("Group", null=True, on_delete=models.CASCADE)
-    characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="groups",
-                                                        through="GroupCharacteristica")
+    characteristica_all_normed = models.ManyToManyField(
+        "Characteristica", related_name="groups", through="GroupCharacteristica"
+    )
 
-    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="groups")
+    study = models.ForeignKey(
+        "studies.Study", on_delete=models.CASCADE, related_name="groups"
+    )
 
     objects = GroupManager()
 
@@ -136,10 +137,15 @@ class Group(Accessible):
     def _characteristica_all(self):
         _characteristica_all = self.characteristica.all()
         this_measurements = _characteristica_all.exclude(
-            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
+            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA
+        ).values_list("measurement_type", flat=True)
         if self.parent:
-            _characteristica_all = _characteristica_all | self.parent._characteristica_all.exclude(
-                measurement_type__in=this_measurements)
+            _characteristica_all = (
+                _characteristica_all
+                | self.parent._characteristica_all.exclude(
+                    measurement_type__in=this_measurements
+                )
+            )
         return _characteristica_all
 
     @property
@@ -160,8 +166,7 @@ class IndividualSet(models.Model):
     def count(self):
         if self.individuals:
             return self.individuals.count()
-        else:
-            return 0
+        return 0
 
 
 class AbstractIndividual(models.Model):
@@ -173,14 +178,21 @@ class AbstractIndividual(models.Model):
 
 
 class IndividualEx(Externable):
-    """ Individual (external curated layer).
+    """Individual (external curated layer).
     This contains maps and splittings.
     Individuals are defined via their characteristics, analogue to groups.
     """
+
     groupby = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
-    source = models.ForeignKey(DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL)
-    image = models.ForeignKey(DataFile, related_name="i_individual_exs", null=True, on_delete=models.SET_NULL)
-    individualset = models.ForeignKey(IndividualSet, on_delete=models.CASCADE, related_name="individual_exs")
+    source = models.ForeignKey(
+        DataFile, related_name="s_individual_exs", null=True, on_delete=models.SET_NULL
+    )
+    image = models.ForeignKey(
+        DataFile, related_name="i_individual_exs", null=True, on_delete=models.SET_NULL
+    )
+    individualset = models.ForeignKey(
+        IndividualSet, on_delete=models.CASCADE, related_name="individual_exs"
+    )
 
     @property
     def study(self):
@@ -195,7 +207,7 @@ class IndividualEx(Externable):
 
 
 class Individual(AbstractIndividual, Accessible):
-    """ Single individual in data base.
+    """Single individual in data base.
 
     This does not contain any mappings are splits any more.
     """
@@ -207,10 +219,15 @@ class Individual(AbstractIndividual, Accessible):
         Group, on_delete=models.CASCADE, related_name="individuals"
     )
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
-    characteristica_all_normed = models.ManyToManyField("Characteristica", related_name="individuals",
-                                                        through="IndividualCharacteristica")
+    characteristica_all_normed = models.ManyToManyField(
+        "Characteristica",
+        related_name="individuals",
+        through="IndividualCharacteristica",
+    )
 
-    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="individuals")
+    study = models.ForeignKey(
+        "studies.Study", on_delete=models.CASCADE, related_name="individuals"
+    )
 
     objects = IndividualManager()
 
@@ -233,9 +250,11 @@ class Individual(AbstractIndividual, Accessible):
         # charcteristica from related groups with the same measurement type as these used in the individual are excluded.
         # this_measurements = characteristica_normed.values_list("measurement_type", flat=True)
         this_measurements = _characteristica_normed.exclude(
-            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA).values_list("measurement_type", flat=True)
-        return (_characteristica_normed | self.group._characteristica_all_normed.exclude(
-            measurement_type__in=this_measurements))
+            measurement_type__info_node__name__in=ADDITIVE_CHARACTERISTICA
+        ).values_list("measurement_type", flat=True)
+        return _characteristica_normed | self.group._characteristica_all_normed.exclude(
+            measurement_type__in=this_measurements
+        )
 
     @property
     def group_indexing(self):
@@ -243,20 +262,26 @@ class Individual(AbstractIndividual, Accessible):
 
     @property
     def characteristica_measurements(self):
-        return [characteristica.measurement_type for characteristica in self.characteristica_all_normed.all()]
+        return [
+            characteristica.measurement_type
+            for characteristica in self.characteristica_all_normed.all()
+        ]
 
     @property
     def characteristica_choices(self):
-        return {characteristica.measurement_type: characteristica.choice for characteristica in
-                self.characteristica_all_normed.all()}
+        return {
+            characteristica.measurement_type: characteristica.choice
+            for characteristica in self.characteristica_all_normed.all()
+        }
 
 
 # ----------------------------------
 # Characteristica
 # ----------------------------------
 
+
 class CharacteristicaEx(models.Model):
-    """ Characteristica  (external curated layer).
+    """Characteristica  (external curated layer).
 
         Characteristics are used to store information about a group of subjects.
         Such a group is defined by
@@ -272,6 +297,7 @@ class CharacteristicaEx(models.Model):
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
     """
+
     group_ex = models.ForeignKey(
         GroupEx, related_name="characteristica_ex", null=True, on_delete=models.CASCADE
     )
@@ -286,7 +312,7 @@ class CharacteristicaEx(models.Model):
 
 
 class Characteristica(Accessible, Normalizable):
-    """ Characteristic. """
+    """Characteristic."""
 
     group = models.ForeignKey(
         Group, related_name="characteristica", null=True, on_delete=models.CASCADE
@@ -300,15 +326,13 @@ class Characteristica(Accessible, Normalizable):
     def raw_pk(self):
         if self.raw:
             return self.raw.pk
-        else:
-            return None
+        return None
 
     @property
     def study(self):
         if self.group:
             return self.group.study
-        else:
-            return self.individual.study
+        return self.individual.study
 
     def study_name(self):
         return self.study.name
@@ -327,8 +351,7 @@ class Characteristica(Accessible, Normalizable):
     def subject_type(self):
         if self.group:
             return SUBJECT_TYPE_GROUP
-        else:
-            return SUBJECT_TYPE_INDIVIDUAL
+        return SUBJECT_TYPE_INDIVIDUAL
 
     @property
     def group_name(self):

@@ -1,10 +1,10 @@
-"""
-Helper functions for calculation of error measures from other errors.
+"""Helper functions for calculation of error measures from other errors.
 
-    sd is standard deviation
-    se is standard error (standard deviation of the mean) sd/sqrt(n)
-    cv is coefficient of variation. sd/mean
+sd is standard deviation
+se is standard error (standard deviation of the mean) sd/sqrt(n)
+cv is coefficient of variation. sd/mean
 """
+
 import numpy as np
 
 
@@ -29,7 +29,6 @@ def calculate_sd(se, count, cv, mean):
 
 def calculate_se(sd, count, cv, mean):
     """Calculates SE from given fields."""
-
     se = None
     is_sd = _is(sd)
     is_count = _is(count)
@@ -45,7 +44,6 @@ def calculate_se(sd, count, cv, mean):
 
 def calculate_cv(sd, count, se, mean):
     """Calculates CV from given fields"""
-
     cv = None
     is_sd = _is(sd)
     is_count = _is(count)

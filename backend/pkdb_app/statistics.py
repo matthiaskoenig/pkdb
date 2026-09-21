@@ -1,25 +1,36 @@
 """Basic information and statistics about database content."""
 
 from django.db.models import Count, F, Q
-from pkdb_app.data.models import SubSet, Data
-from pkdb_app.info_nodes.models import  Substance
-from rest_framework import serializers
-from rest_framework import viewsets
+from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 
 from pkdb_app import __version__
+from pkdb_app.data.models import Data, SubSet
+from pkdb_app.info_nodes.models import Substance
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.outputs.models import Output
-from pkdb_app.studies.models import Study, Reference
+from pkdb_app.studies.models import Reference, Study
 from pkdb_app.subjects.models import Group, Individual
 
 
 class SubstanceStatisticsViewSet(viewsets.ViewSet):
-    def list(self,request):
-        substances_interventions = Substance.objects.annotate(label=F('info_node__label'),intervention_count=Count("intervention", filter=Q(intervention__normed=True))).order_by('info_node__label')
-        substances_outputs = Substance.objects.annotate(label=F('info_node__label'),output_count=Count("output", filter=Q(output__normed=True))).order_by('info_node__label')
+    def list(self, request):
+        substances_interventions = Substance.objects.annotate(
+            label=F("info_node__label"),
+            intervention_count=Count(
+                "intervention", filter=Q(intervention__normed=True)
+            ),
+        ).order_by("info_node__label")
+        substances_outputs = Substance.objects.annotate(
+            label=F("info_node__label"),
+            output_count=Count("output", filter=Q(output__normed=True)),
+        ).order_by("info_node__label")
 
-        data = zip(substances_outputs.values("info_node__label"),substances_outputs.values("output_count"), substances_interventions.values("intervention_count"))
+        data = zip(
+            substances_outputs.values("info_node__label"),
+            substances_outputs.values("output_count"),
+            substances_interventions.values("intervention_count"),
+        )
 
         result = []
         for x in data:
@@ -37,8 +48,8 @@ class SubstanceStatisticsSerializer(serializers.Serializer):
     output_count = serializers.IntegerField(allow_null=True)
 
 
-class Statistics(object):
-    """ Basic database statistics. """
+class Statistics:
+    """Basic database statistics."""
 
     def __init__(self):
         self.version = __version__
@@ -48,16 +59,23 @@ class Statistics(object):
         self.individual_count = Individual.objects.count()
         self.intervention_count = Intervention.objects.filter(normed=True).count()
         self.output_count = Output.objects.filter(normed=True).count()
-        self.output_calculated_count = Output.objects.filter(normed=True, calculated=True).count()
-        self.timecourse_count = SubSet.objects.filter(data__data_type=Data.DataTypes.Timecourse).count()
-        self.scatter_count = SubSet.objects.filter(data__data_type=Data.DataTypes.Scatter).count()
+        self.output_calculated_count = Output.objects.filter(
+            normed=True, calculated=True
+        ).count()
+        self.timecourse_count = SubSet.objects.filter(
+            data__data_type=Data.DataTypes.Timecourse
+        ).count()
+        self.scatter_count = SubSet.objects.filter(
+            data__data_type=Data.DataTypes.Scatter
+        ).count()
 
 
 class StatisticsViewSet(viewsets.ViewSet):
-    """ Endpoint to query PK-DB statistics
+    """Endpoint to query PK-DB statistics
 
     Get database statistics consisting of count and version information.
     """
+
     def list(self, request):
         instance = Statistics()
         serializer = StatisticsSerializer(instance)
@@ -65,7 +83,7 @@ class StatisticsViewSet(viewsets.ViewSet):
 
 
 class StatisticsSerializer(serializers.BaseSerializer):
-    """ Serializer for database statistics. """
+    """Serializer for database statistics."""
 
     def to_representation(self, instance):
         return {
@@ -79,7 +97,7 @@ class StatisticsSerializer(serializers.BaseSerializer):
                 "intervention_count",
                 "output_count",
                 "output_calculated_count",
-                'timecourse_count',
-                'scatter_count',
+                "timecourse_count",
+                "scatter_count",
             ]
         }

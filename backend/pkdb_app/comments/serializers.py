@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from pkdb_app.comments.models import Description, Comment
+from pkdb_app.comments.models import Comment, Description
 from pkdb_app.serializers import WrongKeyValidationSerializer
 from pkdb_app.users.models import User
 
@@ -25,12 +25,13 @@ class DescriptionSerializer(serializers.ModelSerializer):
                     "detail": {str(data)},
                 }
             )
-        elif len(data) == 0:
+        if len(data) == 0:
             raise serializers.ValidationError(
                 {
                     "descriptions": "empty descriptions are not allowed",
                     "detail": {str(data)},
-                })
+                }
+            )
 
 
 class CommentSerializer(WrongKeyValidationSerializer):
@@ -47,20 +48,19 @@ class CommentSerializer(WrongKeyValidationSerializer):
                     "detail": {str(data)},
                 }
             )
-        elif len(data[1]) == 0:
+        if len(data[1]) == 0:
             raise serializers.ValidationError(
                 {
                     "comments": "empty comments are not allowed",
                     "detail": {str(data)},
-                })
-
+                }
+            )
 
     def to_internal_value(self, data):
         self._validate_comment(data)
         user = self.get_or_val_error(User, username=data[0])
 
         return {"text": data[1], "user": user}
-
 
     def to_representation(self, instance):
         return [instance.user.username, instance.text]
@@ -77,5 +77,9 @@ class DescriptionElasticSerializer(serializers.ModelSerializer):
 
 class CommentElasticSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ["pk", "username", "text", ]
+        fields = [
+            "pk",
+            "username",
+            "text",
+        ]
         model = Comment

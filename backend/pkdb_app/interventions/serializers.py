@@ -1,31 +1,50 @@
+"""Serializers for interventions.
 """
-Serializers for interventions.
-"""
+
 import itertools
 import re
+
 from rest_framework import serializers
-import numpy as np
+
 from pkdb_app import utils
-from pkdb_app.behaviours import VALUE_FIELDS_NO_UNIT, \
-    MEASUREMENTTYPE_FIELDS, map_field, EX_MEASUREMENTTYPE_FIELDS
+from pkdb_app.behaviours import (
+    EX_MEASUREMENTTYPE_FIELDS,
+    MEASUREMENTTYPE_FIELDS,
+    VALUE_FIELDS_NO_UNIT,
+    map_field,
+)
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.subjects.serializers import EXTERN_FILE_FIELDS
-from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
-    CommentElasticSerializer
-from ..interventions.models import (
-    InterventionSet,
-    Intervention,
-    InterventionEx)
+
+from ..comments.serializers import (
+    CommentElasticSerializer,
+    CommentSerializer,
+    DescriptionElasticSerializer,
+    DescriptionSerializer,
+)
+from ..interventions.models import Intervention, InterventionEx, InterventionSet
 from ..serializers import (
+    NA_VALUES,
     ExSerializer,
-    NA_VALUES, StudySmallElasticSerializer, SidNameLabelSerializer, MappingSerializer)
+    MappingSerializer,
+    SidNameLabelSerializer,
+    StudySmallElasticSerializer,
+)
 from ..subjects.models import DataFile
+
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, list_duplicates, _validate_required_key, _create, create_multiple_bulk, \
-    create_multiple_bulk_normalized, _validate_required_key_and_value
+from ..utils import (
+    _create,
+    _validate_required_key,
+    _validate_required_key_and_value,
+    create_multiple_bulk,
+    create_multiple_bulk_normalized,
+    list_duplicates,
+    list_of_pk,
+)
 
 MEDICATION = "medication"
 DOSING = "dosing"
@@ -56,17 +75,20 @@ class InterventionSerializer(MeasurementTypeableSerializer):
     route = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Route))
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Route),
+    )
 
     application = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Application))
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Application),
+    )
 
     form = utils.SlugRelatedField(
         slug_field="name",
         required=False,
-        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form))
+        queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Form),
+    )
 
     time = serializers.CharField(allow_null=True)
 
@@ -80,7 +102,9 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
         data = self.retransform_map_fields(data)
         data = self.retransform_ex_fields(data)
-        self.validate_wrong_keys(data, additional_fields=InterventionExSerializer.Meta.fields)
+        self.validate_wrong_keys(
+            data, additional_fields=InterventionExSerializer.Meta.fields
+        )
 
         _validate_required_key(data, "measurement_type")
         measurement_type = data.get("measurement_type")
@@ -97,42 +121,56 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 _validate_required_key_and_value(data, "time")
                 _validate_required_key_and_value(data, "time_unit")
                 application = data["application"]
-                allowed_applications = ["constant infusion", "single dose", "multiple dose"]
+                allowed_applications = [
+                    "constant infusion",
+                    "single dose",
+                    "multiple dose",
+                ]
                 if application not in allowed_applications:
                     raise serializers.ValidationError(
                         f"Allowed applications for measurement_type <{DOSING}> are "
                         f"<{allowed_applications}>, but '{application}' used. "
                         f"You might want to use the measurement_type: "
-                        f"'qualitative dosing' with less restrictive requirements.")
+                        f"'qualitative dosing' with less restrictive requirements."
+                    )
 
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
         try:
             # perform via dedicated function on categorials
-            for info_node in ['substance', 'measurement_type', 'calculation_type', 'form', 'application', 'route']:
+            for info_node in [
+                "substance",
+                "measurement_type",
+                "calculation_type",
+                "form",
+                "application",
+                "route",
+            ]:
                 if info_node in attrs:
                     if attrs[info_node] is not None:
                         attrs[info_node] = getattr(attrs[info_node], info_node)
 
-            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)[
+                "choice"
+            ]
 
         except ValueError as err:
             raise serializers.ValidationError(err)
         return super().validate(attrs)
 
     def validate_time(self, value):
+        """Check that time has a specific pattern.
         """
-        Check that time has a specific pattern.
-        """
-        validators = [self.validate_single,
-                      self.validate_concise_multiple,
-                      self.validate_multiple,
-                      self.raise_all_errors]
+        validators = [
+            self.validate_single,
+            self.validate_concise_multiple,
+            self.validate_multiple,
+            self.raise_all_errors,
+        ]
 
         self._validate_time(value, validators)
         return value
-
 
     @staticmethod
     def raise_all_errors(data, error_log):
@@ -163,8 +201,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
         if not isinstance(data, str):
             return False, f"<{data}> is not a string."
-        else:
-            return True, ""
+        return True, ""
 
     @staticmethod
     def validate_concise_multiple(data, error_log):
@@ -172,11 +209,12 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         if not is_string:
             return False, {"time": error}
 
-        reg_match = "S[-+]?[0-9]*\.?[0-9]+T[0-9]*\.?[0-9]+R[0-9]+$"
+        reg_match = r"S[-+]?[0-9]*\.?[0-9]+T[0-9]*\.?[0-9]+R[0-9]+$"
         if re.match(reg_match, data):
             return True, data
-        else:
-            return False, {data: f"Value does not match the following regular expression: '{reg_match}'."}
+        return False, {
+            data: f"Value does not match the following regular expression: '{reg_match}'."
+        }
 
     @staticmethod
     def validate_multiple(data, error_log):
@@ -184,16 +222,17 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         if not is_string:
             return False, {"time": error}
 
-        time_points = [x.strip() for x in data.split('|')]
-        validators = [InterventionSerializer.validate_single,
-                      InterventionSerializer.validate_concise_multiple,
-                      InterventionSerializer.raise_all_errors]
+        time_points = [x.strip() for x in data.split("|")]
+        validators = [
+            InterventionSerializer.validate_single,
+            InterventionSerializer.validate_concise_multiple,
+            InterventionSerializer.raise_all_errors,
+        ]
         if len(time_points) > 1:
             for time_point in time_points:
                 InterventionSerializer._validate_time(time_point, validators)
             return True, data
-        else:
-            return False, "Value does not contain |"
+        return False, "Value does not contain |"
 
 
 class InterventionExSerializer(MappingSerializer):
@@ -218,10 +257,7 @@ class InterventionExSerializer(MappingSerializer):
 
     class Meta:
         model = InterventionEx
-        fields = (
-                EXTERN_FILE_FIELDS
-                + ["interventions", "comments", "descriptions"]
-        )
+        fields = EXTERN_FILE_FIELDS + ["interventions", "comments", "descriptions"]
 
     def validate_image(self, value):
         self._validate_image(value)
@@ -232,7 +268,9 @@ class InterventionExSerializer(MappingSerializer):
         # decompress external format
         # ----------------------------------
         if not isinstance(data, dict):
-            raise serializers.ValidationError(f"each intervention has to be a dict and not <{data}>")
+            raise serializers.ValidationError(
+                f"each intervention has to be a dict and not <{data}>"
+            )
 
         temp_interventions = self.split_entry(data)
         for key in VALUE_FIELDS_NO_UNIT:
@@ -244,7 +282,9 @@ class InterventionExSerializer(MappingSerializer):
             interventions_from_file = self.entries_from_file(intervention)
             interventions.extend(interventions_from_file)
 
-        drop_fields = INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
+        drop_fields = (
+            INTERVENTION_FIELDS + INTERVENTION_MAP_FIELDS + EX_MEASUREMENTTYPE_FIELDS
+        )
         [data.pop(field, None) for field in drop_fields]
         # ----------------------------------
         # finished
@@ -256,23 +296,27 @@ class InterventionExSerializer(MappingSerializer):
 
     def create(self, validated_data):
         intervention_set = validated_data.pop("intervention_set")
-        intervention_ex, poped_data = _create(model_manager=intervention_set.intervention_exs,
-                                              validated_data=validated_data,
-                                              create_multiple_keys=['descriptions', 'comments'],
-                                              pop=['interventions'])
+        intervention_ex, poped_data = _create(
+            model_manager=intervention_set.intervention_exs,
+            validated_data=validated_data,
+            create_multiple_keys=["descriptions", "comments"],
+            pop=["interventions"],
+        )
 
         interventions = poped_data["interventions"]
         for intervention in interventions:
             intervention["study"] = self.context["study"]
 
-        not_norm_interventions = create_multiple_bulk(intervention_ex, "ex", interventions, Intervention)
+        not_norm_interventions = create_multiple_bulk(
+            intervention_ex, "ex", interventions, Intervention
+        )
         create_multiple_bulk_normalized(not_norm_interventions, Intervention)
         intervention_ex.save()
         return intervention_ex
 
 
 class InterventionSetSerializer(ExSerializer):
-    """ InterventionSet. """
+    """InterventionSet."""
 
     intervention_exs = InterventionExSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -298,31 +342,43 @@ class InterventionSetSerializer(ExSerializer):
         intervention_exs = attrs.get("intervention_exs")
         if intervention_exs:
             all_interventions = list(
-                itertools.chain(*[intervention_ex.get("interventions") for intervention_ex in intervention_exs]))
-            all_intervention_names = [intervention["name"] for intervention in all_interventions]
+                itertools.chain(
+                    *[
+                        intervention_ex.get("interventions")
+                        for intervention_ex in intervention_exs
+                    ]
+                )
+            )
+            all_intervention_names = [
+                intervention["name"] for intervention in all_interventions
+            ]
 
             duplicated_intervention_names = list_duplicates(all_intervention_names)
             if duplicated_intervention_names:
                 raise serializers.ValidationError(
                     {
                         "intervention_set": "Intervention names are required to be unique within a study.",
-                        "duplicated intervention names": duplicated_intervention_names
-                })
+                        "duplicated intervention names": duplicated_intervention_names,
+                    }
+                )
         return super().validate(attrs)
-
-
 
     def create(self, validated_data):
 
-        interventionset, poped_data = _create(model_manager=self.Meta.model.objects,
-                                        validated_data=validated_data,
-                                        create_multiple_keys=['descriptions', 'comments'], pop=['intervention_exs'])
+        interventionset, poped_data = _create(
+            model_manager=self.Meta.model.objects,
+            validated_data=validated_data,
+            create_multiple_keys=["descriptions", "comments"],
+            pop=["intervention_exs"],
+        )
 
-        intervention_exs =  poped_data['intervention_exs']
+        intervention_exs = poped_data["intervention_exs"]
         for intervention_ex in intervention_exs:
             intervention_ex["intervention_set"] = interventionset
 
-        InterventionExSerializer(context=self.context,many=True).create(validated_data=poped_data['intervention_exs'])
+        InterventionExSerializer(context=self.context, many=True).create(
+            validated_data=poped_data["intervention_exs"]
+        )
 
         return interventionset
 
@@ -337,7 +393,12 @@ class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InterventionSet
-        fields = ["pk", "descriptions", "comments", "interventions", ]
+        fields = [
+            "pk",
+            "descriptions",
+            "comments",
+            "interventions",
+        ]
 
     def get_interventions(self, obj):
         return list_of_pk("interventions", obj)
@@ -347,7 +408,7 @@ class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
 class InterventionSmallElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Intervention
-        fields = ["pk", 'name']  # , 'url']
+        fields = ["pk", "name"]  # , 'url']
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
@@ -374,7 +435,9 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Intervention
-        fields = ["pk", "normed"] + INTERVENTION_FIELDS + ["study"] + MEASUREMENTTYPE_FIELDS
+        fields = (
+            ["pk", "normed"] + INTERVENTION_FIELDS + ["study"] + MEASUREMENTTYPE_FIELDS
+        )
 
 
 class InterventionElasticSerializerAnalysis(serializers.Serializer):
@@ -476,11 +539,11 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
             return obj.substance.label
 
     class Meta:
-        fields = ["study_sid", "study_name", "intervention_pk", "raw_pk",
-                  "normed"] + INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
-
-
-
+        fields = (
+            ["study_sid", "study_name", "intervention_pk", "raw_pk", "normed"]
+            + INTERVENTION_FIELDS
+            + MEASUREMENTTYPE_FIELDS
+        )
 
     """
     def to_representation(self, instance):
@@ -492,4 +555,3 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
             pass
     return rep
     """
-

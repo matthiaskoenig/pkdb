@@ -1,25 +1,21 @@
-"""
-Describe outputs
+"""Describe outputs
 """
 
 import math
 
 import numpy as np
 from django.db import models
-
-from pkdb_app.behaviours import Normalizable
-from pkdb_app.info_nodes.models import Tissue, Method
-from pkdb_app.interventions.models import Intervention
-from pkdb_app.subjects.models import Group, DataFile, Individual
 from django.utils.translation import gettext_lazy as _
 
-from .managers import (
-    OutputManager
-)
-from ..behaviours import (
-    Externable, Accessible)
-from ..error_measures import calculate_cv, calculate_se, calculate_sd
+from pkdb_app.behaviours import Normalizable
+from pkdb_app.info_nodes.models import Method, Tissue
+from pkdb_app.interventions.models import Intervention
+from pkdb_app.subjects.models import DataFile, Group, Individual
+
+from ..behaviours import Accessible, Externable
+from ..error_measures import calculate_cv, calculate_sd, calculate_se
 from ..utils import CHAR_MAX_LENGTH
+from .managers import OutputManager
 
 TIME_NORM_UNIT = "hr"
 
@@ -28,11 +24,10 @@ TIME_NORM_UNIT = "hr"
 # OUTPUTS
 # -------------------------------------------------
 class OutputSet(models.Model):
-
     @property
     def outputs(self):
         return self.study.outputs
-        #return Output.objects.filter(ex__in=self.output_exs.all())
+        # return Output.objects.filter(ex__in=self.output_exs.all())
 
     @property
     def outputs_normed(self):
@@ -43,8 +38,8 @@ class OutputSet(models.Model):
     def count_outputs(self):
         if self.outputs.exists():
             return self.outputs.count()
-        else:
-            return 0
+        return 0
+
 
 class AbstractOutput(models.Model):
     time = models.FloatField(null=True)
@@ -52,7 +47,6 @@ class AbstractOutput(models.Model):
 
     class Meta:
         abstract = True
-
 
 
 class OutputEx(Externable):
@@ -66,8 +60,8 @@ class OutputEx(Externable):
         OutputSet, related_name="output_exs", on_delete=models.CASCADE, null=True
     )
 
-class Outputable(Normalizable, models.Model):
 
+class Outputable(Normalizable, models.Model):
     class Meta:
         abstract = True
 
@@ -92,40 +86,59 @@ class Outputable(Normalizable, models.Model):
             return self.method.info_node.name
 
 
-
-
-
 class Output(AbstractOutput, Outputable, Accessible):
-
     class OutputTypes(models.TextChoices):
-        """ Data Types. """
-        Array = 'array', _('array')
-        Timecourse = 'timecourse', _('timecourse')
-        Output = 'output', _('output')
+        """Data Types."""
+
+        Array = "array", _("array")
+        Timecourse = "timecourse", _("timecourse")
+        Output = "output", _("output")
 
     """ Storage of data sets. """
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
-    output_type = models.CharField(max_length=CHAR_MAX_LENGTH,  choices=OutputTypes.choices)
+    output_type = models.CharField(
+        max_length=CHAR_MAX_LENGTH, choices=OutputTypes.choices
+    )
 
     group = models.ForeignKey(Group, null=True, blank=True, on_delete=models.CASCADE)
-    individual = models.ForeignKey(Individual, null=True, blank=True, on_delete=models.CASCADE)
-    interventions = models.ManyToManyField(Intervention, through="OutputIntervention", related_name="outputs", blank=True)
-    subset = models.ForeignKey('data.Subset', on_delete=models.CASCADE, null=True, blank=True, related_name="pks")
+    individual = models.ForeignKey(
+        Individual, null=True, blank=True, on_delete=models.CASCADE
+    )
+    interventions = models.ManyToManyField(
+        Intervention, through="OutputIntervention", related_name="outputs", blank=True
+    )
+    subset = models.ForeignKey(
+        "data.Subset",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="pks",
+    )
 
-    tissue = models.ForeignKey(Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
-    method = models.ForeignKey(Method, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE)
+    tissue = models.ForeignKey(
+        Tissue, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE
+    )
+    method = models.ForeignKey(
+        Method, related_name="outputs", null=True, blank=True, on_delete=models.CASCADE
+    )
 
-    ex = models.ForeignKey(OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True)
+    ex = models.ForeignKey(
+        OutputEx, related_name="outputs", on_delete=models.CASCADE, null=True
+    )
 
     calculated = models.BooleanField(default=False)
-    study = models.ForeignKey('studies.Study', on_delete=models.CASCADE, related_name="outputs")
+    study = models.ForeignKey(
+        "studies.Study", on_delete=models.CASCADE, related_name="outputs"
+    )
 
     objects = OutputManager()
 
     # for elastic search. NaNs are not allowed in elastic search
     def null_attr(self, attr):
         value = getattr(self, attr)
-        if value not in ['nan', 'NA', 'NAN', 'na', np.nan, None] and not math.isnan(value):
+        if value not in ["nan", "NA", "NAN", "na", np.nan, None] and not math.isnan(
+            value
+        ):
             return value
 
     def is_timecourse(self):
@@ -134,36 +147,35 @@ class Output(AbstractOutput, Outputable, Accessible):
                 return True
         return False
 
-
     def null_value(self):
-        return self.null_attr('value')
+        return self.null_attr("value")
 
     def null_mean(self):
-        return self.null_attr('mean')
+        return self.null_attr("mean")
 
     def null_median(self):
-        return self.null_attr('median')
+        return self.null_attr("median")
 
     def null_min(self):
-        return self.null_attr('min')
+        return self.null_attr("min")
 
     def null_max(self):
-        return self.null_attr('max')
+        return self.null_attr("max")
 
     def null_se(self):
-        return self.null_attr('se')
+        return self.null_attr("se")
 
     def null_sd(self):
-        return self.null_attr('sd')
+        return self.null_attr("sd")
 
     def null_cv(self):
-        return self.null_attr('cv')
+        return self.null_attr("cv")
 
     def null_unit(self):
-        return self.null_attr('unit')
+        return self.null_attr("unit")
 
     def null_time(self):
-        return self.null_attr('time')
+        return self.null_attr("time")
 
     def add_error_measures(self):
         if self.group:
@@ -304,12 +316,10 @@ class OutputIntervention(Accessible, models.Model):
     def measurement_type_label(self):
         return self.output.measurement_type.info_node.label
 
-
     @property
     def calculation_type(self):
         if self.output.calculation_type:
             return self.output.calculation_type.info_node.sid
-
 
     @property
     def calculation_type_label(self):

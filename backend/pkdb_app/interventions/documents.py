@@ -1,7 +1,7 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
-from ..documents import string_field, elastic_settings, study_field, info_node
+from ..documents import elastic_settings, info_node, string_field, study_field
 from ..interventions.models import Intervention
 
 
@@ -20,30 +20,30 @@ class InterventionDocument(Document):
     choice = info_node("i_choice")
     substance = info_node("i_substance")
 
-    time_unit = string_field('time_unit')
-    time = string_field('time')
+    time_unit = string_field("time_unit")
+    time = string_field("time")
     time_end = fields.FloatField()
 
     measurement_type_name = fields.TextField(
-        attr='measurement_type_name',
+        attr="measurement_type_name",
         fields={
-            'raw': fields.TextField(analyzer='keyword'),
-        }
+            "raw": fields.TextField(analyzer="keyword"),
+        },
     )
-    calculation_type_name = string_field('calculation_type_name')
+    calculation_type_name = string_field("calculation_type_name")
 
-    form_name = string_field('form_name')
-    route_name = string_field('route_name')
-    application_name = string_field('application_name')
-    choice_name = string_field('choice_name')
-    substance_name = string_field('substance_name')  #FIXME: Remove
+    form_name = string_field("form_name")
+    route_name = string_field("route_name")
+    application_name = string_field("application_name")
+    choice_name = string_field("choice_name")
+    substance_name = string_field("substance_name")  # FIXME: Remove
     study = study_field
-    study_name = string_field('study_name')  # FIXME: Remove
-    study_sid = string_field('study_sid')  # FIXME: Remove
+    study_name = string_field("study_name")  # FIXME: Remove
+    study_sid = string_field("study_sid")  # FIXME: Remove
 
-    name = string_field('name')
+    name = string_field("name")
     normed = fields.BooleanField()
-    raw_pk = string_field('raw_pk')
+    raw_pk = string_field("raw_pk")
     value = fields.FloatField()
     mean = fields.FloatField()
     median = fields.FloatField()
@@ -52,14 +52,12 @@ class InterventionDocument(Document):
     se = fields.FloatField()
     sd = fields.FloatField()
     cv = fields.FloatField()
-    unit = string_field('unit')
-    access = string_field('access')
+    unit = string_field("unit")
+    access = string_field("access")
     allowed_users = fields.ObjectField(
         attr="allowed_users",
-        properties={
-            'username': string_field("username")
-        },
-        multi=True
+        properties={"username": string_field("username")},
+        multi=True,
     )
 
     class Django:
@@ -70,9 +68,9 @@ class InterventionDocument(Document):
         auto_refresh = False
 
     class Index:
-        name = 'interventions'
+        name = "interventions"
         settings = elastic_settings
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(InterventionDocument, self).get_queryset().select_related('study')
+        return super().get_queryset().select_related("study")

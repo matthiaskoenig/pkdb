@@ -2,8 +2,7 @@ from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
 from pkdb_app.comments.models import Comment, Description
-from pkdb_app.documents import elastic_settings, string_field, ObjectField, \
-    text_field
+from pkdb_app.documents import ObjectField, elastic_settings, string_field, text_field
 
 
 # ------------------------------------
@@ -12,13 +11,14 @@ from pkdb_app.documents import elastic_settings, string_field, ObjectField, \
 # TODO: Remove this file
 @registry.register_document
 class CommentDocument(Document):
-    pk = fields.IntegerField(attr='pk')
+    pk = fields.IntegerField(attr="pk")
     user = ObjectField(
         properties={
-            'first_name': string_field('first_name'),
-            'last_name': string_field('last_name'),
-        })
-    text = text_field('text')
+            "first_name": string_field("first_name"),
+            "last_name": string_field("last_name"),
+        }
+    )
+    text = text_field("text")
     date_time = fields.DateField()
 
     class Django:
@@ -29,7 +29,7 @@ class CommentDocument(Document):
         auto_refresh = False
 
     class Index:
-        name = 'comments'
+        name = "comments"
         settings = elastic_settings
 
 
@@ -38,8 +38,8 @@ class CommentDocument(Document):
 # ------------------------------------
 @registry.register_document
 class DescriptionDocument(Document):
-    pk = fields.IntegerField(attr='pk')
-    text = text_field('text')
+    pk = fields.IntegerField(attr="pk")
+    text = text_field("text")
 
     class Django:
         model = Description
@@ -49,5 +49,5 @@ class DescriptionDocument(Document):
         auto_refresh = False
 
     class Index:
-        name = 'descriptions'
+        name = "descriptions"
         settings = elastic_settings

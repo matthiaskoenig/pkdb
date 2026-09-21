@@ -1,19 +1,23 @@
 from django.contrib.auth.models import Group
-from rest_framework import viewsets, mixins
+from rest_framework import mixins, viewsets
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAdminUser
 
 from pkdb_app.users.models import User
-from pkdb_app.users.serializers import AuthTokenSerializerCostum
-from pkdb_app.users.serializers import UserGroupSerializer, CreateUserSerializer, UserSerializer
+from pkdb_app.users.serializers import (
+    AuthTokenSerializerCostum,
+    CreateUserSerializer,
+    UserGroupSerializer,
+    UserSerializer,
+)
 
 
 class UserViewSet(
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
+    """Updates and retrieves user accounts
     """
-    Updates and retrieves user accounts
-    """
+
     swagger_schema = None
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -27,10 +31,12 @@ class UserGroupViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminUser,)
 
 
-class UserCreateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserCreateViewSet(
+    mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+):
+    """Creates user accounts
     """
-    Creates user accounts
-    """
+
     swagger_schema = None
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer

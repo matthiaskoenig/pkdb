@@ -14,8 +14,7 @@ def is_allowed_method(request):
 
 
 class IsUserOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
-    """
-    Object-level permission to only allow owners of an object to edit it.
+    """Object-level permission to only allow owners of an object to edit it.
     """
 
     def has_object_permission(self, request, view, obj):
@@ -26,7 +25,6 @@ class IsUserOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
 
 
 class IsAdminOrCreator(permissions.IsAuthenticatedOrReadOnly):
-
     def has_object_permission(self, request, view, obj):
         if is_allowed_method(request):
             return True
@@ -36,8 +34,7 @@ class IsAdminOrCreator(permissions.IsAuthenticatedOrReadOnly):
 
 
 class IsAdminOrCreatorOrCurator(permissions.IsAuthenticatedOrReadOnly):
-    """
-    for study and reference
+    """for study and reference
     """
 
     def has_object_permission(self, request, view, obj):
@@ -47,7 +44,9 @@ class IsAdminOrCreatorOrCurator(permissions.IsAuthenticatedOrReadOnly):
 
         # for reference model
         if hasattr(obj, "study"):
-            allowed_user = (request.user == obj.study.creator) or (request.user in obj.study.curators.all())
+            allowed_user = (request.user == obj.study.creator) or (
+                request.user in obj.study.curators.all()
+            )
         else:
             allowed_user = False
 
@@ -55,7 +54,6 @@ class IsAdminOrCreatorOrCurator(permissions.IsAuthenticatedOrReadOnly):
 
 
 class StudyPermission(permissions.IsAuthenticatedOrReadOnly):
-
     def has_object_permission(self, request, view, obj):
         if hasattr(obj, "study"):
             if obj.study:
@@ -65,10 +63,12 @@ class StudyPermission(permissions.IsAuthenticatedOrReadOnly):
 
 
 def study_permissions(request, obj):
-    study_permissions = {"admin": admin_permission(),
-                         "basic": basic_permission(request, obj),
-                         "reviewer": reviewer_permission(request, obj),
-                         "anonymous": anonymous_permissions(request, obj)}
+    study_permissions = {
+        "admin": admin_permission(),
+        "basic": basic_permission(request, obj),
+        "reviewer": reviewer_permission(request, obj),
+        "anonymous": anonymous_permissions(request, obj),
+    }
 
     return study_permissions[user_group(request.user)]
 
@@ -77,7 +77,6 @@ def user_group(user):
     try:
         user_group = user.groups.first().name
     except AttributeError:
-
         if user.is_superuser:
             user_group = "admin"
 
@@ -90,16 +89,22 @@ def user_group(user):
 def get_study_permission(user, obj):
     try:
         allowed_user_modify = (user == obj.creator) or (user in obj.curators)
-        allow_user_get = (user in obj.collaborators) or (obj.access == PUBLIC) or allowed_user_modify
+        allow_user_get = (
+            (user in obj.collaborators) or (obj.access == PUBLIC) or allowed_user_modify
+        )
     except TypeError:
         allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
-        allow_user_get = (user in obj.collaborators.all()) or (obj.access == PUBLIC) or allowed_user_modify
+        allow_user_get = (
+            (user in obj.collaborators.all())
+            or (obj.access == PUBLIC)
+            or allowed_user_modify
+        )
 
     permission_dict = {
         "admin": True,
         "anonymous": (obj.access == PUBLIC),
         "reviewer": True,
-        "basic": allow_user_get
+        "basic": allow_user_get,
     }
     return permission_dict[user_group(user)]
 
@@ -109,19 +114,31 @@ def get_study_file_permission(user, obj):
     if isinstance(obj, AttrDict) or isinstance(obj, DictionaryProxy):
         username = user.username
         curator_usernames = [curator["username"] for curator in obj.curators]
-        collaborators_usernames = [collaborator["username"] for collaborator in obj.collaborators]
-        allowed_user_modify = (username == obj.creator["username"]) or (user in curator_usernames)
-        allow_user_get = (user in collaborators_usernames) or (obj.licence == OPEN) or allowed_user_modify
+        collaborators_usernames = [
+            collaborator["username"] for collaborator in obj.collaborators
+        ]
+        allowed_user_modify = (username == obj.creator["username"]) or (
+            user in curator_usernames
+        )
+        allow_user_get = (
+            (user in collaborators_usernames)
+            or (obj.licence == OPEN)
+            or allowed_user_modify
+        )
 
     elif isinstance(obj, Study):
         allowed_user_modify = (user == obj.creator) or (user in obj.curators.all())
-        allow_user_get = (user in obj.collaborators.all()) or (obj.licence == OPEN) or allowed_user_modify
+        allow_user_get = (
+            (user in obj.collaborators.all())
+            or (obj.licence == OPEN)
+            or allowed_user_modify
+        )
 
     permission_dict = {
         "admin": True,
         "anonymous": obj.licence == OPEN,
         "reviewer": True,
-        "basic": allow_user_get
+        "basic": allow_user_get,
     }
     return permission_dict[user_group(user)]
 
@@ -148,8 +165,7 @@ def basic_permission(request, obj):
 def reviewer_permission(request, obj):
     if is_allowed_method(request):
         return get_study_permission(request.user, obj)
-    else:
-        return False
+    return False
 
 
 def admin_permission():

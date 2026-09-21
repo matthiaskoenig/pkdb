@@ -11,10 +11,7 @@ from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SlugRelatedField(
-        queryset=Group.objects.all(),
-        slug_field="name",
-        required=True,
-        many=True
+        queryset=Group.objects.all(), slug_field="name", required=True, many=True
     )
 
     class Meta:
@@ -33,17 +30,20 @@ class AuthTokenSerializerCostum(AuthTokenSerializer):
     def validate(self, attrs):
         result = super().validate(attrs)
 
-        user = VerifiedEmailBackend().authenticate(request=self.context.get('request'),
-                                                   password=attrs["password"], email=result["user"].email)
+        user = VerifiedEmailBackend().authenticate(
+            request=self.context.get("request"),
+            password=attrs["password"],
+            email=result["user"].email,
+        )
         if not user:
-            msg = 'User is not verified. Check your mail for the verification key.'
-            raise serializers.ValidationError(msg, code='authorization')
+            msg = "User is not verified. Check your mail for the verification key."
+            raise serializers.ValidationError(msg, code="authorization")
 
         return result
 
 
 class UserRegistrationSerializer(RegistrationSerializer):
-    class Meta(object):
+    class Meta:
         extra_kwargs = {
             "password": {
                 "style": {"input_type": "password"},
@@ -54,23 +54,22 @@ class UserRegistrationSerializer(RegistrationSerializer):
         model = get_user_model()
 
     def create(self, validated_data):
+        """Create a new user from the data passed to the serializer.
+
+        If the provided email has not been verified yet, the user is
+        created and a verification email is sent to the address.
+        Otherwise we send a notification to the email address that
+        someone attempted to register with an email that's already been
+        verified.
+
+        Args:
+            validated_data (dict):
+                The data passed to the serializer after it has been
+                validated.
+
+        Returns:
+            A new user created from the provided data.
         """
-          Create a new user from the data passed to the serializer.
-
-          If the provided email has not been verified yet, the user is
-          created and a verification email is sent to the address.
-          Otherwise we send a notification to the email address that
-          someone attempted to register with an email that's already been
-          verified.
-
-          Args:
-              validated_data (dict):
-                  The data passed to the serializer after it has been
-                  validated.
-
-          Returns:
-              A new user created from the provided data.
-          """
         email = validated_data.pop("email")
 
         password = validated_data.pop("password")
@@ -106,10 +105,7 @@ class UserRegistrationSerializer(RegistrationSerializer):
 
 class CreateUserSerializer(serializers.ModelSerializer):
     groups = serializers.SlugRelatedField(
-        queryset=Group.objects.all(),
-        slug_field="name",
-        required=True,
-        many=True
+        queryset=Group.objects.all(), slug_field="name", required=True, many=True
     )
 
     def create(self, validated_data):
@@ -139,7 +135,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return instance
 
     def create_verified_email(self, user):
-        email_dict = {"email": user.email, "is_primary": True, "is_verified": True, "user": user}
+        email_dict = {
+            "email": user.email,
+            "is_primary": True,
+            "is_verified": True,
+            "user": user,
+        }
         email = models.EmailAddress.objects.create(**email_dict)
         return email
 
@@ -153,7 +154,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "auth_token",
-            "groups"
+            "groups",
         )
         read_only_fields = ("auth_token",)
         extra_kwargs = {"password": {"write_only": True}}
@@ -165,5 +166,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("username", "first_name", "last_name",)
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+        )
         read_only_fields = ("username",)

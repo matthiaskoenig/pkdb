@@ -1,81 +1,108 @@
 import tempfile
+import time
 import uuid
 import zipfile
 from collections import namedtuple
 from datetime import datetime
 from io import StringIO
 from typing import Dict
-import time
-import pandas as pd
-from django.db import connection
-from django.test.client import RequestFactory
 
 import django_filters.rest_framework
+import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q as DQ, Prefetch
-from django.http import JsonResponse, HttpResponse
+from django.db import connection
+from django.db.models import Prefetch, Q, Subquery
+from django.db.models import Q as DQ
+from django.http import HttpResponse, JsonResponse
+from django.test.client import RequestFactory
 from django.utils.decorators import method_decorator
-from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
-    OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
+from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_EXCLUDE, LOOKUP_QUERY_IN
+from django_elasticsearch_dsl_drf.filter_backends import (
+    CompoundSearchFilterBackend,
+    FilteringFilterBackend,
+    IdsFilterBackend,
+    MultiMatchSearchFilterBackend,
+    OrderingFilterBackend,
+)
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from elasticsearch import helpers
 from elasticsearch_dsl.query import Q
-
-from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
-from pkdb_app.data.models import SubSet, Data
-from pkdb_app.data.serializers import TimecourseSerializer
-from pkdb_app.data.views import SubSetViewSet
-from pkdb_app.documents import UUID_PARAM
-from pkdb_app.info_nodes.serializers import InfoNodeElasticSerializer, IndoNodeFlatSerializer
-from pkdb_app.info_nodes.views import InfoNodeElasticViewSet
-from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
-from pkdb_app.outputs.serializers import OutputInterventionSerializer
-from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
+from rest_framework import filters, serializers, status, viewsets
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
+from rest_framework.parsers import FormParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import filters, status, serializers
-from rest_framework import viewsets
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-
-from pkdb_app.interventions.documents import InterventionDocument
-from pkdb_app.outputs.documents import OutputDocument, \
-    OutputInterventionDocument
-from pkdb_app.outputs.models import OutputIntervention
-from pkdb_app.pagination import CustomPagination
-from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
-from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
-    GroupCharacteristicaDocument, IndividualCharacteristicaDocument
-from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica, Group, Individual
-from pkdb_app.users.models import PUBLIC
-from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, study_permissions, user_group
 from rest_framework.views import APIView
 
-from .serializers import (
-    ReferenceSerializer,
-    StudySerializer,
-    ReferenceElasticSerializer,
-    StudyElasticSerializer, StudyAnalysisSerializer,
+from pkdb_app.data.documents import DataAnalysisDocument, SubSetDocument
+from pkdb_app.data.models import Data, SubSet
+from pkdb_app.data.serializers import TimecourseSerializer
+from pkdb_app.data.views import SubSetViewSet
+from pkdb_app.documents import UUID_PARAM
+from pkdb_app.info_nodes.serializers import (
+    IndoNodeFlatSerializer,
+)
+from pkdb_app.info_nodes.views import InfoNodeElasticViewSet
+from pkdb_app.interventions.documents import InterventionDocument
+from pkdb_app.interventions.models import Intervention
+from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
+from pkdb_app.interventions.views import (
+    ElasticInterventionAnalysisViewSet,
+    ElasticInterventionViewSet,
+)
+from pkdb_app.outputs.documents import OutputDocument, OutputInterventionDocument
+from pkdb_app.outputs.models import Output, OutputIntervention
+from pkdb_app.outputs.serializers import OutputInterventionSerializer
+from pkdb_app.outputs.views import ElasticOutputViewSet, OutputInterventionViewSet
+from pkdb_app.pagination import CustomPagination
+from pkdb_app.studies.documents import ReferenceDocument, StudyDocument
+from pkdb_app.studies.models import IdCollection, Reference, Study
+from pkdb_app.subjects.documents import (
+    GroupCharacteristicaDocument,
+    GroupDocument,
+    IndividualCharacteristicaDocument,
+    IndividualDocument,
+)
+from pkdb_app.subjects.models import (
+    Group,
+    GroupCharacteristica,
+    Individual,
+    IndividualCharacteristica,
+)
+from pkdb_app.subjects.serializers import (
+    GroupCharacteristicaSerializer,
+    IndividualCharacteristicaSerializer,
+)
+from pkdb_app.subjects.views import (
+    GroupCharacteristicaViewSet,
+    GroupViewSet,
+    IndividualCharacteristicaViewSet,
+    IndividualViewSet,
+)
+from pkdb_app.users.models import PUBLIC
+from pkdb_app.users.permissions import (
+    IsAdminOrCreatorOrCurator,
+    StudyPermission,
+    study_permissions,
+    user_group,
 )
 
-from django.db.models import Subquery
-from django.db.models import Q
-from pkdb_app.interventions.views import ElasticInterventionViewSet, ElasticInterventionAnalysisViewSet
-from pkdb_app.outputs.models import Output
-from pkdb_app.interventions.models import Intervention
-from pkdb_app.outputs.views import ElasticOutputViewSet, OutputInterventionViewSet
-from pkdb_app.studies.models import Study, IdCollection, Reference
-from pkdb_app.subjects.views import GroupViewSet, IndividualViewSet, GroupCharacteristicaViewSet, \
-    IndividualCharacteristicaViewSet
+from .serializers import (
+    ReferenceElasticSerializer,
+    ReferenceSerializer,
+    StudyAnalysisSerializer,
+    StudyElasticSerializer,
+    StudySerializer,
+)
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
-    """ ReferenceViewSet """
+    """ReferenceViewSet"""
+
     swagger_schema = None
     queryset = Reference.objects.all()
     parser_classes = (JSONParser, MultiPartParser, FormParser)
@@ -85,20 +112,14 @@ class ReferencesViewSet(viewsets.ModelViewSet):
         django_filters.rest_framework.DjangoFilterBackend,
         filters.SearchFilter,
     )
-    filter_fields = (
-        "sid",
-        "name",
-        "pmid",
-        "title",
-        "abstract",
-        "journal"
-    )
+    filter_fields = ("sid", "name", "pmid", "title", "abstract", "journal")
     search_fields = filter_fields
     permission_classes = (IsAdminOrCreatorOrCurator,)
 
 
 class StudyViewSet(viewsets.ModelViewSet):
-    """ StudyViewSet """
+    """StudyViewSet"""
+
     swagger_schema = None
     queryset = Study.objects.all()
     serializer_class = StudySerializer
@@ -118,13 +139,15 @@ class StudyViewSet(viewsets.ModelViewSet):
         if group in ["admin", "reviewer"]:
             return queryset
 
-        elif group == "basic":
-            return queryset.filter(DQ(access=PUBLIC) |
-                                   DQ(creator=user) |
-                                   DQ(collaborators=user) |
-                                   DQ(curators=user)).distinct()
+        if group == "basic":
+            return queryset.filter(
+                DQ(access=PUBLIC)
+                | DQ(creator=user)
+                | DQ(collaborators=user)
+                | DQ(curators=user)
+            ).distinct()
 
-        elif group == "anonymous":
+        if group == "anonymous":
             return queryset.filter(access=PUBLIC)
 
     def get_queryset(self):
@@ -145,6 +168,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 ###############################################################################################
 # Elastic ViewSets
 ###############################################################################################
+
 
 @api_view(["POST"])
 @parser_classes([JSONParser])
@@ -170,7 +194,7 @@ def update_index_study(request):
         # code you want to evaluate
 
         try:
-            action = data.get('action', 'index')
+            action = data.get("action", "index")
             doc().update(thing=instances, action=action)
         except helpers.BulkIndexError:
             raise helpers.BulkIndexError
@@ -187,7 +211,7 @@ def delete_elastic_study(related_elastic):
 
 
 def related_elastic_dict(study):
-    """ Dictionary of elastic documents for given study.
+    """Dictionary of elastic documents for given study.
 
     :param study:
     :return:
@@ -199,36 +223,40 @@ def related_elastic_dict(study):
     subsets = study.subsets.all()
 
     related_outputs_intervention = [
-        'intervention',
-        'output',
-        'output__individual',
-        'output__group',
-        'output__measurement_type__info_node',
-        'output__tissue__info_node',
-        'output__substance__info_node',
+        "intervention",
+        "output",
+        "output__individual",
+        "output__group",
+        "output__measurement_type__info_node",
+        "output__tissue__info_node",
+        "output__substance__info_node",
     ]
 
     related_outputs = [
-        'individual',
-        'group',
-        'measurement_type__info_node',
-        'tissue__info_node',
-        'substance__info_node',
+        "individual",
+        "group",
+        "measurement_type__info_node",
+        "tissue__info_node",
+        "substance__info_node",
     ]
 
     docs_dict = {
         StudyDocument: study,
         GroupDocument: groups,
         IndividualDocument: individuals,
-        GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related('group', 'characteristica').filter(
-            group__in=groups),
-        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related('individual',
-                                                                                            'characteristica').filter(
-            individual__in=individuals),
+        GroupCharacteristicaDocument: GroupCharacteristica.objects.select_related(
+            "group", "characteristica"
+        ).filter(group__in=groups),
+        IndividualCharacteristicaDocument: IndividualCharacteristica.objects.select_related(
+            "individual", "characteristica"
+        ).filter(individual__in=individuals),
         InterventionDocument: interventions,
-        OutputDocument: study.outputs.select_related(*related_outputs).prefetch_related('interventions'),
-        OutputInterventionDocument: OutputIntervention.objects.select_related(*related_outputs_intervention).filter(
-            intervention__in=interventions),
+        OutputDocument: study.outputs.select_related(*related_outputs).prefetch_related(
+            "interventions"
+        ),
+        OutputInterventionDocument: OutputIntervention.objects.select_related(
+            *related_outputs_intervention
+        ).filter(intervention__in=interventions),
         DataAnalysisDocument: dimensions,
         SubSetDocument: subsets,
     }
@@ -237,115 +265,114 @@ def related_elastic_dict(study):
     return docs_dict
 
 
-@method_decorator(name='list', decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM]))
+@method_decorator(
+    name="list", decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM])
+)
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
-    """ Endpoint to query studies
+    """Endpoint to query studies
 
     The studies endpoint gives access to the studies data. A study is a container of consistent
     pharmacokinetics data. This container mostly contains data reported in a single scientific paper.
     """
+
     document_uid_field = "sid__raw"
     lookup_field = "sid"
     document = StudyDocument
     serializer_class = StudyElasticSerializer
     pagination_class = CustomPagination
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, MultiMatchSearchFilterBackend]
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        MultiMatchSearchFilterBackend,
+    ]
     permission_classes = (StudyPermission,)
     search_fields = (
-        'sid',
-        'pk_version',
-        'creator.first_name',
-        'creator.last_name',
-        'creator.user',
-
-        'curators.first_name',
-        'curators.last_name',
-        'curators.user',
-
-        'name',
-        'reference.pmid',
-        'reference.title',
-
-        'files',
-        'substances.sid'
-        'substances.label'
+        "sid",
+        "pk_version",
+        "creator.first_name",
+        "creator.last_name",
+        "creator.user",
+        "curators.first_name",
+        "curators.last_name",
+        "curators.user",
+        "name",
+        "reference.pmid",
+        "reference.title",
+        "files",
+        "substances.sidsubstances.label",
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
-    multi_match_options = {
-        'operator': 'and'
-    }
+    multi_match_options = {"operator": "and"}
     filter_fields = {
-        'sid': 'sid.raw',
-        'name': {
-            'field': 'name.raw',
-            'lookups': [LOOKUP_QUERY_IN],
+        "sid": "sid.raw",
+        "name": {
+            "field": "name.raw",
+            "lookups": [LOOKUP_QUERY_IN],
         },
-        'reference_name': {
-            'field': 'reference.name.raw',
-            'lookups': [LOOKUP_QUERY_IN],
+        "reference_name": {
+            "field": "reference.name.raw",
+            "lookups": [LOOKUP_QUERY_IN],
         },
-        'creator': {
-            'field': 'creator.username.raw',
-            'lookups': [LOOKUP_QUERY_IN],
+        "creator": {
+            "field": "creator.username.raw",
+            "lookups": [LOOKUP_QUERY_IN],
         },
-        'curators': {
-            'field': 'curators.username.raw',
-            'lookups': [LOOKUP_QUERY_IN]
+        "curators": {"field": "curators.username.raw", "lookups": [LOOKUP_QUERY_IN]},
+        "collaborator": "collaborators.name.raw",
+        "licence": {
+            "field": "licence.raw",
+            "lookups": [LOOKUP_QUERY_IN],
         },
-        'collaborator': 'collaborators.name.raw',
-        'licence': {
-            'field': 'licence.raw',
-            'lookups': [LOOKUP_QUERY_IN],
+        "access": {
+            "field": "access.raw",
+            "lookups": [LOOKUP_QUERY_IN],
         },
-        'access': {
-            'field': 'access.raw',
-            'lookups': [LOOKUP_QUERY_IN],
-        },
-        'substance': 'substances.name.raw',
+        "substance": "substances.name.raw",
     }
     ordering_fields = {
-        'sid': 'sid',
+        "sid": "sid",
     }
 
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=False)})
     def get_object(self):
-        """ Test """
+        """Test"""
         return super().get_object()
 
-    @swagger_auto_schema(responses={200: StudyElasticSerializer(many=True)}, manual_parameters=[UUID_PARAM])
+    @swagger_auto_schema(
+        responses={200: StudyElasticSerializer(many=True)},
+        manual_parameters=[UUID_PARAM],
+    )
     def get_queryset(self):
-        """ Test """
+        """Test"""
         group = user_group(self.request.user)
 
         _uuid = self.request.query_params.get("uuid", [])
         if _uuid:
-            ids = list(get_object_or_404(IdCollection, uuid=_uuid, resource=self.document.Index.name).ids)
-
-            _qs_kwargs = {'values': ids}
-
-            self.search = self.search.query(
-                'ids',
-                **_qs_kwargs
+            ids = list(
+                get_object_or_404(
+                    IdCollection, uuid=_uuid, resource=self.document.Index.name
+                ).ids
             )
+
+            _qs_kwargs = {"values": ids}
+
+            self.search = self.search.query("ids", **_qs_kwargs)
 
         if group in ["admin", "reviewer"]:
             return self.search.query()
 
-        elif group == "basic":
+        if group == "basic":
             qs = self.search.query(
-                Q('match', access__raw=PUBLIC) |
-                Q('match', creator__username__raw=self.request.user.username) |
-                Q('match', curators__username__raw=self.request.user.username) |
-                Q('match', collaborators__username__raw=self.request.user.username)
-
+                Q("match", access__raw=PUBLIC)
+                | Q("match", creator__username__raw=self.request.user.username)
+                | Q("match", curators__username__raw=self.request.user.username)
+                | Q("match", collaborators__username__raw=self.request.user.username)
             )
             return qs
 
-        elif group == "anonymous":
-            qs = self.search.query(
-                'match',
-                **{"access__raw": PUBLIC}
-            )
+        if group == "anonymous":
+            qs = self.search.query("match", access__raw=PUBLIC)
             return qs
 
 
@@ -353,25 +380,26 @@ class StudyAnalysisViewSet(ElasticStudyViewSet):
     swagger_schema = None
     serializer_class = StudyAnalysisSerializer
     filter_fields = {
-        'study_sid': {'field': 'sid.raw',
-                      'lookups': [
-                          LOOKUP_QUERY_IN,
-                          LOOKUP_QUERY_EXCLUDE,
-
-                      ],
-                      },
-        'study_name': {'field': 'name.raw',
-                       'lookups': [
-                           LOOKUP_QUERY_IN,
-                           LOOKUP_QUERY_EXCLUDE,
-
-                       ],
-                       },
+        "study_sid": {
+            "field": "sid.raw",
+            "lookups": [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
+        "study_name": {
+            "field": "name.raw",
+            "lookups": [
+                LOOKUP_QUERY_IN,
+                LOOKUP_QUERY_EXCLUDE,
+            ],
+        },
     }
 
 
 class ElasticReferenceViewSet(BaseDocumentViewSet):
-    """Read/query/search references. """
+    """Read/query/search references."""
+
     swagger_schema = None
     document_uid_field = "sid__raw"
     lookup_field = "sid"
@@ -379,25 +407,26 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     pagination_class = CustomPagination
     permission_classes = (IsAdminOrCreatorOrCurator,)
     serializer_class = ReferenceElasticSerializer
-    filter_backends = [FilteringFilterBackend, IdsFilterBackend, OrderingFilterBackend, CompoundSearchFilterBackend,
-                       MultiMatchSearchFilterBackend]
+    filter_backends = [
+        FilteringFilterBackend,
+        IdsFilterBackend,
+        OrderingFilterBackend,
+        CompoundSearchFilterBackend,
+        MultiMatchSearchFilterBackend,
+    ]
     search_fields = (
-        'sid',
-        'pmid',
-        'name',
-        'title',
-        'abstract',
+        "sid",
+        "pmid",
+        "name",
+        "title",
+        "abstract",
     )
     multi_match_search_fields = {field: {"boost": 1} for field in search_fields}
-    multi_match_options = {
-        'operator': 'and'
-    }
-    filter_fields = {
-        'name': 'name.raw'
-    }
+    multi_match_options = {"operator": "and"}
+    filter_fields = {"name": "name.raw"}
     ordering_fields = {
-        'sid': 'sid',
-        "pk": 'pk',
+        "sid": "sid",
+        "pk": "pk",
         "pmid": "pmid",
         "name": "name",
         "doi": "doi",
@@ -410,18 +439,19 @@ class ElasticReferenceViewSet(BaseDocumentViewSet):
     }
 
 
-class PKData(object):
-    """ PKData represents a consistent set of pharmacokinetic data. """
+class PKData:
+    """PKData represents a consistent set of pharmacokinetic data."""
 
-    def __init__(self,
-                 request,
-                 concise: bool = True,
-                 interventions_query: dict = None,
-                 groups_query: dict = None,
-                 individuals_query: dict = None,
-                 outputs_query: dict = None,
-                 studies_query: dict = None,
-                 ):
+    def __init__(
+        self,
+        request,
+        concise: bool = True,
+        interventions_query: dict = None,
+        groups_query: dict = None,
+        individuals_query: dict = None,
+        outputs_query: dict = None,
+        studies_query: dict = None,
+    ):
 
         #  --- Init ---
 
@@ -431,11 +461,21 @@ class PKData(object):
 
         time_init = time.time()
 
-        self.outputs = Output.objects.filter(normed=True).select_related("study__sid").prefetch_related(
-            Prefetch(
-                'interventions',
-                queryset=Intervention.objects.only('id'))).only(
-            'group_id', 'individual_id', "id", "interventions__id", "subset__id", "output_type")
+        self.outputs = (
+            Output.objects.filter(normed=True)
+            .select_related("study__sid")
+            .prefetch_related(
+                Prefetch("interventions", queryset=Intervention.objects.only("id"))
+            )
+            .only(
+                "group_id",
+                "individual_id",
+                "id",
+                "interventions__id",
+                "subset__id",
+                "output_type",
+            )
+        )
 
         #  --- Elastic ---
         if studies_query:
@@ -445,7 +485,9 @@ class PKData(object):
             self.outputs = self.outputs.filter(study_id__in=studies_pks)
 
         else:
-            studies_pks = StudyViewSet.filter_on_permissions(request.user, Study.objects).values_list("id", flat=True)
+            studies_pks = StudyViewSet.filter_on_permissions(
+                request.user, Study.objects
+            ).values_list("id", flat=True)
             self.outputs = self.outputs.filter(study_id__in=Subquery(studies_pks))
 
         self.studies = Study.objects.filter(id__in=studies_pks)
@@ -460,19 +502,26 @@ class PKData(object):
             time_elastic_individuals = time.time()
             if concise:
                 self.outputs = self.outputs.filter(
-                    DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks))
+                    DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks)
+                )
             else:
                 self.studies = self.studies.filter(
-                    DQ(groups__id__in=groups_pks) | DQ(individuals__id__in=individuals_pks))
+                    DQ(groups__id__in=groups_pks)
+                    | DQ(individuals__id__in=individuals_pks)
+                )
 
         if interventions_query:
             self.interventions_query = {"normed": "true", **interventions_query}
             interventions_pks = self.intervention_pks()
             time_elastic_interventions = time.time()
             if concise:
-                self.outputs = self.outputs.filter(interventions__id__in=interventions_pks)
+                self.outputs = self.outputs.filter(
+                    interventions__id__in=interventions_pks
+                )
             else:
-                self.studies = self.studies.filter(interventions__id__in=interventions_pks)
+                self.studies = self.studies.filter(
+                    interventions__id__in=interventions_pks
+                )
 
         if outputs_query:
             self.outputs_query = {"normed": "true", **outputs_query}
@@ -481,7 +530,6 @@ class PKData(object):
             if concise:
                 self.outputs = self.outputs.filter(id__in=outputs_pks)
             else:
-
                 self.studies = self.studies.filter(outputs__id__in=outputs_pks)
 
         time_elastic = time.time()
@@ -496,8 +544,15 @@ class PKData(object):
             timecourses = set()
             scatters = set()
 
-            for output in self.outputs.values("study_id", "group_id", "individual_id", "id", "interventions__id",
-                                              "subset__id", "output_type"):
+            for output in self.outputs.values(
+                "study_id",
+                "group_id",
+                "individual_id",
+                "id",
+                "interventions__id",
+                "subset__id",
+                "output_type",
+            ):
                 studies.add(output["study_id"])
                 if output["group_id"]:
                     groups.add(output["group_id"])
@@ -508,10 +563,14 @@ class PKData(object):
                 if output["interventions__id"]:
                     interventions.add(output["interventions__id"])
 
-                if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Timecourse):
+                if (output["subset__id"] is not None) & (
+                    output["output_type"] == Output.OutputTypes.Timecourse
+                ):
                     timecourses.add(output["subset__id"])
 
-                if (output["subset__id"] is not None) & (output["output_type"] == Output.OutputTypes.Array):
+                if (output["subset__id"] is not None) & (
+                    output["output_type"] == Output.OutputTypes.Array
+                ):
                     scatters.add(output["subset__id"])
 
             self.ids = {
@@ -527,7 +586,9 @@ class PKData(object):
         else:
             study_pks = self.studies.distinct().values_list("pk", flat=True)
 
-            self.interventions = Intervention.objects.filter(study_id__in=study_pks, normed=True)
+            self.interventions = Intervention.objects.filter(
+                study_id__in=study_pks, normed=True
+            )
             self.groups = Group.objects.filter(study_id__in=study_pks)
             self.individuals = Individual.objects.filter(study_id__in=study_pks)
             self.outputs = Output.objects.filter(study_id__in=study_pks, normed=True)
@@ -540,9 +601,15 @@ class PKData(object):
                 "interventions": list(self.interventions.values_list("pk", flat=True)),
                 "outputs": list(self.outputs.values_list("pk", flat=True)),
                 "timecourses": list(
-                    self.subset.filter(data__data_type=Data.DataTypes.Timecourse).values_list("pk", flat=True)),
+                    self.subset.filter(
+                        data__data_type=Data.DataTypes.Timecourse
+                    ).values_list("pk", flat=True)
+                ),
                 "scatters": list(
-                    self.subset.filter(data__data_type=Data.DataTypes.Scatter).values_list("pk", flat=True)),
+                    self.subset.filter(
+                        data__data_type=Data.DataTypes.Scatter
+                    ).values_list("pk", flat=True)
+                ),
             }
 
         time_loop_end = time.time()
@@ -560,31 +627,39 @@ class PKData(object):
         print("-" * 80)
 
     def empty_get(self):
-        """create an get request with no parameters in the url."""
+        """Create an get request with no parameters in the url."""
         return RequestFactory().get("/").GET.copy()
 
     def intervention_pks(self):
-        return self._pks(view_class=ElasticInterventionViewSet, query_dict=self.interventions_query)
+        return self._pks(
+            view_class=ElasticInterventionViewSet, query_dict=self.interventions_query
+        )
 
     def group_pks(self):
         return self._pks(view_class=GroupViewSet, query_dict=self.groups_query)
 
     def individual_pks(self):
-        return self._pks(view_class=IndividualViewSet, query_dict=self.individuals_query)
+        return self._pks(
+            view_class=IndividualViewSet, query_dict=self.individuals_query
+        )
 
     def output_pks(self):
-        return self._pks(view_class=ElasticOutputViewSet, query_dict=self.outputs_query, scan_size=20000)
+        return self._pks(
+            view_class=ElasticOutputViewSet,
+            query_dict=self.outputs_query,
+            scan_size=20000,
+        )
 
     def subset_pks(self):
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
 
     def study_pks(self):
-        return self._pks(view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="pk")
+        return self._pks(
+            view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="pk"
+        )
 
     def set_request_get(self, query_dict: Dict):
-        """
-
-        :param query_dict:
+        """:param query_dict:
         :return:
         """
         get = self.empty_get()
@@ -592,9 +667,14 @@ class PKData(object):
             get[k] = v
         self.request._request.GET = get
 
-    def _pks(self, view_class: DocumentViewSet, query_dict: Dict, pk_field: str = "pk", scan_size=10000):
-        """
-        query elastic search for pks.
+    def _pks(
+        self,
+        view_class: DocumentViewSet,
+        query_dict: Dict,
+        pk_field: str = "pk",
+        scan_size=10000,
+    ):
+        """Query elastic search for pks.
         """
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
@@ -612,26 +692,36 @@ class PKData(object):
             queryset = queryset.source(serializer.Meta.fields)
             return [hit.to_dict() for hit in queryset.params(size=5000).scan()]
 
-        else:
-            return serializer(queryset.params(size=5000).scan(), many=True).data
+        return serializer(queryset.params(size=5000).scan(), many=True).data
 
 
 class ResponseSerializer(serializers.Serializer):
     """Documentation of response schema."""
+
     uuid = serializers.UUIDField(
         required=True,
         allow_null=False,
         help_text="The resulting queries can be accessed by adding this uuid as "
-                  "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /subsets/."
+        "an argument to the endpoints: /studies/, /groups/, /individuals/, /outputs/, /timecourses/, /subsets/.",
     )
-    studies = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting studies.")
-    groups = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting groups.")
-    individuals = serializers.IntegerField(required=True, allow_null=False,
-                                           help_text="Number of resulting individuals.")
-    outputs = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting outputs.")
-    timecourses = serializers.IntegerField(required=True, allow_null=False,
-                                           help_text="Number of resulting timecourses.")
-    scatters = serializers.IntegerField(required=True, allow_null=False, help_text="Number of resulting scatters.")
+    studies = serializers.IntegerField(
+        required=True, allow_null=False, help_text="Number of resulting studies."
+    )
+    groups = serializers.IntegerField(
+        required=True, allow_null=False, help_text="Number of resulting groups."
+    )
+    individuals = serializers.IntegerField(
+        required=True, allow_null=False, help_text="Number of resulting individuals."
+    )
+    outputs = serializers.IntegerField(
+        required=True, allow_null=False, help_text="Number of resulting outputs."
+    )
+    timecourses = serializers.IntegerField(
+        required=True, allow_null=False, help_text="Number of resulting timecourses."
+    )
+    scatters = serializers.IntegerField(
+        required=True, allow_null=False, help_text="Number of resulting scatters."
+    )
 
 
 class PKDataView(APIView):
@@ -681,30 +771,30 @@ class PKDataView(APIView):
 
     # additional parameters
     download__param = openapi.Parameter(
-        'download',
+        "download",
         openapi.IN_QUERY,
         description="The download parameter allows to download the results of the filter query. "
-                    "If set to True, a zip archive is returned containing '.csv' files for all tables.",
+        "If set to True, a zip archive is returned containing '.csv' files for all tables.",
         type=openapi.TYPE_BOOLEAN,
-        default=False
+        default=False,
     )
 
     concise__param = openapi.Parameter(
-        'concise',
+        "concise",
         openapi.IN_QUERY,
         description="The concise parameter to reduce the set to the most concise amount "
-                    "of instances in each table or to return studies which meet the "
-                    "filtered criteria and all the content (related set tables) of the "
-                    "studies. E.g. Filtering for “thalf -- elimination half life” with “"
-                    "concise:true” will return all studies containing “thalf” outputs, "
-                    "all interventions which have been applied before measuring thalf, "
-                    "and all groups and individuals for which half has been measured. "
-                    "Filtering for “thalf -- elimination half life” with “concise:false” "
-                    "will return all studies containing “thalf” outputs, all interventions "
-                    "which have been applied in these studies, and all groups and individuals "
-                    "in these studies.",
+        "of instances in each table or to return studies which meet the "
+        "filtered criteria and all the content (related set tables) of the "
+        "studies. E.g. Filtering for “thalf -- elimination half life” with “"
+        "concise:true” will return all studies containing “thalf” outputs, "
+        "all interventions which have been applied before measuring thalf, "
+        "and all groups and individuals for which half has been measured. "
+        "Filtering for “thalf -- elimination half life” with “concise:false” "
+        "will return all studies containing “thalf” outputs, all interventions "
+        "which have been applied in these studies, and all groups and individuals "
+        "in these studies.",
         type=openapi.TYPE_BOOLEAN,
-        default=True
+        default=True,
     )
 
     @swagger_auto_schema(
@@ -712,13 +802,13 @@ class PKDataView(APIView):
         responses={
             200: openapi.Response(
                 description="Returns a 'uuid' and the number of entries for each table. "
-                            "This 'uuid' can be used as an argument in the endpoints of the "
-                            "tables (studies, groups, individuals, interventions, outputs, subsets). "
-                            "For subsets endpoint the 'data_type'['timecourse', 'scatter'] "
-                            "has to be provided.",
-                schema=ResponseSerializer)
-        }
-
+                "This 'uuid' can be used as an argument in the endpoints of the "
+                "tables (studies, groups, individuals, interventions, outputs, subsets). "
+                "For subsets endpoint the 'data_type'['timecourse', 'scatter'] "
+                "has to be provided.",
+                schema=ResponseSerializer,
+            )
+        },
     )
     def get(self, request, *args, **kw):
         time_start_request = time.time()
@@ -726,7 +816,7 @@ class PKDataView(APIView):
         request.GET = request.GET.copy()
         pkdata = PKData(
             request=request,
-            concise="false" != request.GET.get("concise", True),
+            concise=request.GET.get("concise", True) != "false",
             studies_query=self._get_param("study", request),
             groups_query=self._get_param("group", request),
             individuals_query=self._get_param("individual", request),
@@ -756,34 +846,87 @@ class PKDataView(APIView):
                 scatter_subsets = SubSet.objects.filter(id__in=ids)
                 return [t.scatter_representation for t in scatter_subsets]
 
-            Sheet = namedtuple("Sheet",
-                               ["sheet_name", "query_dict", "viewset", "serializer", "function", "boost_performance", ])
+            Sheet = namedtuple(
+                "Sheet",
+                [
+                    "sheet_name",
+                    "query_dict",
+                    "viewset",
+                    "serializer",
+                    "function",
+                    "boost_performance",
+                ],
+            )
             table_content = {
-                "studies": Sheet("Studies", {"pk": pkdata.ids["studies"]}, ElasticStudyViewSet, StudyAnalysisSerializer,
-                                 None, False),
-                "groups": Sheet("Groups", {"group_pk": pkdata.ids["groups"]}, GroupCharacteristicaViewSet,
-                                GroupCharacteristicaSerializer, None, True, ),
-                "individuals": Sheet("Individuals", {"individual_pk": pkdata.ids["individuals"]},
-                                     IndividualCharacteristicaViewSet, IndividualCharacteristicaSerializer, None, True),
-                "interventions": Sheet("Interventions", {"pk": pkdata.ids["interventions"]},
-                                       ElasticInterventionAnalysisViewSet, InterventionElasticSerializerAnalysis, None,
-                                       False),
-                "outputs": Sheet("Outputs", {"output_pk": pkdata.ids["outputs"]}, OutputInterventionViewSet,
-                                 OutputInterventionSerializer, None, True),
-                "timecourses": Sheet("Timecourses", {"pk": pkdata.ids["timecourses"]}, SubSetViewSet,
-                                     TimecourseSerializer, None, False),
-                "scatters": Sheet("Scatter", {"subset_pk": pkdata.ids["scatters"]}, None, None, serialize_scatters,
-                                  False),
-                "info_nodes": Sheet("InfoNodes", None,
-                                    InfoNodeElasticViewSet,
-                                    IndoNodeFlatSerializer,
-                                    None,
-                                    False),
+                "studies": Sheet(
+                    "Studies",
+                    {"pk": pkdata.ids["studies"]},
+                    ElasticStudyViewSet,
+                    StudyAnalysisSerializer,
+                    None,
+                    False,
+                ),
+                "groups": Sheet(
+                    "Groups",
+                    {"group_pk": pkdata.ids["groups"]},
+                    GroupCharacteristicaViewSet,
+                    GroupCharacteristicaSerializer,
+                    None,
+                    True,
+                ),
+                "individuals": Sheet(
+                    "Individuals",
+                    {"individual_pk": pkdata.ids["individuals"]},
+                    IndividualCharacteristicaViewSet,
+                    IndividualCharacteristicaSerializer,
+                    None,
+                    True,
+                ),
+                "interventions": Sheet(
+                    "Interventions",
+                    {"pk": pkdata.ids["interventions"]},
+                    ElasticInterventionAnalysisViewSet,
+                    InterventionElasticSerializerAnalysis,
+                    None,
+                    False,
+                ),
+                "outputs": Sheet(
+                    "Outputs",
+                    {"output_pk": pkdata.ids["outputs"]},
+                    OutputInterventionViewSet,
+                    OutputInterventionSerializer,
+                    None,
+                    True,
+                ),
+                "timecourses": Sheet(
+                    "Timecourses",
+                    {"pk": pkdata.ids["timecourses"]},
+                    SubSetViewSet,
+                    TimecourseSerializer,
+                    None,
+                    False,
+                ),
+                "scatters": Sheet(
+                    "Scatter",
+                    {"subset_pk": pkdata.ids["scatters"]},
+                    None,
+                    None,
+                    serialize_scatters,
+                    False,
+                ),
+                "info_nodes": Sheet(
+                    "InfoNodes",
+                    None,
+                    InfoNodeElasticViewSet,
+                    IndoNodeFlatSerializer,
+                    None,
+                    False,
+                ),
             }
 
             # Create archive
             with tempfile.SpooledTemporaryFile() as tmp:
-                with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
+                with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as archive:
                     download_times = {}
 
                     for key, sheet in table_content.items():
@@ -791,27 +934,36 @@ class PKDataView(APIView):
 
                         string_buffer = StringIO()
                         if sheet.function:
-                            df = pd.DataFrame(sheet.function(sheet.query_dict["subset_pk"]))
+                            df = pd.DataFrame(
+                                sheet.function(sheet.query_dict["subset_pk"])
+                            )
                             df.to_csv(string_buffer)
-                            archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                            archive.writestr(f"{key}.csv", string_buffer.getvalue())
                             download_times[key] = time.time() - download_time_start
 
                         else:
                             df = pd.DataFrame(
-                                pkdata.data_by_query_dict(sheet.query_dict, sheet.viewset, sheet.serializer,
-                                                          sheet.boost_performance))
+                                pkdata.data_by_query_dict(
+                                    sheet.query_dict,
+                                    sheet.viewset,
+                                    sheet.serializer,
+                                    sheet.boost_performance,
+                                )
+                            )
                             if len(df) < 0:
                                 df = df[sheet.serializer.Meta.fields]
                             df.to_csv(string_buffer)
-                            archive.writestr(f'{key}.csv', string_buffer.getvalue())
+                            archive.writestr(f"{key}.csv", string_buffer.getvalue())
                             download_times[key] = time.time() - download_time_start
 
-                    archive.write('download_extra/README.md', 'README.md')
-                    archive.write('download_extra/TERMS_OF_USE.md', 'TERMS_OF_USE.md')
+                    archive.write("download_extra/README.md", "README.md")
+                    archive.write("download_extra/TERMS_OF_USE.md", "TERMS_OF_USE.md")
 
                 tmp.seek(0)
-                resp = HttpResponse(tmp.read(), content_type='application/x-zip-compressed')
-                resp['Content-Disposition'] = "attachment; filename=%s" % "pkdata.zip"
+                resp = HttpResponse(
+                    tmp.read(), content_type="application/x-zip-compressed"
+                )
+                resp["Content-Disposition"] = "attachment; filename=%s" % "pkdata.zip"
                 print("-" * 80)
                 print("File Creation")
                 for k, v in download_times.items():

@@ -1,53 +1,51 @@
+"""Django URLs
 """
-Django URLs
-"""
+
 from django.conf.urls import url
-from django.urls import path, include
+from django.urls import include, path
+from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet, TimecourseViewSet
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework.routers import DefaultRouter
 
-from .views import CustomOpenAPISchemaGenerator
-from drf_yasg import openapi
-
-from .statistics import (
-    StatisticsViewSet, SubstanceStatisticsViewSet,
-)
+from pkdb_app.data.views import DataAnalysisViewSet, SubSetViewSet, TimecourseViewSet
 
 from .info_nodes.views import (
-    InfoNodeViewSet,
     InfoNodeElasticViewSet,
+    InfoNodeViewSet,
 )
-from .outputs.views import (
-    ElasticOutputViewSet,
-    OutputInterventionViewSet)
 from .interventions.views import (
+    ElasticInterventionAnalysisViewSet,
     ElasticInterventionViewSet,
-    ElasticInterventionAnalysisViewSet
+)
+from .outputs.views import ElasticOutputViewSet, OutputInterventionViewSet
+from .statistics import (
+    StatisticsViewSet,
+    SubstanceStatisticsViewSet,
 )
 from .studies.views import (
-    ReferencesViewSet,
-    StudyViewSet,
     ElasticReferenceViewSet,
     ElasticStudyViewSet,
-    update_index_study, PKDataView, StudyAnalysisViewSet,
+    PKDataView,
+    ReferencesViewSet,
+    StudyAnalysisViewSet,
+    StudyViewSet,
+    update_index_study,
 )
 from .subjects.views import (
     DataFileViewSet,
-    IndividualViewSet,
-    GroupViewSet,
     GroupCharacteristicaViewSet,
+    GroupViewSet,
     IndividualCharacteristicaViewSet,
+    IndividualViewSet,
 )
 from .users.views import (
-    UserViewSet,
+    ObtainAuthTokenCustom,
     UserCreateViewSet,
     UserGroupViewSet,
-    ObtainAuthTokenCustom,
+    UserViewSet,
 )
-from .views import serve_protected_document
-
+from .views import CustomOpenAPISchemaGenerator, serve_protected_document
 
 router = DefaultRouter()
 
@@ -55,7 +53,9 @@ router = DefaultRouter()
 # Misc URLs
 # -----------------------------------------------------------------------------
 router.register("statistics", StatisticsViewSet, basename="statistics")
-router.register("statistics/substances", SubstanceStatisticsViewSet, basename="statistics")
+router.register(
+    "statistics/substances", SubstanceStatisticsViewSet, basename="statistics"
+)
 
 # -----------------------------------------------------------------------------
 # Elastic URLs
@@ -81,30 +81,39 @@ router.register("_users", UserViewSet, basename="_users")
 router.register("_users", UserCreateViewSet, basename="_users")
 router.register("_user_groups", UserGroupViewSet, basename="_user_groups")
 
-router.register('_info_nodes', InfoNodeViewSet, basename="_info_nodes")  # django
+router.register("_info_nodes", InfoNodeViewSet, basename="_info_nodes")  # django
 
 router.register("pkdata/studies", StudyAnalysisViewSet, basename="studies_analysis")
-router.register("pkdata/interventions", ElasticInterventionAnalysisViewSet, basename="interventions_analysis")
-router.register("pkdata/groups", GroupCharacteristicaViewSet, basename="groups_analysis")
-router.register("pkdata/individuals", IndividualCharacteristicaViewSet, basename="individuals_analysis")
+router.register(
+    "pkdata/interventions",
+    ElasticInterventionAnalysisViewSet,
+    basename="interventions_analysis",
+)
+router.register(
+    "pkdata/groups", GroupCharacteristicaViewSet, basename="groups_analysis"
+)
+router.register(
+    "pkdata/individuals",
+    IndividualCharacteristicaViewSet,
+    basename="individuals_analysis",
+)
 router.register("pkdata/outputs", OutputInterventionViewSet, basename="output_analysis")
 router.register("pkdata/data", DataAnalysisViewSet, basename="data_analysis")
 router.register("pkdata/timecourses", TimecourseViewSet, basename="timecourse_analysis")
 
 
-
 urlpatterns = [
     # api
     path("api/v1/", include(router.urls)),
-    path('api/v1/filter/', PKDataView.as_view()),
+    path("api/v1/filter/", PKDataView.as_view()),
 ]
-#router.register("pkdata", PKDataView, basename="pkdata")
+# router.register("pkdata", PKDataView, basename="pkdata")
 
 schema_view = get_schema_view(
-   openapi.Info(
-    title="PK-DB REST API",
-    default_version='v1',
-    description="""
+    openapi.Info(
+        title="PK-DB REST API",
+        default_version="v1",
+        description="""
     PK-DB provides web services based on REST to search, filter, retrieve and download data. 
      
     The data in PK-DB is structured based on **studies**, with a single study corresponding to a single source of information. In most cases such a study corresponds to a single publication or a single clinical trial. 
@@ -133,32 +142,42 @@ schema_view = get_schema_view(
      
     If you are interested in contributing to the database please contact Matthias König.
     """,
-    terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
-    contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),
-    license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
+        terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
+        contact=openapi.Contact(email="koenigmx@hu-berlin.de", name="Matthias König"),
+        license=openapi.License(name="GNU Lesser General Public License v3 (LGPLv3)"),
     ),
-   generator_class=CustomOpenAPISchemaGenerator,
-   public=False,
-   patterns=urlpatterns,
+    generator_class=CustomOpenAPISchemaGenerator,
+    public=False,
+    patterns=urlpatterns,
 )
 
 urlpatterns = urlpatterns + [
     path("api/v1/update_index/", update_index_study),
-
     # media files
-    url(r'^media/(?P<file>.*)$', serve_protected_document,
-        name='serve_protected_document'),
-
+    url(
+        r"^media/(?P<file>.*)$",
+        serve_protected_document,
+        name="serve_protected_document",
+    ),
     # authentification
-    path('api-token-auth/', ObtainAuthTokenCustom.as_view()),
-    path('api-auth/', include("rest_framework.urls", namespace="rest_framework")),
-
-    url(r'^accounts/', include('rest_email_auth.urls')),
-
-    path('verify/?P<key>[-\w]+)', obtain_auth_token),
-    path('reset/?P<key>[-\w]+)', obtain_auth_token),
-
-    url(r'^api/v1/swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    url(r'^api/v1/swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    url(r'^api/v1/redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path("api-token-auth/", ObtainAuthTokenCustom.as_view()),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    url(r"^accounts/", include("rest_email_auth.urls")),
+    path(r"verify/?P<key>[-\w]+)", obtain_auth_token),
+    path(r"reset/?P<key>[-\w]+)", obtain_auth_token),
+    url(
+        r"^api/v1/swagger(?P<format>\.json|\.yaml)$",
+        schema_view.without_ui(cache_timeout=0),
+        name="schema-json",
+    ),
+    url(
+        r"^api/v1/swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    url(
+        r"^api/v1/redoc/$",
+        schema_view.with_ui("redoc", cache_timeout=0),
+        name="schema-redoc",
+    ),
 ]

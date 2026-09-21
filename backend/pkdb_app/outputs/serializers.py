@@ -1,5 +1,4 @@
-"""
-Serializers for outputs.
+"""Serializers for outputs.
 """
 
 import warnings
@@ -7,27 +6,47 @@ import warnings
 from rest_framework import serializers
 
 from pkdb_app import utils
-from pkdb_app.behaviours import MEASUREMENTTYPE_FIELDS, EX_MEASUREMENTTYPE_FIELDS, VALUE_FIELDS, map_field
+from pkdb_app.behaviours import (
+    EX_MEASUREMENTTYPE_FIELDS,
+    MEASUREMENTTYPE_FIELDS,
+    VALUE_FIELDS,
+    map_field,
+)
 from pkdb_app.info_nodes.models import InfoNode
 from pkdb_app.info_nodes.serializers import MeasurementTypeableSerializer
 from pkdb_app.interventions.serializers import InterventionSmallElasticSerializer
-from .models import (
-    Output,
-    OutputSet,
-    OutputEx)
-from ..comments.serializers import DescriptionSerializer, CommentSerializer, DescriptionElasticSerializer, \
-    CommentElasticSerializer
+
+from ..comments.serializers import (
+    CommentElasticSerializer,
+    CommentSerializer,
+    DescriptionElasticSerializer,
+    DescriptionSerializer,
+)
 from ..interventions.models import Intervention
 from ..serializers import (
-    ExSerializer, StudySmallElasticSerializer, SidNameLabelSerializer)
-from ..subjects.models import Group, DataFile, Individual
+    ExSerializer,
+    SidNameLabelSerializer,
+    StudySmallElasticSerializer,
+)
+from ..subjects.models import DataFile, Group, Individual
 from ..subjects.serializers import (
-    EXTERN_FILE_FIELDS, GroupSmallElasticSerializer, IndividualSmallElasticSerializer)
+    EXTERN_FILE_FIELDS,
+    GroupSmallElasticSerializer,
+    IndividualSmallElasticSerializer,
+)
+
 # ----------------------------------
 # Serializer FIELDS
 # ----------------------------------
-from ..utils import list_of_pk, _validate_required_key, create_multiple, _create, create_multiple_bulk_normalized, \
-    create_multiple_bulk
+from ..utils import (
+    _create,
+    _validate_required_key,
+    create_multiple,
+    create_multiple_bulk,
+    create_multiple_bulk_normalized,
+    list_of_pk,
+)
+from .models import Output, OutputEx, OutputSet
 
 EXTRA_FIELDS = ["tissue", "method", "label", "output_type"]
 TIME_FIELDS = ["time", "time_unit"]
@@ -35,17 +54,17 @@ OUTPUT_FIELDS = EXTRA_FIELDS + TIME_FIELDS
 
 OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 OUTPUT_FOREIGN_KEYS = [
-            'measurement_type',
-            'substance',
-            'choice',
-            'raw',
-            'group',
-            'individual',
-            'tissue',
-            'method',
-            'ex',
-            'study'
-        ]
+    "measurement_type",
+    "substance",
+    "choice",
+    "raw",
+    "group",
+    "individual",
+    "tissue",
+    "method",
+    "ex",
+    "study",
+]
 
 # ----------------------------------
 # Outputs
@@ -53,7 +72,6 @@ OUTPUT_FOREIGN_KEYS = [
 
 
 class OutputSerializer(MeasurementTypeableSerializer):
-
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -64,8 +82,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
         allow_null=True,
     )
     interventions = serializers.PrimaryKeyRelatedField(
-        queryset=Intervention.objects.all(),
-        many=True, required=True, allow_null=True)
+        queryset=Intervention.objects.all(), many=True, required=True, allow_null=True
+    )
 
     tissue = utils.SlugRelatedField(
         slug_field="name",
@@ -79,12 +97,17 @@ class OutputSerializer(MeasurementTypeableSerializer):
         slug_field="name",
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Method),
         read_only=False,
-        required=False
+        required=False,
     )
 
     class Meta:
         model = Output
-        fields = OUTPUT_FIELDS + ['label'] + MEASUREMENTTYPE_FIELDS + ["group", "individual", "interventions"]
+        fields = (
+            OUTPUT_FIELDS
+            + ["label"]
+            + MEASUREMENTTYPE_FIELDS
+            + ["group", "individual", "interventions"]
+        )
 
     def to_internal_value(self, data):
         data.pop("comments", None)
@@ -103,7 +126,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self.validate_group_individual_output(attrs)
 
         _validate_required_key(attrs, "measurement_type")
-        #_validate_required_key(attrs, "calculation_type")
+        # _validate_required_key(attrs, "calculation_type")
         _validate_required_key(attrs, "substance")
         _validate_required_key(attrs, "tissue")
         _validate_required_key(attrs, "interventions")
@@ -111,13 +134,15 @@ class OutputSerializer(MeasurementTypeableSerializer):
         self._validate_timecourse(attrs)
 
         try:
-            attrs['measurement_type'] = attrs['measurement_type'].measurement_type
+            attrs["measurement_type"] = attrs["measurement_type"].measurement_type
 
-            for key in ['substance', 'tissue', 'method', "calculation_type"]:
+            for key in ["substance", "tissue", "method", "calculation_type"]:
                 if key in attrs:
                     if attrs[key] is not None:
                         attrs[key] = getattr(attrs[key], key)
-            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)["choice"]
+            attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)[
+                "choice"
+            ]
 
         except ValueError as err:
             raise serializers.ValidationError(err)
@@ -127,13 +152,12 @@ class OutputSerializer(MeasurementTypeableSerializer):
     def _validate_timecourse(self, attrs):
         if attrs["output_type"] == Output.OutputTypes.Timecourse:
             _validate_required_key(attrs, "label")
-            if not attrs.get("label",None):
+            if not attrs.get("label", None):
                 msg = "Label is required on on output_type=timecourse"
                 raise serializers.ValidationError(msg)
 
 
 class OutputExSerializer(ExSerializer):
-
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -155,13 +179,7 @@ class OutputExSerializer(ExSerializer):
 
     class Meta:
         model = OutputEx
-        fields = (
-                EXTERN_FILE_FIELDS + [
-                    "outputs",
-                    "comments",
-                    "descriptions"
-                ]
-        )
+        fields = EXTERN_FILE_FIELDS + ["outputs", "comments", "descriptions"]
 
     def to_internal_value(self, data):
         # ----------------------------------
@@ -177,11 +195,13 @@ class OutputExSerializer(ExSerializer):
         # finished
         # ----------------------------------
 
-        drop_fields = OUTPUT_FIELDS + \
-                      OUTPUT_MAP_FIELDS + \
-                      EX_MEASUREMENTTYPE_FIELDS+ \
-                      ["group", "individual", "interventions"] + \
-                      ["group_map", "individual_map", "interventions_map"]
+        drop_fields = (
+            OUTPUT_FIELDS
+            + OUTPUT_MAP_FIELDS
+            + EX_MEASUREMENTTYPE_FIELDS
+            + ["group", "individual", "interventions"]
+            + ["group_map", "individual_map", "interventions_map"]
+        )
 
         # label validation
         label = data.pop("label", None)
@@ -208,17 +228,17 @@ class OutputExSerializer(ExSerializer):
         output_ex, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
-            create_multiple_keys=['comments', 'descriptions'],
-            pop=['outputs']
+            create_multiple_keys=["comments", "descriptions"],
+            pop=["outputs"],
         )
 
         outputs = poped_data["outputs"]
         outputs_interventions = []
         for output in outputs:
             output["study"] = self.context["study"]
-            outputs_interventions.append(output.pop('interventions', []))
+            outputs_interventions.append(output.pop("interventions", []))
 
-        outputs_dj = create_multiple_bulk(output_ex, 'ex', outputs, Output)
+        outputs_dj = create_multiple_bulk(output_ex, "ex", outputs, Output)
         for output, interventions in zip(outputs_dj, outputs_interventions):
             output.interventions.add(*interventions)
 
@@ -230,9 +250,9 @@ class OutputExSerializer(ExSerializer):
 
 
 class OutputSetSerializer(ExSerializer):
+    """OutputSet
     """
-    OutputSet
-    """
+
     output_exs = OutputExSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -258,8 +278,8 @@ class OutputSetSerializer(ExSerializer):
         outputset, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
-            create_multiple_keys=['descriptions', 'comments'],
-            pop=pop_keys
+            create_multiple_keys=["descriptions", "comments"],
+            pop=pop_keys,
         )
 
         for k in pop_keys:
@@ -279,20 +299,20 @@ class OutputSetSerializer(ExSerializer):
             outputset.output_exs.add(*outputs_exs)
             outputset.save()
 
-
             # create warning messages
             if len(ws) > 0:
-
-                create_multiple(self.context["study"], [
-                    {
-                        "text": f"{w.filename}: '{w.message}'"
-                    } for w in ws], 'warnings')
+                create_multiple(
+                    self.context["study"],
+                    [{"text": f"{w.filename}: '{w.message}'"} for w in ws],
+                    "warnings",
+                )
         return outputset
 
 
 # -----------------------
 # Elastic Serializer
 # -----------------------
+
 
 class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
@@ -343,7 +363,6 @@ class OutputInterventionSerializer(serializers.Serializer):
     substance = serializers.CharField()
     substance_label = serializers.CharField()
 
-
     value = serializers.FloatField()
     mean = serializers.FloatField()
     median = serializers.FloatField()
@@ -354,10 +373,21 @@ class OutputInterventionSerializer(serializers.Serializer):
     cv = serializers.FloatField()
     unit = serializers.CharField()
 
-
     class Meta:
-        fields = ["study_sid", "study_name", "output_pk", "intervention_pk", "group_pk", "individual_pk", "normed",
-                  "calculated"] + OUTPUT_FIELDS + MEASUREMENTTYPE_FIELDS
+        fields = (
+            [
+                "study_sid",
+                "study_name",
+                "output_pk",
+                "intervention_pk",
+                "group_pk",
+                "individual_pk",
+                "normed",
+                "calculated",
+            ]
+            + OUTPUT_FIELDS
+            + MEASUREMENTTYPE_FIELDS
+        )
 
 
 class SmallOutputSerializer(serializers.ModelSerializer):
@@ -384,18 +414,19 @@ class SmallOutputSerializer(serializers.ModelSerializer):
     class Meta:
         model = Output
         fields = (
-                ["pk", "normed"]
-                + EXTRA_FIELDS
-                + ["group", "individual", "interventions"]
-                + MEASUREMENTTYPE_FIELDS
-                + TIME_FIELDS
-                + VALUE_FIELDS
+            ["pk", "normed"]
+            + EXTRA_FIELDS
+            + ["group", "individual", "interventions"]
+            + MEASUREMENTTYPE_FIELDS
+            + TIME_FIELDS
+            + VALUE_FIELDS
         )
         read_only_fields = fields
 
 
 class OutputElasticSerializer(serializers.ModelSerializer):
     """Main serializer for outputs."""
+
     study = StudySmallElasticSerializer()
 
     group = GroupSmallElasticSerializer()
@@ -421,13 +452,12 @@ class OutputElasticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Output
         fields = (
-                ["pk", "normed", "calculated"]
-                + EXTRA_FIELDS
-                + ["study"]
-                + ["group", "individual", "interventions"]
-                + MEASUREMENTTYPE_FIELDS
-                + TIME_FIELDS
-                + VALUE_FIELDS
+            ["pk", "normed", "calculated"]
+            + EXTRA_FIELDS
+            + ["study"]
+            + ["group", "individual", "interventions"]
+            + MEASUREMENTTYPE_FIELDS
+            + TIME_FIELDS
+            + VALUE_FIELDS
         )
         read_only_fields = fields
-

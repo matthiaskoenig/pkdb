@@ -1,11 +1,11 @@
+"""DJANGO settings
 """
-DJANGO settings
-"""
+
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = os.environ['PKDB_SECRET_KEY']
-API_BASE = os.environ['PKDB_API_BASE']
+SECRET_KEY = os.environ["PKDB_SECRET_KEY"]
+API_BASE = os.environ["PKDB_API_BASE"]
 API_URL = API_BASE + "/api/v1"
 
 INSTALLED_APPS = (
@@ -15,21 +15,17 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # authentication
-    'rest_email_auth',
+    "rest_email_auth",
     "rest_framework.authtoken",  # token authentication
-
     # Third party apps
     "rest_framework",  # utilities for rest apis
-    'drf_yasg',  # swapper api
+    "drf_yasg",  # swapper api
     "django_filters",  # for filtering rest endpoints
     "corsheaders",
-
     # elasticsearch
-    'django_elasticsearch_dsl',
-    'django_elasticsearch_dsl_drf',
-
+    "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
     # Your apps
     "pkdb_app.users",
     "pkdb_app.studies",
@@ -106,25 +102,27 @@ TEMPLATES = [
 # authentication
 AUTHENTICATION_BACKENDS = (
     # default
-    'django.contrib.auth.backends.ModelBackend',
+    "django.contrib.auth.backends.ModelBackend",
     # email login
-    'rest_email_auth.authentication.VerifiedEmailBackend',
+    "rest_email_auth.authentication.VerifiedEmailBackend",
 )
 REST_EMAIL_AUTH = {
-    'EMAIL_VERIFICATION_URL': API_BASE + '/verification/{key}',
-    'PASSWORD_RESET_URL': API_BASE + '/reset-password/{key}',
-    'EMAIL_VERIFICATION_PASSWORD_REQUIRED': False,
-    'REGISTRATION_SERIALIZER': 'pkdb_app.users.serializers.UserRegistrationSerializer'
+    "EMAIL_VERIFICATION_URL": API_BASE + "/verification/{key}",
+    "PASSWORD_RESET_URL": API_BASE + "/reset-password/{key}",
+    "EMAIL_VERIFICATION_PASSWORD_REQUIRED": False,
+    "REGISTRATION_SERIALIZER": "pkdb_app.users.serializers.UserRegistrationSerializer",
 }
 AUTH_USER_MODEL = "users.User"
 
 # Password Validation
 # https://docs.djangoproject.com/en/2.0/topics/auth/passwords/#module-django.contrib.auth.password_validation
 AUTH_PASSWORD_VALIDATORS = [
-     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Logging
@@ -174,21 +172,20 @@ LOGGING = {
     },
 }
 SWAGGER_SETTINGS = {
-   'USE_SESSION_AUTH': False,
-
-    'DEFAULT_FIELD_INSPECTORS': [
-        'drf_yasg.inspectors.CamelCaseJSONFilter',
-        'drf_yasg.inspectors.InlineSerializerInspector',
-        'drf_yasg.inspectors.RelatedFieldInspector',
-        'drf_yasg.inspectors.ChoiceFieldInspector',
-        'drf_yasg.inspectors.FileFieldInspector',
-        'drf_yasg.inspectors.DictFieldInspector',
-        'drf_yasg.inspectors.SimpleFieldInspector',
-        'drf_yasg.inspectors.StringDefaultFieldInspector',
+    "USE_SESSION_AUTH": False,
+    "DEFAULT_FIELD_INSPECTORS": [
+        "drf_yasg.inspectors.CamelCaseJSONFilter",
+        "drf_yasg.inspectors.InlineSerializerInspector",
+        "drf_yasg.inspectors.RelatedFieldInspector",
+        "drf_yasg.inspectors.ChoiceFieldInspector",
+        "drf_yasg.inspectors.FileFieldInspector",
+        "drf_yasg.inspectors.DictFieldInspector",
+        "drf_yasg.inspectors.SimpleFieldInspector",
+        "drf_yasg.inspectors.StringDefaultFieldInspector",
     ],
-    'DEFAULT_PAGINATOR_INSPECTORS': [
-        'pkdb_app.response_pagination.ResponsePagination',
-        'drf_yasg.inspectors.CoreAPICompatInspector',
+    "DEFAULT_PAGINATOR_INSPECTORS": [
+        "pkdb_app.response_pagination.ResponsePagination",
+        "drf_yasg.inspectors.CoreAPICompatInspector",
     ],
 }
 
@@ -196,11 +193,11 @@ SWAGGER_SETTINGS = {
 REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     "DEFAULT_PAGINATION_CLASS": "pkdb_app.pagination.CustomPagination",
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "PAGE_SIZE": int(os.getenv("DJANGO_PAGINATION_LIMIT", 20)),
-    'PAGINATE_BY': 1000,  # Default to 10
-    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
-    'MAX_PAGINATE_BY': 1000,
+    "PAGINATE_BY": 1000,  # Default to 10
+    "PAGINATE_BY_PARAM": "page_size",  # Allow client to override, using `?page_size=xxx`.
+    "MAX_PAGINATE_BY": 1000,
     "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S%z",
     "DEFAULT_RENDERER_CLASSES": (
         "rest_framework.renderers.JSONRenderer",
@@ -211,38 +208,33 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "rest_framework.authentication.BasicAuthentication",
-
     ),
-    "DEFAULT_FILTER_BACKENDS": (
-        "django_filters.rest_framework.DjangoFilterBackend",
-    ),
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
 }
-
-
 
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ['PKDB_DB_NAME'],
-        "USER": os.environ['PKDB_DB_USER'],
-        "HOST": os.environ['PKDB_DB_SERVICE'],
-        "PASSWORD": os.environ['PKDB_DB_PASSWORD'],
-        "PORT": os.environ['PKDB_DB_PORT'],
+        "NAME": os.environ["PKDB_DB_NAME"],
+        "USER": os.environ["PKDB_DB_USER"],
+        "HOST": os.environ["PKDB_DB_SERVICE"],
+        "PASSWORD": os.environ["PKDB_DB_PASSWORD"],
+        "PORT": os.environ["PKDB_DB_PORT"],
     }
 }
 
 ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': os.environ.get('PKDB_ELASTICSEARCH_HOST', 'elasticsearch:9200')
+    "default": {
+        "hosts": os.environ.get("PKDB_ELASTICSEARCH_HOST", "elasticsearch:9200")
     },
 }
 
-DJANGO_CONFIGURATION = os.environ['PKDB_DJANGO_CONFIGURATION']
+DJANGO_CONFIGURATION = os.environ["PKDB_DJANGO_CONFIGURATION"]
 # ------------------------------
 # local
 # ------------------------------
-if DJANGO_CONFIGURATION == 'local':
+if DJANGO_CONFIGURATION == "local":
     DEBUG = True
     LOGIN_URL = API_BASE + "/account"
     LOGIN_REDIRECT_URL = API_BASE + "/account"
@@ -256,13 +248,13 @@ if DJANGO_CONFIGURATION == 'local':
 # -------------------------------------------------
 # production
 # -------------------------------------------------
-elif DJANGO_CONFIGURATION == 'production':
+elif DJANGO_CONFIGURATION == "production":
     DEBUG = False
     LOGIN_URL = "/account"
     LOGIN_REDIRECT_URL = "/account"
     ACCOUNT_LOGOUT_REDIRECT_URL = "/account"
 
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
     # Mail
     # Mail is sent using the SMTP host and port specified in the EMAIL_HOST and EMAIL_PORT settings.
@@ -270,15 +262,15 @@ elif DJANGO_CONFIGURATION == 'production':
     # and the EMAIL_USE_TLS and EMAIL_USE_SSL settings control whether a secure connection is used.
     EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
     SERVER_EMAIL = "mail@pk-db.com"
-    DEFAULT_FROM_EMAIL = 'pk-db.com <mail@pk-db.com>'
+    DEFAULT_FROM_EMAIL = "pk-db.com <mail@pk-db.com>"
     EMAIL_HOST = "mailhost.cms.hu-berlin.de"
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     # EMAIL_PORT = 465
     # EMAIL_USE_SSL = True
     # EMAIL_PORT = 25
-    EMAIL_HOST_USER = os.environ['PKDB_EMAIL_HOST_USER']
-    EMAIL_HOST_PASSWORD = os.environ['PKDB_EMAIL_HOST_PASSWORD']
+    EMAIL_HOST_USER = os.environ["PKDB_EMAIL_HOST_USER"]
+    EMAIL_HOST_PASSWORD = os.environ["PKDB_EMAIL_HOST_PASSWORD"]
 
     # Test email
     # from django.core.mail import send_mail

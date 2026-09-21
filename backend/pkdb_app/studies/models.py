@@ -1,23 +1,29 @@
+"""Django model for Study.
 """
-Django model for Study.
-"""
+
 import datetime
-from django.utils.timezone import make_aware
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from pkdb_app.data.models import DataSet, Data
-
-from pkdb_app.info_nodes.models import Substance, InfoNode
-from pkdb_app.users.models import PUBLIC, PRIVATE
-from ..behaviours import Sidable
-from ..interventions.models import InterventionSet, DataFile, Intervention
-from ..outputs.models import OutputSet, OutputIntervention
-from ..subjects.models import GroupSet, IndividualSet, Characteristica, Group, Individual
-from ..users.models import User
-from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
+from pkdb_app.data.models import Data, DataSet
+from pkdb_app.info_nodes.models import InfoNode, Substance
+from pkdb_app.users.models import PRIVATE, PUBLIC
+
+from ..behaviours import Sidable
+from ..interventions.models import DataFile, Intervention, InterventionSet
+from ..outputs.models import OutputIntervention, OutputSet
+from ..subjects.models import (
+    Characteristica,
+    Group,
+    GroupSet,
+    Individual,
+    IndividualSet,
+)
+from ..users.models import User
+from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -35,26 +41,32 @@ STUDY_LICENCE_DATA = [
 
 STUDY_LICENCE_CHOICES = [(t, t) for t in STUDY_LICENCE_DATA]
 
-STUDY_ACCESS_DATA = [
-    PUBLIC,
-    PRIVATE
-]
+STUDY_ACCESS_DATA = [PUBLIC, PRIVATE]
 STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
 
 
 # ---------------------------------------------------
 
 from django.core.validators import RegexValidator
-alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+
+alphanumeric = RegexValidator(
+    r"^[0-9a-zA-Z]*$", "Only alphanumeric characters are allowed."
+)
 
 
 class Reference(models.Model):
-    """
-    This is the main class describing the publication or reference which describes the study.
+    """This is the main class describing the publication or reference which describes the study.
     In most cases this is a published paper, but could be a thesis or unpublished.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric], )
-    pmid = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, validators=[alphanumeric])  # optional
+
+    sid = models.CharField(
+        max_length=CHAR_MAX_LENGTH,
+        unique=True,
+        validators=[alphanumeric],
+    )
+    pmid = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, validators=[alphanumeric]
+    )  # optional
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     doi = models.CharField(max_length=150, null=True)  # optional
     title = models.TextField()
@@ -80,30 +92,41 @@ class Reference(models.Model):
 
 
 class Author(models.Model):
-    """ Author in reference. """
+    """Author in reference."""
+
     first_name = models.CharField(max_length=CHAR_MAX_LENGTH, blank=True)
     last_name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, blank=True)
-    reference = models.ForeignKey(Reference, related_name="authors", on_delete=models.CASCADE)
+    reference = models.ForeignKey(
+        Reference, related_name="authors", on_delete=models.CASCADE
+    )
+
     def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)
 
 
 class Rating(models.Model):
-    """ Rating.
+    """Rating.
 
     Used to encode quality of curation status.
     """
+
     rating = models.FloatField(default=0)
     study = models.ForeignKey("Study", related_name="ratings", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name="ratings", on_delete=models.CASCADE)
 
 
 class Study(Sidable, models.Model):
-    """ A study containing PKDB information.
+    """A study containing PKDB information.
 
     Mainly reported as a single publication.
     """
-    sid = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True, validators=[alphanumeric], help_text="Study Identifer")
+
+    sid = models.CharField(
+        max_length=CHAR_MAX_LENGTH,
+        unique=True,
+        validators=[alphanumeric],
+        help_text="Study Identifer",
+    )
     date = models.DateField(default=datetime.date.today)
     name = models.CharField(max_length=CHAR_MAX_LENGTH, unique=True)
     access = models.CharField(max_length=CHAR_MAX_LENGTH, choices=STUDY_ACCESS_CHOICES)
@@ -111,16 +134,16 @@ class Study(Sidable, models.Model):
     reference = models.OneToOneField(
         Reference, on_delete=models.CASCADE, related_name="study", null=True
     )
-    licence = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES)
+    licence = models.CharField(
+        max_length=CHAR_MAX_LENGTH, null=True, choices=STUDY_LICENCE_CHOICES
+    )
     creator = models.ForeignKey(
         User, related_name="creator_of_studies", on_delete=models.CASCADE
     )
     curators = models.ManyToManyField(
         User, related_name="curator_of_studies", through=Rating
     )
-    collaborators = models.ManyToManyField(
-        User, related_name="collaborator_of_studies"
-    )
+    collaborators = models.ManyToManyField(User, related_name="collaborator_of_studies")
     groupset = models.OneToOneField(
         GroupSet, related_name="study", on_delete=models.SET_NULL, null=True
     )
@@ -140,15 +163,14 @@ class Study(Sidable, models.Model):
 
     files = models.ManyToManyField(DataFile)
 
-
     class Meta:
         verbose_name_plural = "studies"
 
     def __unicode__(self):
-        return '%s' % self.name
+        return "%s" % self.name
 
     def __str__(self):
-        return '%s' % self.name
+        return "%s" % self.name
 
     @property
     def reference_date(self):
@@ -172,9 +194,13 @@ class Study(Sidable, models.Model):
     def characteristica(self):
         empty_characteristica = Characteristica.objects.none()
         for group in self.groups.all():
-            empty_characteristica = empty_characteristica.union(group.characteristica.all())
+            empty_characteristica = empty_characteristica.union(
+                group.characteristica.all()
+            )
         for individual in self.individuals.all():
-            empty_characteristica = empty_characteristica.union(individual.characteristica.all())
+            empty_characteristica = empty_characteristica.union(
+                individual.characteristica.all()
+            )
 
         return empty_characteristica
 
@@ -185,7 +211,6 @@ class Study(Sidable, models.Model):
         except AttributeError:
             return Intervention.objects.none()
 
-
     @property
     def outputs_interventions(self):
         try:
@@ -195,7 +220,7 @@ class Study(Sidable, models.Model):
 
     @property
     def get_substances(self):
-        """ Get all substances for given study.
+        """Get all substances for given study.
 
         Substances are collected from interventions, outputs, timecourses.
         """
@@ -204,24 +229,38 @@ class Study(Sidable, models.Model):
 
         if self.interventions:
             all_substances.extend(
-                list(self.interventions.filter(substance__isnull=False).values_list("substance__pk", flat=True))
+                list(
+                    self.interventions.filter(substance__isnull=False).values_list(
+                        "substance__pk", flat=True
+                    )
+                )
             )
 
         if self.outputs:
             all_substances.extend(
-                list(self.outputs.filter(substance__isnull=False).values_list("substance__pk", flat=True))
+                list(
+                    self.outputs.filter(substance__isnull=False).values_list(
+                        "substance__pk", flat=True
+                    )
+                )
             )
 
         substances_dj = Substance.objects.filter(pk__in=set(all_substances))
 
         basic_substances_dj = substances_dj.filter(info_node__parents__isnull=True)
         if basic_substances_dj:
-            basic_substances.extend(list(basic_substances_dj.values_list("info_node__pk", flat=True)))
+            basic_substances.extend(
+                list(basic_substances_dj.values_list("info_node__pk", flat=True))
+            )
 
         substances_derived_dj = substances_dj.filter(info_node__parents__isnull=False)
         if substances_derived_dj:
             basic_substances.extend(
-                list(substances_derived_dj.values_list("info_node__parents__pk", flat=True))
+                list(
+                    substances_derived_dj.values_list(
+                        "info_node__parents__pk", flat=True
+                    )
+                )
             )
 
         return InfoNode.objects.filter(pk__in=set(basic_substances))
@@ -303,20 +342,19 @@ def expire():
 
 # FIXME: rename to something what it is (FilterQuery, IdCollection ?)
 class IdCollection(models.Model):
-    """
-    DOCUMENT ME
+    """DOCUMENT ME
     """
 
     class Recourses(models.TextChoices):
-        """ Recourse Types"""
-        Studies = 'studies', _('studies')
-        Groups = 'groups', _('groups')
-        Individuals = 'individuals', _('individuals')
-        Interventions = 'interventions', _('interventions')
-        Outputs = 'outputs', _('outputs')
-        Scatter = 'scatter', _('scatter')
-        Timecourses = 'timecourses', _('timecourses')
+        """Recourse Types"""
 
+        Studies = "studies", _("studies")
+        Groups = "groups", _("groups")
+        Individuals = "individuals", _("individuals")
+        Interventions = "interventions", _("interventions")
+        Outputs = "outputs", _("outputs")
+        Scatter = "scatter", _("scatter")
+        Timecourses = "timecourses", _("timecourses")
 
     resource = models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
     uuid = models.UUIDField(null=False, blank=False, editable=False)
@@ -324,5 +362,4 @@ class IdCollection(models.Model):
     expire = models.DateTimeField(default=expire, blank=True, editable=False)
 
     class Meta:
-        unique_together = ['uuid', 'resource']
-
+        unique_together = ["uuid", "resource"]

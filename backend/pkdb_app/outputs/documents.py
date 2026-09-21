@@ -1,8 +1,14 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
+from ..documents import (
+    ObjectField,
+    elastic_settings,
+    info_node,
+    string_field,
+    study_field,
+)
 from .models import Output, OutputIntervention
-from ..documents import string_field, elastic_settings, ObjectField, study_field, info_node
 
 
 # ------------------------------------
@@ -12,53 +18,49 @@ from ..documents import string_field, elastic_settings, ObjectField, study_field
 class OutputDocument(Document):
     pk = fields.IntegerField()
     study = study_field
-    group = ObjectField(properties={
-        'pk': fields.IntegerField(),
-        'name': string_field('name'),
-        'count': fields.IntegerField(),
-    })
-    individual = ObjectField(properties={
-        'pk': fields.IntegerField(),
-        'name': string_field('name')})
-    interventions = ObjectField(properties={
-        'pk': fields.IntegerField(),
-        'name': string_field('name')
-    }, multi=True)
-    ex = ObjectField(properties={
-        'pk': string_field('pk')}
+    group = ObjectField(
+        properties={
+            "pk": fields.IntegerField(),
+            "name": string_field("name"),
+            "count": fields.IntegerField(),
+        }
     )
+    individual = ObjectField(
+        properties={"pk": fields.IntegerField(), "name": string_field("name")}
+    )
+    interventions = ObjectField(
+        properties={"pk": fields.IntegerField(), "name": string_field("name")},
+        multi=True,
+    )
+    ex = ObjectField(properties={"pk": string_field("pk")})
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
-    raw = ObjectField(properties={
-        'pk': fields.IntegerField()}
-    )
-    value = fields.FloatField('null_value')
-    mean = fields.FloatField('null_mean')
-    median = fields.FloatField('null_median')
-    min = fields.FloatField('null_min')
-    max = fields.FloatField('null_max')
-    se = fields.FloatField('null_se')
-    sd = fields.FloatField('null_sd')
-    cv = fields.FloatField('null_cv')
-    unit = string_field('unit')
-    time_unit = string_field('time_unit')
-    time = fields.FloatField('null_time')
-    tissue = info_node('i_tissue')
-    method = info_node('i_method')
-    measurement_type = info_node('i_measurement_type')
-    calculation_type = info_node('i_calculation_type')
+    raw = ObjectField(properties={"pk": fields.IntegerField()})
+    value = fields.FloatField("null_value")
+    mean = fields.FloatField("null_mean")
+    median = fields.FloatField("null_median")
+    min = fields.FloatField("null_min")
+    max = fields.FloatField("null_max")
+    se = fields.FloatField("null_se")
+    sd = fields.FloatField("null_sd")
+    cv = fields.FloatField("null_cv")
+    unit = string_field("unit")
+    time_unit = string_field("time_unit")
+    time = fields.FloatField("null_time")
+    tissue = info_node("i_tissue")
+    method = info_node("i_method")
+    measurement_type = info_node("i_measurement_type")
+    calculation_type = info_node("i_calculation_type")
 
-    substance = info_node('i_substance')
-    choice = info_node('i_choice')
-    label = string_field('label')
-    output_type = string_field('output_type')
-    access = string_field('access')
+    substance = info_node("i_substance")
+    choice = info_node("i_choice")
+    label = string_field("label")
+    output_type = string_field("output_type")
+    access = string_field("access")
     allowed_users = fields.ObjectField(
         attr="allowed_users",
-        properties={
-            'username': string_field("username")
-        },
-        multi=True
+        properties={"username": string_field("username")},
+        multi=True,
     )
 
     class Django:
@@ -70,70 +72,66 @@ class OutputDocument(Document):
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(OutputDocument, self).get_queryset()#.prefetch_related("interventions").select_related('study', 'individual__name', 'group').
+        return super().get_queryset()  # .prefetch_related("interventions").select_related('study', 'individual__name', 'group').
 
     class Index:
-        name = 'outputs'
+        name = "outputs"
         settings = elastic_settings
-        settings['number_of_shards'] = 5
-        settings['number_of_replicas'] = 1
-        settings['max_result_window'] = 500000
+        settings["number_of_shards"] = 5
+        settings["number_of_replicas"] = 1
+        settings["max_result_window"] = 500000
 
 
 @registry.register_document
 class OutputInterventionDocument(Document):
-    study_sid = string_field('study_sid')
-    study_name = string_field('study_name')
-    output_pk = fields.IntegerField('output_pk')
-    intervention_pk = fields.IntegerField('intervention_pk')
-    group_pk = fields.IntegerField('group_pk')
-    individual_pk = fields.IntegerField('individual_pk')
+    study_sid = string_field("study_sid")
+    study_name = string_field("study_name")
+    output_pk = fields.IntegerField("output_pk")
+    intervention_pk = fields.IntegerField("intervention_pk")
+    group_pk = fields.IntegerField("group_pk")
+    individual_pk = fields.IntegerField("individual_pk")
 
-    label = string_field('label')
-    output_type = string_field('output_type')
+    label = string_field("label")
+    output_type = string_field("output_type")
     measurement_type = string_field("measurement_type")
     calculation_type = string_field("calculation_type")
 
     measurement_type_label = string_field("measurement_type_label")
     calculation_type_label = string_field("calculation_type_label")
 
-
     substance = string_field("substance")
     substance_label = string_field("substance_label")
 
     normed = fields.BooleanField()
     calculated = fields.BooleanField()
-    method = string_field('method')
-    method_label = string_field('method_label')
+    method = string_field("method")
+    method_label = string_field("method_label")
 
-    tissue = string_field('tissue')
-    tissue_label = string_field('tissue_label')
+    tissue = string_field("tissue")
+    tissue_label = string_field("tissue_label")
 
-    time = fields.FloatField('time')
-    time_unit = string_field('time_unit')
-    unit = string_field('unit')
-    choice = string_field('choice')
-    choice_label = string_field('choice_label')
-
+    time = fields.FloatField("time")
+    time_unit = string_field("time_unit")
+    unit = string_field("unit")
+    choice = string_field("choice")
+    choice_label = string_field("choice_label")
 
     # output fields
-    value = fields.FloatField('value')
-    mean = fields.FloatField('mean')
-    median = fields.FloatField('median')
-    min = fields.FloatField('min')
-    max = fields.FloatField('max')
-    se = fields.FloatField('se')
-    sd = fields.FloatField('sd')
-    cv = fields.FloatField('cv')
+    value = fields.FloatField("value")
+    mean = fields.FloatField("mean")
+    median = fields.FloatField("median")
+    min = fields.FloatField("min")
+    max = fields.FloatField("max")
+    se = fields.FloatField("se")
+    sd = fields.FloatField("sd")
+    cv = fields.FloatField("cv")
 
     # for permissions
-    access = string_field('access')
+    access = string_field("access")
     allowed_users = fields.ObjectField(
         attr="allowed_users",
-        properties={
-            'username': string_field("username")
-        },
-        multi=True
+        properties={"username": string_field("username")},
+        multi=True,
     )
 
     class Django:
@@ -144,13 +142,16 @@ class OutputInterventionDocument(Document):
         auto_refresh = False
 
     class Index:
-        name = 'outputs_interventions'
+        name = "outputs_interventions"
         settings = elastic_settings
-        settings['number_of_shards'] = 5
-        settings['number_of_replicas'] = 1
-        settings['max_result_window'] = 500000
-
+        settings["number_of_shards"] = 5
+        settings["number_of_replicas"] = 1
+        settings["max_result_window"] = 500000
 
     def get_queryset(self):
         """Not mandatory but to improve performance we can select related in one sql request"""
-        return super(OutputInterventionDocument, self).get_queryset().select_related('intervention', 'output')
+        return (
+            super()
+            .get_queryset()
+            .select_related("intervention", "output")
+        )

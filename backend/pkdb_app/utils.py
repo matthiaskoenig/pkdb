@@ -1,8 +1,9 @@
+"""Generic utility functions.
 """
-Generic utility functions.
-"""
+
 import copy
 import os
+
 import pandas as pd
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
@@ -13,8 +14,8 @@ CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 5
 
 class SlugRelatedField(serializers.SlugRelatedField):
     default_error_messages = {
-        'does_not_exist': _('Object with {slug_name}=<{value}> does not exist.'),
-        'invalid': _('Invalid value.'),
+        "does_not_exist": _("Object with {slug_name}=<{value}> does not exist."),
+        "invalid": _("Invalid value."),
     }
 
 
@@ -29,7 +30,7 @@ def list_duplicates(seq):
 
 
 def create_choices(collection):
-    """ Creates choices from given list of items.
+    """Creates choices from given list of items.
     In case of dictionaries the keys are used to create choices.
     :param collection: iterable collection from which choices are created.
     :return: list of choice tuples
@@ -53,8 +54,7 @@ def create_if_exists(src, src_key, dest, dest_key):
 def clean_import(data):
     clean_dict = {}
     for key, value in data.items():
-
-        if not str(value).strip() in ["", "nan"]:
+        if str(value).strip() not in ["", "nan"]:
             clean_dict[key] = value
 
         elif str(value) == "NA":
@@ -75,7 +75,7 @@ def list_of_pk(field, obj):
 
 
 def ensure_dir(file_path):
-    """ Checks for directory and creates if non-existant."""
+    """Checks for directory and creates if non-existant."""
     directory = os.path.dirname(file_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -99,7 +99,9 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=None
                 obj = instance_child.model.objects.get(**lookup_dict)
             for key, value in child.items():
                 if key == "annotations":
-                    update_or_create_multiple(obj, value, key, lookup_fields=["term", "relation"])
+                    update_or_create_multiple(
+                        obj, value, key, lookup_fields=["term", "relation"]
+                    )
                 elif key == "synonyms":
                     update_or_create_multiple(obj, value, key, lookup_fields=["name"])
                 else:
@@ -119,20 +121,35 @@ def create_multiple(parent, children, related_name):
 
 def create_multiple_bulk(parent, related_name_parent, children, class_child):
     return class_child.objects.bulk_create(
-        [class_child(**{related_name_parent: parent, **child}) for child in children])
+        [class_child(**{related_name_parent: parent, **child}) for child in children]
+    )
 
 
 def create_multiple_bulk_normalized(notnormalized_instances, model_class):
     if notnormalized_instances:
         return model_class.objects.bulk_create(
-            [initialize_normed(notnorm_instance) for notnorm_instance in notnormalized_instances])
+            [
+                initialize_normed(notnorm_instance)
+                for notnorm_instance in notnormalized_instances
+            ]
+        )
 
 
-def _create(validated_data, model_manager=None, model_serializer=None,
-            create_multiple_keys=[], add_multiple_keys=[], pop=[]):
+def _create(
+    validated_data,
+    model_manager=None,
+    model_serializer=None,
+    create_multiple_keys=[],
+    add_multiple_keys=[],
+    pop=[],
+):
     popped_data = {related: validated_data.pop(related, []) for related in pop}
-    related_data_create = {related: validated_data.pop(related, []) for related in create_multiple_keys}
-    related_data_add = {related: validated_data.pop(related, []) for related in add_multiple_keys}
+    related_data_create = {
+        related: validated_data.pop(related, []) for related in create_multiple_keys
+    }
+    related_data_add = {
+        related: validated_data.pop(related, []) for related in add_multiple_keys
+    }
     if model_manager is not None:
         instance = model_manager.create(**validated_data)
     elif model_serializer is not None:
@@ -175,7 +192,7 @@ def initialize_normed(not_norm_instance):
 
 
 def recursive_iter(obj, keys=()):
-    """ Creates dictionary with key:object from nested JSON data structure. """
+    """Creates dictionary with key:object from nested JSON data structure."""
     if isinstance(obj, dict):
         for k, v in obj.items():
             yield from recursive_iter(v, keys + (k,))
@@ -191,7 +208,7 @@ def recursive_iter(obj, keys=()):
 
 
 def set_keys(d, value, *keys):
-    """ Changes keys in nested dictionary. """
+    """Changes keys in nested dictionary."""
     for key in keys[:-1]:
         d = d[key]
     d[keys[-1]] = value
@@ -205,7 +222,9 @@ def _validate_required_key_and_value(attrs, key, details=None, extra_message: st
         raise serializers.ValidationError(error_json)
 
 
-def _validate_required_key_and_value_or_nr(attrs, key, details=None, extra_message: str = ""):
+def _validate_required_key_and_value_or_nr(
+    attrs, key, details=None, extra_message: str = ""
+):
     value = attrs.get(key, None)
     if value != "NR":
         _validate_required_key_and_value(attrs, key, details, extra_message)
