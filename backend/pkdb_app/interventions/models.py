@@ -1,6 +1,4 @@
-"""Describe Interventions and Output (i.e. define the characteristics of the
-group or individual).
-"""
+"""Models describing the interventions applied to a group or individual."""
 
 from django.db import models
 
@@ -17,26 +15,29 @@ from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 
 class InterventionSet(models.Model):
+    """Collection of interventions belonging to the intervention_exs of a study."""
+
     @property
     def interventions(self):
-        """All interventions"""
-        interventions = Intervention.objects.filter(ex__in=self.intervention_exs.all())
-        return interventions
+        """Return all interventions created from this set's intervention_exs."""
+        return Intervention.objects.filter(ex__in=self.intervention_exs.all())
 
     @property
     def interventions_normed(self):
-        """All interventions"""
-        interventions = self.interventions.filter(normed=True)
-        return interventions
+        """Return the normed interventions of this set."""
+        return self.interventions.filter(normed=True)
 
     @property
     def count(self):
+        """Return the number of interventions in this set, 0 if there are none."""
         if self.interventions:
             return self.interventions.count()
         return 0
 
 
 class AbstractIntervention(models.Model):
+    """Abstract base holding the timing fields shared by interventions."""
+
     time = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_end = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
@@ -45,6 +46,7 @@ class AbstractIntervention(models.Model):
         abstract = True
 
     def __str__(self):
+        """Return the intervention's name."""
         return self.name
 
 
@@ -93,40 +95,48 @@ class Intervention(Accessible, Normalizable, AbstractIntervention):
     )
 
     def __str__(self):
+        """Return the intervention's name."""
         return self.name
 
     @property
     def raw_pk(self):
+        """Return the primary key of the raw (non-normed) intervention, or None."""
         if self.raw:
             return self.raw.pk
         return None
 
     @property
     def i_application(self):
+        """Return the info node of the application, or None if not set."""
         return self._i("application")
 
     @property
     def i_route(self):
+        """Return the info node of the route, or None if not set."""
         return self._i("route")
 
     @property
     def i_form(self):
+        """Return the info node of the form, or None if not set."""
         return self._i("form")
 
     @property
     def route_name(self):
+        """Return the name of the route's info node, or None if not set."""
         if self.route:
             return self.route.info_node.name
         return None
 
     @property
     def application_name(self):
+        """Return the name of the application's info node, or None if not set."""
         if self.application:
             return self.application.info_node.name
         return None
 
     @property
     def form_name(self):
+        """Return the name of the form's info node, or None if not set."""
         if self.form:
             return self.form.info_node.name
         return None

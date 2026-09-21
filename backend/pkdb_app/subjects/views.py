@@ -1,3 +1,7 @@
+"""Elasticsearch-backed views for querying groups, individuals and their characteristica."""
+
+import contextlib
+
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_EXCLUDE, LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import (
     CompoundSearchFilterBackend,
@@ -47,7 +51,7 @@ subject_filter_fields = {
 
 
 class GroupViewSet(AccessView):
-    """Endpoint to query groups
+    """Endpoint to query groups.
 
     The groups endpoint gives access to the groups data. A group is a collection of individuals for which data was
     reported collectively.
@@ -89,7 +93,7 @@ class GroupViewSet(AccessView):
 
 
 class IndividualViewSet(AccessView):
-    """Endpoint to query individuals
+    """Endpoint to query individuals.
 
     The individual endpoint gives access to the individual subjects data.
     """
@@ -182,7 +186,7 @@ characteristica_filter_fields = {
 
 
 class GroupCharacteristicaViewSet(AccessView):
-    """Endpoint to query group characteristica
+    """Endpoint to query group characteristica.
 
     The endpoint gives access to characteristica information for groups.
     """
@@ -234,7 +238,7 @@ class GroupCharacteristicaViewSet(AccessView):
 
 
 class IndividualCharacteristicaViewSet(AccessView):
-    """Endpoint to query individual characteristica
+    """Endpoint to query individual characteristica.
 
     The endpoint gives access to characteristica information for individuals.
     """
@@ -296,17 +300,17 @@ class IndividualCharacteristicaViewSet(AccessView):
 # Views queried not from elastic search
 ###########################################################
 class DataFileViewSet(viewsets.ModelViewSet):
+    """Endpoint to upload and query data files (tables or figures)."""
+
     swagger_schema = None
     queryset = DataFile.objects.all()
     serializer_class = DataFileSerializer
     permission_classes = (StudyPermission,)
 
     def create(self, request, *args, **kwargs):
-        try:
+        """Delete any existing data file with the same name before creating the new one."""
+        with contextlib.suppress(DataFile.DoesNotExist):
             DataFile.objects.filter(file=f"data/{request.data['file'].name}").delete()
 
         # same_files = DataFile.objects.filter(file = request.data["file"].name)
-        except DataFile.DoesNotExist:
-            pass
-
         return super().create(request, *args, **kwargs)

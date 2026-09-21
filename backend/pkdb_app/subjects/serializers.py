@@ -1,3 +1,5 @@
+"""Serializers for groups, individuals and their characteristica."""
+
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.db.models import Q
 from drf_yasg.utils import swagger_serializer_method
@@ -47,12 +49,15 @@ EXTERN_FILE_FIELDS = ["source", "subset_map", "source_map", "image", "image_map"
 # DataFile
 # ----------------------------------
 class DataFileSerializer(WrongKeyValidationSerializer):
+    """Serialize an uploaded table or figure data file."""
+
     class Meta:
         model = DataFile
         fields = ["file", "filetype", "id"]
         extra_kwargs = {"id": {"allow_null": False}}
 
     def to_internal_value(self, data):
+        """Check for unexpected keys in addition to the default conversion."""
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
@@ -62,6 +67,8 @@ class DataFileSerializer(WrongKeyValidationSerializer):
 # Characteristica
 # ----------------------------------
 class CharacteristicaExSerializer(WrongKeyValidationSerializer):
+    """Serialize the external (as uploaded) form of a characteristica entry."""
+
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -74,20 +81,23 @@ class CharacteristicaExSerializer(WrongKeyValidationSerializer):
         fields = ["comments", "descriptions"]
 
     def to_internal_value(self, data):
+        """Drop the characteristica-specific columns before the default conversion."""
         drop_fields = (
             CHARACTERISTICA_FIELDS
             + CHARACTERISTICA_MAP_FIELDS
             + EX_MEASUREMENTTYPE_FIELDS
         )
         [data.pop(field, None) for field in drop_fields]
-        data = super().to_internal_value(data)
-        return data
+        return super().to_internal_value(data)
 
     def to_representation(self, instance):
+        """Return the default representation unchanged."""
         return super().to_representation(instance)
 
 
 class CharacteristicaSerializer(MeasurementTypeableSerializer):
+    """Serialize an uploaded characteristica and validate it against its measurement type."""
+
     count = serializers.IntegerField(required=False)
 
     class Meta:
@@ -95,6 +105,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         fields = CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_internal_value(self, data):
+        """Drop comments/descriptions, require a measurement_type and check for unexpected keys."""
         data.pop("comments", None)
         data.pop("descriptions", None)
         self._is_required(data, "measurement_type")
@@ -105,6 +116,7 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def validate_count(count):
+        """Check that count is at least 1."""
         if count < 1:
             raise serializers.ValidationError(
                 f"count <{count}> has to be greater or equal to 1. "
@@ -112,18 +124,24 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         return count
 
     def validate(self, attrs):
+        """Resolve info node fields to their categorials and validate the choice.
+
+        Replaces each info node field by its related categorial via the
+        dedicated function on categorials, then derives the `choice` from the
+        measurement type's completeness validation (time not allowed on a
+        characteristica).
+        """
         try:
             # perform via dedicated function on categorials
             for info_node in ["substance", "measurement_type", "calculation_type"]:
-                if info_node in attrs:
-                    if attrs[info_node] is not None:
-                        attrs[info_node] = getattr(attrs[info_node], info_node)
+                if info_node in attrs and attrs[info_node] is not None:
+                    attrs[info_node] = getattr(attrs[info_node], info_node)
             attrs["choice"] = attrs["measurement_type"].validate_complete(
                 data=attrs, time_allowed=False
             )["choice"]
 
         except ValueError as err:
-            raise serializers.ValidationError(err)
+            raise serializers.ValidationError(err) from err
 
         return super().validate(attrs)
 
@@ -132,6 +150,8 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
 # Group
 # ----------------------------------
 class GroupSerializer(ExSerializer):
+    """Serialize an uploaded group and validate its characteristica."""
+
     characteristica = CharacteristicaSerializer(
         many=True, read_only=False, required=False
     )
@@ -139,9 +159,10 @@ class GroupSerializer(ExSerializer):
 
     class Meta:
         model = Group
-        fields = GROUP_FIELDS + ["parent", "characteristica"]
+        fields = [*GROUP_FIELDS, "parent", "characteristica"]
 
     def to_internal_value(self, data):
+        """Drop comments/descriptions, remap upload fields and require a count."""
         data.pop("comments", None)
         data.pop("descriptions", None)
         data = self.retransform_map_fields(data)
@@ -182,9 +203,11 @@ class GroupSerializer(ExSerializer):
             )
 
     def validate(self, attrs):
-        """Validates species information on group with name all
-        :param attrs:
-        :return:
+        """Check the `all` group's required species information and characteristica counts.
+
+        The group named `all` must define species, healthy and sex
+        characteristica. Every group's characteristica must not disable
+        `value` and must have a count not larger than the group's count.
         """
         if attrs.get("name") == "all":
             characteristica = attrs.get("characteristica", [])
@@ -207,12 +230,13 @@ class GroupSerializer(ExSerializer):
         return super().validate(attrs)
 
     def to_representation(self, instance):
-
-        rep = super().to_representation(instance)
-        return rep
+        """Return the default representation unchanged."""
+        return super().to_representation(instance)
 
 
 class GroupExSerializer(ExSerializer):
+    """Serialize the external (as uploaded) form of a group set entry."""
+
     characteristica_ex = CharacteristicaExSerializer(
         many=True, read_only=False, required=False
     )
@@ -235,7 +259,8 @@ class GroupExSerializer(ExSerializer):
 
     class Meta:
         model = GroupEx
-        fields = EXTERN_FILE_FIELDS + [
+        fields = [
+            *EXTERN_FILE_FIELDS,
             "characteristica_ex",
             "groups",
             "comments",
@@ -243,7 +268,12 @@ class GroupExSerializer(ExSerializer):
         ]
 
     def to_internal_value(self, data):
+        """Split the uploaded entry into groups and expand file and characteristica references.
 
+        Splits a combined row into its individual group entries and their
+        characteristica, drops the group-specific columns from the outer
+        entry and remaps the entry's file columns.
+        """
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -278,10 +308,11 @@ class GroupExSerializer(ExSerializer):
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        return rep
+        """Return the default representation unchanged."""
+        return super().to_representation(instance)
 
     def create(self, validated_data):
+        """Create the GroupEx, its characteristica_ex, and its raw and normed Group instances."""
         group_set = validated_data.pop("group_set")
         group_ex, popped_data = _create(
             validated_data=validated_data,
@@ -303,11 +334,14 @@ class GroupExSerializer(ExSerializer):
         return group_ex
 
     def validate_image(self, value):
+        """Check that the referenced image file exists and is accessible."""
         self._validate_image(value)
         return value
 
 
 class GroupSetSerializer(ExSerializer):
+    """Serialize an uploaded set of groups and validate their parent/child structure."""
+
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -321,6 +355,7 @@ class GroupSetSerializer(ExSerializer):
         fields = ["descriptions", "group_exs", "comments"]
 
     def to_internal_value(self, data):
+        """Check for unexpected keys and validate the parent/child structure of the groups."""
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         groups = []
@@ -330,6 +365,11 @@ class GroupSetSerializer(ExSerializer):
         return data
 
     def create(self, validated_data):
+        """Create the GroupSet and its group_exs, then merge parent characteristica.
+
+        After creating every group, adds the normed characteristica inherited
+        from its parent group to its own `characteristica_all_normed`.
+        """
         groupset, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -433,6 +473,8 @@ class GroupSetSerializer(ExSerializer):
 
 
 class IndividualSerializer(ExSerializer):
+    """Serialize an uploaded individual and resolve its group by name."""
+
     name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all())
     characteristica = CharacteristicaSerializer(
@@ -445,15 +487,16 @@ class IndividualSerializer(ExSerializer):
 
     @staticmethod
     def group_to_internal_value(group, study_sid):
+        """Resolve a group name to its primary key within the given study."""
         if group:
             try:
                 group = Group.objects.get(Q(study__sid=study_sid) & Q(name=group)).pk
-            except ObjectDoesNotExist:
+            except ObjectDoesNotExist as err:
                 msg = f"group: {group} in study: {study_sid} does not exist"
-                raise serializers.ValidationError(msg)
-            except MultipleObjectsReturned:
+                raise serializers.ValidationError(msg) from err
+            except MultipleObjectsReturned as err:
                 msg = f"group: {group} in study: {study_sid} has been defined multiple times."
-                raise serializers.ValidationError(msg)
+                raise serializers.ValidationError(msg) from err
 
         else:
             msg = {"group": "group is required on individual", "detail": group}
@@ -461,6 +504,7 @@ class IndividualSerializer(ExSerializer):
         return group
 
     def to_internal_value(self, data):
+        """Require and resolve the group, drop comments/descriptions and remap upload fields."""
         self._is_required(data, "group")
         data.pop("comments", None)
         data.pop("descriptions", None)
@@ -482,6 +526,8 @@ class IndividualSerializer(ExSerializer):
 
 
 class IndividualExSerializer(ExSerializer):
+    """Serialize the external (as uploaded) form of an individual set entry."""
+
     characteristica_ex = CharacteristicaExSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -504,12 +550,14 @@ class IndividualExSerializer(ExSerializer):
     )
 
     def validate_image(self, value):
+        """Check that the referenced image file exists and is accessible."""
         self._validate_image(value)
         return value
 
     class Meta:
         model = IndividualEx
-        fields = EXTERN_FILE_FIELDS + [
+        fields = [
+            *EXTERN_FILE_FIELDS,
             "characteristica_ex",
             "individuals",
             "comments",
@@ -518,16 +566,23 @@ class IndividualExSerializer(ExSerializer):
 
     @staticmethod
     def group_to_internal_value(group, study_sid):
+        """Resolve a group name to its primary key within the given study."""
         if group:
             try:
                 group = Group.objects.get(Q(study__sid=study_sid) & Q(name=group)).pk
-            except ObjectDoesNotExist:
+            except ObjectDoesNotExist as err:
                 msg = f"group: {group} in study: {study_sid} does not exist"
-                raise serializers.ValidationError(msg)
+                raise serializers.ValidationError(msg) from err
         return group
 
     def to_internal_value(self, data):
+        """Split the uploaded entry into individuals and expand file and characteristica references.
 
+        Splits a combined row into its individual entries and their
+        characteristica, drops the individual-specific columns from the
+        outer entry, remaps the entry's file columns and resolves the group
+        name to its primary key.
+        """
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -565,17 +620,17 @@ class IndividualExSerializer(ExSerializer):
         return super(WrongKeyValidationSerializer, self).to_internal_value(data)
 
     def to_representation(self, instance):
-
+        """Replace the group id in the representation by its name or group_map."""
         rep = super().to_representation(instance)
-        if "group" in rep:
-            if rep["group"]:
-                if instance.group:
-                    rep["group"] = instance.group.name
-                if instance.group_map:
-                    rep["group"] = instance.group_map
+        if rep.get("group"):
+            if instance.group:
+                rep["group"] = instance.group.name
+            if instance.group_map:
+                rep["group"] = instance.group_map
         return rep
 
     def create(self, validated_data):
+        """Create the IndividualEx and its raw and normed Individual instances."""
         individual_set = validated_data.pop("individual_set")
         individual_ex, poped_data = _create(
             model_manager=individual_set.individual_exs,
@@ -600,6 +655,8 @@ class IndividualExSerializer(ExSerializer):
 
 
 class IndividualSetSerializer(ExSerializer):
+    """Serialize an uploaded set of individuals."""
+
     individual_exs = IndividualExSerializer(many=True, read_only=False, required=False)
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -613,11 +670,13 @@ class IndividualSetSerializer(ExSerializer):
         fields = ["descriptions", "individual_exs", "comments"]
 
     def to_internal_value(self, data):
+        """Check for unexpected keys in addition to the default conversion."""
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
     def create(self, validated_data):
+        """Create the IndividualSet and its individual_exs."""
         individualset, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -640,6 +699,8 @@ class IndividualSetSerializer(ExSerializer):
 # Read Serializer
 ###############################################################################################
 class CharacteristicaElasticBigSerializer(ReadSerializer):
+    """Serialize a characteristica for read access with its group and individual context."""
+
     measurement_type = serializers.CharField()
     substance = serializers.CharField(allow_null=True)
     calculation_type = serializers.CharField(allow_null=True)
@@ -648,13 +709,23 @@ class CharacteristicaElasticBigSerializer(ReadSerializer):
 
     class Meta:
         model = Characteristica
-        fields = (
-            ["pk", "raw_pk", "normed", "study_sid", "study_name", "subject_type"]
-            + CHARACTERISTICA_FIELDS
-            + MEASUREMENTTYPE_FIELDS
-            + ["group_pk", "group_name", "group_count", "group_parent_pk"]
-            + ["individual_pk", "individual_name", "individual_group_pk"]
-        )
+        fields = [
+            "pk",
+            "raw_pk",
+            "normed",
+            "study_sid",
+            "study_name",
+            "subject_type",
+            *CHARACTERISTICA_FIELDS,
+            *MEASUREMENTTYPE_FIELDS,
+            "group_pk",
+            "group_name",
+            "group_count",
+            "group_parent_pk",
+            "individual_pk",
+            "individual_name",
+            "individual_group_pk",
+        ]
 
 
 ###############################################################################################
@@ -662,6 +733,8 @@ class CharacteristicaElasticBigSerializer(ReadSerializer):
 ###############################################################################################
 # maybe depreciated
 class DataFileElasticSerializer(serializers.ModelSerializer):
+    """Serialize a data file for read access via elasticsearch."""
+
     file = serializers.CharField()
 
     class Meta:
@@ -670,6 +743,8 @@ class DataFileElasticSerializer(serializers.ModelSerializer):
 
 
 class CharacteristicaElasticSerializer(serializers.ModelSerializer):
+    """Serialize a characteristica for read access via elasticsearch."""
+
     value = serializers.FloatField(allow_null=True)
     mean = serializers.FloatField(allow_null=True)
     median = serializers.FloatField(allow_null=True)
@@ -686,18 +761,20 @@ class CharacteristicaElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Characteristica
-        fields = (
-            ["pk"]
-            + CHARACTERISTICA_FIELDS
-            + MEASUREMENTTYPE_FIELDS
-            + ["group_count"]
-            + ["normed"]
-        )  # + ['access','allowed_users']
+        fields = [
+            "pk",
+            *CHARACTERISTICA_FIELDS,
+            *MEASUREMENTTYPE_FIELDS,
+            "group_count",
+            "normed",
+        ]  # + ['access','allowed_users']
         read_only_fields = fields
 
 
 # Group related Serializer
 class GroupSetElasticSmallSerializer(serializers.ModelSerializer):
+    """Serialize a compact, read-only representation of a group set."""
+
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     groups = serializers.SerializerMethodField()
@@ -707,16 +784,21 @@ class GroupSetElasticSmallSerializer(serializers.ModelSerializer):
         fields = ["pk", "descriptions", "comments", "groups"]
 
     def get_groups(self, obj):
+        """Return the primary keys of the groups of this set."""
         return list_of_pk("groups", obj)
 
 
 class GroupSmallElasticSerializer(serializers.ModelSerializer):
+    """Serialize a compact, read-only representation of a group."""
+
     class Meta:
         model = Group
         fields = ["pk", "name", "count"]
 
 
 class GroupElasticSerializer(serializers.ModelSerializer):
+    """Serialize a group for read access via elasticsearch."""
+
     study = StudySmallElasticSerializer(read_only=True)
     parent = GroupSmallElasticSerializer(read_only=True)
     characteristica = serializers.SerializerMethodField()
@@ -734,6 +816,7 @@ class GroupElasticSerializer(serializers.ModelSerializer):
 
     @swagger_serializer_method(CharacteristicaElasticSerializer(many=True))
     def get_characteristica(self, instance):
+        """Return the normed characteristica of this group, or an empty list if there are none."""
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(
                 instance.characteristica_all_normed, many=True, read_only=True
@@ -743,12 +826,16 @@ class GroupElasticSerializer(serializers.ModelSerializer):
 
 # Individual related Serializer
 class IndividualSmallElasticSerializer(serializers.ModelSerializer):
+    """Serialize a compact, read-only representation of an individual."""
+
     class Meta:
         model = Individual
         fields = ["pk", "name"]
 
 
 class IndividualSetElasticSmallSerializer(serializers.ModelSerializer):
+    """Serialize a compact, read-only representation of an individual set."""
+
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     individuals = serializers.SerializerMethodField()
@@ -758,16 +845,20 @@ class IndividualSetElasticSmallSerializer(serializers.ModelSerializer):
         fields = ["pk", "descriptions", "comments", "individuals"]
 
     def get_individuals(self, obj):
+        """Return the primary keys of the individuals of this set."""
         return list_of_pk("individuals", obj)
 
 
 class IndividualElasticSerializer(serializers.ModelSerializer):
+    """Serialize an individual for read access via elasticsearch."""
+
     study = StudySmallElasticSerializer(read_only=True)
     group = GroupSmallElasticSerializer(read_only=True)
     characteristica = serializers.SerializerMethodField()
 
     @swagger_serializer_method(serializer_or_field=CharacteristicaElasticSerializer)
     def get_characteristica(self, instance):
+        """Return the normed characteristica of this individual, or an empty list if there are none."""
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(
                 instance.characteristica_all_normed, many=True, read_only=True
@@ -786,6 +877,8 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
 
 
 class GroupCharacteristicaSerializer(serializers.Serializer):
+    """Serialize a group's characteristica in a flat, elasticsearch-backed form."""
+
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
     group_pk = serializers.IntegerField()
@@ -821,10 +914,13 @@ class GroupCharacteristicaSerializer(serializers.Serializer):
             "group_parent_pk",
             "characteristica_pk",
             "count",
-        ] + MEASUREMENTTYPE_FIELDS
+            *MEASUREMENTTYPE_FIELDS,
+        ]
 
 
 class IndividualCharacteristicaSerializer(serializers.Serializer):
+    """Serialize an individual's characteristica in a flat, elasticsearch-backed form."""
+
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
     individual_pk = serializers.IntegerField()
@@ -858,4 +954,5 @@ class IndividualCharacteristicaSerializer(serializers.Serializer):
             "individual_group_pk",
             "characteristica_pk",
             "count",
-        ] + MEASUREMENTTYPE_FIELDS
+            *MEASUREMENTTYPE_FIELDS,
+        ]

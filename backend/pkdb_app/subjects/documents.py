@@ -1,3 +1,5 @@
+"""Elasticsearch document definitions for groups, individuals and their characteristica."""
+
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from elasticsearch_dsl import analyzer
@@ -47,7 +49,7 @@ characteristica_object_field = fields.ObjectField(
 # ------------------------------------
 @registry.register_document
 class IndividualDocument(Document):
-    """Individual elastic search document"""
+    """Individual elastic search document."""
 
     pk = fields.IntegerField()
     name = string_field("name")
@@ -86,7 +88,7 @@ class IndividualDocument(Document):
 # ------------------------------------
 @registry.register_document
 class GroupDocument(Document):
-    """Elastic Group Document"""
+    """Elastic Group Document."""
 
     pk = fields.IntegerField(attr="pk")
     name = string_field("name")
@@ -122,7 +124,7 @@ class GroupDocument(Document):
         settings["max_result_window"] = 100000
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
+        """Select and prefetch related study, parent and characteristica in one query."""
         return (
             super()
             .get_queryset()
@@ -211,12 +213,8 @@ class GroupCharacteristicaDocument(Document):
         settings = {**elastic_settings, "max_result_window": 100000}
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return (
-            super()
-            .get_queryset()
-            .select_related("group", "characteristica")
-        )
+        """Select the related group and characteristica in the same query."""
+        return super().get_queryset().select_related("group", "characteristica")
 
 
 @registry.register_document
@@ -298,9 +296,5 @@ class IndividualCharacteristicaDocument(Document):
         settings = {**elastic_settings, "max_result_window": 100000}
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return (
-            super()
-            .get_queryset()
-            .select_related("individual", "characteristica")
-        )
+        """Select the related individual and characteristica in the same query."""
+        return super().get_queryset().select_related("individual", "characteristica")

@@ -1,3 +1,5 @@
+"""Elasticsearch document definition for interventions."""
+
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
@@ -10,6 +12,8 @@ from ..interventions.models import Intervention
 # ------------------------------------
 @registry.register_document
 class InterventionDocument(Document):
+    """Elasticsearch document indexing an Intervention for search and read access."""
+
     pk = fields.IntegerField("pk")
     measurement_type = info_node("i_measurement_type")
     calculation_type = info_node("i_calculation_type")
@@ -72,5 +76,5 @@ class InterventionDocument(Document):
         settings = elastic_settings
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
+        """Select the related study in the same query to reduce database hits."""
         return super().get_queryset().select_related("study")

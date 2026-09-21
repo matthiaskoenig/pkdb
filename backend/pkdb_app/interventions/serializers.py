@@ -1,5 +1,4 @@
-"""Serializers for interventions.
-"""
+"""Serializers for interventions."""
 
 import itertools
 import re
@@ -72,6 +71,8 @@ OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 
 
 class InterventionSerializer(MeasurementTypeableSerializer):
+    """Serialize an uploaded intervention and validate it against its measurement type."""
+
     route = utils.SlugRelatedField(
         slug_field="name",
         required=False,
@@ -97,6 +98,13 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         fields = INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_internal_value(self, data):
+        """Drop comments/descriptions, remap upload fields and check dosing requirements.
+
+        For a `medication` or `dosing` measurement type, requires substance,
+        route, value and unit; a `dosing` additionally requires form,
+        application, time and time_unit, and restricts the application to a
+        fixed set of allowed values.
+        """
         data.pop("comments", None)
         data.pop("descriptions", None)
 
@@ -137,6 +145,12 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
+        """Resolve info node fields to their categorials and validate the choice.
+
+        Replaces each info node field by its related categorial via the
+        dedicated function on categorials, then derives the `choice` from the
+        measurement type's completeness validation.
+        """
         try:
             # perform via dedicated function on categorials
             for info_node in [
@@ -147,21 +161,19 @@ class InterventionSerializer(MeasurementTypeableSerializer):
                 "application",
                 "route",
             ]:
-                if info_node in attrs:
-                    if attrs[info_node] is not None:
-                        attrs[info_node] = getattr(attrs[info_node], info_node)
+                if info_node in attrs and attrs[info_node] is not None:
+                    attrs[info_node] = getattr(attrs[info_node], info_node)
 
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)[
                 "choice"
             ]
 
         except ValueError as err:
-            raise serializers.ValidationError(err)
+            raise serializers.ValidationError(err) from err
         return super().validate(attrs)
 
     def validate_time(self, value):
-        """Check that time has a specific pattern.
-        """
+        """Check that time has a specific pattern."""
         validators = [
             self.validate_single,
             self.validate_concise_multiple,
@@ -174,10 +186,12 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def raise_all_errors(data, error_log):
+        """Raise a ValidationError with the accumulated error log."""
         raise serializers.ValidationError(error_log)
 
     @staticmethod
     def _validate_time(value, validators):
+        """Try each validator on value in order until one of them succeeds."""
         error_log = []
         valid = False
         validator_iter = iter(validators)
@@ -189,6 +203,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def validate_single(data, error_log):
+        """Check that data is None or convertible to a float."""
         if data is not None:
             try:
                 return True, float(data)
@@ -198,13 +213,14 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def is_string(data):
-
+        """Check that data is a string."""
         if not isinstance(data, str):
             return False, f"<{data}> is not a string."
         return True, ""
 
     @staticmethod
     def validate_concise_multiple(data, error_log):
+        """Check that data is a string matching the concise multiple-dose pattern."""
         is_string, error = InterventionSerializer.is_string(data)
         if not is_string:
             return False, {"time": error}
@@ -218,6 +234,7 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def validate_multiple(data, error_log):
+        """Check that data is a string of pipe-separated time points, each valid on its own."""
         is_string, error = InterventionSerializer.is_string(data)
         if not is_string:
             return False, {"time": error}
@@ -236,6 +253,8 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
 
 class InterventionExSerializer(MappingSerializer):
+    """Serialize the external (as uploaded) form of an intervention set entry."""
+
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -257,13 +276,20 @@ class InterventionExSerializer(MappingSerializer):
 
     class Meta:
         model = InterventionEx
-        fields = EXTERN_FILE_FIELDS + ["interventions", "comments", "descriptions"]
+        fields = [*EXTERN_FILE_FIELDS, "interventions", "comments", "descriptions"]
 
     def validate_image(self, value):
+        """Check that the referenced image file exists and is accessible."""
         self._validate_image(value)
         return value
 
     def to_internal_value(self, data):
+        """Split the uploaded entry into interventions and expand file references.
+
+        Splits a combined row into its individual intervention entries,
+        normalizes NA values, drops the intervention-specific columns from
+        the outer entry and remaps the entry's file columns.
+        """
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -295,6 +321,7 @@ class InterventionExSerializer(MappingSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def create(self, validated_data):
+        """Create the InterventionEx and its raw and normed Intervention instances."""
         intervention_set = validated_data.pop("intervention_set")
         intervention_ex, poped_data = _create(
             model_manager=intervention_set.intervention_exs,
@@ -316,7 +343,7 @@ class InterventionExSerializer(MappingSerializer):
 
 
 class InterventionSetSerializer(ExSerializer):
-    """InterventionSet."""
+    """Serialize an uploaded set of interventions and validate their names are unique."""
 
     intervention_exs = InterventionExSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -333,11 +360,18 @@ class InterventionSetSerializer(ExSerializer):
         fields = ["descriptions", "intervention_exs", "comments"]
 
     def to_internal_value(self, data):
+        """Check for unexpected keys in addition to the default conversion."""
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
     def validate(self, attrs):
+        """Check that intervention names are unique within the study.
+
+        Uniqueness cannot be enforced by the model's unique_together because
+        the study is not part of the serializer validation, it is only added
+        after create.
+        """
         # unique together not working because study is not part of the serializer validation but is added after create
         intervention_exs = attrs.get("intervention_exs")
         if intervention_exs:
@@ -364,7 +398,7 @@ class InterventionSetSerializer(ExSerializer):
         return super().validate(attrs)
 
     def create(self, validated_data):
-
+        """Create the InterventionSet and its intervention_exs."""
         interventionset, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -387,6 +421,8 @@ class InterventionSetSerializer(ExSerializer):
 # Elastic Serializer
 # ##############################################################################################
 class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
+    """Serialize a compact, read-only representation of an intervention set."""
+
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     interventions = serializers.SerializerMethodField()
@@ -401,17 +437,22 @@ class InterventionSetElasticSmallSerializer(serializers.ModelSerializer):
         ]
 
     def get_interventions(self, obj):
+        """Return the primary keys of the interventions of this set."""
         return list_of_pk("interventions", obj)
 
 
 # Intervention related Serializer
 class InterventionSmallElasticSerializer(serializers.ModelSerializer):
+    """Serialize a compact, read-only representation of an intervention."""
+
     class Meta:
         model = Intervention
         fields = ["pk", "name"]  # , 'url']
 
 
 class InterventionElasticSerializer(serializers.ModelSerializer):
+    """Serialize an intervention for read access via the study endpoint."""
+
     pk = serializers.IntegerField()
     study = StudySmallElasticSerializer(read_only=True)
 
@@ -435,12 +476,18 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Intervention
-        fields = (
-            ["pk", "normed"] + INTERVENTION_FIELDS + ["study"] + MEASUREMENTTYPE_FIELDS
-        )
+        fields = [
+            "pk",
+            "normed",
+            *INTERVENTION_FIELDS,
+            "study",
+            *MEASUREMENTTYPE_FIELDS,
+        ]
 
 
 class InterventionElasticSerializerAnalysis(serializers.Serializer):
+    """Serialize an intervention for the flat, elasticsearch-backed analysis endpoint."""
+
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
     intervention_pk = serializers.IntegerField(source="pk")
@@ -483,67 +530,99 @@ class InterventionElasticSerializerAnalysis(serializers.Serializer):
     unit = serializers.CharField()
 
     def get_choice(self, obj):
+        """Return the sid of the choice info node, or None if not set."""
         if obj.choice:
             return obj.choice.sid
+        return None
 
     def get_choice_label(self, obj):
+        """Return the label of the choice info node, or None if not set."""
         if obj.choice:
             return obj.choice.label
+        return None
 
     def get_route(self, obj):
+        """Return the sid of the route info node, or None if not set."""
         if obj.route:
             return obj.route.sid
+        return None
 
     def get_route_label(self, obj):
+        """Return the label of the route info node, or None if not set."""
         if obj.route:
             return obj.route.label
+        return None
 
     def get_form(self, obj):
+        """Return the sid of the form info node, or None if not set."""
         if obj.form:
             return obj.form.sid
+        return None
 
     def get_form_label(self, obj):
+        """Return the label of the form info node, or None if not set."""
         if obj.form:
             return obj.form.label
+        return None
 
     def get_application(self, obj):
+        """Return the sid of the application info node, or None if not set."""
         if obj.application:
             return obj.application.sid
+        return None
 
     def get_application_label(self, obj):
+        """Return the label of the application info node, or None if not set."""
         if obj.application:
             return obj.application.label
+        return None
 
     def get_measurement_type(self, obj):
+        """Return the sid of the measurement type info node, or None if not set."""
         if obj.measurement_type:
             return obj.measurement_type.sid
+        return None
 
     def get_measurement_type_label(self, obj):
+        """Return the label of the measurement type info node, or None if not set."""
         if obj.measurement_type:
             return obj.measurement_type.label
+        return None
 
     def get_calculation_type(self, obj):
+        """Return the sid of the calculation type info node, or None if not set."""
         if obj.calculation_type:
             return obj.calculation_type.sid
+        return None
 
     def get_calculation_type_label(self, obj):
+        """Return the label of the calculation type info node, or None if not set."""
         if obj.calculation_type:
             return obj.calculation_type.label
+        return None
 
     def get_substance(self, obj):
+        """Return the sid of the substance info node, or None if not set."""
         if obj.substance:
             return obj.substance.sid
+        return None
 
     def get_substance_label(self, obj):
+        """Return the label of the substance info node, or None if not set."""
         if obj.substance:
             return obj.substance.label
+        return None
 
     class Meta:
-        fields = (
-            ["study_sid", "study_name", "intervention_pk", "raw_pk", "normed"]
-            + INTERVENTION_FIELDS
-            + MEASUREMENTTYPE_FIELDS
-        )
+        fields = [
+            "study_sid",
+            "study_name",
+            "intervention_pk",
+            "raw_pk",
+            "normed",
+            *INTERVENTION_FIELDS,
+            *MEASUREMENTTYPE_FIELDS,
+        ]
 
     """
     def to_representation(self, instance):

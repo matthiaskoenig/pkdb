@@ -1,5 +1,4 @@
-"""the managers can be used to overwrite class methods of the models module.
-"""
+"""Custom managers overwriting class methods of the models module."""
 
 from django.apps import apps
 from django.db import models
@@ -12,7 +11,10 @@ from pkdb_app.utils import (
 
 
 class GroupManager(models.Manager):
+    """Manager creating a Group together with its characteristica."""
+
     def create(self, *args, **kwargs):
+        """Create the group, resolve its parent by name and create its characteristica."""
         characteristica = kwargs.pop("characteristica", [])
         study_groups = kwargs.pop("study_groups")
 
@@ -41,7 +43,10 @@ class GroupManager(models.Manager):
 
 
 class CharacteristicaExManager(models.Manager):
+    """Manager creating a CharacteristicaEx together with its comments and descriptions."""
+
     def create(self, *args, **kwargs):
+        """Create the instance and attach its comments and descriptions."""
         comments = kwargs.pop("comments", [])
         descriptions = kwargs.pop("descriptions", [])
         instance = super().create(*args, **kwargs)
@@ -52,7 +57,10 @@ class CharacteristicaExManager(models.Manager):
 
 
 class IndividualManager(models.Manager):
+    """Manager creating an Individual together with its characteristica."""
+
     def create(self, *args, **kwargs):
+        """Create the individual and create its characteristica."""
         characteristica = kwargs.pop("characteristica", [])
         individual = super().create(*args, **kwargs)
         Characteristica = apps.get_model("subjects", "Characteristica")

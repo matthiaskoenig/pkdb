@@ -1,3 +1,5 @@
+"""Elasticsearch-backed views for querying interventions."""
+
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_EXCLUDE, LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
@@ -107,8 +109,10 @@ class ElasticInterventionViewSet(AccessView):
 
 
 class ElasticInterventionAnalysisViewSet(AccessView):
-    """The intervention endpoint gives access to the intervention data. This is mostly a dosing of a substance to the body
-    of the subject but can also be more vague interventions like a meal uptake or exercise.
+    """Endpoint giving access to the intervention data for analysis.
+
+    This is mostly a dosing of a substance to the body of the subject but can
+    also be more vague interventions like a meal uptake or exercise.
     """
 
     swagger_schema = None
