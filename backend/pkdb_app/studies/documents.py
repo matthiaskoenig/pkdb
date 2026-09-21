@@ -30,7 +30,11 @@ descriptions_field = ObjectField(
 
 
 def common_setfields(model, attr=None):
-    """Build an ObjectField with descriptions, comments and a nested pk-only object field for the given set."""
+    """Build an ObjectField for the given set.
+
+    The field holds the descriptions, the comments and a nested pk-only object
+    field.
+    """
     if attr is None:
         attr = model
     return ObjectField(
@@ -92,7 +96,11 @@ class ReferenceDocument(Document):
 
 @registry.register_document
 class StudyDocument(Document):
-    """Elasticsearch document indexing a Study, its reference, subject sets, interventions, outputs and files for search."""
+    """Elasticsearch document indexing a Study for search.
+
+    The indexed content is the reference, the subject sets, the interventions,
+    the outputs and the files of the study.
+    """
 
     # id = fields.TextField(attr='sid')
     pk = fields.IntegerField()

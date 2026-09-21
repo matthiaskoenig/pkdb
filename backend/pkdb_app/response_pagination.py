@@ -12,9 +12,11 @@ from rest_framework.pagination import (
 
 
 class ResponsePagination(DjangoRestResponsePagination):
-    """Wrap the response schema for LimitOffsetPagination, PageNumberPagination and CursorPagination.
+    """Wrap the response schema of the pagination classes.
 
-    Wraps the list schema in a page object matching CustomPagination's output.
+    The wrapped classes are LimitOffsetPagination, PageNumberPagination and
+    CursorPagination. Wraps the list schema in a page object matching
+    CustomPagination's output.
     """
 
     def get_paginated_response(self, paginator, response_schema):

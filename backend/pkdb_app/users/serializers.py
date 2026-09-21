@@ -33,7 +33,10 @@ class UserGroupSerializer(serializers.ModelSerializer):
 
 
 class AuthTokenSerializerCostum(AuthTokenSerializer):
-    """Auth token serializer that additionally requires the user's email to be verified."""
+    """Auth token serializer with an additional requirement.
+
+    The email of the user has to be verified.
+    """
 
     def validate(self, attrs):
         """Reject the credentials unless the user's email address has been verified."""
@@ -52,7 +55,10 @@ class AuthTokenSerializerCostum(AuthTokenSerializer):
 
 
 class UserRegistrationSerializer(RegistrationSerializer):
-    """Registration serializer that creates an unverified user pending email confirmation."""
+    """Registration serializer that creates an unverified user.
+
+    The user is pending the email confirmation.
+    """
 
     class Meta:
         extra_kwargs = {
@@ -115,14 +121,20 @@ class UserRegistrationSerializer(RegistrationSerializer):
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
-    """Admin serializer that creates or updates a user account with a verified email and groups."""
+    """Admin serializer that creates or updates a user account.
+
+    The account has a verified email and groups.
+    """
 
     groups = serializers.SlugRelatedField(
         queryset=Group.objects.all(), slug_field="name", required=True, many=True
     )
 
     def create(self, validated_data):
-        """Create the user with a hashed password, a verified email and the given groups."""
+        """Create the user with a hashed password and a verified email.
+
+        The given groups are assigned to the user.
+        """
         # call create_user on user object. Without this
         # the password will be stored in plain text.
         groups = validated_data.pop("groups", ["basic"])

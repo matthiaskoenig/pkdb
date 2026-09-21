@@ -71,7 +71,11 @@ OUTPUT_FOREIGN_KEYS = [
 
 
 class OutputSerializer(MeasurementTypeableSerializer):
-    """Serializer for uploading a single output value with its group, individual and interventions."""
+    """Serializer for uploading a single output value.
+
+    The group, the individual and the interventions of the output are uploaded
+    as well.
+    """
 
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
@@ -113,7 +117,10 @@ class OutputSerializer(MeasurementTypeableSerializer):
         ]
 
     def to_internal_value(self, data):
-        """Drop nested output-set fields, retransform map fields and resolve related fields."""
+        """Drop the nested output-set fields and resolve the related fields.
+
+        The map fields are retransformed.
+        """
         data.pop("comments", None)
         data.pop("descriptions", None)
         data.pop("image", None)
@@ -125,7 +132,10 @@ class OutputSerializer(MeasurementTypeableSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
-        """Validate group/individual consistency and resolve measurement type fields to instances."""
+        """Validate the group/individual consistency of the output.
+
+        The measurement type fields are resolved to instances.
+        """
         self._validate_individual_output(attrs)
         self._validate_group_output(attrs)
         self.validate_group_individual_output(attrs)
@@ -188,7 +198,10 @@ class OutputExSerializer(ExSerializer):
         fields = [*EXTERN_FILE_FIELDS, "outputs", "comments", "descriptions"]
 
     def to_internal_value(self, data):
-        """Expand the uploaded file rows into individual outputs and drop the now-resolved columns."""
+        """Expand the uploaded file rows into individual outputs.
+
+        The now-resolved columns are dropped.
+        """
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -225,7 +238,10 @@ class OutputExSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_label_map(self, value) -> None:
-        """Raise ValidationError if a string label mapping neither starts with 'col==' nor contains '||'."""
+        """Raise ValidationError for a string label which is no mapping.
+
+        A string label has to start with 'col==' or to contain '||'.
+        """
         if (
             isinstance(value, str)
             and not value.startswith("col==")
@@ -240,7 +256,10 @@ class OutputExSerializer(ExSerializer):
         return value
 
     def create(self, validated_data):
-        """Create the output_ex, its outputs and their normalized copies, and wire up interventions."""
+        """Create the output_ex, its outputs and their normalized copies.
+
+        The interventions are wired up.
+        """
         output_ex, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -266,7 +285,11 @@ class OutputExSerializer(ExSerializer):
 
 
 class OutputSetSerializer(ExSerializer):
-    """Serializer for uploading a study's output set, its output_exs, descriptions and comments."""
+    """Serializer for uploading a study's output set.
+
+    The output_exs, the descriptions and the comments of the set are uploaded
+    as well.
+    """
 
     output_exs = OutputExSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -290,7 +313,10 @@ class OutputSetSerializer(ExSerializer):
         return data
 
     def create(self, validated_data):
-        """Create the output set and its output_exs, collecting calculation warnings as study warnings."""
+        """Create the output set and its output_exs.
+
+        The calculation warnings are collected as study warnings.
+        """
         pop_keys = ["output_exs"]
         outputset, poped_data = _create(
             model_manager=self.Meta.model.objects,
@@ -332,7 +358,11 @@ class OutputSetSerializer(ExSerializer):
 
 
 class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
-    """Elasticsearch serializer for an output set's descriptions, comments and output primary keys."""
+    """Elasticsearch serializer for an output set.
+
+    The serialized fields are the descriptions, the comments and the output
+    primary keys.
+    """
 
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
@@ -450,7 +480,10 @@ class SmallOutputSerializer(serializers.ModelSerializer):
 
 
 class OutputElasticSerializer(serializers.ModelSerializer):
-    """Elasticsearch serializer for a read-only, full view of an output, including its study."""
+    """Elasticsearch serializer for a read-only, full view of an output.
+
+    The study of the output is included.
+    """
 
     study = StudySmallElasticSerializer()
 

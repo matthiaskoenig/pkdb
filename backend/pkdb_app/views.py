@@ -14,7 +14,10 @@ from .subjects.models import DataFile
 
 
 def serve_protected_document(request, file):
-    """Return the data file as an attachment when the user has read access to its study."""
+    """Return the data file as an attachment.
+
+    The file is returned only to a user with read access to its study.
+    """
     try:
         user, _ = TokenAuthentication().authenticate(request=request)
     except TypeError:
@@ -39,7 +42,10 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
     @staticmethod
     def _params(table, swagger):
-        """Return the list endpoint's query parameters prefixed with `table__` for the filter endpoint."""
+        """Return the query parameters of the list endpoint for the filter endpoint.
+
+        Each parameter name is prefixed with `table__`.
+        """
         if swagger.paths.get(f"/{table}/"):
             _params = []
             params = swagger.paths.get(f"/{table}/").get("get").get("parameters").copy()

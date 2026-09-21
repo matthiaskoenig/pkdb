@@ -19,7 +19,10 @@ from pkdb_app.utils import (
 
 
 class Annotation(models.Model):
-    """An ontology annotation attached to an info node, relating it to an external term."""
+    """An ontology annotation attached to an info node.
+
+    The annotation relates the info node to an external term.
+    """
 
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
     relation = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -91,7 +94,10 @@ class InfoNode(Sidable):
     )
 
     def annotations_strings(self):
-        """Return the info node's annotations formatted as ``relation <relation>:, term``."""
+        """Return the formatted annotations of the info node.
+
+        The format is ``relation <relation>:, term``.
+        """
         return [
             f"relation <{annotation.relation}>:, {annotation.term}"
             for annotation in self.annotations.all()
@@ -118,7 +124,10 @@ class Synonym(models.Model):
 
 
 class AbstractInfoNode(models.Model):
-    """Base for the models that specialize an info node with a one-to-one ``info_node`` link."""
+    """Base for the models that specialize an info node.
+
+    A specialized model holds a one-to-one ``info_node`` link.
+    """
 
     class Meta:
         abstract = True
@@ -137,7 +146,10 @@ class AbstractInfoNode(models.Model):
 
 
 class Tissue(AbstractInfoNode):
-    """An info node of type tissue, the site in the body a measurement or intervention refers to."""
+    """An info node of type tissue.
+
+    A tissue is the site in the body a measurement or intervention refers to.
+    """
 
     info_node = models.OneToOneField(
         InfoNode, related_name="tissue", on_delete=models.CASCADE, null=True
@@ -161,7 +173,10 @@ class Route(AbstractInfoNode):
 
 
 class Application(AbstractInfoNode):
-    """An info node of type application, how an intervention was administered (e.g. single dose)."""
+    """An info node of type application.
+
+    An application is how an intervention was administered (e.g. single dose).
+    """
 
     info_node = models.OneToOneField(
         InfoNode, related_name="application", on_delete=models.CASCADE, null=True
@@ -169,7 +184,10 @@ class Application(AbstractInfoNode):
 
 
 class Form(AbstractInfoNode):
-    """An info node of type form, the pharmaceutical form of an intervention (e.g. tablet)."""
+    """An info node of type form.
+
+    A form is the pharmaceutical form of an intervention (e.g. tablet).
+    """
 
     info_node = models.OneToOneField(
         InfoNode, related_name="form", on_delete=models.CASCADE, null=True
@@ -188,10 +206,12 @@ class Unit(models.Model):
 
 
 class MeasurementType(AbstractInfoNode):
-    """An info node of type measurement type, defining what is measured and its allowed units.
+    """An info node of type measurement type.
 
-    Holds the allowed normalized units, the choices for categorical types and the
-    validation logic for the values, units, time and choice of an output or intervention.
+    A measurement type defines what is measured and its allowed units. Holds the
+    allowed normalized units, the choices for categorical types and the
+    validation logic for the values, units, time and choice of an output or
+    intervention.
     """
 
     info_node = models.OneToOneField(
@@ -279,7 +299,10 @@ class MeasurementType(AbstractInfoNode):
 
     @staticmethod
     def p_unit(unit):
-        """Parse a unit string into a pint unit, raising ValueError for an invalid unit."""
+        """Parse a unit string into a pint unit.
+
+        An invalid unit raises ValueError.
+        """
         try:
             p_unit = ureg(unit)
             _ = p_unit.u  # check if pint unit can be accessed
@@ -295,7 +318,10 @@ class MeasurementType(AbstractInfoNode):
             ) from err
 
     def is_valid_unit(self, data):
-        """Check the unit's characters, syntax and dimension, then run the type-specific checks."""
+        """Check the unit's characters, syntax and dimension.
+
+        The type-specific checks run afterwards.
+        """
         unit = data.get("unit", None)
         is_valid = self._is_valid_unit(unit)
         if is_valid:
@@ -318,7 +344,10 @@ class MeasurementType(AbstractInfoNode):
         return True
 
     def _is_valid_unit(self, unit):
-        """Check the unit's characters and syntax, then that its dimension is allowed."""
+        """Check the unit's characters and syntax.
+
+        The dimension of the unit has to be allowed.
+        """
         if not re.match(r"^[\/^_*.() µα-ωΑ-Ωa-zA-Z0-9]*$", str(unit)):
             msg = (
                 f"Unit value <{unit}> contains not allowed characters. "
@@ -405,7 +434,10 @@ class MeasurementType(AbstractInfoNode):
         return self.info_node.name in self.TIME_REQUIRED_MEASUREMENT_TYPES
 
     def validate_choice(self, choice):
-        """Validate the choice against the measurement type's dtype and allowed choices."""
+        """Validate the choice against the measurement type.
+
+        The dtype and the allowed choices of the measurement type decide.
+        """
         if choice:
             if self.info_node.dtype in [
                 self.info_node.DTypes.Categorical,
@@ -473,9 +505,11 @@ class MeasurementType(AbstractInfoNode):
                         )
 
     def validate_complete(self, data, time_allowed: bool = True):
-        """Validate data's unit, numeric values, choice, and time and time unit if time_allowed.
+        """Validate the unit, the numeric values and the choice of data.
 
-        Resolves any 'NR' time and time_unit values to None and returns the resolved choice.
+        The time and the time unit are validated when time_allowed is set.
+        Resolves any 'NR' time and time_unit values to None and returns the
+        resolved choice.
         """
         # check unit
         self.validate_unit(data)
@@ -510,7 +544,10 @@ class MeasurementType(AbstractInfoNode):
 
 
 class Choice(AbstractInfoNode):
-    """An info node of type choice, one allowed value of a categorical measurement type."""
+    """An info node of type choice.
+
+    A choice is one allowed value of a categorical measurement type.
+    """
 
     info_node = models.OneToOneField(
         InfoNode, related_name="choice", on_delete=models.CASCADE, null=True
@@ -587,7 +624,10 @@ class Substance(AbstractInfoNode):
 
     @property
     def derived(self):
-        """Return True if the substance is derived from other substances (has parents)."""
+        """Return True if the substance is derived from other substances.
+
+        A derived substance has parents.
+        """
         # validation rule: check that all labels are in derived and not more(split on `+/()`)
         return self.info_node.parents.exists()
 

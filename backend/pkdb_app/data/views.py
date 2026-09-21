@@ -19,7 +19,10 @@ from pkdb_app.pagination import CustomPagination
 
 
 class DataAnalysisViewSet(AccessView):
-    """Elasticsearch view for querying data analysis rows (dimensions linking data points to outputs)."""
+    """Elasticsearch view for querying data analysis rows.
+
+    A data analysis row is a dimension which links a data point to an output.
+    """
 
     swagger_schema = None
     document = DataAnalysisDocument
@@ -68,8 +71,9 @@ class DataAnalysisViewSet(AccessView):
 class SubSetViewSet(AccessView):
     """Endpoint to query subsets (timecourses and scatters).
 
-    The subets endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a
-    timecourse or scatter. A timecourse subset consists of outputs measured at different time points. A scatter subset
+    The subets endpoint gives access to the subset data. A Subset is a collection
+    of outputs which can be either a timecourse or scatter. A timecourse subset
+    consists of outputs measured at different time points. A scatter subset
     contains correlated data which commonly are displayed as scatter plots.
     """
 
@@ -103,7 +107,10 @@ class SubSetViewSet(AccessView):
 
     @swagger_auto_schema(responses={200: SubSetElasticSerializer(many=False)})
     def get_object(self):
-        """Return the requested subset, documented for swagger with its full serializer."""
+        """Return the requested subset.
+
+        The full serializer documents the response for swagger.
+        """
         return super().get_object()
 
 

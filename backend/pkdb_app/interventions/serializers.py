@@ -71,7 +71,10 @@ OUTPUT_MAP_FIELDS = map_field(OUTPUT_FIELDS)
 
 
 class InterventionSerializer(MeasurementTypeableSerializer):
-    """Serialize an uploaded intervention and validate it against its measurement type."""
+    """Serialize an uploaded intervention.
+
+    The intervention is validated against its measurement type.
+    """
 
     route = utils.SlugRelatedField(
         slug_field="name",
@@ -98,12 +101,12 @@ class InterventionSerializer(MeasurementTypeableSerializer):
         fields = INTERVENTION_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_internal_value(self, data):
-        """Drop comments/descriptions, remap upload fields and check dosing requirements.
+        """Drop the comments and descriptions and remap the upload fields.
 
-        For a `medication` or `dosing` measurement type, requires substance,
-        route, value and unit; a `dosing` additionally requires form,
-        application, time and time_unit, and restricts the application to a
-        fixed set of allowed values.
+        The dosing requirements are checked. For a `medication` or `dosing`
+        measurement type, requires substance, route, value and unit; a `dosing`
+        additionally requires form, application, time and time_unit, and
+        restricts the application to a fixed set of allowed values.
         """
         data.pop("comments", None)
         data.pop("descriptions", None)
@@ -234,7 +237,10 @@ class InterventionSerializer(MeasurementTypeableSerializer):
 
     @staticmethod
     def validate_multiple(data, error_log):
-        """Check that data is a string of pipe-separated time points, each valid on its own."""
+        """Check that data is a string of pipe-separated time points.
+
+        Each time point has to be valid on its own.
+        """
         is_string, error = InterventionSerializer.is_string(data)
         if not is_string:
             return False, {"time": error}
@@ -343,7 +349,10 @@ class InterventionExSerializer(MappingSerializer):
 
 
 class InterventionSetSerializer(ExSerializer):
-    """Serialize an uploaded set of interventions and validate their names are unique."""
+    """Serialize an uploaded set of interventions.
+
+    The names of the interventions have to be unique.
+    """
 
     intervention_exs = InterventionExSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -486,7 +495,10 @@ class InterventionElasticSerializer(serializers.ModelSerializer):
 
 
 class InterventionElasticSerializerAnalysis(serializers.Serializer):
-    """Serialize an intervention for the flat, elasticsearch-backed analysis endpoint."""
+    """Serialize an intervention for the analysis endpoint.
+
+    The endpoint is flat and elasticsearch-backed.
+    """
 
     study_sid = serializers.CharField()
     study_name = serializers.CharField()

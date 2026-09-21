@@ -31,14 +31,21 @@ from pkdb_app.utils import update_or_create_multiple
 
 
 class EXMeasurementTypeableSerializer(ExSerializer):
-    """External (as uploaded) serializer base for data referring to a measurement type by name."""
+    """External (as uploaded) serializer base for data with a measurement type.
+
+    The data refers to its measurement type by name.
+    """
 
     measurement_type = serializers.CharField(allow_blank=False)
     measurement_type_map = serializers.CharField(allow_blank=False)
 
 
 class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
-    """Serializer base resolving measurement type, substance and calculation type by slug."""
+    """Serializer base which resolves the info nodes of the data by slug.
+
+    The resolved info nodes are the measurement type, the substance and the
+    calculation type.
+    """
 
     substance = utils.SlugRelatedField(
         slug_field="name",
@@ -90,7 +97,10 @@ class AnnotationSerializer(serializers.ModelSerializer):
 
 
 class CrossReferenceSerializer(serializers.ModelSerializer):
-    """Read and write serializer for an info node's external database cross references."""
+    """Read and write serializer for the cross references of an info node.
+
+    A cross reference points to an external database.
+    """
 
     name = serializers.CharField(allow_null=False, required=True)
     accession = serializers.CharField(allow_null=False, required=True)
@@ -113,7 +123,10 @@ class UnitSerializer(serializers.ModelSerializer):
         return {"name": data}
 
     def to_representation(self, instance):
-        """Represent the unit as its plain name, accepting either a dict or a Unit instance."""
+        """Represent the unit as its plain name.
+
+        The unit is accepted either as a dict or as a Unit instance.
+        """
         try:
             return instance["name"]
 
@@ -122,7 +135,10 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class SubstanceExtraSerializer(serializers.ModelSerializer):
-    """Read and write serializer for a substance's mass, charge, formula and derived flag."""
+    """Read and write serializer for the extra fields of a substance.
+
+    The extra fields are the mass, the charge, the formula and the derived flag.
+    """
 
     derived = serializers.BooleanField(read_only=True)
 
@@ -159,10 +175,16 @@ class ChoiceExtraSerializer(serializers.ModelSerializer):
 
 
 class InfoNodeListSerializer(serializers.ListSerializer):
-    """List serializer that creates or updates a batch of info nodes and refreshes their index."""
+    """List serializer that creates or updates a batch of info nodes.
+
+    The index of the info nodes is refreshed.
+    """
 
     def run_validation(self, data=empty):
-        """Skip list-level validation; each info node is validated individually in create()."""
+        """Skip the list-level validation.
+
+        Each info node is validated individually in create().
+        """
         return data
 
     def update(self, instance, validated_data):
@@ -170,7 +192,10 @@ class InfoNodeListSerializer(serializers.ListSerializer):
         return self.create(validated_data)
 
     def create(self, validated_data):
-        """Create or update each info node and refresh the elasticsearch index for the batch."""
+        """Create or update each info node.
+
+        The elasticsearch index is refreshed for the batch.
+        """
         info_nodes_pks = []
         for validated_data_single in validated_data:
             try:
@@ -195,11 +220,12 @@ class InfoNodeListSerializer(serializers.ListSerializer):
 
 
 class InfoNodeSerializer(serializers.ModelSerializer):
-    """Admin serializer that creates, updates and represents an info node with its specialized fields.
+    """Admin serializer that creates, updates and represents an info node.
 
-    Resolves the info node's parents, synonyms, annotations and cross references, and
-    creates or updates the extra model (Substance, MeasurementType, ...) that matches
-    the info node's ntype.
+    The specialized fields of the info node are part of the representation.
+    Resolves the info node's parents, synonyms, annotations and cross
+    references, and creates or updates the extra model (Substance,
+    MeasurementType, ...) that matches the info node's ntype.
     """
 
     parents = utils.SlugRelatedField(
@@ -242,7 +268,10 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def NTypes():
-        """Map each ntype value to the specialized model that extends InfoNode for it."""
+        """Map each ntype value to its specialized model.
+
+        A specialized model extends InfoNode for one ntype value.
+        """
         return {
             "info_node": InfoNode,
             "measurement_type": MeasurementType,
@@ -257,7 +286,11 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         }
 
     def update_or_create(self, validated_data, instance=None, update_document=True):
-        """Create or update the info node, its synonyms, annotations, xrefs, parents and specialized model."""
+        """Create or update the info node and its related data.
+
+        The related data consists of the synonyms, the annotations, the xrefs,
+        the parents and the specialized model.
+        """
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
         annotations_data = validated_data.pop("annotations", [])
@@ -341,7 +374,11 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
 
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
-    """Elasticsearch read serializer for an info node with its hierarchy and specialized fields."""
+    """Elasticsearch read serializer for an info node.
+
+    The hierarchy and the specialized fields of the info node are serialized as
+    well.
+    """
 
     parents = SidNameLabelSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)

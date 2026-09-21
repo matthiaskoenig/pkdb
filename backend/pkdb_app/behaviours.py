@@ -18,7 +18,10 @@ class Sidable(models.Model):
 
 
 class Externable(models.Model):
-    """Model has the mapping fields for the subset, source and image columns of an upload."""
+    """Model has the mapping fields for the columns of an upload.
+
+    The mapped columns are the subset, source and image columns.
+    """
 
     # format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     subset_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
@@ -145,7 +148,10 @@ class ValueableNotBlank(models.Model):
 
 
 class MeasurementTypeable(ValueableNotBlank):
-    """Model has a measurement type, calculation type, substance and choice with values."""
+    """Model has a measurement type, calculation type, substance and choice.
+
+    The values are inherited from ValueableNotBlank.
+    """
 
     measurement_type = models.ForeignKey(
         "info_nodes.MeasurementType", on_delete=models.PROTECT
@@ -250,7 +256,7 @@ class Normalizable(MeasurementTypeable):
 
     @property
     def norm_fields(self):
-        """Return the value and error fields which are converted during normalization."""
+        """Return the value and error fields converted during normalization."""
         return {
             "value": self.value,
             "mean": self.mean,
@@ -263,16 +269,22 @@ class Normalizable(MeasurementTypeable):
 
     @property
     def norm_unit(self):
-        """Call `units.get(self.unit)` on the `units` many-to-many manager, which raises.
+        """Always raise instead of returning a normalized unit.
 
-        `units` is a `ManyToManyField`, not a mapping, so this always raises rather
-        than looking up a normalized unit. Nothing in the codebase calls this property.
+        The property calls `units.get(self.unit)` on the `units` many-to-many
+        manager. `units` is a `ManyToManyField`, not a mapping, so this always
+        raises rather than looking up a normalized unit. Nothing in the codebase
+        calls this property.
         """
         return self.measurement_type.units.get(self.unit)
 
     @property
     def is_norm(self):
-        """Return True when there is no unit, otherwise whether unit is already a normalized unit of the measurement type."""
+        """Return whether the unit is already a normalized unit.
+
+        The measurement type decides whether its unit is a normalized one. A
+        missing unit counts as normalized and returns True.
+        """
         if self.unit:
             return self.measurement_type.is_norm_unit(self.unit)
         return True
@@ -281,7 +293,8 @@ class Normalizable(MeasurementTypeable):
     def is_removeable_substance_dimension(self):
         """Checks if the object has a substance which has units which can be normalized.
 
-        :return: tuple (boolean, dimension), i.e, (can be normalized, dimension of substance)
+        :return: tuple (boolean, dimension), i.e, (can be normalized, dimension
+            of substance)
         """
         substance = getattr(self, "substance", None)
         if substance and substance.mass:
@@ -294,7 +307,9 @@ class Normalizable(MeasurementTypeable):
         return (False, None)
 
     def remove_substance_dimension(self):
-        """Remove substance unit by using the molar mass in [g/mole] to convert [mole] -> [g].
+        """Remove the substance unit by using the molar mass.
+
+        The molar mass in [g/mole] converts [mole] -> [g].
 
         :return: tuple (magnitude, unit), i.e., pre-factor and resulting unit
         """

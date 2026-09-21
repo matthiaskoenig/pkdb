@@ -42,14 +42,20 @@ class DescriptionSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(WrongKeyValidationSerializer):
-    """Upload serializer that reads and writes a comment as a ``[username, text]`` pair."""
+    """Upload serializer for a comment.
+
+    A comment is read and written as a ``[username, text]`` pair.
+    """
 
     class Meta:
         fields = ["text", "user"]
         model = Comment
 
     def _validate_comment(self, data):
-        """Raise a validation error unless data is a two element list with non-empty text."""
+        """Raise a validation error for data which is no comment.
+
+        A comment is a two element list with non-empty text.
+        """
         if not (isinstance(data, list) and len(data) == 2):
             raise serializers.ValidationError(
                 {

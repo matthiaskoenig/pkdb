@@ -1,4 +1,7 @@
-"""Elasticsearch-backed views for querying groups, individuals and their characteristica."""
+"""Elasticsearch-backed views for querying the subjects.
+
+The subjects are the groups, the individuals and their characteristica.
+"""
 
 import contextlib
 
@@ -53,8 +56,8 @@ subject_filter_fields = {
 class GroupViewSet(AccessView):
     """Endpoint to query groups.
 
-    The groups endpoint gives access to the groups data. A group is a collection of individuals for which data was
-    reported collectively.
+    The groups endpoint gives access to the groups data. A group is a collection
+    of individuals for which data was reported collectively.
     """
 
     document = GroupDocument
@@ -308,7 +311,10 @@ class DataFileViewSet(viewsets.ModelViewSet):
     permission_classes = (StudyPermission,)
 
     def create(self, request, *args, **kwargs):
-        """Delete any existing data file with the same name before creating the new one."""
+        """Delete any existing data file with the same name.
+
+        The new data file is created afterwards.
+        """
         with contextlib.suppress(DataFile.DoesNotExist):
             DataFile.objects.filter(file=f"data/{request.data['file'].name}").delete()
 

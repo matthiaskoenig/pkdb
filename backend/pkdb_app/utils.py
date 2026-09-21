@@ -13,7 +13,10 @@ CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 5
 
 
 class SlugRelatedField(serializers.SlugRelatedField):
-    """SlugRelatedField with the not-found and invalid error messages worded for uploads."""
+    """SlugRelatedField with error messages worded for uploads.
+
+    The not-found and the invalid message are reworded.
+    """
 
     default_error_messages = {
         "does_not_exist": _("Object with {slug_name}=<{value}> does not exist."),
@@ -57,7 +60,10 @@ def create_if_exists(src, src_key, dest, dest_key):
 
 
 def clean_import(data):
-    """Drop keys whose value is empty, blank or `nan`, and keep the value of every other key."""
+    """Drop the keys whose value is empty, blank or `nan`.
+
+    Every other key keeps its value.
+    """
     clean_dict = {}
     for key, value in data.items():
         if str(value).strip() not in ["", "nan"]:
@@ -89,7 +95,10 @@ def ensure_dir(file_path):
 
 
 def update_or_create_multiple(parent, children, related_name, lookup_fields=None):
-    """Update or create each child on parent's related_name manager, recursing into nested relations."""
+    """Update or create each child on the parent's related_name manager.
+
+    The nested relations of a child are updated or created recursively.
+    """
     for child in children:
         lookup_dict = {}
         instance_child = getattr(parent, related_name)
@@ -123,13 +132,19 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=None
 
 
 def create_multiple(parent, children, related_name):
-    """Create each child on parent's related_name manager and return the created instances."""
+    """Create each child on the parent's related_name manager.
+
+    The created instances are returned.
+    """
     instance_child = getattr(parent, related_name)
     return [instance_child.create(**child) for child in children]
 
 
 def create_multiple_bulk(parent, related_name_parent, children, class_child):
-    """Bulk create class_child instances for each child, linked to parent via related_name_parent."""
+    """Bulk create a class_child instance for each child.
+
+    Each instance is linked to the parent via related_name_parent.
+    """
     return class_child.objects.bulk_create(
         [class_child(**{related_name_parent: parent, **child}) for child in children]
     )
@@ -155,7 +170,10 @@ def _create(
     add_multiple_keys=(),
     pop=(),
 ):
-    """Create the instance and pop out the related data to be created or added afterwards."""
+    """Create the instance and pop out the related data.
+
+    The popped data is created or added afterwards.
+    """
     popped_data = {related: validated_data.pop(related, []) for related in pop}
     related_data_create = {
         related: validated_data.pop(related, []) for related in create_multiple_keys
@@ -180,7 +198,10 @@ def _create(
 
 
 def initialize_normed(not_norm_instance):
-    """Create the normalized copy of a not-normalized instance and normalize its units."""
+    """Create the normalized copy of a not-normalized instance.
+
+    The units of the copy are normalized.
+    """
     norm = copy.copy(not_norm_instance)
     norm.pk = None
     norm.normed = True
@@ -200,7 +221,10 @@ def initialize_normed(not_norm_instance):
 
 
 def recursive_iter(obj, keys=()):
-    """Yield (key path, value) pairs by recursively walking a nested dict/list/tuple structure."""
+    """Yield the (key path, value) pairs of a nested structure.
+
+    The dict, list and tuple structure is walked recursively.
+    """
     if isinstance(obj, dict):
         for k, v in obj.items():
             yield from recursive_iter(v, (*keys, k))

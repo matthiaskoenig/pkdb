@@ -103,7 +103,10 @@ def text_field(attr):
 
 
 class ObjectField(DEDField, Object):
-    """Object field that returns null for an empty field instead of an empty dictionary."""
+    """Object field that returns null for an empty field.
+
+    An empty field returns null instead of an empty dictionary.
+    """
 
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):
         data = {}
@@ -158,7 +161,10 @@ UUID_PARAM = openapi.Parameter(
     name="list", decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM])
 )
 class AccessView(BaseDocumentViewSet):
-    """Elasticsearch document viewset restricting its queryset by ids, uuid and access group."""
+    """Elasticsearch document viewset with a restricted queryset.
+
+    The queryset is restricted by ids, uuid and access group.
+    """
 
     def _get_resource(self):
         resource = self.request.query_params.get("data_type", self.document.Index.name)
@@ -169,7 +175,7 @@ class AccessView(BaseDocumentViewSet):
         return resource
 
     def get_queryset(self):
-        """Restrict the search to the ids, uuid filter and access level of the current user."""
+        """Restrict the search by ids, uuid filter and current user access."""
         group = user_group(self.request.user)
         if hasattr(self, "initial_data"):
             id_queries = [Q("term", pk=pk) for pk in self.initial_data]

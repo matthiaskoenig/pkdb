@@ -1,4 +1,4 @@
-"""Base serializers for the upload, elasticsearch and small read-only representations."""
+"""Base serializers for upload, elasticsearch and small read-only representations."""
 
 import copy
 import numbers
@@ -26,7 +26,10 @@ NA_VALUES = ["na", "NA", "nan", "NAN"]
 
 
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
-    """Base serializer which rejects upload keys unknown to the model and hides null fields."""
+    """Base serializer which rejects upload keys unknown to the model.
+
+    The null fields are hidden.
+    """
 
     @staticmethod
     def retransform_map_string(k):
@@ -65,7 +68,10 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         return instance
 
     def to_internal_value(self, data):
-        """Validate that no unknown key is present before the framework parses the data."""
+        """Validate that no unknown key is present.
+
+        The check runs before the framework parses the data.
+        """
         self.validate_wrong_keys(data)
 
         return super().to_internal_value(data)
@@ -90,14 +96,20 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
 
 class MappingSerializer(WrongKeyValidationSerializer):
-    """Base serializer handling the `_map` column mapping and `||` splitting of uploaded data."""
+    """Base serializer for the column mapping and splitting of uploaded data.
+
+    The mapping uses the `_map` fields and the splitting uses `||`.
+    """
 
     # ----------------------------------
     # helper
     # ----------------------------------
     @staticmethod
     def transform_map_fields(data):
-        """Rename key to f"{key}_map" when its value contains the mapping syntax (==, ||)."""
+        """Rename key to f"{key}_map" when its value contains the mapping syntax.
+
+        The mapping syntax consists of == and ||.
+        """
         transformed_data = {}
         for key, value in data.items():
             if isinstance(value, str):
@@ -245,7 +257,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
     # helper for export of entries from file
     # ----------------------------------
     def subset_pd(self, subset, df):
-        """Filter df to the rows matching the `col==cell_value` expression given in subset."""
+        """Filter df to the rows matching the `col==cell_value` expression.
+
+        The expression is given in subset.
+        """
         values = subset.split(ITEM_MAPPER)
         values = [v.strip() for v in values]
         if len(values) != 2:
@@ -335,7 +350,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return df
 
     def make_entry(self, entry, template, data, source):
-        """Fill template with the row values referenced by its `col==<header>` fields."""
+        """Fill template with the row values its `col==<header>` fields reference."""
         entry_dict = copy.deepcopy(template)
         recursive_entry_dict = list(recursive_iter(entry_dict))
 
@@ -372,7 +387,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return entry_dict
 
     def _groupby_with_list(self, keys, template, df, data, source, groupby, entries):
-        """Group df by groupby and build one entry per group, with per-row values under keys."""
+        """Group df by groupby and build one entry per group.
+
+        The per-row values are stored under keys.
+        """
         poped_keys = {key: template.pop(key) for key in keys if key in template}
         for _non_values_keys, group_df in df.groupby(groupby, sort=False):
             entry_dict = self.make_entry(
@@ -390,7 +408,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
             entries.append(entry_dict)
 
     def entries_from_file(self, data):
-        """Build the list of upload entries, reading and grouping the source file if given."""
+        """Build the list of upload entries.
+
+        A given source file is read and grouped.
+        """
         entries = []
         source = data.get("source")
         template = copy.deepcopy(data)
@@ -459,12 +480,18 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 )
 
     def to_internal_value(self, data):
-        """Rename fields using the mapping syntax to their `_map` field before parsing."""
+        """Rename the fields with the mapping syntax to their `_map` field.
+
+        The renaming happens before parsing.
+        """
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-        """Strip the `_map` suffix and turn the source and image fields into absolute URLs."""
+        """Strip the `_map` suffix of the fields.
+
+        The source and the image field are turned into absolute URLs.
+        """
         rep = super().to_representation(instance)
         rep = self.retransform_map_fields(rep)
 
@@ -479,10 +506,13 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
 
 class ExSerializer(MappingSerializer):
-    """Base serializer for external (as uploaded) instances resolving related fields by name."""
+    """Base serializer for external (as uploaded) instances.
+
+    The related fields are resolved by name.
+    """
 
     def to_internal_related_fields(self, data):
-        """Resolve the group, individual and intervention names to their primary keys."""
+        """Resolve the group, individual and intervention names to primary keys."""
         study_sid = self.context["request"].path.split("/")[-2]
         if data.get("group"):
             try:
@@ -644,7 +674,7 @@ class ExSerializer(MappingSerializer):
 
     @staticmethod
     def ex_mapping():
-        """Return the mapping of the external (ex) field names to the upload field names."""
+        """Return the mapping of external (ex) to upload field names."""
         return {
             "individual_exs": "individuals",
             "individual_ex": "individual",
@@ -657,7 +687,10 @@ class ExSerializer(MappingSerializer):
 
     @classmethod
     def rev_ex_mapping(cls):
-        """Return ex_mapping with the upload field names mapped to the external (ex) field names."""
+        """Return the mapping of the upload to the external (ex) field names.
+
+        The mapping is ex_mapping with keys and values exchanged.
+        """
         return {v: k for k, v in cls.ex_mapping().items()}
 
     @classmethod
@@ -674,7 +707,7 @@ class ExSerializer(MappingSerializer):
 
     @classmethod
     def retransform_ex_fields(cls, data):
-        """Rename the external (ex) field names of data back to their upload field names."""
+        """Rename the external (ex) field names of data back to upload field names."""
         transform_data = {}
         for key, value in data.items():
             ex_key = cls.ex_mapping().get(key)
@@ -685,14 +718,20 @@ class ExSerializer(MappingSerializer):
         return transform_data
 
     def to_internal_value(self, data):
-        """Validate that data is a dict and rename its keys to the external (ex) field names."""
+        """Validate that data is a dict.
+
+        The keys of data are renamed to the external (ex) field names.
+        """
         # change keys
         validate_dict(data)
         data = self.transform_ex_fields(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-        """Rename the external (ex) field names of the representation to the upload field names."""
+        """Rename the external (ex) field names of the representation.
+
+        The external names become the upload field names.
+        """
         representation = super().to_representation(instance)
 
         # change keys
@@ -700,10 +739,16 @@ class ExSerializer(MappingSerializer):
 
 
 class SidSerializer(WrongKeyValidationSerializer):
-    """Serializer which looks up the instance by sid so validation updates it instead of creating a duplicate."""
+    """Serializer which looks up the instance by sid.
+
+    Validation updates the existing instance instead of creating a duplicate.
+    """
 
     def is_valid(self, raise_exception=False):
-        """Attach the existing instance with the given sid, if any, before validating."""
+        """Attach the existing instance with the given sid before validating.
+
+        Nothing is attached when no instance has the given sid.
+        """
         if "sid" in self.initial_data:
             sid = self.initial_data.get("sid")
             try:
@@ -725,7 +770,10 @@ class SidSerializer(WrongKeyValidationSerializer):
 
 
 class ReadSerializer(serializers.ModelSerializer):
-    """Base serializer for elasticsearch read representations rounding floats to 2 decimals."""
+    """Base serializer for elasticsearch read representations.
+
+    The floats are rounded to 2 decimals.
+    """
 
     def to_representation(self, instance):
         """Round every float value of the representation to 2 decimal places."""

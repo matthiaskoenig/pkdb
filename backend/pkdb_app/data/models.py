@@ -1,4 +1,7 @@
-"""Django models for data sets, subsets and the data points that build timecourses and scatters."""
+"""Django models for data sets, subsets and data points.
+
+The data points build the timecourses and the scatters.
+"""
 
 from collections.abc import Iterable
 
@@ -15,9 +18,10 @@ from pkdb_app.utils import CHAR_MAX_LENGTH
 
 
 class DataSet(models.Model):
-    """Add context to outputs, grouping already uploaded outputs into datasets and subsets.
+    """Add context to outputs by grouping them into datasets and subsets.
 
-    These subsets represent, for example, the data points of a timecourse or of a scatter plot.
+    The grouped outputs are already uploaded. These subsets represent, for
+    example, the data points of a timecourse or of a scatter plot.
     """
 
     @property
@@ -27,7 +31,10 @@ class DataSet(models.Model):
 
 
 class Data(models.Model):
-    """A study's named figure or table containing scatter or timecourse data, e.g. Fig3."""
+    """A study's named figure or table, e.g. Fig3.
+
+    The figure or table contains scatter or timecourse data.
+    """
 
     class DataTypes(models.TextChoices):
         """The kinds of data a Data instance can hold: scatter or timecourse."""
@@ -48,18 +55,24 @@ class Data(models.Model):
 
 
 class Timecourseable(models.Model):
-    """Abstract mixin providing the timecourse and scatter representations built from data points."""
+    """Abstract mixin providing the timecourse and scatter representations.
+
+    The representations are built from the data points.
+    """
 
     class Meta:
         abstract = True
 
     def output_pk(self):
-        """Return the primary keys of the outputs referenced by this instance's data points."""
+        """Return the primary keys of the outputs of this instance's data points."""
         return self.data_points.values_list("outputs__pk")
 
     @cached_property
     def timecourse(self):
-        """Build and return the merged timecourse dict of this instance's data points."""
+        """Build and return the merged timecourse dict.
+
+        The dict is built from this instance's data points.
+        """
         tc = self.merge_values(
             self.data_points.prefetch_related("outputs").values(
                 *self._timecourse_extra().values()
@@ -71,7 +84,10 @@ class Timecourseable(models.Model):
         return tc
 
     def reformat_timecourse(self, timecourse, mapping):
-        """Rename the timecourse dict's keys per mapping, wrapping a single intervention pk into a tuple."""
+        """Rename the keys of the timecourse dict per mapping.
+
+        A single intervention pk is wrapped into a tuple.
+        """
         for new_key, old_key in mapping.items():
             timecourse[new_key] = timecourse.pop(old_key)
             if new_key in ["intervention_pk", "interventions"] and isinstance(
@@ -81,7 +97,10 @@ class Timecourseable(models.Model):
 
     @cached_property
     def timecourse_representation(self):
-        """Return the merged timecourse dict if this instance's data is a timecourse, else None."""
+        """Return the merged timecourse dict of this instance.
+
+        None is returned when the data of the instance is not a timecourse.
+        """
         if self.data.data_type == Data.DataTypes.Timecourse:
             timecourse = self.merge_values(
                 self.data_points.values(
@@ -93,7 +112,10 @@ class Timecourseable(models.Model):
         return None
 
     def timecourse_extra_no_intervention(self):
-        """Return the mapping of timecourse dict keys to queryset value paths, excluding intervention fields."""
+        """Return the mapping of timecourse dict keys to queryset value paths.
+
+        The intervention fields are excluded.
+        """
         return {
             "output": "outputs__pk",
             "measurement_type": "outputs__measurement_type",
@@ -118,7 +140,10 @@ class Timecourseable(models.Model):
         }
 
     def keys_timecourse_representation(self):
-        """Return the mapping of timecourse representation keys to queryset value paths."""
+        """Return the mapping of the timecourse representation keys.
+
+        The keys are mapped to the queryset value paths.
+        """
         return {
             "study_sid": "outputs__study__sid",
             "study_name": "outputs__study__name",
@@ -168,26 +193,39 @@ class Timecourseable(models.Model):
 
     @staticmethod
     def none_tuple(values):
-        """Return a single-element (None,) tuple if values is iterable and all NaN, else values as a tuple."""
+        """Return the values as a tuple.
+
+        A single-element (None,) tuple is returned when values is iterable and
+        all its entries are NaN.
+        """
         if isinstance(values, Iterable) and all(pd.isna(v) for v in values):
             return (None,)
         return tuple(values)
 
     @staticmethod
     def to_list(tdf):
-        """Apply none_tuple and tuple_or_value to every column of the timecourse dataframe."""
+        """Apply none_tuple and tuple_or_value to the timecourse dataframe.
+
+        Every column is converted.
+        """
         return tdf.apply(SubSet.none_tuple).apply(SubSet.tuple_or_value)
 
     @staticmethod
     def tuple_or_value(values):
-        """Return the single distinct value if all values are equal, else return values unchanged."""
+        """Return the single distinct value when all values are equal.
+
+        Values which are not all equal are returned unchanged.
+        """
         if len(set(values)) == 1:
             return next(iter(values))
         return values
 
     @staticmethod
     def _tuple_or_value(values):
-        """Return the single distinct value if all values are equal, else values as a tuple."""
+        """Return the single distinct value when all values are equal.
+
+        Values which are not all equal are returned as a tuple.
+        """
         if len(set(values)) == 1:
             return next(iter(values))
         return tuple(values)
@@ -199,7 +237,12 @@ class Timecourseable(models.Model):
         groupby=("outputs__pk",),
         sort_values=("outputs__interventions__pk", "outputs__time"),
     ):
-        """Sort by sort_values, group by groupby, and collapse each group's column to its single value where all rows agree, or to None where all are None."""
+        """Sort and group the values and collapse the columns of each group.
+
+        The rows are sorted by sort_values and grouped by groupby. A column of a
+        group collapses to its single value where all rows agree and to None
+        where all values are None.
+        """
         if values:
             df = pd.DataFrame(values)
         if sort_values:
@@ -227,13 +270,19 @@ class Timecourseable(models.Model):
         return merged_dict
 
     def get_name(self, values, Model):
-        """Return the name of the given Model instance, or a list of names if values is a list of ids."""
+        """Return the name of the given Model instance.
+
+        A list of ids in values returns the list of their names.
+        """
         if isinstance(values, int):
             return Model.objects.get(pk=values).name
         return [self.get_name(value, Model) for value in values]
 
     def validate_timecourse(self, timecourse):
-        """Raise ValueError if any of the timecourse's key values are not unique within the subset."""
+        """Raise ValueError for key values which are not unique.
+
+        The key values of the timecourse have to be unique within the subset.
+        """
         unique_values = {
             "interventions": Intervention,
             "application_name": None,
@@ -260,7 +309,10 @@ class Timecourseable(models.Model):
 
 
 class SubSet(Accessible, Timecourseable):
-    """Concrete data subset of a study, e.g. one timecourse or one series of a scatter plot."""
+    """Concrete data subset of a study.
+
+    A subset is, for example, one timecourse or one series of a scatter plot.
+    """
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
     data = models.ForeignKey(Data, related_name="subsets", on_delete=models.CASCADE)
@@ -285,7 +337,10 @@ class SubSet(Accessible, Timecourseable):
 
     @property
     def array(self):
-        """Iterate over the data points (result unused) and return the subset's data type."""
+        """Return the data type of the subset.
+
+        The data points are iterated over first and the result is unused.
+        """
         [point.values_list("output") for point in self.data_points]
         return self.data.data_type
 
@@ -296,12 +351,12 @@ class SubSet(Accessible, Timecourseable):
 
     @property
     def outputs(self):
-        """Return the primary keys of the outputs referenced by this subset's data points."""
+        """Return the primary keys of the outputs of this subset's data points."""
         return self.data_points.values_list("outputs", flat=True)
 
     @property
     def interventions(self):
-        """Return the primary keys of the interventions linked to this subset's outputs."""
+        """Return the primary keys of the interventions of this subset's outputs."""
         return self.data_points.values_list("outputs__interventions", flat=True)
 
     def keys_scatter_representation(self):
@@ -314,7 +369,10 @@ class SubSet(Accessible, Timecourseable):
 
     @cached_property
     def scatter_representation(self):
-        """Build and return the combined x/y scatter dict for this subset's data points."""
+        """Build and return the combined x/y scatter dict.
+
+        The dict is built for this subset's data points.
+        """
         scatter_x = self.merge_values(
             self.data_points.filter(dimensions__dimension=0).values(
                 *self.keys_scatter_representation().values()
@@ -352,7 +410,10 @@ class DataPoint(models.Model):
 
 
 class Dimension(Accessible):
-    """One dimension (e.g. x or y) of a data point, linking it to the output that spans it."""
+    """One dimension (e.g. x or y) of a data point.
+
+    The dimension links the data point to the output which spans it.
+    """
 
     dimension = models.IntegerField()
     data_point = models.ForeignKey(
@@ -377,12 +438,15 @@ class Dimension(Accessible):
 
     @property
     def data_type(self):
-        """Return the data type (scatter or timecourse) of this dimension's data point."""
+        """Return the data type of this dimension's data point.
+
+        The data type is scatter or timecourse.
+        """
         return self.data_point.subset.data.data_type
 
     @property
     def subset_pk(self):
-        """Return the primary key of the subset this dimension's data point belongs to."""
+        """Return the primary key of the subset of this dimension's data point."""
         return self.data_point.subset.pk
 
     @property

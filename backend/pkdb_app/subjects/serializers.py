@@ -96,7 +96,10 @@ class CharacteristicaExSerializer(WrongKeyValidationSerializer):
 
 
 class CharacteristicaSerializer(MeasurementTypeableSerializer):
-    """Serialize an uploaded characteristica and validate it against its measurement type."""
+    """Serialize an uploaded characteristica.
+
+    The characteristica is validated against its measurement type.
+    """
 
     count = serializers.IntegerField(required=False)
 
@@ -105,7 +108,10 @@ class CharacteristicaSerializer(MeasurementTypeableSerializer):
         fields = CHARACTERISTICA_FIELDS + MEASUREMENTTYPE_FIELDS
 
     def to_internal_value(self, data):
-        """Drop comments/descriptions, require a measurement_type and check for unexpected keys."""
+        """Drop the comments and descriptions and require a measurement_type.
+
+        The data is checked for unexpected keys.
+        """
         data.pop("comments", None)
         data.pop("descriptions", None)
         self._is_required(data, "measurement_type")
@@ -203,7 +209,7 @@ class GroupSerializer(ExSerializer):
             )
 
     def validate(self, attrs):
-        """Check the `all` group's required species information and characteristica counts.
+        """Check the required information and the characteristica counts.
 
         The group named `all` must define species, healthy and sex
         characteristica. Every group's characteristica must not disable
@@ -268,9 +274,10 @@ class GroupExSerializer(ExSerializer):
         ]
 
     def to_internal_value(self, data):
-        """Split the uploaded entry into groups and expand file and characteristica references.
+        """Split the uploaded entry into groups and expand its references.
 
-        Splits a combined row into its individual group entries and their
+        The expanded references are the file and characteristica ones. Splits a
+        combined row into its individual group entries and their
         characteristica, drops the group-specific columns from the outer
         entry and remaps the entry's file columns.
         """
@@ -312,7 +319,10 @@ class GroupExSerializer(ExSerializer):
         return super().to_representation(instance)
 
     def create(self, validated_data):
-        """Create the GroupEx, its characteristica_ex, and its raw and normed Group instances."""
+        """Create the GroupEx and its characteristica_ex.
+
+        The raw and the normed Group instances are created as well.
+        """
         group_set = validated_data.pop("group_set")
         group_ex, popped_data = _create(
             validated_data=validated_data,
@@ -355,7 +365,10 @@ class GroupSetSerializer(ExSerializer):
         fields = ["descriptions", "group_exs", "comments"]
 
     def to_internal_value(self, data):
-        """Check for unexpected keys and validate the parent/child structure of the groups."""
+        """Check for unexpected keys and validate the structure of the groups.
+
+        The validated structure is the parent/child one.
+        """
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         groups = []
@@ -504,7 +517,11 @@ class IndividualSerializer(ExSerializer):
         return group
 
     def to_internal_value(self, data):
-        """Require and resolve the group, drop comments/descriptions and remap upload fields."""
+        """Require and resolve the group of the individual.
+
+        The comments and descriptions are dropped and the upload fields are
+        remapped.
+        """
         self._is_required(data, "group")
         data.pop("comments", None)
         data.pop("descriptions", None)
@@ -576,9 +593,10 @@ class IndividualExSerializer(ExSerializer):
         return group
 
     def to_internal_value(self, data):
-        """Split the uploaded entry into individuals and expand file and characteristica references.
+        """Split the uploaded entry into individuals and expand its references.
 
-        Splits a combined row into its individual entries and their
+        The expanded references are the file and characteristica ones. Splits a
+        combined row into its individual entries and their
         characteristica, drops the individual-specific columns from the
         outer entry, remaps the entry's file columns and resolves the group
         name to its primary key.
@@ -699,7 +717,10 @@ class IndividualSetSerializer(ExSerializer):
 # Read Serializer
 ###############################################################################################
 class CharacteristicaElasticBigSerializer(ReadSerializer):
-    """Serialize a characteristica for read access with its group and individual context."""
+    """Serialize a characteristica for read access.
+
+    The group and the individual context are part of the representation.
+    """
 
     measurement_type = serializers.CharField()
     substance = serializers.CharField(allow_null=True)
@@ -816,7 +837,10 @@ class GroupElasticSerializer(serializers.ModelSerializer):
 
     @swagger_serializer_method(CharacteristicaElasticSerializer(many=True))
     def get_characteristica(self, instance):
-        """Return the normed characteristica of this group, or an empty list if there are none."""
+        """Return the normed characteristica of this group.
+
+        An empty list is returned when the group has none.
+        """
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(
                 instance.characteristica_all_normed, many=True, read_only=True
@@ -858,7 +882,10 @@ class IndividualElasticSerializer(serializers.ModelSerializer):
 
     @swagger_serializer_method(serializer_or_field=CharacteristicaElasticSerializer)
     def get_characteristica(self, instance):
-        """Return the normed characteristica of this individual, or an empty list if there are none."""
+        """Return the normed characteristica of this individual.
+
+        An empty list is returned when the individual has none.
+        """
         if instance.characteristica_all_normed:
             return CharacteristicaElasticSerializer(
                 instance.characteristica_all_normed, many=True, read_only=True
@@ -919,7 +946,10 @@ class GroupCharacteristicaSerializer(serializers.Serializer):
 
 
 class IndividualCharacteristicaSerializer(serializers.Serializer):
-    """Serialize an individual's characteristica in a flat, elasticsearch-backed form."""
+    """Serialize the characteristica of an individual.
+
+    The form of the representation is flat and elasticsearch-backed.
+    """
 
     study_sid = serializers.CharField()
     study_name = serializers.CharField()

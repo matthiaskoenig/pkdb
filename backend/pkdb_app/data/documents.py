@@ -14,7 +14,10 @@ from ..documents import elastic_settings, info_node, string_field, study_field
 
 @registry.register_document
 class DataAnalysisDocument(Document):
-    """Elasticsearch document for a single dimension linking a data point to an output."""
+    """Elasticsearch document for a single dimension.
+
+    The dimension links a data point to an output.
+    """
 
     study_sid = string_field("study_sid")
     study_name = string_field("study_name")

@@ -75,7 +75,10 @@ class OutputDocument(Document):
         auto_refresh = False
 
     def get_queryset(self):
-        """Return the default queryset, a hook left for future select/prefetch related tuning."""
+        """Return the default queryset.
+
+        The hook is left for future select/prefetch related tuning.
+        """
         return super().get_queryset()  # .prefetch_related("interventions").select_related('study', 'individual__name', 'group').
 
     class Index:
@@ -155,5 +158,8 @@ class OutputInterventionDocument(Document):
         settings["max_result_window"] = 500000
 
     def get_queryset(self):
-        """Select related intervention and output in the same query to reduce lookups."""
+        """Select related intervention and output in the same query.
+
+        The single query reduces the lookups.
+        """
         return super().get_queryset().select_related("intervention", "output")

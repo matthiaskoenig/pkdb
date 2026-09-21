@@ -36,7 +36,10 @@ from pkdb_app.utils import (
 
 
 class DimensionSerializer(WrongKeyValidationSerializer):
-    """Serializer for uploading one dimension of a scatter subset, linking it to an output."""
+    """Serializer for uploading one dimension of a scatter subset.
+
+    The dimension is linked to an output.
+    """
 
     output = serializers.CharField(write_only=True, allow_null=False, allow_blank=False)
 
@@ -46,7 +49,10 @@ class DimensionSerializer(WrongKeyValidationSerializer):
 
 
 class SubSetSerializer(ExSerializer):
-    """Serializer for uploading a subset and building its scatter or timecourse data points."""
+    """Serializer for uploading a subset.
+
+    The scatter or timecourse data points of the subset are built.
+    """
 
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -67,12 +73,19 @@ class SubSetSerializer(ExSerializer):
         fields = ["name", "descriptions", "comments", "dimensions", "shared"]
 
     def to_internal_value(self, data):
-        """Check for unexpected keys and return the raw data unchanged, skipping the framework's field conversion."""
+        """Check for unexpected keys and return the raw data unchanged.
+
+        The field conversion of the framework is skipped.
+        """
         self.validate_wrong_keys(data)
         return data
 
     def create(self, validated_data):
-        """Create the subset and, depending on its data type, build its scatter or timecourse points."""
+        """Create the subset and build its data points.
+
+        The data type of the subset decides whether scatter or timecourse points
+        are built.
+        """
         validated_data["study"] = self.context["study"]
 
         subset_instance, poped_data = _create(
@@ -111,7 +124,10 @@ class SubSetSerializer(ExSerializer):
             )
 
     def calculate_pks_from_timecourses(self, subset):
-        """Calculate the pharmacokinetics outputs of the timecourse subset and bulk-create them."""
+        """Calculate the pharmacokinetics outputs of the timecourse subset.
+
+        The calculated outputs are bulk created.
+        """
         # calculate pharmacokinetics outputs
         try:
             outputs = pkoutputs_from_timecourse(subset)
@@ -156,7 +172,10 @@ class SubSetSerializer(ExSerializer):
         return value
 
     def create_scatter(self, dimensions, shared, subset_instance):
-        """Build the two-dimensional scatter data points of the subset from the study's outputs."""
+        """Build the two-dimensional scatter data points of the subset.
+
+        The data points are built from the study's outputs.
+        """
         study = self.context["study"]
         study_outputs = study.outputs.filter(normed=True)
         if len(dimensions) != 2:
@@ -242,7 +261,10 @@ class SubSetSerializer(ExSerializer):
         subset_instance.pks.add(*subset_outputs)
 
     def create_timecourse(self, subset_instance, dimensions):
-        """Build the timecourse data points of the subset and calculate its pharmacokinetics outputs."""
+        """Build the timecourse data points of the subset.
+
+        The pharmacokinetics outputs of the subset are calculated.
+        """
         study = self.context["study"]
         if len(dimensions) != 1:
             raise serializers.ValidationError(
@@ -339,7 +361,10 @@ class DataSerializer(ExSerializer):
 
 
 class DataSetSerializer(ExSerializer):
-    """Serializer for uploading a study's data set: its data figures/tables and their subsets."""
+    """Serializer for uploading a study's data set.
+
+    The data set consists of the data figures/tables and their subsets.
+    """
 
     data = DataSerializer(many=True, read_only=False, required=False, allow_null=True)
     comments = CommentSerializer(
@@ -376,7 +401,10 @@ class DataSetSerializer(ExSerializer):
                 subset_names.append(subset.get("name"))
 
     def to_internal_value(self, data):
-        """Split and expand uploaded data and subset rows, then append auto-generated timecourses."""
+        """Split and expand the uploaded data and subset rows.
+
+        The auto-generated timecourses are appended afterwards.
+        """
         self.validate_wrong_keys(data)
 
         # parse special formatting:
@@ -400,7 +428,10 @@ class DataSetSerializer(ExSerializer):
         return super().to_internal_value(data)
 
     def validate_no_timeocourses(self, data):
-        """Raise ValidationError if a data entry is explicitly declared with data_type=timecourse."""
+        """Raise ValidationError for an explicitly declared timecourse.
+
+        A data entry declared with data_type=timecourse is rejected.
+        """
         for data_single in data:
             if data_single.get("data_type") == Data.DataTypes.Timecourse:
                 raise serializers.ValidationError(
@@ -410,7 +441,11 @@ class DataSetSerializer(ExSerializer):
                 )
 
     def autogenerate_timecourses(self):
-        """Build a data entry grouping the study's timecourse outputs by label, or None if there are none."""
+        """Build a data entry which groups the timecourse outputs by label.
+
+        The grouped outputs are the timecourse outputs of the study. None is
+        returned when the study has no such output.
+        """
         # Study = apps.get_model('studies', 'Study')
 
         study_sid = self.context["request"].path.split("/")[-2]
@@ -463,7 +498,10 @@ class DataSetSerializer(ExSerializer):
 
 
 class TimecourseSerializer(serializers.Serializer):
-    """Read-only serializer flattening a subset's timecourse array into per-field columns."""
+    """Read-only serializer for a subset's timecourse array.
+
+    The array is flattened into per-field columns.
+    """
 
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
@@ -619,14 +657,20 @@ class TimecourseSerializer(serializers.Serializer):
         return None
 
     def get_substance(self, obj):
-        """Return the sid of the subset's substance info node, or None if it has none."""
+        """Return the sid of the subset's substance info node.
+
+        None is returned when the subset has no substance info node.
+        """
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["substance"][0]:
             return result["substance"][0]["sid"]
         return None
 
     def get_substance_label(self, obj):
-        """Return the label of the subset's substance info node, or None if it has none."""
+        """Return the label of the subset's substance info node.
+
+        None is returned when the subset has no substance info node.
+        """
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["substance"][0]:
             return result["substance"][0]["label"]
@@ -685,7 +729,10 @@ class TimecourseSerializer(serializers.Serializer):
 
 
 class SubSetElasticSerializer(DocumentSerializer):
-    """Elasticsearch serializer for a subset (scatter or timecourse), its array and timecourse fields."""
+    """Elasticsearch serializer for a subset (scatter or timecourse).
+
+    The array and the timecourse fields are serialized as well.
+    """
 
     study = StudySmallElasticSerializer(read_only=True)
     name = serializers.CharField()
@@ -702,7 +749,11 @@ class SubSetElasticSerializer(DocumentSerializer):
 
 
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
-    """Elasticsearch serializer for a data set's descriptions, comments and subset primary keys."""
+    """Elasticsearch serializer for a data set.
+
+    The serialized fields are the descriptions, the comments and the subset
+    primary keys.
+    """
 
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)

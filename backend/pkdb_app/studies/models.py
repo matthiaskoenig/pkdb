@@ -80,7 +80,10 @@ class Reference(models.Model):
     # FIXME: Remove
     @property
     def study_pk(self):
-        """Return the primary key of the study using this reference, or an empty string."""
+        """Return the primary key of the study using this reference.
+
+        An empty string is returned when no study uses the reference.
+        """
         if self.study:
             return self.study.pk
         return ""
@@ -184,7 +187,10 @@ class Study(Sidable, models.Model):
 
     @property
     def individuals(self):
-        """Return the individuals of the study, or an empty queryset if there is no individual set."""
+        """Return the individuals of the study.
+
+        An empty queryset is returned when the study has no individual set.
+        """
         try:
             return self.individualset.individuals.all()
         except AttributeError:
@@ -192,7 +198,10 @@ class Study(Sidable, models.Model):
 
     @property
     def groups(self):
-        """Return the groups of the study, or an empty queryset if there is no group set."""
+        """Return the groups of the study.
+
+        An empty queryset is returned when the study has no group set.
+        """
         try:
             return self.groupset.groups.all()
         except AttributeError:
@@ -200,7 +209,10 @@ class Study(Sidable, models.Model):
 
     @property
     def characteristica(self):
-        """Return the combined characteristica of all groups and individuals of the study."""
+        """Return the combined characteristica of the study.
+
+        The characteristica of all groups and individuals are combined.
+        """
         empty_characteristica = Characteristica.objects.none()
         for group in self.groups.all():
             empty_characteristica = empty_characteristica.union(
@@ -215,7 +227,10 @@ class Study(Sidable, models.Model):
 
     @property
     def interventions(self):
-        """Return the interventions of the study, or an empty queryset if there is no intervention set."""
+        """Return the interventions of the study.
+
+        An empty queryset is returned when the study has no intervention set.
+        """
         try:
             return self.interventionset.interventions.all()
         except AttributeError:
@@ -223,7 +238,10 @@ class Study(Sidable, models.Model):
 
     @property
     def outputs_interventions(self):
-        """Always return an empty queryset, since the reverse `outputs` manager has no `outputs_interventions` attribute."""
+        """Always return an empty queryset.
+
+        The reverse `outputs` manager has no `outputs_interventions` attribute.
+        """
         try:
             return self.outputs.outputs_interventions.all()
         except AttributeError:
@@ -305,14 +323,20 @@ class Study(Sidable, models.Model):
 
     @property
     def individual_count(self):
-        """Return the number of individuals of the study, or 0 if there is no individual set."""
+        """Return the number of individuals of the study.
+
+        The number is 0 when the study has no individual set.
+        """
         if self.individualset:
             return self.individualset.individuals.count()
         return 0
 
     @property
     def intervention_count(self):
-        """Return the number of normed interventions of the study, or 0 if there is no intervention set."""
+        """Return the number of normed interventions of the study.
+
+        The number is 0 when the study has no intervention set.
+        """
         if self.interventionset:
             return self.interventionset.interventions.filter(normed=True).count()
         return 0
@@ -343,7 +367,11 @@ class Study(Sidable, models.Model):
         return self.subsets.filter(data__data_type=Data.DataTypes.Scatter).count()
 
     def delete(self, *args, **kwargs):
-        """Delete the study together with its outputset, dataset, interventionset, individualset, groupset and reference."""
+        """Delete the study together with its related sets and its reference.
+
+        The deleted sets are the outputset, dataset, interventionset,
+        individualset and groupset.
+        """
         if self.outputset:
             self.outputset.delete()
         if self.dataset:
@@ -360,7 +388,10 @@ class Study(Sidable, models.Model):
 
 
 def expire():
-    """Return the timezone aware datetime one day from now, used as the default expiry of an IdCollection."""
+    """Return the timezone aware datetime one day from now.
+
+    The datetime is used as the default expiry of an IdCollection.
+    """
     expire_datetime = datetime.datetime.now() + datetime.timedelta(days=1)
     return make_aware(expire_datetime)
 

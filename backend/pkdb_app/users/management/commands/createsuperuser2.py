@@ -22,7 +22,10 @@ class Command(createsuperuser.Command):
         )
 
     def handle(self, *args, **options):
-        """Create the superuser with the given password and a verified email if none exists yet."""
+        """Create the superuser with the given password and a verified email.
+
+        The superuser is created only when it does not exist yet.
+        """
         password = options.get("password")
         username = options.get("username")
         email = options.get("email")

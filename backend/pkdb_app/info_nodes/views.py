@@ -39,7 +39,10 @@ MEASUREMENT_TYPE_EXTRA = ["units"]
 
 
 class InfoNodeViewSet(viewsets.ModelViewSet):
-    """List, create, retrieve, update and delete info nodes, restricted to admin users."""
+    """List, create, retrieve, update and delete info nodes.
+
+    The endpoint is restricted to admin users.
+    """
 
     swagger_schema = None
     permission_classes = (IsAdminUser,)

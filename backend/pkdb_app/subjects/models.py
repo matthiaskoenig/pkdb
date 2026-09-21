@@ -29,7 +29,8 @@ ADDITIVE_CHARACTERISTICA = ["disease", "abstinence"]
 class DataFile(models.Model):
     """Table or figure from where the data comes from (png).
 
-    This should be in a separate class, so that they can be easily displayed/filtered/...
+    This should be in a separate class, so that they can be easily
+    displayed/filtered/...
     """
 
     file = models.FileField(
@@ -102,7 +103,10 @@ class GroupEx(Externable):
 
 
 class Group(Accessible):
-    """A group of subjects, defined by its characteristica and optionally a parent group."""
+    """A group of subjects.
+
+    A group is defined by its characteristica and optionally a parent group.
+    """
 
     ex = models.ForeignKey(
         GroupEx, related_name="groups", null=True, on_delete=models.CASCADE
@@ -309,14 +313,15 @@ class CharacteristicaEx(models.Model):
 
         Characteristics are used to store information about a group of subjects.
         Such a group is defined by
-        - Inclusion criteria, which define general characteristics (often via cutoffs, i.e. min or max) of which
-          subjects are in a group.
-        - Exclusion criteria, analogue to inclusion criteria but defines which subjects are excluded.
+        - Inclusion criteria, which define general characteristics (often via
+          cutoffs, i.e. min or max) of which subjects are in a group.
+        - Exclusion criteria, analogue to inclusion criteria but defines which
+          subjects are excluded.
         - Group criteria, concrete properties/characteristics of the group of subjects.
 
         The type of characteristic is defined via the cvtype.
-        When group characteristica are curated it is important to specify the inclusion/exclusion criteria in
-        addition to the group criteria.
+        When group characteristica are curated it is important to specify the
+        inclusion/exclusion criteria in addition to the group criteria.
 
     This is the concrete selection/information of the characteristics.
     This stores the raw information. Derived values can be calculated.
@@ -355,7 +360,10 @@ class Characteristica(Accessible, Normalizable):
 
     @property
     def study(self):
-        """Return the study this characteristica belongs to, via its group or individual."""
+        """Return the study this characteristica belongs to.
+
+        The study is reached via the group or the individual.
+        """
         if self.group:
             return self.group.study
         return self.individual.study
@@ -466,21 +474,30 @@ class SubjectCharacteristica(models.Model):
 
     @property
     def calculation_type(self):
-        """Return the name of the related characteristica's calculation type, or None."""
+        """Return the name of the related characteristica's calculation type.
+
+        None is returned when the characteristica has no calculation type.
+        """
         if self.characteristica.calculation_type:
             return self.characteristica.calculation_type.info_node.name
         return None
 
     @property
     def choice(self):
-        """Return the name of the related characteristica's choice, or None if not set."""
+        """Return the name of the related characteristica's choice.
+
+        None is returned when the choice is not set.
+        """
         if self.characteristica.choice:
             return self.characteristica.choice.info_node.name
         return None
 
     @property
     def substance(self):
-        """Return the name of the related characteristica's substance, or None if not set."""
+        """Return the name of the related characteristica's substance.
+
+        None is returned when the substance is not set.
+        """
         if self.characteristica.substance:
             return self.characteristica.substance.info_node.name
         return None

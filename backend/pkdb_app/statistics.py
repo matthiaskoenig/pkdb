@@ -14,7 +14,10 @@ from pkdb_app.subjects.models import Group, Individual
 
 
 class SubstanceStatisticsViewSet(viewsets.ViewSet):
-    """Endpoint listing, per substance, the count of normed interventions and outputs."""
+    """Endpoint listing the count of normed interventions and outputs.
+
+    The counts are listed per substance.
+    """
 
     def list(self, request):
         """Return one row per substance with its intervention and output counts."""
@@ -57,7 +60,10 @@ class Statistics:
     """Basic database statistics."""
 
     def __init__(self):
-        """Compute the current counts of studies, subjects, interventions and outputs."""
+        """Compute the current counts of the database content.
+
+        The counted content is studies, subjects, interventions and outputs.
+        """
         self.version = __version__
         self.study_count = Study.objects.count()
         self.reference_count = Reference.objects.count()

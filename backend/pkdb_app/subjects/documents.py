@@ -1,4 +1,7 @@
-"""Elasticsearch document definitions for groups, individuals and their characteristica."""
+"""Elasticsearch document definitions for the subjects.
+
+The subjects are the groups, the individuals and their characteristica.
+"""
 
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
@@ -124,7 +127,10 @@ class GroupDocument(Document):
         settings["max_result_window"] = 100000
 
     def get_queryset(self):
-        """Select and prefetch related study, parent and characteristica in one query."""
+        """Select and prefetch the related instances in one query.
+
+        The related instances are the study, the parent and the characteristica.
+        """
         return (
             super()
             .get_queryset()

@@ -39,7 +39,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        """Replace the provider's SocialApp entry and associate it with the configured site."""
+        """Replace the SocialApp entry of the provider.
+
+        The entry is associated with the configured site.
+        """
         provider = options["provider"]
         name = options.get("name") or provider.title()
         client_id = options["client_id"]

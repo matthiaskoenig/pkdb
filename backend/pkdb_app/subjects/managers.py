@@ -14,7 +14,10 @@ class GroupManager(models.Manager):
     """Manager creating a Group together with its characteristica."""
 
     def create(self, *args, **kwargs):
-        """Create the group, resolve its parent by name and create its characteristica."""
+        """Create the group and its characteristica.
+
+        The parent of the group is resolved by name.
+        """
         characteristica = kwargs.pop("characteristica", [])
         study_groups = kwargs.pop("study_groups")
 
@@ -43,7 +46,10 @@ class GroupManager(models.Manager):
 
 
 class CharacteristicaExManager(models.Manager):
-    """Manager creating a CharacteristicaEx together with its comments and descriptions."""
+    """Manager creating a CharacteristicaEx.
+
+    The comments and the descriptions are created together with it.
+    """
 
     def create(self, *args, **kwargs):
         """Create the instance and attach its comments and descriptions."""

@@ -1,4 +1,7 @@
-"""Permission classes and helpers that grant access to studies and their data by user role."""
+"""Permission classes and helpers for studies and their data.
+
+The access is granted by the role of the user.
+"""
 
 from django_elasticsearch_dsl_drf.utils import DictionaryProxy
 from elasticsearch_dsl import AttrDict
@@ -15,10 +18,16 @@ def is_allowed_method(request):
 
 
 class IsUserOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
-    """Grant safe methods to everybody, write access only to the user who is the object itself."""
+    """Grant safe methods to everybody.
+
+    Write access is granted only to the user who is the object itself.
+    """
 
     def has_object_permission(self, request, view, obj):
-        """Grant safe methods to everybody and write access to the user who is obj itself."""
+        """Grant safe methods to everybody.
+
+        Write access is granted to the user who is obj itself.
+        """
         if request.method in permissions.SAFE_METHODS:
             return True
 
@@ -26,10 +35,16 @@ class IsUserOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
 
 
 class IsAdminOrCreator(permissions.IsAuthenticatedOrReadOnly):
-    """Grant PUT and safe methods generally, other writes to staff and the object's creator."""
+    """Grant PUT and safe methods generally.
+
+    The other writes are granted to staff and to the object's creator.
+    """
 
     def has_object_permission(self, request, view, obj):
-        """Grant PUT and safe methods generally, other writes to staff and the creator."""
+        """Grant PUT and safe methods generally.
+
+        The other writes are granted to staff and to the creator.
+        """
         if is_allowed_method(request):
             return True
 
@@ -38,13 +53,18 @@ class IsAdminOrCreator(permissions.IsAuthenticatedOrReadOnly):
 
 
 class IsAdminOrCreatorOrCurator(permissions.IsAuthenticatedOrReadOnly):
-    """Grant PUT and safe methods generally, other writes to staff, creators and curators.
+    """Grant PUT and safe methods generally.
 
-    Used for the study and reference models.
+    The other writes are granted to staff, creators and curators. Used for the
+    study and reference models.
     """
 
     def has_object_permission(self, request, view, obj):
-        """Grant staff and, for objects with a study, the study's creator and curators write access."""
+        """Grant write access to staff.
+
+        For an object with a study, the study's creator and curators get write
+        access as well.
+        """
         if is_allowed_method(request):
             return True
 
@@ -63,7 +83,10 @@ class StudyPermission(permissions.IsAuthenticatedOrReadOnly):
     """Grant access to an object based on the requesting user's role on its study."""
 
     def has_object_permission(self, request, view, obj):
-        """Delegate to the study of obj, if it has one, and check the user's role there."""
+        """Delegate to the study of obj and check the user's role there.
+
+        The delegation happens only when obj has a study.
+        """
         if hasattr(obj, "study") and obj.study:
             obj = obj.study
 
@@ -83,7 +106,10 @@ def study_permissions(request, obj):
 
 
 def user_group(user):
-    """Return the name of the user's first group, or a fallback for superusers and anonymous users."""
+    """Return the name of the user's first group.
+
+    A fallback is returned for superusers and anonymous users.
+    """
     try:
         user_group = user.groups.first().name
     except AttributeError:
@@ -93,7 +119,11 @@ def user_group(user):
 
 
 def get_study_permission(user, obj):
-    """Grant admins and reviewers full access, others access based on study role and access level."""
+    """Grant admins and reviewers full access.
+
+    The access of the other users is based on the study role and the access
+    level.
+    """
     try:
         allowed_user_modify = (user == obj.creator) or (user in obj.curators)
         allow_user_get = (
@@ -117,9 +147,11 @@ def get_study_permission(user, obj):
 
 
 def get_study_file_permission(user, obj):
-    """Grant admins and reviewers full access, others access based on study role and licence.
+    """Grant admins and reviewers full access.
 
-    Accepts both a Study instance and its elasticsearch dictionary representation.
+    The access of the other users is based on the study role and the licence.
+    Accepts both a Study instance and its elasticsearch dictionary
+    representation.
     """
     allow_user_get = False
     if isinstance(obj, (AttrDict, DictionaryProxy)):
@@ -162,7 +194,10 @@ def anonymous_permissions(request, obj):
 
 
 def basic_permission(request, obj):
-    """Grant other methods to the study's creator and curators, PUT and safe methods by access level."""
+    """Grant the other methods to the study's creator and curators.
+
+    PUT and the safe methods are granted by the access level.
+    """
     user = request.user
     try:
         allowed_user_modify = (user == obj.creator) or (user in obj.curators)

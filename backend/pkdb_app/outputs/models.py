@@ -55,7 +55,10 @@ class AbstractOutput(models.Model):
 
 
 class OutputEx(Externable):
-    """External (as uploaded) form of an output, referencing its source and image files."""
+    """External (as uploaded) form of an output.
+
+    The form references its source and image files.
+    """
 
     source = models.ForeignKey(
         DataFile, related_name="s_output_exs", null=True, on_delete=models.SET_NULL
@@ -100,7 +103,10 @@ class Outputable(Normalizable, models.Model):
 
 
 class Output(AbstractOutput, Outputable, Accessible):
-    """A single measured or calculated pharmacokinetic value for a group or individual."""
+    """A single measured or calculated pharmacokinetic value.
+
+    The value belongs to a group or an individual.
+    """
 
     class OutputTypes(models.TextChoices):
         """The kinds of output: a single value, a timecourse point or an array."""
@@ -149,7 +155,11 @@ class Output(AbstractOutput, Outputable, Accessible):
 
     # for elastic search. NaNs are not allowed in elastic search
     def null_attr(self, attr):
-        """Return the named attribute, or None if it is missing or NaN (elasticsearch rejects NaN)."""
+        """Return the named attribute.
+
+        None is returned when the attribute is missing or NaN, because
+        elasticsearch rejects NaN.
+        """
         value = getattr(self, attr)
         if value not in ["nan", "NA", "NAN", "na", np.nan, None] and not math.isnan(
             value
@@ -202,7 +212,10 @@ class Output(AbstractOutput, Outputable, Accessible):
         return self.null_attr("time")
 
     def add_error_measures(self):
-        """Fill in missing sd, se and cv of a group output from the others that are set."""
+        """Fill in the missing sd, se and cv of a group output.
+
+        The missing measures are calculated from the ones which are set.
+        """
         if self.group:
             if not self.sd:
                 self.sd = calculate_sd(
@@ -287,42 +300,66 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def value(self):
-        """Return the output's null_value bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_value, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_value
 
     @property
     def mean(self):
-        """Return the output's null_mean bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_mean, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_mean
 
     @property
     def median(self):
-        """Return the output's null_median bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_median, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_median
 
     @property
     def min(self):
-        """Return the output's null_min bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_min, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_min
 
     @property
     def max(self):
-        """Return the output's null_max bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_max, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_max
 
     @property
     def sd(self):
-        """Return the output's null_sd bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_sd, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_sd
 
     @property
     def se(self):
-        """Return the output's null_se bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_se, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_se
 
     @property
     def cv(self):
-        """Return the output's null_cv bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_cv, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_cv
 
     @property
@@ -332,7 +369,10 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def time(self):
-        """Return the output's null_time bound method itself, not its value (the call is missing)."""
+        """Return the output's bound method null_time, not its value.
+
+        The call of the method is missing.
+        """
         return self.output.null_time
 
     @property
@@ -380,14 +420,20 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def calculation_type(self):
-        """Return the sid of the output's calculation type info node, or None if it has none."""
+        """Return the sid of the output's calculation type info node.
+
+        None is returned when the output has no calculation type.
+        """
         if self.output.calculation_type:
             return self.output.calculation_type.info_node.sid
         return None
 
     @property
     def calculation_type_label(self):
-        """Return the label of the output's calculation type info node, or None if it has none."""
+        """Return the label of the output's calculation type info node.
+
+        None is returned when the output has no calculation type.
+        """
         if self.output.calculation_type:
             return self.output.calculation_type.info_node.label
         return None
@@ -413,14 +459,20 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def substance(self):
-        """Return the sid of the output's substance info node, or None if it has none."""
+        """Return the sid of the output's substance info node.
+
+        None is returned when the output has no substance.
+        """
         if self.output.substance:
             return self.output.substance.info_node.sid
         return None
 
     @property
     def substance_label(self):
-        """Return the label of the output's substance info node, or None if it has none."""
+        """Return the label of the output's substance info node.
+
+        None is returned when the output has no substance.
+        """
         if self.output.substance:
             return self.output.substance.info_node.label
         return None

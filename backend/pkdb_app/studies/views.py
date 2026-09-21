@@ -103,7 +103,10 @@ from .serializers import (
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
-    """CRUD endpoint for references; object-level write access is decided by IsAdminOrCreatorOrCurator."""
+    """CRUD endpoint for references.
+
+    IsAdminOrCreatorOrCurator decides the object-level write access.
+    """
 
     swagger_schema = None
     queryset = Reference.objects.all()
@@ -136,7 +139,11 @@ class StudyViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def filter_on_permissions(user, queryset):
-        """Restrict queryset to the studies visible to the user's group: all for admin/reviewer, public and own for basic, public only for anonymous."""
+        """Restrict queryset to the studies visible to the user's group.
+
+        An admin or reviewer sees all studies, a basic user the public and its
+        own studies and an anonymous user the public studies only.
+        """
         group = user_group(user)
         if group in ["admin", "reviewer"]:
             return queryset
@@ -155,7 +162,10 @@ class StudyViewSet(viewsets.ModelViewSet):
         return None
 
     def get_queryset(self):
-        """Return the default queryset restricted to the studies visible to the requesting user."""
+        """Return the default queryset restricted to the visible studies.
+
+        The studies are the ones visible to the requesting user.
+        """
         queryset = super().get_queryset()
         return self.filter_on_permissions(self.request.user, queryset)
 
@@ -208,7 +218,10 @@ def update_index_study(request):
 
 
 def delete_elastic_study(related_elastic):
-    """Delete every elastic document instance in related_elastic, returning (False, "BulkIndexError") on failure."""
+    """Delete every elastic document instance in related_elastic.
+
+    A failure returns (False, "BulkIndexError").
+    """
     for doc, instances in related_elastic.items():
         try:
             doc().update(thing=instances, action="delete")
@@ -218,7 +231,10 @@ def delete_elastic_study(related_elastic):
 
 
 def related_elastic_dict(study):
-    """Map each elastic document class to the study's instances it indexes, including the reference document if set.
+    """Map each elastic document class to the study's instances it indexes.
+
+    The reference document is part of the mapping when the study has a
+    reference.
 
     :param study:
     :return:
@@ -278,8 +294,9 @@ def related_elastic_dict(study):
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
     """Endpoint to query studies.
 
-    The studies endpoint gives access to the studies data. A study is a container of consistent
-    pharmacokinetics data. This container mostly contains data reported in a single scientific paper.
+    The studies endpoint gives access to the studies data. A study is a container
+    of consistent pharmacokinetics data. This container mostly contains data
+    reported in a single scientific paper.
     """
 
     document_uid_field = "sid__raw"
@@ -343,7 +360,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
 
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=False)})
     def get_object(self):
-        """Return the single study document matching the lookup, subject to the default object permission checks."""
+        """Return the single study document matching the lookup.
+
+        The default object permission checks apply.
+        """
         return super().get_object()
 
     @swagger_auto_schema(
@@ -351,7 +371,11 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
         manual_parameters=[UUID_PARAM],
     )
     def get_queryset(self):
-        """Restrict the search to a previously saved uuid of ids, then to the studies visible to the user's group."""
+        """Restrict the search to a previously saved uuid of ids.
+
+        The search is restricted to the studies visible to the user's group
+        afterwards.
+        """
         group = user_group(self.request.user)
 
         _uuid = self.request.query_params.get("uuid", [])
@@ -384,7 +408,10 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
 
 
 class StudyAnalysisViewSet(ElasticStudyViewSet):
-    """Endpoint to query the reduced study fields used for analysis, filterable by study sid or name."""
+    """Endpoint to query the reduced study fields used for analysis.
+
+    The fields are filterable by study sid or name.
+    """
 
     swagger_schema = None
     serializer_class = StudyAnalysisSerializer
@@ -461,7 +488,11 @@ class PKData:
         outputs_query: Optional[dict] = None,
         studies_query: Optional[dict] = None,
     ):
-        """Build the concise or full set of studies, groups, individuals, interventions and outputs matching the given queries."""
+        """Build the set of instances matching the given queries.
+
+        The built set is concise or full and holds the studies, groups,
+        individuals, interventions and outputs.
+        """
         #  --- Init ---
 
         time_start = time.time()
@@ -659,7 +690,11 @@ class PKData:
         )
 
     def subset_pks(self):
-        """Always raise AttributeError: self.subsets_query is never set by __init__ and this method has no caller."""
+        """Always raise AttributeError.
+
+        The attribute self.subsets_query is never set by __init__ and this
+        method has no caller.
+        """
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
 
     def study_pks(self):
@@ -695,7 +730,11 @@ class PKData:
         return [instance[pk_field] for instance in response]
 
     def data_by_query_dict(self, query_dict, viewset, serializer, boost):
-        """Query the given elastic viewset with query_dict and return raw source dicts if boost else serialized data."""
+        """Query the given elastic viewset with query_dict.
+
+        A set boost returns the raw source dicts, otherwise the serialized data
+        is returned.
+        """
         view = viewset(request=self.request)
         queryset = view.get_queryset()
         if query_dict is not None:
@@ -739,9 +778,11 @@ class ResponseSerializer(serializers.Serializer):
 class PKDataView(APIView):
     """Endpoint to filter and query data.
 
-    The filter endpoint is the main endpoint for complex queries, such as searches and filtering. A filter query returns
-    a unique id corresponding to the query, which allows to access the complete set of tables
-    (studies, groups, individuals and interventions, outputs, timecourses, and scatters) for the search.
+    The filter endpoint is the main endpoint for complex queries, such as
+    searches and filtering. A filter query returns a unique id corresponding to
+    the query, which allows to access the complete set of tables (studies,
+    groups, individuals and interventions, outputs, timecourses, and scatters)
+    for the search.
     In addition an overview of the counts in the tables is provided.
     ```
     {
@@ -759,9 +800,10 @@ class PKDataView(APIView):
     * `download`: which allows to download the results as zip archive
     * `concise`: switching between concise and non-concise data
 
-    The filter endpoint provides the option of filtering on any of the tables mentioned
-    early. Arguments can be provided with the prefixes `['studies__' , 'groups__', 'individuals__', 'interventions__',
-    'outputs__', 'subsets__']` for the respective tables.
+    The filter endpoint provides the option of filtering on any of the tables
+    mentioned early. Arguments can be provided with the prefixes
+    `['studies__' , 'groups__', 'individuals__', 'interventions__', 'outputs__',
+    'subsets__']` for the respective tables.
     """
 
     EXTRA = {
@@ -823,7 +865,10 @@ class PKDataView(APIView):
         },
     )
     def get(self, request, *args, **kw):
-        """Run the filter query, save its resulting ids under a uuid, and return the counts or a zip download."""
+        """Run the filter query and save its resulting ids under a uuid.
+
+        The counts or a zip download are returned.
+        """
         time_start_request = time.time()
 
         request.GET = request.GET.copy()

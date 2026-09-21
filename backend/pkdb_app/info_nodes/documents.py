@@ -36,7 +36,11 @@ small_info_node_properties = {
 
 @registry.register_document
 class InfoNodeDocument(Document):
-    """Index an info node with its hierarchy, annotations, cross references and units."""
+    """Index an info node.
+
+    The hierarchy, the annotations, the cross references and the units of the
+    info node are indexed as well.
+    """
 
     sid = string_field("sid")
     name = string_field("name")
