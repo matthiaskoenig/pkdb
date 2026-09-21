@@ -12,7 +12,7 @@ from rest_framework.pagination import (
 
 
 class ResponsePagination(DjangoRestResponsePagination):
-    """Wraps the response schema for LimitOffsetPagination, PageNumberPagination and CursorPagination.
+    """Wrap the response schema for LimitOffsetPagination, PageNumberPagination and CursorPagination.
 
     Wraps the list schema in a page object matching CustomPagination's output.
     """

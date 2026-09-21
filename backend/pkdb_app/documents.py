@@ -158,7 +158,7 @@ UUID_PARAM = openapi.Parameter(
     name="list", decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM])
 )
 class AccessView(BaseDocumentViewSet):
-    """Permissions on views."""
+    """Elasticsearch document viewset restricting its queryset by ids, uuid and access group."""
 
     def _get_resource(self):
         resource = self.request.query_params.get("data_type", self.document.Index.name)

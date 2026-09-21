@@ -30,7 +30,7 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def retransform_map_string(k):
-        """Strip a trailing `_map` suffix from a field name."""
+        """Cut the last four characters off k when it contains `_map` anywhere."""
         if "_map" in k:
             k = k[:-4]
         return k
@@ -459,7 +459,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 )
 
     def to_internal_value(self, data):
-        """Rename the source and target columns to their `_map` field before parsing."""
+        """Rename fields using the mapping syntax to their `_map` field before parsing."""
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
 

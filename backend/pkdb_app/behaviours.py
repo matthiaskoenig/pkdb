@@ -263,12 +263,16 @@ class Normalizable(MeasurementTypeable):
 
     @property
     def norm_unit(self):
-        """Return the normalized unit registered for the current unit on the measurement type."""
+        """Call `units.get(self.unit)` on the `units` many-to-many manager, which raises.
+
+        `units` is a `ManyToManyField`, not a mapping, so this always raises rather
+        than looking up a normalized unit. Nothing in the codebase calls this property.
+        """
         return self.measurement_type.units.get(self.unit)
 
     @property
     def is_norm(self):
-        """Return whether the current unit already is the norm unit of the measurement type."""
+        """Return True when there is no unit, otherwise whether unit is already a normalized unit of the measurement type."""
         if self.unit:
             return self.measurement_type.is_norm_unit(self.unit)
         return True
