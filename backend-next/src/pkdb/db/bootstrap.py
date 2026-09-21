@@ -45,6 +45,9 @@ class NodeInput(Input):
         "form",
         "application",
         "calculation_type",
+        "info_node",
+        "choice",
+        "substance_set",
     ]
     definition: dict = Field(default_factory=dict)
     parents: list[str] = Field(default_factory=list)

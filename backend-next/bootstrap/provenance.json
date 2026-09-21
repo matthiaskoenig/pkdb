@@ -1,0 +1,18 @@
+{
+  "legacy_nodes": 2147,
+  "uncached_optional_metadata": [
+    "https://www.ebi.ac.uk/ols4/api/ontologies/obi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBI_OBI_0000070",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_000554",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_000555",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_000751",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001007",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001013",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001014",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001024",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_010048",
+    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_010052"
+  ],
+  "legacy_serialization_sha256": "d6ba91a18f703271563bea45dd07baa61e816af99b6d9bb3fc90ad7edcc1eef9",
+  "policy_sha256": "41438d3302d09aecb89da5a3bdd276dfd7c3f1b7d5e44141f9767db8a88097f5"
+}

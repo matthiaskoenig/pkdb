@@ -42,6 +42,12 @@ def split_entry(entry: dict) -> list[dict]:
                 value = []
             if key in LIST_FIELDS and isinstance(value, str):
                 value = [part.strip() for part in value.split(",")]
+            if key in LIST_FIELDS and isinstance(value, list):
+                value = [
+                    part.strip() if isinstance(part, str) else part
+                    for item in value
+                    for part in (item.split(",") if isinstance(item, str) else [item])
+                ]
             result[index][key] = deepcopy(value)
     return result
 

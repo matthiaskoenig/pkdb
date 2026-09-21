@@ -83,3 +83,17 @@ def test_changed_vocabulary_changes_validation_version(db_session, bootstrap_dir
 def test_bootstrap_requires_explicit_transaction(db_session, bootstrap_directory):
     with pytest.raises(RuntimeError, match="transaction"):
         bootstrap(bootstrap_directory, db_session)
+
+
+def test_full_offline_vocabulary_bootstraps(db_session, bootstrap_directory):
+    from pathlib import Path
+
+    source = Path(__file__).parents[2] / "bootstrap/vocabulary.json"
+    (bootstrap_directory / "vocabulary.json").write_bytes(source.read_bytes())
+    with db_session.begin():
+        report = bootstrap(bootstrap_directory, db_session)
+        assert not report.errors, report.errors
+        vocabulary = load_vocabulary(db_session)
+        mass = vocabulary.substance_map()["apixaban"].mass
+        assert mass is not None and mass > 0
+        assert "M" in vocabulary.measurement_map()["sex"].choices

@@ -27,3 +27,9 @@ def test_nested_mapping_preserves_zero():
 def test_non_column_expression_is_rejected():
     with pytest.raises(StudyValidationError):
         bind_columns({"mean": "eval==1+1"}, {"x": 0})
+
+
+def test_mapped_interventions_expand_cell_lists():
+    template = split_entry({"interventions": "col==interventions"})[0]
+    bound = bind_columns(template, {"interventions": "API10, CYC100"})
+    assert split_entry(bound) == [{"interventions": ["API10", "CYC100"]}]

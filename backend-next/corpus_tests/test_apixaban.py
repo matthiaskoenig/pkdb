@@ -21,3 +21,11 @@ def test_apixaban_parses_without_source_edits(folder):
     assert study.interventions
     assert study.measurements
     assert all(record.source is not None for record in study.measurements)
+
+
+@pytest.mark.parametrize("folder", PATHS, ids=lambda path: path.name)
+def test_apixaban_scientific_validation(folder, full_vocabulary):
+    from pkdb.domain.validation import prepare_study
+
+    prepared = prepare_study(parse_bundle(load_folder(folder)), full_vocabulary)
+    assert prepared.report.valid

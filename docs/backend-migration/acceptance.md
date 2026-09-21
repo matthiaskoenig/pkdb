@@ -27,3 +27,16 @@ are not complete. The legacy backend remains unchanged and is not retired.
 - Apixaban parser gate: 28 passed, 2 failed. Frost2013a references missing
   `Frost2013a_Tab3.png`; Wang2016 Tab3 maps a missing `label` column.
   Inputs were not changed or excluded. Full scientific parity remains pending.
+
+## Persistence and HTTP checkpoint
+
+- 156 tests pass on each supported interpreter, including real PostgreSQL tests.
+- Verified stable-root replacement, rollback after deletion/before commit,
+  concurrent first publication, old-reader snapshots, vocabulary/user rechecks,
+  protected file lifecycle, bounded SQL counts and multipart workbook ingestion.
+- PostgreSQL-only test compose and dual-Python CI include Alembic upgrade/check.
+- Offline bootstrap contains 2,147 vocabulary nodes; 11 optional metadata lookups
+  were not cached and are recorded in `backend-next/bootstrap/provenance.json`.
+- Updated apixaban gate: 28/30 parse; 24/30 pass scientific validation.
+  No source studies were edited or excluded. Full-corpus and legacy-output parity
+  remain open; these counts are not cutover acceptance.

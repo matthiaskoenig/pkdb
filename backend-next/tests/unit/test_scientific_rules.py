@@ -79,3 +79,30 @@ def test_molar_normalization_uses_explicit_substance_mass():
         raw, MeasurementRule(name="concentration", units=("mg/l",)), molar_mass=500.0
     )
     assert norm.statistics.mean == pytest.approx(0.5)
+
+
+def test_scaled_body_surface_unit_normalizes_to_unscaled_units():
+    raw = Measurement(
+        key="gfr",
+        measurement_type="gfr",
+        statistics=Statistics(mean=80.7),
+        unit="ml/min/(1.73*m^2)",
+    )
+    normalized = normalize_record(
+        raw, MeasurementRule(name="gfr", units=("ml/min/(1.73*m^2)",))
+    )
+    assert normalized.statistics.mean == pytest.approx(80.7 / 1.73)
+    assert normalized.statistics.mean is not None
+    assert ureg.Quantity(normalized.statistics.mean, normalized.unit).to(
+        "ml/min/m^2"
+    ).magnitude == pytest.approx(80.7 / 1.73)
+
+
+def test_normalization_overflow_is_a_validation_error():
+    from pkdb.schemas.validation import StudyValidationError
+
+    raw = Measurement(
+        key="m", measurement_type="amount", statistics=Statistics(mean=1e308), unit="kg"
+    )
+    with pytest.raises(StudyValidationError):
+        normalize_record(raw, MeasurementRule(name="amount", units=("ng",)))
