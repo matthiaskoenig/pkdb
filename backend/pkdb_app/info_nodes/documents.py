@@ -1,3 +1,5 @@
+"""Elasticsearch document for info nodes."""
+
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
@@ -34,6 +36,8 @@ small_info_node_properties = {
 
 @registry.register_document
 class InfoNodeDocument(Document):
+    """Index an info node with its hierarchy, annotations, cross references and units."""
+
     sid = string_field("sid")
     name = string_field("name")
     label = string_field("label")

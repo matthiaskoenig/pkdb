@@ -1,3 +1,5 @@
+"""Comments and descriptions that curators attach to studies and their data."""
+
 from django.db import models
 
 # Create your models here.
@@ -19,6 +21,13 @@ from pkdb_app.users.models import User
 
 
 class Comment(models.Model):
+    """A curator's remark attached to a study or to one of its uploaded entities.
+
+    Exactly one of the foreign keys is expected to be set, linking the comment
+    to the study, group, individual, intervention, output, data set or one of
+    their ``Ex`` (external, as uploaded) counterparts it was written about.
+    """
+
     text = models.TextField(null=True)
     user = models.ForeignKey(
         User, related_name="comments", null=True, on_delete=models.CASCADE
@@ -84,10 +93,19 @@ class Comment(models.Model):
 
     @property
     def username(self):
+        """Return the username of the comment's author."""
         return self.user.username
 
 
 class Description(models.Model):
+    """A free text description attached to a study or one of its uploaded entities.
+
+    Exactly one of the foreign keys is expected to be set, linking the
+    description to the study, group, individual, intervention, output, data
+    set or one of their ``Ex`` (external, as uploaded) counterparts, or to a
+    study as a warning.
+    """
+
     text = models.TextField(blank=True, null=True)
     groupset = models.ForeignKey(
         GroupSet, related_name="descriptions", null=True, on_delete=models.CASCADE

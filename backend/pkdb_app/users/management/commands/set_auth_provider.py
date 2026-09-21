@@ -1,4 +1,6 @@
-"""See: # https://django-allauth.readthedocs.io/en/latest/providers.html#github
+"""Management command that updates or inserts an allauth social provider entry.
+
+See: https://django-allauth.readthedocs.io/en/latest/providers.html#github
 
 # manage.py set_auth_provider google google GOOGLE_CLIENT_ID GOOGLE_SECRET_ID
 python manage.py set_auth_provider github github $GITHUB_CLIENT_ID $GITHUB_SECRET_ID
@@ -14,9 +16,12 @@ from pkdb_app.settings import SITE_ID
 
 
 class Command(BaseCommand):
+    """Update or insert a specific allauth provider entry like Google or Facebook."""
+
     help = "Update or insert a specific allauth provider entry like Google or Facebook"
 
     def add_arguments(self, parser):
+        """Add the provider, name, client_id and client_secret arguments."""
         parser.add_argument("provider", type=str, help="Provider ID like 'google'")
         parser.add_argument(
             "--name",
@@ -34,6 +39,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        """Replace the provider's SocialApp entry and associate it with the configured site."""
         provider = options["provider"]
         name = options.get("name") or provider.title()
         client_id = options["client_id"]
@@ -59,8 +65,6 @@ class Command(BaseCommand):
         a.sites.add(site)
 
         self.stdout.write(
-            self.style.SUCCESS(
-                f"Provider '{a.name}' -> client ID '{a.client_id}'"
-            )
+            self.style.SUCCESS(f"Provider '{a.name}' -> client ID '{a.client_id}'")
         )
         self.stdout.write(self.style.SUCCESS(f"Associated with site: {site}"))

@@ -1,3 +1,5 @@
+"""The pint unit registry used to parse, validate and convert measurement units."""
+
 import pint
 
 ureg = pint.UnitRegistry()

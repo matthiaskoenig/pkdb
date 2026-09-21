@@ -1,3 +1,5 @@
+"""Admin viewset and elasticsearch viewset for info nodes."""
+
 from collections import namedtuple
 
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_EXCLUDE, LOOKUP_QUERY_IN
@@ -37,6 +39,8 @@ MEASUREMENT_TYPE_EXTRA = ["units"]
 
 
 class InfoNodeViewSet(viewsets.ModelViewSet):
+    """Create, update and retrieve info nodes, restricted to admin users."""
+
     swagger_schema = None
     permission_classes = (IsAdminUser,)
     lookup_field = "url_slug"
@@ -44,6 +48,7 @@ class InfoNodeViewSet(viewsets.ModelViewSet):
     queryset = InfoNode.objects.all()
 
     def get_serializer(self, *args, **kwargs):
+        """Build a many-serializer when the request data is a list."""
         if isinstance(kwargs.get("data", {}), list):
             kwargs["many"] = True
             return super().get_serializer(*args, **kwargs)
@@ -52,6 +57,8 @@ class InfoNodeViewSet(viewsets.ModelViewSet):
 
 
 class InfoNodeElasticViewSet(BaseDocumentViewSet):
+    """Search and filter info nodes by name, type and their nested fields."""
+
     pagination_class = CustomPagination
     document = InfoNodeDocument
     ignore = [404]

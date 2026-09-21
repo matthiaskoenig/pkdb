@@ -1,3 +1,5 @@
+"""Upload and elasticsearch serializers for info nodes and their specialized kinds."""
+
 from rest_framework import serializers
 from rest_framework.fields import empty
 
@@ -29,11 +31,15 @@ from pkdb_app.utils import update_or_create_multiple
 
 
 class EXMeasurementTypeableSerializer(ExSerializer):
+    """External (as uploaded) serializer base for data referring to a measurement type by name."""
+
     measurement_type = serializers.CharField(allow_blank=False)
     measurement_type_map = serializers.CharField(allow_blank=False)
 
 
 class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
+    """Serializer base resolving measurement type, substance and calculation type by slug."""
+
     substance = utils.SlugRelatedField(
         slug_field="name",
         queryset=InfoNode.objects.filter(ntype=InfoNode.NTypes.Substance),
@@ -58,6 +64,8 @@ class MeasurementTypeableSerializer(EXMeasurementTypeableSerializer):
 
 
 class SynonymSerializer(WrongKeyValidationSerializer):
+    """Upload serializer that reads a synonym as a plain name string."""
+
     pk = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -65,10 +73,13 @@ class SynonymSerializer(WrongKeyValidationSerializer):
         fields = ["name", "pk"]
 
     def to_internal_value(self, data):
+        """Wrap the raw name string as the ``name`` field value."""
         return {"name": data}
 
 
 class AnnotationSerializer(serializers.ModelSerializer):
+    """Read and write serializer for an info node's ontology annotations."""
+
     description = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
     url = serializers.URLField(allow_null=False, required=True)
@@ -79,6 +90,8 @@ class AnnotationSerializer(serializers.ModelSerializer):
 
 
 class CrossReferenceSerializer(serializers.ModelSerializer):
+    """Read and write serializer for an info node's external database cross references."""
+
     name = serializers.CharField(allow_null=False, required=True)
     accession = serializers.CharField(allow_null=False, required=True)
     url = serializers.URLField(allow_null=False, required=True)
@@ -89,14 +102,18 @@ class CrossReferenceSerializer(serializers.ModelSerializer):
 
 
 class UnitSerializer(serializers.ModelSerializer):
+    """Read and write serializer for a unit, as a plain name string."""
+
     class Meta:
         model = Unit
         fields = ["name"]
 
     def to_internal_value(self, data):
+        """Wrap the raw name string as the ``name`` field value."""
         return {"name": data}
 
     def to_representation(self, instance):
+        """Represent the unit as its plain name, accepting either a dict or a Unit instance."""
         try:
             return instance["name"]
 
@@ -105,6 +122,8 @@ class UnitSerializer(serializers.ModelSerializer):
 
 
 class SubstanceExtraSerializer(serializers.ModelSerializer):
+    """Read and write serializer for a substance's mass, charge, formula and derived flag."""
+
     derived = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -113,6 +132,8 @@ class SubstanceExtraSerializer(serializers.ModelSerializer):
 
 
 class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
+    """Read and write serializer for a measurement type's allowed units and choices."""
+
     choices = SidNameLabelSerializer(many=True, read_only=True)
     units = UnitSerializer(many=True, allow_null=True, required=False)
 
@@ -122,6 +143,8 @@ class MeasurementTypeExtraSerializer(serializers.ModelSerializer):
 
 
 class ChoiceExtraSerializer(serializers.ModelSerializer):
+    """Read and write serializer for the measurement types a choice is valid for."""
+
     measurement_types = serializers.SlugRelatedField(
         "sid",
         many=True,
@@ -136,13 +159,18 @@ class ChoiceExtraSerializer(serializers.ModelSerializer):
 
 
 class InfoNodeListSerializer(serializers.ListSerializer):
+    """List serializer that creates or updates a batch of info nodes and refreshes their index."""
+
     def run_validation(self, data=empty):
+        """Skip list-level validation; each info node is validated individually in create()."""
         return data
 
     def update(self, instance, validated_data):
+        """Update a batch of info nodes the same way create() does."""
         return self.create(validated_data)
 
     def create(self, validated_data):
+        """Create or update each info node and refresh the elasticsearch index for the batch."""
         info_nodes_pks = []
         for validated_data_single in validated_data:
             try:
@@ -209,6 +237,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def NTypes():
+        """Map each ntype value to the specialized model that extends InfoNode for it."""
         return {
             "info_node": InfoNode,
             "measurement_type": MeasurementType,
@@ -223,6 +252,7 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         }
 
     def update_or_create(self, validated_data, instance=None, update_document=True):
+        """Create or update the info node, its synonyms, annotations, xrefs, parents and specialized model."""
         synonyms_data = validated_data.pop("synonyms", [])
         parents_data = validated_data.pop("parents", [])
         annotations_data = validated_data.pop("annotations", [])
@@ -283,20 +313,21 @@ class InfoNodeSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
-
+        """Update the info node via update_or_create()."""
         return self.update_or_create(validated_data=validated_data, instance=instance)
 
     def create(self, validated_data):
+        """Create the info node via update_or_create()."""
         return self.update_or_create(validated_data=validated_data)
 
     def to_internal_value(self, data):
+        """Set the creator to the requesting user before the default validation."""
         data["creator"] = self.context["request"].user.id
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
-
-        data = super().to_representation(instance)
-        return data
+        """Represent the info node with the default fields."""
+        return super().to_representation(instance)
 
 
 ###############################################################################################
@@ -305,6 +336,8 @@ class InfoNodeSerializer(serializers.ModelSerializer):
 
 
 class InfoNodeElasticSerializer(serializers.ModelSerializer):
+    """Elasticsearch read serializer for an info node with its hierarchy and specialized fields."""
+
     parents = SidNameLabelSerializer(many=True, allow_null=True)
     annotations = AnnotationSerializer(many=True, allow_null=True)
     synonyms = serializers.SerializerMethodField()
@@ -331,10 +364,13 @@ class InfoNodeElasticSerializer(serializers.ModelSerializer):
         ]
 
     def get_synonyms(self, obj):
+        """Return the names of the info node's synonyms."""
         return [synonym["name"] for synonym in obj.synonyms]
 
 
 class IndoNodeFlatSerializer(serializers.Serializer):
+    """Flat, minimal representation of an info node's sid, label and ntype."""
+
     sid = serializers.CharField()
     label = serializers.CharField()
     ntype = serializers.CharField()

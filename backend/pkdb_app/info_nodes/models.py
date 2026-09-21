@@ -1,5 +1,4 @@
-"""Model for the InfoNodes.
-"""
+"""Models for the info nodes, the controlled vocabulary of PK-DB, and their units."""
 
 import re
 from numbers import Number
@@ -20,7 +19,7 @@ from pkdb_app.utils import (
 
 
 class Annotation(models.Model):
-    """Annotation Model"""
+    """An ontology annotation attached to an info node, relating it to an external term."""
 
     term = models.CharField(max_length=CHAR_MAX_LENGTH)
     relation = models.CharField(max_length=CHAR_MAX_LENGTH)
@@ -31,7 +30,7 @@ class Annotation(models.Model):
 
 
 class CrossReference(models.Model):
-    """CrossReference."""
+    """A cross reference from an info node to an accession in an external database."""
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
     accession = models.CharField(max_length=CHAR_MAX_LENGTH, null=False)
@@ -39,6 +38,15 @@ class CrossReference(models.Model):
 
 
 class InfoNode(Sidable):
+    """An entry of the controlled vocabulary (substance, measurement type, route, ...).
+
+    Info nodes form a hierarchy through the ``parents``/``children`` relation and carry
+    annotations and cross references to external ontologies and databases. The concrete
+    kind of an info node is given by ``ntype`` and its data type by ``dtype``; the
+    specialized models (Substance, MeasurementType, Tissue, ...) each hold a one-to-one
+    link back to their info node.
+    """
+
     class NTypes(models.TextChoices):
         """Note Types."""
 
@@ -79,6 +87,7 @@ class InfoNode(Sidable):
     )
 
     def annotations_strings(self):
+        """Return the info node's annotations formatted as ``relation <relation>:, term``."""
         return [
             f"relation <{annotation.relation}>:, {annotation.term}"
             for annotation in self.annotations.all()
@@ -86,19 +95,17 @@ class InfoNode(Sidable):
 
     @property
     def synonym_names(self):
-        """:return: list of normalized units as strings
-        """
+        """Return the names of the info node's synonyms."""
         return list(self.synonyms.values_list("name", flat=True))
 
     @property
     def creator_username(self):
-        """:return: list of normalized units in the data format of pint
-        """
+        """Return the username of the info node's creator."""
         return self.creator.username
 
 
 class Synonym(models.Model):
-    """Synonym Model"""
+    """An alternative name for an info node."""
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, unique=True)
     info_node = models.ForeignKey(
@@ -107,21 +114,26 @@ class Synonym(models.Model):
 
 
 class AbstractInfoNode(models.Model):
+    """Base for the models that specialize an info node with a one-to-one ``info_node`` link."""
+
     class Meta:
         abstract = True
 
     def sid(self):
+        """Return the sid of the linked info node."""
         return self.info_node.sid
 
     def name(self):
+        """Return the name of the linked info node."""
         return self.info_node.name
 
     def __str__(self):
+        """Return the name of the linked info node."""
         return self.info_node.name
 
 
 class Tissue(AbstractInfoNode):
-    """Tissue Model"""
+    """An info node of type tissue, the site in the body a measurement or intervention refers to."""
 
     info_node = models.OneToOneField(
         InfoNode, related_name="tissue", on_delete=models.CASCADE, null=True
@@ -129,7 +141,7 @@ class Tissue(AbstractInfoNode):
 
 
 class Method(AbstractInfoNode):
-    """Method Model"""
+    """An info node of type method, the technique used to obtain a measurement."""
 
     info_node = models.OneToOneField(
         InfoNode, related_name="method", on_delete=models.CASCADE, null=True
@@ -137,7 +149,7 @@ class Method(AbstractInfoNode):
 
 
 class Route(AbstractInfoNode):
-    """Route Model"""
+    """An info node of type route, the route of administration of an intervention."""
 
     info_node = models.OneToOneField(
         InfoNode, related_name="route", on_delete=models.CASCADE, null=True
@@ -145,7 +157,7 @@ class Route(AbstractInfoNode):
 
 
 class Application(AbstractInfoNode):
-    """Application Model"""
+    """An info node of type application, how an intervention was administered (e.g. single dose)."""
 
     info_node = models.OneToOneField(
         InfoNode, related_name="application", on_delete=models.CASCADE, null=True
@@ -153,7 +165,7 @@ class Application(AbstractInfoNode):
 
 
 class Form(AbstractInfoNode):
-    """Form Model"""
+    """An info node of type form, the pharmaceutical form of an intervention (e.g. tablet)."""
 
     info_node = models.OneToOneField(
         InfoNode, related_name="form", on_delete=models.CASCADE, null=True
@@ -161,17 +173,22 @@ class Form(AbstractInfoNode):
 
 
 class Unit(models.Model):
-    """Units Model"""
+    """A unit of measurement, stored by its pint-parsable name."""
 
     name = models.CharField(max_length=CHAR_MAX_LENGTH)
 
     @property
     def p_unit(self):
+        """Return the unit as a pint unit."""
         return ureg(self.name).u
 
 
 class MeasurementType(AbstractInfoNode):
-    """MeasurementType Model"""
+    """An info node of type measurement type, defining what is measured and its allowed units.
+
+    Holds the allowed normalized units, the choices for categorical types and the
+    validation logic for the values, units, time and choice of an output or intervention.
+    """
 
     info_node = models.OneToOneField(
         InfoNode, related_name="measurement_type", on_delete=models.CASCADE, null=True
@@ -220,53 +237,61 @@ class MeasurementType(AbstractInfoNode):
 
     @property
     def choices(self):
+        """Return the allowed choices of this measurement type."""
         return self.info_node.choices.all()
 
     def __str__(self):
+        """Return the name of the linked info node."""
         return self.info_node.name
 
     def __repr__(self):
+        """Return the name of the linked info node."""
         return self.info_node.name
 
     @property
     def n_p_units(self):
-        """:return: list of normalized units in the data format of pint
-        """
+        """Return the normalized units as pint units."""
         return [unit.p_unit for unit in self.units.all()]
 
     @property
     def n_units(self):
-        """:return: list of normalized units as strings
-        """
+        """Return the normalized units as strings."""
         return list(self.units.values_list("name", flat=True))
 
     @property
     def valid_dimensions(self):
+        """Return the pint dimensionalities of the normalized units."""
         return [unit.dimensionality for unit in self.n_p_units]
 
     @property
     def valid_dimensions_str(self):
+        """Return the dimensionalities of the normalized units as strings."""
         return [str(unit.dimensionality) for unit in self.n_p_units]
 
     @property
     def dimension_to_n_unit(self):
+        """Map each normalized unit's dimensionality string to its pint unit."""
         return {str(n_unit_p.dimensionality): n_unit_p for n_unit_p in self.n_p_units}
 
     @staticmethod
     def p_unit(unit):
+        """Parse a unit string into a pint unit, raising ValueError for an invalid unit."""
         try:
             p_unit = ureg(unit)
-            p_unit.u  # check if pint unit can be accessed
+            _ = p_unit.u  # check if pint unit can be accessed
             return p_unit
-        except (UndefinedUnitError, AttributeError):
+        except (UndefinedUnitError, AttributeError) as err:
             if unit == "%":
-                raise ValueError(f"unit: [{unit}] has to be encoded as 'percent'")
+                raise ValueError(
+                    f"unit: [{unit}] has to be encoded as 'percent'"
+                ) from err
 
             raise ValueError(
                 f"unit [{unit}] is not defined in unit registry or not allowed."
-            )
+            ) from err
 
     def is_valid_unit(self, data):
+        """Check the unit's characters, syntax and dimension, then run the type-specific checks."""
         unit = data.get("unit", None)
         is_valid = self._is_valid_unit(unit)
         if is_valid:
@@ -274,21 +299,22 @@ class MeasurementType(AbstractInfoNode):
         return is_valid
 
     def _validate_special(self, data):
+        """Reject a recovery value, mean or median whose fraction exceeds 2 (200%)."""
         unit = data.get("unit", None)
         if self.info_node.sid == "recovery":
             factor = self.p_unit(unit).to("dimensionless")
             for key in ["value", "mean", "median"]:
-                if data.get(key):
-                    if factor.m * data[key] > 2:
-                        msg = (
-                            f"<{key}> with value <{data[key]}> and unit <{unit}> cannot be greater than "
-                            f"<{2 / factor.m}>. Note that the unit 'dimensionless'= 'none' = 'percent'/100."
-                        )
-                        raise serializers.ValidationError({"unit": msg})
+                if data.get(key) and factor.m * data[key] > 2:
+                    msg = (
+                        f"<{key}> with value <{data[key]}> and unit <{unit}> cannot be greater than "
+                        f"<{2 / factor.m}>. Note that the unit 'dimensionless'= 'none' = 'percent'/100."
+                    )
+                    raise serializers.ValidationError({"unit": msg})
 
         return True
 
     def _is_valid_unit(self, unit):
+        """Check the unit's characters and syntax, then that its dimension is allowed."""
         if not re.match(r"^[\/^_*.() µα-ωΑ-Ωa-zA-Z0-9]*$", str(unit)):
             msg = (
                 f"Unit value <{unit}> contains not allowed characters. "
@@ -298,23 +324,21 @@ class MeasurementType(AbstractInfoNode):
         try:
             p_unit = self.p_unit(unit)
 
-        except pint.DefinitionSyntaxError:
+        except pint.DefinitionSyntaxError as err:
             msg = f"The unit [{unit}] has a wrong syntax."
-            raise serializers.ValidationError({"unit": msg})
+            raise serializers.ValidationError({"unit": msg}) from err
 
         if len(self.n_units) != 0:
             if unit:
-                return any([p_unit.check(dim) for dim in self.valid_dimensions])
+                return any(p_unit.check(dim) for dim in self.valid_dimensions)
             # unit_not_required2 = self.dtype == NUMERIC_CATEGORIAL_TYPE
             # return unit_not_required2
-            unit_not_required2 = self.NO_UNIT in self.n_units
-            return unit_not_required2
+            return self.NO_UNIT in self.n_units
 
-        if unit:
-            return False
-        return True
+        return not unit
 
     def validate_unit(self, data):
+        """Raise ValueError unless data's unit is valid for this measurement type."""
         unit = data.get("unit", None)
         if not self.is_valid_unit(data):
             msg = (
@@ -330,47 +354,54 @@ class MeasurementType(AbstractInfoNode):
             )
 
     def is_valid_time_unit(self, time_unit):
+        """Return True if time_unit has the dimensionality of time."""
         return self.p_unit(time_unit).dimensionality == "[time]"
 
     def validate_time_unit(self, unit):
+        """Raise ValueError unless unit has the dimensionality of time."""
         if not self.is_valid_time_unit(unit):
             msg = f"[{unit}] with dimension [{self.unit_dimension(unit)}] is not allowed for the time units. "
             raise ValueError({"time_unit": msg})
 
     def norm_unit(self, unit):
+        """Return the normalized unit of the given unit's dimension."""
         try:
             return self.dimension_to_n_unit[str(self.unit_dimension(unit))]
-        except KeyError:
+        except KeyError as err:
             raise ValueError(
                 f"Dimension [{self.unit_dimension(unit)}] is not allowed for measurement type [{self.info_node.name}]."
                 f" Dimension was calculated from unit :[{unit}]"
-            )
+            ) from err
 
     def unit_dimension(self, unit):
+        """Return the pint dimensionality of the given unit."""
         return self.p_unit(unit).dimensionality
 
     def is_norm_unit(self, unit):
+        """Return True if the given unit is already one of the normalized units."""
         return ureg(unit) in self.n_p_units
 
     def normalize(self, magnitude, unit):
+        """Convert a magnitude given in unit to the corresponding normalized unit."""
         this_unit_p = self.p_unit(unit)
         this_norm_unit_p = self.norm_unit(unit)
-        result = (magnitude * this_unit_p).to(this_norm_unit_p)
-        return result
+        return (magnitude * this_unit_p).to(this_norm_unit_p)
 
     def is_valid_choice(self, choice):
+        """Return True if choice is one of the measurement type's allowed choices."""
         return choice in self.choices_list()
 
     def choices_list(self):
+        """Return the names of the measurement type's allowed choices."""
         return self.choices.values_list("info_node__name", flat=True)
 
     @property
     def time_required(self):
-        if self.info_node.name in self.TIME_REQUIRED_MEASUREMENT_TYPES:
-            return True
-        return False
+        """Return True if this measurement type requires a time value."""
+        return self.info_node.name in self.TIME_REQUIRED_MEASUREMENT_TYPES
 
     def validate_choice(self, choice):
+        """Validate the choice against the measurement type's dtype and allowed choices."""
         if choice:
             if self.info_node.dtype in [
                 self.info_node.DTypes.Categorical,
@@ -397,9 +428,11 @@ class MeasurementType(AbstractInfoNode):
                 f" Allowed choices are: `{sorted(self.choices_list())}`."
             )
             raise ValueError({"choice": msg})
+        return None
 
     @property
     def numeric_fields(self):
+        """Return the names of the fields that can hold a numeric value."""
         return ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
 
     def validate_numeric(self, data):
@@ -470,6 +503,8 @@ class MeasurementType(AbstractInfoNode):
 
 
 class Choice(AbstractInfoNode):
+    """An info node of type choice, one allowed value of a categorical measurement type."""
+
     info_node = models.OneToOneField(
         InfoNode, related_name="choice", on_delete=models.CASCADE, null=True
     )
@@ -477,28 +512,34 @@ class Choice(AbstractInfoNode):
 
     @property
     def sid(self):
+        """Return the sid of the linked info node."""
         return self.info_node.sid
 
     @property
     def name(self):
+        """Return the name of the linked info node."""
         return self.info_node.name
 
     @property
     def description(self):
+        """Return the description of the linked info node."""
         return self.info_node.description
 
     @property
     def annotations(self):
+        """Return the annotations of the linked info node."""
         return self.info_node.annotations
 
     @property
     def label(self):
+        """Return the label of the linked info node."""
         return self.info_node.label
 
 
 class CalculationType(AbstractInfoNode):
-    """CalculationType
-    The way averages are calculated (e.g. mean, median, geometric mean)
+    """An info node of type calculation type.
+
+    The way averages are calculated (e.g. mean, median, geometric mean).
     """
 
     info_node = models.OneToOneField(
@@ -506,6 +547,7 @@ class CalculationType(AbstractInfoNode):
     )
 
     def __str__(self):
+        """Return the name of the linked info node."""
         return self.info_node.name
 
 
@@ -538,17 +580,21 @@ class Substance(AbstractInfoNode):
 
     @property
     def derived(self):
+        """Return True if the substance is derived from other substances (has parents)."""
         # validation rule: check that all labels are in derived and not more(split on `+/()`)
         return self.info_node.parents.exists()
 
     @property
     def outputs_normed(self):
+        """Return the normalized outputs measured for this substance."""
         return self.output_set.filter(normed=True)
 
     @property
     def outputs_calculated(self):
+        """Return the normalized, calculated outputs for this substance."""
         return self.output_set.filter(normed=True, calculated=True)
 
     @property
     def interventions_normed(self):
+        """Return the normalized interventions for this substance."""
         return self.intervention_set.filter(normed=True)

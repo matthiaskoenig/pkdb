@@ -1,3 +1,5 @@
+"""Management command that creates a superuser with a password and a verified email."""
+
 from django.contrib.auth.management.commands import createsuperuser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import CommandError
@@ -5,9 +7,12 @@ from rest_email_auth.models import EmailAddress
 
 
 class Command(createsuperuser.Command):
+    """Extend the built-in createsuperuser command with a password argument."""
+
     help = "Create a superuser, and allow password to be provided"
 
     def add_arguments(self, parser):
+        """Add the --password argument on top of the base command's arguments."""
         super().add_arguments(parser)
         parser.add_argument(
             "--password",
@@ -17,6 +22,7 @@ class Command(createsuperuser.Command):
         )
 
     def handle(self, *args, **options):
+        """Create the superuser with the given password and a verified email if none exists yet."""
         password = options.get("password")
         username = options.get("username")
         email = options.get("email")

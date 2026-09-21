@@ -1,3 +1,5 @@
+"""Viewsets for managing and authenticating user accounts."""
+
 from django.contrib.auth.models import Group
 from rest_framework import mixins, viewsets
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -15,8 +17,7 @@ from pkdb_app.users.serializers import (
 class UserViewSet(
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
-    """Updates and retrieves user accounts
-    """
+    """Retrieve and update user accounts, restricted to admin users."""
 
     swagger_schema = None
     queryset = User.objects.all()
@@ -25,6 +26,8 @@ class UserViewSet(
 
 
 class UserGroupViewSet(viewsets.ModelViewSet):
+    """Manage the available user groups, restricted to admin users."""
+
     swagger_schema = None
     queryset = Group.objects.all()
     serializer_class = UserGroupSerializer
@@ -34,8 +37,7 @@ class UserGroupViewSet(viewsets.ModelViewSet):
 class UserCreateViewSet(
     mixins.CreateModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
-    """Creates user accounts
-    """
+    """Create and update user accounts, restricted to admin users."""
 
     swagger_schema = None
     queryset = User.objects.all()
@@ -47,5 +49,7 @@ class UserCreateViewSet(
 
 
 class ObtainAuthTokenCustom(ObtainAuthToken):
+    """Issue an auth token, requiring the account's email to be verified."""
+
     swagger_schema = None
     serializer_class = AuthTokenSerializerCostum

@@ -1,3 +1,5 @@
+"""Serializers for reading, creating and registering user accounts."""
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from rest_email_auth import models, signals
@@ -10,6 +12,8 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """Read and update serializer for a user's name and group memberships."""
+
     groups = serializers.SlugRelatedField(
         queryset=Group.objects.all(), slug_field="name", required=True, many=True
     )
@@ -21,13 +25,18 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserGroupSerializer(serializers.ModelSerializer):
+    """Read and update serializer for a group's name and permissions."""
+
     class Meta:
         model = Group
         fields = ["name", "permissions"]
 
 
 class AuthTokenSerializerCostum(AuthTokenSerializer):
+    """Auth token serializer that additionally requires the user's email to be verified."""
+
     def validate(self, attrs):
+        """Reject the credentials unless the user's email address has been verified."""
         result = super().validate(attrs)
 
         user = VerifiedEmailBackend().authenticate(
@@ -43,6 +52,8 @@ class AuthTokenSerializerCostum(AuthTokenSerializer):
 
 
 class UserRegistrationSerializer(RegistrationSerializer):
+    """Registration serializer that creates an unverified user pending email confirmation."""
+
     class Meta:
         extra_kwargs = {
             "password": {
@@ -104,11 +115,14 @@ class UserRegistrationSerializer(RegistrationSerializer):
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
+    """Admin serializer that creates or updates a user account with a verified email and groups."""
+
     groups = serializers.SlugRelatedField(
         queryset=Group.objects.all(), slug_field="name", required=True, many=True
     )
 
     def create(self, validated_data):
+        """Create the user with a hashed password, a verified email and the given groups."""
         # call create_user on user object. Without this
         # the password will be stored in plain text.
         groups = validated_data.pop("groups", ["basic"])
@@ -121,6 +135,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
+        """Update the user's fields and replace its groups when new groups are given."""
         # call create_user on user object. Without this
         # the password will be stored in plain text.
         groups = validated_data.pop("groups", [])
@@ -135,14 +150,14 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return instance
 
     def create_verified_email(self, user):
+        """Create an already verified, primary email address for the user."""
         email_dict = {
             "email": user.email,
             "is_primary": True,
             "is_verified": True,
             "user": user,
         }
-        email = models.EmailAddress.objects.create(**email_dict)
-        return email
+        return models.EmailAddress.objects.create(**email_dict)
 
     class Meta:
         model = User
@@ -164,6 +179,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
 # Elastic Serializer
 # -----------------------------------------------------------------------------
 class UserElasticSerializer(serializers.ModelSerializer):
+    """Elasticsearch read serializer exposing a user's username and name."""
+
     class Meta:
         model = User
         fields = (
