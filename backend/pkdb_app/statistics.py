@@ -83,13 +83,13 @@ class Statistics:
 
 
 class StatisticsViewSet(viewsets.ViewSet):
-    """Endpoint to query PK-DB statistics.
-
-    Get database statistics consisting of count and version information.
-    """
+    """ViewSet backing the `/api/v1/statistics/` endpoint, see `list`."""
 
     def list(self, request):
-        """Return the current database statistics."""
+        """Endpoint to query PK-DB statistics.
+
+        Get database statistics consisting of count and version information.
+        """
         instance = Statistics()
         serializer = StatisticsSerializer(instance)
         return Response(serializer.data)

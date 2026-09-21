@@ -776,35 +776,7 @@ class ResponseSerializer(serializers.Serializer):
 
 
 class PKDataView(APIView):
-    """Endpoint to filter and query data.
-
-    The filter endpoint is the main endpoint for complex queries, such as
-    searches and filtering. A filter query returns a unique id corresponding to
-    the query, which allows to access the complete set of tables (studies,
-    groups, individuals and interventions, outputs, timecourses, and scatters)
-    for the search.
-    In addition an overview of the counts in the tables is provided.
-    ```
-    {
-      "uuid": "6a15733e-0659-4224-985a-9c71120911d5",
-      "studies": 430,
-      "groups": 887,
-      "individuals": 5748,
-      "interventions": 1291,
-      "outputs": 70636,
-      "timecourses": 2946,
-      "scatters": 37
-    }
-    ```
-    Two main parameters control the output of the filter query:
-    * `download`: which allows to download the results as zip archive
-    * `concise`: switching between concise and non-concise data
-
-    The filter endpoint provides the option of filtering on any of the tables
-    mentioned early. Arguments can be provided with the prefixes
-    `['studies__' , 'groups__', 'individuals__', 'interventions__', 'outputs__',
-    'subsets__']` for the respective tables.
-    """
+    """View backing the `/api/v1/filter/` endpoint, see `get` for its documentation."""
 
     EXTRA = {
         "study": "studies__",
@@ -865,9 +837,34 @@ class PKDataView(APIView):
         },
     )
     def get(self, request, *args, **kw):
-        """Run the filter query and save its resulting ids under a uuid.
+        """Endpoint to filter and query data.
 
-        The counts or a zip download are returned.
+        The filter endpoint is the main endpoint for complex queries, such as
+        searches and filtering. A filter query returns a unique id corresponding to
+        the query, which allows to access the complete set of tables (studies,
+        groups, individuals and interventions, outputs, timecourses, and scatters)
+        for the search.
+        In addition an overview of the counts in the tables is provided.
+        ```
+        {
+          "uuid": "6a15733e-0659-4224-985a-9c71120911d5",
+          "studies": 430,
+          "groups": 887,
+          "individuals": 5748,
+          "interventions": 1291,
+          "outputs": 70636,
+          "timecourses": 2946,
+          "scatters": 37
+        }
+        ```
+        Two main parameters control the output of the filter query:
+        * `download`: which allows to download the results as zip archive
+        * `concise`: switching between concise and non-concise data
+
+        The filter endpoint provides the option of filtering on any of the tables
+        mentioned early. Arguments can be provided with the prefixes
+        `['studies__' , 'groups__', 'individuals__', 'interventions__', 'outputs__',
+        'subsets__']` for the respective tables.
         """
         time_start_request = time.time()
 
