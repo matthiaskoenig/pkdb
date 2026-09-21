@@ -1,5 +1,5 @@
 import itertools
-from collections import Iterable
+from collections.abc import Iterable
 
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.db import models
