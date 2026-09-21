@@ -125,7 +125,7 @@ class Output(AbstractOutput, Outputable, Accessible):
     # for elastic search. NaNs are not allowed in elastic search
     def null_attr(self, attr):
         value = getattr(self, attr)
-        if value not in ['nan', 'NA', 'NAN', 'na', np.NaN, None] and not math.isnan(value):
+        if value not in ['nan', 'NA', 'NAN', 'na', np.nan, None] and not math.isnan(value):
             return value
 
     def is_timecourse(self):
