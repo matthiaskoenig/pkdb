@@ -32,6 +32,11 @@ dependencies = [
     "gunicorn>=23.0.0",
     "json-logging>=1.5.1",
     "psycopg2-binary>=2.9.10",
+    # drf-yasg imports pkg_resources at module load time without declaring
+    # setuptools as its own dependency; uv venvs are seedless and do not
+    # provide it, so it has to be declared here explicitly. Pinned below the
+    # setuptools version which dropped the bundled pkg_resources package.
+    "setuptools>=75.0.0,<81",
 
     # django
     "Django==3.1.14",
