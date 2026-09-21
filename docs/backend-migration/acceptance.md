@@ -18,3 +18,12 @@ Populated-study baseline timings and golden payloads, canonical importer,
 scientific parity, PostgreSQL schema/transactions, REST compatibility, MCP,
 complete corpus dispositions, container builds, restore/cutover, and final review
 are not complete. The legacy backend remains unchanged and is not retired.
+
+## Importer and scientific checkpoint
+
+- 52 unit/runtime tests pass on each Python 3.13 and 3.14; Ruff and ty pass.
+- Tests cover source provenance, zero/missing distinctions, duplicate headers,
+  row limits, subject statistics, graph references, normalization and PK curves.
+- Apixaban parser gate: 28 passed, 2 failed. Frost2013a references missing
+  `Frost2013a_Tab3.png`; Wang2016 Tab3 maps a missing `label` column.
+  Inputs were not changed or excluded. Full scientific parity remains pending.
