@@ -16,6 +16,7 @@ from starlette.datastructures import UploadFile
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
+from pkdb.api import accounts, media
 from pkdb.api.limits import UploadLimits
 from pkdb.config import Settings
 from pkdb.db.read import read_study
@@ -24,12 +25,14 @@ from pkdb.files.store import FileStore, FileTooLarge
 from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.validation import StudyValidationError, fail
+from pkdb.services.accounts import AccountService
 from pkdb.services.authentication import AuthenticationFailed, authenticate_token
 from pkdb.services.authorization import AuthorizationDenied
 from pkdb.services.ingestion import IngestionService, PublicationConflict
+from pkdb.services.mailer import SMTPMailer
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "7dd23f32b5f9"
+SCHEMA_REVISION = "24471de5f5a4"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -46,6 +49,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         session_factory.kw["bind"].dispose()
 
     app = FastAPI(title="PK-DB", version="0.10.0", lifespan=lifespan)
+    app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
+    app.state.file_store = file_store
     app.state.ingestion = ingestion
     app.state.session_factory = session_factory
     app.add_middleware(
@@ -221,4 +226,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return JSONResponse({"status": "unavailable"}, status_code=503)
         return {"status": "ok"}
 
+    app.state.principal = principal
+    app.include_router(accounts.router)
+    app.include_router(media.router)
     return app

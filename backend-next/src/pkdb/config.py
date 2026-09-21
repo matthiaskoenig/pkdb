@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,3 +15,10 @@ class Settings(BaseSettings):
     upload_max_files: int = Field(default=256, gt=0)
     upload_max_rows: int = Field(default=1_000_000, gt=0)
     upload_concurrency: int = Field(default=2, gt=0)
+
+    smtp_host: str | None = None
+    smtp_port: int = Field(default=587, ge=1, le=65535)
+    smtp_sender: str | None = None
+    smtp_username: str | None = None
+    smtp_password: SecretStr | None = None
+    smtp_starttls: bool = True
