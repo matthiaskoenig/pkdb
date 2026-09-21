@@ -16,7 +16,13 @@ from .serializers import OutputElasticSerializer, OutputInterventionSerializer
 
 
 class OutputInterventionViewSet(AccessView):
-    """Elastic view for OutputIntervention."""
+    """Endpoint to query denormalized output/intervention pairs.
+
+    Filterable by study, output, intervention, group and individual pks, tissue,
+    time, measurement type, substance, choice and unit; searchable by study,
+    measurement type, substance, tissue, group name, individual name and
+    intervention.
+    """
 
     swagger_schema = None
     document = OutputInterventionDocument

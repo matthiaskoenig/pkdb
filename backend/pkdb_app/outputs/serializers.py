@@ -225,7 +225,7 @@ class OutputExSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate_label_map(self, value) -> None:
-        """Validate the label key."""
+        """Raise ValidationError if a string label mapping neither starts with 'col==' nor contains '||'."""
         if (
             isinstance(value, str)
             and not value.startswith("col==")
@@ -450,7 +450,7 @@ class SmallOutputSerializer(serializers.ModelSerializer):
 
 
 class OutputElasticSerializer(serializers.ModelSerializer):
-    """Main serializer for outputs."""
+    """Elasticsearch serializer for a read-only, full view of an output, including its study."""
 
     study = StudySmallElasticSerializer()
 

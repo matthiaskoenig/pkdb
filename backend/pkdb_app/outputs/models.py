@@ -103,13 +103,12 @@ class Output(AbstractOutput, Outputable, Accessible):
     """A single measured or calculated pharmacokinetic value for a group or individual."""
 
     class OutputTypes(models.TextChoices):
-        """Data Types."""
+        """The kinds of output: a single value, a timecourse point or an array."""
 
         Array = "array", _("array")
         Timecourse = "timecourse", _("timecourse")
         Output = "output", _("output")
 
-    """ Storage of data sets. """
     label = models.CharField(max_length=CHAR_MAX_LENGTH, null=True, blank=True)
     output_type = models.CharField(
         max_length=CHAR_MAX_LENGTH, choices=OutputTypes.choices
@@ -288,42 +287,42 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def value(self):
-        """Return the output's null-safe value."""
+        """Return the output's null_value bound method itself, not its value (the call is missing)."""
         return self.output.null_value
 
     @property
     def mean(self):
-        """Return the output's null-safe mean."""
+        """Return the output's null_mean bound method itself, not its value (the call is missing)."""
         return self.output.null_mean
 
     @property
     def median(self):
-        """Return the output's null-safe median."""
+        """Return the output's null_median bound method itself, not its value (the call is missing)."""
         return self.output.null_median
 
     @property
     def min(self):
-        """Return the output's null-safe min."""
+        """Return the output's null_min bound method itself, not its value (the call is missing)."""
         return self.output.null_min
 
     @property
     def max(self):
-        """Return the output's null-safe max."""
+        """Return the output's null_max bound method itself, not its value (the call is missing)."""
         return self.output.null_max
 
     @property
     def sd(self):
-        """Return the output's null-safe standard deviation."""
+        """Return the output's null_sd bound method itself, not its value (the call is missing)."""
         return self.output.null_sd
 
     @property
     def se(self):
-        """Return the output's null-safe standard error."""
+        """Return the output's null_se bound method itself, not its value (the call is missing)."""
         return self.output.null_se
 
     @property
     def cv(self):
-        """Return the output's null-safe coefficient of variation."""
+        """Return the output's null_cv bound method itself, not its value (the call is missing)."""
         return self.output.null_cv
 
     @property
@@ -333,7 +332,7 @@ class OutputIntervention(Accessible, models.Model):
 
     @property
     def time(self):
-        """Return the output's null-safe time."""
+        """Return the output's null_time bound method itself, not its value (the call is missing)."""
         return self.output.null_time
 
     @property

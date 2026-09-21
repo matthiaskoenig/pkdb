@@ -30,7 +30,7 @@ class Data(models.Model):
     """A study's named figure or table containing scatter or timecourse data, e.g. Fig3."""
 
     class DataTypes(models.TextChoices):
-        """Data Types."""
+        """The kinds of data a Data instance can hold: scatter or timecourse."""
 
         Scatter = "scatter", _("scatter")
         Timecourse = "timecourse", _("timecourse")
@@ -197,13 +197,13 @@ class Timecourseable(models.Model):
         values=None,
         df=None,
         groupby=("outputs__pk",),
-        sort_values=["outputs__interventions__pk", "outputs__time"],
+        sort_values=("outputs__interventions__pk", "outputs__time"),
     ):
-        """Group values (or df) by groupby, merging each group's rows into tuples of unique values."""
+        """Sort by sort_values, group by groupby, and collapse each group's column to its single value where all rows agree, or to None where all are None."""
         if values:
             df = pd.DataFrame(values)
         if sort_values:
-            df = df.sort_values(sort_values)
+            df = df.sort_values(list(sort_values))
         merged_dict = (
             df.groupby(list(groupby), as_index=False)
             .apply(SubSet.to_list)

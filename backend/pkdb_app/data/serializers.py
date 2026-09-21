@@ -67,7 +67,7 @@ class SubSetSerializer(ExSerializer):
         fields = ["name", "descriptions", "comments", "dimensions", "shared"]
 
     def to_internal_value(self, data):
-        """Validate that no unexpected keys are present in the uploaded subset data."""
+        """Check for unexpected keys and return the raw data unchanged, skipping the framework's field conversion."""
         self.validate_wrong_keys(data)
         return data
 
@@ -685,7 +685,7 @@ class TimecourseSerializer(serializers.Serializer):
 
 
 class SubSetElasticSerializer(DocumentSerializer):
-    """Elasticsearch serializer for a subset's scatter array."""
+    """Elasticsearch serializer for a subset (scatter or timecourse), its array and timecourse fields."""
 
     study = StudySmallElasticSerializer(read_only=True)
     name = serializers.CharField()
