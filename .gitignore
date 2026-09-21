@@ -121,7 +121,6 @@ celerybeat-schedule
 # ----------------------------
 # uv / ruff / ty / tox tooling
 # ----------------------------
-site/
 .cache/
 .tox/
 .pytest_cache/
