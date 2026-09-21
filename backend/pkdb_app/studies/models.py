@@ -321,7 +321,7 @@ class IdCollection(models.Model):
     resource = models.CharField(choices=Recourses.choices, max_length=CHAR_MAX_LENGTH)
     uuid = models.UUIDField(null=False, blank=False, editable=False)
     ids = ArrayField(models.IntegerField(), null=True, blank=True)
-    expire = models.DateTimeField(default=expire(), blank=True, editable=False)
+    expire = models.DateTimeField(default=expire, blank=True, editable=False)
 
     class Meta:
         unique_together = ['uuid', 'resource']
