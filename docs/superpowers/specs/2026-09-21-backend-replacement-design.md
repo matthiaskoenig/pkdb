@@ -1,7 +1,7 @@
 # PK-DB backend replacement specification
 
 Date: 2026-09-21
-Status: Draft for user review; implementation is not authorized by this document.
+Status: Approved for implementation planning, with Python 3.13/3.14 support added at user request. Implementation awaits plan review.
 Scope: Replace the Django backend with a simpler, validated, reproducible backend.
 
 ## 1. Purpose and agreed decisions
@@ -13,6 +13,7 @@ operate and maintain.
 The following decisions were explicitly agreed during design:
 
 - FastAPI and Pydantic form the API and validation foundation.
+- Support CPython 3.13 and 3.14 on standard GIL-enabled builds.
 - SQLAlchemy 2, Alembic, and PostgreSQL replace Django persistence.
 - Use a fresh schema and reupload the complete study corpus from
   `../pkdb_data/studies`; do not migrate legacy study tables.
@@ -71,9 +72,23 @@ atomic replacement guarantee; section 8 explicitly defines this boundary.
 | Attachments | Persistent filesystem volume, metadata in PostgreSQL |
 | Diagnostics | Structured logs, request IDs, stage timings and query counts |
 
-Pin a supported Python minor version and dependency versions in the implementation
-plan after checking the scientific dependency set. No pre-release dependency is
-required. Remove obsolete Django-specific stubs and test plugins at retirement.
+Support CPython 3.13 and 3.14 on standard GIL-enabled builds.
+Declare `requires-python = ">=3.13,<3.15"` and Ruff `target-version = "py313"`.
+Use Python 3.14 as the default development and deployment interpreter; 3.13 is an
+equally required supported target. Free-threaded builds and Python 3.15 are outside
+this support contract. Do not use Python 3.14-only syntax or standard-library APIs
+without a tested Python 3.13-compatible path.
+
+Resolve and lock stable dependencies that install and run on both interpreters,
+including compiled numerical, database, validation, and spreadsheet dependencies.
+Test installation, package build, CLI/API startup, scientific behavior, PostgreSQL
+integration, MCP, and container builds on both versions. Run Ruff and ty with the
+minimum supported language version and run type checking in both environments.
+An unavailable dependency on either interpreter blocks release; do not silently
+skip that matrix entry or lower the support promise. Preserve the legacy runtime
+in a separate environment for characterization rather than forcing Django 3.1
+onto these interpreters. Remove obsolete Django-specific stubs and test plugins
+at retirement.
 
 Run one application deployment and one PostgreSQL service, plus persistent file
 storage. Multiple Uvicorn processes may serve the same application. Start without
@@ -391,6 +406,8 @@ Acceptance gates:
   account/file access. REST and MCP enforce equivalent domain permissions.
 - Real PostgreSQL integration tests cover constraints and transactions; SQLite
   is not used as a substitute for these tests.
+- Python 3.13 and 3.14 both pass clean locked installation, package/container
+  builds, CLI/API/MCP startup, scientific regression, and PostgreSQL tests.
 - Ruff, ty, unit tests, contract tests, scientific regression tests, and measured
   performance budgets pass in CI or a reproducible benchmark environment.
 - A clean deployment, full rebuild, backup restore, and rollback rehearsal work
