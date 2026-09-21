@@ -1,9 +1,9 @@
 
 # Installation
-PK-DB is deployed via `docker` and `docker compose`. 
+PK-DB is deployed via `docker` and `docker compose`.
 
 ## Requirements
-To setup the development server 
+To setup the development server
 the following minimal requirements must be fulfilled
 - `docker`
 
@@ -11,7 +11,7 @@ For elasticsearch the following system settings are required
 ```
 sudo sysctl -w vm.max_map_count=262144
 ```
-To set `vm.max_map_count` persistently change the value in 
+To set `vm.max_map_count` persistently change the value in
 ```
 /etc/sysctl.conf
 ```
@@ -26,7 +26,7 @@ git pull
 
 # set environment variables
 set -a && source .env.local
- 
+
 # create/rebuild all docker containers
 ./docker-purge.sh
 ```
@@ -73,7 +73,7 @@ watch docker container ls
 To get access to individual container logs use `docker container logs <container>`. For instance to check the
 django backend logs use
 ```bash
-docker container logs pkdb_backend_1 
+docker container logs pkdb_backend_1
 ```
 
 ### Run command in container

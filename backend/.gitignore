@@ -16,4 +16,3 @@ pkdb_app/depricated/categorials/migrations/00*.py
 pkdb_app/depricated/substances/migrations/00*.py
 pkdb_app/info_nodes/migrations/00*.py
 pkdb_app/data/migrations/00*.py
-

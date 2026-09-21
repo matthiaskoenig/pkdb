@@ -43,9 +43,3 @@ $HOME/envs/pkdb_data/bin/upload_nodes
 # run upload and allow disconnect of connection
 # FIXME: add logging
 nohup $HOME/envs/pkdb_data/bin/upload_studies &
-
-
-
-
-
-

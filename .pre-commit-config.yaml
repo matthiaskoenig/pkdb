@@ -26,7 +26,10 @@ repos:
     description: Check for symlinks which do not point to anything
   - id: trailing-whitespace
     description: Trim trailing whitespaces
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    # README.md, backend/README.md and backend/download_extra/README.md use two
+    # trailing spaces as a markdown hard line break in their intro paragraph;
+    # stripping them would silently change how the paragraph renders
+    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/|README\.md$|backend/README\.md$|backend/download_extra/README\.md$)
   - id: end-of-file-fixer
     description: Fix empty lines at ends of files
     exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
