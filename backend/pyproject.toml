@@ -36,7 +36,7 @@ dependencies = [
     # setuptools as its own dependency; uv venvs are seedless and do not
     # provide it, so it has to be declared here explicitly. Pinned below the
     # setuptools version which dropped the bundled pkg_resources package.
-    "setuptools>=75.0.0,<81",
+    "setuptools>=75.0.0,<85",
 
     # django
     "Django==3.1.14",
@@ -49,9 +49,9 @@ dependencies = [
 
     # REST API
     "djangorestframework==3.12.4",
-    "drf-yasg==1.21.4",
+    "drf-yasg==1.21.15",
     "elasticsearch-dsl==7.3.0",
-    "django-elasticsearch-dsl==7.2.0",
+    "django-elasticsearch-dsl==7.2.2",
     "django-elasticsearch-dsl-drf==0.22.5",
 
     # analysis
