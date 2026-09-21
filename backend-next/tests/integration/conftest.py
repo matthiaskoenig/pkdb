@@ -18,7 +18,7 @@ from pkdb.db.models.vocabulary import VocabularyNode
 from pkdb.db.session import make_session_factory
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def session_factory():
     database_url = os.environ.get("PKDB_TEST_DATABASE_URL")
     if not database_url:
