@@ -1,15 +1,24 @@
 """Management command that creates a superuser with a password and a verified email."""
 
+from typing import TYPE_CHECKING
+
 from django.contrib.auth.management.commands import createsuperuser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import CommandError
 from rest_email_auth.models import EmailAddress
+
+if TYPE_CHECKING:
+    from pkdb_app.users.models import User
 
 
 class Command(createsuperuser.Command):
     """Extend the built-in createsuperuser command with a password argument."""
 
     help = "Create a superuser, and allow password to be provided"
+
+    if TYPE_CHECKING:
+        # set by createsuperuser.Command.__init__, the stub does not declare it
+        UserModel: "type[User]"
 
     def add_arguments(self, parser):
         """Add the --password argument on top of the base command's arguments."""

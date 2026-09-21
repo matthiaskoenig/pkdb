@@ -4,6 +4,7 @@ The data points build the timecourses and the scatters.
 """
 
 from collections.abc import Iterable
+from typing import TYPE_CHECKING, Optional
 
 import pandas as pd
 from django.apps import apps
@@ -16,6 +17,11 @@ from pkdb_app.behaviours import Accessible
 from pkdb_app.interventions.models import Intervention
 from pkdb_app.utils import CHAR_MAX_LENGTH
 
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
+
+    from pkdb_app.studies.models import Study
+
 
 class DataSet(models.Model):
     """Add context to outputs by grouping them into datasets and subsets.
@@ -23,6 +29,10 @@ class DataSet(models.Model):
     The grouped outputs are already uploaded. These subsets represent, for
     example, the data points of a timecourse or of a scatter plot.
     """
+
+    if TYPE_CHECKING:
+        # reverse relation of the one to one field Study.dataset
+        study: "Study"
 
     @property
     def subsets(self):
@@ -59,6 +69,12 @@ class Timecourseable(models.Model):
 
     The representations are built from the data points.
     """
+
+    if TYPE_CHECKING:
+        # every concrete subclass declares the data foreign key and is the
+        # target of the reverse relation DataPoint.subset
+        data: "Data"
+        data_points: "RelatedManager[DataPoint]"
 
     class Meta:
         abstract = True
@@ -246,9 +262,9 @@ class Timecourseable(models.Model):
         if values:
             df = pd.DataFrame(values)
         if sort_values:
-            df = df.sort_values(list(sort_values))
+            df = df.sort_values(list(sort_values))  # ty: ignore[unresolved-attribute]  # known defect, reported: df stays None for empty values
         merged_dict = (
-            df.groupby(list(groupby), as_index=False)
+            df.groupby(list(groupby), as_index=False)  # ty: ignore[unresolved-attribute]  # known defect, reported: df stays None for empty values
             .apply(SubSet.to_list)
             .to_dict("list")
         )
@@ -320,7 +336,7 @@ class SubSet(Accessible, Timecourseable):
         "studies.Study", on_delete=models.CASCADE, related_name="subsets"
     )
 
-    def get_single_dosing(self, substance) -> Intervention:
+    def get_single_dosing(self, substance) -> Optional[Intervention]:
         """Return the single dosing intervention with the given substance, if it exists.
 
         If multiple dosing interventions exist, no dosing is returned.
@@ -341,7 +357,7 @@ class SubSet(Accessible, Timecourseable):
 
         The data points are iterated over first and the result is unused.
         """
-        [point.values_list("output") for point in self.data_points]
+        [point.values_list("output") for point in self.data_points]  # ty: ignore[not-iterable]  # known broken code, iterates the RelatedManager instead of .all()
         return self.data.data_type
 
     @property

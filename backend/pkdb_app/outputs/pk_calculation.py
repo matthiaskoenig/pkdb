@@ -2,12 +2,16 @@
 
 import logging
 import warnings
+from typing import TYPE_CHECKING
 
 import numpy as np
 from django.apps import apps
 from pkdb_analysis.pk import pharmacokinetics
 
 from pkdb_app.info_nodes.units import ureg
+
+if TYPE_CHECKING:
+    from pkdb_app.data.models import SubSet
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +26,7 @@ Individual = apps.get_model("subjects.Individual")
 Group = apps.get_model("subjects.Group")
 
 
-def pkoutputs_from_timecourse(subset: Subset) -> list[dict]:
+def pkoutputs_from_timecourse(subset: "SubSet") -> list[dict]:
     """Calculate pharmacokinetics outputs for timecourse.
 
     :param subset: models.SubSet

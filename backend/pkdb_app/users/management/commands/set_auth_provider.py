@@ -8,11 +8,15 @@ docker compose run web python manage.py set_auth_provider github $GITHUB_CLIENT_
 
 """
 
-from allauth.socialaccount.models import SocialApp
+from allauth.socialaccount.models import (  # ty: ignore[unresolved-import]  # known defect, reported: django-allauth is not a dependency
+    SocialApp,
+)
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
-from pkdb_app.settings import SITE_ID
+from pkdb_app.settings import (
+    SITE_ID,  # ty: ignore[unresolved-import]  # known defect, reported: settings defines no SITE_ID
+)
 
 
 class Command(BaseCommand):

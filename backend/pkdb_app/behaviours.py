@@ -1,11 +1,16 @@
 """Reusable behavior for models."""
 
+from typing import TYPE_CHECKING
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
 from pkdb_app.info_nodes.units import ureg
 
 from .utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+
+if TYPE_CHECKING:
+    from pkdb_app.studies.models import Study
 
 
 class Sidable(models.Model):
@@ -34,6 +39,11 @@ class Externable(models.Model):
 
 class Accessible(models.Model):
     """Model derives its access level and allowed users from its related study."""
+
+    if TYPE_CHECKING:
+        # every concrete subclass reaches its study, either through a foreign key
+        # or through a property; the abstract base cannot declare the relation
+        study: "Study"
 
     class Meta:
         abstract = True
@@ -163,6 +173,10 @@ class MeasurementTypeable(ValueableNotBlank):
         "info_nodes.Substance", null=True, on_delete=models.PROTECT
     )
     choice = models.ForeignKey("info_nodes.Choice", null=True, on_delete=models.PROTECT)
+
+    if TYPE_CHECKING:
+        # every concrete subclass is also Accessible and reaches its study
+        study: "Study"
 
     class Meta:
         abstract = True

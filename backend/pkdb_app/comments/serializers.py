@@ -27,14 +27,14 @@ class DescriptionSerializer(serializers.ModelSerializer):
         """Raise a validation error unless data is a non-empty string."""
         if not (isinstance(data, str)):
             raise serializers.ValidationError(
-                {
+                {  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
                     "descriptions": "Description must be a String",
                     "detail": {str(data)},
                 }
             )
         if len(data) == 0:
             raise serializers.ValidationError(
-                {
+                {  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
                     "descriptions": "empty descriptions are not allowed",
                     "detail": {str(data)},
                 }
@@ -58,14 +58,14 @@ class CommentSerializer(WrongKeyValidationSerializer):
         """
         if not (isinstance(data, list) and len(data) == 2):
             raise serializers.ValidationError(
-                {
+                {  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
                     "comments": "comment must be a list of the form ['username', 'comment']",
                     "detail": {str(data)},
                 }
             )
         if len(data[1]) == 0:
             raise serializers.ValidationError(
-                {
+                {  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
                     "comments": "empty comments are not allowed",
                     "detail": {str(data)},
                 }

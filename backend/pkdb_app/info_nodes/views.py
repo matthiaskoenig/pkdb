@@ -22,7 +22,7 @@ from pkdb_app.info_nodes.serializers import (
 )
 from pkdb_app.pagination import CustomPagination
 
-NT = namedtuple("NodeType", ["model", "serializer", "fields"])
+NodeType = namedtuple("NodeType", ["model", "serializer", "fields"])
 
 INFO_NODE_FIELDS = [
     "sid",

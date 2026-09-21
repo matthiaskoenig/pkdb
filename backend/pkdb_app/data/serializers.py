@@ -144,7 +144,7 @@ class SubSetSerializer(ExSerializer):
                 errors.append(err)
         if errors:
             raise serializers.ValidationError(
-                {"calculated outputs": errors},
+                {"calculated outputs": errors},  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
             )
         interventions = [o.pop("interventions") for o in outputs]
 
@@ -676,7 +676,7 @@ class TimecourseSerializer(serializers.Serializer):
             return result["substance"][0]["label"]
         return None
 
-    def get_value(self, obj):
+    def get_value(self, obj):  # ty: ignore[invalid-method-override]  # the SerializerMethodField named value requires get_value, which collides with Field.get_value
         """Return the subset's values."""
         return self._get_field(obj, "value")
 

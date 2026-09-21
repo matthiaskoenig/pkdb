@@ -302,14 +302,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
                 pass
             else:
                 raise serializers.ValidationError(
-                    {
+                    {  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
                         "source": f"<{source!s}> does not exist",
                         "detail": type(source),
                     }
                 )
         else:
             raise serializers.ValidationError(
-                {"source": f"<{source!s}> does not exist", "detail": type(source)}
+                {"source": f"<{source!s}> does not exist", "detail": type(source)}  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
             )
         src = DataFile.objects.get(pk=source)
 
@@ -500,7 +500,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         # url representation of file
         for file in ["source", "image"]:
             if file in rep and "||" not in str(rep[file]):
-                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
+                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)  # ty: ignore[unresolved-attribute]  # DRF puts the request into the serializer context, .get types it as optional
 
         return rep
 
@@ -757,16 +757,16 @@ class SidSerializer(WrongKeyValidationSerializer):
             except (ObjectDoesNotExist, MultipleObjectsReturned):
                 # Except not finding the object or the data being ambiguous
                 # for defining it. Then validate the data as usual
-                return super().is_valid(raise_exception)
+                return super().is_valid(raise_exception=raise_exception)
             else:
                 # If the object is found add it to the serializer. Then
                 # validate the data as usual
                 self.instance = obj
-                return super().is_valid(raise_exception)
+                return super().is_valid(raise_exception=raise_exception)
         else:
             # If the Serializer was instantiated with just an object, and no
             # data={something} proceed as usual
-            return super().is_valid(raise_exception)
+            return super().is_valid(raise_exception=raise_exception)
 
 
 class ReadSerializer(serializers.ModelSerializer):

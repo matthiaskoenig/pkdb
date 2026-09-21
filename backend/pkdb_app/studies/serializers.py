@@ -362,7 +362,7 @@ class StudySerializer(SidSerializer):
         # todo: This is not working correctly
         if "files" in rep:
             rep["files"] = [
-                request.build_absolute_uri(file.file.url)
+                request.build_absolute_uri(file.file.url)  # ty: ignore[unresolved-attribute]  # DRF puts the request into the serializer context, .get types it as optional
                 for file in instance.files.all()
             ]
 

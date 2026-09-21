@@ -26,7 +26,7 @@ from django_elasticsearch_dsl_drf.filter_backends import (
     MultiMatchSearchFilterBackend,
     OrderingFilterBackend,
 )
-from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet, DocumentViewSet
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from elasticsearch import helpers
@@ -396,9 +396,9 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
         if group == "basic":
             return self.search.query(
                 Q("match", access__raw=PUBLIC)
-                | Q("match", creator__username__raw=self.request.user.username)
-                | Q("match", curators__username__raw=self.request.user.username)
-                | Q("match", collaborators__username__raw=self.request.user.username)
+                | Q("match", creator__username__raw=self.request.user.username)  # ty: ignore[unresolved-attribute]  # AUTH_USER_MODEL is users.User which has username, the stub types request.user as AbstractBaseUser
+                | Q("match", curators__username__raw=self.request.user.username)  # ty: ignore[unresolved-attribute]  # AUTH_USER_MODEL is users.User which has username, the stub types request.user as AbstractBaseUser
+                | Q("match", collaborators__username__raw=self.request.user.username)  # ty: ignore[unresolved-attribute]  # AUTH_USER_MODEL is users.User which has username, the stub types request.user as AbstractBaseUser
             )
 
         if group == "anonymous":
@@ -673,12 +673,13 @@ class PKData:
 
     def group_pks(self):
         """Return the primary keys of the groups matching groups_query."""
-        return self._pks(view_class=GroupViewSet, query_dict=self.groups_query)
+        return self._pks(view_class=GroupViewSet, query_dict=self.groups_query)  # ty: ignore[invalid-argument-type]  # known defect, reported: groups_query stays None when only individuals_query is given
 
     def individual_pks(self):
         """Return the primary keys of the individuals matching individuals_query."""
         return self._pks(
-            view_class=IndividualViewSet, query_dict=self.individuals_query
+            view_class=IndividualViewSet,
+            query_dict=self.individuals_query,  # ty: ignore[invalid-argument-type]  # known defect, reported: individuals_query stays None when only groups_query is given
         )
 
     def output_pks(self):
@@ -695,7 +696,7 @@ class PKData:
         The attribute self.subsets_query is never set by __init__ and this
         method has no caller.
         """
-        return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
+        return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)  # ty: ignore[unresolved-attribute]  # known broken code, __init__ never sets subsets_query
 
     def study_pks(self):
         """Return the primary keys of the studies matching studies_query."""
@@ -716,7 +717,7 @@ class PKData:
 
     def _pks(
         self,
-        view_class: DocumentViewSet,
+        view_class: type[BaseDocumentViewSet],
         query_dict: dict,
         pk_field: str = "pk",
         scan_size=10000,
@@ -726,7 +727,7 @@ class PKData:
         view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
 
-        response = queryset.source([pk_field]).params(size=scan_size).scan()
+        response = queryset.source([pk_field]).params(size=scan_size).scan()  # ty: ignore[unresolved-attribute]  # BaseDocumentViewSet.get_queryset returns an elasticsearch-dsl Search, not a QuerySet
         return [instance[pk_field] for instance in response]
 
     def data_by_query_dict(self, query_dict, viewset, serializer, boost):

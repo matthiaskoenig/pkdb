@@ -30,7 +30,7 @@ def list_duplicates(seq):
     seen = set()
     seen_add = seen.add
     # adds all elements it doesn't know yet to seen and all other to seen_twice
-    seen_twice = {x for x in seq if x in seen or seen_add(x)}
+    seen_twice = {x for x in seq if x in seen or seen_add(x)}  # ty: ignore[redundant-condition]  # set.add returns None on purpose, it is called for the side effect
     # turn the set into a list (as requested)
     return list(seen_twice)
 

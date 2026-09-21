@@ -1,6 +1,7 @@
 """Django models for outputs: single measured or calculated pharmacokinetic values."""
 
 import math
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 from django.db import models
@@ -16,6 +17,9 @@ from ..error_measures import calculate_cv, calculate_sd, calculate_se
 from ..utils import CHAR_MAX_LENGTH
 from .managers import OutputManager
 
+if TYPE_CHECKING:
+    from pkdb_app.studies.models import Study
+
 TIME_NORM_UNIT = "hr"
 
 
@@ -24,6 +28,10 @@ TIME_NORM_UNIT = "hr"
 # -------------------------------------------------
 class OutputSet(models.Model):
     """Collection of outputs uploaded for one study."""
+
+    if TYPE_CHECKING:
+        # reverse relation of the one to one field Study.outputset
+        study: "Study"
 
     @property
     def outputs(self):
@@ -73,6 +81,12 @@ class OutputEx(Externable):
 
 class Outputable(Normalizable, models.Model):
     """Abstract mixin providing tissue and method info node and name accessors."""
+
+    if TYPE_CHECKING:
+        # every concrete subclass declares the nullable tissue and method
+        # foreign keys
+        tissue: Optional[Tissue]
+        method: Optional[Method]
 
     class Meta:
         abstract = True
@@ -169,7 +183,7 @@ class Output(AbstractOutput, Outputable, Accessible):
 
     def is_timecourse(self):
         """Return True if this output belongs to a timecourse data set."""
-        return bool(self.timecourse and self.timecourse.data.data_type == "timecourse")
+        return bool(self.timecourse and self.timecourse.data.data_type == "timecourse")  # ty: ignore[unresolved-attribute]  # known defect, reported: Output has no timecourse relation
 
     def null_value(self):
         """Return the value, or None if missing or NaN."""

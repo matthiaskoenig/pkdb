@@ -159,7 +159,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
             ]
 
         except ValueError as err:
-            raise serializers.ValidationError(err) from err
+            raise serializers.ValidationError(err) from err  # ty: ignore[invalid-argument-type]  # DRF renders any detail value with force_str, the stub type is narrower
 
         return super().validate(attrs)
 

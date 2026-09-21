@@ -2,6 +2,7 @@
 
 import re
 from numbers import Number
+from typing import TYPE_CHECKING
 
 import pint
 from django.db import models
@@ -16,6 +17,12 @@ from pkdb_app.utils import (
     CHAR_MAX_LENGTH_LONG,
     _validate_required_key_and_value,
 )
+
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
+
+    from pkdb_app.interventions.models import Intervention
+    from pkdb_app.outputs.models import Output
 
 
 class Annotation(models.Model):
@@ -93,6 +100,11 @@ class InfoNode(Sidable):
         null=False, blank=False, choices=DTypes.choices, max_length=20
     )
 
+    if TYPE_CHECKING:
+        # reverse relations of Synonym.info_node and of CalculationType.info_node
+        synonyms: "RelatedManager[Synonym]"
+        calculation_type: "CalculationType"
+
     def annotations_strings(self):
         """Return the formatted annotations of the info node.
 
@@ -111,7 +123,7 @@ class InfoNode(Sidable):
     @property
     def creator_username(self):
         """Return the username of the info node's creator."""
-        return self.creator.username
+        return self.creator.username  # ty: ignore[unresolved-attribute]  # known defect, reported: InfoNode has no creator field
 
 
 class Synonym(models.Model):
@@ -128,6 +140,10 @@ class AbstractInfoNode(models.Model):
 
     A specialized model holds a one-to-one ``info_node`` link.
     """
+
+    if TYPE_CHECKING:
+        # every concrete subclass declares the info_node one to one field
+        info_node: "InfoNode"
 
     class Meta:
         abstract = True
@@ -621,6 +637,12 @@ class Substance(AbstractInfoNode):
     formula = models.CharField(
         null=True, max_length=CHAR_MAX_LENGTH
     )  # chemical formula
+
+    if TYPE_CHECKING:
+        # default reverse relations of the substance foreign key of
+        # MeasurementTypeable on Output and on Intervention
+        output_set: "RelatedManager[Output]"
+        intervention_set: "RelatedManager[Intervention]"
 
     @property
     def derived(self):

@@ -19,7 +19,7 @@ def serve_protected_document(request, file):
     The file is returned only to a user with read access to its study.
     """
     try:
-        user, _ = TokenAuthentication().authenticate(request=request)
+        user, _ = TokenAuthentication().authenticate(request=request)  # ty: ignore[not-iterable]  # authenticate returns None without a token, the TypeError is caught below
     except TypeError:
         user = request.user
 

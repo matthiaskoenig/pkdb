@@ -1,6 +1,7 @@
 """Django model for Study."""
 
 import datetime
+from typing import TYPE_CHECKING
 
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import RegexValidator
@@ -24,6 +25,12 @@ from ..subjects.models import (
 )
 from ..users.models import User
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
+
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
+
+    from pkdb_app.data.models import SubSet
+    from pkdb_app.outputs.models import Output
 
 CURRENT_VERSION = [1.0]
 VERSIONS = [1.0]
@@ -72,6 +79,10 @@ class Reference(models.Model):
     abstract = models.TextField(null=True)
     journal = models.TextField(null=True)
     date = models.DateField()
+
+    if TYPE_CHECKING:
+        # reverse relation of the one to one field Study.reference
+        study: "Study"
 
     def __str__(self):
         """Return the reference title."""
@@ -169,6 +180,11 @@ class Study(Sidable, models.Model):
 
     files = models.ManyToManyField(DataFile)
 
+    if TYPE_CHECKING:
+        # reverse relations of Output.study and SubSet.study
+        outputs: "RelatedManager[Output]"
+        subsets: "RelatedManager[SubSet]"
+
     class Meta:
         verbose_name_plural = "studies"
 
@@ -243,7 +259,7 @@ class Study(Sidable, models.Model):
         The reverse `outputs` manager has no `outputs_interventions` attribute.
         """
         try:
-            return self.outputs.outputs_interventions.all()
+            return self.outputs.outputs_interventions.all()  # ty: ignore[unresolved-attribute]  # known broken code, the reverse manager has no outputs_interventions
         except AttributeError:
             return OutputIntervention.objects.none()
 

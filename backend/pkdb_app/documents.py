@@ -167,7 +167,7 @@ class AccessView(BaseDocumentViewSet):
     """
 
     def _get_resource(self):
-        resource = self.request.query_params.get("data_type", self.document.Index.name)
+        resource = self.request.query_params.get("data_type", self.document.Index.name)  # ty: ignore[unresolved-attribute]  # the concrete viewsets set document, Index is built by elasticsearch-dsl
         if resource == "timecourse":
             return "timecourses"
         if resource == "scatter":
@@ -178,7 +178,7 @@ class AccessView(BaseDocumentViewSet):
         """Restrict the search by ids, uuid filter and current user access."""
         group = user_group(self.request.user)
         if hasattr(self, "initial_data"):
-            id_queries = [Q("term", pk=pk) for pk in self.initial_data]
+            id_queries = [Q("term", pk=pk) for pk in self.initial_data]  # ty: ignore[not-iterable]  # initial_data is a list attached to the viewset at runtime
             if len(id_queries) > 0:
                 self.search = self.search.query(reduce(operator.ior, id_queries))
             else:
@@ -200,7 +200,7 @@ class AccessView(BaseDocumentViewSet):
         if group == "basic":
             return self.search.query(
                 Q("term", access__raw=PUBLIC)
-                | Q("term", allowed_users__raw=self.request.user.username)
+                | Q("term", allowed_users__raw=self.request.user.username)  # ty: ignore[unresolved-attribute]  # AUTH_USER_MODEL is users.User which has username, the stub types request.user as AbstractBaseUser
             )
         if group == "anonymous":
             return self.search.query(Q("term", access__raw=PUBLIC))

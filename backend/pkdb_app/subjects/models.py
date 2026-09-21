@@ -4,6 +4,8 @@ Data structure wise, subjects are handled very similarly to the things which
 are measured on them.
 """
 
+from typing import TYPE_CHECKING
+
 from django.db import models
 
 from pkdb_app.behaviours import Normalizable
@@ -16,6 +18,11 @@ from .managers import (
     GroupManager,
     IndividualManager,
 )
+
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
+
+    from pkdb_app.studies.models import Study
 
 SUBJECT_TYPE_GROUP = "group"
 SUBJECT_TYPE_INDIVIDUAL = "individual"
@@ -40,6 +47,10 @@ class DataFile(models.Model):
         null=True, blank=True, max_length=CHAR_MAX_LENGTH
     )  # XLSX, PNG, CSV
 
+    if TYPE_CHECKING:
+        # default reverse relation of the many to many field Study.files
+        study_set: "RelatedManager[Study]"
+
     @property
     def name(self):
         """Return the name of the uploaded file."""
@@ -57,6 +68,10 @@ class DataFile(models.Model):
 
 class GroupSet(models.Model):
     """Collection of groups belonging to the group_exs of a study."""
+
+    if TYPE_CHECKING:
+        # reverse relation of GroupEx.groupset
+        group_exs: "RelatedManager[GroupEx]"
 
     @property
     def groups(self):
@@ -125,6 +140,10 @@ class Group(Accessible):
 
     objects = GroupManager()
 
+    if TYPE_CHECKING:
+        # reverse relation of Characteristica.group
+        characteristica: "RelatedManager[Characteristica]"
+
     # class Meta:
     # todo: in validator unique_together = ('ex__groupset', 'name')
 
@@ -172,6 +191,10 @@ class Group(Accessible):
 class IndividualSet(models.Model):
     """Collection of individuals belonging to the individual_exs of a study."""
 
+    if TYPE_CHECKING:
+        # reverse relation of IndividualEx.individualset
+        individual_exs: "RelatedManager[IndividualEx]"
+
     @property
     def individuals(self):
         """Return all individuals created from this set's individual_exs."""
@@ -187,6 +210,10 @@ class IndividualSet(models.Model):
 
 class AbstractIndividual(models.Model):
     """Abstract base providing a name-based string representation for individuals."""
+
+    if TYPE_CHECKING:
+        # every concrete subclass declares the name field
+        name: str
 
     class Meta:
         abstract = True
@@ -253,6 +280,10 @@ class Individual(AbstractIndividual, Accessible):
     )
 
     objects = IndividualManager()
+
+    if TYPE_CHECKING:
+        # reverse relation of Characteristica.individual
+        characteristica: "RelatedManager[Characteristica]"
 
     @property
     def source(self):
@@ -443,6 +474,10 @@ class Characteristica(Accessible, Normalizable):
 
 class SubjectCharacteristica(models.Model):
     """Abstract base exposing the fields of the related Characteristica on a subject."""
+
+    if TYPE_CHECKING:
+        # every concrete subclass declares the characteristica foreign key
+        characteristica: "Characteristica"
 
     class Meta:
         abstract = True

@@ -152,7 +152,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     *urlpatterns,
-    path("api/v1/update_index/", update_index_study),
+    path("api/v1/update_index/", update_index_study),  # ty: ignore[no-matching-overload]  # stub artifact, api_view returns a protocol whose __call__ is an attribute
     # media files
     url(
         r"^media/(?P<file>.*)$",

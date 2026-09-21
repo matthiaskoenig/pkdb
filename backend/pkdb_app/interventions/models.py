@@ -1,5 +1,7 @@
 """Models describing the interventions applied to a group or individual."""
 
+from typing import TYPE_CHECKING
+
 from django.db import models
 
 from pkdb_app.behaviours import Normalizable
@@ -9,6 +11,9 @@ from ..behaviours import Accessible, Externable
 from ..subjects.models import DataFile
 from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
+if TYPE_CHECKING:
+    from django.db.models.fields.related_descriptors import RelatedManager
+
 # -------------------------------------------------
 # Intervention
 # -------------------------------------------------
@@ -16,6 +21,10 @@ from ..utils import CHAR_MAX_LENGTH, CHAR_MAX_LENGTH_LONG
 
 class InterventionSet(models.Model):
     """Collection of interventions belonging to the intervention_exs of a study."""
+
+    if TYPE_CHECKING:
+        # reverse relation of InterventionEx.interventionset
+        intervention_exs: "RelatedManager[InterventionEx]"
 
     @property
     def interventions(self):
@@ -41,6 +50,10 @@ class AbstractIntervention(models.Model):
     time = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     time_end = models.FloatField(null=True)
     time_unit = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
+
+    if TYPE_CHECKING:
+        # every concrete subclass declares the name field
+        name: str
 
     class Meta:
         abstract = True

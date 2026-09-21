@@ -1,5 +1,7 @@
 """Serializers for reading, creating and registering user accounts."""
 
+from typing import cast
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from rest_email_auth import models, signals
@@ -67,7 +69,7 @@ class UserRegistrationSerializer(RegistrationSerializer):
                 "write_only": True,
             }
         }
-        fields = (get_user_model().USERNAME_FIELD, "email", "password")
+        fields = (get_user_model().USERNAME_FIELD, "email", "password")  # ty: ignore[unresolved-attribute]  # get_user_model is typed as AbstractBaseUser, AUTH_USER_MODEL is users.User
         model = get_user_model()
 
     def create(self, validated_data):
@@ -93,7 +95,8 @@ class UserRegistrationSerializer(RegistrationSerializer):
 
         # We don't save the user instance yet in case the provided email
         # address already exists.
-        user = get_user_model()(**validated_data)
+        # cast: get_user_model() is typed as AbstractBaseUser, AUTH_USER_MODEL is users.User
+        user = cast(User, get_user_model()(**validated_data))
         user.set_password(password)
 
         # We set an ephemeral email property so that it is included in
