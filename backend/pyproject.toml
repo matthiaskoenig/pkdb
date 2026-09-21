@@ -115,8 +115,10 @@ filterwarnings = [
     "ignore:django\\.conf\\.urls\\.url\\(\\) is deprecated in favor of django\\.urls\\.re_path\\(\\)\\.:django.utils.deprecation.RemovedInDjango40Warning:pkdb_app\\.urls",
     # elasticsearch-dsl 7.3.0 still builds queries with the deprecated 'body' parameter of elasticsearch-py
     "ignore:The 'body' parameter is deprecated for the '.*' API and will be removed in a future version\\.:DeprecationWarning:elasticsearch_dsl",
-    # StudyViewSet uses django-filter's pre-2.0 `filter_fields` attribute name; left for the lint task
-    "ignore:`StudyViewSet\\.filter_fields` attribute should be renamed `filterset_fields`\\.:django_filters.utils.MigrationNotice:django_filters",
+    # StudyViewSet and ReferencesViewSet use django-filter's pre-2.0 `filter_fields` attribute name; left for the lint task
+    "ignore:`(StudyViewSet|ReferencesViewSet)\\.filter_fields` attribute should be renamed `filterset_fields`\\.:django_filters.utils.MigrationNotice:django_filters",
+    # pkdb_app/documents.py uses collections.Iterable instead of collections.abc.Iterable; left for the lint task
+    "ignore:Using or importing the ABCs from 'collections' instead of from 'collections\\.abc' is deprecated.*:DeprecationWarning:pkdb_app\\.documents",
     # the elastic Study queryset used for the django (write) endpoints is not ordered, which is fine for the
     # single-object create/update/delete actions of StudyViewSet; only pagination of a list would need an order
     "ignore:Pagination may yield inconsistent results with an unordered object_list.*:django.core.paginator.UnorderedObjectListWarning:rest_framework",

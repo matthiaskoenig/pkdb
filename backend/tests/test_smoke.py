@@ -13,6 +13,7 @@ from django.utils import timezone
 from rest_framework.test import APIClient
 
 from pkdb_app.studies.models import IdCollection
+from pkdb_app.users.models import User
 
 PUBLIC_ENDPOINTS = [
     "/api/v1/",
@@ -23,11 +24,12 @@ PUBLIC_ENDPOINTS = [
     "/api/v1/_studies/",
 ]
 
-
-@pytest.fixture
-def search_index(db: None) -> None:
-    """Create the elasticsearch indices for the empty test database."""
-    call_command("search_index", "--rebuild", "-f", stdout=StringIO())
+# the endpoints whose views use `rest_framework.permissions.IsAdminUser`
+STAFF_ONLY_ENDPOINTS = [
+    "/api/v1/_info_nodes/",
+    "/api/v1/_users/",
+    "/api/v1/_user_groups/",
+]
 
 
 def test_check() -> None:
@@ -62,20 +64,20 @@ def test_public_endpoint(endpoint: str, search_index: None) -> None:
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "endpoint",
-    [
-        pytest.param(
-            "/api/v1/_studies/",
-            marks=pytest.mark.xfail(
-                strict=True,
-                reason="pinned until the permission classes are revised",
-            ),
-        ),
-        "/api/v1/_info_nodes/",
-    ],
-)
+@pytest.mark.parametrize("endpoint", ["/api/v1/_studies/", *STAFF_ONLY_ENDPOINTS])
 def test_anonymous_write_rejected(endpoint: str) -> None:
     """An anonymous client cannot write."""
     response = APIClient().post(endpoint, data={}, format="json")
+    assert response.status_code in {401, 403}
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("endpoint", STAFF_ONLY_ENDPOINTS)
+def test_non_staff_write_rejected(endpoint: str) -> None:
+    """A user without staff rights cannot write on the endpoints reserved for staff."""
+    client = APIClient()
+    client.force_authenticate(
+        user=User.objects.create_user(username="plain", password="plain-password")
+    )
+    response = client.post(endpoint, data={}, format="json")
     assert response.status_code in {401, 403}

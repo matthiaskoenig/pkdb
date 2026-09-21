@@ -15,7 +15,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q as DQ, Prefetch
 from django.http import JsonResponse, HttpResponse
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_IN, LOOKUP_QUERY_EXCLUDE
 from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend, \
     OrderingFilterBackend, IdsFilterBackend, MultiMatchSearchFilterBackend, CompoundSearchFilterBackend
@@ -35,7 +34,10 @@ from pkdb_app.info_nodes.views import InfoNodeElasticViewSet
 from pkdb_app.interventions.serializers import InterventionElasticSerializerAnalysis
 from pkdb_app.outputs.serializers import OutputInterventionSerializer
 from pkdb_app.subjects.serializers import GroupCharacteristicaSerializer, IndividualCharacteristicaSerializer
+from rest_framework.decorators import api_view, parser_classes, permission_classes
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import filters, status, serializers
 from rest_framework import viewsets
@@ -51,7 +53,7 @@ from pkdb_app.subjects.documents import GroupDocument, IndividualDocument, \
     GroupCharacteristicaDocument, IndividualCharacteristicaDocument
 from pkdb_app.subjects.models import GroupCharacteristica, IndividualCharacteristica, Group, Individual
 from pkdb_app.users.models import PUBLIC
-from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, user_group
+from pkdb_app.users.permissions import IsAdminOrCreatorOrCurator, StudyPermission, study_permissions, user_group
 from rest_framework.views import APIView
 
 from .serializers import (
@@ -144,28 +146,36 @@ class StudyViewSet(viewsets.ModelViewSet):
 # Elastic ViewSets
 ###############################################################################################
 
-@csrf_exempt
+@api_view(["POST"])
+@parser_classes([JSONParser])
+@permission_classes([IsAuthenticated])
 def update_index_study(request):
-    if request.method == 'POST':
+    """Update the elastic documents of a single study.
 
-        data = JSONParser().parse(request)
+    The caller has to be allowed to modify the study itself, which is the rule
+    `study_permissions()` applies for every other write on a study.
+    """
+    data = request.data
+    try:
+        study = Study.objects.get(sid=data["sid"])
+
+    except ObjectDoesNotExist:
+        return JsonResponse({"success": "False", "reason": "Instance not in database"})
+
+    if not study_permissions(request, study):
+        raise PermissionDenied
+
+    related_elastic = related_elastic_dict(study)
+    for doc, instances in related_elastic.items():
+        # code you want to evaluate
+
         try:
-            study = Study.objects.get(sid=data["sid"])
+            action = data.get('action', 'index')
+            doc().update(thing=instances, action=action)
+        except helpers.BulkIndexError:
+            raise helpers.BulkIndexError
 
-        except ObjectDoesNotExist:
-            return JsonResponse({"success": "False", "reason": "Instance not in database"})
-
-        related_elastic = related_elastic_dict(study)
-        for doc, instances in related_elastic.items():
-            # code you want to evaluate
-
-            try:
-                action = data.get('action', 'index')
-                doc().update(thing=instances, action=action)
-            except helpers.BulkIndexError:
-                raise helpers.BulkIndexError
-
-        return JsonResponse({"success": "True"})
+    return JsonResponse({"success": "True"})
 
 
 def delete_elastic_study(related_elastic):

@@ -13,7 +13,7 @@ def is_allowed_method(request):
     return False
 
 
-class IsUserOrReadOnly(permissions.BasePermission):
+class IsUserOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
     """
     Object-level permission to only allow owners of an object to edit it.
     """
@@ -25,7 +25,7 @@ class IsUserOrReadOnly(permissions.BasePermission):
         return obj == request.user
 
 
-class IsAdminOrCreator(permissions.BasePermission):
+class IsAdminOrCreator(permissions.IsAuthenticatedOrReadOnly):
 
     def has_object_permission(self, request, view, obj):
         if is_allowed_method(request):
@@ -35,7 +35,7 @@ class IsAdminOrCreator(permissions.BasePermission):
         return user.is_staff or (user == obj.creator)
 
 
-class IsAdminOrCreatorOrCurator(permissions.BasePermission):
+class IsAdminOrCreatorOrCurator(permissions.IsAuthenticatedOrReadOnly):
     """
     for study and reference
     """
@@ -54,7 +54,7 @@ class IsAdminOrCreatorOrCurator(permissions.BasePermission):
         return request.user.is_staff or allowed_user
 
 
-class StudyPermission(permissions.BasePermission):
+class StudyPermission(permissions.IsAuthenticatedOrReadOnly):
 
     def has_object_permission(self, request, view, obj):
         if hasattr(obj, "study"):
