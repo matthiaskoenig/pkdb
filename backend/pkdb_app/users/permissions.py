@@ -15,10 +15,10 @@ def is_allowed_method(request):
 
 
 class IsUserOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
-    """Grant safe methods to any authenticated user, write access to the object's owner."""
+    """Grant safe methods to everybody, write access only to the user who is the object itself."""
 
     def has_object_permission(self, request, view, obj):
-        """Grant safe methods generally and write access to the user who is obj itself."""
+        """Grant safe methods to everybody and write access to the user who is obj itself."""
         if request.method in permissions.SAFE_METHODS:
             return True
 

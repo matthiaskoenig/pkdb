@@ -195,7 +195,12 @@ class InfoNodeListSerializer(serializers.ListSerializer):
 
 
 class InfoNodeSerializer(serializers.ModelSerializer):
-    """InfoNodeSerializer."""
+    """Admin serializer that creates, updates and represents an info node with its specialized fields.
+
+    Resolves the info node's parents, synonyms, annotations and cross references, and
+    creates or updates the extra model (Substance, MeasurementType, ...) that matches
+    the info node's ntype.
+    """
 
     parents = utils.SlugRelatedField(
         many=True,

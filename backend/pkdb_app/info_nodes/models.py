@@ -48,7 +48,11 @@ class InfoNode(Sidable):
     """
 
     class NTypes(models.TextChoices):
-        """Note Types."""
+        """The kinds of info node.
+
+        Substance, measurement type, route, form, application, tissue, method,
+        calculation type, choice, or a generic info node.
+        """
 
         Substance = "substance", _("substance")
         MeasurementType = "measurement_type", _("measurement_type")
@@ -63,7 +67,7 @@ class InfoNode(Sidable):
         Info_Node = "info_node", _("info_node")
 
     class DTypes(models.TextChoices):
-        """Data Types."""
+        """The data types a measurement type's values can have."""
 
         Abstract = "abstract", _("abstract")
         Boolean = "boolean", _("boolean")
@@ -469,7 +473,10 @@ class MeasurementType(AbstractInfoNode):
                         )
 
     def validate_complete(self, data, time_allowed: bool = True):
-        """Complete validation."""
+        """Validate data's unit, numeric values, choice, and time and time unit if time_allowed.
+
+        Resolves any 'NR' time and time_unit values to None and returns the resolved choice.
+        """
         # check unit
         self.validate_unit(data)
         self.validate_numeric(data)
