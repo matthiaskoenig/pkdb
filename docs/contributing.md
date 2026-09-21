@@ -40,7 +40,7 @@ Name the branch after the change. Keep a branch small and short lived: one topic
 Commit as usual. The git hook checks the changed files on every commit:
 
 - files larger than 2 MB, merge conflict markers and private keys are rejected everywhere
-- python files under `backend/` are linted and formatted with ruff and type checked with ty
+- every python file (`backend/` and `scripts/`) is linted and formatted with ruff; `backend/` is additionally type checked with ty
 
 If the hook changed a file, e.g. ruff formatted it, add the file again and repeat the commit.
 
@@ -61,12 +61,17 @@ Open the pull request against `develop`, either with the link git prints after t
 
 ## 4. Get the checks green
 
-| check | what it runs | run it locally |
-| --- | --- | --- |
-| `tests` | the backend tests against postgres and elasticsearch, and the docker build | `cd backend && uv run tox -e py3.9` |
-| `ruff` | lint and format of `backend/` | `uv run --project backend ruff check .`, `uv run --project backend ruff format --check .` |
-| `ty` | type check of `backend/` | `cd backend && uv run ty check` |
-| `docs` | build of this documentation | `uvx --python 3.14 --with-requirements docs/requirements.txt zensical build --clean` |
+`tests`
+:   The backend tests against postgres and elasticsearch, and the docker build. Run it locally: `cd backend && uv run tox -e py3.9`.
+
+`ruff`
+:   Lint and format of `backend/`. Run it locally: `uv run --project backend ruff check .`, `uv run --project backend ruff format --check .`.
+
+`ty`
+:   Type check of `backend/`. Run it locally: `cd backend && uv run ty check`.
+
+`docs`
+:   Build of this documentation. Run it locally: `uvx --python 3.14 --with-requirements docs/requirements.txt zensical build --clean`.
 
 A red check shows the reason in its log on the pull request page ("Details"). Fix it locally, commit and push to the same branch; the pull request updates itself and the checks run again.
 

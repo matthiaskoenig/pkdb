@@ -24,31 +24,54 @@ Because `backend` and `frontend` bind mount the checkout, editing a file under `
 
 `docker-compose-production.yml` defines the same `postgres` and `elasticsearch` services (environment from `.env.production`, `elasticsearch` given more heap: `-Xms3g -Xmx12g`), plus:
 
-- **`backend`** - built from `./backend`, started with `gunicorn pkdb_app.wsgi:application -w 4 --timeout 900 --bind 0.0.0.0:8000`; also exposes container port `25`, published on `1025`, for outgoing mail.
+- **`backend`** - built from `./backend`, started with `gunicorn pkdb_app.wsgi:application --log-config gunicorn_logging.conf -w 4 --timeout 900 --bind 0.0.0.0:8000`; also exposes container port `25`, published on `1025`, for outgoing mail.
 - **`frontend`** - built from `./frontend` with `Dockerfile-production`; the container itself runs `tail -f /dev/null` (it only builds the static files into the `vue_dist` volume, `nginx` serves them).
 - **`nginx`** - `nginx:1.19.2`, published on `8888` (container port `80`), configuration mounted from `nginx/config/conf.d`. It serves `django_static` at `/static`, `django_media` at `/media` and the built frontend (`vue_dist`) at `/`, and proxies `/api` and `/admin` to the `backend` service on its container port `8000`.
 
-`postgres`, `elasticsearch`, `django_static`, `django_media`, `vue_dist` and `node_modules` are named docker volumes in both compose files, so their data survives a container restart; they are only removed by a script that explicitly asks for it (see below).
+`postgres_data`, `elasticsearch_data`, `django_static`, `django_media`, `vue_dist` and `node_modules` are named docker volumes in both compose files, so their data survives a container restart; they are only removed by a script that explicitly asks for it (see below).
 
 ## Environment variables
 
-Read from `backend/pkdb_app/settings.py`, the compose files and `.env.local`. Every value below is a placeholder, never a real credential.
+Read from `backend/pkdb_app/settings.py`, the compose files and `.env.local`. Every example below is a placeholder, never a real credential. All are required unless marked optional.
 
-| variable | meaning | example |
-| --- | --- | --- |
-| `PKDB_DOCKER_COMPOSE_YAML` | compose file the scripts below act on | `docker-compose-develop.yml` |
-| `PKDB_DJANGO_CONFIGURATION` | selects the `local` or `production` block in `settings.py` | `local` |
-| `PKDB_API_BASE` | base URL of the backend; combined with `/api/v1` for `API_URL`, and with `local` also used for the login and redirect URLs | `http://localhost:8000` |
-| `PKDB_SECRET_KEY` | Django `SECRET_KEY` | `change-me` |
-| `PKDB_ADMIN_PASSWORD` | password of the admin superuser `docker-purge.sh` creates | `change-me` |
-| `PKDB_DB_NAME` | postgres database name | `pkdb` |
-| `PKDB_DB_USER` | postgres user | `pkdb` |
-| `PKDB_DB_PASSWORD` | postgres password | `change-me` |
-| `PKDB_DB_SERVICE` | postgres host as seen by the backend, the compose service name | `postgres` |
-| `PKDB_DB_PORT` | postgres port as seen by the backend, the container port (`5432`), not the published `5433` | `5432` |
-| `PKDB_ELASTICSEARCH_HOST` | `host:port` of elasticsearch; optional, defaults to `elasticsearch:9200` if unset | `elasticsearch:9200` |
-| `PKDB_EMAIL_HOST_USER` | SMTP user; only read when `PKDB_DJANGO_CONFIGURATION` is `production` | `change-me` |
-| `PKDB_EMAIL_HOST_PASSWORD` | SMTP password; only read when `PKDB_DJANGO_CONFIGURATION` is `production` | `change-me` |
+`PKDB_DOCKER_COMPOSE_YAML`
+:   Compose file the scripts below act on. Example: `docker-compose-develop.yml`.
+
+`PKDB_DJANGO_CONFIGURATION`
+:   Selects the `local` or `production` block in `settings.py`. Example: `local`.
+
+`PKDB_API_BASE`
+:   Base URL of the backend; combined with `/api/v1` for `API_URL`, and with `local` also used for the login and redirect URLs. Example: `http://localhost:8000`.
+
+`PKDB_SECRET_KEY`
+:   Django `SECRET_KEY`. Example: `change-me`.
+
+`PKDB_ADMIN_PASSWORD`
+:   Password of the admin superuser `docker-purge.sh` creates. Example: `change-me`.
+
+`PKDB_DB_NAME`
+:   Postgres database name. Example: `pkdb`.
+
+`PKDB_DB_USER`
+:   Postgres user. Example: `pkdb`.
+
+`PKDB_DB_PASSWORD`
+:   Postgres password. Example: `change-me`.
+
+`PKDB_DB_SERVICE`
+:   Postgres host as seen by the backend, the compose service name. Example: `postgres`.
+
+`PKDB_DB_PORT`
+:   Postgres port as seen by the backend, the container port (`5432`), not the published `5433`. Example: `5432`.
+
+`PKDB_ELASTICSEARCH_HOST`
+:   Optional. `host:port` of elasticsearch, defaults to `elasticsearch:9200` if unset. Example: `elasticsearch:9200`.
+
+`PKDB_EMAIL_HOST_USER`
+:   SMTP user, only read when `PKDB_DJANGO_CONFIGURATION` is `production`. Example: `change-me`.
+
+`PKDB_EMAIL_HOST_PASSWORD`
+:   SMTP password, only read when `PKDB_DJANGO_CONFIGURATION` is `production`. Example: `change-me`.
 
 ## Scripts
 

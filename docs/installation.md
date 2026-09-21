@@ -39,8 +39,8 @@ which lists the current containers, e.g.:
 
 ```
 NAMES                   IMAGE                 PORTS
-pkdb-backend-1          pkdb-backend          0.0.0.0:8000->8000/tcp
-pkdb-frontend-1         pkdb-frontend         0.0.0.0:8081->8080/tcp
+pkdb-backend-1          pkdb-backend:latest   0.0.0.0:8000->8000/tcp
+pkdb-frontend-1         pkdb-frontend:latest  0.0.0.0:8081->8080/tcp
 pkdb-elasticsearch-1    elasticsearch:7.9.2   0.0.0.0:9123->9200/tcp
 pkdb-postgres-1         postgres:18.0         0.0.0.0:5433->5432/tcp
 ```

@@ -1,0 +1,4 @@
+/* the PK-DB logo is black on transparent, invert it on the dark scheme */
+[data-md-color-scheme="slate"] img[src$="pkdb_logo_transparent.png"] {
+  filter: invert(1);
+}

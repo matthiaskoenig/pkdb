@@ -4,11 +4,13 @@ site_description = "PK-DB - the open pharmacokinetics database"
 site_url = "https://matthiaskoenig.github.io/pkdb/"
 site_author = "Matthias König"
 
-copyright = 'Copyright &copy; 2017-2026 <a href="https://livermetabolism.com">Matthias König</a>'
+copyright = 'Copyright &copy; 2017-2025 Jan Grzegorzewski & Matthias König; <a href="https://livermetabolism.com">https://livermetabolism.com</a>'
 
 repo_url = "https://github.com/matthiaskoenig/pkdb"
 repo_name = "matthiaskoenig/pkdb"
 edit_uri = "edit/develop/docs/"
+
+extra_css = ["stylesheets/extra.css"]
 
 nav = [
   { "Home" = "index.md" },
@@ -20,7 +22,7 @@ nav = [
 
 [project.theme]
 language = "en"
-logo = "pkdb_logo.png"
+logo = "pkdb_logo_transparent.png"
 features = [
   "content.action.edit",
   "content.code.annotate",

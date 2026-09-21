@@ -37,11 +37,14 @@ Further rules of a pull request:
 
 The protection is implemented with [repository rulesets](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets). They are part of the repository in `.github/rulesets/` instead of only living in the web interface, so a change to a policy is reviewed like any other change:
 
-| ruleset | applies to | rules |
-| --- | --- | --- |
-| `develop.json` | `develop` | pull request required, the four checks above, resolved conversations, linear history, no force push, no deletion. No bypass. |
-| `main.json` | `main` | no force push, no deletion, no bypass |
-| `tags.json` | tags matching `v*` | a release tag cannot be deleted or moved |
+`develop.json`
+:   Applies to `develop`. Pull request required, the four checks above, resolved conversations, linear history, no force push, no deletion. No bypass.
+
+`main.json`
+:   Applies to `main`. No force push, no deletion, no bypass.
+
+`tags.json`
+:   Applies to tags matching `v*`. A release tag cannot be deleted or moved.
 
 Changing a policy means changing the json and applying it:
 
@@ -160,12 +163,17 @@ The `documentation` workflow runs both steps. `docs/robots.txt` points crawlers 
 
 Four workflows run on every pull request against `develop` and on every push to `develop` and `main`, see `.github/workflows/`. Their required jobs `tests`, `ruff`, `ty` and `docs` are the [checks](#pull-requests) of a pull request:
 
-| workflow | what it does |
-| --- | --- |
-| `ci-cd` (`ci-cd.yml`) | `test` runs `tox -e py3.9` against postgres and elasticsearch services, `docker` builds the backend image; on a tag it also creates the GitHub release and fast-forwards `main` |
-| `ruff` (`ruff.yml`) | lint and format check |
-| `ty` (`ty.yml`) | the type check |
-| `documentation` (`docs.yml`) | builds the site and the agent facing files, publishes from `develop` |
+`ci-cd` (`ci-cd.yml`)
+:   `test` runs `tox -e py3.9` against postgres and elasticsearch services, `docker` builds the backend image; on a tag it also creates the GitHub release and fast-forwards `main`.
+
+`ruff` (`ruff.yml`)
+:   Lint and format check.
+
+`ty` (`ty.yml`)
+:   The type check.
+
+`documentation` (`docs.yml`)
+:   Builds the site and the agent facing files, publishes from `develop`.
 
 ## Release
 
@@ -173,8 +181,16 @@ There is no PyPI package; a release is a docker image built from the tagged comm
 
 1. write the release notes for the version in `release-notes/<version>.md`
 2. make sure everything passes: `uv run --project backend pre-commit run --all-files`, `uv run tox -e py3.9`, `uv run tox -e ty`
-3. bump the version in `backend/pkdb_app/__init__.py` and `.bumpversion.toml`, on a branch, merged through a pull request like any other change
-4. tag the merged commit on `develop` and push the tag:
+3. on a branch, bump the version with [bump-my-version](https://github.com/callowayproject/bump-my-version), run from the repository root so it finds `.bumpversion.toml`:
+
+    ```bash
+    uv run --project backend bump-my-version bump --dry-run --verbose [major|minor|patch]  # check first
+    uv run --project backend bump-my-version bump [major|minor|patch]
+    ```
+
+    This rewrites the version in both `backend/pkdb_app/__init__.py` and `.bumpversion.toml`'s own `current_version`, and commits both files with the message `Bump version: <old> → <new>` (`commit = true` in `.bumpversion.toml`). It does not tag (`tag = false`): the bump is merged into `develop` through a pull request, which would rewrite the commit and leave a tag behind on a commit that is not part of `develop`; the tag is created on `develop` after the merge, see the next steps. Run from `backend/` instead and the command still shows a plausible-looking version, but does not find `.bumpversion.toml` and would not know which file to change - always run it from the repository root.
+4. push the branch, open the pull request against `develop` and merge it once the checks are green
+5. tag the merged commit on `develop` and push the tag:
 
     ```bash
     git switch develop

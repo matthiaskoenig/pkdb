@@ -28,20 +28,24 @@ published on PyPI.
 
 ## Commands
 
+Every line below is written to be run from the repository root, one after
+another, in any order; lines that need `backend/` use a subshell (`(cd
+backend && ...)`) so they do not change the shell's working directory for the
+next line.
+
 ```bash
-# environment (uv based, run from backend/)
-cd backend
-uv sync --extra dev
-uv run --project backend pre-commit install   # from the repository root, once per checkout
+# environment (uv based, backend is its own uv project)
+(cd backend && uv sync --extra dev)
+uv run --project backend pre-commit install   # once per checkout
 
 # tests: need the services of docker-compose-test.yml (ports 5434 / 9124)
 docker compose -f docker-compose-test.yml up -d --wait
-cd backend && uv run pytest -q
-uv run tox -e py3.9      # the tests, matching CI
-uv run tox -e ty         # ty type check
+(cd backend && uv run pytest -q)
+(cd backend && uv run tox -e py3.9)      # the tests, matching CI
+(cd backend && uv run tox -e ty)         # ty type check
 
-# lint / format (from the repository root, backend/ and scripts/ are covered
-# by the hierarchical .ruff.toml configuration)
+# lint / format (backend/ and scripts/ are covered by the hierarchical
+# .ruff.toml configuration)
 uv run --project backend ruff check .
 uv run --project backend ruff format .
 
