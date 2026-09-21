@@ -1,0 +1,53 @@
+# Keep the GitHub Actions and python dependencies used in the project up to
+# date. See https://docs.github.com/code-security/dependabot/dependabot-version-updates
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    # a single pull request for all dependency updates instead of one per package
+    groups:
+      python-packages:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    ignore:
+      # Django and the REST stack are pinned deliberately, see backend/pyproject.toml
+      - dependency-name: "Django"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "djangorestframework"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "django-*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "drf-yasg"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "elasticsearch-dsl"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+
+  - package-ecosystem: "pip"
+    directory: "/docs"
+    schedule:
+      interval: "weekly"
+    groups:
+      python-packages:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # a single pull request for all action updates instead of one per action
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"

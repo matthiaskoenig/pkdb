@@ -1,0 +1,62 @@
+name: documentation
+
+on:
+  push:
+    # feature branches are built through their pull request
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # never cancel a running deployment, it would leave the site half published
+  cancel-in-progress: false
+
+jobs:
+  docs:
+    # required by the branch protection, see .github/rulesets/develop.json
+    name: docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: "3.14"
+          enable-cache: true
+      - name: Build the documentation
+        # zensical and its plugins run standalone, the backend is not installed
+        run: uvx --python 3.14 --with-requirements docs/requirements.txt zensical build --clean
+      - name: Generate the agent facing files
+        # llms.txt, llms-full.txt and the markdown of every page
+        run: uv run --no-project --python 3.14 python scripts/llms_txt.py
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+  deploy:
+    needs: docs
+    # only the default branch publishes to https://matthiaskoenig.github.io/pkdb
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write     # deploy to GitHub Pages
+      id-token: write  # verify the deployment originates from this workflow
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

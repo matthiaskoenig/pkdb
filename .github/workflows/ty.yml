@@ -1,0 +1,41 @@
+name: ty
+
+on:
+  push:
+    # feature branches are checked through their pull request
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ty:
+    # required by the branch protection, see .github/rulesets/develop.json
+    name: ty
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: "3.9"
+          enable-cache: true
+      - name: Install the backend
+        working-directory: backend
+        run: uv sync --extra dev
+      - name: Type check
+        working-directory: backend
+        env:
+          # render diagnostics as GitHub Actions workflow annotations
+          TY_OUTPUT_FORMAT: github
+        run: uv run ty check

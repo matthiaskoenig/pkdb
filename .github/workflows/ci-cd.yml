@@ -1,0 +1,167 @@
+name: CI-CD
+
+on:
+  push:
+    # feature branches are tested through their pull request, tags release
+    branches: [develop, main]
+    tags: ['v*']
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+# least privilege by default, the release and sync jobs raise what they need
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # superseded branch runs are cancelled, release runs are never cancelled
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:18.0
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s --health-timeout 5s --health-retries 10
+      elasticsearch:
+        image: elasticsearch:7.9.2
+        env:
+          discovery.type: single-node
+          ES_JAVA_OPTS: -Xms512m -Xmx512m
+        ports:
+          - 9200:9200
+        options: >-
+          --health-cmd "curl -fs http://localhost:9200/_cluster/health"
+          --health-interval 10s --health-timeout 5s --health-retries 20
+    env:
+      # every variable pkdb_app/settings.py reads at import time; pytest itself
+      # gets these from [tool.pytest_env] in backend/pyproject.toml, but
+      # manage.py does not read that table, so the job sets all of them
+      PKDB_DJANGO_CONFIGURATION: local
+      PKDB_API_BASE: http://localhost:8000
+      PKDB_SECRET_KEY: test-secret-key-not-used-anywhere-else
+      PKDB_DB_NAME: postgres
+      PKDB_DB_USER: postgres
+      PKDB_DB_PASSWORD: postgres
+      PKDB_DB_SERVICE: localhost
+      PKDB_DB_PORT: "5432"
+      PKDB_ELASTICSEARCH_HOST: localhost:9200
+      PKDB_EMAIL_HOST_USER: ""
+      PKDB_EMAIL_HOST_PASSWORD: ""
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+    - name: Install uv and set the python version
+      # astral-sh/setup-uv publishes no floating major tag beyond v7
+      uses: astral-sh/setup-uv@v10.1.0
+      with:
+        python-version: "3.9"
+        enable-cache: true
+    - name: Install the backend
+      working-directory: backend
+      run: uv sync --extra dev --locked
+    - name: Create the migrations
+      # migrations are git-ignored and generated per deployment (see
+      # docker-purge.sh); a fresh checkout has none, so pytest-django would
+      # find no tables to test against without this step
+      working-directory: backend
+      run: uv run python manage.py makemigrations
+    - name: Test with tox
+      working-directory: backend
+      run: uv run tox -e py3.9
+
+  docker:
+    name: docker
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+    - name: Build the backend image
+      uses: docker/build-push-action@v6
+      with:
+        context: backend
+        push: false
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  tests:
+    # the one check the branch protection requires
+    name: tests
+    needs: [test, docker]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Check the result of the test and docker jobs
+      env:
+        TEST_RESULT: ${{ needs.test.result }}
+        DOCKER_RESULT: ${{ needs.docker.result }}
+      run: |
+        echo "test: $TEST_RESULT"
+        echo "docker: $DOCKER_RESULT"
+        test "$TEST_RESULT" = "success"
+        test "$DOCKER_RESULT" = "success"
+
+  release:
+    needs: tests
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write  # create the GitHub release
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+        # only the release notes are needed
+        filter: blob:none
+        sparse-checkout: |
+          release-notes
+    - name: Determine the release notes path
+      # the tag v0.10.0 releases with release-notes/0.10.0.md
+      run: echo "NOTES_PATH=release-notes/${GITHUB_REF_NAME#v}.md" >> "$GITHUB_ENV"
+    - name: Create GitHub release
+      uses: softprops/action-gh-release@v3
+      with:
+        body_path: ${{ env.NOTES_PATH }}
+        draft: false
+        prerelease: false
+
+  sync-main:
+    # main tracks the latest release, see docs/development.md
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write  # fast-forward main to the released commit
+    steps:
+    - name: Fast-forward main to the release
+      # via the api, so the repository is not cloned; without force the update
+      # fails loudly if it would not be a fast-forward. The first release
+      # creates the branch.
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --silent 2>/dev/null; then
+          gh api -X PATCH "repos/${GITHUB_REPOSITORY}/git/refs/heads/main" \
+            -f sha="${GITHUB_SHA}" -F force=false --silent
+        else
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+            -f ref="refs/heads/main" -f sha="${GITHUB_SHA}" --silent
+        fi

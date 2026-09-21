@@ -1,0 +1,38 @@
+name: ruff
+
+on:
+  push:
+    # feature branches are checked through their pull request
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ruff:
+    # required by the branch protection, see .github/rulesets/develop.json
+    name: ruff
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # the ruff version is read from the dev dependencies in backend/pyproject.toml,
+      # the rule set and the excludes (frontend, docs, migrations) from .ruff.toml
+      - name: Lint
+        # astral-sh/ruff-action publishes no floating major tag beyond v3
+        uses: astral-sh/ruff-action@v4.1.0
+        with:
+          args: check --output-format=github
+      - name: Format
+        uses: astral-sh/ruff-action@v4.1.0
+        with:
+          args: format --check --diff
