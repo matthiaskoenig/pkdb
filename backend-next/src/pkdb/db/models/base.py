@@ -28,6 +28,7 @@ class Owned(Identity):
         ForeignKey("studies.id", ondelete="CASCADE"), index=True
     )
     key: Mapped[str] = mapped_column(String(512))
+    source: Mapped[dict | None] = mapped_column(JSONB)
 
 
 class Scientific:
@@ -52,7 +53,6 @@ class Scientific:
     cv: Mapped[float | None] = mapped_column(Float)
     count: Mapped[int | None]
     origin: Mapped[str] = mapped_column(String(16), default="reported")
-    source: Mapped[dict | None] = mapped_column(JSONB)
 
 
 class Timestamped:
