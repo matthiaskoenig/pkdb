@@ -43,7 +43,7 @@ def calculate_se(sd, count, cv, mean):
 
 
 def calculate_cv(sd, count, se, mean):
-    """Calculates CV from given fields"""
+    """Calculates CV from given fields."""
     cv = None
     is_sd = _is(sd)
     is_count = _is(count)

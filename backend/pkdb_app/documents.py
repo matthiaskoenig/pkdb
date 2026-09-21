@@ -1,8 +1,11 @@
+"""Elasticsearch document field helpers and the search access view."""
+
+import collections.abc
 import operator
 from functools import reduce
 
 from django.utils.decorators import method_decorator
-from django_elasticsearch_dsl import DEDField, Object, collections, fields
+from django_elasticsearch_dsl import DEDField, Object, fields
 from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -43,6 +46,7 @@ autocomplete = analyzer(
 
 
 def string_field(attr, **kwargs):
+    """Build a text field with autocomplete analyzers and a raw keyword subfield."""
     return fields.TextField(
         attr=attr,
         fielddata=True,
@@ -54,6 +58,7 @@ def string_field(attr, **kwargs):
 
 
 def basic_object(attr, **kwargs):
+    """Build an object field indexing the primary key and name of a related object."""
     return ObjectField(
         attr=attr,
         properties={
@@ -65,6 +70,7 @@ def basic_object(attr, **kwargs):
 
 
 def info_node(attr, **kwargs):
+    """Build an object field indexing the sid, name and label of a related info node."""
     return ObjectField(
         attr=attr,
         properties={
@@ -86,6 +92,7 @@ study_field = fields.ObjectField(
 
 
 def text_field(attr):
+    """Build a text field with autocomplete analyzers and a raw keyword subfield."""
     return fields.TextField(
         attr=attr,
         fielddata=True,
@@ -96,8 +103,7 @@ def text_field(attr):
 
 
 class ObjectField(DEDField, Object):
-    """This document Object fields returns a null for any empty field and not an empty dictionary.
-    """
+    """Object field that returns null for an empty field instead of an empty dictionary."""
 
     def _get_inner_field_data(self, obj, field_value_to_ignore=None):
         data = {}
@@ -125,13 +131,12 @@ class ObjectField(DEDField, Object):
         return data
 
     def get_value_from_instance(self, instance, field_value_to_ignore=None):
-        objs = super().get_value_from_instance(
-            instance, field_value_to_ignore
-        )
+        """Return None for an empty value, else the inner field data for each object."""
+        objs = super().get_value_from_instance(instance, field_value_to_ignore)
 
         if objs is None:
             return None
-        if isinstance(objs, collections.Iterable):
+        if isinstance(objs, collections.abc.Iterable):
             return [
                 self._get_inner_field_data(obj, field_value_to_ignore)
                 for obj in objs
@@ -164,6 +169,7 @@ class AccessView(BaseDocumentViewSet):
         return resource
 
     def get_queryset(self):
+        """Restrict the search to the ids, uuid filter and access level of the current user."""
         group = user_group(self.request.user)
         if hasattr(self, "initial_data"):
             id_queries = [Q("term", pk=pk) for pk in self.initial_data]

@@ -1,3 +1,5 @@
+"""Swagger response schema wrapping for the paginated API responses."""
+
 from collections import OrderedDict
 
 from drf_yasg import openapi
@@ -10,11 +12,13 @@ from rest_framework.pagination import (
 
 
 class ResponsePagination(DjangoRestResponsePagination):
-    """Provides response schema pagination warpping for django-rest-framework's LimitOffsetPagination,
-    PageNumberPagination and CursorPagination
+    """Wraps the response schema for LimitOffsetPagination, PageNumberPagination and CursorPagination.
+
+    Wraps the list schema in a page object matching CustomPagination's output.
     """
 
     def get_paginated_response(self, paginator, response_schema):
+        """Build the swagger schema for a paginated response of the given paginator."""
         assert response_schema.type == openapi.TYPE_ARRAY, (
             "array return expected for paged response"
         )

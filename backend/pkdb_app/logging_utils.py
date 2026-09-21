@@ -1,5 +1,4 @@
-"""Helpers related to logging
-"""
+"""Configure colored console logging for the application."""
 
 import coloredlogs
 

@@ -14,7 +14,10 @@ from pkdb_app.subjects.models import Group, Individual
 
 
 class SubstanceStatisticsViewSet(viewsets.ViewSet):
+    """Endpoint listing, per substance, the count of normed interventions and outputs."""
+
     def list(self, request):
+        """Return one row per substance with its intervention and output counts."""
         substances_interventions = Substance.objects.annotate(
             label=F("info_node__label"),
             intervention_count=Count(
@@ -43,6 +46,8 @@ class SubstanceStatisticsViewSet(viewsets.ViewSet):
 
 
 class SubstanceStatisticsSerializer(serializers.Serializer):
+    """Serialize the per substance intervention and output counts."""
+
     label = serializers.CharField()
     intervention_count = serializers.IntegerField(allow_null=True)
     output_count = serializers.IntegerField(allow_null=True)
@@ -52,6 +57,7 @@ class Statistics:
     """Basic database statistics."""
 
     def __init__(self):
+        """Compute the current counts of studies, subjects, interventions and outputs."""
         self.version = __version__
         self.study_count = Study.objects.count()
         self.reference_count = Reference.objects.count()
@@ -71,12 +77,13 @@ class Statistics:
 
 
 class StatisticsViewSet(viewsets.ViewSet):
-    """Endpoint to query PK-DB statistics
+    """Endpoint to query PK-DB statistics.
 
     Get database statistics consisting of count and version information.
     """
 
     def list(self, request):
+        """Return the current database statistics."""
         instance = Statistics()
         serializer = StatisticsSerializer(instance)
         return Response(serializer.data)
@@ -86,6 +93,7 @@ class StatisticsSerializer(serializers.BaseSerializer):
     """Serializer for database statistics."""
 
     def to_representation(self, instance):
+        """Return the count and version attributes of the given Statistics instance."""
         return {
             key: getattr(instance, key)
             for key in [

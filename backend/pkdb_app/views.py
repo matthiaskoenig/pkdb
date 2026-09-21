@@ -1,5 +1,4 @@
-"""Views
-"""
+"""Views for protected media downloads and the swagger schema customization."""
 
 import os
 from copy import copy
@@ -15,12 +14,13 @@ from .subjects.models import DataFile
 
 
 def serve_protected_document(request, file):
+    """Return the data file as an attachment when the user has read access to its study."""
     try:
         user, _ = TokenAuthentication().authenticate(request=request)
     except TypeError:
         user = request.user
 
-    path, file_name = os.path.split(file)
+    _path, file_name = os.path.split(file)
     datafile = get_object_or_404(DataFile, file=file)
     study = datafile.study_set.all()[0]
     if get_study_file_permission(user, study):
@@ -39,25 +39,30 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
 
     @staticmethod
     def _params(table, swagger):
+        """Return the list endpoint's query parameters prefixed with `table__` for the filter endpoint."""
         if swagger.paths.get(f"/{table}/"):
             _params = []
             params = swagger.paths.get(f"/{table}/").get("get").get("parameters").copy()
 
             for p in params:
                 _p = copy(p)
-                if p.name not in [
-                    "ordering",
-                    "search_multi_match",
-                    "page",
-                    "page_size",
-                ]:
-                    if table not in p.name:
-                        _p.name = f"{table}__{p.name}"
-                        _params.append(_p)
+                if (
+                    p.name
+                    not in [
+                        "ordering",
+                        "search_multi_match",
+                        "page",
+                        "page_size",
+                    ]
+                    and table not in p.name
+                ):
+                    _p.name = f"{table}__{p.name}"
+                    _params.append(_p)
             return _params
+        return None
 
     def get_schema(self, request=None, public=False):
-        """Generate a :class:`.Swagger` object with custom tags"""
+        """Generate a :class:`.Swagger` object with custom tags."""
         swagger = super().get_schema(request, public)
         swagger.tags = [
             {

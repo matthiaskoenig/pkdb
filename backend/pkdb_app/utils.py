@@ -1,6 +1,6 @@
-"""Generic utility functions.
-"""
+"""Generic utility functions."""
 
+import contextlib
 import copy
 import os
 
@@ -13,6 +13,8 @@ CHAR_MAX_LENGTH_LONG = CHAR_MAX_LENGTH * 5
 
 
 class SlugRelatedField(serializers.SlugRelatedField):
+    """SlugRelatedField with the not-found and invalid error messages worded for uploads."""
+
     default_error_messages = {
         "does_not_exist": _("Object with {slug_name}=<{value}> does not exist."),
         "invalid": _("Invalid value."),
@@ -20,17 +22,19 @@ class SlugRelatedField(serializers.SlugRelatedField):
 
 
 def list_duplicates(seq):
+    """Return the items of seq which occur more than once, each one once."""
     # FIXME: use colletions.Counter
     seen = set()
     seen_add = seen.add
     # adds all elements it doesn't know yet to seen and all other to seen_twice
-    seen_twice = set(x for x in seq if x in seen or seen_add(x))
+    seen_twice = {x for x in seq if x in seen or seen_add(x)}
     # turn the set into a list (as requested)
     return list(seen_twice)
 
 
 def create_choices(collection):
-    """Creates choices from given list of items.
+    """Create choices from a given list of items.
+
     In case of dictionaries the keys are used to create choices.
     :param collection: iterable collection from which choices are created.
     :return: list of choice tuples
@@ -46,12 +50,14 @@ def create_choices(collection):
 
 
 def create_if_exists(src, src_key, dest, dest_key):
-    if src_key in src.keys():
+    """Copy src[src_key] to dest[dest_key] when src_key is present in src."""
+    if src_key in src:
         dest[dest_key] = src[src_key]
     return dest
 
 
 def clean_import(data):
+    """Drop keys whose value is empty, blank or `nan`, and keep the value of every other key."""
     clean_dict = {}
     for key, value in data.items():
         if str(value).strip() not in ["", "nan"]:
@@ -64,6 +70,7 @@ def clean_import(data):
 
 
 def list_of_pk(field, obj):
+    """Return the primary keys of the related objects stored under field on obj."""
     result = []
     try:
         relevant_field = obj.to_dict().get(field)
@@ -82,6 +89,7 @@ def ensure_dir(file_path):
 
 
 def update_or_create_multiple(parent, children, related_name, lookup_fields=None):
+    """Update or create each child on parent's related_name manager, recursing into nested relations."""
     for child in children:
         lookup_dict = {}
         instance_child = getattr(parent, related_name)
@@ -115,17 +123,20 @@ def update_or_create_multiple(parent, children, related_name, lookup_fields=None
 
 
 def create_multiple(parent, children, related_name):
+    """Create each child on parent's related_name manager and return the created instances."""
     instance_child = getattr(parent, related_name)
     return [instance_child.create(**child) for child in children]
 
 
 def create_multiple_bulk(parent, related_name_parent, children, class_child):
+    """Bulk create class_child instances for each child, linked to parent via related_name_parent."""
     return class_child.objects.bulk_create(
         [class_child(**{related_name_parent: parent, **child}) for child in children]
     )
 
 
 def create_multiple_bulk_normalized(notnormalized_instances, model_class):
+    """Bulk create the normalized copies of the given not-normalized instances."""
     if notnormalized_instances:
         return model_class.objects.bulk_create(
             [
@@ -133,16 +144,18 @@ def create_multiple_bulk_normalized(notnormalized_instances, model_class):
                 for notnorm_instance in notnormalized_instances
             ]
         )
+    return None
 
 
 def _create(
     validated_data,
     model_manager=None,
     model_serializer=None,
-    create_multiple_keys=[],
-    add_multiple_keys=[],
-    pop=[],
+    create_multiple_keys=(),
+    add_multiple_keys=(),
+    pop=(),
 ):
+    """Create the instance and pop out the related data to be created or added afterwards."""
     popped_data = {related: validated_data.pop(related, []) for related in pop}
     related_data_create = {
         related: validated_data.pop(related, []) for related in create_multiple_keys
@@ -167,38 +180,33 @@ def _create(
 
 
 def initialize_normed(not_norm_instance):
+    """Create the normalized copy of a not-normalized instance and normalize its units."""
     norm = copy.copy(not_norm_instance)
     norm.pk = None
     norm.normed = True
     norm.normalize()
     norm.raw_id = not_norm_instance.pk
 
-    try:
+    with contextlib.suppress(AttributeError):
         norm.individual_id = not_norm_instance.individual.pk
-    except AttributeError:
-        pass
 
-    try:
+    with contextlib.suppress(AttributeError):
         norm.group_id = not_norm_instance.group.pk
-    except AttributeError:
-        pass
 
     # interventions have no add add_error_measures() because they should have no mean,median,sd,se,cv ...
-    try:
+    with contextlib.suppress(AttributeError):
         norm.add_error_measures()
-    except AttributeError:
-        pass
     return norm
 
 
 def recursive_iter(obj, keys=()):
-    """Creates dictionary with key:object from nested JSON data structure."""
+    """Yield (key path, value) pairs by recursively walking a nested dict/list/tuple structure."""
     if isinstance(obj, dict):
         for k, v in obj.items():
-            yield from recursive_iter(v, keys + (k,))
+            yield from recursive_iter(v, (*keys, k))
     elif any(isinstance(obj, t) for t in (list, tuple)):
         for idx, item in enumerate(obj):
-            yield from recursive_iter(item, keys + (idx,))
+            yield from recursive_iter(item, (*keys, idx))
 
         if len(obj) == 0:
             yield keys, None

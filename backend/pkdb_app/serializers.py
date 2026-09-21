@@ -1,3 +1,5 @@
+"""Base serializers for the upload, elasticsearch and small read-only representations."""
+
 import copy
 import numbers
 from collections import OrderedDict
@@ -24,15 +26,17 @@ NA_VALUES = ["na", "NA", "nan", "NAN"]
 
 
 class WrongKeyValidationSerializer(serializers.ModelSerializer):
+    """Base serializer which rejects upload keys unknown to the model and hides null fields."""
+
     @staticmethod
     def retransform_map_string(k):
+        """Strip a trailing `_map` suffix from a field name."""
         if "_map" in k:
             k = k[:-4]
         return k
 
-    def validate_wrong_keys(self, data, additional_fields=tuple([])):
-        """Validate that all keys correspond to a model field.
-        """
+    def validate_wrong_keys(self, data, additional_fields=()):
+        """Validate that all keys correspond to a model field."""
         serializer_fields = tuple(self.Meta.fields) + tuple(additional_fields)
         payload_keys = data.keys()
         for payload_key in payload_keys:
@@ -61,17 +65,17 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
         return instance
 
     def to_internal_value(self, data):
+        """Validate that no unknown key is present before the framework parses the data."""
         self.validate_wrong_keys(data)
 
         return super().to_internal_value(data)
 
     def validate(self, attrs):
-        errors = super().validate(attrs)
-        return errors
+        """Run the framework validation without adding further checks."""
+        return super().validate(attrs)
 
     def to_representation(self, instance):
-        """Display only keys, which are not None
-        """
+        """Drop keys whose value is None or an empty list from the representation."""
         rep = super().to_representation(instance)
         rep = OrderedDict([(key, rep[key]) for key in rep if rep[key] is not None])
 
@@ -86,14 +90,14 @@ class WrongKeyValidationSerializer(serializers.ModelSerializer):
 
 
 class MappingSerializer(WrongKeyValidationSerializer):
+    """Base serializer handling the `_map` column mapping and `||` splitting of uploaded data."""
+
     # ----------------------------------
     # helper
     # ----------------------------------
     @staticmethod
     def transform_map_fields(data):
-        """Replaces key with f"{key}_map" if value contains special syntax.
-        ( ==, || )
-        """
+        """Rename key to f"{key}_map" when its value contains the mapping syntax (==, ||)."""
         transformed_data = {}
         for key, value in data.items():
             if isinstance(value, str):
@@ -107,6 +111,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return transformed_data
 
     def retransform_map_fields(self, data):
+        """Strip the `_map` suffix from every key of data."""
         transformed_data = {}
         for k, v in data.items():
             k = self.retransform_map_string(k)
@@ -130,7 +135,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
         """Splits the data to get number of entries."""
         n_values = []
 
-        for field, value in entry.items():
+        for _field, value in entry.items():
             n = 1
 
             try:
@@ -158,6 +163,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
     @staticmethod
     def string_to_list(value):
+        """Split a comma separated string into a list of stripped strings."""
         if value:
             return [v.strip() for v in str(value).split(",")]
         return value
@@ -173,11 +179,11 @@ class MappingSerializer(WrongKeyValidationSerializer):
             return [entry]
 
         # create entries by splitting separators
-        entries = [dict() for k in range(n)]
+        entries = [{} for k in range(n)]
 
         split_by_image = False
         number_spit_fields = 0
-        for field in entry.keys():
+        for field in entry:
             value = entry[field]
             try:
                 values = value.split(ITEM_SEPARATOR)
@@ -201,22 +207,20 @@ class MappingSerializer(WrongKeyValidationSerializer):
             # --- validation ---
             # names must be split in a split entry
             if len(values) != n:
-                if field == "name":
-                    if len(values) == 1:
-                        raise serializers.ValidationError(
-                            f"Names must be split and not left as <{values}>. "
-                            f"Otherwise UniqueConstrain of name is violated."
-                        )
+                if field == "name" and len(values) == 1:
+                    raise serializers.ValidationError(
+                        f"Names must be split and not left as <{values}>. "
+                        f"Otherwise UniqueConstrain of name is violated."
+                    )
             else:
                 number_spit_fields += 1
 
             # check for old syntax
             for value in values:
-                if isinstance(value, str):
-                    if "{{" in value or "}}" in value:
-                        raise serializers.ValidationError(
-                            "Splitting via '{ }' syntax not allowed, use '||' in count."
-                        )
+                if isinstance(value, str) and ("{{" in value or "}}" in value):
+                    raise serializers.ValidationError(
+                        "Splitting via '{ }' syntax not allowed, use '||' in count."
+                    )
 
             # extend entries
             if len(values) == 1:
@@ -241,6 +245,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
     # helper for export of entries from file
     # ----------------------------------
     def subset_pd(self, subset, df):
+        """Filter df to the rows matching the `col==cell_value` expression given in subset."""
         values = subset.split(ITEM_MAPPER)
         values = [v.strip() for v in values]
         if len(values) != 2:
@@ -250,10 +255,10 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         try:
             df[values[0]]
-        except KeyError:
+        except KeyError as err:
             raise serializers.ValidationError(
                 {"subset": f"Your source file has no column <{values[0]}>."}
-            )
+            ) from err
         try:
             df = df.loc[df[values[0]] == values[1]]
         except TypeError:
@@ -311,13 +316,13 @@ class MappingSerializer(WrongKeyValidationSerializer):
             )
             df.columns = df.columns.str.strip()
 
-        except Exception:
+        except Exception as err:
             raise serializers.ValidationError(
                 {
                     "source": "Cannot read tsv.",
                     "detail": {"source": source, "subset": subset},
                 }
-            )
+            ) from err
 
         # filter subset
         if subset:
@@ -330,46 +335,46 @@ class MappingSerializer(WrongKeyValidationSerializer):
         return df
 
     def make_entry(self, entry, template, data, source):
+        """Fill template with the row values referenced by its `col==<header>` fields."""
         entry_dict = copy.deepcopy(template)
         recursive_entry_dict = list(recursive_iter(entry_dict))
 
         for keys, value in recursive_entry_dict:
-            if isinstance(value, str):
-                if ITEM_MAPPER in value:
-                    values = value.split(ITEM_MAPPER)
-                    values = [v.strip() for v in values]
-                    if len(values) != 2 or values[0] != "col":
-                        raise serializers.ValidationError(
-                            ["Field has wrong pattern col=='col_value'.", data]
-                        )
-                    try:
-                        entry_value = getattr(entry, values[1])
+            if isinstance(value, str) and ITEM_MAPPER in value:
+                values = value.split(ITEM_MAPPER)
+                values = [v.strip() for v in values]
+                if len(values) != 2 or values[0] != "col":
+                    raise serializers.ValidationError(
+                        ["Field has wrong pattern col=='col_value'.", data]
+                    )
+                try:
+                    entry_value = getattr(entry, values[1])
 
-                    except AttributeError:
-                        raise serializers.ValidationError(
-                            [
-                                f"Header key <{values[1]}> does not exist in <{DataFile.objects.get(pk=source).file}>.",
-                                data,
-                            ]
-                        )
-                    if isinstance(entry_value, numbers.Number):
-                        if np.isnan(entry_value):
-                            entry_value = None
+                except AttributeError as err:
+                    raise serializers.ValidationError(
+                        [
+                            f"Header key <{values[1]}> does not exist in <{DataFile.objects.get(pk=source).file}>.",
+                            data,
+                        ]
+                    ) from err
+                if isinstance(entry_value, numbers.Number) and np.isnan(entry_value):
+                    entry_value = None
 
-                    if isinstance(entry_value, str):
-                        entry_value = entry_value.strip()
+                if isinstance(entry_value, str):
+                    entry_value = entry_value.strip()
 
-                    if keys[0] in ["interventions", "dimensions", "shared"]:
-                        entry_value = self.string_to_list(entry_value)
-                        set_keys(entry_dict, entry_value, *keys[:1])
+                if keys[0] in ["interventions", "dimensions", "shared"]:
+                    entry_value = self.string_to_list(entry_value)
+                    set_keys(entry_dict, entry_value, *keys[:1])
 
-                    else:
-                        set_keys(entry_dict, entry_value, *keys)
+                else:
+                    set_keys(entry_dict, entry_value, *keys)
         return entry_dict
 
     def _groupby_with_list(self, keys, template, df, data, source, groupby, entries):
+        """Group df by groupby and build one entry per group, with per-row values under keys."""
         poped_keys = {key: template.pop(key) for key in keys if key in template}
-        for non_values_keys, group_df in df.groupby(groupby, sort=False):
+        for _non_values_keys, group_df in df.groupby(groupby, sort=False):
             entry_dict = self.make_entry(
                 next(group_df.itertuples()), template, data, source
             )
@@ -385,6 +390,7 @@ class MappingSerializer(WrongKeyValidationSerializer):
             entries.append(entry_dict)
 
     def entries_from_file(self, data):
+        """Build the list of upload entries, reading and grouping the source file if given."""
         entries = []
         source = data.get("source")
         template = copy.deepcopy(data)
@@ -398,10 +404,9 @@ class MappingSerializer(WrongKeyValidationSerializer):
             template = copy.deepcopy(template)
 
             mappings = []
-            for key, value in template.items():
-                if isinstance(value, str):
-                    if "==" in value:
-                        mappings.append(value)
+            for _key, value in template.items():
+                if isinstance(value, str) and "==" in value:
+                    mappings.append(value)
 
             if template.get("name", "").startswith("col=="):
                 groupby = [template.get("name")[5:]]
@@ -415,14 +420,14 @@ class MappingSerializer(WrongKeyValidationSerializer):
                         groupby,
                         entries,
                     )
-                except KeyError:
+                except KeyError as err:
                     raise serializers.ValidationError(
                         [
                             f"The key <{groupby[0]}> is missing in"
                             f"file <{DataFile.objects.get(pk=source).file}> ",
                             data,
                         ]
-                    )
+                    ) from err
             else:
                 for entry in df.itertuples():
                     entry_dict = self.make_entry(entry, template, data, source)
@@ -443,20 +448,23 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
     @staticmethod
     def _validate_image(datafile):
+        """Validate that the image file has one of the allowed image extensions."""
         if datafile:
             allowed_endings = ["png", "jpg", "jpeg", "tif", "tiff"]
             if not any(
-                [datafile.file.name.endswith(ending) for ending in allowed_endings]
+                datafile.file.name.endswith(ending) for ending in allowed_endings
             ):
                 raise serializers.ValidationError(
                     {"figure": f"{datafile.file.name} must end with {allowed_endings}."}
                 )
 
     def to_internal_value(self, data):
+        """Rename the source and target columns to their `_map` field before parsing."""
         data = self.transform_map_fields(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
+        """Strip the `_map` suffix and turn the source and image fields into absolute URLs."""
         rep = super().to_representation(instance)
         rep = self.retransform_map_fields(rep)
 
@@ -464,50 +472,48 @@ class MappingSerializer(WrongKeyValidationSerializer):
 
         # url representation of file
         for file in ["source", "image"]:
-            if file in rep:
-                if "||" not in str(rep[file]):
-                    rep[file] = request.build_absolute_uri(
-                        getattr(instance, file).file.url
-                    )
+            if file in rep and "||" not in str(rep[file]):
+                rep[file] = request.build_absolute_uri(getattr(instance, file).file.url)
 
         return rep
 
 
 class ExSerializer(MappingSerializer):
+    """Base serializer for external (as uploaded) instances resolving related fields by name."""
+
     def to_internal_related_fields(self, data):
+        """Resolve the group, individual and intervention names to their primary keys."""
         study_sid = self.context["request"].path.split("/")[-2]
-        if "group" in data:
-            if data["group"]:
-                try:
-                    data["group"] = Group.objects.get(
-                        Q(study__sid=study_sid) & Q(name=data.get("group"))
-                    ).pk
-                except ObjectDoesNotExist:
-                    raise serializers.ValidationError(
-                        f"Group <{data.get('group')}> does not exist, check groups."
-                    )
-                except MultipleObjectsReturned:
-                    raise serializers.ValidationError(
-                        f"Group <{data.get('group')}> is defined multiple times."
-                    )
+        if data.get("group"):
+            try:
+                data["group"] = Group.objects.get(
+                    Q(study__sid=study_sid) & Q(name=data.get("group"))
+                ).pk
+            except ObjectDoesNotExist as err:
+                raise serializers.ValidationError(
+                    f"Group <{data.get('group')}> does not exist, check groups."
+                ) from err
+            except MultipleObjectsReturned as err:
+                raise serializers.ValidationError(
+                    f"Group <{data.get('group')}> is defined multiple times."
+                ) from err
 
-        if "individual" in data:
-            if data["individual"]:
-                try:
-                    data["individual"] = Individual.objects.get(
-                        Q(study__sid=study_sid) & Q(name=data.get("individual"))
-                    ).pk
+        if data.get("individual"):
+            try:
+                data["individual"] = Individual.objects.get(
+                    Q(study__sid=study_sid) & Q(name=data.get("individual"))
+                ).pk
 
-                except ObjectDoesNotExist:
-                    raise serializers.ValidationError(
-                        f"individual: Individual <{data.get('individual')}> does "
-                        f"not exist, check individuals."
-                    )
-                except MultipleObjectsReturned:
-                    raise serializers.ValidationError(
-                        f"individual: Individual <{data.get('individual')}> is "
-                        f"defined multiple times."
-                    )
+            except ObjectDoesNotExist as err:
+                raise serializers.ValidationError(
+                    f"individual: Individual <{data.get('individual')}> does "
+                    f"not exist, check individuals."
+                ) from err
+            except MultipleObjectsReturned as err:
+                raise serializers.ValidationError(
+                    f"individual: Individual <{data.get('individual')}> is "
+                    f"defined multiple times."
+                ) from err
 
         if "interventions" in data:
             if data["interventions"]:
@@ -523,10 +529,10 @@ class ExSerializer(MappingSerializer):
                                 & Q(name=intervention, normed=True)
                             ).pk
                         )
-                    except ObjectDoesNotExist:
+                    except ObjectDoesNotExist as err:
                         raise serializers.ValidationError(
                             f"Intervention <{intervention}> does not exist, check interventions."
-                        )
+                        ) from err
                 data["interventions"] = interventions
             else:
                 data["interventions"] = []
@@ -565,6 +571,7 @@ class ExSerializer(MappingSerializer):
 
     @staticmethod
     def validate_group_individual_output(output):
+        """Validate that exactly one of group or individual is set on the output."""
         is_group = output.get("group") or output.get("group_map")
         is_individual = output.get("individual") or output.get("individual_map")
         if is_individual and is_group:
@@ -637,6 +644,7 @@ class ExSerializer(MappingSerializer):
 
     @staticmethod
     def ex_mapping():
+        """Return the mapping of the external (ex) field names to the upload field names."""
         return {
             "individual_exs": "individuals",
             "individual_ex": "individual",
@@ -649,10 +657,12 @@ class ExSerializer(MappingSerializer):
 
     @classmethod
     def rev_ex_mapping(cls):
-        return dict((v, k) for k, v in cls.ex_mapping().items())
+        """Return ex_mapping with the upload field names mapped to the external (ex) field names."""
+        return {v: k for k, v in cls.ex_mapping().items()}
 
     @classmethod
     def transform_ex_fields(cls, data):
+        """Rename the upload field names of data to their external (ex) field names."""
         transform_data = {}
         for key, value in data.items():
             ex_key = cls.rev_ex_mapping().get(key)
@@ -664,6 +674,7 @@ class ExSerializer(MappingSerializer):
 
     @classmethod
     def retransform_ex_fields(cls, data):
+        """Rename the external (ex) field names of data back to their upload field names."""
         transform_data = {}
         for key, value in data.items():
             ex_key = cls.ex_mapping().get(key)
@@ -674,12 +685,14 @@ class ExSerializer(MappingSerializer):
         return transform_data
 
     def to_internal_value(self, data):
+        """Validate that data is a dict and rename its keys to the external (ex) field names."""
         # change keys
         validate_dict(data)
         data = self.transform_ex_fields(data)
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
+        """Rename the external (ex) field names of the representation to the upload field names."""
         representation = super().to_representation(instance)
 
         # change keys
@@ -687,13 +700,11 @@ class ExSerializer(MappingSerializer):
 
 
 class SidSerializer(WrongKeyValidationSerializer):
-    """This Serializer is overwriting a the is_valid method. If sid already exists. It adds a instance to the class.
-    This triggers the update method instead of the create method of the serializer.
-    """
+    """Serializer which looks up the instance by sid so validation updates it instead of creating a duplicate."""
 
     def is_valid(self, raise_exception=False):
-
-        if "sid" in self.initial_data.keys():
+        """Attach the existing instance with the given sid, if any, before validating."""
+        if "sid" in self.initial_data:
             sid = self.initial_data.get("sid")
             try:
                 # Try to get the object in question
@@ -714,7 +725,10 @@ class SidSerializer(WrongKeyValidationSerializer):
 
 
 class ReadSerializer(serializers.ModelSerializer):
+    """Base serializer for elasticsearch read representations rounding floats to 2 decimals."""
+
     def to_representation(self, instance):
+        """Round every float value of the representation to 2 decimal places."""
         rep = super().to_representation(instance)
         for key, value in rep.items():
             if isinstance(value, float):
@@ -723,6 +737,8 @@ class ReadSerializer(serializers.ModelSerializer):
 
 
 class PkSerializer(serializers.Serializer):
+    """Serialize the primary key of an instance."""
+
     pk = serializers.IntegerField()
     # study_sid = serializers.CharField()
 
@@ -731,6 +747,8 @@ class PkSerializer(serializers.Serializer):
 
 
 class NameSerializer(serializers.Serializer):
+    """Serialize the primary key, name and study sid of an instance."""
+
     pk = serializers.IntegerField()
     name = serializers.CharField()
     study_sid = serializers.CharField()
@@ -740,6 +758,8 @@ class NameSerializer(serializers.Serializer):
 
 
 class PkStringSerializer(serializers.Serializer):
+    """Serialize a primary key which is a string (e.g. a sid)."""
+
     pk = serializers.CharField()
 
     class Meta:
@@ -747,17 +767,22 @@ class PkStringSerializer(serializers.Serializer):
 
 
 class SidNameSerializer(serializers.Serializer):
+    """Serialize the sid and name of an info node."""
+
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
 
 
 class SidNameLabelSerializer(serializers.Serializer):
+    """Serialize the sid, name and label of an info node."""
+
     sid = serializers.CharField(allow_null=True)
     name = serializers.CharField(allow_null=True)
     label = serializers.CharField(allow_null=True)
 
 
 def validate_dict(dic):
+    """Validate that dic is a dictionary."""
     if not isinstance(dic, dict):
         raise serializers.ValidationError(
             {"error": "data must be a dictionary", "detail": dic}
@@ -765,13 +790,18 @@ def validate_dict(dic):
 
 
 class StudySmallElasticSerializer(serializers.ModelSerializer):
+    """Serialize the primary key, sid and name of a study for elasticsearch."""
+
     class Meta:
         model = Study
         fields = ["pk", "sid", "name"]  # ,'url']
 
 
 class FloatNRField(serializers.FloatField):
+    """Float field which also accepts the value `NR` (not reported) unchanged."""
+
     def to_internal_value(self, data):
+        """Pass `NR` through unchanged, otherwise parse the value as a float."""
         if data == "NR":
             return data
         if isinstance(data, str) and len(data) > self.MAX_STRING_LENGTH:

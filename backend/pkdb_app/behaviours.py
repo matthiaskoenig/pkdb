@@ -1,5 +1,4 @@
-"""Reusable behavior for models.
-"""
+"""Reusable behavior for models."""
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -19,6 +18,8 @@ class Sidable(models.Model):
 
 
 class Externable(models.Model):
+    """Model has the mapping fields for the subset, source and image columns of an upload."""
+
     # format = models.CharField(max_length=CHAR_MAX_LENGTH, null=True)
     subset_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     source_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
@@ -29,15 +30,19 @@ class Externable(models.Model):
 
 
 class Accessible(models.Model):
+    """Model derives its access level and allowed users from its related study."""
+
     class Meta:
         abstract = True
 
     @property
     def access(self):
+        """Return the access level of the related study."""
         return self.study.access
 
     @property
     def allowed_users(self):
+        """Return the union of the study's creator, curators and collaborators."""
         creator = self.study.creator
         creator_queryset = get_user_model().objects.filter(id=creator.id)
         curators = self.study.curators.all()
@@ -46,20 +51,23 @@ class Accessible(models.Model):
 
     @property
     def study_name(self):
+        """Return the name of the related study."""
         return self.study.name
 
     @property
     def study_sid(self):
+        """Return the sid of the related study."""
         return self.study.sid
 
 
 def map_field(fields):
+    """Return the ``<field>_map`` column names for the given field names."""
     return [f"{field}_map" for field in fields]
 
 
 VALUE_FIELDS_SAME_SCALE = ["value", "mean", "median", "min", "max"]
-VALUE_FIELDS_NO_UNIT = VALUE_FIELDS_SAME_SCALE + ["sd", "se", "cv"]
-VALUE_FIELDS = VALUE_FIELDS_NO_UNIT + ["unit"]
+VALUE_FIELDS_NO_UNIT = [*VALUE_FIELDS_SAME_SCALE, "sd", "se", "cv"]
+VALUE_FIELDS = [*VALUE_FIELDS_NO_UNIT, "unit"]
 VALUE_MAP_FIELDS = map_field(VALUE_FIELDS)
 
 MEASUREMENTTYPE_FIELDS = [
@@ -67,12 +75,13 @@ MEASUREMENTTYPE_FIELDS = [
     "calculation_type",
     "choice",
     "substance",
-] + VALUE_FIELDS
+    *VALUE_FIELDS,
+]
 EX_MEASUREMENTTYPE_FIELDS = MEASUREMENTTYPE_FIELDS + map_field(MEASUREMENTTYPE_FIELDS)
 
 
 class ValueableMapNotBlank(models.Model):
-    """ValuableMap."""
+    """Model has the mapping fields for each value and statistic column of an upload."""
 
     value_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
     mean_map = models.CharField(max_length=CHAR_MAX_LENGTH_LONG, null=True)
@@ -136,6 +145,8 @@ class ValueableNotBlank(models.Model):
 
 
 class MeasurementTypeable(ValueableNotBlank):
+    """Model has a measurement type, calculation type, substance and choice with values."""
+
     measurement_type = models.ForeignKey(
         "info_nodes.MeasurementType", on_delete=models.PROTECT
     )
@@ -151,63 +162,84 @@ class MeasurementTypeable(ValueableNotBlank):
         abstract = True
 
     def self_plural(self):
+        """Return the lower cased plural of the class name, e.g. 'outputs'."""
         return f"{self.__class__.__name__.lower()}s"
 
     @property
     def measurement_type_name(self):
+        """Return the name of the info node of the measurement type."""
         return self.measurement_type.info_node.name
 
     @property
     def calculation_type_name(self):
+        """Return the name of the calculation type's info node, or None if unset."""
         if self.calculation_type:
             return self.calculation_type.info_node.name
+        return None
 
     @property
     def substance_name(self):
+        """Return the name of the substance's info node, or None if unset."""
         if self.substance:
             return self.substance.info_node.name
+        return None
 
     @property
     def choices(self):
+        """Return the allowed choices of the measurement type."""
         return self.measurement_type.choices_list()
 
     def _i(self, info_node):
+        """Return the info node of the given related field, or None if unset."""
         related_field = getattr(self, info_node)
         if related_field:
             return related_field.info_node
+        return None
 
     @property
     def i_measurement_type(self):
+        """Return the info node of the measurement type."""
         return self._i("measurement_type")
 
     @property
     def i_calculation_type(self):
+        """Return the info node of the calculation type, or None if unset."""
         return self._i("calculation_type")
 
     @property
     def i_choice(self):
+        """Return the info node of the choice, or None if unset."""
         return self._i("choice")
 
     @property
     def i_substance(self):
+        """Return the info node of the substance, or None if unset."""
         return self._i("substance")
 
     @property
     def study_name(self):
+        """Return the name of the related study."""
         return self.study.name
 
     @property
     def study_sid(self):
+        """Return the sid of the related study."""
         return self.study.sid
 
     @property
     def choice_name(self):
+        """Return the name of the choice's info node, or None if unset."""
         if self.choice:
             return self.choice.info_node.name
         return None
 
 
 class Normalizable(MeasurementTypeable):
+    """Model can be normalized to the default unit of its measurement type.
+
+    Keeps a link to the raw (as uploaded) instance it was normalized from.
+    """
+
     raw = models.ForeignKey(
         "self", related_name="norm", on_delete=models.CASCADE, null=True
     )
@@ -218,6 +250,7 @@ class Normalizable(MeasurementTypeable):
 
     @property
     def norm_fields(self):
+        """Return the value and error fields which are converted during normalization."""
         return {
             "value": self.value,
             "mean": self.mean,
@@ -230,10 +263,12 @@ class Normalizable(MeasurementTypeable):
 
     @property
     def norm_unit(self):
+        """Return the normalized unit registered for the current unit on the measurement type."""
         return self.measurement_type.units.get(self.unit)
 
     @property
     def is_norm(self):
+        """Return whether the current unit already is the norm unit of the measurement type."""
         if self.unit:
             return self.measurement_type.is_norm_unit(self.unit)
         return True
@@ -255,8 +290,7 @@ class Normalizable(MeasurementTypeable):
         return (False, None)
 
     def remove_substance_dimension(self):
-        """Remove substance unit by using the molar mass in [g/mole] to
-        convert [mole] -> [g].
+        """Remove substance unit by using the molar mass in [g/mole] to convert [mole] -> [g].
 
         :return: tuple (magnitude, unit), i.e., pre-factor and resulting unit
         """
@@ -269,7 +303,7 @@ class Normalizable(MeasurementTypeable):
         return 1, self.unit
 
     def normalize(self):
-        """Normalizes the units.
+        """Normalize the units.
 
         Units are brought to default units.
         Values are changed according to the conversion factor.
@@ -281,15 +315,14 @@ class Normalizable(MeasurementTypeable):
 
         # remove substance unit
 
-        if unit and self.unit:
-            if ureg(unit) != ureg(self.unit):
-                for key, value in self.norm_fields.items():
-                    if value is not None:
-                        setattr(self, key, value * factor)
-                self.unit = unit
+        if unit and self.unit and ureg(unit) != ureg(self.unit):
+            for key, value in self.norm_fields.items():
+                if value is not None:
+                    setattr(self, key, value * factor)
+            self.unit = unit
 
-            # else:
-            #    self.unit = str(ureg(self.unit).u)
+        # else:
+        #    self.unit = str(ureg(self.unit).u)
 
         # normalization
         if not self.is_norm:

@@ -1,5 +1,4 @@
-"""Django URLs
-"""
+"""URL routing for the pkdb_app REST API and admin endpoints."""
 
 from django.conf.urls import url
 from django.urls import include, path
@@ -114,32 +113,32 @@ schema_view = get_schema_view(
         title="PK-DB REST API",
         default_version="v1",
         description="""
-    PK-DB provides web services based on REST to search, filter, retrieve and download data. 
-     
-    The data in PK-DB is structured based on **studies**, with a single study corresponding to a single source of information. In most cases such a study corresponds to a single publication or a single clinical trial. 
-    
-    A study in PK-DB reports pharmacokinetics information for the subjects under investigation in the study. These subjects are characterised by properties such as their *sex*, *age*, *body weight*, *ethnicity* or *health status*. Depending on the reported information, subject information is stored for **groups** and/or **individuals**. 
-    
-    A second class of information are the **interventions** which were performed on the subjects. Most of the interventions in pharmacokinetics studies is application of a certain dose of a substance (e.g. 1 mg paracetamol orally as tablet). In addition interventions can also consist of other things changed between the studied subjects or groups, such as food which was applied. 
-    
+    PK-DB provides web services based on REST to search, filter, retrieve and download data.
+
+    The data in PK-DB is structured based on **studies**, with a single study corresponding to a single source of information. In most cases such a study corresponds to a single publication or a single clinical trial.
+
+    A study in PK-DB reports pharmacokinetics information for the subjects under investigation in the study. These subjects are characterised by properties such as their *sex*, *age*, *body weight*, *ethnicity* or *health status*. Depending on the reported information, subject information is stored for **groups** and/or **individuals**.
+
+    A second class of information are the **interventions** which were performed on the subjects. Most of the interventions in pharmacokinetics studies is application of a certain dose of a substance (e.g. 1 mg paracetamol orally as tablet). In addition interventions can also consist of other things changed between the studied subjects or groups, such as food which was applied.
+
     Finally, pharmacokinetics measurements are performed on the subject. These are often *concentration* measurements in certain tissue of the subject. These can either be single measurements (**outputs**) or time profiles (**time courses**). Additionally, derived pharmacokinetics parameters such as *AUC*, *clearance*, or *half-lives* are commonly reported. Correlations between theses outputs are often shown in form of **scatter** plots.
-    
+
   Meta-information is encoded in the form of an **info nodes** which for a given field encodes meta-data such as description, synonyms, annotations and database cross-references.
-    
+
     The REST API provides endpoints for
-    * overview of PK-DB statistics (`statistics`)  
+    * overview of PK-DB statistics (`statistics`)
     * searching and filtering of data (`filter`)
     * accessing study information (`studies`)
     * accessing groups (`groups`) and individuals (`individuals`)
     * accessing interventions (`interventions`)
-    * accessing outputs (`outputs`) and subsets (`subsets`) 
+    * accessing outputs (`outputs`) and subsets (`subsets`)
     * accessing info_nodes information (`info_nodes`)
-    
+
     Data can be downloaded using the filter and search endpoint.
-    
-    Python examples demonstrating the use of the API are available at 
+
+    Python examples demonstrating the use of the API are available at
     https://github.com/matthiaskoenig/pkdb/blob/develop/docs/pkdb_api.ipynb
-     
+
     If you are interested in contributing to the database please contact Matthias König.
     """,
         terms_of_service="https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
@@ -151,7 +150,8 @@ schema_view = get_schema_view(
     patterns=urlpatterns,
 )
 
-urlpatterns = urlpatterns + [
+urlpatterns = [
+    *urlpatterns,
     path("api/v1/update_index/", update_index_study),
     # media files
     url(

@@ -6,8 +6,9 @@ indent-width = 4
 target-version = "py39"
 
 # not linted: Django migrations are generated, the frontend is a separate
-# project and the docs are not python
-extend-exclude = ["**/migrations/**", "frontend", "docs"]
+# project, the docs are not python, and superpowers holds the plan and spec
+# documents whose python code fences must not be rewritten
+extend-exclude = ["**/migrations/**", "frontend", "docs", "superpowers"]
 
 [per-file-target-version]
 "scripts/*.py" = "py314"

@@ -1,5 +1,4 @@
-"""DJANGO settings
-"""
+"""Django settings for the pkdb_app project."""
 
 import os
 
