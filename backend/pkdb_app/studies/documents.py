@@ -1,3 +1,5 @@
+"""Elasticsearch documents for references and studies."""
+
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
@@ -28,6 +30,7 @@ descriptions_field = ObjectField(
 
 
 def common_setfields(model, attr=None):
+    """Build an ObjectField with descriptions, comments and a nested pk-only object field for the given set."""
     if attr is None:
         attr = model
     return ObjectField(
@@ -50,6 +53,8 @@ def common_setfields(model, attr=None):
 # TODO: add permissions like on all other elastic documents.
 @registry.register_document
 class ReferenceDocument(Document):
+    """Elasticsearch document indexing a Reference for search."""
+
     pk = fields.IntegerField(attr="pk")
     sid = string_field(attr="sid")
     pmid = string_field(attr="pmid")
@@ -87,6 +92,8 @@ class ReferenceDocument(Document):
 
 @registry.register_document
 class StudyDocument(Document):
+    """Elasticsearch document indexing a Study, its reference, subject sets, interventions, outputs and files for search."""
+
     # id = fields.TextField(attr='sid')
     pk = fields.IntegerField()
     sid = string_field(attr="sid")

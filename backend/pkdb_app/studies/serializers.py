@@ -1,5 +1,4 @@
-"""Studies serializers.
-"""
+"""Serializers for studies, their references, authors and curator ratings."""
 
 from collections import OrderedDict
 
@@ -55,6 +54,8 @@ from .models import Author, Rating, Reference, Study
 
 
 class AuthorSerializer(WrongKeyValidationSerializer):
+    """Serialize an author of a study reference for upload and read."""
+
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -62,10 +63,12 @@ class AuthorSerializer(WrongKeyValidationSerializer):
         fields = ("id", "first_name", "last_name")
 
     def create(self, validated_data):
-        author, created = Author.objects.update_or_create(**validated_data)
+        """Create the author, or update the matching author if one with the same fields already exists."""
+        author, _ = Author.objects.update_or_create(**validated_data)
         return author
 
     def to_internal_value(self, data):
+        """Reject unknown keys before deferring to the default deserialization."""
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
@@ -81,6 +84,8 @@ class AuthorSerializer(WrongKeyValidationSerializer):
 
 
 class ReferenceSerializer(WrongKeyValidationSerializer):
+    """Serialize the publication or reference of a study, with its authors, for upload and read."""
+
     authors = AuthorSerializer(many=True, read_only=False)
 
     class Meta:
@@ -103,6 +108,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         }
 
     def create(self, validated_data):
+        """Create the reference and its authors."""
         authors_data = validated_data.pop("authors", [])
         reference = Reference.objects.create(**validated_data)
         create_multiple(reference, authors_data, "authors")
@@ -110,6 +116,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         return reference
 
     def update(self, instance, validated_data):
+        """Update the reference fields and replace its authors with the given ones."""
         authors_data = validated_data.pop("authors", [])
         for name, value in validated_data.items():
             setattr(instance, name, value)
@@ -118,17 +125,16 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         return instance
 
     def to_internal_value(self, data):
+        """Reject unknown keys before deferring to the default deserialization."""
         self.validate_wrong_keys(data)
         return super().to_internal_value(data)
 
     def validate(self, attrs):
         """Validate reference information."""
-        if attrs.get("journal"):
-            if attrs.get("journal").startswith("Add your title"):
-                raise serializers.ValidationError("Add a journal to <reference.json>.")
-        if attrs.get("title"):
-            if attrs.get("title").startswith("Add your title"):
-                raise serializers.ValidationError("Add a title to <reference.json>.")
+        if attrs.get("journal") and attrs.get("journal").startswith("Add your title"):
+            raise serializers.ValidationError("Add a journal to <reference.json>.")
+        if attrs.get("title") and attrs.get("title").startswith("Add your title"):
+            raise serializers.ValidationError("Add a title to <reference.json>.")
         if attrs.get("date") == "1000-10-10":
             raise serializers.ValidationError(
                 "Replace '1000-10-10' with the correct date in <reference.json>."
@@ -137,6 +143,8 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
 
 
 class CuratorRatingSerializer(serializers.ModelSerializer):
+    """Serialize a curator's rating of a study, for upload and read."""
+
     rating = serializers.FloatField(min_value=0, max_value=5)
 
     user = utils.SlugRelatedField(queryset=User.objects.all(), slug_field="username")
@@ -149,11 +157,12 @@ class CuratorRatingSerializer(serializers.ModelSerializer):
         fields = ("rating", "user", "study")
 
     def to_representation(self, instance):
+        """Represent the rating by the curator's username only."""
         return {"curator": instance.username}
 
 
 class StudySerializer(SidSerializer):
-    """Study Serializer."""
+    """Serialize a study, with its reference, curators, collaborators and related sets, for upload and read."""
 
     reference = utils.SlugRelatedField(
         slug_field="sid",
@@ -221,6 +230,13 @@ class StudySerializer(SidSerializer):
         write_only_fields = ("curators", "collaborators")
 
     def to_internal_value(self, data):
+        """Resolve the creator username, normalize curators to rating dicts, reject duplicates and check the reference.
+
+        Resolves the creator to a User, accepts curators either as a list of usernames or as
+        [username, rating] pairs and normalizes them to {"user": ..., "rating": ...} dicts,
+        raises a ValidationError on duplicate collaborators, curators or substances, and raises
+        a ValidationError if the reference is already used by a different study.
+        """
         creator = data.get("creator")
         if creator:
             data["creator"] = self.get_or_val_error(User, username=creator)
@@ -273,22 +289,23 @@ class StudySerializer(SidSerializer):
         # handle reference
         if data.get("reference"):
             reference = self.get_or_val_error(model=Reference, sid=data["reference"])
-            if hasattr(reference, "study"):
-                if str(reference.study.sid) != str(data.get("sid")):
-                    raise serializers.ValidationError(
-                        {
-                            "reference": f"References are required to be unqiue on every study. "
-                            f"This Reference already exist in study with sid: <{reference.study.sid} and "
-                            f"name: <{reference.study.name}>. If you changed the sid of the study "
-                            f"you might want to run `delete_study -s {reference.study.sid}`. ",
-                            "details": data["reference"],
-                        }
-                    )
+            if hasattr(reference, "study") and str(reference.study.sid) != str(
+                data.get("sid")
+            ):
+                raise serializers.ValidationError(
+                    {
+                        "reference": f"References are required to be unqiue on every study. "
+                        f"This Reference already exist in study with sid: <{reference.study.sid} and "
+                        f"name: <{reference.study.name}>. If you changed the sid of the study "
+                        f"you might want to run `delete_study -s {reference.study.sid}`. ",
+                        "details": data["reference"],
+                    }
+                )
 
         return super().to_internal_value(data)
 
     def create(self, validated_data):
-
+        """Create the study, or update the matching study by sid, and create its related sets."""
         related = self.pop_relations(validated_data)
         instance, _ = Study.objects.update_or_create(
             sid=validated_data["sid"],
@@ -299,14 +316,14 @@ class StudySerializer(SidSerializer):
         return instance
 
     def update(self, instance, validated_data):
+        """Update the study fields and replace its related sets."""
         # remove nested relations (handled via own serializers)
         related = self.pop_relations(validated_data)
 
         for name, value in validated_data.items():
             setattr(instance, name, value)
         instance.save()
-        instance = self.create_relations(instance, related)
-        return instance
+        return self.create_relations(instance, related)
 
     def to_representation(self, instance):
         """Convert to JSON.
@@ -347,6 +364,7 @@ class StudySerializer(SidSerializer):
 
     @staticmethod
     def related_sets():
+        """Return the ordered mapping of study field name to related set model."""
         return OrderedDict(
             [
                 ("groupset", GroupSet),
@@ -358,6 +376,7 @@ class StudySerializer(SidSerializer):
         )
 
     def related_serializer(self):
+        """Return the ordered mapping of study field name to related set serializer class."""
         return OrderedDict(
             [
                 ("groupset", GroupSetSerializer),
@@ -369,7 +388,7 @@ class StudySerializer(SidSerializer):
         )
 
     def pop_relations(self, validated_data):
-        """Remove nested relations (handled via own serializers)
+        """Remove nested relations (handled via own serializers).
 
         :param validated_data:
         :return:
@@ -384,10 +403,7 @@ class StudySerializer(SidSerializer):
             "files": DataFile,
         }
         related_foreignkeys_dict = OrderedDict(
-            [
-                (name, validated_data.pop(name, None))
-                for name in related_foreignkeys.keys()
-            ]
+            [(name, validated_data.pop(name, None)) for name in related_foreignkeys]
         )
         related_many2many_dict = OrderedDict(
             [
@@ -396,11 +412,10 @@ class StudySerializer(SidSerializer):
                 if name in validated_data
             ]
         )
-        related = OrderedDict(
+        return OrderedDict(
             list(related_foreignkeys_dict.items())
             + list(related_many2many_dict.items())
         )
-        return related
 
     def create_relations(self, study, related):
         """Function creates all the related_sets.
@@ -421,12 +436,11 @@ class StudySerializer(SidSerializer):
                 setattr(study, name, instance)
                 study.save()
 
-        if "curators" in related:
-            if related["curators"]:
-                study.ratings.all().delete()
-                for curator in related["curators"]:
-                    curator["study"] = study
-                    Rating.objects.create(**curator)
+        if related.get("curators"):
+            study.ratings.all().delete()
+            for curator in related["curators"]:
+                curator["study"] = study
+                Rating.objects.create(**curator)
 
         if "collaborators" in related:
             study.collaborators.clear()
@@ -454,7 +468,7 @@ class StudySerializer(SidSerializer):
         return study
 
     def validate(self, attrs):
-
+        """Validate the study's date requirement by sid pattern and that the creator is among the curators."""
         if str(attrs.get("sid")).startswith("PKDB"):
             _validate_required_key(
                 attrs,
@@ -471,12 +485,14 @@ class StudySerializer(SidSerializer):
                     "the date must not be set in the study.json.",
                 )
 
-        if "curators" in attrs and "creator" in attrs:
-            if attrs["creator"] not in [
-                curator["user"] for curator in attrs["curators"]
-            ]:
-                error_json = {"curators": "Creator must be in curators."}
-                raise serializers.ValidationError(error_json)
+        if (
+            "curators" in attrs
+            and "creator" in attrs
+            and attrs["creator"]
+            not in [curator["user"] for curator in attrs["curators"]]
+        ):
+            error_json = {"curators": "Creator must be in curators."}
+            raise serializers.ValidationError(error_json)
         return super().validate(attrs)
 
 
@@ -484,6 +500,8 @@ class StudySerializer(SidSerializer):
 # Elastic Serializer
 # --------------------
 class AuthorElasticSerializer(serializers.ModelSerializer):
+    """Serialize an author for the elasticsearch index."""
+
     class Meta:
         model = Author
         fields = ("pk", "first_name", "last_name")
@@ -491,6 +509,8 @@ class AuthorElasticSerializer(serializers.ModelSerializer):
 
 
 class CuratorRatingElasticSerializer(serializers.Serializer):
+    """Serialize a curator's rating of a study for the elasticsearch index."""
+
     rating = serializers.FloatField()
     username = serializers.CharField()
     first_name = serializers.CharField()
@@ -501,6 +521,8 @@ class CuratorRatingElasticSerializer(serializers.Serializer):
 
 
 class ReferenceElasticSerializer(serializers.ModelSerializer):
+    """Serialize a reference, with its study and authors, for the elasticsearch index."""
+
     study = StudySmallElasticSerializer(read_only=True)
     authors = AuthorElasticSerializer(many=True, read_only=True)
 
@@ -523,6 +545,8 @@ class ReferenceElasticSerializer(serializers.ModelSerializer):
 
 
 class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
+    """Serialize a reference by its primary key and sid only, for the elasticsearch index."""
+
     class Meta:
         model = Reference
         fields = ["pk", "sid"]  # , 'url']
@@ -530,6 +554,8 @@ class ReferenceSmallElasticSerializer(serializers.ModelSerializer):
 
 
 class StudyElasticStatisticsSerializer(serializers.Serializer):
+    """Serialize the statistics of a study (counts, curators, creator) for the elasticsearch index."""
+
     name = serializers.CharField(read_only=True)
     licence = serializers.CharField(read_only=True)
     access = serializers.CharField(read_only=True)
@@ -561,8 +587,7 @@ class StudyElasticStatisticsSerializer(serializers.Serializer):
 
 @swagger_auto_schema(tags=["Studies"])
 class StudyElasticSerializer(serializers.ModelSerializer):
-    """Study serializer.
-    """
+    """Serialize a study, with its reference, subject sets, comments and counts, for the elasticsearch index."""
 
     pk = serializers.CharField()
     sid = serializers.CharField(help_text="This is the string id.")
@@ -642,13 +667,13 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_substances(obj):
-        """Get substances."""
+        """Return the study's substances as a list, or an empty list if there are none."""
         if obj.substances:
             return list(obj.substances)
         return []
 
     def get_files(self, obj):
-
+        """Return the study's files if the request user has file permission for the study, else an empty list."""
         if get_study_file_permission(self.context["request"].user, obj):
             files_serializer = DataFileElasticSerializer(
                 obj.files, many=True, read_only=True
@@ -659,6 +684,8 @@ class StudyElasticSerializer(serializers.ModelSerializer):
 
 
 class StudyAnalysisSerializer(serializers.Serializer):
+    """Serialize a reduced set of study fields for analysis, resolving creator, curators, substances and reference."""
+
     sid = serializers.CharField()
     name = serializers.CharField()
     licence = serializers.CharField()
@@ -674,18 +701,23 @@ class StudyAnalysisSerializer(serializers.Serializer):
     reference_date = serializers.DateField()
 
     def get_substances(self, obj):
+        """Return the labels of the study's substances."""
         return [s["label"] for s in obj.substances]
 
     def get_reference_pmid(self, obj):
+        """Return the pmid of the study's reference."""
         return obj.reference["pmid"]
 
     def get_reference_title(self, obj):
+        """Return the title of the study's reference."""
         return obj.reference["title"]
 
     def get_creator(self, obj):
+        """Return the username of the study's creator."""
         return obj.creator["username"]
 
     def get_curators(self, obj):
+        """Return the usernames of the study's curators."""
         return [s["username"] for s in obj.curators]
 
     class Meta:

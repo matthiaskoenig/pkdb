@@ -1,9 +1,9 @@
-"""Django model for Study.
-"""
+"""Django model for Study."""
 
 import datetime
 
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
@@ -47,16 +47,15 @@ STUDY_ACCESS_CHOICES = [(t, t) for t in STUDY_ACCESS_DATA]
 
 # ---------------------------------------------------
 
-from django.core.validators import RegexValidator
-
 alphanumeric = RegexValidator(
     r"^[0-9a-zA-Z]*$", "Only alphanumeric characters are allowed."
 )
 
 
 class Reference(models.Model):
-    """This is the main class describing the publication or reference which describes the study.
-    In most cases this is a published paper, but could be a thesis or unpublished.
+    """The publication or reference describing a study.
+
+    In most cases this is a published paper, but it could be a thesis or unpublished.
     """
 
     sid = models.CharField(
@@ -75,17 +74,20 @@ class Reference(models.Model):
     date = models.DateField()
 
     def __str__(self):
+        """Return the reference title."""
         return self.title
 
     # FIXME: Remove
     @property
     def study_pk(self):
+        """Return the primary key of the study using this reference, or an empty string."""
         if self.study:
             return self.study.pk
         return ""
 
     @property
     def study_name(self):
+        """Return the name of the study using this reference, or an empty string."""
         if self.study:
             return self.study.name
         return ""
@@ -101,7 +103,8 @@ class Author(models.Model):
     )
 
     def __str__(self):
-        return "%s %s" % (self.first_name, self.last_name)
+        """Return the author's full name."""
+        return f"{self.first_name} {self.last_name}"
 
 
 class Rating(models.Model):
@@ -167,17 +170,21 @@ class Study(Sidable, models.Model):
         verbose_name_plural = "studies"
 
     def __unicode__(self):
-        return "%s" % self.name
+        """Return the study name."""
+        return f"{self.name}"
 
     def __str__(self):
-        return "%s" % self.name
+        """Return the study name."""
+        return f"{self.name}"
 
     @property
     def reference_date(self):
+        """Return the publication date of the study's reference."""
         return self.reference.date
 
     @property
     def individuals(self):
+        """Return the individuals of the study, or an empty queryset if there is no individual set."""
         try:
             return self.individualset.individuals.all()
         except AttributeError:
@@ -185,6 +192,7 @@ class Study(Sidable, models.Model):
 
     @property
     def groups(self):
+        """Return the groups of the study, or an empty queryset if there is no group set."""
         try:
             return self.groupset.groups.all()
         except AttributeError:
@@ -192,6 +200,7 @@ class Study(Sidable, models.Model):
 
     @property
     def characteristica(self):
+        """Return the combined characteristica of all groups and individuals of the study."""
         empty_characteristica = Characteristica.objects.none()
         for group in self.groups.all():
             empty_characteristica = empty_characteristica.union(
@@ -206,6 +215,7 @@ class Study(Sidable, models.Model):
 
     @property
     def interventions(self):
+        """Return the interventions of the study, or an empty queryset if there is no intervention set."""
         try:
             return self.interventionset.interventions.all()
         except AttributeError:
@@ -213,6 +223,7 @@ class Study(Sidable, models.Model):
 
     @property
     def outputs_interventions(self):
+        """Return the output-intervention links of the study, or an empty queryset if there are no outputs."""
         try:
             return self.outputs.outputs_interventions.all()
         except AttributeError:
@@ -267,59 +278,72 @@ class Study(Sidable, models.Model):
 
     @property
     def files_url(self):
+        """Return the file names of all files attached to the study."""
         return [file.file.name for file in self.files.all()]
 
     @property
     def files_ordered(self):
+        """Return the files attached to the study ordered by file name."""
         return self.files.all().order_by("file")
 
     @property
     def reference_name(self):
+        """Return the name of the study's reference."""
         return self.reference.name
 
     @property
     def reference_pk(self):
+        """Return the primary key of the study's reference."""
         return self.reference.pk
 
     @property
     def group_count(self):
+        """Return the number of groups of the study, or 0 if there is no group set."""
         if self.groupset:
             return self.groupset.groups.count()
         return 0
 
     @property
     def individual_count(self):
+        """Return the number of individuals of the study, or 0 if there is no individual set."""
         if self.individualset:
             return self.individualset.individuals.count()
         return 0
 
     @property
     def intervention_count(self):
+        """Return the number of normed interventions of the study, or 0 if there is no intervention set."""
         if self.interventionset:
             return self.interventionset.interventions.filter(normed=True).count()
         return 0
 
     @property
     def output_count(self):
+        """Return the number of normed outputs of the study."""
         return self.outputs.filter(normed=True).count()
 
     @property
     def output_calculated_count(self):
+        """Return the number of normed, calculated outputs of the study."""
         return self.outputs.filter(normed=True, calculated=True).count()
 
     @property
     def subset_count(self):
+        """Return the number of data subsets of the study."""
         return self.subsets.count()
 
     @property
     def timecourse_count(self):
+        """Return the number of timecourse data subsets of the study."""
         return self.subsets.filter(data__data_type=Data.DataTypes.Timecourse).count()
 
     @property
     def scatter_count(self):
+        """Return the number of scatter data subsets of the study."""
         return self.subsets.filter(data__data_type=Data.DataTypes.Scatter).count()
 
     def delete(self, *args, **kwargs):
+        """Delete the study together with its outputset, dataset, interventionset, individualset, groupset and reference."""
         if self.outputset:
             self.outputset.delete()
         if self.dataset:
@@ -336,17 +360,22 @@ class Study(Sidable, models.Model):
 
 
 def expire():
+    """Return the timezone aware datetime one day from now, used as the default expiry of an IdCollection."""
     expire_datetime = datetime.datetime.now() + datetime.timedelta(days=1)
     return make_aware(expire_datetime)
 
 
 # FIXME: rename to something what it is (FilterQuery, IdCollection ?)
 class IdCollection(models.Model):
-    """DOCUMENT ME
+    """A saved set of ids for a resource type, addressed by a uuid.
+
+    Stores the primary keys matching a filtered elasticsearch query under a uuid so a
+    later request can look up the ids again, for example to select all matching results
+    across pages. Expires a day after creation.
     """
 
     class Recourses(models.TextChoices):
-        """Recourse Types"""
+        """The resource types an IdCollection can hold ids for."""
 
         Studies = "studies", _("studies")
         Groups = "groups", _("groups")

@@ -1,3 +1,5 @@
+"""Views for studies and references, and the cross-app filter and download endpoint."""
+
 import tempfile
 import time
 import uuid
@@ -5,13 +7,13 @@ import zipfile
 from collections import namedtuple
 from datetime import datetime
 from io import StringIO
-from typing import Dict
+from typing import Optional
 
 import django_filters.rest_framework
 import pandas as pd
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
-from django.db.models import Prefetch, Q, Subquery
+from django.db.models import Prefetch, Subquery
 from django.db.models import Q as DQ
 from django.http import HttpResponse, JsonResponse
 from django.test.client import RequestFactory
@@ -101,7 +103,7 @@ from .serializers import (
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
-    """ReferenceViewSet"""
+    """CRUD endpoint for references, writable by staff and by the creator or curators of the linked study."""
 
     swagger_schema = None
     queryset = Reference.objects.all()
@@ -118,7 +120,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
 
 class StudyViewSet(viewsets.ModelViewSet):
-    """StudyViewSet"""
+    """CRUD endpoint for studies, with object access gated by the requesting user's role on the study."""
 
     swagger_schema = None
     queryset = Study.objects.all()
@@ -134,7 +136,7 @@ class StudyViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def filter_on_permissions(user, queryset):
-
+        """Restrict queryset to the studies visible to the user's group: all for admin/reviewer, public and own for basic, public only for anonymous."""
         group = user_group(user)
         if group in ["admin", "reviewer"]:
             return queryset
@@ -150,12 +152,15 @@ class StudyViewSet(viewsets.ModelViewSet):
         if group == "anonymous":
             return queryset.filter(access=PUBLIC)
 
+        return None
+
     def get_queryset(self):
+        """Return the default queryset restricted to the studies visible to the requesting user."""
         queryset = super().get_queryset()
         return self.filter_on_permissions(self.request.user, queryset)
 
     def destroy(self, request, *args, **kwargs):
-
+        """Delete the study together with its elasticsearch documents."""
         # if get object does not find  an object it stops here
 
         instance = self.get_object()
@@ -196,18 +201,20 @@ def update_index_study(request):
         try:
             action = data.get("action", "index")
             doc().update(thing=instances, action=action)
-        except helpers.BulkIndexError:
-            raise helpers.BulkIndexError
+        except helpers.BulkIndexError as err:
+            raise helpers.BulkIndexError from err
 
     return JsonResponse({"success": "True"})
 
 
 def delete_elastic_study(related_elastic):
+    """Delete every elastic document instance in related_elastic, returning (False, "BulkIndexError") on failure."""
     for doc, instances in related_elastic.items():
         try:
             doc().update(thing=instances, action="delete")
         except helpers.BulkIndexError:
             return False, "BulkIndexError"
+    return None
 
 
 def related_elastic_dict(study):
@@ -269,7 +276,7 @@ def related_elastic_dict(study):
     name="list", decorator=swagger_auto_schema(manual_parameters=[UUID_PARAM])
 )
 class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
-    """Endpoint to query studies
+    """Endpoint to query studies.
 
     The studies endpoint gives access to the studies data. A study is a container of consistent
     pharmacokinetics data. This container mostly contains data reported in a single scientific paper.
@@ -336,7 +343,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
 
     @swagger_auto_schema(responses={200: StudyElasticSerializer(many=False)})
     def get_object(self):
-        """Test"""
+        """Return the single study document matching the lookup, subject to the default object permission checks."""
         return super().get_object()
 
     @swagger_auto_schema(
@@ -344,7 +351,7 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
         manual_parameters=[UUID_PARAM],
     )
     def get_queryset(self):
-        """Test"""
+        """Restrict the search to a previously saved uuid of ids, then to the studies visible to the user's group."""
         group = user_group(self.request.user)
 
         _uuid = self.request.query_params.get("uuid", [])
@@ -363,20 +370,22 @@ class ElasticStudyViewSet(BaseDocumentViewSet, APIView):
             return self.search.query()
 
         if group == "basic":
-            qs = self.search.query(
+            return self.search.query(
                 Q("match", access__raw=PUBLIC)
                 | Q("match", creator__username__raw=self.request.user.username)
                 | Q("match", curators__username__raw=self.request.user.username)
                 | Q("match", collaborators__username__raw=self.request.user.username)
             )
-            return qs
 
         if group == "anonymous":
-            qs = self.search.query("match", access__raw=PUBLIC)
-            return qs
+            return self.search.query("match", access__raw=PUBLIC)
+
+        return None
 
 
 class StudyAnalysisViewSet(ElasticStudyViewSet):
+    """Endpoint to query the reduced study fields used for analysis, filterable by study sid or name."""
+
     swagger_schema = None
     serializer_class = StudyAnalysisSerializer
     filter_fields = {
@@ -446,13 +455,13 @@ class PKData:
         self,
         request,
         concise: bool = True,
-        interventions_query: dict = None,
-        groups_query: dict = None,
-        individuals_query: dict = None,
-        outputs_query: dict = None,
-        studies_query: dict = None,
+        interventions_query: Optional[dict] = None,
+        groups_query: Optional[dict] = None,
+        individuals_query: Optional[dict] = None,
+        outputs_query: Optional[dict] = None,
+        studies_query: Optional[dict] = None,
     ):
-
+        """Build the concise or full set of studies, groups, individuals, interventions and outputs matching the given queries."""
         #  --- Init ---
 
         time_start = time.time()
@@ -481,7 +490,7 @@ class PKData:
         if studies_query:
             self.studies_query = studies_query
             studies_pks = self.study_pks()
-            time_elastic_studies = time.time()
+            time.time()
             self.outputs = self.outputs.filter(study_id__in=studies_pks)
 
         else:
@@ -495,11 +504,11 @@ class PKData:
         if groups_query or individuals_query:
             self.groups_query = groups_query
             groups_pks = self.group_pks()
-            time_elastic_groups = time.time()
+            time.time()
 
             self.individuals_query = individuals_query
             individuals_pks = self.individual_pks()
-            time_elastic_individuals = time.time()
+            time.time()
             if concise:
                 self.outputs = self.outputs.filter(
                     DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks)
@@ -513,7 +522,7 @@ class PKData:
         if interventions_query:
             self.interventions_query = {"normed": "true", **interventions_query}
             interventions_pks = self.intervention_pks()
-            time_elastic_interventions = time.time()
+            time.time()
             if concise:
                 self.outputs = self.outputs.filter(
                     interventions__id__in=interventions_pks
@@ -526,7 +535,7 @@ class PKData:
         if outputs_query:
             self.outputs_query = {"normed": "true", **outputs_query}
             outputs_pks = self.output_pks()
-            time_elastic_outputs = time.time()
+            time.time()
             if concise:
                 self.outputs = self.outputs.filter(id__in=outputs_pks)
             else:
@@ -631,19 +640,23 @@ class PKData:
         return RequestFactory().get("/").GET.copy()
 
     def intervention_pks(self):
+        """Return the primary keys of the interventions matching interventions_query."""
         return self._pks(
             view_class=ElasticInterventionViewSet, query_dict=self.interventions_query
         )
 
     def group_pks(self):
+        """Return the primary keys of the groups matching groups_query."""
         return self._pks(view_class=GroupViewSet, query_dict=self.groups_query)
 
     def individual_pks(self):
+        """Return the primary keys of the individuals matching individuals_query."""
         return self._pks(
             view_class=IndividualViewSet, query_dict=self.individuals_query
         )
 
     def output_pks(self):
+        """Return the primary keys of the outputs matching outputs_query."""
         return self._pks(
             view_class=ElasticOutputViewSet,
             query_dict=self.outputs_query,
@@ -651,15 +664,19 @@ class PKData:
         )
 
     def subset_pks(self):
+        """Return the primary keys of the subsets matching subsets_query."""
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
 
     def study_pks(self):
+        """Return the primary keys of the studies matching studies_query."""
         return self._pks(
             view_class=ElasticStudyViewSet, query_dict=self.studies_query, pk_field="pk"
         )
 
-    def set_request_get(self, query_dict: Dict):
-        """:param query_dict:
+    def set_request_get(self, query_dict: dict):
+        """Replace the request's GET parameters with the given query dict.
+
+        :param query_dict:
         :return:
         """
         get = self.empty_get()
@@ -670,12 +687,11 @@ class PKData:
     def _pks(
         self,
         view_class: DocumentViewSet,
-        query_dict: Dict,
+        query_dict: dict,
         pk_field: str = "pk",
         scan_size=10000,
     ):
-        """Query elastic search for pks.
-        """
+        """Query elastic search for pks."""
         self.set_request_get(query_dict)
         view = view_class(request=self.request)
         queryset = view.filter_queryset(view.get_queryset())
@@ -684,6 +700,7 @@ class PKData:
         return [instance[pk_field] for instance in response]
 
     def data_by_query_dict(self, query_dict, viewset, serializer, boost):
+        """Query the given elastic viewset with query_dict and return raw source dicts if boost else serialized data."""
         view = viewset(request=self.request)
         queryset = view.get_queryset()
         if query_dict is not None:
@@ -811,6 +828,7 @@ class PKDataView(APIView):
         },
     )
     def get(self, request, *args, **kw):
+        """Run the filter query, save its resulting ids under a uuid, and return the counts or a zip download."""
         time_start_request = time.time()
 
         request.GET = request.GET.copy()
@@ -963,7 +981,7 @@ class PKDataView(APIView):
                 resp = HttpResponse(
                     tmp.read(), content_type="application/x-zip-compressed"
                 )
-                resp["Content-Disposition"] = "attachment; filename=%s" % "pkdata.zip"
+                resp["Content-Disposition"] = "attachment; filename=pkdata.zip"
                 print("-" * 80)
                 print("File Creation")
                 for k, v in download_times.items():
