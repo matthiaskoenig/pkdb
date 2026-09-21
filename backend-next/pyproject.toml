@@ -20,6 +20,9 @@ dependencies = [
   "psycopg[binary]>=3,<4",
   "alembic>=1,<2",
   "pwdlib[argon2]>=0.3,<1",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "python-multipart>=0.0.20",
 ]
 
 [dependency-groups]
