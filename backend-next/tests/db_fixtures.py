@@ -159,6 +159,7 @@ def valid_bundle(valid_study):
                 "statistics",
                 "source",
                 "origin",
+                "calculated",
                 "derived_from",
                 "series_key",
                 "time_not_reported",

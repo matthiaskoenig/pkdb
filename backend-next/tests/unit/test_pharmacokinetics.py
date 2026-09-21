@@ -95,3 +95,42 @@ def test_preparation_derives_validated_pk_outputs(
     assert len(prepared.study.timecourses) == 2
     calculated = [p for p in prepared.study.measurements if p.origin == "calculated"]
     assert any(p.measurement_type == "thalf" for p in calculated)
+
+
+def test_calculated_outputs_also_have_normalized_copies(
+    valid_study, vocabulary, exponential_course
+):
+    from pkdb.domain.validation import prepare_study
+    from pkdb.domain.vocabulary import MeasurementRule
+
+    rules = tuple(
+        MeasurementRule(name=name, units=(unit,))
+        for name, unit in [
+            ("auc_end", "mg*h/l"),
+            ("auc_inf", "mg*h/l"),
+            ("cmax", "mg/l"),
+            ("kel", "1/h"),
+            ("thalf", "h"),
+            ("tmax", "h"),
+        ]
+    )
+    vocabulary = vocabulary.model_copy(
+        update={"measurements": vocabulary.measurements + rules}
+    )
+    valid_study.measurements = [
+        point.model_copy(update={"origin": "reported"})
+        for point in exponential_course.points
+    ]
+    prepared = prepare_study(valid_study, vocabulary)
+    raw = next(
+        record
+        for record in prepared.study.measurements
+        if record.origin == "calculated" and record.measurement_type == "thalf"
+    )
+    normalized = next(
+        record
+        for record in prepared.study.measurements
+        if record.derived_from == raw.key
+    )
+    assert normalized.origin == "normalized"
+    assert normalized.calculated

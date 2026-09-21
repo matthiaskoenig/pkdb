@@ -83,6 +83,7 @@ class ScientificRecord(Notes):
     source: SourceLocation | None = None
     origin: Literal["reported", "normalized", "calculated"] = "reported"
     derived_from: str | None = None
+    calculated: bool = False
 
 
 class Group(Notes):

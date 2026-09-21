@@ -52,7 +52,7 @@ def calculate_cv(sd, count, se, mean):
 
     # mean can be zero, CV not calculatable, resulting in -inf/inf
     # mean data must be cleaned before calculation
-    mean_clean = np.copy(mean)
+    mean_clean = np.array(mean, dtype=float, copy=True)
     mean_clean[mean_clean == 0.0] = np.nan
 
     if is_sd and is_mean:
@@ -61,3 +61,30 @@ def calculate_cv(sd, count, se, mean):
         cv = np.true_divide(np.multiply(se, np.sqrt(count)), mean_clean)
 
     return cv
+
+
+def complete_statistics(statistics, count=None):
+    """Fill missing error statistics while retaining reported values, including zero."""
+    from pkdb.schemas.study import Statistics
+
+    values = statistics.model_dump()
+    effective_count = statistics.count if statistics.count is not None else count
+    if effective_count is not None and effective_count <= 0:
+        effective_count = None
+    calculations = {
+        "sd": lambda: calculate_sd(
+            statistics.se, effective_count, statistics.cv, statistics.mean
+        ),
+        "se": lambda: calculate_se(
+            statistics.sd, effective_count, statistics.cv, statistics.mean
+        ),
+        "cv": lambda: calculate_cv(
+            statistics.sd, effective_count, statistics.se, statistics.mean
+        ),
+    }
+    for field, calculate in calculations.items():
+        if values[field] is None:
+            result = calculate()
+            if result is not None and np.isfinite(result):
+                values[field] = float(result)
+    return Statistics.model_validate(values)

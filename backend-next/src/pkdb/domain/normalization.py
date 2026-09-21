@@ -31,10 +31,11 @@ def conversion(
     if target is None:
         raise UnitDimensionError(f"No normalized unit for {source}")
     target_quantity = ureg(target)
+    if not substance_power and quantity == ureg.Quantity(1, target_quantity.units):
+        return 1.0, source
     factor = float(quantity.to(target_quantity.units).magnitude)
-    # Legacy normalization emits unscaled unit coordinates (e.g. per m², not per 1.73 m²).
-    unit = target if target_quantity.magnitude == 1 else str(target_quantity.units)
-    return factor, unit
+    # Converted values use the unscaled unit; already normalized spellings stay intact.
+    return factor, str(target_quantity.units)
 
 
 def normalize_record[T: ScientificRecord](

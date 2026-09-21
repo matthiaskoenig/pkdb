@@ -122,3 +122,29 @@ def test_intervention_normalization_is_retained(valid_study, vocabulary):
     normalized = [i for i in prepared.study.interventions if i.origin == "normalized"]
     assert len(normalized) == 1
     assert normalized[0].derived_from == valid_study.interventions[0].key
+
+
+def test_group_statistics_and_default_calculation_match_legacy(valid_study, vocabulary):
+    valid_study.measurements[0].statistics.sd = 1.0
+    vocabulary = vocabulary.model_copy(update={"calculation_types": ("sample mean",)})
+    prepared = prepare_study(valid_study, vocabulary)
+    reported = prepared.study.measurements[0]
+    assert reported.statistics.se is None
+    assert reported.statistics.cv is None
+    normalized = next(
+        record
+        for record in prepared.study.measurements
+        if record.origin == "normalized"
+    )
+    assert normalized.statistics.se == 0.5
+    assert normalized.statistics.cv == 0.5
+    assert reported.calculation_type == "sample mean"
+    assert valid_study.measurements[0].statistics.se is None
+
+
+def test_explicit_zero_error_is_preserved(valid_study, vocabulary):
+    valid_study.measurements[0].statistics.sd = 1.0
+    valid_study.measurements[0].statistics.se = 0.0
+    assert (
+        prepare_study(valid_study, vocabulary).study.measurements[0].statistics.se == 0
+    )

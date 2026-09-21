@@ -114,6 +114,7 @@ def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
     reserved = data.keys() & {
         "origin",
         "derived_from",
+        "calculated",
         "key",
         "statistics",
         "series_key",

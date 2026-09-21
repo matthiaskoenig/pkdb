@@ -7,6 +7,7 @@ import pint
 
 from pkdb.domain.normalization import normalize_record
 from pkdb.domain.pharmacokinetics import build_timecourses, derive_pk
+from pkdb.domain.statistics import complete_statistics
 from pkdb.domain.units import ureg
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.prepared import PreparedStudy
@@ -31,6 +32,24 @@ def prepare_study(
 ) -> PreparedStudy:
     if max_issues < 1:
         raise ValueError("max_issues must be positive")
+    study = study.model_copy(deep=True)
+    group_counts = {group.name: group.count for group in study.groups}
+    for group in study.groups:
+        for record in group.characteristica:
+            if record.statistics.count is None:
+                record.statistics.count = group.count
+            if (
+                record.calculation_type is None
+                and "sample mean" in vocabulary.calculation_types
+            ):
+                record.calculation_type = "sample mean"
+    for record in study.measurements:
+        if record.group:
+            if (
+                record.calculation_type is None
+                and "sample mean" in vocabulary.calculation_types
+            ):
+                record.calculation_type = "sample mean"
     report = ValidationReport()
 
     def issue(code, message, record=None, severity="error"):
@@ -259,6 +278,8 @@ def prepare_study(
         if not record.unit:
             if rule.units and "NO_UNIT" not in rule.units:
                 issue("missing_unit", f"Unit is required for {rule.name}", record)
+            else:
+                normalized[record.key] = normalize_record(record, rule)
             continue
         try:
             substance = substances.get(record.substance)
@@ -311,6 +332,11 @@ def prepare_study(
                 )
     if not report.valid:
         raise StudyValidationError(report)
+    for candidate in normalized.values():
+        if isinstance(candidate, Measurement) and candidate.group:
+            candidate.statistics = complete_statistics(
+                candidate.statistics, group_counts.get(candidate.group)
+            )
     prepared = study.model_copy(deep=True)
     prepared.measurements.extend(
         item
@@ -349,11 +375,11 @@ def prepare_study(
                 continue
             try:
                 checked = normalize_record(generated, rule)
-                checked.key = generated.key
-                checked.origin = "calculated"
-                checked.derived_from = course.key
-                prepared.measurements.append(
-                    Measurement.model_validate(checked.model_dump())
+                prepared.measurements.extend(
+                    [
+                        Measurement.model_validate(generated.model_dump()),
+                        Measurement.model_validate(checked.model_dump()),
+                    ]
                 )
             except StudyValidationError as error:
                 for detail in error.report.issues:

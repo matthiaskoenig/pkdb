@@ -69,6 +69,7 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             choice=record.choice,
             unit=record.unit,
             origin=record.origin,
+            calculated=record.calculated,
         )
         return row
 

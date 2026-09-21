@@ -140,6 +140,10 @@ def derive_pk(
         record = first.model_copy(deep=True)
         record.key = f"{course.key}:{measurement_type}"
         record.origin = "calculated"
+        record.calculated = True
+        record.calculation_type = None
+        record.label = None
+        record.series_key = None
         record.derived_from = course.key
         record.output_type = "output"
         record.measurement_type = measurement_type

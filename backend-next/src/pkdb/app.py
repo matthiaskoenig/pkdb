@@ -29,7 +29,7 @@ from pkdb.services.authorization import AuthorizationDenied
 from pkdb.services.ingestion import IngestionService, PublicationConflict
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "30fe14280237"
+SCHEMA_REVISION = "7dd23f32b5f9"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

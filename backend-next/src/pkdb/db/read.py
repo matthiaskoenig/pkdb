@@ -77,6 +77,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             choice=row.choice,
             unit=row.unit,
             origin=row.origin,
+            calculated=row.calculated,
             derived_from=derived_keys.get(row.derived_from_id),
             statistics={
                 **{

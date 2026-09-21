@@ -52,6 +52,7 @@ class Scientific:
     se: Mapped[float | None] = mapped_column(Float)
     cv: Mapped[float | None] = mapped_column(Float)
     count: Mapped[int | None]
+    calculated: Mapped[bool] = mapped_column(default=False)
     origin: Mapped[str] = mapped_column(String(16), default="reported")
 
 
