@@ -16,6 +16,9 @@ dependencies = [
   "pint>=0.25,<1",
   "openpyxl>=3.1,<4",
   "pkdb-analysis @ git+https://github.com/matthiaskoenig/pkdb_analysis.git@6e010ca987bc43995da99b826064581bf201e731",
+  "sqlalchemy>=2,<3",
+  "psycopg[binary]>=3,<4",
+  "alembic>=1,<2",
 ]
 
 [dependency-groups]

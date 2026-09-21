@@ -12,6 +12,20 @@ jobs:
       fail-fast: false
       matrix:
         python: ['3.13', '3.14']
+    services:
+      postgres:
+        image: postgres:18.0
+        env:
+          POSTGRES_DB: pkdb_test
+          POSTGRES_USER: pkdb_test
+          POSTGRES_PASSWORD: local-test-only
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U pkdb_test -d pkdb_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      PKDB_TEST_DATABASE_URL: postgresql+psycopg://pkdb_test:local-test-only@localhost:5432/pkdb_test
+      PKDB_DATABASE_URL: postgresql+psycopg://pkdb_test:local-test-only@localhost:5432/pkdb_test
     defaults:
       run:
         working-directory: backend-next
@@ -24,6 +38,10 @@ jobs:
           python-version: ${{ matrix.python }}
           enable-cache: true
       - run: uv sync --locked --python ${{ matrix.python }}
+      - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
+      - run: uv run --python ${{ matrix.python }} --locked alembic check
+      - run: uv run --python ${{ matrix.python }} --locked alembic downgrade base
+      - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
       - run: uv run --python ${{ matrix.python }} --locked pytest -q
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
