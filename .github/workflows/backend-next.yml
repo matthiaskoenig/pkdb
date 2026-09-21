@@ -1,0 +1,37 @@
+name: Backend replacement
+on:
+  pull_request:
+    paths: ['backend-next/**', '.github/workflows/backend-next.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.13', '3.14']
+    defaults:
+      run:
+        working-directory: backend-next
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - run: uv sync --locked --python ${{ matrix.python }}
+      - run: uv run --python ${{ matrix.python }} --locked pytest -q
+      - run: uv run --python ${{ matrix.python }} --locked ruff check .
+      - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
+      - run: uv run --python ${{ matrix.python }} --locked ty check
+      - run: uv build --python ${{ matrix.python }}
+      - name: Install wheel in clean environment
+        run: |
+          uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
+          uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
+          cd /tmp
+          /tmp/pkdb-wheel/bin/python -c 'import pkdb, numpy, scipy, pandas, pint; from pkdb_analysis.pk import pharmacokinetics'
