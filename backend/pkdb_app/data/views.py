@@ -1,3 +1,5 @@
+"""Elasticsearch views for data analysis rows, subsets and timecourses."""
+
 from django_elasticsearch_dsl_drf.constants import LOOKUP_QUERY_EXCLUDE, LOOKUP_QUERY_IN
 from django_elasticsearch_dsl_drf.filter_backends import (
     FilteringFilterBackend,
@@ -17,6 +19,8 @@ from pkdb_app.pagination import CustomPagination
 
 
 class DataAnalysisViewSet(AccessView):
+    """Elasticsearch view for querying data analysis rows (dimensions linking data points to outputs)."""
+
     swagger_schema = None
     document = DataAnalysisDocument
     serializer_class = DataAnalysisSerializer
@@ -62,7 +66,7 @@ class DataAnalysisViewSet(AccessView):
 
 
 class SubSetViewSet(AccessView):
-    """Endpoint to query subsets (timecourses and scatters)
+    """Endpoint to query subsets (timecourses and scatters).
 
     The subets endpoint gives access to the subset data. A Subset is a collection of outputs which can be either a
     timecourse or scatter. A timecourse subset consists of outputs measured at different time points. A scatter subset
@@ -99,12 +103,12 @@ class SubSetViewSet(AccessView):
 
     @swagger_auto_schema(responses={200: SubSetElasticSerializer(many=False)})
     def get_object(self):
-        """Test"""
+        """Return the requested subset, documented for swagger with its full serializer."""
         return super().get_object()
 
 
 class TimecourseViewSet(AccessView):
-    """Endpoint to query timecourses
+    """Endpoint to query timecourses.
 
     The timecourses endpoints gives access to timecourses.
     """

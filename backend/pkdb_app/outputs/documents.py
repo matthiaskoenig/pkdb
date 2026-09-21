@@ -1,3 +1,5 @@
+"""Elasticsearch document definitions for outputs and output-intervention pairs."""
+
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
@@ -16,6 +18,8 @@ from .models import Output, OutputIntervention
 # ------------------------------------
 @registry.register_document
 class OutputDocument(Document):
+    """Elasticsearch document for a single measured or calculated output value."""
+
     pk = fields.IntegerField()
     study = study_field
     group = ObjectField(
@@ -71,7 +75,7 @@ class OutputDocument(Document):
         auto_refresh = False
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
+        """Return the default queryset, a hook left for future select/prefetch related tuning."""
         return super().get_queryset()  # .prefetch_related("interventions").select_related('study', 'individual__name', 'group').
 
     class Index:
@@ -84,6 +88,8 @@ class OutputDocument(Document):
 
 @registry.register_document
 class OutputInterventionDocument(Document):
+    """Elasticsearch document for a denormalized output/intervention pair."""
+
     study_sid = string_field("study_sid")
     study_name = string_field("study_name")
     output_pk = fields.IntegerField("output_pk")
@@ -149,9 +155,5 @@ class OutputInterventionDocument(Document):
         settings["max_result_window"] = 500000
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return (
-            super()
-            .get_queryset()
-            .select_related("intervention", "output")
-        )
+        """Select related intervention and output in the same query to reduce lookups."""
+        return super().get_queryset().select_related("intervention", "output")

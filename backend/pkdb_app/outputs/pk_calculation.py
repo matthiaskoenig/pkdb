@@ -1,9 +1,7 @@
-"""Calculate pharmacokinetics
-"""
+"""Calculate pharmacokinetic parameters from timecourses."""
 
 import logging
 import warnings
-from typing import Dict, List
 
 import numpy as np
 from django.apps import apps
@@ -24,8 +22,8 @@ Individual = apps.get_model("subjects.Individual")
 Group = apps.get_model("subjects.Group")
 
 
-def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
-    """Calculates pharmacokinetics outputs for timecourse.
+def pkoutputs_from_timecourse(subset: Subset) -> list[dict]:
+    """Calculate pharmacokinetics outputs for timecourse.
 
     :param subset: models.SubSet
     :return:
@@ -41,12 +39,11 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
         if "concentration" in variables:
             ctype = variables.pop("ctype", None)
             pkinf = None
-            if dosing:
-                if (
-                    dosing.application.info_node.name == "single dose"
-                    and timecourse["substance"] == dosing.substance.pk
-                ):
-                    pkinf = pharmacokinetics.TimecoursePK(**variables)
+            if dosing and (
+                dosing.application.info_node.name == "single dose"
+                and timecourse["substance"] == dosing.substance.pk
+            ):
+                pkinf = pharmacokinetics.TimecoursePK(**variables)
 
             if not pkinf:
                 _ = variables.pop("dosing", None)
@@ -70,6 +67,7 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
             def get_or_none(id, model):
                 if id:
                     return model.objects.get(id=id)
+                return None
 
             for key in key_mapping:
                 pk_par = getattr(pk, key, None)
@@ -106,7 +104,7 @@ def pkoutputs_from_timecourse(subset: Subset) -> List[Dict]:
     return outputs
 
 
-def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
+def _timecourse_to_pkdict(tc: dict, dosing) -> dict:
     """Create dictionary for pk calculation from timecourse.
 
     :return: dict
@@ -138,25 +136,28 @@ def _timecourse_to_pkdict(tc: dict, dosing) -> Dict:
     # dosing
     pk_dict["dose"] = Q_(np.nan, "mg")
 
-    if dosing:
-        if dosing.substance.pk == tc["substance"]:
-            # pharmacokinetics is only calculated for single dose experiments
-            # where the applied substance is the measured substance!
-            if MeasurementType.objects.get(
-                info_node__name="restricted dosing"
-            )._is_valid_unit(dosing.unit):
-                if dosing.value is not None:
-                    pk_dict["dose"] = Q_(dosing.value, dosing.unit)
-                else:
-                    warnings.warn(f"restricted dosing requires value: {dosing}")
-                try:
-                    dosing_time = float(dosing.time)
-                except (TypeError, ValueError):
-                    dosing_time = None
-                    warnings.warn(
-                        f"Intervention time is not used for pk calculation. : {dosing_time}"
-                    )
+    # pharmacokinetics is only calculated for single dose experiments
+    # where the applied substance is the measured substance!
+    if (
+        dosing
+        and dosing.substance.pk == tc["substance"]
+        and MeasurementType.objects.get(
+            info_node__name="restricted dosing"
+        )._is_valid_unit(dosing.unit)
+    ):
+        if dosing.value is not None:
+            pk_dict["dose"] = Q_(dosing.value, dosing.unit)
+        else:
+            warnings.warn(f"restricted dosing requires value: {dosing}", stacklevel=2)
+        try:
+            dosing_time = float(dosing.time)
+        except (TypeError, ValueError):
+            dosing_time = None
+            warnings.warn(
+                f"Intervention time is not used for pk calculation. : {dosing_time}",
+                stacklevel=2,
+            )
 
-                if dosing_time is not None:
-                    pk_dict["intervention_time"] = Q_(dosing_time, dosing.time_unit)
+        if dosing_time is not None:
+            pk_dict["intervention_time"] = Q_(dosing_time, dosing.time_unit)
     return pk_dict

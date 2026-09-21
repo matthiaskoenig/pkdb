@@ -1,3 +1,5 @@
+"""Elasticsearch document definitions for data analysis rows and subsets."""
+
 from django_elasticsearch_dsl import Document, ObjectField, fields
 from django_elasticsearch_dsl.registries import registry
 
@@ -12,6 +14,8 @@ from ..documents import elastic_settings, info_node, string_field, study_field
 
 @registry.register_document
 class DataAnalysisDocument(Document):
+    """Elasticsearch document for a single dimension linking a data point to an output."""
+
     study_sid = string_field("study_sid")
     study_name = string_field("study_name")
 
@@ -49,46 +53,48 @@ class DataAnalysisDocument(Document):
         settings["max_result_window"] = 100000
 
 
-output_field = dict(
-    pk=fields.IntegerField(),
-    group=ObjectField(
+output_field = {
+    "pk": fields.IntegerField(),
+    "group": ObjectField(
         properties={
             "pk": fields.IntegerField(),
             "name": string_field("name"),
             "count": fields.IntegerField(),
         }
     ),
-    individual=ObjectField(
+    "individual": ObjectField(
         properties={"pk": fields.IntegerField(), "name": string_field("name")}
     ),
-    interventions=ObjectField(
+    "interventions": ObjectField(
         properties={"pk": fields.IntegerField(), "name": string_field("name")},
         multi=True,
     ),
-    ex=ObjectField(properties={"pk": string_field("pk")}),
-    normed=fields.BooleanField(),
-    value=fields.FloatField("null_value"),
-    mean=fields.FloatField("null_mean"),
-    median=fields.FloatField("null_median"),
-    min=fields.FloatField("null_min"),
-    max=fields.FloatField("null_max"),
-    se=fields.FloatField("null_se"),
-    sd=fields.FloatField("null_sd"),
-    cv=fields.FloatField("null_cv"),
-    unit=string_field("unit"),
-    time_unit=string_field("time_unit"),
-    time=fields.FloatField("null_time"),
-    tissue=info_node("i_tissue"),
-    method=info_node("i_method"),
-    measurement_type=info_node("i_measurement_type"),
-    substance=info_node("i_substance"),
-    choice=info_node("i_choice"),
-    label=string_field("label"),
-)
+    "ex": ObjectField(properties={"pk": string_field("pk")}),
+    "normed": fields.BooleanField(),
+    "value": fields.FloatField("null_value"),
+    "mean": fields.FloatField("null_mean"),
+    "median": fields.FloatField("null_median"),
+    "min": fields.FloatField("null_min"),
+    "max": fields.FloatField("null_max"),
+    "se": fields.FloatField("null_se"),
+    "sd": fields.FloatField("null_sd"),
+    "cv": fields.FloatField("null_cv"),
+    "unit": string_field("unit"),
+    "time_unit": string_field("time_unit"),
+    "time": fields.FloatField("null_time"),
+    "tissue": info_node("i_tissue"),
+    "method": info_node("i_method"),
+    "measurement_type": info_node("i_measurement_type"),
+    "substance": info_node("i_substance"),
+    "choice": info_node("i_choice"),
+    "label": string_field("label"),
+}
 
 
 @registry.register_document
 class SubSetDocument(Document):
+    """Elasticsearch document for a subset with its data points and their outputs."""
+
     pk = fields.IntegerField()
     array = fields.ObjectField(
         attr="data_points",
@@ -110,12 +116,8 @@ class SubSetDocument(Document):
     )
 
     def get_queryset(self):
-        """Not mandatory but to improve performance we can select related in one sql request"""
-        return (
-            super()
-            .get_queryset()
-            .prefetch_related("data_points__outputs")
-        )
+        """Prefetch the data points and their outputs in the same query."""
+        return super().get_queryset().prefetch_related("data_points__outputs")
 
     class Django:
         model = SubSet
@@ -138,7 +140,7 @@ class TimeCourseDocument(Document):
     study_sid = string_field('study_sid')
     study_name = string_field('study_name')
     outputs_pk = fields.ListField('timecourse')
-    
+
     # for permissions
     access = string_field('access')
     allowed_users = fields.ObjectField(

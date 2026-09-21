@@ -1,5 +1,4 @@
-"""Serializers for outputs.
-"""
+"""Serializers for uploading and reading outputs."""
 
 import warnings
 
@@ -72,6 +71,8 @@ OUTPUT_FOREIGN_KEYS = [
 
 
 class OutputSerializer(MeasurementTypeableSerializer):
+    """Serializer for uploading a single output value with its group, individual and interventions."""
+
     group = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), read_only=False, required=False, allow_null=True
     )
@@ -102,14 +103,17 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
     class Meta:
         model = Output
-        fields = (
-            OUTPUT_FIELDS
-            + ["label"]
-            + MEASUREMENTTYPE_FIELDS
-            + ["group", "individual", "interventions"]
-        )
+        fields = [
+            *OUTPUT_FIELDS,
+            "label",
+            *MEASUREMENTTYPE_FIELDS,
+            "group",
+            "individual",
+            "interventions",
+        ]
 
     def to_internal_value(self, data):
+        """Drop nested output-set fields, retransform map fields and resolve related fields."""
         data.pop("comments", None)
         data.pop("descriptions", None)
         data.pop("image", None)
@@ -121,6 +125,7 @@ class OutputSerializer(MeasurementTypeableSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def validate(self, attrs):
+        """Validate group/individual consistency and resolve measurement type fields to instances."""
         self._validate_individual_output(attrs)
         self._validate_group_output(attrs)
         self.validate_group_individual_output(attrs)
@@ -137,15 +142,14 @@ class OutputSerializer(MeasurementTypeableSerializer):
             attrs["measurement_type"] = attrs["measurement_type"].measurement_type
 
             for key in ["substance", "tissue", "method", "calculation_type"]:
-                if key in attrs:
-                    if attrs[key] is not None:
-                        attrs[key] = getattr(attrs[key], key)
+                if key in attrs and attrs[key] is not None:
+                    attrs[key] = getattr(attrs[key], key)
             attrs["choice"] = attrs["measurement_type"].validate_complete(data=attrs)[
                 "choice"
             ]
 
         except ValueError as err:
-            raise serializers.ValidationError(err)
+            raise serializers.ValidationError(err) from err
 
         return super().validate(attrs)
 
@@ -158,6 +162,8 @@ class OutputSerializer(MeasurementTypeableSerializer):
 
 
 class OutputExSerializer(ExSerializer):
+    """Serializer for uploading the external (as uploaded) form of a set of outputs."""
+
     source = serializers.PrimaryKeyRelatedField(
         queryset=DataFile.objects.all(), required=False, allow_null=True
     )
@@ -179,9 +185,10 @@ class OutputExSerializer(ExSerializer):
 
     class Meta:
         model = OutputEx
-        fields = EXTERN_FILE_FIELDS + ["outputs", "comments", "descriptions"]
+        fields = [*EXTERN_FILE_FIELDS, "outputs", "comments", "descriptions"]
 
     def to_internal_value(self, data):
+        """Expand the uploaded file rows into individual outputs and drop the now-resolved columns."""
         # ----------------------------------
         # decompress external format
         # ----------------------------------
@@ -195,13 +202,17 @@ class OutputExSerializer(ExSerializer):
         # finished
         # ----------------------------------
 
-        drop_fields = (
-            OUTPUT_FIELDS
-            + OUTPUT_MAP_FIELDS
-            + EX_MEASUREMENTTYPE_FIELDS
-            + ["group", "individual", "interventions"]
-            + ["group_map", "individual_map", "interventions_map"]
-        )
+        drop_fields = [
+            *OUTPUT_FIELDS,
+            *OUTPUT_MAP_FIELDS,
+            *EX_MEASUREMENTTYPE_FIELDS,
+            "group",
+            "individual",
+            "interventions",
+            "group_map",
+            "individual_map",
+            "interventions_map",
+        ]
 
         # label validation
         label = data.pop("label", None)
@@ -215,16 +226,21 @@ class OutputExSerializer(ExSerializer):
 
     def validate_label_map(self, value) -> None:
         """Validate the label key."""
-        if isinstance(value, str):
-            if not value.startswith("col==") and "||" not in value:
-                msg = f"The 'label' must be a mapping start with 'col==' or contain a split '||', but label is '{value}'"
-                raise serializers.ValidationError(msg)
+        if (
+            isinstance(value, str)
+            and not value.startswith("col==")
+            and "||" not in value
+        ):
+            msg = f"The 'label' must be a mapping start with 'col==' or contain a split '||', but label is '{value}'"
+            raise serializers.ValidationError(msg)
 
     def validate_image(self, value):
+        """Validate the uploaded image file."""
         self._validate_image(value)
         return value
 
     def create(self, validated_data):
+        """Create the output_ex, its outputs and their normalized copies, and wire up interventions."""
         output_ex, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -250,8 +266,7 @@ class OutputExSerializer(ExSerializer):
 
 
 class OutputSetSerializer(ExSerializer):
-    """OutputSet
-    """
+    """Serializer for uploading a study's output set, its output_exs, descriptions and comments."""
 
     output_exs = OutputExSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -269,11 +284,13 @@ class OutputSetSerializer(ExSerializer):
         fields = ["descriptions", "comments", "output_exs"]
 
     def to_internal_value(self, data):
+        """Validate that no unexpected keys remain after the parent conversion."""
         data = super().to_internal_value(data)
         self.validate_wrong_keys(data)
         return data
 
     def create(self, validated_data):
+        """Create the output set and its output_exs, collecting calculation warnings as study warnings."""
         pop_keys = ["output_exs"]
         outputset, poped_data = _create(
             model_manager=self.Meta.model.objects,
@@ -315,6 +332,8 @@ class OutputSetSerializer(ExSerializer):
 
 
 class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
+    """Elasticsearch serializer for an output set's descriptions, comments and output primary keys."""
+
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     outputs = serializers.SerializerMethodField()
@@ -326,10 +345,13 @@ class OutputSetElasticSmallSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_outputs(self, obj):
+        """Return the primary keys of the output set's outputs."""
         return list_of_pk("outputs", obj)
 
 
 class OutputInterventionSerializer(serializers.Serializer):
+    """Elasticsearch serializer for a denormalized output/intervention pair."""
+
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
     output_pk = serializers.IntegerField()
@@ -374,23 +396,23 @@ class OutputInterventionSerializer(serializers.Serializer):
     unit = serializers.CharField()
 
     class Meta:
-        fields = (
-            [
-                "study_sid",
-                "study_name",
-                "output_pk",
-                "intervention_pk",
-                "group_pk",
-                "individual_pk",
-                "normed",
-                "calculated",
-            ]
-            + OUTPUT_FIELDS
-            + MEASUREMENTTYPE_FIELDS
-        )
+        fields = [
+            "study_sid",
+            "study_name",
+            "output_pk",
+            "intervention_pk",
+            "group_pk",
+            "individual_pk",
+            "normed",
+            "calculated",
+            *OUTPUT_FIELDS,
+            *MEASUREMENTTYPE_FIELDS,
+        ]
 
 
 class SmallOutputSerializer(serializers.ModelSerializer):
+    """Elasticsearch serializer for a read-only, reduced view of an output."""
+
     group = GroupSmallElasticSerializer()
     individual = IndividualSmallElasticSerializer()
     interventions = InterventionSmallElasticSerializer(many=True)
@@ -413,14 +435,17 @@ class SmallOutputSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Output
-        fields = (
-            ["pk", "normed"]
-            + EXTRA_FIELDS
-            + ["group", "individual", "interventions"]
-            + MEASUREMENTTYPE_FIELDS
-            + TIME_FIELDS
-            + VALUE_FIELDS
-        )
+        fields = [
+            "pk",
+            "normed",
+            *EXTRA_FIELDS,
+            "group",
+            "individual",
+            "interventions",
+            *MEASUREMENTTYPE_FIELDS,
+            *TIME_FIELDS,
+            *VALUE_FIELDS,
+        ]
         read_only_fields = fields
 
 
@@ -451,13 +476,17 @@ class OutputElasticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Output
-        fields = (
-            ["pk", "normed", "calculated"]
-            + EXTRA_FIELDS
-            + ["study"]
-            + ["group", "individual", "interventions"]
-            + MEASUREMENTTYPE_FIELDS
-            + TIME_FIELDS
-            + VALUE_FIELDS
-        )
+        fields = [
+            "pk",
+            "normed",
+            "calculated",
+            *EXTRA_FIELDS,
+            "study",
+            "group",
+            "individual",
+            "interventions",
+            *MEASUREMENTTYPE_FIELDS,
+            *TIME_FIELDS,
+            *VALUE_FIELDS,
+        ]
         read_only_fields = fields

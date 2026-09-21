@@ -1,3 +1,5 @@
+"""Serializers for uploading and reading data sets, data and subsets."""
+
 import json
 import traceback
 from functools import lru_cache
@@ -34,6 +36,8 @@ from pkdb_app.utils import (
 
 
 class DimensionSerializer(WrongKeyValidationSerializer):
+    """Serializer for uploading one dimension of a scatter subset, linking it to an output."""
+
     output = serializers.CharField(write_only=True, allow_null=False, allow_blank=False)
 
     class Meta:
@@ -42,8 +46,7 @@ class DimensionSerializer(WrongKeyValidationSerializer):
 
 
 class SubSetSerializer(ExSerializer):
-    """DataSetSerializer
-    """
+    """Serializer for uploading a subset and building its scatter or timecourse data points."""
 
     descriptions = DescriptionSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -64,10 +67,12 @@ class SubSetSerializer(ExSerializer):
         fields = ["name", "descriptions", "comments", "dimensions", "shared"]
 
     def to_internal_value(self, data):
+        """Validate that no unexpected keys are present in the uploaded subset data."""
         self.validate_wrong_keys(data)
         return data
 
     def create(self, validated_data):
+        """Create the subset and, depending on its data type, build its scatter or timecourse points."""
         validated_data["study"] = self.context["study"]
 
         subset_instance, poped_data = _create(
@@ -90,6 +95,7 @@ class SubSetSerializer(ExSerializer):
         return subset_instance
 
     def validate_shared(self, shared):
+        """Validate that the shared field is a list, not a plain string."""
         if isinstance(shared, str):
             raise serializers.ValidationError(
                 {
@@ -105,13 +111,14 @@ class SubSetSerializer(ExSerializer):
             )
 
     def calculate_pks_from_timecourses(self, subset):
+        """Calculate the pharmacokinetics outputs of the timecourse subset and bulk-create them."""
         # calculate pharmacokinetics outputs
         try:
             outputs = pkoutputs_from_timecourse(subset)
-        except Exception:
+        except Exception as err:
             raise serializers.ValidationError(
                 {"pharmacokinetics exception": traceback.format_exc()}
-            )
+            ) from err
 
         errors = []
         for output in outputs:
@@ -149,6 +156,7 @@ class SubSetSerializer(ExSerializer):
         return value
 
     def create_scatter(self, dimensions, shared, subset_instance):
+        """Build the two-dimensional scatter data points of the subset from the study's outputs."""
         study = self.context["study"]
         study_outputs = study.outputs.filter(normed=True)
         if len(dimensions) != 2:
@@ -234,6 +242,7 @@ class SubSetSerializer(ExSerializer):
         subset_instance.pks.add(*subset_outputs)
 
     def create_timecourse(self, subset_instance, dimensions):
+        """Build the timecourse data points of the subset and calculate its pharmacokinetics outputs."""
         study = self.context["study"]
         if len(dimensions) != 1:
             raise serializers.ValidationError(
@@ -279,6 +288,8 @@ class SubSetSerializer(ExSerializer):
 
 
 class DataSerializer(ExSerializer):
+    """Serializer for uploading a named data figure or table and its subsets."""
+
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
     )
@@ -297,6 +308,7 @@ class DataSerializer(ExSerializer):
         fields = ["name", "data_type", "comments", "descriptions", "image", "subsets"]
 
     def to_internal_value(self, data):
+        """Validate that no unexpected keys are present in the uploaded data."""
         # ----------------------------------
         # if timecourse, add time subsets automatically
         # ----------------------------------
@@ -308,6 +320,7 @@ class DataSerializer(ExSerializer):
         return super(serializers.ModelSerializer, self).to_internal_value(data)
 
     def create(self, validated_data):
+        """Create the data instance and its subsets."""
         study = self.context["study"]
         data_instance, poped_data = _create(
             model_manager=self.Meta.model.objects,
@@ -317,7 +330,7 @@ class DataSerializer(ExSerializer):
         )
 
         for subset in poped_data["subsets"]:
-            subset_instance, poped_data = _create(
+            _, poped_data = _create(
                 model_serializer=SubSetSerializer(context=self.context),
                 validated_data={**subset, "data": data_instance},
                 create_multiple_keys=["comments", "descriptions"],
@@ -326,6 +339,8 @@ class DataSerializer(ExSerializer):
 
 
 class DataSetSerializer(ExSerializer):
+    """Serializer for uploading a study's data set: its data figures/tables and their subsets."""
+
     data = DataSerializer(many=True, read_only=False, required=False, allow_null=True)
     comments = CommentSerializer(
         many=True, read_only=False, required=False, allow_null=True
@@ -361,6 +376,7 @@ class DataSetSerializer(ExSerializer):
                 subset_names.append(subset.get("name"))
 
     def to_internal_value(self, data):
+        """Split and expand uploaded data and subset rows, then append auto-generated timecourses."""
         self.validate_wrong_keys(data)
 
         # parse special formatting:
@@ -384,6 +400,7 @@ class DataSetSerializer(ExSerializer):
         return super().to_internal_value(data)
 
     def validate_no_timeocourses(self, data):
+        """Raise ValidationError if a data entry is explicitly declared with data_type=timecourse."""
         for data_single in data:
             if data_single.get("data_type") == Data.DataTypes.Timecourse:
                 raise serializers.ValidationError(
@@ -393,6 +410,7 @@ class DataSetSerializer(ExSerializer):
                 )
 
     def autogenerate_timecourses(self):
+        """Build a data entry grouping the study's timecourse outputs by label, or None if there are none."""
         # Study = apps.get_model('studies', 'Study')
 
         study_sid = self.context["request"].path.split("/")[-2]
@@ -401,7 +419,7 @@ class DataSetSerializer(ExSerializer):
         )
         timecourse_labels = outputs.values_list("label", flat=True).distinct()
         if len(timecourse_labels) > 0:
-            auto_generated_data = {
+            return {
                 "name": "AutoGenerate",
                 "data_type": "timecourse",
                 "subsets": [
@@ -409,13 +427,15 @@ class DataSetSerializer(ExSerializer):
                     for label in timecourse_labels
                 ],
             }
-            return auto_generated_data
+        return None
 
     def validate(self, attrs):
+        """Validate that data and subset names are unique within the data set."""
         self._validate_unique_names(attrs["data"])
         return super().validate(attrs)
 
     def create(self, validated_data):
+        """Create the data set and its data instances."""
         dataset_instance, poped_data = _create(
             model_manager=self.Meta.model.objects,
             validated_data=validated_data,
@@ -443,7 +463,7 @@ class DataSetSerializer(ExSerializer):
 
 
 class TimecourseSerializer(serializers.Serializer):
-    """Timecourse Serializer"""
+    """Read-only serializer flattening a subset's timecourse array into per-field columns."""
 
     study_sid = serializers.CharField()
     study_name = serializers.CharField()
@@ -489,8 +509,9 @@ class TimecourseSerializer(serializers.Serializer):
     # def json_object(self):
     #    return json.dumps(self.instance.to_dict())
 
+    @staticmethod
     @lru_cache(maxsize=128)
-    def _get_general(self, obj):
+    def _get_general(obj):
         """This function reshapes and reformats the outputs to a Pandas DataFrame."""
         obj = [v["point"][0] for v in json.loads(obj)["array"]]
         result = pd.DataFrame(obj)
@@ -503,132 +524,169 @@ class TimecourseSerializer(serializers.Serializer):
         return list(result[field].values)
 
     def get_output_pk(self, obj):
-        result = self._get_general(json.dumps(obj.to_dict()))
+        """Return the primary keys of the subset's outputs."""
+        self._get_general(json.dumps(obj.to_dict()))
         return self._get_field(obj, "pk")
 
     def get_intervention_pk(self, obj):
+        """Return the primary keys of the interventions of the subset's first output."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return [i["pk"] for i in result["interventions"].iloc[0]]
 
     def get_group_pk(self, obj):
+        """Return the primary key of the subset's group, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["group"][0]:
             return result["group"][0]["pk"]
+        return None
 
     def get_individual_pk(self, obj):
+        """Return the primary key of the subset's individual, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["individual"][0]:
             return result["individual"][0]["pk"]
+        return None
 
     def get_normed(self, obj):
+        """Return whether the subset's outputs are normalized."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["normed"][0]
 
     def get_tissue(self, obj):
+        """Return the sid of the subset's tissue info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["tissue"][0]:
             return result["tissue"][0]["sid"]
+        return None
 
     def get_tissue_label(self, obj):
+        """Return the label of the subset's tissue info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["tissue"][0]:
             return result["tissue"][0]["label"]
+        return None
 
     def get_method(self, obj):
+        """Return the sid of the subset's method info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["method"][0]:
             return result["method"][0]["sid"]
+        return None
 
     def get_method_label(self, obj):
+        """Return the label of the subset's method info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["method"][0]:
             return result["method"][0]["label"]
+        return None
 
     def get_label(self, obj):
+        """Return the subset's label."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["label"][0]
 
     def get_time(self, obj):
+        """Return the subset's time values."""
         return self._get_field(obj, "time")
 
     def get_time_unit(self, obj):
+        """Return the subset's time unit."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["time_unit"][0]
 
     def get_measurement_type(self, obj):
+        """Return the sid of the subset's measurement type info node."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["measurement_type"][0]["sid"]
 
     def get_measurement_type_label(self, obj):
+        """Return the label of the subset's measurement type info node."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["measurement_type"][0]["label"]
 
     def get_choice(self, obj):
+        """Return the sid of the subset's choice info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["choice"][0]:
             return result["choice"][0]["sid"]
+        return None
 
     def get_choice_label(self, obj):
+        """Return the label of the subset's choice info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["choice"][0]:
             return result["choice"][0]["label"]
+        return None
 
     def get_substance(self, obj):
+        """Return the sid of the subset's substance info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["substance"][0]:
             return result["substance"][0]["sid"]
+        return None
 
     def get_substance_label(self, obj):
+        """Return the label of the subset's substance info node, or None if it has none."""
         result = self._get_general(json.dumps(obj.to_dict()))
         if result["substance"][0]:
             return result["substance"][0]["label"]
+        return None
 
     def get_value(self, obj):
+        """Return the subset's values."""
         return self._get_field(obj, "value")
 
     def get_mean(self, obj):
+        """Return the subset's means."""
         return self._get_field(obj, "mean")
 
     def get_median(self, obj):
+        """Return the subset's medians."""
         return self._get_field(obj, "median")
 
     def get_min(self, obj):
+        """Return the subset's mins."""
         return self._get_field(obj, "min")
 
     def get_max(self, obj):
+        """Return the subset's maxs."""
         return self._get_field(obj, "max")
 
     def get_sd(self, obj):
+        """Return the subset's standard deviations."""
         return self._get_field(obj, "sd")
 
     def get_se(self, obj):
+        """Return the subset's standard errors."""
         return self._get_field(obj, "se")
 
     def get_cv(self, obj):
+        """Return the subset's coefficients of variation."""
         return self._get_field(obj, "cv")
 
     def get_unit(self, obj):
+        """Return the subset's unit."""
         result = self._get_general(json.dumps(obj.to_dict()))
         return result["unit"][0]
 
     class Meta:
-        fields = (
-            [
-                "study_sid",
-                "study_name",
-                "output_pk",
-                "intervention_pk",
-                "group_pk",
-                "individual_pk",
-                "normed",
-                "calculated",
-            ]
-            + OUTPUT_FIELDS
-            + MEASUREMENTTYPE_FIELDS
-        )
+        fields = [
+            "study_sid",
+            "study_name",
+            "output_pk",
+            "intervention_pk",
+            "group_pk",
+            "individual_pk",
+            "normed",
+            "calculated",
+            *OUTPUT_FIELDS,
+            *MEASUREMENTTYPE_FIELDS,
+        ]
 
 
 class SubSetElasticSerializer(DocumentSerializer):
+    """Elasticsearch serializer for a subset's scatter array."""
+
     study = StudySmallElasticSerializer(read_only=True)
     name = serializers.CharField()
     data_type = serializers.CharField()
@@ -639,10 +697,13 @@ class SubSetElasticSerializer(DocumentSerializer):
         fields = ["pk", "study", "name", "data_type", "array", "timecourse"]
 
     def get_array(self, object):
+        """Return the subset's array of data points as a plain list."""
         return [point["point"] for point in object.to_dict()["array"]]
 
 
 class DataSetElasticSmallSerializer(serializers.ModelSerializer):
+    """Elasticsearch serializer for a data set's descriptions, comments and subset primary keys."""
+
     descriptions = DescriptionElasticSerializer(many=True, read_only=True)
     comments = CommentElasticSerializer(many=True, read_only=True)
     subsets = serializers.SerializerMethodField()
@@ -653,10 +714,13 @@ class DataSetElasticSmallSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_subsets(self, obj):
+        """Return the primary keys of the data set's subsets."""
         return list_of_pk("subsets", obj)
 
 
 class DataAnalysisSerializer(serializers.ModelSerializer):
+    """Elasticsearch serializer for a single dimension of a data analysis row."""
+
     class Meta:
         model = Dimension
         fields = [
