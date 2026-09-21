@@ -9,8 +9,6 @@ the public documentation that users of the API see in swagger. These tests
 guard the restored documentation.
 """
 
-from typing import Optional
-
 import pytest
 from rest_framework.test import APIClient
 
@@ -49,21 +47,6 @@ def swagger_schema(db: None) -> dict:
     return _fetch_swagger_schema()
 
 
-def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
-    """Parametrize the summary guard test over every operation of the schema."""
-    if not {"path", "method", "summary"}.issubset(metafunc.fixturenames):
-        return
-    schema = _fetch_swagger_schema()
-    cases = [
-        (path, method, operation.get("summary"))
-        for path, methods in schema["paths"].items()
-        for method, operation in methods.items()
-        if method in _OPERATION_METHODS
-    ]
-    ids = [f"{method} {path}" for path, method, _ in cases]
-    metafunc.parametrize(("path", "method", "summary"), cases, ids=ids)
-
-
 @pytest.mark.django_db
 def test_filter_operation_keeps_its_public_documentation(
     swagger_schema: dict,
@@ -86,21 +69,26 @@ def test_statistics_operation_keeps_its_public_documentation(
     assert operation["summary"].startswith("Endpoint to query PK-DB statistics")
 
     description = operation["description"]
-    assert description
-    assert description != "Return the current database statistics."
+    assert (
+        description
+        == "Get database statistics consisting of count and version information."
+    )
 
 
 @pytest.mark.django_db
-def test_operation_has_a_summary(
-    path: str, method: str, summary: Optional[str]
-) -> None:
-    """Every operation of the schema has a non-empty summary.
+def test_every_operation_has_a_summary(swagger_schema: dict) -> None:
+    """Every operation of the schema has a summary, except a named exception list.
 
     Guards against silently losing an operation's summary, the way
     `PKDataView.get` and `StatisticsViewSet.list` lost theirs; see the two
-    tests above. Operations which already had no summary before the
-    docstring work of task 5 are excluded, see `OPERATIONS_WITHOUT_SUMMARY`.
+    tests above. The set of operations without a summary must equal
+    `OPERATIONS_WITHOUT_SUMMARY` exactly: once an exempt operation gets a
+    summary, it has to be removed from that constant too.
     """
-    if (path, method) in OPERATIONS_WITHOUT_SUMMARY:
-        pytest.skip("no summary already before the docstring work of task 5")
-    assert summary
+    without_summary = {
+        (path, method)
+        for path, methods in swagger_schema["paths"].items()
+        for method, operation in methods.items()
+        if method in _OPERATION_METHODS and not operation.get("summary")
+    }
+    assert without_summary == OPERATIONS_WITHOUT_SUMMARY
