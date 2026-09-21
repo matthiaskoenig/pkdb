@@ -8,6 +8,7 @@ import pytest
 from alembic.config import Config
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
+from sqlalchemy.orm import Session
 
 from alembic import command
 from pkdb.db.models.studies import Study
@@ -49,9 +50,15 @@ def session_factory():
 
 @pytest.fixture
 def db_session(session_factory):
-    with session_factory() as session:
-        yield session
-        session.rollback()
+    with session_factory.kw["bind"].connect() as connection:
+        transaction = connection.begin()
+        try:
+            with Session(
+                connection, join_transaction_mode="create_savepoint"
+            ) as session:
+                yield session
+        finally:
+            transaction.rollback()
 
 
 @pytest.fixture
