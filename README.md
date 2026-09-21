@@ -1,3 +1,7 @@
+[![CI-CD](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml)
+[![ruff](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml)
+[![ty](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml)
+[![documentation](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 [![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT)
 
@@ -25,6 +29,24 @@ PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://alpha.
 The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
 
 ![PK-DB overview](./docs/images/data_extraction.png)
+
+## Documentation
+
+The full documentation, including installation, deployment and development, is at
+[https://matthiaskoenig.github.io/pkdb](https://matthiaskoenig.github.io/pkdb).
+
+## Setup
+
+PK-DB is deployed via `docker` and `docker compose`; there is no PyPI package.
+
+```bash
+git clone https://github.com/matthiaskoenig/pkdb.git
+cd pkdb
+set -a && source .env.local
+./docker-purge.sh
+```
+
+See [Installation](https://matthiaskoenig.github.io/pkdb/installation/) for the requirements and the details, and [`INSTALLATION.md`](./INSTALLATION.md) as a pointer from the repository.
 
 ## How to cite
 If you use PK-DB data or the web interface cite

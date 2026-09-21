@@ -1,0 +1,9 @@
+# The documentation is available as markdown for agents and language models:
+#   https://matthiaskoenig.github.io/pkdb/llms.txt      index of all pages
+#   https://matthiaskoenig.github.io/pkdb/llms-full.txt the complete documentation
+# Every page is served as markdown next to its html, e.g. /installation.md for /installation/.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://matthiaskoenig.github.io/pkdb/sitemap.xml
