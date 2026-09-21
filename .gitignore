@@ -96,9 +96,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
-
 # celery beat schedule file
 celerybeat-schedule
 
@@ -120,3 +117,14 @@ celerybeat-schedule
 *.so
 
 .git-credentials
+
+# ----------------------------
+# uv / ruff / ty / tox tooling
+# ----------------------------
+site/
+.cache/
+.tox/
+.pytest_cache/
+.ruff_cache/
+.venv/
+dist/

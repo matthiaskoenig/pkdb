@@ -19,7 +19,7 @@ classifiers = [
 	"Development Status :: 4 - Beta",
 	"Intended Audience :: Science/Research",
 	"Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.9",
 	"Programming Language :: Python :: Implementation :: CPython",
 	"Topic :: Scientific/Engineering",
 	"Topic :: Scientific/Engineering :: Bio-Informatics",
@@ -60,32 +60,62 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "ipdb>=0.12.3",
-    "ipython>=7.11.1",
-    "flake8>=3.7.9",
-    "mock==2.0.0",
-    "factory-boy==2.11.1",
-    "django-nose>=1.4.6",
-    "nose-progressive>=1.5.1",
-    "coverage>=4.5.1",
-]
-test = [
-    "tox>=4.14.2",
-    "pytest>=8.1.1",
-    "pytest-cov>=5.0.0",
+    "bump-my-version>=1.2.0",
+    "ruff>=0.16.6",
+    "pre-commit>=4.3.0",
+    "ty>=0.0.78",
+    "tox>=4.30.0",
+    "tox-uv>=1.28.0",
+    "pytest>=8.4.0",
+    "pytest-django>=4.11.0",
+    "pytest-env>=1.1.5",
+    "pytest-cov>=6.0.0",
+    "django-stubs>=5.1.0",
+    "djangorestframework-stubs>=3.15.0",
+    "types-Markdown>=3.7.0",
+    "ipython>=8.18.0",
+    "ipdb>=0.13.13",
 ]
 
-[project_urls]
+[project.urls]
 Homepage = "https://pk-db.com"
+Documentation = "https://matthiaskoenig.github.io/pkdb"
 Repository = "https://github.com/matthiaskoenig/pkdb"
-Documentation = "https://github.com/matthiaskoenig/pkdb"
 Issues = "https://github.com/matthiaskoenig/pkdb/issues"
+Changelog = "https://github.com/matthiaskoenig/pkdb/tree/develop/release-notes"
 
 [tool.hatch.version]
 path = "./pkdb_app/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["backend/pkdb_app"]
+packages = ["pkdb_app"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "pkdb_app.settings"
+addopts = "--strict-markers"
+
+[tool.pytest_env]
+# defaults for the services of docker-compose-test.yml; an environment variable
+# which is set (CI) wins
+PKDB_DJANGO_CONFIGURATION = {value = "local", skip_if_set = true}
+PKDB_API_BASE = {value = "http://localhost:8000", skip_if_set = true}
+PKDB_SECRET_KEY = {value = "test-secret-key-not-used-anywhere-else", skip_if_set = true}
+PKDB_DB_NAME = {value = "postgres", skip_if_set = true}
+PKDB_DB_USER = {value = "postgres", skip_if_set = true}
+PKDB_DB_PASSWORD = {value = "postgres", skip_if_set = true}
+PKDB_DB_SERVICE = {value = "localhost", skip_if_set = true}
+PKDB_DB_PORT = {value = "5434", skip_if_set = true}
+PKDB_ELASTICSEARCH_HOST = {value = "localhost:9124", skip_if_set = true}
+PKDB_EMAIL_HOST_USER = {value = "", skip_if_set = true}
+PKDB_EMAIL_HOST_PASSWORD = {value = "", skip_if_set = true}
+
+[tool.ty.src]
+include = ["pkdb_app", "tests", "manage.py"]
+exclude = ["**/migrations/**"]
+
+[tool.ty.terminal]
+error-on-warning = true

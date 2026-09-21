@@ -1,0 +1,83 @@
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+# oldest supported version, see `backend/pyproject.toml` `project.requires-python`
+target-version = "py39"
+
+# not linted: Django migrations are generated, the frontend is a separate
+# project and the docs are not python
+extend-exclude = ["**/migrations/**", "frontend", "docs"]
+
+[per-file-target-version]
+"scripts/*.py" = "py314"
+
+[lint]
+# Pyflakes (`F`) and a subset of pycodestyle (`E`), plus:
+#   W    pycodestyle warnings
+#   I    import sorting
+#   D    docstrings (google convention, see [lint.pydocstyle])
+#   UP   pyupgrade, keeps the code on current python syntax
+#   B    bugbear, likely bugs and design problems
+#   C4   comprehensions
+#   SIM  simplifications
+#   RET  return statements
+#   G    logging format, lazy `%s` instead of f-strings
+#   PIE  misc lints
+#   RUF  ruff specific rules
+select = [
+    "E4", "E7", "E9", "F", "W", "I", "D", "UP", "B", "C4", "SIM", "RET", "G", "PIE", "RUF",
+]
+ignore = [
+    # names such as `König` are not ambiguous unicode, they are german
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    # Django idioms: class attributes of models, serializers and views, nested Meta classes
+    "RUF012",
+    "D106",
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+# the tests document themselves through their names
+"backend/tests/**" = ["D103"]
+
+[lint.isort]
+known-first-party = ["pkdb_app"]
+
+[format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
+[lint.pydocstyle]
+convention = "google"  # Accepts: "google", "numpy", or "pep257".

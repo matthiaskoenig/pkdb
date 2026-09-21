@@ -234,7 +234,7 @@ DATABASES = {
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'elasticsearch:9200'
+        'hosts': os.environ.get('PKDB_ELASTICSEARCH_HOST', 'elasticsearch:9200')
     },
 }
 
