@@ -4,6 +4,6 @@ from django.apps import AppConfig
 
 
 class StudiesConfig(AppConfig):
-    """Django app configuration for the studies app."""
+    """Register the studies app under the name ``studies``."""
 
     name = "studies"

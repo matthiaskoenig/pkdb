@@ -73,7 +73,7 @@ class AuthorSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
     def validate(self, attrs):
-        """Validate author."""
+        """Reject the placeholder author name 'Max Mustermann', then defer to the default validation."""
         if attrs.get("first_name") == "Max" and attrs.get("last_name").startswith(
             "Musterman"
         ):
@@ -116,7 +116,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         return reference
 
     def update(self, instance, validated_data):
-        """Update the reference fields and replace its authors with the given ones."""
+        """Update the reference fields and update or create the given authors, without deleting any existing author."""
         authors_data = validated_data.pop("authors", [])
         for name, value in validated_data.items():
             setattr(instance, name, value)
@@ -130,7 +130,7 @@ class ReferenceSerializer(WrongKeyValidationSerializer):
         return super().to_internal_value(data)
 
     def validate(self, attrs):
-        """Validate reference information."""
+        """Reject the unfilled placeholder values for journal, title and date, then defer to the default validation."""
         if attrs.get("journal") and attrs.get("journal").startswith("Add your title"):
             raise serializers.ValidationError("Add a journal to <reference.json>.")
         if attrs.get("title") and attrs.get("title").startswith("Add your title"):
@@ -326,11 +326,7 @@ class StudySerializer(SidSerializer):
         return self.create_relations(instance, related)
 
     def to_representation(self, instance):
-        """Convert to JSON.
-
-        :param instance:
-        :return:
-        """
+        """Replace the files with their absolute URLs and the curators with their rating, name and pk."""
         rep = super().to_representation(instance)
         request = self.context.get("request")
         # replace file url
@@ -418,7 +414,7 @@ class StudySerializer(SidSerializer):
         )
 
     def create_relations(self, study, related):
-        """Function creates all the related_sets.
+        """Replace the study's related one-to-one sets, ratings, collaborators, descriptions, comments and files.
 
         :param study:
         :param related:

@@ -103,7 +103,7 @@ from .serializers import (
 
 
 class ReferencesViewSet(viewsets.ModelViewSet):
-    """CRUD endpoint for references, writable by staff and by the creator or curators of the linked study."""
+    """CRUD endpoint for references; object-level write access is decided by IsAdminOrCreatorOrCurator."""
 
     swagger_schema = None
     queryset = Reference.objects.all()
@@ -120,7 +120,7 @@ class ReferencesViewSet(viewsets.ModelViewSet):
 
 
 class StudyViewSet(viewsets.ModelViewSet):
-    """CRUD endpoint for studies, with object access gated by the requesting user's role on the study."""
+    """CRUD endpoint for studies; object-level access is decided by StudyPermission."""
 
     swagger_schema = None
     queryset = Study.objects.all()
@@ -218,7 +218,7 @@ def delete_elastic_study(related_elastic):
 
 
 def related_elastic_dict(study):
-    """Dictionary of elastic documents for given study.
+    """Map each elastic document class to the study's instances it indexes, including the reference document if set.
 
     :param study:
     :return:
@@ -490,7 +490,6 @@ class PKData:
         if studies_query:
             self.studies_query = studies_query
             studies_pks = self.study_pks()
-            time.time()
             self.outputs = self.outputs.filter(study_id__in=studies_pks)
 
         else:
@@ -504,11 +503,9 @@ class PKData:
         if groups_query or individuals_query:
             self.groups_query = groups_query
             groups_pks = self.group_pks()
-            time.time()
 
             self.individuals_query = individuals_query
             individuals_pks = self.individual_pks()
-            time.time()
             if concise:
                 self.outputs = self.outputs.filter(
                     DQ(group_id__in=groups_pks) | DQ(individual_id__in=individuals_pks)
@@ -522,7 +519,6 @@ class PKData:
         if interventions_query:
             self.interventions_query = {"normed": "true", **interventions_query}
             interventions_pks = self.intervention_pks()
-            time.time()
             if concise:
                 self.outputs = self.outputs.filter(
                     interventions__id__in=interventions_pks
@@ -535,7 +531,6 @@ class PKData:
         if outputs_query:
             self.outputs_query = {"normed": "true", **outputs_query}
             outputs_pks = self.output_pks()
-            time.time()
             if concise:
                 self.outputs = self.outputs.filter(id__in=outputs_pks)
             else:
@@ -664,7 +659,7 @@ class PKData:
         )
 
     def subset_pks(self):
-        """Return the primary keys of the subsets matching subsets_query."""
+        """Always raise AttributeError: self.subsets_query is never set by __init__ and this method has no caller."""
         return self._pks(view_class=SubSetViewSet, query_dict=self.subsets_query)
 
     def study_pks(self):

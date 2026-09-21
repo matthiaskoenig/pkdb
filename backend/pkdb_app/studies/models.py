@@ -223,7 +223,7 @@ class Study(Sidable, models.Model):
 
     @property
     def outputs_interventions(self):
-        """Return the output-intervention links of the study, or an empty queryset if there are no outputs."""
+        """Always return an empty queryset, since the reverse `outputs` manager has no `outputs_interventions` attribute."""
         try:
             return self.outputs.outputs_interventions.all()
         except AttributeError:
