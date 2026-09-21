@@ -26,9 +26,10 @@ changed.
 Decided without a question, each can be revisited:
 
 - The python project stays in `backend/`, which is the docker build context.
-  `pyproject.toml`, `.ruff.toml`, `tox.ini` and `uv.lock` live there. The files of the
-  repository level live in the root: `.github/`, `.pre-commit-config.yaml`,
-  `.bumpversion.toml`, `zensical.toml`, `docs/`, `scripts/`, `CLAUDE.md`.
+  `pyproject.toml`, `tox.ini` and `uv.lock` live there. The files of the repository level
+  live in the root: `.github/`, `.ruff.toml`, `.pre-commit-config.yaml`,
+  `.bumpversion.toml`, `zensical.toml`, `docs/`, `scripts/`, `CLAUDE.md`. ruff finds its
+  configuration hierarchically, so the one file covers `backend/` and `scripts/`.
 - No move to a `src/` layout.
 - The first release is `0.10.0`. The tag format stays `v<version>` as for the existing tags
   `v0.9.3` to `v0.9.8`.
@@ -68,19 +69,23 @@ with the maintainer one by one.
 `backend/pyproject.toml`
 
 - `dev` extra with the complete tooling: ruff, ty, tox, tox-uv, pytest, pytest-django,
-  pytest-cov, pre-commit, bump-my-version, zensical, django-stubs,
+  pytest-env, pytest-cov, pre-commit, bump-my-version, django-stubs,
   djangorestframework-stubs, ipython, ipdb.
+- zensical does not support python 3.9 and is not part of the extra. `docs/requirements.txt`
+  pins it and the documentation is built with python 3.14 through `uvx`.
 - removed: `flake8`, `mock`, `factory-boy`, `django-nose`, `nose-progressive`, `coverage`
   and the `test` extra, which is merged into `dev`.
 - fixes: `[project_urls]` becomes `[project.urls]`, the documentation url points at the
   published site, the hatch wheel target `backend/pkdb_app` becomes `pkdb_app` (the path
   is relative to `backend/`), the classifier lists python 3.9 instead of 3.13.
 - `[tool.pytest.ini_options]`: `testpaths`, `DJANGO_SETTINGS_MODULE`.
-- `[tool.ty]`: `error-on-warning = true`, same scope as ruff.
+- `[tool.pytest_env]`: the `PKDB_*` variables of the test services as defaults.
+- `[tool.ty]`: `error-on-warning = true`, scope `backend/` without migrations.
+  `scripts/llms_txt.py` needs python 3.11 and is covered by ruff only.
 
 Other files
 
-- `backend/.ruff.toml`: the rule set of `pkdb_data` with `target-version = "py39"`.
+- `.ruff.toml`: the rule set of `pkdb_data` with `target-version = "py39"`.
   Ignored: `RUF012` (mutable class attributes of Django models, serializers and views) and
   `D106` (nested `Meta` classes). Excluded: `**/migrations/**`. Checked: `pkdb_app/`,
   `tests/`, `manage.py`, and `scripts/` of the root.
@@ -116,18 +121,24 @@ Smoke tests, they need postgres and elasticsearch:
   (`search_index --rebuild -f`).
 - The endpoints which need authentication reject an anonymous write with 401 or 403.
 
-Unit tests, no services: `error_measures.py`, `utils.py`, the normalization in
-`behaviours.py`, the unit handling in `info_nodes/units.py` and the pharmacokinetic
-calculation in `outputs/pk_calculation.py`, each with the edge cases (missing values,
-zero counts, unit conversion).
+Unit tests, no services: `error_measures.py`, `utils.py`, `behaviours.map_field` and the
+unit handling in `info_nodes/units.py`, each with the edge cases (missing values, zero
+mean, unit conversion). The normalization and `outputs/pk_calculation.py` need info nodes
+in the database and are left to the tests of the stack upgrade.
 
 Environment
 
-- `settings.py` reads `PKDB_*` variables. `backend/.env.test` is committed with the test
-  values (no secrets) and is documented in `docs/development.md`.
-- CI: service containers `postgres:18.0` and `elasticsearch:7.9.2`, the images of
-  `docker-compose-develop.yml`, with health checks.
-- Local: the same two services from `docker-compose-develop.yml`, then `tox -e py3.9`.
+- `settings.py` reads the `PKDB_*` variables on import. `pytest-env` sets them from
+  `[tool.pytest_env]` in `backend/pyproject.toml`; a variable which is set wins, which is
+  how CI points the tests at its service containers.
+- The elasticsearch host is hardcoded as the compose service name. It becomes the setting
+  `PKDB_ELASTICSEARCH_HOST` with the default `elasticsearch:9200`, so compose and
+  production are unchanged.
+- The index names are fixed strings, so a rebuild against the development stack would
+  empty the development indices. The tests have their own services:
+  `docker-compose-test.yml` with `postgres:18.0` on `localhost:5434` and
+  `elasticsearch:7.9.2` on `localhost:9124`, without volumes.
+- CI: service containers with the same two images and health checks.
 
 ## 4. Workflows and policies
 
