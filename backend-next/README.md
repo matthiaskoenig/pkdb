@@ -17,7 +17,7 @@ uv run --locked --python 3.14 uvicorn pkdb.app:create_app --factory
 Set `PKDB_DATABASE_URL` and `PKDB_FILE_ROOT` first. Apply migrations explicitly;
 startup does not modify the schema. Bootstrap vocabulary and account identities
 before uploading studies. SMTP is configured through `PKDB_SMTP_*` settings.
-The deployment/bootstrap CLI and final cutover runbook are still being built.
+The final cutover runbook and legacy draft adapters are still being built.
 
 Tests require an isolated PostgreSQL database named by
 `PKDB_TEST_DATABASE_URL`. Each test owns and removes its own random schema.
@@ -55,3 +55,32 @@ source locations, total error count, and a bounded issue list. Authorization and
 invalid-handle failures are MCP tool errors. Queries and scientific work run off
 the ASGI event loop with independent database sessions. Both interfaces share
 request byte/admission limits configured with `PKDB_UPLOAD_*` settings.
+
+## Commands
+
+Set `PKDB_API_TOKEN` in the environment for remote commands. Supply either one
+study folder or a directory containing study folders. Commands read source files
+without editing them and print one JSON outcome per study. Any failure produces
+a nonzero exit status. Upload makes one complete-bundle PUT per study, waits for
+publication, and never deletes the previous study before uploading.
+
+```bash
+pkdb validate ../pkdb_data/studies/apixaban/Frost2014 --api-url http://localhost:8000
+pkdb upload ../pkdb_data/studies/apixaban --api-url http://localhost:8000
+```
+
+A timed-out upload has an unknown outcome; rerun the complete bundle. The CLI
+does not follow redirects or automatically repeat a request. API tokens are not
+accepted as command-line arguments.
+
+Local administrators use the configured `PKDB_DATABASE_URL` and `PKDB_FILE_ROOT`:
+
+```bash
+pkdb bootstrap bootstrap
+pkdb cleanup
+```
+
+Bootstrap applies the reviewed offline vocabulary and account identities in one
+transaction. Cleanup removes expired saved criteria and eligible staged/crash
+files, preserving publication references and active file leases. Schedule cleanup
+through the deployment environment; no background queue is required.

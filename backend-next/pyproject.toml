@@ -25,10 +25,14 @@ dependencies = [
   "python-multipart>=0.0.20",
   "fastmcp>=3,<4",
   "mcp==1.30.0",
+  "httpx>=0.28",
 ]
 
+[project.scripts]
+pkdb = "pkdb.cli:main"
+
 [dependency-groups]
-dev = ["pytest>=8", "httpx>=0.28", "ruff>=0.16", "ty>=0.0.82"]
+dev = ["pytest>=8", "ruff>=0.16", "ty>=0.0.82"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pkdb"]

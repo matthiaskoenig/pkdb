@@ -1539,6 +1539,7 @@ dependencies = [
     { name = "alembic" },
     { name = "fastapi" },
     { name = "fastmcp" },
+    { name = "httpx" },
     { name = "mcp" },
     { name = "numpy" },
     { name = "openpyxl" },
@@ -1557,7 +1558,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "pytest" },
     { name = "ruff" },
     { name = "ty" },
@@ -1568,6 +1568,7 @@ requires-dist = [
     { name = "alembic", specifier = ">=1,<2" },
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "fastmcp", specifier = ">=3,<4" },
+    { name = "httpx", specifier = ">=0.28" },
     { name = "mcp", specifier = "==1.30.0" },
     { name = "numpy", specifier = ">=2.3,<3" },
     { name = "openpyxl", specifier = ">=3.1,<4" },
@@ -1586,7 +1587,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx", specifier = ">=0.28" },
     { name = "pytest", specifier = ">=8" },
     { name = "ruff", specifier = ">=0.16" },
     { name = "ty", specifier = ">=0.0.82" },
